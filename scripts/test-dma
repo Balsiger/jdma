@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Test a given set of classes
+
+ant test -Dtest.classes=**/$1'\$Test'.class
+
