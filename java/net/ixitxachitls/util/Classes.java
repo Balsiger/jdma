@@ -132,11 +132,8 @@ public final class Classes
     *              package)
     *
     */
-  public static String fromClassName(Class inClass)
+  public static @Nonnull String fromClassName(@Nonnull Class inClass)
   {
-    if(inClass == null)
-      return null;
-
     String name = inClass.getName();
 
     name = name.substring(name.lastIndexOf('.') + 1);
@@ -158,11 +155,8 @@ public final class Classes
     * @undefined   if given class is null
     *
     */
-  public static String getPackage(Class inClass)
+  public static @Nonnull String getPackage(@Nonnull Class inClass)
   {
-    if(inClass == null)
-      return null;
-
     String name = inClass.getName();
 
     return name.substring(0, name.lastIndexOf("."));

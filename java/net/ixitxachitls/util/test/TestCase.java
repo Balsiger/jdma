@@ -51,7 +51,7 @@ public class TestCase extends org.junit.Assert
   //-------------------------------------------------------------- variables
 
   /** The mock logger to test logging statements. */
-  //  protected Log.Test.MockLogger m_logger;
+  protected Log.Test.MockLogger m_logger;
 
   /** The number of errors occurred. */
   protected int m_errors = 0;
