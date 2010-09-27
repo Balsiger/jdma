@@ -115,6 +115,18 @@ public class NullPointerCheck extends Check
         if(param.getType() != TokenTypes.PARAMETER_DEF)
           continue;
 
+        // ignore parameters that are @Nonnull
+        if(param.branchContains(TokenTypes.ANNOTATION))
+          for(DetailAST child = param.getFirstChild(); child != null;
+              child = child.getNextSibling())
+            if(child.getType() == TokenTypes.MODIFIERS)
+              for(DetailAST modifier = child.getFirstChild(); modifier != null;
+                  modifier = modifier.getNextSibling())
+                if(modifier.getType() == TokenTypes.ANNOTATION)
+                  if(modifier.findFirstToken(TokenTypes.IDENT).getText()
+                     .equals("Nonnull"))
+                    return;
+
         String parameter = param.findFirstToken(TokenTypes.IDENT).getText();
 
         // check if we have a type that needs to be considered

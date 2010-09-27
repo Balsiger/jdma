@@ -85,9 +85,6 @@ public final class Classes
   public static @Nonnull String toClassName
     (@Nonnull String inName, @Nullable String inPackage)
   {
-    if(inName == null)
-      return null;
-
     // trim white spaces
     inName = inName.trim().replaceAll("\\s+", " ");
 
@@ -192,8 +189,6 @@ public final class Classes
       // null values
       assertEquals("wrong conversion", "JustATest",
                    Classes.toClassName("just a test", null));
-      assertNull("wrong conversion", Classes.toClassName(null, "my.package"));
-      assertNull("wrong conversion", Classes.toClassName(null, null));
     }
 
     /** Test class to name conversion. */
@@ -203,7 +198,6 @@ public final class Classes
       // from a class
       assertEquals("wrong name from class", "Classes",
                    Classes.fromClassName(Classes.class));
-      assertEquals("wrong name from class", null, Classes.fromClassName(null));
     }
 
     /** Test package extraction. */
@@ -213,7 +207,6 @@ public final class Classes
       // get package name
       assertEquals("package", "net.ixitxachitls.util",
                    Classes.getPackage(Classes.class));
-      assertNull("null", Classes.getPackage(null));
     }
 
     /** Tests to make coverage happy. */
