@@ -1,0 +1,9 @@
+<!-- Bugs to be excluded for reporting. -->
+
+<FindBugsFilter>
+  <Match>
+    <Class name="~net\.ixitxachitls\.util\.logging\.Log\$Test\$.*" />
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
+  </Match>
+</FindBugsFilter>
+
