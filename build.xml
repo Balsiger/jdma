@@ -25,7 +25,7 @@
   <property name="source.dir"    value="java"                            />
   <property name="build.dir"     value="build"                           />
   <property name="build.test.dir" value="${build.dir}/test"              />
-  <property name="classes.dir"   value="${build.dir}/classes"            />  
+  <property name="classes.dir"   value="${build.dir}/classes"            />
   <property name="dist.dir"      value="dist"                            />
   <property name="doc.dir"       value="doc"                             />
   <property name="api.dir"       value="${doc.dir}/api"                  />
@@ -34,8 +34,8 @@
   <property name="lib.test.dir"  value="${lib.dir}/test"                 />
   <property name="resources.dir" value="resources"                       />
   <property name="config.dir"    value="${resources.dir}/config"         />
-  <property name="files.dir"     value="${resources.dir}/files"          />  
-  <property name="files-int.dir" value="${resources.dir}/files-internal" />  
+  <property name="files.dir"     value="${resources.dir}/files"          />
+  <property name="files-int.dir" value="${resources.dir}/files-internal" />
   <property name="coverage.dir"  value="${build.dir}/coverage"           />
   <property name="coverage.instr.dir" value="${coverage.dir}/instr"      />
   <property name="dma.dir"       value="../DnD/Information"              />
@@ -49,7 +49,7 @@
   <property name="warnings.deprecation" value="on"         />
   <property name="check.dir"          value="${source.dir}/net/ixitxachitls/" />
   <property name="test.classes"         value="**/*$Test.class" />
-  
+
   <!-- for checkstyle -->
   <path id="checkstyle.classpath">
     <pathelement location="${classes.dir}" />
@@ -57,7 +57,7 @@
     <pathelement location="${lib.dir}/servlet-api-2.5.jar" />
   </path>
 
-  <taskdef resource="checkstyletask.properties" 
+  <taskdef resource="checkstyletask.properties"
            classpathref="checkstyle.classpath" />
 
   <!-- for emma -->
@@ -74,9 +74,9 @@
   <!-- find bugs -->
   <path id="findbugs.classpath" >
     <pathelement location="${lib.build.dir}/findbugs-ant.jar"     />
-  </path>  
+  </path>
 
-  <taskdef name="findbugs" classpathref="findbugs.classpath" 
+  <taskdef name="findbugs" classpathref="findbugs.classpath"
            classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
 
   <!-- classpath -->
@@ -93,15 +93,15 @@
     <pathelement location="${lib.dir}/ujac.jar" />
     <pathelement location="${lib.dir}/commons-logging-1.1.1.jar" />
     <!-- jetty -->
-    <pathelement location="${lib.dir}/jetty-continuation-7.1.6.v20100715.jar"/> 
-    <pathelement location="${lib.dir}/jetty-http-7.1.6.v20100715.jar" /> 
-    <pathelement location="${lib.dir}/jetty-io-7.1.6.v20100715.jar" /> 
-    <pathelement location="${lib.dir}/jetty-jmx-7.1.6.v20100715.jar" /> 
-    <pathelement location="${lib.dir}/jetty-security-7.1.6.v20100715.jar" /> 
-    <pathelement location="${lib.dir}/jetty-server-7.1.6.v20100715.jar" /> 
-    <pathelement location="${lib.dir}/jetty-servlet-7.1.6.v20100715.jar" /> 
-    <pathelement location="${lib.dir}/jetty-servlets-7.1.6.v20100715.jar" /> 
-    <pathelement location="${lib.dir}/jetty-util-7.1.6.v20100715.jar" /> 
+    <pathelement location="${lib.dir}/jetty-continuation-7.1.6.v20100715.jar"/>
+    <pathelement location="${lib.dir}/jetty-http-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-io-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-jmx-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-security-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-server-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-servlet-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-servlets-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-util-7.1.6.v20100715.jar" />
     <pathelement location="${lib.dir}/servlet-api-2.5.jar" />
     <!-- mail -->
     <pathelement location="${lib.dir}/mail.jar" />
@@ -111,7 +111,7 @@
     <!-- somehow required probably because checkstyle does not handle -->
     <!-- build.sysclasspath... -->
     <pathelement location="${lib.build.dir}/checkstyle-all-5.1.jar"  />
-    <!-- cassandra 
+    <!-- cassandra
     <pathelement location="${lib.dir}/apache-cassandra-0.6.0-rc1.jar" />
     <pathelement location="${lib.dir}/libthrift-r917130.jar" />
     <pathelement location="${lib.dir}/slf4j-api-1.5.8.jar" />
@@ -125,7 +125,7 @@
 
   <!-- the version number stuff and so on -->
   <loadproperties resource="config/default.config" classpathref="classpath">
-    <filterchain> 
+    <filterchain>
       <linecontains>
         <contains value="project."/>
       </linecontains>
@@ -142,8 +142,8 @@
     <mkdir dir="${classes.dir}" />
     <mkdir dir="${dist.dir}" />
     <mkdir dir="${coverage.dir}" />
-    <property name="plugin.destination" value="${dist.dir}" />    
-    <property name="project.stem" 
+    <property name="plugin.destination" value="${dist.dir}" />
+    <property name="project.stem"
               value="${project.name}-${project.version}-${today.file}" />
     <!-- remove the superfluous build entries in the file from time to -->
     <!-- time! -->
@@ -158,7 +158,7 @@
       project:                   ${project.name}
       version:                   ${project.version}
       stem:                      ${project.stem}
-      
+
       os name:                   ${os.name}
       os version:                ${os.version}
       os arch:                   ${os.arch}
@@ -189,16 +189,16 @@
   </target>
 
   <!-- compile the whole project -->
-  <target name="compile" depends="prepare" 
+  <target name="compile" depends="prepare"
           description="compile all the source files of the project">
-    <javac srcdir="${source.dir}" destdir="${classes.dir}" 
-           deprecation="${warnings.deprecation}" 
-           debug="on" optimize="on" encoding="utf-8" 
+    <javac srcdir="${source.dir}" destdir="${classes.dir}"
+           deprecation="${warnings.deprecation}"
+           debug="on" optimize="on" encoding="utf-8"
            debuglevel="lines,vars,source" source="1.5">
       <classpath>
         <path refid="classpath" />
       </classpath>
-      <compilerarg line="-Xlint:${warnings.lint}"/> 
+      <compilerarg line="-Xlint:${warnings.lint}"/>
     </javac>
     <copy todir="${classes.dir}">
       <fileset dir="${source.dir}" excludes="**/*.java" />
@@ -206,17 +206,17 @@
   </target>
 
   <!-- clean everything -->
-  <target name="clean-all" 
+  <target name="clean-all"
           depends="clean, clean-dist, clean-config, clean-coverage"
           description="call all clean targets" >
   </target>
 
-  <!-- clean the build -->	
-  <target name       ="clean" 
+  <!-- clean the build -->
+  <target name       ="clean"
           description="clean up the build directories" >
-    <delete dir="${build.dir}"/>    
+    <delete dir="${build.dir}"/>
     <delete>
-      <fileset dir="${basedir}" defaultexcludes="no" 
+      <fileset dir="${basedir}" defaultexcludes="no"
                includes="**/*.class, **/*~, **/#*#, **/.#*, **/default.log"/>
     </delete>
   </target>
@@ -227,7 +227,7 @@
       <fileset dir="${dist.dir}" includes="**/*" />
     </delete>
   </target>
-   
+
   <!-- clean the coverage direactory -->
   <target name="clean-coverage" description="clean up the coverage dir">
     <delete dir="${coverage.dir}"/>
@@ -254,13 +254,13 @@
   </target>
 
   <!-- create the file with the class path -->
-  <target name="classpath" depends="prepare" 
+  <target name="classpath" depends="prepare"
           description="create a file to set the correct classpath">
     <delete file="${classpath.file}" />
     <copy file="${classpath.orig}.${os.name}" tofile="${classpath.file}">
       <filterchain>
         <expandproperties/>
-      </filterchain>     
+      </filterchain>
     </copy>
     <echo>please execute or source file ${classpath.file}</echo>
   </target>
@@ -269,7 +269,7 @@
   <target name="test" depends="prepare, compile">
     <emma enabled="${emma.enabled}" >
       <instr instrpathref="emma.instr.classpath"
-             destdir="${coverage.instr.dir}"	
+             destdir="${emma.instr.dir}"
              metadatafile="${coverage.dir}/metadata.emma"
              merge="true">
         <filter excludes="net.ixitxachitls.util.NullPointerCheck" />
@@ -285,7 +285,7 @@
       <jvmarg value="-Demma.coverage.out.file=${coverage.dir}/coverage.emma" />
       <jvmarg value="-Demma.coverage.out.merge=true" />
       <classpath>
-        <pathelement location="${coverage.instr.dir}" />
+        <pathelement location="${emma.instr.dir}" />
         <path refid="emma.classpath" />
         <path refid="classpath" />
       </classpath>
@@ -312,15 +312,15 @@
 
   <!-- create the javadoc api documentation -->
   <target name="javadoc" depends="compile">
-    <javadoc sourcepath="${source.dir}" destdir="${api.dir}" 
-             packagenames="net.ixitxachitls.*" classpathref="classpath" 
-             version="true" author="true" use="true" access="private" 
+    <javadoc sourcepath="${source.dir}" destdir="${api.dir}"
+             packagenames="net.ixitxachitls.*" classpathref="classpath"
+             version="true" author="true" use="true" access="private"
              source="1.5">
-      <tag name="keywords" description="Keywords:" 
+      <tag name="keywords" description="Keywords:"
            scope="methods, constructors, types" enabled="false" />
-      <tag name="bugs" description="Bugs:" 
+      <tag name="bugs" description="Bugs:"
            scope="methods, constructors, types" enabled="false" />
-      <tag name="to_do" description="To Do:" 
+      <tag name="to_do" description="To Do:"
            scope="methods, constructors, types" enabled="false" />
       <tag name="file" description="File:" scope="types" />
     </javadoc>
@@ -329,10 +329,10 @@
   <!-- check the source code -->
   <target name="check" depends=""
           description="check files for various conventions">
-    <checkstyle config="${lib.build.dir}/check.xml" 
+    <checkstyle config="${lib.build.dir}/check.xml"
                 classpathref="checkstyle.classpath">
       <fileset dir="${check.dir}" includes="**/*.java">
-      </fileset>        
+      </fileset>
       <formatter type="plain"                               />
       <formatter type="xml" toFile="build/check_errors.xml" />
     </checkstyle>
@@ -347,44 +347,44 @@
         <exclude name="**/DuplicateEntry.java"        />
         <exclude name="**/NotFoundEntry.java"         />
         <exclude name="**/PropertyChangeSupport.java" />
-      </fileset>        
+      </fileset>
       <formatter type="xml" toFile="build/check_errors.xml" />
     </checkstyle>
   </target>
 
   <!-- create coverage statistics -->
-  <target name="coverage" description="determine test coverage" 
+  <target name="coverage" description="determine test coverage"
           depends="compile">
     <property name="emma.enabled" value="true" />
     <!-- EMMA instr class output directory: -->
-    <property name="coverage.instr.dir" value="${coverage.instr.dir}" />
+    <property name="emma.instr.dir" value="${coverage.instr.dir}" />
     <mkdir dir="${coverage.instr.dir}" />
   </target>
 
   <!-- create coverage statistics -->
-  <target name="coverage2" description="determine test coverage" 
+  <target name="coverage2" description="determine test coverage"
           depends="compile">
-    <emmajava enabled="true" libclasspathref="emma.classpath" 
+    <emmajava enabled="true" libclasspathref="emma.classpath"
               fullmetadata="yes" sourcepath="${source.dir}"
-              classname="${test.class}" fork="yes" merge="false"> 
+              classname="${test.class}" fork="yes" merge="false">
       <txt outfile="${coverage.dir}/coverage-${today.file}.txt" />
       <xml outfile="${coverage.dir}/coverage.xml" />
       <html outfile="${coverage.dir}/coverage-${today.file}.html"  />
-      <filter includes="test.All, net.ixitxachitls.*" /> 
+      <filter includes="test.All, net.ixitxachitls.*" />
 
       <jvmarg value="-ea" />
-      <arg value="-text" /> 
-      <arg value="${test.class}" /> 
+      <arg value="-text" />
+      <arg value="${test.class}" />
       <classpath>
         <path refid="classpath" />
       </classpath>
     </emmajava>
-  </target>    
+  </target>
 
   <!-- run find bugs on the source -->
-  <target name="findbugs" depends="compile">
-    <findbugs home="${findbugs.dir}"
-              output="text">
+  <target name="bugs" depends="compile">
+    <findbugs home="${findbugs.dir}" output="text" reportLevel="low"
+              excludeFilter="${lib.build.dir}/findbugs.xml">
       <auxClasspath>
         <path refid="classpath" />
       </auxClasspath>
@@ -403,74 +403,74 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
   <target name="web" description="DMA web server" depends="compile">
     <jar jarfile="${dist.dir}/${project.stem}.jar" update="false">
       <fileset dir="${classes.dir}" />
-      <zipfileset dir="${config.dir}" prefix="config/" 
+      <zipfileset dir="${config.dir}" prefix="config/"
                   includes="default.config" />
       <manifest>
-        <attribute name="Main-Class" 
+        <attribute name="Main-Class"
                    value="net.ixitxachitls.dma.server.WebServer" />
-        <attribute name="Class-Path" 
+        <attribute name="Class-Path"
                value=". resources/ ${project.stem}-resources.jar ${project.name}-${project.version}-resources.jar ${project.stem}-files.jar ${project.name}-${project.version}-files.jar ${project.stem}-files-internal.jar ${project.name}-${project.version}-files-internal.jar jetty-6.1.5.jar jetty-util-6.1.5.jar servlet-api-2.5-6.1.5.jar iText.jar ujac.jar commons-logging.jar" />
       </manifest>
-    </jar>    
+    </jar>
   </target>
 
   <!-- create the disrtibution source package -->
-  <target name="dist-source" 
+  <target name="dist-source"
           depends="dist-source-tar, dist-source-zip"
           description="Create a distribution of the source files"/>
 
-  <target name="dist-source-tar" depends="prepare" 
+  <target name="dist-source-tar" depends="prepare"
           description="Create a tar distribution of the source files">
     <delete file="${dist.dir}/${project.stem}-source.tar.gz" />
-    <tar destfile="${dist.dir}/${project.stem}-source.tar.gz" 
+    <tar destfile="${dist.dir}/${project.stem}-source.tar.gz"
          basedir="${basedir}"
-         includes="${source.dir}/**/*.java,${lib.dir}/**/*,${config.dir}/**/*" 
+         includes="${source.dir}/**/*.java,${lib.dir}/**/*,${config.dir}/**/*"
          compression="gzip" />
   </target>
   <!-- create the distribution source package -->
   <target name="dist-source-zip" depends="prepare"
           description="Create a zip distribution of the source files">
-    <delete file="${dist.dir}/${project.stem}-source.zip" />          
+    <delete file="${dist.dir}/${project.stem}-source.zip" />
     <zip destfile="${dist.dir}/${project.stem}-source.zip" basedir="${basedir}"
-         includes="${source.dir}/**/*.java,${lib.dir}/**/*,${config.dir}/**/*" 
+         includes="${source.dir}/**/*.java,${lib.dir}/**/*,${config.dir}/**/*"
     />
   </target>
 
   <!-- create the distribution source package -->
   <target name="dist-bin" depends="compile"
-          description="Create a distribution of the binary files">    
+          description="Create a distribution of the binary files">
     <jar jarfile="${dist.dir}/${project.stem}.jar" update="false">
       <fileset dir="${classes.dir}" />
       <zipfileset dir="${config.dir}" prefix="config/" />
       <manifest>
         <attribute name="Main-Class" value="net.ixitxachitls.dma.cli.CLI" />
-        <attribute name="Class-Path" 
+        <attribute name="Class-Path"
                    value="${project.stem}-resources.jar ${project.stem}-files.jar ${project.stem}-files-internal.jar" />
       </manifest>
     </jar>
   </target>
 
   <!-- create the distribution source package -->
-  <target name="dist-resources" 
+  <target name="dist-resources"
           depends="dist-resources-zip, dist-resources-tar, dist-resources-jar"
           description="Create a distribution of the resource files" />
 
   <target name="dist-resources-tar" depends="prepare"
           description="Create a tar distribution of the resource files">
     <delete file="${dist.dir}/${project.stem}-resources-tar.gz" />
-    <tar destfile="${dist.dir}/${project.stem}-resources.tar.gz" 
+    <tar destfile="${dist.dir}/${project.stem}-resources.tar.gz"
          basedir="${basedir}"
-         includes="${resources.dir}/**/*" 
+         includes="${resources.dir}/**/*"
          excludes="${config.dir}/**/*,${files.dir}/**/*,${files-int.dir}/**/*,${resources.dir}/raw/**/*"
          compression="gzip" />
   </target>
 
   <target name="dist-resources-zip" depends="prepare"
           description="Create a zip distribution of the resource files">
-    <delete file="${dist.dir}/${project.stem}-resources.zip" />          
+    <delete file="${dist.dir}/${project.stem}-resources.zip" />
     <zip destfile="${dist.dir}/${project.stem}-resources.zip" update="false"
          basedir="${basedir}"
-         includes="${resources.dir}/**/*" 
+         includes="${resources.dir}/**/*"
          excludes="${config.dir}/**/*,${files.dir}/**/*,${files-int.dir}/**/*,${resources.dir}/raw/**/*" />
   </target>
 
@@ -481,35 +481,35 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
                excludes="config/**/*,files/**/*,files-internal/**/*,raw/**/*" />
     </jar>
   </target>
-  
-  <target name="dist-dma" depends="prepare" 
+
+  <target name="dist-dma" depends="prepare"
           description="create a jar with all the dma files">
     <jar jarfile="${dist.dir}/${project.stem}-dma.jar" update="false">
       <zipfileset dir="${dma.dir}" includes="**/*.dma" prefix="dma"/>
-    </jar>    
+    </jar>
   </target>
 
   <!-- create the distribution source package -->
-  <target name="dist-files" 
+  <target name="dist-files"
           depends="dist-files-tar, dist-files-zip, dist-files-jar"
           description="Create a distribution resource files" />
 
   <target name="dist-files-tar" depends="prepare"
           description="Create a tar distribution resource files">
     <delete file="${dist.dir}/${project.stem}-files-tar.gz" />
-    <tar destfile="${dist.dir}/${project.stem}-files.tar.gz" 
+    <tar destfile="${dist.dir}/${project.stem}-files.tar.gz"
          basedir="${basedir}"
-         includes="${files.dir}/**/*" 
+         includes="${files.dir}/**/*"
          compression="gzip" />
   </target>
   <target name="dist-files-zip" depends="prepare"
           description="Create a distribution resource files">
-    <delete file="${dist.dir}/${project.stem}-files.zip" />          
+    <delete file="${dist.dir}/${project.stem}-files.zip" />
     <zip destfile="${dist.dir}/${project.stem}-files.zip" update="false"
          basedir="${basedir}"
          includes="${files.dir}/**/*" />
   </target>
- 
+
   <target name="dist-files-jar" depends="prepare"
           description="Create a jar distribution of the files">
     <jar jarfile="${dist.dir}/${project.stem}-files.jar" update="false">
@@ -518,22 +518,22 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
   </target>
 
   <!-- create the distribution source package -->
-  <target name="dist-files-internal" 
+  <target name="dist-files-internal"
         depends="dist-files-internal-tar,dist-files-internal-zip,dist-files-internal-jar"
           description="Create a distribution resource files" />
 
   <target name="dist-files-internal-tar" depends="prepare"
           description="Create a distribution resource files">
     <delete file="${dist.dir}/${project.stem}-files-internal-tar.gz" />
-    <tar destfile="${dist.dir}/${project.stem}-files-internal.tar.gz" 
+    <tar destfile="${dist.dir}/${project.stem}-files-internal.tar.gz"
          basedir="${basedir}"
-         includes="${files-int.dir}/**/*" 
+         includes="${files-int.dir}/**/*"
          compression="gzip" />
   </target>
   <target name="dist-files-internal-zip" depends="prepare"
           description="Create a distribution resource files">
-    <delete file="${dist.dir}/${project.stem}-files-internal.zip" />          
-    <zip destfile="${dist.dir}/${project.stem}-files-internal.zip" 
+    <delete file="${dist.dir}/${project.stem}-files-internal.zip" />
+    <zip destfile="${dist.dir}/${project.stem}-files-internal.zip"
          update="false"
          basedir="${basedir}"
          includes="${files-int.dir}/**/*" />
@@ -541,7 +541,7 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
 
   <target name="dist-files-internal-jar" depends="prepare"
           description="Create a jar distribution of the files">
-    <jar jarfile="${dist.dir}/${project.stem}-files-internal.jar" 
+    <jar jarfile="${dist.dir}/${project.stem}-files-internal.jar"
          update="false">
       <zipfileset dir="${files-int.dir}" prefix="files-internal"/>
     </jar>

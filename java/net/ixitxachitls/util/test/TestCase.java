@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.util.test;
 
-//import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -85,50 +85,16 @@ public class TestCase extends org.junit.Assert
    *
    */
 //   public void assertEquals(String inMessage, String inExpected,
-//   Object inActual)
+//                            Object inActual)
 //   {
 //     assertEquals(inMessage, inExpected, inActual.toString());
 //   }
 
   //........................................................................
 
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
-  //--------------------------------- run ----------------------------------
-
-  /**
-   * This method actually runs a test.
-   *
-   * @param       inResult the result of the test is returned with this
-   *
-   * @undefined   never
-   *
-   */
-  public void run(final junit.framework.TestResult inResult)
-  {
-    //super.run(inResult);
-
-    // call the special tearDown
-    try
-    {
-      tearDown(inResult.errorCount() > m_errors
-               || inResult.failureCount() > m_failures);
-
-      m_errors   = inResult.errorCount();
-      m_failures = inResult.failureCount();
-    }
-    catch(junit.framework.AssertionFailedError e)
-    {
-      //inResult.addError(this, e);
-    }
-  }
-
-
-
-  //........................................................................
 
   //-------------------------------- setUp ---------------------------------
 
@@ -136,18 +102,13 @@ public class TestCase extends org.junit.Assert
    * Setup the test for the next test case. This is called before each
    * test method.
    *
-   * @undefined   never
-   *
-   * @algorithm   just set up the mock logger to DEBUG level
-   *
-   * @derivation  possible, but call this one
-   *
    */
+  @org.junit.Before
   public void setUp()
   {
-    //    m_logger = new Log.Test.MockLogger();
-    //Log.add(s_logger, m_logger);
-    //Log.setLevel(Log.Type.DEBUG);
+    m_logger = new Log.Test.MockLogger();
+    Log.add(s_logger, m_logger);
+    Log.setLevel(Log.Type.DEBUG);
     //net.ixitxachitls.util.configuration.Config.setRewriting(true);
   }
 
@@ -156,22 +117,16 @@ public class TestCase extends org.junit.Assert
 
   /**
    * Tear down the test after a test case. This is called after each
-   * test method. This is a special, additional tearDown method with
-   * an additional method signaling that an error or failure occured.
-   *
-   * @param       inFailure - true if an error or failure occured, false
-   *                          if everything is ok
-   *
-   * @undefined   never
+   * test method.
    *
    */
-  public void tearDown(final boolean inFailure)
+  @org.junit.After
+  public void tearDown()
   {
-    //if(!inFailure)
-    //  m_logger.verify(getName());
+    m_logger.verify("logger tear down");
 
-    //Log.remove(s_logger);
-    //m_logger = null;
+    Log.remove(s_logger);
+    m_logger = null;
   }
 
   //........................................................................
