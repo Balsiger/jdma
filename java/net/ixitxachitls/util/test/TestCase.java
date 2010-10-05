@@ -63,7 +63,7 @@ public class TestCase extends org.junit.Assert
   {
     // switch Configuration to test mode; must be done in a static init
     // to make sure that all static inits in the test use the test mode
-    //net.ixitxachitls.util.configuration.Config.setRewriting(true);
+    net.ixitxachitls.util.configuration.Config.setRewriting(true);
   }
 
   /** The name of the test logger. */
@@ -109,7 +109,7 @@ public class TestCase extends org.junit.Assert
     m_logger = new Log.Test.MockLogger();
     Log.add(s_logger, m_logger);
     Log.setLevel(Log.Type.DEBUG);
-    //net.ixitxachitls.util.configuration.Config.setRewriting(true);
+    net.ixitxachitls.util.configuration.Config.setRewriting(true);
   }
 
   //........................................................................

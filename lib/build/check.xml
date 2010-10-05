@@ -90,11 +90,12 @@
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sf.net/config_import.html -->
         <module name="AvoidStarImport"/>
+        <module name="AvoidStaticImport"/>
         <module name="IllegalImport"/> <!-- defaults to sun.* packages -->
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
         <module name="ImportOrder">
-          <property name="groups" value="java,javax"/>
+          <property name="groups" value="java,javax,net.ixitxachitls"/>
           <property name="ordered" value="true"/>
           <property name="separated" value="true"/>
         </module>
