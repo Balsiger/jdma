@@ -136,6 +136,8 @@ public class Resource implements Configuration
    * This is a simple extension to the properties class capable of
    * loading its contents from an url.
    *
+   * Properties are thread safe, so this one is too.
+   *
    * @example       DataHandler properties =
    *                  new PropertiesHandler(new URL("test.file"));
    *
@@ -334,7 +336,7 @@ public class Resource implements Configuration
      * @return      true if the values were saved, false else
      *
      */
-    public boolean store()
+    synchronized public boolean store()
     {
       if(m_url == null)
         return false;

@@ -57,6 +57,8 @@ public class User extends Resource
   /**
    * This is a simple extension to the properties class.
    *
+   * The preferences node is thread save, so this class is too.
+   *
    * @example       PreferencesHandler preferences =
    *                  new PreferencesHandler("test.file");
    *
