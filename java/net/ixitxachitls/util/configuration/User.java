@@ -27,6 +27,7 @@ import java.util.prefs.Preferences;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
@@ -48,6 +49,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ThreadSafe
 public class User extends Resource
 {
   //----------------------------------------------------------------- nested
@@ -63,6 +65,7 @@ public class User extends Resource
    *                  new PreferencesHandler("test.file");
    *
    */
+  @ThreadSafe
   public static class PreferencesHandler implements DataHandler
   {
     //------------------------- PreferencesHandler -------------------------

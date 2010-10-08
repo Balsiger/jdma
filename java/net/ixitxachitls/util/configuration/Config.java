@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Pair;
@@ -86,6 +87,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ThreadSafe
 public final class Config
 {
   //--------------------------------------------------------- constructor(s)

@@ -26,6 +26,7 @@ package net.ixitxachitls.util.configuration;
 import java.util.prefs.Preferences;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.util.logging.Log;
 
@@ -46,6 +47,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ThreadSafe
 public class System extends User
 {
   //----------------------------------------------------------------- nested
@@ -59,6 +61,7 @@ public class System extends User
    *                  new SystemPreferencesHandler("test.file");
    *
    */
+  @ThreadSafe
   public static class SystemPreferencesHandler extends PreferencesHandler
   {
     //---------------------- SystemPreferencesHandler ----------------------

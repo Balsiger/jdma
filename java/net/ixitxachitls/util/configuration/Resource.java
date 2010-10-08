@@ -34,6 +34,7 @@ import java.util.Properties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.logging.Log;
@@ -56,6 +57,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ThreadSafe
 public class Resource implements Configuration
 {
   //----------------------------------------------------------------- nested
@@ -142,6 +144,7 @@ public class Resource implements Configuration
    *                  new PropertiesHandler(new URL("test.file"));
    *
    */
+  @ThreadSafe
   public static class PropertiesHandler extends Properties
     implements DataHandler
   {
@@ -866,7 +869,6 @@ public class Resource implements Configuration
     }
 
     //......................................................................
-
   }
 
   //........................................................................
