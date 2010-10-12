@@ -463,7 +463,7 @@ public class Project extends Resource
     {
       FileHandler first = new FileHandler("resources/config/test/test");
       FileHandler second = new FileHandler("resources/config/test/project");
-      FileHandler third = new FileHandler("reosource/config/test/test");
+      FileHandler third = new FileHandler("resources/config/test/test");
 
       assertTrue("same", first.equals(first));
       assertTrue("similar", first.equals(third));
@@ -474,7 +474,6 @@ public class Project extends Resource
     }
 
     //......................................................................
-
   }
 
   //........................................................................
