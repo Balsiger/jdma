@@ -23,6 +23,9 @@
 
 package net.ixitxachitls.util.test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -72,6 +75,26 @@ public class TestCase extends org.junit.Assert
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //---------------------------- assertPattern -----------------------------
+
+  /**
+   * Assert that the given string matches the given pattern.
+   *
+   * @param       inMessage the message
+   * @param       inPattern the expected pattern
+   * @param       inText    the text obtained
+   *
+   */
+  public void assertPattern(String inMessage, String inPattern, String inText)
+  {
+    Matcher matcher = Pattern.compile(inPattern).matcher(inText);
+
+    if(!matcher.matches())
+      throw new org.junit.ComparisonFailure(inMessage, inPattern, inText);
+  }
+
+  //........................................................................
 
   //----------------------------- assertEquals -----------------------------
 
