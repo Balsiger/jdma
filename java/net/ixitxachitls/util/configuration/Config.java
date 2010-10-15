@@ -1427,11 +1427,8 @@ public final class Config
       m_logger.logClass(Resource.class);
       m_logger.logClass(Bundle.BundleHandler.class);
       m_logger.logClass(User.PreferencesHandler.class);
-//       m_logger.logClass(System.SystemPreferencesHandler.class);
+      m_logger.logClass(System.SystemPreferencesHandler.class);
 
-      m_logger.addExpected("USEFUL: loaded configuration class "
-                           + "net.ixitxachitls.util.configuration.Resource for "
-                           + "resource");
       m_logger.addExpectedPattern("COMPLETE: loading resource "
                                   + ".*/test.config");
 
@@ -1463,10 +1460,13 @@ public final class Config
       assertEquals("get (user)", "guru",
                    Config.get("user:test/test/test.config", "guru"));
 
-// m_logger.addExpected("COMPLETE: creating system preferences test/test");
+      m_logger.addExpected("USEFUL: loaded configuration class "
+                           + "net.ixitxachitls.util.configuration.System for "
+                           + "system");
+      m_logger.addExpected("COMPLETE: creating system preferences test/test");
 
-// assertEquals("get (system)", "guru",
-// Config.get("system:test/test/test.config", "guru"));
+      assertEquals("get (system)", "guru",
+                   Config.get("system:test/test/test.config", "guru"));
 
       m_logger.verify();
     }

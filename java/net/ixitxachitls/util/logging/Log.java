@@ -203,7 +203,7 @@ public final class Log
     new LinkedList<Message>();
 
   /** The analytics tracker. */
-  //protected static Analytics s_analytics = new Analytics();
+  protected static Analytics s_analytics = new Analytics();
 
   //........................................................................
 
@@ -398,7 +398,7 @@ public final class Log
     */
   public static void track(@Nonnull String inTitle, @Nonnull String inPage)
   {
-    //s_analytics.track(inTitle, inPage);
+    s_analytics.track(inTitle, inPage);
   }
 
   //........................................................................
@@ -418,7 +418,7 @@ public final class Log
                                 @Nonnull String inLabel,
                                 @Nonnull String inValue)
   {
-    //s_analytics.event(inObject, inAction, inLabel, inValue);
+    s_analytics.event(inObject, inAction, inLabel, inValue);
   }
 
   //........................................................................
