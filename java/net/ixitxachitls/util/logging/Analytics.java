@@ -296,6 +296,15 @@ public class Analytics
   public void stop()
   {
     m_tracker.done();
+
+    try
+    {
+      m_tracker.join(5 * 1000);
+    }
+    catch(InterruptedException e)
+    {
+      // ignoring, wanted to stop anyway
+    }
   }
 
   //........................................................................

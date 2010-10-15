@@ -1377,6 +1377,8 @@ public final class Log
       new Log();
       assertEquals("value of", Type.WARNING, Log.Type.valueOf("WARNING"));
       assertTrue("values", Log.Type.values().length > 0);
+
+      s_analytics.stop();
     }
 
     //......................................................................
