@@ -203,7 +203,7 @@ public final class Log
     new LinkedList<Message>();
 
   /** The analytics tracker. */
-  protected static Analytics s_analytics = new Analytics();
+  private static Analytics s_analytics = new Analytics();
 
   //........................................................................
 

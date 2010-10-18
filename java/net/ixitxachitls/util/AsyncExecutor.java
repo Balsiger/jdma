@@ -220,7 +220,7 @@ public abstract class AsyncExecutor<T> extends Thread
       final java.util.ArrayList<String> results =
         new java.util.ArrayList<String>();
 
-      AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 5)
+      AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 4)
         {
           public void execute(String inValue)
           {
@@ -233,12 +233,13 @@ public abstract class AsyncExecutor<T> extends Thread
 
       executor.start();
 
-      executor.offer("first", 100);
-      executor.offer("second", 100);
-      executor.offer("third", 100);
-      executor.offer("fourth", 100);
-      executor.offer("fifth", 100);
-      executor.offer("sixth", 0);
+      executor.offer("first", 0);
+      executor.offer("second", 0);
+      executor.offer("third", 0);
+      executor.offer("fourth", 0);
+      executor.offer("fifth", 0);
+      // this is only true if execution of the first element already started
+      boolean additional = executor.offer("sixth", 0);
 
       executor.done();
       executor.join(5 * 1000);
@@ -247,8 +248,13 @@ public abstract class AsyncExecutor<T> extends Thread
       assertEquals("result", "second", results.get(1));
       assertEquals("result", "third", results.get(2));
       assertEquals("result", "fourth", results.get(3));
-      assertEquals("result", "fifth", results.get(4));
-      assertEquals("result size", 5, results.size());
+      if(additional)
+      {
+        assertEquals("result", "fifth", results.get(4));
+        assertEquals("result size", 5, results.size());
+      }
+      else
+        assertEquals("result size", 4, results.size());
     }
 
     //......................................................................
@@ -276,18 +282,27 @@ public abstract class AsyncExecutor<T> extends Thread
           }
         };
 
+
       executor.start();
 
       assertTrue(executor.offer("first", 0));
       assertTrue(executor.offer("second", 0));
-      assertFalse(executor.offer("third", 0));
+      // this is only true if execution of the first element already started
+      boolean additional = executor.offer("third", 0);
+      assertFalse(executor.offer("fourth", 0));
 
       executor.done();
       executor.join(5 * 1000);
 
-      assertEquals("result", 2, results.size());
       assertEquals("result", "first", results.get(0));
       assertEquals("result", "second", results.get(1));
+      if(additional)
+      {
+        assertEquals("result", "third", results.get(2));
+        assertEquals("result", 3, results.size());
+      }
+      else
+        assertEquals("result", 2, results.size());
     }
 
     //......................................................................
