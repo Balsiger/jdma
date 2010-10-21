@@ -110,6 +110,8 @@
     <pathelement location="${lib.dir}/activation.jar" />
     <!-- java annotations -->
     <pathelement location="${lib.dir}/jsr305.jar" />
+    <!-- guava -->
+    <pathelement location="${lib.dir}/guava-r06.jar" />
     <!-- somehow required probably because checkstyle does not handle -->
     <!-- build.sysclasspath... -->
     <pathelement location="${lib.build.dir}/checkstyle-all-5.1.jar"  />

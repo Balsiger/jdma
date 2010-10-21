@@ -342,11 +342,7 @@ public final class Encodings
 
   //------------------------------------------------------------------- test
 
-  /** The test.
-   *
-   * @hidden
-   *
-   */
+  /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     //----- encode decode --------------------------------------------------
@@ -423,7 +419,8 @@ public final class Encodings
     //----- encode html ----------------------------------------------------
 
     /** Test encoding as html attribute. */
-    public void testEncodeHTML()
+    @org.junit.Test
+    public void encodeHTML()
     {
       assertEquals("apos", "I can&#39;t do &#34;this&#34;",
                    Encodings.encodeHTMLAttribute("I can't do \"this\""));
@@ -456,6 +453,29 @@ public final class Encodings
       assertEquals("simple", "just_a_test", markSpaces("just a test"));
       assertEquals("all", "just\\ta\\ntest\\f\\r_with___all_\\n\\nthings",
                    markSpaces("just\ta\ntest\f\r with   all \n\nthings"));
+    }
+
+    //......................................................................
+    //----- css ------------------------------------------------------------
+
+    /** css Test. */
+    @org.junit.Test
+    public void css()
+    {
+      assertEquals("empty", "", Encodings.toCSSString(""));
+      assertEquals("simple", "simple", Encodings.toCSSString("simple"));
+      assertEquals("spaces", "justatest", Encodings.toCSSString("just a test"));
+      assertEquals("special", "a", Encodings.toCSSString("&*%$#a%#!@()"));
+    }
+
+    //......................................................................
+    //----- coverage -------------------------------------------------------
+
+    /** Coverage test. */
+    @org.junit.Test
+    public void coverage()
+    {
+      new Encodings();
     }
 
     //......................................................................
