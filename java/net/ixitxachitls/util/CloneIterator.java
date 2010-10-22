@@ -26,7 +26,6 @@ package net.ixitxachitls.util;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 //..........................................................................
@@ -34,11 +33,12 @@ import javax.annotation.concurrent.NotThreadSafe;
 //------------------------------------------------------------------- header
 
 /**
- * This class defines an iterator that can be used on arrays.
+ * This class defines an iterator over another iterator of PublicCloneable
+ * objects and clones each object before returning it.
  *
  * @param         <T> The elements of each iteration
  *
- * @file          ArrayIterator.java
+ * @file          CloneIterator.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
@@ -49,19 +49,19 @@ import javax.annotation.concurrent.NotThreadSafe;
 //__________________________________________________________________________
 
 @NotThreadSafe
-public class ArrayIterator<T> implements Iterator<T>
+public class CloneIterator<T extends PublicCloneable> implements Iterator<T>
 {
   //--------------------------------------------------------- constructor(s)
 
-  //---------------------------- ArrayIterator -----------------------------
+  //---------------------------- CloneIterator -----------------------------
 
   /**
-   * Create the iterator with the given array.
+   * Create the clone iterator with the given iterator.
    *
-   * @param       inValues the values of the array
+   * @param       inValues the values of the iterator to 'clone'
    *
    */
-  public ArrayIterator(@Nonnull T ... inValues)
+  public CloneIterator(@Nonnull Iterator<T> inValues)
   {
     m_values = inValues;
   }
@@ -73,10 +73,7 @@ public class ArrayIterator<T> implements Iterator<T>
   //-------------------------------------------------------------- variables
 
   /** The values iterated over. */
-  private @Nonnull T []m_values;
-
-  /** The index of the current value used. */
-  private int m_index = 0;
+  private @Nonnull Iterator<T> m_values;
 
   //........................................................................
 
@@ -92,7 +89,7 @@ public class ArrayIterator<T> implements Iterator<T>
    */
   public boolean hasNext()
   {
-    return m_index < m_values.length;
+    return m_values.hasNext();
   }
 
   //........................................................................
@@ -109,12 +106,17 @@ public class ArrayIterator<T> implements Iterator<T>
    * @return      the next Object
    *
    */
-  public @Nullable T next()
+  @SuppressWarnings("unchecked")
+  public T next()
   {
-    if(m_index >= m_values.length)
-      throw new java.util.NoSuchElementException("no more values");
-
-    return m_values[m_index++];
+    // the following produces an unchecked cast. It would be possible to
+    // prevent that by making PublicCloneable a generic type. But then we have
+    // some problems with the Value class. This one must implement the
+    // PublicCloneable interface as well, but its derivations cannot
+    // subsequently implement their own version of it as well (unless Value
+    // itself is a generic type, which in turn produces many other
+    // problems). Thus, we just have to live with it here, sorry.
+    return (T)m_values.next().clone();
   }
 
   //........................................................................
@@ -130,8 +132,7 @@ public class ArrayIterator<T> implements Iterator<T>
   public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
-                                            + "support the removal of "
-                                            + "entries");
+                                            + "support removal of entries");
   }
 
   //........................................................................
@@ -146,39 +147,72 @@ public class ArrayIterator<T> implements Iterator<T>
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- remove ---------------------------------------------------------
+    //---------------------------------------------------------------- value
 
-    /** Removing test. */
-    @org.junit.Test(expected = UnsupportedOperationException.class)
-    public void remove()
+    /** A public cloneable class for testing. */
+    private class Value implements PublicCloneable
     {
-      Iterator<Integer> i =
-        new ArrayIterator<Integer>(1, 2, 3, 4);
+      /**
+       * Create the value.
+       *
+       * @param inName the name of the value
+       */
+      public Value(@Nonnull String inName)
+      {
+        m_name = inName;
+      }
 
-      i.remove();
+      /** The name of the value. */
+      private String m_name;
+
+      /**
+       * Clone the current object.
+       *
+       * @return the cloned object
+       *
+       */
+      public Object clone()
+      {
+        return new Value(m_name + "(cloned)");
+      }
+
+      /**
+       * Convert to string.
+       *
+       * @return the converted string
+       */
+      public String toString()
+      {
+        return m_name;
+      }
     }
 
     //......................................................................
     //----- iterator -------------------------------------------------------
 
-    /** Test the iteration process. */
-    @org.junit.Test(expected = java.util.NoSuchElementException.class)
+    /** Test the iteration. */
+    @org.junit.Test()
     public void iterate()
     {
-      Iterator<String> i =
-        new ArrayIterator<String>("first", "second", "third", "fourth");
+      Iterator<Value> i = new CloneIterator<Value>
+        (new ArrayIterator<Value>(new Value []
+          { new Value("first"),
+            new Value("second"),
+            new Value("third"),
+            new Value("fourth"),
+          }));
 
       assertTrue("first", i.hasNext());
-      assertEquals("first", "first", i.next());
+      assertEquals("first", "first(cloned)", i.next().toString());
 
       assertTrue("second", i.hasNext());
-      assertEquals("second", "second", i.next());
+      assertEquals("second", "second(cloned)", i.next().toString());
 
       assertTrue("third", i.hasNext());
-      assertEquals("third", "third", i.next());
+      assertEquals("third", "third(cloned)", i.next().toString());
 
       assertTrue("fourth", i.hasNext());
-      assertEquals("fourth", "fourth", i.next());
+      assertEquals("fourth", "fourth(cloned)", i.next().toString());
 
       assertFalse("end", i.hasNext());
     }
@@ -190,13 +224,27 @@ public class ArrayIterator<T> implements Iterator<T>
     @org.junit.Test(expected = java.util.NoSuchElementException.class)
     public void overrun()
     {
-      Iterator<String> i = new ArrayIterator<String>(new String [0]);
+      Iterator<Value> i =
+        new CloneIterator<Value>(new ArrayIterator<Value>(new Value [0]));
 
       i.next();
     }
 
     //......................................................................
+    //----- remove ---------------------------------------------------------
 
+    /** remove Test. */
+    @org.junit.Test(expected = UnsupportedOperationException.class)
+    public void remove()
+    {
+      Iterator<Value> i =
+        new CloneIterator<Value>(new ArrayIterator<Value>(new Value []
+          { new Value("first") }));
+
+      i.remove();
+    }
+
+    //......................................................................
   }
 
   //........................................................................
