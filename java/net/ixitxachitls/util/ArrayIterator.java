@@ -159,10 +159,10 @@ public class ArrayIterator<T> implements Iterator<T>
     }
 
     //......................................................................
-    //----- iterator -------------------------------------------------------
+    //----- iterate --------------------------------------------------------
 
     /** Test the iteration process. */
-    @org.junit.Test(expected = java.util.NoSuchElementException.class)
+    @org.junit.Test
     public void iterate()
     {
       Iterator<String> i =
