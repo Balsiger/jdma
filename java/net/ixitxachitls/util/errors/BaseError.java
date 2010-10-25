@@ -25,6 +25,7 @@ package net.ixitxachitls.util.errors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.configuration.Config;
@@ -46,6 +47,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@ThreadSafe
 public class BaseError
 {
   //--------------------------------------------------------- constructor(s)
@@ -159,7 +161,7 @@ public class BaseError
   }
 
   //........................................................................
-  //------------------------------- hashCode -------------------------------
+ //------------------------------- hashCode -------------------------------
 
   /**
    * Compute the hash code for this class.
