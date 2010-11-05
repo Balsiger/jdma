@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.util;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 //..........................................................................
 
@@ -47,22 +47,34 @@ import javax.annotation.Nonnull;
 public interface Filter<T>
 {
   /** The filter to accept no objects. */
-  public static final Filter NONE = new Filter()
+  public static class None<T> implements Filter<T>
+  {
+    @Override
+    public boolean accept(T inEntry)
     {
-      public boolean accept(Object inEntry)
-      {
-        return true;
-      }
-    };
+      return false;
+    }
+  }
 
   /** The filter to accept all objects. */
-  public static final Filter ALL = new Filter()
+  public static class All<T> implements Filter<T>
+  {
+    @Override
+    public boolean accept(T inEntry)
     {
-      public boolean accept(Object inEntry)
-      {
-        return false;
-      }
-    };
+      return true;
+    }
+  }
+
+  /** The filter to accept non null objects only. */
+  public static class NonNull<T> implements Filter<T>
+  {
+    @Override
+    public boolean accept(@Nullable T inEntry)
+    {
+      return inEntry != null;
+    }
+  }
 
   //-------------------------------------------------------------- accessors
 
@@ -76,7 +88,7 @@ public interface Filter<T>
     * @return      true if accepted in the filter, false if not
     *
     */
-  public boolean accept(@Nonnull T inEntry);
+  public boolean accept(@Nullable T inEntry);
 
   //........................................................................
 

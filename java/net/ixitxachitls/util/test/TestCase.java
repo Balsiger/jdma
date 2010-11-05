@@ -132,6 +132,42 @@ public class TestCase extends org.junit.Assert
   }
 
   //........................................................................
+  //---------------------------- assertContent -----------------------------
+
+  /**
+   * Assert the contents in the iterator.
+   *
+   * @param    inMessage  the message to show on failure
+   * @param    inActual   the objects that were actually produced
+   * @param    inExpected the objects expected
+   *
+   */
+  public void assertContent(@Nonnull String inMessage,
+                            @Nonnull Iterator<?> inActual,
+                            @Nonnull Object ... inExpected)
+  {
+    for(Object o : inExpected)
+    {
+      Object next = inActual.next();
+      if(o == null)
+      {
+        if(next != null)
+          throw new org.junit.ComparisonFailure(inMessage, "NULL",
+                                                next.toString());
+      }
+      else
+        if(!o.equals(next))
+          throw new org.junit.ComparisonFailure(inMessage, o.toString(),
+                                                next.toString());
+    }
+
+    if(inActual.hasNext())
+      throw new org.junit.ComparisonFailure(inMessage + " (end)", "to at end",
+                                            "not yet at end");
+  }
+
+  //........................................................................
+
   //----------------------------- raiseFailure -----------------------------
 
   /**
