@@ -23,8 +23,13 @@
 
 package net.ixitxachitls.util.test;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.annotation.Nonnull;
 
 import net.ixitxachitls.util.logging.Log;
 
@@ -92,6 +97,57 @@ public class TestCase extends org.junit.Assert
 
     if(!matcher.matches())
       throw new org.junit.ComparisonFailure(inMessage, inPattern, inText);
+  }
+
+  //........................................................................
+  //------------------------ assertContentsAnyOrder ------------------------
+
+  /**
+   * Check that the iterable contains the given objects in any order.
+   *
+   * @param    inMessage  the message to show on failure
+   * @param    inActual   the objects that were actually produced
+   * @param    inExpected the objects expected
+   *
+   */
+  public void assertContentAnyOrder(@Nonnull String inMessage,
+                                    @Nonnull Iterable<?> inActual,
+                                    @Nonnull Object ... inExpected)
+  {
+    List<Object> actual = new ArrayList<Object>();
+    List<Object> expected = new ArrayList<Object>();
+
+    for(Iterator<?> i = inActual.iterator(); i.hasNext(); )
+      actual.add(i.next());
+
+    for(Object o : inExpected)
+      expected.add(o);
+
+    if(actual.size() != expected.size())
+      raiseFailure(inMessage, expected, actual);
+
+    for(Object o : actual)
+      if(!expected.remove(o))
+        raiseFailure(inMessage, expected, actual);
+  }
+
+  //........................................................................
+  //----------------------------- raiseFailure -----------------------------
+
+  /**
+   * Raise a failure because the actual and expected values don't match.
+   *
+   * @param       inMessage  the failure message
+   * @param       inExpected the epected value
+   * @param       inActual   the real value obtained
+   *
+   */
+   private void raiseFailure(@Nonnull String inMessage,
+                             @Nonnull List<?> inExpected,
+                             @Nonnull List<?> inActual)
+  {
+    throw new org.junit.ComparisonFailure(inMessage, inExpected.toString(),
+                                          inActual.toString());
   }
 
   //........................................................................

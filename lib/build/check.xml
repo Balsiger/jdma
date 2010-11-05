@@ -96,7 +96,7 @@
         <module name="UnusedImports"/>
         <module name="ImportOrder">
           <property name="groups"
-                    value="java,javax,org.easymock,net.ixitxachitls"/>
+                   value="java,javax,com.google,org.easymock,net.ixitxachitls"/>
           <property name="ordered" value="true"/>
           <property name="separated" value="true"/>
         </module>
