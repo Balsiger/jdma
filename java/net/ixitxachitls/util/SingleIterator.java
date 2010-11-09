@@ -25,6 +25,7 @@ package net.ixitxachitls.util;
 
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 //..........................................................................
