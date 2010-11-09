@@ -168,7 +168,8 @@ public class Triple<T1, T2, T3>
       final String third  = "So long";
 
       Triple<String, Integer, String> triple =
-        new Triple<String, Integer, String>(first, new Integer(second), third);
+        new Triple<String, Integer, String>(first, Integer.valueOf(second),
+                                            third);
 
       assertNotNull("instantiated", triple);
       assertEquals("first",  first, triple.first());
@@ -191,7 +192,7 @@ public class Triple<T1, T2, T3>
       assertNull("second", triple.second());
       assertNull("third", triple.third());
 
-      triple = new Triple<String, Integer, String>("", new Integer(0), "");
+      triple = new Triple<String, Integer, String>("", Integer.valueOf(0), "");
 
       assertNotNull("instantiated", triple);
       assertEquals("first", "", triple.first());
