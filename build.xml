@@ -85,7 +85,7 @@
     <pathelement location="${config.dir}" />
     <pathelement location="${resources.dir}" />
     <!-- for testing -->
-    <pathelement location="${lib.dir}/test/junit-4.8.1.jar" />
+    <pathelement location="${lib.dir}/test/junit-4.8.2.jar" />
     <pathelement location="${lib.dir}/test/cglib-nodep-2.2.jar" />
     <pathelement location="${lib.dir}/test/objenesis-1.2.jar" />
     <pathelement location="${lib.dir}/test/easymock-3.0.jar" />

@@ -2,7 +2,7 @@
 
 <FindBugsFilter>
   <Match>
-    <Class name="~net\.ixitxachitls\.util\..*\$Test\$.*" />
+    <Class name="~net\.ixitxachitls\..*\$Test\$.*" />
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
   </Match>
 

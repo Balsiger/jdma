@@ -26,6 +26,7 @@ package net.ixitxachitls.util.test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,9 +92,11 @@ public class TestCase extends org.junit.Assert
    * @param       inText    the text obtained
    *
    */
-  public void assertPattern(String inMessage, String inPattern, String inText)
+  public void assertPattern(@Nonnull String inMessage,
+                            @Nonnull String inPattern, @Nonnull String inText)
   {
-    Matcher matcher = Pattern.compile(inPattern).matcher(inText);
+    Matcher matcher =
+      Pattern.compile(inPattern, Pattern.DOTALL).matcher(inText);
 
     if(!matcher.matches())
       throw new org.junit.ComparisonFailure(inMessage, inPattern, inText);
@@ -164,6 +167,41 @@ public class TestCase extends org.junit.Assert
     if(inActual.hasNext())
       throw new org.junit.ComparisonFailure(inMessage + " (end)", "to at end",
                                             "not yet at end");
+  }
+
+  //........................................................................
+  //---------------------------- assertContent -----------------------------
+
+  /**
+   * Assert the contents in the iterator.
+   *
+   * @param    inMessage  the message to show on failure
+   * @param    inActual   the objects that were actually produced
+   * @param    inExpected the objects expected, as pairs of key/value
+   *
+   */
+  public void assertContent(@Nonnull String inMessage,
+                            @Nonnull Map<?, ?> inActual,
+                            @Nonnull Object ... inExpected)
+  {
+    if(inActual.size() * 2 != inExpected.length)
+      throw new org.junit.ComparisonFailure(inMessage, "" + inActual.size(),
+                                            "" + (inExpected.length / 2));
+
+    for(int i = 0; i < inExpected.length; i += 2)
+    {
+      Object key = inExpected[i];
+      Object value = inExpected[i + 1];
+
+      Object actual = inActual.get(key);
+
+      if ((actual == null && value != null)
+          || (actual != null && !actual.equals(value)))
+        throw new org.junit.ComparisonFailure
+          (inMessage + " [" + key + "]",
+           value != null ? value.toString() : "NULL",
+           actual != null ? actual.toString() : "NULL");
+    }
   }
 
   //........................................................................
