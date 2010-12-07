@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.util;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +37,6 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import com.google.common.base.Joiner;
 
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -325,7 +324,8 @@ public class CommandLineParser
      */
     public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
-      if(inArguments.length > inIndex) {
+      if(inArguments.length > inIndex)
+      {
         try
         {
           m_value = new Integer(inArguments[inIndex]);

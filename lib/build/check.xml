@@ -96,7 +96,7 @@
         <module name="UnusedImports"/>
         <module name="ImportOrder">
           <property name="groups"
-                   value="java,javax,com.google,org.easymock,net.ixitxachitls"/>
+                   value="java,javax,com.google,org.easymock,org.eclipse,net.ixitxachitls"/>
           <property name="ordered" value="true"/>
           <property name="separated" value="true"/>
         </module>
@@ -160,7 +160,7 @@
 
         <!-- Checks for common coding problems               -->
         <!-- See http://checkstyle.sf.net/config_coding.html -->
-        <module name="AvoidInlineConditionals"/>
+        <!-- <module name="AvoidInlineConditionals"/> -->
         <module name="DoubleCheckedLocking"/>    <!-- MY FAVOURITE -->
         <!-- <module name="EmptyStatement"/> remove for empty for loops -->
         <module name="EqualsHashCode"/>
