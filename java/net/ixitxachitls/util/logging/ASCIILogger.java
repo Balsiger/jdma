@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.output.WrapBuffer;
@@ -254,7 +255,8 @@ public class ASCIILogger implements Logger
    * @return      the formatted string
    *
    */
-  protected String format(@Nonnull String inMessage, Log.Type inType,
+  protected String format(@Nullable String inMessage,
+                          @Nullable Log.Type inType,
                           @Nonnull String inFormat)
   {
     return format(inMessage, inType, inFormat, new GregorianCalendar());
@@ -275,7 +277,7 @@ public class ASCIILogger implements Logger
    * @return      the formatted string
    *
    */
-  private String format(@Nonnull String inMessage, @Nonnull Log.Type inType,
+  private String format(@Nullable String inMessage, @Nullable Log.Type inType,
                         @Nonnull String inFormat, @Nonnull Calendar inCurrent)
   {
     // replace the appropriate texts in the given string
