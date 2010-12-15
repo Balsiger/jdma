@@ -88,8 +88,11 @@ public class Resource implements Configuration
      * @param       inKey   the key of the value to set
      * @param       inValue the value to set to
      *
+     * @return      true if set, false if not (because it already has the
+     *              value)
+     *
      */
-    public void set(@Nonnull String inKey, @Nonnull String inValue);
+    public boolean set(@Nonnull String inKey, @Nonnull String inValue);
 
     //......................................................................
     //------------------------------- remove -------------------------------
@@ -306,12 +309,12 @@ public class Resource implements Configuration
      * @param       inKey   the key of the value to set
      * @param       inValue the value to set to
      *
-     * @undefined   key and value may not be null
+     * @return      true if set, false if not because already there
      *
      */
-    public void set(@Nonnull String inKey, @Nonnull String inValue)
+    public boolean set(@Nonnull String inKey, @Nonnull String inValue)
     {
-      setProperty(inKey, inValue);
+      return !inValue.equals(setProperty(inKey, inValue));
     }
 
     //......................................................................
@@ -536,9 +539,13 @@ public class Resource implements Configuration
     // determine if we can actually store the file
     DataHandler data = getDataHandler(keys.first());
 
-    data.set(keys.second(), inValue);
+    if(data.set(keys.second(), inValue))
+    {
+      store(data);
+      return true;
+    }
 
-    return store(data);
+    return false;
   }
 
   //........................................................................

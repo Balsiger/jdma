@@ -5,4 +5,8 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
 
 <suppressions>
+  <!-- this class has a dummy logger that we want to ignore -->
+  <suppress checks="JavadocMethod|LeftCurly"
+            files="WebServer.java"
+            lines="282-300"/>
 </suppressions>

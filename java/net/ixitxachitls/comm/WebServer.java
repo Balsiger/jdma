@@ -126,6 +126,24 @@ public class WebServer
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------ isStarted -------------------------------
+
+  /**
+   * Check if the server is properly started.
+   *
+   * @return      True if started, false if not.
+   *
+   */
+  public boolean isStarted()
+  {
+    if(m_server == null)
+      return false;
+
+    return m_server.isStarted();
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -154,7 +172,7 @@ public class WebServer
     connector.setPort(m_port);
     connector.setHost(m_name);
     m_server.addConnector(connector);
-    m_server.setGracefulShutdown(5 * 1000);
+    m_server.setGracefulShutdown(0);
     m_server.setStopAtShutdown(true);
 
     // install the default, startup handler
@@ -175,6 +193,7 @@ public class WebServer
     try
     {
       m_server.stop();
+      m_server.setGracefulShutdown(5 * 1000);
     }
     catch(Exception e)
     {
@@ -183,6 +202,7 @@ public class WebServer
 
     // setup the resources for the handling or real requests
     setupServlets();
+    m_startupContext.setShutdown(true);
 
     try
     {
@@ -227,14 +247,6 @@ public class WebServer
   @OverridingMethodsMustInvokeSuper
   public void init()
   {
-    try
-    {
-      Thread.currentThread().sleep(5000);
-    }
-    catch(Exception e)
-    {
-    }
-
     // nothing to do here.
   }
 
@@ -265,19 +277,140 @@ public class WebServer
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- startup --------------------------------------------------------
+    //---------------------------------------------------------- DummyLogger
 
-    /** startup Test. */
-    @org.junit.Test
-    public void startup()
+    /** A simple dummy logger to prevent jetty from printing to stderr. */
+    public static class DummyLogger
+      implements org.eclipse.jetty.util.log.Logger
     {
-      WebServer server = new WebServer("host", 1234);
-
-
+      public boolean isDebugEnabled() { return false; };
+      public void setDebugEnabled(boolean inEnabled) { };
+      public void ignore(Throwable inError) { };
+      public void debug(String inMsg, Object ... inArgs) { };
+      public void debug(String inMsg, Throwable inError) { };
+      public void debug(Throwable inError) { };
+      public void info(String inMsg, Object ... inArgs) { };
+      public void info(String inMsg, Throwable inError) { };
+      public void info(Throwable inError) { };
+      public void warn(String inMsg, Object ... inArgs) { };
+      public void warn(String inMsg, Throwable inError) { };
+      public void warn(Throwable inMsg) { };
+      public org.eclipse.jetty.util.log.Logger getLogger(String inName)
+      { return this; };
+      public String getName() { return "dummy"; };
     }
 
     //......................................................................
 
+    //-----  wait ----------------------------------------------------------
+
+    /**
+     * Small function to wait until the server is up.
+     *
+     * @param   inServer  the server to check
+     * @param   inStarted true for waiting to start, false for waiting not to
+     *                    be started
+     *
+     */
+    public void wait(@Nonnull WebServer inServer, boolean inStarted)
+    {
+      try
+      {
+        int count = 0;
+        while(inServer.isStarted() != inStarted)
+        {
+          Thread.currentThread().sleep(20);
+          if(++count > 100)
+          {
+            System.err.println("Interrupted waiting for server "
+                               + (inStarted ? "start" : "stop"));
+            break;
+          }
+        }
+      }
+      catch(InterruptedException e)
+      {
+        // we just stop waiting in this case
+      }
+    }
+
+    //......................................................................
+    //----- startup --------------------------------------------------------
+
+    /**
+     * The startup Test.
+     *
+     * @throws Exception should not happen
+     *
+     */
+    @org.junit.Test
+    public void startup() throws Exception
+    {
+      // disable jetty logging
+      org.eclipse.jetty.util.log.Log.setLog(new DummyLogger());
+
+      final java.util.concurrent.atomic.AtomicBoolean done =
+        new java.util.concurrent.atomic.AtomicBoolean(false);
+
+      final WebServer server = new WebServer("localhost", 12345)
+        {
+          public void init()
+          {
+            while(!done.get())
+              ;
+
+            super.init();
+          }
+        };
+
+      Thread thread = new Thread()
+        {
+          public void run()
+          {
+            server.start();
+          }
+      };
+      thread.start();
+
+      // while until the server is really running
+      wait(server, true);
+
+      // first we have the startup context
+      java.net.HttpURLConnection connection = (java.net.HttpURLConnection)
+        new java.net.URL("http://localhost:12345/guru").openConnection();
+      connection.setRequestMethod("GET");
+      connection.connect();
+      assertEquals("connection code", java.net.HttpURLConnection.HTTP_OK,
+                   connection.getResponseCode());
+
+      byte []buffer = new byte[2048];
+      assertTrue("read", connection.getInputStream().read(buffer) > 0);
+      assertPattern("content",
+                    "<html.*<head.*<title.*Error: Server is Starting Up.*",
+                    new String(buffer));
+
+
+      // startup is done
+      done.set(true);
+
+      // wait until the server is stopping
+      wait(server, false);
+
+      // wait until the server is up again
+      wait(server, true);
+
+      connection = (java.net.HttpURLConnection)
+        new java.net.URL("http://localhost:12345/guru").openConnection();
+      connection.setRequestMethod("GET");
+      connection.connect();
+      assertEquals("connection code",
+                   java.net.HttpURLConnection.HTTP_NOT_FOUND,
+                   connection.getResponseCode());
+
+      server.stop();
+    }
+
+    //......................................................................
   }
 
   //........................................................................
