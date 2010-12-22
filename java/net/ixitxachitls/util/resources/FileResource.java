@@ -23,12 +23,14 @@
 
 package net.ixitxachitls.util.resources;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 //..........................................................................
 
@@ -57,11 +59,12 @@ public class FileResource extends Resource
    * Create the file resource.
    *
    * @param    inName the name of the file this resource represents
+   * @param       inURL  the url to the resource
    *
    */
-  public FileResource(@Nonnull URL inName)
+  FileResource(@Nonnull String inName, @Nullable URL inURL)
   {
-    super(inName);
+    super(inName, inURL);
   }
 
   //........................................................................
@@ -86,7 +89,10 @@ public class FileResource extends Resource
   {
     List<String> result = new ArrayList<String>();
 
-    File file = new File(m_name.getFile().replaceAll("%20", " "));
+    if(m_url == null)
+      return result;
+
+    File file = asFile();
 
     // not really a directory
     if(file.isDirectory())
@@ -121,7 +127,8 @@ public class FileResource extends Resource
     public void directory()
     {
       Resource resource =
-        new FileResource(FileResource.class.getResource("/config/test"));
+        new FileResource("config/test",
+                         FileResource.class.getResource("/config/test"));
 
       assertContentAnyOrder("config/test", resource.files(),
                             ".svn", "project", "project.config", "test",
@@ -129,6 +136,10 @@ public class FileResource extends Resource
                             "test.config", "test.properties",
                             "test_de.properties", "test_de_CH.properties",
                             "test_en.properties");
+
+      // invalid
+      resource = new FileResource("guru", null);
+      assertEquals("empty size", 0, resource.files().size());
     }
 
     //......................................................................
@@ -144,14 +155,38 @@ public class FileResource extends Resource
     public void file() throws Exception
     {
       Resource resource =
-        new FileResource(FileResource.class.getResource
+        new FileResource("/config/test/test.config",
+                         FileResource.class.getResource
                          ("/config/test/test.config"));
 
       assertContentAnyOrder("config/test/test.config", resource.files(),
                             "test.config");
 
-      resource = new FileResource(new URL("file:/guru"));
+      resource = new FileResource("guru", new URL("file:/guru"));
       assertContentAnyOrder("non existant", resource.files(), "guru");
+    }
+
+    //......................................................................
+    //----- write ----------------------------------------------------------
+
+    /** The write Test. */
+    @org.junit.Test
+    public void write()
+    {
+      Resource resource =
+        new FileResource("/config/test/test.config",
+                         FileResource.class.getResource("/config/test"));
+
+      ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+      assertTrue("writing", resource.write(output));
+      assertPattern("content", ".*test.config=guru.*", output.toString());
+
+      // invalid resource
+      resource = new FileResource("guru", null);
+      assertFalse("writing", resource.write(output));
+
+      m_logger.addExpected("WARNING: cannot obtain input stream for guru");
     }
 
     //......................................................................

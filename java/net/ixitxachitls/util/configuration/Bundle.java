@@ -186,8 +186,10 @@ public class Bundle extends Resource
      * @param       inKey   the key of the value to set
      * @param       inValue the value to set to
      *
+     * @return      true if actually set, false if already at this value
+     *
      */
-    public void set(String inKey, String inValue)
+    public boolean set(String inKey, String inValue)
     {
       throw new UnsupportedOperationException("cannot set bundle values");
     }

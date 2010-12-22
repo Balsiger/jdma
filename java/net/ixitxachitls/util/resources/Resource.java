@@ -23,6 +23,10 @@
 
 package net.ixitxachitls.util.resources;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -30,6 +34,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.util.Files;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -59,11 +64,13 @@ public abstract class Resource
    * Create the resource.
    *
    * @param       inName the name of the resource
+   * @param       inURL  the url to the resource
    *
    */
-  public Resource(@Nonnull URL inName)
+  public Resource(@Nonnull String inName, @Nullable URL inURL)
   {
     m_name = inName;
+    m_url = inURL;
   }
 
   //........................................................................
@@ -73,7 +80,10 @@ public abstract class Resource
   //-------------------------------------------------------------- variables
 
   /** The name of the resouce. */
-  protected @Nonnull URL m_name;
+  protected @Nonnull String m_name;
+
+  /** The url of the resource. */
+  protected @Nullable URL m_url;
 
   //........................................................................
 
@@ -100,7 +110,10 @@ public abstract class Resource
    */
   public String toString()
   {
-    return m_name.toString();
+    if(m_url != null)
+      return m_url.toString();
+
+    return m_name + " (invalid)";
   }
 
   //........................................................................
@@ -110,26 +123,25 @@ public abstract class Resource
   /**
    * Get the resource represented by the given name.
    *
-   * @param       inName the name of the resource, relative to the classpath
+   * @param       inName      the name of the resource, relative to the
+   *                          classpath
    *
    * @return      the resource for this name
    *
    */
-  public static @Nullable Resource get(@Nonnull String inName)
+  public static @Nonnull Resource get(@Nonnull String inName)
   {
-    URL url = Resource.class.getResource(Files.concatenate("/", inName));
+    String name = inName;
+    if(!name.startsWith("/"))
+      name = "/" + name;
 
-    if(url == null)
-      return null;
+    URL url = Resource.class.getResource(Files.concatenate("/", name));
+    String protocol = url != null ? url.getProtocol() : null;
 
-    String protocol = url.getProtocol();
+    if("jar".equals(protocol))
+      return new JarResource(name, url);
 
-    if("file".equals(protocol))
-      return new FileResource(url);
-    else if("jar".equals(protocol))
-      return new JarResource(url);
-
-    return null;
+    return new FileResource(name, url);
   }
 
   //........................................................................
@@ -149,10 +161,78 @@ public abstract class Resource
   }
 
   //........................................................................
+  //-------------------------------- asFile --------------------------------
+
+  /**
+   * Return the resource as a file in the file system.
+   *
+   * @return  the File, can be null
+   *
+   */
+  public @Nullable File asFile()
+  {
+    if(m_url == null)
+      return null;
+
+    // requires some replacements for windows...
+    return new File(m_url.getFile().replaceAll("%20", " "));
+  }
+
+  //........................................................................
 
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //-------------------------------- write ---------------------------------
+
+  /**
+   * Write the resources to the given output.
+   *
+   * @param       inOutput the output stream to write to
+   *
+   * @return      true if writing ok, false if not
+   *
+   */
+  public boolean write(@Nonnull OutputStream inOutput)
+  {
+    InputStream input =
+      FileResource.class.getResourceAsStream(m_name);
+
+    if(input == null)
+    {
+      Log.warning("cannot obtain input stream for " + m_name);
+      return false;
+    }
+
+    try
+    {
+      byte []buffer = new byte[10000];
+      for(int read = input.read(buffer); read > 0;
+          read = input.read(buffer))
+        inOutput.write(buffer, 0, read);
+    }
+    catch(java.io.IOException e)
+    {
+      Log.warning("Could not write static file: " + e);
+      return false;
+    }
+    finally
+    {
+      try
+      {
+        input.close();
+      }
+      catch(IOException e)
+      {
+        Log.warning("cannot close input stream for " + this);
+      }
+    }
+
+    return true;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -171,7 +251,8 @@ public abstract class Resource
     @org.junit.Test
     public void resources()
     {
-      assertNull("unknown", Resource.get("guru/gugus"));
+      assertNotNull("unknown", Resource.get("guru/gugus"));
+      assertNull("unknown", Resource.get("guru/gugus").m_url);
 
       // now for a directory
       assertPattern("file", "file:/.*/config/test",
@@ -182,7 +263,8 @@ public abstract class Resource
                     Resource.get("dir").toString());
 
       // invalid protocol
-      assertNull("http", Resource.get("http://www.ixitxachitls.net"));
+      assertNotNull("http", Resource.get("http://www.ixitxachitls.net"));
+      assertNull("http", Resource.get("http://www.ixitxachitls.net").m_url);
     }
 
     //......................................................................

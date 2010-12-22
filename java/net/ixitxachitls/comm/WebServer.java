@@ -112,14 +112,14 @@ public class WebServer
      HttpServletResponse.SC_ACCEPTED);
 
   /** The version string for this application. */
-  private static final String s_version =
+  protected static final String s_version =
     Config.getPattern("resource:webserver.version",
                       "{resource:project.name} web server, "
                       + "{resource:project.version} version!\nSee "
                       + "{resource:project.url} for further information.\n");
 
   /** The log file to use. */
-  private static final String s_logFile =
+  protected static final String s_logFile =
     Config.get("resource:web/log.file", "logs/server-%Y-%M-%D.log");
 
   //........................................................................

@@ -41,6 +41,7 @@ import javax.annotation.concurrent.Immutable;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -384,7 +385,6 @@ public abstract class BaseServlet extends HttpServlet
   }
 
   //........................................................................
-
   //-------------------------------- handle --------------------------------
 
   /**
@@ -503,7 +503,7 @@ public abstract class BaseServlet extends HttpServlet
     //--------------------------------------------------------------- nested
 
     /** A simple mock servlet stream implementation. */
-    private static class MockServletInputStream extends ServletInputStream
+    public static class MockServletInputStream extends ServletInputStream
     {
       /**
        * Create a mock input stream.
@@ -528,6 +528,43 @@ public abstract class BaseServlet extends HttpServlet
       public int read()
       {
         return m_contents.read();
+      }
+    }
+
+    /** A simple mock servlet output stream implementation. */
+    public static class MockServletOutputStream extends ServletOutputStream
+    {
+      /**
+       * Create a mock output stream.
+       */
+      public MockServletOutputStream()
+      {
+      }
+
+      /** The text printed. */
+      private @Nonnull java.io.ByteArrayOutputStream m_contents =
+        new java.io.ByteArrayOutputStream();
+
+      /**
+       * Wrie a character to the string.
+       *
+       * @param inCharacter the character to write
+       *
+       */
+      public void write(int inCharacter)
+      {
+        m_contents.write(inCharacter);
+      }
+
+      /**
+       * Get the contents of the stream.
+       *
+       * @return the contents printed so far.
+       *
+       */
+      public String toString()
+      {
+        return m_contents.toString();
       }
     }
 

@@ -219,10 +219,12 @@ public class Project extends Resource
      * @param       inKey   the key of the value to set
      * @param       inValue the value to set to
      *
+     * @return      true if actually set, false if already at this value
+     *
      */
-    public void set(@Nonnull String inKey, @Nonnull String inValue)
+    public boolean set(@Nonnull String inKey, @Nonnull String inValue)
     {
-      setProperty(inKey, inValue);
+      return !inValue.equals(setProperty(inKey, inValue));
     }
 
     //......................................................................

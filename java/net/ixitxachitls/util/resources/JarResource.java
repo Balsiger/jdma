@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.util.resources;
 
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -61,11 +63,12 @@ public class JarResource extends Resource
    * Create the jar resource.
    *
    * @param    inName the name of the file this resource represents
+   * @param    inURL  the url to the resource
    *
    */
-  public JarResource(@Nonnull URL inName)
+  JarResource(@Nonnull String inName, @Nullable URL inURL)
   {
-    super(inName);
+    super(inName, inURL);
   }
 
   //........................................................................
@@ -90,11 +93,14 @@ public class JarResource extends Resource
   {
     List<String> result = new ArrayList<String>();
 
+    if(m_url == null)
+      return result;
+
     try
     {
       JarFile jar =
-        new JarFile(Strings.getPattern(m_name.getFile(), "^file:(.*)!"));
-      String dir = Strings.getPattern(m_name.getFile(), "^file:.*!/(.+)");
+        new JarFile(Strings.getPattern(m_url.getFile(), "^file:(.*)!"));
+      String dir = Strings.getPattern(m_url.getFile(), "^file:.*!/(.+)");
 
       for(java.util.Enumeration i = jar.entries(); i.hasMoreElements(); )
       {
@@ -113,7 +119,7 @@ public class JarResource extends Resource
     catch(java.io.IOException e)
     {
       Log.warning("could not open jar file '"
-                  + Strings.getPattern(m_name.getFile(), ":(.*)!") + "'");
+                  + Strings.getPattern(m_url.getFile(), ":(.*)!") + "'");
 
       return result;
     }
@@ -124,7 +130,6 @@ public class JarResource extends Resource
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -143,13 +148,29 @@ public class JarResource extends Resource
     public void directory()
     {
       Resource resource =
-        new JarResource(FileResource.class.getResource("/dir"));
+        new JarResource("/dir", FileResource.class.getResource("/dir"));
 
       assertContentAnyOrder("dir", resource.files(), "readme.txt", "NPCs.png");
     }
 
     //......................................................................
+    //----- write ----------------------------------------------------------
 
+    /** The write Test. */
+    @org.junit.Test
+    public void write()
+    {
+      Resource resource =
+        new FileResource("/dir/readme.txt",
+                         FileResource.class.getResource("/dir/readme.txt"));
+
+      ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+      assertTrue("writing", resource.write(output));
+      assertPattern("content", ".*70x200 points.*", output.toString());
+    }
+
+    //......................................................................
   }
 
   //........................................................................

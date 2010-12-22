@@ -131,6 +131,9 @@ public final class Strings
     NumberFormat.getInstance(new Locale(Config.get("number.language", "de"),
                                         Config.get("number.country", "ch")));
 
+  /** The pattern for teplates. */
+  private static final Pattern s_template = Pattern.compile("\\$(\\S+)");
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -353,6 +356,39 @@ public final class Strings
   }
 
   //........................................................................
+  //-------------------------- replaceTemplates ----------------------------
+
+  /**
+   * Replace templates in the given string.
+   *
+   * @param       inText   the text to replace in
+   * @param       inPrefix the prefix to use to access variables in the config
+   *
+   * @return      the text with al templates replaced
+   *
+   * @example     String replaced = Files.replaceTemplate("my text");
+   *
+   */
+  public static @Nonnull String replaceTemplates(@Nonnull String inText,
+                                                 @Nonnull String inPrefix)
+  {
+    // check if we have a name
+    Matcher matcher = s_template.matcher(inText);
+
+    StringBuffer result = new StringBuffer();
+    while(matcher.find())
+    {
+      String template = matcher.group(1);
+      matcher.appendReplacement(result, Config.get(inPrefix + "." + template,
+                                                   "*unknown*"));
+    }
+
+    matcher.appendTail(result);
+    return result.toString();
+  }
+
+  //........................................................................
+
 
   //--------------------------------- pad ----------------------------------
 
@@ -1063,6 +1099,26 @@ public final class Strings
          (com.google.common.collect.Lists.newArrayList("one", "two", "three",
                                                        "four", "five"),
           "two", "six", "four"));
+    }
+
+    //......................................................................
+    //----- replaceTemplates -----------------------------------------------
+
+    /** The replaceTemplates Test. */
+    @org.junit.Test
+    public void replaceTemplates()
+    {
+      Config.setRewriting(false);
+      assertEquals("no templates", "a test without a template",
+                   Strings.replaceTemplates("a test without a template",
+                                            "test/test/template"));
+      assertEquals("unknown", "a *unknown* test",
+                   Strings.replaceTemplates("a $test test",
+                                            "test/test/template"));
+      assertEquals("valid", "some single word test",
+                   Strings.replaceTemplates("some $simple test",
+                                            "test/test/template"));
+      Config.setRewriting(true);
     }
 
     //......................................................................
