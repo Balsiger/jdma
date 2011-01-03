@@ -132,7 +132,7 @@ public final class Strings
                                         Config.get("number.country", "ch")));
 
   /** The pattern for teplates. */
-  private static final Pattern s_template = Pattern.compile("\\$(\\S+)");
+  private static final Pattern s_template = Pattern.compile("\\$(\\w+)");
 
   //........................................................................
 
@@ -1117,6 +1117,9 @@ public final class Strings
                                             "test/test/template"));
       assertEquals("valid", "some single word test",
                    Strings.replaceTemplates("some $simple test",
+                                            "test/test/template"));
+      assertEquals("special char", "some single word; test",
+                   Strings.replaceTemplates("some $simple; test",
                                             "test/test/template"));
       Config.setRewriting(true);
     }

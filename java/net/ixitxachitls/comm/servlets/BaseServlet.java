@@ -31,8 +31,6 @@ import java.io.Serializable;
 import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.SimpleTimeZone;
 
 import javax.annotation.Nonnull;
@@ -45,6 +43,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
@@ -421,14 +422,14 @@ public abstract class BaseServlet extends HttpServlet
    *
    * @param       inRequest the request from the client
    *
-   * @return      A map with keys of the parameter names and values
+   * @return      A multi map with keys of the parameter names and values
    *              containing the parameter values.
    *
    */
-  private static Map<String, String>
+  protected static Multimap<String, String>
     extractParams(@Nonnull HttpServletRequest inRequest)
   {
-    Map<String, String> values = new HashMap<String, String>();
+    Multimap<String, String> values = HashMultimap.create();
 
     BufferedReader reader = null;
     try
@@ -583,17 +584,25 @@ public abstract class BaseServlet extends HttpServlet
         EasyMock.createMock(HttpServletRequest.class);
       javax.servlet.ServletInputStream inputStream =
         new MockServletInputStream("post_1=val_3\npost_2=\n"
-                                   + "post_3=val_4\npost_3=val_4a");
+                                   + "post_3=val_4\npost_3=val_4a\n"
+                                   + "both=val_5a");
 
       EasyMock.expect(request.getInputStream()).andReturn(inputStream);
       EasyMock.expect(request.getQueryString())
-        .andReturn("url_1=val_1&url2&url_3=val_2&url_3=val_2a").times(2);
+        .andReturn("url_1=val_1&url_2&url_3=val_2&url_3=val_2a"
+                   + "&both=val_5b&both=val_5c").times(2);
 
       EasyMock.replay(request);
 
-      assertContent("params", BaseServlet.extractParams(request),
-                    "url_1", "val_1", "url_2", null, "url_3", "val_2a",
-                    "post_1", "val_3", "post_2", "", "post_3", "val_4a");
+      Multimap<String, String> params = BaseServlet.extractParams(request);
+      assertContent("url_1", params.get("url_1"), "val_1");
+      assertContent("url_2", params.get("url_2"), "");
+      assertContentAnyOrder("url_3", params.get("url_3"), "val_2", "val_2a");
+      assertContent("post_1", params.get("post_1"), "val_3");
+      assertContent("post_2", params.get("post_2"), "");
+      assertContentAnyOrder("post_3", params.get("post_3"), "val_4", "val_4a");
+      assertContentAnyOrder("both", params.get("both"), "val_5a", "val_5b",
+                            "val_5c");
 
       EasyMock.verify(request);
     }

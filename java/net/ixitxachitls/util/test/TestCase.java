@@ -177,6 +177,24 @@ public class TestCase extends org.junit.Assert
    *
    * @param    inMessage  the message to show on failure
    * @param    inActual   the objects that were actually produced
+   * @param    inExpected the objects expected
+   *
+   */
+  public void assertContent(@Nonnull String inMessage,
+                            @Nonnull Iterable<?> inActual,
+                            @Nonnull Object ... inExpected)
+  {
+    assertContent(inMessage, inActual.iterator(), inExpected);
+  }
+
+  //........................................................................
+  //---------------------------- assertContent -----------------------------
+
+  /**
+   * Assert the contents in the iterator.
+   *
+   * @param    inMessage  the message to show on failure
+   * @param    inActual   the objects that were actually produced
    * @param    inExpected the objects expected, as pairs of key/value
    *
    */

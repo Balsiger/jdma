@@ -23,9 +23,11 @@
 
 package net.ixitxachitls.util.resources;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
@@ -33,6 +35,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
 
@@ -84,6 +87,9 @@ public abstract class Resource
 
   /** The url of the resource. */
   protected @Nullable URL m_url;
+
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
 
   //........................................................................
 
@@ -226,6 +232,64 @@ public abstract class Resource
       catch(IOException e)
       {
         Log.warning("cannot close input stream for " + this);
+      }
+    }
+
+    return true;
+  }
+
+  //........................................................................
+  //-------------------------------- write ---------------------------------
+
+  /**
+   * Write the resources to the given output.
+   *
+   * @param       inWriter the output writer to write to
+   *
+   * @return      true if writing ok, false if not
+   *
+   */
+  public boolean write(@Nonnull HTMLWriter inWriter)
+  {
+    InputStream inputStream = FileResource.class.getResourceAsStream(m_name);
+
+    if(inputStream == null)
+    {
+      Log.warning("cannot obtain input stream for '" + m_name + "'");
+      return false;
+    }
+
+    BufferedReader input =
+      new BufferedReader(new InputStreamReader(inputStream));
+
+    try
+    {
+      String line = input.readLine();
+
+      if(line.startsWith("title:"))
+      {
+        inWriter.title(line.substring(6));
+        line = input.readLine();
+      }
+
+      for(; line != null; line = input.readLine())
+        inWriter.add(line);
+    }
+    catch(IOException e)
+    {
+      Log.warning("cannot write to output for " + this);
+      return false;
+    }
+    finally
+    {
+      try
+      {
+        input.close();
+      }
+      catch(IOException e)
+      {
+        Log.warning("cannot close input stream for " + this);
+        return false;
       }
     }
 
