@@ -36,6 +36,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Multimap;
 
+import org.easymock.EasyMock;
+
 import net.ixitxachitls.comm.servlets.BaseServlet;
 import net.ixitxachitls.output.html.HTMLWriter;
 
@@ -59,7 +61,7 @@ import net.ixitxachitls.output.html.HTMLWriter;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class PageServlet extends BaseServlet
+public class PageServlet extends BaseServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -74,6 +76,9 @@ public abstract class PageServlet extends BaseServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
 
   //........................................................................
 
@@ -152,8 +157,7 @@ public abstract class PageServlet extends BaseServlet
       .end("div") // header-right
       .begin("div").id("header-left")
       .add("DMA")
-      .end("div") // header-left
-      ;
+      .end("div"); // header-left
   }
 
   //........................................................................
@@ -175,8 +179,7 @@ public abstract class PageServlet extends BaseServlet
   {
     inWriter
       .end("div") // header
-      .begin("div").classes("page")
-      ;
+      .begin("div").classes("page");
   }
 
   //........................................................................
@@ -197,8 +200,7 @@ public abstract class PageServlet extends BaseServlet
                              @Nonnull Multimap<String, String> inParams)
   {
     inWriter
-      .end("div") // page
-      ;
+      .end("div"); // page
   }
 
   //........................................................................
@@ -212,7 +214,8 @@ public abstract class PageServlet extends BaseServlet
    * @param       inSections the sections and subsections to the current page
    *
    */
-  public void addNavigation(HTMLWriter inWriter, String ... inSections)
+  public void addNavigation(@Nonnull HTMLWriter inWriter,
+                            @Nonnull String ... inSections)
   {
     inWriter
       .begin("div").id("navigation")
@@ -239,6 +242,121 @@ public abstract class PageServlet extends BaseServlet
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- simple ---------------------------------------------------------
+
+    /** The simple Test.
+     *
+     * @throws Exception should not happen
+     */
+    @org.junit.Test
+    public void simple() throws Exception
+    {
+      HttpServletRequest request =
+        EasyMock.createMock(HttpServletRequest.class);
+      HttpServletResponse response =
+        EasyMock.createMock(HttpServletResponse.class);
+      BaseServlet.Test.MockServletOutputStream output =
+        new BaseServlet.Test.MockServletOutputStream();
+      BaseServlet.Test.MockServletInputStream input =
+        new BaseServlet.Test.MockServletInputStream("");
+
+      response.setHeader("Content-Type", "text/html");
+      response.setHeader("Cache-Control", "max-age=0");
+      EasyMock.expect(request.getInputStream()).andReturn(input);
+      EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
+      EasyMock.expect(request.getPathInfo()).andReturn("/about.html");
+      EasyMock.expect(response.getOutputStream()).andReturn(output);
+      EasyMock.replay(request, response);
+
+      PageServlet servlet = new PageServlet();
+
+      assertNull("handle", servlet.handle(request, response));
+      assertEquals("content",
+                   "<HTML>\n"
+                   + "  <HEAD>\n"
+                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
+                   + "href=\"/css/jdma.css\" />\n"
+                   + "  </HEAD>\n"
+                   + "  <BODY>\n"
+                   + "    <DIV id=\"header\">\n"
+                   + "      <DIV id=\"header-right\">\n"
+                   + "        <A id=\"login-icon\" class=\"icon\" "
+                   + "title=\"Login\">\n"
+                   + "        </A>\n"
+                   + "        <A id=\"logout-icon\" class=\"icon\" "
+                   + "title=\"Logout\">\n"
+                   + "        </A>\n"
+                   + "        <A class=\"icon library\" title=\"Library\">\n"
+                   + "        </A>\n"
+                   + "        <A class=\"icon search\" title=\"Search\">\n"
+                   + "        </A>\n"
+                   + "        <A class=\"icon about\" title=\"About\" "
+                   + "href=\"/about.html\">\n"
+                   + "        </A>\n"
+                   + "      </DIV>\n"
+                   + "      <DIV id=\"header-left\">\n"
+                   + "        DMA\n"
+                   + "      </DIV>\n"
+                   + "    </DIV>\n"
+                   + "    <DIV class=\"page\">\n"
+                   + "    </DIV>\n"
+                   + "  </BODY>\n"
+                   + "</HTML>\n",
+                   output.toString());
+
+      output.close();
+      EasyMock.verify(request, response);
+    }
+
+    //......................................................................
+    //----- navigation -----------------------------------------------------
+
+    /** The navigation Test. */
+    @org.junit.Test
+    public void navigation()
+    {
+      java.io.ByteArrayOutputStream output =
+        new java.io.ByteArrayOutputStream();
+      HTMLWriter writer = new HTMLWriter(new PrintWriter(output));
+
+      PageServlet servlet = new PageServlet();
+
+      servlet.addNavigation(writer, "s1", "s2", "s3");
+      writer.close();
+      assertEquals("3 sections",
+                   "<HTML>\n"
+                   + "  <BODY>\n"
+                   + "    <DIV id=\"navigation\">\n"
+                   + "      <A id=\"home\" class=\"icon\" title=\"Home\" "
+                   + "href=\"/\">\n"
+                   + "      </A>\n"
+                   + "       &raquo; \n"
+                   + "      s1\n"
+                   + "       &raquo; \n"
+                   + "      s2\n"
+                   + "       &raquo; \n"
+                   + "      s3\n"
+                   + "    </DIV>\n"
+                   + "  </BODY>\n"
+                   + "</HTML>\n", output.toString());
+
+      output = new java.io.ByteArrayOutputStream();
+      writer = new HTMLWriter(new PrintWriter(output));
+
+      servlet.addNavigation(writer);
+      writer.close();
+      assertEquals("no section", "<HTML>\n"
+                   + "  <BODY>\n"
+                   + "    <DIV id=\"navigation\">\n"
+                   + "      <A id=\"home\" class=\"icon\" title=\"Home\" "
+                   + "href=\"/\">\n"
+                   + "      </A>\n"
+                   + "    </DIV>\n"
+                   + "  </BODY>\n"
+                   + "</HTML>\n", output.toString());
+    }
+
+    //......................................................................
   }
 
   //........................................................................

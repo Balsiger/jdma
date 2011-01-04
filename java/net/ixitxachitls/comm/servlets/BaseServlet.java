@@ -457,7 +457,8 @@ public abstract class BaseServlet extends HttpServlet
     {
       try
       {
-        reader.close();
+        if(reader != null)
+          reader.close();
       }
       catch(java.io.IOException e)
       {

@@ -27,13 +27,13 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableSet;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -100,9 +100,6 @@ public class HTMLWriter
   /** Whether in head context. */
   private boolean m_inHead = false;
 
-  /** Whether in body context. */
-  private boolean m_inBody = false;
-
   /** The joiner to space concatenate strings. */
   private static final Joiner s_spaceJoiner = Joiner.on(' ');
 
@@ -127,7 +124,7 @@ public class HTMLWriter
   {
     indent();
     m_bodyWriter.print("<");
-    m_bodyWriter.print(inTag.toUpperCase());
+    m_bodyWriter.print(inTag.toUpperCase(Locale.US));
     m_tags.push(inTag);
     m_unclosed = true;
 
@@ -243,14 +240,14 @@ public class HTMLWriter
    */
   public HTMLWriter end(@Nonnull String inTag)
   {
-    if(!m_tags.peek().equalsIgnoreCase(inTag))
+    if(m_tags.size() > 0 && !m_tags.peek().equalsIgnoreCase(inTag))
       Log.warning("closing tag " + inTag + ", but expected " + m_tags.peek());
 
     if(!m_tags.removeFirstOccurrence(inTag))
       Log.warning("closing tag " + inTag + ", but was never opened");
 
-    if(m_unclosed && !inTag.equalsIgnoreCase("div") &&
-       !inTag.equalsIgnoreCase("a"))
+    if(m_unclosed && !inTag.equalsIgnoreCase("div")
+       && !inTag.equalsIgnoreCase("a"))
     {
       m_bodyWriter.println("/>");
       m_unclosed = false;
@@ -260,7 +257,7 @@ public class HTMLWriter
       maybeCloseTag();
       indent();
       m_bodyWriter.print("</");
-      m_bodyWriter.print(inTag.toUpperCase());
+      m_bodyWriter.print(inTag.toUpperCase(Locale.US));
       m_bodyWriter.println(">");
     }
 
@@ -271,7 +268,7 @@ public class HTMLWriter
   //------------------------------- comment --------------------------------
 
   /**
-   * Write a comment;
+   * Write a comment.
    *
    * @param       inComment the comment to write
    *
@@ -354,6 +351,7 @@ public class HTMLWriter
    */
   public void close()
   {
+    ensureHTML();
     maybeCloseTag();
     maybeCloseHead();
 
@@ -392,17 +390,15 @@ public class HTMLWriter
    * Ensure that we are in the head of the document.
    *
    */
-  protected boolean ensureHead()
+  protected void ensureHead()
   {
     if(m_inHead)
-      return true;
+      return;
 
     ensureHTML();
 
     m_writer.println("  <HEAD>");
     m_inHead = true;
-
-    return true;
   }
 
   //........................................................................
@@ -441,7 +437,7 @@ public class HTMLWriter
   //-------------------------------- indent --------------------------------
 
   /**
-   * Print the corret indent for a new line
+   * Print the corret indent for a new line.
    *
    */
   protected void indent()

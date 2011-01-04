@@ -266,7 +266,7 @@ public abstract class Resource
     {
       String line = input.readLine();
 
-      if(line.startsWith("title:"))
+      if(line != null && line.startsWith("title:"))
       {
         inWriter.title(line.substring(6));
         line = input.readLine();

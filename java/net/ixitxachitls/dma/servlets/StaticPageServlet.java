@@ -23,14 +23,12 @@
 
 package net.ixitxachitls.dma.servlets;
 
-import java.io.IOException;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.ThreadSafe;
-import javax.servlet.ServletException;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.output.html.HTMLWriter;
@@ -80,7 +78,7 @@ public class StaticPageServlet extends PageServlet
   protected @Nonnull String m_root;
 
   /** The error to return if a file is not found. */
-  protected @Nonnull String s_notFoundError =
+  protected static final @Nonnull String s_notFoundError =
     Config.get("web/html.not.found", "<h1>File not found</h1>"
                + "The requested file could not be found on the server!");
 
@@ -135,6 +133,7 @@ public class StaticPageServlet extends PageServlet
                         @Nonnull Multimap<String, String> inParams)
   {
     super.writeBody(inWriter, inPath, inParams);
+
     // check the given path for illegal relative stuff and add the root
     String path = m_root;
 
@@ -169,6 +168,89 @@ public class StaticPageServlet extends PageServlet
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- headerFooter --------------------------------------------------
+
+    /** The handle Test. */
+    @org.junit.Test
+    public void headerFooter()
+    {
+      java.io.ByteArrayOutputStream output =
+        new java.io.ByteArrayOutputStream();
+      HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(output));
+
+      StaticPageServlet servlet = new StaticPageServlet("/html/");
+
+      servlet.writeHeader(writer, "/about.html",
+                          HashMultimap.<String, String>create());
+      servlet.writeFooter(writer, "/about.html",
+                          HashMultimap.<String, String>create());
+      writer.close();
+      assertEquals("header",
+                   "<HTML>\n"
+                   + "  <HEAD>\n"
+                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
+                   + "href=\"/css/jdma.css\" />\n"
+                   + "  </HEAD>\n"
+                   + "  <BODY>\n"
+                   + "    <DIV id=\"header\">\n"
+                   + "      <DIV id=\"header-right\">\n"
+                   + "        <A id=\"login-icon\" class=\"icon\" "
+                   + "title=\"Login\">\n"
+                   + "        </A>\n"
+                   + "        <A id=\"logout-icon\" class=\"icon\" "
+                   + "title=\"Logout\">\n"
+                   + "        </A>\n"
+                   + "        <A class=\"icon library\" title=\"Library\">\n"
+                   + "        </A>\n"
+                   + "        <A class=\"icon search\" title=\"Search\">\n"
+                   + "        </A>\n"
+                   + "        <A class=\"icon about\" title=\"About\" "
+                   + "href=\"/about.html\">\n"
+                   + "        </A>\n"
+                   + "      </DIV>\n"
+                   + "      <DIV id=\"header-left\">\n"
+                   + "        DMA\n"
+                   + "      </DIV>\n"
+                   + "      <DIV id=\"navigation\">\n"
+                   + "        <A id=\"home\" class=\"icon\" title=\"Home\" "
+                   + "href=\"/\">\n"
+                   + "        </A>\n"
+                   + "         &raquo; \n"
+                   + "        about\n"
+                   + "      </DIV>\n"
+                   + "    </DIV>\n"
+                   + "  </BODY>\n"
+                   + "</HTML>\n", output.toString());
+    }
+
+    //......................................................................
+    //----- body -----------------------------------------------------------
+
+    /** The body Test. */
+    @org.junit.Test
+    public void body()
+    {
+      java.io.ByteArrayOutputStream output =
+        new java.io.ByteArrayOutputStream();
+      HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(output));
+
+      StaticPageServlet servlet = new StaticPageServlet("/html/");
+
+      servlet.writeBody(writer, "/about.html",
+                        HashMultimap.<String, String>create());
+      writer.close();
+
+      assertPattern("body", ".*<BODY>.*", output.toString());
+      assertPattern("page", ".*<DIV class=\"page\">.*", output.toString());
+      assertPattern("about", ".*<h1>About</h1>.*", output.toString());
+      assertPattern("title", ".*<TITLE>DMA - About</TITLE>.*",
+                    output.toString());
+
+      m_logger.addExpected("WARNING: closing tag div, but was never opened");
+      m_logger.addExpected("WARNING: writer closed, but tags [div] not closed");
+    }
+
+    //......................................................................
   }
 
   //........................................................................

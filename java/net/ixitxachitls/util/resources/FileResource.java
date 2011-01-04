@@ -133,7 +133,7 @@ public class FileResource extends Resource
       assertContentAnyOrder("config/test", resource.files(),
                             ".svn", "project", "project.config", "test",
                             "test path.config", "test test.config",
-                            "test.config", "test.properties",
+                            "test.config", "test.properties", "test.template",
                             "test_de.properties", "test_de_CH.properties",
                             "test_en.properties");
 
@@ -187,6 +187,33 @@ public class FileResource extends Resource
       assertFalse("writing", resource.write(output));
 
       m_logger.addExpected("WARNING: cannot obtain input stream for guru");
+    }
+
+    //......................................................................
+    //----- write ----------------------------------------------------------
+
+    /** The write Test. */
+    @org.junit.Test
+    public void writeHTML()
+    {
+      Resource resource =
+        new FileResource("/config/test/test.config",
+                         FileResource.class.getResource("/config/test"));
+
+      ByteArrayOutputStream output = new ByteArrayOutputStream();
+      net.ixitxachitls.output.html.HTMLWriter writer =
+        new net.ixitxachitls.output.html.HTMLWriter
+        (new java.io.PrintWriter(output));
+
+      assertTrue("writing", resource.write(writer));
+      writer.close();
+      assertPattern("content", ".*test.config=guru.*", output.toString());
+
+      // invalid resource
+      resource = new FileResource("guru", null);
+      assertFalse("writing", resource.write(writer));
+
+      m_logger.addExpected("WARNING: cannot obtain input stream for 'guru'");
     }
 
     //......................................................................

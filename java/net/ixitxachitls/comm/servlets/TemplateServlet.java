@@ -23,8 +23,6 @@
 
 package net.ixitxachitls.comm.servlets;
 
-import java.util.Date;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
