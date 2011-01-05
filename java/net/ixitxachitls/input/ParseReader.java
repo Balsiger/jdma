@@ -26,6 +26,7 @@ package net.ixitxachitls.input;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.PushbackReader;
 import java.io.Reader;
 import java.util.Iterator;
 
@@ -242,8 +243,7 @@ public class ParseReader
   protected @Nullable String m_name;
 
   /** The stream to read from. */
-  // TODO: we could use a java.io.PushbackReader here.
-  protected @Nullable Reader m_buffer;
+  protected @Nullable PushbackReader m_buffer;
 
   /** A flag if currently logging errors or warnings. */
   private boolean m_logErrors = true;
@@ -253,9 +253,6 @@ public class ParseReader
 
   /** A flag if there was an error in this stream. */
   private boolean m_error = false;
-
-  /** The put back buffer to store characters that were put back. */
-  protected @Nonnull StringBuilder m_back = new StringBuilder();
 
   /** All the white spaces. */
   protected final static @Nonnull String s_whites =
@@ -1487,7 +1484,7 @@ public class ParseReader
       close();
 
     // store the given values
-    m_buffer   = inReader;
+    m_buffer   = new PushbackReader(inReader);
     m_name     = inName;
 
     // reset the position
@@ -1629,7 +1626,7 @@ public class ParseReader
    */
   public void put(boolean inBoolean)
   {
-    m_back.insert(0, inBoolean);
+    m_buffer.unread(("" + inBoolean).toBytes());
   }
 
   //........................................................................
@@ -1670,7 +1667,6 @@ public class ParseReader
     // set the internal values
     m_position = inPosition.getPosition();
     m_newlines = inPosition.getLine();
-    m_back     = new StringBuilder(inPosition.getBuffer());
 
     // go to the buffer position
     try
