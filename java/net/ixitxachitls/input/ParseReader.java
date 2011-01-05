@@ -26,7 +26,6 @@ package net.ixitxachitls.input;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.PushbackReader;
 import java.io.Reader;
 import java.util.Iterator;
 
@@ -243,7 +242,7 @@ public class ParseReader
   protected @Nullable String m_name;
 
   /** The stream to read from. */
-  protected @Nullable PushbackReader m_buffer;
+  protected @Nullable Reader m_buffer;
 
   /** A flag if currently logging errors or warnings. */
   private boolean m_logErrors = true;
@@ -253,6 +252,9 @@ public class ParseReader
 
   /** A flag if there was an error in this stream. */
   private boolean m_error = false;
+
+  /** The put back buffer to store characters that were put back. */
+  protected @Nonnull StringBuilder m_back = new StringBuilder();
 
   /** All the white spaces. */
   protected final static @Nonnull String s_whites =
@@ -957,32 +959,10 @@ public class ParseReader
       return -1;
 
     // read a normal character
-    int result = -1;
-    try
-    {
-      result = m_buffer.read();
-    }
-    catch(java.io.IOException e)
-    {
-      Log.error("could not read from '" + m_name + "': " + e);
-    }
+    int result = read();
 
-    // reset the buffer to its starting position
-    // TODO: can we use the put back buffer instead of resetting and skipping?
-    // Might be much faster.
     if(result != -1)
-    {
-      try
-      {
-        m_buffer.reset();
-        if(m_buffer.skip(m_position - 1) != m_position - 1)
-          Log.warning("could not skip the right amount of characters");
-      }
-      catch(java.io.IOException e)
-      {
-        Log.error("could not peek next character in " + m_name + ": " + e);
-      }
-    }
+      put((char)result);
 
     return result;
   }
@@ -1379,14 +1359,16 @@ public class ParseReader
     seek(inPosition);
 
     // read the characters after the position
-    String post =
-      inPosition.getBuffer().substring(0,
-                                       Math.min(200,
-                                                inPosition.getBuffer()
-                                                .length()));
+//     String post =
+//       inPosition.getBuffer().substring(0,
+//                                        Math.min(200,
+//                                                 inPosition.getBuffer()
+//                                                 .length()));
 
-    post += read(Config.get("resource:parser/error.postcharacters", 200)
-                 - post.length());
+    String post =
+      read(Config.get("resource:parser/error.postcharacters", 200))
+      .substring(inPosition.getBuffer().length());
+
 
     // reset the position to the starting position
     seek(current);
@@ -1484,7 +1466,7 @@ public class ParseReader
       close();
 
     // store the given values
-    m_buffer   = new PushbackReader(inReader);
+    m_buffer   = inReader;
     m_name     = inName;
 
     // reset the position
@@ -1626,7 +1608,7 @@ public class ParseReader
    */
   public void put(boolean inBoolean)
   {
-    m_buffer.unread(("" + inBoolean).toBytes());
+    m_back.insert(0, inBoolean);
   }
 
   //........................................................................
@@ -1667,6 +1649,7 @@ public class ParseReader
     // set the internal values
     m_position = inPosition.getPosition();
     m_newlines = inPosition.getLine();
+    m_back     = new StringBuilder(inPosition.getBuffer());
 
     // go to the buffer position
     try
@@ -1698,7 +1681,8 @@ public class ParseReader
 
     seek(pos);
 
-    return m_name + " is on line " + m_newlines + ":\n" + current + '\n';
+    return m_name + " is on line " + m_newlines + ":\n" + current + '\n'
+      + "back: '" + m_back + "'\n";
   }
 
   //........................................................................
@@ -1870,9 +1854,9 @@ public class ParseReader
         reader.expect("guru");
         assertEquals(9, reader.getLineNumber());
         assertEquals(9, reader.getPosition().getLine());
-        assertEquals(17, reader.getPosition().getPosition());
-        assertEquals("", reader.getPosition().getBuffer());
-        assertEquals("pos", "(pos = 17, line = 9, back = '')",
+        assertEquals(18, reader.getPosition().getPosition());
+        assertEquals(" ", reader.getPosition().getBuffer());
+        assertEquals("pos", "(pos = 18, line = 9, back = ' ')",
                      reader.getPosition().toString());
       }
       catch(ReadException e)
@@ -2042,25 +2026,25 @@ public class ParseReader
 
       ParseError error = reader.error(pos, "test", "just some text");
 
-      assertEquals("test",                            error.getErrorNumber());
-      assertEquals("just some text",                  error.getParseMessage());
-      assertEquals("not yet defined!",                error.getError());
-      assertEquals("test",                            error.getDocument());
-      assertEquals(4,                                 error.getLine());
-      assertEquals("\njust some test text\n\n with ", error.getPre());
-      assertEquals("# an \nerror position",           error.getPost());
-      assertFalse("error",                            reader.hadError());
-      assertFalse("warning",                          reader.hadWarning());
+      assertEquals("test",                             error.getErrorNumber());
+      assertEquals("just some text",                   error.getParseMessage());
+      assertEquals("not yet defined!",                 error.getError());
+      assertEquals("test",                             error.getDocument());
+      assertEquals(4,                                  error.getLine());
+      assertEquals("\njust some test text\n\n with #", error.getPre());
+      assertEquals(" an \nerror position",             error.getPost());
+      assertFalse("error",                             reader.hadError());
+      assertFalse("warning",                           reader.hadWarning());
 
       m_logger.addExpected("ERROR: test: not yet defined! (just some text) "
                            + "on line 4 in document 'test'\n...\njust some "
-                           + "test text\n\n with >>># an \nerror position...");
+                           + "test text\n\n with #>>> an \nerror position...");
 
       reader.logError(pos, "test", "just some text");
 
       m_logger.addExpected("WARNING: test: not yet defined! (some other text) "
                            + "on line 4 in document 'test'\n...\njust some "
-                           + "test text\n\n with >>># an \nerror position...");
+                           + "test text\n\n with #>>> an \nerror position...");
 
       reader.logWarning(pos, "test", "some other text");
 
@@ -2084,7 +2068,7 @@ public class ParseReader
         reader.put('a');
         assertEquals("char", 'a',     reader.readChar());
         assertEquals("word", "some",  reader.readWord());
-        reader.skipWhites();
+        assertEquals("whites", " ", reader.skipWhites());
         reader.put('#');
         assertEquals("#", reader.readWord());
         reader.put(' ');
@@ -2126,7 +2110,8 @@ public class ParseReader
         reader.skipWhites();
         assertEquals('t', reader.readChar());
 
-        assertEquals("test is on line 3:\next to read\n", reader.toString());
+        assertEquals("test is on line 3:\next to read\nback: ''\n",
+                     reader.toString());
         reader.seek(pos);
         assertEquals("text to read", Strings.trim(reader.read(s_maxRead)));
       }
