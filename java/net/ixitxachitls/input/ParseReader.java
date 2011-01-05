@@ -2193,7 +2193,6 @@ public class ParseReader
       try
       {
         file = File.createTempFile("test", ".guru");
-        assertTrue(file.createNewFile());
         ParseReader reader = new ParseReader(file.getPath());
 
         reader.readChar();
