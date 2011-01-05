@@ -134,6 +134,10 @@ public final class Strings
   /** The pattern for teplates. */
   private static final Pattern s_template = Pattern.compile("\\$(\\w+)");
 
+  /** All the white spaces. */
+  private final static @Nonnull String s_whites =
+    Config.get("resource:parser/white.spaces", " \t\r\n\f");
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -389,7 +393,6 @@ public final class Strings
 
   //........................................................................
 
-
   //--------------------------------- pad ----------------------------------
 
   /**
@@ -509,6 +512,33 @@ public final class Strings
   public static @Nonnull String format(double inNumber)
   {
     return s_number.format(inNumber);
+  }
+
+  //........................................................................
+  //--------------------------------- trim ---------------------------------
+
+  /**
+   * Remove surplus white spaces, concatenating all groups of white spaces
+   * to a single space. This also completely removes white spaces at the
+   * end and the beginning of the string. Newlines and tabulators are also
+   * replaced to spaces, even if they appear alone.
+   *
+   * @param       inText the text to trim
+   *
+   * @return      the trimmed text
+   *
+   */
+  public static @Nonnull String trim(@Nullable String inText)
+  {
+    if(inText == null || inText.length() == 0)
+      return "";
+
+    String result = inText.replaceAll("[" + s_whites + "]+", " ").trim();
+
+    if(result.equals(" "))
+      return "";
+
+    return result;
   }
 
   //........................................................................
