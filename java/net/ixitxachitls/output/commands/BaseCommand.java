@@ -89,7 +89,9 @@ public class BaseCommand extends Command
     m_name = inName;
     m_optNumber = inNbrOptionals;
     m_argNumber = inNbrArguments;
-    withArguments(inArguments);
+
+    if(inArguments.length > 0)
+      withArguments(inArguments);
   }
 
   //........................................................................
@@ -256,14 +258,11 @@ public class BaseCommand extends Command
 
     for(Object element : m_optionals)
     {
-      if(element instanceof String)
-      {
-        if(!((String)element).isEmpty())
-          return false;
-      }
-      else if(element instanceof Command)
-        if(!((Command)element).isEmpty())
-          return false;
+      if(element instanceof String && !((String)element).isEmpty())
+        return false;
+
+      if(element instanceof Command && !((Command)element).isEmpty())
+        return false;
     }
 
     return true;
@@ -622,7 +621,7 @@ public class BaseCommand extends Command
   protected Command withArguments(@Nonnull List<Object> inArguments)
   {
     if(m_argNumber >= 0 && m_argNumber != inArguments.size())
-      Log.warning("too many argments given for command " + m_name
+      Log.warning("invalid number of argments given for command " + m_name
                   + ", expected " + m_argNumber + " but got "
                   + inArguments.size());
 
@@ -659,8 +658,8 @@ public class BaseCommand extends Command
   public Command withOptionals(@Nonnull List<Object> inArguments)
   {
     if(m_optNumber >= 0 && m_optNumber != inArguments.size())
-      Log.warning("too many optional argments given for command " + m_name
-                  + ", expected " + m_optNumber + " but got "
+      Log.warning("invalid number of optional argments given for command "
+                  + m_name + ", expected " + m_optNumber + " but got "
                   + inArguments.size());
 
     m_optionals.addAll(inArguments);
@@ -886,10 +885,9 @@ public class BaseCommand extends Command
       assertFalse("empty", command.isEmpty());
 
       command =
-        new BaseCommand("name", 0, 1, "",
+        new BaseCommand("name", 0, 2, "",
                         new BaseCommand("name", 1, 1, "").withOptionals(""));
-
-      assertTrue("empty", command.isEmpty());
+       assertTrue("empty", command.isEmpty());
     }
 
     //......................................................................

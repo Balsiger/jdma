@@ -171,14 +171,11 @@ public class Command implements PublicCloneable
   {
     for(Object element : m_arguments)
     {
-      if(element instanceof String)
-      {
-        if(!((String)element).isEmpty())
-          return false;
-      }
-      else if(element instanceof Command)
-        if(!((Command)element).isEmpty())
-          return false;
+      if(element instanceof String && !((String)element).isEmpty())
+        return false;
+
+      if(element instanceof Command && !((Command)element).isEmpty())
+        return false;
     }
 
     return true;
