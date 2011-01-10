@@ -291,7 +291,8 @@ public class BaseCommand extends Command
     {
       BaseCommand other = (BaseCommand)inOther;
       return m_name.equals(other.m_name)
-        && m_optionals.equals(other.m_optionals);
+        && m_optionals.equals(other.m_optionals)
+        && super.equals(inOther);
     }
     else
       return super.equals(inOther);
