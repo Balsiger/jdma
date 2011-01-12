@@ -218,11 +218,8 @@ public class Remark
    */
   public @Nonnull String toString()
   {
-    if(m_comment == null)
-      return s_start + m_type.toString() + s_end;
-    else
-      return s_start + m_type.toString() + s_comment + ' ' + m_comment
-        + s_end;
+    return s_start + m_type.toString()
+      + (m_comment == null ? "" : s_comment + m_comment) + s_end;
   }
 
   //........................................................................
@@ -326,7 +323,7 @@ public class Remark
 
       assertEquals("first", Type.ESTIMATION, remark.getType());
       assertEquals("first", "just a test", remark.getComment());
-      assertEquals("first", "{~, just a test}", remark.toString());
+      assertEquals("first", "{~,just a test}", remark.toString());
       assertEquals("first",
                    new Span("ESTIMATION",
                             new Window("hello", "Estimation: just a test")),

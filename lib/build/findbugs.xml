@@ -11,5 +11,11 @@
     <Bug pattern="SP_SPIN_ON_FIELD" />
   </Match>
 
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.values\.Value\$Test.*" />
+    <!--<Class name="~net\.ixitxachitls\.dma\.values\.Value\$Test\$.*" />-->
+    --<Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+  </Match>
+
 </FindBugsFilter>
 
