@@ -448,7 +448,7 @@ public abstract class Value<T extends Value> implements
    */
 //   public @Nonnull T add(@Nonnull T inValue)
 //   {
-//   throw new UnsupportedOperationException("cannot add to this " + getClass());
+//  throw new UnsupportedOperationException("cannot add to this " + getClass());
 //   }
 
   //........................................................................
@@ -861,7 +861,7 @@ public abstract class Value<T extends Value> implements
     //----- value ----------------------------------------------------------
 
     /** A specific value class. */
-    private Value m_value = new Value<Value>()
+    public Value m_value = new Value<Value>()
     {
       private boolean m_defined = false;
       protected boolean doRead(@Nonnull ParseReader inReader)
@@ -890,7 +890,8 @@ public abstract class Value<T extends Value> implements
         return "guru";
       }
 
-      public Value create() {
+      public Value create()
+      {
         Value copy = this.clone();
         copy.reset();
         return copy;

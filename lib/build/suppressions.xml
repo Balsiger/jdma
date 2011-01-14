@@ -9,4 +9,7 @@
   <suppress checks="JavadocMethod|LeftCurly"
             files="WebServer.java"
             lines="282-300"/>
+  <suppress checks="VisibilityModifier"
+            files="Value.java"
+            lines="864"/>
 </suppressions>
