@@ -93,17 +93,19 @@ public abstract class Value<T extends Value> implements
    *
    * @param       inNew the newly created object that needs to be completed
    *
+   * @return      the created value
+   *
    */
-//   @SuppressWarnings("unchecked")
-//   public @Nonnull T create(@Nonnull T inNew)
-//   {
-//     inNew.m_formatter  = m_formatter;
-//     inNew.m_grouping   = m_grouping;
-//     inNew.m_editType   = m_editType;
-//     inNew.m_editValues = m_editValues;
+  @SuppressWarnings("unchecked")
+  public @Nonnull T create(@Nonnull T inNew)
+  {
+    inNew.m_formatter = m_formatter;
+    inNew.m_grouping = m_grouping;
+    inNew.m_editType = m_editType;
+    inNew.m_choices = m_choices;
 
-//     return inNew;
-//   }
+    return inNew;
+  }
 
   //........................................................................
   //-------------------------------- clone ---------------------------------
@@ -153,7 +155,7 @@ public abstract class Value<T extends Value> implements
   protected @Nonnull String m_editType = "";
 
   /** The values for editing the type. */
-  protected @Nullable String m_editValues = null;
+  protected @Nullable String m_choices = null;
 
   //........................................................................
 
@@ -376,7 +378,7 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
-  //---------------------------- getEditValues -----------------------------
+  //------------------------------ getChoices ------------------------------
 
   /**
    * Get the all the possible values this value can be edited with. Returns
@@ -388,9 +390,9 @@ public abstract class Value<T extends Value> implements
    * @return      the possible value to select from or null for no selection
    *
    */
-  public @Nullable String getEditValues()
+  public @Nullable String getChoices()
   {
-    return m_editValues;
+    return m_choices;
   }
 
   //........................................................................
@@ -441,65 +443,67 @@ public abstract class Value<T extends Value> implements
   //--------------------------------- add ----------------------------------
 
   /**
-   * Add the given value to the beginning of the current one.
+   * Add the current and given value and return it. The current value is not
+   * changed.
    *
    * @param       inValue the value to add to this one
    *
+   * @return      the added values
+   *
    */
-//   public @Nonnull T add(@Nonnull T inValue)
-//   {
-//  throw new UnsupportedOperationException("cannot add to this " + getClass());
-//   }
+  public @Nonnull T add(@Nonnull T inValue)
+  {
+    throw new UnsupportedOperationException("cannot add " + getClass());
+  }
 
   //........................................................................
   //------------------------------ subtract --------------------------------
 
   /**
-   * Subtract the current value from the given one.
+   * Subtract the current value from the given one, return the result.
    *
    * @param       inValue the value to subtract from
    *
+   * @return      the subtracted values
+   *
    */
-//   public @Nonnull T subtract(@Nonnull T inValue)
-//   {
-//     throw new UnsupportedOperationException("cannot subtract fromt this "
-//                                             + getClass());
-//   }
+  public @Nonnull T subtract(@Nonnull T inValue)
+  {
+    throw new UnsupportedOperationException("cannot subtract from "
+                                            + getClass());
+  }
 
   //........................................................................
   //------------------------------- multiply -------------------------------
 
   /**
-   * Set this value to the multiple of the given one.
+   * Multiply this value and return the result.
    *
-   * @param       inValue      the value to multiply
    * @param       inMultiplier the multiplication factor
    *
+   * @return      the multiplied value
+   *
    */
-//   public T multiply(T inValue, Value inMultiplier)
-//   {
-//     throw new UnsupportedOperationException("cannot multiply to this "
-//                                             + getClass());
-//   }
+  public @Nonnull T multiply(@Nonnull Value inMultiplier)
+   {
+     throw new UnsupportedOperationException("cannot multiply " + getClass());
+   }
 
   //........................................................................
-  //----------------------------- setToDivide ------------------------------
+  //-------------------------------- divide --------------------------------
 
   /**
-   * Set this value to the divided of the given one.
+   * Divide this value and return the result.
    *
-   * @param       inValue   the value to multiply
    * @param       inDivisor the divisor factor
    *
-   * @undefined   IllegalArgumentException if given value is null
-   * @undefined   UnsupportedOperationException if operation not allowed
+   * @return      the divided value
    *
    */
-//   public void setToDivide(Value inValue, Value inDivisor)
-//   {
-//     throw new UnsupportedOperationException("cannot divide to this "
-//                                             + getClass());
-//   }
+  public @Nonnull T setToDivide(@Nonnull Value inDivisor)
+  {
+    throw new UnsupportedOperationException("cannot divide " + getClass());
+  }
 
   //........................................................................
   //------------------------------- multiply -------------------------------
@@ -509,35 +513,48 @@ public abstract class Value<T extends Value> implements
    *
    * @param       inValue the multiplication factor
    *
-   * @return      true if multiplied, false if not
-   *
-   * @undefined   never
+   * @return      the multiple value.
    *
    */
-//   public boolean multiply(long inValue)
-//   {
-//   throw new UnsupportedOperationException("multiplication not supported in "
-//                                             + getClass());
-//   }
+  public @Nonnull T multiply(long inValue)
+  {
+    throw new UnsupportedOperationException("multiplication for "
+                                            + getClass());
+  }
 
   //........................................................................
-  //------------------------------- multiply -------------------------------
+  //--------------------------------- max ----------------------------------
 
   /**
-   * Multiply the value with the given value.
+   * Compute the maximum of the two values.
    *
-   * @param       inValue the multiplication factor
+   * @param       inValue the value to add to this one
    *
-   * @return      true if multiplied, false if not
-   *
-   * @undefined   never
+   * @return      the maximum value (usually one of the values)
    *
    */
-//   public boolean multiply(Rational inValue)
-//   {
-//   throw new UnsupportedOperationException("multiplication not supported in "
-//                                             + getClass());
-//   }
+  public @Nonnull T max(@Nonnull T inValue)
+  {
+    throw new UnsupportedOperationException("cannot compute max for "
+                                            + getClass());
+  }
+
+  //........................................................................
+  //--------------------------------- min ----------------------------------
+
+  /**
+   * Compute the minimal of the two values.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the minimal value (usually one of the values)
+   *
+   */
+  public @Nonnull T min(@Nonnull T inValue)
+  {
+    throw new UnsupportedOperationException("cannot compute min for "
+                                            + getClass());
+  }
 
   //........................................................................
 
@@ -692,7 +709,7 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
-  //---------------------------- withEditValues ----------------------------
+  //----------------------------- withChoices ------------------------------
 
   /**
    * Set the edit values for this value.
@@ -703,12 +720,9 @@ public abstract class Value<T extends Value> implements
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withEditValues(@Nonnull String inValues)
+  public @Nonnull T withChoices(@Nonnull String inValues)
   {
-    if(inValues.length() == 0)
-      throw new IllegalArgumentException("must have values here");
-
-    m_editValues = inValues;
+    m_choices = inValues;
 
     return (T)this;
   }
@@ -835,8 +849,8 @@ public abstract class Value<T extends Value> implements
                    inValue.m_grouping, newValue.m_grouping);
       assertEquals("new value not same edit type",
                    inValue.m_editType, newValue.m_editType);
-      assertEquals("new value not same edit values",
-                   inValue.m_editValues, newValue.m_editValues);
+      assertEquals("new value not same choices",
+                   inValue.m_choices, newValue.m_choices);
 
       // clone the value
       Value clone = inValue.clone();
