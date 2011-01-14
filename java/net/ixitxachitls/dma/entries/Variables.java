@@ -201,12 +201,26 @@ public class Variables implements Iterable<Variable>
    * @param       inVariable the variable to add
    *
    */
+  protected void add(@Nonnull String inKey, @Nonnull Variable inVariable)
+  {
+    if(inKey.length() >= m_keyWidth)
+      m_keyWidth = inKey.length() + 1;
+
+    m_variables.put(inKey, inVariable);
+  }
+
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add a variable to the values.
+   *
+   * @param       inVariable the variable to add
+   *
+   */
   protected void add(@Nonnull Variable inVariable)
   {
-    if(inVariable.getKey().length() >= m_keyWidth)
-      m_keyWidth = inVariable.getKey().length() + 1;
-
-    m_variables.put(inVariable.getKey(), inVariable);
+    add(inVariable.getKey(), inVariable);
   }
 
   //........................................................................
