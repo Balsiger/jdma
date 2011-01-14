@@ -13,8 +13,12 @@
 
   <Match>
     <Class name="~net\.ixitxachitls\.dma\.values\.Value\$Test.*" />
-    <!--<Class name="~net\.ixitxachitls\.dma\.values\.Value\$Test\$.*" />-->
-    --<Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+    <Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.entries\.TaggedVariables.*" />
+    <Bug pattern="UR_UNINIT_READ_CALLED_FROM_SUPER_CONSTRUCTOR" />
   </Match>
 
 </FindBugsFilter>

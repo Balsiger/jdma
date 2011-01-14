@@ -198,6 +198,7 @@ public class Variables implements Iterable<Variable>
   /**
    * Add a variable to the values.
    *
+   * @param       inKey      the key to add the variable for
    * @param       inVariable the variable to add
    *
    */

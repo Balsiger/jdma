@@ -373,6 +373,7 @@ public class Variable
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    /** A simple class for testing variables. */
     public static class TestObject implements Changeable
     {
       /** Changed field for testing. */
@@ -382,7 +383,8 @@ public class Variable
       protected Value m_value = new Value.Test().m_value.clone();
 
       /** Change method for testing. */
-      public void changed() {
+      public void changed()
+      {
         m_changed = true;
       }
     }
