@@ -23,8 +23,6 @@
 
 package net.ixitxachitls.output.commands;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -35,9 +33,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The bold command.
+ * The id command.
  *
- * @file          Bold.java
+ * @file          ID.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,37 +46,36 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Bold extends BaseCommand
+public class ID extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------------- Bold ---------------------------------
+  //--------------------------------- ID ---------------------------------
 
   /**
-   * The constructor for the bold command.
+   * The constructor for the id command.
    *
-   * @param       inText the text to set bold
+   * @param       inLabel the id label
+   * @param       inText  the text to set id
    *
    */
-  public Bold(@Nonnull Object inText)
+  public ID(@Nonnull Object inLabel, @Nonnull Object inText)
   {
     this();
 
-    withArguments(inText);
+    withArguments(inLabel, inText);
   }
 
   //........................................................................
-  //--------------------------------- Bold ---------------------------------
+  //--------------------------------- ID ---------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
-   * @undefined   never
-   *
    */
-  protected Bold()
+  protected ID()
   {
-    super(BOLD, 0, 1);
+    super(ID, 0, 2);
   }
 
   //........................................................................
@@ -87,9 +84,9 @@ public class Bold extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for bold printing. */
-  public static final @Nonnull String BOLD =
-    Config.get("resource:commands/bold", "bold");
+  /** Command for setting an id at a special position in the text. */
+  public static final String ID =
+    Config.get("resource:commands/id", "id");
 
   //........................................................................
 
@@ -97,6 +94,7 @@ public class Bold extends BaseCommand
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -104,11 +102,7 @@ public class Bold extends BaseCommand
 
   //------------------------------------------------------------------- test
 
-  /** The test.
-   *
-   * @hidden
-   *
-   */
+  /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     //----- arguments ------------------------------------------------------
@@ -117,40 +111,8 @@ public class Bold extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      List<Object> parsed = BaseCommand.parse("\\bold{some test}");
-      assertEquals("bold", "\\bold{some test}", parsed.get(0).toString());
-
-      parsed = BaseCommand.parse("\\bold{some test}{some other}");
-      assertEquals("too much", "\\bold{some test}", parsed.get(0).toString());
-
-      m_logger.addExpected("WARNING: too many arguments given for 'bold', "
-                           + "surplus will be ignored "
-                           + "(at \\bold" + s_markArgStart + "<0>some test"
-                           + s_markArgEnd + "<0>" + s_markArgStart
-                           + "<0>some othe...)");
-      m_logger.verify();
-
-      parsed = BaseCommand.parse("\\bold command");
-      assertEquals("not enough", "\\bold{}", parsed.get(0).toString());
-      assertEquals("not enough", "command", parsed.get(1).toString());
-
-      m_logger.addExpected("WARNING: not enough arguments given for 'bold'"
-                           + ", missing arguments will be empty "
-                           + "(at \\bold command...)");
-      m_logger.verify();
-
-      parsed = BaseCommand.parse("\\bold[command]{test}");
-      assertEquals("optional", "\\bold{test}", parsed.get(0).toString());
-
-      m_logger.addExpected("WARNING: too many optional arguments given for "
-                           + "'bold', surplus will be ignored");
-      m_logger.verify();
-
-       Command command = new Bold("a test");
-       assertEquals("command", "\\bold{a test}", command.toString());
-
-       command = new Bold(new Command("a test"));
-       assertEquals("command", "\\bold{a test}", command.toString());
+      Command command = new ID("text", "label");
+      assertEquals("setup", "\\id{text}{label}", command.toString());
     }
 
     //......................................................................
