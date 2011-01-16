@@ -367,7 +367,7 @@ public class BaseCommand extends Command
    * @return      the list of all the commands found in the string
    *
    */
-  private static @Nonnull List<Object> parse(String inText)
+  protected static @Nonnull List<Object> parse(String inText)
   {
     List<Object> result = new ArrayList<Object>();
 
@@ -678,6 +678,7 @@ public class BaseCommand extends Command
    * @param       inTransformer the transformer to use
    *
    */
+  // TODO:
 //   public Command transform(Transformer inTransformer)
 //   {
 //     if(inTransformer == null)
@@ -702,6 +703,7 @@ public class BaseCommand extends Command
    * @return      the list of transformed arguments
    *
    */
+  // TODO:
 //   @MayReturnNull
 //   private java.util.List<Object> transform
 //    (Transformer inTransformer, @MayBeNull java.util.List<Object> inArguments)
