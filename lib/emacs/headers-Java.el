@@ -33,8 +33,12 @@
           " *****************************************************************************/\n"
           "\n")
   (my-insert-line "//" "imports" "right" "-")
-  (insert "\nimport javax.annotation.Nonnull;\n")
+  (insert "\n")
+  (insert "package net.ixitxachitls.\n")
+  (insert "\n")
+  (insert "import javax.annotation.Nonnull;\n")
   (insert "import javax.annotation.Nullable;\n")
+  (insert "import javax.annotation.concurrent.Immutable;\n")
   (insert "\n")
   (my-insert-line "//" "" "right" ".")
   (insert "\n")

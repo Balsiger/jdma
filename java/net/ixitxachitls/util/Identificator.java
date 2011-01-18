@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.util;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 //..........................................................................
@@ -58,7 +60,7 @@ public interface Identificator<T>
     * @return      the list of ids
     *
     */
-  public @Nonnull String []id(@Nonnull T inEntry);
+  public @Nonnull List<String> id(@Nonnull T inEntry);
 
   //........................................................................
 

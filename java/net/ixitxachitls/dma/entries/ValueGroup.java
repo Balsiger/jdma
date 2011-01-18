@@ -1968,23 +1968,23 @@ public abstract class ValueGroup
     {
       /** The change state. */
       @Key(value = "changed", stored = false)
-      private boolean m_changed = false;
+      protected boolean m_changed = false;
 
       /** A simple value. */
       @Key("simple value")
-      private Value m_value = new Value.Test().m_value.clone();
+      protected Value m_value = new Value.Test().m_value.clone();
 
       /** A value for dms only. */
       @Key(value = "dm value", dm = true, plural = "dms value")
-      private Value m_dmValue = new Value.Test().m_value.clone();
+      protected Value m_dmValue = new Value.Test().m_value.clone();
 
       /** A value for players only. */
       @Key(value = "player value", player = true, playerEditable = false)
-      private Value m_playerValue = new Value.Test().m_value.clone();
+      protected Value m_playerValue = new Value.Test().m_value.clone();
 
       /** A player editable value. */
       @Key(value = "player editable", playerEditable = true)
-      private Value m_playerEditableValue = new Value.Test().m_value.clone();
+      protected Value m_playerEditableValue = new Value.Test().m_value.clone();
 
       /** Set the change state.
        *
