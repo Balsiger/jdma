@@ -152,6 +152,23 @@ public class Type<T /* extends Entry */> extends AbstractType<T>
   }
 
   //........................................................................
+  //------------------------------- getType --------------------------------
+
+  /**
+   * Get the base entry type for the given name.
+   *
+   * @param       inName the name of the type to get
+   *
+   * @return      the base entry type with the given name or null if not
+   *              found.
+   *
+   */
+  public static @Nullable Type<? /*extends Entry*/> getType(String inName)
+  {
+    return s_types.get(inName);
+  }
+
+  //........................................................................
   //------------------------------- getTypes -------------------------------
 
   /**
