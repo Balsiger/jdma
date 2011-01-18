@@ -275,7 +275,7 @@ public class TestCase extends org.junit.Assert
    *
    */
   @org.junit.Before
-  public void setUp()
+  public void setUpTest()
   {
     m_logger = new Log.Test.MockLogger();
     Log.add(s_logger, m_logger);
