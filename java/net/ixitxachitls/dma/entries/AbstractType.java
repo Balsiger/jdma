@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -36,11 +38,14 @@ import net.ixitxachitls.util.logging.Log;
 
 /**
  * The type abstract base of the entriy types.
+ * TODO: change to abstract entry when that is available.
  *
  *
  * @file          AbstractType.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
+ *
+ * @param         <T> the type represented by this type spec
  *
  */
 
@@ -48,7 +53,6 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-// TODO: change to abstract entry when that is available
 @Immutable
 public abstract class AbstractType<T /*extends ValueGroup*/>
   implements Comparable<AbstractType>
@@ -58,7 +62,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   //----------------------------- AbstractType -----------------------------
 
   /**
-   * Create the type
+   * Create the type.
    *
    * @param       inClass the class represented by this type
    *
@@ -72,7 +76,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   //----------------------------- AbstractType -----------------------------
 
   /**
-   * Create the type
+   * Create the type.
    *
    * @param       inClass    the class represented by this type
    * @param       inMultiple the name to use for multiple entries of the type
@@ -103,9 +107,6 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   /** the class for the type. */
   private @Nonnull Class m_class;
 
-//   /** the type of the corresponding base entry. */
-//   private @Nullable AbType m_base;
-
   /** The class name without package. */
   private @Nonnull String m_className;
 
@@ -123,7 +124,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
    */
   public @Nonnull String getLink()
   {
-    return m_name.replaceAll(" ", "").toLowerCase();
+    return m_name.replaceAll(" ", "").toLowerCase(Locale.US);
   }
 
   //.......................................................................
@@ -179,7 +180,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
    */
   public @Nonnull String getMultipleLink()
   {
-    return m_multiple.replaceAll(" ", "").toLowerCase();
+    return m_multiple.replaceAll(" ", "").toLowerCase(Locale.US);
   }
 
   //........................................................................
@@ -213,16 +214,46 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
     if(inOther == null)
       return -1;
 
-//     if(m_base != null && inOther.m_base == null)
-//       return -1;
-
-//     if(m_base == null && inOther.m_base != null)
-//       return +1;
-
     return m_name.compareTo(inOther.m_name);
   }
 
-    //......................................................................
+  //........................................................................
+  //-------------------------------- equals --------------------------------
+
+  /**
+   * Check for equality of the given errors.
+   *
+   * @param       inOther the object to compare to
+   *
+   * @return      true if equal, false else
+   *
+   */
+  public boolean equals(Object inOther)
+  {
+    if(inOther == null)
+      return false;
+
+    if(inOther instanceof AbstractType)
+      return m_name.equals(((AbstractType)inOther).m_name);
+    else
+      return false;
+  }
+
+  //........................................................................
+  //------------------------------- hashCode -------------------------------
+
+  /**
+   * Compute the hash code for this class.
+   *
+   * @return      the hash code
+   *
+   */
+  public int hashCode()
+  {
+    return m_name.hashCode();
+  }
+
+  //........................................................................
   //------------------------------- toString -------------------------------
 
   /**
@@ -331,11 +362,22 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
     /** A type for testing. */
     public static class TestType<T> extends AbstractType<T>
     {
+      /**
+       * Create the type.
+       *
+       * @param inClass the class of the type
+       */
       public TestType(@Nonnull Class<T> inClass)
       {
         super(inClass);
       }
 
+      /**
+       * Create the type.
+       *
+       * @param inClass the class of the type
+       * @param inMultiple the text for multiple types
+       */
       public TestType(@Nonnull Class<T> inClass, String inMultiple)
       {
         super(inClass, inMultiple);
@@ -359,10 +401,10 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
       assertEquals("string", "String", type.toString());
 
       String string = type.create();
-      assertEquals("create", "", string.toString());
+      assertEquals("create", "", string);
 
       string = type.create("guru");
-      assertEquals("create", "guru", string.toString());
+      assertEquals("create", "guru", string);
 
       TestType<ValueGroup> type2 =
         new TestType<ValueGroup>(ValueGroup.class, "Many More");
