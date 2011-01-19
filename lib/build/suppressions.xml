@@ -11,5 +11,5 @@
             lines="282-300"/>
   <suppress checks="VisibilityModifier"
             files="Value.java"
-            lines="878"/>
+            lines="892"/>
 </suppressions>

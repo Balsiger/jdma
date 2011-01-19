@@ -164,7 +164,7 @@ public abstract class Value<T extends Value> implements
   //------------------------------- toString -------------------------------
 
   /**
-   * Convert the value into a String that can be stored and reread.
+   * Convert the value into a String that can be shown to a user.
    *
    * @return      a String representation for human reading
    *
@@ -190,7 +190,7 @@ public abstract class Value<T extends Value> implements
    * @return      a string representation.
    *
    */
-  public abstract @Nonnull String doToString();
+  protected abstract @Nonnull String doToString();
 
   //........................................................................
 
@@ -263,6 +263,20 @@ public abstract class Value<T extends Value> implements
 
   //........................................................................
 
+  //-------------------------------- format --------------------------------
+
+  /**
+   * Format the value for printing.
+   *
+   * @return      the command that can be printed
+   *
+   */
+  public @Nonnull Command format()
+  {
+    return format(false, false);
+  }
+
+  //........................................................................
   //-------------------------------- format --------------------------------
 
   /**
