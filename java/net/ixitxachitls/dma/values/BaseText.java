@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.values;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
@@ -51,6 +52,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@Immutable
 public class BaseText<T extends BaseText> extends Value<T>
 {
   //--------------------------------------------------------- constructor(s)

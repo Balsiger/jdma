@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.values;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 //..........................................................................
 
@@ -42,6 +43,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@Immutable
 public class Name extends BaseText<Name>
 {
   //--------------------------------------------------------- constructor(s)
