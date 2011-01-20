@@ -84,7 +84,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
    */
   public AbstractType(@Nonnull Class<T> inClass, @Nonnull String inMultiple)
   {
-    m_name      = Classes.fromClassName(inClass);
+    m_name      = Classes.fromClassName(inClass).toLowerCase(Locale.US);
     m_class     = inClass;
     m_multiple  = inMultiple;
     m_className = inClass.getName().replaceAll(".*\\.", "");
