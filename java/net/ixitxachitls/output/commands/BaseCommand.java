@@ -658,7 +658,7 @@ public class BaseCommand extends Command
    */
   public Command withOptionals(@Nonnull List<Object> inArguments)
   {
-    if(m_optNumber >= 0 && m_optNumber != inArguments.size())
+    if(m_optNumber >= 0 && m_optNumber < inArguments.size())
       Log.warning("invalid number of optional argments given for command "
                   + m_name + ", expected " + m_optNumber + " but got "
                   + inArguments.size());

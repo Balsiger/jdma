@@ -34,7 +34,7 @@ import net.ixitxachitls.output.commands.Command;
 /**
  * The interface for all formatters.
  *
- * @file          ValueFormatter.java
+ * @file          Formatter.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
