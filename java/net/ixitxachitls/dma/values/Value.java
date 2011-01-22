@@ -674,7 +674,7 @@ public abstract class Value<T extends Value> implements
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withFormatter(@Nonnull Formatter inFormatter)
+  public @Nonnull T withFormatter(@Nonnull Formatter<T> inFormatter)
   {
     m_formatter = inFormatter;
 
