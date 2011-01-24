@@ -226,7 +226,7 @@ public class Selection<T extends Selection> extends Value<T>
 
   //........................................................................
 
-  //---------------------------- getEditValues -----------------------------
+  //----------------------------- getChoices -------------------------------
 
   /**
    * Get the all the possible values this value can be edited with. Returns
@@ -235,7 +235,7 @@ public class Selection<T extends Selection> extends Value<T>
    * @return      the possible value to select from or null for no selection
    *
    */
-  public @Nonnull String getEditValues()
+  public @Nonnull String getChoices()
   {
     return Strings.toString(m_selections, "||", "");
   }
@@ -502,7 +502,7 @@ public class Selection<T extends Selection> extends Value<T>
       assertEquals("value not correctly converted", "you",
                    selection.toString());
       assertEquals("edit values", "how||are||you||?",
-                   selection.getEditValues());
+                   selection.getChoices());
 
       // what do we have?
       assertEquals("get", "how", selection.getSelections()[0]);
