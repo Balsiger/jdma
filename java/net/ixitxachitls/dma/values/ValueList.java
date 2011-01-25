@@ -727,9 +727,7 @@ public class ValueList<T extends Value>
     @org.junit.Test
     public void init()
     {
-      ValueList<net.ixitxachitls.dma.values.Name> list =
-        new ValueList<net.ixitxachitls.dma.values.Name>
-        (new net.ixitxachitls.dma.values.Name());
+      ValueList<Name> list = new ValueList<Name>(new Name());
 
       // undefined value
       assertEquals("not undefined at start", false, list.isDefined());
@@ -745,10 +743,8 @@ public class ValueList<T extends Value>
       assertEquals("define", "", list.toString());
       assertFalse("define 2", list.define());
 
-      list = new ValueList<net.ixitxachitls.dma.values.Name>
-        (new net.ixitxachitls.dma.values.Name("Hello"),
-         new net.ixitxachitls.dma.values.Name("how are"),
-         new net.ixitxachitls.dma.values.Name("you"));
+      list = new ValueList<Name>
+        (new Name("Hello"), new Name("how are"), new Name("you"));
 
       // defined value
       assertEquals("not defined at start", true, list.isDefined());
@@ -774,14 +770,13 @@ public class ValueList<T extends Value>
       assertEquals("defined value not correct", "Hello,\n$undefined$,\nyou",
                    list.toString());
 
-      ArrayList<net.ixitxachitls.dma.values.Name> input =
-        new ArrayList<net.ixitxachitls.dma.values.Name>();
+      ArrayList<Name> input = new ArrayList<Name>();
 
-      input.add(new net.ixitxachitls.dma.values.Name("Hello"));
-      input.add(new net.ixitxachitls.dma.values.Name("how are"));
-      input.add(new net.ixitxachitls.dma.values.Name("you"));
+      input.add(new Name("Hello"));
+      input.add(new Name("how are"));
+      input.add(new Name("you"));
 
-      list = new ValueList<net.ixitxachitls.dma.values.Name>(input);
+      list = new ValueList<Name>(input);
 
       //System.out.println(list);
 
@@ -820,9 +815,7 @@ public class ValueList<T extends Value>
           "none", "= first, second", null, "= first, second",
         };
 
-      Value.Test.readTest(tests,
-                          new ValueList<net.ixitxachitls.dma.values.Name>
-                          (new net.ixitxachitls.dma.values.Name()));
+      Value.Test.readTest(tests, new ValueList<Name>(new Name()));
     }
 
     //......................................................................
@@ -839,9 +832,7 @@ public class ValueList<T extends Value>
                         "test");
 
       // normal read
-      ValueList<net.ixitxachitls.dma.values.Name> list =
-        new ValueList<net.ixitxachitls.dma.values.Name>
-        (new net.ixitxachitls.dma.values.Name(), ":");
+      ValueList<Name> list = new ValueList<Name>(new Name(), ":");
 
       //System.out.println(list);
       assertEquals("list should have been read", true,
@@ -859,36 +850,34 @@ public class ValueList<T extends Value>
     @org.junit.Test
     public void set()
     {
-      ValueList<net.ixitxachitls.dma.values.Name> list =
-        new ValueList<net.ixitxachitls.dma.values.Name>
-        (new net.ixitxachitls.dma.values.Name());
+      ValueList<Name> list = new ValueList<Name>(new Name());
 
       assertFalse("not undefined at start", list.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    list.toString());
 
-      assertTrue(list.add(new net.ixitxachitls.dma.values.Name("test 1")));
+      assertTrue(list.add(new Name("test 1")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1",
                    list.toString());
 
-      assertTrue(list.add(new net.ixitxachitls.dma.values.Name("test 2")));
+      assertTrue(list.add(new Name("test 2")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1,\ntest 2",
                    list.toString());
 
-      assertTrue(list.add(1, new net.ixitxachitls.dma.values.Name("test 3")));
+      assertTrue(list.add(1, new Name("test 3")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1,\ntest 3,\ntest 2",
                    list.toString());
 
-      assertFalse(list.add(1, new net.ixitxachitls.dma.values.Name()));
+      assertFalse(list.add(1, new Name()));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1,\ntest 3,\ntest 2",
                    list.toString());
 
       // values with other types are added but with the stored type
-      assertTrue(list.add(1, new net.ixitxachitls.dma.values.Name("guru")));
+      assertTrue(list.add(1, new Name("guru")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct",
                    "test 1,\nguru,\ntest 3,\ntest 2",
@@ -902,18 +891,12 @@ public class ValueList<T extends Value>
     @org.junit.Test
     public void emove()
     {
-      ValueList<net.ixitxachitls.dma.values.Name> list =
-        new ValueList<net.ixitxachitls.dma.values.Name>
-        (new net.ixitxachitls.dma.values.Name(), " - ");
+      ValueList<Name> list = new ValueList<Name>(new Name(), " - ");
 
-      net.ixitxachitls.dma.values.Name first =
-         new net.ixitxachitls.dma.values.Name("first");
-       net.ixitxachitls.dma.values.Name second =
-        new net.ixitxachitls.dma.values.Name("second");
-       net.ixitxachitls.dma.values.Name third =
-        new net.ixitxachitls.dma.values.Name("third");
-      net.ixitxachitls.dma.values.Name fourth =
-        new net.ixitxachitls.dma.values.Name("fourth");
+      Name first = new Name("first");
+      Name second = new Name("second");
+      Name third = new Name("third");
+      Name fourth = new Name("fourth");
 
       list.add(first);
       list.add(second);
@@ -950,26 +933,22 @@ public class ValueList<T extends Value>
     @org.junit.Test
     public void compute()
     {
-      ValueList<net.ixitxachitls.dma.values.Name> list =
-        new ValueList<net.ixitxachitls.dma.values.Name>
-        (" ",
-         new net.ixitxachitls.dma.values.Name("hello"),
-         new net.ixitxachitls.dma.values.Name("there,"),
-         new net.ixitxachitls.dma.values.Name("how"),
-         new net.ixitxachitls.dma.values.Name("are"),
-         new net.ixitxachitls.dma.values.Name("you?"));
+      ValueList<Name> list = new ValueList<Name>(" ",
+                                                 new Name("hello"),
+                                                 new Name("there,"),
+                                                 new Name("how"),
+                                                 new Name("are"),
+                                                 new Name("you?"));
 
-      list = list.subtract(new ValueList<net.ixitxachitls.dma.values.Name>
-                           (new net.ixitxachitls.dma.values.Name("guru"),
-                            new net.ixitxachitls.dma.values.Name("there,"),
-                            new net.ixitxachitls.dma.values.Name("are"),
-                            new net.ixitxachitls.dma.values.Name("you")));
+      list = list.subtract(new ValueList<Name>(new Name("guru"),
+                                               new Name("there,"),
+                                               new Name("are"),
+                                               new Name("you")));
 
       assertEquals("subtract", "hello how you?", list.toString());
 
-      list = list.add(new ValueList<net.ixitxachitls.dma.values.Name>
-                           (new net.ixitxachitls.dma.values.Name("guru"),
-                            new net.ixitxachitls.dma.values.Name("guru")));
+      list = list.add(new ValueList<Name>(new Name("guru"),
+                                          new Name("guru")));
 
       assertEquals("subtract", "hello how you? guru guru", list.toString());
     }

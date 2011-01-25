@@ -103,6 +103,7 @@ public abstract class Value<T extends Value> implements
     inNew.m_grouping = m_grouping;
     inNew.m_editType = m_editType;
     inNew.m_choices = m_choices;
+    inNew.reset();
 
     return inNew;
   }

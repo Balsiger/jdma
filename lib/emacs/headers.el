@@ -3,29 +3,29 @@
 ;;
 
 ;; set some functions as outloading from the corresponding files
-(autoload 'my-insert-C++-file-header "headers-C++" 
+(autoload 'my-insert-C++-file-header "headers-C++"
            "Insert the C++ file header" t t)
-(autoload 'my-insert-C++-func-header "headers-C++" 
+(autoload 'my-insert-C++-func-header "headers-C++"
            "Insert the C++ function header" t t)
-(autoload 'my-insert-Java/l-file-header "headers-Java" 
+(autoload 'my-insert-Java/l-file-header "headers-Java"
            "Insert the Java file header" t t)
-(autoload 'my-insert-Java/l-func-header "headers-Java" 
+(autoload 'my-insert-Java/l-func-header "headers-Java"
            "Insert the Java function header" t t)
-(autoload 'my-insert-Perl-file-header "headers-perl" 
+(autoload 'my-insert-Perl-file-header "headers-perl"
           "Insert the perl file header" t t)
-(autoload 'my-insert-Perl-func-header "headers-perl" 
+(autoload 'my-insert-Perl-func-header "headers-perl"
           "Insert the perl function header" t t)
-(autoload 'my-insert-HTML-file-header "headers-html" 
+(autoload 'my-insert-HTML-file-header "headers-html"
           "Insert the html file header" t t)
-(autoload 'my-insert-HTML-func-header "headers-html" 
+(autoload 'my-insert-HTML-func-header "headers-html"
           "Insert the html function header" t t)
 
 ;; install the header function
 (defun my-mode-header-install ()
   "Install the c++-mode headers"
-  (local-set-key [f3] (intern (concat "my-insert-" mode-name 
+  (local-set-key [f3] (intern (concat "my-insert-" mode-name
                                       "-file-header")))
-  (local-set-key [f4] (intern (concat "my-insert-" mode-name 
+  (local-set-key [f4] (intern (concat "my-insert-" mode-name
                                       "-func-header")))
   (fold-mode)
   ;;(flyspell-mode)
@@ -59,27 +59,27 @@
       (insert (make-string (- fill-column (string-width indent) 3)
                                           (string-to-char character)))
       (if (string= position "right")
-          (insert (make-string (- fill-column (string-width indent) 
+          (insert (make-string (- fill-column (string-width indent)
                                   (string-width caption)
                                   4)
                                (string-to-char character))
                   " " caption
           )
           (if (string= position "left")
-              (insert (make-string 5 (string-to-char character)) " " caption 
+              (insert (make-string 5 (string-to-char character)) " " caption
                       " "
-                      (make-string (- fill-column (string-width indent) 
+                      (make-string (- fill-column (string-width indent)
                                       (string-width caption)
                                       10)
                                    (string-to-char character))
               )
-              (insert (make-string (/ (- fill-column (string-width indent) 
+              (insert (make-string (/ (- fill-column (string-width indent)
                                          (string-width caption)
                                          5)
                                       2)
                                    (string-to-char character))
                       " " caption " "
-                      (make-string (/ (- fill-column (string-width indent) 
+                      (make-string (/ (- fill-column (string-width indent)
                                          (string-width caption)
                                          4)
                                       2)
@@ -95,7 +95,7 @@
   "Insert an aligned fold"
   (set 'my-temp (current-column))
   (beginning-of-line)
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   (if text
                       text
@@ -103,7 +103,7 @@
                   )
                   position "-")
   (insert "\n\n\n")
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   "" "left" ".")
   (previous-line 3)
@@ -134,11 +134,11 @@
 (defun my-insert-DMA (&optional text)
   "Insert an empty DMA template of the appropriate type"
   (interactive)
-  (set 'my-type (completing-read "Type of entry: " 
+  (set 'my-type (completing-read "Type of entry: "
                                  '(("product" 1) ("base-product" 2)
-                                   ("base-item" 3) ("adventure" 4) 
-                                   ("image" 5) ("base-spell" 6) 
-                                   ("base-effect" 7) ("base-monster" 8) 
+                                   ("base-item" 3) ("adventure" 4)
+                                   ("image" 5) ("base-spell" 6)
+                                   ("base-effect" 7) ("base-monster" 8)
                                    ("base-quality" 9) ("base-encounter" 10)
                                    ("encounter" 11))
                                  nil t))
@@ -150,7 +150,7 @@
   (interactive)
   (beginning-of-buffer)
   (insert "/******************************************************************************\n"
-          " * Copyright (c) 2002,2003 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler\n"
+          " * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler\n"
           " * All rights reserved\n"
           " *\n"
           " * This file is part of Dungeon Master Assistant.\n"
@@ -182,7 +182,7 @@
   (insert "  <TABLE>\n"
           "    <TR>\n"
           "      <TD>\n"
-          "        <IMG BORDER=0 SRC=\"../Archive/icons/" 
+          "        <IMG BORDER=0 SRC=\"../Archive/icons/"
           my-category "/" my-name ".png\" \n"
           "             ALT=\"" my-name "\" \n"
           "             onMouseOver=\"iconHighlight(this);\" "
@@ -331,7 +331,7 @@
           "  target            ;\n"
           "  duration          ;\n"
           "  daving throw      ;\n"
-          "  spell resistance  ;\n"          
+          "  spell resistance  ;\n"
           "  references        \"WTC 17524\" 1;\n"
           "  short description \"\";\n"
           "  world             generic;\n"
@@ -353,7 +353,7 @@
                 )
   )
   (beginning-of-line)
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   my-text "left" "-")
   (insert "\n"
@@ -369,7 +369,7 @@
           "  description       \n"
           "\n"
           "  \"\".\n\n")
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   "" "left" ".")
   (forward-line -7)
@@ -386,7 +386,7 @@
                 )
   )
   (beginning-of-line)
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   my-text "left" "-")
   (insert "\n"
@@ -431,7 +431,7 @@
           "  description       \n"
           "\n"
           "  \"\".\n\n")
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   "" "left" ".")
   (forward-line -39)
@@ -481,7 +481,7 @@
                 )
   )
   (beginning-of-line)
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   my-text "left" "-")
   (insert "\n"
@@ -499,7 +499,7 @@
           "  description       \n"
           "\n"
           "  \"\".\n\n")
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   "" "left" ".")
   (forward-line -10)
@@ -556,7 +556,7 @@
                 )
   )
   (beginning-of-line)
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   my-text "left" "-")
   (insert "\n"
@@ -586,7 +586,7 @@
                 )
   )
   (beginning-of-line)
-  (my-insert-line (concat (make-string my-temp ?\ ) 
+  (my-insert-line (concat (make-string my-temp ?\ )
                           (string-trim '(?\ ) comment-start))
                   my-text "left" "-")
   (insert "\n"
@@ -652,7 +652,7 @@ from the beginning of S until the first character not in BAG is found."
     (if (<= len i1) "" (substring s i1 len))))
 
 
-(defun string-right-trim (bag s) 
+(defun string-right-trim (bag s)
   "Returns a substring of the string specified by S that has had every
 character in BAG removed from the end.  S must be a string or a symbol.
 The BAG argument may be any sequence of characters.  Characters are trimmed
