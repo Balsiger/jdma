@@ -62,7 +62,7 @@ public class Text extends BaseText<Text>
    */
   public Text()
   {
-    m_editType = "string";
+    // nothing to do
   }
 
   //........................................................................
@@ -77,11 +77,13 @@ public class Text extends BaseText<Text>
   public Text(@Nonnull String inText)
   {
     super(inText);
-
-    m_editType = "string";
   }
 
   //........................................................................
+
+  {
+    m_editType = "string";
+  }
 
   //-------------------------------- create --------------------------------
 

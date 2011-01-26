@@ -62,7 +62,7 @@ public class FormattedText extends BaseText<FormattedText>
    */
   public FormattedText()
   {
-    m_editType = "formatted";
+    // nothing to do
   }
 
   //........................................................................
@@ -77,11 +77,13 @@ public class FormattedText extends BaseText<FormattedText>
   public FormattedText(@Nonnull String inText)
   {
     super(inText);
-
-    m_editType = "formatted";
   }
 
   //........................................................................
+
+  {
+    m_editType = "formatted";
+  }
 
   //-------------------------------- create --------------------------------
 
