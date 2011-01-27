@@ -1682,6 +1682,8 @@ public abstract class ValueGroup
   protected boolean readValue(@Nonnull ParseReader inReader,
                               @Nonnull Variable inVariable)
   {
+    // TODO: change read to return the newly read value and thus make the
+    // values really immutable.
     return inVariable.getValue(this).read(inReader);
   }
 

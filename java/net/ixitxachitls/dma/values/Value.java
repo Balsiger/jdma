@@ -57,7 +57,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 public abstract class Value<T extends Value> implements
-  Comparable<Value>, PublicCloneable
+  Comparable<Object>, PublicCloneable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -218,7 +218,7 @@ public abstract class Value<T extends Value> implements
    *              object given
    *
    */
-  public int compareTo(@Nonnull Value inOther)
+  public int compareTo(@Nonnull Object inOther)
   {
     return toString().compareTo(inOther.toString());
   }
@@ -499,7 +499,7 @@ public abstract class Value<T extends Value> implements
    * @return      the multiplied value
    *
    */
-  public @Nonnull T multiply(@Nonnull Value inMultiplier)
+  public @Nonnull T multiply(@Nonnull T inMultiplier)
    {
      throw new UnsupportedOperationException("cannot multiply " + getClass());
    }
@@ -515,7 +515,7 @@ public abstract class Value<T extends Value> implements
    * @return      the divided value
    *
    */
-  public @Nonnull T setToDivide(@Nonnull Value inDivisor)
+  public @Nonnull T divide(@Nonnull T inDivisor)
   {
     throw new UnsupportedOperationException("cannot divide " + getClass());
   }
