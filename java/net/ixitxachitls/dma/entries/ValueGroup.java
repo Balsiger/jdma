@@ -85,7 +85,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
-public abstract class ValueGroup
+public abstract class ValueGroup implements Changeable
 {
   //----------------------------------------------------------------- nested
 
@@ -1659,16 +1659,16 @@ public abstract class ValueGroup
    */
   public @Nonnull String set(@Nonnull String inKey, @Nonnull String inText)
   {
-    Variable var = getVariable(inKey);
+    Variable variable = getVariable(inKey);
 
-    if(var == null)
+    if(variable == null)
       return inText;
 
-    return var.setFromString(this, inText);
+    return variable.setFromString(this, inText);
   }
 
   //........................................................................
-  //------------------------------- readValue ------------------------------
+  //----------------------------- readVariable -----------------------------
 
   /**
    * Read a value, and only one value, from the reader into the object.
@@ -1679,12 +1679,10 @@ public abstract class ValueGroup
    * @return      true if read, faluse if not
    *
    */
-  protected boolean readValue(@Nonnull ParseReader inReader,
-                              @Nonnull Variable inVariable)
+  protected boolean readVariable(@Nonnull ParseReader inReader,
+                                 @Nonnull Variable inVariable)
   {
-    // TODO: change read to return the newly read value and thus make the
-    // values really immutable.
-    return inVariable.getValue(this).read(inReader);
+    return inVariable.read(this, inReader);
   }
 
   //........................................................................
@@ -1969,24 +1967,23 @@ public abstract class ValueGroup
     public static class TestGroup extends ValueGroup
     {
       /** The change state. */
-      @Key(value = "changed", stored = false)
       protected boolean m_changed = false;
 
       /** A simple value. */
       @Key("simple value")
-      protected Value m_value = new Value.Test().m_value.clone();
+      protected Value m_value = new Value.Test.TestValue();
 
       /** A value for dms only. */
-      @Key(value = "dm value", dm = true, plural = "dms value")
-      protected Value m_dmValue = new Value.Test().m_value.clone();
+      @Key(value = "dm value", dm = true, plural = "dms value", stored = false)
+      protected Value m_dmValue = new Value.Test.TestValue();
 
       /** A value for players only. */
       @Key(value = "player value", player = true, playerEditable = false)
-      protected Value m_playerValue = new Value.Test().m_value.clone();
+      protected Value m_playerValue = new Value.Test.TestValue();
 
       /** A player editable value. */
       @Key(value = "player editable", playerEditable = true)
-      protected Value m_playerEditableValue = new Value.Test().m_value.clone();
+      protected Value m_playerEditableValue = new Value.Test.TestValue();
 
       /** Set the change state.
        *
@@ -2031,9 +2028,9 @@ public abstract class ValueGroup
     {
       Variables variables = s_variables.get(TestGroup.class);
       assertTrue("variables", variables != null);
-      assertTrue("changed", variables.getVariable("changed") != null);
+      assertTrue("simple value", variables.getVariable("simple value") != null);
       assertNull("invalid", variables.getVariable("invalid"));
-      assertFalse("stored", variables.getVariable("changed").isStored());
+      assertFalse("stored", variables.getVariable("dm value").isStored());
       assertTrue("stored", variables.getVariable("simple value").isStored());
       assertEquals("plural", "dms value",
                    variables.getVariable("dm value").getPluralKey());
@@ -2070,7 +2067,6 @@ public abstract class ValueGroup
       assertTrue("format", group.formatValues(builder, true, 13));
       assertEquals("format",
                    "  simple value guru;\n"
-                   + "  dm value     guru;\n"
                    + "  player value guru",
                    builder.toString());
     }
@@ -2083,18 +2079,18 @@ public abstract class ValueGroup
     public void values()
     {
       TestGroup group = new TestGroup();
-      group.set("simple value", "guru");
-      group.set("dm value", "guru");
-      group.set("player value", "guru");
+      assertTrue("set", group.set("simple value", "guru").isEmpty());
+      assertTrue("set", group.set("dm value", "guru").isEmpty());
+      assertTrue("set", group.set("player value", "guru").isEmpty());
 
       assertEquals("id", "Test-ID", group.getID());
       assertEquals("name", "Test-Name", group.getName());
       assertFalse("base", group.isBase());
       assertEquals("value", "guru", group.getValue("simple value").toString());
       assertNull("value", group.getValue("invalid"));
-      assertFalse("changed", group.m_changed);
-      group.changed();
       assertTrue("changed", group.m_changed);
+      group.changed(false);
+      assertFalse("changed", group.m_changed);
     }
 
     //......................................................................
@@ -2109,8 +2105,9 @@ public abstract class ValueGroup
         new ParseReader(new java.io.StringReader("guru gugus"), "test");
 
       assertTrue("read",
-                 group.readValue(reader, group.getVariable("simple value")));
+                 group.readVariable(reader, group.getVariable("simple value")));
       assertEquals("value", "guru", group.getValue("simple value").toString());
+      assertTrue("expect", reader.expect("gugus"));
     }
 
     //......................................................................

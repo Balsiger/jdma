@@ -280,6 +280,7 @@ public class WebServer
     //---------------------------------------------------------- DummyLogger
 
     /** A simple dummy logger to prevent jetty from printing to stderr. */
+    // CHECKSTYLE:OFF
     public static class DummyLogger
       implements org.eclipse.jetty.util.log.Logger
     {
@@ -299,6 +300,7 @@ public class WebServer
       { return this; };
       public String getName() { return "dummy"; };
     }
+    // CHECKSTYLE:ON
 
     //......................................................................
 

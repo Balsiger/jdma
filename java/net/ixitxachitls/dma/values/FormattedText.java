@@ -338,15 +338,14 @@ public class FormattedText extends BaseText<FormattedText>
                                                  + "\"just \\\" a \\\" test"),
                         "test");
 
-      FormattedText text = new FormattedText();
+      FormattedText text = new FormattedText().read(reader);
 
-      assertEquals("text should not have been read", false,
-                   text.read(reader));
+      assertNull("text should not have been read", text);
 
       reader.read(' ');
 
-      assertEquals("text should have been read", true,
-                   text.read(reader));
+      text = new FormattedText().read(reader);
+      assertTrue("text should have been read", text != null);
       assertEquals("text does not match", "just \" a \" test", text.get());
       assertEquals("converted text does not match",
                    "\"just \\\" a \\\" test\"", text.toString());

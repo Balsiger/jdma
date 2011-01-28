@@ -626,10 +626,10 @@ public class ValueList<T extends Value>
     do
     {
       // create a new value
-      T value = (T)m_type.create();
+      T value = (T)m_type.read(inReader);
 
       // read it
-      if(!value.read(inReader))
+      if(value == null)
       {
         if(isDefined())
         {
@@ -835,8 +835,8 @@ public class ValueList<T extends Value>
       ValueList<Name> list = new ValueList<Name>(new Name(), ":");
 
       //System.out.println(list);
-      assertEquals("list should have been read", true,
-                   list.read(reader));
+      list = list.read(reader);
+      assertTrue("list should have been read", list != null);
       assertEquals("converted list does not match",
                    "one:two:three:four", list.toString());
 

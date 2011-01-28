@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.io.StringReader;
 import java.lang.reflect.Field;
 
 import javax.annotation.Nonnull;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.input.ParseReader;
 
 //..........................................................................
 
@@ -311,6 +313,32 @@ public class Variable
 
   //----------------------------------------------------------- manipulators
 
+  //--------------------------------- read ---------------------------------
+
+  /**
+   * Read a variable from the given reader.
+   *
+   * @param       inGroup    the group into which to read
+   * @param       inReader   the reader to read from
+   *
+   * @return      true if read, false if not
+   *
+   */
+  public boolean read(@Nonnull ValueGroup inGroup,
+                      @Nonnull ParseReader inReader)
+  {
+    Value read = getValue(inGroup).read(inReader);
+
+    if(read == null)
+      return false;
+
+    set(inGroup, read);
+
+    return true;
+  }
+
+  //........................................................................
+
   //--------------------------------- set ----------------------------------
 
   /**
@@ -350,15 +378,32 @@ public class Variable
    * @return      the text of the input String that was not used
    *
    */
-  public @Nonnull String setFromString(@Nonnull Object inEntry,
+  public @Nonnull String setFromString(@Nonnull Changeable inEntry,
                                        @Nonnull String inValue)
   {
-    Value value = getValue(inEntry);
+    if(inValue.isEmpty())
+      return inValue;
+
+    if(inValue.startsWith(Value.UNDEFINED))
+    {
+      set(inEntry, getValue(inEntry).create());
+
+      return inValue.substring(Value.UNDEFINED.length());
+    }
+
+    // init the reader
+    StringReader string = new StringReader(inValue);
+    ParseReader reader  = new ParseReader(string, "set");
+
+    Value value = getValue(inEntry).read(reader);
 
     if(value == null)
       return inValue;
 
-    return value.setFromString(inValue);
+    set(inEntry, value);
+
+    // return the part that was not read
+    return reader.read(inValue.length());
   }
 
   //........................................................................
@@ -380,7 +425,7 @@ public class Variable
       private boolean m_changed = false;
 
       /** Value field for testing. */
-      protected Value m_value = new Value.Test().m_value.clone();
+      protected Value m_value = new Value.Test.TestValue();
 
       /** Change method for testing. */
       public void changed()
@@ -434,10 +479,8 @@ public class Variable
       Variable variable =
         new Variable("key", field, false, false, false, false, null);
       TestObject test = new TestObject();
-      Value value = test.m_value.clone();
 
-      value.setFromString("guru");
-      variable.set(test, value);
+      variable.setFromString(test, "guru");
       assertEquals("setting", "guru", variable.getValue(test).toString());
     }
 

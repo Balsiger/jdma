@@ -450,7 +450,7 @@ public abstract class AbstractAttachment<T /*extends AbstractEntry*/>
     {
       /** A test value. */
       @Key("value")
-      protected Value m_value = new Value.Test().m_value.clone();
+      protected Value m_value = new Value.Test.TestValue();
 
       /**
        * The constructor.

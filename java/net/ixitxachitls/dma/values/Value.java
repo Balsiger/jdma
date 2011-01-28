@@ -28,6 +28,7 @@ import java.io.StringReader;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.input.ParseReader;
@@ -56,6 +57,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@Immutable
 public abstract class Value<T extends Value> implements
   Comparable<Object>, PublicCloneable
 {
@@ -416,45 +418,6 @@ public abstract class Value<T extends Value> implements
 
   //----------------------------------------------------------- manipulators
 
-  //---------------------------- setFromString -----------------------------
-
-  /**
-   * Set the contents of the value from the given String. The part of the
-   * String that could not be read is returned.
-   *
-   * @param       inText   the text to parse to get the value
-   *
-   * @return      the part not parsed or the empty string if everything could
-   *              be parsed (if the String is the same as the one read, the
-   *              value was not changed)
-   *
-   */
-  public @Nonnull String setFromString(@Nonnull String inText)
-  {
-    if(inText.isEmpty())
-      return inText;
-
-    if(inText.startsWith(UNDEFINED))
-    {
-      reset();
-
-      return inText.substring(UNDEFINED.length());
-    }
-
-    // init the reader
-    StringReader string = new StringReader(inText);
-    ParseReader reader  = new ParseReader(string, "set");
-
-    // could we read the value at all?
-    if(!read(reader))
-      return inText;
-
-    // determine the part that could not be read
-    return reader.read(inText.length());
-  }
-
-  //........................................................................
-
   //--------------------------------- add ----------------------------------
 
   /**
@@ -613,36 +576,32 @@ public abstract class Value<T extends Value> implements
    *
    * @param       inReader       the reader to read from
    *
-   * @return      true if a valid value was read, false else
+   * @return      the value read
    *
    */
-  public boolean read(@Nonnull ParseReader inReader)
+  public @Nullable T read(@Nonnull ParseReader inReader)
   {
-    // reset the current value
-    reset();
+    T result = create();
 
     // check if undefined is encountered
     if(inReader.expect(UNDEFINED))
-      return true;
+      return result;
 
     // store the current position
     ParseReader.Position pos = inReader.getPosition();
 
-    m_remark = Remark.read(inReader);
+    result.m_remark = Remark.read(inReader);
 
     // could we read the value?
-    if(!doRead(inReader))
+    if(!result.doRead(inReader))
     {
       // restore position
       inReader.seek(pos);
 
-      // make sure the value is undefined again
-      reset();
-
-      return false;
+      return null;
     }
 
-    return true;
+    return result;
   }
 
   //........................................................................
@@ -775,16 +734,18 @@ public abstract class Value<T extends Value> implements
         ParseReader reader =
           new ParseReader(new java.io.StringReader(inTests[i + 1]), "test");
 
+        Value value = inValue.read(reader);
+
         if(inTests[i + 2] == null)
-          assertFalse(i / 4 + ": " + inTests[i]
+          assertNull(i / 4 + ": " + inTests[i]
                       + ", should not have been read",
-                      inValue.read(reader));
+                      value);
         else
         {
           assertTrue(i / 4 + ": " + inTests[i] + ", should have been read",
-                     inValue.read(reader));
+                     value != null);
           assertEquals(i / 4 + ": " + inTests[i] + ", does not match",
-                       inTests[i + 2], inValue.toString());
+                       inTests[i + 2], value.toString());
         }
 
         String rest = reader.readLine();
@@ -808,33 +769,33 @@ public abstract class Value<T extends Value> implements
      * @param inValue the value to read into
      *
      */
-    public static void setTest(@Nonnull String []inTests,
-                               @Nonnull Value inValue)
-    {
-      if(inTests.length % 4 != 0)
-        throw new IllegalArgumentException("quadruplets of input test strings "
-                                           + "must be given");
+//     public static void setTest(@Nonnull String []inTests,
+//                                @Nonnull Value inValue)
+//     {
+//       if(inTests.length % 4 != 0)
+//       throw new IllegalArgumentException("quadruplets of input test strings "
+//                                            + "must be given");
 
-      for(int i = 0; i < inTests.length; i += 4)
-      {
-        String rest = inValue.setFromString(inTests[i + 1]);
+//       for(int i = 0; i < inTests.length; i += 4)
+//       {
+//         String rest = inValue.setFromString(inTests[i + 1]);
 
-        if(inTests[i + 2] == null)
-          assertTrue(i / 4 + ": " + inTests[i]
-                     + ", should not have been set",
-                     rest == inTests[i + 1]);
-        else
-          assertEquals(i / 4 + ": " + inTests[i] + ", does not match",
-                       inTests[i + 2], inValue.toString());
+//         if(inTests[i + 2] == null)
+//           assertTrue(i / 4 + ": " + inTests[i]
+//                      + ", should not have been set",
+//                      rest == inTests[i + 1]);
+//         else
+//           assertEquals(i / 4 + ": " + inTests[i] + ", does not match",
+//                        inTests[i + 2], inValue.toString());
 
-        if(inTests[i + 3] != null)
-          assertEquals(i / 4 + ": " + inTests[i] + ", rest does not match",
-                       inTests[i + 3], rest);
-        else
-          assertTrue(i / 4 + ": " + inTests[i] + ", still having rest '"
-                     + rest + "'", rest.length() == 0);
-      }
-    }
+//         if(inTests[i + 3] != null)
+//           assertEquals(i / 4 + ": " + inTests[i] + ", rest does not match",
+//                        inTests[i + 3], rest);
+//         else
+//           assertTrue(i / 4 + ": " + inTests[i] + ", still having rest '"
+//                      + rest + "'", rest.length() == 0);
+//       }
+//     }
 
     //......................................................................
     //----- cloneCreateResetTest -------------------------------------------
@@ -890,9 +851,20 @@ public abstract class Value<T extends Value> implements
     //----- value ----------------------------------------------------------
 
     /** A specific value class. */
-    public Value m_value = new Value<Value>()
+    // CHECKSTYLE:OFF
+    public static class TestValue extends Value<TestValue>
     {
+      public TestValue()
+      {
+      }
+
+      public TestValue(boolean inDefined)
+      {
+        m_defined = inDefined;
+      }
+
       private boolean m_defined = false;
+
       protected boolean doRead(@Nonnull ParseReader inReader)
       {
         m_defined = inReader.expect("guru");
@@ -919,13 +891,15 @@ public abstract class Value<T extends Value> implements
         return "guru";
       }
 
-      public Value create()
+      public TestValue create()
       {
-        Value copy = this.clone();
+        TestValue copy = this.clone();
         copy.reset();
         return copy;
       }
     };
+    // CHECKSTYLE:ON
+
 
     //......................................................................
 
@@ -945,10 +919,9 @@ public abstract class Value<T extends Value> implements
         "valid with rest", "  guru   hello", "guru", "   hello",
       };
 
-      readTest(tests, m_value);
-      setTest(tests, m_value);
+      readTest(tests, new TestValue());
 
-      cloneCreateResetTest(m_value);
+      cloneCreateResetTest(new TestValue(true));
     }
 
     //......................................................................
@@ -958,30 +931,35 @@ public abstract class Value<T extends Value> implements
     @org.junit.Test
     public void formatting()
     {
+      TestValue value = new TestValue();
+
       assertEquals("undefined", new Color("error", UNDEFINED),
-                   m_value.format(false));
+                   value.format(false));
       assertEquals("undefined", new Command(new Object [0]),
-                   m_value.format(true));
+                   value.format(true));
 
-      m_value.setFromString("guru");
+      value = new TestValue(true);
       assertEquals("defined", new Command("guru"),
-                   m_value.format(false));
+                   value.format(false));
       assertEquals("defined", new Command("guru"),
-                   m_value.format(true));
+                   value.format(true));
 
-      m_value.setFromString("{*} guru");
+
+      StringReader string = new StringReader("{*} guru");
+      ParseReader reader = new ParseReader(string, "test");
+      value = new TestValue().read(reader);
       assertEquals("defined, remark",
                    new net.ixitxachitls.output.commands.Span
                    ("HOUSE_RULE",
                     new net.ixitxachitls.output.commands.Window
                     (new Command("guru"), "House Rule")),
-                   m_value.format(false));
+                   value.format(false));
       assertEquals("defined, remark",
                    new net.ixitxachitls.output.commands.Span
                    ("HOUSE_RULE",
                     new net.ixitxachitls.output.commands.Window
                     (new Command("guru"), "House Rule")),
-                   m_value.format(true));
+                   value.format(true));
     }
 
     //......................................................................
@@ -991,17 +969,17 @@ public abstract class Value<T extends Value> implements
     @org.junit.Test
     public void equalsHash()
     {
-      assertTrue("read", m_value.setFromString("guru").isEmpty());
+      TestValue value1 = new TestValue(true);
+      TestValue value2 = new TestValue(true);
 
-      Value clone = m_value.clone();
-      assertTrue("equals", m_value.equals(clone));
-      assertTrue("equals", clone.equals(m_value));
-      assertEquals("hash", m_value.hashCode(), clone.hashCode());
+      assertTrue("equals", value1.equals(value2));
+      assertTrue("equals", value2.equals(value1));
+      assertEquals("hash", value1.hashCode(), value2.hashCode());
 
-      clone.reset();
-      assertFalse("equals", m_value.equals(clone));
-      assertFalse("equals", clone.equals(m_value));
-      assertFalse("hash", m_value.hashCode() == clone.hashCode());
+      value2 = new TestValue();
+      assertFalse("equals", value1.equals(value2));
+      assertFalse("equals", value2.equals(value1));
+      assertFalse("hash", value1.hashCode() == value2.hashCode());
     }
 
     //......................................................................

@@ -339,15 +339,14 @@ public class Text extends BaseText<Text>
                                                  + "\"just \\\" a \\\" test"),
                         "test");
 
-      Text text = new Text();
+      Text text = new Text().read(reader);
 
-      assertEquals("text should not have been read", false,
-                   text.read(reader));
+      assertNull("text should not have been read", text);
 
       reader.read(' ');
 
-      assertEquals("text should have been read", true,
-                   text.read(reader));
+      text = new Text().read(reader);
+      assertTrue("text should have been read", text != null);
       assertEquals("text does not match", "just \" a \" test", text.get());
       assertEquals("converted text does not match",
                    "\"just \\\" a \\\" test\"", text.toString());

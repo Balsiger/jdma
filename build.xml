@@ -280,7 +280,8 @@
       </instr>
     </emma>
 
-    <junit fork="yes" printsummary="withOutAndErr" haltonerror="true">
+    <junit fork="yes" printsummary="withOutAndErr" haltonerror="true"
+           haltonfailure="true">
       <jvmarg value="-ea" /> <!-- enable assertions -->
       <jvmarg value="-Djava.awt.headless=true" /> <!-- no X for awt tests -->
       <jvmarg value="-Dfile.encoding=UTF-8" /> <!-- use utf-8 for tests -->

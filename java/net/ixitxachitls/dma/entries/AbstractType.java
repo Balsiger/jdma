@@ -392,11 +392,11 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
 
       assertEquals("link", "string", type.getLink());
       assertEquals("class name", "String", type.getClassName());
-      assertEquals("name", "String", type.getName());
+      assertEquals("name", "string", type.getName());
       assertEquals("multiple", "Strings", type.getMultiple());
       assertEquals("multiple link", "strings", type.getMultipleLink());
       assertEquals("multiple dir", "Strings", type.getMultipleDir());
-      assertEquals("string", "String", type.toString());
+      assertEquals("string", "string", type.toString());
 
       String string = type.create();
       assertEquals("create", "", string);
@@ -409,11 +409,11 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
 
       assertEquals("link", "valuegroup", type2.getLink());
       assertEquals("class name", "ValueGroup", type2.getClassName());
-      assertEquals("name", "Value Group", type2.getName());
+      assertEquals("name", "value group", type2.getName());
       assertEquals("multiple", "Many More", type2.getMultiple());
       assertEquals("multiple link", "manymore", type2.getMultipleLink());
       assertEquals("multiple dir", "ManyMore", type2.getMultipleDir());
-      assertEquals("string", "Value Group", type2.toString());
+      assertEquals("string", "value group", type2.toString());
     }
 
     //......................................................................
