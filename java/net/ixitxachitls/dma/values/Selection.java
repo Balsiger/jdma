@@ -394,18 +394,9 @@ public class Selection<T extends Selection> extends Value<T>
 
   //........................................................................
 
-  //-------------------------------- reset ---------------------------------
-
-  /**
-   * Reset the value to undefined.
-   *
-   */
-  public void reset()
-  {
-    m_selected = -1;
-  }
-
   //........................................................................
+
+  //------------------------------------------------- other member functions
 
   //------------------------------- doRead ---------------------------------
 
@@ -428,10 +419,6 @@ public class Selection<T extends Selection> extends Value<T>
   }
 
   //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
 
   //-------------------------------- check ---------------------------------
 
@@ -510,7 +497,7 @@ public class Selection<T extends Selection> extends Value<T>
       assertEquals("get", "you", selection.getSelections()[2]);
       assertEquals("get", "?",   selection.getSelections()[3]);
 
-      Value.Test.cloneCreateResetTest(selection);
+      Value.Test.createTest(selection);
     }
 
     //......................................................................

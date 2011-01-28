@@ -308,21 +308,140 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- reset ---------------------------------
+  // immutable!
+
+  //-------------------------------- check ---------------------------------
 
   /**
-   * Reset the value to undefined.
+   * Check that the current value is valid.
    *
    */
-  public void reset()
+  protected void check()
   {
-    m_number  = 0;
-    m_defined = false;
+    if(m_number > m_max)
+    {
+      Log.warning("number " + m_number + " too high, adjusted to " + m_max);
+
+      m_number = m_max;
+    }
+    else
+      if(m_number < m_min)
+      {
+        Log.warning("number " + m_number + " too low, adjusted to " + m_min);
+
+        m_number = m_min;
+      }
   }
 
   //........................................................................
 
-  //--------------------------------- set ----------------------------------
+  //........................................................................
+
+  //------------------------------------------------- other member functions
+
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given and current values.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the addition of both values
+   *
+   */
+  @SuppressWarnings("unchecked") // have to cast
+  public @Nonnull T add(@Nonnull T inValue)
+  {
+    T result = create();
+
+    result.m_defined = true;
+    result.m_number = m_number + inValue.m_number;
+
+    result.check();
+
+    return result;
+  }
+
+  //........................................................................
+  //------------------------------ subtract --------------------------------
+
+  /**
+   * Subtract the current value from the given one.
+   *
+   * @param       inValue the value to subtract from
+   *
+   * @return      the subtraction of both values
+   *
+   */
+  public T subtract(@Nonnull T inValue)
+  {
+    T result = create();
+
+    result.m_number = m_number - inValue.m_number;
+
+    check();
+
+    return result;
+  }
+
+  //........................................................................
+  //------------------------------- multiply -------------------------------
+
+  /**
+   * Multiply the number.
+   *
+   * @param       inValue the multiplication factor
+   *
+   * @return      the multiplied value
+   *
+   */
+  @SuppressWarnings("unchecked") // casting
+  public T multiply(long inValue)
+  {
+    if(!m_defined)
+      return (T)this;
+
+    T result = create();
+
+    result.m_number = m_number * inValue;
+    result.m_defined = true;
+
+    result.check();
+
+    return result;
+  }
+
+  //........................................................................
+  //-------------------------------- divide --------------------------------
+
+  /**
+   * Divide the dice. This decreases the dice type to the corresponding
+   * dice, as shown in the Player's Handbook p. 116 and 114.
+   *
+   * @param       inValue the division factor
+   *
+   * @return      true if divided, false if not
+   *
+   */
+  @SuppressWarnings("unchecked") // casting
+  public T divide(long inValue)
+  {
+    if(!m_defined)
+      return (T)this;
+
+    T result = create();
+
+    result.m_number = m_number / inValue;
+    result.m_defined = true;
+
+    result.check();
+
+    return result;
+  }
+
+  //........................................................................
+
+  //---------------------------------- as ----------------------------------
 
   /**
    * Set the number value.
@@ -332,20 +451,20 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      true if set, false if not in range
    *
    */
-  protected boolean set(long inValue)
+  @SuppressWarnings("unchecked")
+  protected T as(long inValue)
   {
     if(inValue > m_max || inValue < m_min)
-      return false;
+      return (T)this;
 
-    m_number = inValue;
+    T result = create();
+    result.m_number = inValue;
+    result.m_defined = true;
 
-    m_defined = true;
-
-    return true;
+    return result;
   }
 
   //........................................................................
-
   //------------------------------- doRead ---------------------------------
 
   /**
@@ -388,133 +507,6 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
     m_defined = true;
 
     return true;
-  }
-
-  //........................................................................
-
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add the given and current values.
-   *
-   * @param       inValue the value to add to this one
-   *
-   * @return      the addition of both values
-   *
-   */
-  @SuppressWarnings("unchecked") // have to cast
-  public @Nonnull T add(@Nonnull T inValue)
-  {
-    T result = clone();
-
-    result.m_defined = true;
-    result.m_number += inValue.m_number;
-
-    result.check();
-
-    return result;
-  }
-
-  //........................................................................
-  //------------------------------ subtract --------------------------------
-
-  /**
-   * Subtract the current value from the given one.
-   *
-   * @param       inValue the value to subtract from
-   *
-   * @return      the subtraction of both values
-   *
-   */
-  public T subtract(@Nonnull T inValue)
-  {
-    T result = clone();
-
-    result.m_number -= inValue.m_number;
-
-    check();
-
-    return result;
-  }
-
-  //........................................................................
-  //------------------------------- multiply -------------------------------
-
-  /**
-   * Multiply the number.
-   *
-   * @param       inValue the multiplication factor
-   *
-   * @return      the multiplied value
-   *
-   */
-  public T multiply(long inValue)
-  {
-    T result = clone();
-
-    if(!m_defined)
-      return result;
-
-    result.m_number *= inValue;
-
-    result.check();
-
-    return result;
-  }
-
-  //........................................................................
-  //-------------------------------- divide --------------------------------
-
-  /**
-   * Divide the dice. This decreases the dice type to the corresponding
-   * dice, as shown in the Player's Handbook p. 116 and 114.
-   *
-   * @param       inValue the division factor
-   *
-   * @return      true if divided, false if not
-   *
-   */
-  public T divide(long inValue)
-  {
-    T result = clone();
-
-    if(!m_defined)
-      return result;
-
-    result.m_number /= inValue;
-
-    result.check();
-
-    return result;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- check ---------------------------------
-
-  /**
-   * Check that the current value is valid.
-   *
-   */
-  protected void check()
-  {
-    if(m_number > m_max)
-    {
-      Log.warning("number " + m_number + " too high, adjusted to " + m_max);
-
-      m_number = m_max;
-    }
-    else
-      if(m_number < m_min)
-      {
-        Log.warning("number " + m_number + " too low, adjusted to " + m_min);
-
-        m_number = m_min;
-      }
   }
 
   //........................................................................
@@ -568,7 +560,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
 
       assertEquals("sign", "+0", number.toString());
 
-      Value.Test.cloneCreateResetTest(number);
+      Value.Test.createTest(number);
     }
 
     //......................................................................
@@ -617,25 +609,11 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       assertEquals("undefined value not correct", "$undefined$",
                    number.toString());
 
-      assertTrue("set", number.set(15));
-      assertTrue("set", number.isDefined());
-      assertEquals("set", "15", number.toString());
-
-      assertFalse("low", number.set(9));
-      assertTrue("low", number.isDefined());
-      assertEquals("low", "15", number.toString());
-
-      assertFalse("high", number.set(21));
-      assertTrue("high", number.isDefined());
-      assertEquals("high", "15", number.toString());
-
-      assertTrue("max", number.set(20));
-      assertTrue("max", number.isDefined());
-      assertEquals("max", "20", number.toString());
-
-      assertTrue("min", number.set(10));
-      assertTrue("min", number.isDefined());
-      assertEquals("min", "10", number.toString());
+      assertEquals("set", "15", number.as(15).toString());
+      assertEquals("low", UNDEFINED, number.as(9).toString());
+      assertEquals("high", UNDEFINED, number.as(21).toString());
+      assertEquals("max", "20", number.as(20).toString());
+      assertEquals("min", "10", number.as(10).toString());
     }
 
     //......................................................................
@@ -658,7 +636,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       assertEquals("start", 11, number.get());
 
       // initialize in the middle
-      number.set(5);
+      number = number.as(5);
 
       number = number.multiply(3);
       assertEquals("multiply", 15, number.get());
@@ -666,7 +644,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       number = number.multiply(2);
       assertEquals("multiply", 20, number.get());
 
-      number.set(5);
+      number = number.as(5);
 
       number = number.divide(2);
       assertEquals("divide", 2, number.get());

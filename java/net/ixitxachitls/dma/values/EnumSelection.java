@@ -314,39 +314,29 @@ public class EnumSelection<T extends Enum<T>>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+  //........................................................................
 
-  //--------------------------------- set ----------------------------------
+  //------------------------------------------------- other member functions
+
+  //---------------------------------- as ----------------------------------
 
   /**
    * Set the value of the selection.
    *
    * @param       inValue the value to select
    *
-   * @return      true if set, false if value is invalid
+   * @return      a new selection with the given value
    *
    */
-  public boolean set(@Nonnull T inValue)
+  public EnumSelection<T> as(@Nonnull T inValue)
   {
-    m_selected = inValue;
+    EnumSelection<T> result = create();
+    result.m_selected = inValue;
 
-    return true;
+    return result;
   }
 
   //........................................................................
-
-  //-------------------------------- reset ---------------------------------
-
-  /**
-   * Reset the value to undefined.
-   *
-   */
-  public void reset()
-  {
-    m_selected = null;
-  }
-
-  //........................................................................
-
   //------------------------------- doRead ---------------------------------
 
   /**
@@ -387,7 +377,7 @@ public class EnumSelection<T extends Enum<T>>
    */
   public @Nonnull EnumSelection<T> max(@Nonnull EnumSelection<T> inValue)
   {
-    EnumSelection<T> result = clone();
+    EnumSelection<T> result = create();
 
     if (m_selected == null
         || inValue.m_selected.ordinal() > m_selected.ordinal())
@@ -411,7 +401,7 @@ public class EnumSelection<T extends Enum<T>>
    */
   public @Nonnull EnumSelection<T> min(@Nonnull EnumSelection<T> inValue)
   {
-    EnumSelection<T> result = clone();
+    EnumSelection<T> result = create();
 
     if (m_selected == null
         || inValue.m_selected.ordinal() < m_selected.ordinal())
@@ -423,10 +413,6 @@ public class EnumSelection<T extends Enum<T>>
   }
 
   //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
 
   //-------------------------------- init ----------------------------------
 
@@ -531,7 +517,7 @@ public class EnumSelection<T extends Enum<T>>
       assertEquals("edit values", "one||two||three||four",
                    selection.getChoices());
 
-      Value.Test.cloneCreateResetTest(selection);
+      Value.Test.createTest(selection);
     }
 
     //......................................................................
@@ -569,14 +555,14 @@ public class EnumSelection<T extends Enum<T>>
       assertEquals("compare", -1, val1.compareTo(val2));
       assertEquals("compare", +1, val2.compareTo(val1));
 
-      val1.set(Choice.two);
+      val1 = val1.as(Choice.two);
       assertEquals("compare", 0, val1.compareTo(val2));
 
-      val1.reset();
+      val1 = val1.create();
       assertEquals("compare", -1, val1.compareTo(val2));
       assertEquals("compare", 1, val2.compareTo(val1));
 
-      val1.set(Choice.four);
+      val1 = val1.as(Choice.four);
       assertEquals("max", Choice.four, val1.max(val2).getSelected());
       assertEquals("max", Choice.four, val2.max(val1).getSelected());
       assertEquals("min", Choice.two, val1.min(val2).getSelected());

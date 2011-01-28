@@ -157,6 +157,9 @@ public class Text extends BaseText<Text>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+  //........................................................................
+
+  //------------------------------------------------- other member functions
 
   //------------------------------- doRead ---------------------------------
 
@@ -197,9 +200,6 @@ public class Text extends BaseText<Text>
 
   //........................................................................
 
-  //------------------------------------------------- other member functions
-  //........................................................................
-
   //------------------------------------------------------------------- test
 
   /** The test. */
@@ -221,7 +221,7 @@ public class Text extends BaseText<Text>
       assertEquals("format", "", text.format(true).toString());
 
       // now with some text
-      text.set("just some = test");
+      text = text.as("just some = test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "\"just some = test\"",
@@ -241,7 +241,7 @@ public class Text extends BaseText<Text>
       assertEquals("format", "", text.format(true).toString());
 
       // now with some text
-      text.set("just some \" test");
+      text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "\"just some \\\" test\"",
@@ -259,7 +259,7 @@ public class Text extends BaseText<Text>
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some formattedText
-      text.set("  just \n   some \n\n\" test");
+      text = text.as("  just \n   some \n\n\" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten",
@@ -271,7 +271,7 @@ public class Text extends BaseText<Text>
       assertEquals("format", " just some \" test",
                    text.format(true).toString());
 
-      Value.Test.cloneCreateResetTest(text);
+      Value.Test.createTest(text);
     }
 
     //......................................................................
@@ -316,11 +316,11 @@ public class Text extends BaseText<Text>
     {
       Text text = new Text();
 
-      text.set("a test");
+      text = text.as("a test");
 
       assertEquals("simple", "a test", text.get());
 
-      text.set("another = test");
+      text = text.as("another = test");
 
       assertEquals("check", "another = test", text.get());
       assertEquals("converted text does not match",

@@ -193,19 +193,13 @@ public class BaseText<T extends BaseText> extends Value<T>
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- reset ---------------------------------
-
-  /**
-   * Reset the value to undefined.
-   *
-   */
-  public void reset()
-  {
-    m_text   = null;
-  }
+  // immutable!
 
   //........................................................................
-  //--------------------------------- set ----------------------------------
+
+  //------------------------------------------------- other member functions
+
+  //---------------------------------- as ----------------------------------
 
   /**
    * Set the text stored in this value.
@@ -213,20 +207,20 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @param       inText the new text to set, set to null to undefined the
    *                     value
    *
-   * @return      true if set, false if not
-   *
-   * @undefined   never
+   * @return      a new value with the given value set
    *
    */
-  public boolean set(@Nonnull String inText)
+  public T as(@Nonnull String inText)
   {
-    m_text   = inText;
+    T result = create();
 
-    return true;
+    result.m_text   = inText;
+
+    return result;
   }
 
   //........................................................................
-  //-------------------------------- addTo ---------------------------------
+  //--------------------------------- add ----------------------------------
 
   /**
    * Add the given value to the current one.
@@ -248,10 +242,7 @@ public class BaseText<T extends BaseText> extends Value<T>
     else
       text += " " + value;
 
-    T result = create();
-    result.set(text);
-
-    return result;
+    return as(text);
   }
 
   //........................................................................
@@ -287,9 +278,6 @@ public class BaseText<T extends BaseText> extends Value<T>
 
   //........................................................................
 
-  //------------------------------------------------- other member functions
-  //........................................................................
-
   //------------------------------------------------------------------- test
 
   /** The test. */
@@ -299,6 +287,7 @@ public class BaseText<T extends BaseText> extends Value<T>
 
     /** Testing init. */
     @org.junit.Test
+    @SuppressWarnings("unchecked") // need to cast
     public void testInit()
     {
       BaseText<BaseText> text = new BaseText<BaseText>();
@@ -313,7 +302,7 @@ public class BaseText<T extends BaseText> extends Value<T>
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some text
-      text.set("just some = test");
+      text = text.as("just some = test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \\= test",
@@ -324,7 +313,7 @@ public class BaseText<T extends BaseText> extends Value<T>
                    text.get());
 
       // now with some text
-      text.set("just some \" test");
+      text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \" test",
@@ -345,7 +334,7 @@ public class BaseText<T extends BaseText> extends Value<T>
       assertEquals("added", "just some \" test and more",
                    added.format().toString());
 
-      Value.Test.cloneCreateResetTest(text);
+      Value.Test.createTest(text);
     }
 
     //......................................................................

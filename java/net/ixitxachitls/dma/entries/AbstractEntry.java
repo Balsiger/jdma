@@ -245,7 +245,7 @@ public class AbstractEntry extends ValueGroup
   protected AbstractEntry(@Nonnull String inName,
                           @Nonnull AbstractType<AbstractEntry> inType)
   {
-    m_name.set(inName);
+    m_name = m_name.as(inName);
 
     m_type = inType;
   }
@@ -1606,7 +1606,7 @@ public class AbstractEntry extends ValueGroup
    */
   public void setName(@Nonnull String inName)
   {
-    m_name.set(inName);
+    m_name = m_name.as(inName);
   }
 
   //........................................................................
@@ -1854,13 +1854,14 @@ public class AbstractEntry extends ValueGroup
 
     // fix the comments
     if(!result.m_leadingComment.isDefined() && result.m_name.isDefined())
-        result.m_leadingComment.set("#----- " + result.m_name + "\n\n");
+        result.m_leadingComment =
+          result.m_leadingComment.as("#----- " + result.m_name + "\n\n");
     else
       // fix the number of newlines before and after
       result.m_leadingComment.fix();
 
     if(!result.m_trailingComment.isDefined())
-      result.m_trailingComment.set("\n#.....\n");
+      result.m_trailingComment = result.m_trailingComment.as("\n#.....\n");
     else
       result.m_trailingComment.fix();
 

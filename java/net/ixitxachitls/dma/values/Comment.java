@@ -97,7 +97,7 @@ public class Comment extends Value<Comment>
 
   //........................................................................
 
-  //------------------------------ createNew -------------------------------
+  //-------------------------------- create --------------------------------
 
   /**
    * Create a new list with the same type information as this one, but one
@@ -196,18 +196,6 @@ public class Comment extends Value<Comment>
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- reset ---------------------------------
-
-  /**
-   * Reset the value to undefined.
-   *
-   */
-  public void reset()
-  {
-    m_lines = null;
-  }
-
-  //........................................................................
   //--------------------------------- fix ----------------------------------
 
   /**
@@ -215,6 +203,7 @@ public class Comment extends Value<Comment>
    * comment.
    *
    * We allow at most to leading and two trailing newlines.
+   * This is actually changing the value, but we allow this as an exception.
    *
    */
   public void fix()
@@ -235,28 +224,60 @@ public class Comment extends Value<Comment>
   }
 
   //........................................................................
-  //--------------------------------- set ----------------------------------
+  //-------------------------------- check ---------------------------------
 
   /**
-   * Set the text stored in the comment.
+   * Check if the given String is a valid comment (starts with the
+   * comment starter on any line).
    *
-   * @param       inText the text to set the comment to
+   * @param       inText the text to check
    *
-   * @return      true if set, false if not
+   * @return      true if it is a comment, false if not
    *
    */
-  public boolean set(@Nonnull String inText)
+  protected static boolean check(@Nonnull String inText)
   {
-    if(!check(inText))
-      return false;
+    String []lines = inText.split("\n");
 
-    m_lines = inText;
+    for(int i = 0; i < lines.length; i++)
+    {
+      String line = lines[i].trim().replaceAll("\\s", "");
+
+      if(line.length() > 0 && !line.startsWith(s_starter))
+        return false;
+    }
 
     return true;
   }
 
   //........................................................................
 
+  //........................................................................
+
+  //------------------------------------------------- other member functions
+
+  //---------------------------------- as ----------------------------------
+
+  /**
+   * Set the text stored in the comment.
+   *
+   * @param       inText the text to set the comment to
+   *
+   * @return      a new comment with the given value
+   *
+   */
+  public Comment as(@Nonnull String inText)
+  {
+    if(!check(inText))
+      return this;
+
+    Comment result = create();
+    result.m_lines = inText;
+
+    return result;
+  }
+
+  //........................................................................
   //------------------------------- doRead ---------------------------------
 
   /**
@@ -342,38 +363,6 @@ public class Comment extends Value<Comment>
 
   //........................................................................
 
-  //------------------------------------------------- other member functions
-
-  //-------------------------------- check ---------------------------------
-
-  /**
-   * Check if the given String is a valid comment (starts with the
-   * comment starter on any line).
-   *
-   * @param       inText the text to check
-   *
-   * @return      true if it is a comment, false if not
-   *
-   */
-  protected static boolean check(@Nonnull String inText)
-  {
-    String []lines = inText.split("\n");
-
-    for(int i = 0; i < lines.length; i++)
-    {
-      String line = lines[i].trim().replaceAll("\\s", "");
-
-      if(line.length() > 0 && !line.startsWith(s_starter))
-        return false;
-    }
-
-    return true;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
   //------------------------------------------------------------------- test
 
   /** The Test. */
@@ -403,7 +392,7 @@ public class Comment extends Value<Comment>
                    comment.format().toString());
 
 
-      Value.Test.cloneCreateResetTest(comment);
+      Value.Test.createTest(comment);
 
       // check for an invalid value
       try
@@ -458,30 +447,28 @@ public class Comment extends Value<Comment>
     }
 
     //......................................................................
-    //----- set ------------------------------------------------------------
+    //----- as -------------------------------------------------------------
 
     /** Testing setting. */
     @org.junit.Test
-    public void set()
+    public void as()
     {
       Comment comment = new Comment(-1, -1);
 
-      assertEquals("set", true, comment.set(s_starter + " some value"));
-      assertEquals("value", s_starter + " some value", comment.toString());
+      assertEquals("set", s_starter + " some value",
+                   comment.as(s_starter + " some value").toString());
 
-      assertEquals("set", true, comment.set(s_starter + " another value"));
-      assertEquals("value", s_starter + " another value", comment.toString());
+      assertEquals("set", s_starter + " another value",
+                   comment.as(s_starter + " another value").toString());
 
-      assertEquals("set", false, comment.set("whatever"));
-      assertEquals("value", s_starter + " another value", comment.toString());
+      assertEquals("set", UNDEFINED, comment.as("whatever").toString());
 
-      assertEquals("set", false, comment.set(s_starter + "first\n\nsecond"));
-      assertEquals("value", s_starter + " another value", comment.toString());
+      assertEquals("set", UNDEFINED,
+                   comment.as(s_starter + "first\n\nsecond").toString());
 
-      assertEquals("set", true,
-                   comment.set("\n\t\r\f   " + s_starter + " another value"));
-      assertEquals("value", "\n\t\r\f   " + s_starter + " another value",
-                   comment.toString());
+      assertEquals("set", "\n\t\r\f   " + s_starter + " another value",
+                   comment.as("\n\t\r\f   " + s_starter
+                              + " another value").toString());
     }
 
     //......................................................................

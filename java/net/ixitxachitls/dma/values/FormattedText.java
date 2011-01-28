@@ -158,6 +158,9 @@ public class FormattedText extends BaseText<FormattedText>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+  //........................................................................
+
+  //------------------------------------------------- other member functions
 
   //------------------------------- doRead ---------------------------------
 
@@ -196,9 +199,6 @@ public class FormattedText extends BaseText<FormattedText>
 
   //........................................................................
 
-  //------------------------------------------------- other member functions
-  //........................................................................
-
   //------------------------------------------------------------------- test
 
   /** The test. */
@@ -220,7 +220,7 @@ public class FormattedText extends BaseText<FormattedText>
       assertEquals("format", "", text.format(true).toString());
 
       // now with some text
-      text.set("just some = test");
+      text = text.as("just some = test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "\"just some = test\"",
@@ -240,7 +240,7 @@ public class FormattedText extends BaseText<FormattedText>
       assertEquals("format", "", text.format(true).toString());
 
       // now with some text
-      text.set("just some \" test");
+      text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "\"just some \\\" test\"",
@@ -258,7 +258,7 @@ public class FormattedText extends BaseText<FormattedText>
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some formattedText
-      text.set("  just \n   some \n\n\" test");
+      text = text.as("  just \n   some \n\n\" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten",
@@ -270,7 +270,7 @@ public class FormattedText extends BaseText<FormattedText>
       assertEquals("format", "just some\\par \" test",
                    text.format(true).toString());
 
-      Value.Test.cloneCreateResetTest(text);
+      Value.Test.createTest(text);
     }
 
     //......................................................................
@@ -315,11 +315,11 @@ public class FormattedText extends BaseText<FormattedText>
     {
       FormattedText text = new FormattedText();
 
-      text.set("a test");
+      text = text.as("a test");
 
       assertEquals("simple", "a test", text.get());
 
-      text.set("another = test");
+      text = text.as("another = test");
 
       assertEquals("check", "another = test", text.get());
       assertEquals("converted text does not match",

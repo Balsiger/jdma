@@ -103,11 +103,9 @@ public class Name extends BaseText<Name>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -133,7 +131,7 @@ public class Name extends BaseText<Name>
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some text
-      text.set("just some = test");
+      text = text.as("just some = test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \\= test",
@@ -144,7 +142,7 @@ public class Name extends BaseText<Name>
                    text.get());
 
       // now with some text
-      text.set("just some \" test");
+      text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \" test",
@@ -165,7 +163,7 @@ public class Name extends BaseText<Name>
       assertEquals("added", "just some \" test and more",
                    added.format().toString());
 
-      Value.Test.cloneCreateResetTest(text);
+      Value.Test.createTest(text);
     }
 
     //......................................................................

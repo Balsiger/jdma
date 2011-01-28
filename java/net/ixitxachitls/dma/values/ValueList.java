@@ -216,22 +216,22 @@ public class ValueList<T extends Value>
    * @return      a copy of the current value
    *
    */
-  @SuppressWarnings("unchecked") // casting value
-  public ValueList<T> clone()
-  {
-    ValueList<T> result = super.clone();
+//   @SuppressWarnings("unchecked") // casting value
+//   public ValueList<T> clone()
+//   {
+//     ValueList<T> result = super.clone();
 
-    // now clone all the values
-    if(m_values != null)
-    {
-      result.m_values = new ArrayList<T>();
+//     // now clone all the values
+//     if(m_values != null)
+//     {
+//       result.m_values = new ArrayList<T>();
 
-      for(Value value : m_values)
-        result.m_values.add((T)value.clone());
-    }
+//       for(Value value : m_values)
+//         result.m_values.add((T)value.clone());
+//     }
 
-    return result;
-  }
+//     return result;
+//   }
 
   //........................................................................
 
@@ -433,21 +433,6 @@ public class ValueList<T extends Value>
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- reset ---------------------------------
-
-  /**
-   * Reset the value to undefined.
-   *
-   * @undefined   never
-   *
-   */
-  public void reset()
-  {
-    m_values = null;
-  }
-
-  //........................................................................
-
   //--------------------------------- add ----------------------------------
 
   /**
@@ -516,50 +501,6 @@ public class ValueList<T extends Value>
 
   //........................................................................
 
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add the given value to the end of the list.
-   *
-   * @param       inValue the value to add to this one
-   *
-   * @return      the result of the addition
-   *
-   */
-  public @Nonnull ValueList<T> add(ValueList<T> inValue)
-  {
-    ValueList<T> result = this.clone();
-
-    for(T value : inValue)
-      result.add(value);
-
-    return result;
-  }
-
-  //........................................................................
-  //------------------------------ subtract --------------------------------
-
-  /**
-   * Subtract the current value from the given one. This will remove all the
-   * values in the given list from the current one.
-   *
-   * @param       inValue the value to subtract from
-   *
-   * @return      the result of the subtraction
-   *
-   */
-  @SuppressWarnings("unchecked") // comparing values of the raw type
-  public @Nonnull ValueList<T> subtract(@Nonnull ValueList<T> inValue)
-  {
-    ValueList<T> result = clone();
-
-    for(T value : inValue)
-      result.remove(value);
-
-    return result;
-  }
-
-  //........................................................................
   //-------------------------------- define --------------------------------
 
   /**
@@ -569,7 +510,7 @@ public class ValueList<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public boolean define()
+  protected boolean define()
   {
     if(m_values != null)
       return false;
@@ -605,6 +546,90 @@ public class ValueList<T extends Value>
 
   //........................................................................
 
+  //-------------------------------- modify --------------------------------
+
+  /**
+   * Modify the value.
+   *
+   * @param       inModify the modifier to apply to this value
+   *
+   * @return      true if modified, false if not
+   *
+   */
+//   @Deprecated // ??
+//   public boolean modify(ValueGroup.Modifier inModify)
+//   {
+//     if(m_values == null)
+//       return false;
+
+//     boolean result = false;
+
+//     for(Value element : m_values)
+//     {
+//       if(element instanceof Modifiable)
+//         result |= ((Modifiable)element).modify(inModify);
+//     }
+
+//     return result;
+//   }
+
+
+  //........................................................................
+
+  //........................................................................
+
+  //------------------------------------------------- other member functions
+
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given value to the end of the list.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the result of the addition
+   *
+   */
+  public @Nonnull ValueList<T> add(ValueList<T> inValue)
+  {
+    ValueList<T> result = this.create();
+
+    for(T value : m_values)
+      result.add(value);
+
+    for(T value : inValue)
+      result.add(value);
+
+    return result;
+  }
+
+  //........................................................................
+  //------------------------------ subtract --------------------------------
+
+  /**
+   * Subtract the current value from the given one. This will remove all the
+   * values in the given list from the current one.
+   *
+   * @param       inValue the value to subtract from
+   *
+   * @return      the result of the subtraction
+   *
+   */
+  @SuppressWarnings("unchecked") // comparing values of the raw type
+  public @Nonnull ValueList<T> subtract(@Nonnull ValueList<T> inValue)
+  {
+    ValueList<T> result = create();
+
+    for(T value : m_values)
+      result.add(value);
+
+    for(T value : inValue)
+      result.remove(value);
+
+    return result;
+  }
+
+  //........................................................................
   //------------------------------- doRead ---------------------------------
 
   /**
@@ -655,40 +680,6 @@ public class ValueList<T extends Value>
 
   //........................................................................
 
-  //-------------------------------- modify --------------------------------
-
-  /**
-   * Modify the value.
-   *
-   * @param       inModify the modifier to apply to this value
-   *
-   * @return      true if modified, false if not
-   *
-   */
-//   @Deprecated // ??
-//   public boolean modify(ValueGroup.Modifier inModify)
-//   {
-//     if(m_values == null)
-//       return false;
-
-//     boolean result = false;
-
-//     for(Value element : m_values)
-//     {
-//       if(element instanceof Modifiable)
-//         result |= ((Modifiable)element).modify(inModify);
-//     }
-
-//     return result;
-//   }
-
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
   //---------------------------- createElement -----------------------------
 
   /**
@@ -701,11 +692,7 @@ public class ValueList<T extends Value>
   @SuppressWarnings("unchecked") // casting cloned value
   public T createElement()
   {
-    T result = (T)m_type.clone();
-
-    result.reset();
-
-    return result;
+    return (T)m_type.create();
   }
 
   //........................................................................
@@ -760,16 +747,6 @@ public class ValueList<T extends Value>
       assertEquals("2", "how are", list.get(1).toString());
       assertEquals("3", "you",     list.get(2).toString());
 
-      java.util.Iterator i = list.iterator();
-
-      assertEquals("1", "Hello",   i.next().toString());
-      ((Value)i.next()).reset();
-      assertEquals("3", "you",     i.next().toString());
-      assertFalse("end", i.hasNext());
-
-      assertEquals("defined value not correct", "Hello,\n$undefined$,\nyou",
-                   list.toString());
-
       ArrayList<Name> input = new ArrayList<Name>();
 
       input.add(new Name("Hello"));
@@ -790,7 +767,7 @@ public class ValueList<T extends Value>
 
       assertEquals("new", "$undefined$", list.createElement().toString());
 
-      Value.Test.cloneCreateResetTest(list);
+      Value.Test.createTest(list);
     }
 
     //......................................................................

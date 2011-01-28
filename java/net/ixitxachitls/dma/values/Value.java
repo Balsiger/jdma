@@ -554,26 +554,6 @@ public abstract class Value<T extends Value> implements
   /**
    * Try to read the value from the given stream.
    *
-   * This is just a convenience method without the need to give an initializer
-   * (which will not be read with this method).
-   *
-   * @param       inReader   the reader to read from
-   *
-   * @return      true if a valid value was read, false else
-   *
-   */
-  // TODO: do we still need this, or the one with remarks?
-//   public boolean read(ParseReader inReader)
-//   {
-//     return read(inReader, true);
-//   }
-
-  //........................................................................
-  //--------------------------------- read ---------------------------------
-
-  /**
-   * Try to read the value from the given stream.
-   *
    * @param       inReader       the reader to read from
    *
    * @return      the value read
@@ -809,9 +789,6 @@ public abstract class Value<T extends Value> implements
     @SuppressWarnings("unchecked")
     public static void cloneCreateResetTest(@Nonnull Value inValue)
     {
-      if(inValue == null)
-        throw new IllegalArgumentException("must have a value here");
-
       // create a new value
       Value newValue = inValue.create();
 
@@ -844,6 +821,43 @@ public abstract class Value<T extends Value> implements
       // reset the value
       assertEquals("not undefined after reset", false, clone.isDefined());
       assertEquals("not undefined after reset", UNDEFINED, clone.toString());
+    }
+
+    //......................................................................
+    //----- createTest -----------------------------------------------------
+
+    /**
+     * A simple check to test clone(), create() and reset().
+     *
+     * @param inValue the value to test
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public static void createTest(@Nonnull Value inValue)
+    {
+      // create a new value
+      Value newValue = inValue.create();
+
+      assertEquals("new not undefined", false, newValue.isDefined());
+      assertEquals("new not undefined", UNDEFINED, newValue.toString());
+      assertEquals("new not same class",
+                   inValue.getClass(), newValue.getClass());
+      assertEquals("new value not same formatter",
+                   inValue.m_formatter, newValue.m_formatter);
+      assertEquals("new value not same group",
+                   inValue.m_grouping, newValue.m_grouping);
+      assertEquals("new value not same edit type",
+                   inValue.m_editType, newValue.m_editType);
+      assertEquals("new value not same choices",
+                   inValue.m_choices, newValue.m_choices);
+
+      // clone the value
+      Value clone = inValue.clone();
+
+      assertEquals("clone not defined", true, clone.isDefined());
+      assertEquals("not correctly cloned", 0, inValue.compareTo(clone));
+      assertEquals("not correctly cloned", inValue.toString(),
+                   clone.toString());
     }
 
     //......................................................................
@@ -899,7 +913,6 @@ public abstract class Value<T extends Value> implements
       }
     };
     // CHECKSTYLE:ON
-
 
     //......................................................................
 
