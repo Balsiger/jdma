@@ -27,7 +27,6 @@ import java.io.StringReader;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.formatters.Formatter;
@@ -105,7 +104,6 @@ public abstract class Value<T extends Value> implements
     inNew.m_grouping = m_grouping;
     inNew.m_editType = m_editType;
     inNew.m_choices = m_choices;
-    inNew.reset();
 
     return inNew;
   }
@@ -536,19 +534,6 @@ public abstract class Value<T extends Value> implements
 
   //........................................................................
 
-  //-------------------------------- reset ---------------------------------
-
-  /**
-   * Reset the value to undefined.
-   *
-   */
-  @OverridingMethodsMustInvokeSuper
-  public void reset()
-  {
-    m_remark = null;
-  }
-
-  //........................................................................
   //--------------------------------- read ---------------------------------
 
   /**
@@ -778,52 +763,6 @@ public abstract class Value<T extends Value> implements
 //     }
 
     //......................................................................
-    //----- cloneCreateResetTest -------------------------------------------
-
-    /**
-     * A simple check to test clone(), create() and reset().
-     *
-     * @param inValue the value to test
-     *
-     */
-    @SuppressWarnings("unchecked")
-    public static void cloneCreateResetTest(@Nonnull Value inValue)
-    {
-      // create a new value
-      Value newValue = inValue.create();
-
-      assertEquals("new not undefined", false, newValue.isDefined());
-      assertEquals("new not undefined", UNDEFINED, newValue.toString());
-      assertEquals("new not same class",
-                   inValue.getClass(), newValue.getClass());
-      assertEquals("new value not same formatter",
-                   inValue.m_formatter, newValue.m_formatter);
-      assertEquals("new value not same group",
-                   inValue.m_grouping, newValue.m_grouping);
-      assertEquals("new value not same edit type",
-                   inValue.m_editType, newValue.m_editType);
-      assertEquals("new value not same choices",
-                   inValue.m_choices, newValue.m_choices);
-
-      // clone the value
-      Value clone = inValue.clone();
-
-      assertEquals("clone not defined", true, clone.isDefined());
-      assertEquals("not correctly cloned", 0, inValue.compareTo(clone));
-      assertEquals("not correctly cloned", inValue.toString(),
-                   clone.toString());
-
-      String current = inValue.toString();
-      clone.reset();
-
-      assertEquals("not everything cloned", current, inValue.toString());
-
-      // reset the value
-      assertEquals("not undefined after reset", false, clone.isDefined());
-      assertEquals("not undefined after reset", UNDEFINED, clone.toString());
-    }
-
-    //......................................................................
     //----- createTest -----------------------------------------------------
 
     /**
@@ -934,7 +873,7 @@ public abstract class Value<T extends Value> implements
 
       readTest(tests, new TestValue());
 
-      cloneCreateResetTest(new TestValue(true));
+      createTest(new TestValue(true));
     }
 
     //......................................................................

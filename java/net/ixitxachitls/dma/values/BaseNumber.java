@@ -67,12 +67,15 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @param       inSign   true if always print a sign (even for +)
    *
    */
+  @SuppressWarnings("unchecked") // need to cast
   public BaseNumber(long inBaseNumber, long inMin, long inMax, boolean inSign)
   {
     this(inMin, inMax, inSign);
 
     m_number  = inBaseNumber;
     m_defined = true;
+    m_editType = "number";
+    m_grouping = (Grouping<T, Object>)s_grouping;
 
     check();
   }
@@ -150,7 +153,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
                                  // derivation for this to work
   public T create()
   {
-    return super.create((T)new BaseNumber(m_min, m_max));
+    return super.create((T)new BaseNumber(m_min, m_max, m_sign));
   }
 
   //........................................................................

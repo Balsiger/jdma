@@ -113,7 +113,7 @@ public class Number extends BaseNumber<Number>
 
   //........................................................................
 
-  //------------------------------ createNew -------------------------------
+  //-------------------------------- create --------------------------------
 
   /**
    * Create a new list with the same type information as this one, but one
@@ -126,7 +126,7 @@ public class Number extends BaseNumber<Number>
                                  // derivation for this to work
   public Number create()
   {
-    return super.create(new Number(m_min, m_max));
+    return super.create(new Number(m_min, m_max, m_sign));
   }
 
   //........................................................................
