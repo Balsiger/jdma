@@ -122,7 +122,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
    */
   public @Nonnull String getLink()
   {
-    return m_name.replaceAll(" ", "").toLowerCase(Locale.US);
+    return "/entry/" + m_name.replaceAll(" ", "").toLowerCase(Locale.US) + "/";
   }
 
   //.......................................................................
@@ -390,7 +390,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
     {
       TestType<String> type = new TestType<String>(String.class);
 
-      assertEquals("link", "string", type.getLink());
+      assertEquals("link", "/entry/string/", type.getLink());
       assertEquals("class name", "String", type.getClassName());
       assertEquals("name", "string", type.getName());
       assertEquals("multiple", "Strings", type.getMultiple());
@@ -407,7 +407,7 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
       TestType<ValueGroup> type2 =
         new TestType<ValueGroup>(ValueGroup.class, "Many More");
 
-      assertEquals("link", "valuegroup", type2.getLink());
+      assertEquals("link", "/entry/valuegroup/", type2.getLink());
       assertEquals("class name", "ValueGroup", type2.getClassName());
       assertEquals("name", "value group", type2.getName());
       assertEquals("multiple", "Many More", type2.getMultiple());

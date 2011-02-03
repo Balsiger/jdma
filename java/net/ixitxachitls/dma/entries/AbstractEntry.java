@@ -2621,7 +2621,7 @@ public class AbstractEntry extends ValueGroup
 
       // type
       assertEquals("type", "abstract entry", entry.getType().toString());
-      assertEquals("type", "abstractentry", entry.getType().getLink());
+      assertEquals("type", "/entry/abstractentry/", entry.getType().getLink());
       assertEquals("type", "AbstractEntry", entry.getType().getClassName());
       assertEquals("type", "Abstract Entries", entry.getType().getMultiple());
       assertEquals("type", "AbstractEntries", entry.getType().getMultipleDir());

@@ -478,7 +478,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
