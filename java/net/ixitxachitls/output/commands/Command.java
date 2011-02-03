@@ -102,9 +102,8 @@ public class Command implements PublicCloneable
   //-------------------------------- clone ---------------------------------
 
   /**
-   * Make a copy of the value and return it. If necessary, this is a deep
-   * copy, although type relevant values are never copied, because these
-   * are immutable.
+   * Make a copy of the command and return it. If necessary, this is a deep
+   * copy.
    *
    * @return      a copy of the current value
    *

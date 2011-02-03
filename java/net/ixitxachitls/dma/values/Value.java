@@ -103,6 +103,7 @@ public abstract class Value<T extends Value> implements
     inNew.m_formatter = m_formatter;
     inNew.m_grouping = m_grouping;
     inNew.m_editType = m_editType;
+    inNew.m_editName = m_editName;
     inNew.m_choices = m_choices;
 
     return inNew;
@@ -154,6 +155,9 @@ public abstract class Value<T extends Value> implements
 
   /** The type to use for editing. */
   protected @Nonnull String m_editType = "";
+
+  /** The name to use for editing. */
+  protected @Nonnull String m_editName = "";
 
   /** The values for editing the type. */
   protected @Nullable String m_choices = null;
@@ -643,6 +647,28 @@ public abstract class Value<T extends Value> implements
       throw new IllegalArgumentException("must have a type here");
 
     m_editType = inType;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withEditName -----------------------------
+
+  /**
+   * Set a edit name for this value.
+   *
+   * @param       inName the name to set to
+   *
+   * @return      the value itself (to allow new T().setFormatter())
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withEditName(@Nonnull String inName)
+  {
+    if(inName.length() == 0)
+      throw new IllegalArgumentException("must have a name here");
+
+    m_editName = inName;
 
     return (T)this;
   }

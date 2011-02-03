@@ -338,7 +338,7 @@ public class FileLogger extends ASCIILogger
           }
         });
 
-      assertEquals("length", 2, files.length);
+      assertEquals("length of directory " + dir, 2, files.length);
 
       assertEquals
         ("diff", 1,

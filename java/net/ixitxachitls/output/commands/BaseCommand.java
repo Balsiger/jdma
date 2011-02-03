@@ -61,6 +61,100 @@ public class BaseCommand extends Command
 {
   //----------------------------------------------------------------- nested
 
+  //----- Builder ----------------------------------------------------------
+
+  /** A simple builder to build commands with various arguments. */
+  public static class Builder
+  {
+    /**
+     * Create the builder.
+     *
+     * @param inCommand the command to build from.
+     *
+     */
+    public Builder(@Nonnull BaseCommand inCommand)
+    {
+      m_command = (BaseCommand)inCommand.clone();
+    }
+
+    /** The command being built. */
+    private @Nonnull BaseCommand  m_command;
+
+    /**
+     * Build the command and return it.
+     *
+     * @return the command built
+     *
+     */
+    public BaseCommand build()
+    {
+      return m_command;
+    }
+
+    /**
+     * Set the arguments the command is to be built with.
+     *
+     * @param inArguments the arguments for the command
+     *
+     * @return the builder, for chaining
+     *
+     */
+    public Builder withArguments(@Nonnull Object ... inArguments)
+    {
+      m_command.withArguments(inArguments);
+
+      return this;
+    }
+
+    /**
+     * Set the arguments the command is to be built with.
+     *
+     * @param inArguments the arguments for the command
+     *
+     * @return the builder, for chaining
+     *
+     */
+    public Builder withArguments(@Nonnull List<Object> inArguments)
+    {
+      m_command.withArguments(inArguments);
+
+      return this;
+    }
+
+    /**
+     * Set the optionals arguments the command is to be built with.
+     *
+     * @param inOptionals the optional arguments for the command
+     *
+     * @return the builder, for chaining
+     *
+     */
+    public Builder withOptionals(@Nonnull Object ... inOptionals)
+    {
+      m_command.withOptionals(inOptionals);
+
+      return this;
+    }
+
+    /**
+     * Set the optionals arguments the command is to be built with.
+     *
+     * @param inOptionals the optional arguments for the command
+     *
+     * @return the builder, for chaining
+     *
+     */
+    public Builder withOptionals(@Nonnull List<Object> inOptionals)
+    {
+      m_command.withOptionals(inOptionals);
+
+      return this;
+    }
+  }
+
+  //........................................................................
+
+
 //   public interface Transformer
 //   {
 //     public Object transform(Object inCommand);
