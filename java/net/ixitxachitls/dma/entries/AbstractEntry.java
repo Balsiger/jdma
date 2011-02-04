@@ -243,7 +243,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   protected AbstractEntry(@Nonnull String inName,
-                          @Nonnull AbstractType<AbstractEntry> inType)
+                          @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     m_name = m_name.as(inName);
 
@@ -283,7 +283,7 @@ public class AbstractEntry extends ValueGroup
   //----- general values ---------------------------------------------------
 
    /** The entry type. */
-  protected @Nonnull AbstractType<AbstractEntry> m_type;
+  protected @Nonnull AbstractType<? extends AbstractEntry> m_type;
 
   /** Flag if this entry has been changed but not saved. */
   protected boolean m_changed = false;
