@@ -61,7 +61,7 @@ import net.ixitxachitls.input.ParseReader;
 //import net.ixitxachitls.util.MultiIterator;
 //import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.configuration.Config;
+//import net.ixitxachitls.util.configuration.Config;
 //import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -1166,17 +1166,17 @@ public class BaseEntry extends AbstractEntry
       + "  \"A thick, quilted, wool blanket.\".\n"
       + "\n";
 
-    /** Test text with remarks. */
-    private static String s_remarks =
-      "base entry test remarks = \n"
-      + "\n"
-      + "  synonyms      {*}\"blanket, winter\", \"guru\";\n"
-      + "  categories    {~, some estimation}dagger, weapon, guru, test;\n"
-      + "  references    {p, a player remark} \"a\" 10, \"b\" 5-10/20;\n"
-      + "  description   \n"
-      + "\n"
-      + "  \"A thick, quilted, wool blanket.\".\n"
-      + "\n";
+//     /** Test text with remarks. */
+//     private static String s_remarks =
+//       "base entry test remarks = \n"
+//       + "\n"
+//       + "  synonyms      {*}\"blanket, winter\", \"guru\";\n"
+//       + "  categories    {~, some estimation}dagger, weapon, guru, test;\n"
+//       + "  references    {p, a player remark} \"a\" 10, \"b\" 5-10/20;\n"
+//       + "  description   \n"
+//       + "\n"
+//       + "  \"A thick, quilted, wool blanket.\".\n"
+//       + "\n";
 
     //......................................................................
     //----- read -----------------------------------------------------------
