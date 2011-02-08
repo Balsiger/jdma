@@ -189,8 +189,8 @@ public abstract class ActionServlet extends DMAServlet
    * @return      the javascript code to send back to the client
    *
    */
-  protected abstract String doAction(DMARequest inRequest,
-                                     HttpServletResponse inResponse);
+  protected abstract String doAction(@Nonnull DMARequest inRequest,
+                                     @Nonnull HttpServletResponse inResponse);
 
   //........................................................................
 
@@ -208,7 +208,7 @@ public abstract class ActionServlet extends DMAServlet
    * @return      javascript to send back to the client for failure
    *
    */
-  public String fail(String inMessage)
+  protected @Nonnull String fail(@Nonnull String inMessage)
   {
     Log.warning(inMessage);
 
@@ -277,7 +277,7 @@ public abstract class ActionServlet extends DMAServlet
         output = new net.ixitxachitls.comm.servlets.BaseServlet.Test.
         MockServletOutputStream();
 
-      EasyMock.expect(request.getMethod()).andReturn("POST").times(2);
+      EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getRequestURI()).andReturn("uri");
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
@@ -295,6 +295,58 @@ public abstract class ActionServlet extends DMAServlet
 
       servlet.doPost(request, response);
       assertEquals("post", "done", output.toString());
+
+      EasyMock.verify(request, response);
+    }
+
+    //......................................................................
+    //----- setMessage -----------------------------------------------------
+
+    /** The setMessage Test. */
+    @org.junit.Test
+    public void setMessage()
+    {
+      HttpServletResponse response =
+        EasyMock.createMock(HttpServletResponse.class);
+
+      response.addCookie(EasyMock.isA(Cookie.class));
+
+      EasyMock.replay(response);
+
+      ActionServlet servlet = new ActionServlet() {
+          private static final long serialVersionUID = 1L;
+          protected String doAction(@Nonnull DMARequest inRequest,
+                                    @Nonnull HttpServletResponse inResponse)
+          {
+            return "done";
+          }
+        };
+
+      servlet.setMessage(response, "message");
+
+      EasyMock.verify(response);
+    }
+
+    //......................................................................
+    //----- fail -----------------------------------------------------------
+
+    /** The fail Test. */
+    @org.junit.Test
+    public void checkFail()
+    {
+      ActionServlet servlet = new ActionServlet()
+        {
+          private static final long serialVersionUID = 1L;
+          protected String doAction(@Nonnull DMARequest inRequest,
+                                    @Nonnull HttpServletResponse inResponse)
+          {
+            return "done";
+          }
+        };
+
+      assertEquals("fail", "gui.alert('message');", servlet.fail("message"));
+
+      m_logger.addExpected("WARNING: message");
     }
 
     //......................................................................
