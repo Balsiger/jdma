@@ -253,8 +253,8 @@ public class BaseCharacter extends BaseEntry
   //----- products ---------------------------------------------------------
 
   /** The files with the products. */
-//   @Key("products")
-//   protected Text m_products = new Text();
+  @Key("products")
+  protected Text m_products = new Text();
 
 //   /** The campaign storing all the products. */
 //   protected Campaign m_productEntries = new Campaign("Products", "prd", 0);

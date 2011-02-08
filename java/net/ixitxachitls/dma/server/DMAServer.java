@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.server;
 
+import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -31,8 +32,10 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import net.ixitxachitls.comm.WebServer;
 import net.ixitxachitls.comm.servlets.FileServlet;
 import net.ixitxachitls.comm.servlets.TemplateServlet;
+import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.servlets.StaticPageServlet;
 import net.ixitxachitls.util.CommandLineParser;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.EventLogger;
@@ -89,10 +92,13 @@ public class DMAServer extends WebServer
     * @param       inUsers     the name of the file containing user info
     *
     */
-  public DMAServer(String inHost, int inPort, String inBase,
-                   String inCampaigns, String inUsers)
+  public DMAServer(@Nonnull String inHost, int inPort, @Nonnull String inBase,
+                   @Nonnull String inCampaigns, @Nonnull String inUsers)
   {
     super(inHost, inPort);
+
+    m_userFile = new DMAFile(inUsers,
+                             Files.concatenate(DATA_DIR, "BaseCharacters/"));
 
 //     java.util.Date start = new java.util.Date();
 
@@ -101,7 +107,6 @@ public class DMAServer extends WebServer
 //     BaseCampaign all = new BaseCampaign("All");
 //     all.readFile(inBase, DATA_DIR);
 //     m_baseCampaign = (BaseCampaign)all.iterator().next();
-//     m_users.readFile("BaseCharacters/" + inUsers, DATA_DIR);
 
 //     // load the campaign specific files
 //     m_campaigns.readFile(inCampaigns, DATA_DIR);
@@ -127,7 +132,10 @@ public class DMAServer extends WebServer
   //-------------------------------------------------------------- variables
 
   /** The root context for all root information. */
-  private ServletContextHandler m_rootContext;
+  private @Nonnull ServletContextHandler m_rootContext;
+
+  /** The file with all the user information. */
+  private @Nonnull DMAFile m_userFile;
 
   /** The base campaign for the user information. */
 //   private BaseCampaign m_users = new BaseCampaign("Users");
@@ -148,7 +156,7 @@ public class DMAServer extends WebServer
 //   }
 
   /** The directory containing all data files. */
-  public static final String DATA_DIR = Config.get
+  public static final @Nonnull String DATA_DIR = Config.get
     ("resource:web/dir.dma", "dma");
 
   /** The extractor to get the product data. */
@@ -703,16 +711,30 @@ public class DMAServer extends WebServer
   }
 
   //........................................................................
+  //--------------------------------- init ---------------------------------
+
+  /**
+   * General initialization to be done while the server is starting up. The
+   * server will server requests but will return an error message about it
+   * being started up. This means this can take some time.
+   *
+   */
+  @OverridingMethodsMustInvokeSuper
+  public void init()
+  {
+    Log.info("Loading user information from '" + m_userFile.getStorageName()
+             + "'");
+    if(!m_userFile.read())
+      Log.error("Could not read user file '" + m_userFile + "'!");
+  }
+
+  //........................................................................
 
   //........................................................................
 
   //------------------------------------------------------------------- test
 
-  /** The test.
-   *
-   * @hidden
-   *
-   */
+  /** The test. */
 //   public static class Test extends net.ixitxachitls.util.test.TestCase
 //   {
 //   }

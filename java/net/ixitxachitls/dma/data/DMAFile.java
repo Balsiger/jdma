@@ -245,7 +245,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    */
   public String toString()
   {
-    return m_path + ":" + m_name + ": " + m_entries
+    return m_path + "/" + m_name + ": " + m_entries
       + " (" + m_lines + " lines, "
       + (m_changed ? "changed" : "not changed")
       + (m_read ? ", read" : ", not read")
@@ -570,7 +570,7 @@ public class DMAFile //implements Storage<AbstractEntry>
       assertEquals("format", "\\link[/index/files/test.dma]{test.dma}",
                    file.format().toString());
       assertEquals("string",
-                   "build/test:test.dma: [] (0 lines, not changed, not read)",
+                   "build/test/test.dma: [] (0 lines, not changed, not read)",
                    file.toString());
     }
 

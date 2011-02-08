@@ -99,7 +99,7 @@ public abstract class BaseServlet extends HttpServlet
   }
 
   //........................................................................
-  //----- HandleError ------------------------------------------------------
+  //----- TextError --------------------------------------------------------
 
   /** A class for a handling error. */
   @Immutable
