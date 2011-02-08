@@ -43,6 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 // import net.ixitxachitls.dma.data.CampaignData;
+import net.ixitxachitls.dma.data.DMAFile;
 // import net.ixitxachitls.dma.data.Storage;
 // import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
 // import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
@@ -217,6 +218,20 @@ public class AbstractEntry extends ValueGroup
   //---------------------------- AbstractEntry -----------------------------
 
   /**
+   * The default constructor.
+   *
+   * @param  inType  the type of the entry
+   *
+   */
+  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    m_type = inType;
+  }
+
+  //........................................................................
+  //---------------------------- AbstractEntry -----------------------------
+
+  /**
    * The constructor with only a name, using the default type.
    *
    * @param       inName the name of the entry
@@ -385,20 +400,23 @@ public class AbstractEntry extends ValueGroup
   //........................................................................
   //----- storage ----------------------------------------------------------
 
+  /** The file this entry will be written to. */
+  protected @Nullable DMAFile m_file;
+
 //   /** The place this entry is stored in (not read). */
 //   protected Storage<AbstractEntry> m_storage = null;
 
-//   /** The starting position in the file (characters). */
-//   protected long m_startPos = 0;
+  /** The starting position in the file (characters). */
+  protected long m_startPos = 0;
 
-//   /** The starting position in the file (lines). */
-//   protected long m_startLine = 0;
+  /** The starting position in the file (lines). */
+  protected long m_startLine = 0;
 
-//   /** The ending position in the file (characters). */
-//   protected long m_endPos = 0;
+  /** The ending position in the file (characters). */
+  protected long m_endPos = 0;
 
-//   /** The ending position in the file (lines). */
-//   protected long m_endLine = 0;
+  /** The ending position in the file (lines). */
+  protected long m_endLine = 0;
 
 //   /** The possible ways of extracting a base value. */
 //   public enum Combine { FIRST, ADD, MODIFY, MINIMUM, MAXIMUM, };
@@ -1744,7 +1762,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked") // calling complete on base type
-  public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader)
+    public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader)
   {
     if(inReader.isAtEnd())
       return null;
@@ -1846,11 +1864,11 @@ public class AbstractEntry extends ValueGroup
     // changed, but who should be interested in that...)
     result.changed(false);
 
-//     ParseReader.Position end = inReader.getPosition();
-//     result.m_startLine = start.getLine();
-//     result.m_startPos  = start.getPosition();
-//     result.m_endLine   = end.getLine();
-//     result.m_endPos    = end.getPosition();
+    ParseReader.Position end = inReader.getPosition();
+    result.m_startLine = start.getLine();
+    result.m_startPos  = start.getPosition();
+    result.m_endLine   = end.getLine();
+    result.m_endPos    = end.getPosition();
 
     // fix the comments
     if(!result.m_leadingComment.isDefined() && result.m_name.isDefined())
@@ -2297,6 +2315,30 @@ public class AbstractEntry extends ValueGroup
 //   }
 
   //........................................................................
+  //-------------------------------- addTo ---------------------------------
+
+  /**
+   * Add the entry to the given file (also removing it from any current file).
+   *
+   * @param       inFile the file to add to
+   *
+   */
+  public void addTo(@Nonnull DMAFile inFile)
+  {
+    if(m_file != null)
+    {
+      m_file.remove(this);
+      m_startPos = -1;
+      m_startLine = -1;
+      m_endPos = -1;
+      m_endLine = -1;
+    }
+
+    m_file = inFile;
+  }
+
+  //........................................................................
+
 
   //------------------------------- complete -------------------------------
 

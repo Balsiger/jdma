@@ -460,19 +460,10 @@ public class DMAFile //implements Storage<AbstractEntry>
    */
   protected boolean add(@Nonnull AbstractEntry inEntry, boolean inNew)
   {
-    // remove from any file already in
-    // TODO: make sure this is correct!
-//     DMAFile current = (DMAFile)inEntry.getStorage();
-
-//     if(current != null)
-//       current.remove(inEntry);
+    inEntry.addTo(this);
 
     // add to this file
     m_entries.add(inEntry);
-
-    // store the entry (this will also add it and all its nested entries to the
-    // campaign)
-//     inEntry.store(this);
 
     if(inNew || inEntry.isChanged())
       m_changed = true;
@@ -606,7 +597,8 @@ public class DMAFile //implements Storage<AbstractEntry>
       DMAFile file = new DMAFile("read.dma", "path");
 
       assertTrue("read", file.read(reader));
-      synchronized(file) {
+      synchronized(file)
+      {
         assertEquals("comment", "# A test file\n\n", file.m_comment.toString());
       }
       assertEquals("entry 1",

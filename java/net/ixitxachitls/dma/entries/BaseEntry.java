@@ -151,7 +151,21 @@ public class BaseEntry extends AbstractEntry
    */
   protected BaseEntry()
   {
-    m_type = TYPE;
+    super(TYPE);
+  }
+
+  //........................................................................
+  //------------------------------ BaseEntry -------------------------------
+
+  /**
+   * The default constructor, with undefined values.
+   *
+   * @param   inType   the type of the entry
+   *
+   */
+  protected BaseEntry(@Nonnull AbstractType<? extends BaseEntry> inType)
+  {
+    super(inType);
   }
 
   //........................................................................
