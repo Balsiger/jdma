@@ -36,7 +36,6 @@ import java.util.SimpleTimeZone;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
@@ -399,8 +398,6 @@ public abstract class BaseServlet extends HttpServlet
    * @throws      ServletException general error when processing the page
    * @throws      IOException      writing to the page failed
    *
-   * @undefined   never
-   *
    */
   protected abstract @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
@@ -727,7 +724,7 @@ public abstract class BaseServlet extends HttpServlet
 
     /**
      * The get Test.
-     * @throws Exception to lazy to catch
+     * @throws Exception too lazy to catch
      */
     @org.junit.Test
     public void get() throws Exception
