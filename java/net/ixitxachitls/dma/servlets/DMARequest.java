@@ -26,14 +26,18 @@ package net.ixitxachitls.dma.servlets;
 // import java.io.BufferedReader;
 // import java.io.InputStreamReader;
 // import java.net.URLDecoder;
+import java.util.Collection;
 // import java.util.HashMap;
 // import java.util.Map;
 // import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 //import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
+import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
@@ -77,19 +81,21 @@ public class DMARequest extends HttpServletRequestWrapper
    * A request wrapper for dma requests.
    *
    * @param       inRequest the request to be wrapped
+   * @param       inParams  the parameters to the request (URL & post)
    *
    */
 //    * @param       inUsers the users available in the system
 //    * @param       inCampaigns the campaigns
-  public DMARequest(@Nonnull HttpServletRequest inRequest
+  public DMARequest(@Nonnull HttpServletRequest inRequest,
+                    @Nonnull Multimap<String, String> inParams
                     /*, BaseCampaign inUsers, Campaign inCampaigns*/)
   {
     super(inRequest);
 
+    m_params = inParams;
 //     m_users = inUsers;
 //     m_campaigns = inCampaigns;
 
-//     extractURLParams(inRequest);
 //     extractUser(inRequest);
 //     extractCampaign(inRequest);
 //     extractDM(inRequest);
@@ -102,8 +108,8 @@ public class DMARequest extends HttpServletRequestWrapper
 
   //-------------------------------------------------------------- variables
 
-  /** The URL parameters. */
-//   private Map<String, String> m_params = new HashMap<String, String>();
+  /** The URL and post parameters. */
+  private Multimap<String, String> m_params;
 
   /** The base campaign with all the users. */
 //   private BaseCampaign m_users = null;
@@ -246,20 +252,25 @@ public class DMARequest extends HttpServletRequestWrapper
 
   //........................................................................
 
-  //----------------------------- getURLParam ------------------------------
+  //---------------------------- getFirstParam -----------------------------
 
   /**
-   * Get an url parameter from the request.
+   * Get the first value given for a key.
    *
    * @param       inName the name of the parameter to get
    *
    * @return      the value of the parameter or null if not found
    *
    */
-//   public String getURLParam(@Nonnull String inName)
-//   {
-//     return m_params.get(inName);
-//   }
+  public @Nullable String getParam(@Nonnull String inName)
+  {
+    Collection<String> values = m_params.get(inName);
+
+    if(values == null || values.isEmpty())
+      return null;
+
+    return values.iterator().next();
+  }
 
   //........................................................................
   //---------------------------- getStartIndex -----------------------------
@@ -394,66 +405,6 @@ public class DMARequest extends HttpServletRequestWrapper
 
   //------------------------------------------------- other member functions
 
-  //--------------------------- extractURLParams ---------------------------
-
-  /**
-   * Extract URL parameters for the request.
-   *
-   * @param       inRequest the request to process
-   *
-   */
-//   public void extractURLParams(HttpServletRequest inRequest)
-//   {
-//     try
-//     {
-//       BufferedReader reader =
-//       new BufferedReader(new InputStreamReader(inRequest.getInputStream()));
-
-//       // parse all the key values pairs
-//       for(String line = reader.readLine(); line != null;
-//           line = reader.readLine())
-//       {
-//         String []matches = line.split("=", 2);
-
-//         if(matches.length != 2)
-//           Log.warning("invalid line of post request ignored: " + line);
-//         else
-//           m_params.put(matches[0], URLDecoder.decode(matches[1], "utf-8"));
-//       }
-
-//       reader.close();
-//     }
-//     catch(java.io.IOException e)
-//     {
-//       Log.warning("Could not extract post parameters!");
-//     }
-
-//     try
-//     {
-//       if(inRequest.getQueryString() != null)
-//         for(String param : inRequest.getQueryString().split("&"))
-//         {
-//           String []parts = param.split("=");
-
-//           String key   = param;
-//           String value = "";
-
-//           if(parts != null && parts.length == 2)
-//           {
-//             key   = parts[0];
-//             value = parts[1];
-//           }
-
-//           m_params.put(key, URLDecoder.decode(value, "utf-8"));
-//         }
-//     }
-//     catch(java.io.UnsupportedEncodingException e)
-//     {
-//       Log.error("Unsupported encoding for parsing get paramters!");
-//     }
-//   }
-
-  //........................................................................
   //----------------------------- extractUser ------------------------------
 
   /**
@@ -594,7 +545,10 @@ public class DMARequest extends HttpServletRequestWrapper
 
       EasyMock.replay(mockRequest);
 
-      DMARequest request = new DMARequest(mockRequest);
+      DMARequest request =
+        new DMARequest(mockRequest,
+                       com.google.common.collect.HashMultimap.
+                       <String, String>create());
 
       assertEquals("page size", def_pageSize, request.getPageSize());
 

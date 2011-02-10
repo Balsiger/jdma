@@ -29,6 +29,7 @@ import java.io.FileWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -152,6 +153,22 @@ public class DMAFile //implements Storage<AbstractEntry>
   }
 
   //........................................................................
+  //------------------------------ getEntries ------------------------------
+
+  /**
+   * Get the entries currently in the file. The list is immutable but is backed
+   * by the real contents of the file (e.g. is updated when an entry is added).
+   *
+   * @return      an immutable list with all the entries
+   *
+   */
+  public @Nonnull List<AbstractEntry> getEntries()
+  {
+    return Collections.unmodifiableList(m_entries);
+  }
+
+  //........................................................................
+
   //----------------------------- getCampaign ------------------------------
 
   /**

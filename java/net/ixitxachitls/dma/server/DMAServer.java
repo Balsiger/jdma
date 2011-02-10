@@ -32,7 +32,9 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import net.ixitxachitls.comm.WebServer;
 import net.ixitxachitls.comm.servlets.FileServlet;
 import net.ixitxachitls.comm.servlets.TemplateServlet;
-import net.ixitxachitls.dma.data.DMAFile;
+import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.servlets.LoginServlet;
 import net.ixitxachitls.dma.servlets.StaticPageServlet;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Files;
@@ -97,8 +99,8 @@ public class DMAServer extends WebServer
   {
     super(inHost, inPort);
 
-    m_userFile = new DMAFile(inUsers,
-                             Files.concatenate(DATA_DIR, "BaseCharacters/"));
+    m_users =
+      new DMAData(DATA_DIR, Files.concatenate("BaseCharacters", inUsers));
 
 //     java.util.Date start = new java.util.Date();
 
@@ -134,8 +136,8 @@ public class DMAServer extends WebServer
   /** The root context for all root information. */
   private @Nonnull ServletContextHandler m_rootContext;
 
-  /** The file with all the user information. */
-  private @Nonnull DMAFile m_userFile;
+  /** The user information. */
+  private @Nonnull DMAData m_users;
 
   /** The base campaign for the user information. */
 //   private BaseCampaign m_users = new BaseCampaign("Users");
@@ -525,9 +527,10 @@ public class DMAServer extends WebServer
 //     m_rootContext.addServlet
 //     (new ServletHolder(new SaveActionServlet(m_campaigns)), "/actions/save");
 
-//     m_rootContext.addServlet
-//       (new ServletHolder(new LoginServlet(m_users)),
-//        "/actions/login");
+    m_rootContext.addServlet
+      (new ServletHolder(new LoginServlet
+                         (m_users.getEntries(BaseCharacter.class))),
+       "/actions/login");
 
 //     m_rootContext.addServlet
 //       (new ServletHolder(new LogoutServlet(m_users)),
@@ -722,10 +725,9 @@ public class DMAServer extends WebServer
   @OverridingMethodsMustInvokeSuper
   public void init()
   {
-    Log.info("Loading user information from '" + m_userFile.getStorageName()
-             + "'");
-    if(!m_userFile.read())
-      Log.error("Could not read user file '" + m_userFile + "'!");
+    Log.info("Loading user information");
+    if(!m_users.read())
+      Log.error("Could not properly read user files!");
   }
 
   //........................................................................

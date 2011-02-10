@@ -104,7 +104,7 @@ public abstract class DMAServlet extends BaseServlet
     if(inRequest instanceof DMARequest)
       request = (DMARequest)inRequest;
     else
-      request = new DMARequest(inRequest);
+      request = new DMARequest(inRequest, extractParams(inRequest));
 
     return handle(request, inResponse);
   }
