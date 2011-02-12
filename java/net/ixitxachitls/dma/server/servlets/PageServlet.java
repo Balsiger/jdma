@@ -162,7 +162,7 @@ public class PageServlet extends DMAServlet
         .begin("span").classes("user").add(user.getName()).end("span")
         .add(" | ")
         .begin("a").id("logout-icon").classes("icon").tooltip("Logout")
-        .end("a");
+        .onClick("logout()").end("a");
 
     inWriter
       .begin("a").classes("icon", "library").tooltip("Library").end("a")

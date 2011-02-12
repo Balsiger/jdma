@@ -34,6 +34,7 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.filters.DMAFilter;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
+import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
 import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
@@ -538,9 +539,10 @@ public class DMAServer extends WebServer
                          (m_users.getEntries(BaseCharacter.class))),
        "/actions/login");
 
-//     m_rootContext.addServlet
-//       (new ServletHolder(new LogoutServlet(m_users)),
-//        "/actions/logout");
+    m_rootContext.addServlet
+      (new ServletHolder(new LogoutServlet
+                         (m_users.getEntries(BaseCharacter.class))),
+       "/actions/logout");
 
 //     m_rootContext.addServlet
 //       (new ServletHolder(new SelectCharacterServlet(m_campaigns)),
