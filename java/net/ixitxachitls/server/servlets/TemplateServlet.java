@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.comm.servlets;
+package net.ixitxachitls.server.servlets;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

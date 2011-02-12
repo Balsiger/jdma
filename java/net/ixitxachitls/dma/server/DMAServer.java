@@ -30,9 +30,9 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import net.ixitxachitls.comm.WebServer;
-import net.ixitxachitls.comm.servlets.FileServlet;
-import net.ixitxachitls.comm.servlets.TemplateServlet;
+import net.ixitxachitls.server.WebServer;
+import net.ixitxachitls.server.servlets.FileServlet;
+import net.ixitxachitls.server.servlets.TemplateServlet;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.filters.DMAFilter;
