@@ -212,6 +212,22 @@ public class HTMLWriter
   }
 
   //........................................................................
+  //--------------------------------- href ---------------------------------
+
+  /**
+   * Add an on click attribute to the current tag.
+   *
+   * @param       inText   the text for the href
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter onClick(@Nonnull String inText)
+  {
+    return attribute("onclick", inText);
+  }
+
+  //........................................................................
   //------------------------------- classes -------------------------------
 
   /**
@@ -338,6 +354,26 @@ public class HTMLWriter
     ensureHead();
     m_writer.println("    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                      + "href=\"/css/" + inName + ".css\" />");
+
+    return this;
+  }
+
+  //........................................................................
+  //------------------------------ addCSSFile ------------------------------
+
+  /**
+   * Add a javascript file to the head of the file.
+   *
+   * @param       inName the name of the CSS resource to add
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter addJSFile(@Nonnull String inName)
+  {
+    ensureHead();
+    m_writer.println("    <SCRIPT type=\"text/javascript\" "
+                     + "src=\"/js/" + inName + ".js\"></script>");
 
     return this;
   }

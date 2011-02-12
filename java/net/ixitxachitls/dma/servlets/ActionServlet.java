@@ -270,7 +270,7 @@ public abstract class ActionServlet extends DMAServlet
     public void handle() throws Exception
     {
       HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
+        EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       net.ixitxachitls.comm.servlets.BaseServlet.Test.MockServletOutputStream

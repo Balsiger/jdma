@@ -28,8 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.ThreadSafe;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Strings;
@@ -100,15 +99,15 @@ public class StaticPageServlet extends PageServlet
    * @param     inWriter  the writer to take up the content (will be closed
    *                      by the PageServlet)
    * @param     inPath    the path of the request
-   * @param     inParams  the parameters given in the request
+   * @param     inRequest the request for the page
    *
    */
   @OverridingMethodsMustInvokeSuper
   protected void writeHeader(@Nonnull HTMLWriter inWriter,
                              @Nonnull String inPath,
-                             @Nonnull Multimap<String, String> inParams)
+                             @Nonnull DMARequest inRequest)
   {
-    super.writeHeader(inWriter, inPath, inParams);
+    super.writeHeader(inWriter, inPath, inRequest);
 
     if(inPath != null && inPath.length() > 0)
       addNavigation(inWriter,
@@ -126,13 +125,13 @@ public class StaticPageServlet extends PageServlet
    * @param     inWriter  the writer to take up the content (will be closed
    *                      by the PageServlet)
    * @param     inPath    the path for the request
-   * @param     inParams  the parameters of the request
+   * @param     inRequest the request for the page
    *
    */
   public void writeBody(@Nonnull HTMLWriter inWriter, @Nullable String inPath,
-                        @Nonnull Multimap<String, String> inParams)
+                        @Nonnull DMARequest inRequest)
   {
-    super.writeBody(inWriter, inPath, inParams);
+    super.writeBody(inWriter, inPath, inRequest);
 
     // check the given path for illegal relative stuff and add the root
     String path = m_root;
@@ -176,29 +175,38 @@ public class StaticPageServlet extends PageServlet
     {
       java.io.ByteArrayOutputStream output =
         new java.io.ByteArrayOutputStream();
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+
+      EasyMock.expect(request.getUser()).andReturn(null);
+
+      EasyMock.replay(request);
+
       HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(output));
 
       StaticPageServlet servlet = new StaticPageServlet("/html/");
 
-      servlet.writeHeader(writer, "/about.html",
-                          HashMultimap.<String, String>create());
-      servlet.writeFooter(writer, "/about.html",
-                          HashMultimap.<String, String>create());
+      servlet.writeHeader(writer, "/about.html", request);
+      servlet.writeFooter(writer, "/about.html", request);
       writer.close();
       assertEquals("header",
                    "<HTML>\n"
                    + "  <HEAD>\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/jquery-1.5.js\"></script>\n"
+                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
+                   + "href=\"/css/smoothness/jquery-ui-1.8.9.custom.css\" />\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/jquery-ui-1.8.9.custom.min.js\"></script>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/jdma.css\" />\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/jdma.js\"></script>\n"
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    <DIV id=\"header\">\n"
                    + "      <DIV id=\"header-right\">\n"
                    + "        <A id=\"login-icon\" class=\"icon\" "
-                   + "title=\"Login\">\n"
-                   + "        </A>\n"
-                   + "        <A id=\"logout-icon\" class=\"icon\" "
-                   + "title=\"Logout\">\n"
+                   + "title=\"Login\" onclick=\"login()\">\n"
                    + "        </A>\n"
                    + "        <A class=\"icon library\" title=\"Library\">\n"
                    + "        </A>\n"
@@ -221,6 +229,8 @@ public class StaticPageServlet extends PageServlet
                    + "    </DIV>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
+
+      EasyMock.verify(request);
     }
 
     //......................................................................
@@ -232,12 +242,15 @@ public class StaticPageServlet extends PageServlet
     {
       java.io.ByteArrayOutputStream output =
         new java.io.ByteArrayOutputStream();
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+
+      EasyMock.replay(request);
+
       HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(output));
 
       StaticPageServlet servlet = new StaticPageServlet("/html/");
 
-      servlet.writeBody(writer, "/about.html",
-                        HashMultimap.<String, String>create());
+      servlet.writeBody(writer, "/about.html", request);
       writer.close();
 
       assertPattern("body", ".*<BODY>.*", output.toString());
@@ -248,6 +261,8 @@ public class StaticPageServlet extends PageServlet
 
       m_logger.addExpected("WARNING: closing tag div, but was never opened");
       m_logger.addExpected("WARNING: writer closed, but tags [div] not closed");
+
+      EasyMock.verify(request);
     }
 
     //......................................................................

@@ -31,14 +31,12 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.comm.servlets.BaseServlet;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.output.html.HTMLWriter;
 
 //..........................................................................
@@ -61,7 +59,7 @@ import net.ixitxachitls.output.html.HTMLWriter;
 //__________________________________________________________________________
 
 @Immutable
-public class PageServlet extends BaseServlet
+public class PageServlet extends DMAServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -103,7 +101,7 @@ public class PageServlet extends BaseServlet
    *
    */
   protected @Nullable SpecialResult handle
-    (@Nonnull HttpServletRequest inRequest,
+    (@Nonnull DMARequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
@@ -111,15 +109,13 @@ public class PageServlet extends BaseServlet
     inResponse.setHeader("Content-Type", "text/html");
     inResponse.setHeader("Cache-Control", "max-age=0");
 
-    Multimap<String, String> params = BaseServlet.extractParams(inRequest);
     String path = inRequest.getPathInfo();
     HTMLWriter writer =
       new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
 
-    // TODO: handle body param and other params here here!
-    writeHeader(writer, path, params);
-    writeBody(writer, path, params);
-    writeFooter(writer, path, params);
+    writeHeader(writer, path, inRequest);
+    writeBody(writer, path, inRequest);
+    writeFooter(writer, path, inRequest);
 
     writer.close();
 
@@ -136,20 +132,40 @@ public class PageServlet extends BaseServlet
    * @param     inWriter  the writer to take up the content (will be closed
    *                      by the PageServlet)
    * @param     inPath    the path of the request
-   * @param     inParams  the parameters given in the request
+   * @param     inRequest the request for the page
    *
    */
   @OverridingMethodsMustInvokeSuper
   protected void writeHeader(@Nonnull HTMLWriter inWriter,
                              @Nonnull String inPath,
-                             @Nonnull Multimap<String, String> inParams)
+                             @Nonnull DMARequest inRequest)
   {
     inWriter
+      // jquery
+      .addJSFile("jquery-1.5")
+      .addCSSFile("smoothness/jquery-ui-1.8.9.custom")
+      .addJSFile("jquery-ui-1.8.9.custom.min")
+      // jdma
       .addCSSFile("jdma")
+      .addJSFile("jdma")
+      // header
       .begin("div").id("header")
-      .begin("div").id("header-right")
-      .begin("a").id("login-icon").classes("icon").tooltip("Login").end("a")
-      .begin("a").id("logout-icon").classes("icon").tooltip("Logout").end("a")
+      .begin("div").id("header-right");
+
+    BaseCharacter user = inRequest.getUser();
+
+    if(user == null)
+      inWriter
+        .begin("a").id("login-icon").classes("icon").tooltip("Login")
+        .onClick("login()").end("a");
+    else
+      inWriter
+        .begin("span").classes("user").add(user.getName()).end("span")
+        .add(" | ")
+        .begin("a").id("logout-icon").classes("icon").tooltip("Logout")
+        .end("a");
+
+    inWriter
       .begin("a").classes("icon", "library").tooltip("Library").end("a")
       .begin("a").classes("icon", "search").tooltip("Search").end("a")
       .begin("a").classes("icon", "about").tooltip("About").href("/about.html")
@@ -169,13 +185,13 @@ public class PageServlet extends BaseServlet
    * @param     inWriter  the writer to take up the content (will be closed
    *                      by the PageServlet)
    * @param     inPath    the path of the request
-   * @param     inParams  the parameters given in the request
+   * @param     inRequest the request for the page
    *
    */
   @OverridingMethodsMustInvokeSuper
   protected void writeBody(@Nonnull HTMLWriter inWriter,
                            @Nullable String inPath,
-                           @Nonnull Multimap<String, String> inParams)
+                           @Nonnull DMARequest inRequest)
   {
     inWriter
       .end("div") // header
@@ -191,13 +207,13 @@ public class PageServlet extends BaseServlet
    * @param     inWriter  the writer to take up the content (will be closed
    *                      by the PageServlet)
    * @param     inPath    the path of the request
-   * @param     inParams  the parameters given in the request
+   * @param     inRequest the request for the page
    *
    */
   @OverridingMethodsMustInvokeSuper
   protected void writeFooter(@Nonnull HTMLWriter inWriter,
                              @Nonnull String inPath,
-                             @Nonnull Multimap<String, String> inParams)
+                             @Nonnull DMARequest inRequest)
   {
     inWriter
       .end("div"); // page
@@ -251,20 +267,17 @@ public class PageServlet extends BaseServlet
     @org.junit.Test
     public void simple() throws Exception
     {
-      HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
+      DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       BaseServlet.Test.MockServletOutputStream output =
         new BaseServlet.Test.MockServletOutputStream();
-      BaseServlet.Test.MockServletInputStream input =
-        new BaseServlet.Test.MockServletInputStream("");
 
       response.setHeader("Content-Type", "text/html");
       response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(request.getInputStream()).andReturn(input);
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(request.getPathInfo()).andReturn("/about.html");
+      EasyMock.expect(request.getUser()).andReturn(null);
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 
@@ -274,17 +287,22 @@ public class PageServlet extends BaseServlet
       assertEquals("content",
                    "<HTML>\n"
                    + "  <HEAD>\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/jquery-1.5.js\"></script>\n"
+                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
+                   + "href=\"/css/smoothness/jquery-ui-1.8.9.custom.css\" />\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/jquery-ui-1.8.9.custom.min.js\"></script>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/jdma.css\" />\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/jdma.js\"></script>\n"
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    <DIV id=\"header\">\n"
                    + "      <DIV id=\"header-right\">\n"
                    + "        <A id=\"login-icon\" class=\"icon\" "
-                   + "title=\"Login\">\n"
-                   + "        </A>\n"
-                   + "        <A id=\"logout-icon\" class=\"icon\" "
-                   + "title=\"Logout\">\n"
+                   + "title=\"Login\" onclick=\"login()\">\n"
                    + "        </A>\n"
                    + "        <A class=\"icon library\" title=\"Library\">\n"
                    + "        </A>\n"
@@ -358,10 +376,6 @@ public class PageServlet extends BaseServlet
 
     //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.server;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -34,6 +35,7 @@ import net.ixitxachitls.comm.servlets.FileServlet;
 import net.ixitxachitls.comm.servlets.TemplateServlet;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.filters.DMAFilter;
 import net.ixitxachitls.dma.servlets.LoginServlet;
 import net.ixitxachitls.dma.servlets.StaticPageServlet;
 import net.ixitxachitls.util.CommandLineParser;
@@ -275,6 +277,10 @@ public class DMAServer extends WebServer
 
     Log.info("Setting up real contexts");
     m_rootContext = new ServletContextHandler(m_server, "/", false, false);
+
+    m_rootContext.addFilter
+      (new FilterHolder
+       (new DMAFilter(m_users.getEntries(BaseCharacter.class))), "/*", 0);
 
 //     m_rootContext.setAttribute("users", m_users);
 //     m_rootContext.setAttribute("campaigns", m_campaigns);

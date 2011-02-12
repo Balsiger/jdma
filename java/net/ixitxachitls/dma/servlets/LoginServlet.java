@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
@@ -171,21 +170,18 @@ public class LoginServlet extends ActionServlet
     @org.junit.Test
     public void noData() throws Exception
     {
-      HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
+      DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       net.ixitxachitls.comm.servlets.BaseServlet.Test.MockServletOutputStream
         output = new net.ixitxachitls.comm.servlets.BaseServlet.Test.
         MockServletOutputStream();
-      net.ixitxachitls.comm.servlets.BaseServlet.Test.MockServletInputStream
-        input = new net.ixitxachitls.comm.servlets.BaseServlet.Test.
-        MockServletInputStream("");
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
-      EasyMock.expect(request.getInputStream()).andReturn(input);
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("");
+      EasyMock.expect(request.getParam("username")).andReturn(null);
+      EasyMock.expect(request.getParam("password")).andReturn(null);
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
@@ -216,22 +212,20 @@ public class LoginServlet extends ActionServlet
     @org.junit.Test
     public void wrongPassword() throws Exception
     {
-      HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
+      DMARequest request =
+        EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       net.ixitxachitls.comm.servlets.BaseServlet.Test.MockServletOutputStream
         output = new net.ixitxachitls.comm.servlets.BaseServlet.Test.
         MockServletOutputStream();
-      net.ixitxachitls.comm.servlets.BaseServlet.Test.MockServletInputStream
-        input = new net.ixitxachitls.comm.servlets.BaseServlet.Test.
-        MockServletInputStream("");
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
-      EasyMock.expect(request.getInputStream()).andReturn(input);
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=guru").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("");
+      EasyMock.expect(request.getParam("username")).andReturn("somebody");
+      EasyMock.expect(request.getParam("password")).andReturn("guru");
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
@@ -263,22 +257,19 @@ public class LoginServlet extends ActionServlet
     @org.junit.Test
     public void login() throws Exception
     {
-      HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
+      DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       net.ixitxachitls.comm.servlets.BaseServlet.Test.MockServletOutputStream
         output = new net.ixitxachitls.comm.servlets.BaseServlet.Test.
         MockServletOutputStream();
-      net.ixitxachitls.comm.servlets.BaseServlet.Test.MockServletInputStream
-        input = new net.ixitxachitls.comm.servlets.BaseServlet.Test.
-        MockServletInputStream("");
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
-      EasyMock.expect(request.getInputStream()).andReturn(input);
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=secret").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("");
+      EasyMock.expect(request.getParam("username")).andReturn("somebody");
+      EasyMock.expect(request.getParam("password")).andReturn("secret");
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       response.addCookie(EasyMock.isA(Cookie.class));

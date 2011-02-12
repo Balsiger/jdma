@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.comm.servlets.BaseServlet;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -100,13 +101,15 @@ public abstract class DMAServlet extends BaseServlet
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
-    DMARequest request;
     if(inRequest instanceof DMARequest)
-      request = (DMARequest)inRequest;
+      return handle((DMARequest)inRequest, inResponse);
     else
-      request = new DMARequest(inRequest, extractParams(inRequest));
+    {
+      Log.error("Invalid request, expected a DMA request!");
+      return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                           "Invalid request, expected a DMA request");
+    }
 
-    return handle(request, inResponse);
   }
 
   //........................................................................
@@ -153,7 +156,7 @@ public abstract class DMAServlet extends BaseServlet
     public void get() throws Exception
     {
       HttpServletRequest request =
-        EasyMock.createMock(HttpServletRequest.class);
+        EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
 

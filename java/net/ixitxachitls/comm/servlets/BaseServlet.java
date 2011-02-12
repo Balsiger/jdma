@@ -423,7 +423,7 @@ public abstract class BaseServlet extends HttpServlet
    *              containing the parameter values.
    *
    */
-  protected static Multimap<String, String>
+  public static Multimap<String, String>
     extractParams(@Nonnull HttpServletRequest inRequest)
   {
     Multimap<String, String> values = HashMultimap.create();

@@ -27,13 +27,13 @@ package net.ixitxachitls.dma.servlets;
 // import java.io.InputStreamReader;
 // import java.net.URLDecoder;
 import java.util.Collection;
-// import java.util.HashMap;
-// import java.util.Map;
+import java.util.HashMap;
+import java.util.Map;
 // import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-//import javax.servlet.http.Cookie;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -43,7 +43,7 @@ import org.easymock.EasyMock;
 
 // import net.ixitxachitls.dma.entries.AbstractEntry;
 // import net.ixitxachitls.dma.entries.BaseCampaign;
-// import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 // import net.ixitxachitls.dma.entries.Campaign;
 // import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Entry;
@@ -82,21 +82,22 @@ public class DMARequest extends HttpServletRequestWrapper
    *
    * @param       inRequest the request to be wrapped
    * @param       inParams  the parameters to the request (URL & post)
+   * @param       inUsers the users available in the system
    *
    */
-//    * @param       inUsers the users available in the system
 //    * @param       inCampaigns the campaigns
   public DMARequest(@Nonnull HttpServletRequest inRequest,
-                    @Nonnull Multimap<String, String> inParams
-                    /*, BaseCampaign inUsers, Campaign inCampaigns*/)
+                    @Nonnull Multimap<String, String> inParams,
+                    @Nonnull Map<String, BaseCharacter> inUsers
+                    /*, Campaign inCampaigns*/)
   {
     super(inRequest);
 
     m_params = inParams;
-//     m_users = inUsers;
+    m_users = inUsers;
 //     m_campaigns = inCampaigns;
 
-//     extractUser(inRequest);
+    extractUser(inRequest);
 //     extractCampaign(inRequest);
 //     extractDM(inRequest);
 //     extractPlayer(inRequest);
@@ -109,10 +110,10 @@ public class DMARequest extends HttpServletRequestWrapper
   //-------------------------------------------------------------- variables
 
   /** The URL and post parameters. */
-  private Multimap<String, String> m_params;
+  private @Nonnull Multimap<String, String> m_params;
 
   /** The base campaign with all the users. */
-//   private BaseCampaign m_users = null;
+  private @Nonnull Map<String, BaseCharacter> m_users;
 
   /** The campaign containing all campaigns. */
 //   private Campaign m_campaigns = null;
@@ -121,7 +122,7 @@ public class DMARequest extends HttpServletRequestWrapper
 //   private Campaign m_campaign = null;
 
   /** The user doing the request, if any. */
-//   private BaseCharacter m_user = null;
+  private @Nullable BaseCharacter m_user = null;
 
   /** The player for the request, if any. */
 //   private Character m_player = null;
@@ -145,10 +146,10 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      true if there is a user, false if not
    *
    */
-//   public boolean hasUser()
-//   {
-//     return m_user != null;
-//   }
+  public boolean hasUser()
+  {
+    return m_user != null;
+  }
 
   //........................................................................
   //------------------------------ hasPlayer -------------------------------
@@ -273,6 +274,20 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   //........................................................................
+  //------------------------------ getParams -------------------------------
+
+  /**
+   * Get all the paramaters.
+   *
+   * @return      all the parameters
+   *
+   */
+  public @Nonnull Multimap<String, String> getParams()
+  {
+    return m_params;
+  }
+
+  //........................................................................
   //---------------------------- getStartIndex -----------------------------
 
   /**
@@ -363,12 +378,13 @@ public class DMARequest extends HttpServletRequestWrapper
   /**
    * Get the user for the request.
    *
+   * @return the currently logged in user
+   *
    */
-//   @MayReturnNull
-//   public BaseCharacter getUser()
-//   {
-//     return m_user;
-//   }
+  public @Nullable BaseCharacter getUser()
+  {
+    return m_user;
+  }
 
   //........................................................................
   //------------------------------ getPlayer -------------------------------
@@ -413,39 +429,36 @@ public class DMARequest extends HttpServletRequestWrapper
    * @param       inRequest the request to process
    *
    */
-//   public void extractUser(HttpServletRequest inRequest)
-//   {
-//     if(m_users == null)
-//       return;
+  public void extractUser(@Nonnull HttpServletRequest inRequest)
+  {
+    // check for the user and token cookies
+    Cookie []cookies = inRequest.getCookies();
 
-//     // check for the user and token cookies
-//     Cookie []cookies = inRequest.getCookies();
+    String user  = null;
+    String token = null;
+    BaseCharacter.Group group = null;
 
-//     String user  = null;
-//     String token = null;
-//     BaseCharacter.Group group = null;
+    if(cookies != null)
+      for(Cookie cookie : cookies)
+      {
+        if(LoginServlet.COOKIE_USER.equals(cookie.getName()))
+          user = cookie.getValue();
+        else
+          if(LoginServlet.COOKIE_TOKEN.equals(cookie.getName()))
+            token = cookie.getValue();
+      }
 
-//     if(cookies != null)
-//       for(Cookie cookie : cookies)
-//       {
-//         if(LoginServlet.COOKIE_USER.equals(cookie.getName()))
-//           user = cookie.getValue();
-//         else
-//           if(LoginServlet.COOKIE_TOKEN.equals(cookie.getName()))
-//             token = cookie.getValue();
-//       }
+    if(user != null && token != null)
+    {
+      m_user = m_users.get(user);
 
-//     if(user != null && token != null)
-//     {
-//       m_user = m_users.getBaseEntry(user, BaseCharacter.TYPE);
-
-//       if(m_user != null)
-//         if(m_user.checkToken(token))
-//           m_user.action();
-//         else
-//           m_user = null;
-//     }
-//   }
+      if(m_user != null)
+        if(m_user.checkToken(token))
+          m_user.action();
+        else
+          m_user = null;
+    }
+  }
 
   //........................................................................
   //--------------------------- extractCampaign ----------------------------
@@ -543,12 +556,16 @@ public class DMARequest extends HttpServletRequestWrapper
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
 
+      EasyMock.expect(mockRequest.getCookies()).andReturn
+        (new javax.servlet.http.Cookie [0]);
+
       EasyMock.replay(mockRequest);
 
       DMARequest request =
         new DMARequest(mockRequest,
                        com.google.common.collect.HashMultimap.
-                       <String, String>create());
+                       <String, String>create(),
+                       new HashMap<String, BaseCharacter>());
 
       assertEquals("page size", def_pageSize, request.getPageSize());
 
