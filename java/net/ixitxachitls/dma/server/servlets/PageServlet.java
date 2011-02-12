@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.servlets;
+package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.comm.servlets.BaseServlet;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.output.html.HTMLWriter;
 
@@ -256,7 +255,7 @@ public class PageServlet extends DMAServlet
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
     //----- simple ---------------------------------------------------------
 
@@ -270,8 +269,7 @@ public class PageServlet extends DMAServlet
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
-      BaseServlet.Test.MockServletOutputStream output =
-        new BaseServlet.Test.MockServletOutputStream();
+      MockServletOutputStream output = new MockServletOutputStream();
 
       response.setHeader("Content-Type", "text/html");
       response.setHeader("Cache-Control", "max-age=0");

@@ -36,7 +36,7 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
-import net.ixitxachitls.comm.servlets.FixedTextServlet;
+import net.ixitxachitls.server.servlets.FixedTextServlet;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.ANSILogger;

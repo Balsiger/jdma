@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.filters;
+package net.ixitxachitls.dma.server.filters;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.servlets.DMARequest;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.server.ServerUtils;
 
 //..........................................................................

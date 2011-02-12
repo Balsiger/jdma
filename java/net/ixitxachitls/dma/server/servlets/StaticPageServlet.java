@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.servlets;
+package net.ixitxachitls.dma.server.servlets;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

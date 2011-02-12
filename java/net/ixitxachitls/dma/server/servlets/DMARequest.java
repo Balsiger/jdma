@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.servlets;
+package net.ixitxachitls.dma.server.servlets;
 
 // import java.io.BufferedReader;
 // import java.io.InputStreamReader;

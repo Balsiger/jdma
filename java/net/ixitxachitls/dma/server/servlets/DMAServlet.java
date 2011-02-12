@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.servlets;
+package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.comm.servlets.BaseServlet;
+import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
