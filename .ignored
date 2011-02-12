@@ -1,4 +1,10 @@
 build
 dist
 .classpath
+logs
+new
+tmp
+old
+dma
+
 

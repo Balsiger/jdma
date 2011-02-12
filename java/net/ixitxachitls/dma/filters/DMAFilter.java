@@ -39,9 +39,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.comm.servlets.BaseServlet;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.servlets.DMARequest;
+import net.ixitxachitls.server.ServerUtils;
 
 //..........................................................................
 
@@ -142,12 +142,11 @@ public class DMAFilter implements Filter
     throws ServletException, IOException
   {
     ServletRequest request = inRequest;
-    if(!(inRequest instanceof DMARequest) &&
-       inRequest instanceof HttpServletRequest)
-      request =
-        new DMARequest((HttpServletRequest)inRequest,
-                       BaseServlet.extractParams((HttpServletRequest)inRequest),
-                       m_users);
+    if(!(inRequest instanceof DMARequest)
+       && inRequest instanceof HttpServletRequest)
+      request = new DMARequest
+        ((HttpServletRequest)inRequest,
+         ServerUtils.extractParams((HttpServletRequest)inRequest), m_users);
 
     inChain.doFilter(request, inResponse);
   }
@@ -162,7 +161,7 @@ public class DMAFilter implements Filter
   //------------------------------------------------------------------- test
 
   /** The tests. */
-  public static class Test extends BaseServlet.Test
+  public static class Test extends ServerUtils.Test
   {
     //----- filter ---------------------------------------------------------
 
