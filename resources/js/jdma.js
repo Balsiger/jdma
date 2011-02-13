@@ -55,7 +55,8 @@ function login()
       title: 'DMA Login',
       modal: true,
       resizable: false,
-      width: 500,
+      width: 300,
+      dialogClass: 'login-dialog',
       buttons: [
           {
             id:  'login-button',

@@ -147,6 +147,9 @@ public class PageServlet extends DMAServlet
       // jdma
       .addCSSFile("jdma")
       .addJSFile("jdma")
+      // make android use the device width/height
+      .meta("viewport",
+            "width=device-width, height=device-height")
       // header
       .begin("div").id("header")
       .begin("div").id("header-right");

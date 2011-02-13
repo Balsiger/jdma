@@ -212,7 +212,7 @@ public class HTMLWriter
   }
 
   //........................................................................
-  //--------------------------------- href ---------------------------------
+  //-------------------------------- onClick -------------------------------
 
   /**
    * Add an on click attribute to the current tag.
@@ -374,6 +374,27 @@ public class HTMLWriter
     ensureHead();
     m_writer.println("    <SCRIPT type=\"text/javascript\" "
                      + "src=\"/js/" + inName + ".js\"></script>");
+
+    return this;
+  }
+
+  //........................................................................
+  //------------------------------ addCSSFile ------------------------------
+
+  /**
+   * Add a javascript file to the head of the file.
+   *
+   * @param       inName    the name of the meta info
+   * @param       inContent the content of the meta
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter meta(@Nonnull String inName, @Nonnull String inContent)
+  {
+    ensureHead();
+    m_writer.println("    <META name=\"" + inName + "\" content=\""
+                     + inContent + "\"/>");
 
     return this;
   }
