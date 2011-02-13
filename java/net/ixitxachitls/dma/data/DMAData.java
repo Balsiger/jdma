@@ -33,6 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
 
 //..........................................................................
 
@@ -83,9 +84,10 @@ public class DMAData
   private @Nonnull List<DMAFile> m_files = new ArrayList<DMAFile>();
 
   /** All the entries, by class and by id. */
-  private @Nonnull Map<Class<? extends AbstractEntry>,
+  private @Nonnull Map<AbstractType<? extends AbstractEntry>,
                                Map<String, AbstractEntry>> m_entries =
-    new HashMap<Class<? extends AbstractEntry>, Map<String, AbstractEntry>>();
+    new HashMap<AbstractType<? extends AbstractEntry>,
+                               Map<String, AbstractEntry>>();
 
   //........................................................................
 
@@ -97,21 +99,21 @@ public class DMAData
    * Gets all the entries of a specific type.
    *
    * @param    <T> The type of entry to get
-   * @param    inClass the class of entries to get
+   * @param    inType the type of entries to get
    *
-   * @return   a map with id and class
+   * @return   a map with id and type
    *
    */
   @SuppressWarnings("unchecked") // need to cast
   public @Nonnull <T extends AbstractEntry> Map<String, T>
-    getEntries(Class<T> inClass)
+    getEntries(AbstractType<T> inType)
   {
-    Map<String, AbstractEntry> entries = m_entries.get(inClass);
+    Map<String, AbstractEntry> entries = m_entries.get(inType);
 
     if(entries == null)
     {
       entries = new HashMap<String, AbstractEntry>();
-      m_entries.put(inClass, entries);
+      m_entries.put(inType, entries);
     }
 
     return (Map<String, T>)Collections.unmodifiableMap(entries);
@@ -132,6 +134,7 @@ public class DMAData
    *         errors
    *
    */
+  @SuppressWarnings("unchecked") // cast for entry.getType() in put
   public boolean read()
   {
     boolean result = true;
@@ -142,11 +145,11 @@ public class DMAData
 
         for(AbstractEntry entry : file.getEntries())
         {
-          Map<String, AbstractEntry> entries = m_entries.get(entry.getClass());
+          Map<String, AbstractEntry> entries = m_entries.get(entry.getType());
           if(entries == null)
           {
             entries = new HashMap<String, AbstractEntry>();
-            m_entries.put(entry.getClass(), entries);
+            m_entries.put(entry.getType(), entries);
           }
 
           entries.put(entry.getID(), entry);

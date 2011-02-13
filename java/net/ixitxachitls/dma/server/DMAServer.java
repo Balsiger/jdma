@@ -281,7 +281,7 @@ public class DMAServer extends WebServer
 
     m_rootContext.addFilter
       (new FilterHolder
-       (new DMAFilter(m_users.getEntries(BaseCharacter.class))), "/*", 0);
+       (new DMAFilter(m_users.getEntries(BaseCharacter.TYPE))), "/*", 0);
 
 //     m_rootContext.setAttribute("users", m_users);
 //     m_rootContext.setAttribute("campaigns", m_campaigns);
@@ -536,12 +536,12 @@ public class DMAServer extends WebServer
 
     m_rootContext.addServlet
       (new ServletHolder(new LoginServlet
-                         (m_users.getEntries(BaseCharacter.class))),
+                         (m_users.getEntries(BaseCharacter.TYPE))),
        "/actions/login");
 
     m_rootContext.addServlet
       (new ServletHolder(new LogoutServlet
-                         (m_users.getEntries(BaseCharacter.class))),
+                         (m_users.getEntries(BaseCharacter.TYPE))),
        "/actions/logout");
 
 //     m_rootContext.addServlet
