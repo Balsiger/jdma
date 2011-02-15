@@ -246,5 +246,6 @@ Array.prototype.remove = function(inValue)
 
 // install a handler to support back/forward actions
 $(window).bind('popstate', function(event) {
-    util.link(event.originalEvent, event.originalEvent.state);
+    if(event.originalEvent.state)
+      util.link(event.originalEvent, event.originalEvent.state);
   });

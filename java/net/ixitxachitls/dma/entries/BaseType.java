@@ -95,6 +95,9 @@ public class BaseType<T /* extends BaseEntry */> extends AbstractType<T>
   private static final Map<String, BaseType<?/* extends BaseEntry */>> s_types =
     new HashMap<String, BaseType<?/* extends BaseEntry*/>>();
 
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors

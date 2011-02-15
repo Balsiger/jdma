@@ -104,6 +104,9 @@ public class Type<T /* extends Entry */> extends AbstractType<T>
   private static final Map<String, Type<?/* extends Entry */>> s_types =
     new HashMap<String, Type<?/* extends Entry*/>>();
 
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors

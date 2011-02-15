@@ -33,7 +33,6 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
 
@@ -77,11 +76,6 @@ public class StaticPageServlet extends PageServlet
   /** The root to the files to server. */
   protected @Nonnull String m_root;
 
-  /** The error to return if a file is not found. */
-  protected static final @Nonnull String s_notFoundError =
-    Config.get("web/html.not.found", "<h1>File not found</h1>"
-               + "The requested file could not be found on the server!");
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
@@ -104,7 +98,8 @@ public class StaticPageServlet extends PageServlet
    *
    */
   @OverridingMethodsMustInvokeSuper
-  public void writeBody(@Nonnull HTMLWriter inWriter, @Nullable String inPath,
+  public void writeBody(@Nonnull HTMLWriter inWriter,
+                        @Nullable String inPath,
                         @Nonnull DMARequest inRequest)
   {
     super.writeBody(inWriter, inPath, inRequest);
@@ -128,7 +123,10 @@ public class StaticPageServlet extends PageServlet
 
     if(!Resource.has(path))
     {
-      inWriter.add(s_notFoundError);
+      inWriter
+        .title("Not Found")
+        .begin("h1").add("Could not find file '" + path + "'").end("h1")
+        .add("The requested file could not be found on the server!");
 
       return;
     }

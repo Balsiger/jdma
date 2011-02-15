@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.server.filters.DMAFilter;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
+import net.ixitxachitls.dma.server.servlets.TypedEntryServlet;
 import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.server.servlets.TemplateServlet;
@@ -330,12 +331,15 @@ public class DMAServer extends WebServer
 //       (new ServletHolder(new BaseEntryServlet(m_baseCampaign)),
 //        "/entry/*");
 
-//     // user
+    // user
 //     m_rootContext.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.USER)),
 //        "/user/*", 0);
-//   m_rootContext.addServlet(new ServletHolder(new BaseEntryServlet(m_users)),
-//                              "/user/*");
+    m_rootContext.addServlet
+      (new ServletHolder
+       (new TypedEntryServlet<BaseCharacter>
+        (BaseCharacter.TYPE,
+         m_users.getEntries(BaseCharacter.TYPE))), "/user/*");
 
 //     m_rootContext.addFilter(new FilterHolder(new MeUserFilter()),
 //                             "/user/me/*", 0);

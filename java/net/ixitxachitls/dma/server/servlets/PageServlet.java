@@ -225,6 +225,7 @@ public class PageServlet extends DMAServlet
                            @Nullable String inPath,
                            @Nonnull DMARequest inRequest)
   {
+    // nothing done here
   }
 
   //........................................................................
@@ -333,8 +334,8 @@ public class PageServlet extends DMAServlet
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
           protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
+                                   @Nullable String inPath,
+                                   @Nonnull DMARequest inRequest)
           {
             super.writeBody(inWriter, inPath, inRequest);
             inWriter.add("This is the body.");
@@ -455,8 +456,8 @@ public class PageServlet extends DMAServlet
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
           protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
+                                   @Nullable String inPath,
+                                   @Nonnull DMARequest inRequest)
           {
             super.writeBody(inWriter, inPath, inRequest);
             inWriter.add("This is the body.");

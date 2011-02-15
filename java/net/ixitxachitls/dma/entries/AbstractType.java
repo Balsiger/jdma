@@ -55,7 +55,7 @@ import net.ixitxachitls.util.logging.Log;
 
 @Immutable
 public abstract class AbstractType<T /*extends ValueGroup*/>
-  implements Comparable<AbstractType>
+  implements Comparable<AbstractType>, java.io.Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -107,6 +107,9 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
 
   /** The class name without package. */
   private @Nonnull String m_className;
+
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
 
   //........................................................................
 
@@ -380,6 +383,9 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
       {
         super(inClass, inMultiple);
       }
+
+      /** The id for serialization. */
+      private static final long serialVersionUID = 1L;
     }
 
     //----- create ---------------------------------------------------------
