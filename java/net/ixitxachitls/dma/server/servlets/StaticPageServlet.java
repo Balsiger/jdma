@@ -30,6 +30,7 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -91,32 +92,6 @@ public class StaticPageServlet extends PageServlet
 
   //----------------------------------------------------------- manipulators
 
-  //----------------------------- writeHeader ------------------------------
-
-  /**
-   * Write the header to the writer.
-   *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
-   *
-   */
-  @OverridingMethodsMustInvokeSuper
-  protected void writeHeader(@Nonnull HTMLWriter inWriter,
-                             @Nonnull String inPath,
-                             @Nonnull DMARequest inRequest)
-  {
-    super.writeHeader(inWriter, inPath, inRequest);
-
-    if(inPath != null && inPath.length() > 0)
-      addNavigation(inWriter,
-                    Strings.getPattern(inPath, "([^/]*?)\\.[^\\.]*?$"));
-    else
-      addNavigation(inWriter);
-  }
-
-  //........................................................................
   //------------------------------ writeBody -------------------------------
 
   /**
@@ -128,10 +103,17 @@ public class StaticPageServlet extends PageServlet
    * @param     inRequest the request for the page
    *
    */
+  @OverridingMethodsMustInvokeSuper
   public void writeBody(@Nonnull HTMLWriter inWriter, @Nullable String inPath,
                         @Nonnull DMARequest inRequest)
   {
     super.writeBody(inWriter, inPath, inRequest);
+
+    if(inPath != null && inPath.length() > 0)
+      addNavigation(inWriter,
+                    Strings.getPattern(inPath, "([^/]*?)\\.[^\\.]*?$"));
+    else
+      addNavigation(inWriter);
 
     // check the given path for illegal relative stuff and add the root
     String path = m_root;
@@ -192,15 +174,48 @@ public class StaticPageServlet extends PageServlet
                    "<HTML>\n"
                    + "  <HEAD>\n"
                    + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jquery-1.5.js\"></script>\n"
+                   + "src=\"/js/jquery-1.5.js\"></SCRIPT>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/smoothness/jquery-ui-1.8.9.custom.css\" />\n"
                    + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jquery-ui-1.8.9.custom.min.js\"></script>\n"
+                   + "src=\"/js/jquery-ui-1.8.9.custom.min.js\"></SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/util.js\"></SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/form.js\">"
+                   + "</SCRIPT>\n"
+                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
+                   + "href=\"/css/gui.css\" />\n"
+                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/gui.js\">"
+                   + "</SCRIPT>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/jdma.css\" />\n"
                    + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jdma.js\"></script>\n"
+                   + "src=\"/js/jdma.js\"></SCRIPT>\n"
+                   + "    <META name=\"viewport\" "
+                   + "content=\"width=device-width, height=device-height\"/>\n"
+                   + "    <META name=\"Content-Type\" "
+                   + "content=\"text/html; charset=utf-8\" xml:lang=\"en\" "
+                   + "lang=\"en\"/>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      if(location.hostname != 'localhost')\n"
+                   + "      {\n"
+                   + "        var gaJsHost = ((\"https:\" == "
+                   + "document.location.protocol) ? \"https://ssl.\" : "
+                   + "\"http://www.\");\n"
+                   + "        document.write(unescape(\"%3Cscript src='\" + "
+                   + "gaJsHost + \"google-analytics.com/ga.js' "
+                   + "type='text/javascript'%3E%3C/script%3E\"));\n"
+                   + "      }\n"
+                   + "    </SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      if(location.hostname != 'localhost')\n"
+                   + "      {\n"
+                   + "        var pageTracker = "
+                   + "_gat._getTracker(\"UA-1524401-1\");\n"
+                   + "        pageTracker._initData();\n"
+                   + "        pageTracker._trackPageview();\n"
+                   + "      }\n"
+                   + "    </SCRIPT>\n"
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    <DIV id=\"header\">\n"
@@ -213,7 +228,8 @@ public class StaticPageServlet extends PageServlet
                    + "        <A class=\"icon search\" title=\"Search\">\n"
                    + "        </A>\n"
                    + "        <A class=\"icon about\" title=\"About\" "
-                   + "href=\"/about.html\">\n"
+                   + "href=\"/about.html\" "
+                   + "onclick=\"util.link(event, '/about.html')\">\n"
                    + "        </A>\n"
                    + "      </DIV>\n"
                    + "      <DIV id=\"header-left\">\n"
@@ -221,14 +237,20 @@ public class StaticPageServlet extends PageServlet
                    + "      </DIV>\n"
                    + "      <DIV id=\"navigation\">\n"
                    + "        <A id=\"home\" class=\"icon\" title=\"Home\" "
-                   + "href=\"/\">\n"
+                   + "href=\"/\" onclick=\"util.link(event, '/')\">\n"
                    + "        </A>\n"
-                   + "         &raquo; \n"
-                   + "        about\n"
+                   + "        <SPAN id=\"subnavigation\">\n"
+                   + "          &nbsp;\n"
+                   + "        </SPAN>\n"
                    + "      </DIV>\n"
-                   + "    </DIV>\n"
+                   + "      <DIV class=\"footer\">\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
+
+      // because these are closed outside of header/footer (to allow for
+      // derivations)
+      m_logger.addExpected("WARNING: writer closed, but tags [div, div] "
+                           + "not closed");
 
       EasyMock.verify(request);
     }
@@ -246,31 +268,23 @@ public class StaticPageServlet extends PageServlet
 
       EasyMock.replay(request);
 
-      HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(output));
+      HTMLBodyWriter writer =
+        new HTMLBodyWriter(new java.io.PrintWriter(output));
 
       StaticPageServlet servlet = new StaticPageServlet("/html/");
 
       servlet.writeBody(writer, "/about.html", request);
       writer.close();
 
-      assertPattern("body", ".*<BODY>.*", output.toString());
-      assertPattern("page", ".*<DIV class=\"page\">.*", output.toString());
       assertPattern("about", ".*<h1>About</h1>.*", output.toString());
-      assertPattern("title", ".*<TITLE>DMA - About</TITLE>.*",
+      assertPattern("title", ".*document.title = 'DMA - About';.*",
                     output.toString());
-
-      m_logger.addExpected("WARNING: closing tag div, but was never opened");
-      m_logger.addExpected("WARNING: writer closed, but tags [div] not closed");
 
       EasyMock.verify(request);
     }
 
     //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

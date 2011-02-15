@@ -194,20 +194,20 @@ public class DMARequest extends HttpServletRequestWrapper
 //   }
 
   //........................................................................
-  //----------------------------- hasURLParam ------------------------------
+  //------------------------------- hasParam -------------------------------
 
   /**
-   * Check if the request has a given URL parameter.
+   * Check if the request has a given parameter.
    *
    * @param       inName the name of the parameter to check for
    *
    * @return      true if the parameter is there, false if not
    *
    */
-//   public boolean hasURLParam(@Nonnull String inName)
-//   {
-//     return m_params.get(inName) != null;
-//   }
+  public boolean hasParam(@Nonnull String inName)
+  {
+    return getParam(inName) != null;
+  }
 
   //........................................................................
   //--------------------------- hasCreateParam -----------------------------
@@ -246,10 +246,10 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      true for the body, false for full page
    *
    */
-//   public boolean isBodyOnly()
-//   {
-//     return hasURLParam("body");
-//   }
+  public boolean isBodyOnly()
+  {
+    return hasParam("body");
+  }
 
   //........................................................................
 

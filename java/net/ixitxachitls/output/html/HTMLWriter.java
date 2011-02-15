@@ -80,28 +80,28 @@ public class HTMLWriter
   //-------------------------------------------------------------- variables
 
   /** The writer to output to. */
-  private @Nonnull PrintWriter m_writer;
+  protected @Nonnull PrintWriter m_writer;
 
   /** The writer containing the body. */
-  private @Nonnull StringWriter m_body = new StringWriter();
+  protected @Nonnull StringWriter m_body = new StringWriter();
 
   /** The writer for the body. */
-  private @Nonnull PrintWriter m_bodyWriter = new PrintWriter(m_body);
+  protected @Nonnull PrintWriter m_bodyWriter = new PrintWriter(m_body);
 
   /** The current stack of tags. */
-  private Deque<String> m_tags = new ArrayDeque<String>();
+  protected Deque<String> m_tags = new ArrayDeque<String>();
 
   /** Whether currently in a tag. */
-  private boolean m_unclosed = false;
+  protected boolean m_unclosed = false;
 
   /** Whether in html context. */
-  private boolean m_inHTML = false;
+  protected boolean m_inHTML = false;
 
   /** Whether in head context. */
-  private boolean m_inHead = false;
+  protected boolean m_inHead = false;
 
   /** The joiner to space concatenate strings. */
-  private static final Joiner s_spaceJoiner = Joiner.on(' ');
+  protected static final Joiner s_spaceJoiner = Joiner.on(' ');
 
   //........................................................................
 
@@ -373,28 +373,63 @@ public class HTMLWriter
   {
     ensureHead();
     m_writer.println("    <SCRIPT type=\"text/javascript\" "
-                     + "src=\"/js/" + inName + ".js\"></script>");
+                     + "src=\"/js/" + inName + ".js\"></SCRIPT>");
 
     return this;
   }
 
   //........................................................................
-  //------------------------------ addCSSFile ------------------------------
+  //--------------------------------- meta ---------------------------------
 
   /**
-   * Add a javascript file to the head of the file.
+   * Add a meta tag to the page header.
    *
-   * @param       inName    the name of the meta info
-   * @param       inContent the content of the meta
+   * @param       inName       the name of the meta info
+   * @param       inContent    the content of the meta
+   * @param       inAttributes the attributes for the tag, as key value pairs
    *
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter meta(@Nonnull String inName, @Nonnull String inContent)
+  public HTMLWriter meta(@Nonnull String inName, @Nonnull String inContent,
+                         String ... inAttributes)
   {
+    assert inAttributes.length % 2 == 0
+      : "must have an even number of attribute value pairs";
+
     ensureHead();
-    m_writer.println("    <META name=\"" + inName + "\" content=\""
-                     + inContent + "\"/>");
+    m_writer.print("    <META name=\"" + inName + "\" content=\""
+                     + inContent + "\"");
+
+    for(int i = 0; i < inAttributes.length; i += 2)
+      m_writer.print(" " + inAttributes[i] + "=\"" + inAttributes[i + 1]
+                     + "\"");
+
+    m_writer.println("/>");
+
+    return this;
+  }
+
+  //........................................................................
+  //-------------------------------- script --------------------------------
+
+  /**
+   * Add a script tag with contents to the page.
+   *
+   * @param       inLines the lines of the script contents
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter script(@Nonnull String ... inLines)
+  {
+    ensureHTML();
+    m_writer.println("    <SCRIPT type=\"text/javascript\">");
+
+    for(String line : inLines)
+      m_writer.println("      " + line);
+
+    m_writer.println("    </SCRIPT>");
 
     return this;
   }
@@ -465,7 +500,7 @@ public class HTMLWriter
    * Close a currently opened tag, if necessary.
    *
    */
-  private void maybeCloseTag()
+  protected void maybeCloseTag()
   {
     if(!m_unclosed)
       return;

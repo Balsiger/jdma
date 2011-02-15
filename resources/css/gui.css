@@ -1,0 +1,30 @@
+/* This file contains the css for the gui javascript library */
+
+/******************************************************************************
+ * busy
+ *****************************************************************************/
+
+DIV.busy
+{
+  position:           fixed;
+  top:                40%;
+  left:               40%;
+  right:              40%;
+  z-index:            100;
+  border-style:       ridge;
+  border-color:       #884;
+  border-width:       2px;
+  padding:            20px;
+  text-align:         center;
+  background-color:   #ffc;
+  -webkit-box-shadow: 3px 3px 7px #777;
+  border-radius:      22px;
+  font-size:          90%;
+}
+
+DIV.busy IMG
+{
+  vertical-align: middle;
+  padding-right:  0.5em;
+}
+

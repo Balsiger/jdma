@@ -82,6 +82,7 @@ H2
 
 #navigation
 {
+  margin-top: -2px;
 }
 
 .icon
@@ -192,4 +193,5 @@ DIV.login LABEL
 .login-dialog
 {
   font-size: 90%;
+  -webkit-box-shadow: 3px 3px 7px #777;
 }

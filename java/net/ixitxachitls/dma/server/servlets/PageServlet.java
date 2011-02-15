@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
 
 //..........................................................................
@@ -108,13 +109,31 @@ public class PageServlet extends DMAServlet
     inResponse.setHeader("Content-Type", "text/html");
     inResponse.setHeader("Cache-Control", "max-age=0");
 
-    String path = inRequest.getPathInfo();
-    HTMLWriter writer =
-      new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
+    boolean bodyOnly = inRequest.isBodyOnly();
 
-    writeHeader(writer, path, inRequest);
+    String path = inRequest.getPathInfo();
+    HTMLWriter writer;
+    if(bodyOnly)
+      writer =
+        new HTMLBodyWriter(new PrintWriter(inResponse.getOutputStream()));
+    else
+      writer = new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
+
+    if(!bodyOnly)
+    {
+      writeHeader(writer, path, inRequest);
+      writer.end("div"); // header
+      writer.begin("div").id("page").classes("page");
+    }
+
     writeBody(writer, path, inRequest);
-    writeFooter(writer, path, inRequest);
+
+    if(!bodyOnly)
+    {
+      writer.end("div"); // page
+      writeFooter(writer, path, inRequest);
+      writer.end("div"); // footer
+    }
 
     writer.close();
 
@@ -145,11 +164,17 @@ public class PageServlet extends DMAServlet
       .addCSSFile("smoothness/jquery-ui-1.8.9.custom")
       .addJSFile("jquery-ui-1.8.9.custom.min")
       // jdma
+      .addJSFile("util")
+      .addJSFile("form")
+      .addCSSFile("gui")
+      .addJSFile("gui")
       .addCSSFile("jdma")
       .addJSFile("jdma")
       // make android use the device width/height
       .meta("viewport",
             "width=device-width, height=device-height")
+      .meta("Content-Type", "text/html; charset=utf-8",
+            "xml:lang", "en", "lang", "en")
       // header
       .begin("div").id("header")
       .begin("div").id("header-right");
@@ -171,11 +196,16 @@ public class PageServlet extends DMAServlet
       .begin("a").classes("icon", "library").tooltip("Library").end("a")
       .begin("a").classes("icon", "search").tooltip("Search").end("a")
       .begin("a").classes("icon", "about").tooltip("About").href("/about.html")
-      .end("a")
+      .onClick("util.link(event, '/about.html')").end("a")
       .end("div") // header-right
       .begin("div").id("header-left")
       .add("DMA")
-      .end("div"); // header-left
+      .end("div") // header-left
+      .begin("div").id("navigation")
+      .begin("a").id("home").classes("icon").tooltip("Home").href("/")
+      .onClick("util.link(event, '/')").end("a")
+      .begin("span").id("subnavigation").add("&nbsp;").end("span")
+      .end("div");
   }
 
   //........................................................................
@@ -195,9 +225,6 @@ public class PageServlet extends DMAServlet
                            @Nullable String inPath,
                            @Nonnull DMARequest inRequest)
   {
-    inWriter
-      .end("div") // header
-      .begin("div").classes("page");
   }
 
   //........................................................................
@@ -217,8 +244,21 @@ public class PageServlet extends DMAServlet
                              @Nonnull String inPath,
                              @Nonnull DMARequest inRequest)
   {
-    inWriter
-      .end("div"); // page
+    inWriter.begin("div").classes("footer")
+      .script("if(location.hostname != 'localhost')",
+              "{",
+              "  var gaJsHost = ((\"https:\" == document.location.protocol) ? "
+              + "\"https://ssl.\" : \"http://www.\");",
+              "  document.write(unescape(\"%3Cscript src='\" + gaJsHost + \""
+              + "google-analytics.com/ga.js' "
+              + "type='text/javascript'%3E%3C/script%3E\"));",
+              "}")
+      .script("if(location.hostname != 'localhost')",
+              "{",
+              "  var pageTracker = _gat._getTracker(\"UA-1524401-1\");",
+              "  pageTracker._initData();",
+              "  pageTracker._trackPageview();",
+              "}");
   }
 
   //........................................................................
@@ -235,16 +275,23 @@ public class PageServlet extends DMAServlet
   public void addNavigation(@Nonnull HTMLWriter inWriter,
                             @Nonnull String ... inSections)
   {
-    inWriter
-      .begin("div").id("navigation")
-      .begin("a").id("home").classes("icon").tooltip("Home").href("/").end("a");
+    StringBuilder builder = new StringBuilder();
 
-    for(String section : inSections)
-      if(section != null)
-        inWriter.add(" &raquo; ").add(section);
+    if(inSections.length > 0)
+    {
+      for(String section : inSections)
+        if(section != null)
+        {
+          builder.append(" &raquo; ");
+          builder.append(section);
+        }
+    }
 
-    inWriter
-      .end("div"); // navigation
+    String navigation = builder.toString();
+    if(navigation.isEmpty())
+      navigation = "&nbsp;";
+
+    inWriter.script("$('#subnavigation').html('" + navigation + "');");
   }
 
   //........................................................................
@@ -276,28 +323,71 @@ public class PageServlet extends DMAServlet
 
       response.setHeader("Content-Type", "text/html");
       response.setHeader("Cache-Control", "max-age=0");
+      EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
+      EasyMock.expect(request.getUser()).andReturn(null);
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(request.getPathInfo()).andReturn("/about.html");
-      EasyMock.expect(request.getUser()).andReturn(null);
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 
-      PageServlet servlet = new PageServlet();
+      PageServlet servlet = new PageServlet() {
+          private static final long serialVersionUID = 1L;
+          protected void writeBody(@Nonnull HTMLWriter inWriter,
+                           @Nullable String inPath,
+                           @Nonnull DMARequest inRequest)
+          {
+            super.writeBody(inWriter, inPath, inRequest);
+            inWriter.add("This is the body.");
+          }
+        };
 
       assertNull("handle", servlet.handle(request, response));
       assertEquals("content",
                    "<HTML>\n"
                    + "  <HEAD>\n"
                    + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jquery-1.5.js\"></script>\n"
+                   + "src=\"/js/jquery-1.5.js\"></SCRIPT>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/smoothness/jquery-ui-1.8.9.custom.css\" />\n"
                    + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jquery-ui-1.8.9.custom.min.js\"></script>\n"
+                   + "src=\"/js/jquery-ui-1.8.9.custom.min.js\"></SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\" "
+                   + "src=\"/js/util.js\"></SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/form.js\">"
+                   + "</SCRIPT>\n"
+                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
+                   + "href=\"/css/gui.css\" />\n"
+                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/gui.js\">"
+                   + "</SCRIPT>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/jdma.css\" />\n"
                    + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jdma.js\"></script>\n"
+                   + "src=\"/js/jdma.js\"></SCRIPT>\n"
+                   + "    <META name=\"viewport\" "
+                   + "content=\"width=device-width, height=device-height\"/>\n"
+                   + "    <META name=\"Content-Type\" "
+                   + "content=\"text/html; charset=utf-8\" xml:lang=\"en\" "
+                   + "lang=\"en\"/>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      if(location.hostname != 'localhost')\n"
+                   + "      {\n"
+                   + "        var gaJsHost = ((\"https:\" == "
+                   + "document.location.protocol) ? \"https://ssl.\" : "
+                   + "\"http://www.\");\n"
+                   + "        document.write(unescape(\"%3Cscript src='\" + "
+                   + "gaJsHost + \"google-analytics.com/ga.js' "
+                   + "type='text/javascript'%3E%3C/script%3E\"));\n"
+                   + "      }\n"
+                   + "    </SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      if(location.hostname != 'localhost')\n"
+                   + "      {\n"
+                   + "        var pageTracker = "
+                   + "_gat._getTracker(\"UA-1524401-1\");\n"
+                   + "        pageTracker._initData();\n"
+                   + "        pageTracker._trackPageview();\n"
+                   + "      }\n"
+                   + "    </SCRIPT>\n"
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    <DIV id=\"header\">\n"
@@ -310,18 +400,71 @@ public class PageServlet extends DMAServlet
                    + "        <A class=\"icon search\" title=\"Search\">\n"
                    + "        </A>\n"
                    + "        <A class=\"icon about\" title=\"About\" "
-                   + "href=\"/about.html\">\n"
+                   + "href=\"/about.html\" "
+                   + "onclick=\"util.link(event, '/about.html')\">\n"
                    + "        </A>\n"
                    + "      </DIV>\n"
                    + "      <DIV id=\"header-left\">\n"
                    + "        DMA\n"
                    + "      </DIV>\n"
+                   + "      <DIV id=\"navigation\">\n"
+                   + "        <A id=\"home\" class=\"icon\" title=\"Home\" "
+                   + "href=\"/\" onclick=\"util.link(event, '/')\">\n"
+                   + "        </A>\n"
+                   + "        <SPAN id=\"subnavigation\">\n"
+                   + "          &nbsp;\n"
+                   + "        </SPAN>\n"
+                   + "      </DIV>\n"
                    + "    </DIV>\n"
-                   + "    <DIV class=\"page\">\n"
+                   + "    <DIV id=\"page\" class=\"page\">\n"
+                   + "      This is the body.\n"
+                   + "    </DIV>\n"
+                   + "    <DIV class=\"footer\">\n"
                    + "    </DIV>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n",
                    output.toString());
+
+      output.close();
+      EasyMock.verify(request, response);
+    }
+
+    //......................................................................
+    //----- bodyOnly -------------------------------------------------------
+
+    /** The simple Test.
+     *
+     * @throws Exception should not happen
+     */
+    @org.junit.Test
+    public void bodyOnly() throws Exception
+    {
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+      HttpServletResponse response =
+        EasyMock.createMock(HttpServletResponse.class);
+      MockServletOutputStream output = new MockServletOutputStream();
+
+      response.setHeader("Content-Type", "text/html");
+      response.setHeader("Cache-Control", "max-age=0");
+      EasyMock.expect(request.isBodyOnly()).andReturn(true).anyTimes();
+      EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
+      EasyMock.expect(request.getPathInfo()).andReturn("/about.html");
+      EasyMock.expect(response.getOutputStream()).andReturn(output);
+      EasyMock.replay(request, response);
+
+      PageServlet servlet = new PageServlet() {
+          private static final long serialVersionUID = 1L;
+          protected void writeBody(@Nonnull HTMLWriter inWriter,
+                           @Nullable String inPath,
+                           @Nonnull DMARequest inRequest)
+          {
+            super.writeBody(inWriter, inPath, inRequest);
+            inWriter.add("This is the body.");
+          }
+        };
+
+      assertNull("handle", servlet.handle(request, response));
+      assertEquals("content", "    This is the body.\n", output.toString());
 
       output.close();
       EasyMock.verify(request, response);
@@ -344,18 +487,11 @@ public class PageServlet extends DMAServlet
       writer.close();
       assertEquals("3 sections",
                    "<HTML>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      $('#subnavigation').html(' &raquo; s1 &raquo; "
+                   + "s2 &raquo; s3');\n"
+                   + "    </SCRIPT>\n"
                    + "  <BODY>\n"
-                   + "    <DIV id=\"navigation\">\n"
-                   + "      <A id=\"home\" class=\"icon\" title=\"Home\" "
-                   + "href=\"/\">\n"
-                   + "      </A>\n"
-                   + "       &raquo; \n"
-                   + "      s1\n"
-                   + "       &raquo; \n"
-                   + "      s2\n"
-                   + "       &raquo; \n"
-                   + "      s3\n"
-                   + "    </DIV>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
 
@@ -364,13 +500,12 @@ public class PageServlet extends DMAServlet
 
       servlet.addNavigation(writer);
       writer.close();
-      assertEquals("no section", "<HTML>\n"
+      assertEquals("no section",
+                   "<HTML>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      $('#subnavigation').html('&nbsp;');\n"
+                   + "    </SCRIPT>\n"
                    + "  <BODY>\n"
-                   + "    <DIV id=\"navigation\">\n"
-                   + "      <A id=\"home\" class=\"icon\" title=\"Home\" "
-                   + "href=\"/\">\n"
-                   + "      </A>\n"
-                   + "    </DIV>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
     }
