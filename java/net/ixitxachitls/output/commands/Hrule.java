@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright(c) 2002,2003 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002,2003 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -33,9 +33,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The block command.
+ * The Hrule command.
  *
- * @file          Block.java
+ * @file          Hrule.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -46,51 +46,55 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Block extends BaseCommand
+public class Hrule extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //-------------------------------- Block ---------------------------------
+  //-------------------------------- Hrule ---------------------------------
 
   /**
-   * The constructor for the block command.
+   * The constructor for the Hrule command.
    *
-   * @param       inText the text to set block
+   * @param       inColor the color of the rule
+   * @param       inWidth the width of the rule (in % of the total width)
    *
    */
-  public Block(@Nonnull String inText)
+  public Hrule(@Nonnull String inColor, int inWidth)
   {
-    this();
+    this(inColor);
 
-    withArguments(inText);
+    if(inWidth <= 0)
+      throw new IllegalArgumentException("must be a positive width...");
+
+    withOptionals("" + inWidth);
   }
 
   //........................................................................
-  //-------------------------------- Block ---------------------------------
+  //-------------------------------- Hrule ---------------------------------
 
   /**
-   * The constructor for the block command.
+   * This is the internal constructor for a command.
    *
-   * @param       inCommand a nested command
+   * @param       inColor the color of the line
    *
    */
-  public Block(@Nonnull Command inCommand)
+  public Hrule(@Nonnull String inColor)
   {
-    this();
+    super(HRULE, 1, 1);
 
-    withArguments(inCommand);
+    withArguments(inColor);
   }
 
   //........................................................................
-  //-------------------------------- Block ---------------------------------
+  //-------------------------------- Hrule ---------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Block()
+  public Hrule()
   {
-    super(BLOCK, 0, 1);
+    this("black");
   }
 
   //........................................................................
@@ -99,9 +103,9 @@ public class Block extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for block printing. */
-  public static final String BLOCK =
-    Config.get("resource:commands/block", "block");
+  /** Command for formatting a horizontal rule. */
+  public static final String HRULE =
+    Config.get("resource:commands/hrule", "hrule");
 
   //........................................................................
 
@@ -125,11 +129,14 @@ public class Block extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Block("text");
-      assertEquals("setup", "\\block{text}", command.toString());
+      Command command = new Hrule();
+      assertEquals("setup", "\\hrule{black}", command.toString());
 
-      command = new Block(new Command("text"));
-      assertEquals("setup", "\\block{text}", command.toString());
+      command = new Hrule("red");
+      assertEquals("setup", "\\hrule{red}", command.toString());
+
+      command = new Hrule("green", 20);
+      assertEquals("setup", "\\hrule[20]{green}", command.toString());
     }
 
     //......................................................................

@@ -45,6 +45,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@Immutable
 public class Card extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
