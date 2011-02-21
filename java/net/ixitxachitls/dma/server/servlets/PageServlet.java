@@ -76,6 +76,7 @@ public class PageServlet extends DMAServlet
 
   //-------------------------------------------------------------- variables
 
+  /** The project name. */
   public static final String PROJECT =
     Config.get("project.name", "jDMA");
 

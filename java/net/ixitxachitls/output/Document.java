@@ -632,10 +632,6 @@ public class Document
 //   public static final String NEWPAGE =
 //     Config.get("resource:commands/newpage", "newpage");
 
-//   /** Command for setting a divider. */
-//   public static final String DIVIDER =
-//     Config.get("resource:commands/divider", "divider");
-
 //   /** Command for indentation. */
 //   public static final String INDENT =
 //     Config.get("resource:commands/indent", "indent");

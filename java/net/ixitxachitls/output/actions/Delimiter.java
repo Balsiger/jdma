@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.output.actions;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -82,12 +83,20 @@ public class Delimiter extends Action
                    @Nullable String []inArgStart, @Nullable String []inArgEnd,
                    @Nullable String []inOptStart, @Nullable String []inOptEnd)
   {
-    m_start    = inStart;
-    m_end      = inEnd;
-    m_argStart = inArgStart;
-    m_argEnd   = inArgEnd;
-    m_optStart = inOptStart;
-    m_optEnd   = inOptEnd;
+    m_start = inStart;
+    m_end = inEnd;
+
+    if(inArgStart != null)
+      m_argStart = Arrays.copyOf(inArgStart, inArgStart.length);
+
+    if(inArgEnd != null)
+      m_argEnd = Arrays.copyOf(inArgEnd, inArgEnd.length);
+
+    if(inOptStart != null)
+      m_optStart = Arrays.copyOf(inOptStart, inOptStart.length);
+
+    if(inOptEnd != null)
+      m_optEnd = Arrays.copyOf(inOptEnd, inOptEnd.length);
   }
 
   //........................................................................
