@@ -477,10 +477,6 @@ public class Document
 //   public static final String LEFT =
 //     Config.get("resource:commands/left", "left");
 
-//   /** Command for right aligned printing. */
-//   public static final String RIGHT =
-//     Config.get("resource:commands/right", "right");
-
 //   /** Command for formatting an enumeration list. */
 //   public static final String ENUMERATION =
 //     Config.get("resource:commands/enumeration", "enumeration");
