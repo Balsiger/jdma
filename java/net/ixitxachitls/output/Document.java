@@ -485,10 +485,6 @@ public class Document
 //   public static final String CENTER =
 //     Config.get("resource:commands/center", "center");
 
-//   /** Command for inserting a paragraph break. */
-//   public static final String FOOTNOTE =
-//     Config.get("resource:commands/footnote", "footnote");
-
 //   /** Command for formatting an enumeration list. */
 //   public static final String ENUMERATION =
 //     Config.get("resource:commands/enumeration", "enumeration");
