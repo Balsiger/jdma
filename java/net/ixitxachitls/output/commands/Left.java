@@ -33,9 +33,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The right command.
+ * The left command.
  *
- * @file          Right.java
+ * @file          Left.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -46,19 +46,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Right extends BaseCommand
+public class Left extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------------- Right --------------------------------
+  //--------------------------------- Left ---------------------------------
 
   /**
-   * The constructor for the right command.
+   * The constructor for the left command.
    *
-   * @param       inText the text to set right
+   * @param       inText the text to set left
    *
    */
-  public Right(@Nonnull Object inText)
+  public Left(@Nonnull Object inText)
   {
     this();
 
@@ -66,15 +66,15 @@ public class Right extends BaseCommand
   }
 
   //........................................................................
-  //--------------------------------- Right --------------------------------
+  //--------------------------------- Left ---------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Right()
+  protected Left()
   {
-    super(RIGHT, 0, 1);
+    super(LEFT, 0, 1);
   }
 
   //........................................................................
@@ -83,9 +83,9 @@ public class Right extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for right aligned printing. */
-  public static final String RIGHT =
-    Config.get("resource:commands/right", "right");
+  /** Command for left aligned printing. */
+  public static final String LEFT =
+    Config.get("resource:commands/left", "left");
 
   //........................................................................
 
@@ -109,11 +109,11 @@ public class Right extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Right("text");
-      assertEquals("setup", "\\right{text}", command.toString());
+      Command command = new Left("text");
+      assertEquals("setup", "\\left{text}", command.toString());
 
-      command = new Right(new Bold("text"));
-      assertEquals("setup", "\\right{\\bold{text}}", command.toString());
+      command = new Left(new Bold("text"));
+      assertEquals("setup", "\\left{\\bold{text}}", command.toString());
     }
 
     //......................................................................

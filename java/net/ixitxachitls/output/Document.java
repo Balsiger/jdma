@@ -473,10 +473,6 @@ public class Document
 //   public static final String LIST =
 //     Config.get("resource:commands/list", "list");
 
-//   /** Command for left aligned printing. */
-//   public static final String LEFT =
-//     Config.get("resource:commands/left", "left");
-
 //   /** Command for formatting an enumeration list. */
 //   public static final String ENUMERATION =
 //     Config.get("resource:commands/enumeration", "enumeration");
