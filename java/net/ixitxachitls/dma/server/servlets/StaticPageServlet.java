@@ -169,7 +169,12 @@ public class StaticPageServlet extends PageServlet
       servlet.writeFooter(writer, "/about.html", request);
       writer.close();
       assertEquals("header",
-                   "<HTML>\n"
+                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+                   + "\">\n"
+                   + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+                   + "<HTML>\n"
                    + "  <HEAD>\n"
                    + "    <SCRIPT type=\"text/javascript\" "
                    + "src=\"/js/jquery-1.5.js\"></SCRIPT>\n"
@@ -194,6 +199,8 @@ public class StaticPageServlet extends PageServlet
                    + "    <META name=\"Content-Type\" "
                    + "content=\"text/html; charset=utf-8\" xml:lang=\"en\" "
                    + "lang=\"en\"/>\n"
+                   + "    <LINK ref=\"SHORTCUT ICON\" "
+                   + "href=\"/icons/favicon.png\" />\n"
                    + "    <SCRIPT type=\"text/javascript\">\n"
                    + "      if(location.hostname != 'localhost')\n"
                    + "      {\n"
@@ -216,6 +223,8 @@ public class StaticPageServlet extends PageServlet
                    + "    </SCRIPT>\n"
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
+                   + "    <!-- This file was generate by jDMA, version "
+                   + "Allip () -->\n"
                    + "    <DIV id=\"header\">\n"
                    + "      <DIV id=\"header-right\">\n"
                    + "        <A id=\"login-icon\" class=\"icon\" "
@@ -242,11 +251,17 @@ public class StaticPageServlet extends PageServlet
                    + "        </SPAN>\n"
                    + "      </DIV>\n"
                    + "      <DIV class=\"footer\">\n"
+                   + "        <P/>\n"
+                   + "        <a href=\"http://validator.w3.org/check?"
+                   + "uri=referer\"><img src=\"/icons/valid-xhtml10.png\" "
+                   + "alt=\"Valid XHTML 1.0!\" /></a>\n"
+                   + "        <IMG src=\"/icons/html5.png\" "
+                   + "alt=\"Uses HTML 5!\"/>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
 
       // because these are closed outside of header/footer (to allow for
-      // derivations)
+      // derivations) in handle (which is not called here)
       m_logger.addExpected("WARNING: writer closed, but tags [div, div] "
                            + "not closed");
 

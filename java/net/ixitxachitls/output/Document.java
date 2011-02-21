@@ -404,6 +404,7 @@ public class Document
   {
     // init the known actions
     s_actions.put("command", new Action());
+    s_actions.put("baseCommand", new Action());
   }
 
   //----- command definitions ----------------------------------------------
@@ -552,10 +553,6 @@ public class Document
 //   /** Command for highlighting special texts. */
 //   public static final String HIGHLIGHT =
 //     Config.get("resource:commands/highlight", "highlight");
-
-//   /** Command for setting an id at a special position in the text. */
-//   public static final String SUPER =
-//     Config.get("resource:commands/super", "super");
 
 //   /** Command for setting an id at a special position in the text. */
 //   public static final String SUB =
@@ -920,18 +917,17 @@ public class Document
    * @return      the converted result
    *
    */
-//   @Deprecated // TODO: ?? do we need this or can we call parse?
-//   public String convert(@Nonnull Object inCommand)
-//   {
-//     if(!(inCommand instanceof Command))
-//       inCommand = new Command(inCommand.toString());
+  public String convert(@Nonnull Object inCommand)
+  {
+    if(!(inCommand instanceof Command))
+      inCommand = new BaseCommand(inCommand.toString());
 
-//     Document sub = createSubDocument();
+    Document sub = createSubDocument();
 
-//     sub.add(inCommand);
+    sub.add(inCommand);
 
-//     return sub.toString();
-//   }
+    return sub.toString();
+  }
 
   //........................................................................
 
@@ -1039,7 +1035,9 @@ public class Document
    */
   public void add(@Nonnull Object inObject)
   {
-    if(inObject instanceof Command)
+    if(inObject instanceof BaseCommand)
+      add((BaseCommand)inObject);
+    else if(inObject instanceof Command)
       add((Command)inObject);
     else
       add(inObject.toString());

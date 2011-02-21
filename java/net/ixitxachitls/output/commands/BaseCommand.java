@@ -194,6 +194,20 @@ public class BaseCommand extends Command
   /**
    * This is the internal constructor for a command.
    *
+   * @param inText the text to parse for arguments
+   *
+   */
+  public BaseCommand(@Nonnull String inText)
+  {
+    withArguments(parse(inText));
+  }
+
+  //........................................................................
+  //----------------------------- BaseCommand ------------------------------
+
+  /**
+   * This is the internal constructor for a command.
+   *
    */
   protected BaseCommand()
   {

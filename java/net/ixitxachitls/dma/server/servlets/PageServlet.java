@@ -38,6 +38,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
@@ -74,6 +75,25 @@ public class PageServlet extends DMAServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  public static final String PROJECT =
+    Config.get("project.name", "jDMA");
+
+  /** The project name. */
+  public static final String PROJECT_URL =
+    Config.get("project.url", "http://dma.ixitxachitls.net");
+
+  /** The version number (or monster in this case ;-)). */
+  public static final String VERSION =
+    Config.get("project.version", "Allip");
+
+  /**
+   * The build date. Because I did not manage to simply replace the date in
+   * the config file from ant, all the build dates from all builds are
+   * concatenated in this value. We only need the first, though.
+   */
+  public static final String BUILD =
+    Config.get("project.build", "").replaceAll(";.*", "");
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -159,6 +179,8 @@ public class PageServlet extends DMAServlet
                              @Nonnull DMARequest inRequest)
   {
     inWriter
+      .comment("This file was generate by " + PROJECT + ", version " + VERSION
+               + " (" + BUILD + ")")
       // jquery
       .addJSFile("jquery-1.5")
       .addCSSFile("smoothness/jquery-ui-1.8.9.custom")
@@ -175,6 +197,8 @@ public class PageServlet extends DMAServlet
             "width=device-width, height=device-height")
       .meta("Content-Type", "text/html; charset=utf-8",
             "xml:lang", "en", "lang", "en")
+      // favicon
+      .link("SHORTCUT ICON", "/icons/favicon.png")
       // header
       .begin("div").id("header")
       .begin("div").id("header-right");
@@ -246,6 +270,13 @@ public class PageServlet extends DMAServlet
                              @Nonnull DMARequest inRequest)
   {
     inWriter.begin("div").classes("footer")
+      .begin("p").end("p")
+      // we can't have spaces here, so we add it directly
+      .add("<a href=\"http://validator.w3.org/check?uri=referer\">"
+           + "<img src=\"/icons/valid-xhtml10.png\" alt=\"Valid XHTML 1.0!\" />"
+           + "</a>")
+      .begin("img").src("/icons/html5.png").alt("Uses HTML 5!")
+      .end("img")
       .script("if(location.hostname != 'localhost')",
               "{",
               "  var gaJsHost = ((\"https:\" == document.location.protocol) ? "
@@ -344,7 +375,12 @@ public class PageServlet extends DMAServlet
 
       assertNull("handle", servlet.handle(request, response));
       assertEquals("content",
-                   "<HTML>\n"
+                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+                   + "\">\n"
+                   + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+                   + "<HTML>\n"
                    + "  <HEAD>\n"
                    + "    <SCRIPT type=\"text/javascript\" "
                    + "src=\"/js/jquery-1.5.js\"></SCRIPT>\n"
@@ -369,6 +405,8 @@ public class PageServlet extends DMAServlet
                    + "    <META name=\"Content-Type\" "
                    + "content=\"text/html; charset=utf-8\" xml:lang=\"en\" "
                    + "lang=\"en\"/>\n"
+                   + "    <LINK ref=\"SHORTCUT ICON\" "
+                   + "href=\"/icons/favicon.png\" />\n"
                    + "    <SCRIPT type=\"text/javascript\">\n"
                    + "      if(location.hostname != 'localhost')\n"
                    + "      {\n"
@@ -391,6 +429,8 @@ public class PageServlet extends DMAServlet
                    + "    </SCRIPT>\n"
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
+                   + "    <!-- This file was generate by jDMA, version "
+                   + "Allip () -->\n"
                    + "    <DIV id=\"header\">\n"
                    + "      <DIV id=\"header-right\">\n"
                    + "        <A id=\"login-icon\" class=\"icon\" "
@@ -421,6 +461,12 @@ public class PageServlet extends DMAServlet
                    + "      This is the body.\n"
                    + "    </DIV>\n"
                    + "    <DIV class=\"footer\">\n"
+                   + "      <P/>\n"
+                   + "      <a href=\"http://validator.w3.org/check?"
+                   + "uri=referer\"><img src=\"/icons/valid-xhtml10.png\" "
+                   + "alt=\"Valid XHTML 1.0!\" /></a>\n"
+                   + "      <IMG src=\"/icons/html5.png\" "
+                   + "alt=\"Uses HTML 5!\"/>\n"
                    + "    </DIV>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n",
@@ -487,7 +533,12 @@ public class PageServlet extends DMAServlet
       servlet.addNavigation(writer, "s1", "s2", "s3");
       writer.close();
       assertEquals("3 sections",
-                   "<HTML>\n"
+                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+                   + "\">\n"
+                   + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+                   + "<HTML>\n"
                    + "    <SCRIPT type=\"text/javascript\">\n"
                    + "      $('#subnavigation').html(' &raquo; s1 &raquo; "
                    + "s2 &raquo; s3');\n"
@@ -502,7 +553,12 @@ public class PageServlet extends DMAServlet
       servlet.addNavigation(writer);
       writer.close();
       assertEquals("no section",
-                   "<HTML>\n"
+                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+                   + "\">\n"
+                   + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+                   + "<HTML>\n"
                    + "    <SCRIPT type=\"text/javascript\">\n"
                    + "      $('#subnavigation').html('&nbsp;');\n"
                    + "    </SCRIPT>\n"

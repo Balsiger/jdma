@@ -169,7 +169,7 @@ public class HTMLBodyWriter extends HTMLWriter
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'title';\n"
                    + "    </SCRIPT>\n"
-                   + "    // This is a test.\n"
+                   + "    <!-- This is a test. -->\n"
                    + "    <P font=\"Helvetica\" selected>\n"
                    + "      This is the body\n"
                    + "      <BR/>\n"

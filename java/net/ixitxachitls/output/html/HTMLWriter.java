@@ -212,6 +212,54 @@ public class HTMLWriter
   }
 
   //........................................................................
+  //--------------------------------- src ----------------------------------
+
+  /**
+   * Add a src attribute to a tag.
+   *
+   * @param       inText   the text for the src
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter src(@Nonnull String inText)
+  {
+    return attribute("src", inText);
+  }
+
+  //........................................................................
+  //--------------------------------- alt ----------------------------------
+
+  /**
+   * Add a alt attribute to a tag.
+   *
+   * @param       inText   the text for the alt
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter alt(@Nonnull String inText)
+  {
+    return attribute("alt", inText);
+  }
+
+  //........................................................................
+  //-------------------------------- style ---------------------------------
+
+  /**
+   * Add a style attribute to a tag.
+   *
+   * @param       inText   the text for the style
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter style(@Nonnull String inText)
+  {
+    return attribute("style", inText);
+  }
+
+  //........................................................................
   //-------------------------------- onClick -------------------------------
 
   /**
@@ -294,8 +342,9 @@ public class HTMLWriter
   public HTMLWriter comment(@Nonnull String inComment)
   {
     indent();
-    m_bodyWriter.print("// ");
-    m_bodyWriter.println(inComment);
+    m_bodyWriter.print("<!-- ");
+    m_bodyWriter.print(inComment);
+    m_bodyWriter.println(" -->");
 
     return this;
   }
@@ -411,6 +460,27 @@ public class HTMLWriter
   }
 
   //........................................................................
+  //--------------------------------- meta ---------------------------------
+
+  /**
+   * Add a link tag to the page header.
+   *
+   * @param       inType       the type of the link (value of 'ref')
+   * @param       inHRef       the value of the reference
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter link(@Nonnull String inType, @Nonnull String inHRef)
+  {
+    ensureHead();
+    m_writer.println("    <LINK ref=\"" + inType + "\" href=\""
+                     + inHRef + "\" />");
+
+    return this;
+  }
+
+  //........................................................................
   //-------------------------------- script --------------------------------
 
   /**
@@ -470,6 +540,12 @@ public class HTMLWriter
   {
     if(!m_inHTML)
     {
+      m_writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+      m_writer.println
+        ("<!DOCTYPE html "
+         + "PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
+         + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
+      m_writer.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
       m_writer.println("<HTML>");
       m_inHTML = true;
     }
