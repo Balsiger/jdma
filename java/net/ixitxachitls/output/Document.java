@@ -481,10 +481,6 @@ public class Document
 //   public static final String RIGHT =
 //     Config.get("resource:commands/right", "right");
 
-//   /** Command for centered printing. */
-//   public static final String CENTER =
-//     Config.get("resource:commands/center", "center");
-
 //   /** Command for formatting an enumeration list. */
 //   public static final String ENUMERATION =
 //     Config.get("resource:commands/enumeration", "enumeration");
