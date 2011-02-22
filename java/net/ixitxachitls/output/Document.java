@@ -425,10 +425,6 @@ public class Document
 //   public static final String SERIF =
 //     Config.get("resource:commands/sansserif", "serif");
 
-//   /** Command for huge printing. */
-//   public static final String HUGE =
-//     Config.get("resource:commands/huge", "huge");
-
 //   /** Command for huger printing. */
 //   public static final String HUGER =
 //     Config.get("resource:commands/huger", "huger");
