@@ -425,10 +425,6 @@ public class Document
 //   public static final String SERIF =
 //     Config.get("resource:commands/sansserif", "serif");
 
-//   /** Command for footnote size. */
-//   public static final String FOOTNOTE_SIZE =
-//     Config.get("resource:commands/footnotesize", "footnotesize");
-
 //   /** Command for script size. */
 //   public static final String SCRIPT_SIZE =
 //     Config.get("resource:commands/scriptsize", "scriptsize");
