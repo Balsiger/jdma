@@ -368,7 +368,7 @@ public class Document
   //-------------------------------------------------------------- variables
 
   /** The buffer for storage. */
-  protected @Nonnull SimpleBuffer m_buffer = new SimpleBuffer();
+  protected @Nonnull Buffer m_buffer = new SimpleBuffer();
 
   /** The current counter value. */
   protected int m_counter = 0;
@@ -521,10 +521,6 @@ public class Document
 //   /** Command for adding a character with an acute. */
 //   public static final String GRAVE =
 //     Config.get("resource:commands/grave", "grave");
-
-//   /** Command for adding fractions as real fraction signs. */
-//   public static final String FRAC =
-//     Config.get("resource:commands/frac", "frac");
 
 //   /** Command for adding files found to the text. */
 //   public static final String FILES =
