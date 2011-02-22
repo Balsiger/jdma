@@ -429,10 +429,6 @@ public class Document
 //   public static final String SERIF =
 //     Config.get("resource:commands/sansserif", "serif");
 
-//   /** Command for tiny. */
-//   public static final String TINY =
-//     Config.get("resource:commands/tiny", "tiny");
-
 //   /** Command for footnote size. */
 //   public static final String FOOTNOTE_SIZE =
 //     Config.get("resource:commands/footnotesize", "footnotesize");
