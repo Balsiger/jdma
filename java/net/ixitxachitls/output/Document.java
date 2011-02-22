@@ -425,10 +425,6 @@ public class Document
 //   public static final String SERIF =
 //     Config.get("resource:commands/sansserif", "serif");
 
-//   /** Command for script size. */
-//   public static final String SCRIPT_SIZE =
-//     Config.get("resource:commands/scriptsize", "scriptsize");
-
 //   /** Command for small printing. */
 //   public static final String SMALL =
 //     Config.get("resource:commands/small", "small");
