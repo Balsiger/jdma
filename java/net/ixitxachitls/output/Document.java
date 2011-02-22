@@ -425,10 +425,6 @@ public class Document
 //   public static final String SERIF =
 //     Config.get("resource:commands/sansserif", "serif");
 
-//   /** Command for huger printing. */
-//   public static final String HUGER =
-//     Config.get("resource:commands/huger", "huger");
-
 //   /** Command for formatting a list. */
 //   public static final String LIST =
 //     Config.get("resource:commands/list", "list");
