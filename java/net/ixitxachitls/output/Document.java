@@ -409,10 +409,6 @@ public class Document
 
   //----- command definitions ----------------------------------------------
 
-//    /** Command for emphasized printing. */
-//   public static final String EMPH =
-//     Config.get("resource:commands/emph", "emph");
-
 //   /** Command for underlined. */
 //   public static final String UNDERLINE =
 //     Config.get("resource:commands/underline", "underline");
