@@ -536,10 +536,6 @@ public class Document
 //   public static final String ENTRY_PIC =
 //     Config.get("resource:commands/entry.pic", "entrypic");
 
-//   /** Command for printing a less sign. */
-//   public static final String GREATER_OR_EQUAL =
-//     Config.get("resource:commands/key.greater.equal", "greaterequal");
-
 //   /** Command for verbatim printing. */
 //   public static final String VERBATIM =
 //     Config.get("resource:commands/verbatim", "verbatim");
