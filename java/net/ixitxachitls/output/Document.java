@@ -433,10 +433,6 @@ public class Document
 //   public static final String ENUMERATION =
 //     Config.get("resource:commands/enumeration", "enumeration");
 
-//   /** Command for formatting a title. */
-//   public static final String SUBTITLE =
-//     Config.get("resource:commands/subtitle", "subtitle");
-
 //   /** Command for adding an overlay icon. */
 //   public static final String OVERLAY_ICON =
 //     Config.get("resource:commands/icon.overlay", "overlayicon");
