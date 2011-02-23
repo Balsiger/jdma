@@ -410,10 +410,6 @@ public class Document
   //----- command definitions ----------------------------------------------
 
 //   /** Command for sans serif. */
-//   public static final String SANS_SERIF =
-//     Config.get("resource:commands/sansserif", "sansserif");
-
-//   /** Command for sans serif. */
 //   public static final String SERIF =
 //     Config.get("resource:commands/sansserif", "serif");
 
