@@ -409,10 +409,6 @@ public class Document
 
   //----- command definitions ----------------------------------------------
 
-//   /** Command for italic. */
-//   public static final String ITALIC =
-//     Config.get("resource:commands/italic", "italic");
-
 //   /** Command for sans serif. */
 //   public static final String SANS_SERIF =
 //     Config.get("resource:commands/sansserif", "sansserif");
