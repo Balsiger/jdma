@@ -68,7 +68,7 @@ public class Greater extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for printing a less sign. */
-  public static final String GREATER =
+  public static final @Nonnull String GREATER =
     Config.get("resource:commands/key.greater", "greater");
 
   //........................................................................
