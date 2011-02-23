@@ -520,10 +520,6 @@ public class Document
 //   public static final String INDENT =
 //     Config.get("resource:commands/indent", "indent");
 
-//   /** Command for indentation. */
-//   public static final String COLUMNS =
-//     Config.get("resource:commands/columns", "columns");
-
 //   /** Command for hide contents. */
 //   public static final String HIDE =
 //     Config.get("resource:commands/hide", "hide");
