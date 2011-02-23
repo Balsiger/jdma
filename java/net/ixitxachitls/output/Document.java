@@ -425,10 +425,6 @@ public class Document
 //   public static final String SERIF =
 //     Config.get("resource:commands/sansserif", "serif");
 
-//   /** Command for formatting a list. */
-//   public static final String LIST =
-//     Config.get("resource:commands/list", "list");
-
 //   /** Command for formatting an enumeration list. */
 //   public static final String ENUMERATION =
 //     Config.get("resource:commands/enumeration", "enumeration");
