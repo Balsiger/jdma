@@ -446,10 +446,6 @@ public class Document
 //   public static final String OVERVIEW_FILES =
 //     Config.get("resource:commands/overview.files", "overivewfiles");
 
-//   /** Command for highlighting special texts. */
-//   public static final String HIGHLIGHT =
-//     Config.get("resource:commands/highlight", "highlight");
-
 //   /** Command for setting an id at a special position in the text. */
 //   public static final String SUB =
 //     Config.get("resource:commands/sub", "sub");
