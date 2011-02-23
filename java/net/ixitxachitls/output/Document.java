@@ -434,10 +434,6 @@ public class Document
 //     Config.get("resource:commands/enumeration", "enumeration");
 
 //   /** Command for formatting a title. */
-//   public static final String TITLE =
-//     Config.get("resource:commands/title", "title");
-
-//   /** Command for formatting a title. */
 //   public static final String SUBTITLE =
 //     Config.get("resource:commands/subtitle", "subtitle");
 
