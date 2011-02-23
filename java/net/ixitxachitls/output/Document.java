@@ -450,10 +450,6 @@ public class Document
 //   public static final String NO_PICTURES =
 //     Config.get("resource:commands/nopictures", "nopictures");
 
-//   /** Command for adding a character with an acute. */
-//   public static final String GRAVE =
-//     Config.get("resource:commands/grave", "grave");
-
 //   /** Command for adding files found to the text. */
 //   public static final String OVERVIEW_FILES =
 //     Config.get("resource:commands/overview.files", "overivewfiles");
