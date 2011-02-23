@@ -33,9 +33,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The id command.
+ * The sup command.
  *
- * @file          ID.java
+ * @file          Sub.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -46,36 +46,35 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class ID extends BaseCommand
+public class Sub extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------------- ID ---------------------------------
+  //--------------------------------- Sub ---------------------------------
 
   /**
-   * The constructor for the id command.
+   * The constructor for the sup command.
    *
-   * @param       inLabel the id label
-   * @param       inText  the text to set id
+   * @param       inText the text to set sup
    *
    */
-  public ID(@Nonnull Object inLabel, @Nonnull Object inText)
+  public Sub(@Nonnull Object inText)
   {
     this();
 
-    withArguments(inLabel, inText);
+    withArguments(inText);
   }
 
   //........................................................................
-  //--------------------------------- ID ---------------------------------
+  //--------------------------------- Sub ---------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected ID()
+  protected Sub()
   {
-    super(ID, 0, 2);
+    super(SUB, 0, 1);
   }
 
   //........................................................................
@@ -85,8 +84,8 @@ public class ID extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting an id at a special position in the text. */
-  public static final String ID =
-    Config.get("resource:commands/id", "id");
+  public static final String SUB =
+    Config.get("resource:commands/sub", "sub");
 
   //........................................................................
 
@@ -94,7 +93,6 @@ public class ID extends BaseCommand
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -111,8 +109,8 @@ public class ID extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new ID("text", "label");
-      assertEquals("setup", "\\id{text}{label}", command.toString());
+      Command command = new Sub("text");
+      assertEquals("setup", "\\sub{text}", command.toString());
     }
 
     //......................................................................

@@ -447,10 +447,6 @@ public class Document
 //     Config.get("resource:commands/overview.files", "overivewfiles");
 
 //   /** Command for setting an id at a special position in the text. */
-//   public static final String SUB =
-//     Config.get("resource:commands/sub", "sub");
-
-//   /** Command for setting an id at a special position in the text. */
 //   public static final String NAVIGATION =
 //     Config.get("resource:commands/navigation", "navigation");
 
