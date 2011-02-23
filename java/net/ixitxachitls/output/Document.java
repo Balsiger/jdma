@@ -450,10 +450,6 @@ public class Document
 //   public static final String NO_PICTURES =
 //     Config.get("resource:commands/nopictures", "nopictures");
 
-//   /** Command for adding hatted characters. */
-//   public static final String UMLAUT =
-//     Config.get("resource:commands/umlaut", "umlaut");
-
 //   /** Command for adding a character with an acute. */
 //   public static final String GRAVE =
 //     Config.get("resource:commands/grave", "grave");
