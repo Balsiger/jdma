@@ -409,10 +409,6 @@ public class Document
 
   //----- command definitions ----------------------------------------------
 
-//   /** Command for sans serif. */
-//   public static final String SERIF =
-//     Config.get("resource:commands/sansserif", "serif");
-
 //   /** Command for formatting an enumeration list. */
 //   public static final String ENUMERATION =
 //     Config.get("resource:commands/enumeration", "enumeration");
