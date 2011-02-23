@@ -552,10 +552,6 @@ public class Document
 //   public static final String GREATER_OR_EQUAL =
 //     Config.get("resource:commands/key.greater.equal", "greaterequal");
 
-//   /** Command for counting. */
-//   public static final String COUNT =
-//     Config.get("resource:commands/count", "count");
-
 //   /** Command for verbatim printing. */
 //   public static final String VERBATIM =
 //     Config.get("resource:commands/verbatim", "verbatim");
