@@ -475,10 +475,6 @@ public class Document
 //     Config.get("resource:commands/grave", "grave");
 
 //   /** Command for adding files found to the text. */
-//   public static final String FILES =
-//     Config.get("resource:commands/files", "files");
-
-//   /** Command for adding files found to the text. */
 //   public static final String OVERVIEW_FILES =
 //     Config.get("resource:commands/overview.files", "overivewfiles");
 
