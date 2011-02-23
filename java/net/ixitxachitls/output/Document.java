@@ -451,10 +451,6 @@ public class Document
 //     Config.get("resource:commands/nopictures", "nopictures");
 
 //   /** Command for adding hatted characters. */
-//   public static final String HAT =
-//     Config.get("resource:commands/hat", "hat");
-
-//   /** Command for adding hatted characters. */
 //   public static final String UMLAUT =
 //     Config.get("resource:commands/umlaut", "umlaut");
 
