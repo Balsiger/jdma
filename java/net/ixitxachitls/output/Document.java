@@ -541,10 +541,6 @@ public class Document
 //     Config.get("resource:commands/key.less.equal", "lessequal");
 
 //   /** Command for printing a less sign. */
-//   public static final String GREATER =
-//     Config.get("resource:commands/key.greater", "greater");
-
-//   /** Command for printing a less sign. */
 //   public static final String GREATER_OR_EQUAL =
 //     Config.get("resource:commands/key.greater.equal", "greaterequal");
 
