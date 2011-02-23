@@ -381,60 +381,61 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
     // the current document to write to
     Document doc = inDocument;
 
-    for(int i = 1; i < inArguments.size(); i++)
-    {
-      // ignore null arguments
-      if(inArguments.get(i) == null)
-        continue;
-
-      // ignore nopicture cells (this is actually quite ugly, but so far I
-      // don't know another way to solve this...
-      if(inArguments.get(i).toString().startsWith("\\nopictures"))
-        continue;
-
-      String arg =
-        doc.convert(inArguments.get(i)).replaceAll("\\'", "\\\\'")
-        .replaceAll("\n", "\\\\n");
-
-      // is there a group and sorting  given?
-      String groups = Strings.getPattern(arg, "##(.*?##.*?)##$");
-
-      if(groups != null)
+    if(inArguments != null)
+      for(int i = 1; i < inArguments.size(); i++)
       {
-        String []parts = groups.split("##");
+        // ignore null arguments
+        if(inArguments.get(i) == null)
+          continue;
 
-        arg = "new Table.Cell('" + arg.replaceAll("##.*?##.*?##$", "")
-          + "', '" + (parts.length > 0 ? parts[0] : "") + "', '"
-          + (parts.length > 1 ? parts[1] : "")
-          + "')";
-      }
-      else
-        arg = "'" + arg + "'";
+        // ignore nopicture cells (this is actually quite ugly, but so far I
+        // don't know another way to solve this...
+        if(inArguments.get(i).toString().startsWith("\\nopictures"))
+          continue;
 
-      // start a new line
-      if(i % columns.length == 1)
-      {
-        if(i != 1)
-          doc.add(");\n");
+        String arg =
+          doc.convert(inArguments.get(i)).replaceAll("\\'", "\\\\'")
+          .replaceAll("\n", "\\\\n");
 
-        if(i / columns.length > 0 && (i / columns.length) % 100 == 0)
+        // is there a group and sorting  given?
+        String groups = Strings.getPattern(arg, "##(.*?##.*?)##$");
+
+        if(groups != null)
         {
-          int number = (i / columns.length) / 100;
-          int total  = (inArguments.size() / columns.length) / 100;
+          String []parts = groups.split("##");
 
-          doc = inDocument.createSubDocument();
-          inDocument.addDocument(doc);
-
-          inDocument.add("gui.delayed(\"gui.loadFile('" + id + "', "
-                         + number + ", " + total + ");\", "
-                         + Math.round(i * 10 / columns.length) + ");\n");
+          arg = "new Table.Cell('" + arg.replaceAll("##.*?##.*?##$", "")
+            + "', '" + (parts.length > 0 ? parts[0] : "") + "', '"
+            + (parts.length > 1 ? parts[1] : "")
+            + "')";
         }
+        else
+          arg = "'" + arg + "'";
 
-        doc.add(id + ".add(" + arg);
+        // start a new line
+        if(i % columns.length == 1)
+        {
+          if(i != 1)
+            doc.add(");\n");
+
+          if(i / columns.length > 0 && (i / columns.length) % 100 == 0)
+          {
+            int number = (i / columns.length) / 100;
+            int total  = (inArguments.size() / columns.length) / 100;
+
+            doc = inDocument.createSubDocument();
+            inDocument.addDocument(doc);
+
+            inDocument.add("gui.delayed(\"gui.loadFile('" + id + "', "
+                           + number + ", " + total + ");\", "
+                           + (i * 10 / columns.length) + ");\n");
+          }
+
+          doc.add(id + ".add(" + arg);
+        }
+        else
+          doc.add(", " + arg);
       }
-      else
-        doc.add(", " + arg);
-    }
 
     // close the last argument
     doc.add(");\n");

@@ -441,10 +441,6 @@ public class Document
 //   public static final String SUBTITLE =
 //     Config.get("resource:commands/subtitle", "subtitle");
 
-//   /** Command for adding an icon. */
-//   public static final String ICON =
-//     Config.get("resource:commands/icon", "icon");
-
 //   /** Command for adding an overlay icon. */
 //   public static final String OVERLAY_ICON =
 //     Config.get("resource:commands/icon.overlay", "overlayicon");
