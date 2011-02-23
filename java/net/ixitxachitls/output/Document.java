@@ -409,10 +409,6 @@ public class Document
 
   //----- command definitions ----------------------------------------------
 
-//   /** Command for underlined. */
-//   public static final String UNDERLINE =
-//     Config.get("resource:commands/underline", "underline");
-
 //   /** Command for italic. */
 //   public static final String ITALIC =
 //     Config.get("resource:commands/italic", "italic");
