@@ -450,10 +450,6 @@ public class Document
 //   public static final String NO_PICTURES =
 //     Config.get("resource:commands/nopictures", "nopictures");
 
-//   /** Command for adding a text block. */
-//   public static final String TEXT_BLOCK =
-//     Config.get("resource:commands/textblock", "textblock");
-
 //   /** Command for adding hatted characters. */
 //   public static final String HAT =
 //     Config.get("resource:commands/hat", "hat");
