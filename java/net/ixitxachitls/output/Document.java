@@ -548,10 +548,6 @@ public class Document
 //   public static final String TOC_ENTRY =
 //     Config.get("resource:commands/toc", "toc");
 
-//   /** Command for a table of contents entry. */
-//   public static final String GROUPED =
-//     Config.get("resource:commands/grouped", "grouped");
-
 //   /** Command for setting a value. */
 //   public static final String VALUE =
 //     Config.get("resource:commands/value", "Value");
