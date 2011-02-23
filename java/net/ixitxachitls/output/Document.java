@@ -442,10 +442,6 @@ public class Document
 //   public static final String LABEL =
 //     Config.get("resource:commands/label", "label");
 
-//   /** Command for formatting text for channels without picture support. */
-//   public static final String NO_PICTURES =
-//     Config.get("resource:commands/nopictures", "nopictures");
-
 //   /** Command for adding files found to the text. */
 //   public static final String OVERVIEW_FILES =
 //     Config.get("resource:commands/overview.files", "overivewfiles");
