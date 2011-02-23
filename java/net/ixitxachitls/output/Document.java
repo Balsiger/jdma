@@ -537,10 +537,6 @@ public class Document
 //     Config.get("resource:commands/entry.pic", "entrypic");
 
 //   /** Command for printing a less sign. */
-//   public static final String LESS =
-//     Config.get("resource:commands/key.less", "less");
-
-//   /** Command for printing a less sign. */
 //   public static final String LESS_OR_EQUAL =
 //     Config.get("resource:commands/key.less.equal", "lessequal");
 
