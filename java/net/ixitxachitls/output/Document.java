@@ -532,10 +532,6 @@ public class Document
 //   public static final String SKIP =
 //     Config.get("resource:commands/SKIP", "SKIP");
 
-//   /** Command for footer text. */
-//   public static final String FOOTER =
-//     Config.get("resource:commands/footer", "footer");
-
 //   /** Command for entry pictures text. */
 //   public static final String ENTRY_PIC =
 //     Config.get("resource:commands/entry.pic", "entrypic");
