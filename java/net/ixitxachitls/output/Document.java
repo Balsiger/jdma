@@ -413,10 +413,6 @@ public class Document
 //   public static final String OVERLAY_ICON =
 //     Config.get("resource:commands/icon.overlay", "overlayicon");
 
-//   /** Command for adding a picture. */
-//   public static final String PICTURE =
-//     Config.get("resource:commands/picture", "picture");
-
 //   /** Command for adding a label (a small icon or text in front of more
 //    * text). */
 //   public static final String LABEL =
