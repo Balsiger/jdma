@@ -528,10 +528,6 @@ public class Document
 //   public static final String EDITABLE =
 //     Config.get("resource:commands/editable", "editable");
 
-//   /** Command for a button. */
-//   public static final String BUTTON =
-//     Config.get("resource:commands/button", "button");
-
 //   /** Command for bold printing. */
 //   public static final String SCRIPT =
 //     Config.get("resource:commands/script", "script");
