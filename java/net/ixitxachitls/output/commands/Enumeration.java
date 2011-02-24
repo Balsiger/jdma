@@ -23,8 +23,6 @@
 
 package net.ixitxachitls.output.commands;
 
-import net.ixitxachitls.output.Document;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 

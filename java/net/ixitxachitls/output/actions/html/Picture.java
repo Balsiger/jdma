@@ -92,7 +92,7 @@ public class Picture extends Action
    *
    */
   public Picture(@Nonnull String inClass, boolean inCaption, boolean inLink,
-                 @Nonnull String inSubDir)
+                 @Nullable String inSubDir)
   {
     m_class   = inClass;
     m_caption = inCaption;
@@ -116,7 +116,7 @@ public class Picture extends Action
   private boolean m_link;
 
   /** The name of the sub directory for the pictures. */
-  private @Nonnull String  m_subDir;
+  private @Nullable String m_subDir;
 
   //........................................................................
 
@@ -168,16 +168,15 @@ public class Picture extends Action
       link = inDocument.convert(inArguments.get(i++));
     }
 
-    String overlays = "";
-
     // overlays, if any
+    StringBuilder overlays = new StringBuilder();
     while(i < inArguments.size() - 1)
     {
       Object css = inArguments.get(i++);
       String src = net.ixitxachitls.util.
         Files.concatenate(m_subDir, inArguments.get(i++) + ".png");
 
-      overlays += "<img src='" + src + "' class='overlay " + css + "'/>";
+      overlays.append("<img src='" + src + "' class='overlay " + css + "'/>");
     }
 
     String highlight;
