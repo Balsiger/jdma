@@ -409,10 +409,6 @@ public class Document
 
   //----- command definitions ----------------------------------------------
 
-//   /** Command for adding a label (a small icon or text in front of more
-//    * text). */
-//   public static final String LABEL =
-//     Config.get("resource:commands/label", "label");
 
 //   /** Command for adding files found to the text. */
 //   public static final String OVERVIEW_FILES =
