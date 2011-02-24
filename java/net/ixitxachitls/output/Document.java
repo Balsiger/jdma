@@ -409,10 +409,6 @@ public class Document
 
   //----- command definitions ----------------------------------------------
 
-//   /** Command for formatting an enumeration list. */
-//   public static final String ENUMERATION =
-//     Config.get("resource:commands/enumeration", "enumeration");
-
 //   /** Command for adding an overlay icon. */
 //   public static final String OVERLAY_ICON =
 //     Config.get("resource:commands/icon.overlay", "overlayicon");
