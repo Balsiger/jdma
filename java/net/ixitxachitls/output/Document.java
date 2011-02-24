@@ -409,10 +409,6 @@ public class Document
 
   //----- command definitions ----------------------------------------------
 
-//   /** Command for adding an overlay icon. */
-//   public static final String OVERLAY_ICON =
-//     Config.get("resource:commands/icon.overlay", "overlayicon");
-
 //   /** Command for adding a label (a small icon or text in front of more
 //    * text). */
 //   public static final String LABEL =
