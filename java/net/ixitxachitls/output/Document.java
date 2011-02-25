@@ -472,10 +472,6 @@ public class Document
 //   public static final String SKILL =
 //     Config.get("resource:commands/Skill", "Skill");
 
-//   /** Command for setting a group name. */
-//   public static final String NEWPAGE =
-//     Config.get("resource:commands/newpage", "newpage");
-
 //   /** Command for indentation. */
 //   public static final String INDENT =
 //     Config.get("resource:commands/indent", "indent");
@@ -488,14 +484,6 @@ public class Document
 //   public static final String ENTRY_PIC =
 //     Config.get("resource:commands/entry.pic", "entrypic");
 
-//   /** Command for a page. */
-//   public static final String PAGE =
-//     Config.get("resource:commands/page", "page");
-
-//   /** Command for a table of contents entry. */
-//   public static final String TOC_ENTRY =
-//     Config.get("resource:commands/toc", "toc");
-
 //   /** Command for setting a value. */
 //   public static final String VALUE =
 //     Config.get("resource:commands/value", "Value");
@@ -503,14 +491,6 @@ public class Document
 //   /** Command for a checked value. */
 //   public static final String CHECKED =
 //     Config.get("resource:commands/checked", "checked");
-
-//   /** Command for an editable value. */
-//   public static final String EDITABLE =
-//     Config.get("resource:commands/editable", "editable");
-
-//   /** Command for bold printing. */
-//   public static final String SCRIPT =
-//     Config.get("resource:commands/script", "script");
 
 //   /** Command for temporary groups. */
 //   public static final String TEMPGROUP = "TempGroup";
