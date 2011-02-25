@@ -410,10 +410,6 @@ public class Document
   //----- command definitions ----------------------------------------------
 
 
-//   /** Command for adding files found to the text. */
-//   public static final String OVERVIEW_FILES =
-//     Config.get("resource:commands/overview.files", "overivewfiles");
-
 //   /** Command for setting an id at a special position in the text. */
 //   public static final String MENU =
 //     Config.get("resource:commands/menu", "menu");
