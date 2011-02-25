@@ -488,10 +488,6 @@ public class Document
 //   public static final String ENTRY_PIC =
 //     Config.get("resource:commands/entry.pic", "entrypic");
 
-//   /** Command for verbatim printing. */
-//   public static final String VERBATIM =
-//     Config.get("resource:commands/verbatim", "verbatim");
-
 //   /** Command for a page. */
 //   public static final String PAGE =
 //     Config.get("resource:commands/page", "page");
