@@ -480,10 +480,6 @@ public class Document
 //   public static final String INDENT =
 //     Config.get("resource:commands/indent", "indent");
 
-//   /** Command for hide contents. */
-//   public static final String HIDE =
-//     Config.get("resource:commands/hide", "hide");
-
 //   /** Command for skipping text. */
 //   public static final String SKIP =
 //     Config.get("resource:commands/SKIP", "SKIP");
