@@ -30,7 +30,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -91,6 +93,9 @@ public abstract class Resource
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
+  /** Special presets, mainly for testing. */
+  private static @Nullable Map<String, Resource> s_presets;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -138,6 +143,14 @@ public abstract class Resource
   public static @Nonnull Resource get(@Nonnull String inName)
   {
     String name = inName;
+
+    if(s_presets != null)
+    {
+      Resource preset = s_presets.get(name);
+      if(preset != null)
+        return preset;
+    }
+
     if(!name.startsWith("/"))
       name = "/" + name;
 
@@ -164,6 +177,22 @@ public abstract class Resource
   public static boolean has(String inName)
   {
     return Files.class.getResource(Files.concatenate("/", inName)) != null;
+  }
+
+  //........................................................................
+  //---------------------------- hasResource -------------------------------
+
+  /**
+   * Chbeck if the given resource contains the given sub resource.
+   *
+   * @param       inName the name of the sub resource
+   *
+   * @return      true if found, false if not
+   *
+   */
+  public boolean hasResource(String inName)
+  {
+    return Resource.has(inName);
   }
 
   //........................................................................
@@ -298,10 +327,49 @@ public abstract class Resource
 
   //........................................................................
 
+  //-------------------------------- preset --------------------------------
+
+  /**
+   * Add a preset resource.
+   *
+   * @param       inName     the name of the resource
+   * @param       inResource the resource to preset
+   *
+   */
+  public static synchronized void preset(@Nonnull String inName,
+                                         @Nonnull Resource inResource)
+  {
+    if(s_presets == null)
+      s_presets = new HashMap<String, Resource>();
+
+    s_presets.put(inName, inResource);
+  }
+
+  //........................................................................
+  //----------------------------- clearPreset ------------------------------
+
+  /**
+   * Clears the preset with the given name, if it is defined.
+   *
+   * @param       inName the name of the preset to clear
+   *
+   */
+  public static synchronized void clearPreset(String inName)
+  {
+    if(s_presets == null)
+      return;
+
+    s_presets.remove(inName);
+
+    if(s_presets.isEmpty())
+      s_presets = null;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test
