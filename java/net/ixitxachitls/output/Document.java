@@ -484,10 +484,6 @@ public class Document
 //   public static final String HIDE =
 //     Config.get("resource:commands/hide", "hide");
 
-//   /** Command for word uppercase text. */
-//   public static final String WORD_UPPERCASE =
-//     Config.get("resource:commands/worduppercase", "worduppercase");
-
 //   /** Command for skipping text. */
 //   public static final String SKIP =
 //     Config.get("resource:commands/SKIP", "SKIP");
