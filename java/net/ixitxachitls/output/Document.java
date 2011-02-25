@@ -410,10 +410,6 @@ public class Document
   //----- command definitions ----------------------------------------------
 
 
-//   /** Command for setting an id at a special position in the text. */
-//   public static final String MENU =
-//     Config.get("resource:commands/menu", "menu");
-
 //   // dma specifics
 
 //   /** Command for setting a product name. */

@@ -24,6 +24,8 @@
 package net.ixitxachitls.output.actions.html;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,11 +72,11 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Navigation extends Action
+public class Menu extends Action
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Navigation -----------------------------
+  //---------------------------------- Menu --------------------------------
 
   /**
    * Construct the action.
@@ -82,7 +84,7 @@ public class Navigation extends Action
    * @param       inIconDir the relative directory to the icons
    *
    */
-  public Navigation(@Nonnull String inIconDir)
+  public Menu(@Nonnull String inIconDir)
   {
     m_icons = inIconDir;
   }
@@ -120,6 +122,7 @@ public class Navigation extends Action
    * @param       inArguments the arguments
    *
    */
+  @SuppressWarnings("unchecked")
   public void execute(@Nonnull Document inDocument,
                       @Nullable List<? extends Object> inOptionals,
                       @Nullable List<? extends Object> inArguments)
@@ -130,38 +133,90 @@ public class Navigation extends Action
     if(!(inDocument instanceof HTMLDocument))
       throw new IllegalArgumentException("for HTML documents only, silly");
 
-    if(inArguments.size() % 2 != 0)
-      throw new IllegalArgumentException("must have an even number of "
+    if(inArguments.size() % 3 != 0)
+      throw new IllegalArgumentException("must have multiple of three "
                                          + "arguments");
 
     String id = "navigation";
 
-    if(inOptionals != null && inOptionals.isEmpty())
+    if(inOptionals != null && !inOptionals.isEmpty())
       id = inDocument.convert(inOptionals.get(0));
 
-    inDocument.add("<span class=\"" + id + "\">");
-    inDocument.add("<span class=\"" + id + "-top\"></span>");
+    Map<String, Object> menus = new TreeMap<String, Object>();
 
-    for(int i = 0; i < inArguments.size(); i += 2)
+    for(int i = 0; i < inArguments.size(); i += 3)
     {
-      String arg   = inDocument.convert(inArguments.get(i));
-      String link  = inDocument.convert(inArguments.get(i + 1));
+      String group = inDocument.convert(inArguments.get(i));
+      String arg   = inDocument.convert(inArguments.get(i + 1));
+      String link  = inDocument.convert(inArguments.get(i + 2));
 
-      inDocument.add("<span class=\"" + id + "-" + arg.replaceAll(" ", "_")
-                     + " " + id + "-part\" id=\"" + id + "-"
-                     + arg.replaceAll(" ", "_") + "\">"
-                     + "<a href=\"" + link + "\">");
-      inDocument.add("<img src=\"/" + m_icons
-                     + "/" + id + "_" + arg + ".png\" alt=\"" + id + "\"");
-      inDocument.add(" onmouseover=\"gui.iconHighlight(this)\" "
-                     + "onmouseout=\"gui.iconNormal(this)\"");
-      inDocument.add("/>\n");
-      inDocument.add("</a>\n"
-                     + "</span>\n");
+      String []parts = group.split("::");
+
+      Map<String, Object> cur = menus;
+
+      // add up all groups
+      for(int j = 0; j < parts.length; j++)
+      {
+        Map<String, Object> sub = (Map<String, Object>)cur.get(parts[j]);
+
+        if(sub == null)
+          sub = new TreeMap<String, Object>();
+
+        cur.put(parts[j], sub);
+
+        cur = sub;
+      }
+
+      // add the real link
+      cur.put(arg, link);
     }
 
-    inDocument.add("\n<span class=\"" + id + "-bottom\"></span>");
-    inDocument.add("</span>\n");
+    inDocument.add("<ul class='" + id + "-" + 0 + "'>");
+
+    for(Map.Entry<String, Object> menu : menus.entrySet())
+      addMenuEntries(inDocument, id, 1, menu.getKey(), menu.getValue());
+
+    inDocument.add("</ul><div style='clear: both'></div>");
+  }
+
+  //........................................................................
+
+  //---------------------------- addMenuEntries ----------------------------
+
+  /**
+   * Print the individual menu entries, recursive.
+   *
+   * @param       inDocument the document to print to
+   * @param       inID       the class id (prefix) to use for printing
+   * @param       inLevel    the level of printing
+   * @param       inKey      the key to print
+   * @param       inEntries  the individual menu entries (this is either a
+   *                         simple string, i.e. the link, or a map with sub
+   *                         entries)
+   *
+   */
+  @SuppressWarnings("unchecked")
+  private void addMenuEntries(@Nonnull Document inDocument,
+                              @Nonnull String inID, int inLevel,
+                              @Nonnull String inKey, @Nonnull Object inEntries)
+  {
+    if(inEntries instanceof String)
+      inDocument.add("<li><a href='" + (String)inEntries + "'>" + inKey
+                     + "</a></li>");
+    else
+    {
+      inDocument.add("<li onmouseover=\"this.childNodes[1].style.display="
+                     + "'block'\" "
+                     + "onmouseout=\"this.childNodes[1].style.display="
+                     + "'none'\">" + inKey + "<ul class='" + inID + "-"
+                     + inLevel + "'>");
+
+      for(String key : ((Map<String, Object>)inEntries).keySet())
+        addMenuEntries(inDocument, inID, inLevel + 1, key,
+                       ((Map<String, Object>)inEntries).get(key));
+
+      inDocument.add("</ul></li>");
+    }
   }
 
   //........................................................................
@@ -179,37 +234,32 @@ public class Navigation extends Action
     @org.junit.Test
     public void all()
     {
-      Action action = new Navigation("icons");
+      Action action = new Menu("icons");
 
       HTMLDocument doc = new HTMLDocument("title", "type");
 
       action.execute(doc, null,
                      com.google.common.collect.ImmutableList.of
-                     ("menu 1", "link 1", "menu 2", "link 2"));
+                     ("group 1", "menu 1", "link 1", "group 2", "menu 2",
+                      "link 2"));
 
       assertEquals("test",
-                   "<span class=\"navigation\">"
-                   + "<span class=\"navigation-top\"></span>"
-                   + "<span class=\"navigation-menu_1 navigation-part\" "
-                   + "id=\"navigation-menu_1\">"
-                   + "<a href=\"link 1\">"
-                   + "<img src=\"/icons/navigation_menu 1.png\" "
-                   + "alt=\"navigation\" "
-                   + "onmouseover=\"gui.iconHighlight(this)\" "
-                   + "onmouseout=\"gui.iconNormal(this)\"/>\n"
-                   + "</a>\n"
-                   + "</span>\n"
-                   + "<span class=\"navigation-menu_2 navigation-part\" "
-                   + "id=\"navigation-menu_2\">"
-                   + "<a href=\"link 2\">"
-                   + "<img src=\"/icons/navigation_menu 2.png\" "
-                   + "alt=\"navigation\" "
-                   + "onmouseover=\"gui.iconHighlight(this)\" "
-                   + "onmouseout=\"gui.iconNormal(this)\"/>\n"
-                   + "</a>\n"
-                   + "</span>\n\n"
-                   + "<span class=\"navigation-bottom\"></span>"
-                   + "</span>\n",
+                   "<ul class=\'navigation-0'>"
+                   + "<li onmouseover=\"this.childNodes[1].style.display="
+                   + "'block'\" "
+                   + "onmouseout=\"this.childNodes[1].style.display='none'\">"
+                   + "group 1"
+                   + "<ul class='navigation-1'>"
+                   + "<li><a href='link 1'>menu 1</a></li>"
+                   + "</ul></li>"
+                   + "<li onmouseover=\"this.childNodes[1].style.display="
+                   + "'block'\" "
+                   + "onmouseout=\"this.childNodes[1].style.display='none'\">"
+                   + "group 2"
+                   + "<ul class='navigation-1'>"
+                   + "<li><a href='link 2'>menu 2</a></li>"
+                   + "</ul></li>"
+                   + "</ul><div style='clear: both'></div>",
                    doc.toString());
     }
 
