@@ -85,10 +85,6 @@
             <!--     value="${basedir}/java.header"/>                   -->
         <!-- </module> -->
 
-        <!-- Following interprets the header file as regular expressions. -->
-        <!-- <module name="RegexpHeader"/>                                -->
-
-
         <!-- Checks for imports                              -->
         <!-- See http://checkstyle.sf.net/config_import.html -->
         <module name="AvoidStarImport"/>
@@ -198,6 +194,13 @@
         <!-- Merlins own checks -->
         <module name="net.ixitxachitls.util.NullPointerCheck" />
 
+    </module>
+
+    <!-- Following interprets the header file as regular expressions. -->
+    <module name="RegexpHeader">
+      <property
+         name="header"
+         value="^/\*+$\n^ \* Copyright \(c\) (\d\d\d\d-)?2011 .*$\n^ \* All rights reserved$"/>
     </module>
 
     <module name="SuppressionCommentFilter"/>
