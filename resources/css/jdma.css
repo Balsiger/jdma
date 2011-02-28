@@ -78,6 +78,7 @@ H2
 {
   float: right;
   padding-right: 10px;
+  text-align: right;
 }
 
 #navigation
@@ -121,6 +122,12 @@ H2
 .about
 {
   background-position: -30px;
+}
+
+#search INPUT
+{
+  font-size: 60%;
+  display: none;
 }
 
 /******************************************************************************
@@ -201,6 +208,12 @@ DIV.footer
   position:    relative;
 }
 
+DIV.footer DIV.version
+{
+  font-size:     70%;
+  color:         #ccc;
+  margin-bottom: 3px;
+}
 
 /******************************************************************************
  * jQuery overrides

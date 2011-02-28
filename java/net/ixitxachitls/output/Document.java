@@ -412,50 +412,6 @@ public class Document
 
 //   // dma specifics
 
-//   /** Command for setting a product name. */
-//   public static final String PRODUCT =
-//     Config.get("resource:commands/Product", "Product");
-
-//   /** Command for setting a place name. */
-//   public static final String PLACE =
-//     Config.get("resource:commands/Place", "Place");
-
-//   /** Command for setting an NPC name. */
-//   public static final String NPC =
-//     Config.get("resource:commands/NPC", "NPC");
-
-//   /** Command for setting a monster name. */
-//   public static final String MONSTER =
-//     Config.get("resource:commands/Monster", "Monster");
-
-//   /** Command for setting a group name. */
-//   public static final String GROUP =
-//     Config.get("resource:commands/Group", "Group");
-
-//   /** Command for setting a group name. */
-//   public static final String QUALITY =
-//     Config.get("resource:commands/Quality", "Quality");
-
-//   /** Command for setting a group name. */
-//   public static final String ITEM =
-//     Config.get("resource:commands/Item", "Item");
-
-//   /** Command for setting a group name. */
-//   public static final String GOD =
-//     Config.get("resource:commands/God", "God");
-
-//   /** Command for setting a group name. */
-//   public static final String EVENT =
-//     Config.get("resource:commands/Event", "Event");
-
-//   /** Command for setting a group name. */
-//   public static final String CLASS =
-//     Config.get("resource:commands/Class", "Class");
-
-//   /** Command for setting a group name. */
-//   public static final String SPELL =
-//     Config.get("resource:commands/Spell", "Spell");
-
 //   /** Command for setting a group name. */
 //   public static final String SPELLREF =
 //     Config.get("resource:commands/SpellRef", "SpellRef");
@@ -463,14 +419,6 @@ public class Document
 //   /** Command for setting a group name. */
 //   public static final String DOMAIN =
 //     Config.get("resource:commands/Domain", "Domain");
-
-//   /** Command for setting a group name. */
-//   public static final String FEAT =
-//     Config.get("resource:commands/Feat", "Feat");
-
-//   /** Command for setting a group name. */
-//   public static final String SKILL =
-//     Config.get("resource:commands/Skill", "Skill");
 
 //   /** Command for indentation. */
 //   public static final String INDENT =

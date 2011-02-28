@@ -244,6 +244,22 @@ public class HTMLWriter
   }
 
   //........................................................................
+  //--------------------------------- alt ----------------------------------
+
+  /**
+   * Add a name attribute to a tag.
+   *
+   * @param       inText   the text for the name
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter name(@Nonnull String inText)
+  {
+    return attribute("name", inText);
+  }
+
+  //........................................................................
   //-------------------------------- style ---------------------------------
 
   /**
@@ -273,6 +289,54 @@ public class HTMLWriter
   public HTMLWriter onClick(@Nonnull String inText)
   {
     return attribute("onclick", inText);
+  }
+
+  //........................................................................
+  //-------------------------------- onSubmit ------------------------------
+
+  /**
+   * Add an on submit attribute to the current tag.
+   *
+   * @param       inText   the text for the event handler
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter onSubmit(@Nonnull String inText)
+  {
+    return attribute("onsubmit", inText);
+  }
+
+  //........................................................................
+  //------------------------------ onMouseOver -----------------------------
+
+  /**
+   * Add an on mouseover attribute to the current tag.
+   *
+   * @param       inText   the text for the mouse over
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter onMouseOver(@Nonnull String inText)
+  {
+    return attribute("onmouseover", inText);
+  }
+
+  //........................................................................
+  //------------------------------ onMouseOver -----------------------------
+
+  /**
+   * Add an on mouseout attribute to the current tag.
+   *
+   * @param       inText   the text for the mouse out
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter onMouseOut(@Nonnull String inText)
+  {
+    return attribute("onmouseout", inText);
   }
 
   //........................................................................

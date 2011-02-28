@@ -77,12 +77,11 @@ public class PageServlet extends DMAServlet
   //-------------------------------------------------------------- variables
 
   /** The project name. */
-  public static final String PROJECT =
-    Config.get("project.name", "jDMA");
+  public static final String PROJECT = Config.get("project.name", "jDMA");
 
   /** The project name. */
   public static final String PROJECT_URL =
-    Config.get("project.url", "http://dma.ixitxachitls.net");
+    Config.get("project.url", "http://www.ixitxachitls.net");
 
   /** The version number (or monster in this case ;-)). */
   public static final String VERSION =
@@ -219,9 +218,16 @@ public class PageServlet extends DMAServlet
 
     inWriter
       .begin("a").classes("icon", "library").tooltip("Library").end("a")
-      .begin("a").classes("icon", "search").tooltip("Search").end("a")
       .begin("a").classes("icon", "about").tooltip("About").href("/about.html")
       .onClick("util.link(event, '/about.html')").end("a")
+      .begin("div").onMouseOver("$('#search :input').show()")
+      .onMouseOut("$('#search :input').hide()")
+      .begin("form").classes("search").id("search")
+      .onSubmit("util.link(event, '/search/' + this.search.value)")
+      .begin("input").name("search")
+      .begin("div").classes("icon", "search").tooltip("Search").end("div")
+      .end("form") // search
+      .end("div") // search
       .end("div") // header-right
       .begin("div").id("header-left")
       .add("DMA")
@@ -272,6 +278,9 @@ public class PageServlet extends DMAServlet
   {
     inWriter.begin("div").classes("footer")
       .begin("p").end("p")
+      .begin("div").classes("version")
+      .add(PROJECT + " version " + VERSION + " (build " + BUILD + ")")
+      .end("div")
       // we can't have spaces here, so we add it directly
       .add("<a href=\"http://validator.w3.org/check?uri=referer\">"
            + "<img src=\"/icons/valid-xhtml10.png\" alt=\"Valid XHTML 1.0!\" />"
