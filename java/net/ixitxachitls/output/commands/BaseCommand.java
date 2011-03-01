@@ -1005,7 +1005,7 @@ public class BaseCommand extends Command
     //----- commands -------------------------------------------------------
 
     /** Testing commands. */
-    //@org.junit.Test
+    @org.junit.Test
     public void commands()
     {
       String input = "some \\command to parse";

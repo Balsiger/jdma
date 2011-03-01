@@ -36,5 +36,12 @@
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AbstractEntryServlet.*" />
+    <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+  </Match>
+
+
+
 </FindBugsFilter>
 

@@ -211,8 +211,7 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
 
   //------------------------------------------------------------------- test
 
-  /** The Test.
-   *
+  /** The Test. *
    * @hidden
    *
    */
