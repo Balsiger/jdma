@@ -44,6 +44,7 @@ import javax.annotation.Nullable;
 
 // import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAFile;
+import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.data.Storage;
 // import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
 // import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
@@ -63,7 +64,7 @@ import net.ixitxachitls.input.ParseReader;
 // import net.ixitxachitls.output.commands.Bold;
 // import net.ixitxachitls.output.commands.Center;
 // import net.ixitxachitls.output.commands.Color;
-// import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.Linebreak;
@@ -875,7 +876,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
 //   @MayReturnNull
-//   @SuppressWarnings("unchecked") // having to case base entry to given T
+//   @SuppressWarnings("unchecked") // having to cast base entry to given T
 //   protected <T extends BaseEntry, V>
 //     V getBaseValue(Extractor<T, V> inExtractor,
 //                    @MayBeNull Combiner<V, V> inCombiner)
@@ -1332,19 +1333,19 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-  //---------------------------- getPrintCommand ---------------------------
+  //--------------------------------- print --------------------------------
 
   /**
-   * Print the item to the document, in the general section.
+   * Get the print object for printing this entry.
    *
    * @param       inDM   true if set for DM, false for player
    *
    * @return      the command representing this item in a list
    *
    */
-//   public Command getPrintCommand(boolean inDM)
-//   {
-//     PrintCommand commands = printCommand(inDM, true);
+  public Command print(boolean inDM)
+  {
+    Print print = printValues(inDM, true);
 
 //     ArrayList<Object> result = new ArrayList<Object>();
 
@@ -1365,7 +1366,8 @@ public class AbstractEntry extends ValueGroup
 //     }
 
 //     return new Divider(commands.type, new Command(result.toArray()));
-//   }
+    return null;
+  }
 
   //........................................................................
   //------------------------- getShortPrintCommand -------------------------
@@ -1400,26 +1402,26 @@ public class AbstractEntry extends ValueGroup
 //   }
 
   //........................................................................
-  //------------------------------ printCommand ----------------------------
+  //------------------------------ printValues -----------------------------
 
   /**
-   * Print the item to the document, in the general section.
+   * Collect the values for printing.
    *
    * @param       inDM       true if setting for dm, false if not
    * @param       inEditable true if values are editable, false if not
    *
-   * @return      the command representing this item in a list
+   * @return      the print object representing the values to print
    *
    */
-//   public PrintCommand printCommand(boolean inDM, boolean inEditable)
-//   {
-//     PrintCommand commands = new PrintCommand();
+  private @Nonnull Print printValues(boolean inDM, boolean inEditable)
+  {
+    Print values = new Print();
 
 //     commands.type = "abstract entry";
 
-//     // images
-//     commands.addValue("image", getType().getMultipleDir() + "/" + getID(),
-//                       false, false, false, "images");
+    // images
+    values.add("image", getType().getMultipleDir() + "/" + getID(), false,
+               false, false, "images");
 
 //     String baseDir;
 //     if(isBase())
@@ -1551,8 +1553,8 @@ public class AbstractEntry extends ValueGroup
 //                                  .iterator(), "||", "")), false, true, false,
 //                         "files");
 
-//     return commands;
-//   }
+    return values;
+  }
 
   //........................................................................
   //--------------------------- shortPrintCommand --------------------------

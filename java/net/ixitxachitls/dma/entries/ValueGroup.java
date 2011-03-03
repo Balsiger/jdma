@@ -55,6 +55,7 @@ import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 // import net.ixitxachitls.output.commands.Bold;
 //import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.ID;
@@ -103,21 +104,51 @@ public abstract class ValueGroup implements Changeable
   public @interface Key {
     /** The name of the value. */
     String value();
+  }
 
-    /** Flag if value is to be stored or not. */
-    boolean stored() default true;
-
+  /** The annotation for a DM only variable. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface DM {
     /** Flag if the value is for dms only. */
-    boolean dm() default false;
+    boolean value() default true;
+  }
 
+  /** The annotation for a player only variable. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface PlayerOnly {
     /** Flag if the value is for players only. */
-    boolean player() default false;
+    boolean value() default true;
+  }
 
-    /** Flag if the value can be edited by players. */
-    boolean playerEditable() default true;
+  /** The annotation for a player editable value. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface PlayerEdit {
+    /** Flag if the value can be edited by a player. */
+    boolean value() default true;
+  }
 
-    /** The plural version of the name of hte value. */
-    String plural() default "";
+  /** The plural form of the key. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface Plural {
+    /** Plural form of the key of this value. */
+    String value();
+  }
+
+  /** The annotation for a value that is not stored. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface NoStore {
+    /** Flag denoting that the values is not stored. */
+    boolean value() default true;
   }
 
   //........................................................................
@@ -235,80 +266,9 @@ public abstract class ValueGroup implements Changeable
   /** A simple structure to store the results of creating a print command. */
 //   public class PrintCommand
 //   {
-//    //--------------------------------------------------------------- nested
-
-//     private class PrintValue
-//     {
-//       private PrintValue(Object inValue, boolean inEditable, boolean inDM,
-//                          boolean inPlayer, String inPluralKey)
-//       {
-//         if(inDM && inPlayer)
-//          throw new IllegalArgumentException("value can't be for DM only and "
-//                                              + "for player only, something "
-//                                              + "must be wrong!");
-
-//         m_value    = inValue;
-//         m_editable = inEditable;
-//         m_dm       = inDM;
-//         m_player   = inPlayer;
-//         m_plural   = inPluralKey;
-//       }
-
-//       private Object m_value;
-//       private boolean m_editable;
-//       private boolean m_dm;
-//       private boolean m_player;
-//       private String m_plural;
-//       private PrintValue m_next = null;
-
-//       public void add(PrintValue inValue)
-//       {
-//         if(m_next == null)
-//           m_next = inValue;
-//         else
-//           m_next.add(inValue);
-//       }
-
-//       public String toString()
-//       {
-//         List<String> options = new ArrayList<String>();
-
-//         if(m_editable)
-//           options.add("editable");
-
-//         if(m_dm)
-//           options.add("dm");
-
-//         StringBuilder builder = new StringBuilder();
-
-//         for(PrintValue value = this; value != null; value = value.m_next)
-//         {
-//           builder.append(value.m_plural);
-//           builder.append(": ");
-//           builder.append(value.m_value.toString());
-
-//           if(value.m_next != null)
-//             builder.append(" / ");
-//         }
-
-//         if(options.size() > 0)
-//         {
-//           builder.append(" ");
-//           builder.append(options);
-//         }
-
-//         return builder.toString();
-//       }
-//     }
-
-//     //......................................................................
-
 //     /** The type of entry printed. */
 //     public String type = "type";
 
-//     /** A map with all the individual values. */
-//     private Map<String, PrintValue> m_values =
-//       new HashMap<String, PrintValue>();
 
 //     public java.util.List<Object> temp;
 
@@ -764,34 +724,6 @@ public abstract class ValueGroup implements Changeable
 
 //     //......................................................................
 
-     //------------------------------ addValue ------------------------------
-
-//     /**
-//      * Add a value to the print output.
-//      *
-//      * @param       inKey      the key of the value added
-//      * @param       inValue    the value to add
-//      * @param       inEditable true if editable, false if not
-//      * @param       inDM       true if the value is for DMs only, false else
-//      * @param       inPlayer   true if the data is for players only
-//      * @param       inPlural   the plural for the key of the value
-//      *
-//      */
-//     public void addValue(String inKey, Object inValue, boolean inEditable,
-//                          boolean inDM, boolean inPlayer, String inPlural)
-//     {
-//       PrintValue newValue =
-//         new PrintValue(inValue, inEditable, inDM, inPlayer, inPlural);
-
-//       PrintValue oldValue = m_values.get(inKey);
-
-//       if(oldValue == null)
-//         m_values.put(inKey, newValue);
-//       else
-//         oldValue.add(newValue);
-//     }
-
-//     //......................................................................
      //---------------------------- appendValue -----------------------------
 
 //     /**
@@ -1086,7 +1018,7 @@ public abstract class ValueGroup implements Changeable
 //     }
 
 //     //......................................................................
-//     //------------------------------ toString ------------------------------
+     //------------------------------ toString ------------------------------
 
 //     /**
 //      * Convert to a string for debugging.
@@ -1451,18 +1383,18 @@ public abstract class ValueGroup implements Changeable
 
   //---------------------------- getPrintCommand ---------------------------
 
-//   /**
-//    * Print the item to the document, in the general section.
-//    *
-//    * @param       inDM true if setting for dm, false if not
-//    *
-//    * @return      the command representing this item in a list
-//    *
-//    */
-//   public Command getPrintCommand(boolean inDM)
-//   {
-//     return null;
-//   }
+  /**
+   * Print the entry into a command for adding to a document.
+   *
+   * @param       inDM true if setting for dm, false if not
+   *
+   * @return      the command representing this item in a list
+   *
+   */
+  public Command print(boolean inDM)
+  {
+    return null;
+  }
 
   //........................................................................
   //------------------------------- getCommand -----------------------------
@@ -1707,11 +1639,19 @@ public abstract class ValueGroup implements Changeable
     for(Field field : fields)
     {
       Key key = field.getAnnotation(Key.class);
+      DM dm = field.getAnnotation(DM.class);
+      PlayerOnly player = field.getAnnotation(PlayerOnly.class);
+      PlayerEdit edit = field.getAnnotation(PlayerEdit.class);
+      Plural plural = field.getAnnotation(Plural.class);
+      NoStore noStore = field.getAnnotation(NoStore.class);
 
       if(key != null)
-        variables.add(new Variable(key.value(), field, key.stored(), key.dm(),
-                                   key.player(), key.playerEditable(),
-                                   key.plural()));
+        variables.add(new Variable(key.value(), field,
+                                   noStore == null || !noStore.value(),
+                                   dm != null && dm.value(),
+                                   player != null && player.value(),
+                                   edit != null && edit.value(),
+                                   plural == null ? null : plural.value()));
     }
 
     // add all the variables of the parent class, if any
@@ -1974,15 +1914,20 @@ public abstract class ValueGroup implements Changeable
       protected Value m_value = new Value.Test.TestValue();
 
       /** A value for dms only. */
-      @Key(value = "dm value", dm = true, plural = "dms value", stored = false)
+      @Key(value = "dm value")
+      @DM
+      @Plural("dms value")
+      @NoStore
       protected Value m_dmValue = new Value.Test.TestValue();
 
       /** A value for players only. */
-      @Key(value = "player value", player = true, playerEditable = false)
+      @Key("player value")
+      @PlayerOnly
       protected Value m_playerValue = new Value.Test.TestValue();
 
       /** A player editable value. */
-      @Key(value = "player editable", playerEditable = true)
+      @Key("player editable")
+      @PlayerEdit
       protected Value m_playerEditableValue = new Value.Test.TestValue();
 
       /** Set the change state.
