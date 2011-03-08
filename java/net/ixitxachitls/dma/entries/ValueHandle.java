@@ -91,14 +91,14 @@ public abstract class ValueHandle
   /** The key for this variable. */
   protected @Nonnull String m_key;
 
-  /** A flag denoting if the value is for editable by players. */
-  protected boolean m_playerEditable;
-
   /** A flag denoting if the value is for DMs only. */
   protected boolean m_dm;
 
   /** A flag denoting if the value is for players only. */
   protected boolean m_player;
+
+  /** A flag denoting if the value is for editable by players. */
+  protected boolean m_playerEditable;
 
   /** A string with the plural of the key. */
   protected @Nonnull String m_plural;
