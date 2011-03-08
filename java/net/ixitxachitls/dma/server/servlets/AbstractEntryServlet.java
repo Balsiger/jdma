@@ -238,6 +238,8 @@ public abstract class AbstractEntryServlet extends PageServlet
     HTMLDocument document = new HTMLDocument
       (title, entry.getType().getMultiple().toLowerCase(Locale.US));
 
+    document.add(entry.printPage(true)); // TODO: must have dm or not here!
+
 //     document.add(entry.getPrintCommand(true));
 
     //document.add(new Linebreak());
@@ -378,7 +380,11 @@ public abstract class AbstractEntryServlet extends PageServlet
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'base entry: guru';\n"
                    + "    </SCRIPT>\n"
-                   + "    \n",
+                   + "    <span class=\"error\">* id unknown *</span> "
+                   + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
+                   + "class=\"editable\" type=\"name\"><span>guru</span>"
+                   + "&nbsp;</dma.editable>"
+                   + "\n",
                    m_output.toString());
       assertContent("paths", m_paths, "/baseentry/guru");
     }
@@ -490,7 +496,11 @@ public abstract class AbstractEntryServlet extends PageServlet
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'base entry: guru';\n"
                    + "    </SCRIPT>\n"
-                   + "    \n",
+                   + "    <span class=\"error\">* id unknown *</span> "
+                   + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
+                   + "class=\"editable\" type=\"name\"><span>guru</span>"
+                   + "&nbsp;</dma.editable>"
+                   + "\n",
                    m_output.toString());
       assertContent("paths", m_paths,
                     "/baseentry/guru", "/baseentry/guru", "/baseentry/guru");

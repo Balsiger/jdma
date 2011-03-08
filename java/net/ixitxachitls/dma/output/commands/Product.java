@@ -129,6 +129,7 @@ public class Product extends BaseCommand
     //----- arguments ------------------------------------------------------
 
     /** Testing arguments. */
+    @org.junit.Test
     public void testArguments()
     {
       Command command = new Product("text");

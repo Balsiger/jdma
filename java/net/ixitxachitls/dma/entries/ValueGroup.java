@@ -54,8 +54,8 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 // import net.ixitxachitls.output.commands.Bold;
-//import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Color;
+//import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.ID;
@@ -433,14 +433,6 @@ public abstract class ValueGroup implements Changeable
 //      */
 //     private Object asCommand(String inKey, PrintValue inValue, boolean inDM)
 //     {
-//       if(inValue == null)
-//         return null;
-
-//       if(inValue.m_value == null)
-//         return new Color("error", "*undefined*");
-
-//       if(!inDM && inValue.m_dm || inDM && inValue.m_player)
-//         return null;
 
 //       Object val = inValue.m_value;
 //       if(!inDM && inValue.m_value instanceof
@@ -1070,9 +1062,6 @@ public abstract class ValueGroup implements Changeable
 
 //       if(inCommand instanceof String)
 //       {
-//         List<String> tokens =
-//           Encodings.tokenize((String)inCommand,
-//                              "(\\$|#|%|\\?|&)(?:\\{(.*?)\\}|(\\w+))\\s?");
 
 //         List<Object> commands = new ArrayList<Object>();
 //         for(String token : tokens)
@@ -1381,22 +1370,31 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
-  //---------------------------- getPrintCommand ---------------------------
+  //----------------------------- formatValue ------------------------------
 
   /**
-   * Print the entry into a command for adding to a document.
+   * Format a value for printing.
    *
-   * @param       inDM true if setting for dm, false if not
+   * @param     inKey the key of the value to format
+   * @param     inDM  true if formattign for dm, false if not
+   * @param     inEdit true if allowing to edit, false if not
    *
-   * @return      the command representing this item in a list
+   * @return    a formatted value ready for printing
    *
    */
-  public Command print(boolean inDM)
+  public @Nonnull Object formatValue(@Nonnull String inKey, boolean inDM,
+                                     boolean inEdit)
   {
-    return null;
+    ValueHandle handle = getVariable(inKey);
+
+    if(handle == null)
+      return new Color("error", "* " + inKey + " unknown *");
+
+    return handle.format(this, inDM, inEdit);
   }
 
   //........................................................................
+
   //------------------------------- getCommand -----------------------------
 
 //   /**
@@ -1498,13 +1496,6 @@ public abstract class ValueGroup implements Changeable
 //                                              @Nullable String inScript,
 //                                     boolean inEditable)
 //   {
-//     if(inEditable)
-//       return new Editable(getID(), inValue.format(true), inKey,
-//                           inValue.toEdit(),
-//                           inType != null ? inType : inValue.getEditType(),
-//                           inScript, inValue.getEditValues());
-//     else
-//       return inValue.format(true);
 //   }
 
   //........................................................................
@@ -1534,7 +1525,7 @@ public abstract class ValueGroup implements Changeable
       if(!var.isStored())
         continue;
 
-      Value value = var.getValue(this);
+      Value value = var.get(this);
 
       // We don't store this if we don't have a value.
       if(value == null || !value.isDefined())

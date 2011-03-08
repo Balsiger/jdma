@@ -224,7 +224,7 @@ public class PageServlet extends DMAServlet
       .onMouseOut("$('#search :input').hide()")
       .begin("form").classes("search").id("search")
       .onSubmit("util.link(event, '/search/' + this.search.value)")
-      .begin("input").name("search")
+      .begin("input").name("search").end("input")
       .begin("div").classes("icon", "search").tooltip("Search").end("div")
       .end("form") // search
       .end("div") // search
@@ -448,12 +448,21 @@ public class PageServlet extends DMAServlet
                    + "        </A>\n"
                    + "        <A class=\"icon library\" title=\"Library\">\n"
                    + "        </A>\n"
-                   + "        <A class=\"icon search\" title=\"Search\">\n"
-                   + "        </A>\n"
                    + "        <A class=\"icon about\" title=\"About\" "
                    + "href=\"/about.html\" "
                    + "onclick=\"util.link(event, '/about.html')\">\n"
                    + "        </A>\n"
+                   + "        <DIV onmouseover=\"$('#search :input').show()\" "
+                   + "onmouseout=\"$('#search :input').hide()\">\n"
+                   + "          <FORM class=\"search\" id=\"search\" "
+                   + "onsubmit=\"util.link(event, '/search/' + "
+                   + "this.search.value)\">\n"
+                   + "            <INPUT name=\"search\"/>\n"
+                   + "            <DIV class=\"icon search\" "
+                   + "title=\"Search\">\n"
+                   + "            </DIV>\n"
+                   + "          </FORM>\n"
+                   + "        </DIV>\n"
                    + "      </DIV>\n"
                    + "      <DIV id=\"header-left\">\n"
                    + "        DMA\n"
@@ -472,6 +481,9 @@ public class PageServlet extends DMAServlet
                    + "    </DIV>\n"
                    + "    <DIV class=\"footer\">\n"
                    + "      <P/>\n"
+                   + "      <DIV class=\"version\">\n"
+                   + "        jDMA version Allip (build )\n"
+                   + "      </DIV>\n"
                    + "      <a href=\"http://validator.w3.org/check?"
                    + "uri=referer\"><img src=\"/icons/valid-xhtml10.png\" "
                    + "alt=\"Valid XHTML 1.0!\" /></a>\n"

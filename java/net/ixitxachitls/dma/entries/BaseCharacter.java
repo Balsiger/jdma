@@ -33,6 +33,7 @@ import javax.annotation.Nullable;
 //import net.ixitxachitls.dma.Global;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Text;
 //import net.ixitxachitls.dma.values.ValueList;
@@ -167,6 +168,11 @@ public class BaseCharacter extends BaseEntry
   public static final BaseType<BaseCharacter> TYPE =
     new BaseType<BaseCharacter>(BaseCharacter.class);
 
+  /** The printer for printing the whole base character. */
+  public static final Print s_pagePrint =
+    new Print("$title $id and some other text $name ${real name} and some "
+              + "more $group ${last login} ${last action}");
+
   /** The basic formatter for base characters. */
 //   public static final Index.Formatter<AbstractEntry> FORMATTER =
 //     new Index.Formatter<AbstractEntry>()
@@ -298,6 +304,21 @@ public class BaseCharacter extends BaseEntry
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //----------------------------- getPagePrint -----------------------------
+
+  /**
+   * Get the print for a full page.
+   *
+   * @return the print for page printing
+   *
+   */
+  protected @Nonnull Print getPagePrint()
+  {
+    return s_pagePrint;
+  }
+
+  //........................................................................
 
   //------------------------------ printCommand ----------------------------
 

@@ -24,6 +24,7 @@
 package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.configuration.Config;
@@ -87,11 +88,12 @@ public class Editable extends BaseCommand
    */
   public Editable(@Nonnull Object inID, @Nonnull Object inText,
                   @Nonnull Object inKey, @Nonnull Object inValue,
-                  @Nonnull Object inType, @Nonnull Object inScript)
+                  @Nonnull Object inType, @Nullable String inScript)
   {
     this(inID, inText, inKey, inValue, inType);
 
-    withOptionals(inScript);
+    if(inScript != null && !inScript.isEmpty())
+      withOptionals(inScript);
   }
 
   //........................................................................
@@ -111,12 +113,18 @@ public class Editable extends BaseCommand
    */
   public Editable(@Nonnull Object inID, @Nonnull Object inText,
                   @Nonnull Object inKey, @Nonnull Object inValue,
-                  @Nonnull Object inType, @Nonnull Object inScript,
-                  @Nonnull Object inValues)
+                  @Nonnull Object inType, @Nullable String inScript,
+                  @Nullable String inValues)
   {
     this(inID, inText, inKey, inValue, inType, inScript);
 
-    withOptionals(inValues);
+    if(inValues != null && !inValues.isEmpty())
+    {
+      if(inScript == null || inScript.isEmpty())
+        withOptionals("");
+
+      withOptionals(inValues);
+    }
   }
 
   //........................................................................
@@ -173,8 +181,7 @@ public class Editable extends BaseCommand
                    "\\editable[script]{id}{text}{key}{value}{type}",
                    command.toString());
 
-      command = new Editable("id", "text", "key", "value", "type",
-                             "script",
+      command = new Editable("id", "text", "key", "value", "type", "script",
                              "values");
       assertEquals("command",
                    "\\editable[script][values]{id}{text}{key}{value}{type}",

@@ -66,12 +66,12 @@ import net.ixitxachitls.input.ParseReader;
 // import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Editable;
+import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.Linebreak;
-// import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
-// import net.ixitxachitls.output.commands.Title;
+import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.util.EmptyIterator;
 // import net.ixitxachitls.util.Extractor;
 // import net.ixitxachitls.util.Identificator;
@@ -322,6 +322,9 @@ public class AbstractEntry extends ValueGroup
   public static final @Nonnull AbstractType<AbstractEntry> TYPE =
     new BaseType<AbstractEntry>(AbstractEntry.class, "Abstract Entries");
 
+  /** The print for printing a whole page entry. */
+  public static final Print s_pagePrint = new Print("$id $name");
+
   /** The random generator. */
   protected static final @Nonnull Random s_random = new Random();
 
@@ -384,7 +387,8 @@ public class AbstractEntry extends ValueGroup
   //----- name -------------------------------------------------------------
 
   /** The name of the abstract entry. */
-  @Key(value = "name", stored = false)
+  @Key("name")
+  @NoStore
   protected Name m_name = new Name();
 
   //........................................................................
@@ -1300,7 +1304,7 @@ public class AbstractEntry extends ValueGroup
       if(!var.isStored())
         continue;
 
-      Value value = var.getValue(this);
+      Value value = var.get(this);
 
       // We don't store this if we don't have a value.
       if(value == null || !value.isDefined())
@@ -1333,6 +1337,37 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
+  //----------------------------- getPagePrint -----------------------------
+
+  /**
+   * Get the print for a full page.
+   *
+   * @return the print for page printing
+   *
+   */
+  protected @Nonnull Print getPagePrint()
+  {
+    return s_pagePrint;
+  }
+
+  //........................................................................
+  //------------------------------- printPage ------------------------------
+
+  /**
+   * Print the entry into a command for adding to a document.
+   *
+   * @param       inDM true if setting for dm, false if not
+   *
+   * @return      the command representing this item in a list
+   *
+   */
+  public @Nonnull Object printPage(boolean inDM)
+  {
+    return getPagePrint().print(this, inDM);
+  }
+
+  //........................................................................
+
   //--------------------------------- print --------------------------------
 
   /**
@@ -1343,9 +1378,9 @@ public class AbstractEntry extends ValueGroup
    * @return      the command representing this item in a list
    *
    */
-  public Command print(boolean inDM)
-  {
-    Print print = printValues(inDM, true);
+//   public Command print(boolean inDM)
+//   {
+//     Print print = printValues(inDM, true);
 
 //     ArrayList<Object> result = new ArrayList<Object>();
 
@@ -1366,8 +1401,8 @@ public class AbstractEntry extends ValueGroup
 //     }
 
 //     return new Divider(commands.type, new Command(result.toArray()));
-    return null;
-  }
+//     return null;
+//   }
 
   //........................................................................
   //------------------------- getShortPrintCommand -------------------------
@@ -1413,15 +1448,15 @@ public class AbstractEntry extends ValueGroup
    * @return      the print object representing the values to print
    *
    */
-  private @Nonnull Print printValues(boolean inDM, boolean inEditable)
-  {
-    Print values = new Print();
+//   private @Nonnull Print printValues(boolean inDM, boolean inEditable)
+//   {
+//     Print values = new Print();
 
 //     commands.type = "abstract entry";
 
     // images
-    values.add("image", getType().getMultipleDir() + "/" + getID(), false,
-               false, false, "images");
+//     values.add("image", getType().getMultipleDir() + "/" + getID(), false,
+//                false, false, "images");
 
 //     String baseDir;
 //     if(isBase())
@@ -1553,7 +1588,39 @@ public class AbstractEntry extends ValueGroup
 //                                  .iterator(), "||", "")), false, true, false,
 //                         "files");
 
-    return values;
+//     return values;
+//   }
+
+  //........................................................................
+  //----------------------------- formatValue ------------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   * @param     inEdit true if allowing to edit, false if not
+   *
+   * @return    a formatted value ready for printing
+   *
+   */
+  @Override
+  public @Nonnull Object formatValue(@Nonnull String inKey, boolean inDM,
+                                     boolean inEdit)
+  {
+    if("title".equals(inKey))
+    {
+      Command title =
+        new Title(formatValue("name", inDM, false), "title",
+                  new Link(getType(), "/index/" + getType().getMultipleLink()));
+
+      if(inDM && inEdit)
+        return new Editable(getID(), title, "name", m_name.toString(), "name");
+
+      return title;
+    }
+
+    return super.formatValue(inKey, inDM, inEdit);
   }
 
   //........................................................................

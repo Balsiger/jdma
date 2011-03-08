@@ -1008,17 +1008,17 @@ public class BaseCommand extends Command
     @org.junit.Test
     public void commands()
     {
-      String input = "some \\command to parse";
+      String input = "some \\baseCommand to parse";
       Command command = new Command(BaseCommand.parse(input));
       Command expected =
-        new Command("some", new BaseCommand("baseCommand", 0, 0), " to parse");
+        new Command("some ", new BaseCommand("baseCommand", 0, 0), "to parse");
 
       assertEquals("objects", expected, command);
       assertEquals("string", input, command.toString());
 
       input = "\\starting command";
       command = new Command(BaseCommand.parse(input));
-      expected = new Command(new BaseCommand("starting", 0, 0), " command");
+      expected = new Command(new BaseCommand("starting", 0, 0), "command");
 
       assertEquals("objects", expected, command);
       assertEquals("string", input, command.toString());
@@ -1027,9 +1027,10 @@ public class BaseCommand extends Command
                            + "[Starting]: java.lang.ClassNotFoundException: "
                            + "net.ixitxachitls.output.commands.Starting");
 
-      // single command      input = "\\command";
+      // single command
+      input = "\\baseCommand ";
       command = new Command(BaseCommand.parse(input));
-      expected = new BaseCommand("baseCommand", 0, 0);
+      expected = new Command(new BaseCommand("baseCommand", 0, 0));
 
       assertEquals("objects", expected, command);
       assertEquals("string", input, command.toString());

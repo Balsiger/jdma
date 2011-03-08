@@ -125,6 +125,7 @@ public class Item extends BaseCommand
     //----- arguments ------------------------------------------------------
 
     /** Testing arguments. */
+    @org.junit.Test
     public void arguments()
     {
       Command command = new Item("text");

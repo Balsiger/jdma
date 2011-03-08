@@ -28,6 +28,7 @@ package net.ixitxachitls.dma.entries;
 //import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 // import net.ixitxachitls.dma.Global;
 // import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
@@ -277,7 +278,8 @@ public class BaseEntry extends AbstractEntry
 
   // TODO: was modifiable; check if it needs to be
   /** The references for this entry. */
-  @Key(value = "references", dm = true)
+  @Key("references")
+  @DM
   protected ValueList<Multiple> m_references =
     new ValueList<Multiple>
     (new Multiple
@@ -344,7 +346,8 @@ public class BaseEntry extends AbstractEntry
     new ListFormatter<ValueList<Text>>("; ");
 
   /** The synonyms for this entry. */
-  @Key(value = "synonyms", dm = true)
+  @Key("synonyms")
+  @DM
   protected ValueList<Text> m_synonyms =
     new ValueList<Text>(new Text()).withFormatter(s_synonymListFormatter);
 
@@ -356,7 +359,8 @@ public class BaseEntry extends AbstractEntry
     new LinkFormatter<Name>("/index/categories/");
 
   /** The categories. */
-  @Key(value = "categories", dm = true)
+  @Key("categories")
+  @DM
   protected ValueList<Name> m_categories =
     new ValueList<Name>(new Name().withFormatter(s_categoryFormatter));
 
@@ -853,18 +857,14 @@ public class BaseEntry extends AbstractEntry
    *
    * @param       inDescription the description
    *
-   * @return      true if set, false if not
-   *
    */
-//   public boolean setDescription(String inDescription)
-//   {
-//     if(inDescription == null)
-//       return false;
-
-//     m_description.set(inDescription);
-
-//     return true;
-//   }
+  public void setDescription(@Nullable String inDescription)
+  {
+    if(inDescription == null)
+      m_description = new FormattedText();
+    else
+      m_description = new FormattedText(inDescription);
+  }
 
   //........................................................................
   //---------------------------- setShortDescription -----------------------

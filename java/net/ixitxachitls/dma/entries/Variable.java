@@ -53,7 +53,7 @@ import net.ixitxachitls.input.ParseReader;
 //__________________________________________________________________________
 
 @Immutable
-public class Variable
+public class Variable extends ValueHandle
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -67,8 +67,8 @@ public class Variable
    *                               variable
    * @param       inStored         true if the value will be stored, false
    *                               if not
-   * @param       inDM             true if the value is for DMs only
-   * @param       inPlayer         true if the value is for players only
+   * @param       inDM             true if the value is for DMs
+   * @param       inPlayer         true if the value is for players
    * @param       inPlayerEditable true if the value is editable for a player
    * @param       inPlural         the plural of the key
    *
@@ -77,17 +77,10 @@ public class Variable
                   boolean inStored, boolean inDM, boolean inPlayer,
                   boolean inPlayerEditable, @Nullable String inPlural)
   {
-    m_key            = inKey;
+    super(inKey, inDM, inPlayer, inPlayerEditable, inPlural);
+
     m_field          = inField;
     m_store          = inStored;
-    m_dm             = inDM;
-    m_player         = inPlayer;
-    m_playerEditable = inPlayerEditable;
-
-    if(inPlural == null || inPlural.length() == 0)
-      m_plural = m_key + "s";
-    else
-      m_plural = inPlural;
   }
 
   //......................................................................
@@ -96,46 +89,17 @@ public class Variable
 
   //-------------------------------------------------------------- variables
 
-  /** The key for this variable. */
-  protected @Nonnull String m_key;
-
   /** The field containing the value. */
   protected @Nonnull Field m_field;
 
   /** A flag denoting if the variable is to be stored (or computed). */
   protected boolean m_store;
 
-  /** A flag denoting if the value is for DMs only. */
-  protected boolean m_dm;
-
-  /** A flag denoting if the value is for players only. */
-  protected boolean m_player;
-
-  /** A flag denoting if the value is for editable by players. */
-  protected boolean m_playerEditable;
-
-  /** A string with the plural of the key. */
-  protected @Nonnull String m_plural;
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
-  //-------------------------------- getKey --------------------------------
-
-  /**
-   * Get the keyword of the variable.
-   *
-   * @return      the keyword
-   *
-   */
-  public @Nonnull String getKey()
-  {
-    return m_key;
-  }
-
-  //........................................................................
-  //------------------------------ getValue --------------------------------
+  //--------------------------------- get ----------------------------------
 
   /**
    * Get the value of the variable given a specific entry.
@@ -145,8 +109,7 @@ public class Variable
    * @return      the current value
    *
    */
-  @SuppressWarnings("unchecked") // have to cast below
-  public @Nullable Value getValue(@Nonnull Object inEntry)
+  public @Nullable Value get(@Nonnull Object inEntry)
   {
     try
     {
@@ -160,26 +123,23 @@ public class Variable
   }
 
   //........................................................................
-  //--------------------------------- get ----------------------------------
+  //------------------------------- value ----------------------------------
 
   /**
-   * Get the value of the variable given a specific entry (cloned).
+   * Get the value of the variable given a specific entry.
    *
    * @param       inEntry the entry to get the value from
+   * @param       inDM    true if getting the value for a DM
    *
-   * @return      the current value (cloned)
+   * @return      the current value
    *
    */
-  public @Nullable Value get(@Nonnull Object inEntry)
+  public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
   {
-    Value result = getValue(inEntry);
-    if(result != null)
-      return result.clone();
-
-    return null;
+    return get(inEntry);
   }
 
-  //......................................................................
+  //........................................................................
   //--------------------------- getStringValue ---------------------------
 
   /**
@@ -192,25 +152,11 @@ public class Variable
      */
   public @Nullable String getStringValue(@Nonnull Object inEntry)
   {
-    Value result = getValue(inEntry);
+    Value result = get(inEntry);
     if(result != null)
       return result.toString();
 
     return null;
-  }
-
-  //........................................................................
-  //----------------------------- getPluralKey -----------------------------
-
-  /**
-   * Get the pural version of the key.
-   *
-   * @return      a string with the plural
-   *
-   */
-  public @Nonnull String getPluralKey()
-  {
-    return m_plural;
   }
 
   //........................................................................
@@ -227,7 +173,7 @@ public class Variable
      */
   public boolean hasValue(@Nonnull Object inEntry)
   {
-    Value value = getValue(inEntry);
+    Value value = get(inEntry);
 
     // if value is not set, we don't have to print anything
     if(value == null || !value.isDefined())
@@ -251,48 +197,6 @@ public class Variable
   }
 
   //.......................................................................
-  //------------------------------- isDMOnly -------------------------------
-
-  /**
-   * Check if the variable is for DMs only or not.
-   *
-   * @return      true if for DMs only, false if not
-   *
-   */
-  public boolean isDMOnly()
-  {
-    return m_dm;
-  }
-
-  //........................................................................
-  //----------------------------- isPlayerOnly -----------------------------
-
-  /**
-   * Check if the variable is for playsers only or not.
-   *
-   * @return      true if it is players only, false if not
-   *
-   */
-  public boolean isPlayerOnly()
-  {
-    return m_player;
-  }
-
-  //........................................................................
-  //--------------------------- isPlayerEditable ---------------------------
-
-  /**
-   * Check if the value is editable by players only or not.
-   *
-   * @return      true if it is editable by players, false if not
-   *
-   */
-  public boolean isPlayerEditable()
-  {
-    return m_playerEditable;
-  }
-
-  //........................................................................
 
   //------------------------------- toString -------------------------------
 
@@ -327,7 +231,7 @@ public class Variable
   public boolean read(@Nonnull ValueGroup inGroup,
                       @Nonnull ParseReader inReader)
   {
-    Value read = getValue(inGroup).read(inReader);
+    Value read = get(inGroup).read(inReader);
 
     if(read == null)
       return false;
@@ -386,7 +290,7 @@ public class Variable
 
     if(inValue.startsWith(Value.UNDEFINED))
     {
-      set(inEntry, getValue(inEntry).create());
+      set(inEntry, get(inEntry).create());
 
       return inValue.substring(Value.UNDEFINED.length());
     }
@@ -395,7 +299,7 @@ public class Variable
     StringReader string = new StringReader(inValue);
     ParseReader reader  = new ParseReader(string, "set");
 
-    Value value = getValue(inEntry).read(reader);
+    Value value = get(inEntry).read(reader);
 
     if(value == null)
       return inValue;
@@ -450,7 +354,7 @@ public class Variable
 
       assertEquals("key", "key", variable.getKey());
       assertEquals("value", "$undefined$",
-                   variable.getValue(new TestObject()).toString());
+                   variable.get(new TestObject()).toString());
       assertEquals("value", "$undefined$",
                    variable.get(new TestObject()).toString());
       assertEquals("value", "$undefined$",
@@ -481,7 +385,7 @@ public class Variable
       TestObject test = new TestObject();
 
       variable.setFromString(test, "guru");
-      assertEquals("setting", "guru", variable.getValue(test).toString());
+      assertEquals("setting", "guru", variable.get(test).toString());
     }
 
     //......................................................................
