@@ -77,11 +77,11 @@ public class Print
 
   //-------------------------------------------------------------- variables
 
-  /** The tokens to print. */
-  private volatile @Nullable List<String> m_tokens;
-
   /** The template to print with. */
   private @Nonnull String m_template;
+
+  /** The tokens to print. */
+  private volatile @Nullable List<String> m_tokens;
 
   /** Tokenizer string to separate values to print. */
   private static final @Nonnull String s_delimiter =
