@@ -170,7 +170,8 @@ public class BaseCharacter extends BaseEntry
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
-    new Print("$title $id and some other text $name ${real name} and some "
+    new Print("$mainimage $title $id and some other text $name ${real name} "
+              + "and some "
               + "more $group ${last login} ${last action}");
 
   /** The basic formatter for base characters. */
