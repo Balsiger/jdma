@@ -32,8 +32,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.Lists;
-
 import net.ixitxachitls.output.Document;
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.util.configuration.Config;
@@ -294,55 +292,21 @@ public class Files extends Action
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //--------------------------------------------------------------- nested
-
-    /** A resource used for testing. */
-    private static final class TestResource extends Resource
-    {
-      /**
-       * Create the test resource.
-       *
-       * @param inName the name of the resource
-       */
-      private TestResource(@Nonnull String inName)
-      {
-        super("test", null);
-
-        m_name = inName;
-      }
-
-      /** The name of the resource. */
-      private @Nonnull String m_name;
-
-      @Override
-      public @Nonnull List<String> files()
-      {
-        return Lists.newArrayList
-          (m_name + "/back.png",
-           m_name + "/back_thumbnail.png",
-           m_name + "/contents.png",
-           m_name + "/contents_thumbnail.png",
-           m_name + "/cover.png",
-           m_name + "/cover_thumbnail.png",
-           m_name + "/inside.png",
-           m_name + "/inside_thumbnail.png");
-      }
-
-      @Override
-      public boolean hasResource(String inName)
-      {
-        return files().contains(inName);
-      }
-    }
-
-    //......................................................................
-
     /** Setup tests. */
     @org.junit.Before
     public void setUp()
     {
-      Resource.preset("test::files/BaseProducts/WTC 88567",
-                      new TestResource("test::files/BaseProducts/WTC 88567"));
+      Resource.preset
+        ("test::files/BaseProducts/WTC 88567",
+         new Resource.Test.TestResource("test::files/BaseProducts/WTC 88567",
+                                        "back.png",
+                                        "back_thumbnail.png",
+                                        "contents.png",
+                                        "contents_thumbnail.png",
+                                        "cover.png",
+                                        "cover_thumbnail.png",
+                                        "inside.png",
+                                        "inside_thumbnail.png"));
     }
 
     /** Teardown tests. */

@@ -44,6 +44,7 @@ import javax.annotation.Nullable;
 
 // import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAFile;
+import net.ixitxachitls.dma.data.DMAFiles;
 import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.data.Storage;
 // import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
@@ -67,6 +68,7 @@ import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Editable;
+import net.ixitxachitls.output.commands.Image;
 // import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Script;
@@ -1618,6 +1620,13 @@ public class AbstractEntry extends ValueGroup
         return new Editable(getID(), title, "name", m_name.toString(), "name");
 
       return title;
+    }
+
+    if("mainimage".equals(inKey))
+    {
+      return
+        new Image(DMAFiles.mainImage(getID(), getType().getMultipleDir()),
+                  DMAFiles.defaultImage(getType().getMultipleDir()));
     }
 
     return super.formatValue(inKey, inDM, inEdit);

@@ -26,6 +26,7 @@ package net.ixitxachitls.util;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,6 +34,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import javax.swing.ImageIcon;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableSet;
 
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -91,6 +93,10 @@ public final class Files
   /** The date format for backup files. */
   private static String s_backupFormat =
     Config.get("resource:format.backup.date", "yyyy-MM-dd-HH-mm-ss");
+
+  /** Extensions supported as images. */
+  private static final Set<String> s_imageExtensions =
+    ImmutableSet.of(".png", ".jpg");
 
   //........................................................................
 
@@ -408,6 +414,24 @@ public final class Files
         result.append(".." + SEPARATOR);
 
     return result.toString();
+  }
+
+  //........................................................................
+
+  //------------------------------- isImage --------------------------------
+
+  /**
+   * Checks that the given name is an image. This currently only checks the
+   * extension.
+   *
+   * @param    inName the name of the file to check
+   *
+   * @return   true if the extension matches an image, false if not
+   *
+   */
+  public static boolean isImage(@Nonnull String inName)
+  {
+    return s_imageExtensions.contains(extension(inName));
   }
 
   //........................................................................

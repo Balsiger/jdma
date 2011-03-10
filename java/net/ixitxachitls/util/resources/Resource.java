@@ -377,6 +377,53 @@ public abstract class Resource
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //--------------------------------------------------------------- nested
+
+    /** A resource used for testing. */
+    public static final class TestResource extends Resource
+    {
+      /**
+       * Create the test resource.
+       *
+       * @param inName  the name of the resource
+       * @param inFiles the files to be returned
+       */
+      public TestResource(@Nonnull String inName, @Nonnull String ... inFiles)
+      {
+        super("test", null);
+
+        m_name = inName;
+        for(String file : inFiles)
+          m_files.add(m_name + "/" + file);
+      }
+
+      /** The name of the resource. */
+      private @Nonnull String m_name;
+
+      /** The files represented. */
+      private @Nonnull List<String> m_files = new java.util.ArrayList<String>();
+
+      @Override
+      public @Nonnull List<String> files()
+      {
+        return m_files;
+      }
+
+      @Override
+      public boolean hasResource(String inName)
+      {
+        return m_files.contains(inName);
+      }
+
+      @Override
+      public String toString()
+      {
+        return m_name + ": " + m_files;
+      }
+    }
+
+    //......................................................................
+
     //----- resources ------------------------------------------------------
 
     /** resources Test. */
