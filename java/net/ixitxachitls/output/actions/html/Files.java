@@ -251,7 +251,7 @@ public class Files extends Action
           inDocument.add("<span class=\"picture table\">"
                          + "<span class=\"picture-row table-row\">"
                          + "<span class=\"picture-cell table-cell\">"
-                         + "<a href=\"" + file + "\">"
+                         + "<a href=\"" + dirName + "/" + file + "\">"
                          + "<img src=\"" + dirName + "/" +  name
                          + "_thumbnail" + extension + "\" " + "alt=\""
                          + name + "\"" + " class=\"picture\""
@@ -262,7 +262,7 @@ public class Files extends Action
             inDocument.add("<span class=\"picture table\">"
                            + "<span class=\"picture-row table-row\">"
                            + "<span class=\"picture-cell table-cell\">"
-                           + "<img src=\"" + file + "\" "
+                           + "<img src=\"" + dirName + "/" + file + "\" "
                            + "alt=\"" + name
                            + "\"" + " class=\"picture\"/>"
                            + "</a><br />" + name + "</span></span></span>");
@@ -272,7 +272,7 @@ public class Files extends Action
             inDocument.add("<span class=\"picture table\">"
                            + "<span class=\"picture-row table-row\">"
                            + "<span class=\"picture-cell table-cell\">"
-                           + "<a href=\"" + file + "\">"
+                           + "<a href=\"" + dirName + "/" + file + "\">"
                            + "<img src=\"" + m_icons + "/"
                            + extension.substring(1) + ".png\" alt=\"" + name
                            + "\" class=\"picture\"/>"

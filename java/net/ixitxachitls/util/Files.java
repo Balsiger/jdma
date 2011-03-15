@@ -96,7 +96,14 @@ public final class Files
 
   /** Extensions supported as images. */
   private static final Set<String> s_imageExtensions =
-    ImmutableSet.of(".png", ".jpg");
+    ImmutableSet.of(".png", ".jpg", ".gif");
+
+  /** Extensions supported as pdf. */
+  private static final Set<String> s_pdfExtensions = ImmutableSet.of(".pdf");
+
+  /** The filename part to use for thumbnails. */
+  private static final @Nonnull String s_thumbName =
+    Config.get("file.thumbnail", "_thumbnail");
 
   //........................................................................
 
@@ -245,7 +252,7 @@ public final class Files
    * @return      the path part, including the trailing separator
    *
    */
-  public static @Nonnull String getPath(@Nonnull String inName)
+  public static @Nonnull String path(@Nonnull String inName)
   {
     // we use both separators to be able to parse unix file names on windoooze
     // and vice versa
@@ -417,6 +424,31 @@ public final class Files
   }
 
   //........................................................................
+  //----------------------------- asThumbnail ------------------------------
+
+  /**
+   * Convert the given name into one used for a thumbnail.
+   *
+   * @param      inName the name to convert
+   *
+   * @return     the name converted to a thumbnail
+   *
+   */
+  public static @Nonnull String asThumbnail(@Nonnull String inName)
+  {
+    if(Files.isThumbnail(inName))
+      return inName;
+
+    String path = Files.path(inName);
+    String name = Files.file(inName) + s_thumbName + Files.extension(inName);
+
+    if(path.isEmpty())
+      return name;
+
+    return Files.concatenate(path, name);
+  }
+
+  //........................................................................
 
   //------------------------------- isImage --------------------------------
 
@@ -432,6 +464,74 @@ public final class Files
   public static boolean isImage(@Nonnull String inName)
   {
     return s_imageExtensions.contains(extension(inName));
+  }
+
+  //........................................................................
+  //------------------------------- isImage --------------------------------
+
+  /**
+   * Checks that the given name is a pdf file. This currently only checks the
+   * extension.
+   *
+   * @param    inName the name of the file to check
+   *
+   * @return   true if the extension matches a pdf, false if not
+   *
+   */
+  public static boolean isPDF(@Nonnull String inName)
+  {
+    return s_pdfExtensions.contains(extension(inName));
+  }
+
+  //........................................................................
+  //----------------------------- isThumbnail ------------------------------
+
+  /**
+   * Checks that the given name is an image. This currently only checks the
+   * extension.
+   *
+   * @param    inName the name of the file to check
+   *
+   * @return   true the name is for a thumbnail, false if not
+   *
+   */
+  public static boolean isThumbnail(@Nonnull String inName)
+  {
+    return inName.matches(".+" + s_thumbName + "(\\..+|)");
+  }
+
+  //........................................................................
+  //------------------------------ isIgnored -------------------------------
+
+  /**
+   * Checks if the given file should be ignored because it's either not really
+   * a file or because it is used for administravie purposes (e.g. CVS).
+   *
+   * @param       inName the name to check
+   *
+   * @return      true if it should be ignored, false it not
+   *
+   */
+  public static boolean isIgnored(@Nonnull String inName)
+  {
+    String file = Files.file(inName);
+
+    if(file.isEmpty())
+      return true;
+
+    if("..".equals(file))
+      return true;
+
+    if("CVS".equals(file))
+      return true;
+
+    if(file.startsWith("."))
+      return true;
+
+    if(inName.endsWith("~"))
+      return true;
+
+    return false;
   }
 
   //........................................................................
@@ -525,12 +625,12 @@ public final class Files
       assertEquals("file", "", Files.file(""));
       assertEquals("path", File.separator + "my" + File.separator + "path"
                    + File.separator,
-                   Files.getPath(File.separator + "my" + File.separator
+                   Files.path(File.separator + "my" + File.separator
                                  + "path" + File.separator
                                  + "file.extension"));
-      assertEquals("path", "", Files.getPath("file.extension"));
-      assertEquals("path", "", Files.getPath(""));
-      assertEquals("path", "/", Files.getPath(File.separator));
+      assertEquals("path", "", Files.path("file.extension"));
+      assertEquals("path", "", Files.path(""));
+      assertEquals("path", "/", Files.path(File.separator));
 
       assertEquals("extension (empty)", "",
                    Files.extension(File.separator + "my" + File.separator
@@ -539,7 +639,7 @@ public final class Files
                    Files.file(File.separator + "my" + File.separator
                                  + "path" + File.separator + ".extension"));
       assertEquals("path (empty)",      "",
-                   Files.getPath("file.extension"));
+                   Files.path("file.extension"));
     }
 
     //......................................................................
@@ -664,6 +764,55 @@ public final class Files
     public void coverage()
     {
       new Files();
+    }
+
+    //......................................................................
+    //----- thumbnail ------------------------------------------------------
+
+    /** The thumbnail Test. */
+    @org.junit.Test
+    public void thumbnail()
+    {
+      assertFalse(Files.isThumbnail("hello there.png"));
+      assertFalse(Files.isThumbnail("thumbnail.png"));
+      assertTrue(Files.isThumbnail("test_thumbnail"));
+      assertFalse(Files.isThumbnail("test_thumbnails"));
+      assertFalse(Files.isThumbnail("test_thumbnail_png"));
+      assertTrue(Files.isThumbnail("test_thumbnail.png"));
+      assertTrue(Files.isThumbnail("test_thumbnail"));
+
+      assertEquals("image_thumbnail.png", Files.asThumbnail("image.png"));
+      assertEquals("path/image_thumbnail.png",
+                   Files.asThumbnail("path/image.png"));
+      assertEquals("path/image_thumbnail", Files.asThumbnail("path/image"));
+      assertEquals("/image_thumbnail.png",
+                   Files.asThumbnail("/image_thumbnail.png"));
+      assertEquals("path/image_thumbnail",
+                   Files.asThumbnail("path/image_thumbnail"));
+    }
+
+    //......................................................................
+    //----- ignored --------------------------------------------------------
+
+    /** The ignored Test. */
+    @org.junit.Test
+    public void ignored()
+    {
+      assertFalse(Files.isIgnored("test.png"));
+      assertFalse(Files.isIgnored("/path/test.png"));
+      assertFalse(Files.isIgnored("path/test"));
+
+      assertTrue(Files.isIgnored("."));
+      assertTrue(Files.isIgnored("path/."));
+      assertTrue(Files.isIgnored(".."));
+      assertTrue(Files.isIgnored("path/.."));
+      assertTrue(Files.isIgnored("/."));
+      assertTrue(Files.isIgnored("/CVS"));
+      assertTrue(Files.isIgnored("path/CVS"));
+      assertTrue(Files.isIgnored("/path/test.tst~"));
+      assertTrue(Files.isIgnored(".guru"));
+      assertTrue(Files.isIgnored("/.guru"));
+      assertTrue(Files.isIgnored("path/.guru"));
     }
 
     //......................................................................

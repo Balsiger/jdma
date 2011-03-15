@@ -322,7 +322,7 @@ public class FileLogger extends ASCIILogger
       logger.print("another test", Log.Type.ERROR);
 
       // check that the files were properly written
-      String path = net.ixitxachitls.util.Files.getPath(temp.getPath());
+      String path = net.ixitxachitls.util.Files.path(temp.getPath());
       java.io.File dir = new java.io.File(path);
 
       assertTrue("dir", dir.isDirectory());

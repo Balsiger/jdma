@@ -74,6 +74,7 @@ import net.ixitxachitls.output.commands.Huge;
 import net.ixitxachitls.output.commands.Huger;
 import net.ixitxachitls.output.commands.ID;
 import net.ixitxachitls.output.commands.Icon;
+import net.ixitxachitls.output.commands.Image;
 import net.ixitxachitls.output.commands.Italic;
 import net.ixitxachitls.output.commands.Label;
 import net.ixitxachitls.output.commands.Large;
@@ -309,11 +310,11 @@ public class HTMLDocument extends Document
                   new Picture(net.ixitxachitls.output.commands.Picture.PICTURE,
                               true, true, null));
     s_actions.put(Icon.ICON,
-                  new Picture(Icon.ICON, true, true,
-                              Config.get("resource:html/dir.icons", "/icons")));
+                  new Picture(Icon.ICON, true, true, s_dirIcons));
     s_actions.put(OverlayIcon.OVERLAY_ICON,
                   new Picture(OverlayIcon.OVERLAY_ICON, true, true,
-                              Config.get("resource:html/dir.icons", "/icons")));
+                              s_dirIcons));
+    s_actions.put(Image.IMAGE, new Picture(Image.IMAGE, false, false, null));
     s_actions.put(Label.LABEL,
                   new Picture(Label.LABEL, false, false,
                               Config.get("resource:html/dir.labels",

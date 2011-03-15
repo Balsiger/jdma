@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if test $# == 0; then
+  echo "Usage: thumbnail <file> ...";
+
+  exit 1
+fi
+
+# determine the extension and the base name
+for arg in "$@"; do
+
+  dir=`dirname "$arg"`
+  file=`basename "$arg"`
+  ext=`echo "$file" | grep -o "\..*" -` 
+  base=`basename "$file" "$ext"`
+
+  if test ! -f "$dir/${base}_thumbnail${ext}"; then 
+    echo "generating thumbnail for $1..."
+    convert -size 100x200 "$arg" -resize 100x200 +profile "*" "$dir/${base}_thumbnail${ext}"
+  fi
+
+done
+
+
+
+

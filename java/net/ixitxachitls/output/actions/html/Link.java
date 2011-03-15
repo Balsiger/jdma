@@ -139,7 +139,7 @@ public class Link extends Action
        && !name.startsWith("http://") && !name.startsWith("/index/")
        && !"/".equals(name))
     {
-      String dir = Files.getPath(name);
+      String dir = Files.path(name);
       name = dir + Files.encodeName(name.substring(dir.length()));
 
       if(Files.extension(name).isEmpty())

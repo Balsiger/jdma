@@ -80,7 +80,7 @@ public class Command implements PublicCloneable
    * @param       inTexts the static texts
    *
    */
-  public Command(@Nonnull List<Object> inTexts)
+  public Command(@Nonnull List<? extends Object> inTexts)
   {
     m_arguments.addAll(inTexts);
   }

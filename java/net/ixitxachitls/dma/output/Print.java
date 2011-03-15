@@ -202,8 +202,7 @@ public class Print
 
       assertEquals("printing",
                    "[start , \\color{error}{* first unknown *},  , "
-                   + "\\editable{test}{\\title[title]"
-                   + "[\\link[/index/baseentries]{base entry}]{test}}{name}"
+                   + "\\editable{test}{\\title[entrytitle]{test}}{name}"
                    + "{test}{name},  middle , "
                    + "\\editable{test}{desc}{description}"
                    + "{\"desc\"}{formatted},  the end]",

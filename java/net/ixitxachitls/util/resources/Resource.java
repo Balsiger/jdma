@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,6 +178,23 @@ public abstract class Resource
   public static boolean has(String inName)
   {
     return Files.class.getResource(Files.concatenate("/", inName)) != null;
+  }
+
+  //........................................................................
+  //--------------------------------- has ----------------------------------
+
+  /**
+   * Chbeck if the given resource is availabe as a thumbnail.
+   *
+   * @param       inName the name of the resource
+   *
+   * @return      true if found, false if not
+   *
+   */
+  public static boolean hasThumbnail(String inName)
+  {
+    return Files.class.getResource
+      (Files.concatenate("/", Files.asThumbnail(inName))) != null;
   }
 
   //........................................................................
@@ -394,7 +412,7 @@ public abstract class Resource
 
         m_name = inName;
         for(String file : inFiles)
-          m_files.add(m_name + "/" + file);
+          m_files.add(file);
       }
 
       /** The name of the resource. */
@@ -406,13 +424,14 @@ public abstract class Resource
       @Override
       public @Nonnull List<String> files()
       {
-        return m_files;
+        return new ArrayList<String>(m_files);
       }
 
       @Override
       public boolean hasResource(String inName)
       {
-        return m_files.contains(inName);
+        return m_name.equals(inName.substring(0, m_name.length()))
+          && m_files.contains(inName.substring(m_name.length() + 1));
       }
 
       @Override

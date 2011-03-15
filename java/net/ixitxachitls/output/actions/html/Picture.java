@@ -32,6 +32,7 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.output.Document;
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.util.Files;
+import net.ixitxachitls.util.resources.Resource;
 
 //..........................................................................
 
@@ -82,8 +83,7 @@ public class Picture extends Action
   //------------------------------- Picture ------------------------------
 
   /**
-   * Construct the action, mainly by giving the pictures to use. Any of
-   * the pictures given can be null, in which case they are ignored.
+   * Construct the action, mainly by giving the pictures to use.
    *
    * @param       inClass   the type of picture
    * @param       inCaption flag if caption is given
@@ -149,6 +149,12 @@ public class Picture extends Action
     int i = 0;
 
     String target = inDocument.convert(inArguments.get(i++));
+    String targetSrc = target;
+
+    // determine if we have a thumbnail image
+    boolean thumbnail = Resource.hasThumbnail(targetSrc);
+    if(thumbnail)
+      targetSrc = Files.asThumbnail(targetSrc);
 
     String caption = null;
     if(m_caption)
@@ -217,7 +223,7 @@ public class Picture extends Action
 
     inDocument.add("<img src=\"");
     inDocument.add(net.ixitxachitls.util.
-                   Files.concatenate(m_subDir, Files.encodeName(target))
+                   Files.concatenate(m_subDir, Files.encodeName(targetSrc))
                    .replaceAll("%", "%25"));
     inDocument.add("\" alt=\"");
     inDocument.add(Files.file(target));
@@ -225,6 +231,11 @@ public class Picture extends Action
     inDocument.add(m_class);
     inDocument.add("\"");
     inDocument.add(highlight);
+    if(thumbnail && !m_link)
+      inDocument.add(" onclick=\"util.link(event, '"
+                     + Files.concatenate(m_subDir, Files.encodeName(target))
+                     .replaceAll("%", "%25") + "');\" "
+                     + "style=\"cursor: pointer\"");
     inDocument.add("/>");
 
     if(overlays.length() > 0)

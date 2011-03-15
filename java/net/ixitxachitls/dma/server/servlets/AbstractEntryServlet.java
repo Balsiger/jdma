@@ -34,14 +34,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-// import net.ixitxachitls.output.commands.Button;
-// import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Hidden;
-//import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
+// import net.ixitxachitls.output.commands.Button;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Divider;
+// import net.ixitxachitls.output.commands.Hidden;
+//import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.logging.Log;
 
@@ -133,6 +135,19 @@ public abstract class AbstractEntryServlet extends PageServlet
     getType(String inPath);
 
   //........................................................................
+  //------------------------------- getPath --------------------------------
+
+  /**
+   * Get the path to the given entry.
+   *
+   * @param       inEntry the entry to get the path for
+   *
+   * @return      the path to the entry
+   *
+   */
+  public abstract @Nullable String getPath(@Nonnull AbstractEntry inEntry);
+
+  //........................................................................
   //-------------------------------- getID ---------------------------------
 
   /**
@@ -144,6 +159,66 @@ public abstract class AbstractEntryServlet extends PageServlet
    *
    */
   public abstract @Nullable String getID(String inPath);
+
+  //........................................................................
+  //------------------------------- getFirst -------------------------------
+
+  /**
+   * Get the first available entry.
+   *
+   * @param     inType the type entry to get
+   *
+   * @return    the first entry available
+   *
+   */
+  public abstract @Nonnull AbstractEntry getFirst
+    (@Nonnull AbstractType<? extends AbstractEntry> inType);
+
+  //........................................................................
+  //------------------------------ getPrevious -----------------------------
+
+  /**
+   * Get the first available entry.
+   *
+   * @param     inID   the id of the current entry
+   * @param     inType the type entry to get
+   *
+   * @return    the first entry available
+   *
+   */
+  public abstract @Nullable AbstractEntry getPrevious
+    (@Nonnull String inID,
+     @Nonnull AbstractType<? extends AbstractEntry> inType);
+
+  //........................................................................
+  //------------------------------- getNext --------------------------------
+
+  /**
+   * Get the first available entry.
+   *
+   * @param     inID   the id of the current entry
+   * @param     inType the type entry to get
+   *
+   * @return    the first entry available
+   *
+   */
+  public abstract @Nullable AbstractEntry getNext
+    (@Nonnull String inID,
+     @Nonnull AbstractType<? extends AbstractEntry> inType);
+
+  //........................................................................
+  //------------------------------- getLast -------------------------------
+
+  /**
+   * Get the last available entry.
+   *
+   * @param     inType the type entry to get
+   *
+   * @return    the first entry available
+   *
+   */
+  public abstract @Nonnull AbstractEntry getLast
+    (@Nonnull AbstractType<? extends AbstractEntry> inType);
 
   //........................................................................
 
@@ -238,9 +313,42 @@ public abstract class AbstractEntryServlet extends PageServlet
     HTMLDocument document = new HTMLDocument
       (title, entry.getType().getMultiple().toLowerCase(Locale.US));
 
+    AbstractEntry first = getFirst(entry.getType());
+    if(first == entry)
+      first = null;
+
+    AbstractEntry previous = getPrevious(entry.getID(), entry.getType());
+    AbstractEntry next = getNext(entry.getID(), entry.getType());
+
+    AbstractEntry last = getLast(entry.getType());
+    if(last == entry)
+      last = null;
+
+    Command navigation =
+      new Divider("entry-nav",
+                  new Command(new Link(new Divider("first icon"
+                                                   + (first == null
+                                                      ? " disabled" : ""), ""),
+                                       first == null ? "" : getPath(first)),
+                              new Link(new Divider("previous icon"
+                                                   + (previous == null
+                                                      ? " disabled" : ""), ""),
+                                       previous == null ? ""
+                                       : getPath(previous)),
+                              new Link(new Divider("index icon", ""), "/user/"),
+                              new Link(new Divider("next icon"
+                                                   + (next == null
+                                                      ? " disabled" : ""), ""),
+                                       next == null ? "" : getPath(next)),
+                              new Link(new Divider("last icon"
+                                                   + (last == null
+                                                      ? " disabled" : ""), ""),
+                                       last == null ? "" : getPath(last))));
+    document.add(navigation);
+
     document.add(entry.printPage(true)); // TODO: must have dm or not here!
 
-//     document.add(entry.getPrintCommand(true));
+    document.add(navigation);
 
     //document.add(new Linebreak());
 //     document.add(new Hidden
@@ -248,8 +356,15 @@ public abstract class AbstractEntryServlet extends PageServlet
 //                   new Divider("verbatim",
 //                               new Verbatim(entry.toString()))));
 
-    // TODO: change to toString and remove everything not in the body
     inWriter.add(document.toString());
+
+    // add some javascript for the entry
+    inWriter.script("$(document).ready(function ()",
+                    "{",
+                    "  $('DIV.files IMG.image')"
+                    + ".mouseover(util.replaceMainImage)"
+                    + ".mouseout(util.restoreMainImage)",
+                    "});");
   }
 
   //........................................................................
@@ -276,6 +391,36 @@ public abstract class AbstractEntryServlet extends PageServlet
 
     /** Paths encountered while testing. */
     private final List<String> m_paths = new ArrayList<String>();
+
+    /** Expected text for the dummy navigation. */
+    private static final String s_navigation = "<div class=\"entry-nav\">"
+      + "<a href=\"\" class=\"link\" onclick=\"link(event, '');\">"
+      + "<div class=\"first icon disabled\"></div>"
+      + "</a>"
+      + "<a href=\"\" class=\"link\" onclick=\"link(event, '');\">"
+      + "<div class=\"previous icon disabled\"></div>"
+      + "</a>"
+      + "<a href=\"/user/\" class=\"link\" onclick=\"link(event, '/user/');\">"
+      + "<div class=\"index icon\"></div>"
+      + "</a>"
+      + "<a href=\"\" class=\"link\" onclick=\"link(event, '');\">"
+      + "<div class=\"next icon disabled\"></div>"
+      + "</a>"
+      + "<a href=\"\" class=\"link\" onclick=\"link(event, '');\">"
+      + "<div class=\"last icon disabled\"></div>"
+      + "</a>"
+      + "</div>";
+
+    /** Exepcted test for the image script. */
+    private static final String s_imageScript =
+      "    <SCRIPT type=\"text/javascript\">\n"
+      + "      $(document).ready(function ()\n"
+      + "      {\n"
+      + "        $('DIV.files IMG.image')"
+      + ".mouseover(util.replaceMainImage)"
+      + ".mouseout(util.restoreMainImage)\n"
+      + "      });\n"
+      + "    </SCRIPT>\n";
 
     //----- setUp ----------------------------------------------------------
 
@@ -339,21 +484,59 @@ public abstract class AbstractEntryServlet extends PageServlet
         {
           private static final long serialVersionUID = 1L;
 
+          @Override
           public String getID(String inPath)
           {
             m_paths.add(inPath);
             return inID;
           }
 
+          @Override
           public AbstractType<? extends AbstractEntry> getType(String inPath)
           {
             m_paths.add(inPath);
             return inType;
           }
 
+          @Override
+          public @Nonnull String getPath(@Nonnull AbstractEntry inEntry)
+          {
+            return "/somewhere/" + inEntry.getID();
+          }
+
+          @Override
           public AbstractEntry getEntry(String inPath)
           {
             m_paths.add(inPath);
+            return inEntry;
+          }
+
+          @Override
+          public AbstractEntry getFirst
+            (AbstractType<? extends AbstractEntry> inType)
+          {
+            return inEntry;
+          }
+
+          @Override
+          public @Nullable AbstractEntry getPrevious
+            (String inID,
+             AbstractType<? extends AbstractEntry> inType)
+          {
+            return null;
+          }
+
+          @Override
+          public AbstractEntry getNext
+            (String inID, AbstractType<? extends AbstractEntry> inType)
+          {
+            return null;
+          }
+
+          @Override
+          public AbstractEntry getLast
+            (AbstractType<? extends AbstractEntry> inType)
+          {
             return inEntry;
           }
         };
@@ -380,10 +563,13 @@ public abstract class AbstractEntryServlet extends PageServlet
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'base entry: guru';\n"
                    + "    </SCRIPT>\n"
-                   + "    <span class=\"error\">* id unknown *</span> "
+                   + s_imageScript
+                   + "    " + s_navigation
+                   + "<span class=\"error\">* id unknown *</span> "
                    + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
                    + "class=\"editable\" type=\"name\"><span>guru</span>"
                    + "&nbsp;</dma.editable>"
+                   + s_navigation
                    + "\n",
                    m_output.toString());
       assertContent("paths", m_paths, "/baseentry/guru");
@@ -496,10 +682,13 @@ public abstract class AbstractEntryServlet extends PageServlet
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'base entry: guru';\n"
                    + "    </SCRIPT>\n"
-                   + "    <span class=\"error\">* id unknown *</span> "
+                   + s_imageScript
+                   + "    " + s_navigation
+                   + "<span class=\"error\">* id unknown *</span> "
                    + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
                    + "class=\"editable\" type=\"name\"><span>guru</span>"
                    + "&nbsp;</dma.editable>"
+                   + s_navigation
                    + "\n",
                    m_output.toString());
       assertContent("paths", m_paths,

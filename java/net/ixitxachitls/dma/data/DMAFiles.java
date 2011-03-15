@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -82,6 +84,10 @@ public final class DMAFiles
   private static final @Nonnull String s_basePath =
     Config.get("files.path.base", "/files");
 
+  /** The directory with the icons. */
+  private static final @Nonnull String s_dirIcons =
+    Config.get("resource:html/dir.icons", "/icons");
+
   /** The special file names that we want to return first. */
   private static final Set<String> s_specialImages =
     ImmutableSet.of("cover", "official", "unofficial", "main");
@@ -118,25 +124,59 @@ public final class DMAFiles
       return defaultImage(inType);
 
     if(files.size() == 1)
-      return files.get(0);
+      return Files.concatenate(s_basePath, inType, inID, files.get(0));
 
     for(String file : files)
       if(Files.file(file).equals(inID))
-        return file;
+        return Files.concatenate(s_basePath, inType, inID, file);
 
     for(String file : files)
       if(Files.file(file).contains(inID))
-        return file;
+        return Files.concatenate(s_basePath, inType, inID, file);
 
     for(String file : files)
       if(s_specialImages.contains(Files.file(file)))
-        return file;
+        return Files.concatenate(s_basePath, inType, inID, file);
 
     // As a fallback we return the first image that we find
-    return files.get(0);
+    return Files.concatenate(s_basePath, inType, inID, files.get(0));
   }
 
   //........................................................................
+  //----------------------------- otherFiles -------------------------------
+
+  /**
+   * Get all the other images for the given id.
+   *
+   * @param       inID     the id of the entry
+   * @param       inType   the path to the type
+   *
+   * @return      the names of the file to use for the given data
+   *
+   */
+  public static @Nonnull List<String> otherFiles(@Nonnull String inID,
+                                                 @Nonnull String inType)
+  {
+    String main = mainImage(inID, inType);
+
+    Resource resources =
+      Resource.get(Files.concatenate(s_basePath, inType, inID));
+
+    List<String> files = resources.files();
+    List<String> withPath = new ArrayList<String>();
+
+    for(String file : files)
+      if(!Files.file(file).equals(Files.file(main)) && !Files.isThumbnail(file)
+         && !Files.isIgnored(file))
+        withPath.add(Files.concatenate(s_basePath, inType, inID, file));
+
+    Collections.sort(withPath);
+
+    return withPath;
+  }
+
+  //........................................................................
+
   //----------------------------- defaultImage -----------------------------
 
   /**
@@ -149,7 +189,7 @@ public final class DMAFiles
    */
   public static @Nonnull String defaultImage(@Nonnull String inType)
   {
-    return Files.concatenate(inType, s_defaultImage);
+    return Files.concatenate(s_dirIcons, inType + "-" + s_defaultImage);
   }
 
   //........................................................................
@@ -177,7 +217,7 @@ public final class DMAFiles
       // no images
       Resource.preset("/files/type/test",
                       new Resource.Test.TestResource("/files/type/test"));
-      assertEquals("no images", "type/dummy.png",
+      assertEquals("no images", "/icons/type-dummy.png",
                    DMAFiles.mainImage("test", "type"));
 
       Resource.preset("/files/type/test",
@@ -190,7 +230,7 @@ public final class DMAFiles
                       new Resource.Test.TestResource("/files/type/test",
                                                      "single.pdf", "other.doc",
                                                      "some.exe", "..", "."));
-      assertEquals("no image type", "type/dummy.png",
+      assertEquals("no image type", "/icons/type-dummy.png",
                    DMAFiles.mainImage("test", "type"));
 
       Resource.preset("/files/type/test",
@@ -225,7 +265,7 @@ public final class DMAFiles
       assertEquals("just the first", "/files/type/test/first.png",
                    DMAFiles.mainImage("test", "type"));
 
-      Resource.clearPreset("test");
+      Resource.clearPreset("/files/type/test");
     }
 
     //......................................................................
@@ -235,7 +275,30 @@ public final class DMAFiles
     @org.junit.Test
     public void defaultImage()
     {
-      assertEquals("default", "type/dummy.png", DMAFiles.defaultImage("type"));
+      assertEquals("default", "/icons/type-dummy.png",
+                   DMAFiles.defaultImage("type"));
+    }
+
+    //......................................................................
+    //----- mainImage ------------------------------------------------------
+
+    /** The mainImage Test. */
+    @org.junit.Test
+    public void otherFiles()
+    {
+      // no images
+      Resource.preset("/files/type/test",
+                      new Resource.Test.TestResource("/files/type/test",
+                                                     "single.pdf", "..", ".",
+                                                     "some.file", "CVS",
+                                                     "test.png",
+                                                     "backup~", "image.png"));
+      assertContent("other images", DMAFiles.otherFiles("test", "type"),
+                    "/files/type/test/image.png",
+                    "/files/type/test/single.pdf",
+                    "/files/type/test/some.file");
+
+      Resource.clearPreset("/files/type/test");
     }
 
     //......................................................................

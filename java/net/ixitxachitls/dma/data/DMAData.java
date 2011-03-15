@@ -24,10 +24,11 @@
 package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -85,9 +86,9 @@ public class DMAData
 
   /** All the entries, by class and by id. */
   private @Nonnull Map<AbstractType<? extends AbstractEntry>,
-                               Map<String, AbstractEntry>> m_entries =
+                               NavigableMap<String, AbstractEntry>> m_entries =
     new HashMap<AbstractType<? extends AbstractEntry>,
-                               Map<String, AbstractEntry>>();
+                               NavigableMap<String, AbstractEntry>>();
 
   //........................................................................
 
@@ -105,18 +106,19 @@ public class DMAData
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nonnull <T extends AbstractEntry> Map<String, T>
+  public @Nonnull <T extends AbstractEntry> NavigableMap<String, T>
     getEntries(AbstractType<T> inType)
   {
-    Map<String, AbstractEntry> entries = m_entries.get(inType);
+    NavigableMap<String, AbstractEntry> entries = m_entries.get(inType);
 
     if(entries == null)
     {
-      entries = new HashMap<String, AbstractEntry>();
+      entries = new TreeMap<String, AbstractEntry>();
       m_entries.put(inType, entries);
     }
 
-    return (Map<String, T>)Collections.unmodifiableMap(entries);
+    // TODO: this should actually be unmodifiable
+    return (NavigableMap<String, T>)entries;
   }
 
   //........................................................................
@@ -145,10 +147,11 @@ public class DMAData
 
         for(AbstractEntry entry : file.getEntries())
         {
-          Map<String, AbstractEntry> entries = m_entries.get(entry.getType());
+          NavigableMap<String, AbstractEntry> entries =
+            m_entries.get(entry.getType());
           if(entries == null)
           {
-            entries = new HashMap<String, AbstractEntry>();
+            entries = new TreeMap<String, AbstractEntry>();
             m_entries.put(entry.getType(), entries);
           }
 

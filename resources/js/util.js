@@ -213,6 +213,34 @@ util.link = function(inEvent, inTarget, inFunction)
 
 //..........................................................................
 
+//---------------------------- replaceMainImage ----------------------------
+
+/**
+ * Replace the main image with the current one of this.
+ *
+ */
+util.replaceMainImage = function()
+{
+  var main = $('DIV.mainimage IMG');
+  util.mainImage = main.attr('src')
+  main.attr('src', this.src);
+}
+
+//..........................................................................
+//---------------------------- restoreMainImage ----------------------------
+
+/**
+ * Restore the main image with it's original value.
+ *
+ */
+util.restoreMainImage = function()
+{
+  $('DIV.mainimage IMG').attr('src', util.mainImage);
+}
+
+//..........................................................................
+
+
 //---------------------------------------------------------- extend existing
 
 //------------------------------ Array.remove ------------------------------
@@ -246,6 +274,6 @@ Array.prototype.remove = function(inValue)
 
 // install a handler to support back/forward actions
 $(window).bind('popstate', function(event) {
-    if(event.originalEvent.state)
-      util.link(event.originalEvent, event.originalEvent.state);
+    util.link(event.originalEvent, location.pathname);
   });
+

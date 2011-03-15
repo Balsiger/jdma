@@ -31,7 +31,7 @@ BODY
 
 DIV.page
 {
-  padding: 35px 1em 2em 2em;
+  padding: 60px 1em 0 2em;
 }
 
 H1
@@ -43,6 +43,11 @@ H1
   margin:      0;
 }
 
+H1.entrytitle
+{
+  display:        inline-block;
+}
+
 H2
 {
   font-weight: bold;
@@ -51,6 +56,12 @@ H2
   padding: 0;
   padding-top: 1em;
   margin: 0;
+}
+
+DIV.subtitletext, DIV.subtitletext A
+{
+  font-size:  x-small;
+  color:      #CCCCCC;
 }
 
 /******************************************************************************
@@ -67,6 +78,7 @@ H2
   color: #0099BB;
   font-size: small;
   padding: 5px;
+  -webkit-box-shadow: 0 1px 3px #777;
 }
 
 #header-left
@@ -129,6 +141,42 @@ H2
   font-size: 60%;
   display: none;
 }
+
+DIV.entry-nav
+{
+  text-align: center;
+}
+
+DIV.entry-nav DIV
+{
+  margin: 0 2px;
+}
+
+DIV.first
+{
+  background-position: -130px;
+}
+
+DIV.previous
+{
+  background-position: -150px;
+}
+
+DIV.index
+{
+  background-position: -170px;
+}
+
+DIV.next
+{
+  background-position: -160px;
+}
+
+DIV.last
+{
+  background-position: -140px;
+}
+
 
 /******************************************************************************
  * about
@@ -216,6 +264,41 @@ DIV.footer DIV.version
 }
 
 /******************************************************************************
+ * entry
+ *****************************************************************************/
+
+DIV.mainimage
+{
+  border:       1px solid #ccc;
+  padding:      5px;
+  margin:       0 10px 0 0;
+  display:      inline-block;
+  -webkit-box-shadow: 1px 1px 3px #777;
+}
+
+DIV.mainimage IMG.image
+{
+  max-height: 100px;
+  max-width:  100px;
+}
+
+DIV.files
+{
+  margin-top:  -15px;
+  padding-top: 2px;
+  border-top:  1px solid #ddd;
+}
+
+DIV.files IMG
+{
+  border:     1px solid #ccc;
+  max-width:  50px;
+  max-height: 50px;
+  margin:     2px;
+  padding:    2px;
+}
+
+/******************************************************************************
  * jQuery overrides
  *****************************************************************************/
 
@@ -223,4 +306,28 @@ DIV.footer DIV.version
 {
   font-size: 90%;
   -webkit-box-shadow: 3px 3px 7px #777;
+}
+
+/******************************************************************************
+ * positioning and styles
+ *****************************************************************************/
+
+DIV.clear
+{
+  clear: both;
+}
+
+DIV.clear-left
+{
+  clear: left;
+}
+
+DIV.clear-right
+{
+  clear: right;
+}
+
+.disabled
+{
+  opacity: 0.5;
 }

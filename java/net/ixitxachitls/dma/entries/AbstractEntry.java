@@ -24,7 +24,7 @@
 package net.ixitxachitls.dma.entries;
 
 // import java.lang.reflect.Constructor;
-// import java.util.ArrayList;
+import java.util.ArrayList;
 // import java.util.Collection;
 // import java.util.Collections;
 import java.util.HashMap;
@@ -66,15 +66,18 @@ import net.ixitxachitls.input.ParseReader;
 // import net.ixitxachitls.output.commands.Center;
 // import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
-// import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Editable;
+//import net.ixitxachitls.output.commands.Icon;
 import net.ixitxachitls.output.commands.Image;
 // import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Link;
+//import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.output.commands.Picture;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.util.EmptyIterator;
+import net.ixitxachitls.util.Files;
 // import net.ixitxachitls.util.Extractor;
 // import net.ixitxachitls.util.Identificator;
 // import net.ixitxachitls.util.Pair;
@@ -724,7 +727,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested name
    *
    */
-  public @Nonnull AbstractType getType()
+  public @Nonnull AbstractType<? extends AbstractEntry> getType()
   {
     return m_type;
   }
@@ -1613,8 +1616,7 @@ public class AbstractEntry extends ValueGroup
     if("title".equals(inKey))
     {
       Command title =
-        new Title(formatValue("name", inDM, false), "title",
-                  new Link(getType(), "/index/" + getType().getMultipleLink()));
+        new Title(formatValue("name", inDM, false), "entrytitle");
 
       if(inDM && inEdit)
         return new Editable(getID(), title, "name", m_name.toString(), "name");
@@ -1623,10 +1625,27 @@ public class AbstractEntry extends ValueGroup
     }
 
     if("mainimage".equals(inKey))
-    {
       return
-        new Image(DMAFiles.mainImage(getID(), getType().getMultipleDir()),
-                  DMAFiles.defaultImage(getType().getMultipleDir()));
+        new Divider("mainimage",
+                    new Image(DMAFiles.mainImage(getID(),
+                                                 getType().getMultipleDir())));
+
+    if("clear".equals(inKey))
+      return new Divider("clear", "");
+
+    if("files".equals(inKey))
+    {
+      List<Command> commands = new ArrayList<Command>();
+      for(String file
+            : DMAFiles.otherFiles(getID(), getType().getMultipleDir()))
+        if(Files.isImage(file))
+          commands.add(new Image(file));
+        else if(Files.isPDF(file))
+          commands.add(new Picture("/icons/pdf.png", "", file));
+        else
+          Log.warning("unknown file '" + file + "' ignored");
+
+      return new Divider("files", new Command(commands));
     }
 
     return super.formatValue(inKey, inDM, inEdit);
@@ -3118,7 +3137,7 @@ public class AbstractEntry extends ValueGroup
 //       assertEquals("file (dm)",
 //                    "\\editable{name}{}{_file}{<please select>}{selection}",
 //                    entry.asCommand(true, "file"));
-//       assertEquals("file (player)",
+//       assertEquals("file (player)"
 //                    "", entry.asCommand(false, "file"));
 
 //       // script
