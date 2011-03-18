@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
-// import java.lang.reflect.Constructor;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 // import java.util.Collection;
 // import java.util.Collections;
@@ -43,6 +43,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 // import net.ixitxachitls.dma.data.CampaignData;
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.data.DMAFiles;
 import net.ixitxachitls.dma.output.Print;
@@ -82,7 +83,7 @@ import net.ixitxachitls.util.Files;
 // import net.ixitxachitls.util.Identificator;
 // import net.ixitxachitls.util.Pair;
 // import net.ixitxachitls.util.Classes;
-// import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.Strings;
 // import net.ixitxachitls.util.UniqueIdentificator;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
@@ -214,24 +215,29 @@ public class AbstractEntry extends ValueGroup
   /**
    * The default constructor.
    *
+   * @param inData all the avaialble data
+   *
    */
-  protected AbstractEntry()
+  public AbstractEntry(@Nonnull DMAData inData)
   {
-    m_type = TYPE;
+    this(TYPE, inData);
   }
 
   //........................................................................
   //---------------------------- AbstractEntry -----------------------------
 
   /**
-   * The default constructor.
+   * The constructor with a type.
    *
    * @param  inType  the type of the entry
+   * @param inData all the avaialble data
    *
    */
-  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType,
+                          @Nonnull DMAData inData)
   {
     m_type = inType;
+    m_data = inData;
   }
 
   //........................................................................
@@ -241,13 +247,12 @@ public class AbstractEntry extends ValueGroup
    * The constructor with only a name, using the default type.
    *
    * @param       inName the name of the entry
-   *
-   * @undefined   never
+   * @param inData all the avaialble data
    *
    */
-  protected AbstractEntry(@Nonnull String inName)
+  protected AbstractEntry(@Nonnull String inName, @Nonnull DMAData inData)
   {
-    this(inName, TYPE);
+    this(inName, TYPE, inData);
   }
 
   //........................................................................
@@ -259,16 +264,16 @@ public class AbstractEntry extends ValueGroup
    *
    * @param       inName the name of the entry
    * @param       inType the type of the entry
-   *
-   * @undefined   never
+   * @param       inData all the avaialble data
    *
    */
   protected AbstractEntry(@Nonnull String inName,
-                          @Nonnull AbstractType<? extends AbstractEntry> inType)
+                          @Nonnull AbstractType<? extends AbstractEntry> inType,
+                          @Nonnull DMAData inData)
   {
-    m_name = m_name.as(inName);
+    this(inType, inData);
 
-    m_type = inType;
+    m_name = m_name.as(inName);
   }
 
   //........................................................................
@@ -305,6 +310,9 @@ public class AbstractEntry extends ValueGroup
 
    /** The entry type. */
   protected @Nonnull AbstractType<? extends AbstractEntry> m_type;
+
+  /** All the data available. */
+  protected @Nonnull DMAData m_data;
 
   /** Flag if this entry has been changed but not saved. */
   protected boolean m_changed = false;
@@ -1046,6 +1054,20 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
+  //--------------------------- getPossibleFiles ---------------------------
+
+  /**
+   * Get the names of the files that this entry can possibly be stored in.
+   *
+   * @return      a list of names that can be used for storage
+   *
+   */
+  public @Nonnull List<String> getPossibleFiles() {
+    return new ArrayList<String>();
+  };
+
+  //........................................................................
+
   //----------------------- getFirstDefinedBaseValue -----------------------
 
   /**
@@ -1480,18 +1502,6 @@ public class AbstractEntry extends ValueGroup
 //                       "/entry/" + getType().getLink()
 //                       + "/" + getID());
 
-//     commands.addValue("name", new Bold(new Color("subtitle", name)),
-//                       true, true, false, "names");
-//     commands.addValue("title",
-//                       new Title(name, "title",
-//                                 new Link(getType(), "/index/"
-//                                          + getType().getMultipleLink())),
-//                       true, false, false, "titles");
-
-//     commands.shortHeader.add(new Link(new Title(name),
-//                                       "/entry/" + getType().getLink() + "/"
-//                                       + getID()));
-
 // //     // attachments
 // //     ValueList<SimpleText> attachments =
 // //       new ValueList<SimpleText>(new SimpleText());
@@ -1574,64 +1584,43 @@ public class AbstractEntry extends ValueGroup
 
 //     // file
 //     if(m_storage != null)
-//       commands.addValue("file", new Command(new Object []
-//         {
-//           new Editable(getName(), m_storage.getStorageName(), "_file",
-//                        m_storage.getStorageName(), "selection", null,
-//                        Strings.toString(BaseCampaign.GLOBAL.getFilenames()
-//                                         .iterator(), "||", "")),
-//           " lines ",
-//           m_startLine,
-//           " to ",
-//           m_endLine,
-//         }), false, true, false, "files");
-//     else
-//       commands.addValue("file", new Editable
-//                  (getName(), "", "_file", "<please select>",
-//                   "selection", null,
-//                   Strings.toString(BaseCampaign.GLOBAL.getFilenames()
-//                                  .iterator(), "||", "")), false, true, false,
-//                         "files");
 
 //     return values;
 //   }
 
   //........................................................................
-  //----------------------------- formatValue ------------------------------
+  //----------------------------- computeValue -----------------------------
 
   /**
    * Get a value for printing.
    *
    * @param     inKey  the name of the value to get
    * @param     inDM   true if formattign for dm, false if not
-   * @param     inEdit true if allowing to edit, false if not
    *
-   * @return    a formatted value ready for printing
+   * @return    a value handle ready for printing
    *
    */
   @Override
-  public @Nonnull Object formatValue(@Nonnull String inKey, boolean inDM,
-                                     boolean inEdit)
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
     if("title".equals(inKey))
-    {
-      Command title =
-        new Title(formatValue("name", inDM, false), "entrytitle");
-
-      if(inDM && inEdit)
-        return new Editable(getID(), title, "name", m_name.toString(), "name");
-
-      return title;
-    }
+      return new FormattedValue(new Title(computeValue("name", inDM)
+                                          .format(this, inDM, false),
+                                          "entrytitle"),
+                                "title", false, false, false, "titles");
 
     if("mainimage".equals(inKey))
-      return
-        new Divider("mainimage",
-                    new Image(DMAFiles.mainImage(getID(),
-                                                 getType().getMultipleDir())));
+      return new FormattedValue
+        (new Divider("mainimage",
+                     new Image(DMAFiles.mainImage(getID(),
+                                                  getType().getMultipleDir()))),
+         "mainimage", false, false, false, "mainimages");
 
     if("clear".equals(inKey))
-      return new Divider("clear", "");
+      // we need a non empty string here, because when parsing trailing empty
+      // arguments are ignored.
+      return new FormattedValue(new Divider("clear", " "),
+                                "clear", false, false, false, "clear");
 
     if("files".equals(inKey))
     {
@@ -1645,10 +1634,33 @@ public class AbstractEntry extends ValueGroup
         else
           Log.warning("unknown file '" + file + "' ignored");
 
-      return new Divider("files", new Command(commands));
+      return new FormattedValue(new Divider("files", new Command(commands)),
+                                "files", false, false, false, "files");
     }
 
-    return super.formatValue(inKey, inDM, inEdit);
+    if("file".equals(inKey))
+      if(m_file == null)
+        return new FormattedValue
+          (new Editable(getName(), "", "_file", "<please select>",
+                        "selection", null,
+                        Strings.toString(getPossibleFiles(), "||", "")),
+           "file", false, true, false, "files");
+      else
+        return new FormattedValue
+          (new Command(new Editable(getName(),
+                                    m_file.getStorageName(),
+                                    "_file",
+                                    m_file.getStorageName(),
+                                    "selection", null,
+                                    Strings.toString(getPossibleFiles(), "||",
+                                                     "")),
+                       " lines ",
+                       m_startLine,
+                       " to ",
+                       m_endLine),
+           "file", false, true, false, "files");
+
+    return super.computeValue(inKey, inDM);
   }
 
   //........................................................................
@@ -1854,12 +1866,14 @@ public class AbstractEntry extends ValueGroup
    * Read an entry from the reader.
    *
    * @param       inReader   the reader to read from
+   * @param       inData     all the available data
    *
    * @return      the entry read or null of no matching entry found.
    *
    */
   @SuppressWarnings("unchecked") // calling complete on base type
-    public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader)
+    public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader,
+                                               @Nonnull DMAData inData)
   {
     if(inReader.isAtEnd())
       return null;
@@ -1874,9 +1888,9 @@ public class AbstractEntry extends ValueGroup
     //......................................................................
     //----- type -----------------------------------------------------------
 
-    String type       = "";
-    String className  = "";
-    Class  entry      = null;
+    String type = "";
+    String className = "";
+    Class<? extends AbstractEntry> entry = null;
     for(int i = 0; i < s_keywordWords; i++)
     {
       String word = null;
@@ -1895,7 +1909,8 @@ public class AbstractEntry extends ValueGroup
 
       try
       {
-        entry = Class.forName(s_package + className);
+        entry = (Class<? extends AbstractEntry>)
+          Class.forName(s_package + className);
 
         // could load class
         break;
@@ -1923,7 +1938,10 @@ public class AbstractEntry extends ValueGroup
     try
     {
       // create the object
-      result = (AbstractEntry)entry.newInstance();
+      Constructor<? extends AbstractEntry> constructor =
+        entry.getConstructor(DMAData.class);
+
+      result = constructor.newInstance(inData);
     }
     catch(java.lang.InstantiationException e)
     {
@@ -1936,6 +1954,20 @@ public class AbstractEntry extends ValueGroup
     {
       Log.error("cannot instantiate entry of type " + type + " [" + className
                 + "]: " + e);
+
+      return null;
+    }
+    catch(java.lang.NoSuchMethodException e)
+    {
+      Log.error("cannot find data constructor for entry of type " + type
+                + " [" + className + "]: " + e);
+
+      return null;
+    }
+    catch(java.lang.reflect.InvocationTargetException e)
+    {
+      Log.error("cannot invoke data constructor for entry of type " + type
+                + " [" + className + "]: " + e);
 
       return null;
     }
@@ -2752,7 +2784,8 @@ public class AbstractEntry extends ValueGroup
     @org.junit.Test
     public void init()
     {
-      AbstractEntry entry = new AbstractEntry("just a test");
+      AbstractEntry entry =
+        new AbstractEntry("just a test", new DMAData("path"));
 
       // name
       assertEquals("name", "just a test", entry.getName());
@@ -2769,7 +2802,7 @@ public class AbstractEntry extends ValueGroup
 //       assertNull("type", entry.getType().getBaseType());
 
       assertEquals("create", "abstract entry $undefined$ =\n\n.\n",
-                   entry.getType().create().toString());
+                   entry.getType().create(new DMAData("path")).toString());
 
       // conversion to string
       assertEquals("converted", "abstract entry just a test =\n\n.\n",
@@ -2990,7 +3023,7 @@ public class AbstractEntry extends ValueGroup
                                                  + "\\= test = ."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader);
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "just a = test",
@@ -3017,7 +3050,7 @@ public class AbstractEntry extends ValueGroup
         new ParseReader(new java.io.StringReader("abstract entry test."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader);
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "test", entry.getName());
@@ -3043,7 +3076,7 @@ public class AbstractEntry extends ValueGroup
         new ParseReader(new java.io.StringReader("abstract entry."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader);
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "", entry.getName());
@@ -3076,7 +3109,7 @@ public class AbstractEntry extends ValueGroup
                          + "# now the next entry\n"),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader);
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "test",

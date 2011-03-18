@@ -125,6 +125,7 @@ public class FileServlet extends BaseServlet
   {
     s_types.put(".png", "image/png");
     s_types.put(".jpg", "image/jpeg");
+    s_types.put(".gif", "image/gif");
     s_types.put(".pdf", "application/pdf");
     s_types.put(".css", "text/css");
     s_types.put(".js",  "text/javascript");

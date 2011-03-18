@@ -149,7 +149,9 @@ public class LogoutServlet extends LoginServlet
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
 
-      BaseCharacter character = new BaseCharacter("somebody");
+      BaseCharacter character =
+        new BaseCharacter("somebody",
+                          new net.ixitxachitls.dma.data.DMAData("path"));
       character.setPassword("secret");
 
       EasyMock.expect(request.getMethod()).andReturn("POST");

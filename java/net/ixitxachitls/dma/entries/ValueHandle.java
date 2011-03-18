@@ -28,7 +28,8 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.output.commands.Editable;;
+import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Editable;
 
 //..........................................................................
 
@@ -125,12 +126,9 @@ public abstract class ValueHandle
     Object value = value(inEntry, inDM);
 
     if(value == null)
-      return "";
+      return new Color("error", " * " + getKey() + " * ");
 
-    if(inDM && isPlayerOnly())
-      return "";
-
-    if(!inDM && isDMOnly())
+    if(inDM && isPlayerOnly() || !inDM && isDMOnly())
       return "";
 
     String type;
@@ -233,7 +231,7 @@ public abstract class ValueHandle
   //--------------------------- isPlayerEditable ---------------------------
 
   /**
-   * Check if the value is editable by players only or not.
+   * Check if the value] is editable by players only or not.
    *
    * @return      true if it is editable by players, false if not
    *
@@ -322,15 +320,17 @@ public abstract class ValueHandle
     public void format()
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test id");
+        new net.ixitxachitls.dma.entries.BaseEntry("test id",
+                                                   new net.ixitxachitls.dma.data
+                                                   .DMAData("path"));
       ValueHandle handle =
-        new TestHandle("test", true, false, false, null, null);
-      assertEquals("null", "", handle.format(entry, false, false));
+        new TestHandle("test", true, false, false, null, "value");
+      assertEquals("null", "", handle.format(entry, false, false).toString());
 
-      handle = new TestHandle("test", false, true, false, null, null);
+      handle = new TestHandle("test", false, true, false, null, "value");
       assertEquals("player only for dm", "", handle.format(entry, true, false));
 
-      handle = new TestHandle("test", true, false, false, null, null);
+      handle = new TestHandle("test", true, false, false, null, "value");
       assertEquals("dm only for player", "",
                    handle.format(entry, false, false));
     }
@@ -343,7 +343,9 @@ public abstract class ValueHandle
     public void formatEditable()
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test id");
+        new net.ixitxachitls.dma.entries.BaseEntry("test id",
+                                                   new net.ixitxachitls.dma.data
+                                                   .DMAData("path"));
       ValueHandle handle =
         new TestHandle("test", true, false, false, null, "string value");
 
@@ -367,7 +369,9 @@ public abstract class ValueHandle
     public void formatNoEdit()
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test id");
+        new net.ixitxachitls.dma.entries.BaseEntry("test id",
+                                                   new net.ixitxachitls.dma.data
+                                                   .DMAData("path"));
       ValueHandle handle =
         new TestHandle("test", true, false, false, null, "value");
       assertEquals("string value", "value", handle.format(entry, true, false));

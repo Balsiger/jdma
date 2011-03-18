@@ -72,7 +72,7 @@ public class DMAData
     if(inFiles != null)
       for(String file : inFiles)
         if(file != null)
-          m_files.add(new DMAFile(file, inPath));
+          m_files.add(new DMAFile(file, inPath, this));
   }
 
   //........................................................................

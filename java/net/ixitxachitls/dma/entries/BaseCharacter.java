@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 //import net.ixitxachitls.dma.Global;
+import net.ixitxachitls.dma.data.DMAData;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.Print;
@@ -137,10 +138,12 @@ public class BaseCharacter extends BaseEntry
    * The default internal constructor to create an undefined entry to be
    * filled by reading it from a file.
    *
+   * @param   inData all the avaialble data
+   *
    */
-  protected BaseCharacter()
+  public BaseCharacter(@Nonnull DMAData inData)
   {
-    super(TYPE);
+    super(TYPE, inData);
   }
 
   //........................................................................
@@ -151,11 +154,12 @@ public class BaseCharacter extends BaseEntry
    * name.
    *
    * @param       inName the name of the base charcter to create
+   * @param       inData all the avaialble data
    *
    */
-  public BaseCharacter(@Nonnull String inName)
+  public BaseCharacter(@Nonnull String inName, @Nonnull DMAData inData)
   {
-    super(inName, TYPE);
+    super(inName, TYPE, inData);
   }
 
   //........................................................................
@@ -171,11 +175,10 @@ public class BaseCharacter extends BaseEntry
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
     new Print("$mainimage $title $clear $files"
-              "$id "
-              + "\\par and some other text $name ${real name} "
-              + "and some "
-              + "more $group ${last login} ${last action}"
-              + "");
+              + "%name "
+              + "%{real name} %email %password %products %{last login} "
+              + "%{last action} %token %group %characters"
+              + "%file %errors");
 
   /** The basic formatter for base characters. */
 //   public static final Index.Formatter<AbstractEntry> FORMATTER =
@@ -668,7 +671,7 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void init()
     {
-      BaseCharacter character = new BaseCharacter("Me");
+      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
 
       assertEquals("id", "Me", character.getID());
       assertFalse("real name", character.m_realName.isDefined());
@@ -687,7 +690,7 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void token()
     {
-      BaseCharacter character = new BaseCharacter("Me");
+      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
 
       String token = character.createToken();
       String token2 = character.createToken();
@@ -711,7 +714,7 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void login()
     {
-      BaseCharacter character = new BaseCharacter("Me");
+      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
       character.m_name = character.m_name.as("user");
       character.m_password = character.m_password.as("password");
 
@@ -759,7 +762,8 @@ public class BaseCharacter extends BaseEntry
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
                                                "test");
 
-      BaseCharacter character = (BaseCharacter)BaseCharacter.read(reader);
+      BaseCharacter character = (BaseCharacter)
+        BaseCharacter.read(reader, new DMAData("path"));
 
       assertNotNull("base character should have been read", character);
       assertEquals("base character name does not match", "Me",
@@ -789,7 +793,7 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void group()
     {
-      BaseCharacter character = new BaseCharacter("Me");
+      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
 
       assertTrue("guest", character.hasAccess(Group.GUEST));
       assertFalse("user", character.hasAccess(Group.USER));

@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.logging.Log;
 
@@ -287,12 +288,11 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nullable T create()
+  public @Nullable T create(@Nullable DMAData inData)
   {
     try
     {
-      // create the object
-      return (T)m_class.newInstance();
+      return (T)m_class.getConstructor(DMAData.class).newInstance(inData);
     }
     catch(java.lang.InstantiationException e)
     {
@@ -303,6 +303,20 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e);
+    }
+    catch(java.lang.NoSuchMethodException e)
+    {
+      Log.error("cannot find data constructor for entry of type " + m_name
+                + " [" + m_class + "]: " + e);
+
+      return null;
+    }
+    catch(java.lang.reflect.InvocationTargetException e)
+    {
+      Log.error("cannot invoke data constructor for entry of type " + m_name
+                + " [" + m_class + "]: " + e);
+
+      return null;
     }
 
     return null;
@@ -320,12 +334,13 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nullable T create(@Nonnull String inID)
+  public @Nullable T create(@Nonnull String inID, @Nonnull DMAData inData)
   {
     try
     {
       // create the object
-      return (T)m_class.getConstructor(String.class).newInstance(inID);
+      return (T)m_class.getConstructor(String.class, DMAData.class)
+        .newInstance(inID, inData);
     }
     catch(java.lang.NoSuchMethodException e)
     {
@@ -394,21 +409,22 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
     @org.junit.Test
     public void create()
     {
-      TestType<String> type = new TestType<String>(String.class);
+      TestType<BaseEntry> type = new TestType<BaseEntry>(BaseEntry.class);
 
-      assertEquals("link", "/entry/string/", type.getLink());
-      assertEquals("class name", "String", type.getClassName());
-      assertEquals("name", "string", type.getName());
-      assertEquals("multiple", "Strings", type.getMultiple());
-      assertEquals("multiple link", "strings", type.getMultipleLink());
-      assertEquals("multiple dir", "Strings", type.getMultipleDir());
-      assertEquals("string", "string", type.toString());
+      assertEquals("link", "/entry/baseentry/", type.getLink());
+      assertEquals("class name", "BaseEntry", type.getClassName());
+      assertEquals("name", "base entry", type.getName());
+      assertEquals("multiple", "Base Entrys", type.getMultiple());
+      assertEquals("multiple link", "baseentrys", type.getMultipleLink());
+      assertEquals("multiple dir", "BaseEntrys", type.getMultipleDir());
+      assertEquals("string", "base entry", type.toString());
 
-      String string = type.create();
-      assertEquals("create", "", string);
+      BaseEntry entry = type.create(new DMAData("path"));
+      assertEquals("create", "base entry $undefined$ =\n\n.\n",
+                   entry.toString());
 
-      string = type.create("guru");
-      assertEquals("create", "guru", string);
+      entry = type.create("guru", new DMAData("path"));
+      assertEquals("create", "base entry guru =\n\n.\n", entry.toString());
 
       TestType<ValueGroup> type2 =
         new TestType<ValueGroup>(ValueGroup.class, "Many More");

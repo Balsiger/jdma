@@ -31,7 +31,7 @@ BODY
 
 DIV.page
 {
-  padding: 60px 1em 0 2em;
+  padding: 40px 1em 0 2em;
 }
 
 H1
@@ -145,6 +145,7 @@ DIV.subtitletext, DIV.subtitletext A
 DIV.entry-nav
 {
   text-align: center;
+  margin:     5px 0;
 }
 
 DIV.entry-nav DIV
@@ -284,7 +285,7 @@ DIV.mainimage IMG.image
 
 DIV.files
 {
-  margin-top:  -15px;
+  margin-top:  -32px;
   padding-top: 2px;
   border-top:  1px solid #ddd;
 }
@@ -296,6 +297,43 @@ DIV.files IMG
   max-height: 50px;
   margin:     2px;
   padding:    2px;
+}
+
+DIV.value
+{
+  width:  100%;
+  margin: 1px;
+}
+
+DIV.value:hover
+{
+  background-color: #800;
+}
+
+DIV.value-label
+{
+  font-weight: bold;
+  padding:     5px;
+  width:       15ex;
+  position:    absolute;
+  text-align:  right;
+}
+
+DIV.value-content
+{
+  padding:          5px;
+  background-color: #eee;
+  margin-left:      17ex;
+}
+
+/******************************************************************************
+ * type colors
+ *****************************************************************************/
+
+.back-base-character
+{
+  color:            white;
+  background-color: #ccc;
 }
 
 /******************************************************************************
@@ -331,3 +369,7 @@ DIV.clear-right
 {
   opacity: 0.5;
 }
+
+/* error, colored text */
+SPAN.error, SPAN.error A { color: #AA0000; }
+SPAN.warning, SPAN.warning A { color: #FF8800; }

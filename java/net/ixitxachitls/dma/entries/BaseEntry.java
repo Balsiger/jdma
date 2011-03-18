@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 // import net.ixitxachitls.dma.Global;
+import net.ixitxachitls.dma.data.DMAData;
 // import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
 // import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 // import net.ixitxachitls.dma.entries.indexes.Index;
@@ -149,10 +150,12 @@ public class BaseEntry extends AbstractEntry
   /**
    * The default constructor, with undefined values.
    *
+   * @param       inData all the avaialble data
+   *
    */
-  protected BaseEntry()
+  public BaseEntry(@Nonnull DMAData inData)
   {
-    super(TYPE);
+    super(TYPE, inData);
   }
 
   //........................................................................
@@ -161,12 +164,14 @@ public class BaseEntry extends AbstractEntry
   /**
    * The default constructor, with undefined values.
    *
-   * @param   inType   the type of the entry
+   * @param   inType the type of the entry
+   * @param   inData all the avaialble data
    *
    */
-  protected BaseEntry(@Nonnull AbstractType<? extends BaseEntry> inType)
+  protected BaseEntry(@Nonnull AbstractType<? extends BaseEntry> inType,
+                      @Nonnull DMAData inData)
   {
-    super(inType);
+    super(inType, inData);
   }
 
   //........................................................................
@@ -176,11 +181,12 @@ public class BaseEntry extends AbstractEntry
    * The complete constructor.
    *
    * @param       inName     the name of the entry
+   * @param       inData all the avaialble data
    *
    */
-  public BaseEntry(@Nonnull String inName)
+  public BaseEntry(@Nonnull String inName, @Nonnull DMAData inData)
   {
-    this(inName, TYPE);
+    this(inName, TYPE, inData);
   }
 
   //........................................................................
@@ -191,12 +197,14 @@ public class BaseEntry extends AbstractEntry
    *
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
+   * @param       inData all the avaialble data
    *
    */
   protected BaseEntry(@Nonnull String inName,
-                      @Nonnull AbstractType<? extends BaseEntry> inType)
+                      @Nonnull AbstractType<? extends BaseEntry> inType,
+                      @Nonnull DMAData inData)
   {
-    super(inName, inType);
+    super(inName, inType, inData);
   }
 
   //........................................................................
@@ -1202,7 +1210,9 @@ public class BaseEntry extends AbstractEntry
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
 
-      BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
+      BaseEntry entry =
+        (BaseEntry)BaseEntry.read(reader,
+                                  new net.ixitxachitls.dma.data.DMAData("path"));
 
       //System.out.println(entry);
       m_logger.verify();

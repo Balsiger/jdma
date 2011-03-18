@@ -31,7 +31,10 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.util.Encodings;
 
 //..........................................................................
@@ -121,11 +124,35 @@ public class Print
         continue;
 
       String name = token.substring(1);
+      ValueHandle handle = inEntry.computeValue(name, inDM);
+
       switch(token.charAt(0))
       {
         case '$':
           // A simple, directly printed value
-          result.add(inEntry.formatValue(name, inDM, true));
+          if(handle != null)
+            result.add(handle.format(inEntry, inDM, true));
+          else
+            result.add(new Color("error", " * " + name + " * "));
+          break;
+
+        case '%':
+          // A value as tabelarized data
+          Command label = new Divider("value-label back-"
+                                      + inEntry.getType().getName()
+                                      .replaceAll("\\s+", "-"),
+                                      Encodings.toWordUpperCase(name));
+          Object value;
+          if(handle != null)
+            value = handle.format(inEntry, inDM, true);
+          else
+            value = new Color("error", " * unknown * ");
+
+          result.add
+              (new Divider("value",
+                           new Command(label,
+                                       new Divider("value-content", value))));
+
           break;
 
         default:
@@ -194,16 +221,18 @@ public class Print
     public void print()
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test");
+        new net.ixitxachitls.dma.entries.BaseEntry("test", new net.ixitxachitls
+                                                   .dma.data.DMAData("path"));
+
       entry.setDescription("desc");
 
       Print print =
         new Print("start $first ${title} middle $description the end");
 
       assertEquals("printing",
-                   "[start , \\color{error}{* first unknown *},  , "
-                   + "\\editable{test}{\\title[entrytitle]{test}}{name}"
-                   + "{test}{name},  middle , "
+                   "[start , \\color{error}{ * first * },  , "
+                   + "\\editable{test}{\\title[entrytitle]{test}}{title}"
+                   + "{\\title[entrytitle]{test}}{string},  middle , "
                    + "\\editable{test}{desc}{description}"
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, true)).getArguments()

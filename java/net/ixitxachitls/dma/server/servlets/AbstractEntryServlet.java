@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
@@ -74,9 +75,9 @@ public abstract class AbstractEntryServlet extends PageServlet
    * The basic constructor for the servlet.
    *
    */
-  public AbstractEntryServlet()
+  public AbstractEntryServlet(@Nonnull DMAData inData)
   {
-    // nothing to do
+    m_data = inData;
   }
 
   //........................................................................
@@ -84,6 +85,9 @@ public abstract class AbstractEntryServlet extends PageServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** All the available data. */
+  protected @Nonnull DMAData m_data;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -287,7 +291,7 @@ public abstract class AbstractEntryServlet extends PageServlet
         // create a new entry for filling out
         Log.info("creating " + type + " '" + id + "'");
 
-        entry = type.create(id);
+        entry = type.create(id, m_data);
       }
 
       if(entry == null)
@@ -480,7 +484,7 @@ public abstract class AbstractEntryServlet extends PageServlet
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
       EasyMock.replay(m_request, m_response);
 
-      return new AbstractEntryServlet()
+      return new AbstractEntryServlet(new DMAData("path"))
         {
           private static final long serialVersionUID = 1L;
 
@@ -555,7 +559,9 @@ public abstract class AbstractEntryServlet extends PageServlet
     public void simple() throws Exception
     {
       AbstractEntryServlet servlet =
-        createServlet("/baseentry/guru", new BaseEntry("guru"), null, null,
+        createServlet("/baseentry/guru",
+                      new BaseEntry("guru", new net.ixitxachitls.dma.data
+                                    .DMAData("path")), null, null,
                       false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
@@ -565,7 +571,7 @@ public abstract class AbstractEntryServlet extends PageServlet
                    + "    </SCRIPT>\n"
                    + s_imageScript
                    + "    " + s_navigation
-                   + "<span class=\"error\">* id unknown *</span> "
+                   + "<span class=\"error\"> * id * </span> "
                    + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
                    + "class=\"editable\" type=\"name\"><span>guru</span>"
                    + "&nbsp;</dma.editable>"
@@ -684,7 +690,7 @@ public abstract class AbstractEntryServlet extends PageServlet
                    + "    </SCRIPT>\n"
                    + s_imageScript
                    + "    " + s_navigation
-                   + "<span class=\"error\">* id unknown *</span> "
+                   + "<span class=\"error\"> * id * </span> "
                    + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
                    + "class=\"editable\" type=\"name\"><span>guru</span>"
                    + "&nbsp;</dma.editable>"

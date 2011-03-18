@@ -186,7 +186,9 @@ public class LoginServlet extends ActionServlet
 
       EasyMock.replay(request, response);
 
-      BaseCharacter character = new BaseCharacter("somebody");
+      BaseCharacter character =
+        new BaseCharacter("somebody",
+                          new net.ixitxachitls.dma.data.DMAData("path"));
       character.setPassword("secret");
 
       LoginServlet servlet = new LoginServlet
@@ -228,7 +230,9 @@ public class LoginServlet extends ActionServlet
 
       EasyMock.replay(request, response);
 
-      BaseCharacter character = new BaseCharacter("somebody");
+      BaseCharacter character =
+        new BaseCharacter("somebody",
+                          new net.ixitxachitls.dma.data.DMAData("path"));
       character.setPassword("secret");
 
       LoginServlet servlet = new LoginServlet
@@ -272,7 +276,9 @@ public class LoginServlet extends ActionServlet
 
       EasyMock.replay(request, response);
 
-      BaseCharacter character = new BaseCharacter("somebody");
+      BaseCharacter character =
+        new BaseCharacter("somebody",
+                          new net.ixitxachitls.dma.data.DMAData("path"));
       character.setPassword("secret");
 
       LoginServlet servlet = new LoginServlet

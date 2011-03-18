@@ -75,10 +75,12 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @param       inPath     the path to the file
    *
    */
-  public DMAFile(@Nonnull String inName, @Nonnull String inPath)
+  public DMAFile(@Nonnull String inName, @Nonnull String inPath,
+                 @Nonnull DMAData inData)
   {
-    m_name     = inName;
-    m_path     = inPath;
+    m_name = inName;
+    m_path = inPath;
+    m_data = inData;
   }
 
   //........................................................................
@@ -93,8 +95,8 @@ public class DMAFile //implements Storage<AbstractEntry>
   /** The base path to the file read. */
   private @Nonnull String m_path;
 
-//   /** The campaign this file belongs to. */
-//   private CampaignData m_campaign;
+  /** All the available data. */
+  private @Nonnull DMAData m_data;
 
   /** The file level comment (if any). */
   private @Nonnull Comment m_comment = new Comment(1, -1);
@@ -327,7 +329,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     while(!reader.isAtEnd())
     {
       //ParseReader.Position start = reader.getPosition();
-      AbstractEntry entry = AbstractEntry.read(reader);
+      AbstractEntry entry = AbstractEntry.read(reader, m_data);
       //ParseReader.Position end = reader.getPosition();
 
       if(entry == null)
@@ -578,7 +580,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     @org.junit.Test
     public void init()
     {
-      DMAFile file = new DMAFile("test.dma", "build/test");
+      DMAFile file = new DMAFile("test.dma", "build/test", new DMAData("path"));
 
       assertEquals("name", "test.dma", file.getStorageName());
       assertEquals("lines", 0, file.getLines());
@@ -611,7 +613,7 @@ public class DMAFile //implements Storage<AbstractEntry>
       java.io.StringWriter writer = new java.io.StringWriter();
 
       // start the test
-      DMAFile file = new DMAFile("read.dma", "path");
+      DMAFile file = new DMAFile("read.dma", "path", new DMAData("path"));
 
       assertTrue("read", file.read(reader));
       synchronized(file)
@@ -661,7 +663,7 @@ public class DMAFile //implements Storage<AbstractEntry>
       // add an entry
       writer = new java.io.StringWriter();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("guru");
+        new net.ixitxachitls.dma.entries.BaseEntry("guru", new DMAData("path"));
       file.add(entry);
 
       assertTrue("changed", file.isChanged());

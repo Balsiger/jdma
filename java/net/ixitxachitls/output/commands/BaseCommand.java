@@ -637,7 +637,7 @@ public class BaseCommand extends Command
       }
 
       // check and set the arguments
-      if(command.m_optNumber == -1 || command.m_optNumber == optionals.size())
+      if(command.m_optNumber == -1 || command.m_optNumber >= optionals.size())
         command.m_optionals.addAll(optionals);
       else
       {
@@ -646,13 +646,8 @@ public class BaseCommand extends Command
                       + "', surplus will be ignored");
 
         if(optionals.size() > 0)
-        {
           for(int i = 0; i < command.m_optNumber; i++)
-            if(i < optionals.size())
-              command.m_optionals.add(optionals.get(i));
-            else
-              command.m_optionals.add("");
-        }
+            command.m_optionals.add(optionals.get(i));
       }
 
       if(command.m_argNumber == -1 || command.m_argNumber == arguments.size())

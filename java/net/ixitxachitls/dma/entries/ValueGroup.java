@@ -1370,27 +1370,20 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
-  //----------------------------- formatValue ------------------------------
+  //----------------------------- computeValue -----------------------------
 
   /**
    * Format a value for printing.
    *
    * @param     inKey the key of the value to format
    * @param     inDM  true if formattign for dm, false if not
-   * @param     inEdit true if allowing to edit, false if not
    *
-   * @return    a formatted value ready for printing
+   * @return    a value handle ready for printing
    *
    */
-  public @Nonnull Object formatValue(@Nonnull String inKey, boolean inDM,
-                                     boolean inEdit)
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
-    ValueHandle handle = getVariable(inKey);
-
-    if(handle == null)
-      return new Color("error", "* " + inKey + " unknown *");
-
-    return handle.format(this, inDM, inEdit);
+    return getVariable(inKey);
   }
 
   //........................................................................

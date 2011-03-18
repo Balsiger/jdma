@@ -134,7 +134,6 @@ public class Pattern extends Action
       for(int i = 0; i < inOptionals.size(); i++)
       {
         String optional = inDocument.convert(inOptionals.get(i));
-
         result = result.replaceAll("(?<!\\\\)\\%" + (i + 1) + "(?!\\d)",
                                    optional.replaceAll("\\\\", "\\\\\\\\")
                                    .replaceAll("\\%", "\\\\\\%"));
