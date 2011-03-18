@@ -120,13 +120,13 @@ public abstract class ValueHandle
    * @return   the formatted value, usually either a String or a Command.
    *
    */
-  public @Nonnull Object format(@Nonnull ValueGroup inEntry, boolean inDM,
-                                boolean inEdit)
+  public @Nullable Object format(@Nonnull ValueGroup inEntry, boolean inDM,
+                                 boolean inEdit)
   {
     Object value = value(inEntry, inDM);
 
     if(value == null)
-      return new Color("error", " * " + getKey() + " * ");
+      return null;
 
     if(inDM && isPlayerOnly() || !inDM && isDMOnly())
       return "";

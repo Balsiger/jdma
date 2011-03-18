@@ -142,13 +142,15 @@ public class Print
                                       + inEntry.getType().getName()
                                       .replaceAll("\\s+", "-"),
                                       Encodings.toWordUpperCase(name));
+
           Object value;
           if(handle != null)
             value = handle.format(inEntry, inDM, true);
           else
             value = new Color("error", " * unknown * ");
 
-          result.add
+          if(value != null)
+            result.add
               (new Divider("value",
                            new Command(label,
                                        new Divider("value-content", value))));

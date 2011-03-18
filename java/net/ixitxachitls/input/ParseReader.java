@@ -27,7 +27,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,6 +38,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.errors.BaseError;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -252,6 +255,9 @@ public class ParseReader
 
   /** A flag if there was an error in this stream. */
   private boolean m_error = false;
+
+  /** All the errors encountered but not yet fetched. */
+  private List<BaseError> m_errors = new ArrayList<BaseError>();
 
   /** The put back buffer to store characters that were put back. */
   protected @Nonnull StringBuilder m_back = new StringBuilder();
@@ -1398,7 +1404,9 @@ public class ParseReader
 
     m_error = true;
 
-    Log.error(error(inPosition, inErrorNumber, inText));
+    ParseError error = error(inPosition, inErrorNumber, inText);
+    m_errors.add(error);
+    Log.error(error);
   }
 
   //........................................................................
@@ -1421,10 +1429,30 @@ public class ParseReader
 
     m_warning = true;
 
-    Log.warning(error(inPosition, inErrorNumber, inText));
+    ParseError error = error(inPosition, inErrorNumber, inText);
+    m_errors.add(error);
+    Log.warning(error);
   }
 
   //........................................................................
+  //----------------------------- fetchErrors ------------------------------
+
+  /**
+   * Fetch and clear all errors encountred.
+   *
+   * @return all the errors since the last fetch.
+   *
+   */
+  public List<BaseError> fetchErrors()
+  {
+    List<BaseError> errors = m_errors;
+    m_errors = new ArrayList<BaseError>();
+
+    return errors;
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

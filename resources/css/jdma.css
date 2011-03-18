@@ -79,6 +79,7 @@ DIV.subtitletext, DIV.subtitletext A
   font-size: small;
   padding: 5px;
   -webkit-box-shadow: 0 1px 3px #777;
+  z-index: 1;
 }
 
 #header-left
@@ -373,3 +374,4 @@ DIV.clear-right
 /* error, colored text */
 SPAN.error, SPAN.error A { color: #AA0000; }
 SPAN.warning, SPAN.warning A { color: #FF8800; }
+DIV.snippet { color: #aaa; font-size: 80%; }

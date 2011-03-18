@@ -71,7 +71,7 @@ import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Editable;
 //import net.ixitxachitls.output.commands.Icon;
 import net.ixitxachitls.output.commands.Image;
-// import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Linebreak;
 //import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Picture;
 // import net.ixitxachitls.output.commands.Script;
@@ -318,7 +318,7 @@ public class AbstractEntry extends ValueGroup
   protected boolean m_changed = false;
 
   /** Errors for this entry. */
-  protected @Nullable Set<BaseError> m_errors = null;
+  protected @Nullable List<BaseError> m_errors = null;
 
   /** All the attachments, indexed by name. */
 //   protected Map<String, AbstractAttachment> m_attachments =
@@ -1497,22 +1497,6 @@ public class AbstractEntry extends ValueGroup
 // //     commands.addValue("attachment", attachments, true, true, false,
 // //                       "attachments");
 
-//     // errors
-//     if(m_errors != null)
-//     {
-//       ArrayList<Object>errors = new ArrayList<Object>();
-
-//       for(Iterator<BaseError> i = m_errors.iterator(); i.hasNext(); )
-//       {
-//         errors.add(i.next());
-
-//         if(i.hasNext())
-//           errors.add(new Linebreak());
-//       }
-
-//       commands.addValue("errors", new Command(errors.toArray()), false, true,
-//                         false, "errors");
-//     }
 
 //     commands.addValue("scripts", new Script
 //                       ("gui.addAction('Report', "
@@ -1645,6 +1629,27 @@ public class AbstractEntry extends ValueGroup
                        " to ",
                        m_endLine),
            "file", true, false, false, "files");
+
+    if("errors".equals(inKey))
+    {
+      Object value = null;
+
+      if(hasErrors())
+      {
+        ArrayList<Object>errors = new ArrayList<Object>();
+        for(Iterator<BaseError> i = m_errors.iterator(); i.hasNext(); )
+        {
+          errors.add(i.next().format());
+
+          if(i.hasNext())
+            errors.add(new Linebreak());
+        }
+
+        value = new Command(errors);
+      }
+
+      return new FormattedValue(value, "errors", true, false, false, "errors");
+    }
 
     return super.computeValue(inKey, inDM);
   }
@@ -1997,6 +2002,10 @@ public class AbstractEntry extends ValueGroup
       result.m_trailingComment = result.m_trailingComment.as("\n#.....\n");
     else
       result.m_trailingComment.fix();
+
+    // obtain and store all errors found for this entry
+    for(BaseError error : inReader.fetchErrors())
+      result.addError(error);
 
     return result;
   }
@@ -2511,7 +2520,7 @@ public class AbstractEntry extends ValueGroup
   public void addError(@Nonnull BaseError inError)
   {
     if(m_errors == null)
-      m_errors = new HashSet<BaseError>();
+      m_errors = new ArrayList<BaseError>();
 
     m_errors.add(inError);
   }

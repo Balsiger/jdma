@@ -26,6 +26,10 @@ package net.ixitxachitls.input;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
 
@@ -151,7 +155,7 @@ public class ParseError extends BaseError
   //---------------------------- getParseMessage ---------------------------
 
   /**
-   * Get the individual error message test.
+   * Get the individual error message text.
    *
    * @return      the requested individual text
    *
@@ -219,6 +223,34 @@ public class ParseError extends BaseError
 
   //.......................................................................
 
+  //-------------------------------- format --------------------------------
+
+  /**
+   * Format the error for printing.
+   *
+   * @return      a string or command representing the error
+   *
+   */
+  public Object format()
+  {
+    return new Command(new Color("error", m_errorNumber + ": " + m_error
+                                 + (m_parseMessage != null ?
+                                    " (" + m_parseMessage + ")" : "")),
+                       (m_line > 0 ? " on line " + m_line : ""),
+                       (m_document != null ? " in document '" + m_document
+                        + "'" : ""),
+                       new Linebreak(),
+                       (m_pre != null || m_post != null ?
+                        new Divider("snippet",
+                                    new Command((m_pre != null
+                                                 ? s_dots + m_pre : ""),
+                                                new Color("error", s_mark),
+                                                (m_post != null
+                                                 ? m_post + s_dots : "")))
+                        : ""));
+  }
+
+  //........................................................................
   //------------------------------- toString -------------------------------
 
   /**
