@@ -218,7 +218,7 @@ public class AbstractEntry extends ValueGroup
    * @param inData all the avaialble data
    *
    */
-  public AbstractEntry(@Nonnull DMAData inData)
+  protected AbstractEntry(@Nonnull DMAData inData)
   {
     this(TYPE, inData);
   }
@@ -1054,20 +1054,6 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-  //--------------------------- getPossibleFiles ---------------------------
-
-  /**
-   * Get the names of the files that this entry can possibly be stored in.
-   *
-   * @return      a list of names that can be used for storage
-   *
-   */
-  public @Nonnull List<String> getPossibleFiles() {
-    return new ArrayList<String>();
-  };
-
-  //........................................................................
-
   //----------------------- getFirstDefinedBaseValue -----------------------
 
   /**
@@ -1643,8 +1629,8 @@ public class AbstractEntry extends ValueGroup
         return new FormattedValue
           (new Editable(getName(), "", "_file", "<please select>",
                         "selection", null,
-                        Strings.toString(getPossibleFiles(), "||", "")),
-           "file", false, true, false, "files");
+                        Strings.toString(m_data.files(getType()), "||", "")),
+           "file", true, false, false, "files");
       else
         return new FormattedValue
           (new Command(new Editable(getName(),
@@ -1652,13 +1638,13 @@ public class AbstractEntry extends ValueGroup
                                     "_file",
                                     m_file.getStorageName(),
                                     "selection", null,
-                                    Strings.toString(getPossibleFiles(), "||",
-                                                     "")),
+                                    Strings.toString(m_data.files(getType()),
+                                                     "||", "")),
                        " lines ",
                        m_startLine,
                        " to ",
                        m_endLine),
-           "file", false, true, false, "files");
+           "file", true, false, false, "files");
 
     return super.computeValue(inKey, inDM);
   }
@@ -1939,7 +1925,7 @@ public class AbstractEntry extends ValueGroup
     {
       // create the object
       Constructor<? extends AbstractEntry> constructor =
-        entry.getConstructor(DMAData.class);
+        entry.getDeclaredConstructor(DMAData.class);
 
       result = constructor.newInstance(inData);
     }

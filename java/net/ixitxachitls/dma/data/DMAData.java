@@ -25,9 +25,11 @@ package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
@@ -163,6 +165,28 @@ public class DMAData
   }
 
   //........................................................................
+  //--------------------------------- files --------------------------------
+
+  /**
+   * Get the names of the files that this entry can possibly be stored in.
+   *
+   * @param       inType the type of entries for which to get files
+   *
+   * @return      a list of names that can be used for storage
+   *
+   */
+  public @Nonnull Set<String> files
+    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    Set<String> names = new HashSet<String>();
+    for(DMAFile file : m_files)
+      names.add(file.getStorageName());
+
+    return names;
+  };
+
+  //........................................................................
+
 
   //........................................................................
 

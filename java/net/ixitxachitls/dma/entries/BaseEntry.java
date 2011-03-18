@@ -153,7 +153,7 @@ public class BaseEntry extends AbstractEntry
    * @param       inData all the avaialble data
    *
    */
-  public BaseEntry(@Nonnull DMAData inData)
+  protected BaseEntry(@Nonnull DMAData inData)
   {
     super(TYPE, inData);
   }

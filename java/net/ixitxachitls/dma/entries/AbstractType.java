@@ -292,7 +292,8 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   {
     try
     {
-      return (T)m_class.getConstructor(DMAData.class).newInstance(inData);
+      return (T)m_class.getDeclaredConstructor(DMAData.class)
+        .newInstance(inData);
     }
     catch(java.lang.InstantiationException e)
     {

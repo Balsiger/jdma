@@ -141,7 +141,7 @@ public class BaseCharacter extends BaseEntry
    * @param   inData all the avaialble data
    *
    */
-  public BaseCharacter(@Nonnull DMAData inData)
+  protected BaseCharacter(@Nonnull DMAData inData)
   {
     super(TYPE, inData);
   }
