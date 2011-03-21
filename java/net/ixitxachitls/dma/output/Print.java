@@ -107,7 +107,7 @@ public class Print
    */
   public Object print(@Nonnull AbstractEntry inEntry, boolean inDM)
   {
-    // CHECKSTYLE:OFF (this works in 1.6)
+    // CHECKSTYLE:OFF (this works in Java 1.6)
     if(m_tokens == null)
       synchronized(this)
       {

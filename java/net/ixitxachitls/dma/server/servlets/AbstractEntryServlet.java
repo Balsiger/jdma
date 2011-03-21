@@ -350,7 +350,7 @@ public abstract class AbstractEntryServlet extends PageServlet
                                        last == null ? "" : getPath(last))));
     document.add(navigation);
 
-    document.add(entry.printPage(true)); // TODO: must have dm or not here!
+    document.add(entry.printPage(entry.isDM(inRequest.getUser())));
 
     document.add(navigation);
 

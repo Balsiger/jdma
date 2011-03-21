@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.logging.Log;
 
@@ -72,12 +73,59 @@ public abstract class DMAServlet extends BaseServlet
 
   //........................................................................
 
+  //------------------------------ withAccess ------------------------------
+
+  /**
+   * Set the access level for this servlet.
+   *
+   * @param       inGroup
+   *
+   * @return      this servlet for chaining
+   *
+   */
+  public DMAServlet withAccess(@Nonnull BaseCharacter.Group inGroup)
+  {
+    m_group = inGroup;
+
+    return this;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The group required for accessing the content of this servlet. */
+  private @Nullable BaseCharacter.Group m_group;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //-------------------------------- allows --------------------------------
+
+  /**
+   * Check for access to the page.
+   *
+   * @param       inRequest the request to the page
+   *
+   * @return      true for access, false for not
+   *
+   */
+  protected boolean allows(@Nonnull DMARequest inRequest)
+  {
+    // no access restriction defined
+    if(m_group == null)
+      return true;
+
+    // normal user access
+    return inRequest.hasUser() && inRequest.getUser().hasAccess(m_group);
+  }
+
+  //........................................................................
+
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -102,7 +150,17 @@ public abstract class DMAServlet extends BaseServlet
     throws ServletException, IOException
   {
     if(inRequest instanceof DMARequest)
-      return handle((DMARequest)inRequest, inResponse);
+    {
+      DMARequest request = (DMARequest)inRequest;
+
+      if(allows(request))
+        return handle(request, inResponse);
+
+      Log.error("No access to page");
+      return new HTMLError(HttpServletResponse.SC_FORBIDDEN,
+                           "Access Denied",
+                           "You don't have access to the requested page.");
+    }
     else
     {
       Log.error("Invalid request, expected a DMA request!");

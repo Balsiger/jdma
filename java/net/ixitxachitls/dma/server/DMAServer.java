@@ -339,7 +339,8 @@ public class DMAServer extends WebServer
       (new ServletHolder
        (new TypedEntryServlet<BaseCharacter>
         (BaseCharacter.TYPE, "/user/",
-         m_users.getEntries(BaseCharacter.TYPE), m_users)), "/user/*");
+         m_users.getEntries(BaseCharacter.TYPE), m_users)
+        .withAccess(BaseCharacter.Group.USER)), "/user/*");
 
 //     m_rootContext.addFilter(new FilterHolder(new MeUserFilter()),
 //                             "/user/me/*", 0);

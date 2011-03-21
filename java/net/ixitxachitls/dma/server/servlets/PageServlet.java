@@ -210,11 +210,19 @@ public class PageServlet extends DMAServlet
         .begin("a").id("login-icon").classes("icon").tooltip("Login")
         .onClick("login()").end("a");
     else
+    {
       inWriter
-        .begin("span").classes("user").add(user.getName()).end("span")
+        .begin("span").classes("user").add(user.getName());
+
+      if(inRequest.hasUserOverride())
+        inWriter.add(" (" + inRequest.getRealUser().getName() + ")");
+
+      inWriter
+        .end("span")
         .add(" | ")
         .begin("a").id("logout-icon").classes("icon").tooltip("Logout")
         .onClick("logout()").end("a");
+    }
 
     inWriter
       .begin("a").classes("icon", "library").tooltip("Library").end("a")

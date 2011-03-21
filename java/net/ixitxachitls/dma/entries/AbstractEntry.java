@@ -1695,6 +1695,7 @@ public class AbstractEntry extends ValueGroup
 //   }
 
   //........................................................................
+
   //------------------------- getShortDescription --------------------------
 
   /**
@@ -1706,6 +1707,22 @@ public class AbstractEntry extends ValueGroup
   public @Nonnull String getShortDescription()
   {
     return "";
+  }
+
+  //........................................................................
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  public boolean isDM(@Nonnull BaseCharacter inUser)
+  {
+    return false;
   }
 
   //........................................................................

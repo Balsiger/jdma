@@ -129,7 +129,7 @@ public abstract class ValueHandle
       return null;
 
     if(inDM && isPlayerOnly() || !inDM && isDMOnly())
-      return "";
+      return null;
 
     String type;
     String choices;
@@ -144,7 +144,7 @@ public abstract class ValueHandle
     {
       type = "string";
       choices = "";
-      formatted = value.toString();
+      formatted = value;
     }
 
     if(inEdit && (inDM || m_playerEditable))

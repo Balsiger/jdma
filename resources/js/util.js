@@ -142,6 +142,7 @@ util.reload = function(inPage)
   */
 util.link = function(inEvent, inTarget, inFunction)
 {
+  window.console.log("link", inEvent, inTarget, inFunction, location);
   if(inEvent)
   {
     inEvent.preventDefault();
@@ -168,9 +169,6 @@ util.link = function(inEvent, inTarget, inFunction)
       return true;
 
   window.onbeforeunload = null;
-
-//   lastPage = "#" + unescape(inTarget);
-//   location.hash = inTarget;
 
   var busy = new gui.Busy("Please wait while ", ["loading page"]);
 
@@ -274,6 +272,6 @@ Array.prototype.remove = function(inValue)
 
 // install a handler to support back/forward actions
 $(window).bind('popstate', function(event) {
-    util.link(event.originalEvent, location.pathname);
+    util.link(event.originalEvent, location.pathname + location.search)
   });
 

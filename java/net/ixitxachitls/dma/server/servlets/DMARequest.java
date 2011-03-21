@@ -124,6 +124,9 @@ public class DMARequest extends HttpServletRequestWrapper
   /** The user doing the request, if any. */
   private @Nullable BaseCharacter m_user = null;
 
+  /** The user override for doing the request, if any. */
+  private @Nullable BaseCharacter m_userOverride = null;
+
   /** The player for the request, if any. */
 //   private Character m_player = null;
 
@@ -149,6 +152,20 @@ public class DMARequest extends HttpServletRequestWrapper
   public boolean hasUser()
   {
     return m_user != null;
+  }
+
+  //........................................................................
+  //--------------------------- hasUserOverride ----------------------------
+
+  /**
+   * Check if the request has a user override associated with it.
+   *
+   * @return      true if there is a user override, false if not
+   *
+   */
+  public boolean hasUserOverride()
+  {
+    return m_userOverride != null;
   }
 
   //........................................................................
@@ -253,7 +270,7 @@ public class DMARequest extends HttpServletRequestWrapper
 
   //........................................................................
 
-  //---------------------------- getFirstParam -----------------------------
+  //------------------------------ getParam --------------------------------
 
   /**
    * Get the first value given for a key.
@@ -378,10 +395,30 @@ public class DMARequest extends HttpServletRequestWrapper
   /**
    * Get the user for the request.
    *
-   * @return the currently logged in user
+   * @return the currently logged in user or the user on whose behalve we are
+   *         acting
    *
    */
   public @Nullable BaseCharacter getUser()
+  {
+    // only admin are allows to do that
+    if(m_userOverride != null && hasUser()
+       && m_user.hasAccess(BaseCharacter.Group.ADMIN))
+      return m_userOverride;
+
+    return m_user;
+  }
+
+  //........................................................................
+  //------------------------------- getUser --------------------------------
+
+  /**
+   * Get the real user for the request.
+   *
+   * @return the currently logged in user
+   *
+   */
+  public @Nullable BaseCharacter getRealUser()
   {
     return m_user;
   }
@@ -436,7 +473,6 @@ public class DMARequest extends HttpServletRequestWrapper
 
     String user  = null;
     String token = null;
-    BaseCharacter.Group group = null;
 
     if(cookies != null)
       for(Cookie cookie : cookies)
@@ -458,6 +494,10 @@ public class DMARequest extends HttpServletRequestWrapper
         else
           m_user = null;
     }
+
+    String override = getParam("user");
+    if(override != null)
+      m_userOverride = m_users.get(override);
   }
 
   //........................................................................

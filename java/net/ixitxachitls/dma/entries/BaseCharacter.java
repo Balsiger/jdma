@@ -246,6 +246,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The files in the base campaign. */
   @Key("real name")
+  @DM
   protected Text m_realName = new Text();
 
   //........................................................................
@@ -253,6 +254,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The files in the base campaign. */
   @Key("email")
+  @DM
   protected Text m_email = new Text();
 
   //........................................................................
@@ -260,6 +262,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The files in the base campaign. */
   @Key("password")
+  @DM
   protected Text m_password = new Text();
 
   //........................................................................
@@ -291,6 +294,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The files in the base campaign. */
   @Key("token")
+  @DM
   protected Text m_token = new Text();
 
   //........................................................................
@@ -503,6 +507,22 @@ public class BaseCharacter extends BaseEntry
   public boolean hasAccess(@Nonnull Group inGroup)
   {
     return inGroup.allows(getGroup());
+  }
+
+  //........................................................................
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  public boolean isDM(@Nonnull BaseCharacter inUser)
+  {
+    return inUser.hasAccess(Group.ADMIN) || inUser == this;
   }
 
   //........................................................................

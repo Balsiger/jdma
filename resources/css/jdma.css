@@ -286,7 +286,7 @@ DIV.mainimage IMG.image
 
 DIV.files
 {
-  margin-top:  -32px;
+  margin-top:  -10px;
   padding-top: 2px;
   border-top:  1px solid #ddd;
 }
@@ -325,6 +325,7 @@ DIV.value-content
   padding:          5px;
   background-color: #eee;
   margin-left:      17ex;
+  min-height:       1.125em;
 }
 
 /******************************************************************************

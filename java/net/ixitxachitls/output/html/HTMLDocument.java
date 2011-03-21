@@ -459,7 +459,7 @@ public class HTMLDocument extends Document
                                + "id=\"$1\" class=\"editable\" "
                                + "type=\"$5\"[[ script=\"%1\"]]"
                                + "[[ values=\"$html((%2))\"]]>"
-                               + "<span>$2</span>&nbsp;"
+                               + "<span>$2</span>"
                                + "</dma.editable>", false));
      s_actions.put(Script.SCRIPT,
                    new Pattern("\n<script type='text/javascript'>$1"
