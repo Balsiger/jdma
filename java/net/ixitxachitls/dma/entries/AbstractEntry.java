@@ -2578,8 +2578,8 @@ public class AbstractEntry extends ValueGroup
   {
     m_changed = inChanged;
 
-//     if(m_changed && m_storage != null)
-//       m_storage.changed();
+    if(m_changed && m_file != null)
+      m_file.changed();
   }
 
   //........................................................................
