@@ -112,7 +112,7 @@ function doLogin(inUsername, inPassword)
     $("#login-error").html(result);
   else
     // reload the page to show login
-    reload();
+    util.reload();
 }
 
 //..........................................................................
@@ -130,7 +130,7 @@ function doLogout()
 {
   var result = util.ajax("/actions/logout", {});
 
-  reload();
+  util.reload();
 }
 
 //..........................................................................
