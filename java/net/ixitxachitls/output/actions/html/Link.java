@@ -190,7 +190,8 @@ public class Link extends Action
 
       assertEquals("execution did not produce desired result",
                    "<a href=\"target_dir/target.ext\" class=\"test\" "
-                   + "onclick=\"link(event, 'target_dir/target.ext');\">"
+                   + "onclick=\"return util.link(event, "
+                   + "'target_dir/target.ext');\">"
                    + "target_dir/target</a>",
                    doc.toString());
     }
@@ -215,7 +216,8 @@ public class Link extends Action
       // now to the execute
       assertEquals("execution did not produce desired result",
                    "<a href=\"optional.ext\" class=\"id\" "
-                   + "onclick=\"link(event, 'optional.ext');\">target</a>",
+                   + "onclick=\"return util.link(event, 'optional.ext');\">"
+                   + "target</a>",
                    doc.toString());
     }
 

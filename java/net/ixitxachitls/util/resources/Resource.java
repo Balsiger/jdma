@@ -428,7 +428,7 @@ public abstract class Resource
       }
 
       @Override
-      public boolean hasResource(String inName)
+      public boolean hasResource(@Nonnull String inName)
       {
         return m_name.equals(inName.substring(0, m_name.length()))
           && m_files.contains(inName.substring(m_name.length() + 1));

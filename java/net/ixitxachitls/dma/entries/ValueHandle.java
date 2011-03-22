@@ -325,14 +325,13 @@ public abstract class ValueHandle
                                                    .DMAData("path"));
       ValueHandle handle =
         new TestHandle("test", true, false, false, null, "value");
-      assertEquals("null", "", handle.format(entry, false, false).toString());
+      assertNull("null", handle.format(entry, false, false));
 
       handle = new TestHandle("test", false, true, false, null, "value");
-      assertEquals("player only for dm", "", handle.format(entry, true, false));
+      assertNull("player only for dm", handle.format(entry, true, false));
 
       handle = new TestHandle("test", true, false, false, null, "value");
-      assertEquals("dm only for player", "",
-                   handle.format(entry, false, false));
+      assertNull("dm only for player", handle.format(entry, false, false));
     }
 
     //......................................................................

@@ -613,6 +613,153 @@ public class DMARequest extends HttpServletRequestWrapper
     }
 
     //......................................................................
+    //----- user -----------------------------------------------------------
+
+    /** The user Test. */
+    @org.junit.Test
+    public void user()
+    {
+      HttpServletRequest mockRequest =
+        EasyMock.createMock(HttpServletRequest.class);
+
+      BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
+
+      EasyMock.expect(mockRequest.getCookies()).andReturn
+        (new javax.servlet.http.Cookie []
+          {
+            new Cookie(LoginServlet.COOKIE_USER, "user"),
+            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
+          });
+
+      EasyMock.expect(user.checkToken("token")).andReturn(true);
+      user.action();
+
+      EasyMock.replay(mockRequest, user);
+
+      DMARequest request =
+        new DMARequest(mockRequest,
+                       com.google.common.collect.HashMultimap.
+                       <String, String>create(),
+                       com.google.common.collect.ImmutableMap.of("user", user));
+
+      assertEquals("user", user, request.getUser());
+
+      EasyMock.verify(mockRequest);
+    }
+
+    //.....................................................................
+    //----- invalid token -------------------------------------------------
+
+    /** The user Test. */
+    @org.junit.Test
+    public void invalidToken()
+    {
+      HttpServletRequest mockRequest =
+        EasyMock.createMock(HttpServletRequest.class);
+
+      BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
+
+      EasyMock.expect(mockRequest.getCookies()).andReturn
+        (new javax.servlet.http.Cookie []
+          {
+            new Cookie(LoginServlet.COOKIE_USER, "user"),
+            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
+          });
+
+      EasyMock.expect(user.checkToken("token")).andReturn(false);
+      user.action();
+
+      EasyMock.replay(mockRequest, user);
+
+      DMARequest request =
+        new DMARequest(mockRequest,
+                       com.google.common.collect.HashMultimap.
+                       <String, String>create(),
+                       com.google.common.collect.ImmutableMap.of("user", user));
+
+      assertNull("user", request.getUser());
+
+      EasyMock.verify(mockRequest);
+    }
+
+    //......................................................................
+    //----- user override --------------------------------------------------
+
+    /** The user Test. */
+    @org.junit.Test
+    public void userOverride()
+    {
+      HttpServletRequest mockRequest =
+        EasyMock.createMock(HttpServletRequest.class);
+
+      BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
+      BaseCharacter other = EasyMock.createMock(BaseCharacter.class);
+
+      EasyMock.expect(mockRequest.getCookies()).andReturn
+        (new javax.servlet.http.Cookie []
+          {
+            new Cookie(LoginServlet.COOKIE_USER, "user"),
+            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
+          });
+
+      EasyMock.expect(user.checkToken("token")).andReturn(true);
+      user.action();
+      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN)).andReturn(true);
+
+      EasyMock.replay(mockRequest, user, other);
+
+      DMARequest request =
+        new DMARequest(mockRequest,
+                       com.google.common.collect.ImmutableMultimap.of
+                       ("user", "other"),
+                       com.google.common.collect.ImmutableMap.of
+                       ("user", user, "other", other));
+
+      assertEquals("user", other, request.getUser());
+
+      EasyMock.verify(mockRequest);
+    }
+
+    //......................................................................
+    //----- user override --------------------------------------------------
+
+    /** The user Test. */
+    @org.junit.Test
+    public void userOverrideNonAdmin()
+    {
+      HttpServletRequest mockRequest =
+        EasyMock.createMock(HttpServletRequest.class);
+
+      BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
+      BaseCharacter other = EasyMock.createMock(BaseCharacter.class);
+
+      EasyMock.expect(mockRequest.getCookies()).andReturn
+        (new javax.servlet.http.Cookie []
+          {
+            new Cookie(LoginServlet.COOKIE_USER, "user"),
+            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
+          });
+
+      EasyMock.expect(user.checkToken("token")).andReturn(true);
+      user.action();
+      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
+        .andReturn(false);
+
+      EasyMock.replay(mockRequest, user, other);
+
+      DMARequest request =
+        new DMARequest(mockRequest,
+                       com.google.common.collect.ImmutableMultimap.of
+                       ("user", "other"),
+                       com.google.common.collect.ImmutableMap.of
+                       ("user", user, "other", other));
+
+      assertEquals("user", user, request.getUser());
+
+      EasyMock.verify(mockRequest);
+    }
+
+    //......................................................................
   }
 
   //........................................................................

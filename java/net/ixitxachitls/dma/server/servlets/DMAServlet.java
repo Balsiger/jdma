@@ -78,12 +78,12 @@ public abstract class DMAServlet extends BaseServlet
   /**
    * Set the access level for this servlet.
    *
-   * @param       inGroup
+   * @param       inGroup the group required for accessing the servlet
    *
    * @return      this servlet for chaining
    *
    */
-  public DMAServlet withAccess(@Nonnull BaseCharacter.Group inGroup)
+  public @Nonnull DMAServlet withAccess(@Nonnull BaseCharacter.Group inGroup)
   {
     m_group = inGroup;
 

@@ -1647,6 +1647,8 @@ public class AbstractEntry extends ValueGroup
 
         value = new Command(errors);
       }
+      else
+        value = "";
 
       return new FormattedValue(value, "errors", true, false, false, "errors");
     }

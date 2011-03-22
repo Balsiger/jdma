@@ -32,8 +32,8 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.ValueHandle;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.util.Encodings;
 

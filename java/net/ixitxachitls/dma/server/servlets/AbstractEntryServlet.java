@@ -74,6 +74,8 @@ public abstract class AbstractEntryServlet extends PageServlet
   /**
    * The basic constructor for the servlet.
    *
+   * @param   inData all the available data
+   *
    */
   public AbstractEntryServlet(@Nonnull DMAData inData)
   {
@@ -398,20 +400,20 @@ public abstract class AbstractEntryServlet extends PageServlet
 
     /** Expected text for the dummy navigation. */
     private static final String s_navigation = "<div class=\"entry-nav\">"
-      + "<a href=\"\" class=\"link\" onclick=\"return link(event, '');\">"
+      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
       + "<div class=\"first icon disabled\"></div>"
       + "</a>"
-      + "<a href=\"\" class=\"link\" onclick=\"return link(event, '');\">"
+      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
       + "<div class=\"previous icon disabled\"></div>"
       + "</a>"
       + "<a href=\"/user/\" class=\"link\" "
-      + "onclick=\"return link(event, '/user/');\">"
+      + "onclick=\"return util.link(event, '/user/');\">"
       + "<div class=\"index icon\"></div>"
       + "</a>"
-      + "<a href=\"\" class=\"link\" onclick=\"return link(event, '');\">"
+      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
       + "<div class=\"next icon disabled\"></div>"
       + "</a>"
-      + "<a href=\"\" class=\"link\" onclick=\"return link(event, '');\">"
+      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
       + "<div class=\"last icon disabled\"></div>"
       + "</a>"
       + "</div>";
@@ -481,6 +483,7 @@ public abstract class AbstractEntryServlet extends PageServlet
       EasyMock.expect(m_request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(m_request.getPathInfo()).andReturn(inPath);
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
+      EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
       if(inEntry == null && inType != null && inID != null)
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
       EasyMock.replay(m_request, m_response);
@@ -573,9 +576,7 @@ public abstract class AbstractEntryServlet extends PageServlet
                    + s_imageScript
                    + "    " + s_navigation
                    + "<span class=\"error\"> * id * </span> "
-                   + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
-                   + "class=\"editable\" type=\"name\"><span>guru</span>"
-                   + "&nbsp;</dma.editable>"
+                   + "guru"
                    + s_navigation
                    + "\n",
                    m_output.toString());
@@ -692,9 +693,7 @@ public abstract class AbstractEntryServlet extends PageServlet
                    + s_imageScript
                    + "    " + s_navigation
                    + "<span class=\"error\"> * id * </span> "
-                   + "<dma.editable key=\"name\" value=\"guru\" id=\"guru\" "
-                   + "class=\"editable\" type=\"name\"><span>guru</span>"
-                   + "&nbsp;</dma.editable>"
+                   + "guru"
                    + s_navigation
                    + "\n",
                    m_output.toString());
