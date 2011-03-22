@@ -151,14 +151,14 @@ public class Link extends Action
     if(!name.startsWith("http://"))
       inDocument.add("<a href=\""
                      + Files.concatenate(m_dir, name)
-                     + "\" class=\"" + id + "\" onclick=\"link(event, '"
+                     + "\" class=\"" + id + "\" "
+                     + "onclick=\"return util.link(event, '"
                      + Files.concatenate(m_dir, name)
                      + "');\">"
-                     //+ target.replaceAll("^[^<>]*/", "") + "</a>");
                      + target + "</a>");
     else
       inDocument.add("<a href=\"" + name + "\" class=\""
-                     + id + "\" onclick=\"link(event, '"
+                     + id + "\" onclick=\"return util.link(event, '"
                      + Files.concatenate(m_dir, name)
                      + "');\">" + target.replaceAll("^[^<>]*/", "")
                      + "</a>");

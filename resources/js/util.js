@@ -58,29 +58,29 @@ util.ajax = function(inURL, inValues, inFunction)
     {
       try
       {
-        request = new ActiveXObject("MSXML2.XMLHTTP");
+        request = new ActiveXObject('MSXML2.XMLHTTP');
       }
       catch(e)
       {
         try
         {
-          request = new ActiveXObject("Microsoft.XMLHTTP");
+          request = new ActiveXObject('Microsoft.XMLHTTP');
         }
         catch(e2)
         {
-          alert("Your browser is currently not supported!");
+          alert('Your browser is currently not supported!');
         }
       }
     }
 
   // build up the data
-  var data = "";
+  var data = '';
   for(var key in inValues)
-    data += key + "=" + encodeURIComponent(inValues[key]) + "\n";
+    data += key + '=' + encodeURIComponent(inValues[key]) + '\n';
 
-  request.open("POST", inURL, inFunction !=  null);
-  request.setRequestHeader("Content-Type",
-                           "application/x-www-form-urlencoded");
+  request.open('POST', inURL, inFunction !=  null);
+  request.setRequestHeader('Content-Type',
+                           'application/x-www-form-urlencoded');
 
   request.send(data);
 
@@ -88,7 +88,7 @@ util.ajax = function(inURL, inValues, inFunction)
     return request.responseText;
 
   // build up the arguments array
-  var args = [ "<nothing yet>" ];
+  var args = [ '<nothing yet>' ];
 
   for(var i = 3, argument; argument = arguments[i]; i++)
     args.push(argument);
@@ -124,7 +124,7 @@ util.reload = function(inPage)
     destination = document.location.hash.substring(1);
 
   if(inPage)
-    destination = destination.replace(/^(.*\/).*?$/, "$1" + inPage);
+    destination = destination.replace(/^(.*\/).*?$/, '$1' + inPage);
 
   document.location.href = destination;
 }
@@ -142,7 +142,6 @@ util.reload = function(inPage)
   */
 util.link = function(inEvent, inTarget, inFunction)
 {
-  window.console.log("link", inEvent, inTarget, inFunction, location);
   if(inEvent)
   {
     inEvent.preventDefault();
@@ -155,41 +154,45 @@ util.link = function(inEvent, inTarget, inFunction)
   // only link via ajax if its an html file
   var matched = inTarget.match(/\/.*\.(.*?)$/);
 
-  if(matched && matched[1] != "html" && matched[1] != "")
+  if(matched && matched[1] != 'html' && matched[1] != '')
   {
     location.href = inTarget;
 
-    return true;
+    return false;
   }
 
   // check if we have prevented moving away
   if(window.onbeforeunload)
-    if(!confirm("Do you really want to leave the page?\n\n"
+    if(!confirm('Do you really want to leave the page?\n\n'
                 + window.onbeforeunload()))
-      return true;
+      return false;
 
   window.onbeforeunload = null;
 
-  var busy = new gui.Busy("Please wait while ", ["loading page"]);
+  var busy = new gui.Busy('Please wait while ', ['loading page']);
 
   // remove all current actions
 //   $p('actions').innerHTML = '';
 
   // inform google analytics about this page change
-  if(location.hostname != "localhost")
+  if(location.hostname != 'localhost')
     pageTracker._trackPageview(inTarget);
 
   var target = inTarget;
-  if(target.match(/\?/))
-    target += "&body";
-  else
-    target += "?body";
+  if(!target.match(/\?/) && location.search)
+    target += location.search;
 
-  util.ajax(target, null, function(inText)
+  var bodyTarget = target;
+  if(bodyTarget.match(/\?/))
+    bodyTarget += '&body';
+  else
+    bodyTarget += '?body';
+
+  util.ajax(bodyTarget, null, function(inText)
   {
     $('#page').html(inText);
 
-    busy.done("loading page");
+    busy.done('loading page');
     delete busy;
 
     // Adding something to the innerHTML will not execute any javascript in it.
@@ -200,7 +203,7 @@ util.link = function(inEvent, inTarget, inFunction)
       inFunction();
 
     if(!inEvent.state)
-      window.history.pushState(inTarget, document.title, inTarget);
+      window.history.pushState(target, document.title, target);
 
     // make all editable, if necessary
     //gui.makeEditable();
