@@ -236,7 +236,7 @@ public class Menu extends Action
     {
       Action action = new Menu("icons");
 
-      HTMLDocument doc = new HTMLDocument("title", "type");
+      HTMLDocument doc = new HTMLDocument("title");
 
       action.execute(doc, null,
                      com.google.common.collect.ImmutableList.of

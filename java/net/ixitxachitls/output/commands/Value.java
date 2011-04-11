@@ -21,30 +21,23 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.entries;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * The type specification for a base entry.
+ * The value command.
  *
- * @file          BaseType.java
+ * @file          Value.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
- * @param         <T> the type represented by this type spec
  *
  */
 
@@ -53,36 +46,36 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
-public class BaseType<T extends AbstractEntry> extends AbstractType<T>
+public class Value extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- BaseType -------------------------------
+  //--------------------------------- Value ---------------------------------
 
   /**
-   * Create the type.
+   * The constructor for the value command.
    *
-   * @param       inClass the class represented by this type
+   * @param       inLabel the label for the value
+   * @param       inValue the value itself
    *
    */
-  public BaseType(@Nonnull Class<T> inClass)
+  public Value(@Nonnull Object inLabel, @Nonnull Object inValue)
   {
-    super(inClass);
+    this();
+
+    withArguments(inLabel, inValue);
   }
 
   //........................................................................
-  //------------------------------- BaseType -------------------------------
+  //--------------------------------- Value ---------------------------------
 
   /**
-   * Create the type.
-   *
-   * @param       inClass    the class represented by this type
-   * @param       inMultiple the name to use for multiple entries of the type
+   * This is the internal constructor for a command.
    *
    */
-  public BaseType(@Nonnull Class<T> inClass, @Nonnull String inMultiple)
+  protected Value()
   {
-    super(inClass, inMultiple);
+    super(VALUE, 0, 2);
   }
 
   //........................................................................
@@ -91,56 +84,42 @@ public class BaseType<T extends AbstractEntry> extends AbstractType<T>
 
   //-------------------------------------------------------------- variables
 
-  /** All the non-base types available. */
-  private static final Map<String, BaseType<?/* extends BaseEntry */>> s_types =
-    new HashMap<String, BaseType<?/* extends BaseEntry*/>>();
-
-  /** The id for serialization. */
-  private static final long serialVersionUID = 1L;
+  /** Command for value printing. */
+  public static final @Nonnull String VALUE =
+    Config.get("resource:commands/value", "value");
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //------------------------------- getType --------------------------------
-
-  /**
-   * Get the base entry type for the given name.
-   *
-   * @param       inName the name of the type to get
-   *
-   * @return      the base entry type with the given name or null if not
-   *              found.
-   *
-   */
-  public static @Nullable BaseType<? /*extends BaseEntry*/>
-    getType(String inName)
-  {
-    return s_types.get(inName);
-  }
-
-  //........................................................................
-  //------------------------------- getTypes -------------------------------
-
-  /**
-   * Get the non-base types available.
-   *
-   * @return      all the non-base types
-   *
-   */
-  public static @Nonnull
-    Collection<BaseType<?/* extends BaseEntry*/>> getTypes()
-  {
-    return Collections.unmodifiableCollection(s_types.values());
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
   //........................................................................
 
   //------------------------------------------------- other member functions
+  //........................................................................
+
+  //------------------------------------------------------------------- test
+
+  /** The test.
+   *
+   * @hidden
+   *
+   */
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  {
+    //----- arguments ------------------------------------------------------
+
+    /** Testing arguments. */
+    @org.junit.Test
+    public void arguments()
+    {
+      Command command = new Value("label", "value");
+      assertEquals("command", "\\value{label}{value}", command.toString());
+    }
+
+    //......................................................................
+  }
+
   //........................................................................
 }

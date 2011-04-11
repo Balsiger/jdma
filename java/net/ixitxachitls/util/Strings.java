@@ -38,6 +38,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.google.common.base.Joiner;
+
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -137,6 +139,12 @@ public final class Strings
   /** All the white spaces. */
   private final static @Nonnull String s_whites =
     Config.get("resource:parser/white.spaces", " \t\r\n\f");
+
+  /** The joiner to convert with newlines. */
+  public static final Joiner NEWLINE_JOINER = Joiner.on('\n');
+
+  /** The joiner to convert with escaped newlines. */
+  public static final Joiner BR_JOINER = Joiner.on("<br />");
 
   //........................................................................
 

@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Editable;
 
 //..........................................................................
@@ -60,13 +59,16 @@ public abstract class ValueHandle
    *
    * @param       inKey            the key of the value
    * @param       inDM             true if the value is for dms only
+   * @param       inEditable       true if the value is editable
    * @param       inPlayer         true if the value is for players only
    * @param       inPlayerEditable true if the value can be edited by players
    * @param       inPlural         the plural value of the key
+   * @param       inNote           a special note for editing the value
    *
    */
-  public ValueHandle(@Nonnull String inKey, boolean inDM, boolean inPlayer,
-                     boolean inPlayerEditable, @Nullable String inPlural)
+  public ValueHandle(@Nonnull String inKey, boolean inDM, boolean inEditable,
+                     boolean inPlayer, boolean inPlayerEditable,
+                     @Nullable String inPlural, @Nullable String inNote)
   {
     if(inDM && inPlayer)
       throw new IllegalArgumentException
@@ -74,6 +76,7 @@ public abstract class ValueHandle
 
     m_key = inKey;
     m_dm = inDM;
+    m_editable = inEditable;
     m_player = inPlayer;
     m_playerEditable = inPlayerEditable;
 
@@ -81,6 +84,8 @@ public abstract class ValueHandle
       m_plural = inPlural;
     else
       m_plural = m_key + "s";
+
+    m_note = inNote;
   }
 
   //........................................................................
@@ -95,6 +100,9 @@ public abstract class ValueHandle
   /** A flag denoting if the value is for DMs only. */
   protected boolean m_dm;
 
+  /** A flag denoting if the value can be edited. */
+  protected boolean m_editable;
+
   /** A flag denoting if the value is for players only. */
   protected boolean m_player;
 
@@ -103,6 +111,9 @@ public abstract class ValueHandle
 
   /** A string with the plural of the key. */
   protected @Nonnull String m_plural;
+
+  /** A string with a special note for editing. */
+  protected @Nullable String m_note;
 
   //........................................................................
 
@@ -147,9 +158,18 @@ public abstract class ValueHandle
       formatted = value;
     }
 
-    if(inEdit && (inDM || m_playerEditable))
-      return new Editable(inEntry.getID(), formatted, m_key, value.toString(),
-                          type, "", choices);
+    // TODO: fix this (have to deal with attachments here)!
+    assert inEntry instanceof AbstractEntry
+      : "temporarily need an abstract entry here, please fix";
+
+    String note = m_note;
+    if(note == null)
+      note = "";
+
+    if(inEdit && m_editable && (inDM || m_playerEditable))
+      return new Editable(inEntry.getID(), ((AbstractEntry)inEntry).getType(),
+                          formatted, m_key, value.toString(), type, note,
+                          choices);
 
     return formatted;
   }
@@ -242,6 +262,20 @@ public abstract class ValueHandle
   }
 
   //........................................................................
+  //------------------------------ isEditable ------------------------------
+
+  /**
+   * Check if the value] is editable or not.
+   *
+   * @return      true if it is editable, false if not
+   *
+   */
+  public boolean isEditable()
+  {
+    return m_editable;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -265,17 +299,21 @@ public abstract class ValueHandle
        *
        * @param   inKey            the key of the value
        * @param   inDM             true if the value is for dms only
+       * @param   inEditable       true if the value can be edited
        * @param   inPlayer         true if the value is for players only
        * @param   inPlayerEditable true if the value can be edited by players
        * @param   inPlural         the plural value of the key
+       * @param   inNote           a note for editing, if any
        * @param   inValue          the value to return for value()
        *
        */
-      TestHandle(@Nonnull String inKey, boolean inDM, boolean inPlayer,
-                 boolean inPlayerEditable, @Nullable String inPlural,
+      TestHandle(@Nonnull String inKey, boolean inDM, boolean inEditable,
+                 boolean inPlayer, boolean inPlayerEditable,
+                 @Nullable String inPlural, @Nullable String inNote,
                  Object inValue)
       {
-        super(inKey, inDM, inPlayer, inPlayerEditable, inPlural);
+        super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
+              inNote);
 
         m_value = inValue;
       }
@@ -297,14 +335,15 @@ public abstract class ValueHandle
     public void init()
     {
       ValueHandle handle =
-        new TestHandle("test", true, false, false, null, null);
+        new TestHandle("test", true, true, false, false, null, null, null);
 
       assertEquals("plural", "tests", handle.getPluralKey());
       assertTrue("dm", handle.isDMOnly());
       assertFalse("player", handle.isPlayerOnly());
       assertFalse("editable", handle.isPlayerEditable());
 
-      handle = new TestHandle("test", false, true, true, "more", null);
+      handle =
+        new TestHandle("test", false, true, true, true, "more", null, null);
 
       assertEquals("plural", "more", handle.getPluralKey());
       assertFalse("dm", handle.isDMOnly());
@@ -324,13 +363,15 @@ public abstract class ValueHandle
                                                    new net.ixitxachitls.dma.data
                                                    .DMAData("path"));
       ValueHandle handle =
-        new TestHandle("test", true, false, false, null, "value");
+        new TestHandle("test", true, true, false, false, null, null, "value");
       assertNull("null", handle.format(entry, false, false));
 
-      handle = new TestHandle("test", false, true, false, null, "value");
+      handle = new TestHandle("test", false, true, true, false, null, null,
+                              "value");
       assertNull("player only for dm", handle.format(entry, true, false));
 
-      handle = new TestHandle("test", true, false, false, null, "value");
+      handle = new TestHandle("test", true, true, false, false, null, null,
+                              "value");
       assertNull("dm only for player", handle.format(entry, false, false));
     }
 
@@ -346,17 +387,19 @@ public abstract class ValueHandle
                                                    new net.ixitxachitls.dma.data
                                                    .DMAData("path"));
       ValueHandle handle =
-        new TestHandle("test", true, false, false, null, "string value");
+        new TestHandle("test", true, true, false, false, null, null,
+                       "string value");
 
       assertEquals("string value",
-                   "\\editable{test id}{string value}{test}{string value}"
-                   + "{string}", handle.format(entry, true, true).toString());
+                   "\\editable{test id}{base entry}{string value}{test}"
+                   + "{string value}{string}",
+                   handle.format(entry, true, true).toString());
 
-      handle = new TestHandle("test", true, false, false, null,
+      handle = new TestHandle("test", true, true, false, false, null, null,
                               new net.ixitxachitls.dma.values.Name("name"));
 
       assertEquals("name value",
-                   "\\editable{test id}{name}{test}{name}{name}",
+                   "\\editable{test id}{base entry}{name}{test}{name}{name}",
                    handle.format(entry, true, true).toString());
     }
 
@@ -372,13 +415,14 @@ public abstract class ValueHandle
                                                    new net.ixitxachitls.dma.data
                                                    .DMAData("path"));
       ValueHandle handle =
-        new TestHandle("test", true, false, false, null, "value");
+        new TestHandle("test", true, true, false, false, null, null, "value");
       assertEquals("string value", "value", handle.format(entry, true, false));
 
-      handle = new TestHandle("test", false, true, false, null, "value");
+      handle =
+        new TestHandle("test", false, true, true, false, null, null, "value");
       assertEquals("string value", "value", handle.format(entry, false, true));
 
-      handle = new TestHandle("test", false, true, false, null,
+      handle = new TestHandle("test", false, true, true, false, null, null,
                               new net.ixitxachitls.dma.values.Name("name"));
       assertEquals("name value", "name",
                    handle.format(entry, false, true).toString());

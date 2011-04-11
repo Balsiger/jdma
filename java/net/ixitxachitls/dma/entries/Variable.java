@@ -68,16 +68,20 @@ public class Variable extends ValueHandle
    * @param       inStored         true if the value will be stored, false
    *                               if not
    * @param       inDM             true if the value is for DMs
+   * @param       inEditable       true if the value is editable
    * @param       inPlayer         true if the value is for players
    * @param       inPlayerEditable true if the value is editable for a player
    * @param       inPlural         the plural of the key
+   * @param       inNote           a note for editing, if any
    *
    */
   public Variable(@Nonnull String inKey, @Nonnull Field inField,
-                  boolean inStored, boolean inDM, boolean inPlayer,
-                  boolean inPlayerEditable, @Nullable String inPlural)
+                  boolean inStored, boolean inDM, boolean inEditable,
+                  boolean inPlayer, boolean inPlayerEditable,
+                  @Nullable String inPlural, @Nullable String inNote)
   {
-    super(inKey, inDM, inPlayer, inPlayerEditable, inPlural);
+    super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
+          inNote);
 
     m_field          = inField;
     m_store          = inStored;
@@ -279,35 +283,44 @@ public class Variable extends ValueHandle
    * @param       inEntry  the entry to set the value in
    * @param       inValue  the value to set to
    *
-   * @return      the text of the input String that was not used
+   * @return      the text of the input String that was not used or null if
+   *              all was used
    *
    */
-  public @Nonnull String setFromString(@Nonnull Changeable inEntry,
-                                       @Nonnull String inValue)
+  public @Nullable String setFromString(@Nonnull Changeable inEntry,
+                                        @Nonnull String inValue)
   {
     if(inValue.isEmpty())
       return inValue;
 
+    String rest;
     if(inValue.startsWith(Value.UNDEFINED))
     {
       set(inEntry, get(inEntry).create());
 
-      return inValue.substring(Value.UNDEFINED.length());
+      rest = inValue.substring(Value.UNDEFINED.length());
+    }
+    else
+    {
+      // init the reader
+      StringReader string = new StringReader(inValue);
+      ParseReader reader  = new ParseReader(string, "set");
+
+      Value value = get(inEntry).read(reader);
+
+      if(value == null)
+        return inValue;
+
+      set(inEntry, value);
+
+      // return the part that was not read
+      rest = reader.read(inValue.length());
     }
 
-    // init the reader
-    StringReader string = new StringReader(inValue);
-    ParseReader reader  = new ParseReader(string, "set");
+    if(rest.isEmpty() || rest.matches("\\s*"))
+      return null;
 
-    Value value = get(inEntry).read(reader);
-
-    if(value == null)
-      return inValue;
-
-    set(inEntry, value);
-
-    // return the part that was not read
-    return reader.read(inValue.length());
+    return rest;
   }
 
   //........................................................................
@@ -350,7 +363,8 @@ public class Variable extends ValueHandle
     {
       Field field = Variable.Test.TestObject.class.getDeclaredField("m_value");
       Variable variable =
-        new Variable("key", field, false, false, false, false, null);
+        new Variable("key", field, false, true, false, false, false, null,
+                     null);
 
       assertEquals("key", "key", variable.getKey());
       assertEquals("value", "$undefined$",
@@ -361,9 +375,10 @@ public class Variable extends ValueHandle
                    variable.getStringValue(new TestObject()));
       assertFalse("has value", variable.hasValue(new TestObject()));
       assertFalse("stored", variable.isStored());
-      assertFalse("dm only", variable.isDMOnly());
+      assertTrue("dm only", variable.isDMOnly());
       assertFalse("player only", variable.isPlayerOnly());
       assertFalse("player editable", variable.isPlayerEditable());
+      assertFalse("player editable", variable.isEditable());
       assertEquals("string", "var key", variable.toString());
       assertEquals("string", "keys", variable.getPluralKey());
     }
@@ -381,7 +396,8 @@ public class Variable extends ValueHandle
     {
       Field field = Variable.Test.TestObject.class.getDeclaredField("m_value");
       Variable variable =
-        new Variable("key", field, false, false, false, false, null);
+        new Variable("key", field, false, true, false, false, false, null,
+                     null);
       TestObject test = new TestObject();
 
       variable.setFromString(test, "guru");

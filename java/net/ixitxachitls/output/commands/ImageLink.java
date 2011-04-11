@@ -21,30 +21,22 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.entries;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * The type specification for a base entry.
+ * The link command.
  *
- * @file          BaseType.java
+ * @file          ImageLink.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
- * @param         <T> the type represented by this type spec
  *
  */
 
@@ -52,37 +44,57 @@ import javax.annotation.concurrent.Immutable;
 
 //__________________________________________________________________________
 
-@Immutable
-public class BaseType<T extends AbstractEntry> extends AbstractType<T>
+public class ImageLink extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- BaseType -------------------------------
+  //------------------------------ ImageLink -------------------------------
 
   /**
-   * Create the type.
+   * The constructor for the link command.
    *
-   * @param       inClass the class represented by this type
+   * @param       inText the text to set the link to
+   * @param       inURL  the url to link to
    *
    */
-  public BaseType(@Nonnull Class<T> inClass)
+  public ImageLink(@Nonnull Object inText, @Nonnull Object inURL)
   {
-    super(inClass);
+    this();
+
+    withArguments(inText, inURL);
   }
 
   //........................................................................
-  //------------------------------- BaseType -------------------------------
+  //------------------------------ ImageLink -------------------------------
 
   /**
-   * Create the type.
+   * The constructor for the link command.
    *
-   * @param       inClass    the class represented by this type
-   * @param       inMultiple the name to use for multiple entries of the type
+   * @param       inText the text to set the link to
+   * @param       inURL  the url to link to
+   * @param       inID   the ID of the link for special formatting
    *
    */
-  public BaseType(@Nonnull Class<T> inClass, @Nonnull String inMultiple)
+  public ImageLink(@Nonnull Object inText, @Nonnull Object inURL,
+                   @Nonnull Object inID)
   {
-    super(inClass, inMultiple);
+    this(inText, inURL);
+
+    withOptionals(inID);
+  }
+
+  //........................................................................
+  //------------------------------- ImageLink ------------------------------
+
+  /**
+   * This is the internal constructor for a command.
+   *
+   * @undefined   never
+   *
+   */
+  protected ImageLink()
+  {
+    super(IMAGE_LINK, 1, 2);
   }
 
   //........................................................................
@@ -91,56 +103,42 @@ public class BaseType<T extends AbstractEntry> extends AbstractType<T>
 
   //-------------------------------------------------------------- variables
 
-  /** All the non-base types available. */
-  private static final Map<String, BaseType<?/* extends BaseEntry */>> s_types =
-    new HashMap<String, BaseType<?/* extends BaseEntry*/>>();
-
-  /** The id for serialization. */
-  private static final long serialVersionUID = 1L;
+  /** Command for adding a link to another file or position to the text. */
+  public static final String IMAGE_LINK =
+    Config.get("resource:commands/image.link", "imagelink");
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //------------------------------- getType --------------------------------
-
-  /**
-   * Get the base entry type for the given name.
-   *
-   * @param       inName the name of the type to get
-   *
-   * @return      the base entry type with the given name or null if not
-   *              found.
-   *
-   */
-  public static @Nullable BaseType<? /*extends BaseEntry*/>
-    getType(String inName)
-  {
-    return s_types.get(inName);
-  }
-
-  //........................................................................
-  //------------------------------- getTypes -------------------------------
-
-  /**
-   * Get the non-base types available.
-   *
-   * @return      all the non-base types
-   *
-   */
-  public static @Nonnull
-    Collection<BaseType<?/* extends BaseEntry*/>> getTypes()
-  {
-    return Collections.unmodifiableCollection(s_types.values());
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
   //........................................................................
 
   //------------------------------------------------- other member functions
+  //........................................................................
+
+  //------------------------------------------------------------------- test
+
+  /** The Test. */
+  public static class Test extends net.ixitxachitls.util.test.TestCase
+  {
+    //----- arguments ------------------------------------------------------
+
+    /** Testing the arguments. */
+    @org.junit.Test
+    public void arguments()
+    {
+      Command command = new ImageLink("text", "some url");
+      assertEquals("base", "\\imagelink{text}{some url}", command.toString());
+
+      command = new ImageLink("text", "some url", "id");
+      assertEquals("optional", "\\imagelink[id]{text}{some url}",
+                   command.toString());
+    }
+
+    //......................................................................
+  }
+
   //........................................................................
 }

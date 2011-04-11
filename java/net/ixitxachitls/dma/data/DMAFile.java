@@ -73,6 +73,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    *
    * @param       inName     the filename of the file to read
    * @param       inPath     the path to the file
+   * @param       inData     all the avaialble data
    *
    */
   public DMAFile(@Nonnull String inName, @Nonnull String inPath,
@@ -382,7 +383,10 @@ public class DMAFile //implements Storage<AbstractEntry>
       return true;
 
     if(m_readOnly)
+    {
+      Log.event("*system*", "Save", "Readonly " + m_name);
       return false;
+    }
 
     // backup the old file
     String renamed = Files.backup(Files.concatenate(m_path, m_name),
@@ -402,6 +406,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     {
       writer = new FileWriter(Files.concatenate(m_path, m_name));
       result = write(writer);
+      Log.event("*system*", "Save", "Written file " + m_name);
     }
     catch(java.io.IOException e)
     {

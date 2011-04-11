@@ -35,7 +35,9 @@ import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.util.Encodings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -123,42 +125,49 @@ public class Print
       if(token.isEmpty())
         continue;
 
-      String name = token.substring(1);
-      ValueHandle handle = inEntry.computeValue(name, inDM);
-
-      switch(token.charAt(0))
+      if("$%".indexOf(token.charAt(0)) < 0)
+        result.add(token);
+      else
       {
-        case '$':
-          // A simple, directly printed value
-          if(handle != null)
-            result.add(handle.format(inEntry, inDM, true));
-          else
-            result.add(new Color("error", " * " + name + " * "));
-          break;
+        String name = token.substring(1);
+        ValueHandle handle = inEntry.computeValue(name, inDM);
 
-        case '%':
-          // A value as tabelarized data
-          Command label = new Divider("value-label back-"
-                                      + inEntry.getType().getName()
-                                      .replaceAll("\\s+", "-"),
-                                      Encodings.toWordUpperCase(name));
+        switch(token.charAt(0))
+        {
+          case '$':
+            // A simple, directly printed value
+            if(handle != null)
+            {
+              Object formatted = handle.format(inEntry, inDM, true);
+              if(formatted != null)
+                result.add(formatted);
+            }
+            else
+              result.add(new Color("error", " * " + name + " * "));
+            break;
 
-          Object value;
-          if(handle != null)
-            value = handle.format(inEntry, inDM, true);
-          else
-            value = new Color("error", " * unknown * ");
+          case '%':
+            // A value as tabelarized data
+            Command label =
+              new Divider("value-label-container back-"
+                          + inEntry.getType().getName().replaceAll("\\s+", "-"),
+                          new Divider("value-label",
+                                      Encodings.toWordUpperCase(name)));
 
-          if(value != null)
-            result.add
-              (new Divider("value",
-                           new Command(label,
-                                       new Divider("value-content", value))));
+            Object value;
+            if(handle != null)
+              value = handle.format(inEntry, inDM, true);
+            else
+              value = new Color("error", " * unknown * ");
 
-          break;
+            if(value != null)
+              result.add(new Value(label, new Divider("value-content", value)));
 
-        default:
-          result.add(token);
+            break;
+
+          default:
+            Log.warning("invalid token '" + token.charAt(0) + " encountered");
+        }
       }
     }
 
@@ -233,9 +242,8 @@ public class Print
 
       assertEquals("printing",
                    "[start , \\color{error}{ * first * },  , "
-                   + "\\editable{test}{\\title[entrytitle]{test}}{title}"
-                   + "{\\title[entrytitle]{test}}{string},  middle , "
-                   + "\\editable{test}{desc}{description}"
+                   + "\\title[entrytitle]{test},  middle , "
+                   + "\\editable{test}{base entry}{desc}{description}"
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, true)).getArguments()
                    .toString());

@@ -71,12 +71,11 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
    * from the configuration.
    *
    * @param       inTitle the HTML title of the document
-   * @param       inType the type of the document
    *
    */
-  public HTMLDocument(String inTitle, String inType)
+  public HTMLDocument(String inTitle)
   {
-    super(inTitle, inType);
+    super(inTitle);
   }
 
   //........................................................................
@@ -223,7 +222,7 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
     @org.junit.Test
     public void testSimple()
     {
-      HTMLDocument doc = new HTMLDocument("title", "type");
+      HTMLDocument doc = new HTMLDocument("title");
 
       doc.add(new Command
               ("just ",

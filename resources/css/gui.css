@@ -28,3 +28,55 @@ DIV.busy IMG
   padding-right:  0.5em;
 }
 
+/******************************************************************************
+ * nofitications
+ *****************************************************************************/
+
+DIV.-gui-notification
+{
+  height:      100px;
+  overflow:    hidden;
+  width:       250px;
+  border:      ridge 2px;
+  padding:     5px;
+  position:    fixed;
+  bottom:      -150px;
+  right:       10px;
+  cursor:      pointer;
+  box-shadow:  -3px -3px 7px #444;
+  font-size:   small;
+}
+
+IMG.-gui-notification-image
+{
+  float:         left;
+  margin-top:    35px;
+  padding-right: 5px;
+}
+
+DIV.-gui-notification-text
+{
+  height:         100px;
+  overflow:       auto;
+  text-align:     center;
+  display:        table-cell;
+  vertical-align: middle;
+}
+
+DIV.-gui-notification-alert
+{
+  background-color: #fcc;
+  border-color:      red;
+}
+
+DIV.-gui-notification-info
+{
+  background-color: #ccf;
+  border-color:      blue;
+}
+
+DIV.-gui-notification-debug
+{
+  background-color: #cfc;
+  border-color:      green;
+}

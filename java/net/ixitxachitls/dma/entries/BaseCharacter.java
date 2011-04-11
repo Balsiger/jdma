@@ -174,10 +174,12 @@ public class BaseCharacter extends BaseEntry
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
-    new Print("$mainimage $title $clear $files"
+    new Print("$mainimage $title "
+              + "${as pdf} ${as text} ${as dma}"
+              + "$clear $files\n " // need to start a new line for ascii
               + "%name "
               + "%{real name} %email %password %products %{last login} "
-              + "%{last action} %token %group %characters"
+              + "%{last action} %token %group %characters "
               + "%file %errors");
 
   /** The basic formatter for base characters. */
@@ -270,6 +272,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The files with the products. */
   @Key("products")
+  @NoEdit
   protected Text m_products = new Text();
 
 //   /** The campaign storing all the products. */
@@ -280,6 +283,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The files in the base campaign. */
   @Key("last login")
+  @NoEdit
   protected Text m_lastLogin = new Text();
 
   //........................................................................
@@ -287,6 +291,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The files in the base campaign. */
   @Key("last action")
+  @NoEdit
   protected Text m_lastAction = new Text();
 
   //........................................................................

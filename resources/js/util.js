@@ -105,7 +105,7 @@ util.ajax = function(inURL, inValues, inFunction)
     }
 
   return request;
-}
+};
 
 //..........................................................................
 //--------------------------------- reload ---------------------------------
@@ -127,7 +127,7 @@ util.reload = function(inPage)
     destination = destination.replace(/^(.*\/).*?$/, '$1' + inPage);
 
   document.location.href = destination;
-}
+};
 
 //..........................................................................
 //---------------------------------- link ----------------------------------
@@ -171,9 +171,6 @@ util.link = function(inEvent, inTarget, inFunction)
 
   var busy = new gui.Busy('Please wait while ', ['loading page']);
 
-  // remove all current actions
-//   $p('actions').innerHTML = '';
-
   // inform google analytics about this page change
   if(location.hostname != 'localhost')
     pageTracker._trackPageview(inTarget);
@@ -202,15 +199,29 @@ util.link = function(inEvent, inTarget, inFunction)
     if(inFunction)
       inFunction();
 
-    if(!inEvent.state)
+    if(inEvent && !inEvent.state)
       window.history.pushState(target, document.title, target);
 
-    // make all editable, if necessary
-    //gui.makeEditable();
+    edit.refresh();
   });
 
   return false;
-}
+};
+
+//..........................................................................
+//----------------------------- clearSelection -----------------------------
+
+/**
+ * Clears the current selection, if any.
+ *
+ */
+util.clearSelection = function()
+{
+  if(document.selection && document.selection.empty)
+    document.selection.empty();
+  else if(window.getSelection)
+    window.getSelection().removeAllRanges();
+};
 
 //..........................................................................
 
@@ -225,7 +236,7 @@ util.replaceMainImage = function()
   var main = $('DIV.mainimage IMG');
   util.mainImage = main.attr('src')
   main.attr('src', this.src);
-}
+};
 
 //..........................................................................
 //---------------------------- restoreMainImage ----------------------------
@@ -237,10 +248,33 @@ util.replaceMainImage = function()
 util.restoreMainImage = function()
 {
   $('DIV.mainimage IMG').attr('src', util.mainImage);
-}
+};
 
 //..........................................................................
 
+//--------------------------------- extend ---------------------------------
+
+/**
+  * Copy all properties from the given source object to the destination object,
+  * thus gaining a crude, static kind of inheritance.
+  *
+  * @param  ioDestination the destination to copy to
+  * @param  inSource      the source object to copy from
+  *
+  * @return the destination object again
+  *
+  */
+function extend(inSubClass, inBaseClass)
+{
+  inSubClass._super = inBaseClass.prototype;
+
+  function temp() {};
+  temp.prototype = inBaseClass.prototype;
+  inSubClass.prototype = new temp();
+  inSubClass.prototype.constructor = inSubClass;
+}
+
+//..........................................................................
 
 //---------------------------------------------------------- extend existing
 
@@ -270,11 +304,114 @@ Array.prototype.remove = function(inValue)
 };
 
 //..........................................................................
+//----------------------------- Array.contains -----------------------------
+
+/**
+  * Check if an array contains the given element.
+  *
+  * @param  inElement the element to check for
+  *
+  * @return true if the element is there, false if not
+  *
+  */
+Array.prototype.contains = function(inElement)
+{
+  if(!inElement)
+    return false;
+
+  for(var i = 0, length = this.length; i < length; i++)
+    if(inElement == this[i])
+      return true;
+
+  return false;
+};
+
+//..........................................................................
+//------------------------- String.removeNewlines --------------------------
+
+/**
+  * Compact the white space in the string and return it.
+  *
+  * @return the same string, but with all newlines removed.
+  *
+  */
+String.prototype.removeNewlines = function()
+{
+  return this.replace(/\s*\n\s*/g, " ");
+};
+
+//..........................................................................
+//------------------------------ String.trim -------------------------------
+
+/**
+  * Remove leading and trailing white space.
+  *
+  * @return the same string, but trimmed
+  *
+  */
+String.prototype.trim = function()
+{
+  return this.replace(/^\s+/, "").replace(/\s+$/, "");
+};
+
+//..........................................................................
+//------------------------------- Array.from -------------------------------
+
+/**
+  * Create an array from the given iterable.
+  *
+  * @param  inIterable the iterable to create the array from
+  *
+  * @return an array with the values of the iterable
+  *
+  */
+Array.from = function(inIterable)
+{
+  if(!inIterable)
+    return [];
+
+  if(inIterable.toArray)
+    return inIterable.toArray();
+
+  var results = [];
+
+  for(var i = 0, length = inIterable.length; i < length; i++)
+    results.push(inIterable[i]);
+
+  return results;
+};
+
+//..........................................................................
+//----------------------------- Function.bind ------------------------------
+
+/**
+ * Bind the function to the given object and arguments.
+ *
+ * @param  the object to bind to
+ * @param  ... any other arguments
+ *
+ * @return a function that can be called with the appropriate binding
+ *
+ */
+Function.prototype.bind = function()
+{
+  var method   = this;
+  var args     = Array.from(arguments);
+  var object   = args.shift();
+
+  return function()
+  {
+    return method.apply(object, args.concat(Array.from(arguments)));
+  }
+};
+
+//..........................................................................
 
 //..............................................................................
 
 // install a handler to support back/forward actions
 $(window).bind('popstate', function(event) {
-    util.link(event.originalEvent, location.pathname + location.search)
+    if(event.originalEvent.state)
+      util.link(event.originalEvent, location.pathname + location.search)
   });
 

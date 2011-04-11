@@ -1210,9 +1210,8 @@ public class BaseEntry extends AbstractEntry
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
 
-      BaseEntry entry =
-        (BaseEntry)BaseEntry.read(reader,
-                                  new net.ixitxachitls.dma.data.DMAData("path"));
+      BaseEntry entry = (BaseEntry)BaseEntry.read
+        (reader, new net.ixitxachitls.dma.data.DMAData("path"));
 
       //System.out.println(entry);
       m_logger.verify();

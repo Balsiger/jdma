@@ -54,7 +54,6 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 // import net.ixitxachitls.output.commands.Bold;
-import net.ixitxachitls.output.commands.Color;
 //import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
@@ -115,6 +114,15 @@ public abstract class ValueGroup implements Changeable
     boolean value() default true;
   }
 
+  /** The annotation for a not editable variable. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface NoEdit {
+    /** Flag if the value cannot be edit. */
+    boolean value() default true;
+  }
+
   /** The annotation for a player only variable. */
   @Target(ElementType.FIELD)
   @Retention(RetentionPolicy.RUNTIME)
@@ -149,6 +157,15 @@ public abstract class ValueGroup implements Changeable
   public @interface NoStore {
     /** Flag denoting that the values is not stored. */
     boolean value() default true;
+  }
+
+  /** The annotation for a note for editing. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface Note {
+    /** A note for editing the value. */
+    String value();
   }
 
   //........................................................................
@@ -1580,6 +1597,7 @@ public abstract class ValueGroup implements Changeable
     if(variable == null)
       return inText;
 
+    changed();
     return variable.setFromString(this, inText);
   }
 
@@ -1624,18 +1642,22 @@ public abstract class ValueGroup implements Changeable
     {
       Key key = field.getAnnotation(Key.class);
       DM dm = field.getAnnotation(DM.class);
+      NoEdit noEdit = field.getAnnotation(NoEdit.class);
       PlayerOnly player = field.getAnnotation(PlayerOnly.class);
-      PlayerEdit edit = field.getAnnotation(PlayerEdit.class);
+      PlayerEdit playerEdit = field.getAnnotation(PlayerEdit.class);
       Plural plural = field.getAnnotation(Plural.class);
       NoStore noStore = field.getAnnotation(NoStore.class);
+      Note note = field.getAnnotation(Note.class);
 
       if(key != null)
         variables.add(new Variable(key.value(), field,
                                    noStore == null || !noStore.value(),
                                    dm != null && dm.value(),
+                                   noEdit == null || !noEdit.value(),
                                    player != null && player.value(),
-                                   edit != null && edit.value(),
-                                   plural == null ? null : plural.value()));
+                                   playerEdit != null && playerEdit.value(),
+                                   plural == null ? null : plural.value(),
+                                   note == null ? null : note.value()));
     }
 
     // add all the variables of the parent class, if any
@@ -1970,7 +1992,7 @@ public abstract class ValueGroup implements Changeable
       assertFalse("player", variables.getVariable("dm value").isPlayerOnly());
       assertTrue("player",
                  variables.getVariable("player value").isPlayerOnly());
-      assertTrue("editable",
+      assertTrue("player editable",
                  variables.getVariable("player editable").isPlayerEditable());
       assertFalse("editable",
                   variables.getVariable("player value").isPlayerEditable());
@@ -2008,9 +2030,9 @@ public abstract class ValueGroup implements Changeable
     public void values()
     {
       TestGroup group = new TestGroup();
-      assertTrue("set", group.set("simple value", "guru").isEmpty());
-      assertTrue("set", group.set("dm value", "guru").isEmpty());
-      assertTrue("set", group.set("player value", "guru").isEmpty());
+      assertNull("set", group.set("simple value", "guru"));
+      assertNull("set", group.set("dm value", "guru"));
+      assertNull("set", group.set("player value", "guru"));
 
       assertEquals("id", "Test-ID", group.getID());
       assertEquals("name", "Test-Name", group.getName());

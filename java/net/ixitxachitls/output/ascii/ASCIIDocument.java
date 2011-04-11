@@ -52,6 +52,7 @@ import net.ixitxachitls.output.commands.Columns;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Count;
 import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Editable;
 import net.ixitxachitls.output.commands.Emph;
 import net.ixitxachitls.output.commands.Files;
 import net.ixitxachitls.output.commands.Footer;
@@ -67,6 +68,8 @@ import net.ixitxachitls.output.commands.Huge;
 import net.ixitxachitls.output.commands.Huger;
 import net.ixitxachitls.output.commands.ID;
 import net.ixitxachitls.output.commands.Icon;
+import net.ixitxachitls.output.commands.Image;
+import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Large;
 import net.ixitxachitls.output.commands.Larger;
 import net.ixitxachitls.output.commands.Largest;
@@ -79,6 +82,7 @@ import net.ixitxachitls.output.commands.Navigation;
 import net.ixitxachitls.output.commands.Nopictures;
 import net.ixitxachitls.output.commands.NormalSize;
 import net.ixitxachitls.output.commands.Par;
+import net.ixitxachitls.output.commands.Picture;
 import net.ixitxachitls.output.commands.Right;
 import net.ixitxachitls.output.commands.Scriptsize;
 import net.ixitxachitls.output.commands.Small;
@@ -90,6 +94,7 @@ import net.ixitxachitls.output.commands.Textblock;
 import net.ixitxachitls.output.commands.Tiny;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.commands.Umlaut;
+import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -180,8 +185,12 @@ public class ASCIIDocument extends Document
     s_actions.put(Huge.HUGE, new Identity(1));
     s_actions.put(Huger.HUGER, new Identity(1));
     s_actions.put(Icon.ICON, null);
+    s_actions.put(Image.IMAGE, null);
+    s_actions.put(Picture.PICTURE, null);
+    s_actions.put(ImageLink.IMAGE_LINK, null);
     s_actions.put(net.ixitxachitls.output.commands.Table.TABLE, new Table());
     s_actions.put(Link.LINK, new Identity(1));
+    s_actions.put(Editable.EDITABLE, new Identity(3));
     s_actions.put(Files.FILES, null);
     s_actions.put(Title.TITLE, new Multi(new Action []
       {
@@ -257,6 +266,8 @@ public class ASCIIDocument extends Document
     s_actions.put(Lessequal.LESS_OR_EQUAL, new Pattern("<="));
     s_actions.put(Greaterequal.GREATER_OR_EQUAL, new Pattern(">="));
     s_actions.put(Grouped.GROUPED, new Identity(1));
+    s_actions.put(Value.VALUE,
+                  new Pattern("\\table{f15:l;1:l}{$1}{$2}", true));
 
     s_actions.put("command", new Action());
     s_actions.put("baseCommand", new Action());

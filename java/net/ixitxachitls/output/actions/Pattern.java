@@ -150,14 +150,17 @@ public class Pattern extends Action
     if(inArguments != null)
       for(int i = 0; i < inArguments.size(); i++)
       {
-        String argument = inDocument.convert(inArguments.get(i));
+        Object arg = inArguments.get(i);
+        if(arg == null)
+          arg = "";
+
+        String argument = inDocument.convert(arg);
 
         result = result.replaceAll("(?<!\\\\)\\$" + (i + 1) + "(?!\\d)",
                                    argument.replaceAll("\\\\", "\\\\\\\\")
                                    .replaceAll("\\$", "\\\\\\$"));
         result = result.replaceAll("(?<!\\\\)\\@" + (i + 1) + "(?!\\d)",
-                                   inArguments.get(i).toString()
-                                   .replaceAll("\\\\", "\\\\\\\\")
+                                   arg.toString().replaceAll("\\\\", "\\\\\\\\")
                                    .replaceAll("\\$", "\\\\\\$"));
       }
 
@@ -271,7 +274,7 @@ public class Pattern extends Action
                                      .replaceAll("\\$", "\\\\\\$")));
 
       net.ixitxachitls.output.html.HTMLDocument doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+        new net.ixitxachitls.output.html.HTMLDocument("title");
 
       doc.add(new net.ixitxachitls.output.commands.Divider("1",
                                                            "just some \\ "
@@ -281,7 +284,7 @@ public class Pattern extends Action
                    "<div class=\"1\">just some \\ test</div>",
                    doc.toString());
 
-      doc = new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+      doc = new net.ixitxachitls.output.html.HTMLDocument("title");
 
       doc.add(new net.ixitxachitls.output.commands
               .Divider("1", new net.ixitxachitls.output.commands
@@ -294,7 +297,7 @@ public class Pattern extends Action
       // nested string commands
       Pattern pattern = new Pattern("\\bold{$1}", true);
 
-      doc = new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+      doc = new net.ixitxachitls.output.html.HTMLDocument("title");
 
       pattern.execute(doc, com.google.common.collect.ImmutableList.of(),
                       com.google.common.collect.ImmutableList.of("guru"));

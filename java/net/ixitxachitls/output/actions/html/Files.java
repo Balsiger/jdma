@@ -327,7 +327,7 @@ public class Files extends Action
                                                 "contents", "electronic" });
 
       net.ixitxachitls.output.html.HTMLDocument doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+        new net.ixitxachitls.output.html.HTMLDocument("title");
 
       action.execute(doc, null,
                      com.google.common.collect.ImmutableList.of
@@ -382,7 +382,7 @@ public class Files extends Action
                                                 "contents", "electronic" });
 
       net.ixitxachitls.output.html.HTMLDocument doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+        new net.ixitxachitls.output.html.HTMLDocument("title");
 
       action.execute(doc,
                      com.google.common.collect.ImmutableList.of("cover"),
@@ -415,7 +415,7 @@ public class Files extends Action
                                                 "contents", "electronic" });
 
       net.ixitxachitls.output.html.HTMLDocument doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+        new net.ixitxachitls.output.html.HTMLDocument("title");
 
       action.execute(doc, com.google.common.collect.ImmutableList.of("~cover"),
                      com.google.common.collect.ImmutableList.of

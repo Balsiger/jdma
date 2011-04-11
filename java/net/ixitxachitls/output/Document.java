@@ -637,8 +637,11 @@ public class Document
    * @return      the converted result
    *
    */
-  public String convert(@Nonnull Object inCommand)
+  public @Nonnull String convert(@Nullable Object inCommand)
   {
+    if(inCommand == null)
+      return "";
+
     if(!(inCommand instanceof Command))
       inCommand = new BaseCommand(inCommand.toString());
 

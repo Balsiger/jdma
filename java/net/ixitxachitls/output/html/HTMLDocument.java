@@ -75,6 +75,7 @@ import net.ixitxachitls.output.commands.Huger;
 import net.ixitxachitls.output.commands.ID;
 import net.ixitxachitls.output.commands.Icon;
 import net.ixitxachitls.output.commands.Image;
+import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Italic;
 import net.ixitxachitls.output.commands.Label;
 import net.ixitxachitls.output.commands.Large;
@@ -108,6 +109,7 @@ import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.commands.TocEntry;
 import net.ixitxachitls.output.commands.Umlaut;
 import net.ixitxachitls.output.commands.Underline;
+import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -140,13 +142,11 @@ public class HTMLDocument extends Document
    * from the configuration.
    *
    * @param       inTitle           the HTML title of the document
-   * @param       inType            the type of the document
    *
    */
-  public HTMLDocument(@Nonnull String inTitle, @Nonnull String inType)
+  public HTMLDocument(@Nonnull String inTitle)
   {
     m_title = inTitle;
-    m_type = inType;
   }
 
   //........................................................................
@@ -157,9 +157,6 @@ public class HTMLDocument extends Document
 
   /** The document title. */
   protected @Nonnull String m_title;
-
-  /** The document type, e.g. BaseProduct. */
-  protected @Nonnull String m_type;
 
   /** The directory for the files. */
   protected static final @Nonnull String s_dirFiles =
@@ -184,7 +181,7 @@ public class HTMLDocument extends Document
   /** A simple document for easy conversions. This should be last or the
    * static values above will not be correctly set!*/
   protected static final @Nonnull HTMLDocument s_simple =
-    new HTMLDocument("simple", "simple");
+    new HTMLDocument("simple");
 
   static
   {
@@ -327,8 +324,11 @@ public class HTMLDocument extends Document
                   new Pattern("<div class=\"textblock %1\">$1</div>"));
     s_actions.put(net.ixitxachitls.output.commands.Link.LINK,
                   new Link(net.ixitxachitls.output.commands.Link.LINK, null,
-                           Config.get("resource:html/extension.html",
-                                      "")));
+                           Config.get("resource:html/extension.html", "")));
+    s_actions.put(ImageLink.IMAGE_LINK,
+                  new Link(ImageLink.IMAGE_LINK, null,
+                           Config.get("resource:html/extension.html", ""),
+                           true));
     s_actions.put(Hat.HAT,
                   new Replace(new Replace.Replacement("u", "&ucirc;"),
                               new Replace.Replacement("U", "&Ucirc;"),
@@ -454,18 +454,21 @@ public class HTMLDocument extends Document
      s_actions.put(Newpage.NEWPAGE, null);
      s_actions.put(Grouped.GROUPED, new Pattern("$1##$2##$3##"));
      s_actions.put(Editable.EDITABLE,
-                   new Pattern("<dma.editable key=\"$3\" "
-                               + "value=\"$html((@4))\" "
+                   new Pattern("<dmaeditable key=\"$4\" "
+                               + "value=\"$html((@5))\" "
                                + "id=\"$1\" class=\"editable\" "
-                               + "type=\"$5\"[[ script=\"%1\"]]"
+                               + "entry=\"$2\" "
+                               + "type=\"$6\"[[ note=\"%1\"]]"
                                + "[[ values=\"$html((%2))\"]]>"
-                               + "<span>$2</span>"
-                               + "</dma.editable>", false));
+                               + "<span>$3</span>"
+                               + "</dmaeditable>", false));
      s_actions.put(Script.SCRIPT,
                    new Pattern("\n<script type='text/javascript'>$1"
                                + "</script>\n"));
-    s_actions.put("command", new Action());
-    s_actions.put("baseCommand", new Action());
+     s_actions.put(Value.VALUE,
+                   new Pattern("<div class=\"value\">$1$2</div>"));
+     s_actions.put("command", new Action());
+     s_actions.put("baseCommand", new Action());
   }
   //........................................................................
 
@@ -546,7 +549,7 @@ public class HTMLDocument extends Document
     @org.junit.Test
     public void simple()
     {
-      HTMLDocument doc = new HTMLDocument("title", "type");
+      HTMLDocument doc = new HTMLDocument("title");
 
       doc.add(new Command(new Command("just "), new Bold("some "),
                           new Command("test")));
@@ -565,7 +568,7 @@ public class HTMLDocument extends Document
     @org.junit.Test
     public void wrapping()
     {
-      HTMLDocument doc = new HTMLDocument("title", "type");
+      HTMLDocument doc = new HTMLDocument("title");
 
       doc.add
         (new Command
@@ -590,7 +593,7 @@ public class HTMLDocument extends Document
     @org.junit.Test
     public void justification()
     {
-      HTMLDocument doc = new HTMLDocument("title", "type");
+      HTMLDocument doc = new HTMLDocument("title");
 
       doc.add(new net.ixitxachitls.output.commands.Center("center"));
       doc.add(new net.ixitxachitls.output.commands.Left("left"));
@@ -629,7 +632,7 @@ public class HTMLDocument extends Document
     @org.junit.Test
     public void footnote()
     {
-      HTMLDocument doc = new HTMLDocument("title", "type");
+      HTMLDocument doc = new HTMLDocument("title");
 
       doc.add(new BaseCommand
               ("just some text for the document\\footnote{test only}, "
@@ -674,7 +677,7 @@ public class HTMLDocument extends Document
     @org.junit.Test
     public void frac()
     {
-      HTMLDocument doc = new HTMLDocument("title", "type");
+      HTMLDocument doc = new HTMLDocument("title");
 
       doc.add(new BaseCommand("1/10 = \\frac{1}{10}"));
 

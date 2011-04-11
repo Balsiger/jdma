@@ -56,20 +56,21 @@ public class Editable extends BaseCommand
   /**
    * The constructor for the Editable command.
    *
-   * @param       inID      the id of the editable element
-   * @param       inText    the text of the element to display
-   * @param       inKey     the key of the value edited
-   * @param       inValue   the original value of the element
-   * @param       inType    the type of the element to edit
+   * @param       inID        the id of the editable element
+   * @param       inEntry     the type of the editable element
+   * @param       inText      the text of the element to display
+   * @param       inKey       the key of the value edited
+   * @param       inValue     the original value of the element
+   * @param       inType      the type of the element to edit
    *
    */
-  public Editable(@Nonnull Object inID, @Nonnull Object inText,
-                  @Nonnull Object inKey, @Nonnull Object inValue,
-                  @Nonnull Object inType)
+  public Editable(@Nonnull Object inID, @Nonnull Object inEntry,
+                  @Nonnull Object inText, @Nonnull Object inKey,
+                  @Nonnull Object inValue, @Nonnull Object inType)
   {
     this();
 
-    withArguments(inID, inText, inKey, inValue, inType);
+    withArguments(inID, inEntry, inText, inKey, inValue, inType);
   }
 
   //........................................................................
@@ -78,22 +79,24 @@ public class Editable extends BaseCommand
   /**
    * The constructor for the Editable command.
    *
-   * @param       inID      the id of the editable element
-   * @param       inText    the text of the element to display
-   * @param       inKey     the key of the value edited
-   * @param       inValue   the original value of the element
-   * @param       inType    the type of the element to edit
-   * @param       inScript  the script code to call when editing
+   * @param       inID        the id of the editable element
+   * @param       inEntry     the type of the editable element
+   * @param       inText      the text of the element to display
+   * @param       inKey       the key of the value edited
+   * @param       inValue     the original value of the element
+   * @param       inType      the type of the element to edit
+   * @param       inNote      a special not for editing
    *
    */
-  public Editable(@Nonnull Object inID, @Nonnull Object inText,
-                  @Nonnull Object inKey, @Nonnull Object inValue,
-                  @Nonnull Object inType, @Nullable String inScript)
+  public Editable(@Nonnull Object inID, @Nonnull Object inEntry,
+                  @Nonnull Object inText, @Nonnull Object inKey,
+                  @Nonnull Object inValue, @Nonnull Object inType,
+                  @Nullable String inNote)
   {
-    this(inID, inText, inKey, inValue, inType);
+    this(inID, inEntry, inText, inKey, inValue, inType);
 
-    if(inScript != null && !inScript.isEmpty())
-      withOptionals(inScript);
+    if(inNote != null && !inNote.isEmpty())
+      withOptionals(inNote);
   }
 
   //........................................................................
@@ -102,25 +105,26 @@ public class Editable extends BaseCommand
   /**
    * The constructor for the Editable command.
    *
-   * @param       inID      the id of the editable element
-   * @param       inText    the text of the element to display
-   * @param       inKey     the key of the value edited
-   * @param       inValue   the original value of the element
-   * @param       inType    the type of the element to edit
-   * @param       inScript  the script code to call when editing
-   * @param       inValues  special values for the given type
+   * @param       inID        the id of the editable element
+   * @param       inEntry     the type of the editable element
+   * @param       inText      the text of the element to display
+   * @param       inKey       the key of the value edited
+   * @param       inValue     the original value of the element
+   * @param       inType      the type of the element to edit
+   * @param       inNote      a special note for editing
+   * @param       inValues    special values for the given type
    *
    */
-  public Editable(@Nonnull Object inID, @Nonnull Object inText,
-                  @Nonnull Object inKey, @Nonnull Object inValue,
-                  @Nonnull Object inType, @Nullable String inScript,
-                  @Nullable String inValues)
+  public Editable(@Nonnull Object inID, @Nonnull Object inEntry,
+                  @Nonnull Object inText, @Nonnull Object inKey,
+                  @Nonnull Object inValue, @Nonnull Object inType,
+                  @Nullable String inNote, @Nullable String inValues)
   {
-    this(inID, inText, inKey, inValue, inType, inScript);
+    this(inID, inEntry, inText, inKey, inValue, inType, inNote);
 
     if(inValues != null && !inValues.isEmpty())
     {
-      if(inScript == null || inScript.isEmpty())
+      if(inNote == null || inNote.isEmpty())
         withOptionals("");
 
       withOptionals(inValues);
@@ -136,7 +140,7 @@ public class Editable extends BaseCommand
    */
   protected Editable()
   {
-    super(EDITABLE, 2, 5);
+    super(EDITABLE, 2, 6);
   }
 
   //........................................................................
@@ -171,26 +175,30 @@ public class Editable extends BaseCommand
     @org.junit.Test
     public void testArguments()
     {
-      Command command = new Editable("id", "text", "key", "value", "type");
+      Command command =
+        new Editable("id", "entry", "text", "key", "value", "type");
       assertEquals("command",
-                   "\\editable{id}{text}{key}{value}{type}",
+                   "\\editable{id}{entry}{text}{key}{value}{type}",
                    command.toString());
 
-      command = new Editable("id", "text", "key", "value", "type", "script");
+      command = new Editable("id", "entry", "text", "key", "value",
+                             "type", "script");
       assertEquals("command",
-                   "\\editable[script]{id}{text}{key}{value}{type}",
+                   "\\editable[script]{id}{entry}{text}{key}{value}{type}",
                    command.toString());
 
-      command = new Editable("id", "text", "key", "value", "type", "script",
-                             "values");
+      command = new Editable("id", "entry", "text", "key", "value", "type",
+                             "script", "values");
       assertEquals("command",
-                   "\\editable[script][values]{id}{text}{key}{value}{type}",
+                   "\\editable[script][values]{id}{entry}{text}{key}"
+                   + "{value}{type}",
                    command.toString());
 
-      command = new Editable("id", "text", "key", "value", "type",
+      command = new Editable("id", "entry", "text", "key", "value", "type",
                              "", "values");
       assertEquals("command",
-                   "\\editable[][values]{id}{text}{key}{value}{type}",
+                   "\\editable[][values]{id}{entry}{text}{key}{value}"
+                   + "{type}",
                    command.toString());
     }
 

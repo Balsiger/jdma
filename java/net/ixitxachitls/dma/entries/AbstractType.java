@@ -24,6 +24,8 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -55,7 +57,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class AbstractType<T /*extends ValueGroup*/>
+public abstract class AbstractType<T extends AbstractEntry>
   implements Comparable<AbstractType>, java.io.Serializable
 {
   //--------------------------------------------------------- constructor(s)
@@ -89,6 +91,8 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
     m_class     = inClass;
     m_multiple  = inMultiple;
     m_className = inClass.getName().replaceAll(".*\\.", "");
+
+    s_types.put(m_name, this);
   }
 
   //........................................................................
@@ -108,6 +112,10 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
 
   /** The class name without package. */
   private @Nonnull String m_className;
+
+  /** All the available types. */
+  private static final Map<String, AbstractType<? extends AbstractEntry>>
+    s_types = new ConcurrentHashMap<String, AbstractType<?>>();
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -200,6 +208,23 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   }
 
   //........................................................................
+  //--------------------------------- get ----------------------------------
+
+  /**
+   * Get the type for the given name.
+   *
+   * @param     inName the name of the type to get
+   *
+   * @return    the type found, if any
+   *
+   */
+  public static @Nullable AbstractType<? extends AbstractEntry>
+    get(@Nonnull String inName)
+  {
+    return s_types.get(inName);
+  }
+
+  //........................................................................
 
   //------------------------------ compareTo -------------------------------
 
@@ -274,7 +299,6 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -283,6 +307,8 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
 
   /**
    * Create a entry of the type.
+   *
+   * @param       inData all the available data
    *
    * @return      an empty, undefined entry of the type.
    *
@@ -329,7 +355,8 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   /**
    * Create a entry of the type.
    *
-   * @param       inID the id of the entry to create
+   * @param       inID   the id of the entry to create
+   * @param       inData all the available data
    *
    * @return      an empty, undefined entry of the type.
    *
@@ -377,7 +404,8 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     /** A type for testing. */
-    public static class TestType<T> extends AbstractType<T>
+    public static class TestType<T extends AbstractEntry>
+      extends AbstractType<T>
     {
       /**
        * Create the type.
@@ -427,16 +455,16 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
       entry = type.create("guru", new DMAData("path"));
       assertEquals("create", "base entry guru =\n\n.\n", entry.toString());
 
-      TestType<ValueGroup> type2 =
-        new TestType<ValueGroup>(ValueGroup.class, "Many More");
+      TestType<AbstractEntry> type2 =
+        new TestType<AbstractEntry>(AbstractEntry.class, "Many More");
 
-      assertEquals("link", "/entry/valuegroup/", type2.getLink());
-      assertEquals("class name", "ValueGroup", type2.getClassName());
-      assertEquals("name", "value group", type2.getName());
+      assertEquals("link", "/entry/abstractentry/", type2.getLink());
+      assertEquals("class name", "AbstractEntry", type2.getClassName());
+      assertEquals("name", "abstract entry", type2.getName());
       assertEquals("multiple", "Many More", type2.getMultiple());
       assertEquals("multiple link", "manymore", type2.getMultipleLink());
       assertEquals("multiple dir", "ManyMore", type2.getMultipleDir());
-      assertEquals("string", "value group", type2.toString());
+      assertEquals("string", "abstract entry", type2.toString());
     }
 
     //......................................................................
@@ -446,13 +474,14 @@ public abstract class AbstractType<T /*extends ValueGroup*/>
     @org.junit.Test
     public void compare()
     {
-      TestType<String> type1 = new TestType<String>(String.class);
-      TestType<Number> type2 = new TestType<Number>(Number.class);
+      TestType<AbstractEntry> type1 =
+        new TestType<AbstractEntry>(AbstractEntry.class);
+      TestType<BaseEntry> type2 = new TestType<BaseEntry>(BaseEntry.class);
 
       assertEquals("compare", 0, type1.compareTo(type1));
       assertTrue("compare", type1.compareTo(null) < 0);
-      assertTrue("compare", type1.compareTo(type2) > 0);
-      assertTrue("compare", type2.compareTo(type1) < 0);
+      assertTrue("compare", type1.compareTo(type2) < 0);
+      assertTrue("compare", type2.compareTo(type1) > 0);
 
       assertEquals("compare", 0, type2.compareTo(type2));
       assertTrue("compare", type2.compareTo(null) < 0);

@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.filters.DMAFilter;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
+import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
 import net.ixitxachitls.dma.server.servlets.TypedEntryServlet;
 import net.ixitxachitls.server.WebServer;
@@ -334,8 +335,7 @@ public class DMAServer extends WebServer
     // users
     m_rootContext.addServlet
       (new ServletHolder(new TypedEntryServlet<BaseCharacter>
-                         (BaseCharacter.TYPE, "/user/",
-                          m_users.getEntries(BaseCharacter.TYPE), m_users)
+                         (BaseCharacter.TYPE, "/user/", m_users)
                          .withAccess(BaseCharacter.Group.USER)), "/user/*");
 
 //     m_rootContext.addFilter(new FilterHolder(new MeUserFilter()),
@@ -531,9 +531,9 @@ public class DMAServer extends WebServer
 //     m_rootContext.addServlet
 //       (new ServletHolder(new AdminServlet()), "/admin/*");
 
-//     // actions
-//     m_rootContext.addServlet
-//     (new ServletHolder(new SaveActionServlet(m_campaigns)), "/actions/save");
+    // actions
+    m_rootContext.addServlet
+      (new ServletHolder(new SaveActionServlet(m_users)), "/actions/save");
 
     m_rootContext.addServlet
       (new ServletHolder(new LoginServlet

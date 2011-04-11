@@ -45,7 +45,7 @@ var form = new Object();
  */
 form.setupValidation = function(inElement)
 {
-  var inputs = $(':input', inElement).keyup(validate).each(validate);
+  var inputs = $(':input', inElement).keyup(form.validate).each(form.validate);
 }
 
 //..........................................................................
@@ -64,12 +64,12 @@ form.validate = function()
   if(!type)
     return;
 
-  if(checkValue(type, value))
+  if(form.checkValue(type, value))
   {
     if($(this).hasClass('invalid'))
     {
       $(this).removeClass('invalid');
-      $(button).each(enableButton);
+      $(button).each(form.enableButton);
     }
   }
   else
@@ -77,7 +77,7 @@ form.validate = function()
     if(!$(this).hasClass('invalid'))
     {
       $(this).addClass('invalid');
-      $(button).each(disableButton);
+      $(button).each(form.disableButton);
     }
   }
 }
@@ -103,6 +103,9 @@ form.checkValue = function(inType, inValue)
         return true;
 
       return false;
+
+    case 'name':
+      return !inValue.match(/[\":,.;=\[\]\{\}\|\(\)]/);
   }
 
   return true;
@@ -125,7 +128,7 @@ form.enableButton = function()
 }
 
 //..........................................................................
-//------------------------------ enableButton ------------------------------
+//------------------------------ disableButton -----------------------------
 
 /**
  * Disable the button.

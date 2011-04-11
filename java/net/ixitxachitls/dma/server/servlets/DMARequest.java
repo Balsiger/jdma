@@ -704,7 +704,8 @@ public class DMARequest extends HttpServletRequestWrapper
 
       EasyMock.expect(user.checkToken("token")).andReturn(true);
       user.action();
-      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN)).andReturn(true);
+      EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
+        .andReturn(true);
 
       EasyMock.replay(mockRequest, user, other);
 

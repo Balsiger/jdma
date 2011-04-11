@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.output.actions.html;
+package net.ixitxachitls.output.actions;
 
 import java.util.List;
 
@@ -30,36 +30,18 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.output.Document;
-import net.ixitxachitls.output.actions.Action;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * This is a Footerding action. This action replaces a footertion with its HTML
- * equivalent.
+ * This is a simple class used to do nothing, an action that just
+ * prints out its arguments again.
  *
- * @file          Footer.java
+ * @file          Ignore.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- * @example       <PRE>
- * Action action = new Footer("test");
- *
- * // get an execution of the action
- * Execution exec = action.getExecution();
- *
- * // add the arguments
- * exec.startArgument(null);
- * exec.add("1");
- * exec.stopArgument();
- * exec.startArgument(null);
- * exec.add("2");
- * exec.stopArgument();
- *
- * // now to the execute
- * String result = exec.execute(null);
- * </PRE>
  *
  */
 
@@ -68,19 +50,18 @@ import net.ixitxachitls.output.actions.Action;
 //__________________________________________________________________________
 
 @Immutable
-public class Footer extends Action
+public class Ignore extends Action
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------------- Footer -------------------------------
+  //--------------------------------- Ignore -----------------------------
 
   /**
-   * Construct the action.
+   * Create the action.
    *
    */
-  public Footer()
+  public Ignore()
   {
-    // nothing to do
   }
 
   //........................................................................
@@ -112,10 +93,7 @@ public class Footer extends Action
                       @Nullable List<? extends Object> inOptionals,
                       @Nullable List<? extends Object> inArguments)
   {
-    if(inArguments == null || inArguments.size() != 1)
-      throw new IllegalArgumentException("expecting one argument");
-
-    inDocument.addFooter(inArguments.get(0));
+    return;
   }
 
   //........................................................................
@@ -124,7 +102,10 @@ public class Footer extends Action
 
   //------------------------------------------------------------------- test
 
-  /** The test. */
+  /**
+   * The tests.
+   *
+   */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     //----- all ------------------------------------------------------------
@@ -133,17 +114,15 @@ public class Footer extends Action
     @org.junit.Test
     public void all()
     {
-      Action action = new Footer();
+      Action action = new Ignore();
 
-      Document doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title");
+      Document doc = new Document();
 
-      action.execute(doc, null,
-                     com.google.common.collect.ImmutableList.of
-                     ("some footer text"));
+      action.execute(doc, null, com.google.common.collect.ImmutableList.of
+                     ("first", "second", "third"));
 
-      assertEquals("test", "some footer text",
-                   doc.getFooter().substring(doc.getFooter().length() - 16));
+      assertEquals("execution did not produce desired result", "",
+                   doc.toString());
     }
 
     //......................................................................

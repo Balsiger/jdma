@@ -35,6 +35,185 @@
 /** The object to store everything in. */
 var gui = new Object();
 
+/** The currently displayed notification messages. */
+gui.pendingNotifications = 0;
+
+//------------------------------- addAction --------------------------------
+
+/**
+  * Add an action to the page.
+  *
+  * @param       inName   the name of the action
+  * @param       inTitle  the text to show when hovering
+  * @param       inAction the function to execute on click
+  *
+  */
+gui.addAction = function(inName, inTitle, inAction)
+{
+  var actions = $('#actions');
+
+  // check if it's already there
+  if(actions.data('actions') && actions.data('actions').contains(inName))
+    return;
+
+  // make sure it's actually shown
+  if(!actions.data('actions') || actions.data('actions').length == 0) {
+      $('#actions').show('fast');
+      actions.data('actions', []);
+  }
+
+  var action = $('<div class="action-button" title="' + inTitle + '">' +
+                 '<div class="icon" id="action-' + inName + '"></div></div>');
+  action.click(inAction);
+  actions.append(action);
+  actions.data('actions').push(inName);
+};
+
+//..........................................................................
+//------------------------------ removeAction ------------------------------
+
+/**
+  * Remove an action from the page
+  *
+  * @param       inName   the name of the action
+  *
+  */
+gui.removeAction = function(inName)
+{
+  var actions = $('#actions');
+  if(!actions.data('actions'))
+    return;
+
+  $('#action-' + inName).remove();
+
+  actions.data('actions').remove(inName);
+  if(actions.data('actions').length == 0)
+    actions.hide('fast');
+};
+
+//..........................................................................
+//---------------------------------- info ----------------------------------
+
+/** Show an alert message.
+ *
+ * @param inMessage the message to appear
+ *
+ */
+gui.info = function(inMessage)
+{
+  gui.notification(inMessage, "/icons/info.png", "info");
+}
+
+//..........................................................................
+//---------------------------------- alert ---------------------------------
+
+/** Show an alert message.
+ *
+ * @param inMessage the message to appear
+ *
+ */
+gui.alert = function(inMessage)
+{
+  gui.notification(inMessage, "/icons/alert.png", "alert");
+}
+
+//..........................................................................
+//--------------------------------- debug ----------------------------------
+
+/** Show an debug message.
+ *
+ * @param inMessage the message to appear
+ *
+ */
+gui.debug = function(inMessage)
+{
+  gui.notification(inMessage, "/icons/bug.png", "debug");
+}
+
+//..........................................................................
+//------------------------------- notificaton ------------------------------
+
+/**
+ * Show an notificaiton message.
+ *
+ * @param inMessage     the message to appear
+ * @param inImage       the name of the image to display
+ * @param inClass       the css class name for the alert
+ *
+ */
+gui.notification = function(inMessage, inImage, inClass)
+{
+  // create the element
+  var win = $('<div class="-gui-notification -gui-notification-' + inClass
+              + '" '
+              + 'style="z-index:' + (1000 - gui.pendingNotifications) + '">'
+              + '<img class="-gui-notification-image" src="' + inImage + '"/>'
+              + '<div class="-gui-notification-text">'
+              + inMessage
+              + '</div>'
+              + '</div>');
+
+  // increase pending counter
+  gui.pendingNotifications++;
+
+  // add a click handler to remove early
+  win.click(function() { $(this).remove(); });
+
+  // append to the page
+  $('body').append(win);
+  win.animate({ bottom: 0 }, 1000, 'swing').
+  delay(5000 * gui.pendingNotifications).
+  animate({ bottom: -150 }, 1000, 'swing',
+          function() { $(this).remove(); gui.pendingNotifications--; });
+}
+
+//..........................................................................
+//-------------------------------- delayed ---------------------------------
+
+/** Delay an action for some time.
+ *
+ * @param inAction the action to do at each step (the action returns false if
+ *                 end is reached)
+ * @param inDelay  the delay in miliseconds to wait before doing the action
+ *
+ * @return the reference to use to stop the action
+ *
+ */
+gui.delayed = function(inAction, inDelay)
+{
+  var handle = new Object();
+
+  handle.timeout = window.setTimeout(inAction, inDelay);
+
+  return handle;
+}
+
+//..........................................................................
+//--------------------------------- stop -----------------------------------
+
+/**
+ * Stop a delayed or repeated action.
+ *
+ * @param inReference the reference obtained by delay
+ *
+ */
+gui.stop = function(inReference)
+{
+  if(!inReference)
+    return;
+
+  if(inReference.timeout)
+  {
+    window.clearTimeout(inReference.timeout);
+
+    inReference.timeout = null;
+  }
+  else
+    window.clearTimeout(inReference);
+}
+
+//..........................................................................
+
 //----- Busy ---------------------------------------------------------------
 
 /**
@@ -65,14 +244,14 @@ gui.Busy = function(inText, inSteps)
   document.body.appendChild(this.display);
 
   this._update();
-}
+};
 
 gui.Busy.prototype.add = function(inStep)
 {
   this.steps.push(inStep);
 
   this._update();
-}
+};
 
 gui.Busy.prototype.done = function(inStep)
 {
@@ -82,11 +261,11 @@ gui.Busy.prototype.done = function(inStep)
     document.body.removeChild(this.display);
   else
     this._update();
-}
+};
 
 gui.Busy.prototype._update = function()
 {
   this.content.innerHTML = this.text + this.steps.join(", ") + "...";
-}
+};
 
 //..........................................................................

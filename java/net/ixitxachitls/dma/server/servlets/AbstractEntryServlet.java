@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,12 +38,14 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
+import net.ixitxachitls.output.ascii.ASCIIDocument;
 // import net.ixitxachitls.output.commands.Button;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Hidden;
 //import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.output.commands.Verbatim;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.logging.Log;
 
@@ -259,6 +260,25 @@ public abstract class AbstractEntryServlet extends PageServlet
       return;
     }
 
+    boolean dma = false;
+    boolean pdf = false;
+    boolean txt = false;
+    if(inPath.endsWith(".dma"))
+    {
+      dma = true;
+      inPath = inPath.substring(0, inPath.length() - 4);
+    }
+    else if(inPath.endsWith(".pdf"))
+    {
+      pdf = true;
+      inPath = inPath.substring(0, inPath.length() - 4);
+    }
+    else if(inPath.endsWith(".txt"))
+    {
+      txt = true;
+      inPath = inPath.substring(0, inPath.length() - 4);
+    }
+
     AbstractEntry entry = getEntry(inPath);
 
     if(entry == null)
@@ -286,7 +306,6 @@ public abstract class AbstractEntryServlet extends PageServlet
 
         return;
       }
-
 
       if(inRequest.hasParam("create"))
       {
@@ -316,8 +335,7 @@ public abstract class AbstractEntryServlet extends PageServlet
     String title = entry.getType() + ": " + entry.getName();
     inWriter.title(title);
 
-    HTMLDocument document = new HTMLDocument
-      (title, entry.getType().getMultiple().toLowerCase(Locale.US));
+    HTMLDocument document = new HTMLDocument(title);
 
     AbstractEntry first = getFirst(entry.getType());
     if(first == entry)
@@ -350,27 +368,40 @@ public abstract class AbstractEntryServlet extends PageServlet
                                                    + (last == null
                                                       ? " disabled" : ""), ""),
                                        last == null ? "" : getPath(last))));
-    document.add(navigation);
 
-    document.add(entry.printPage(entry.isDM(inRequest.getUser())));
+    if(!pdf)
+      document.add(navigation);
 
-    document.add(navigation);
+    boolean dm = entry.isDM(inRequest.getUser());
 
-    //document.add(new Linebreak());
-//     document.add(new Hidden
-//                  (new Button("Input Text", ""),
-//                   new Divider("verbatim",
-//                               new Verbatim(entry.toString()))));
+    if(pdf)
+      ;
+    else if(dma && dm)
+      document.add(new Divider("dma-formatted",
+                               new Verbatim(entry.toString())));
+    else if(txt)
+    {
+      ASCIIDocument doc = new ASCIIDocument(80);
+      doc.add(entry.printPage(dm));
+      document.add(new Divider("text-formatted",
+                               new Verbatim(doc.toString())));
+    }
+    else
+      document.add(entry.printPage(dm));
+
+    if(!pdf)
+      document.add(navigation);
 
     inWriter.add(document.toString());
 
     // add some javascript for the entry
-    inWriter.script("$(document).ready(function ()",
-                    "{",
-                    "  $('DIV.files IMG.image')"
-                    + ".mouseover(util.replaceMainImage)"
-                    + ".mouseout(util.restoreMainImage)",
-                    "});");
+    if(!pdf && !dma && !txt)
+      inWriter.script("$(document).ready(function ()",
+                      "{",
+                      "  $('DIV.files IMG.image')"
+                      + ".mouseover(util.replaceMainImage)"
+                      + ".mouseout(util.restoreMainImage)",
+                      "});");
   }
 
   //........................................................................

@@ -269,14 +269,14 @@ public class Variables implements Iterable<Variable>
       java.lang.reflect.Field field =
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
-        new Variables(new Variable("1234", field, false, false, false, false,
-                                   null),
-                      new Variable("123456", field, false, false, false, false,
-                                   null),
-                      new Variable("123", field, false, false, false, false,
-                                   null),
-                      new Variable("1", field, false, false, false, false,
-                                   null));
+        new Variables(new Variable("1234", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("123456", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("123", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("1", field, false, true, false, false, false,
+                                   null, null));
 
       assertEquals("width", 7, variables.getKeyWidth());
       assertEquals("string",
@@ -298,14 +298,14 @@ public class Variables implements Iterable<Variable>
       java.lang.reflect.Field field =
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
-        new Variables(new Variable("1234", field, false, false, false, false,
-                                   null),
-                      new Variable("123456", field, false, false, false, false,
-                                   null),
-                      new Variable("123", field, false, false, false, false,
-                                   null),
-                      new Variable("1", field, false, false, false, false,
-                                   null));
+        new Variables(new Variable("1234", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("123456", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("123", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("1", field, false, true, false, false, false,
+                                   null, null));
 
       assertEquals("variable", "1234", variables.getVariable("1234").getKey());
       assertNull("not found", variables.getVariable("guru"));

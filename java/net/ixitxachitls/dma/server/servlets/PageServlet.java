@@ -190,6 +190,7 @@ public class PageServlet extends DMAServlet
       .addJSFile("form")
       .addCSSFile("gui")
       .addJSFile("gui")
+      .addJSFile("edit")
       .addCSSFile("jdma")
       .addJSFile("jdma")
       // make android use the device width/height
@@ -244,7 +245,8 @@ public class PageServlet extends DMAServlet
       .begin("a").id("home").classes("icon").tooltip("Home").href("/")
       .onClick("util.link(event, '/')").end("a")
       .begin("span").id("subnavigation").add("&nbsp;").end("span")
-      .end("div");
+      .end("div")
+      .begin("div").id("actions").end("div");
   }
 
   //........................................................................
@@ -414,6 +416,8 @@ public class PageServlet extends DMAServlet
                    + "href=\"/css/gui.css\" />\n"
                    + "    <SCRIPT type=\"text/javascript\" src=\"/js/gui.js\">"
                    + "</SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/edit.js\">"
+                   + "</SCRIPT>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/jdma.css\" />\n"
                    + "    <SCRIPT type=\"text/javascript\" "
@@ -482,6 +486,8 @@ public class PageServlet extends DMAServlet
                    + "        <SPAN id=\"subnavigation\">\n"
                    + "          &nbsp;\n"
                    + "        </SPAN>\n"
+                   + "      </DIV>\n"
+                   + "      <DIV id=\"actions\">\n"
                    + "      </DIV>\n"
                    + "    </DIV>\n"
                    + "    <DIV id=\"page\" class=\"page\">\n"

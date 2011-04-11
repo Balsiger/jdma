@@ -203,14 +203,14 @@ public class TaggedVariables extends Variables
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
         new TaggedVariables("tag",
-                            new Variable("1234", field, false, false, false,
-                                         false, null),
-                            new Variable("123456", field, false, false, false,
-                                         false, null),
-                            new Variable("123", field, false, false, false,
-                                         false, null),
-                            new Variable("1", field, false, false, false,
-                                         false, null));
+                            new Variable("1234", field, false, true, false,
+                                         false, false, null, null),
+                            new Variable("123456", field, false, true, false,
+                                         false, false, null, null),
+                            new Variable("123", field, false, true, false,
+                                         false, false, null, null),
+                            new Variable("1", field, false, true, false, false,
+                                         false, null, null));
 
       assertEquals("width", 11, variables.getKeyWidth());
       assertEquals("string",
@@ -233,14 +233,14 @@ public class TaggedVariables extends Variables
       java.lang.reflect.Field field =
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
-        new Variables(new Variable("1234", field, false, false, false, false,
-                                   null),
-                      new Variable("123456", field, false, false, false, false,
-                                   null),
-                      new Variable("123", field, false, false, false, false,
-                                   null),
-                      new Variable("1", field, false, false, false, false,
-                                   null));
+        new Variables(new Variable("1234", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("123456", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("123", field, false, true, false, false,
+                                   false, null, null),
+                      new Variable("1", field, false, true, false, false, false,
+                                   null, null));
 
       variables = TaggedVariables.tag("tag", variables);
 

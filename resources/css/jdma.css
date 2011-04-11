@@ -64,6 +64,18 @@ DIV.subtitletext, DIV.subtitletext A
   color:      #CCCCCC;
 }
 
+.doc-link
+{
+  float:       right;
+  margin-left: 5px;
+}
+
+.dma-formatted, .text-formatted
+{
+  white-space: pre;
+  font-family: monospace;
+}
+
 /******************************************************************************
  * header
  *****************************************************************************/
@@ -71,11 +83,11 @@ DIV.subtitletext, DIV.subtitletext A
 #header
 {
   height: 28px;
-  border-bottom: solid 1px #8888AA;
-  background-color: #EEEEFF;
+  border-bottom: solid 1px #88a;
+  background-color: #eef;
   width: 100%;
   position: fixed;
-  color: #0099BB;
+  color: #09b;
   font-size: small;
   padding: 5px;
   -webkit-box-shadow: 0 1px 3px #777;
@@ -105,6 +117,7 @@ DIV.subtitletext, DIV.subtitletext A
   width: 10px;
   height: 10px;
   display: inline-block;
+  cursor: pointer;
 }
 
 #home
@@ -302,29 +315,35 @@ DIV.files IMG
 
 DIV.value
 {
-  width:  100%;
-  margin: 1px;
+  width:         100%;
+  margin-bottom: 1px;
+  position:      relative;
 }
 
-DIV.value:hover
+DIV.value:hover DIV.value-label-container
 {
   background-color: #800;
 }
 
+DIV.value-label-container
+{
+  position:    absolute;
+  height:      100%;
+  width:       150px;
+  text-align:  right;
+  font-weight: bold;
+}
+
 DIV.value-label
 {
-  font-weight: bold;
   padding:     5px;
-  width:       15ex;
-  position:    absolute;
-  text-align:  right;
 }
 
 DIV.value-content
 {
   padding:          5px;
   background-color: #eee;
-  margin-left:      17ex;
+  margin-left:      151px;
   min-height:       1.125em;
 }
 
@@ -344,8 +363,8 @@ DIV.value-content
 
 .login-dialog
 {
-  font-size: 90%;
-  -webkit-box-shadow: 3px 3px 7px #777;
+  font-size:  90%;
+  box-shadow: 3px 3px 7px #777;
 }
 
 /******************************************************************************
@@ -376,3 +395,89 @@ DIV.clear-right
 SPAN.error, SPAN.error A { color: #AA0000; }
 SPAN.warning, SPAN.warning A { color: #FF8800; }
 DIV.snippet { color: #aaa; font-size: 80%; }
+
+/******************************************************************************
+ * edit
+ *****************************************************************************/
+
+INPUT.edit
+{
+  font-size: 100%;
+}
+
+DIV.edit-container
+{
+  position:     relative;
+  padding-left: 10px;
+  display:      inline;
+}
+
+DIV.edit-note
+{
+  background-color: #ffd700;
+  border-color:     #daa520;
+  border-style:     solid;
+  border-width:     1px 1px 0 1px;
+  position:         fixed;
+  bottom:           0;
+  max-width:        80%;
+  border-radius:    10px 10px 0 0;
+  padding:          8px;
+  display:          none;
+  z-index:          1;
+  box-shadow:       1px 1px 3px #777;
+}
+
+DIV.edit-undefine
+{
+  background-position: -40px;
+  position:            absolute;
+  left:                0;
+}
+
+DIV.edit-cancel
+{
+  background-position: -50px;
+  position:            absolute;
+  left:                0;
+  bottom:              0;
+}
+
+.edit-undefined
+{
+  opacity: 0.5;
+}
+
+/******************************************************************************
+ * actions
+ *****************************************************************************/
+
+#actions
+{
+  border-right: 1px solid #88a;
+  border-top: 1px solid #88a;
+  border-bottom: 1px solid #88a;
+  background-color: #eef;
+  position: fixed;
+  bottom: 50%;
+  left: 0;
+  width: 20px;
+  padding: 5px 0;
+  box-shadow: 1px 1px 3px #777;
+  display: none;
+}
+
+.action-button {
+  padding: 5px;
+  cursor:  pointer;
+}
+
+#action-save
+{
+  background-position: -80px;
+}
+
+#action-cancel
+{
+  background-position: -50px;
+}

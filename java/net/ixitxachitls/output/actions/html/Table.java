@@ -461,7 +461,7 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
       Action action = new Table();
 
       net.ixitxachitls.output.html.HTMLDocument doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+        new net.ixitxachitls.output.html.HTMLDocument("title");
 
       action.execute(doc, null, com.google.common.collect.ImmutableList.of
                      ("10:L(name)[title];20:C[title2],|,|;30:R(name3), * , * ",
@@ -500,7 +500,7 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
                    + "</table>",
                    doc.toString());
 
-      doc = new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+      doc = new net.ixitxachitls.output.html.HTMLDocument("title");
       action.execute(doc,
                      com.google.common.collect.ImmutableList.of("name"),
                      com.google.common.collect.ImmutableList.of
@@ -532,7 +532,7 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
                    + "</script>\n",
                    doc.toString());
 
-      doc = new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+      doc = new net.ixitxachitls.output.html.HTMLDocument("title");
       action.execute(doc,
                      com.google.common.collect.ImmutableList.of("class"),
                      com.google.common.collect.ImmutableList.of

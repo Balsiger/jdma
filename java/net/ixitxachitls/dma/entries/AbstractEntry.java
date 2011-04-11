@@ -23,17 +23,14 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 // import java.util.Collection;
 // import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 // import java.util.StringTokenizer;
 // import java.util.TreeMap;
 // import java.util.regex.Matcher;
@@ -69,8 +66,8 @@ import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Editable;
-//import net.ixitxachitls.output.commands.Icon;
 import net.ixitxachitls.output.commands.Image;
+import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Linebreak;
 //import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Picture;
@@ -331,7 +328,7 @@ public class AbstractEntry extends ValueGroup
   // TODO: remove uncomment code (are use it)
 //   protected @Nullable List<BaseEntry> m_baseEntries = null;
 
-  /** The type of this abstract entries. */
+  /** The type of this abstract entry. */
   public static final @Nonnull AbstractType<AbstractEntry> TYPE =
     new BaseType<AbstractEntry>(AbstractEntry.class, "Abstract Entries");
 
@@ -402,6 +399,9 @@ public class AbstractEntry extends ValueGroup
   /** The name of the abstract entry. */
   @Key("name")
   @NoStore
+  @Note("Changing this value will not change any references to entries with "
+        + "that name, thus leaving these references dangling. You will have "
+        + "to update these manually.")
   protected Name m_name = new Name();
 
   //........................................................................
@@ -1577,20 +1577,22 @@ public class AbstractEntry extends ValueGroup
       return new FormattedValue(new Title(computeValue("name", inDM)
                                           .format(this, inDM, false),
                                           "entrytitle"),
-                                "title", false, false, false, "titles");
+                                "title", false, false, false, false, "titles",
+                                "");
 
     if("mainimage".equals(inKey))
       return new FormattedValue
         (new Divider("mainimage",
                      new Image(DMAFiles.mainImage(getID(),
                                                   getType().getMultipleDir()))),
-         "mainimage", false, false, false, "mainimages");
+         "mainimage", false, false, false, false, "mainimages", "");
 
     if("clear".equals(inKey))
       // we need a non empty string here, because when parsing trailing empty
       // arguments are ignored.
       return new FormattedValue(new Divider("clear", " "),
-                                "clear", false, false, false, "clear");
+                                "clear", false, false, false, false, "clear",
+                                "");
 
     if("files".equals(inKey))
     {
@@ -1605,21 +1607,23 @@ public class AbstractEntry extends ValueGroup
           Log.warning("unknown file '" + file + "' ignored");
 
       return new FormattedValue(new Divider("files", new Command(commands)),
-                                "files", false, false, false, "files");
+                                "files", false, false, false, false, "files",
+                                "");
     }
 
     if("file".equals(inKey))
       if(m_file == null)
         return new FormattedValue
-          (new Editable(getName(), "", "_file", "<please select>",
+          (new Editable(getName(), getType(), "<please select>", "file", "",
                         "selection", null,
                         Strings.toString(m_data.files(getType()), "||", "")),
-           "file", true, false, false, "files");
+           "file", true, false, false, false, "files", "");
       else
         return new FormattedValue
           (new Command(new Editable(getName(),
+                                    getType(),
                                     m_file.getStorageName(),
-                                    "_file",
+                                    "file",
                                     m_file.getStorageName(),
                                     "selection", null,
                                     Strings.toString(m_data.files(getType()),
@@ -1628,7 +1632,7 @@ public class AbstractEntry extends ValueGroup
                        m_startLine,
                        " to ",
                        m_endLine),
-           "file", true, false, false, "files");
+           "file", true, false, false, false, "files", "");
 
     if("errors".equals(inKey))
     {
@@ -1648,10 +1652,32 @@ public class AbstractEntry extends ValueGroup
         value = new Command(errors);
       }
       else
-        value = "";
+        value = null;
 
-      return new FormattedValue(value, "errors", true, false, false, "errors");
+      return new FormattedValue(value, "errors", true, false, false, false,
+                                "errors", "");
     }
+
+    if("as dma".equals(inKey))
+      return new FormattedValue(new ImageLink("/icons/doc-dma.png",
+                                              "/user/" + getName() + ".dma",
+                                              "doc-link"),
+                                "as dma", true, false, false, false, "as dma",
+                                "");
+
+    if("as pdf".equals(inKey))
+      return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
+                                              "/user/" + getName() + ".pdf",
+                                              "doc-link"),
+                                "as pdf", true, false, false, false, "as pdf",
+                                "");
+
+    if("as text".equals(inKey))
+      return new FormattedValue(new ImageLink("/icons/doc-txt.png",
+                                              "/user/" + getName() + ".txt",
+                                              "doc-link"),
+                                "as text", true, false, false, false, "as text",
+                                "");
 
     return super.computeValue(inKey, inDM);
   }
@@ -1728,6 +1754,23 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------------- canEdit --------------------------------
+
+  /**
+   * Check if the given user is allowed to edit the value with the given key.
+   *
+   * @param       inKey  the key to edit
+   * @param       inUser the user trying to edit
+   *
+   * @return      true if the value can be edited by the user, false if not
+   *
+   */
+  public boolean canEdit(@Nonnull String inKey, @Nonnull BaseCharacter inUser)
+  {
+    return inUser.hasAccess(BaseCharacter.Group.ADMIN);
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -1744,6 +1787,8 @@ public class AbstractEntry extends ValueGroup
   public void setName(@Nonnull String inName)
   {
     m_name = m_name.as(inName);
+    m_leadingComment = m_leadingComment.as("#----- " + m_name + "\n\n");
+    changed();
   }
 
   //........................................................................
@@ -1898,7 +1943,7 @@ public class AbstractEntry extends ValueGroup
     //......................................................................
     //----- type -----------------------------------------------------------
 
-    String type = "";
+    String typeName = "";
     String className = "";
     Class<? extends AbstractEntry> entry = null;
     for(int i = 0; i < s_keywordWords; i++)
@@ -1913,7 +1958,7 @@ public class AbstractEntry extends ValueGroup
         break;
       }
 
-      type += " " + word;
+      typeName += " " + word;
       className += java.lang.Character.toUpperCase(word.charAt(0))
         + word.substring(1);
 
@@ -1938,53 +1983,24 @@ public class AbstractEntry extends ValueGroup
       return null;
     }
 
-    type = type.trim();
+    typeName = typeName.trim();
 
     //......................................................................
     //----- create ---------------------------------------------------------
 
     // create the entry
-    AbstractEntry result = null;
-    try
+    AbstractType<? extends AbstractEntry> type = AbstractType.get(typeName);
+    if(type == null)
     {
-      // create the object
-      Constructor<? extends AbstractEntry> constructor =
-        entry.getDeclaredConstructor(DMAData.class);
-
-      result = constructor.newInstance(inData);
-    }
-    catch(java.lang.InstantiationException e)
-    {
-      Log.error("cannot instantiate entry of type " + type + " [" + className
-                + "]: " + e);
-
+      Log.error("cannot get type for '" + typeName + "'");
       return null;
     }
-    catch(java.lang.IllegalAccessException e)
-    {
-      Log.error("cannot instantiate entry of type " + type + " [" + className
-                + "]: " + e);
 
-      return null;
-    }
-    catch(java.lang.NoSuchMethodException e)
-    {
-      Log.error("cannot find data constructor for entry of type " + type
-                + " [" + className + "]: " + e);
-
-      return null;
-    }
-    catch(java.lang.reflect.InvocationTargetException e)
-    {
-      Log.error("cannot invoke data constructor for entry of type " + type
-                + " [" + className + "]: " + e);
-
-      return null;
-    }
+    AbstractEntry result = type.create(inData);
 
     //......................................................................
 
-    if(!result.readEntry(inReader))
+    if(result == null || !result.readEntry(inReader))
       return null;
 
     // store the additional values
@@ -2481,7 +2497,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-
 
   //------------------------------- complete -------------------------------
 

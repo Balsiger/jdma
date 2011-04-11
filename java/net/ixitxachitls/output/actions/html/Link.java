@@ -70,9 +70,29 @@ public class Link extends Action
   public Link(@Nonnull String inName, @Nullable String inDir,
               @Nonnull String inExtension)
   {
+    this(inName, inDir, inExtension, false);
+  }
+
+  //........................................................................
+  //------------------------------- Link ------------------------------
+
+  /**
+   * Construct the action, mainly by giving the links to use. Any of
+   * the links given can be null, in which case they are ignored.
+   *
+   * @param       inName      the name of the action
+   * @param       inDir       the relative subdirectory for the link
+   * @param       inExtension the extension to use
+   * @param       inImage     true for an image link, false for text
+   *
+   */
+  public Link(@Nonnull String inName, @Nullable String inDir,
+              @Nonnull String inExtension, boolean inImage)
+  {
     m_name      = inName;
     m_dir       = inDir;
     m_extension = inExtension;
+    m_image     = inImage;
   }
 
   //........................................................................
@@ -89,6 +109,9 @@ public class Link extends Action
 
   /** The extension to use for the target. */
   private @Nonnull String m_extension;
+
+  /** If the link is printed as an image or as text. */
+  private boolean m_image;
 
   //........................................................................
 
@@ -114,23 +137,33 @@ public class Link extends Action
                       @Nullable List<? extends Object> inOptionals,
                       @Nullable List<? extends Object> inArguments)
   {
-    if(inArguments == null || inArguments.size() != 1)
+    if(inArguments == null || inArguments.size() < 1)
       throw new IllegalArgumentException("expecting an argument");
 
     String target = inDocument.convert(inArguments.get(0));
 
     String name = null;
     String id   = m_name;
-    if(inOptionals != null && !inOptionals.isEmpty())
-    {
-      name = inDocument.convert(inOptionals.get(0));
 
-      if(inOptionals.size() > 1)
-        id = inDocument.convert(inOptionals.get(1));
+    if(m_image)
+    {
+      name = inDocument.convert(inArguments.get(1));
+      if(inOptionals != null && !inOptionals.isEmpty())
+        id = inDocument.convert(inOptionals.get(0));
     }
     else
-      // remove all html stuff
-      name = target.replaceAll("<.*?>", "");
+    {
+      if(inOptionals != null && !inOptionals.isEmpty())
+      {
+        name = inDocument.convert(inOptionals.get(0));
+
+        if(inOptionals.size() > 1)
+          id = inDocument.convert(inOptionals.get(1));
+      }
+      else
+        // remove all html stuff
+        name = target.replaceAll("<.*?>", "");
+    }
 
     // remove % signs
     name = name.replaceAll("%", "%25");
@@ -154,14 +187,17 @@ public class Link extends Action
                      + "\" class=\"" + id + "\" "
                      + "onclick=\"return util.link(event, '"
                      + Files.concatenate(m_dir, name)
-                     + "');\">"
-                     + target + "</a>");
+                     + "');\">");
     else
       inDocument.add("<a href=\"" + name + "\" class=\""
                      + id + "\" onclick=\"return util.link(event, '"
                      + Files.concatenate(m_dir, name)
-                     + "');\">" + target.replaceAll("^[^<>]*/", "")
-                     + "</a>");
+                     + "');\">");
+
+    if(m_image)
+      inDocument.add("<img src=\"" + target + "\" /></a>");
+    else
+      inDocument.add(target.replaceAll("^[^<>]*/", "") + "</a>");
   }
 
   //........................................................................
@@ -182,7 +218,7 @@ public class Link extends Action
       Action action = new Link("test", null, ".ext");
 
       net.ixitxachitls.output.html.HTMLDocument doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+        new net.ixitxachitls.output.html.HTMLDocument("title");
 
       action.execute(doc, null,
                      com.google.common.collect.ImmutableList.of
@@ -191,8 +227,7 @@ public class Link extends Action
       assertEquals("execution did not produce desired result",
                    "<a href=\"target_dir/target.ext\" class=\"test\" "
                    + "onclick=\"return util.link(event, "
-                   + "'target_dir/target.ext');\">"
-                   + "target_dir/target</a>",
+                   + "'target_dir/target.ext');\">target</a>",
                    doc.toString());
     }
 
@@ -206,7 +241,7 @@ public class Link extends Action
       Action action = new Link("test", null, ".ext");
 
       net.ixitxachitls.output.html.HTMLDocument doc =
-        new net.ixitxachitls.output.html.HTMLDocument("title", "type");
+        new net.ixitxachitls.output.html.HTMLDocument("title");
 
       action.execute(doc,
                      com.google.common.collect.ImmutableList.of("optional",

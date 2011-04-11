@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2007 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -57,20 +57,20 @@ public class FormattedValue extends ValueHandle
    * @param       inValue          the comnputed (and formatted) value itself
    * @param       inKey            the key of the value
    * @param       inDM             true if the value is for dms only
+   * @param       inEditable       true if the value is editable
    * @param       inPlayer         true if the value is for players only
    * @param       inPlayerEditable true if the value can be edited by players
    * @param       inPlural         the plural value of the key
-   *
-   * @param
-   *
-   * @return
+   * @param       inNote           a note for editing
    *
    */
-  public FormattedValue(@Nonnull Object inValue, @Nonnull String inKey,
-                        boolean inDM, boolean inPlayer,
-                        boolean inPlayerEditable, @Nullable String inPlural)
+  public FormattedValue(@Nullable Object inValue, @Nonnull String inKey,
+                        boolean inDM, boolean inEditable, boolean inPlayer,
+                        boolean inPlayerEditable, @Nullable String inPlural,
+                        @Nullable String inNote)
   {
-    super(inKey, inDM, inPlayer, inPlayerEditable, inPlural);
+    super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
+          inNote);
 
     m_value = inValue;
   }
@@ -82,7 +82,7 @@ public class FormattedValue extends ValueHandle
   //-------------------------------------------------------------- variables
 
   /** The formatted value. */
-  protected @Nonnull Object m_value;
+  protected @Nullable Object m_value;
 
   //........................................................................
 
@@ -128,7 +128,8 @@ public class FormattedValue extends ValueHandle
     public void value()
     {
       ValueHandle formatted =
-        new FormattedValue("value", "key", false, false, false, null);
+        new FormattedValue("value", "key", false, true, false, false, null,
+                           null);
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry
         ("guru", new net.ixitxachitls.dma.data.DMAData("path"));

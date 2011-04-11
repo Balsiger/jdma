@@ -272,10 +272,7 @@ public final class Encodings
     //String text = HTMLDocument.simpleConvert(inText);
     // TODO: check if we need HTML conversion here and if this could be moved
     // to util or something
-    String text = inText;
-
-    return "'" + text.replaceAll("'", "\\\\'").replaceAll("\"", "\\\\\"")
-      + "'";
+    return "'" + escapeJS(inText) + "'";
   }
 
   //........................................................................
@@ -326,6 +323,24 @@ public final class Encodings
                     + split[i].substring(1));
 
     return result.toString();
+  }
+
+  //........................................................................
+  //------------------------------- escapeJS -------------------------------
+
+  /**
+   * Escape characters in the given text to make it save to include in a
+   * javascript string.
+   *
+   * @param    inText the text to escape
+   *
+   * @return   the escaped text
+   *
+   */
+  public static @Nonnull String escapeJS(@Nonnull String inText)
+  {
+    return inText.replaceAll("'", "\\\\'").replaceAll("\"", "\\\\\"")
+      .replaceAll("\n", "\\\\n");
   }
 
   //........................................................................

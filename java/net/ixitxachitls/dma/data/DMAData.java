@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +38,7 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -56,7 +58,7 @@ import net.ixitxachitls.dma.entries.AbstractType;
 
 //__________________________________________________________________________
 
-public class DMAData
+public class DMAData implements Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -84,13 +86,16 @@ public class DMAData
   //-------------------------------------------------------------- variables
 
   /** The files for all the data. */
-  private @Nonnull List<DMAFile> m_files = new ArrayList<DMAFile>();
+  private @Nonnull ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();
 
   /** All the entries, by class and by id. */
-  private @Nonnull Map<AbstractType<? extends AbstractEntry>,
-                               NavigableMap<String, AbstractEntry>> m_entries =
+  private @Nonnull HashMap<AbstractType<? extends AbstractEntry>,
+                           NavigableMap<String, AbstractEntry>> m_entries =
     new HashMap<AbstractType<? extends AbstractEntry>,
                                NavigableMap<String, AbstractEntry>>();
+
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
 
   //........................................................................
 
@@ -121,6 +126,27 @@ public class DMAData
 
     // TODO: this should actually be unmodifiable
     return (NavigableMap<String, T>)entries;
+  }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get a type denoted by type and id.
+   *
+   * @param      inID   the id of the entry to get
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  public @Nullable <T extends AbstractEntry> T
+                      getEntry(@Nonnull String inID,
+                               @Nonnull AbstractType<T> inType)
+  {
+    return getEntries(inType).get(inID);
   }
 
   //........................................................................
@@ -186,12 +212,30 @@ public class DMAData
   };
 
   //........................................................................
+  //--------------------------------- save ---------------------------------
 
+  /**
+   * Save all the changed files.
+   *
+   * @return true if all data successfully saved, false if there was an error.
+   *
+   */
+  public boolean save()
+  {
+    boolean success = true;
+    for(DMAFile file : m_files)
+      success = success && file.write();
+
+    Log.event("*system*", "save",
+              "Saved all data " + (success ? "without errors" : "with errors"));
+    return success;
+  }
+
+  //........................................................................
 
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test
