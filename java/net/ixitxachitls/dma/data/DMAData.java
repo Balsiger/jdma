@@ -27,8 +27,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
@@ -224,7 +222,6 @@ public class DMAData implements Serializable
   }
 
   //........................................................................
-
   //--------------------------------- save ---------------------------------
 
   /**
@@ -260,7 +257,7 @@ public class DMAData implements Serializable
     public static class Data extends DMAData
     {
       /**
-       * Create the test data
+       * Create the test data.
        *
        * @param inEntries the entries that the data should have for tests.
        */
@@ -271,6 +268,32 @@ public class DMAData implements Serializable
         for(AbstractEntry entry : inEntries)
           add(entry);
       }
+
+      /**
+       * Save all the changed files.
+       *
+       * @return true if all data successfully saved, false if there was an
+       *         error.
+       *
+       */
+      public boolean save()
+      {
+        m_saved = true;
+        return true;
+      }
+
+      /**
+       * Check whether data has been saved.
+       *
+       * @return true if data has been saved, false if not
+       */
+      public boolean wasSaved()
+      {
+        return m_saved;
+      }
+
+      /** True if data has been saved, false if not. */
+      private boolean m_saved = false;
 
       /** The id for serialization. */
       private static final long serialVersionUID = 1L;

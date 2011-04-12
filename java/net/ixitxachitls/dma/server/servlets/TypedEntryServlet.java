@@ -282,8 +282,8 @@ public class TypedEntryServlet<T extends AbstractEntry>
       TypedEntryServlet<net.ixitxachitls.dma.entries.BaseEntry> servlet =
         new TypedEntryServlet<net.ixitxachitls.dma.entries.BaseEntry>
         (net.ixitxachitls.dma.entries.BaseEntry.TYPE, "/base/",
-         new DMAData.Test.Data
-         (new net.ixitxachitls.dma.entries.BaseEntry("test", null)));
+         new DMAData.Test.Data(new net.ixitxachitls.dma.entries.BaseEntry
+                               ("test", new DMAData.Test.Data())));
 
 
       assertEquals("simple", "id", servlet.getID("/just/some/path/id"));
@@ -311,8 +311,8 @@ public class TypedEntryServlet<T extends AbstractEntry>
                    servlet.getType(""));
 
       assertEquals("path", "/base/id",
-                   servlet.getPath
-                   (new net.ixitxachitls.dma.entries.BaseEntry("id", null)));
+                   servlet.getPath(new net.ixitxachitls.dma.entries.BaseEntry
+                                   ("id", new DMAData.Test.Data())));
     }
 
     //......................................................................
@@ -322,18 +322,19 @@ public class TypedEntryServlet<T extends AbstractEntry>
     @org.junit.Test
     public void navigation()
     {
+      DMAData data = new DMAData.Test.Data();
       AbstractType<net.ixitxachitls.dma.entries.BaseEntry> type =
         net.ixitxachitls.dma.entries.BaseEntry.TYPE;
       net.ixitxachitls.dma.entries.BaseEntry one =
-        new net.ixitxachitls.dma.entries.BaseEntry("first", null);
+        new net.ixitxachitls.dma.entries.BaseEntry("first", data);
       net.ixitxachitls.dma.entries.BaseEntry two =
-        new net.ixitxachitls.dma.entries.BaseEntry("further-1", null);
+        new net.ixitxachitls.dma.entries.BaseEntry("further-1", data);
       net.ixitxachitls.dma.entries.BaseEntry three =
-        new net.ixitxachitls.dma.entries.BaseEntry("further-2", null);
+        new net.ixitxachitls.dma.entries.BaseEntry("further-2", data);
       net.ixitxachitls.dma.entries.BaseEntry four =
-        new net.ixitxachitls.dma.entries.BaseEntry("further-3", null);
+        new net.ixitxachitls.dma.entries.BaseEntry("further-3", data);
       net.ixitxachitls.dma.entries.BaseEntry five =
-        new net.ixitxachitls.dma.entries.BaseEntry("last", null);
+        new net.ixitxachitls.dma.entries.BaseEntry("last", data);
 
       TypedEntryServlet<net.ixitxachitls.dma.entries.BaseEntry> servlet =
         new TypedEntryServlet<net.ixitxachitls.dma.entries.BaseEntry>
