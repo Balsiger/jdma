@@ -174,17 +174,7 @@ public class DMAData implements Serializable
         result &= file.read();
 
         for(AbstractEntry entry : file.getEntries())
-        {
-          NavigableMap<String, AbstractEntry> entries =
-            m_entries.get(entry.getType());
-          if(entries == null)
-          {
-            entries = new TreeMap<String, AbstractEntry>();
-            m_entries.put(entry.getType(), entries);
-          }
-
-          entries.put(entry.getID(), entry);
-        }
+          add(entry);
       }
 
     return result;
@@ -212,6 +202,29 @@ public class DMAData implements Serializable
   };
 
   //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the entry to the data.
+   *
+   * @param     inEntry the entry to add
+   *
+   */
+  protected void add(AbstractEntry inEntry)
+  {
+    NavigableMap<String, AbstractEntry> entries =
+      m_entries.get(inEntry.getType());
+    if(entries == null)
+    {
+      entries = new TreeMap<String, AbstractEntry>();
+      m_entries.put(inEntry.getType(), entries);
+    }
+
+    entries.put(inEntry.getID(), inEntry);
+  }
+
+  //........................................................................
+
   //--------------------------------- save ---------------------------------
 
   /**
@@ -243,6 +256,26 @@ public class DMAData implements Serializable
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    /** A simple data class for testing. */
+    public static class Data extends DMAData
+    {
+      /**
+       * Create the test data
+       *
+       * @param inEntries the entries that the data should have for tests.
+       */
+      public Data(AbstractEntry ... inEntries)
+      {
+        super("");
+
+        for(AbstractEntry entry : inEntries)
+          add(entry);
+      }
+
+      /** The id for serialization. */
+      private static final long serialVersionUID = 1L;
+    }
+
     //----- read -----------------------------------------------------------
 
     /** The read Test. */
