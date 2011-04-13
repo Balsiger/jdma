@@ -192,9 +192,7 @@ public class Count extends Action
 
   //------------------------------------------------------------------- test
 
-  /**
-   * The test.
-   */
+  /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     //----- all ------------------------------------------------------------

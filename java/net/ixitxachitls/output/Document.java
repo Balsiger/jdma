@@ -524,7 +524,7 @@ public class Document
   }
 
   //........................................................................
-  //----------------------------- setAttribute -----------------------------
+  //----------------------------- getAttribute -----------------------------
 
   /**
    * Get an attribute of the document.
@@ -904,7 +904,7 @@ public class Document
    * @param       inValue the value of the attribute
    *
    */
-  public void setAttribute(@Nonnull String inName, @Nonnull String inValue)
+  public void setAttribute(@Nonnull String inName, @Nullable String inValue)
   {
     m_attributes.put(inName, inValue);
   }
