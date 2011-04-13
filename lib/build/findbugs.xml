@@ -32,6 +32,11 @@
   </Match>
 
   <Match>
+    <Class name="~net\.ixitxachitls\.output\.actions\.itext\.Table.*" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match>
     <Class name="~net\.ixitxachitls\.dma\.output\.html\.HTMLDocument.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
