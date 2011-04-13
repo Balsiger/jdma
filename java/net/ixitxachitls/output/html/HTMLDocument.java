@@ -37,7 +37,6 @@ import net.ixitxachitls.output.actions.Pattern;
 import net.ixitxachitls.output.actions.Replace;
 import net.ixitxachitls.output.actions.Verbatim;
 import net.ixitxachitls.output.actions.WordUpperCase;
-import net.ixitxachitls.output.actions.html.Files;
 import net.ixitxachitls.output.actions.html.Footer;
 import net.ixitxachitls.output.actions.html.Frac;
 import net.ixitxachitls.output.actions.html.Link;
@@ -90,7 +89,6 @@ import net.ixitxachitls.output.commands.Newpage;
 import net.ixitxachitls.output.commands.Nopictures;
 import net.ixitxachitls.output.commands.NormalSize;
 import net.ixitxachitls.output.commands.OverlayIcon;
-import net.ixitxachitls.output.commands.OverviewFiles;
 import net.ixitxachitls.output.commands.Page;
 import net.ixitxachitls.output.commands.Par;
 import net.ixitxachitls.output.commands.Right;
@@ -380,14 +378,6 @@ public class HTMLDocument extends Document
                                + "class=\"window\">"
                                + "$2</span>"));
      s_actions.put(net.ixitxachitls.output.commands.Frac.FRAC, new Frac());
-     s_actions.put(net.ixitxachitls.output.commands.Files.FILES,
-                   new Files(s_dirFiles, s_dirFilesInternal, s_dirIcons,
-                             new String [] { "cover", "back", "inside",
-                                             "contents", "electronic" }));
-     s_actions.put(OverviewFiles.OVERVIEW_FILES,
-                   new Files(s_dirFiles, s_dirFilesInternal, s_dirIcons,
-                             new String [] { "cover", "back", "inside",
-                                             "contents", "electronic" }));
      s_actions.put(Highlight.HIGHLIGHT,
                    new Pattern("<span onmouseover=\"gui.addAllStyle"
                                + "('highlight-$1', 'highlight-attachment')\" "

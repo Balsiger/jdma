@@ -54,7 +54,6 @@ import net.ixitxachitls.output.commands.Count;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Editable;
 import net.ixitxachitls.output.commands.Emph;
-import net.ixitxachitls.output.commands.Files;
 import net.ixitxachitls.output.commands.Footer;
 import net.ixitxachitls.output.commands.Footnotesize;
 import net.ixitxachitls.output.commands.Frac;
@@ -191,7 +190,6 @@ public class ASCIIDocument extends Document
     s_actions.put(net.ixitxachitls.output.commands.Table.TABLE, new Table());
     s_actions.put(Link.LINK, new Identity(1));
     s_actions.put(Editable.EDITABLE, new Identity(3));
-    s_actions.put(Files.FILES, null);
     s_actions.put(Title.TITLE, new Multi(new Action []
       {
         new Align(Buffer.Alignment.center),
