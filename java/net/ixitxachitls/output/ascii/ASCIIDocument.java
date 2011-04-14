@@ -167,37 +167,37 @@ public class ASCIIDocument extends Document
   static
   {
     // add the commands
-    s_actions.put(Bold.BOLD, new UpperCase());
-    s_actions.put(Emph.EMPH, new UpperCase());
-    s_actions.put(Left.LEFT, new Align(Buffer.Alignment.left));
-    s_actions.put(Right.RIGHT, new Align(Buffer.Alignment.right));
-    s_actions.put(Center.CENTER, new Align(Buffer.Alignment.center));
-    s_actions.put(Block.BLOCK, new Align(Buffer.Alignment.block));
-    s_actions.put(Tiny.TINY, new Identity(1));
-    s_actions.put(Footnotesize.FOOTNOTE_SIZE, new Identity(1));
-    s_actions.put(Scriptsize.SCRIPT_SIZE, new Identity(1));
-    s_actions.put(Small.SMALL, new Identity(1));
-    s_actions.put(NormalSize.NORMAL_SIZE, new Identity(1));
-    s_actions.put(Large.LARGE, new Identity(1));
-    s_actions.put(Larger.LARGER, new Identity(1));
-    s_actions.put(Largest.LARGEST, new Identity(1));
-    s_actions.put(Huge.HUGE, new Identity(1));
-    s_actions.put(Huger.HUGER, new Identity(1));
-    s_actions.put(Icon.ICON, null);
-    s_actions.put(Image.IMAGE, null);
-    s_actions.put(Picture.PICTURE, null);
-    s_actions.put(ImageLink.IMAGE_LINK, null);
-    s_actions.put(net.ixitxachitls.output.commands.Table.TABLE, new Table());
-    s_actions.put(Link.LINK, new Identity(1));
-    s_actions.put(Editable.EDITABLE, new Identity(3));
-    s_actions.put(Title.TITLE, new Multi(new Action []
+    s_actions.put(Bold.NAME, new UpperCase());
+    s_actions.put(Emph.NAME, new UpperCase());
+    s_actions.put(Left.NAME, new Align(Buffer.Alignment.left));
+    s_actions.put(Right.NAME, new Align(Buffer.Alignment.right));
+    s_actions.put(Center.NAME, new Align(Buffer.Alignment.center));
+    s_actions.put(Block.NAME, new Align(Buffer.Alignment.block));
+    s_actions.put(Tiny.NAME, new Identity(1));
+    s_actions.put(Footnotesize.NAME, new Identity(1));
+    s_actions.put(Scriptsize.NAME, new Identity(1));
+    s_actions.put(Small.NAME, new Identity(1));
+    s_actions.put(NormalSize.NAME, new Identity(1));
+    s_actions.put(Large.NAME, new Identity(1));
+    s_actions.put(Larger.NAME, new Identity(1));
+    s_actions.put(Largest.NAME, new Identity(1));
+    s_actions.put(Huge.NAME, new Identity(1));
+    s_actions.put(Huger.NAME, new Identity(1));
+    s_actions.put(Icon.NAME, null);
+    s_actions.put(Image.NAME, null);
+    s_actions.put(Picture.NAME, null);
+    s_actions.put(ImageLink.NAME, null);
+    s_actions.put(net.ixitxachitls.output.commands.Table.NAME, new Table());
+    s_actions.put(Link.NAME, new Identity(1));
+    s_actions.put(Editable.NAME, new Identity(3));
+    s_actions.put(Title.NAME, new Multi(new Action []
       {
         new Align(Buffer.Alignment.center),
         new UpperCase(),
       }));
-    s_actions.put(Subtitle.SUBTITLE, new Align(Buffer.Alignment.center));
-    s_actions.put(Textblock.TEXT_BLOCK, new Align(Buffer.Alignment.block));
-    s_actions.put(Hat.HAT,
+    s_actions.put(Subtitle.NAME, new Align(Buffer.Alignment.center));
+    s_actions.put(Textblock.NAME, new Align(Buffer.Alignment.block));
+    s_actions.put(Hat.NAME,
                   new Replace(new Replace.Replacement("u", "Ã»"),
                               new Replace.Replacement("U", "Ã"),
                               new Replace.Replacement("o", "Ã´"),
@@ -206,7 +206,7 @@ public class ASCIIDocument extends Document
                               new Replace.Replacement("A", "Ã"),
                               new Replace.Replacement("i", "Ã®"),
                               new Replace.Replacement("I", "Ã")));
-    s_actions.put(Umlaut.UMLAUT,
+    s_actions.put(Umlaut.NAME,
                   new Replace(new Replace.Replacement("a", "Ã¤"),
                               new Replace.Replacement("A", "Ã"),
                               new Replace.Replacement("o", "Ã¶"),
@@ -215,7 +215,7 @@ public class ASCIIDocument extends Document
                               new Replace.Replacement("U", "Ã"),
                               new Replace.Replacement("i", "Ã¯"),
                               new Replace.Replacement("I", "Ã")));
-    s_actions.put(Acute.ACUTE,
+    s_actions.put(Acute.NAME,
                   new Replace(new Replace.Replacement("e", "Ã©"),
                               new Replace.Replacement("E", "Ã"),
                               new Replace.Replacement("u", "\u00fa"),
@@ -226,7 +226,7 @@ public class ASCIIDocument extends Document
                               new Replace.Replacement("O", "\u00d2"),
                               new Replace.Replacement("i", "\u00ed"),
                               new Replace.Replacement("I", "\u00cd")));
-    s_actions.put(Grave.GRAVE,
+    s_actions.put(Grave.NAME,
                   new Replace(new Replace.Replacement("e", "Ã¨"),
                               new Replace.Replacement("E", "Ã"),
                               new Replace.Replacement("u", "Ã¹"),
@@ -237,34 +237,35 @@ public class ASCIIDocument extends Document
                               new Replace.Replacement("O", "Ã"),
                               new Replace.Replacement("i", "Ã¬"),
                               new Replace.Replacement("I", "Ã")));
-    s_actions.put(Par.PAR, new Delimiter("\n\n", null, null, null, null, null));
-    s_actions.put(net.ixitxachitls.output.commands.List.LIST,
+    s_actions.put(Par.NAME,
+                  new Delimiter("\n\n", null, null, null, null, null));
+    s_actions.put(net.ixitxachitls.output.commands.List.NAME,
                   new net.ixitxachitls.output.actions.ascii.List(" * "));
-    s_actions.put(Nopictures.NO_PICTURES, new Identity(1));
-    s_actions.put(Highlight.HIGHLIGHT, null);
-    s_actions.put(ID.ID, new Identity(2));
-    s_actions.put(Window.WINDOW, new Identity(1));
-    s_actions.put(Frac.FRAC, new Pattern("[[$0 ]]$1/$2"));
-    s_actions.put(net.ixitxachitls.output.commands.Footnote.FOOTNOTE,
+    s_actions.put(Nopictures.NAME, new Identity(1));
+    s_actions.put(Highlight.NAME, null);
+    s_actions.put(ID.NAME, new Identity(2));
+    s_actions.put(Window.NAME, new Identity(1));
+    s_actions.put(Frac.NAME, new Pattern("[[$0 ]]$1/$2"));
+    s_actions.put(net.ixitxachitls.output.commands.Footnote.NAME,
                   new net.ixitxachitls.output.actions.Footnote());
-    s_actions.put(Super.SUPER, new Pattern("($1)"));
-    s_actions.put(Sub.SUB, new Pattern("($1)"));
-    s_actions.put(net.ixitxachitls.output.commands.Hrule.HRULE, new Hrule());
-    s_actions.put(Navigation.NAVIGATION,    null);
-    s_actions.put(Divider.DIVIDER, new Identity(2));
-    s_actions.put(Span.SPAN, new Identity(2));
-    s_actions.put(Color.COLOR, null);
-    s_actions.put(Columns.COLUMNS, null);
-    s_actions.put(Footer.FOOTER, null);
-    s_actions.put(Linebreak.LINE_BREAK, new Delimiter("\n", null, null, null,
-                                                      null, null));
-    s_actions.put(Count.COUNT, new Pattern("$1 (max $2) $3"));
-    s_actions.put(Less.LESS, new Pattern("<"));
-    s_actions.put(Greater.GREATER, new Pattern(">"));
-    s_actions.put(Lessequal.LESS_OR_EQUAL, new Pattern("<="));
-    s_actions.put(Greaterequal.GREATER_OR_EQUAL, new Pattern(">="));
-    s_actions.put(Grouped.GROUPED, new Identity(1));
-    s_actions.put(Value.VALUE,
+    s_actions.put(Super.NAME, new Pattern("($1)"));
+    s_actions.put(Sub.NAME, new Pattern("($1)"));
+    s_actions.put(net.ixitxachitls.output.commands.Hrule.NAME, new Hrule());
+    s_actions.put(Navigation.NAME, null);
+    s_actions.put(Divider.NAME, new Identity(2));
+    s_actions.put(Span.NAME, new Identity(2));
+    s_actions.put(Color.NAME, null);
+    s_actions.put(Columns.NAME, null);
+    s_actions.put(Footer.NAME, null);
+    s_actions.put(Linebreak.NAME, new Delimiter("\n", null, null, null,
+                                                null, null));
+    s_actions.put(Count.NAME, new Pattern("$1 (max $2) $3"));
+    s_actions.put(Less.NAME, new Pattern("<"));
+    s_actions.put(Greater.NAME, new Pattern(">"));
+    s_actions.put(Lessequal.NAME, new Pattern("<="));
+    s_actions.put(Greaterequal.NAME, new Pattern(">="));
+    s_actions.put(Grouped.NAME, new Identity(1));
+    s_actions.put(Value.NAME,
                   new Pattern("\\table{f15:l;1:l}{$1}{$2}", true));
 
     s_actions.put("command", new Action());

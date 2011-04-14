@@ -58,7 +58,7 @@ public class Newpage extends BaseCommand
    */
   public Newpage()
   {
-    super(NEWPAGE, 0, 0);
+    super(NAME, 0, 0);
   }
 
   //........................................................................
@@ -68,7 +68,7 @@ public class Newpage extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a group name. */
-  public static final @Nonnull String NEWPAGE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/newpage", "newpage");
 
   //........................................................................

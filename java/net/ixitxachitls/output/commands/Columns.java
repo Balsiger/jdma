@@ -74,7 +74,7 @@ public class Columns extends BaseCommand
    */
   protected Columns()
   {
-    super(COLUMNS, 0, -1);
+    super(NAME, 0, -1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Columns extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for indentation. */
-  public static final @Nonnull String COLUMNS =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/columns", "columns");
 
   //........................................................................

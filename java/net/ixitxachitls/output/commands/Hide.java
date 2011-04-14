@@ -75,7 +75,7 @@ public class Hide extends BaseCommand
    */
   protected Hide()
   {
-    super(HIDE, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Hide extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for hide contents. */
-  public static final @Nonnull String HIDE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/hide", "hide");
 
   //........................................................................

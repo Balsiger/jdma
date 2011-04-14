@@ -89,7 +89,7 @@ public class OverlayIcon extends BaseCommand
    */
   protected OverlayIcon()
   {
-    super(OVERLAY_ICON, 1, -1);
+    super(NAME, 1, -1);
   }
 
   //........................................................................
@@ -99,7 +99,7 @@ public class OverlayIcon extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding an overlay icon. */
-  public static final String OVERLAY_ICON =
+  public static final String NAME =
     Config.get("resource:commands/icon.overlay", "overlayicon");
 
   //........................................................................

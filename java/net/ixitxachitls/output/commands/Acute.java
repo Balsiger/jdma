@@ -92,7 +92,7 @@ public class Acute extends BaseCommand
    */
   protected Acute()
   {
-    super(ACUTE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -102,7 +102,7 @@ public class Acute extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding a character with an acute. */
-  public static final String ACUTE =
+  public static final String NAME =
     Config.get("resource:commands/acute", "acute");
 
   //........................................................................

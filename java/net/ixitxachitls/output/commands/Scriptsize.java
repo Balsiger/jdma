@@ -74,7 +74,7 @@ public class Scriptsize extends BaseCommand
    */
   protected Scriptsize()
   {
-    super(SCRIPT_SIZE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Scriptsize extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for script size. */
-  public static final String SCRIPT_SIZE =
+  public static final String NAME =
     Config.get("resource:commands/scriptsize", "scriptsize");
 
   //........................................................................

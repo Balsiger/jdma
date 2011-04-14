@@ -57,7 +57,7 @@ public class Par extends BaseCommand
    */
   public Par()
   {
-    super(PAR, 0, 0);
+    super(NAME, 0, 0);
   }
 
   //........................................................................
@@ -67,7 +67,7 @@ public class Par extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for inserting a paragraph break. */
-  public static final String PAR =
+  public static final String NAME =
     Config.get("resource:commands/par", "par");
 
   //........................................................................

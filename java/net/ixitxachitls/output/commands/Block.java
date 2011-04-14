@@ -90,7 +90,7 @@ public class Block extends BaseCommand
    */
   protected Block()
   {
-    super(BLOCK, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -100,7 +100,7 @@ public class Block extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for block printing. */
-  public static final String BLOCK =
+  public static final String NAME =
     Config.get("resource:commands/block", "block");
 
   //........................................................................

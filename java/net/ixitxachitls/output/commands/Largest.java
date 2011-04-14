@@ -76,7 +76,7 @@ public class Largest extends BaseCommand
    */
   protected Largest()
   {
-    super(LARGEST, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -86,7 +86,7 @@ public class Largest extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for largest printing. */
-  public static final String LARGEST =
+  public static final String NAME =
     Config.get("resource:commands/largest", "largest");
 
   //........................................................................

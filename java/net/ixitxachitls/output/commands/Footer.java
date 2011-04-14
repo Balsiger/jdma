@@ -74,7 +74,7 @@ public class Footer extends BaseCommand
    */
   protected Footer()
   {
-    super(FOOTER, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Footer extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for footer text. */
-  public static final @Nonnull String FOOTER =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/footer", "footer");
 
   //........................................................................

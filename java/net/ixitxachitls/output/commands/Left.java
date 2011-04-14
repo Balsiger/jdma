@@ -74,7 +74,7 @@ public class Left extends BaseCommand
    */
   protected Left()
   {
-    super(LEFT, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Left extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for left aligned printing. */
-  public static final String LEFT =
+  public static final String NAME =
     Config.get("resource:commands/left", "left");
 
   //........................................................................

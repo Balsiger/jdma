@@ -75,7 +75,7 @@ public class Highlight extends BaseCommand
    */
   protected Highlight()
   {
-    super(HIGHLIGHT, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Highlight extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for highlighting special texts. */
-  public static final @Nonnull String HIGHLIGHT =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/highlight", "highlight");
 
   //........................................................................

@@ -74,7 +74,7 @@ public class Underline extends BaseCommand
    */
   protected Underline()
   {
-    super(UNDERLINE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Underline extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for underlined. */
-  public static final String UNDERLINE =
+  public static final String NAME =
     Config.get("resource:commands/underline", "underline");
 
   //........................................................................

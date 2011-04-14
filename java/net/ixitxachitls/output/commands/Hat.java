@@ -76,7 +76,7 @@ public class Hat extends BaseCommand
    */
   protected Hat()
   {
-    super(HAT, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -86,7 +86,7 @@ public class Hat extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding hatted characters. */
-  public static final String HAT =
+  public static final String NAME =
     Config.get("resource:commands/hat", "hat");
 
   //........................................................................

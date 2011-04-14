@@ -75,7 +75,7 @@ public class Button extends BaseCommand
    */
   protected Button()
   {
-    super(BUTTON, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Button extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for a button. */
-  public static final @Nonnull String BUTTON =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/button", "button");
 
   //........................................................................

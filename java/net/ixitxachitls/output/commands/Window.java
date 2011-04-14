@@ -94,7 +94,7 @@ public class Window extends BaseCommand
    */
   protected Window()
   {
-    super(WINDOW, 1, 2);
+    super(NAME, 1, 2);
   }
 
   //........................................................................
@@ -104,7 +104,7 @@ public class Window extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding a window with additional text. */
-  public static final String WINDOW =
+  public static final String NAME =
     Config.get("resource:commands/window", "window");
 
   //........................................................................

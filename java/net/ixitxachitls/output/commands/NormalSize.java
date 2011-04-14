@@ -74,7 +74,7 @@ public class NormalSize extends BaseCommand
    */
   protected NormalSize()
   {
-    super(NORMAL_SIZE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class NormalSize extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for normal sized printing. */
-  public static final String NORMAL_SIZE =
+  public static final String NAME =
     Config.get("resource:commands/normalsize", "normalsize");
 
   //........................................................................

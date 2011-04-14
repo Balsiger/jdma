@@ -91,7 +91,7 @@ public class Menu extends BaseCommand
    */
   protected Menu()
   {
-    super(MENU, 1, -1);
+    super(NAME, 1, -1);
   }
 
   //........................................................................
@@ -101,7 +101,7 @@ public class Menu extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting an id at a special position in the text. */
-  public static final @Nonnull String MENU =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/menu", "menu");
 
   //........................................................................

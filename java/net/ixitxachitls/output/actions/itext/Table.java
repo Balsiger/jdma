@@ -342,11 +342,7 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
                    + "spacing-after=\"3\" line-spacing=\"1.1\" "
                    + "keep-together=\"false\" split-late=\"false\" "
                    + "widths=\"10,20,30\">"
-                   + "<table-header border-color=\"black\" "
-                   + "border-style=\"bottom\" border-width=\"1\">"
-                   + "<cell halign=\"left\"></cell><cell halign=\"center\">"
-                   + "</cell><cell halign=\"right\"> *  * </cell>"
-                   + "</table-header><cell valign=\"top\" halign=\"left\" "
+                   + "<cell valign=\"top\" halign=\"left\" "
                    + "bgcolor=\"table-even\">first</cell>"
                    + "<cell valign=\"top\" halign=\"center\" "
                    + "bgcolor=\"table-even\">second</cell>"
@@ -427,9 +423,6 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
                    + "<cell></cell></table>",
                    doc.toString());
 
-      m_logger.addExpected("ERROR: Could not get action for 'bold'");
-      m_logger.addExpected("ERROR: Could not get action for 'bold'");
-      m_logger.addExpected("ERROR: Could not get action for 'bold'");
       m_logger.addExpected("ERROR: Could not get action for 'bold'");
       m_logger.addExpected("ERROR: Could not get action for 'bold'");
       m_logger.addExpected("ERROR: Could not get action for 'bold'");

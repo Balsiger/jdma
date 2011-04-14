@@ -99,7 +99,7 @@ public class Icon extends BaseCommand
     */
   protected Icon()
   {
-    super(ICON, 1, 3);
+    super(NAME, 1, 3);
   }
 
   //........................................................................
@@ -109,7 +109,7 @@ public class Icon extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding an icon. */
-  public static final String ICON =
+  public static final String NAME =
     Config.get("resource:commands/icon", "icon");
 
   //........................................................................

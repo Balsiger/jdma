@@ -74,7 +74,7 @@ public class Enumeration extends BaseCommand
    */
   protected Enumeration()
   {
-    super(ENUMERATION, 0, -1);
+    super(NAME, 0, -1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Enumeration extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for formatting an enumeration list. */
-  public static final @Nonnull String ENUMERATION =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/enumeration", "enumeration");
 
   //........................................................................

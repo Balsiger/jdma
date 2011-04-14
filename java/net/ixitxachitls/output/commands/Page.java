@@ -84,7 +84,7 @@ public class Page extends BaseCommand
    */
   protected Page()
   {
-    super(PAGE, 0, 7);
+    super(NAME, 0, 7);
   }
 
   //........................................................................
@@ -94,7 +94,7 @@ public class Page extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for a page. */
-  public static final @Nonnull String PAGE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/page", "page");
 
   //........................................................................

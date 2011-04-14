@@ -75,7 +75,7 @@ public class Small extends BaseCommand
    */
   protected Small()
   {
-    super(SMALL, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Small extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for small printing. */
-  public static final String SMALL =
+  public static final String NAME =
     Config.get("resource:commands/small", "small");
 
   //........................................................................

@@ -33,9 +33,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The Hrule command.
+ * The indent command.
  *
- * @file          Hrule.java
+ * @file          Indent.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -46,55 +46,35 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Hrule extends BaseCommand
+public class Indent extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //-------------------------------- Hrule ---------------------------------
+  //----------------------------- Indent -----------------------------
 
   /**
-   * The constructor for the Hrule command.
+   * The constructor for the indent command.
    *
-   * @param       inColor the color of the rule
-   * @param       inWidth the width of the rule (in % of the total width)
+   * @param       inText the text to set indent
    *
    */
-  public Hrule(@Nonnull String inColor, int inWidth)
+  public Indent(@Nonnull Object inText)
   {
-    this(inColor);
+    this();
 
-    if(inWidth <= 0)
-      throw new IllegalArgumentException("must be a positive width...");
-
-    withOptionals("" + inWidth);
+    withArguments(inText);
   }
 
   //........................................................................
-  //-------------------------------- Hrule ---------------------------------
-
-  /**
-   * This is the internal constructor for a command.
-   *
-   * @param       inColor the color of the line
-   *
-   */
-  public Hrule(@Nonnull String inColor)
-  {
-    super(NAME, 1, 1);
-
-    withArguments(inColor);
-  }
-
-  //........................................................................
-  //-------------------------------- Hrule ---------------------------------
+  //----------------------------- Indent -----------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  public Hrule()
+  protected Indent()
   {
-    this("black");
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -103,9 +83,9 @@ public class Hrule extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for formatting a horizontal rule. */
-  public static final String NAME =
-    Config.get("resource:commands/hrule", "hrule");
+  /** Command for indenting. */
+  public static final @Nonnull String NAME =
+    Config.get("resource:commands/indent", "indent");
 
   //........................................................................
 
@@ -129,14 +109,8 @@ public class Hrule extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Hrule();
-      assertEquals("setup", "\\hrule{black}", command.toString());
-
-      command = new Hrule("red");
-      assertEquals("setup", "\\hrule{red}", command.toString());
-
-      command = new Hrule("green", 20);
-      assertEquals("setup", "\\hrule[20]{green}", command.toString());
+      Command command = new Indent("text");
+      assertEquals("setup", "\\indent{text}", command.toString());
     }
 
     //......................................................................

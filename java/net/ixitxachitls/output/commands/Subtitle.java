@@ -74,7 +74,7 @@ public class Subtitle extends BaseCommand
    */
   protected Subtitle()
   {
-    super(SUBTITLE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Subtitle extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for formatting a title. */
-  public static final String SUBTITLE =
+  public static final String NAME =
     Config.get("resource:commands/subtitle", "subtitle");
 
   //........................................................................

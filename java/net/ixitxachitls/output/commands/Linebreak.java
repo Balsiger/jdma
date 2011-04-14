@@ -58,7 +58,7 @@ public class Linebreak extends BaseCommand
    */
   public Linebreak()
   {
-    super(LINE_BREAK, 0, 0);
+    super(NAME, 0, 0);
   }
 
   //........................................................................
@@ -68,7 +68,7 @@ public class Linebreak extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for inserting a simple line break. */
-  public static final @Nonnull String LINE_BREAK =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/linebreak", "linebreak");
 
   //........................................................................

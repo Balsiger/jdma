@@ -58,7 +58,7 @@ public class Less extends BaseCommand
    */
   public Less()
   {
-    super(LESS, 0, 0);
+    super(NAME, 0, 0);
   }
 
   //........................................................................
@@ -68,7 +68,7 @@ public class Less extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for printing a less sign. */
-  public static final @Nonnull String LESS =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/key.less", "less");
 
   //........................................................................

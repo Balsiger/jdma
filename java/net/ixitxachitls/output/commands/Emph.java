@@ -74,7 +74,7 @@ public class Emph extends BaseCommand
    */
   protected Emph()
   {
-    super(EMPH, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Emph extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for emphasized printing. */
-  public static final String EMPH =
+  public static final String NAME =
     Config.get("resource:commands/emph", "emph");
 
   //........................................................................

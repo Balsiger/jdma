@@ -94,7 +94,7 @@ public class Frac extends BaseCommand
    */
   protected Frac()
   {
-    super(FRAC, 1, 2);
+    super(NAME, 1, 2);
   }
 
   //........................................................................
@@ -104,7 +104,7 @@ public class Frac extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding fractions as real fraction signs. */
-  public static final String FRAC =
+  public static final String NAME =
     Config.get("resource:commands/frac", "frac");
 
   //........................................................................

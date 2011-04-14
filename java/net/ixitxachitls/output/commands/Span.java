@@ -75,7 +75,7 @@ public class Span extends BaseCommand
    */
   protected Span()
   {
-    super(SPAN, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Span extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** The command for div spans. */
-  public static final String SPAN =
+  public static final String NAME =
     Config.get("resource:commands/span", "span");
 
   //........................................................................

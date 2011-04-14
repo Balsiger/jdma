@@ -74,7 +74,7 @@ public class Huger extends BaseCommand
    */
   protected Huger()
   {
-    super(HUGER, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Huger extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for huger printing. */
-  public static final String HUGER =
+  public static final String NAME =
     Config.get("resource:commands/huger", "huger");
 
   //........................................................................

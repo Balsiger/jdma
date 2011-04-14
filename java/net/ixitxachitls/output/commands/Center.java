@@ -74,7 +74,7 @@ public class Center extends BaseCommand
    */
   protected Center()
   {
-    super(CENTER, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Center extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for centered printing. */
-  public static final String CENTER =
+  public static final String NAME =
     Config.get("resource:commands/center", "center");
 
   //........................................................................

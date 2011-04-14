@@ -78,7 +78,7 @@ public class Bold extends BaseCommand
    */
   protected Bold()
   {
-    super(BOLD, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -88,7 +88,7 @@ public class Bold extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for bold printing. */
-  public static final @Nonnull String BOLD =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/bold", "bold");
 
   //........................................................................

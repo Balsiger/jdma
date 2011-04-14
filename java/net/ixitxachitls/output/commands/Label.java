@@ -93,7 +93,7 @@ public class Label extends BaseCommand
    */
   protected Label()
   {
-    super(LABEL, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -106,7 +106,7 @@ public class Label extends BaseCommand
    * Command for adding a label (a small icon or text in front of more
    * text).
    */
-  public static final @Nonnull String LABEL =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/label", "label");
 
   //........................................................................

@@ -147,7 +147,7 @@ public class Count extends BaseCommand
     */
   protected Count()
   {
-    super(COUNT, 1, 3);
+    super(NAME, 1, 3);
   }
 
   //........................................................................
@@ -157,7 +157,7 @@ public class Count extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for counting. */
-  public static final @Nonnull String COUNT =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/count", "count");
 
   //........................................................................

@@ -74,7 +74,7 @@ public class TocEntry extends BaseCommand
    */
   protected TocEntry()
   {
-    super(TOC_ENTRY, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class TocEntry extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for a table of contents entry. */
-  public static final @Nonnull String TOC_ENTRY =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/toc", "toc");
 
   //........................................................................

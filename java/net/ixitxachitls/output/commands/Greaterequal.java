@@ -58,7 +58,7 @@ public class Greaterequal extends BaseCommand
    */
   public Greaterequal()
   {
-    super(GREATER_OR_EQUAL, 0, 0);
+    super(NAME, 0, 0);
   }
 
   //........................................................................
@@ -68,7 +68,7 @@ public class Greaterequal extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for printing a less sign. */
-  public static final @Nonnull String GREATER_OR_EQUAL =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/key.greater.equal", "greaterequal");
 
   //........................................................................

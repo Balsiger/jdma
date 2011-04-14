@@ -75,7 +75,7 @@ public class ID extends BaseCommand
    */
   protected ID()
   {
-    super(ID, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class ID extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting an id at a special position in the text. */
-  public static final String ID =
+  public static final String NAME =
     Config.get("resource:commands/id", "id");
 
   //........................................................................

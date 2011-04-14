@@ -74,7 +74,7 @@ public class List extends BaseCommand
    */
   public List()
   {
-    super(LIST, 0, -1);
+    super(NAME, 0, -1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class List extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for formatting a list. */
-  public static final @Nonnull String LIST =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/list", "list");
 
   //........................................................................

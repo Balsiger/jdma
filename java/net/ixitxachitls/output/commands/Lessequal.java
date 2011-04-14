@@ -58,7 +58,7 @@ public class Lessequal extends BaseCommand
    */
   public Lessequal()
   {
-    super(LESS_OR_EQUAL, 0, 0);
+    super(NAME, 0, 0);
   }
 
   //........................................................................
@@ -68,7 +68,7 @@ public class Lessequal extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for printing a less sign. */
-  public static final @Nonnull String LESS_OR_EQUAL =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/key.less.equal", "lessequal");
 
   //........................................................................

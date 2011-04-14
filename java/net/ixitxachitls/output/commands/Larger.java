@@ -74,7 +74,7 @@ public class Larger extends BaseCommand
    */
   protected Larger()
   {
-    super(LARGER, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Larger extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for larger printing. */
-  public static final String LARGER =
+  public static final String NAME =
     Config.get("resource:commands/larger", "larger");
 
   //........................................................................

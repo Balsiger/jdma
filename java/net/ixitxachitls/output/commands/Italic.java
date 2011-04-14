@@ -74,7 +74,7 @@ public class Italic extends BaseCommand
    */
   protected Italic()
   {
-    super(ITALIC, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Italic extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for italic. */
-  public static final @Nonnull String ITALIC =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/italic", "italic");
 
   //........................................................................

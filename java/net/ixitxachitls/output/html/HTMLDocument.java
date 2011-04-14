@@ -183,151 +183,150 @@ public class HTMLDocument extends Document
 
   static
   {
-    s_actions.put(Bold.BOLD,
+    s_actions.put(Bold.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<strong>" },
                                 new String [] { "</strong>" }, null, null));
-    s_actions.put(Underline.UNDERLINE,
+    s_actions.put(Underline.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<u>" },
                                 new String [] { "</u>" }, null, null));
-    s_actions.put(Italic.ITALIC,
+    s_actions.put(Italic.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<i>" },
                                 new String [] { "</i>" }, null, null));
-    s_actions.put(Emph.EMPH,
+    s_actions.put(Emph.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<em>" },
                                 new String [] { "</em>" }, null, null));
-    s_actions.put(SansSerif.SANS_SERIF,
+    s_actions.put(SansSerif.NAME,
                   new Delimiter(null, null,
                                 new String []
                     { "<span class=\"font-sansserif\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Serif.SERIF,
+    s_actions.put(Serif.NAME,
                   new Delimiter(null, null,
                                 new String []
                     { "<span class=\"font-serif\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Tiny.TINY,
+    s_actions.put(Tiny.NAME,
                   new Delimiter(null, null,
                               new String [] { "<span class=\"size-tiny\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Footnotesize.FOOTNOTE_SIZE,
+    s_actions.put(Footnotesize.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-footnote\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Scriptsize.SCRIPT_SIZE,
+    s_actions.put(Scriptsize.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-script\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Small.SMALL,
+    s_actions.put(Small.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-small\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(NormalSize.NORMAL_SIZE,
+    s_actions.put(NormalSize.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-normal\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Large.LARGE,
+    s_actions.put(Large.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-large\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Larger.LARGER,
+    s_actions.put(Larger.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-larger\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Largest.LARGEST,
+    s_actions.put(Largest.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-largest\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Huge.HUGE,
+    s_actions.put(Huge.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-huge\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(Huger.HUGER,
+    s_actions.put(Huger.NAME,
                   new Delimiter(null, null,
                                 new String [] { "<span "
                                                 + "class=\"size-huger\">" },
                                 new String [] { "</span>" }, null, null));
-    s_actions.put(List.LIST,
+    s_actions.put(List.NAME,
                   new Delimiter("\n<ul>\n", "\n</ul>\n",
                                 new String [] { "  <li>" },
                                 new String [] { "</li>\n" }, null, null));
-    s_actions.put(Left.LEFT,
+    s_actions.put(Left.NAME,
                   new Delimiter(null, null,
                                 new String [] { "\n<div "
                                                 + "class=\"align-left\">\n" },
                                 new String [] { "\n</div>\n"} , null, null));
-    s_actions.put(Right.RIGHT,
+    s_actions.put(Right.NAME,
                   new Delimiter(null, null,
                                 new String [] { "\n<div "
                                                 + "class=\"align-right\">\n" },
                                 new String [] { "\n</div>\n"} , null, null));
-    s_actions.put(Center.CENTER,
+    s_actions.put(Center.NAME,
                   new Delimiter(null, null,
                                 new String [] { "\n<div "
                                                 + "class=\"align-center\">\n"
                                 },
                                 new String [] { "\n</div>\n" }, null, null));
-    s_actions.put(Block.BLOCK,
+    s_actions.put(Block.NAME,
                   new Delimiter(null, null,
                                 new String [] { "\n<div "
                                                 + "class=\"align-justify\">\n"
                                 },
                                 new String [] { "\n</div>\n" }, null, null));
-    s_actions.put(net.ixitxachitls.output.commands.Table.TABLE, new Table());
-    s_actions.put(Par.PAR,
+    s_actions.put(net.ixitxachitls.output.commands.Table.NAME, new Table());
+    s_actions.put(Par.NAME,
                   new Delimiter("\n<p />\n", null, null, null, null, null));
-    s_actions.put(Linebreak.LINE_BREAK,
+    s_actions.put(Linebreak.NAME,
                   new Delimiter("<br />\n", null, null, null, null, null));
-    s_actions.put(Enumeration.ENUMERATION,
+    s_actions.put(Enumeration.NAME,
                   new Delimiter("\n<ol>\n", "\n</ol>\n",
                                 new String [] { "  <li>" },
                                 new String [] { "</li>\n" }, null, null));
-    s_actions.put(Hrule.HRULE,
+    s_actions.put(Hrule.NAME,
                   new Pattern("\n<hr[[ width=\"%1%\"]]>\n"));
-    s_actions.put(Title.TITLE,
+    s_actions.put(Title.NAME,
                   new Pattern("\n<h1[[ class=\"%1\"]]>$1</h1>"
                               + "[[<div class=\"subtitletext\">"
                               + "(%2)</div>]]\n"));
-    s_actions.put(Subtitle.SUBTITLE,
+    s_actions.put(Subtitle.NAME,
                   new Pattern("\n<h2[[ CLASS=%1]]>$1</h2>\n"));
-    s_actions.put(net.ixitxachitls.output.commands.Picture.PICTURE,
-                  new Picture(net.ixitxachitls.output.commands.Picture.PICTURE,
+    s_actions.put(net.ixitxachitls.output.commands.Picture.NAME,
+                  new Picture(net.ixitxachitls.output.commands.Picture.NAME,
                               true, true, null));
-    s_actions.put(Icon.ICON,
-                  new Picture(Icon.ICON, true, true, s_dirIcons));
-    s_actions.put(OverlayIcon.OVERLAY_ICON,
-                  new Picture(OverlayIcon.OVERLAY_ICON, true, true,
-                              s_dirIcons));
-    s_actions.put(Image.IMAGE, new Picture(Image.IMAGE, false, false, null));
-    s_actions.put(Label.LABEL,
-                  new Picture(Label.LABEL, false, false,
+    s_actions.put(Icon.NAME,
+                  new Picture(Icon.NAME, true, true, s_dirIcons));
+    s_actions.put(OverlayIcon.NAME,
+                  new Picture(OverlayIcon.NAME, true, true, s_dirIcons));
+    s_actions.put(Image.NAME, new Picture(Image.NAME, false, false, null));
+    s_actions.put(Label.NAME,
+                  new Picture(Label.NAME, false, false,
                               Config.get("resource:html/dir.labels",
                                          "/icons/labels")));
-    s_actions.put(Button.BUTTON,
+    s_actions.put(Button.NAME,
                   new Pattern("<input type='button' value='$1' "
                               + "onclick='$2' />"));
-    s_actions.put(Nopictures.NO_PICTURES, null);
-    s_actions.put(Textblock.TEXT_BLOCK,
+    s_actions.put(Nopictures.NAME, null);
+    s_actions.put(Textblock.NAME,
                   new Pattern("<div class=\"textblock %1\">$1</div>"));
-    s_actions.put(net.ixitxachitls.output.commands.Link.LINK,
-                  new Link(net.ixitxachitls.output.commands.Link.LINK, null,
+    s_actions.put(net.ixitxachitls.output.commands.Link.NAME,
+                  new Link(net.ixitxachitls.output.commands.Link.NAME, null,
                            Config.get("resource:html/extension.html", "")));
-    s_actions.put(ImageLink.IMAGE_LINK,
-                  new Link(ImageLink.IMAGE_LINK, null,
+    s_actions.put(ImageLink.NAME,
+                  new Link(ImageLink.NAME, null,
                            Config.get("resource:html/extension.html", ""),
                            true));
-    s_actions.put(Hat.HAT,
+    s_actions.put(Hat.NAME,
                   new Replace(new Replace.Replacement("u", "&ucirc;"),
                               new Replace.Replacement("U", "&Ucirc;"),
                               new Replace.Replacement("o", "&ocirc;"),
@@ -336,7 +335,7 @@ public class HTMLDocument extends Document
                               new Replace.Replacement("A", "&Acirc;"),
                               new Replace.Replacement("i", "&icirc;"),
                               new Replace.Replacement("I", "&Icirc;")));
-    s_actions.put(Umlaut.UMLAUT,
+    s_actions.put(Umlaut.NAME,
                   new Replace(new Replace.Replacement("u", "&uuml;"),
                               new Replace.Replacement("U", "&Uuml;"),
                               new Replace.Replacement("o", "&ouml;;"),
@@ -345,7 +344,7 @@ public class HTMLDocument extends Document
                               new Replace.Replacement("A", "&Auml;"),
                               new Replace.Replacement("i", "&iuml;"),
                               new Replace.Replacement("I", "&Iuml;")));
-     s_actions.put(Acute.ACUTE,
+     s_actions.put(Acute.NAME,
                    new Replace(new Replace.Replacement("e", "&eacute;"),
                                new Replace.Replacement("E", "&Eacute;"),
                                new Replace.Replacement("u", "&uacute;"),
@@ -356,7 +355,7 @@ public class HTMLDocument extends Document
                                new Replace.Replacement("O", "&Oacute;"),
                                new Replace.Replacement("i", "&iacute;"),
                                new Replace.Replacement("I", "&Iacute;")));
-     s_actions.put(Grave.GRAVE,
+     s_actions.put(Grave.NAME,
                    new Replace(new Replace.Replacement("e", "&egrave;"),
                                new Replace.Replacement("E", "&Egrave;"),
                                new Replace.Replacement("u", "&ugrave;"),
@@ -367,7 +366,7 @@ public class HTMLDocument extends Document
                                new Replace.Replacement("A", "&Agrave;"),
                                new Replace.Replacement("i", "&igrave;"),
                                new Replace.Replacement("I", "&Igrave;")));
-     s_actions.put(Window.WINDOW,
+     s_actions.put(Window.NAME,
                    new Pattern("<span onmouseover=\"document.getElementById"
                                + "('window$count').style.visibility="
                                + "'visible'\" "
@@ -377,41 +376,41 @@ public class HTMLDocument extends Document
                                + "<span id=\"window$count\" "
                                + "class=\"window\">"
                                + "$2</span>"));
-     s_actions.put(net.ixitxachitls.output.commands.Frac.FRAC, new Frac());
-     s_actions.put(Highlight.HIGHLIGHT,
+     s_actions.put(net.ixitxachitls.output.commands.Frac.NAME, new Frac());
+     s_actions.put(Highlight.NAME,
                    new Pattern("<span onmouseover=\"gui.addAllStyle"
                                + "('highlight-$1', 'highlight-attachment')\" "
                                + "onmouseout=\"gui.removeAllStyle"
                                + "('highlight-$1', 'highlight-attachment')\">"
                                + "$2</span>"));
-     s_actions.put(ID.ID, new Pattern("<span id=\"$1\">$2</span>"));
-     s_actions.put(Super.SUPER, new Pattern("<sup>$1</sup>"));
-     s_actions.put(Sub.SUB, new Pattern("<sub>$1</sub>"));
-     s_actions.put(net.ixitxachitls.output.commands.Footnote.FOOTNOTE,
+     s_actions.put(ID.NAME, new Pattern("<span id=\"$1\">$2</span>"));
+     s_actions.put(Super.NAME, new Pattern("<sup>$1</sup>"));
+     s_actions.put(Sub.NAME, new Pattern("<sub>$1</sub>"));
+     s_actions.put(net.ixitxachitls.output.commands.Footnote.NAME,
                    new net.ixitxachitls.output.actions.Footnote());
-     s_actions.put(net.ixitxachitls.output.commands.Navigation.NAVIGATION,
+     s_actions.put(net.ixitxachitls.output.commands.Navigation.NAME,
                    new Navigation(Config.get("resource:html/dir.icons",
                                              "/icons")));
-     s_actions.put(net.ixitxachitls.output.commands.Menu.MENU,
+     s_actions.put(net.ixitxachitls.output.commands.Menu.NAME,
                    new Menu(Config.get("resource:html/dir.icons", "/icons")));
-     s_actions.put(Card.CARD,
+     s_actions.put(Card.NAME,
                    new Pattern("<div class=\"card card-$1\" id=\"$2\">"
                                + "$3</div>\n\n"));
-     s_actions.put(Color.COLOR,
+     s_actions.put(Color.NAME,
                    new Pattern("<span class=\"$1\">$2</span>"));
-     s_actions.put(Divider.DIVIDER,
+     s_actions.put(Divider.NAME,
                    new Pattern("<div [[id=\"%1\" ]]class=\"$1\">$2</div>"));
-     s_actions.put(Span.SPAN,
+     s_actions.put(Span.NAME,
                    new Pattern("<span class=\"$1\">$2</span>"));
      s_actions.put
-       (net.ixitxachitls.output.commands.WordUpperCase.WORD_UPPERCASE,
+       (net.ixitxachitls.output.commands.WordUpperCase.NAME,
         new WordUpperCase());
-     s_actions.put(Columns.COLUMNS,
+     s_actions.put(Columns.NAME,
                    new Delimiter("<table class=\"columns\"><tr>\n",
                                  "</tr></table>\n",
                                  new String [] { "<td>" },
                                  new String [] { "</td>\n" }, null, null));
-     s_actions.put(Hidden.HIDDEN,
+     s_actions.put(Hidden.NAME,
                    new Pattern("<span class=\"hidden-label\" "
                                + "onmouseup=\"toggle(document.getElementById"
                                + "('hidden-$count'))\" "
@@ -419,19 +418,18 @@ public class HTMLDocument extends Document
                                + "$1</span><br />"
                                + "<div class=\"hidden-text\" "
                                + "id=\"hidden-$count\">$2</div>"));
-     s_actions.put(Hide.HIDE,
+     s_actions.put(Hide.NAME,
                    new Pattern("<span style='display:none;' id='$1'>$2</span"));
-     s_actions.put(net.ixitxachitls.output.commands.Footer.FOOTER,
-                   new Footer());
-     s_actions.put(Count.COUNT, new Pattern("$1 (max $2) $3"));
-     s_actions.put(Less.LESS, new Pattern("&lt;"));
-     s_actions.put(Greater.GREATER, new Pattern("&gt;"));
-     s_actions.put(Lessequal.LESS_OR_EQUAL, new Pattern("&lt;="));
-     s_actions.put(Greaterequal.GREATER_OR_EQUAL, new Pattern("&gt;="));
-     s_actions.put(net.ixitxachitls.output.commands.Verbatim.VERBATIM,
+     s_actions.put(net.ixitxachitls.output.commands.Footer.NAME, new Footer());
+     s_actions.put(Count.NAME, new Pattern("$1 (max $2) $3"));
+     s_actions.put(Less.NAME, new Pattern("&lt;"));
+     s_actions.put(Greater.NAME, new Pattern("&gt;"));
+     s_actions.put(Lessequal.NAME, new Pattern("&lt;="));
+     s_actions.put(Greaterequal.NAME, new Pattern("&gt;="));
+     s_actions.put(net.ixitxachitls.output.commands.Verbatim.NAME,
                    new Verbatim());
-     s_actions.put(TocEntry.TOC_ENTRY, null);
-     s_actions.put(Page.PAGE,
+     s_actions.put(TocEntry.NAME, null);
+     s_actions.put(Page.NAME,
                    new Pattern("<div class=\"align-center\">$2<div>\n"
                                + "<div class=\"main\" id=\"main\">"
                                + "$1\n\n" // title
@@ -441,9 +439,9 @@ public class HTMLDocument extends Document
                                + "$6" // text
                                + "$7" // remarks
                                + "</div>", true));
-     s_actions.put(Newpage.NEWPAGE, null);
-     s_actions.put(Grouped.GROUPED, new Pattern("$1##$2##$3##"));
-     s_actions.put(Editable.EDITABLE,
+     s_actions.put(Newpage.NAME, null);
+     s_actions.put(Grouped.NAME, new Pattern("$1##$2##$3##"));
+     s_actions.put(Editable.NAME,
                    new Pattern("<dmaeditable key=\"$4\" "
                                + "value=\"$html((@5))\" "
                                + "id=\"$1\" class=\"editable\" "
@@ -452,11 +450,12 @@ public class HTMLDocument extends Document
                                + "[[ values=\"$html((%2))\"]]>"
                                + "<span>$3</span>"
                                + "</dmaeditable>", false));
-     s_actions.put(Script.SCRIPT,
+     s_actions.put(Script.NAME,
                    new Pattern("\n<script type='text/javascript'>$1"
                                + "</script>\n"));
-     s_actions.put(Value.VALUE,
+     s_actions.put(Value.NAME,
                    new Pattern("<div class=\"value\">$1$2</div>"));
+
      s_actions.put("command", new Action());
      s_actions.put("baseCommand", new Action());
   }

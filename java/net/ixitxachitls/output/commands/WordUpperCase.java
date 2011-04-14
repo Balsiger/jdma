@@ -74,7 +74,7 @@ public class WordUpperCase extends BaseCommand
    */
   protected WordUpperCase()
   {
-    super(WORD_UPPERCASE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class WordUpperCase extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for word uppercase text. */
-  public static final @Nonnull String WORD_UPPERCASE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/worduppercase", "worduppercase");
 
   //........................................................................

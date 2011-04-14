@@ -95,7 +95,7 @@ public class Divider extends BaseCommand
    */
   protected Divider()
   {
-    super(DIVIDER, 1, 2);
+    super(NAME, 1, 2);
   }
 
   //........................................................................
@@ -105,7 +105,7 @@ public class Divider extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a divider. */
-  public static final String DIVIDER =
+  public static final String NAME =
     Config.get("resource:commands/divider", "divider");
 
   //........................................................................

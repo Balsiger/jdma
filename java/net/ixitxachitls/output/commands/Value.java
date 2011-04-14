@@ -75,7 +75,7 @@ public class Value extends BaseCommand
    */
   protected Value()
   {
-    super(VALUE, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Value extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for value printing. */
-  public static final @Nonnull String VALUE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/value", "value");
 
   //........................................................................

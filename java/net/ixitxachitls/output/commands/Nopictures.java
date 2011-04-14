@@ -74,7 +74,7 @@ public class Nopictures extends BaseCommand
    */
   protected Nopictures()
   {
-    super(NO_PICTURES, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Nopictures extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for formatting text for channels without picture support. */
-  public static final @Nonnull String NO_PICTURES =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/nopictures", "nopictures");
 
   //........................................................................

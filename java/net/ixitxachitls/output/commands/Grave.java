@@ -74,7 +74,7 @@ public class Grave extends BaseCommand
    */
   protected Grave()
   {
-    super(GRAVE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Grave extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding a character with an acute. */
-  public static final @Nonnull String GRAVE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/grave", "grave");
 
   //........................................................................

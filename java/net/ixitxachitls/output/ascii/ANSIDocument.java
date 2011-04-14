@@ -160,20 +160,20 @@ public class ANSIDocument extends ASCIIDocument
 
   static
   {
-    s_actions.put(Bold.BOLD,
+    s_actions.put(Bold.NAME,
                   new Delimiter(null, null,
                                 new String [] { s_bold },
                                 new String [] { s_unbold }, null, null));
-    s_actions.put(Emph.EMPH,
+    s_actions.put(Emph.NAME,
                   new Delimiter(null, null,
                                 new String [] { s_red },
                                 new String [] { s_black }, null, null));
-    s_actions.put(Underline.UNDERLINE,
+    s_actions.put(Underline.NAME,
                   new Delimiter(null, null,
                                 new String [] { s_underline },
                                 new String [] { s_ununderline },
                                 null, null));
-    s_actions.put(Title.TITLE, new Multi(new Action []
+    s_actions.put(Title.NAME, new Multi(new Action []
       {
         new Align(Buffer.Alignment.center),
         new Delimiter(null, null,

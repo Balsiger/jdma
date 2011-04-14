@@ -74,7 +74,7 @@ public class Sub extends BaseCommand
    */
   protected Sub()
   {
-    super(SUB, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Sub extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting an id at a special position in the text. */
-  public static final String SUB =
+  public static final String NAME =
     Config.get("resource:commands/sub", "sub");
 
   //........................................................................

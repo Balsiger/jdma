@@ -100,7 +100,7 @@ public class Picture extends BaseCommand
    */
   protected Picture()
   {
-    super(PICTURE, 2, -1);
+    super(NAME, 2, -1);
   }
 
   //........................................................................
@@ -110,7 +110,7 @@ public class Picture extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding a picture. */
-  public static final @Nonnull String PICTURE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/picture", "picture");
 
   //........................................................................

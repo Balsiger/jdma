@@ -77,7 +77,7 @@ public class Grouped extends BaseCommand
    */
   protected Grouped()
   {
-    super(GROUPED, 0, 3);
+    super(NAME, 0, 3);
   }
 
   //........................................................................
@@ -87,7 +87,7 @@ public class Grouped extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for a table of contents entry. */
-  public static final String GROUPED =
+  public static final String NAME =
     Config.get("resource:commands/grouped", "grouped");
 
   //........................................................................

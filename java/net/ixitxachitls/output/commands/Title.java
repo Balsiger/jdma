@@ -111,7 +111,7 @@ public class Title extends BaseCommand
     */
   protected Title()
   {
-    super(TITLE, 2, 1);
+    super(NAME, 2, 1);
   }
 
   //........................................................................
@@ -121,7 +121,7 @@ public class Title extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for formatting a title. */
-  public static final String TITLE =
+  public static final String NAME =
     Config.get("resource:commands/title", "title");
 
   //........................................................................

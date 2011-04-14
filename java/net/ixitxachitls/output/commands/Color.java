@@ -75,7 +75,7 @@ public class Color extends BaseCommand
    */
   protected Color()
   {
-    super(COLOR, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Color extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a group name. */
-  public static final @Nonnull String COLOR =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/color", "color");
 
   //........................................................................

@@ -74,7 +74,7 @@ public class Serif extends BaseCommand
    */
   protected Serif()
   {
-    super(SERIF, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Serif extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for sans serif. */
-  public static final @Nonnull String SERIF =
+  public static final @Nonnull String NAME =
      Config.get("resource:commands/sansserif", "serif");
 
   //........................................................................

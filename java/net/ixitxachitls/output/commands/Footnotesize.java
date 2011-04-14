@@ -74,7 +74,7 @@ public class Footnotesize extends BaseCommand
    */
   protected Footnotesize()
   {
-    super(FOOTNOTE_SIZE, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Footnotesize extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for footnote size. */
-  public static final String FOOTNOTE_SIZE =
+  public static final String NAME =
     Config.get("resource:commands/footnotesize", "footnotesize");
 
   //........................................................................

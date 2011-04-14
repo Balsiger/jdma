@@ -110,7 +110,7 @@ public class Link extends BaseCommand
    */
   protected Link()
   {
-    super(LINK, 2, 1);
+    super(NAME, 2, 1);
   }
 
   //........................................................................
@@ -120,7 +120,7 @@ public class Link extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding a link to another file or position to the text. */
-  public static final String LINK =
+  public static final String NAME =
     Config.get("resource:commands/link", "link");
 
   //........................................................................

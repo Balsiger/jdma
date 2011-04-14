@@ -94,7 +94,7 @@ public class ImageLink extends BaseCommand
    */
   protected ImageLink()
   {
-    super(IMAGE_LINK, 1, 2);
+    super(NAME, 1, 2);
   }
 
   //........................................................................
@@ -104,7 +104,7 @@ public class ImageLink extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding a link to another file or position to the text. */
-  public static final String IMAGE_LINK =
+  public static final String NAME =
     Config.get("resource:commands/image.link", "imagelink");
 
   //........................................................................

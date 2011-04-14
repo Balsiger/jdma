@@ -74,7 +74,7 @@ public class Verbatim extends BaseCommand
    */
   protected Verbatim()
   {
-    super(VERBATIM, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Verbatim extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for verbatim printing. */
-  public static final @Nonnull String VERBATIM =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/verbatim", "verbatim");
 
   //........................................................................

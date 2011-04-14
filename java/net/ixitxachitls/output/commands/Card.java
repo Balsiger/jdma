@@ -77,7 +77,7 @@ public class Card extends BaseCommand
    */
   protected Card()
   {
-    super(CARD, 0, 3);
+    super(NAME, 0, 3);
   }
 
   //........................................................................
@@ -87,7 +87,7 @@ public class Card extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for centered printing. */
-  public static final String CARD =
+  public static final String NAME =
     Config.get("resource:commands/card", "card");
 
   //........................................................................

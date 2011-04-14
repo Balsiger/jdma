@@ -74,7 +74,7 @@ public class Right extends BaseCommand
    */
   protected Right()
   {
-    super(RIGHT, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Right extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for right aligned printing. */
-  public static final String RIGHT =
+  public static final String NAME =
     Config.get("resource:commands/right", "right");
 
   //........................................................................

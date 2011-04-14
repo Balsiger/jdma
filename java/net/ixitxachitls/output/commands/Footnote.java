@@ -91,7 +91,7 @@ public class Footnote extends BaseCommand
    */
   protected Footnote()
   {
-    super(FOOTNOTE, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -101,7 +101,7 @@ public class Footnote extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for inserting a paragraph break. */
-  public static final String FOOTNOTE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/footnote", "footnote");
 
   //........................................................................

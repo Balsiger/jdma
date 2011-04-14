@@ -74,7 +74,7 @@ public class Script extends BaseCommand
    */
   protected Script()
   {
-    super(SCRIPT, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Script extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for bold printing. */
-  public static final @Nonnull String SCRIPT =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/script", "script");
 
   //........................................................................

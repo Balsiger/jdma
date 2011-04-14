@@ -92,7 +92,7 @@ public class Textblock extends BaseCommand
    */
   protected Textblock()
   {
-    super(TEXT_BLOCK, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -102,7 +102,7 @@ public class Textblock extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for adding a text block. */
-  public static final String TEXT_BLOCK =
+  public static final String NAME =
     Config.get("resource:commands/textblock", "textblock");
 
   //........................................................................

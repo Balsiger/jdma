@@ -79,7 +79,7 @@ public class Navigation extends BaseCommand
    */
   protected Navigation()
   {
-    super(NAVIGATION, 1, -1);
+    super(NAME, 1, -1);
   }
 
   //........................................................................
@@ -89,7 +89,7 @@ public class Navigation extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting an id at a special position in the text. */
-  public static final @Nonnull String NAVIGATION =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/navigation", "navigation");
 
   //........................................................................

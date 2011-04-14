@@ -74,7 +74,7 @@ public class Tiny extends BaseCommand
    */
   protected Tiny()
   {
-    super(TINY, 0, 1);
+    super(NAME, 0, 1);
   }
 
   //........................................................................
@@ -84,7 +84,7 @@ public class Tiny extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for tiny. */
-  public static final String TINY =
+  public static final String NAME =
     Config.get("resource:commands/tiny", "tiny");
 
   //........................................................................

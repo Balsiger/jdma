@@ -245,7 +245,7 @@ public class Table extends BaseCommand
    */
   protected Table()
   {
-    super(TABLE, 1, -1);
+    super(NAME, 1, -1);
   }
 
   //........................................................................
@@ -255,7 +255,7 @@ public class Table extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for formatting tables. */
-  public static final String TABLE =
+  public static final String NAME =
     Config.get("resource:commands/table", "table");
 
   //........................................................................

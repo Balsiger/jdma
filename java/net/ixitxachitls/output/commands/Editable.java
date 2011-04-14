@@ -140,7 +140,7 @@ public class Editable extends BaseCommand
    */
   protected Editable()
   {
-    super(EDITABLE, 2, 6);
+    super(NAME, 2, 6);
   }
 
   //........................................................................
@@ -150,7 +150,7 @@ public class Editable extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for an editable value. */
-  public static final @Nonnull String EDITABLE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/editable", "editable");
 
   //........................................................................

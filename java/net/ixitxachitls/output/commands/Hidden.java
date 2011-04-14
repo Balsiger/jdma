@@ -75,7 +75,7 @@ public class Hidden extends BaseCommand
    */
   protected Hidden()
   {
-    super(HIDDEN, 0, 2);
+    super(NAME, 0, 2);
   }
 
   //........................................................................
@@ -85,7 +85,7 @@ public class Hidden extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for hidden text. */
-  public static final String HIDDEN =
+  public static final String NAME =
     Config.get("resource:commands/hidden", "hidden");
 
   //........................................................................
