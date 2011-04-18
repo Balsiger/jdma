@@ -97,7 +97,9 @@
     <pathelement location="${lib.dir}/test/easymock-3.0.jar" />
     <pathelement location="${lib.dir}/test/test.jar" />
     <!-- itext -->
-    <pathelement location="${lib.dir}/iText-5.0.6.jar" />
+    <!-- not compatible with ujac
+    <pathelement location="${lib.dir}/iText-5.0.6.jar" /> -->
+    <pathelement location="${lib.dir}/iText.jar" />
     <pathelement location="${lib.dir}/ujac.jar" />
     <pathelement location="${lib.dir}/commons-logging-1.1.1.jar" />
     <!-- jetty -->
