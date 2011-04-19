@@ -94,7 +94,7 @@ public class NPC extends BaseCommand
    */
   protected NPC()
   {
-    super(NPC, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -104,7 +104,7 @@ public class NPC extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting an NPC name. */
-  public static final @Nonnull String NPC =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/NPC", "NPC");
 
   //........................................................................

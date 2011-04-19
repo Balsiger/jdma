@@ -93,7 +93,7 @@ public class Event extends BaseCommand
    */
   protected Event()
   {
-    super(EVENT, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -103,7 +103,7 @@ public class Event extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a group name. */
-  public static final @Nonnull String EVENT =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/Event", "Event");
 
   //........................................................................

@@ -42,6 +42,11 @@
   </Match>
 
   <Match>
+    <Class name="~net\.ixitxachitls\.dma\.output\.pdf\.ITextDocument.*" />
+    <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
+  </Match>
+
+  <Match>
     <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AbstractEntryServlet.*" />
     <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
   </Match>
@@ -52,7 +57,10 @@
     <Bug pattern="MSF_MUTABLE_SERVLET_FIELD, MTIA_SUSPECT_SERVLET_INSTANCE_FIELD" />
   </Match>
 
-
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.output\.pdf\.PDFDocument\$Test.*" />
+    <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH" />
+  </Match>
 
 </FindBugsFilter>
 

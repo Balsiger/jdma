@@ -94,7 +94,7 @@ public class Spell extends BaseCommand
    */
   protected Spell()
   {
-    super(SPELL, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -104,7 +104,7 @@ public class Spell extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a group name. */
-  public static final @Nonnull String SPELL =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/Spell", "Spell");
 
   //........................................................................

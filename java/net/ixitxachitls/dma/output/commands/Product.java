@@ -93,7 +93,7 @@ public class Product extends BaseCommand
    */
   protected Product()
   {
-    super(PRODUCT, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -103,7 +103,7 @@ public class Product extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a product name. */
-  public static final @Nonnull String PRODUCT =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/Product", "Product");
 
   //........................................................................

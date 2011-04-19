@@ -93,7 +93,7 @@ public class Skill extends BaseCommand
    */
   protected Skill()
   {
-    super(SKILL, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -103,7 +103,7 @@ public class Skill extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a group name. */
-  public static final @Nonnull String SKILL =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/Skill", "Skill");
 
   //........................................................................

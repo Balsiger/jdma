@@ -49,6 +49,7 @@
   <property name="warnings.deprecation" value="on"         />
   <property name="check.dir"          value="${source.dir}/net/ixitxachitls/" />
   <property name="test.classes"         value="**/*$Test.class" />
+  <property name="bugs.classes"         value="${classes.dir}" />
 
   <!-- for checkstyle -->
   <path id="checkstyle.classpath">
@@ -402,7 +403,7 @@
         <path refid="classpath" />
       </auxClasspath>
       <sourcePath path="${source.dir}" />
-      <class location="${classes.dir}" />
+      <class location="${bugs.classes}" />
     </findbugs>
   </target>
 

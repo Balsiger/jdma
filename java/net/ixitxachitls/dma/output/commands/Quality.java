@@ -93,7 +93,7 @@ public class Quality extends BaseCommand
    */
   protected Quality()
   {
-    super(QUALITY, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -103,7 +103,7 @@ public class Quality extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a group name. */
-  public static final @Nonnull String QUALITY =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/Quality", "Quality");
 
   //........................................................................

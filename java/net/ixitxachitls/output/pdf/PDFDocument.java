@@ -129,15 +129,29 @@ public class PDFDocument extends ITextDocument
    */
   public boolean save(@Nonnull String inFileName)
   {
+    FileOutputStream output = null;
     try
     {
-      write(new FileOutputStream(inFileName));
+      output = new FileOutputStream(inFileName);
+      write(output);
     }
     catch(java.io.IOException e)
     {
       Log.warning("cannot write to '" + inFileName + "': " + e);
 
       return false;
+    }
+    finally
+    {
+      try
+      {
+        if(output != null)
+          output.close();
+      }
+      catch(java.io.IOException e)
+      {
+        Log.warning("cannot close output to '" + inFileName + "': " + e);
+      }
     }
 
     Log.info("wrote file '" + inFileName + "'");
@@ -369,9 +383,14 @@ public class PDFDocument extends ITextDocument
     //......................................................................
     //----- save -----------------------------------------------------------
 
-    /** Test saving of a document. */
+    /**
+     * Test saving of a document.
+     *
+     * @throws Exception should not happen
+     *
+     */
     @org.junit.Test
-    public void save()
+    public void save() throws Exception
     {
       PDFDocument doc = new PDFDocument("title");
 
@@ -379,6 +398,7 @@ public class PDFDocument extends ITextDocument
       doc.add(new net.ixitxachitls.output.commands
               .Left("This is just some test file"));
 
+      java.io.BufferedReader reader = null;
       try
       {
         // save to a temp file
@@ -386,19 +406,19 @@ public class PDFDocument extends ITextDocument
 
         assertTrue("save", doc.save(tmp.getPath()));
 
-        java.io.BufferedReader reader =
-          new java.io
-          .BufferedReader(new java.io
-                         .InputStreamReader(new java.io.FileInputStream(tmp)));
+        reader = new java.io.BufferedReader
+        (new java.io.InputStreamReader(new java.io.FileInputStream(tmp)));
 
         assertEquals("text", "%PDF-1.4", reader.readLine());
-        assertEquals("text", "%", reader.readLine().substring(0, 1));
+        String line = reader.readLine();
+        assertNotNull(line);
+        assertEquals("text", "%", line.substring(0, 1));
 
-        tmp.delete();
+        assertTrue("delete", tmp.delete());
       }
-      catch(Exception e)
+      finally
       {
-        fail("exception: " + e);
+        reader.close();
       }
     }
 

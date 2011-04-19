@@ -93,7 +93,7 @@ public class Place extends BaseCommand
    */
   protected Place()
   {
-    super(PLACE, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -103,7 +103,7 @@ public class Place extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a place name. */
-  public static final @Nonnull String PLACE =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/Place", "Place");
 
   //........................................................................

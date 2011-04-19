@@ -93,7 +93,7 @@ public class Monster extends BaseCommand
    */
   protected Monster()
   {
-    super(MONSTER, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -103,7 +103,7 @@ public class Monster extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a monster name. */
-  public static final @Nonnull String MONSTER =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/Monster", "Monster");
 
   //........................................................................

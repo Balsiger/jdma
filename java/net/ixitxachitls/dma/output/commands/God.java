@@ -93,7 +93,7 @@ public class God extends BaseCommand
    */
   protected God()
   {
-    super(GOD, 1, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................
@@ -103,7 +103,7 @@ public class God extends BaseCommand
   //-------------------------------------------------------------- variables
 
   /** Command for setting a group name. */
-  public static final @Nonnull String GOD =
+  public static final @Nonnull String NAME =
     Config.get("resource:commands/God", "God");
 
   //........................................................................
