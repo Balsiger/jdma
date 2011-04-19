@@ -333,6 +333,9 @@ public class DMAServer extends WebServer
 //        "/entry/*");
 
     // users
+//     m_rootContext.addServlet
+//       (new ServletHolder(new net.ixitxachitls.dma.server.servlets.PDFServlet
+//                          ()), "/guru");
     m_rootContext.addServlet
       (new ServletHolder(new TypedEntryServlet<BaseCharacter>
                          (BaseCharacter.TYPE, "/user/", m_users)

@@ -258,16 +258,10 @@ public abstract class AbstractEntryServlet extends PageServlet
     }
 
     boolean dma = false;
-    boolean pdf = false;
     boolean txt = false;
     if(inPath.endsWith(".dma"))
     {
       dma = true;
-      inPath = inPath.substring(0, inPath.length() - 4);
-    }
-    else if(inPath.endsWith(".pdf"))
-    {
-      pdf = true;
       inPath = inPath.substring(0, inPath.length() - 4);
     }
     else if(inPath.endsWith(".txt"))
@@ -366,33 +360,30 @@ public abstract class AbstractEntryServlet extends PageServlet
                                                       ? " disabled" : ""), ""),
                                        last == null ? "" : getPath(last))));
 
-    if(!pdf)
-      document.add(navigation);
+    document.add(navigation);
 
     boolean dm = entry.isDM(inRequest.getUser());
 
-    if(pdf)
-      ;
-    else if(dma && dm)
+    if(dma && dm)
       document.add(new Divider("dma-formatted",
                                new Verbatim(entry.toString())));
-    else if(txt)
-    {
-      ASCIIDocument doc = new ASCIIDocument(80);
-      doc.add(entry.printPage(dm));
-      document.add(new Divider("text-formatted",
-                               new Verbatim(doc.toString())));
-    }
     else
-      document.add(entry.printPage(dm));
+      if(txt)
+      {
+        ASCIIDocument doc = new ASCIIDocument(80);
+        doc.add(entry.printPage(dm));
+        document.add(new Divider("text-formatted",
+                                 new Verbatim(doc.toString())));
+      }
+      else
+        document.add(entry.printPage(dm));
 
-    if(!pdf)
-      document.add(navigation);
+    document.add(navigation);
 
     inWriter.add(document.toString());
 
     // add some javascript for the entry
-    if(!pdf && !dma && !txt)
+    if(!dma && !txt)
       inWriter.script("$(document).ready(function ()",
                       "{",
                       "  $('DIV.files IMG.image')"

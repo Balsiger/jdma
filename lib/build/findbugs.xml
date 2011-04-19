@@ -62,5 +62,11 @@
     <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH" />
   </Match>
 
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AbstractEntryPDFServlet.*" />
+    <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+  </Match>
+
+
 </FindBugsFilter>
 
