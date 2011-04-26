@@ -174,7 +174,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
-    new Print("$mainimage $title "
+    new Print("$title "
               + "${as pdf} ${as text} ${as dma}"
               + "$clear $files\n " // need to start a new line for ascii
               + "%name "

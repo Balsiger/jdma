@@ -126,7 +126,7 @@ public class Text extends BaseText<Text>
   //------------------------------- doToString ------------------------------
 
   /**
-   * Convert the value to a string, depending on the given kind.
+   * Convert the value to a string.
    *
    * @return      a String representation, depending on the kind given
    *

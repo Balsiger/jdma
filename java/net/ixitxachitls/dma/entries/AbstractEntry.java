@@ -70,7 +70,6 @@ import net.ixitxachitls.output.commands.Image;
 import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Linebreak;
 //import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.output.commands.Picture;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
@@ -1574,18 +1573,18 @@ public class AbstractEntry extends ValueGroup
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
     if("title".equals(inKey))
-      return new FormattedValue(new Title(computeValue("name", inDM)
-                                          .format(this, inDM, false),
-                                          "entrytitle"),
+      return new FormattedValue(new Title
+                                (new Command
+                                 (new Image(DMAFiles.mainImage
+                                            (getID(),
+                                             getType().getMultipleDir()),
+                                            "main-image"),
+                                  " ",
+                                  computeValue("name", inDM)
+                                  .format(this, inDM, false)),
+                                  "entrytitle"),
                                 "title", false, false, false, false, "titles",
                                 "");
-
-    if("mainimage".equals(inKey))
-      return new FormattedValue
-        (new Divider("mainimage",
-                     new Image(DMAFiles.mainImage(getID(),
-                                                  getType().getMultipleDir()))),
-         "mainimage", false, false, false, false, "mainimages", "");
 
     if("clear".equals(inKey))
       // we need a non empty string here, because when parsing trailing empty
@@ -1600,9 +1599,9 @@ public class AbstractEntry extends ValueGroup
       for(String file
             : DMAFiles.otherFiles(getID(), getType().getMultipleDir()))
         if(Files.isImage(file))
-          commands.add(new Image(file));
+          commands.add(new Image(file, "other-image"));
         else if(Files.isPDF(file))
-          commands.add(new Picture("/icons/pdf.png", "", file));
+          commands.add(new ImageLink("/icons/pdf.png", file));
         else
           Log.warning("unknown file '" + file + "' ignored");
 

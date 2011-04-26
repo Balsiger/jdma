@@ -71,15 +71,15 @@ public class Image extends BaseCommand
   /**
    * The constructor for the icon command.
    *
-   * @param       inName    the file name of the image (without extension)
-   * @param       inDefault the file name of the default image
+   * @param       inName  the file name of the image (without extension)
+   * @param       inStyle the style for formatting the image
    *
    */
-  public Image(@Nonnull Object inName, @Nonnull Object inDefault)
+  public Image(@Nonnull Object inName, @Nonnull Object inStyle)
   {
     this(inName);
 
-    withOptionals(inDefault);
+    withOptionals(inStyle);
   }
 
   //........................................................................

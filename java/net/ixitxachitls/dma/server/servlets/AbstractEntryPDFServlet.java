@@ -136,13 +136,13 @@ public abstract class AbstractEntryPDFServlet extends PDFServlet
    */
   protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
   {
-    String path = inRequest.getPathInfo();
+    String path = inRequest.getRequestURI();
     if(path == null)
     {
       PDFDocument document = new PDFDocument("Error: Not Found");
 
       document.add(new Title("Invalid Reference"));
-      document.add(new Left("The page references does not exist!"));
+      document.add(new Left("The page referenced does not exist!"));
 
       return document;
     }
@@ -166,7 +166,7 @@ public abstract class AbstractEntryPDFServlet extends PDFServlet
     PDFDocument document = new PDFDocument(title);
 
     boolean dm = entry.isDM(inRequest.getUser());
-    document.add(new Left(entry.printPage(dm)));
+    document.add(entry.printPage(dm));
 
     return document;
   }

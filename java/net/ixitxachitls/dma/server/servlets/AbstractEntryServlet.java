@@ -253,6 +253,7 @@ public abstract class AbstractEntryServlet extends PageServlet
       inWriter.title("Not Found")
         .begin("h1").add("Invalid Reference").end("h1")
         .add("The page referenced does not exist!");
+      Log.warning("no path given for request");
 
       return;
     }

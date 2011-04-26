@@ -161,7 +161,8 @@ public class Print
               value = new Color("error", " * unknown * ");
 
             if(value != null)
-              result.add(new Value(label, new Divider("value-content", value)));
+              result.add(new Value(inEntry.getType().getClassName(),  label,
+                                   new Divider("value-content", value)));
 
             break;
 

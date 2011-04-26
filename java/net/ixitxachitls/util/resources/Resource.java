@@ -152,9 +152,6 @@ public abstract class Resource
         return preset;
     }
 
-    if(!name.startsWith("/"))
-      name = "/" + name;
-
     URL url = Resource.class.getResource(Files.concatenate("/", name));
     String protocol = url != null ? url.getProtocol() : null;
 

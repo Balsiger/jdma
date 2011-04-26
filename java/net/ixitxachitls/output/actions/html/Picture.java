@@ -185,12 +185,17 @@ public class Picture extends Action
       overlays.append("<img src='" + src + "' class='overlay " + css + "'/>");
     }
 
-    String highlight;
+
+    String style = "";
     if(inOptionals != null && !inOptionals.isEmpty())
-      highlight = " onmouseover=\"gui.iconHighlight(this);\" "
-        + "onmouseout=\"gui.iconNormal(this);\"";
-    else
-      highlight = "";
+    {
+      style = inDocument.convert(inOptionals.get(0));
+      if(style.equals("highlight"))
+        style = "\" onmouseover=\"gui.iconHighlight(this);\" "
+          + "onmouseout=\"gui.iconNormal(this);";
+      else
+        style = " " + style;
+    }
 
     if(m_caption)
     {
@@ -229,8 +234,8 @@ public class Picture extends Action
     inDocument.add(Files.file(target));
     inDocument.add("\" class=\"");
     inDocument.add(m_class);
+    inDocument.add(style);
     inDocument.add("\"");
-    inDocument.add(highlight);
     if(thumbnail && !m_link)
       inDocument.add(" onclick=\"util.link(event, '"
                      + Files.concatenate(m_subDir, Files.encodeName(target))

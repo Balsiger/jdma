@@ -131,7 +131,7 @@ public class PageServlet extends DMAServlet
 
     boolean bodyOnly = inRequest.isBodyOnly();
 
-    String path = inRequest.getPathInfo();
+    String path = inRequest.getRequestURI();
     HTMLWriter writer;
     if(bodyOnly)
       writer =

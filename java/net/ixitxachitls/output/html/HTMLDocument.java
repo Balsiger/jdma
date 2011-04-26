@@ -454,7 +454,7 @@ public class HTMLDocument extends Document
                    new Pattern("\n<script type='text/javascript'>$1"
                                + "</script>\n"));
      s_actions.put(Value.NAME,
-                   new Pattern("<div class=\"value\">$1$2</div>"));
+                   new Pattern("<div class=\"value $1\">$2$3</div>"));
 
      s_actions.put("command", new Action());
      s_actions.put("baseCommand", new Action());

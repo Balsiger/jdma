@@ -31,6 +31,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.ixitxachitls.output.Document;
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.output.actions.Delimiter;
@@ -38,6 +40,7 @@ import net.ixitxachitls.output.actions.Identity;
 import net.ixitxachitls.output.actions.Ignore;
 import net.ixitxachitls.output.actions.Pattern;
 import net.ixitxachitls.output.actions.Replace;
+import net.ixitxachitls.output.actions.Selection;
 import net.ixitxachitls.output.actions.Verbatim;
 import net.ixitxachitls.output.actions.itext.Count;
 import net.ixitxachitls.output.actions.itext.Frac;
@@ -67,6 +70,7 @@ import net.ixitxachitls.output.commands.Huge;
 import net.ixitxachitls.output.commands.Huger;
 import net.ixitxachitls.output.commands.ID;
 import net.ixitxachitls.output.commands.Icon;
+import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Indent;
 import net.ixitxachitls.output.commands.Italic;
 import net.ixitxachitls.output.commands.Label;
@@ -98,6 +102,7 @@ import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.commands.TocEntry;
 import net.ixitxachitls.output.commands.Umlaut;
 import net.ixitxachitls.output.commands.Underline;
+import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -192,10 +197,6 @@ public class ITextDocument extends Document
 
   /** A flag denoting if landscape printing is desired. */
   protected boolean m_landscape = false;
-
-  /** The directory with the icons. */
-  protected static final @Nonnull String s_dirIcons =
-    Config.get("itext/dir.icons", "icons");
 
   /** The directory for the files. */
   protected static final @Nonnull String s_dirFiles =
@@ -362,7 +363,11 @@ public class ITextDocument extends Document
     s_actions.put(net.ixitxachitls.output.commands.Picture.NAME,
                   new Picture(net.ixitxachitls.output.commands.Picture.NAME,
                               true, true));
+    s_actions.put(net.ixitxachitls.output.commands.Image.NAME,
+                  new Picture(net.ixitxachitls.output.commands.Image.NAME,
+                              false, false));
     s_actions.put(Icon.NAME, new Picture(Icon.NAME, true, true, 50, 0));
+    s_actions.put(ImageLink.NAME, new Ignore());
     s_actions.put(Label.NAME, new Ignore());
 //     s_actions.put(LABEL,
 //                   new Picture(LABEL, false, false,
@@ -373,7 +378,7 @@ public class ITextDocument extends Document
                   new Pattern
                   ("<paragraph line-spacing=\"0.5\">$1</paragraph><br />"));
     s_actions.put(Link.NAME, new Identity(1));
-    s_actions.put(Editable.NAME, new Identity(2));
+    s_actions.put(Editable.NAME, new Identity(3));
     s_actions.put(Hat.NAME,
                   new Replace(new Replace.Replacement []
                     {
@@ -423,7 +428,13 @@ public class ITextDocument extends Document
     s_actions.put(Greaterequal.NAME, new Pattern("&gt;="));
     s_actions.put(net.ixitxachitls.output.commands.Verbatim.NAME,
                   new Verbatim());
-    s_actions.put(Divider.NAME, new Identity(2));
+    s_actions.put
+      (Divider.NAME,
+       new Selection(0, 1, new ImmutableMap.Builder<String, Action>()
+                     .put("files",
+                          new Pattern("<paragraph spacing-after=\"5\">$2"
+                                      + "</paragraph>"))
+                     .build()));
     s_actions.put(Page.NAME,
                   new Pattern("<table cell-valign=\"top\" width=\"100\" "
                               + "columns=\"2\" class=\"page\" "
@@ -468,6 +479,13 @@ public class ITextDocument extends Document
     s_actions.put(TocEntry.NAME,
                   new Pattern("<outline name=\"$1\">$1</outline>"));
     s_actions.put(Grouped.NAME, new Identity(new int [] { 1 }));
+    s_actions.put(Value.NAME,
+                  new Pattern("<table columns=\"2\" width=\"100\" "
+                              + "widths=\"1,3\" split-rows=\"true\" "
+                              + "keep-together=\"false\">"
+                              + "<cell bgcolor=\"$1\" class=\"label\">$2</cell>"
+                              + "<cell class=\"value\">$3</cell>"
+                              + "</table>"));
     s_actions.put(Columns.NAME,
                   new Pattern("<column-text columns=\"$1\" padding=\"10\">"
                               + "<font>$2</font></column-text>"));
@@ -615,6 +633,8 @@ public class ITextDocument extends Document
       + "value=\"0x80,0xff,0xff\" />"
       + "<color-def name=\"#AAAAAA\" color-space=\"RGB\" "
       + "value=\"0xaa,0xaa,0xaa\" />"
+      + "<color-def name=\"BaseCharacter\" color-space=\"RGB\" "
+      + "value=\"0xcc,0xcc,0xcc\" />"
       + "<color-def name=\"colored-even\" color-space=\"RGB\" "
       + "value=\"0xee,0xee,0xee\" />"
       + "<color-def name=\"indent\" color-space=\"RGB\" "
@@ -659,13 +679,18 @@ public class ITextDocument extends Document
       + "<font-def size=\"6\" name=\"symbol\" family=\"Webdings\"/>"
 
       // style definitions
-      + "<style-def name=\"count\" border-style=\"box\" "
+      + "<style-def name=\".count\" border-style=\"box\" "
       + "border-color=\"count\" font=\"count\"/>"
-      + "<style-def name=\"count-max\" border-style=\"box\" "
+      + "<style-def name=\".count-max\" border-style=\"box\" "
       + "border-color=\"count-max\" bgcolor=\"dm\" font=\"count-max\" />"
-      + "<style-def name=\"table.colored\" padding-bottom=\"5\" "
+      + "<style-def name=\".table.colored\" padding-bottom=\"5\" "
       + "padding-left=\"5\" padding-right=\"5\" />"
-      + "<style-def name=\"description\" padding-bottom=\"5\" />"
+      + "<style-def name=\".description\" padding-bottom=\"5\" />"
+      + "<style-def name=\".label\" padding-left=\"5\" padding-top=\"0\" "
+      + "padding-bottom=\"5\" border-width=\"0.1\" "
+      + "border-color=\"white\" border-style=\"top\"/>"
+      + "<style-def name=\".value\" padding-left=\"5\" padding-top=\"0\" "
+      + "padding-bottom=\"5\" />"
 
       // header
       + "<header rule-width=\"0.1\" rule-color=\"header\">"
@@ -715,7 +740,6 @@ public class ITextDocument extends Document
   }
 
   //........................................................................
-
 
   //........................................................................
 

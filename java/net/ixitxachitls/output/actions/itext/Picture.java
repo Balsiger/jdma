@@ -144,13 +144,9 @@ public class Picture extends Action
   /** The height of the icon to print. */
   private int m_height;
 
-  /** The base directory for pictures. */
-  private static @Nonnull String s_resources =
-    Config.get("resource:itext/dir.resources", "icons");
-
   /** The name of the picture to display if a picture is not found. */
   private static @Nonnull String s_notFound =
-    Config.get("resource:itext/resource.notfound", "not_found.png");
+    Config.get("resource:itext/resource.notfound", "icons/not_found.png");
 
   //........................................................................
 
@@ -198,31 +194,37 @@ public class Picture extends Action
     if(m_caption)
       caption = inDocument.convert(inArguments.get(1));
 
-    String file = Files.concatenate(s_resources, name);
+    if(name.startsWith("/"))
+      name = name.substring(1);
 
-    URL url = getClass().getResource("/" + file);
-
+    URL url = Picture.class.getResource(Files.concatenate("/", name));
     if(url == null)
     {
-      Log.warning("image file '" + Files.concatenate(s_resources, name)
-                  + "' not found, using placeholder");
-
-      file = Files.concatenate(s_resources, s_notFound);
+      Log.warning("image file '" + name + "' not found, using placeholder");
+      name = s_notFound;
     }
 
     String size = "";
-
     if(m_width != 0)
       size += " width=\"" + m_width + "\"";
 
     if(m_height != 0)
       size += " height=\"" + m_height + "\"";
 
+    if(inOptionals != null && !inOptionals.isEmpty())
+    {
+      String style = inDocument.convert(inOptionals.get(0));
+      if("main-image".equals(style))
+        size = " height=\"50\"";
+      else if("other-image".equals(style))
+        size = " height=\"20\"";
+    }
+
     if(caption == null)
-      inDocument.add("<image source=\"" + file + "\" " + size + "/>");
+      inDocument.add("<image source=\"" + name + "\" " + size + "/>");
     else
       inDocument.add(new Command("\\table{C}{"
-                                 + "<image source=\"" + file + "\" " + size
+                                 + "<image source=\"" + name + "\" " + size
                                  + "/>}{\\scriptsize{\\color{#AAAAAA}{"
                                  + caption + "}}}"));
   }

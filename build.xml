@@ -41,6 +41,7 @@
   <property name="dma.dir"       value="../DnD/Information"              />
   <property name="tools.dir"     value="tools"                           />
   <property name="findbugs.dir"  value="${tools.dir}/findbugs-1.3.9"     />
+  <property name="jetty.version" value="7.3.0.v20110203"                 />
 
   <!-- other values -->
   <property name="classpath.orig"       value=".classpath" />
@@ -104,15 +105,15 @@
     <pathelement location="${lib.dir}/ujac.jar" />
     <pathelement location="${lib.dir}/commons-logging-1.1.1.jar" />
     <!-- jetty -->
-    <pathelement location="${lib.dir}/jetty-continuation-7.1.6.v20100715.jar"/>
-    <pathelement location="${lib.dir}/jetty-http-7.1.6.v20100715.jar" />
-    <pathelement location="${lib.dir}/jetty-io-7.1.6.v20100715.jar" />
-    <pathelement location="${lib.dir}/jetty-jmx-7.1.6.v20100715.jar" />
-    <pathelement location="${lib.dir}/jetty-security-7.1.6.v20100715.jar" />
-    <pathelement location="${lib.dir}/jetty-server-7.1.6.v20100715.jar" />
-    <pathelement location="${lib.dir}/jetty-servlet-7.1.6.v20100715.jar" />
-    <pathelement location="${lib.dir}/jetty-servlets-7.1.6.v20100715.jar" />
-    <pathelement location="${lib.dir}/jetty-util-7.1.6.v20100715.jar" />
+    <pathelement location="${lib.dir}/jetty-continuation-${jetty.version}.jar"/>
+    <pathelement location="${lib.dir}/jetty-http-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-io-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-jmx-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-security-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-server-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-servlet-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-servlets-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-util-${jetty.version}.jar" />
     <pathelement location="${lib.dir}/servlet-api-2.5.jar" />
     <!-- mail -->
     <pathelement location="${lib.dir}/mail.jar" />

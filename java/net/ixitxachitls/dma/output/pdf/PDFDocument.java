@@ -227,6 +227,8 @@ public class PDFDocument extends ITextDocument
 
   //........................................................................
 
+  //--------------------------------- main ---------------------------------
+
   /**
    * Print the ujax xml document given as standard in (for testing).
    *
@@ -253,6 +255,8 @@ public class PDFDocument extends ITextDocument
     // generating the document output
     printer.printDocument(System.out);
   }
+
+  //........................................................................
 
   //........................................................................
 

@@ -26,6 +26,8 @@ package net.ixitxachitls.dma.server;
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -37,6 +39,7 @@ import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
+import net.ixitxachitls.dma.server.servlets.TypedEntryPDFServlet;
 import net.ixitxachitls.dma.server.servlets.TypedEntryServlet;
 import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
@@ -140,6 +143,9 @@ public class DMAServer extends WebServer
 
   /** The root context for all root information. */
   private @Nonnull ServletContextHandler m_rootContext;
+
+  /** The user context for all user information. */
+  private @Nonnull ServletContextHandler m_userContext;
 
   /** The user information. */
   private @Nonnull DMAData m_users;
@@ -279,11 +285,21 @@ public class DMAServer extends WebServer
     super.setupServlets();
 
     Log.info("Setting up real contexts");
-    m_rootContext = new ServletContextHandler(m_server, "/", false, false);
+    m_rootContext = new ServletContextHandler();
+    m_rootContext.setContextPath("/");
+    m_userContext = new ServletContextHandler();
+    m_userContext.setContextPath("/user");
 
     m_rootContext.addFilter
       (new FilterHolder
        (new DMAFilter(m_users.getEntries(BaseCharacter.TYPE))), "/*", 0);
+    m_userContext.addFilter
+      (new FilterHolder
+       (new DMAFilter(m_users.getEntries(BaseCharacter.TYPE))), "/*", 0);
+
+    ContextHandlerCollection contexts = new ContextHandlerCollection();
+    contexts.setHandlers(new Handler[] { m_rootContext, m_userContext });
+    m_server.setHandler(contexts);
 
 //     m_rootContext.setAttribute("users", m_users);
 //     m_rootContext.setAttribute("campaigns", m_campaigns);
@@ -333,13 +349,14 @@ public class DMAServer extends WebServer
 //        "/entry/*");
 
     // users
-//     m_rootContext.addServlet
-//       (new ServletHolder(new net.ixitxachitls.dma.server.servlets.PDFServlet
-//                          ()), "/guru");
-    m_rootContext.addServlet
+    m_userContext.addServlet
       (new ServletHolder(new TypedEntryServlet<BaseCharacter>
                          (BaseCharacter.TYPE, "/user/", m_users)
-                         .withAccess(BaseCharacter.Group.USER)), "/user/*");
+                         .withAccess(BaseCharacter.Group.USER)), "/");
+    m_userContext.addServlet
+      (new ServletHolder(new TypedEntryPDFServlet<BaseCharacter>
+                         (BaseCharacter.TYPE, "/user/", m_users)
+                         .withAccess(BaseCharacter.Group.USER)), "*.pdf");
 
 //     m_rootContext.addFilter(new FilterHolder(new MeUserFilter()),
 //                             "/user/me/*", 0);

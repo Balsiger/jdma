@@ -282,7 +282,7 @@ DIV.footer DIV.version
  * entry
  *****************************************************************************/
 
-DIV.mainimage
+IMG.main-image
 {
   border:       1px solid #ccc;
   padding:      5px;
@@ -299,7 +299,7 @@ DIV.mainimage IMG.image
 
 DIV.files
 {
-  margin-top:  -10px;
+  margin-top:  -20px;
   padding-top: 2px;
   border-top:  1px solid #ddd;
 }

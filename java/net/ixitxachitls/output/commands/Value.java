@@ -55,15 +55,17 @@ public class Value extends BaseCommand
   /**
    * The constructor for the value command.
    *
+   * @param       inType  the type of the value
    * @param       inLabel the label for the value
    * @param       inValue the value itself
    *
    */
-  public Value(@Nonnull Object inLabel, @Nonnull Object inValue)
+  public Value(@Nonnull Object inType, @Nonnull Object inLabel,
+               @Nonnull Object inValue)
   {
     this();
 
-    withArguments(inLabel, inValue);
+    withArguments(inType, inLabel, inValue);
   }
 
   //........................................................................
@@ -75,7 +77,7 @@ public class Value extends BaseCommand
    */
   protected Value()
   {
-    super(NAME, 0, 2);
+    super(NAME, 0, 3);
   }
 
   //........................................................................
@@ -114,8 +116,9 @@ public class Value extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Value("label", "value");
-      assertEquals("command", "\\value{label}{value}", command.toString());
+      Command command = new Value("type", "label", "value");
+      assertEquals("command", "\\value{type}{label}{value}",
+                   command.toString());
     }
 
     //......................................................................
