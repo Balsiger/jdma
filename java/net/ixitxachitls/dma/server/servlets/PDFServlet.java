@@ -105,8 +105,10 @@ public abstract class PDFServlet extends DMAServlet
     throws ServletException, IOException
   {
     // Set the output header.ß
-    inResponse.setHeader("Content-Type", "applicaton/pdf");
+    inResponse.setHeader("Content-Type", "application/pdf");
     inResponse.setHeader("Cache-Control", "max-age=0");
+    inResponse.setHeader("Content-Disposition",
+                         "inline; filename=" + inRequest.getRequestURI());
 
     PDFDocument document = createDocument(inRequest);
 
