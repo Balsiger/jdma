@@ -217,9 +217,9 @@ public class BaseCharacter extends BaseEntry
 //     "20(name)[Real Name];1:L(group)[Group];1:L(last)[Last Login];"
 //     + "1:L(action)[Last Action]";
 
-  // the general index with all base campaigns
-//   static
-//   {
+  // the general index with all base characters
+  static
+  {
 //     s_indexes.add(new ExtractorIndex<ExtractorIndex>
 //                   ("index", "index", "basecharacters",
 //                    new ExtractorIndex.Extractor()
@@ -235,7 +235,7 @@ public class BaseCharacter extends BaseEntry
 //                      }
 //                    }, true, FORMATTER, FORMAT, false).withAccess(Group.ADMIN)
 //                   .withDataSource(Index.DataSource.user));
-//   }
+  }
 
   /** A random generator to create tokens. */
   private static final @Nonnull Random s_random =

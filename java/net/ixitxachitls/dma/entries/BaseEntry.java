@@ -23,9 +23,9 @@
 
 package net.ixitxachitls.dma.entries;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
 //import java.util.Iterator;
-//import java.util.List;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -646,15 +646,16 @@ public class BaseEntry extends AbstractEntry
    * @return      the synonyms
    *
    */
-//   public String []getSynonyms()
-//   {
-//     ArrayList<String> result = new ArrayList<String>();
+  public @Nonnull List<String> getSynonyms()
+  {
+    List<String> result = new ArrayList<String>();
 
-//     for(Iterator<Text> i = m_synonyms.getHigh().iterator(); i.hasNext(); )
-//       result.add(i.next().get());
+    // TODO: add some handling for base class synonyms here
+    for(Text synonym : m_synonyms)
+      result.add(synonym.get());
 
-//     return result.toArray(new String[0]);
-//   }
+    return result;
+  }
 
   //........................................................................
   //----------------------------- getReferences ----------------------------

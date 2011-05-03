@@ -156,7 +156,7 @@ public class TypedEntryServlet<T extends AbstractEntry>
    */
   public @Nullable String getPath(@Nonnull AbstractEntry inEntry)
   {
-    return m_basePath + inEntry.getID();
+    return inEntry.getID();
   }
 
   //........................................................................

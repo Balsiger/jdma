@@ -48,10 +48,10 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 // import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Entry;
 // import net.ixitxachitls.dma.server.servlets.LoginServlet;
-// import net.ixitxachitls.util.Pair;
+import net.ixitxachitls.util.Pair;
 // import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
-// import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -305,48 +305,48 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   //........................................................................
-  //---------------------------- getStartIndex -----------------------------
+  //---------------------------- getPagination -----------------------------
 
   /**
-   * Get the start index and end index for the page.
+   * Get the start and end indexes for the page.
    *
    * @return      the start and end index for pagination, starting with 0
    *
    */
-//   public Pair<Integer, Integer> getPagination()
-//   {
-//     int start = 0;
-//     int end = 0;
+  public @Nonnull Pair<Integer, Integer> getPagination()
+  {
+    int start = 0;
+    int end = 0;
 
-//     if(hasURLParam("start"))
-//     {
-//       try
-//       {
-//         start = Integer.parseInt(getURLParam("start"));
-//       }
-//       catch(NumberFormatException e)
-//       {
-//         Log.warning("invalid start parameter ignored: " + e);
-//       }
-//     }
+    if(hasParam("start"))
+    {
+      try
+      {
+        start = Integer.parseInt(getParam("start"));
+      }
+      catch(NumberFormatException e)
+      {
+        Log.warning("invalid start parameter ignored: " + e);
+      }
+    }
 
-//     if(hasURLParam("end"))
-//     {
-//       try
-//       {
-//         end = Integer.parseInt(getURLParam("end"));
-//       }
-//       catch(NumberFormatException e)
-//       {
-//         Log.warning("invalid end parameter ignored: " + e);
-//       }
-//     }
+    if(hasParam("end"))
+    {
+      try
+      {
+        end = Integer.parseInt(getParam("end"));
+      }
+      catch(NumberFormatException e)
+      {
+        Log.warning("invalid end parameter ignored: " + e);
+      }
+    }
 
-//     if(end == 0)
-//       end = start + def_pageSize;
+    if(end == 0)
+      end = start + def_pageSize;
 
-//     return new Pair<Integer, Integer>(start, end);
-//   }
+    return new Pair<Integer, Integer>(start, end);
+  }
 
   //........................................................................
   //--------------------------- getURLParamNames ---------------------------

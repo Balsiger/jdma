@@ -29,6 +29,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
@@ -63,6 +64,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@Immutable
 public abstract class AbstractEntryServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)

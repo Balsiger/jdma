@@ -23,9 +23,16 @@
 
 package net.ixitxachitls.dma.server;
 
+import java.util.EnumSet;
+
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.servlet.DispatcherType;
 
+import org.eclipse.jetty.rewrite.handler.RewriteHandler;
+import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -68,8 +75,12 @@ import net.ixitxachitls.util.logging.Log;
  *   /files-internal/*          static internal files
  *   /robots.txt                static robots.txt file
  *   /favicon.ico               static favicon
- *   /entry/<type>/<id>         base entries
- *   /user/<id>                 user information
+ *   /<multi-type>              index entries of given type (with type mapping),
+ *                              internally redirected to /entryindex/<type>
+ *   /<multi-type>/<index>      additional index for the given type
+ *                              internally redirected to /index/<index>
+ *   /<type>/<id>               specific base entries (with type mapping)
+ *                              internally redirected  to /entry/<type>/<id>
  *   /user/<id>/product/<id>    a user's products
  *   /campaign/<id>             campaign information
  *   /cmapaign/<id>/<type>/<id> campaign specific entry
@@ -139,9 +150,6 @@ public class DMAServer extends WebServer
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The root context for all root information. */
-  private @Nonnull ServletContextHandler m_rootContext;
 
   /** The user information. */
   private @Nonnull DMAData m_users;
@@ -281,146 +289,165 @@ public class DMAServer extends WebServer
     super.setupServlets();
 
     Log.info("Setting up real contexts");
-    m_rootContext = new ServletContextHandler(m_server, "/", false, false);
 
-    m_rootContext.addFilter
+    RewriteHandler handler = new RewriteHandler();
+    handler.setRewriteRequestURI(true);
+    handler.setRewritePathInfo(true);
+
+    ServletContextHandler context = new ServletContextHandler();
+    handler.setHandler(context);
+
+    m_server.setHandler(handler);
+
+    RewriteRegexRule rewrite = new RewriteRegexRule();
+    rewrite.setRegex("(.*)\\.pdf");
+    rewrite.setReplacement("/pdf$1");
+    handler.addRule(rewrite);
+
+    rewrite = new RewriteRegexRule();
+    rewrite.setRegex("(.*)(/user/.*)");
+    rewrite.setReplacement("$1/entry$2");
+    handler.addRule(rewrite);
+
+    context.addFilter
       (new FilterHolder
-       (new DMAFilter(m_users.getEntries(BaseCharacter.TYPE))), "/*", 0);
-    m_rootContext.addFilter(new FilterHolder(new PrefixRedirectFilter("/pdf")),
-                            "*.pdf", 0);
+       (new DMAFilter(m_users.getEntries(BaseCharacter.TYPE))), "/*",
+       EnumSet.of(DispatcherType.REQUEST));
 
-//     m_rootContext.setAttribute("users", m_users);
-//     m_rootContext.setAttribute("campaigns", m_campaigns);
+//     context.setAttribute("users", m_users);
+//     context.setAttribute("campaigns", m_campaigns);
 
-//     m_rootContext.addFilter(new FilterHolder(new MainPageFilter()),
+//     context.addFilter(new FilterHolder(new MainPageFilter()),
 //                             "/", 0);
 
 
     // static files
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new TemplateServlet("/css", "text/css",
                                              "web/css/template")),
        "/css/*");
 
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new FileServlet("/js", "text/javascript")), "/js/*");
 
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new FileServlet("/icons", "image/png")), "/icons/*");
 
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new FileServlet("/text/robots.txt", "text/plain")),
        "/robots.txt");
 
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new FileServlet("/icons/favicon.png", "image/png")),
        "/favicon.ico");
 
-    m_rootContext.addServlet
-      (new ServletHolder(new StaticPageServlet("/html/")), "/*");
+    context.addServlet
+      (new ServletHolder(new StaticPageServlet("/html")), "/*");
 
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new FileServlet("/files", "")), "/files/*");
 
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.USER)),
 //        "/files-internal/*", 0);
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new StaticFileServlet("/files-internal", "")),
 //        "/files-internal/*");
 
 
 
 //     // base entry servlet
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new BaseEntryServlet(m_baseCampaign)),
 //        "/entry/*");
 
     // users
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new TypedEntryServlet<BaseCharacter>
-                         (BaseCharacter.TYPE, "/user/", m_users)
-                         .withAccess(BaseCharacter.Group.USER)), "/user/*");
-    m_rootContext.addServlet
+                         (BaseCharacter.TYPE, "/entry", m_users)
+                         .withAccess(BaseCharacter.Group.USER)),
+        "/entry/*");
+    context.addServlet
       (new ServletHolder(new TypedEntryPDFServlet<BaseCharacter>
-                         (BaseCharacter.TYPE, "/user/", m_users)
-                         .withAccess(BaseCharacter.Group.USER)), "/pdf/user/*");
+                         (BaseCharacter.TYPE, "/pdf/entry", m_users)
+                         .withAccess(BaseCharacter.Group.USER)),
+       "/pdf/entry/*");
 
-//     m_rootContext.addFilter(new FilterHolder(new MeUserFilter()),
+//     context.addFilter(new FilterHolder(new MeUserFilter()),
 //                             "/user/me/*", 0);
 
 //     // products
 //     for(BaseEntry entry : m_users)
 //       if(entry instanceof BaseCharacter)
-//         m_rootContext.addServlet
+//         context.addServlet
 //           (new ServletHolder
 //            (new EntryServlet(((BaseCharacter)entry).getProductData())),
 //            "/user/" + entry.getName() + "/*");
 
 //     // campaigns
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.PLAYER)),
 //        "/campaign/*", 0);
 
-//   m_rootContext.addServlet(new ServletHolder(new EntryServlet(m_campaigns)),
+//   context.addServlet(new ServletHolder(new EntryServlet(m_campaigns)),
 //                              "/campaign/*");
 
 //     // entries
 //     for(Entry entry : m_campaigns)
 //       if(entry instanceof Campaign)
-//         m_rootContext.addServlet
+//         context.addServlet
 //           (new ServletHolder(new EntryServlet((Campaign)entry)),
 //            "/campaign/" + entry.getID() + "/*");
 
 //     // entry specific stuff
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.USER)),
 //        "/index/products/*", 0);
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ProductServlet(m_users)),
 //        "/index/products/*");
 
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.USER)),
 //        "/index/products/*", 0);
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ProductListServlet(m_users)),
 //        "/pdf/products/list/*");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ProductShelfListServlet(m_users)),
 //        "/pdf/products/shelf/*");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ProductMissingListServlet(m_users)),
 //        "/pdf/products/missing/*");
 
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.PLAYER)),
 //        "/pdf/items/*", 0);
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ItemListServlet(m_campaigns, false)),
 //        "/pdf/items/*");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ItemListServlet(m_campaigns, true)),
 //        "/pdf/dm/items/*");
 
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.DM)),
 //        "/pdf/dm/encounters/*", 0);
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new EncounterListServlet(m_campaigns)),
 //        "/pdf/dm/encounters/*");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ImageServlet(m_campaigns)), "/images/*");
 
 //     // user pages
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.USER)),
 //        "/overview", 0);
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new UserOverviewServlet(m_campaigns)), "/overview");
 
 //     // indexes
@@ -484,11 +511,11 @@ public class DMAServer extends WebServer
 //           assert false : "should never come here";
 //       }
 
-//       m_rootContext.addServlet(new ServletHolder(servlet), path);
+//       context.addServlet(new ServletHolder(servlet), path);
 //     }
 
 //     // search
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder
 //        (new IndexServlet
 //         (new Index<Index>("", "Search", "/search/", false, true)
@@ -533,44 +560,44 @@ public class DMAServer extends WebServer
 //        "/search/*");
 
 //     // administration
-//     m_rootContext.addFilter
+//     context.addFilter
 //       (new FilterHolder(new AccessFilter(BaseCharacter.Group.ADMIN)),
 //        "/admin/*", 0);
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new AdminServlet()), "/admin/*");
 
     // actions
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new SaveActionServlet(m_users)), "/actions/save");
 
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new LoginServlet
                          (m_users.getEntries(BaseCharacter.TYPE))),
        "/actions/login");
 
-    m_rootContext.addServlet
+    context.addServlet
       (new ServletHolder(new LogoutServlet
                          (m_users.getEntries(BaseCharacter.TYPE))),
        "/actions/logout");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new SelectCharacterServlet(m_campaigns)),
 //        "/actions/select");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new MoveServlet(m_campaigns)),
 //        "/actions/move");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new MailServlet(m_campaigns)),
 //        "/actions/mail");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder(new ReloadServlet(m_campaigns)),
 //        "/actions/reload");
 
 //     // ajax data requests
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder
 //        (new AccessorServlet
 //         (new AccessorServlet.Accessor()
@@ -597,7 +624,7 @@ public class DMAServer extends WebServer
 //             }
 //           })), "/ajax/persons");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder
 //        (new AccessorServlet
 //         (new AccessorServlet.Accessor()
@@ -624,7 +651,7 @@ public class DMAServer extends WebServer
 //             }
 //           })), "/ajax/jobs");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder
 //        (new AccessorServlet
 //         (new AccessorServlet.Accessor()
@@ -652,7 +679,7 @@ public class DMAServer extends WebServer
 //             }
 //           })), "/ajax/requirements");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder
 //        (new AccessorServlet
 //         (new AccessorServlet.Accessor()
@@ -674,7 +701,7 @@ public class DMAServer extends WebServer
 //             }
 //           })), "/ajax/references");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder
 //        (new AccessorServlet
 //         (new AccessorServlet.Accessor()
@@ -700,7 +727,7 @@ public class DMAServer extends WebServer
 //             }
 //           })), "/ajax/products");
 
-//     m_rootContext.addServlet
+//     context.addServlet
 //       (new ServletHolder
 //        (new AccessorServlet
 //         (new AccessorServlet.Accessor()

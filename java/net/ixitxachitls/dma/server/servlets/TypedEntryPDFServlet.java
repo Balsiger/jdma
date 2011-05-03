@@ -119,7 +119,7 @@ public class TypedEntryPDFServlet<T extends AbstractEntry>
    */
   public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
   {
-    String id = Strings.getPattern(inPath, "/([^/]*?)\\.pdf$");
+    String id = Strings.getPattern(inPath, "/([^/]*?)(\\.pdf)?$");
     if(id == null)
       return null;
 

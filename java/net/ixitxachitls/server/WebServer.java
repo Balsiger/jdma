@@ -99,9 +99,6 @@ public class WebServer
   /** The port of the server. */
   protected int m_port;
 
-  /** The context during startup. */
-  private ServletContextHandler m_startupContext;
-
   /** The startup handler used when the server is busy. */
   private static final HttpServlet s_startupServlet = new FixedTextServlet
     ("Server is Starting Up",
@@ -176,8 +173,9 @@ public class WebServer
     m_server.setStopAtShutdown(true);
 
     // install the default, startup handler
-    m_startupContext = new ServletContextHandler(m_server, "/", false, false);
-    m_startupContext.addServlet(new ServletHolder(s_startupServlet), "/*");
+    ServletContextHandler startupContext =
+      new ServletContextHandler(m_server, "/", false, false);
+    startupContext.addServlet(new ServletHolder(s_startupServlet), "/*");
 
     try
     {
@@ -202,7 +200,7 @@ public class WebServer
 
     // setup the resources for the handling or real requests
     setupServlets();
-    m_startupContext.setShutdown(true);
+    startupContext.setShutdown(true);
 
     try
     {

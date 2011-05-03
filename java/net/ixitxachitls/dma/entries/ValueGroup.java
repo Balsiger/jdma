@@ -43,7 +43,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-//import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.entries.indexes.Index;
 //import net.ixitxachitls.dma.values.Modifiable;
 //import net.ixitxachitls.dma.values.SimpleText;
 //import net.ixitxachitls.dma.values.Text;
@@ -1197,9 +1197,9 @@ public abstract class ValueGroup implements Changeable
   /** An empty set of values for all unknown classes. */
   private static final @Nonnull Variables s_emptyVariables = new Variables();
 
-//   /** All the indexes. */
-//   protected static final @Nonnull List<Index<? extends Index>> s_indexes =
-//     new ArrayList<Index<? extends Index>>();
+  /** All the indexes. */
+  protected static final @Nonnull List<Index<? extends Index>> s_indexes =
+    new ArrayList<Index<? extends Index>>();
 
   // TODO: make this not static and move to campaign.
   /** The name of the current game. */
