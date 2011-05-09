@@ -69,12 +69,29 @@ public class Script extends BaseCommand
   //-------------------------------- Script --------------------------------
 
   /**
+   * The constructor for the script command.
+   *
+   * @param       inText the text to set script
+   * @param       inID   the id of the script tag
+   *
+   */
+  public Script(@Nonnull Object inText, @Nonnull Object inID)
+  {
+    this(inText);
+
+    withOptionals(inID);
+  }
+
+  //........................................................................
+  //-------------------------------- Script --------------------------------
+
+  /**
    * This is the internal constructor for a command.
    *
    */
   protected Script()
   {
-    super(NAME, 0, 1);
+    super(NAME, 1, 1);
   }
 
   //........................................................................

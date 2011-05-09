@@ -258,7 +258,7 @@ public class Picture extends Action
                    + "{\\scriptsize{\\color{#AAAAAA}{caption}}}",
                    doc.toString());
 
-      m_logger.addExpected("WARNING: image file 'icons/picture.extension' "
+      m_logger.addExpected("WARNING: image file 'picture.extension' "
                            + "not found, using placeholder");
     }
 
@@ -284,7 +284,7 @@ public class Picture extends Action
                    + "{\\scriptsize{\\color{#AAAAAA}{caption}}}",
                    doc.toString());
 
-      m_logger.addExpected("WARNING: image file 'icons/picture.extension' "
+      m_logger.addExpected("WARNING: image file 'picture.extension' "
                            + "not found, using placeholder");
     }
 

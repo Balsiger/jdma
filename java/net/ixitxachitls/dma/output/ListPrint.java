@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.output;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -30,18 +31,16 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * A wrapper to store all values used for printing and converting them
- * into a list of commands for output.
+ * A print object for printing into a list.
  *
  *
- * @file          Print.java
+ * @file          ListPrint.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -52,21 +51,23 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
-public class Print extends AbstractPrint
+public class ListPrint extends AbstractPrint
 {
   //--------------------------------------------------------- constructor(s)
 
-  //-------------------------------- Print ---------------------------------
+  //------------------------------ ListPrint -------------------------------
 
   /**
    * Create the print values.
    *
-   * @param    inTemplate the template to print with.
+   * @param       inFormat  the table format for printing
+   * @param       inTemplates  the individual cell values to print
    *
    */
-  public Print(@Nonnull String inTemplate)
+  public ListPrint(@Nonnull String inFormat, @Nonnull String ... inTemplates)
   {
-    m_template = inTemplate;
+    m_format = inFormat;
+    m_templates = inTemplates;
   }
 
   //........................................................................
@@ -75,11 +76,14 @@ public class Print extends AbstractPrint
 
   //-------------------------------------------------------------- variables
 
-  /** The template to print with. */
-  private @Nonnull String m_template;
+  /** The table format for printing. */
+  private @Nonnull String m_format;
 
-  /** The tokens to print. */
-  private volatile @Nullable List<String> m_tokens;
+  /** The templates for each table cell. */
+  private @Nonnull String []m_templates;
+
+  /** The tokens for each template. */
+  private volatile @Nullable List<List<String>>m_tokens;
 
   //........................................................................
 
@@ -90,24 +94,52 @@ public class Print extends AbstractPrint
   /**
    * Print the given entry into a command.
    *
+   * @param       inKey   the key really printed (e.g. for synonyms)
    * @param       inEntry the entry to print
    * @param       inDM    true if printing for a dm, false if not
    *
    * @return      the object that can be added to a document for printing
    *
    */
-  public @Nonnull Object print(@Nonnull AbstractEntry inEntry, boolean inDM)
+  @SuppressWarnings("unchecked") // need to case for generic array creation
+  public @Nonnull List<Object> print
+    (@Nonnull String inKey, @Nonnull AbstractEntry inEntry, boolean inDM)
   {
     // CHECKSTYLE:OFF (this works in Java 1.6)
     if(m_tokens == null)
       synchronized(this)
       {
         if(m_tokens == null)
-          m_tokens = tokenize(m_template);
+        {
+          m_tokens = new ArrayList<List<String>>();
+          for(int i = 0; i < m_templates.length; i++)
+            if(m_templates[i] == null)
+              m_tokens.add(null);
+            else
+              m_tokens.add(tokenize(m_templates[i]));
+        }
       }
     // CHECKSTYLE:ON
 
-    return convert(m_tokens, inEntry, "**null**", inDM);
+    List<Object> result = new ArrayList<Object>();
+    for(List<String> tokens : m_tokens)
+      result.add(convert(tokens, inEntry, inKey, inDM));
+
+    return result;
+  }
+
+  //........................................................................
+  //------------------------------ getFormat -------------------------------
+
+  /**
+   * Get the table format for printing the complete list.
+   *
+   * @return      the table format
+   *
+   */
+  public @Nonnull String getFormat()
+  {
+    return m_format;
   }
 
   //........................................................................
@@ -116,37 +148,10 @@ public class Print extends AbstractPrint
 
   //----------------------------------------------------------- manipulators
 
-  //------------------------------ addValue --------------------------------
-
-  /**
-   * Add a value to the print output.
-   *
-   * @param       inKey      the key of the value added
-   * @param       inValue    the value to add
-   * @param       inEditable true if editable, false if not
-   * @param       inDM       true if the value is for DMs only, false else
-   * @param       inPlayer   true if the data is for players only
-   * @param       inPlural   the plural for the key of the value
-   *
-   */
-//   public void add(@Nonnull String inKey, @Nonnull Object inValue,
-//                   boolean inEditable, boolean inDM, boolean inPlayer,
-//                   @Nonnull String inPlural)
-//   {
-//     Value value = new Value(inValue, inEditable, inDM, inPlayer, inPlural);
-//     Value old = m_values.get(inKey);
-
-//     if(old == null)
-//       m_values.put(inKey, value);
-//     else
-//       old.add(value);
-//     }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------- other member functions
+
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -167,18 +172,16 @@ public class Print extends AbstractPrint
 
       entry.setDescription("desc");
 
-      Print print =
-        new Print("start $first ${title} middle $description the end");
+      ListPrint print =
+        new ListPrint("format", "start", "$first", "${title}");
 
+      assertEquals("format", "format", print.getFormat());
       assertEquals("printing",
-                   "[start , \\color{error}{ * first * },  , "
+                   "[start, \\color{error}{ * first * }, "
                    + "\\title[entrytitle]"
                    + "{\\image[main-image]{/icons/BaseEntries-dummy.png} "
-                   + "test},  middle , "
-                   + "\\editable{test}{base entry}{desc}{description}"
-                   + "{\"desc\"}{formatted},  the end]",
-                   ((Command)print.print(entry, true)).getArguments()
-                   .toString());
+                   + "test}]",
+                   print.print("key", entry, true).toString());
     }
 
     //......................................................................

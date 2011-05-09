@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.server;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -31,16 +32,15 @@ import javax.servlet.DispatcherType;
 
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.filters.DMAFilter;
-import net.ixitxachitls.dma.server.filters.PrefixRedirectFilter;
+import net.ixitxachitls.dma.server.servlets.EntryListServlet;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
@@ -75,11 +75,13 @@ import net.ixitxachitls.util.logging.Log;
  *   /files-internal/*          static internal files
  *   /robots.txt                static robots.txt file
  *   /favicon.ico               static favicon
- *   /<multi-type>              index entries of given type (with type mapping),
+ *   /users                     all base characters
+ *   /<multi-type>              index entries of given type
  *                              internally redirected to /entryindex/<type>
  *   /<multi-type>/<index>      additional index for the given type
  *                              internally redirected to /index/<index>
- *   /<type>/<id>               specific base entries (with type mapping)
+ *   /user/<id>                 specific base characters
+ *   /<type>/<id>               specific base entries
  *                              internally redirected  to /entry/<type>/<id>
  *   /user/<id>/product/<id>    a user's products
  *   /campaign/<id>             campaign information
@@ -299,15 +301,9 @@ public class DMAServer extends WebServer
 
     m_server.setHandler(handler);
 
-    RewriteRegexRule rewrite = new RewriteRegexRule();
-    rewrite.setRegex("(.*)\\.pdf");
-    rewrite.setReplacement("/pdf$1");
-    handler.addRule(rewrite);
-
-    rewrite = new RewriteRegexRule();
-    rewrite.setRegex("(.*)(/user/.*)");
-    rewrite.setReplacement("$1/entry$2");
-    handler.addRule(rewrite);
+    addRewrite(handler, "(.*)\\.pdf", "/pdf$1");
+    addRewrite(handler, "(.*)/user/(.*)", "$1/entry/basecharacter/$2");
+    addRewrite(handler, "(.*)/users", "$1/entryindex/basecharacter");
 
     context.addFilter
       (new FilterHolder
@@ -372,6 +368,22 @@ public class DMAServer extends WebServer
                          (BaseCharacter.TYPE, "/pdf/entry", m_users)
                          .withAccess(BaseCharacter.Group.USER)),
        "/pdf/entry/*");
+    context.addServlet
+      (new ServletHolder(new EntryListServlet()
+        {
+          private static final long serialVersionUID = 1L;
+          public List<AbstractEntry> getEntries(String inID, int inStart,
+                                                int inEnd)
+          {
+            return new java.util.ArrayList<AbstractEntry>
+              (m_users.getEntries(BaseCharacter.TYPE).values());
+          }
+          public String getTitle()
+          {
+            return "Users";
+          }
+        }), "/entryindex/*");
+
 
 //     context.addFilter(new FilterHolder(new MeUserFilter()),
 //                             "/user/me/*", 0);
@@ -775,6 +787,28 @@ public class DMAServer extends WebServer
   }
 
   //........................................................................
+  //------------------------------ addRewrite ------------------------------
+
+  /**
+   * Add a rewrite rule to the given handler.
+   *
+   * @param       inHandler     the handler to add the rule to
+   * @param       inPattern     the path pattern to rewrite
+   * @param       inReplacement the replacement to rewrite to
+   *
+   */
+  public void addRewrite(@Nonnull RewriteHandler inHandler,
+                         @Nonnull String inPattern,
+                         @Nonnull String inReplacement)
+  {
+    RewriteRegexRule rewrite = new RewriteRegexRule();
+    rewrite.setRegex(inPattern);
+    rewrite.setReplacement(inReplacement);
+    inHandler.addRule(rewrite);
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

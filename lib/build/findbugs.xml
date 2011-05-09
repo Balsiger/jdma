@@ -51,6 +51,11 @@
     <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
   </Match>
 
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryListServlet.*" />
+    <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
+  </Match>
+
   <!-- allow m_group to be mutable, as it is only set at construction time -->
   <Match>
     <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.DMAServlet.*" />

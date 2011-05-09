@@ -451,7 +451,8 @@ public class HTMLDocument extends Document
                                + "<span>$3</span>"
                                + "</dmaeditable>", false));
      s_actions.put(Script.NAME,
-                   new Pattern("\n<script type='text/javascript'>$1"
+                   new Pattern("\n<script [[id=\"%1\" ]]"
+                               + "type='text/javascript'>$1"
                                + "</script>\n"));
      s_actions.put(Value.NAME,
                    new Pattern("<div class=\"value $1\">$2$3</div>"));
@@ -642,15 +643,15 @@ public class HTMLDocument extends Document
                    + "<hr width=\"30%\">\n"
                    + "\n"
                    + "<table class=\"footnote\">"
-                   + "<tr class=\"odd \">"
+                   + "<tr>"
                    + "<td>1)</td>"
                    + "<td>test only</td>"
                    + "</tr>"
-                   + "<tr class=\"even \">"
+                   + "<tr>"
                    + "<td>2)</td>"
                    + "<td>as always</td>"
                    + "</tr>"
-                   + "<tr class=\"odd \">"
+                   + "<tr>"
                    + "<td>a)</td>"
                    + "<td>test with "
                    + "marker and a somewhat larger text to see wrapping "

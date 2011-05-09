@@ -147,11 +147,31 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
     // parse the arguments
     String format = inDocument.convert(inArguments.get(0));
 
-    boolean inline = false;
+    String tableTag;
+    String rowTag;
+    String cellTag;
+    String tableStyle;
+    String rowStyle;
+    String cellStyle;
+
     if(format.startsWith("#inline#"))
     {
-      inline = true;
       format = format.substring(8);
+      tableTag = "span";
+      rowTag = "span";
+      cellTag = "span";
+      tableStyle = "table";
+      rowStyle = "table-row";
+      cellStyle = "table-cell";
+    }
+    else
+    {
+      tableTag = "table";
+      rowTag = "tr";
+      cellTag = "td";
+      tableStyle = "";
+      rowStyle = "";
+      cellStyle = "";
     }
 
     if(format.startsWith("#js#"))
@@ -164,25 +184,11 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
     Column []columns = parse(format);
 
     // table settings
-    if(inline)
-      inDocument.add("\n<span");
-    else
-      inDocument.add("\n<table");
-
+    inDocument.add("\n<" + tableTag);
     if(inOptionals != null && !inOptionals.isEmpty())
-    {
-      inDocument.add(" class=\"");
-      inDocument.add(inOptionals.get(0));
-
-      if(inline)
-        inDocument.add(" table");
-
-      inDocument.add("\"");
-    }
+      inDocument.add(Strings.cssClasses(inOptionals.get(0), tableStyle));
     else
-      if(inline)
-        inDocument.add(" class=\"table\"");
-
+      inDocument.add(Strings.cssClasses(tableStyle));
     inDocument.add(">");
 
     // the column titles (if any)
@@ -194,31 +200,21 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
     if(i < columns.length)
     {
       // we have titles
-      if(inline)
-        inDocument.add("<span class=\"title table-row\">");
-      else
-        inDocument.add("<tr class=\"title\">");
+      inDocument.add("<" + rowTag + Strings.cssClasses("title", rowStyle)
+                     + ">");
 
       for(i = 0; i < columns.length; i++)
       {
-        if(inline)
-          inDocument.add("<span class=\"title table-cell\">");
-        else
-          inDocument.add("<td class=\"title\">");
+        inDocument.add("<" + cellTag + Strings.cssClasses("title", cellStyle)
+                       + ">");
 
         if(!columns[i].getTitle().isEmpty())
           inDocument.add(columns[i].getTitle());
 
-        if(inline)
-          inDocument.add("</span>");
-        else
-          inDocument.add("</td>");
+        inDocument.add("</" + cellTag + ">");
       }
 
-      if(inline)
-        inDocument.add("</span>");
-      else
-        inDocument.add("</tr>");
+      inDocument.add("</" + rowTag + ">");
     }
 
     // table columns
@@ -249,50 +245,18 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
       }
 
       if(col == 0)
-        if(odd)
-        {
-          if(inline)
-            inDocument.add("<span class=\"odd table-row " + style + "\">");
-          else
-            inDocument.add("<tr class=\"odd " + style + "\">");
+        inDocument.add("<" + rowTag + Strings.cssClasses(rowStyle, style)
+                       + ">");
 
-          odd = false;
-        }
-        else
-        {
-          if(inline)
-            inDocument.add("<span class=\"even table-row " + style + "\">");
-          else
-            inDocument.add("<tr class=\"even " + style + "\">");
-
-          odd = true;
-        }
-
-      if(inline)
-        inDocument.add("<span");
-      else
-        inDocument.add("<td");
-
-      if(!columns[col].getName().isEmpty())
-        if(inline)
-          inDocument.add(" class=\"" + columns[col].getName()
-                         + " table-cell\"");
-        else
-          inDocument.add(" class=\"" + columns[col].getName() + "\"");
-      else
-        if(inline)
-          inDocument.add(" class=\"table-cell\"");
-
+      inDocument.add("<" + cellTag);
+      inDocument.add(Strings.cssClasses(columns[col].getName(), cellStyle));
       inDocument.add(">");
 
       inDocument.add(columns[col].getLeader().replaceAll("[|]", ""));
       inDocument.add(inArguments.get(i + 1));
       inDocument.add(columns[col].getTrailer().replaceAll("[|]", ""));
 
-      if(inline)
-        inDocument.add("</span>");
-      else
-        inDocument.add("</td>");
+      inDocument.add("</" + cellTag + ">");
 
       col++;
 
@@ -300,17 +264,11 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
         col = 0;
 
       if((col == 0) || (i + 1 == inArguments.size() - 1))
-        if(inline)
-          inDocument.add("</span>");
-        else
-          inDocument.add("</tr>");
+        inDocument.add("</" + rowTag + ">");
     }
 
     // table ending
-    if(inline)
-      inDocument.add("</span>");
-    else
-      inDocument.add("</table>");
+    inDocument.add("</" + tableTag + ">");
   }
 
   //........................................................................
@@ -374,9 +332,6 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
     }
 
     inDocument.add(");\n\n");
-
-    // table columns
-    boolean odd = true;
 
     // the current document to write to
     Document doc = inDocument;
@@ -482,19 +437,19 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
                    + "<td class=\"title\">title</td>"
                    + "<td class=\"title\">title2</td>"
                    + "<td class=\"title\"></td></tr>"
-                   + "<tr class=\"odd \">"
+                   + "<tr>"
                    + "<td class=\"name\">first</td>"
                    + "<td>second</td>"
                    + "<td class=\"name3\"> * third * "
                    + "</td></tr>"
-                   + "<tr class=\"even \">"
+                   + "<tr>"
                    + "<td class=\"name\">first again, this time somewhat "
                    + "larger, to see that wordwrapping works</td>"
                    + "<td>second, this is short</td>"
                    + "<td class=\"name3\"> * third, this "
                    + "is also a bit longer, because two lines should wrap, "
                    + "to have a better test case * </td></tr>"
-                   + "<tr class=\"odd \">"
+                   + "<tr>"
                    + "<td class=\"name\">first</td>"
                    + "<td>second</td></tr>"
                    + "</table>",
@@ -555,12 +510,12 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
                    + "<span class=\"title table-cell\">title</span>"
                    + "<span class=\"title table-cell\"></span>"
                    + "</span>"
-                   + "<span class=\"odd table-row \">"
+                   + "<span class=\"table-row\">"
                    + "<span class=\"table-cell\">first</span>"
                    + "<span class=\"name table-cell\">second</span>"
                    + "<span class=\"table-cell\"> * third * </span>"
                    + "</span>"
-                   + "<span class=\"even table-row \">"
+                   + "<span class=\"table-row\">"
                    + "<span class=\"table-cell\">"
                    + "first again, this time somewhat larger, to see "
                    + "that wordwrapping works</span>"
@@ -569,7 +524,7 @@ public class Table extends net.ixitxachitls.output.actions.ascii.Table
                    + "<span class=\"table-cell\"> * third, this "
                    + "is also a bit longer, because two lines should wrap, "
                    + "to have a better test case * </span></span>"
-                   + "<span class=\"odd table-row \">"
+                   + "<span class=\"table-row\">"
                    + "<span class=\"table-cell\">first</span>"
                    + "<span class=\"name table-cell\">second</span></span>"
                    + "</span>",

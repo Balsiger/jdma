@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.data.DMAFiles;
+import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.data.Storage;
 // import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
@@ -332,7 +333,11 @@ public class AbstractEntry extends ValueGroup
     new BaseType<AbstractEntry>(AbstractEntry.class, "Abstract Entries");
 
   /** The print for printing a whole page entry. */
-  public static final Print s_pagePrint = new Print("$id $name");
+  public static final Print s_pagePrint = new Print("$title");
+
+  /** The print for printing an entry in a list. */
+  public static final ListPrint s_listPrint =
+    new ListPrint("1:L(icon);20:L(name)[Name]", "$label", null);
 
   /** The random generator. */
   protected static final @Nonnull Random s_random = new Random();
@@ -1363,6 +1368,34 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //----------------------------- getListPrint -----------------------------
+
+  /**
+   * Get the print for a list entry.
+   *
+   * @return the print for list entry
+   *
+   */
+  protected @Nonnull ListPrint getListPrint()
+  {
+    return s_listPrint;
+  }
+
+  //........................................................................
+  //----------------------------- getListPrint -----------------------------
+
+  /**
+   * Get the print for a list entry.
+   *
+   * @return the print for list entry
+   *
+   */
+  public @Nonnull String getListFormat()
+  {
+    return getListPrint().getFormat();
+  }
+
+  //........................................................................
   //------------------------------- printPage ------------------------------
 
   /**
@@ -1376,6 +1409,25 @@ public class AbstractEntry extends ValueGroup
   public @Nonnull Object printPage(boolean inDM)
   {
     return getPagePrint().print(this, inDM);
+  }
+
+  //........................................................................
+  //------------------------------- printPage ------------------------------
+
+  /**
+   * Print the entry into a command for adding to a document.
+   *
+   * @param       inKey the key (name) for the entry to be printed (this is
+   *                    used when printing entries multiple times with synonym
+   *                    names)
+   * @param       inDM  true if setting for dm, false if not
+   *
+   * @return      the command representing this item in a list
+   *
+   */
+  public @Nonnull List<Object> printList(@Nonnull String inKey, boolean inDM)
+  {
+    return getListPrint().print(inKey, this, inDM);
   }
 
   //........................................................................
@@ -1677,6 +1729,13 @@ public class AbstractEntry extends ValueGroup
                                               "doc-link"),
                                 "as text", true, false, false, false, "as text",
                                 "");
+
+    if("label".equals(inKey))
+      return new FormattedValue
+        (new Image(Files.concatenate
+                   ("/icons/labels", getType().getClassName()) + ".png",
+                   "label"),
+         "label", false, false, false, false, "labels", "");
 
     return super.computeValue(inKey, inDM);
   }

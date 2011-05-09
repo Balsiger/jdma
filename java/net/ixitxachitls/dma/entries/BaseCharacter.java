@@ -34,10 +34,14 @@ import javax.annotation.Nullable;
 import net.ixitxachitls.dma.data.DMAData;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Text;
 //import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Script;
+import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.TypeIterator;
 import net.ixitxachitls.util.logging.Log;
@@ -182,40 +186,13 @@ public class BaseCharacter extends BaseEntry
               + "%{last action} %token %group %characters "
               + "%file %errors");
 
-  /** The basic formatter for base characters. */
-//   public static final Index.Formatter<AbstractEntry> FORMATTER =
-//     new Index.Formatter<AbstractEntry>()
-//     {
-//     public java.util.List<Object> format(String inKey, AbstractEntry inEntry)
-//       {
-//         // ignore base values here
-//         java.util.List<Object> list = new ArrayList<Object>();
-
-//         if(!(inEntry instanceof BaseCharacter))
-//           return list;
-
-//         BaseCharacter character = (BaseCharacter)inEntry;
-
-//         // real name
-//         list.add(character.m_realName.format(true));
-
-//         // group
-//         list.add(character.m_group.format(true));
-
-//         // last login
-//         list.add(character.m_lastLogin.format(true));
-
-//         // last action
-//         list.add(character.m_lastAction.format(true));
-
-//         return list;
-//       }
-//     };
-
-  /** The basic format for base campaigns. */
-//   public static final String FORMAT =
-//     "20(name)[Real Name];1:L(group)[Group];1:L(last)[Last Login];"
-//     + "1:L(action)[Last Action]";
+  /** The printer for printing in a list. */
+  public static final ListPrint s_listPrint =
+    new ListPrint("1:L(label);20:L(name)[Name];20(name)[Real Name];"
+                  + "1:L(group)[Group];1:L(last)[Last Login];"
+                  + "1:L(action)[Last Action]",
+                  "$label $listlink", null, "${real name}", "$group",
+                  "${last login}", "${last action}");
 
   // the general index with all base characters
   static
@@ -332,6 +309,20 @@ public class BaseCharacter extends BaseEntry
   protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
+  }
+
+  //........................................................................
+  //----------------------------- getListPrint -----------------------------
+
+  /**
+   * Get the print for a list entry.
+   *
+   * @return the print for list entry
+   *
+   */
+  protected @Nonnull ListPrint getListPrint()
+  {
+    return s_listPrint;
   }
 
   //........................................................................
@@ -655,6 +646,37 @@ public class BaseCharacter extends BaseEntry
 
   //........................................................................
 
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("listlink".equals(inKey))
+    {
+      // we have to add a wrapping div to host the id there; when we assing the
+      // body to the innerHTML of the page, script tags will be ignored and
+      // thus the id would be missing
+      String id = "linkrow-user-" + Encodings.toCSSString(getName());
+      return new FormattedValue
+        (new Divider(id, "", new Script
+                     ("util.linkRow(document.getElementById('" + id + "'), "
+                      + "'/user/" + getName() + "');")),
+         "listlink", false, false, false, false, "listlinks", "");
+    }
+
+    return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
 
   //........................................................................
 

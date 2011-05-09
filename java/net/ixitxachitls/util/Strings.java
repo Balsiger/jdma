@@ -143,6 +143,9 @@ public final class Strings
   /** The joiner to convert with newlines. */
   public static final Joiner NEWLINE_JOINER = Joiner.on('\n');
 
+  /** The joiner to convert with spaces. */
+  public static final Joiner SPACE_JOINER = Joiner.on(' ');
+
   /** The joiner to convert with escaped newlines. */
   public static final Joiner BR_JOINER = Joiner.on("<br />");
 
@@ -771,6 +774,38 @@ public final class Strings
 
   //........................................................................
 
+  //------------------------------ cssClasses ------------------------------
+
+  /**
+   * Create the text for a css attribute.
+   *
+   * @param       inClasses all the css classes to include
+   *
+   * @return      the string for the class attribute (if no valid classes are
+   *              given, this can be empty)
+   *
+   */
+  public static @Nonnull String cssClasses(@Nonnull Object ... inClasses)
+  {
+    List<String> classes = new java.util.ArrayList<String>();
+
+    for(Object cssClass : inClasses)
+      if(cssClass != null)
+      {
+        String cssClassString = cssClass.toString();
+        if(!cssClassString.isEmpty())
+          classes.add(cssClassString);
+      }
+
+    String result = SPACE_JOINER.join(classes);
+    if(result.isEmpty())
+      return "";
+
+    return " class=\"" + result + "\"";
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -1163,6 +1198,29 @@ public final class Strings
     }
 
     //......................................................................
+    //----- css classes ----------------------------------------------------
+
+    /** The css classes Test. */
+    @org.junit.Test
+    public void cssClasses()
+    {
+      assertEquals("", Strings.cssClasses(null, null));
+      assertEquals("", Strings.cssClasses(""));
+      assertEquals("", Strings.cssClasses("", "", null, null));
+
+      assertEquals(" class=\"first\"", Strings.cssClasses("first"));
+      assertEquals(" class=\"first\"",
+                   Strings.cssClasses("", null, "first", null));
+      assertEquals(" class=\"first second\"",
+                   Strings.cssClasses("first", "second"));
+      assertEquals(" class=\"first second\"",
+                   Strings.cssClasses("first", null, "second"));
+      assertEquals(" class=\"first second\"",
+                   Strings.cssClasses("", "first", "", "second", ""));
+    }
+
+    //......................................................................
+
 
     //----- coverage -------------------------------------------------------
 

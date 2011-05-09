@@ -310,7 +310,7 @@ public class TypedEntryServlet<T extends AbstractEntry>
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
                    servlet.getType(""));
 
-      assertEquals("path", "/base/id",
+      assertEquals("path", "id",
                    servlet.getPath(new net.ixitxachitls.dma.entries.BaseEntry
                                    ("id", new DMAData.Test.Data())));
     }

@@ -378,7 +378,7 @@ public class PageServlet extends DMAServlet
       EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
       EasyMock.expect(request.getUser()).andReturn(null);
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(request.getPathInfo()).andReturn("/about.html");
+      EasyMock.expect(request.getRequestURI()).andReturn("/about.html");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 
@@ -531,7 +531,7 @@ public class PageServlet extends DMAServlet
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(request.isBodyOnly()).andReturn(true).anyTimes();
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(request.getPathInfo()).andReturn("/about.html");
+      EasyMock.expect(request.getRequestURI()).andReturn("/about.html");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 

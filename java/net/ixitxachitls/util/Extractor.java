@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.util;
 
+import java.io.Serializable;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -46,7 +48,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
-public interface Extractor<T, V>
+public interface Extractor<T, V> extends Serializable
 {
   //-------------------------------------------------------------- accessors
 

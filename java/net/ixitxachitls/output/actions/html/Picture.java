@@ -259,7 +259,8 @@ public class Picture extends Action
     if(m_link)
       inDocument.add("</a>");
 
-    inDocument.add("</span></span></span>");
+    if(m_caption)
+      inDocument.add("</span></span></span>");
   }
 
   //........................................................................
@@ -313,7 +314,7 @@ public class Picture extends Action
         new net.ixitxachitls.output.html.HTMLDocument("title");
 
       action.execute(doc,
-                     com.google.common.collect.ImmutableList.of("optional"),
+                     com.google.common.collect.ImmutableList.of("highlight"),
                      com.google.common.collect.ImmutableList.of
                      ("picture.extension", "caption", "link"));
 

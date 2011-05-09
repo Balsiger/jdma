@@ -148,7 +148,6 @@ public abstract class AbstractEntryPDFServlet extends PDFServlet
     }
 
     AbstractEntry entry = getEntry(path);
-
     if(entry == null)
     {
       Log.warning("could not extract entry from '" + path + "'");
@@ -239,9 +238,9 @@ public abstract class AbstractEntryPDFServlet extends PDFServlet
     public AbstractEntryPDFServlet createServlet
       (String inPath, final AbstractEntry inEntry) throws Exception
     {
-      m_response.setHeader("Content-Type", "applicaton/pdf");
+      m_response.setHeader("Content-Type", "application/pdf");
       m_response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(m_request.getPathInfo()).andReturn(inPath);
+      EasyMock.expect(m_request.getRequestURI()).andReturn(inPath);
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
       EasyMock.replay(m_request, m_response);
@@ -280,6 +279,9 @@ public abstract class AbstractEntryPDFServlet extends PDFServlet
       assertEquals("content", "%PDF-1.4\n%",
                    m_output.toString().substring(0, 10));
       assertContent("paths", m_paths, "/baseentry/guru");
+
+      m_logger.addExpected("WARNING: image file 'icons/BaseEntries-dummy.png' "
+                           + "not found, using placeholder");
     }
 
     //......................................................................

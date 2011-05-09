@@ -107,8 +107,6 @@ public abstract class PDFServlet extends DMAServlet
     // Set the output header.ß
     inResponse.setHeader("Content-Type", "application/pdf");
     inResponse.setHeader("Cache-Control", "max-age=0");
-    inResponse.setHeader("Content-Disposition",
-                         "inline; filename=" + inRequest.getRequestURI());
 
     PDFDocument document = createDocument(inRequest);
 
@@ -175,7 +173,7 @@ public abstract class PDFServlet extends DMAServlet
         EasyMock.createMock(HttpServletResponse.class);;
       MockServletOutputStream output = new MockServletOutputStream();
 
-      response.setHeader("Content-Type", "applicaton/pdf");
+      response.setHeader("Content-Type", "application/pdf");
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
 

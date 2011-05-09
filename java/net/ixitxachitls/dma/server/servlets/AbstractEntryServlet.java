@@ -353,7 +353,7 @@ public abstract class AbstractEntryServlet extends PageServlet
                                                       ? " disabled" : ""), ""),
                                        previous == null ? ""
                                        : getPath(previous)),
-                              new Link(new Divider("index icon", ""), "/user/"),
+                              new Link(new Divider("index icon", ""), "/users"),
                               new Link(new Divider("next icon"
                                                    + (next == null
                                                       ? " disabled" : ""), ""),
@@ -428,8 +428,8 @@ public abstract class AbstractEntryServlet extends PageServlet
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
       + "<div class=\"previous icon disabled\"></div>"
       + "</a>"
-      + "<a href=\"/user/\" class=\"link\" "
-      + "onclick=\"return util.link(event, '/user/');\">"
+      + "<a href=\"/users\" class=\"link\" "
+      + "onclick=\"return util.link(event, '/users');\">"
       + "<div class=\"index icon\"></div>"
       + "</a>"
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
@@ -503,7 +503,7 @@ public abstract class AbstractEntryServlet extends PageServlet
       m_response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(m_request.isBodyOnly()).andReturn(true).anyTimes();
       EasyMock.expect(m_request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(m_request.getPathInfo()).andReturn(inPath);
+      EasyMock.expect(m_request.getRequestURI()).andReturn(inPath);
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
       if(inEntry == null && inType != null && inID != null)
@@ -597,8 +597,10 @@ public abstract class AbstractEntryServlet extends PageServlet
                    + "    </SCRIPT>\n"
                    + s_imageScript
                    + "    " + s_navigation
-                   + "<span class=\"error\"> * id * </span> "
-                   + "guru"
+                   + "\n<h1 class=\"entrytitle\">"
+                   + "<img src=\"/icons/BaseEntries-dummy.png\" "
+                   + "alt=\"BaseEntries-dummy\" class=\"image main-image\"/>"
+                   + " guru</h1>\n"
                    + s_navigation
                    + "\n",
                    m_output.toString());
@@ -630,6 +632,8 @@ public abstract class AbstractEntryServlet extends PageServlet
                    + "    The page referenced does not exist!\n",
                    m_output.toString());
       assertContent("paths", m_paths);
+
+      m_logger.addExpected("WARNING: no path given for request");
     }
 
     //......................................................................
@@ -714,8 +718,10 @@ public abstract class AbstractEntryServlet extends PageServlet
                    + "    </SCRIPT>\n"
                    + s_imageScript
                    + "    " + s_navigation
-                   + "<span class=\"error\"> * id * </span> "
-                   + "guru"
+                   + "\n<h1 class=\"entrytitle\">"
+                   + "<img src=\"/icons/BaseEntries-dummy.png\" "
+                   + "alt=\"BaseEntries-dummy\" class=\"image main-image\"/>"
+                   + " guru</h1>\n"
                    + s_navigation
                    + "\n",
                    m_output.toString());

@@ -194,7 +194,7 @@ util.link = function(inEvent, inTarget, inFunction)
 
     // Adding something to the innerHTML will not execute any javascript in it.
     inText.replace(/<script.*?>((\n|.)*?)<\/script>/g,
-                   function(match, group) { eval(group) });
+                   function(match, group) { eval(group); });
 
     if(inFunction)
       inFunction();
@@ -206,6 +206,37 @@ util.link = function(inEvent, inTarget, inFunction)
   });
 
   return false;
+};
+
+//..........................................................................
+//---------------------------------- link ----------------------------------
+
+/**
+  * Goto the specified target.
+  *
+  * @param       inElement   the cell with the row to link from
+  * @param       inTarget    the URL to go to
+  *
+  */
+util.linkRow = function(inElement, inTarget)
+{
+  if(!inElement)
+    return;
+
+  // lookup the parent row
+  for(var row = inElement.parentNode; row; row = row.parentNode)
+    if(row.tagName == 'TR')
+      break;
+
+  if(!row)
+  {
+    gui.alert('Cannot find parent table row for click linking for ' + inTarget);
+    return;
+  }
+
+  row.onclick = function(event) {
+    return util.link(event, inTarget);
+  };
 };
 
 //..........................................................................
