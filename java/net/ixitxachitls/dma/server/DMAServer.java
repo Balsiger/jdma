@@ -24,11 +24,12 @@
 package net.ixitxachitls.dma.server;
 
 import java.util.EnumSet;
-import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.DispatcherType;
+
+import com.google.common.collect.ImmutableMap;
 
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
@@ -37,14 +38,13 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.filters.DMAFilter;
-import net.ixitxachitls.dma.server.servlets.EntryListServlet;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
+import net.ixitxachitls.dma.server.servlets.TypedEntryListServlet;
 import net.ixitxachitls.dma.server.servlets.TypedEntryPDFServlet;
 import net.ixitxachitls.dma.server.servlets.TypedEntryServlet;
 import net.ixitxachitls.server.WebServer;
@@ -77,7 +77,7 @@ import net.ixitxachitls.util.logging.Log;
  *   /favicon.ico               static favicon
  *   /users                     all base characters
  *   /<multi-type>              index entries of given type
- *                              internally redirected to /entryindex/<type>
+ *                              internally redirected to /entries/<type>
  *   /<multi-type>/<index>      additional index for the given type
  *                              internally redirected to /index/<index>
  *   /user/<id>                 specific base characters
@@ -303,7 +303,7 @@ public class DMAServer extends WebServer
 
     addRewrite(handler, "(.*)\\.pdf", "/pdf$1");
     addRewrite(handler, "(.*)/user/(.*)", "$1/entry/basecharacter/$2");
-    addRewrite(handler, "(.*)/users", "$1/entryindex/basecharacter");
+    addRewrite(handler, "(.*)/users", "$1/entries/basecharacter");
 
     context.addFilter
       (new FilterHolder
@@ -369,20 +369,12 @@ public class DMAServer extends WebServer
                          .withAccess(BaseCharacter.Group.USER)),
        "/pdf/entry/*");
     context.addServlet
-      (new ServletHolder(new EntryListServlet()
-        {
-          private static final long serialVersionUID = 1L;
-          public List<AbstractEntry> getEntries(String inID, int inStart,
-                                                int inEnd)
-          {
-            return new java.util.ArrayList<AbstractEntry>
-              (m_users.getEntries(BaseCharacter.TYPE).values());
-          }
-          public String getTitle()
-          {
-            return "Users";
-          }
-        }), "/entryindex/*");
+      (new ServletHolder
+       (new TypedEntryListServlet(m_users,
+                                  new ImmutableMap.Builder<String, String>()
+                                  .put("basecharacter", "Users")
+                                  .build())),
+       "/entries/*");
 
 
 //     context.addFilter(new FilterHolder(new MeUserFilter()),

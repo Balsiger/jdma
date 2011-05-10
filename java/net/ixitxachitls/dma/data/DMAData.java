@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
@@ -124,6 +125,33 @@ public class DMAData implements Serializable
 
     // TODO: this should actually be unmodifiable
     return (NavigableMap<String, T>)entries;
+  }
+
+  //........................................................................
+  //------------------------------ getEntries ------------------------------
+
+  /**
+   * Gets all the entries of a specific type.
+   *
+   * @param    <T> The type of entry to get
+   * @param    inType the type of entries to get
+   *
+   * @return   a map with id and type
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast
+  public @Nonnull <T extends AbstractEntry> List<T>
+                     getEntriesList(AbstractType<T> inType)
+  {
+    NavigableMap<String, AbstractEntry> entries = m_entries.get(inType);
+
+    if(entries == null)
+    {
+      entries = new TreeMap<String, AbstractEntry>();
+      m_entries.put(inType, entries);
+    }
+
+    return (List<T>)new ArrayList<AbstractEntry>(entries.values());
   }
 
   //........................................................................

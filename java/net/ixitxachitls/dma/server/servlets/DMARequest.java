@@ -135,7 +135,7 @@ public class DMARequest extends HttpServletRequestWrapper
 
   /** The default size of an index page (number of entries shown). */
   protected static final int def_pageSize =
-    Config.get("resource:html/product.page", 25);
+    Config.get("resource:html/product.page", 2);
 
   //........................................................................
 

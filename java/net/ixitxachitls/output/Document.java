@@ -770,6 +770,21 @@ public class Document
   //--------------------------------- add ----------------------------------
 
   /**
+   * Add the given object to the current position of the document.
+   *
+   * @param       inObject the object to add
+   *
+   */
+  public void add(@Nonnull List<? extends Object> inObject)
+  {
+    for(Object object : inObject)
+      add(object);
+  }
+
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
    * Add the given String to the current position of the document.
    *
    * @param       inText the text to add

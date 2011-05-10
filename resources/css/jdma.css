@@ -31,7 +31,7 @@ BODY
 
 DIV.page
 {
-  padding: 40px 1em 0 2em;
+  padding: 60px 1em 0 2em;
 }
 
 H1
@@ -353,7 +353,8 @@ DIV.value-content
 
 TABLE.entrylist
 {
-  margin: 20px auto;
+  padding: 0 10px;
+  width:  100%;
 }
 
 TABLE.entrylist TR:nth-child(even)
@@ -366,10 +367,17 @@ TABLE.entrylist TR:nth-child(odd)
   background-color: #fafafa;
 }
 
+TABLE.entrylist TR.title:hover
+{
+  background-color: inherit;
+  color:            inherit;
+}
+
 TABLE.entrylist TR:hover
 {
   background-color: #800;
   color: white;
+  cursor:           pointer;
 }
 
 TABLE.entrylist TD
@@ -382,6 +390,21 @@ TABLE.entrylist TD.title
   font-weight: bold;
   border-bottom: 1px solid black;
   margin-bottom: 4px;
+  white-space:   nowrap;
+}
+
+A.paginate-next
+{
+  margin-right: 10px;
+  float:        right;
+  font-size:    small;
+}
+
+A.paginate-previous
+{
+  margin-left: 10px;
+  font-size:   small;
+  float:       left;
 }
 
 /******************************************************************************
@@ -518,3 +541,30 @@ DIV.edit-cancel
 {
   background-position: -50px;
 }
+
+/******************************************************************************
+ * links
+ *****************************************************************************/
+
+/* general link style */
+A         { text-decoration: none; color: #333333; }
+
+/* link with no additional color */
+A.nocolor { font-weight: inherit; color: inherit; }
+
+/* a bold link */
+A.bold { font-weight: bold; }
+
+/* links not yet visited */
+A:link    { font-style: normal; }
+A.nocolor:link { font-weight: inherit; }
+A.bold:link { font-weight: bold; }
+
+/* already visited link */
+A:visited { font-style: normal; }
+A.nocolor:visited { font-weight: inherit; }
+A.bold:visited { font-weight: bold; }
+
+/* links with the cursor on top of them */
+A:hover   { font-style: normal; text-decoration: underline; }
+A.bold:hover { font-weight: bold; }

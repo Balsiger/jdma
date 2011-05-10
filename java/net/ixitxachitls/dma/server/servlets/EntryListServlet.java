@@ -36,6 +36,7 @@ import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
+import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLWriter;
@@ -94,14 +95,11 @@ public abstract class EntryListServlet extends PageServlet
    * Get the entries in the given page range.
    *
    * @param       inID    the id for the entries to get
-   * @param       inStart the starting entry (inclusive)
-   * @param       inEnd   the ending entry number (exclusive)
    *
    * @return      a list of all entries in range
    *
    */
-  public abstract List<AbstractEntry> getEntries(@Nonnull String inID,
-                                                 int inStart, int inEnd);
+  public abstract List<AbstractEntry> getEntries(@Nonnull String inID);
 
   //........................................................................
   //------------------------------- getTitle -------------------------------
@@ -109,13 +107,14 @@ public abstract class EntryListServlet extends PageServlet
   /**
    * Get the title for the document.
    *
+   * @param       inID the id of the request
+   *
    * @return      the title
    *
    */
-  public abstract @Nonnull String getTitle();
+  public abstract @Nonnull String getTitle(String inID);
 
   //........................................................................
-
 
   //........................................................................
 
@@ -139,25 +138,56 @@ public abstract class EntryListServlet extends PageServlet
   {
     String id = "";
     if(inPath != null)
-      id = Strings.getPattern(inPath, "^/(.*?)$");
+      id = Strings.getPattern(inPath, "([^/]*)$");
 
     // determine start and end of index to show
     Pair<Integer, Integer> pagination = inRequest.getPagination();
     int start = pagination.first();
     int end   = pagination.second();
 
-    List<AbstractEntry> entries = getEntries(id, start, end);
+    List<AbstractEntry> entries = getEntries(id);
 
-    HTMLDocument document = new HTMLDocument(getTitle());
+    inWriter.title(getTitle(id));
+    HTMLDocument document = new HTMLDocument(getTitle(id));
 
+    List<String> navigation = new ArrayList<String>();
+    if(start > 0)
+      if(start - inRequest.getPageSize() > 0)
+        navigation.add("<a href=\"?start="
+                       + (start - inRequest.getPageSize())
+                       + "\"  onclick=\"return util.link(event, '?start="
+                       + (start - inRequest.getPageSize()) + "');\" "
+                       + "class=\"paginate-previous\">"
+                       + "&laquo; previous</a>");
+      else
+        navigation.add("<a href=\"?\" "
+                       + "onclick=\"return util.link(event, '?');\" "
+                       + "class=\"paginate-previous\">"
+                       + "&laquo; previous</a>");
+
+    if(entries.size() >= end)
+      navigation.add("<a href=\"?start="
+                     + (start + inRequest.getPageSize()) + "\" "
+                     + " onclick=\"return util.link(event, '?start="
+                     + (start + inRequest.getPageSize()) + "');\" "
+                     + "class=\"paginate-next\">"
+                     + "&raquo; next</a>");
+
+    document.add(navigation);
     boolean dm = true;
-    List<Object> cells = new ArrayList<Object>();
-    for(AbstractEntry entry : entries)
-      cells.addAll(entry.printList(entry.getName(), dm));
+    if(entries.isEmpty())
+      document.add(new Color("error", "No entries found!"));
+    else
+    {
+      List<Object> cells = new ArrayList<Object>();
+      for(AbstractEntry entry : sublist(entries, start, end))
+        cells.addAll(entry.printList(entry.getName(), dm));
 
-    document.add(new Table("entrylist",
-                           entries.get(0).getListFormat(),
-                           new Command(cells)));
+      document.add(new Table("entrylist",
+                             entries.get(0).getListFormat(),
+                             new Command(cells)));
+    }
+    document.add(navigation);
 
     inWriter.add(document.toString());
 //     HTMLDocument document;
@@ -180,6 +210,42 @@ public abstract class EntryListServlet extends PageServlet
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //------------------------------- sublist --------------------------------
+
+  /**
+   * Create a sublist using the given limits.
+   *
+   * @param       <T>     the type of elements in the list
+   * @param       inList  the list with the elements
+   * @param       inStart the start position (inclusive)
+   * @param       inEnd   the end position (exclusive)
+   *
+   * @return      a sublist for the given range
+   *
+   */
+  public @Nonnull <T> List<T> sublist(@Nonnull List<T> inList, int inStart,
+                                      int inEnd)
+  {
+    if(inList.isEmpty())
+      return inList;
+
+    int start = inStart;
+    int end = inEnd;
+
+    if(start < 0)
+      start = 0;
+
+    if(end > inList.size())
+      end = inList.size();
+
+    if(start > end || start > inList.size())
+      start = end;
+
+    return inList.subList(start, end);
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -260,14 +326,13 @@ public abstract class EntryListServlet extends PageServlet
           private static final long serialVersionUID = 1L;
 
           @Override
-          public List<AbstractEntry> getEntries(String inID, int inStart,
-                                                int inEnd)
+          public List<AbstractEntry> getEntries(String inID)
           {
             return inEntries;
           }
 
           @Override
-          public String getTitle()
+          public String getTitle(String inID)
           {
             return "Title";
           }

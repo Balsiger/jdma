@@ -93,6 +93,7 @@ public abstract class AbstractType<T extends AbstractEntry>
     m_className = inClass.getName().replaceAll(".*\\.", "");
 
     s_types.put(m_name, this);
+    s_types.put(getLink(), this);
   }
 
   //........................................................................
@@ -134,7 +135,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    */
   public @Nonnull String getLink()
   {
-    return "/entry/" + m_name.replaceAll(" ", "").toLowerCase(Locale.US) + "/";
+    return m_name.replaceAll(" ", "").toLowerCase(Locale.US);
   }
 
   //.......................................................................
