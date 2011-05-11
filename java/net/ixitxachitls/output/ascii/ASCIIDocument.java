@@ -266,7 +266,7 @@ public class ASCIIDocument extends Document
     s_actions.put(Greaterequal.NAME, new Pattern(">="));
     s_actions.put(Grouped.NAME, new Identity(1));
     s_actions.put(Value.NAME,
-                  new Pattern("\\table{f15:l;1:l}{$1}{$2}", true));
+                  new Pattern("\\table{f15:l;1:l}{$2}{$3}", true));
 
     s_actions.put("command", new Action());
     s_actions.put("baseCommand", new Action());
