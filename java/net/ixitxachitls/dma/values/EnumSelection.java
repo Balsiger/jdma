@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
@@ -53,6 +54,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@Immutable
 public class EnumSelection<T extends Enum<T>>
   extends Value<EnumSelection<T>>
 {
@@ -314,6 +316,9 @@ public class EnumSelection<T extends Enum<T>>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  // immutable!
+
   //........................................................................
 
   //------------------------------------------------- other member functions

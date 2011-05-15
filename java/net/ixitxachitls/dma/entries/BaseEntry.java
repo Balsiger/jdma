@@ -41,7 +41,7 @@ import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Range;
-//import net.ixitxachitls.dma.values.Selection;
+import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.DelimFormatter;
@@ -63,7 +63,7 @@ import net.ixitxachitls.input.ParseReader;
 //import net.ixitxachitls.util.MultiIterator;
 //import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.Encodings;
-//import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.configuration.Config;
 //import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -93,51 +93,50 @@ public class BaseEntry extends AbstractEntry
   //----- worlds -----------------------------------------------------------
 
   /** The game worlds (this is configurable and thus not an enum). */
-//   protected static final String []WORLDS =
-//     Config.get("resource:" + CURRENT + "/game/worlds",
-//                new String []
-//     {
-//       // these are unsorted because they are the most important
-//       "Generic",
-//       "Eberron",
-//       "Forgotten Realms",
+  protected static final String []WORLDS =
+    Config.get("/game/worlds", new String []
+    {
+      // these are unsorted because they are the most important
+      "Generic",
+      "Eberron",
+      "Forgotten Realms",
 
-//       // the rest is sorted
-//       "Al-Qadim",
-//       "Birthright",
-//       "Buck Rogers",
-//       "Call of Cthulhu",
-//       "Confrontation",
-//       "Dark Sun",
-//       "Dark.Matter",
-//       "Dawn of the Emperors",
-//       "Diablo II",
-//       "Dominaria",
-//       "Dragonlance",
-//       "Episode I",
-//       "Gamma World",
-//       "Greyhawk",
-//       "Hollow World",
-//       "Lankhmar",
-//       "Marvel Super Heroes",
-//       "Middle Earth",
-//       "Mystara",
-//       "None",
-//       "Odyssey",
-//       "Planescape",
-//       "Ptolus",
-//       "Ravenloft",
-//       "Real",
-//       "Red Steel",
-//       "Rokugan",
-//       "S.P.I.",
-//       "Savage Coast",
-//       "Spelljammer",
-//       "Star Wars",
-//       "Star*Drive",
-//       "Urza's Destiny",
-//       "Wheel of Time",
-//     });
+      // the rest is sorted
+      "Al-Qadim",
+      "Birthright",
+      "Buck Rogers",
+      "Call of Cthulhu",
+      "Confrontation",
+      "Dark Sun",
+      "Dark.Matter",
+      "Dawn of the Emperors",
+      "Diablo II",
+      "Dominaria",
+      "Dragonlance",
+      "Episode I",
+      "Gamma World",
+      "Greyhawk",
+      "Hollow World",
+      "Lankhmar",
+      "Marvel Super Heroes",
+      "Middle Earth",
+      "Mystara",
+      "None",
+      "Odyssey",
+      "Planescape",
+      "Ptolus",
+      "Ravenloft",
+      "Real",
+      "Red Steel",
+      "Rokugan",
+      "S.P.I.",
+      "Savage Coast",
+      "Spelljammer",
+      "Star Wars",
+      "Star*Drive",
+      "Urza's Destiny",
+      "Wheel of Time",
+    });
 
   //........................................................................
 
@@ -260,16 +259,15 @@ public class BaseEntry extends AbstractEntry
 
   //----- world ------------------------------------------------------------
 
-//   /** The formatter for worlds. */
-//   private static final ValueFormatter<Selection> s_worldFormatter =
-//     new LinkFormatter<Selection>("/index/worlds/");
+  /** The formatter for worlds. */
+  private static final Formatter<Selection> s_worldFormatter =
+    new LinkFormatter<Selection>("/index/worlds/");
 
   /** The world. */
-  // TODO: move this to a BaseGameEntry
-//   @Key("worlds")
-//   protected ValueList<Selection> m_worlds =
-//     new ValueList<Selection>(new Selection(WORLDS)
-//                              .withFormatter(s_worldFormatter));
+  @Key("worlds")
+  protected ValueList<Selection> m_worlds =
+    new ValueList<Selection>(new Selection(WORLDS)
+                             .withFormatter(s_worldFormatter));
 
 //   static
 //   {

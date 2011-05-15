@@ -44,8 +44,6 @@ import net.ixitxachitls.util.Strings;
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
- * @param         <T> the final type of the value
- *
  */
 
 //..........................................................................
@@ -53,7 +51,7 @@ import net.ixitxachitls.util.Strings;
 //__________________________________________________________________________
 
 @Immutable
-public class Selection<T extends Selection> extends Value<T>
+public class Selection extends Value<Selection>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -129,9 +127,9 @@ public class Selection<T extends Selection> extends Value<T>
    */
   @SuppressWarnings("unchecked") // this onlly works if this method is
                                  // overriden in all derivations
-  public T create()
+  public Selection create()
   {
-    return (T)new Selection(m_selections);
+    return new Selection(m_selections);
   }
 
   //........................................................................

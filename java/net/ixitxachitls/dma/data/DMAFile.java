@@ -321,10 +321,12 @@ public class DMAFile //implements Storage<AbstractEntry>
     Log.info("reading file '" + m_name + "'");
 
     // read the top level comment
-    m_comment = m_comment.read(reader);
+    Comment comment = m_comment.read(reader);
 
-    if(!m_comment.isDefined())
+    if(comment == null || !comment.isDefined())
       m_comment = m_comment.as("# file: " + m_name + "\n\n");
+    else
+      m_comment = comment;
 
     // read all the entries
     while(!reader.isAtEnd())

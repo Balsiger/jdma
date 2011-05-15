@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.data;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,8 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.util.Files;
+import net.ixitxachitls.util.resources.Resource;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -72,10 +75,11 @@ public class DMAData implements Serializable
    */
   public DMAData(@Nonnull String inPath, @Nullable String ... inFiles)
   {
-    if(inFiles != null)
-      for(String file : inFiles)
-        if(file != null)
-          m_files.add(new DMAFile(file, inPath, this));
+    m_path = inPath;
+
+    for(String file : inFiles)
+      if(file != null)
+        addFile(file);
   }
 
   //........................................................................
@@ -83,6 +87,12 @@ public class DMAData implements Serializable
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The path from where to load the files. */
+  private @Nonnull String m_path;
+
+  /** The name of the files read. */
+  private @Nonnull Set<String> m_names = new HashSet<String>();
 
   /** The files for all the data. */
   private @Nonnull ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();
@@ -176,6 +186,27 @@ public class DMAData implements Serializable
   }
 
   //........................................................................
+  //--------------------------------- files --------------------------------
+
+  /**
+   * Get the names of the files that this entry can possibly be stored in.
+   *
+   * @param       inType the type of entries for which to get files
+   *
+   * @return      a list of names that can be used for storage
+   *
+   */
+  public @Nonnull Set<String> files
+    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    Set<String> names = new HashSet<String>();
+    for(DMAFile file : m_files)
+      names.add(file.getStorageName());
+
+    return names;
+  };
+
+  //........................................................................
 
   //........................................................................
 
@@ -207,25 +238,48 @@ public class DMAData implements Serializable
   }
 
   //........................................................................
-  //--------------------------------- files --------------------------------
+  //------------------------------- addFile --------------------------------
 
   /**
-   * Get the names of the files that this entry can possibly be stored in.
+   * Load the file with the given name.
    *
-   * @param       inType the type of entries for which to get files
+   * @param       inFile the file name of file to load relative to the path
    *
-   * @return      a list of names that can be used for storage
+   * @return      true if loaded, false if already there
    *
    */
-  public @Nonnull Set<String> files
-    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+  public boolean addFile(@Nonnull String inFile)
   {
-    Set<String> names = new HashSet<String>();
-    for(DMAFile file : m_files)
-      names.add(file.getStorageName());
+    if(m_names.contains(inFile))
+      return false;
 
-    return names;
-  };
+    m_names.add(inFile);
+    m_files.add(new DMAFile(inFile, m_path, this));
+
+    return true;
+  }
+
+  //........................................................................
+  //------------------------------- addFiles -------------------------------
+
+  /**
+   * Load all the dma file from the given path
+   *
+   * @param    inPath the path to the directory to load files from
+   *
+   */
+  public void addAllFiles(@Nonnull String inPath)
+  {
+    System.out.println("reading all files from " + inPath);
+    Resource path = Resource.get(Files.concatenate(m_path, inPath));
+
+    System.out.println(path + " : " + path.files());
+    for(String name : path.files())
+    {
+      if(name.endsWith(".dma"))
+        addFile(Files.concatenate(inPath, name));
+    }
+  }
 
   //........................................................................
   //--------------------------------- add ----------------------------------

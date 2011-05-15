@@ -108,19 +108,21 @@ public class DMAServer extends WebServer
     *
     * @param       inHost      the host name of the server
     * @param       inPort      the port number to use
-    * @param       inBase      the name of the dma file containing the base
-    *                          campaigns
+    * @param       inBaseDirs  the name of the base directories to read from
     * @param       inCampaigns the name of the file containing campaign info
-    * @param       inUsers     the name of the file containing user info
     *
     */
-  public DMAServer(@Nonnull String inHost, int inPort, @Nonnull String inBase,
-                   @Nonnull String inCampaigns, @Nonnull String inUsers)
+  public DMAServer(@Nonnull String inHost, int inPort,
+                   @Nonnull String inBaseDirs,
+                   @Nonnull String inCampaigns)
   {
     super(inHost, inPort);
 
-    m_users =
-      new DMAData(DATA_DIR, Files.concatenate("BaseCharacters", inUsers));
+    // determine which base files to read
+    m_baseData =
+      new DMAData(DATA_DIR);
+    for(String baseDir : inBaseDirs.split(",\\s*"))
+      m_baseData.addAllFiles(baseDir);
 
 //     java.util.Date start = new java.util.Date();
 
@@ -154,10 +156,7 @@ public class DMAServer extends WebServer
   //-------------------------------------------------------------- variables
 
   /** The user information. */
-  private @Nonnull DMAData m_users;
-
-  /** The base campaign for the user information. */
-//   private BaseCampaign m_users = new BaseCampaign("Users");
+  private @Nonnull DMAData m_baseData;
 
   /** The base campaign with all the base information. */
 //   private BaseCampaign m_baseCampaign = new BaseCampaign("Base");
@@ -305,9 +304,12 @@ public class DMAServer extends WebServer
     addRewrite(handler, "(.*)/user/(.*)", "$1/entry/basecharacter/$2");
     addRewrite(handler, "(.*)/users", "$1/entries/basecharacter");
 
+    // TODO: this is temporary, remove once the main page filter is in
+    addRewrite(handler, "/", "/index.html");
+
     context.addFilter
       (new FilterHolder
-       (new DMAFilter(m_users.getEntries(BaseCharacter.TYPE))), "/*",
+       (new DMAFilter(m_baseData.getEntries(BaseCharacter.TYPE))), "/*",
        EnumSet.of(DispatcherType.REQUEST));
 
 //     context.setAttribute("users", m_users);
@@ -360,17 +362,17 @@ public class DMAServer extends WebServer
     // users
     context.addServlet
       (new ServletHolder(new TypedEntryServlet<BaseCharacter>
-                         (BaseCharacter.TYPE, "/entry", m_users)
+                         (BaseCharacter.TYPE, "/entry", m_baseData)
                          .withAccess(BaseCharacter.Group.USER)),
         "/entry/*");
     context.addServlet
       (new ServletHolder(new TypedEntryPDFServlet<BaseCharacter>
-                         (BaseCharacter.TYPE, "/pdf/entry", m_users)
+                         (BaseCharacter.TYPE, "/pdf/entry", m_baseData)
                          .withAccess(BaseCharacter.Group.USER)),
        "/pdf/entry/*");
     context.addServlet
       (new ServletHolder
-       (new TypedEntryListServlet(m_users,
+       (new TypedEntryListServlet(m_baseData,
                                   new ImmutableMap.Builder<String, String>()
                                   .put("basecharacter", "Users")
                                   .build())),
@@ -572,16 +574,16 @@ public class DMAServer extends WebServer
 
     // actions
     context.addServlet
-      (new ServletHolder(new SaveActionServlet(m_users)), "/actions/save");
+      (new ServletHolder(new SaveActionServlet(m_baseData)), "/actions/save");
 
     context.addServlet
       (new ServletHolder(new LoginServlet
-                         (m_users.getEntries(BaseCharacter.TYPE))),
+                         (m_baseData.getEntries(BaseCharacter.TYPE))),
        "/actions/login");
 
     context.addServlet
       (new ServletHolder(new LogoutServlet
-                         (m_users.getEntries(BaseCharacter.TYPE))),
+                         (m_baseData.getEntries(BaseCharacter.TYPE))),
        "/actions/logout");
 
 //     context.addServlet
@@ -774,7 +776,7 @@ public class DMAServer extends WebServer
   public void init()
   {
     Log.info("Loading user information");
-    if(!m_users.read())
+    if(!m_baseData.read())
       Log.error("Could not properly read user files!");
   }
 
@@ -845,22 +847,18 @@ public class DMAServer extends WebServer
         + "WARNING, NECESSARY, IMPORTANT, USEFUL, INFO, COMPLETE, DEBUG).",
         Log.Type.DEBUG),
        new CommandLineParser.StringOption
-       ("d", "dma-files",
+       ("d", "dma-directory",
         "The directory from which to include all dma files.", ""),
        new CommandLineParser.StringOption
-       ("b", "base-campaigns",
-        "The file containing the base campaigns.", "BaseCampaigns.dma"),
+       ("b", "base-directories",
+        "Comma separated list of the directories with base files.",
+        Config.get("entries/base.dirs", "BaseCharacters, BaseProducts/DnD")),
        new CommandLineParser.StringOption
        ("c", "campaigns",
         "The file containing the campaigns.", "Campaigns.dma"),
-       new CommandLineParser.StringOption
-       ("u", "users",
-        "The file containing the base characters (users).",
-        "Ixitxachitls.dma"),
        new CommandLineParser.Flag
        ("nal", "no-analytics",
         "Disable the use of Google analytics on the page."));
-
 
     clp.parse(inArguments);
 
@@ -911,19 +909,15 @@ public class DMAServer extends WebServer
 
     //......................................................................
 
-    int    port = clp.get("port", Config.get("resource:web/port", 5555));
-    String name = clp.get("name", Config.get("resource:web/name", "localhost"));
-    String base = clp.get("base-campaigns",
-                          Config.get("resource:web/base.campaigns",
-                                     "BaseCampaigns.dma"));
-    String campaigns = clp.get("campaigns", Config.get("resource:web/campaigns",
+    int    port = clp.get("port", Config.get("web/port", 5555));
+    String name = clp.get("name", Config.get("web/name", "localhost"));
+    String base = clp.get("base-directories", "");
+    String campaigns = clp.get("campaigns", Config.get("web/campaigns",
                                                        "Campaigns.dma"));
-    String users = clp.get("users", Config.get("resource:web/users",
-                                               "Ixitxachitls.dma"));
 
     Log.info(s_version);
 
-    DMAServer server = new DMAServer(name, port, base, campaigns, users);
+    DMAServer server = new DMAServer(name, port, base, campaigns);
     server.start();
   }
 

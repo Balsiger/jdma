@@ -1,0 +1,3896 @@
+/*****************************************************************************
+ * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+//------------------------------------------------------------------ imports
+
+package net.ixitxachitls.dma.entries;
+
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.ixitxachitls.dma.data.DMAData;
+// import net.ixitxachitls.dma.entries.indexes.CommandIndex;
+// import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
+// import net.ixitxachitls.dma.entries.indexes.GroupedKeyIndex;
+// import net.ixitxachitls.dma.entries.indexes.Index;
+// import net.ixitxachitls.dma.entries.indexes.KeyIndex;
+import net.ixitxachitls.dma.values.Date;
+import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.Group;
+import net.ixitxachitls.dma.values.ISBN;
+import net.ixitxachitls.dma.values.ISBN13;
+import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.dma.values.Price;
+import net.ixitxachitls.dma.values.Selection;
+import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.output.ListPrint;
+import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
+import net.ixitxachitls.dma.values.formatters.Formatter;
+import net.ixitxachitls.dma.values.formatters.LinkFormatter;
+import net.ixitxachitls.dma.values.formatters.ListFormatter;
+import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
+import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Editable;
+import net.ixitxachitls.output.commands.Hrule;
+import net.ixitxachitls.output.commands.Label;
+import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.output.commands.Script;
+import net.ixitxachitls.output.commands.Subtitle;
+import net.ixitxachitls.output.commands.Table;
+import net.ixitxachitls.output.commands.Textblock;
+import net.ixitxachitls.output.commands.Title;
+import net.ixitxachitls.util.Filter;
+import net.ixitxachitls.util.Grouping;
+import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
+
+//..........................................................................
+
+//------------------------------------------------------------------- header
+
+/**
+ * This is the entry for base products, the basic description of a
+ * product available.
+ *
+ * @file          BaseProduct.java
+ *
+ * @author        balsiger@ixitxachils.net (Peter 'Merlin' Balsiger)
+ *
+ */
+
+//..........................................................................
+
+//__________________________________________________________________________
+
+public class BaseProduct extends BaseEntry
+{
+  //----------------------------------------------------------------- nested
+
+  //----- producers --------------------------------------------------------
+
+  /** The producers of products. */
+  public static final @Nonnull String []PRODUCERS =
+    Config.get("/game/product.producers", new String []
+      {
+        "WTC",
+        "TSR",
+        "Paizo",
+        "Celtos",
+        "Cloud Kingdom Games",
+        "Dark Platypus Studio",
+        "Devil's Due",
+        "Do Gooder Press",
+        "Dork Storm Press",
+        "Dover",
+        "Dwarven Forge",
+        "Fantasy Flight Games",
+        "Fantasy Productions",
+        "Fenryll",
+        "Gale Force Nine",
+        "Global Games Europe",
+        "Goodman Games",
+        "Heel",
+        "Henchman Publishing",
+        "K&C",
+        "King of the Castle",
+        "Laurin",
+        "Litko",
+        "Looney Labs",
+        "Mega Miniatures",
+        "Magnificient Egos",
+        "Malhavoc Press",
+        "Mirrorstone",
+        "Necromancer Games",
+        "Open Mind Games",
+        "Pegasus Press",
+        "Rackham",
+        "Ral Partha",
+        "Reaper",
+        "RPG International",
+        "RPGA",
+        "Sterling' Publishing",
+        "tosa",
+        "Toy Vault",
+        "White Wolf",
+        "Wiley",
+      });
+
+  //........................................................................
+  //----- part -------------------------------------------------------------
+
+  /** The product parts. */
+  public enum Part implements EnumSelection.Named
+  {
+    /** A game board. */
+    BOARD("Board"),
+    /** A normal book. */
+    BOOK("Book"),
+    /** A booklet. */
+    BOOKLET("Booklet"),
+    /** Some kind of box. */
+    BOX("Box"),
+    /** A playing card or an item card. */
+    CARD("Card"),
+    /** A cd with music or programs. */
+    CD("CD"),
+    /** Some kind of counter. */
+    COUNTER("Counter"),
+    /** A cover for a book or booklet (separate). */
+    COVER("Cover"),
+    /** Some dice, normal or special. */
+    DICE("Dice"),
+    /** A flyer, basically a piece of paper with something on it. */
+    FLYER("Flyer"),
+    /** A fold to organize things in it. */
+    FOLDER("Folder"),
+    /** Like a cover with a booklet it in, but the cover can be folded out. */
+    GATEFOLD("Gatefold"),
+    /** A magnet with some special design. */
+    MAGNET("Magnet"),
+    /** A map used for playing (battle map) or for showing the lay of the
+     *  environment. */
+    MAP("Map"),
+    /** Some miniature figure that can be used for play or for decoration. */
+    MINIATURE("Miniature"),
+    /** Something not covered in any of the other categories. */
+    MISC("Misc"),
+    /** An transparent or partially transparent sheet that is used as an
+     *  overlay over something else (e.g. a map). */
+    OVERLAY("Overlay"),
+    /** A pack o other things, usually cards. */
+    PACK("Pack"),
+    /** A page of paper. */
+    PAGE("Page"),
+    /** A playing piece other than a miniature. */
+    PLAYING_PIECE("Playing Piece"),
+    /** A poster other than a map. */
+    POSTER("Poster"),
+    /** A screen the DM can be used to not be observed too closely. */
+    SCREEN("Screen"),
+    /** A sheet of paper, e.g. a handout. */
+    SHEET("Sheet"),
+    /** A sticker. */
+    STICKER("Sticker");
+
+    /** The value's name. */
+    private @Nonnull String m_name;
+
+    /**
+     * Create the name.
+     *
+     * @param inName     the name of the value
+     *
+     */
+    private Part(@Nonnull String inName)
+    {
+      m_name = constant("product.part", inName);
+    }
+
+    /**
+     * Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Convert to a human readable string.
+     *
+     * @return the converted string
+     *
+     */
+    public @Nonnull String toString()
+    {
+        return m_name;
+    }
+  };
+
+  //........................................................................
+  //----- layout -----------------------------------------------------------
+
+  /** The product layouts. */
+  public enum Layout implements EnumSelection.Named
+  {
+    /** A product with full color on most pages. */
+    FULL_COLOR("Full Color"),
+    /** A product that uses 4 colors on most pages. */
+    FOUR_COLOR("4 Color"),
+    /** A product that uses a two color print. */
+    TWO_COLOR("2 Color"),
+    /** A product that is basically black & white but has a color cover. */
+    COLOR_COVER("Color Cover"),
+    /** The product is completely in black & white. */
+    BLACK_AND_WHITE("Black & White"),
+    /** The product is mixed between different layout, with none really
+     *  dominant (otherwise use the dominant layout). */
+    MIXED("Mixed");
+
+    /** The value's name. */
+    private @Nonnull String m_name;
+
+    /**
+     * Create the name.
+     *
+     * @param inName     the name of the value
+     *
+     */
+    private Layout(@Nonnull String inName)
+    {
+      m_name = constant("product.layout", inName);
+    }
+
+    /**
+     * Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Convert to a human readable string.
+     *
+     * @return the converted string
+     *
+     */
+    public @Nonnull String toString()
+    {
+        return m_name;
+    }
+  };
+
+  //........................................................................
+  //----- system -----------------------------------------------------------
+
+  /** The game system. */
+  public enum System implements EnumSelection.Named
+  {
+    /** No game system, e.g. for novels. */
+    NONE("None", null),
+    /** Dungeons & Dragons, original edition. */
+    DnD_1ST("D&D 1st", "D&D 1st"),
+    /** Advanced Dungeon & Dragons, first edition. */
+    ADnD_1ST("AD&D 1st", "AD&D 1st"),
+    /** Advanced Dungeon & Dragons, second edition, together with the Saga
+     * rules. */
+    ADnD_2ND_SAGA("AD&D 2nd & Saga", "AD&D 2nd"),
+    /** Advanced Dungeon & Dragons, second edition. */
+    ADnD_2ND("AD&D 2nd", "AD&D 2nd"),
+    /** Advanced Dungeon & Dragons, second but revised edition (new logo). */
+    ADnD_REVISED("AD&D revised", "AD&D 2nd"),
+    /** Dungeons & Dragons, third edition. */
+    DnD_3RD("D&D 3rd", "D&D 3rd"),
+    /** Dungeons & Dragons, version 3.5. */
+    DnD_3_5("D&D 3.5", "D&D 3rd"),
+    /** Dungeon & Dragons, fourth edition. */
+    DnD_4("D&D 4th", "D&D 4th"),
+    /** Games with d20 modern rules. */
+    D20_MODERN("d20 Modern", null),
+    /** Games with d20 future rules. */
+    D20_FUTURE("d20 Future", null),
+    /** Games with the d20 fantasy rules. */
+    D20("d20", null),
+    /** Games with the science-fition rules of Alternaty. */
+    ALTERNITY("Alternity", null),
+    /** Amazing Engine games. */
+    AMAZING_ENGINE("Amazing Engine", null),
+    /** The Blood Wars card game rules. */
+    BLOOD_WARS("Blood Wars", null),
+    /** Games using the Chaosium rules. */
+    CHAOSIUM("Chaosium", null),
+    /** Miniatures from the Dark Heaven line. */
+    DARK_HEAVEN("Dark Heaven", null),
+    /** Dragon Dice game system. */
+    DRAGON_DICE("Dragon Dice", null),
+    /** Dragon Strike game system. */
+    DRAGON_STRIKE("Dragon Strike", null),
+    /** Duel Master games. */
+    DUEL_MASTER("Duel Master", null),
+    /** Books with the Endless Quest system. */
+    ENDLESS_QUEST("Endless Quest", null),
+    /** First Quest introductory games. */
+    FIRST_QUEST("First Quest", null),
+    /** Games with the Gamma World rule. */
+    GAMMA_WORLD("Gamma World", null),
+    /** Games with the Ganbusters rules. */
+    GANGBUSTERS("Gangbusters", null),
+    /** The legend of the Five Rings oriental fantasy rules. */
+    LEGEND_OF_THE_FIVE_RINGS("Legend of the Five Rings", null),
+    /** Card games with the Magic: the Gathering rules. */
+    MAGIC_THE_GAHTERING("Magic: The Gathering", null),
+    /** The Marvel Super Dice rules. */
+    MARVEL_SUPER_DICE("Marvel Super Dice", null),
+    /** Games using the Marvel Super Heroes rules. */
+    MARVEL_SUPER_HEROES("Marvel Super Heroes", null),
+    /** Card games according to the MLB Showdown 2002 rules. */
+    MLB_SHOWDOWN_2002("MLB Showdown 2002", null),
+    /** Card games according to the MLB Showdown 2003 rules. */
+    MLB_SHOWDOWN_2003("MLB Showdown 2003", null),
+    /** Card games according to the MLB Showdown rules. */
+    MLB_SHOWDOWN("MLB Showdown", null),
+    /** Books with the Neopets rules. */
+    NEOPETS("Neopets", null),
+    /** Games with 1 on 1 rules. */
+    ONE_ON_ONE("1 on 1", null),
+    /** Games inside the Pokemon universe. */
+    POKEMON("Pokemon", null),
+    /** Games using the Saga narrative rules. */
+    SAGA("Saga", null),
+    /** Games using special rules (e.g. not covered by other systems). */
+    SPECIAL("Special", null),
+    /** The spellfire card game. */
+    SPELLFIRE("Spellfire", null),
+    /** The star wars trading card game rules. */
+    STAR_WARS_TCG("Star Wars TCG", null),
+    /** Games for the star wars role playing game. */
+    STAR_WARS("Star Wars", null),
+    /** Books with the super endless quest system. */
+    SUPER_ENDLESS_QUEST("Super Endless Quest", null),
+    /** Games for the Sword & Sorcery rules. */
+    SWORD_SORCERY("Sword & Sorcery", null),
+    /** Games using the Terror Tracks system. */
+    TERROR_TRACKS("Terror Tracks", null),
+    /** Gemes using the Terror T.R.A.X. system. */
+    TERROR_TRAX("Terror T.R.A.X.", null),
+    /** Games for Wild Space. */
+    WILD_SPACE("Wild Space", null),
+    /** Games for World War II. */
+    WORLD_WAR_II("World War II", null),
+    /** Games for the XXVC sci-fi game. */
+    XXVC("XXVC", null);
+
+    /** The value's name. */
+    private @Nonnull String m_name;
+
+    /** The group of styles, if any. */
+    private @Nullable String m_group;
+
+    /**
+     * Create the name.
+     *
+     * @param inName     the name of the value
+     * @param inGroup    the group (if any) to use when sorting by system.
+     *
+     */
+    private System(@Nonnull String inName, @Nullable String inGroup)
+    {
+      m_name  = constant("system.name",  inName);
+      m_group = constant("system.group", inName, inGroup);
+    }
+
+    /**
+     * Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Get the group of the style, if any).
+     *
+     * @return the group of the style
+     *
+     */
+    public @Nullable String getGroup()
+    {
+      return m_group;
+    }
+
+    /**
+     * Convert to a human readable string.
+     *
+     * @return the converted string
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return m_name;
+    }
+
+    /**
+     * Get the enum with the given name (case insensitive).
+     *
+     * @param  inName the name to look for
+     *
+     * @return the enum value found or null if not found
+     *
+     */
+    public static @Nullable System valueOfIgnoreCase(@Nonnull String inName)
+    {
+      if(inName == null)
+        return null;
+
+      // check ignoring case
+      try
+      {
+        return valueOf(inName);
+      }
+      catch(java.lang.IllegalArgumentException e)
+      { /* ignore it. */ }
+
+      for(System value : values())
+        if(inName.equalsIgnoreCase(value.toString()))
+          return value;
+
+      return null;
+    }
+  };
+
+  //........................................................................
+  //----- product type -----------------------------------------------------
+
+  /** The product types. */
+  public enum ProductType implements EnumSelection.Named
+  {
+    /** A game accessory, e.g. an optional product enhancing the game. */
+    ACCESSORY("Accessory", "Accessories"),
+    /** A game adventure. */
+    ADVENTURE("Adventure", "Adventures"),
+    /** A board game, usually outside of rpg. */
+    BOARD_GAME("Board Game", null),
+    /** A booster pack for a trading card or miniature game. */
+    BOOSTER_PACK("Booster Pack", null),
+    /** A calendar (no game). */
+    CALENDAR("Calendar", null),
+    /** An expansion to a campaign. */
+    CAMPAIGN_EXPANSION("Campaign Expansion", "Accessories"),
+    /** The base rules and description of a campaign. */
+    CAMPAIGN_SETTING("Campaign Setting", "Accessories"),
+    /** A card game. */
+    CARD_GAME("Card Game", null),
+    /** A bunch of cards that are part of something else. */
+    CARDS("Cards", null),
+    /** A catalog listing products. */
+    CATALOG("Catalog", "Others"),
+    /** A collection of other things. */
+    COLLECTION("Collection", null),
+    /** A comics book. */
+    COMICS("Comics", "Comics"),
+    /** A book with cooking recipies. */
+    COOKBOOK("Cookbook", null),
+    /** One or more dice. */
+    DICE("Dice", null),
+    /** Additional information in electronic form (not programs). */
+    ELECTRONIC_ACCESSORY("Electronic Accessory", null),
+    /** A guide for a game or something else. */
+    GUIDE("Guide", null),
+    /** A gaming magazine. */
+    MAGAZINE("Magazine", "Magazines"),
+    /** One ore more miniatures. */
+    MINIATURE("Miniature", null),
+    /** A compendium with monsters. */
+    MONSTER_COMPENDIUM("Monster Compendium", "Accessories"),
+    /** A novel. */
+    NOVEL("Novel", "Novels"),
+    /** A promotional product. */
+    PROMOTION("Promotion", "Others"),
+    /** A book with basic rules (usually the core rules books). */
+    RULEBOOK("Rulebook", "Rulebooks"),
+    /** A supplement with addtional rules. */
+    RULES_SUPPLEMENT("Rules Supplement", "Accessories"),
+    /** A software tool to support the game. */
+    SOFTWARE("Software", null),
+    /** A source book about rules and descriptions of real world things. */
+    SOURCEBOOK("Sourcebook", "Accessories"),
+    /** Something not covered by all the other types. */
+    SPECIAL_BOOK("Special Book", "Others");
+
+    /** The value's name. */
+    private @Nonnull String m_name;
+
+    /** The group of styles, if any. */
+    private @Nullable String m_group = null;
+
+    /** Create the name.
+     *
+     * @param inName     the name of the value
+     * @param inGroup    the group used for sorting
+     *
+     */
+    private ProductType(@Nonnull String inName, @Nullable String inGroup)
+    {
+      m_name  = constant("product.type.name",  inName);
+      m_group = constant("product.type.group", inName, inGroup);
+    }
+
+    /**
+     * Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Get the group of the style, if any).
+     *
+     * @return the group of the style
+     *
+     */
+    public @Nullable String getGroup()
+    {
+      return m_group;
+    }
+
+    /**
+     * Convert to a human readable string.
+     *
+     * @return the converted string
+     *
+     */
+    public String toString()
+    {
+      return m_name;
+    }
+  };
+
+  //........................................................................
+  //----- style ------------------------------------------------------------
+
+  /** The product styles. */
+  public enum Style implements EnumSelection.Named
+  {
+    /** A booklet, i.e. a small, stapled book. */
+    BOOKLET("Booklet", null),
+    /** A large box (A4 or bigger). */
+    BOX("Box", "Boxes"),
+    /** A set of cards. */
+    CARDS("Cards", null),
+    /** A sheet of paper. */
+    FLYER("Flyer", null),
+    /** A folder to store other things. */
+    FOLDER("Folder", null),
+    /** A hardcover book. */
+    HARDCOVER("Hardcover", null),
+    /** A map. */
+    MAP("Map", null),
+    /** A medium box, roughly A5 or similar. */
+    MEDIUM_BOX("Medium Box", "Medium Boxes"),
+    /** A pack of cards or miniatures. */
+    PACK("Pack", null),
+    /** A normal paperback book. */
+    PAPERBAKC("Paperback", null),
+    /** A poster. */
+    POSTER("Poster", null),
+    /** A screen for the DM to guard his secrets. */
+    SCREEN("Screen", null),
+    /** A bunch of sheets. */
+    SHEETS("Sheets", null),
+    /** A small box, usually for miniatures or similar. */
+    SMALL_BOX("Small Box", "Small Boxes"),
+    /** A bound book with a soft cover. */
+    SOFT_COVER("Soft Cover", null),
+    /** A sticker. */
+    STICKER("Sticker", null);
+
+    /** The value's name. */
+    private @Nonnull String m_name;
+
+    /** The group of styles, if any. */
+    private @Nullable String m_group;
+
+    /** Create the name.
+     *
+     * @param inName     the name of the value
+     * @param inGroup    the group to use for sorting
+     *
+     */
+    private Style(@Nonnull String inName, @Nullable String inGroup)
+    {
+      m_name  = constant("product.style.name",  inName);
+      m_group = constant("product.style.group", inName, inGroup);
+    }
+
+    /**
+     * Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Get the group of the style, if any).
+     *
+     * @return the group of the style
+     *
+     */
+    public @Nullable String getGroup()
+    {
+      return m_group;
+    }
+
+    /**
+     * Convert to a human readable string.
+     *
+     * @return the converted string
+     *
+     */
+    public @Nullable String toString()
+    {
+        return m_name;
+    }
+  };
+
+  //........................................................................
+  //----- audience --------------------------------------------------------
+
+  /** The audiences for products. */
+  public enum Audience implements EnumSelection.Named
+  {
+    /** Material indented for the DM only. */
+    DM("DM"),
+    /** Material targeted mostly to players. */
+    PLAYER("Player"),
+    /** Material that is open to all. */
+    ALL("All");
+
+    /** The value's name. */
+    private @Nonnull String m_name;
+
+    /**
+     * Create the name.
+     *
+     * @param inName     the name of the value
+     *
+     */
+    private Audience(@Nonnull String inName)
+    {
+      m_name = constant("audiences", inName);
+    }
+
+    /**
+     * Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Convert to a human readable string.
+     *
+     * @return the converted string
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return m_name;
+    }
+  };
+
+  //........................................................................
+
+  //----- CategoryAccessor -------------------------------------------------
+
+//   /** A simple interface to get categories out of a product. */
+//   public interface CategoryAccessor
+//   {
+//       /** Get the categories.
+//        *
+//        * @param  inProduct the product to get categories from
+//        *
+//        * @return all the categories
+//        *
+//        */
+//     public ValueList<Multiple> []get(BaseProduct inProduct);
+//   }
+
+  //........................................................................
+
+  //........................................................................
+
+  //--------------------------------------------------------- constructor(s)
+
+  //----------------------------- BaseProduct ------------------------------
+
+  /**
+   * This is the internal, default constructor.
+   *
+   */
+  protected BaseProduct(@Nonnull DMAData inData)
+  {
+    super(TYPE, inData);
+  }
+
+  //........................................................................
+  //----------------------------- BaseProduct ------------------------------
+
+  /**
+   * This is the normal constructor.
+   *
+   * @param       inName the name of the base product
+   *
+   */
+  public BaseProduct(@Nonnull String inName, @Nonnull DMAData inData)
+  {
+    super(inName, TYPE, inData);
+  }
+
+  //........................................................................
+
+  //........................................................................
+
+  //----- printing commands ------------------------------------------------
+
+//   /** The command for printing on a page. */
+//   public static Command PAGE_COMMAND = new Command(new Object []
+//     {
+//       new Divider("center",
+//                   new Command("#system #audience #style #producer #layout "
+//                               + "#{product type}")),
+//       "$title",
+//       new Textblock(new Command(new Object []
+//         {
+//           "$subtitle",
+//           new Linebreak(),
+//           "$description",
+//           new Hrule(),
+//           "${short description}",
+//         }), "desc"),
+//       new OverviewFiles("$image"),
+//       new Table("description", "f" + "Illustrations: ".length()
+//                 + ":L(desc-label);100:L(desc-text)",
+//                 new Command("%base %name %synonyms "
+//                             + "%notes "
+//                             + "%author %editor %cover %cartography "
+//                             + "%illustrations %typography %management "
+//                             + "%date %ISBN "
+//                             + "%pages %series %number %volume "
+//                             + "%price %contents %requirements"
+//                             // incomplete
+//                             + "%incomplete "
+//                             // admin
+//                             + "%{+references} %file")),
+//       "$scripts",
+//       new Divider("clear", " "),
+//     });
+
+  //........................................................................
+
+  //-------------------------------------------------------------- variables
+
+  /** The printer for printing the whole base character. */
+  public static final Print s_pagePrint =
+    new Print("$title $subtitle ${short description} $description");
+
+  /** The type of this entry. */
+  public static final BaseType<BaseProduct> TYPE =
+    new BaseType<BaseProduct>(BaseProduct.class);
+
+  /** The basic formatter for base product. */
+//   public static final Index.Formatter<AbstractEntry> FORMATTER =
+//     new Index.Formatter<AbstractEntry>()
+//     {
+//       public List<Object> format(String inKey, AbstractEntry inEntry)
+//       {
+//         List<Object> list = BaseEntry.FORMATTER.format(inKey, inEntry);
+
+//         if(!(inEntry instanceof BaseProduct))
+//           return list;
+
+//         BaseProduct product = (BaseProduct)inEntry;
+
+//         list.add(product.m_system.format(false));
+//         list.add(product.m_producer.format(false));
+//         list.add(product.m_type.format(false));
+
+//         return list;
+//       }
+//     };
+
+  /** The basic format for base products. */
+//   public static final String FORMAT =
+//     BaseEntry.FORMAT + ";1:L(system)[System];"
+//     + "1:L(producer)[Producer];1:L(type)[Type]";
+
+  // the general index with all items
+  static
+  {
+//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
+//                   ("index", "index", "baseproducts",
+//                    new ExtractorIndex.Extractor()
+//                    {
+//                      public Object []get(AbstractEntry inEntry)
+//                      {
+//                        if(!(inEntry instanceof BaseProduct))
+//                          return null;
+
+//                        return new Object [] { "base product" };
+//                      }
+//                    }, true, FORMATTER, FORMAT, true)
+//                   .withType(BaseProduct.TYPE));
+  }
+
+  //----- title ------------------------------------------------------------
+
+  /** The title of the product. */
+  @Key("title")
+  protected @Nonnull Text m_title = new Text();
+
+  //........................................................................
+  //----- leader -----------------------------------------------------------
+
+  /** The leader of the product, any 'a', 'the' and the like. */
+  @Key("leader")
+  protected @Nonnull Text m_leader = new Text("");
+
+  //........................................................................
+  //----- subtitle ---------------------------------------------------------
+
+  /** The sub title of the product. */
+  @Key("subtitle")
+  protected @Nonnull Text m_subtitle = new Text();
+
+  //........................................................................
+  //----- notes ------------------------------------------------------------
+
+  /** Notes about the product. */
+  @Key("notes")
+  protected @Nonnull Text m_notes = new Text();
+
+  //........................................................................
+  //----- authors ----------------------------------------------------------
+
+  /** The formatter for a person. */
+  protected static Formatter<Text> s_personFormatter =
+    new LinkFormatter<Text>("/index/persons/");
+
+  /** The formatter for a job. */
+  protected static Formatter<Name> s_jobFormatter =
+    new LinkFormatter<Name>("/index/jobs/");
+
+  /** The formatter for a complete person. */
+  protected static Formatter<Multiple> s_nameFormatter =
+    new MultipleFormatter<Multiple>(null, null, " (", ")");
+
+  /** The formatter for a complete person. */
+  protected static Formatter<ValueList<Multiple>> s_listFormatter =
+    new ListFormatter<ValueList<Multiple>>("; ");
+
+  /** All the authors of the product. */
+  @Key("author")
+    protected @Nonnull ValueList<Multiple> m_authors =
+      new ValueList<Multiple>(new Multiple(new Multiple.Element []
+        { new Multiple.Element
+          (new Text().withFormatter(s_personFormatter)
+           .withEditType("suggeststring(persons?category=author)[author]"),
+           false),
+          new Multiple.Element
+          (new Name().withFormatter(s_jobFormatter)
+           .withEditType("suggest(jobs?category=author)[job]"), true) })
+                         .withFormatter(s_nameFormatter))
+    .withFormatter(s_listFormatter);
+
+  static
+  {
+    // the index for all persons
+//     s_indexes.add(new CommandIndex
+//                   ("Product", "Persons", "persons",
+//                    new CommandIndex.Extractor()
+//                    {
+//                      public Object []get(AbstractEntry inEntry)
+//                      {
+//                        if(!(inEntry instanceof BaseProduct))
+//                          return null;
+
+//                        return ((BaseProduct)inEntry).getPersons();
+//                      }
+//                    },
+//                    new CommandIndex.CommandExtractor()
+//                    {
+//                      public Collection<Object> get
+//                        (String inID, View inView)
+//                      {
+//                        TreeMap<String, ArrayList<BaseProduct>> jobs =
+//                          new TreeMap<String, ArrayList<BaseProduct>>();
+
+//                        for(Object i : inView)
+//                        {
+//                          BaseProduct entry = (BaseProduct)i;
+
+//                          for(String job : entry.getJobsForPerson(inID))
+//                          {
+//                            if(!jobs.containsKey(job))
+//                              jobs.put(job, new ArrayList<BaseProduct>());
+
+//                            jobs.get(job).add(entry);
+//                          }
+//                        }
+
+//                        ArrayList<Object> commands = new ArrayList<Object>();
+
+//                        for(String job : jobs.keySet())
+//                        {
+//                          commands.add(new Label("Job"));
+//                          commands.add(new Link(job,
+//                                                "/index/jobs/" + job));
+
+//                          ArrayList<Object> references =
+//                            new ArrayList<Object>();
+
+//                          for(Iterator<BaseProduct> i =
+//                                jobs.get(job).iterator(); i.hasNext(); )
+//                          {
+//                            BaseProduct product = i.next();
+
+//                            references.add(new Link(product.getFullTitle(),
+//                                                    "/entry/baseproduct/"
+//                                                    + product.getID()));
+//                            if(i.hasNext())
+//                              references.add(", ");
+//                          }
+
+//                          commands.add(new Command(references.toArray()));
+//                        }
+
+//                        return commands;
+//                      }
+//                    }, false, "1:L(icon);20:L(job)[Job];"
+//                    + "20:L(references)[References]", false));
+
+    // the index for all jobs
+//     s_indexes.add(new CommandIndex
+//                   ("Product", "Jobs", "jobs",
+//                    new CommandIndex.Extractor()
+//                    {
+//                      public Object []get(AbstractEntry inEntry)
+//                      {
+//                        if(!(inEntry instanceof BaseProduct))
+//                          return null;
+
+//                        return ((BaseProduct)inEntry).getJobs();
+//                      }
+//                    },
+//                    new CommandIndex.CommandExtractor()
+//                    {
+//                      public Collection<Object> get
+//                        (String inID, View inView)
+//                      {
+//                        TreeMap<String, ArrayList<BaseProduct>> persons =
+//                          new TreeMap<String, ArrayList<BaseProduct>>();
+
+//                        for(Object i : inView)
+//                        {
+//                          BaseProduct entry = (BaseProduct)i;
+
+//                          for(String person : entry.getPersonsForJob(inID))
+//                          {
+//                            if(!persons.containsKey(person))
+//                              persons.put(person,
+//                                          new ArrayList<BaseProduct>());
+
+//                            persons.get(person).add(entry);
+//                          }
+//                        }
+
+//                        ArrayList<Object> commands = new ArrayList<Object>();
+
+//                        for(String person : persons.keySet())
+//                        {
+//                          commands.add(new Label("Person"));
+//                          commands.add(new Link(person,
+//                                                "/index/persons/" + person));
+
+//                          ArrayList<Object> references =
+//                            new ArrayList<Object>();
+
+//                          for(Iterator<BaseProduct> i =
+//                                persons.get(person).iterator(); i.hasNext(); )
+//                          {
+//                            BaseProduct product = i.next();
+
+//                            references.add(new Link(product.getFullTitle(),
+//                                                    "/entry/baseproduct/"
+//                                                    + product.getID()));
+//                            if(i.hasNext())
+//                              references.add(", ");
+//                          }
+
+//                          commands.add(new Command(references.toArray()));
+//                        }
+
+//                        return commands;
+//                      }
+//                    }, false, "1:L(icon);20:L(person)[Person];"
+//                    + "20:L(references)[References]", false));
+  }
+
+  //........................................................................
+  //----- editors ----------------------------------------------------------
+
+  /** All the editors of the product. */
+  @Key("editor")
+  protected @Nonnull ValueList<Multiple> m_editors =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element(new Text()
+                             .withFormatter(s_personFormatter)
+                             .withEditType
+                             ("suggeststring(persons?category=editor)[editor]"),
+                             false),
+        new Multiple.Element(new Name()
+                             .withFormatter(s_jobFormatter)
+                             .withEditType("suggest(jobs?category=editor)"
+                                           + "[job]"),
+                             true) }).withFormatter(s_nameFormatter))
+    .withFormatter(s_listFormatter);
+
+  //........................................................................
+  //----- cover ------------------------------------------------------------
+
+  /** All the cover artists. */
+  @Key("cover")
+  protected @Nonnull ValueList<Multiple> m_cover =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element(new Text()
+                             .withFormatter(s_personFormatter)
+                             .withEditType("suggeststring(persons?"
+                                           + "category=cover)[cover]"),
+                             false),
+        new Multiple.Element(new Name().
+                             withFormatter(s_jobFormatter)
+                             .withEditType("suggest(jobs?category=cover)[job]"),
+                             true) }).withFormatter(s_nameFormatter))
+    .withFormatter(s_listFormatter);
+
+  //........................................................................
+  //----- cartographers ----------------------------------------------------
+
+  /** The cartographers for the product. */
+  @Key("cartography")
+  protected @Nonnull ValueList<Multiple> m_cartographers =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element(new Text()
+                             .withFormatter(s_personFormatter)
+                             .withEditType("suggeststring(persons?category="
+                                           + "cartographer)[cartographer]"),
+                             false),
+        new Multiple.Element(new Name()
+                             .withFormatter(s_jobFormatter)
+                             .withEditType("suggest(jobs?category=cartographer)"
+                                           + "[job]"),
+                             true) }).withFormatter(s_nameFormatter))
+    .withFormatter(s_listFormatter);
+
+  //........................................................................
+  //----- illustrators -----------------------------------------------------
+
+  /** The illustration artists for the product. */
+  @Key("illustrations")
+  protected @Nonnull ValueList<Multiple> m_illustrators =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element(new Text()
+                             .withFormatter(s_personFormatter)
+                             .withEditType("suggeststring(persons?category="
+                                           + "illustrator)[illustrator]"),
+                             false),
+        new Multiple.Element(new Name()
+                             .withFormatter(s_jobFormatter)
+                             .withEditType("suggest(jobs?category=illustrator)"
+                                           + "[job]"),
+                             true) }).withFormatter(s_nameFormatter))
+    .withFormatter(s_listFormatter);
+
+  //........................................................................
+  //----- typographers -----------------------------------------------------
+
+  /** The typographers for this product. */
+  @Key("typography")
+  protected @Nonnull ValueList<Multiple> m_typographers =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element(new Text()
+                             .withFormatter(s_personFormatter)
+                             .withEditType("suggeststring(persons?category="
+                                           + "typographer)[typographer]"),
+                             false),
+        new Multiple.Element(new Name()
+                             .withFormatter(s_jobFormatter)
+                             .withEditType("suggest(jobs?category=typographer)"
+                                           + "[job]"),
+                             true) }).withFormatter(s_nameFormatter))
+    .withFormatter(s_listFormatter);
+
+  //........................................................................
+  //----- managers ---------------------------------------------------------
+
+  /** All the mangers and other people involved in the product creation. */
+  @Key("management")
+  protected @Nonnull ValueList<Multiple> m_managers =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element(new Text()
+                             .withFormatter(s_personFormatter)
+                             .withEditType("suggeststring(persons?category="
+                                           + "manager)[manager]"), false),
+        new Multiple.Element(new Name()
+                             .withFormatter(s_jobFormatter)
+                             .withEditType("suggest(jobs?category=manager)"
+                                           + "[job]"),
+                             true) }).withFormatter(s_nameFormatter))
+    .withFormatter(s_listFormatter);
+
+  //........................................................................
+  //----- date -------------------------------------------------------------
+
+  /** The formatter for the date. */
+  protected static Formatter<Date> s_dateFormatter =
+    new LinkFormatter<Date>("/index/dates/");
+
+  /** The date (month and year) the product was released. */
+  @Key("date")
+  protected @Nonnull Date m_date = new Date().withFormatter(s_dateFormatter);
+
+  static
+  {
+//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Date", "dates", "date",
+//                                          false, FORMATTER, FORMAT, false,
+//                                          null));
+  }
+
+  //........................................................................
+  //----- isbn -------------------------------------------------------------
+
+  /** The product's ISBN number, if it has one. */
+  @Key("ISBN")
+  protected @Nonnull ISBN m_isbn = new ISBN();
+
+  //........................................................................
+  //----- isbn 13 ----------------------------------------------------------
+
+  /** The product's ISBN 13 number, if it has one. */
+  @Key("ISBN13")
+  protected @Nonnull ISBN13 m_isbn13 = new ISBN13();
+
+  //........................................................................
+  //----- pages ------------------------------------------------------------
+
+  /** The formatter for the pages. */
+  protected static Formatter<Number> s_pageFormatter =
+    new LinkFormatter<Number>("/index/pages/");
+
+  /** The grouping for the pages. */
+  protected static final Grouping<Number, Object> s_pageGroup =
+    new Group<Number, Long, Object>(new Group.Extractor<Number, Long>()
+      {
+        public Long extract(Number inValue)
+        {
+          if(inValue == null)
+              return 0L;
+
+          return inValue.get();
+        }
+      }, new Long [] { 5L, 10L, 20L, 25L, 50L, 100L, 200L, 250L, 300L, 400L,
+                       500L, },
+                                new String []
+      { "5", "10", "20", "25", "50", "100", "200", "250", "300", "400", "500",
+        "1000", }, "$undefined");
+
+  /** The total number of pages of the product. */
+  @SuppressWarnings("unchecked")
+  @Key("pages")
+  protected @Nonnull Number m_pages =
+    new Number(0, Integer.MAX_VALUE).withFormatter(s_pageFormatter)
+    .withGrouping(s_pageGroup);
+
+  static
+  {
+//     s_indexes.add(new GroupedKeyIndex("Product", "Pages", "pages", "pages",
+//                                       true, FORMATTER, FORMAT, false));
+  }
+
+  //........................................................................
+  //----- system -----------------------------------------------------------
+
+  /** The formatter for the system. */
+  protected static Formatter<EnumSelection<System>> s_systemFormatter =
+    new LinkFormatter<EnumSelection<System>>("/index/systems/");
+
+  /** The game system of the product. */
+  @Key("system")
+  protected @Nonnull EnumSelection<System> m_system =
+    new EnumSelection<System>(System.class).withFormatter(s_systemFormatter);
+
+  static
+  {
+//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "System", "systems",
+//                                          "system", true, FORMATTER, FORMAT,
+//                                          true, null));
+  }
+
+  //........................................................................
+  //----- audience ---------------------------------------------------------
+
+  /** The formatter for the audience. */
+  protected static Formatter<EnumSelection<Audience>>
+    s_audienceFormatter =
+    new LinkFormatter<EnumSelection<Audience>>("/index/audiences/");
+
+  /** The intended audience of the product. */
+  @Key("audience")
+  protected @Nonnull EnumSelection<Audience> m_audience =
+    new EnumSelection<Audience>(Audience.class)
+    .withFormatter(s_audienceFormatter);
+
+  static
+  {
+//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Audience", "audiences",
+//                                          "audience", true, FORMATTER, FORMAT,
+//                                          false, null));
+  }
+
+  //........................................................................
+  //----- type -------------------------------------------------------------
+
+  /** The formatter for the type. */
+  protected static Formatter<EnumSelection<ProductType>>
+    s_typeFormatter =
+    new LinkFormatter<EnumSelection<ProductType>>("/index/categories/");
+
+  /** The type of product. */
+  @Key("product type")
+  protected @Nonnull EnumSelection<ProductType> m_type =
+    new EnumSelection<ProductType>(ProductType.class)
+    .withFormatter(s_typeFormatter);
+
+  //........................................................................
+  //----- style ------------------------------------------------------------
+
+  /** The formatter for the style. */
+  protected static Formatter<EnumSelection<Style>> s_styleFormatter =
+    new LinkFormatter<EnumSelection<Style>>("/index/styles/");
+
+  /** The style of the product, its general outlook. */
+  @Key("style")
+  protected @Nonnull EnumSelection<Style> m_style =
+    new EnumSelection<Style>(Style.class).withFormatter(s_styleFormatter);
+
+  static
+  {
+//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Style", "styles", "style",
+//                                          true, FORMATTER, FORMAT, true, null));
+  }
+
+  //........................................................................
+  //----- producer ---------------------------------------------------------
+
+  /** The formatter for the producer. */
+  protected static Formatter<Selection> s_producerFormatter =
+    new LinkFormatter<Selection>("/index/producers/");
+
+  /** The name of the company that produced the product. */
+  @Key("producer")
+  protected @Nonnull Selection m_producer =
+    new Selection(PRODUCERS).withFormatter(s_producerFormatter);
+
+  static
+  {
+//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Producer", "producers",
+//                                          "producer", true, FORMATTER, FORMAT,
+//                                          true, null));
+  }
+
+  //........................................................................
+  //----- volume -----------------------------------------------------------
+
+  /** The volume of the product for multi volume products. */
+  @Key("volume")
+  protected @Nonnull Name m_volume = new Name().withEditType("name[volume]");
+
+  //........................................................................
+  //----- number -----------------------------------------------------------
+
+  /** The number of the series. */
+  @Key("number")
+  protected @Nonnull Name m_number = new Name().withEditType("name[number]");
+
+  //........................................................................
+  //----- series -----------------------------------------------------------
+
+  /** The formatter for the series. */
+  protected static Formatter<Name> s_seriesFormatter =
+    new LinkFormatter<Name>("/index/series/");
+
+  /** The name of the series, even multiple if necessary, this product belongs
+   *  to. */
+  @Key("series")
+  protected @Nonnull ValueList<Name> m_series =
+    new ValueList<Name>(new Name().withEditType("name[series]")
+                   .withFormatter(s_seriesFormatter));
+
+  static
+  {
+//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Series", "series",
+//                                          "series", true, FORMATTER, FORMAT,
+//                                          true, null));
+  }
+
+  //........................................................................
+  //----- price ------------------------------------------------------------
+
+  /** The formatter for the price. */
+  protected static Formatter<Price> s_priceFormatter =
+    new LinkFormatter<Price>("/index/prices/");
+
+  /** The grouping for the pages. */
+  protected static final Grouping<Price, Object> s_priceGrouping =
+    new Group<Price, Long, Object>(new Group.Extractor<Price, Long>()
+      {
+        public Long extract(Price inValue)
+        {
+          if(inValue == null)
+              return 0L;
+
+          return inValue.get();
+        }
+      }, new Long [] { 100L, 500L, 1000L, 2500L, 5000L, 10000L, },
+                                   new String []
+        { "1", "5", "10", "25", "50", "100", "a fortune", }, "$undefined$");
+
+  /** This is the price of the series. */
+  @Key("price")
+    protected @Nonnull Price m_price =
+      new Price(0, 1000 * 100).withFormatter(s_priceFormatter)
+        .withGrouping(s_priceGrouping);
+
+  static
+  {
+//     s_indexes.add(new GroupedKeyIndex("Product", "Price", "prices", "price",
+//                                       true, FORMATTER, FORMAT, true));
+  }
+
+  //........................................................................
+  //----- contents ---------------------------------------------------------
+
+  /** The formatter for the price. */
+  protected static Formatter<EnumSelection<Part>> s_partFormatter =
+    new LinkFormatter<EnumSelection<Part>>("/index/parts/");
+
+  /** The contents of the product, what kind of individual components it has,
+   *  if any. */
+  @Key("contents")
+  protected @Nonnull ValueList<Multiple> m_contents =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element(new EnumSelection<Part>(Part.class)
+                             .withFormatter(s_partFormatter)
+                             .withEditType("selection[part]"), false),
+        new Multiple.Element(new Text()
+                             .withEditType("string[description]"), true),
+        new Multiple.Element(new Number(1, Integer.MAX_VALUE)
+                             .withEditType("number[number]"), true), }));
+
+  static
+  {
+//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
+//                   ("Product", "Part", "parts",
+//                    new ExtractorIndex.Extractor()
+//                    {
+//                      public Object []get(AbstractEntry inEntry)
+//                      {
+//                        if(!(inEntry instanceof BaseProduct))
+//                          return null;
+
+//                        ArrayList<Object> parts = new ArrayList<Object>();
+
+//                        for(Multiple value : ((BaseProduct)inEntry).m_contents)
+//                          parts.add(value.get(0).get());
+
+//                        return parts.toArray();
+//                      }
+//                    }, true, FORMATTER, FORMAT, true));
+  }
+
+  //........................................................................
+  //----- requirements -----------------------------------------------------
+
+  /** The formatter for a complete person. */
+  protected static Formatter<Multiple> s_requirementsFormatter =
+    new MultipleFormatter<Multiple>(null, null, " optional ", null);
+
+  /** The requirements of this product, which products are required to use this
+   * one. */
+  @Key("requirements")
+  protected @Nonnull Multiple m_requirements =
+    new Multiple(new Multiple.Element []
+      { new Multiple.Element(new ValueList<Name>
+                             (new Name()
+                              // we use an instance specific formatter
+                              // because we need the campaign
+                              .withFormatter(new Formatter<Name>()
+      {
+        public Command format(Name inReference)
+        {
+          if(inReference == null)
+            return null;
+
+          String name  = inReference.get();
+          String title = name;
+
+          // check if we find the product
+          // associated with this reference
+          BaseProduct product = m_data.getEntry(name, TYPE);
+
+          if(product != null)
+            title = product.getFullTitle();
+
+          Command result =
+          new Link(title, "/entry/" + name);
+
+          if(name == title)
+            return new Color("error", result);
+
+          return result;
+        }
+      })), true),
+        new Multiple.Element(new ValueList<Name>
+                             (new Name()
+                              // we use an instance specific formatter
+                              // because we need the campaign
+                              .withFormatter(new Formatter<Name>()
+      {
+        public Command format(Name inReference)
+        {
+          if(inReference == null)
+            return null;
+
+          String name  = inReference.get();
+          String title = name;
+
+          // check if we find the product
+          // associated with this reference
+          BaseProduct product = m_data.getEntry(name, TYPE);
+
+          if(product != null)
+            title = product.getFullTitle();
+
+          Command result =
+          new Link(title, "/entry/" + name);
+
+          if(name == title)
+            return new Color("error", result);
+
+          return result;
+        }
+      })), true, ":", null),
+      }).withFormatter(s_requirementsFormatter);
+
+  //........................................................................
+  //----- layout -----------------------------------------------------------
+
+  /** The formatter for the layout. */
+  protected static Formatter<Selection> s_layoutFormatter =
+    new LinkFormatter<Selection>("/index/layouts/");
+
+  /** The layout of the product. */
+  @Key("layout")
+  protected @Nonnull EnumSelection<Layout> m_layout =
+    new EnumSelection<Layout>(Layout.class);
+
+  static
+  {
+//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Layout", "layouts",
+//                                          "layout", true, FORMATTER, FORMAT,
+//                                          false, null));
+  }
+
+  //........................................................................
+
+  static
+  {
+    extractVariables(BaseProduct.class);
+  }
+
+  //........................................................................
+
+  //-------------------------------------------------------------- accessors
+
+  //----------------------------- getAudience ------------------------------
+
+  /**
+   * Get the audience of the product.
+   *
+   * @return      the audience
+   *
+   */
+  public @Nonnull Audience getAudience()
+  {
+    return m_audience.getSelected();
+  }
+
+  //........................................................................
+  //------------------------------- getDate --------------------------------
+
+  /**
+   * Get the date of the product.
+   *
+   * @return      the date
+   *
+   */
+  public @Nonnull String getDate()
+  {
+    return m_date.toString();
+  }
+
+  //........................................................................
+  //------------------------------- getLeader ------------------------------
+
+  /**
+   * Accessor for the leader of the base product.
+   *
+   * @return      the requested leader
+   *
+   */
+  public @Nonnull String getLeader()
+  {
+    return m_leader.get();
+  }
+
+  //........................................................................
+  //------------------------------ getNumber -------------------------------
+
+  /**
+   * Get the series number of the product.
+   *
+   * @return      the series number
+   *
+   */
+  public @Nonnull String getNumber()
+  {
+    return m_number.get();
+  }
+
+  //........................................................................
+  //--------------------------- getNumberValue -----------------------------
+
+  /**
+   * Get the series number of the product as an integer.
+   *
+   * @return      the series number
+   *
+   */
+  public int getNumberValue()
+  {
+    if(!m_number.isDefined())
+      return 0;
+
+    return Strings.extractNumber(m_number.get());
+  }
+
+  //........................................................................
+  //------------------------------ getPages --------------------------------
+
+  /**
+   * Get the pages of the product.
+   *
+   * @return      the pages
+   *
+   */
+  public long getPages()
+  {
+    return m_pages.get();
+  }
+
+  //........................................................................
+  //------------------------------ getSeries -------------------------------
+
+  /**
+   * Get the series of the product.
+   *
+   * @return      the series
+   *
+   */
+  public @Nonnull String getSeries()
+  {
+    return m_series.toString();
+  }
+
+  //........................................................................
+  //------------------------------ hasSeries -------------------------------
+
+  /**
+    * Check if the product has a series value.
+    *
+    * @return      true if series is set, false if not
+    *
+    */
+  public boolean hasSeries()
+  {
+    return m_series.isDefined();
+  }
+
+  //........................................................................
+  //------------------------------ getStyle --------------------------------
+
+  /**
+   * Get the style of the product.
+   *
+   * @return      the style
+   *
+   */
+  public @Nonnull Style getStyle()
+  {
+    return m_style.getSelected();
+  }
+
+  //........................................................................
+  //----------------------------- getProducer ------------------------------
+
+  /**
+   * Get the producer of the product.
+   *
+   * @return      the producer
+   *
+   */
+  public @Nonnull String getProducer()
+  {
+    return m_producer.toString();
+  }
+
+  //........................................................................
+  //------------------------------ getSystem -------------------------------
+
+  /**
+   * Get the system of the product.
+   *
+   * @return      the system
+   *
+   */
+  public @Nonnull System getSystem()
+  {
+    return m_system.getSelected();
+  }
+
+  //........................................................................
+  //------------------------------- getTitle -------------------------------
+
+  /**
+   * Accessor for the title of the base product.
+   *
+   * @return      the requested title
+   *
+   */
+  public @Nonnull String getTitle()
+  {
+    return m_title.get();
+  }
+
+  //........................................................................
+  //----------------------------- getFullTitle -----------------------------
+
+  /**
+   * Accessor for the full title of the base product.
+   *
+   * @return      the requested title
+   *
+   */
+  public @Nonnull String getFullTitle()
+  {
+    if(m_title == null || !m_title.isDefined())
+      return "";
+
+    if(m_leader == null || !m_title.isDefined()
+       || m_leader.toString().isEmpty())
+      return m_title.toString();
+
+    return m_leader + " " + m_title;
+  }
+
+  //........................................................................
+  //---------------------------- getProductType ----------------------------
+
+  /**
+   * Get the type of the product.
+   *
+   * @return      the type
+   *
+   */
+  public @Nonnull ProductType getProductType()
+  {
+    return m_type.getSelected();
+  }
+
+  //........................................................................
+  //------------------------------ getVolume -------------------------------
+
+  /**
+   * Get the volume of the product.
+   *
+   * @return      the volume
+   *
+   */
+  public @Nonnull String getVolume()
+  {
+    return m_volume.get();
+  }
+
+  //........................................................................
+  //------------------------------ getRefName ------------------------------
+
+  /**
+   * Get the name of the entry as a reference for humans (not necessarily how
+   * it can be found in a campaign).
+   *
+   * @return      the requested name
+   *
+   */
+  public @Nonnull String getRefName()
+  {
+    if(!m_title.isDefined())
+      return super.getRefName();
+
+    if(m_leader.isDefined() && !m_leader.get().isEmpty())
+      return getTitle() + ", " + getLeader();
+
+    return getTitle();
+  }
+
+  //........................................................................
+
+  //------------------------------- getJobs --------------------------------
+
+  /**
+   * Get an array with all the jobs used in this base product.
+   *
+   * @return      an array with all the jobs
+   *
+   */
+  public @Nonnull String []getJobs()
+  {
+    return getJobsForPerson(null);
+  }
+
+  //........................................................................
+  //------------------------------ getPersons ------------------------------
+
+  /**
+   * Get an array with all the persons defined in this entry with the
+   * persons associated with the respective jobs.
+   *
+   * @return      an array with all the persons
+   *
+   */
+  public @Nonnull String []getPersons()
+  {
+    return getPersonsForJob(null);
+  }
+
+  //........................................................................
+  //---------------------------- getAllPersons -----------------------------
+
+  /**
+   * Get all the persons involved in the creation of any of the base products
+   * of the current campaign.
+   *
+   * @param       inCategory the category to limit to (if any)
+   *
+   * @return      A list with all the names found
+   *
+   */
+//   @SuppressWarnings("unchecked") // generic array creation
+//   public static @Nonnull SortedSet<String>
+//     getAllPersons(@Nullable String inCategory)
+//   {
+//     CategoryAccessor categories;
+
+//     if(inCategory == null)
+//       categories = new CategoryAccessor()
+//         {
+//           public ValueList<Multiple> []get(BaseProduct inProduct)
+//           {
+//             if(inProduct == null)
+//               return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//             return (ValueList<Multiple> [])new ValueList<?> []
+//             { inProduct.m_authors, inProduct.m_editors,
+//                 inProduct.m_cover, inProduct.m_cartographers,
+//                 inProduct.m_illustrators, inProduct.m_typographers,
+//                 inProduct.m_managers, };
+//           }
+//         };
+//     else
+//       if(inCategory.equalsIgnoreCase("author"))
+//         categories = new CategoryAccessor()
+//           {
+//             public ValueList<Multiple> []get(BaseProduct inProduct)
+//             {
+//               if(inProduct == null)
+//                 return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//               return (ValueList<Multiple> [])new ValueList<?> []
+//               { inProduct.m_authors, };
+//             }
+//           };
+//       else
+//         if(inCategory.equalsIgnoreCase("editor"))
+//           categories = new CategoryAccessor()
+//             {
+//               public ValueList<Multiple> []get(BaseProduct inProduct)
+//               {
+//                 if(inProduct == null)
+//                   return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                 return (ValueList<Multiple> [])new ValueList<?> []
+//                 { inProduct.m_editors, };
+//               }
+//             };
+//         else
+//           if(inCategory.equalsIgnoreCase("cover"))
+//             categories = new CategoryAccessor()
+//               {
+//                 public ValueList<Multiple> []get(BaseProduct inProduct)
+//                 {
+//                   if(inProduct == null)
+//                     return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                   return (ValueList<Multiple> [])new ValueList<?> []
+//                   { inProduct.m_cover, };
+//                 }
+//               };
+//           else
+//             if(inCategory.equalsIgnoreCase("cartographer"))
+//               categories = new CategoryAccessor()
+//                 {
+//                   public ValueList<Multiple> []get(BaseProduct inProduct)
+//                   {
+//                     if(inProduct == null)
+//                       return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                     return (ValueList<Multiple> [])new ValueList<?> []
+//                     { inProduct.m_cartographers, };
+//                   }
+//                 };
+//             else
+//               if(inCategory.equalsIgnoreCase("illustrator"))
+//                 categories = new CategoryAccessor()
+//                   {
+//                     public ValueList<Multiple> []get(BaseProduct inProduct)
+//                     {
+//                       if(inProduct == null)
+//                         return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                       return (ValueList<Multiple> [])new ValueList<?> []
+//                       { inProduct.m_illustrators, };
+//                     }
+//                   };
+//               else
+//                 if(inCategory.equalsIgnoreCase("typographer"))
+//                   categories = new CategoryAccessor()
+//                     {
+//                       public ValueList<Multiple> []get(BaseProduct inProduct)
+//                       {
+//                         if(inProduct == null)
+//                           return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                         return (ValueList<Multiple> [])new ValueList<?> []
+//                         { inProduct.m_typographers, };
+//                       }
+//                     };
+//                 else
+//                   if(inCategory.equalsIgnoreCase("manager"))
+//                     categories = new CategoryAccessor()
+//                       {
+//                         public ValueList<Multiple> []get(BaseProduct inProduct)
+//                         {
+//                           if(inProduct == null)
+//                             return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                           return (ValueList<Multiple> [])new ValueList<?> []
+//                           { inProduct.m_managers, };
+//                         }
+//                       };
+//                  else
+//                     throw new IllegalArgumentException("invalid category '"
+//                                                        + inCategory
+//                                                        + "' given");
+
+//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
+//       {
+//         public int compare(String inFirst, String inSecond)
+//         {
+//           if(inFirst == null || inSecond == null)
+//             throw new IllegalArgumentException("must have values here");
+
+//           return inFirst.compareToIgnoreCase(inSecond);
+//         }
+//       });
+
+//     for(Iterator<? extends AbstractEntry> i =
+//           BaseCampaign.GLOBAL.iterator(BaseProduct.TYPE); i.hasNext(); )
+//     {
+//       AbstractEntry entry = i.next();
+
+//       if(!(entry instanceof BaseProduct))
+//         continue;
+
+//       BaseProduct product = (BaseProduct)entry;
+
+//       for(ValueList<Multiple> store : categories.get(product))
+//         for(Multiple value : store)
+//         {
+//           String person = ((Text)value.get(0).get()).get();
+
+//           if(person.length() > 0)
+//             result.add(person);
+//         }
+//     }
+
+//     return result;
+//   }
+
+  //........................................................................
+  //------------------------------ getAllJobs ------------------------------
+
+  /**
+   * Get all the jobs involved in the creation of any of the base products
+   * of the current campaign.
+   *
+   * @param       inCategory the category to limit to (if any)
+   *
+   * @return      A list with all the jobs found
+   *
+   */
+//   @SuppressWarnings("unchecked") // generic array creation
+//   public static @Nonnull SortedSet<String>
+//     getAllJobs(@Nullable String inCategory)
+//   {
+//     CategoryAccessor categories;
+
+//     if(inCategory == null)
+//       categories = new CategoryAccessor()
+//         {
+//           public ValueList<Multiple> []get(BaseProduct inProduct)
+//           {
+//             if(inProduct == null)
+//               return (ValueList<Multiple > [])new ValueList<?>[0];
+
+//             return (ValueList<Multiple> [])new ValueList<?> []
+//             {
+//               inProduct.m_authors,
+//               inProduct.m_editors,
+//               inProduct.m_cover, inProduct.m_cartographers,
+//               inProduct.m_illustrators,
+//               inProduct.m_typographers,
+//               inProduct.m_managers,
+//             };
+//           }
+//         };
+//     else
+//       if(inCategory.equalsIgnoreCase("author"))
+//         categories = new CategoryAccessor()
+//           {
+//             public ValueList<Multiple> []get(BaseProduct inProduct)
+//             {
+//               if(inProduct == null)
+//                 return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//               return (ValueList<Multiple> [])new ValueList<?> []
+//               { inProduct.m_authors, };
+//             }
+//           };
+//       else
+//         if(inCategory.equalsIgnoreCase("editor"))
+//           categories = new CategoryAccessor()
+//             {
+//               public ValueList<Multiple> []get(BaseProduct inProduct)
+//               {
+//                 if(inProduct == null)
+//                   return (ValueList<Multiple>[])new ValueList<?>[0];
+
+//                 return (ValueList<Multiple> [])new ValueList<?> []
+//                 { inProduct.m_editors, };
+//               }
+//             };
+//         else
+//           if(inCategory.equalsIgnoreCase("cover"))
+//             categories = new CategoryAccessor()
+//               {
+//                 public ValueList<Multiple> []get(BaseProduct inProduct)
+//                 {
+//                   if(inProduct == null)
+//                     return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                   return (ValueList<Multiple> [])new ValueList<?> []
+//                   { inProduct.m_cover, };
+//                 }
+//               };
+//           else
+//             if(inCategory.equalsIgnoreCase("cartographer"))
+//               categories = new CategoryAccessor()
+//                 {
+//                   public ValueList<Multiple> []get(BaseProduct inProduct)
+//                   {
+//                     if(inProduct == null)
+//                       return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                     return (ValueList<Multiple> [])new ValueList<?> []
+//                     { inProduct.m_cartographers, };
+//                   }
+//                 };
+//             else
+//               if(inCategory.equalsIgnoreCase("illustrator"))
+//                 categories = new CategoryAccessor()
+//                   {
+//                     public ValueList []get(BaseProduct inProduct)
+//                     {
+//                       if(inProduct == null)
+//                         return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                       return (ValueList<Multiple> [])new ValueList<?> []
+//                       { inProduct.m_illustrators, };
+//                     }
+//                   };
+//               else
+//                 if(inCategory.equalsIgnoreCase("typographer"))
+//                   categories = new CategoryAccessor()
+//                     {
+//                       public ValueList<Multiple> []get(BaseProduct inProduct)
+//                       {
+//                         if(inProduct == null)
+//                           return (ValueList<Multiple> [])new ValueList<?> [0];
+
+//                         return (ValueList<Multiple> [])new ValueList<?> []
+//                         { inProduct.m_typographers, };
+//                       }
+//                     };
+//                 else
+//                   if(inCategory.equalsIgnoreCase("manager"))
+//                     categories = new CategoryAccessor()
+//                       {
+//                         public ValueList<Multiple> []get(BaseProduct inProduct)
+//                         {
+//                           if(inProduct == null)
+//                             return (ValueList<Multiple> [])new ValueList<?>[0];
+
+//                           return (ValueList<Multiple> [])new ValueList<?> []
+//                           { inProduct.m_managers, };
+//                         }
+//                       };
+//                  else
+//                     throw new IllegalArgumentException("invalid category '"
+//                                                        + inCategory
+//                                                        + "' given");
+
+//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
+//       {
+//         public int compare(String inFirst, String inSecond)
+//         {
+//           if(inFirst == null)
+//             return -1;
+
+//           return inFirst.compareToIgnoreCase(inSecond);
+//         }
+//       });
+
+//     for(Iterator<? extends AbstractEntry> i =
+//           BaseCampaign.GLOBAL.iterator(BaseProduct.TYPE); i.hasNext(); )
+//     {
+//       AbstractEntry entry = i.next();
+
+//       if(!(entry instanceof BaseProduct))
+//         continue;
+
+//       BaseProduct product = (BaseProduct)entry;
+
+//       for(ValueList<Multiple> store : categories.get(product))
+//         for(Multiple value : store)
+//         {
+//           Text job = (Text)value.get(1).get();
+
+//           if(job.isDefined())
+//             result.add(job.get());
+//         }
+//     }
+
+//     return result;
+//   }
+
+  //........................................................................
+  //--------------------------- getRequirements ----------------------------
+
+  /**
+   * Get all the possible requirements for the given world and system.
+   *
+   * @param       inWorld    the world the requirements is in (or generic)
+   * @param       inSystem   the system to require for
+   *
+   * @return      a sorted set of strings containing all the titles and ids
+   *
+   */
+//   public static @Nonnull SortedSet<String>
+//     getRequirements(@Nonnull String inWorld, @Nonnull String inSystem)
+//   {
+//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
+//       {
+//         public int compare(String inFirst, String inSecond)
+//         {
+//           if(inFirst == null)
+//             return -1;
+
+//           return inFirst.compareToIgnoreCase(inSecond);
+//         }
+//       });
+
+//     for(BaseEntry entry : BaseCampaign.GLOBAL)
+//     {
+//       if(!(entry instanceof BaseProduct))
+//         continue;
+
+//       BaseProduct product = (BaseProduct)entry;
+
+//       // only the given world or generic
+//       if(product.m_world.getSelected() != 0
+//          && (!product.m_world.isDefined()
+//              || !inWorld.equalsIgnoreCase(product.m_world.toString())))
+//         continue;
+
+//       System system = System.valueOfIgnoreCase(inSystem);
+
+//       // only the given system
+//       if(system == null || !product.m_system.isDefined()
+//          || (product.m_system.getSelected() != system
+//              && (system.getGroup() == null
+//                  || !system.getGroup().equals(product.m_system.getSelected()
+//                                               .getGroup()))))
+//         continue;
+
+//       // only rulebooks, campaign settings, campaign expansions, monster
+//       // compendiums, or rulebooks
+//       ProductType type = product.m_type.getSelected();
+
+//       if(type != ProductType.CAMPAIGN_EXPANSION
+//          && type != ProductType.CAMPAIGN_SETTING
+//          && type != ProductType.MONSTER_COMPENDIUM
+//          && type != ProductType.RULEBOOK
+//          && type != ProductType.RULES_SUPPLEMENT
+//          && type != ProductType.MINIATURE)
+//         continue;
+
+//       result.add(product.getRefName() + " (" + product.m_system + ")::"
+//                  + product.getName());
+//     }
+
+//     return result;
+//   }
+
+  //........................................................................
+  //----------------------------- getProducts ------------------------------
+
+  /**
+   *
+   * Get all the possible products for the given world or for the generic
+   * world.
+   *
+   * @param       inWorld    the world the requirements is in (or generic)
+   *
+   * @return      a sorted set of strings containing all the titles and ids
+   *
+   */
+//   public static @Nonnull SortedSet<String> getProducts(@Nonnull String inWorld)
+//   {
+//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
+//       {
+//         public int compare(String inFirst, String inSecond)
+//         {
+//           if(inFirst == null)
+//             return -1;
+
+//           return inFirst.compareToIgnoreCase(inSecond);
+//         }
+//       });
+
+//     for(BaseEntry entry : BaseCampaign.GLOBAL)
+//     {
+//       if(!(entry instanceof BaseProduct))
+//         continue;
+
+//       BaseProduct product = (BaseProduct)entry;
+
+//       // only the given world or generic
+//       if(product.m_world.getSelected() != 0
+//          && (!product.m_world.isDefined()
+//              || !inWorld.equalsIgnoreCase(product.m_world.toString())))
+//         continue;
+
+//       result.add(product.getRefName() + " (" + product.m_system + ")::"
+//                  + product.getName());
+//     }
+
+//     return result;
+//   }
+
+  //........................................................................
+  //--------------------------- getAllReferences ---------------------------
+
+  /**
+   *
+   * Get all the possible references.
+   *
+   * @return      a sorted set of strings containing all the titles and ids
+   *
+   */
+//   public static @Nonnull SortedSet<String> getAllReferences()
+//   {
+//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
+//       {
+//         public int compare(String inFirst, String inSecond)
+//         {
+//           if(inFirst == null)
+//             return -1;
+
+//           return inFirst.compareToIgnoreCase(inSecond);
+//         }
+//       });
+
+//     for(BaseEntry entry : BaseCampaign.GLOBAL)
+//     {
+//       if(!(entry instanceof BaseProduct))
+//         continue;
+
+//       BaseProduct product = (BaseProduct)entry;
+
+//       // only catalogs
+//       ProductType type = product.m_type.getSelected();
+
+//       if(type != ProductType.CATALOG)
+//         continue;
+
+//       result.add(product.getRefName() + "::" + product.getName());
+//     }
+
+//     // add some web sites as well
+//     result.add("www.wizards.com");
+//     result.add("www.paizo.com");
+
+//     return result;
+//   }
+
+  //........................................................................
+
+  //--------------------------- getPersonsForJob ---------------------------
+
+  /**
+   *
+   * Get the persons that were involved in this product with the given job.
+   *
+   * @param       inJob the job to look for (may be null for all persons)
+   *
+   * @return      all the persons with this job
+   *
+   */
+  public @Nonnull String []getPersonsForJob(@Nonnull String inJob)
+  {
+    HashSet<String> result = new HashSet<String>();
+
+    addPersons(result, "author",       inJob, m_authors);
+    addPersons(result, "editor",       inJob, m_editors);
+    addPersons(result, "cover artist", inJob, m_cover);
+    addPersons(result, "cartographer", inJob, m_cartographers);
+    addPersons(result, "illustrator",  inJob, m_illustrators);
+    addPersons(result, "typographer",  inJob, m_typographers);
+    addPersons(result, "manager",      inJob, m_managers);
+
+    return result.toArray(new String [0]);
+  }
+
+  //........................................................................
+  //--------------------------- getJobsForPerson ---------------------------
+
+  /**
+   * Get the jobs that were involved in this product with the given person.
+   *
+   * @param       inPerson the job to look for (may be null for all jobs)
+   *
+   * @return      all the jobs with this person
+   *
+   */
+  public @Nonnull String []getJobsForPerson(@Nonnull String inPerson)
+  {
+    TreeSet<String> result = new TreeSet<String>();
+
+    addJobs(result, "author",       inPerson, m_authors);
+    addJobs(result, "editor",       inPerson, m_editors);
+    addJobs(result, "cover artist", inPerson, m_cover);
+    addJobs(result, "cartographer", inPerson, m_cartographers);
+    addJobs(result, "illustrator",  inPerson, m_illustrators);
+    addJobs(result, "typographer",  inPerson, m_typographers);
+    addJobs(result, "manager",      inPerson, m_managers);
+
+    return result.toArray(new String [0]);
+  }
+
+  //........................................................................
+
+  //------------------------------- matches --------------------------------
+
+  /**
+   * Check if this entry matches the given search string or pattern.
+   *
+   * @param       inPattern the pattern to search for
+   *
+   * @return      true if it matches, false if not
+   *
+   */
+//   public boolean matches(@Nonnull String inPattern)
+//   {
+//     if(super.matches(inPattern))
+//       return true;
+
+//     String title = getTitle();
+
+//     if(title == null)
+//       return false;
+
+//     return title.matches("(?i).*" + inPattern + ".*");
+//   }
+
+  //........................................................................
+
+  //------------------------------ printCommand ----------------------------
+
+  /**
+   * Print the item to the document, in the general section.
+   *
+   * @param       inDM   true if set for DM, false for player
+   * @param       inEditable true if values are editable, false if not
+   *
+   * @return      the command representing this item in a list
+   *
+   */
+//   public PrintCommand printCommand(boolean inDM, boolean inEditable)
+//   {
+//     PrintCommand commands = super.printCommand(inDM, inEditable);
+
+//     commands.type = "product";
+
+//     commands.replaceValue
+//       ("title",
+//        new Title(new Command(new Object []
+//          {
+//            inEditable ? new Editable(getName(), "", "leader",
+//                                      m_leader.toStore(), "string") : "",
+//            inEditable ? new Editable(getName(), getFullTitle(), "title",
+//                                      m_title.toStore(), "string")
+//            : getFullTitle(),
+//          }), "title", new Link(getType(),
+//                                "/index/" + getType().getMultipleLink())),
+//        false, false, false, "titles");
+
+//     commands.replaceValue
+//       ("ISBN",
+//        new Command(new Object []
+//          {
+//            inEditable ? new Editable(getName(), m_isbn.format(true), "ISBN",
+//                                      m_isbn.toEdit(), m_isbn.getEditType())
+//            : m_isbn,
+//            m_isbn.isDefined() && m_isbn13.isDefined() ? " / " : " ",
+//            inEditable ? new Editable(getName(), m_isbn13.format(true),
+//                                      "ISBN13", m_isbn13.toEdit(),
+//                                      m_isbn.getEditType())
+//            : m_isbn13,
+//          }), false, false, false, "ISBNs");
+
+//     commands.addValue("scripts",
+//                       new Script
+//                       ("gui.addAction('Add Product', function(event) { "
+//                        + "link(event, '/user/me/product/" + getName()
+//                        + "?create', "
+//                        + "function () { gui.makeEditable(); gui.editAll(); }, "
+//                        + "'Add this entry as a product.')})\n"),
+//                       false, false, false, "scripts");
+
+//     commands.addValue("series",
+//                       new Command(new Object []
+//                         {
+//                           createValueCommand(m_series, "series", inEditable),
+//                           m_volume.isDefined() ? ", " : " ",
+//                           createValueCommand(m_volume, "volume", inEditable),
+//                           m_number.isDefined() ? ", " : " ",
+//                           createValueCommand(m_number, "number", inEditable),
+//                         }));
+
+//     commands.temp = new ArrayList<Object>();
+//     commands.temp.add(PAGE_COMMAND.transform(new ValueTransformer(commands,
+//                                                                   inDM)));
+
+//     return commands;
+//   }
+
+  //........................................................................
+
+  //........................................................................
+
+  //----------------------------------------------------------- manipulators
+
+  //----------------------------- setAudience ------------------------------
+
+  /**
+   * Set the audience of the product.
+   *
+   * @param       inAudience the audience
+   *
+   */
+  public boolean setAudience(@Nonnull Audience inAudience)
+  {
+    m_audience = m_audience.as(inAudience);
+    return true;
+  }
+
+  //........................................................................
+  //------------------------------ setCover --------------------------------
+
+  /**
+   * Set the cover of the product.
+   *
+   * @param       inCover the cover
+   *
+   * @return      true if set, false if not
+   *
+   */
+  public boolean setCover(@Nonnull ValueList<Multiple> inCover)
+  {
+    m_cover = inCover;
+    return true;
+  }
+
+  //........................................................................
+  //------------------------------- setDate --------------------------------
+
+  /**
+   * Set the date of the product.
+   *
+   * @param       inDate the date
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setDate(@Nonnull String inDate)
+//   {
+//     return m_date.setFromString(inDate) == null;
+//   }
+
+  //........................................................................
+  //------------------------------- setLeader ------------------------------
+
+  /**
+   * Set the leader of the base product.
+   *
+   * @param       inLeader the new leader
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setLeader(@Nonnull String inLeader)
+//   {
+//     if(inLeader == null)
+//       return false;
+
+//     m_leader.set(inLeader);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------ setNumber -------------------------------
+
+  /**
+   * Set the series number of the product.
+   *
+   * @param       inNumber the series number
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setNumber(@Nonnull String inNumber)
+//   {
+//     if(inNumber == null)
+//       return false;
+
+//     m_number.set(inNumber);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------ setPages --------------------------------
+
+  /**
+   * Set the pages of the product.
+   *
+   * @param       inPages the pages
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setPages(long inPages)
+//   {
+//     if(inPages < 0)
+//       return false;
+
+//     m_pages.set(inPages);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------ setISBN --------------------------------
+
+  /**
+   * Set the isbn of the product.
+   *
+   * @param       inGroup     the group code
+   * @param       inPublisher the publisher code
+   * @param       inTitle     the title code
+   * @param       inCheck     the checksum (10 for X), set to -1 if to compute
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setISBN(@Nonnull String inGroup, @Nonnull String inPublisher,
+//                          @Nonnull String inTitle, int inCheck)
+//   {
+//     return m_isbn.set(inGroup, inPublisher, inTitle, inCheck);
+//   }
+
+  //........................................................................
+  //------------------------------ setISBN13 --------------------------------
+
+  /**
+   * Set the isbn of the product.
+   *
+   * @param       inG13       the new group for isbn 13
+   * @param       inGroup     the group code
+   * @param       inPublisher the publisher code
+   * @param       inTitle     the title code
+   * @param       inCheck     the checksum (10 for X), set to -1 if to compute
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setISBN13(@Nonnull String inG13, @Nonnull String inGroup,
+//                            @Nonnull String inPublisher, @Nonnull String inTitle,
+//                            int inCheck)
+//   {
+//     return m_isbn13.set(inG13, inGroup, inPublisher, inTitle, inCheck);
+//   }
+
+  //........................................................................
+  //------------------------------ setPrice --------------------------------
+
+  /**
+   * Set the price of the product.
+   *
+   * @param       inCurrency the currency of the price
+   * @param       inNumber   the price * 100
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setPrice(@Nonnull String inCurrency, long inNumber)
+//   {
+//     return m_price.set(inCurrency, inNumber);
+//   }
+
+  //........................................................................
+  //------------------------------ addSeries -------------------------------
+
+  /**
+   * Add a series to the product.
+   *
+   * @param       inSeries the series
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addSeries(@Nonnull String inSeries)
+//   {
+//     Text series = m_series.newElement();
+
+//     series.set(inSeries);
+
+//     return m_series.add(series);
+//   }
+
+  //........................................................................
+  //----------------------------- addContents ------------------------------
+
+  /**
+   * Add a contents entry to the product.
+   *
+   * @param       inPart        the kind of contents added
+   * @param       inDescription the content description
+   * @param       inNumber      the number of parts the contents consists of
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   @SuppressWarnings("unchecked") // need to cast the enum selection
+//   public boolean addContents(@Nonnull Part inPart,
+//                              @Nonnull String inDescription, int inNumber)
+//   {
+//     if(inNumber <= 0)
+//       return false;
+
+//     Multiple contents = m_contents.newElement();
+
+//     ((EnumSelection<Part>)contents.get(0).getMutable()).set(inPart);
+//     ((Text)contents.get(1).getMutable()).set(inDescription);
+//     ((Number)contents.get(2).getMutable()).set(inNumber);
+
+//     return m_contents.add(contents);
+//   }
+
+  //........................................................................
+  //--------------------------- addRequirement -----------------------------
+
+  /**
+   * Add a requirement entry to the product.
+   *
+   * @param       inRequirement the id of the product required by this one
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   @SuppressWarnings("unchecked") // Multiple value cast
+//   public boolean addRequirement(@Nonnull String inRequirement)
+//   {
+//     ValueList<Text> list = (ValueList<Text>)m_requirements.get(0).getMutable();
+
+//     Text requirement = list.newElement();
+//     requirement.set(inRequirement);
+
+//     return list.add(requirement);
+//   }
+
+  //........................................................................
+  //----------------------- addOptionalRequirement -------------------------
+
+  /**
+   * Add an optional requirement entry to the product.
+   *
+   * @param       inRequirement the id of the product optionally required by
+   *                            this one
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   @SuppressWarnings("unchecked") // multiple value cast
+//   public boolean addOptionalRequirement(@Nonnull String inRequirement)
+//   {
+//     ValueList<Text> list = (ValueList<Text>)m_requirements.get(1).getMutable();
+
+//     Text requirement = list.newElement();
+//     requirement.set(inRequirement);
+
+//     return list.add(requirement);
+//   }
+
+  //........................................................................
+  //------------------------------- setStyle -------------------------------
+
+  /**
+   * Set the style of the product.
+   *
+   * @param       inStyle the style
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setStyle(@Nonnull Style inStyle)
+//   {
+//     if(inStyle == null)
+//       return false;
+
+//     return m_style.set(inStyle);
+//   }
+
+  //........................................................................
+  //----------------------------- setProducer ------------------------------
+
+  /**
+   * Set the producer of the product.
+   *
+   * @param       inProducer the producer
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setProducer(@Nonnull String inProducer)
+//   {
+//     if(inProducer == null)
+//       return false;
+
+//     return m_producer.setSelected(inProducer);
+//   }
+
+  //........................................................................
+  //------------------------------ setSystem -------------------------------
+
+  /**
+   * Set the system of the product.
+   *
+   * @param       inSystem the system
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setSystem(@Nonnull System inSystem)
+//   {
+//     return m_system.set(inSystem);
+//   }
+
+  //........................................................................
+  //------------------------------ setLayout -------------------------------
+
+  /**
+   * Set the layout of the product.
+   *
+   * @param       inLayout the layout
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setLayout(@Nonnull Layout inLayout)
+//   {
+//     return m_layout.set(inLayout);
+//   }
+
+  //........................................................................
+  //------------------------------- setTitle -------------------------------
+
+  /**
+   * Set the title of the base product.
+   *
+   * @param       inTitle the new title
+   *
+   * @return      true if set, false if not (because of error)
+   *
+   */
+//   public boolean setTitle(@Nonnull String inTitle)
+//   {
+//     m_title.set(inTitle);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------- setNotes -------------------------------
+
+  /**
+   * Set the notes of the base product.
+   *
+   * @param       inNotes the new notes
+   *
+   * @return      true if set, false if not (because of error)
+   *
+   */
+//   public boolean setNotes(@Nonnull String inNotes)
+//   {
+//     m_notes.set(inNotes);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------- setTitle -------------------------------
+
+  /**
+   * Set the sub title of the base product.
+   *
+   * @param       inSubtitle the new subtitle
+   *
+   * @return      true if set, false if not (because of error)
+   *
+   */
+//   public boolean setSubtitle(@Nonnull String inSubtitle)
+//   {
+//     m_subtitle.set(inSubtitle);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //---------------------------- setProductType ----------------------------
+
+  /**
+   * Set the type of the product.
+   *
+   * @param       inType the type to set to
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setProductType(@Nonnull ProductType inType)
+//   {
+//     return m_type.set(inType);
+//   }
+
+  //........................................................................
+  //------------------------------ setVolume -------------------------------
+
+  /**
+   * Set the volume of the product.
+   *
+   * @param       inVolume the volume
+   *
+   * @return      true if set, false if not
+   *
+   */
+//   public boolean setVolume(@Nonnull String inVolume)
+//   {
+//     m_volume.set(inVolume);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------ addAuthor -------------------------------
+
+  /**
+   * Add an author name to the current list of authors.
+   *
+   * @param       inAuthor the name of the author, as 'Lastnasme, Firstname'
+   * @param       inJob    the job the person did, or null
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addAuthor(@Nonnull String inAuthor, @Nonnull String inJob)
+//   {
+//     Multiple author = m_authors.newElement();
+
+//     ((Text)author.get(0).getMutable()).set(inAuthor);
+//     ((Text)author.get(1).getMutable()).set(inJob);
+
+//     m_authors.add(author);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------ addEditor -------------------------------
+
+  /**
+   * Add an editor name to the current list of editors.
+   *
+   * @param       inEditor the name of the editor, as 'Lastnasme, Firstname'
+   * @param       inJob    the job the person did, or null
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addEditor(@Nonnull String inEditor, @Nonnull String inJob)
+//   {
+//     Multiple editor = m_editors.newElement();
+
+//     ((Text)editor.get(0).getMutable()).set(inEditor);
+//     ((Text)editor.get(1).getMutable()).set(inJob);
+
+//     m_editors.add(editor);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------- addCover -------------------------------
+
+  /**
+   * Add an cover name to the current list of covers.
+   *
+   * @param       inCover the name of the cover, as 'Lastnasme, Firstname'
+   * @param       inJob    the job the person did, or null
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addCover(@Nonnull String inCover, @Nonnull String inJob)
+//   {
+//     Multiple cover = m_cover.newElement();
+
+//     ((Text)cover.get(0).getMutable()).set(inCover);
+//     ((Text)cover.get(1).getMutable()).set(inJob);
+
+//     m_cover.add(cover);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //---------------------------- addCartographer ---------------------------
+
+  /**
+   * Add an cartographer name to the current list of cartographers.
+   *
+   * @param       inCartographer the name of the cartographer, as
+   *                             'Lastname, Firstname'
+   *
+   * @param       inJob          the job the person did, or null
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addCartographer(@Nonnull String inCartographer,
+//                                  @Nonnull String inJob)
+//   {
+//     Multiple cartographer = m_cartographers.newElement();
+
+//     ((Text)cartographer.get(0).getMutable()).set(inCartographer);
+//     ((Text)cartographer.get(1).getMutable()).set(inJob);
+
+//     return m_cartographers.add(cartographer);
+//   }
+
+  //........................................................................
+  //---------------------------- addIllustrator ---------------------------
+
+  /**
+   * Add an illustrator name to the current list of illustrators.
+   *
+   * @param       inIllustrator the name of the illustrator, as
+   *                             'Lastname, Firstname'
+   *
+   * @param       inJob          the job the person did, or null
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addIllustrator(@Nonnull String inIllustrator,
+//                                 @Nonnull String inJob)
+//   {
+//     if(inIllustrator == null)
+//       return false;
+
+//     Multiple illustrator = m_illustrators.newElement();
+
+//     ((Text)illustrator.get(0).getMutable()).set(inIllustrator);
+//     ((Text)illustrator.get(1).getMutable()).set(inJob);
+
+//     m_illustrators.add(illustrator);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //----------------------------- addTypography ----------------------------
+
+  /**
+   * Add a typographer name to the current list of typographerss.
+   *
+   * @param       inTypographer the name of the typographer, as
+   *                             'Lastname, Firstname'
+   *
+   * @param       inJob          the job the person did, or null
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addTypographer(@Nonnull String inTypographer,
+//                                 @Nonnull String inJob)
+//   {
+//     Multiple typographer = m_typographers.newElement();
+
+//     ((Text)typographer.get(0).getMutable()).set(inTypographer);
+//     ((Text)typographer.get(1).getMutable()).set(inJob);
+
+//     m_typographers.add(typographer);
+
+//     return true;
+//   }
+
+  //........................................................................
+  //------------------------------- addManager -----------------------------
+
+  /**
+   * Add a manager name to the current list of managerss.
+   *
+   * @param       inManager the name of the manager, as 'Lastname, Firstname'
+   *
+   * @param       inJob          the job the person did, or null
+   *
+   * @return      true if added, false if not
+   *
+   */
+//   public boolean addManager(@Nonnull String inManager, @Nonnull String inJob)
+//   {
+//     Multiple manager = m_managers.newElement();
+
+//     ((Text)manager.get(0).getMutable()).set(inManager);
+//     ((Text)manager.get(1).getMutable()).set(inJob);
+
+//     m_managers.add(manager);
+
+//     return true;
+//   }
+
+  //........................................................................
+
+  //---------------------------- updatePersons -----------------------------
+
+  /**
+    * Update all the persons with the given name to the given new name.
+    *
+    * @param       inPerson the persons to change
+    * @param       inNew    the new value to set to
+    *
+    * @return      true if any person was changed, false if not
+    *
+    * @example     product.update("Ed Greenwood", "Greendwood, Ed");
+    *
+    */
+//   @SuppressWarnings("unchecked") // cast for generic array creation
+//   public boolean updatePersons(@Nonnull String inPerson, @Nonnull String inNew)
+//   {
+//     ValueList<Multiple> []lists = (ValueList<Multiple> [])new ValueList<?> []
+//       {
+//         m_authors, m_editors, m_cover, m_cartographers, m_illustrators,
+//         m_typographers, m_managers,
+//       };
+
+//     boolean result = false;
+
+//     for(ValueList<Multiple> list : lists)
+//       for(Multiple value : list)
+//       {
+//         Text person = (Text)value.get(0).getMutable();
+
+//         if(inPerson.equalsIgnoreCase(person.get()))
+//         {
+//           person.set(inNew);
+
+//           changed();
+//           result = true;
+//         }
+//       }
+
+//     return result;
+//   }
+
+  //........................................................................
+
+  //........................................................................
+
+  //------------------------------------------------- other member functions
+
+  //------------------------------- addJobs --------------------------------
+
+  /**
+   * Add the jobs of the given list with the given key to the hashtable.
+   *
+   * @param       ioStore  where to store the information
+   * @param       inKey    the default key to use
+   * @param       inPerson the person to limit to (or null for all)
+   * @param       inList   the list with the values
+   *
+   */
+  protected static void addJobs(@Nonnull Set<String> ioStore,
+                                @Nonnull String inKey,
+                                @Nonnull String inPerson,
+                                @Nonnull ValueList<Multiple> inList)
+  {
+    for(Multiple person : inList)
+    {
+      String job = inKey.toLowerCase();
+      if(person.get(1).isDefined())
+        job = ((Name)person.get(1)).get().toLowerCase();
+
+      if(inPerson != null)
+      {
+        String name = ((Text)person.get(0)).get();
+
+        if(name.indexOf('\\') >= 0)
+          name = ASCIIDocument.simpleConvert(name);
+
+        if(!name.equalsIgnoreCase(inPerson))
+          continue;
+      }
+
+      ioStore.add(job);
+    }
+  }
+
+  //........................................................................
+  //------------------------------ addPersons ------------------------------
+
+  /**
+   * Add the persons to the given lists matching the given job.
+   *
+   * @param       ioStore where to store the information
+   * @param       inKey   the default job if none is given
+   * @param       inJob   the job to compare against
+   * @param       inList  the list with the values
+   *
+   */
+  protected static void addPersons(@Nonnull Set<String> ioStore,
+                                   @Nonnull String inKey,
+                                   @Nonnull String inJob,
+                                   @Nonnull ValueList<Multiple> inList)
+  {
+    for(Multiple person : inList)
+    {
+      // if no job, add it in any case
+      if(inJob != null)
+      {
+        String job = inKey;
+        if(person.get(1).isDefined())
+          job = ((Name)person.get(1)).get();
+
+        if(!job.equalsIgnoreCase(inJob))
+          continue;
+      }
+
+      String name = ((Text)person.get(0)).get();
+
+      if(name.indexOf('\\') >= 0)
+        name = ASCIIDocument.simpleConvert(name);
+
+      ioStore.add(name);
+    }
+  }
+
+  //........................................................................
+
+  //------------------------------- complete -------------------------------
+
+  /**
+   * Complete the entry and make sure that all values are filled.
+   *
+   */
+//   public void complete()
+//   {
+//     super.complete();
+
+//     // if the normal isbn is not set and this one starts with the default
+//     // numbers, deduce the normal isbn number
+//     if(!m_isbn.isDefined()
+//        && ("978".equals(m_isbn13.get13()) || "979".equals(m_isbn13.get13())))
+//       m_isbn.set(m_isbn13.getGroup(), m_isbn13.getPublisher(),
+//                  m_isbn13.getTitle(),
+//                  net.ixitxachitls.dma.values.ISBN.compute
+//                  (m_isbn13.getGroup(), m_isbn13.getPublisher(),
+//                   m_isbn13.getTitle()));
+//   }
+
+  //........................................................................
+
+  //........................................................................
+
+  //------------------------------------------------------------------- test
+
+  /** This is the test. */
+  public static class Test extends ValueGroup.Test
+  {
+    //----- text -----------------------------------------------------------
+
+    /** The text to read from. */
+    private static String s_text =
+      "#------ WTC 88567 -------------------\n"
+      + "\n"
+      + "base product WTC 88567 = \n"
+      + "\n"
+      + "  title         \"Silver M\\hat{a}rches\";\n"
+      + "  leader        \"\";\n"
+      + "  author        \"Ed Greenwood\", \"Jason Carl\", "
+      + "                \"Richard Baker\" developer;\n"
+      + "  editor        \"Kim Mohan\";\n"
+      + "  cover         \"Vance Kovacs\";\n"
+      + "  cartography   \"Dennis Kauth\", \"Rob Lazzaretti\";\n"
+      + "  illustrations \"Matt Cavotta\", \"Michael Dubisch\", "
+      + "                \"Jeff Easley\", \"Wayne England\", "
+      + "                \"Raven Mimura\", \"Matt Mitchel\", \n"
+      + "                \"Christopher Moeller\", \"Puddnhead\", \n"
+      + "                \"Adam Rex\", \"Richard Sardinha\", \n"
+      + "                \"Arnie Swekel\";\n"
+      + "  typography    \"Sonya Percival\";\n"
+      + "  management    \"Richard Baker\" creative direction, \n"
+      + "                \"Bill Slavicsek\" vice-president RPG R&D,\n"
+      + "                 \"Mary Kirchoff\" vice-president publishing,\n"
+      + "                \"Anthony Valterra\" business management,\n"
+      + "                \"Martin Durham\" project management,\n"
+      + "                \"Chas DeLong\" production management,\n"
+      + "                \"Robert Raper\" art direction,\n"
+      + "                \"Robert Campbell\" graphic design,\n"
+      + "                \"Cynthia Fliege\" graphic design,\n"
+      + "                \"Dee & Barnett\" graphic design;\n"
+      + "  date          July 2002;\n"
+      + "  ISBN          0-7869-2835-2;\n"
+      + "  pages         160;\n"
+      + "  system        D&D 3rd;\n"
+      + "  producer      TSR;\n"
+      + "  worlds        Forgotten Realms;\n"
+      + "  audience      DM;\n"
+      + "  product type  accessory;\n"
+      + "  style         soft cover;\n"
+      + "  volume        XV;\n"
+      + "  series        test series;\n"
+      + "  number        42;\n"
+      + "  price         $38.95;\n"
+      + "  contents      book 3, poster \"color map\" 2;\n"
+      + "  notes         \"test\";\n"
+      + "  references    \"guru guru\" 10, \"test\", \"test\" 304-330/400;\n"
+      + "  subtitle      \"A Vast Frontier Fraught with Endless Peril\";\n"
+      + "  requirements  DMA 007, DMA 42, DMA 3;\n"
+      + "  description   \n"
+      + "\n"
+      + "  \"Haunted by malicious dragons, hordes of orcs, and other\n"
+      + "  ferocious creatures, the relentless cold and unforgiving\n"
+      + "  terrain of the \\Place{Silver Marches} promise undiscovered\n"
+      + "  riches and unspeakable danger to those bold enough to\n"
+      + "  venture there. Complete information on the towns and\n"
+      + "  settlements of the burgeoning \\Place{Silver Marches} alliance\n"
+      + "  and the many hazards that threaten it highlight this detailed\n"
+      + "  survey of one of the most exciting regions in the\n"
+      + "  \\Product[WTC 11836]{Forgotten Realms} game setting.\n"
+      + "\n"
+      + "  \\list{6 new prestige classes}\n"
+      + "       {Indigenous monster}\n"
+      + "       {Poster map of the region}\n"
+      + "\n"
+      + "  To use this accessory, you also need the\n"
+      + "  \\Product[WTC 11836]{Forgotten Realms Campaign Setting}, the\n"
+      + "  \\Product[WTC 11550]{Player's Handbook}, the\n"
+      + "  \\Product[WTC 11551]{Dungeon Master's\n"
+      + "  Guide}, and the \\Product[WTC 11552]{Monster Manual}.\".\n"
+      + "\n"
+      + "#.......................................................\n"
+      + "\n";
+
+    //......................................................................
+    //----- read -----------------------------------------------------------
+
+    /** Testing reading. */
+    @org.junit.Test
+    public void read()
+    {
+      ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test");
+
+      String result =
+        "#----- WTC 88567\n"
+        + "\n"
+        + "base product WTC 88567 =\n"
+        + "\n"
+        + "  title             \"Silver M\\hat{a}rches\";\n"
+        + "  leader            \"\";\n"
+        + "  subtitle          \"A Vast Frontier Fraught with Endless Peril\""
+        + ";\n"
+        + "  notes             \"test\";\n"
+        + "  author            \"Ed Greenwood\",\n"
+        + "                    \"Jason Carl\",\n"
+        + "                    \"Richard Baker\" developer;\n"
+        + "  editor            \"Kim Mohan\";\n"
+        + "  cover             \"Vance Kovacs\";\n"
+        + "  cartography       \"Dennis Kauth\",\n"
+        + "                    \"Rob Lazzaretti\";\n"
+        + "  illustrations     \"Matt Cavotta\",\n"
+        + "                    \"Michael Dubisch\",\n"
+        + "                    \"Jeff Easley\",\n"
+        + "                    \"Wayne England\",\n"
+        + "                    \"Raven Mimura\",\n"
+        + "                    \"Matt Mitchel\",\n"
+        + "                    \"Christopher Moeller\",\n"
+        + "                    \"Puddnhead\",\n"
+        + "                    \"Adam Rex\",\n"
+        + "                    \"Richard Sardinha\",\n"
+        + "                    \"Arnie Swekel\";\n"
+        + "  typography        \"Sonya Percival\";\n"
+        + "  management        \"Richard Baker\" creative direction,\n"
+        + "                    \"Bill Slavicsek\" vice-president RPG R&D,\n"
+        + "                    \"Mary Kirchoff\" vice-president publishing,\n"
+        + "                    \"Anthony Valterra\" business management,\n"
+        + "                    \"Martin Durham\" project management,\n"
+        + "                    \"Chas DeLong\" production management,\n"
+        + "                    \"Robert Raper\" art direction,\n"
+        + "                    \"Robert Campbell\" graphic design,\n"
+        + "                    \"Cynthia Fliege\" graphic design,\n"
+        + "                    \"Dee & Barnett\" graphic design;\n"
+        + "  date              July 2002;\n"
+        + "  ISBN              0-7869-2835-2;\n"
+        + "  pages             160;\n"
+        + "  system            D&D 3rd;\n"
+        + "  audience          DM;\n"
+        + "  product type      Accessory;\n"
+        + "  style             Soft Cover;\n"
+        + "  producer          TSR;\n"
+        + "  volume            XV;\n"
+        + "  number            42;\n"
+        + "  series            test series;\n"
+        + "  price             $38.95;\n"
+        + "  contents          Book 3,\n"
+        + "                    Poster \"color map\" 2;\n"
+        + "  requirements      DMA 007,\n"
+        + "                    DMA 42,\n"
+        + "                    DMA 3;\n"
+        + "  worlds            Forgotten Realms;\n"
+        + "  references        \"guru guru\" 10,\n"
+        + "                    \"test\",\n"
+        + "                    \"test\" 304-330/400;\n"
+        + "  description       \"Haunted by malicious dragons, hordes of orcs, "
+        + "and other\n"
+        + "                    ferocious creatures, the relentless cold and "
+        + "unforgiving\n"
+        + "                    terrain of the \\Place{Silver Marches} promise "
+        + "undiscovered\n"
+        + "                    riches and unspeakable danger to those bold "
+        + "enough to\n"
+        + "                    venture there. Complete information on the "
+        + "towns and\n"
+        + "                    settlements of the burgeoning \\Place{Silver "
+        + "Marches} alliance\n"
+        + "                    and the many hazards that threaten it highlight "
+        + "this detailed\n"
+        + "                    survey of one of the most exciting regions in "
+        + "the\n"
+        + "                    \\Product[WTC 11836]{Forgotten Realms} game "
+        + "setting.\n"
+        + "                    \\list{6 new prestige classes}\n"
+        + "                    {Indigenous monster}\n"
+        + "                    {Poster map of the region}\n"
+        + "                    To use this accessory, you also need the\n"
+        + "                    \\Product[WTC 11836]{Forgotten Realms Campaign "
+        + "Setting}, the\n"
+        + "                    \\Product[WTC 11550]{Player's Handbook}, the\n"
+        + "                    \\Product[WTC 11551]{Dungeon Master's\n"
+        + "                    Guide}, and the \\Product[WTC 11552]{Monster "
+        + "Manual}.\".\n"
+        + "\n"
+        + "#.....\n";
+
+      AbstractEntry entry = BaseProduct.read(reader, new DMAData("path"));
+
+      //System.out.println("read entry:\n'" + entry + "'");
+
+      assertNotNull("base product should have been read", entry);
+      assertEquals("base product name does not match", "WTC 88567",
+                   entry.getName());
+      assertEquals("base product does not match", result, entry.toString());
+    }
+
+    //......................................................................
+    //----- get ------------------------------------------------------------
+
+    /** Testing get. */
+    @org.junit.Test
+    public void get()
+    {
+      ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test");
+      BaseProduct entry = (BaseProduct)
+        BaseProduct.read(reader, new DMAData("path"));
+
+      assertEquals("jobs size", 15, entry.getJobs().length);
+
+      String []sorted = entry.getJobs();
+      java.util.Arrays.sort(sorted);
+      assertEquals("jobs 1", "art direction", sorted[0]);
+      assertEquals("jobs 2", "author", sorted[1]);
+      assertEquals("jobs 3", "business management", sorted[2]);
+
+      sorted = entry.getPersonsForJob("author");
+      java.util.Arrays.sort(sorted);
+      assertEquals("authors size", 2, entry.getPersonsForJob("author").length);
+      assertEquals("authors 0", "Ed Greenwood", sorted[0]);
+      assertEquals("authors 1", "Jason Carl", sorted[1]);
+
+      sorted = entry.getPersons();
+      java.util.Arrays.sort(sorted);
+      assertEquals("persons size", 28, entry.getPersons().length);
+      assertEquals("persons 0", "Adam Rex", sorted[0]);
+      assertEquals("persons 1", "Anthony Valterra", sorted[1]);
+    }
+
+    //......................................................................
+    //----- indexes --------------------------------------------------------
+
+    /** Testing of the base product specific indexes. */
+//     @SuppressWarnings("unchecked") // Filter.NONE
+//     @org.junit.Test
+//     public void indexes()
+//     {
+//       BaseCampaign.GLOBAL.m_bases.clear();
+
+//       BaseProduct product1 = new BaseProduct("product1");
+//       BaseProduct product2 = new BaseProduct("product2");
+
+//       product1.addAuthor("author", "job1");
+//       product2.addEditor("editor", "job1");
+//       product1.addCover("cover", "job2");
+//       product1.addCover("another cover", "job3");
+//       product1.setDate("2008");
+//       product2.setDate("May 2007");
+//       product1.setPages(15);
+//       product2.setPages(143);
+//       product1.setSystem(System.DnD_3RD);
+//       product2.setSystem(System.NONE);
+//       product1.addContents(Part.CARD, "contents1", 42);
+//       product2.addContents(Part.CD, "contents2", 23);
+//       product1.addContents(Part.BOOK, "contents3", 666);
+
+//       BaseCampaign.GLOBAL.add(product1);
+//       BaseCampaign.GLOBAL.add(product2);
+
+//       m_logger.verify();
+
+//       for(net.ixitxachitls.dma.entries.indexes.Index index : s_indexes)
+//       {
+//         if("Product".equals(index.getGroup())
+//            && "Persons".equals(index.getTitle()))
+//         {
+//           assertEquals("persons", 4,
+//                        index.buildNames
+//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
+
+//           Iterator i =
+//             index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
+//             .iterator();
+//           assertEquals("persons", "another cover", i.next().toString());
+//           assertEquals("persons", "author", i.next().toString());
+//           assertEquals("persons", "cover", i.next().toString());
+//           assertEquals("persons", "editor", i.next().toString());
+
+//           assertFalse("persons", index.matchesName("guru", product1));
+//           assertTrue("persons", index.matchesName("author", product1));
+//           assertTrue("persons", index.matchesName("cover", product1));
+//           assertFalse("persons", index.matchesName("editor", product1));
+//           assertTrue("persons", index.matchesName("editor", product2));
+
+//           // checking built command
+//           Collection<Object> commands =
+//             index.buildCommand("author", BaseCampaign.GLOBAL.createView
+//                                (Filter.NONE, index.getIdentificator()));
+
+//           // now check the commands
+//           assertEquals("size", 3, commands.size());
+
+//           Iterator<Object> j = commands.iterator();
+
+//           Object command = j.next();
+//           assertEquals("command", "label", extract(command, 0));
+//           assertEquals("command", "Job", extract(command, 1));
+
+//           command = j.next();
+//           assertEquals("command", "link", extract(command, 0));
+//           assertEquals("command", "/index/jobs/job1", extract(command, -1));
+//           assertEquals("command", "job1", extract(command, 1));
+
+//           command = j.next();
+//           assertEquals("command", "link", extract(command, 1, 0));
+//           assertEquals("command", "/entry/baseproduct/product1",
+//                        extract(command, 1, -1));
+//           assertEquals("command", "", extract(command, 1, 1));
+
+//           // checking getting all persons
+//           SortedSet<String> persons = getAllPersons("author");
+
+//           assertEquals("all persons", 1, persons.size());
+//           assertTrue("all persons", persons.contains("author"));
+
+//           persons = getAllPersons(null);
+
+//           assertEquals("all persons", 4, persons.size());
+
+//           i = persons.iterator();
+
+//           assertEquals("all persons", "another cover", i.next());
+//           assertEquals("all persons", "author", i.next());
+//           assertEquals("all persons", "cover", i.next());
+//           assertEquals("all persons", "editor", i.next());
+
+//           continue;
+//         }
+
+//         if("Product".equals(index.getGroup())
+//            && "Jobs".equals(index.getTitle()))
+//         {
+//           assertEquals("jobs", 3,
+//                        index.buildNames
+//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
+
+//           Iterator i =
+//             index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
+//             .iterator();
+//           assertEquals("jobs", "job1", i.next().toString());
+//           assertEquals("jobs", "job2", i.next().toString());
+//           assertEquals("jobs", "job3", i.next().toString());
+
+//           assertFalse("jobs", index.matchesName("guru", product1));
+//           assertTrue("jobs", index.matchesName("job1", product1));
+//           assertTrue("jobs", index.matchesName("job2", product1));
+//           assertFalse("jobs", index.matchesName("job2", product2));
+//           assertTrue("jobs", index.matchesName("job1", product2));
+
+//           // checking built command
+//           Collection<Object> commands =
+//             index.buildCommand("job1", BaseCampaign.GLOBAL.createView
+//                                (Filter.NONE, index.getIdentificator()));
+
+//           // now check the commands
+//           assertEquals("size", 6, commands.size());
+
+//           Iterator<Object> j = commands.iterator();
+
+//           Object command = j.next();
+//           assertEquals("command", "label", extract(command, 0));
+//           assertEquals("command", "Person", extract(command, 1));
+
+//           command = j.next();
+//           assertEquals("command", "link", extract(command, 0));
+//           assertEquals("command", "/index/persons/author",
+//                        extract(command, -1));
+//           assertEquals("command", "author", extract(command, 1));
+
+//           command = j.next();
+//           assertEquals("command", "link", extract(command, 1, 0));
+//           assertEquals("command", "/entry/baseproduct/product1",
+//                        extract(command, 1, -1));
+//           assertEquals("command", "", extract(command, 1, 1));
+
+//           command = j.next();
+//           assertEquals("command", "Person", extract(command, 1));
+
+//           command = j.next();
+//           assertEquals("command", "editor", extract(command, 1));
+
+//           command = j.next();
+//           assertEquals("command", "/entry/baseproduct/product2",
+//                        extract(command, 1, -1));
+
+//           // checking getting all jobs
+//           SortedSet<String> jobs = getAllJobs("cover");
+
+//           assertEquals("all jobs", 2, jobs.size());
+//           assertTrue("all jobs", jobs.contains("job2"));
+//           assertTrue("all jobs", jobs.contains("job3"));
+
+//           jobs = getAllJobs(null);
+
+//           assertEquals("all jobs", 3, jobs.size());
+
+//           i = jobs.iterator();
+
+//           assertEquals("all jobs", "job1", i.next());
+//           assertEquals("all jobs", "job2", i.next());
+//           assertEquals("all jobs", "job3", i.next());
+
+//           continue;
+//         }
+
+//         if("Product".equals(index.getGroup())
+//            && "Date".equals(index.getTitle()))
+//         {
+//           assertEquals("dates", 2,
+//                        index.buildNames
+//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
+
+//           Iterator i =
+//             index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
+//             .iterator();
+//           assertEquals("dates", "May 2007", i.next().toString());
+//           assertEquals("dates", "2008", i.next().toString());
+
+//           assertFalse("dates", index.matchesName("guru", product1));
+//           assertTrue("dates", index.matchesName("2008", product1));
+//           assertFalse("dates", index.matchesName("2008", product2));
+//           assertTrue("dates", index.matchesName("May 2007", product2));
+
+//           continue;
+//         }
+
+//         if("Product".equals(index.getGroup())
+//            && "Pages".equals(index.getTitle()))
+//         {
+//           assertEquals("pages", 2,
+//                        index.buildNames
+//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
+
+//           Iterator i =
+//             index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
+//             .iterator();
+//           assertEquals("pages", "15", i.next().toString());
+//           assertEquals("pages", "143", i.next().toString());
+
+//           assertFalse("pages", index.matchesName("guru", product1));
+//           assertTrue("pages", index.matchesName("20", product1));
+//           assertFalse("pages", index.matchesName("20", product2));
+//           assertTrue("pages", index.matchesName("200", product2));
+
+//           continue;
+//         }
+
+//         if("Product".equals(index.getGroup())
+//            && "System".equals(index.getTitle()))
+//         {
+//           assertEquals("System", 2,
+//                        index.buildNames
+//                        (BaseCampaign.GLOBAL.getAbstractEntries()).size());
+
+//           Iterator i =
+//             index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
+//             .iterator();
+//           assertEquals("System", "None", i.next().toString());
+//           assertEquals("System", "D&D 3rd", i.next().toString());
+
+//           assertFalse("System", index.matchesName("guru", product1));
+//           assertTrue("System", index.matchesName("D&D 3rd", product1));
+//           assertFalse("System", index.matchesName("D&D 3rd", product2));
+//           assertTrue("System", index.matchesName("None", product2));
+
+//           continue;
+//         }
+
+//         if("Product".equals(index.getGroup())
+//            && "Part".equals(index.getTitle()))
+//         {
+//           assertEquals("Part", 3,
+//                        index.buildNames(BaseCampaign.GLOBAL
+//                                         .getAbstractEntries()).size());
+
+//           Iterator i =
+//             index.buildNames(BaseCampaign.GLOBAL.getAbstractEntries())
+//             .iterator();
+//           assertEquals("Part", "Book", i.next().toString());
+//           assertEquals("Part", "Card", i.next().toString());
+//           assertEquals("Part", "CD", i.next().toString());
+
+//           assertFalse("Part", index.matchesName("guru", product1));
+//           assertTrue("Part", index.matchesName("Card", product1));
+//           assertFalse("Part", index.matchesName("CD", product1));
+//           assertTrue("Part", index.matchesName("CD", product2));
+
+//           continue;
+//         }
+//       }
+
+//       BaseCampaign.GLOBAL.m_bases.clear();
+//     }
+
+    //......................................................................
+    //----- format ---------------------------------------------------------
+
+    /** Check format for overview. */
+//     @org.junit.Test
+//     public void format()
+//     {
+//       BaseProduct product = new BaseProduct("format", new DMAData("path"));
+
+//       product.setSystem(System.DnD_3RD);
+//       product.setProducer("TSR");
+//       product.setProductType(ProductType.ADVENTURE);
+
+//       List<Object> list = FORMATTER.format("key", product);
+
+//       assertEquals("system", "D&D 3rd", extract(list.get(4), 1));
+//       assertEquals("producer", "TSR", extract(list.get(5), 1));
+//       assertEquals("type", "Adventure", extract(list.get(6), 1));
+//     }
+
+    //......................................................................
+    //----- requirements ---------------------------------------------------
+
+    /** Test handling and extracting requirements. */
+//     @org.junit.Test
+//     public void requirements()
+//     {
+//       BaseCampaign.GLOBAL.m_bases.clear();
+
+//       BaseProduct product1 = new BaseProduct("product 1");
+//       BaseProduct product2 = new BaseProduct("product 2");
+//       BaseProduct product3 = new BaseProduct("product 3");
+//       BaseProduct product4 = new BaseProduct("product 4");
+//       BaseProduct product5 = new BaseProduct("product 5");
+
+//       product1.setWorld("Forgotten Realms");
+//       product2.setWorld("Generic");
+//       product3.setWorld("Forgotten Realms");
+//       product4.setWorld("Forgotten Realms");
+//       product5.setWorld("Forgotten Realms");
+
+//       product1.setSystem(System.DnD_3_5);
+//       product2.setSystem(System.DnD_3_5);
+//       product3.setSystem(System.DnD_3_5);
+//       product4.setSystem(System.DnD_3RD);
+//       product5.setSystem(System.DnD_3_5);
+
+//       product1.setProductType(ProductType.RULEBOOK);
+//       product2.setProductType(ProductType.RULEBOOK);
+//       product3.setProductType(ProductType.RULEBOOK);
+//       product4.setProductType(ProductType.RULEBOOK);
+//       product5.setProductType(ProductType.ADVENTURE);
+
+//       BaseCampaign.GLOBAL.add(product1);
+//       BaseCampaign.GLOBAL.add(product2);
+//       BaseCampaign.GLOBAL.add(product3);
+//       BaseCampaign.GLOBAL.add(product4);
+//       BaseCampaign.GLOBAL.add(product5);
+
+//       SortedSet<String> requirements =
+//         BaseProduct.getRequirements("Forgotten Realms",
+//                                     System.DnD_3_5.toString());
+
+//       Iterator<String> i = requirements.iterator();
+
+//       assertEquals("requirements", "product 1 (D&D 3.5)::product 1", i.next());
+//       assertEquals("requirements", "product 2 (D&D 3.5)::product 2", i.next());
+//       assertEquals("requirements", "product 3 (D&D 3.5)::product 3", i.next());
+//       assertEquals("requirements", "product 4 (D&D 3rd)::product 4", i.next());
+//       assertFalse("requirements", i.hasNext());
+
+//       // test for all the products
+//       SortedSet<String> products =
+//         BaseProduct.getProducts("Forgotten Realms");
+
+//       i = products.iterator();
+
+//       assertEquals("requirements", "product 1 (D&D 3.5)::product 1", i.next());
+//       assertEquals("requirements", "product 2 (D&D 3.5)::product 2", i.next());
+//       assertEquals("requirements", "product 3 (D&D 3.5)::product 3", i.next());
+//       assertEquals("requirements", "product 4 (D&D 3rd)::product 4", i.next());
+//       assertEquals("requirements", "product 5 (D&D 3.5)::product 5", i.next());
+//       assertFalse("requirements", i.hasNext());
+
+//       BaseCampaign.GLOBAL.m_bases.clear();
+//     }
+
+    //......................................................................
+    //----- references ---------------------------------------------------
+
+    /** Test handling and extracting references. */
+//     @org.junit.Test
+//     public void references()
+//     {
+//       BaseCampaign.GLOBAL.m_bases.clear();
+
+//       BaseProduct product1 = new BaseProduct("product 1");
+//       BaseProduct product2 = new BaseProduct("product 2");
+//       BaseProduct product3 = new BaseProduct("product 3");
+//       BaseProduct product4 = new BaseProduct("product 4");
+//       BaseProduct product5 = new BaseProduct("product 5");
+
+//       product1.setProductType(ProductType.CATALOG);
+//       product2.setProductType(ProductType.RULEBOOK);
+//       product3.setProductType(ProductType.CATALOG);
+//       product4.setProductType(ProductType.CATALOG);
+//       product5.setProductType(ProductType.ADVENTURE);
+
+//       BaseCampaign.GLOBAL.add(product1);
+//       BaseCampaign.GLOBAL.add(product2);
+//       BaseCampaign.GLOBAL.add(product3);
+//       BaseCampaign.GLOBAL.add(product4);
+
+//       SortedSet<String> requirements =
+//         BaseProduct.getAllReferences();
+
+//       Iterator<String> i = requirements.iterator();
+
+//       assertEquals("requirements", "product 1::product 1", i.next());
+//       assertEquals("requirements", "product 3::product 3", i.next());
+//       assertEquals("requirements", "product 4::product 4", i.next());
+//       assertEquals("requirements", "www.paizo.com", i.next());
+//       assertEquals("requirements", "www.wizards.com", i.next());
+//       assertFalse("requirements", i.hasNext());
+
+
+//       BaseCampaign.GLOBAL.m_bases.clear();
+//     }
+
+    //......................................................................
+    //----- update ---------------------------------------------------------
+
+//     /** Test updating persons. */
+//     @org.junit.Test
+//     public void update()
+//     {
+//       BaseProduct product = new BaseProduct("product 1");
+
+//       product.addAuthor("a", null);
+//       product.addAuthor("b", null);
+//       product.addAuthor("c", null);
+//       product.addEditor("b", null);
+//       product.addCover("a", null);
+//       product.addCover("b", null);
+
+//       assertTrue("update", product.updatePersons("b", "guru"));
+
+//       // authors
+//       Iterator<Multiple> i = product.m_authors.iterator();
+
+//       assertEquals("update", "a", i.next().get(0).get().toString());
+//       assertEquals("update", "guru", i.next().get(0).get().toString());
+//       assertEquals("update", "c", i.next().get(0).get().toString());
+//       assertFalse("update", i.hasNext());
+
+//       // editor
+//       i = product.m_editors.iterator();
+
+//       assertEquals("update", "guru", i.next().get(0).get().toString());
+//       assertFalse("update", i.hasNext());
+
+//       // cover
+//       i = product.m_cover.iterator();
+
+//       assertEquals("update", "a", i.next().get(0).get().toString());
+//       assertEquals("update", "guru", i.next().get(0).get().toString());
+//       assertFalse("update", i.hasNext());
+//     }
+
+    //......................................................................
+ }
+
+  //........................................................................
+}
