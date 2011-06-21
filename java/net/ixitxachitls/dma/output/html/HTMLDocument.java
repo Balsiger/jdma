@@ -26,18 +26,18 @@ package net.ixitxachitls.dma.output.html;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.ixitxachitls.dma.output.commands.Event;
-import net.ixitxachitls.dma.output.commands.Feat;
-import net.ixitxachitls.dma.output.commands.God;
-import net.ixitxachitls.dma.output.commands.Group;
-import net.ixitxachitls.dma.output.commands.Item;
-import net.ixitxachitls.dma.output.commands.Monster;
-import net.ixitxachitls.dma.output.commands.NPC;
-import net.ixitxachitls.dma.output.commands.Place;
-import net.ixitxachitls.dma.output.commands.Product;
-import net.ixitxachitls.dma.output.commands.Quality;
-import net.ixitxachitls.dma.output.commands.Skill;
-import net.ixitxachitls.dma.output.commands.Spell;
+import net.ixitxachitls.output.commands.Event;
+import net.ixitxachitls.output.commands.Feat;
+import net.ixitxachitls.output.commands.God;
+import net.ixitxachitls.output.commands.Group;
+import net.ixitxachitls.output.commands.Item;
+import net.ixitxachitls.output.commands.Monster;
+import net.ixitxachitls.output.commands.NPC;
+import net.ixitxachitls.output.commands.Place;
+import net.ixitxachitls.output.commands.Product;
+import net.ixitxachitls.output.commands.Quality;
+import net.ixitxachitls.output.commands.Skill;
+import net.ixitxachitls.output.commands.Spell;
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.output.actions.html.Link;
 import net.ixitxachitls.output.commands.Command;
@@ -140,8 +140,8 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
                                                   "event"),
                            Config.get("resource:html/extension.html",
                                       ".html")));
-    s_actions.put(net.ixitxachitls.dma.output.commands.Class.NAME,
-                  new Link(net.ixitxachitls.dma.output.commands.Class.NAME,
+    s_actions.put(net.ixitxachitls.output.commands.Class.NAME,
+                  new Link(net.ixitxachitls.output.commands.Class.NAME,
                            "/entry/" + Config.get("resource:html/class.dir",
                                                   "class"),
                            Config.get("resource:html/extension.html",
@@ -226,7 +226,7 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
 
       doc.add(new Command
               ("just ",
-               new net.ixitxachitls.dma.output.commands.Product("some "),
+               new net.ixitxachitls.output.commands.Product("some "),
                new Command("test")));
 
       assertEquals("simple",

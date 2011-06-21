@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The god command.
+ * The item command.
  *
- * @file          God.java
+ * @file          Item.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class God extends BaseCommand
+public class Item extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- God --------------------------------
+  //------------------------------- Item --------------------------------
 
   /**
-   * The constructor for the god command.
+   * The constructor for the item command.
    *
-   * @param       inText the text to set god
+   * @param       inText the text to set item
    *
    */
-  public God(@Nonnull Object inText)
+  public Item(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class God extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- God --------------------------------
+  //------------------------------- Item --------------------------------
 
   /**
-   * The constructor for the god command.
+   * The constructor for the item command.
    *
-   * @param       inText the text to set god
-   * @param       inReal the real name of the god (ID)
+   * @param       inText the text to set item
+   * @param       inReal the real name of the item (ID)
    *
    */
-  public God(@Nonnull Object inText, @Nonnull Object inReal)
+  public Item(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class God extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- God --------------------------------
+  //------------------------------- Item --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected God()
+  protected Item()
   {
     super(NAME, 1, 1);
   }
@@ -104,7 +104,7 @@ public class God extends BaseCommand
 
   /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/God", "God");
+    Config.get("resource:commands/Item", "Item");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class God extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new God("text");
-      assertEquals("setup", "\\God{text}", command.toString());
+      Command command = new Item("text");
+      assertEquals("setup", "\\Item{text}", command.toString());
 
-      command = new God("text", "real");
-      assertEquals("setup", "\\God[real]{text}", command.toString());
+      command = new Item("text", "real");
+      assertEquals("setup", "\\Item[real]{text}", command.toString());
     }
 
     //......................................................................

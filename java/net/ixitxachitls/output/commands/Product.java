@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;

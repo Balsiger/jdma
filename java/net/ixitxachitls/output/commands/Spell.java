@@ -21,7 +21,8 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
+
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +36,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The NPC command.
+ * The spell command.
  *
- * @file          NPC.java
+ * @file          Spell.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,20 +49,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class NPC extends BaseCommand
+public class Spell extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- NPC --------------------------------
+  //------------------------------- Spell --------------------------------
 
   /**
-   * The constructor for the nPC command.
+   * The constructor for the spell command.
    *
-   * @param       inText the text to set nPC
-   *
+   * @param       inText the text to set spell
    *
    */
-  public NPC(@Nonnull Object inText)
+  public Spell(@Nonnull Object inText)
   {
     this();
 
@@ -69,16 +69,16 @@ public class NPC extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- NPC --------------------------------
+  //------------------------------- Spell --------------------------------
 
   /**
-   * The constructor for the nPC command.
+   * The constructor for the spell command.
    *
-   * @param       inText the text to set nPC
-   * @param       inReal the real name of the nPC (ID)
+   * @param       inText the text to set spell
+   * @param       inReal the real name of the spell (ID)
    *
    */
-  public NPC(@Nonnull Object inText, @Nonnull Object inReal)
+  public Spell(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -86,13 +86,13 @@ public class NPC extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- NPC --------------------------------
+  //------------------------------- Spell --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected NPC()
+  protected Spell()
   {
     super(NAME, 1, 1);
   }
@@ -103,9 +103,9 @@ public class NPC extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for setting an NPC name. */
+  /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/NPC", "NPC");
+    Config.get("resource:commands/Spell", "Spell");
 
   //........................................................................
 
@@ -129,11 +129,11 @@ public class NPC extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new NPC("text");
-      assertEquals("setup", "\\NPC{text}", command.toString());
+      Command command = new Spell("text");
+      assertEquals("setup", "\\Spell{text}", command.toString());
 
-      command = new NPC("text", "real");
-      assertEquals("setup", "\\NPC[real]{text}", command.toString());
+      command = new Spell("text", "real");
+      assertEquals("setup", "\\Spell[real]{text}", command.toString());
     }
 
     //......................................................................

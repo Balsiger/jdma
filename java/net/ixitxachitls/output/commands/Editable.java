@@ -113,21 +113,29 @@ public class Editable extends BaseCommand
    * @param       inType      the type of the element to edit
    * @param       inNote      a special note for editing
    * @param       inValues    special values for the given type
+   * @param       inRelated   values related to this one and edited together
    *
    */
   public Editable(@Nonnull Object inID, @Nonnull Object inEntry,
                   @Nonnull Object inText, @Nonnull Object inKey,
                   @Nonnull Object inValue, @Nonnull Object inType,
-                  @Nullable String inNote, @Nullable String inValues)
+                  @Nullable String inNote, @Nullable String inValues,
+                  @Nullable String inRelated)
   {
     this(inID, inEntry, inText, inKey, inValue, inType, inNote);
 
-    if(inValues != null && !inValues.isEmpty())
+    if((inValues != null && !inValues.isEmpty()) ||
+       (inRelated != null && !inRelated.isEmpty()))
     {
       if(inNote == null || inNote.isEmpty())
         withOptionals("");
 
-      withOptionals(inValues);
+      if(inValues == null || inValues.isEmpty())
+        withOptionals("");
+      else
+        withOptionals(inValues);
+
+      withOptionals(inRelated);
     }
   }
 
@@ -140,7 +148,7 @@ public class Editable extends BaseCommand
    */
   protected Editable()
   {
-    super(NAME, 2, 6);
+    super(NAME, 3, 6);
   }
 
   //........................................................................
@@ -176,28 +184,34 @@ public class Editable extends BaseCommand
     public void testArguments()
     {
       Command command =
-        new Editable("id", "entry", "text", "key", "value", "type");
+        new Editable("id", "entry", "text", "key", "value", "type", null);
       assertEquals("command",
                    "\\editable{id}{entry}{text}{key}{value}{type}",
                    command.toString());
 
       command = new Editable("id", "entry", "text", "key", "value",
-                             "type", "script");
+                             "type", "note");
       assertEquals("command",
-                   "\\editable[script]{id}{entry}{text}{key}{value}{type}",
+                   "\\editable[note]{id}{entry}{text}{key}{value}{type}",
                    command.toString());
 
       command = new Editable("id", "entry", "text", "key", "value", "type",
-                             "script", "values");
+                             "note", "values", "related");
       assertEquals("command",
-                   "\\editable[script][values]{id}{entry}{text}{key}"
+                   "\\editable[note][values][related]{id}{entry}{text}{key}"
                    + "{value}{type}",
                    command.toString());
 
       command = new Editable("id", "entry", "text", "key", "value", "type",
-                             "", "values");
+                             null, "values", null);
       assertEquals("command",
                    "\\editable[][values]{id}{entry}{text}{key}{value}"
+                   + "{type}",
+                   command.toString());
+      command = new Editable("id", "entry", "text", "key", "value", "type",
+                             null, null, "related");
+      assertEquals("command",
+                   "\\editable[][][related]{id}{entry}{text}{key}{value}"
                    + "{type}",
                    command.toString());
     }

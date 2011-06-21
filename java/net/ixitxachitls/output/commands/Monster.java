@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The group command.
+ * The monster command.
  *
- * @file          Group.java
+ * @file          Monster.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Group extends BaseCommand
+public class Monster extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Group --------------------------------
+  //------------------------------- Monster --------------------------------
 
   /**
-   * The constructor for the group command.
+   * The constructor for the monster command.
    *
-   * @param       inText the text to set group
+   * @param       inText the text to set monster
    *
    */
-  public Group(@Nonnull Object inText)
+  public Monster(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class Group extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Group --------------------------------
+  //------------------------------- Monster --------------------------------
 
   /**
-   * The constructor for the group command.
+   * The constructor for the monster command.
    *
-   * @param       inText the text to set group
-   * @param       inReal the real name of the group (ID)
+   * @param       inText the text to set monster
+   * @param       inReal the real name of the monster (ID)
    *
    */
-  public Group(@Nonnull Object inText, @Nonnull Object inReal)
+  public Monster(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class Group extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Group --------------------------------
+  //------------------------------- Monster --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Group()
+  protected Monster()
   {
     super(NAME, 1, 1);
   }
@@ -102,9 +102,9 @@ public class Group extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for setting a group name. */
+  /** Command for setting a monster name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Group", "Group");
+    Config.get("resource:commands/Monster", "Monster");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class Group extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Group("text");
-      assertEquals("setup", "\\Group{text}", command.toString());
+      Command command = new Monster("text");
+      assertEquals("setup", "\\Monster{text}", command.toString());
 
-      command = new Group("text", "real");
-      assertEquals("setup", "\\Group[real]{text}", command.toString());
+      command = new Monster("text", "real");
+      assertEquals("setup", "\\Monster[real]{text}", command.toString());
     }
 
     //......................................................................

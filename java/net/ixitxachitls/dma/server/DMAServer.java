@@ -302,6 +302,7 @@ public class DMAServer extends WebServer
 
     addRewrite(handler, "(.*)\\.pdf", "/pdf$1");
     addRewrite(handler, "(.*)/user/(.*)", "$1/entry/basecharacter/$2");
+    addRewrite(handler, "(.*)/product/(.*)", "$1/entry/baseproduct/$2");
     addRewrite(handler, "(.*)/users", "$1/entries/basecharacter");
 
     // TODO: this is temporary, remove once the main page filter is in
@@ -359,7 +360,7 @@ public class DMAServer extends WebServer
 //       (new ServletHolder(new BaseEntryServlet(m_baseCampaign)),
 //        "/entry/*");
 
-    // users
+    // base entries
     context.addServlet
       (new ServletHolder(new TypedEntryServlet<BaseCharacter>
                          (BaseCharacter.TYPE, "/entry", m_baseData)

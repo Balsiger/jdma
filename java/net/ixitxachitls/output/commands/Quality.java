@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The monster command.
+ * The spell command.
  *
- * @file          Monster.java
+ * @file          Quality.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Monster extends BaseCommand
+public class Quality extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Monster --------------------------------
+  //------------------------------- Quality --------------------------------
 
   /**
-   * The constructor for the monster command.
+   * The constructor for the spell command.
    *
-   * @param       inText the text to set monster
+   * @param       inText the text to set spell
    *
    */
-  public Monster(@Nonnull Object inText)
+  public Quality(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class Monster extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Monster --------------------------------
+  //------------------------------- Quality --------------------------------
 
   /**
-   * The constructor for the monster command.
+   * The constructor for the spell command.
    *
-   * @param       inText the text to set monster
-   * @param       inReal the real name of the monster (ID)
+   * @param       inText the text to set spell
+   * @param       inReal the real name of the spell (ID)
    *
    */
-  public Monster(@Nonnull Object inText, @Nonnull Object inReal)
+  public Quality(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class Monster extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Monster --------------------------------
+  //------------------------------- Quality --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Monster()
+  protected Quality()
   {
     super(NAME, 1, 1);
   }
@@ -102,9 +102,9 @@ public class Monster extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for setting a monster name. */
+  /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Monster", "Monster");
+    Config.get("resource:commands/Quality", "Quality");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class Monster extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Monster("text");
-      assertEquals("setup", "\\Monster{text}", command.toString());
+      Command command = new Quality("text");
+      assertEquals("setup", "\\Quality{text}", command.toString());
 
-      command = new Monster("text", "real");
-      assertEquals("setup", "\\Monster[real]{text}", command.toString());
+      command = new Quality("text", "real");
+      assertEquals("setup", "\\Quality[real]{text}", command.toString());
     }
 
     //......................................................................

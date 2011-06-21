@@ -69,10 +69,12 @@ edit.makeEditable = function()
 /**
  * Edit this field.
  *
- * @param inEvent the event that led to the edit
+ * @param inEvent     the event that led to the edit
+ * @param inElement   the dma editable element to edit
+ * @param inNoRelated true when not editing related values
  *
  */
-edit.edit = function(inEvent, inElement)
+  edit.edit = function(inEvent, inElement, inNoRelated)
 {
   var element = inElement || this;
 
@@ -84,7 +86,7 @@ edit.edit = function(inEvent, inElement)
   $(element).unbind('contextmenu', edit.edit);
 
   for(var i = 0; i < element.__edit.length; i++)
-    edit.editValue(element.__edit[i], element);
+    edit.editValue(element.__edit[i], element, inNoRelated);
 
   gui.addAction('save', 'Save', edit.save);
   gui.addAction('cancel', 'Cancel', util.link);
@@ -98,17 +100,27 @@ edit.edit = function(inEvent, inElement)
 /**
  * Edit the dma value.
  *
- * @param       inEditable the field to edit
- * @param       inTarget   the target container
+ * @param       inEditable     the field to edit
+ * @param       inTarget       the target container
+ * @param       inNoRelated    true when not editing related values
  *
  */
-edit.editValue = function(inEditable, inTarget)
+edit.editValue = function(inEditable, inTarget, inNoRelated)
 {
   var editable = edit.Base.create(inEditable);
 
   $(inEditable).after(editable.getElement());
   $(inEditable).hide();
   inTarget.__edit = editable;
+
+  if(!inNoRelated && editable.related)
+  {
+    var related = editable.related.split(/,\s*/);
+    for(var i = 0; i < related.length; i++)
+      edit.edit(undefined, $('dmaeditable[key=' + related[i] + ']')[0], true);
+  }
+
+  editable.focus();
 };
 
 //..........................................................................
@@ -165,11 +177,9 @@ edit.save = function()
   for(var i = 0, editable; editable = edit.all[i]; i++)
     editable.save(values);
 
-  window.console.log('saving', values);
   // send the data to the server
   util.ajax('/actions/save', values,
-            function(inResult) { window.console.log("saved: " + inResult);
-              eval(inResult); });
+            function(inResult) { eval(inResult); });
 
   // remove the move away code
   window.onbeforeunload = undefined;
@@ -205,7 +215,7 @@ edit.unparsed = function(inEntry, inID, inKey, inText)
 }
 
 //..........................................................................
-//--------------------------------- reload ---------------------------------
+//--------------------------------- refresh --------------------------------
 
 /**
  * Redo all edit setup for a page (after a page refresh).
@@ -226,66 +236,72 @@ edit.refresh = function()
 /**
  * The base object for ediable values
  *
- * @param inEditable the editable element create from
- * @param inID       the id of the entry edited
- * @param inEntry    the type of the entry edited
- * @param inKey      the key uniquely defining the value
- * @param inType     the type of the editable
- * @param inValue    the initial value
- * @param inLeader   the text to put in front of the value
- * @param inLabel    the label for the field
- * @param inNote     any note for editing
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
  *
  */
-edit.Base = function(inEditable, inID, inEntry, inKey, inType, inValue,
-                     inLabel, inNote)
+edit.Base = function(inEditable, inProperties)
 {
+  this.properties = inProperties;
   this.editable = inEditable;
-  this.id       = inID,
-  this.entry    = inEntry;
-  this.key      = inKey;
-  this.type     = inType;
-  this.label    = inLabel;
-  this.note     = inNote;
-  this._value   = (inValue == '$undefined$' ? '' : inValue);
-  this._defined = inValue != '$undefined$';
+  this.id = this.properties.id,
+  this.entry = this.properties.entry;
+  this.key = this.properties.key;
+  this.type = this.properties.type;
+  this.label = this.properties.label;
+  this.note = this.properties.note;
+  this.related = this.properties.related;
+  this._value =
+    (this.properties.value == '$undefined$' ? '' : this.properties.value);
+  this._defined = this.properties.value != '$undefined$';
 
   this._element   = this._createElement();
   this._unlabeled = this._element;
 
-  if(this.key)
+  if(!this.properties.nosave)
     edit.all.push(this);
 };
 
 /**
  * Create an editable object for the given editable tag.
  *
- * @param  inElement the editable element to create from
+ * @param  inElement the editable element to create from or an object with all
+ *                   properties
  *
  * @return the edit object of the right type
  */
 edit.Base.create = function(inElement)
 {
-  var properties = edit.Base._parse(inElement);
+  var properties;
+  var element;
+  if(inElement.type)
+  {
+    properties = inElement;
+    element = null;
+  }
+  else
+  {
+    properties = edit.Base._parse(inElement);
+    element = inElement;
+    properties.buttons = true;
+  }
 
-  window.console.log("properties", properties);
   switch(properties.type)
   {
     case 'name':
-      return new edit.Name(inElement, properties.id, properties.entry,
-                           properties.key, properties.type, properties.value,
-                           properties.label, properties.note);
+      return new edit.Name(element, properties);
 
     case 'string':
-      return new edit.String(inElement, properties.id, properties.entry,
-                             properties.key, properties.type, properties.value,
-                             properties.label, properties.note);
+      return new edit.String(element, properties);
 
     case 'selection':
-      return new edit.Selection(inElement, properties.id, properties.entry,
-                                properties.key, properties.type,
-                                properties.value, properties.values,
-                                properties.label, properties.note);
+      return new edit.Selection(element, properties);
+
+    case 'formatted':
+      return new edit.FormattedString(element, properties);
+
+    case 'list':
+      return new edit.List(element, properties);
   }
 
   window.alert('Could not find edit object for ' + properties.type);
@@ -324,17 +340,41 @@ edit.Base._parse = function(inEditable)
   var properties = {
     id: inEditable.getAttribute('id'),
     entry: inEditable.getAttribute('entry'),
-    type: inEditable.getAttribute('type'),
     value: inEditable.getAttribute('value'),
     key: inEditable.getAttribute('key'),
     script: inEditable.getAttribute('script'),
     values: inEditable.getAttribute('vaues'),
     note: inEditable.getAttribute('note'),
+    related: inEditable.getAttribute('related')
   };
 
-  // extract subtype, if any 'type#subtype'
-  var types = properties.type.match(/^((?:\n|.)+?)\#((?:\n|.)+)$/);
+  var type = edit.Base._parseType(inEditable.getAttribute('type'));
+  properties.type = type.type;
+  properties.subtype = type.subtype;
+  properties.label = type.label;
+  properties.options = type.options
 
+  // extract values if any
+  var values = inEditable.getAttribute('values');
+  if(values)
+    properties.values = values.split('||');
+
+  return properties;
+};
+
+/**
+ * Parse a type string.
+ *
+ * @param inType the type to parse
+ * @param an object with the parsed values (type, subtype, label, options)
+ *
+ */
+edit.Base._parseType = function(inType)
+{
+  // extract subtype, if any 'type#subtype'
+  var types = inType.match(/^((?:\n|.)+?)\#((?:\n|.)+)$/);
+
+  var properties = { type: inType };
   if(types)
   {
     properties.type    = types[1];
@@ -358,11 +398,6 @@ edit.Base._parse = function(inEditable)
     properties.type  = types[1];
     properties.label = types[2];
   }
-
-  // extract values if any
-  var values = inEditable.getAttribute('values');
-  if(values)
-    properties.values = values.split('||');
 
   return properties;
 };
@@ -424,21 +459,13 @@ edit.Base.prototype._cancel = function()
 /**
  * The base object for editable values with a single field.
  *
- * @param inEditable the editable element create from
- * @param inID       the id of the entry edited
- * @param inEntry    the type of the entry edited
- * @param inKey      the key uniquely defining the value
- * @param inType     the type of the editable
- * @param inValue    the initial value
- * @param inLabel    the label to set
- * @param inNote     any note for editing
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
  *
  */
-edit.Field = function(inEditable, inID, inEntry, inKey, inType, inValue,
-                      inLabel, inNote)
+edit.Field = function(inEditable, inProperties)
 {
-  edit.Base.call(this, inEditable, inID, inEntry, inKey, inType, inValue,
-                 inLabel, inNote);
+  edit.Base.call(this, inEditable, inProperties);
 
   this.hasFocus = false;
   this.hasMouse = false;
@@ -462,20 +489,32 @@ edit.Field = function(inEditable, inID, inEntry, inKey, inType, inValue,
                           + '</div>');
 
   // add the button to undefine a value
-  $('<div class="icon edit-undefine edit-dynamic" title="Undefine"></div>').
-  prependTo(this._element).
-  click(this._undefine.bind(this));
+  if(this.properties.buttons)
+  {
+    $('<div class="icon edit-undefine edit-dynamic" title="Undefine"></div>').
+      prependTo(this._element).
+      click(this._undefine.bind(this));
 
-  $('<div class="icon edit-cancel edit-dynamic" title="Cancel"></div>').
-  prependTo(this._element).
-  click(this._cancel.bind(this));
+    $('<div class="icon edit-cancel edit-dynamic" title="Cancel"></div>').
+      prependTo(this._element).
+      click(this._cancel.bind(this));
 
-  this._element.mouseover(this._updateDecoration.bind(this, undefined, true));
-  this._element.mouseout(this._updateDecoration.bind(this, undefined, false));
-  this._field.focus(this._updateDecoration.bind(this, true, undefined));
-  this._field.blur(this._updateDecoration.bind(this, false, undefined));
-  this._field.keypress(this._define.bind(this));
+    this._element.mouseover(this._updateDecoration.bind(this, undefined, true));
+    this._element.mouseout(this._updateDecoration.bind(this, undefined, false));
+    this._field.focus(this._updateDecoration.bind(this, true, undefined));
+    this._field.blur(this._updateDecoration.bind(this, false, undefined));
+    this._field.keypress(this._define.bind(this));
+  }
 
+  // add the label, if any
+  if(this.label)
+  {
+    this._element.addClass('label-' + this.label);
+    this._field.addClass('label-' + this.label);
+    this._element.append('<div class="edit-label">' + this.label + '</div>');
+  }
+
+  // add field validation
   form.setupValidation(this._element);
 };
 extend(edit.Field, edit.Base);
@@ -557,21 +596,14 @@ edit.Field.prototype.focus = function()
 /**
  * An object representing an editable name field.
  *
- * @param inEditable the editable element create from
- * @param inID       the id of the entry for the value
- * @param inEntry    the type of the entry edited
- * @param inKey      the key uniquely defining the value
- * @param inType     the type of the editable
- * @param inValue    the initial
- * @param inLabel    the field's label
- * @param inNote     any note for editing
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
  *
  */
-edit.Name = function(inEditable, inID, inEntry, inKey, inType, inValue,
-                     inLabel, inNote)
+edit.Name = function(inEditable, inProperties)
 {
-  edit.Field.call(this, inEditable, inID, inEntry, inKey, inType,
-                  inValue.removeNewlines(), inLabel, inNote);
+  inProperties.value = properties.value.removeNewlines();
+  edit.Field.call(this, inEditable, inProperties);
 };
 extend(edit.Name, edit.Field);
 
@@ -591,22 +623,15 @@ edit.Name.prototype._createElement = function()
 /**
  * An object representing an editable string field.
  *
- * @param inEditable the editable element create from
- * @param inID       the id of the entry for the value
- * @param inEntry    the type of the entry edited
- * @param inKey      the key uniquely defining the value
- * @param inType     the type of the editable
- * @param inValue    the initial
- * @param inLabel    the field's label
- * @param inNote     any note for editing
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
  *
  */
-edit.String = function(inEditable, inID, inEntry, inKey, inType, inValue,
-                       inLabel, inNote)
+edit.String = function(inEditable, inProperties)
 {
-  edit.Field.call(this, inEditable, inID, inEntry, inKey, inType,
-                  inValue.replace(/^\s*\"([\s\S\n]*)\"\s*$/, "$1"), inLabel,
-                  inNote);
+  inProperties.value =
+    inProperties.value.replace(/^\s*\"([\s\S\n]*)\"\s*$/, "$1");
+  edit.Field.call(this, inEditable, inProperties);
 };
 extend(edit.String, edit.Field);
 
@@ -617,7 +642,7 @@ extend(edit.String, edit.Field);
   */
 edit.String.prototype._createElement = function()
 {
-  return $('<input class="edit-field" validate="string"/>');
+  return $('<input class="edit-field" validate="string" size="30"/>');
 };
 
 /**
@@ -633,32 +658,49 @@ edit.String.prototype._getValue = function()
 };
 
 //..........................................................................
+//---------------------------------------------------------- FormattedString
+
+/**
+ * An object representing an editable formatted string field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.FormattedString = function(inEditable, inProperties)
+{
+  inProperties.value = inProperties.value.replace(/[\r\n][\t ]+/g, '\n');
+  edit.String.call(this, inEditable, inProperties);
+};
+extend(edit.FormattedString, edit.String);
+
+/**
+  * Create the element associated with this editable.
+  *
+  * @return the html element created
+  */
+edit.FormattedString.prototype._createElement = function()
+{
+  return $('<textarea class="edit-field" validate="string" rows="15" ' +
+           'cols="80"/>');
+};
+
+//..........................................................................
 //---------------------------------------------------------------- Selection
 
 /**
-  * An object representing an editable selection field.
-  *
- * @param inEditable  the editable element create from
- * @param inID        the id of the entry for the value
- * @param inEntry     the type of the entry edited
- * @param inKey       the key uniquely defining the value
- * @param inType      the type of the editable
- * @param inValue     the initial
- * @param inSelectons an array with all the selectable values (each value can
- *                    be given as x::y, where x will be displayed, but y will
- *                    be stored)
- * @param inLabel     the field's label
- * @param inNote      any note for editing
+ * An object representing an editable selection field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
  *
  */
-edit.Selection = function(inEditable, inID, inEntry, inKey, inType, inValue,
-                          inSelections, inLabel, inNote)
+edit.Selection = function(inEditable, inProperties)
 {
   // this is used in the constructor
   this._selections = inSelections;
 
-  edit.Field.call(this, inEditable, inID, inEntry, inKey, inType, inValue,
-                  inLabel, inNote);
+  edit.Field.call(this, inEditable, inProperties);
 };
 extend(edit.Selection, edit.Field);
 
@@ -694,7 +736,172 @@ edit.Selection.prototype._createElement = function()
 };
 
 //..........................................................................
+//--------------------------------------------------------------------- List
 
+/**
+ * An object representing an editable list field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.List = function(inEditable, inProperties)
+{
+  this.delimiter = inProperties.options.trim();
+  this.subtype = inProperties.subtype;
+  this._initValues = inProperties.value.split(this.delimiter);
+  this._entries = [];
+
+  // fix strings that were split in the middle because the delimiter appears in
+  // the middle of a string
+  for(var i = 0; this._initValues.length > 1 && i < this._initValues.length - 1;
+      i++)
+        if(this._initValues[i].replace(/[^\"]+/g, "").length % 2)
+        {
+          this._initValues[i] += this.delimiter + this._initValues[i + 1];
+          this._initValues.splice(i + 1, 1);
+          i--; // do this again
+        }
+
+  // trim values
+  for(var i = 0; i < this._initValues.length; i++)
+    this._initValues[i] = this._initValues[i].trim();
+
+  // ignore lists with only a single, empty element
+  if(this._initValues.length == 1 && this._initValues[0].length == 0)
+    this._initValues = [];
+
+  // have to setup init values first
+  edit.Field.call(this, inEditable, inProperties);
+};
+extend(edit.List, edit.Field);
+
+/**
+  * Create the element associated with this editable.
+  *
+  * @return the html element created
+  */
+edit.List.prototype._createElement = function()
+{
+  var element = $('<div class="edit-list"></div>');
+
+  if(this._initValues.length > 0)
+    for(var i = 0; i < this._initValues.length; i++)
+      element.append(this._createLine(this._initValues[i]));
+  else
+    element.append(this._createLine(""));
+
+  return element;
+};
+
+/**
+  * Create a single line in the list (with images).
+  *
+  * @param  inValue    the value to set to
+  * @param  inPrevious the editable to add after, if any
+  *
+  * @return the sub editable created
+  *
+  */
+edit.List.prototype._createLine = function(inValue, inPrevious)
+{
+  var line = $('<div class="edit-list-element" />');
+
+  var type = edit.Base._parseType(this.subtype);
+  var entry = edit.Base.create({
+    id: this.id,
+    entry: this.entry,
+    type: type.type,
+    value: inValue,
+    key: this.key,
+    script: null,
+    values: this._values,
+    note: null,
+    label: type.label,
+    related: null,
+    subtype: type.subtype,
+    options: type.options,
+    nobuttons: true,
+    nosave: true
+    });
+
+  entry._line = line;
+
+  if(inPrevious)
+  {
+    var i;
+    for(i = 0; i < this._entries.length; i++)
+      if(this._entries[i] == inPrevious)
+      {
+        this._entries.splice(i + 1, 0, entry);
+
+        break;
+      }
+
+    // not found, add it to the end
+    if(i >= this._entries.length)
+      this._entries.push(entry);
+  }
+  else
+    this._entries.push(entry);
+
+  line.append(entry._element);
+
+  // add the buttons
+  $('<div class="icon edit-list-add" title="Add"></div>').
+  appendTo(line).
+  click(this._add.bind(this, entry))
+  ;
+  $('<div class="icon edit-list-remove" title="Remove"></div>').
+  appendTo(line).
+  click(this._remove.bind(this, entry))
+  ;
+
+  return line;
+};
+
+/**
+  * Remove the entry listed
+  *
+  * @param the entry to remove
+  */
+edit.List.prototype._remove = function(inEntry)
+{
+  inEntry._line.remove();
+  this._entries.remove(inEntry);
+};
+
+/**
+  * Add an empty line after the given entry.
+  *
+  * @param the entry to add after
+  */
+edit.List.prototype._add = function(inEntry)
+{
+  this._createLine("", inEntry).insertAfter(inEntry._line).
+    find('input').focus();
+};
+
+/**
+ * Get the value of the field.
+ *
+ * @return the fields value, ready for storing.
+ */
+edit.List.prototype._getValue = function()
+{
+  var result = [];
+
+  for(var i = 0; i < this._entries.length; i++)
+  {
+    var value = this._entries[i].getValue();
+    if(value)
+      result.push(value);
+  }
+
+  return result.join(this.delimiter) || '$undefined$';
+};
+
+//..........................................................................
 
 // make the form fields editable
-$(document).ready(edit.refresh());
+$(document).ready(edit.refresh);

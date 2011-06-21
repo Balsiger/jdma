@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The item command.
+ * The feat command.
  *
- * @file          Item.java
+ * @file          Feat.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Item extends BaseCommand
+public class Feat extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Item --------------------------------
+  //------------------------------- Feat --------------------------------
 
   /**
-   * The constructor for the item command.
+   * The constructor for the feat command.
    *
-   * @param       inText the text to set item
+   * @param       inText the text to set feat
    *
    */
-  public Item(@Nonnull Object inText)
+  public Feat(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class Item extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Item --------------------------------
+  //------------------------------- Feat --------------------------------
 
   /**
-   * The constructor for the item command.
+   * The constructor for the feat command.
    *
-   * @param       inText the text to set item
-   * @param       inReal the real name of the item (ID)
+   * @param       inText the text to set feat
+   * @param       inReal the real name of the feat (ID)
    *
    */
-  public Item(@Nonnull Object inText, @Nonnull Object inReal)
+  public Feat(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class Item extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Item --------------------------------
+  //------------------------------- Feat --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Item()
+  protected Feat()
   {
     super(NAME, 1, 1);
   }
@@ -104,7 +104,7 @@ public class Item extends BaseCommand
 
   /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Item", "Item");
+    Config.get("resource:commands/Feat", "Feat");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class Item extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Item("text");
-      assertEquals("setup", "\\Item{text}", command.toString());
+      Command command = new Feat("text");
+      assertEquals("setup", "\\Feat{text}", command.toString());
 
-      command = new Item("text", "real");
-      assertEquals("setup", "\\Item[real]{text}", command.toString());
+      command = new Feat("text", "real");
+      assertEquals("setup", "\\Feat[real]{text}", command.toString());
     }
 
     //......................................................................

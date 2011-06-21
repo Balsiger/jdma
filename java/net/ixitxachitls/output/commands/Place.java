@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The feat command.
+ * The place command.
  *
- * @file          Feat.java
+ * @file          Place.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Feat extends BaseCommand
+public class Place extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Feat --------------------------------
+  //-------------------------------- Place ---------------------------------
 
   /**
-   * The constructor for the feat command.
+   * The constructor for the place command.
    *
-   * @param       inText the text to set feat
+   * @param       inText the text to set place
    *
    */
-  public Feat(@Nonnull Object inText)
+  public Place(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class Feat extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Feat --------------------------------
+  //-------------------------------- Place ---------------------------------
 
   /**
-   * The constructor for the feat command.
+   * The constructor for the place command.
    *
-   * @param       inText the text to set feat
-   * @param       inReal the real name of the feat (ID)
+   * @param       inText the text to set place
+   * @param       inReal the real name of the place (ID)
    *
    */
-  public Feat(@Nonnull Object inText, @Nonnull Object inReal)
+  public Place(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class Feat extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Feat --------------------------------
+  //-------------------------------- Place ---------------------------------
 
   /**
-   * This is the internal constructor for a command.
+   * This is the internal const\ructor for a command.
    *
    */
-  protected Feat()
+  protected Place()
   {
     super(NAME, 1, 1);
   }
@@ -102,9 +102,9 @@ public class Feat extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for setting a group name. */
+  /** Command for setting a place name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Feat", "Feat");
+    Config.get("resource:commands/Place", "Place");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class Feat extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Feat("text");
-      assertEquals("setup", "\\Feat{text}", command.toString());
+      Command command = new Place("text");
+      assertEquals("setup", "\\Place{text}", command.toString());
 
-      command = new Feat("text", "real");
-      assertEquals("setup", "\\Feat[real]{text}", command.toString());
+      command = new Place("text", "real");
+      assertEquals("setup", "\\Place[real]{text}", command.toString());
     }
 
     //......................................................................

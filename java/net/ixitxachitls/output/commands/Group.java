@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The skill command.
+ * The group command.
  *
- * @file          Skill.java
+ * @file          Group.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Skill extends BaseCommand
+public class Group extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Skill --------------------------------
+  //------------------------------- Group --------------------------------
 
   /**
-   * The constructor for the skill command.
+   * The constructor for the group command.
    *
-   * @param       inText the text to set skill
+   * @param       inText the text to set group
    *
    */
-  public Skill(@Nonnull Object inText)
+  public Group(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class Skill extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Skill --------------------------------
+  //------------------------------- Group --------------------------------
 
   /**
-   * The constructor for the skill command.
+   * The constructor for the group command.
    *
-   * @param       inText the text to set skill
-   * @param       inReal the real name of the skill (ID)
+   * @param       inText the text to set group
+   * @param       inReal the real name of the group (ID)
    *
    */
-  public Skill(@Nonnull Object inText, @Nonnull Object inReal)
+  public Group(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class Skill extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Skill --------------------------------
+  //------------------------------- Group --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Skill()
+  protected Group()
   {
     super(NAME, 1, 1);
   }
@@ -104,7 +104,7 @@ public class Skill extends BaseCommand
 
   /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Skill", "Skill");
+    Config.get("resource:commands/Group", "Group");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class Skill extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Skill("text");
-      assertEquals("setup", "\\Skill{text}", command.toString());
+      Command command = new Group("text");
+      assertEquals("setup", "\\Group{text}", command.toString());
 
-      command = new Skill("text", "real");
-      assertEquals("setup", "\\Skill[real]{text}", command.toString());
+      command = new Group("text", "real");
+      assertEquals("setup", "\\Group[real]{text}", command.toString());
     }
 
     //......................................................................

@@ -144,18 +144,21 @@ public abstract class ValueHandle
 
     String type;
     String choices;
-    Object formatted;
+    String name;
+    Object formatted = formatted(inEntry, inDM);
+    String related;
+
     if(value instanceof Value)
     {
       type = ((Value)value).getEditType();
       choices = ((Value)value).getChoices();
-      formatted = ((Value)value).format(true);
+      related = ((Value)value).getRelated();
     }
     else
     {
       type = "string";
       choices = "";
-      formatted = value;
+      related = "";
     }
 
     // TODO: fix this (have to deal with attachments here)!
@@ -169,7 +172,7 @@ public abstract class ValueHandle
     if(inEdit && m_editable && (inDM || m_playerEditable))
       return new Editable(inEntry.getID(), ((AbstractEntry)inEntry).getType(),
                           formatted, m_key, value.toString(), type, note,
-                          choices);
+                          choices, related);
 
     return formatted;
   }
@@ -188,6 +191,21 @@ public abstract class ValueHandle
    */
   public abstract @Nullable Object value(@Nonnull ValueGroup inEntry,
                                          boolean inDM);
+
+  //........................................................................
+  //-------------------------------- value ---------------------------------
+
+  /**
+   * Get the formatted value from the given entry.
+   *
+   * @param    inEntry the entry containing the value
+   * @param    inDM    true if getting the value for a DM
+   *
+   * @return   the value found or null if not found or not accessible
+   *
+   */
+  public abstract @Nullable Object formatted(@Nonnull ValueGroup inEntry,
+                                             boolean inDM);
 
   //........................................................................
 
@@ -323,6 +341,12 @@ public abstract class ValueHandle
 
       /** {@inheritDoc} */
       public Object value(ValueGroup inEntry, boolean inDM)
+      {
+        return m_value;
+      }
+
+      /** {@inheritDoc} */
+      public Object formatted(ValueGroup inEntry, boolean inDM)
       {
         return m_value;
       }

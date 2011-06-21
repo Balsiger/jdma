@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The spell command.
+ * The class command.
  *
- * @file          Quality.java
+ * @file          Class.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Quality extends BaseCommand
+public class Class extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Quality --------------------------------
+  //------------------------------- Class --------------------------------
 
   /**
-   * The constructor for the spell command.
+   * The constructor for the class command.
    *
-   * @param       inText the text to set spell
+   * @param       inText the text to set class
    *
    */
-  public Quality(@Nonnull Object inText)
+  public Class(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class Quality extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Quality --------------------------------
+  //------------------------------- Class --------------------------------
 
   /**
-   * The constructor for the spell command.
+   * The constructor for the class command.
    *
-   * @param       inText the text to set spell
-   * @param       inReal the real name of the spell (ID)
+   * @param       inText the text to set class
+   * @param       inReal the real name of the class (ID)
    *
    */
-  public Quality(@Nonnull Object inText, @Nonnull Object inReal)
+  public Class(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class Quality extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Quality --------------------------------
+  //------------------------------- Class --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Quality()
+  protected Class()
   {
     super(NAME, 1, 1);
   }
@@ -104,7 +104,7 @@ public class Quality extends BaseCommand
 
   /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Quality", "Quality");
+    Config.get("resource:commands/Class", "Class");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class Quality extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Quality("text");
-      assertEquals("setup", "\\Quality{text}", command.toString());
+      Command command = new Class("text");
+      assertEquals("setup", "\\Class{text}", command.toString());
 
-      command = new Quality("text", "real");
-      assertEquals("setup", "\\Quality[real]{text}", command.toString());
+      command = new Class("text", "real");
+      assertEquals("setup", "\\Class[real]{text}", command.toString());
     }
 
     //......................................................................

@@ -50,7 +50,7 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
 //import net.ixitxachitls.output.commands.Color;
-//import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.BaseCommand;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.Hrule;
@@ -59,7 +59,7 @@ import net.ixitxachitls.input.ParseReader;
 // import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Super;
-// import net.ixitxachitls.output.commands.Textblock;
+import net.ixitxachitls.output.commands.Textblock;
 //import net.ixitxachitls.util.MultiIterator;
 //import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.Encodings;
@@ -310,8 +310,7 @@ public class BaseEntry extends AbstractEntry
                            .withEditType("dynselection(references)"), false),
       new Multiple.Element
       (new ValueList<Range>(new Range(0, Integer.MAX_VALUE)
-                            .withEditType("number")
-                            .withEditName("page"), "/")
+                            .withEditType("number[page]"), "/")
        .withFormatter(s_pagesFormatter), true)));
 
   static
@@ -342,7 +341,7 @@ public class BaseEntry extends AbstractEntry
 
   /** The short description text for this entry. */
   @Key("short description")
-  protected Text m_short = new Text().withEditName("short description");
+  protected Text m_short = new Text().withEditType("string[short description]");
 
   //........................................................................
   //----- synonyms ---------------------------------------------------------
@@ -765,6 +764,30 @@ public class BaseEntry extends AbstractEntry
 
   //........................................................................
 
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("description".equals(inKey))
+      return new FormattedValue
+        (new Textblock(new BaseCommand(m_description.get()), "desc"),
+         m_description, "description", false, true, false, false,
+         "descriptions", "");
+
+    return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
   //----------------------------- printCommand -----------------------------
 
   /**
@@ -793,24 +816,6 @@ public class BaseEntry extends AbstractEntry
 //     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
 //       i.next().addPrintCommands(commands, inDM, inEditable);
 
-//     // TODO: check that this is actually printed elsewhere
-// //     if(m_errors != null)
-// //     {
-// //  commands.values.add(new Bold(new Color("error", new Link("/index/errors",
-// //                                                       "Errors:"))));
-
-// //       ArrayList<Object>errors = new ArrayList<Object>();
-
-// //       for(Iterator<BaseError> i = m_errors.iterator(); i.hasNext(); )
-// //       {
-// //         errors.add(i.next());
-
-// //         if(i.hasNext())
-// //           errors.add(", ");
-// //       }
-
-// //       commands.values.add(new Command(errors.toArray()));
-// //     }
 
 //     commands.pre.add(new Textblock(new Command(new Object []
 //       {

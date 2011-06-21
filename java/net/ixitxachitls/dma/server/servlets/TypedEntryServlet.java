@@ -76,6 +76,7 @@ public class TypedEntryServlet<T extends AbstractEntry>
   {
     super(inData);
 
+    m_data = inData;
     m_entries = inData.getEntries(inType);
     m_keys = m_entries.navigableKeySet();
     m_type = inType;
@@ -87,6 +88,9 @@ public class TypedEntryServlet<T extends AbstractEntry>
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** All the available entries. */
+  protected @Nonnull DMAData m_data;
 
   /** All the entries available. */
   protected @Nonnull NavigableMap<String, T> m_entries;
@@ -120,10 +124,11 @@ public class TypedEntryServlet<T extends AbstractEntry>
   public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
   {
     String id = getID(inPath);
-    if(id == null)
+    AbstractType<? extends AbstractEntry> type = getType(inPath);
+    if(type == null || id == null)
       return null;
 
-    return m_entries.get(id);
+    return m_data.getEntry(id, type);
   }
 
   //........................................................................
@@ -140,7 +145,7 @@ public class TypedEntryServlet<T extends AbstractEntry>
   public @Nullable AbstractType<? extends AbstractEntry>
     getType(@Nonnull String inPath)
   {
-    return m_type;
+    return AbstractType.get(Strings.getPattern(inPath, ".*/([^/]*?)/"));
   }
 
   //........................................................................

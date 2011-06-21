@@ -53,8 +53,7 @@ H2
   font-weight: bold;
   font-size: large;
   color: #880000;
-  padding: 0;
-  padding-top: 1em;
+  padding: 1em 0 1em 0;
   margin: 0;
 }
 
@@ -347,6 +346,15 @@ DIV.value-content
   min-height:       1.125em;
 }
 
+DIV.textblock.desc {
+  border:     none;
+  margin:     0;
+  padding:    0 0 1em 0;
+  color:      #444;
+  text-align: justify;
+}
+
+
 /******************************************************************************
  * entry lists
  *****************************************************************************/
@@ -414,7 +422,13 @@ A.paginate-previous
 .back-base-character
 {
   color:            white;
-  background-color: #ccc;
+  background-color: $color_Character;
+}
+
+.back-base-product
+{
+  color:            white;
+  background-color: $color_Product;
 }
 
 /******************************************************************************
@@ -462,14 +476,17 @@ DIV.snippet { color: #aaa; font-size: 80%; }
 
 INPUT.edit
 {
-  font-size: 100%;
+  font-size:     100%;
+  width:         100%;
+  box-sizing:    border-box;
 }
 
 DIV.edit-container
 {
-  position:     relative;
-  padding-left: 10px;
-  display:      inline;
+  position:      relative;
+  padding:       0 5px 0 10px;
+  display:       inline-block;
+  box-sizing:    border-box;
 }
 
 DIV.edit-note
@@ -492,20 +509,62 @@ DIV.edit-undefine
 {
   background-position: -40px;
   position:            absolute;
-  left:                0;
+  left:                -2px;
+  top:                 0;
 }
 
 DIV.edit-cancel
 {
   background-position: -50px;
   position:            absolute;
-  left:                0;
+  left:                -2px;
   bottom:              0;
+}
+
+DIV.edit-list-element
+{
+  position: relative;
+}
+
+DIV.edit-list-remove
+{
+  background-position: -100px;
+  position:            absolute;
+  right:               -7px;
+  top:                 1px;
+}
+
+DIV.edit-list-add
+{
+  background-position: -90px;
+  position:            absolute;
+  right:               -7px;
+  bottom:              3px;
 }
 
 .edit-undefined
 {
   opacity: 0.5;
+}
+
+.edit-label
+{
+  position:    absolute;
+  color:       #aaa;
+  right:       8px;
+  bottom:      3px;
+  font-size:   x-small;
+  font-weight: normal;
+}
+
+DIV.label-leader
+{
+  width: 10%;
+}
+
+DIV.label-title
+{
+  width: 70%;
 }
 
 /******************************************************************************
@@ -568,3 +627,57 @@ A.bold:visited { font-weight: bold; }
 /* links with the cursor on top of them */
 A:hover   { font-style: normal; text-decoration: underline; }
 A.bold:hover { font-weight: bold; }
+
+/******************************************************************************
+ * links
+ *****************************************************************************/
+
+/* now the colors for each specific link */
+A.Product         { color: $color_Product }
+A.Product:visited { color: $lightcolor_Product }
+A.Product:hover   { color: $hilightcolor_Product }
+
+A.Place           { color: $color_Place }
+A.Place:visited   { color: $lightcolor_Place }
+A.Place:hover     { color: $hilightcolor_Place }
+
+A.NPC             { color: $color_NPC }
+A.NPC:visited     { color: $lightcolor_NPC }
+A.NPC:hover       { color: $hilightcolor_NPC }
+
+A.Group           { color: $color_Group }
+A.Group:visited   { color: $lightcolor_Group }
+A.Group:hover     { color: $hilightcolor_Group }
+
+A.Monster         { color: $color_Monster }
+A.Monster:visited { color: $lightcolor_Monster }
+A.Monster:hover   { color: $hilightcolor_Monster }
+
+A.God             { color: $color_God }
+A.God:visited     { color: $lightcolor_God }
+A.God:hover       { color: $hilightcolor_God }
+
+A.Item            { color: $color_Item }
+A.Item:visited    { color: $lightcolor_Item }
+A.Item:hover      { color: $hilightcolor_Item }
+
+A.Spell           { color: $color_Spell }
+A.Spell:visited   { color: $lightcolor_Spell }
+A.Spell:hover     { color: $hilightcolor_Spell }
+
+A.Event           { color: $color_Event }
+A.Event:visited   { color: $lightcolor_Event }
+A.Event:hover     { color: $hilightcolor_Event }
+
+A.Class           { color: $color_Class }
+A.Class:visited   { color: $lightcolor_Class }
+A.Class:hover     { color: $hilightcolor_Class }
+
+A.Feat            { color: $color_Feat }
+A.Feat:visited    { color: $lightcolor_Feat }
+A.Feat:hover      { color: $hilightcolor_Feat }
+
+A.Skill           { color: $color_Skill }
+A.Skill:visited   { color: $lightcolor_Skill }
+A.Skill:hover     { color: $hilightcolor_Skill }
+

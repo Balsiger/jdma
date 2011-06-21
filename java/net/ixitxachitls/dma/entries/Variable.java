@@ -144,6 +144,23 @@ public class Variable extends ValueHandle
   }
 
   //........................................................................
+  //------------------------------- value ----------------------------------
+
+  /**
+   * Get the value of the variable given a specific entry.
+   *
+   * @param       inEntry the entry to get the value from
+   * @param       inDM    true if getting the value for a DM
+   *
+   * @return      the current value
+   *
+   */
+  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
+  {
+    return get(inEntry).format(true);
+  }
+
+  //........................................................................
   //--------------------------- getStringValue ---------------------------
 
   /**

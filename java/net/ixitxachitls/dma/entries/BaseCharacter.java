@@ -670,7 +670,7 @@ public class BaseCharacter extends BaseEntry
         (new Divider(id, "", new Script
                      ("util.linkRow(document.getElementById('" + id + "'), "
                       + "'/user/" + getName() + "');")),
-         "listlink", false, false, false, false, "listlinks", "");
+         null, "listlink", false, false, false, false, "listlinks", "");
     }
 
     return super.computeValue(inKey, inDM);

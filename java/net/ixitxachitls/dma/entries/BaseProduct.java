@@ -799,31 +799,7 @@ public class BaseProduct extends BaseEntry
 //       new Divider("center",
 //                   new Command("#system #audience #style #producer #layout "
 //                               + "#{product type}")),
-//       "$title",
-//       new Textblock(new Command(new Object []
-//         {
-//           "$subtitle",
-//           new Linebreak(),
-//           "$description",
-//           new Hrule(),
-//           "${short description}",
-//         }), "desc"),
-//       new OverviewFiles("$image"),
-//       new Table("description", "f" + "Illustrations: ".length()
-//                 + ":L(desc-label);100:L(desc-text)",
-//                 new Command("%base %name %synonyms "
-//                             + "%notes "
-//                             + "%author %editor %cover %cartography "
-//                             + "%illustrations %typography %management "
-//                             + "%date %ISBN "
-//                             + "%pages %series %number %volume "
-//                             + "%price %contents %requirements"
-//                             // incomplete
-//                             + "%incomplete "
-//                             // admin
-//                             + "%{+references} %file")),
 //       "$scripts",
-//       new Divider("clear", " "),
 //     });
 
   //........................................................................
@@ -832,7 +808,25 @@ public class BaseProduct extends BaseEntry
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
-    new Print("$title $subtitle ${short description} $description");
+    new Print("$title "
+              + "${as pdf} ${as text} ${as dma}"
+              + "$clear $files\n"
+              + " $subtitle "
+              + "${short description} $description"
+              + "$par "
+              + "%base %synonyms "
+              + "%notes "
+              + "%system %audience %style %producer %layout %{product type} "
+              + "%author %editor %cover %cartography "
+              + "%illustrations %typography %management "
+              + "%date %ISBN "
+              + "%pages %series %number %volume "
+              + "%price %contents %requirements"
+              // incomplete
+              + "%incomplete "
+              // admin
+              + "%{+references} %file %errors"
+              );
 
   /** The type of this entry. */
   public static final BaseType<BaseProduct> TYPE =
@@ -886,14 +880,16 @@ public class BaseProduct extends BaseEntry
 
   /** The title of the product. */
   @Key("title")
-  protected @Nonnull Text m_title = new Text();
+  protected @Nonnull Text m_title =
+    new Text().withEditType("string[title]").withRelated("leader");
 
   //........................................................................
   //----- leader -----------------------------------------------------------
 
   /** The leader of the product, any 'a', 'the' and the like. */
   @Key("leader")
-  protected @Nonnull Text m_leader = new Text("");
+  protected @Nonnull Text m_leader =
+    new Text("").withEditType("string[leader]").withRelated("title");
 
   //........................................................................
   //----- subtitle ---------------------------------------------------------
@@ -1562,6 +1558,20 @@ public class BaseProduct extends BaseEntry
 
   //-------------------------------------------------------------- accessors
 
+  //----------------------------- getPagePrint -----------------------------
+
+  /**
+   * Get the print for a full page.
+   *
+   * @return the print for page printing
+   *
+   */
+  protected @Nonnull Print getPagePrint()
+  {
+    return s_pagePrint;
+  }
+
+  //........................................................................
   //----------------------------- getAudience ------------------------------
 
   /**
@@ -2402,7 +2412,54 @@ public class BaseProduct extends BaseEntry
 //   }
 
   //........................................................................
+  //--------------------------------- isDM ---------------------------------
 
+  /**
+   * Check whether the given user is the DM for this entry. Everybody is a DM
+   * for a product.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  public boolean isDM(@Nonnull BaseCharacter inUser)
+  {
+    return true;
+  }
+
+  //........................................................................
+
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("name".equals(inKey))
+      return new FormattedValue
+        (new Command(computeValue("_leader", inDM).format(this, inDM, true),
+                     " ",
+                     computeValue("_title", inDM).format(this, inDM, true)),
+         null, "name", false, true, false, true, "names", "");
+
+    if("subtitle".equals(inKey))
+      return new FormattedValue
+        (new Subtitle(computeValue("_subtitle", inDM).format(this, inDM, true)),
+         null, "subtitle", false, false, false, false, "subtitles", "");
+
+    return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
   //------------------------------ printCommand ----------------------------
 
   /**

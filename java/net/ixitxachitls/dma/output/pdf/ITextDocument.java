@@ -30,19 +30,19 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
 //import net.ixitxachitls.dma.entries.BaseSpell;
-import net.ixitxachitls.dma.output.commands.Class;
-import net.ixitxachitls.dma.output.commands.Event;
-import net.ixitxachitls.dma.output.commands.Feat;
-import net.ixitxachitls.dma.output.commands.God;
-import net.ixitxachitls.dma.output.commands.Group;
-import net.ixitxachitls.dma.output.commands.Item;
-import net.ixitxachitls.dma.output.commands.Monster;
-import net.ixitxachitls.dma.output.commands.NPC;
-import net.ixitxachitls.dma.output.commands.Place;
-import net.ixitxachitls.dma.output.commands.Product;
-import net.ixitxachitls.dma.output.commands.Quality;
-import net.ixitxachitls.dma.output.commands.Skill;
-import net.ixitxachitls.dma.output.commands.Spell;
+import net.ixitxachitls.output.commands.Class;
+import net.ixitxachitls.output.commands.Event;
+import net.ixitxachitls.output.commands.Feat;
+import net.ixitxachitls.output.commands.God;
+import net.ixitxachitls.output.commands.Group;
+import net.ixitxachitls.output.commands.Item;
+import net.ixitxachitls.output.commands.Monster;
+import net.ixitxachitls.output.commands.NPC;
+import net.ixitxachitls.output.commands.Place;
+import net.ixitxachitls.output.commands.Product;
+import net.ixitxachitls.output.commands.Quality;
+import net.ixitxachitls.output.commands.Skill;
+import net.ixitxachitls.output.commands.Spell;
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.output.actions.Pattern;
 //import net.ixitxachitls.output.actions.itext.Reference;
@@ -215,7 +215,7 @@ public class ITextDocument extends net.ixitxachitls.output.pdf.ITextDocument
 
       doc.add(new Command
               (new Command("just "),
-               new net.ixitxachitls.dma.output.commands.Product("some "),
+               new net.ixitxachitls.output.commands.Product("some "),
                new Command("test")));
 
       assertEquals("simple",

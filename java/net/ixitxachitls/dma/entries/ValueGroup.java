@@ -1400,6 +1400,10 @@ public abstract class ValueGroup implements Changeable
    */
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
+    // use _ to denote using a variable name
+    if(inKey.startsWith("_"))
+      return getVariable(inKey.substring(1));
+
     return getVariable(inKey);
   }
 
@@ -1641,15 +1645,17 @@ public abstract class ValueGroup implements Changeable
     for(Field field : fields)
     {
       Key key = field.getAnnotation(Key.class);
-      DM dm = field.getAnnotation(DM.class);
-      NoEdit noEdit = field.getAnnotation(NoEdit.class);
-      PlayerOnly player = field.getAnnotation(PlayerOnly.class);
-      PlayerEdit playerEdit = field.getAnnotation(PlayerEdit.class);
-      Plural plural = field.getAnnotation(Plural.class);
-      NoStore noStore = field.getAnnotation(NoStore.class);
-      Note note = field.getAnnotation(Note.class);
 
       if(key != null)
+      {
+        DM dm = field.getAnnotation(DM.class);
+        NoEdit noEdit = field.getAnnotation(NoEdit.class);
+        PlayerOnly player = field.getAnnotation(PlayerOnly.class);
+        PlayerEdit playerEdit = field.getAnnotation(PlayerEdit.class);
+        Plural plural = field.getAnnotation(Plural.class);
+        NoStore noStore = field.getAnnotation(NoStore.class);
+        Note note = field.getAnnotation(Note.class);
+
         variables.add(new Variable(key.value(), field,
                                    noStore == null || !noStore.value(),
                                    dm != null && dm.value(),
@@ -1658,6 +1664,7 @@ public abstract class ValueGroup implements Changeable
                                    playerEdit != null && playerEdit.value(),
                                    plural == null ? null : plural.value(),
                                    note == null ? null : note.value()));
+      }
     }
 
     // add all the variables of the parent class, if any

@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The event command.
+ * The skill command.
  *
- * @file          Event.java
+ * @file          Skill.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Event extends BaseCommand
+public class Skill extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Event --------------------------------
+  //------------------------------- Skill --------------------------------
 
   /**
-   * The constructor for the event command.
+   * The constructor for the skill command.
    *
-   * @param       inText the text to set event
+   * @param       inText the text to set skill
    *
    */
-  public Event(@Nonnull Object inText)
+  public Skill(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +68,16 @@ public class Event extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Event --------------------------------
+  //------------------------------- Skill --------------------------------
 
   /**
-   * The constructor for the event command.
+   * The constructor for the skill command.
    *
-   * @param       inText the text to set event
-   * @param       inReal the real name of the event (ID)
+   * @param       inText the text to set skill
+   * @param       inReal the real name of the skill (ID)
    *
    */
-  public Event(@Nonnull Object inText, @Nonnull Object inReal)
+  public Skill(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +85,13 @@ public class Event extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Event --------------------------------
+  //------------------------------- Skill --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Event()
+  protected Skill()
   {
     super(NAME, 1, 1);
   }
@@ -104,7 +104,7 @@ public class Event extends BaseCommand
 
   /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Event", "Event");
+    Config.get("resource:commands/Skill", "Skill");
 
   //........................................................................
 
@@ -128,11 +128,11 @@ public class Event extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Event("text");
-      assertEquals("setup", "\\Event{text}", command.toString());
+      Command command = new Skill("text");
+      assertEquals("setup", "\\Skill{text}", command.toString());
 
-      command = new Event("text", "real");
-      assertEquals("setup", "\\Event[real]{text}", command.toString());
+      command = new Skill("text", "real");
+      assertEquals("setup", "\\Skill[real]{text}", command.toString());
     }
 
     //......................................................................

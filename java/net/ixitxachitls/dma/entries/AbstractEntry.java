@@ -70,6 +70,7 @@ import net.ixitxachitls.output.commands.Editable;
 import net.ixitxachitls.output.commands.Image;
 import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Par;
 //import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
@@ -1634,14 +1635,14 @@ public class AbstractEntry extends ValueGroup
                                   " ",
                                   computeValue("name", inDM)
                                   .format(this, inDM, false)),
-                                  "entrytitle"),
+                                 "entrytitle"), null,
                                 "title", false, false, false, false, "titles",
                                 "");
 
     if("clear".equals(inKey))
       // we need a non empty string here, because when parsing trailing empty
       // arguments are ignored.
-      return new FormattedValue(new Divider("clear", " "),
+      return new FormattedValue(new Divider("clear", " "), null,
                                 "clear", false, false, false, false, "clear",
                                 "");
 
@@ -1658,17 +1659,17 @@ public class AbstractEntry extends ValueGroup
           Log.warning("unknown file '" + file + "' ignored");
 
       return new FormattedValue(new Divider("files", new Command(commands)),
-                                "files", false, false, false, false, "files",
-                                "");
+                                null, "files", false, false, false, false,
+                                "files", "");
     }
 
     if("file".equals(inKey))
       if(m_file == null)
         return new FormattedValue
           (new Editable(getName(), getType(), "<please select>", "file", "",
-                        "selection", null,
+                        "selection",
                         Strings.toString(m_data.files(getType()), "||", "")),
-           "file", true, false, false, false, "files", "");
+           null, "file", true, false, false, false, "files", "");
       else
         return new FormattedValue
           (new Command(new Editable(getName(),
@@ -1676,14 +1677,14 @@ public class AbstractEntry extends ValueGroup
                                     m_file.getStorageName(),
                                     "file",
                                     m_file.getStorageName(),
-                                    "selection", null,
+                                    "selection",
                                     Strings.toString(m_data.files(getType()),
                                                      "||", "")),
                        " lines ",
                        m_startLine,
                        " to ",
                        m_endLine),
-           "file", true, false, false, false, "files", "");
+           null, "file", true, false, false, false, "files", "");
 
     if("errors".equals(inKey))
     {
@@ -1705,37 +1706,41 @@ public class AbstractEntry extends ValueGroup
       else
         value = null;
 
-      return new FormattedValue(value, "errors", true, false, false, false,
-                                "errors", "");
+      return new FormattedValue(value, null, "errors", true, false, false,
+                                false, "errors", "");
     }
 
     if("as dma".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-dma.png",
                                               "/user/" + getName() + ".dma",
                                               "doc-link"),
-                                "as dma", true, false, false, false, "as dma",
-                                "");
+                                null, "as dma", true, false, false, false,
+                                "as dma", "");
 
     if("as pdf".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
                                               "/user/" + getName() + ".pdf",
                                               "doc-link"),
-                                "as pdf", true, false, false, false, "as pdf",
-                                "");
+                                null, "as pdf", true, false, false, false,
+                                "as pdf", "");
 
     if("as text".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-txt.png",
                                               "/user/" + getName() + ".txt",
                                               "doc-link"),
-                                "as text", true, false, false, false, "as text",
-                                "");
+                                null, "as text", true, false, false, false,
+                                "as text", "");
 
     if("label".equals(inKey))
       return new FormattedValue
         (new Image(Files.concatenate
                    ("/icons/labels", getType().getClassName()) + ".png",
                    "label"),
-         "label", false, false, false, false, "labels", "");
+         null, "label", false, false, false, false, "labels", "");
+
+    if("par".equals(inKey))
+      return new FormattedValue(new Par(), null, "par", false, false, false,
+                                false, "par", "");
 
     return super.computeValue(inKey, inDM);
   }

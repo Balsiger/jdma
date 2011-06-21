@@ -54,7 +54,8 @@ public class FormattedValue extends ValueHandle
   /**
    * Creates the formatted value.
    *
-   * @param       inValue          the comnputed (and formatted) value itself
+   * @param       inFormatted      the formatted value
+   * @param       inValue          the comnputed value (without formatting)
    * @param       inKey            the key of the value
    * @param       inDM             true if the value is for dms only
    * @param       inEditable       true if the value is editable
@@ -64,7 +65,8 @@ public class FormattedValue extends ValueHandle
    * @param       inNote           a note for editing
    *
    */
-  public FormattedValue(@Nullable Object inValue, @Nonnull String inKey,
+  public FormattedValue(@Nullable Object inFormatted, @Nullable Object inValue,
+                        @Nonnull String inKey,
                         boolean inDM, boolean inEditable, boolean inPlayer,
                         boolean inPlayerEditable, @Nullable String inPlural,
                         @Nullable String inNote)
@@ -72,7 +74,12 @@ public class FormattedValue extends ValueHandle
     super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
           inNote);
 
-    m_value = inValue;
+    m_formatted = inFormatted;
+
+    if(inValue == null)
+      m_value = inFormatted;
+    else
+      m_value = inValue;
   }
 
   //........................................................................
@@ -82,6 +89,9 @@ public class FormattedValue extends ValueHandle
   //-------------------------------------------------------------- variables
 
   /** The formatted value. */
+  protected @Nullable Object m_formatted;
+
+  /** The stored value. */
   protected @Nullable Object m_value;
 
   //........................................................................
@@ -102,6 +112,23 @@ public class FormattedValue extends ValueHandle
   public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     return m_value;
+  }
+
+  //........................................................................
+  //-------------------------------- formatted ---------------------------------
+
+  /**
+   * Get the formatted value from the given entry.
+   *
+   * @param    inEntry the entry containing the value
+   * @param    inDM    true if getting the value for a DM
+   *
+   * @return   the value found or null if not found or not accessible
+   *
+   */
+  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
+  {
+    return m_formatted;
   }
 
   //........................................................................
@@ -128,13 +155,14 @@ public class FormattedValue extends ValueHandle
     public void value()
     {
       ValueHandle formatted =
-        new FormattedValue("value", "key", false, true, false, false, null,
-                           null);
+        new FormattedValue("formatted", "value", "key", false, true, false,
+                           false, null, null);
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry
         ("guru", new net.ixitxachitls.dma.data.DMAData("path"));
 
       assertEquals("value", "value", formatted.value(entry, true));
+      assertEquals("formatted", "formatted", formatted.formatted(entry, true));
     }
 
     //......................................................................

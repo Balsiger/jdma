@@ -21,7 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -35,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The place command.
+ * The NPC command.
  *
- * @file          Place.java
+ * @file          NPC.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -48,19 +48,20 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Place extends BaseCommand
+public class NPC extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //-------------------------------- Place ---------------------------------
+  //------------------------------- NPC --------------------------------
 
   /**
-   * The constructor for the place command.
+   * The constructor for the nPC command.
    *
-   * @param       inText the text to set place
+   * @param       inText the text to set nPC
+   *
    *
    */
-  public Place(@Nonnull Object inText)
+  public NPC(@Nonnull Object inText)
   {
     this();
 
@@ -68,16 +69,16 @@ public class Place extends BaseCommand
   }
 
   //........................................................................
-  //-------------------------------- Place ---------------------------------
+  //------------------------------- NPC --------------------------------
 
   /**
-   * The constructor for the place command.
+   * The constructor for the nPC command.
    *
-   * @param       inText the text to set place
-   * @param       inReal the real name of the place (ID)
+   * @param       inText the text to set nPC
+   * @param       inReal the real name of the nPC (ID)
    *
    */
-  public Place(@Nonnull Object inText, @Nonnull Object inReal)
+  public NPC(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -85,13 +86,13 @@ public class Place extends BaseCommand
   }
 
   //........................................................................
-  //-------------------------------- Place ---------------------------------
+  //------------------------------- NPC --------------------------------
 
   /**
-   * This is the internal const\ructor for a command.
+   * This is the internal constructor for a command.
    *
    */
-  protected Place()
+  protected NPC()
   {
     super(NAME, 1, 1);
   }
@@ -102,9 +103,9 @@ public class Place extends BaseCommand
 
   //-------------------------------------------------------------- variables
 
-  /** Command for setting a place name. */
+  /** Command for setting an NPC name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Place", "Place");
+    Config.get("resource:commands/NPC", "NPC");
 
   //........................................................................
 
@@ -128,11 +129,11 @@ public class Place extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Place("text");
-      assertEquals("setup", "\\Place{text}", command.toString());
+      Command command = new NPC("text");
+      assertEquals("setup", "\\NPC{text}", command.toString());
 
-      command = new Place("text", "real");
-      assertEquals("setup", "\\Place[real]{text}", command.toString());
+      command = new NPC("text", "real");
+      assertEquals("setup", "\\NPC[real]{text}", command.toString());
     }
 
     //......................................................................

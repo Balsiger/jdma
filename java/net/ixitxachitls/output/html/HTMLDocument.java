@@ -447,7 +447,8 @@ public class HTMLDocument extends Document
                                + "id=\"$1\" class=\"editable\" "
                                + "entry=\"$2\" "
                                + "type=\"$6\"[[ note=\"%1\"]]"
-                               + "[[ values=\"$html((%2))\"]]>"
+                               + "[[ values=\"$html((%2))\"]]"
+                               + "[[ related=\"%3\"]]>"
                                + "<span>$3</span>"
                                + "</dmaeditable>", false));
      s_actions.put(Script.NAME,

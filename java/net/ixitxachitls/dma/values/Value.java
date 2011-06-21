@@ -103,8 +103,8 @@ public abstract class Value<T extends Value> implements
     inNew.m_formatter = m_formatter;
     inNew.m_grouping = m_grouping;
     inNew.m_editType = m_editType;
-    inNew.m_editName = m_editName;
     inNew.m_choices = m_choices;
+    inNew.m_related = m_related;
 
     return inNew;
   }
@@ -156,11 +156,11 @@ public abstract class Value<T extends Value> implements
   /** The type to use for editing. */
   protected @Nonnull String m_editType = "";
 
-  /** The name to use for editing. */
-  protected @Nonnull String m_editName = "";
-
   /** The values for editing the type. */
   protected @Nullable String m_choices = null;
+
+  /** The related values for editing. */
+  protected @Nullable String m_related = null;
 
   //........................................................................
 
@@ -415,6 +415,21 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
+  //------------------------------ getChoices ------------------------------
+
+  /**
+   * Get the all the possibly related values this value can be edited
+   * with. Returns null if no related values are available.
+   *
+   * @return      the possible related values or none for null
+   *
+   */
+  public @Nullable String getRelated()
+  {
+    return m_related;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -652,28 +667,6 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
-  //----------------------------- withEditName -----------------------------
-
-  /**
-   * Set a edit name for this value.
-   *
-   * @param       inName the name to set to
-   *
-   * @return      the value itself (to allow new T().setFormatter())
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public @Nonnull T withEditName(@Nonnull String inName)
-  {
-    if(inName.length() == 0)
-      throw new IllegalArgumentException("must have a name here");
-
-    m_editName = inName;
-
-    return (T)this;
-  }
-
-  //........................................................................
   //----------------------------- withChoices ------------------------------
 
   /**
@@ -688,6 +681,25 @@ public abstract class Value<T extends Value> implements
   public @Nonnull T withChoices(@Nonnull String inValues)
   {
     m_choices = inValues;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withRelated ------------------------------
+
+  /**
+   * Set the related edits for this value.
+   *
+   * @param       inValues the related values to use
+   *
+   * @return      the value itself (to allow new T().setFormatter())
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withRelated(@Nonnull String inValues)
+  {
+    m_related = inValues;
 
     return (T)this;
   }

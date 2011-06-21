@@ -21,8 +21,7 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.output.commands;
-
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -36,9 +35,9 @@ import net.ixitxachitls.util.configuration.Config;
 //------------------------------------------------------------------- header
 
 /**
- * The spell command.
+ * The event command.
  *
- * @file          Spell.java
+ * @file          Event.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -49,19 +48,19 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class Spell extends BaseCommand
+public class Event extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Spell --------------------------------
+  //------------------------------- Event --------------------------------
 
   /**
-   * The constructor for the spell command.
+   * The constructor for the event command.
    *
-   * @param       inText the text to set spell
+   * @param       inText the text to set event
    *
    */
-  public Spell(@Nonnull Object inText)
+  public Event(@Nonnull Object inText)
   {
     this();
 
@@ -69,16 +68,16 @@ public class Spell extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Spell --------------------------------
+  //------------------------------- Event --------------------------------
 
   /**
-   * The constructor for the spell command.
+   * The constructor for the event command.
    *
-   * @param       inText the text to set spell
-   * @param       inReal the real name of the spell (ID)
+   * @param       inText the text to set event
+   * @param       inReal the real name of the event (ID)
    *
    */
-  public Spell(@Nonnull Object inText, @Nonnull Object inReal)
+  public Event(@Nonnull Object inText, @Nonnull Object inReal)
   {
     this(inText);
 
@@ -86,13 +85,13 @@ public class Spell extends BaseCommand
   }
 
   //........................................................................
-  //------------------------------- Spell --------------------------------
+  //------------------------------- Event --------------------------------
 
   /**
    * This is the internal constructor for a command.
    *
    */
-  protected Spell()
+  protected Event()
   {
     super(NAME, 1, 1);
   }
@@ -105,7 +104,7 @@ public class Spell extends BaseCommand
 
   /** Command for setting a group name. */
   public static final @Nonnull String NAME =
-    Config.get("resource:commands/Spell", "Spell");
+    Config.get("resource:commands/Event", "Event");
 
   //........................................................................
 
@@ -129,11 +128,11 @@ public class Spell extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new Spell("text");
-      assertEquals("setup", "\\Spell{text}", command.toString());
+      Command command = new Event("text");
+      assertEquals("setup", "\\Event{text}", command.toString());
 
-      command = new Spell("text", "real");
-      assertEquals("setup", "\\Spell[real]{text}", command.toString());
+      command = new Event("text", "real");
+      assertEquals("setup", "\\Event[real]{text}", command.toString());
     }
 
     //......................................................................
