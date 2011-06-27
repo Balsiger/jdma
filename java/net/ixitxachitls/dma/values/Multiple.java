@@ -25,10 +25,13 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+
+import com.google.common.base.Joiner;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
@@ -293,15 +296,16 @@ public class Multiple extends Value<Multiple>
   protected static final char s_delimiter =
     Config.get("resource:values/multiple.delimiter", ' ');
 
-  /** The edit multiple delimiter. */
-  protected static final @Nonnull String s_editDelimiter =
-    Config.get("resource:entries/edit.multiple.delimiter", "::");
+  /** The joiner for editing values. */
+  protected static final @Nonnull Joiner s_editJoiner =
+    Joiner.on(Config.get("resource:entries/edit.multiple.delimiter", "::"));
+
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
-  //-------------------------------- toEdit --------------------------------
+  //----------------------------- getEditValue -----------------------------
 
   /**
    * Convert the given value into a String for editing.
@@ -309,20 +313,16 @@ public class Multiple extends Value<Multiple>
    * @return      the object converted to a String
    *
    */
-//   public String toEdit()
-//   {
-//     StringBuilder result = new StringBuilder();
+  @Override
+  public String getEditValue()
+  {
+    List<String> result = new ArrayList<String>();
 
-//     for(Iterator<Multiple.Element> i = iterator(); i.hasNext(); )
-//     {
-//       result.append(i.next().get().toEdit());
+    for(Iterator<Multiple.Element> i = iterator(); i.hasNext(); )
+      result.add(i.next().get().getEditValue());
 
-//       if(i.hasNext())
-//         result.append(s_editDelimiter);
-//     }
-
-//     return result.toString();
-//   }
+    return s_editJoiner.join(result);
+  }
 
   //........................................................................
 

@@ -930,12 +930,13 @@ public class BaseProduct extends BaseEntry
       new ValueList<Multiple>(new Multiple(new Multiple.Element []
         { new Multiple.Element
           (new Text().withFormatter(s_personFormatter)
-           .withEditType("suggeststring(persons?category=author)[author]"),
+           .withEditType("autocomplete(persons/author)[name]"),
            false),
           new Multiple.Element
           (new Name().withFormatter(s_jobFormatter)
-           .withEditType("suggest(jobs?category=author)[job]"), true) })
-                         .withFormatter(s_nameFormatter))
+           .withEditType("autocomplete(jobs/author)[job]"),
+           true, " ", null) })
+                              .withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
   static

@@ -69,6 +69,7 @@ public abstract class DMAServlet extends BaseServlet
    */
   public DMAServlet()
   {
+    // nothing to do here
   }
 
   //........................................................................

@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -260,7 +261,7 @@ public class ValueList<T extends Value>
 
   //-------------------------------------------------------------- accessors
 
-  //-------------------------------- toEdit --------------------------------
+  //----------------------------- getEditValue -----------------------------
 
   /**
    * Convert the given value into a String for editing.
@@ -268,20 +269,16 @@ public class ValueList<T extends Value>
    * @return      the object converted to a String
    *
    */
-//   public String toEdit()
-//   {
-//     StringBuffer result = new StringBuffer();
+  @Override
+  public String getEditValue()
+  {
+    List<String> result = new ArrayList<String>();
 
-//     for(Iterator<T> i = iterator(); i.hasNext(); )
-//     {
-//       result.append(i.next().toEdit());
+    for(Iterator<T> i = iterator(); i.hasNext(); )
+      result.add(i.next().getEditValue());
 
-//       if(i.hasNext())
-//         result.append(m_delimiter);
-//     }
-
-//     return result.toString();
-//   }
+    return m_joiner.join(result);
+  }
 
   //........................................................................
 

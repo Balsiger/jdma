@@ -147,18 +147,21 @@ public abstract class ValueHandle
     String name;
     Object formatted = formatted(inEntry, inDM);
     String related;
+    String edit;
 
     if(value instanceof Value)
     {
       type = ((Value)value).getEditType();
       choices = ((Value)value).getChoices();
       related = ((Value)value).getRelated();
+      edit = ((Value)value).getEditValue();
     }
     else
     {
       type = "string";
       choices = "";
       related = "";
+      edit = value.toString();
     }
 
     // TODO: fix this (have to deal with attachments here)!
@@ -171,7 +174,7 @@ public abstract class ValueHandle
 
     if(inEdit && m_editable && (inDM || m_playerEditable))
       return new Editable(inEntry.getID(), ((AbstractEntry)inEntry).getType(),
-                          formatted, m_key, value.toString(), type, note,
+                          formatted, m_key, edit, type, note,
                           choices, related);
 
     return formatted;

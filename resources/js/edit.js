@@ -177,6 +177,7 @@ edit.save = function()
   for(var i = 0, editable; editable = edit.all[i]; i++)
     editable.save(values);
 
+  window.console.log("saving", values);
   // send the data to the server
   util.ajax('/actions/save', values,
             function(inResult) { eval(inResult); });
@@ -302,6 +303,9 @@ edit.Base.create = function(inElement)
 
     case 'list':
       return new edit.List(element, properties);
+
+    case 'multiple':
+      return new edit.Multiple(element, properties);
   }
 
   window.alert('Could not find edit object for ' + properties.type);
@@ -504,6 +508,7 @@ edit.Field = function(inEditable, inProperties)
     this._field.focus(this._updateDecoration.bind(this, true, undefined));
     this._field.blur(this._updateDecoration.bind(this, false, undefined));
     this._field.keypress(this._define.bind(this));
+    this._field.change(this._define.bind(this));
   }
 
   // add the label, if any
@@ -602,7 +607,7 @@ edit.Field.prototype.focus = function()
  */
 edit.Name = function(inEditable, inProperties)
 {
-  inProperties.value = properties.value.removeNewlines();
+  inProperties.value = inProperties.value.removeNewlines();
   edit.Field.call(this, inEditable, inProperties);
 };
 extend(edit.Name, edit.Field);
@@ -698,9 +703,13 @@ edit.FormattedString.prototype._createElement = function()
 edit.Selection = function(inEditable, inProperties)
 {
   // this is used in the constructor
-  this._selections = inSelections;
+  this._selections = inProperties.values;
 
   edit.Field.call(this, inEditable, inProperties);
+
+  // selections are always defined when starting to edit, as per default always
+  // something will be selected
+  this._defined = true;
 };
 extend(edit.Selection, edit.Field);
 
@@ -899,6 +908,84 @@ edit.List.prototype._getValue = function()
   }
 
   return result.join(this.delimiter) || '$undefined$';
+};
+
+//..........................................................................
+//----------------------------------------------------------------- Multiple
+
+/**
+ * An object representing an editable multiple field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.Multiple = function(inEditable, inProperties)
+{
+  this.items = [];
+  this.subvalues = inProperties.value.split(/::/);
+  this.subtypes = inProperties.subtype.split(/@/);
+  this.delimiters =
+    inProperties.options ? inProperties.options.split(/::/) : [];
+
+  // have to setup init values first
+  edit.Field.call(this, inEditable, inProperties);
+};
+extend(edit.Multiple, edit.Field);
+
+/**
+  * Create the element associated with this editable.
+  *
+  * @return the html element created
+  */
+edit.Multiple.prototype._createElement = function()
+{
+  var element = $('<span class="edit-list-multiple"></span>');
+
+  for(var i = 0; i < this.subtypes.length; i++)
+  {
+    var type = edit.Base._parseType(this.subtypes[i]);
+    var item = edit.Base.create({
+      id: this.id,
+      entry: this.entry,
+      type: type.type,
+      value: this._value.length > i ? this._value[i] : "",
+      key: this.key,
+      script: null,
+      value: i < this.subvalues.length ? this.subvalues[i] : "",
+      note: null,
+      label: type.label,
+      related: null,
+      subtype: type.subtype,
+      options: type.options,
+      nosave: true
+      });
+
+    this.items.push(item);
+    element.append(item._element);
+  }
+
+  return element;
+};
+
+/**
+ * Get the value of the field.
+ *
+ * @return the fields value, ready for storing.
+ */
+edit.Multiple.prototype._getValue = function()
+{
+  var result = "";
+
+  for(var i = 0; i < this.items.length; i++)
+  {
+    var value = this.items[i].getValue();
+
+    if(value.length > 0 && value != "$undefined$")
+      result += this.delimiters[i] + value;
+  }
+
+  return result + this.delimiters[i];
 };
 
 //..........................................................................

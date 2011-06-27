@@ -603,6 +603,10 @@ public class DMAServer extends WebServer
 //       (new ServletHolder(new ReloadServlet(m_campaigns)),
 //        "/actions/reload");
 
+    // autocomplete requests
+//     context.addServlet(new ServletHolder(new Autocomplete()),
+//                        "/autocomplete/persons/*");
+
 //     // ajax data requests
 //     context.addServlet
 //       (new ServletHolder

@@ -487,6 +487,7 @@ DIV.edit-container
   padding:       0 5px 0 10px;
   display:       inline-block;
   box-sizing:    border-box;
+  width:         100%;
 }
 
 DIV.edit-note
@@ -565,6 +566,16 @@ DIV.label-leader
 DIV.label-title
 {
   width: 70%;
+}
+
+DIV.label-name
+{
+  width: 60%;
+}
+
+DIV.label-job
+{
+  width: 40%;
 }
 
 /******************************************************************************

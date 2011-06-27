@@ -430,6 +430,21 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
+  //----------------------------- getEditValue -----------------------------
+
+  /**
+   * Get the value to be used for editing.
+   *
+   * @return      the value for editing
+   *
+   */
+  public String getEditValue()
+  {
+    return toString();
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
