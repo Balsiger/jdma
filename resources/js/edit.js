@@ -306,6 +306,15 @@ edit.Base.create = function(inElement)
 
     case 'multiple':
       return new edit.Multiple(element, properties);
+
+    case 'autostring':
+      return new edit.AutocompleteString(element, properties);
+
+    case 'autoname':
+      return new edit.AutocompleteName(element, properties);
+
+    case 'date':
+      return new edit.Date(element, properties);
   }
 
   window.alert('Could not find edit object for ' + properties.type);
@@ -986,6 +995,179 @@ edit.Multiple.prototype._getValue = function()
   }
 
   return result + this.delimiters[i];
+};
+
+//..........................................................................
+//------------------------------------------------------- AutocompleteString
+
+/**
+ * An object representing an editable autocomplete string field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.AutocompleteString = function(inEditable, inProperties)
+{
+  var options = inProperties.options.split(/\|/);
+  this.source = options[0];
+  this.addition = options[1];
+  edit.String.call(this, inEditable, inProperties);
+
+  this._field.focus(this._update.bind(this));
+};
+extend(edit.AutocompleteString, edit.String);
+
+/**
+ * Update the value on focus to make sure we have the proper autocomplete
+ * installed (as some depend on the values of other fields).
+ */
+edit.AutocompleteString.prototype._update = function()
+{
+  var source = '/autocomplete/' + this.source;
+
+  if(this.addition)
+  {
+    var addition =
+      this._element.siblings().find('input.label-' + this.addition);
+    if(addition.length > 0)
+      source += '/' + addition[0].value;
+  }
+
+  this._field.autocomplete({
+    source: source,
+    autoFocus: true,
+    minLength: 0,
+    delay: 100
+  });
+};
+
+//..........................................................................
+//--------------------------------------------------------- AutocompleteName
+
+/**
+ * An object representing an editable autocomplete name field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.AutocompleteName = function(inEditable, inProperties)
+{
+  var options = inProperties.options.split(/\|/);
+  this.source = options[0];
+  this.addition = options[1];
+  edit.String.call(this, inEditable, inProperties);
+
+  this._field.focus(this._update.bind(this));
+};
+extend(edit.AutocompleteName, edit.Name);
+
+/**
+ * Update the value on focus to make sure we have the proper autocomplete
+ * installed (as some depend on the values of other fields).
+ */
+edit.AutocompleteName.prototype._update = function()
+{
+  var source = '/autocomplete/' + this.source;
+
+  if(this.addition)
+  {
+    var addition =
+      this._element.siblings().find('input.label-' + this.addition);
+    if(addition.length > 0)
+      source += '/' + addition[0].value;
+  }
+
+  this._field.autocomplete({
+    source: source,
+    autoFocus: true,
+    minLength: 0,
+    delay: 100
+  });
+};
+
+//..........................................................................
+//--------------------------------------------------------------------- Date
+
+/**
+ * An object representing an editable date field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.Date = function(inEditable, inProperties)
+{
+  edit.Field.call(this, inEditable, inProperties);
+};
+extend(edit.Date, edit.Field);
+
+/**
+  * Create the element associated with this editable.
+  *
+  * @return the html element created
+  */
+edit.Date.prototype._createElement = function()
+{
+  var values = this.properties.value.split(/ /);
+
+  var monthProperties =
+  {
+    id: this.id,
+    entry: this.entry,
+    type: 'selection',
+    value: values.length > 1 ? values[0] : '',
+    key: this.key,
+    script: null,
+    values: ['', 'January', 'February', 'March', 'April', 'May', 'June',
+             'July', 'August', 'September', 'October', 'November',
+             'December'],
+    note: null,
+    label: null,
+    related: null,
+    subtype: null,
+    options: null,
+    nobuttons: true,
+    nosave: true
+  };
+
+  var years = [];
+  for (var i = 1970; i < new Date().getFullYear() + 2; i++)
+    years.push('' + i);
+
+  var yearProperties =
+  {
+    id: this.id,
+    entry: this.entry,
+    type: 'selection',
+    value: values.length > 1 ? values[1] : values[0],
+    key: this.key,
+    script: null,
+    values: years,
+    note: null,
+    label: null,
+    related: null,
+    subtype: null,
+    options: null,
+    nobuttons: true,
+    nosave: true
+  };
+
+  this.month = new edit.Selection(this.editable, monthProperties);
+  this.year = new edit.Selection(this.editable, yearProperties);
+
+  return $('<span />').append(this.month._element).append(this.year._element);
+};
+
+/**
+ * Get the value of the field.
+ *
+ * @return the fields value, ready for storing.
+ */
+edit.Date.prototype._getValue = function()
+{
+  return this.month._getValue() + ' ' + this.year._getValue();
 };
 
 //..........................................................................

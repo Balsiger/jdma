@@ -573,9 +573,15 @@ DIV.label-name
   width: 60%;
 }
 
-DIV.label-job
+DIV.label-job,
 {
   width: 40%;
+}
+
+SPAN.date DIV
+{
+  display: inline-block;
+  width: auto;
 }
 
 /******************************************************************************

@@ -39,9 +39,12 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.server.filters.DMAFilter;
+import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
+import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
 import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
 import net.ixitxachitls.dma.server.servlets.TypedEntryListServlet;
@@ -604,8 +607,14 @@ public class DMAServer extends WebServer
 //        "/actions/reload");
 
     // autocomplete requests
-//     context.addServlet(new ServletHolder(new Autocomplete()),
-//                        "/autocomplete/persons/*");
+    context.addServlet
+      (new ServletHolder
+       (new PersonAutocomplete(m_baseData.getEntries(BaseProduct.TYPE))),
+       "/autocomplete/persons/*");
+    context.addServlet
+      (new ServletHolder
+       (new JobAutocomplete(m_baseData.getEntries(BaseProduct.TYPE))),
+       "/autocomplete/jobs/*");
 
 //     // ajax data requests
 //     context.addServlet

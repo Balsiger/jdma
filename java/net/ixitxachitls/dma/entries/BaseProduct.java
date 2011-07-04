@@ -930,11 +930,12 @@ public class BaseProduct extends BaseEntry
       new ValueList<Multiple>(new Multiple(new Multiple.Element []
         { new Multiple.Element
           (new Text().withFormatter(s_personFormatter)
-           .withEditType("autocomplete(persons/author)[name]"),
+           .withEditType("autostring(persons/author)[name]"),
            false),
           new Multiple.Element
           (new Name().withFormatter(s_jobFormatter)
-           .withEditType("autocomplete(jobs/author)[job]"),
+           .withEditType("autoname(jobs/author|name)[job]")
+           .withRelated("name"),
            true, " ", null) })
                               .withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
@@ -1083,11 +1084,11 @@ public class BaseProduct extends BaseEntry
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
                              .withEditType
-                             ("suggeststring(persons?category=editor)[editor]"),
+                             ("autostring(persons/editor)[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("suggest(jobs?category=editor)"
+                             .withEditType("autoname(jobs/category|name)"
                                            + "[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
@@ -1101,12 +1102,11 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("suggeststring(persons?"
-                                           + "category=cover)[cover]"),
+                             .withEditType("autostring(persons/cover)[name]"),
                              false),
         new Multiple.Element(new Name().
                              withFormatter(s_jobFormatter)
-                             .withEditType("suggest(jobs?category=cover)[job]"),
+                             .withEditType("autoname(jobs/cover|name)[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
@@ -1119,12 +1119,12 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("suggeststring(persons?category="
-                                           + "cartographer)[cartographer]"),
+                             .withEditType("autostring(persons/cartographer)"
+                                           + "[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("suggest(jobs?category=cartographer)"
+                             .withEditType("autoname(jobs/cartographer|name)"
                                            + "[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
@@ -1138,12 +1138,12 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("suggeststring(persons?category="
-                                           + "illustrator)[illustrator]"),
+                             .withEditType("autostring(persons/illustrator)"
+                                           + "[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("suggest(jobs?category=illustrator)"
+                             .withEditType("autoname(jobs/illustrator|name)"
                                            + "[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
@@ -1157,12 +1157,12 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("suggeststring(persons?category="
-                                           + "typographer)[typographer]"),
+                             .withEditType("autostring(persons/typographer)"
+                                           + "[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("suggest(jobs?category=typographer)"
+                             .withEditType("autoname(jobs/typographer|name)"
                                            + "[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
@@ -1176,11 +1176,11 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("suggeststring(persons?category="
-                                           + "manager)[manager]"), false),
+                             .withEditType("autostring(persons/manager)"
+                                           + "[name]"), false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("suggest(jobs?category=manager)"
+                             .withEditType("autoname(jobs/manager|name)"
                                            + "[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
@@ -1823,7 +1823,7 @@ public class BaseProduct extends BaseEntry
    * @return      an array with all the jobs
    *
    */
-  public @Nonnull String []getJobs()
+  public @Nonnull Set<String> getJobs()
   {
     return getJobsForPerson(null);
   }
@@ -1838,7 +1838,7 @@ public class BaseProduct extends BaseEntry
    * @return      an array with all the persons
    *
    */
-  public @Nonnull String []getPersons()
+  public @Nonnull Set<String> getPersons()
   {
     return getPersonsForJob(null);
   }
@@ -2346,9 +2346,9 @@ public class BaseProduct extends BaseEntry
    * @return      all the persons with this job
    *
    */
-  public @Nonnull String []getPersonsForJob(@Nonnull String inJob)
+  public @Nonnull SortedSet<String> getPersonsForJob(@Nullable String inJob)
   {
-    HashSet<String> result = new HashSet<String>();
+    TreeSet<String> result = new TreeSet<String>();
 
     addPersons(result, "author",       inJob, m_authors);
     addPersons(result, "editor",       inJob, m_editors);
@@ -2358,10 +2358,96 @@ public class BaseProduct extends BaseEntry
     addPersons(result, "typographer",  inJob, m_typographers);
     addPersons(result, "manager",      inJob, m_managers);
 
-    return result.toArray(new String [0]);
+    return result;
+  }
+
+  public @Nonnull Set<String> collectPersons(@Nonnull Set<String> ioNames,
+                                             @Nonnull String inCategory,
+                                             @Nullable String inPrefix)
+  {
+    ValueList<Multiple> list = categoryList(inCategory);
+    if(list == null)
+      return ioNames;
+
+    for(Multiple person : list)
+    {
+      String name = ((Text)person.get(0)).get();
+
+      if(name.indexOf('\\') >= 0)
+        name = ASCIIDocument.simpleConvert(name);
+
+      if(inPrefix == null || inPrefix.isEmpty()
+         || name.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
+        ioNames.add(name);
+    }
+
+    return ioNames;
+  }
+
+  public @Nonnull Set<String> collectJobs(@Nonnull Set<String> ioJobs,
+                                          @Nonnull String inCategory,
+                                          @Nullable String inName,
+                                          @Nullable String inPrefix)
+  {
+    ValueList<Multiple> list = categoryList(inCategory);
+    if(list == null)
+      return ioJobs;
+
+    for(Multiple person : list)
+    {
+      if(!person.get(1).isDefined())
+        continue;
+
+      if(inName != null
+         && !inName.equalsIgnoreCase(((Text)person.get(0)).get()))
+        continue;
+
+      String job = ((Name)person.get(1)).get();
+
+      if(job.indexOf('\\') >= 0)
+        job = ASCIIDocument.simpleConvert(job);
+
+      if(inPrefix == null || inPrefix.isEmpty()
+         || job.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
+        ioJobs.add(job);
+    }
+
+    return ioJobs;
   }
 
   //........................................................................
+  //----------------------------- categoryList -----------------------------
+
+  /**
+   * Get a list of name values for the given category.
+   *
+   * @param     inCategory the category to get names for
+   *
+   * @return    the names of the requested category or null if not found
+   *
+   */
+  private @Nullable ValueList<Multiple> categoryList(@Nonnull String inCategory)
+  {
+    if("author".equalsIgnoreCase(inCategory))
+      return m_authors;
+    else if("editor".equalsIgnoreCase(inCategory))
+      return m_editors;
+    else if("cover".equalsIgnoreCase(inCategory))
+      return m_cover;
+    else if("cartographer".equalsIgnoreCase(inCategory))
+      return m_cartographers;
+    else if("illustrator".equalsIgnoreCase(inCategory))
+      return m_illustrators;
+    else if("typographer".equalsIgnoreCase(inCategory))
+      return m_typographers;
+    else if("manager".equalsIgnoreCase(inCategory))
+      return m_managers;
+
+    return null;
+  }
+
+  //........................................................................
+
   //--------------------------- getJobsForPerson ---------------------------
 
   /**
@@ -2372,7 +2458,7 @@ public class BaseProduct extends BaseEntry
    * @return      all the jobs with this person
    *
    */
-  public @Nonnull String []getJobsForPerson(@Nonnull String inPerson)
+  public @Nonnull Set<String> getJobsForPerson(@Nullable String inPerson)
   {
     TreeSet<String> result = new TreeSet<String>();
 
@@ -2384,7 +2470,7 @@ public class BaseProduct extends BaseEntry
     addJobs(result, "typographer",  inPerson, m_typographers);
     addJobs(result, "manager",      inPerson, m_managers);
 
-    return result.toArray(new String [0]);
+    return result;
   }
 
   //........................................................................
@@ -2531,7 +2617,7 @@ public class BaseProduct extends BaseEntry
 //     return commands;
 //   }
 
-  //........................................................................
+  //....................................................1....................
 
   //........................................................................
 
@@ -3492,25 +3578,17 @@ public class BaseProduct extends BaseEntry
       BaseProduct entry = (BaseProduct)
         BaseProduct.read(reader, new DMAData("path"));
 
-      assertEquals("jobs size", 15, entry.getJobs().length);
+      assertEquals("jobs size", 15, entry.getJobs().size());
 
-      String []sorted = entry.getJobs();
-      java.util.Arrays.sort(sorted);
-      assertEquals("jobs 1", "art direction", sorted[0]);
-      assertEquals("jobs 2", "author", sorted[1]);
-      assertEquals("jobs 3", "business management", sorted[2]);
+      Set<String> sorted = entry.getJobs();
+      assertContent("jobs", sorted,
+                    "art direction", "author", "business management");
 
       sorted = entry.getPersonsForJob("author");
-      java.util.Arrays.sort(sorted);
-      assertEquals("authors size", 2, entry.getPersonsForJob("author").length);
-      assertEquals("authors 0", "Ed Greenwood", sorted[0]);
-      assertEquals("authors 1", "Jason Carl", sorted[1]);
+      assertContent("authors", sorted, "Ed Greenwood", "Jason Carl");
 
       sorted = entry.getPersons();
-      java.util.Arrays.sort(sorted);
-      assertEquals("persons size", 28, entry.getPersons().length);
-      assertEquals("persons 0", "Adam Rex", sorted[0]);
-      assertEquals("persons 1", "Anthony Valterra", sorted[1]);
+      assertContent("persons", sorted, "Adam Rex", "Anthony Valterra");
     }
 
     //......................................................................
