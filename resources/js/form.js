@@ -80,7 +80,7 @@ form.validate = function()
       $(button).each(form.disableButton);
     }
   }
-}
+};
 
 //..........................................................................
 //------------------------------- checkValue -------------------------------
@@ -106,10 +106,39 @@ form.checkValue = function(inType, inValue)
 
     case 'name':
       return !inValue.match(/[\":,.;=\[\]\{\}\|\(\)]/);
+
+    case 'isbn':
+      var parts = inValue.match(/^(\d+-\d+-\d+)-([0-9xX])$/);
+      if(!parts || inValue.length != 13)
+        return false;
+
+      var numbers = parts[1].replace(/-/g, "");
+      var check = parts[2];
+
+      var sum = 0;
+      for(var i = 10, j = 0; i > 1; i--, j++)
+        sum += numbers.charAt(j) * i;
+
+      return check == "" + (11 - (sum % 11)) % 11;
+
+    case 'isbn13':
+      parts = inValue.match(/^(\d+-\d+-\d+-\d+)-(\d)$/)
+
+      if(!parts && inValue.length != 17)
+        return false;
+
+      numbers = parts[1].replace(/-/g, "");
+      check = parts[2];
+
+      sum = 0;
+      for(var i = 0; i < 12; i++)
+        sum += numbers.charAt(i) * (i % 2 == 0 ? 1 : 3);
+
+      return check == "" + (10 - (sum % 10)) % 10;
   }
 
   return true;
-}
+};
 
 //..........................................................................
 //------------------------------ enableButton ------------------------------
@@ -125,7 +154,7 @@ form.enableButton = function()
 
   if(!this.invalidCount)
     $(this).button('enable');
-}
+};
 
 //..........................................................................
 //------------------------------ disableButton -----------------------------
@@ -142,6 +171,6 @@ form.disableButton = function()
     this.invalidCount = 1;
 
   $(this).button('disable');
-}
+};
 
 //..........................................................................

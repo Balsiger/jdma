@@ -819,7 +819,7 @@ public class BaseProduct extends BaseEntry
               + "%system %audience %style %producer %layout %{product type} "
               + "%author %editor %cover %cartography "
               + "%illustrations %typography %management "
-              + "%date %ISBN "
+              + "%date %ISBN %ISBN13 "
               + "%pages %series %number %volume "
               + "%price %contents %requirements"
               // incomplete

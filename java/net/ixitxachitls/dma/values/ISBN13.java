@@ -62,7 +62,7 @@ public class ISBN13 extends Value<ISBN13>
    */
   public ISBN13()
   {
-    m_editType = "isbn[ISBN 13]";
+    m_editType = "isbn13[ISBN 13]";
   }
 
   //........................................................................

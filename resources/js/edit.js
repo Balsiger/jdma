@@ -315,6 +315,14 @@ edit.Base.create = function(inElement)
 
     case 'date':
       return new edit.Date(element, properties);
+
+    case 'isbn':
+      properties.validate = 'isbn';
+      return new edit.Name(element, properties);
+
+    case 'isbn13':
+      properties.validate = 'isbn13';
+      return new edit.Name(element, properties);
   }
 
   window.alert('Could not find edit object for ' + properties.type);
@@ -628,7 +636,8 @@ extend(edit.Name, edit.Field);
   */
 edit.Name.prototype._createElement = function()
 {
-  return $('<input class="edit-field" validate="name"/>');
+  return $('<input class="edit-field" validate="' +
+           (this.properties.validate || 'name') + '"/>');
 };
 
 //..........................................................................
@@ -656,7 +665,8 @@ extend(edit.String, edit.Field);
   */
 edit.String.prototype._createElement = function()
 {
-  return $('<input class="edit-field" validate="string" size="30"/>');
+  return $('<input class="edit-field" validate="' +
+           (this.properties.validate || 'string') + '" size="30"/>');
 };
 
 /**
