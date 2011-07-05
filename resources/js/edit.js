@@ -323,6 +323,14 @@ edit.Base.create = function(inElement)
     case 'isbn13':
       properties.validate = 'isbn13';
       return new edit.Name(element, properties);
+
+    case 'number':
+      properties.validate = 'number';
+      return new edit.Name(element, properties);
+
+    case 'price':
+      properties.validate = 'price';
+      return new edit.Name(element, properties);
   }
 
   window.alert('Could not find edit object for ' + properties.type);

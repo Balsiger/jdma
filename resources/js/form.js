@@ -135,6 +135,12 @@ form.checkValue = function(inType, inValue)
         sum += numbers.charAt(i) * (i % 2 == 0 ? 1 : 3);
 
       return check == "" + (10 - (sum % 10)) % 10;
+
+    case 'number':
+      return inValue.match(/^\d+$/);
+
+    case 'price':
+      return inValue.match(/^[^\d\s]+\s?\d+(\.\d\d)?$/);
   }
 
   return true;
