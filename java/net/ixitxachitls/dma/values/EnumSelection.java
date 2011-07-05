@@ -439,10 +439,12 @@ public class EnumSelection<T extends Enum<T>>
 
       // don't know how to do it without cast, it's reflection after all
       m_selections = (T [])method.invoke(m_enum);
+      String []values;
 
       if(m_selections[0] instanceof Short)
       {
-        m_multiSelections = new String [m_selections.length][2];
+        m_multiSelections = new String[m_selections.length][2];
+        values = new String[m_selections.length];
 
         for(int i = 0; i < m_selections.length; i++)
         {
@@ -452,11 +454,13 @@ public class EnumSelection<T extends Enum<T>>
             m_multiSelections[i][0] = m_selections[i].toString();
 
           m_multiSelections[i][1] = ((Short)m_selections[i]).getShort();
+          values[i] = m_multiSelections[i][0];
         }
       }
       else
       {
-        m_simpleSelections = new String [m_selections.length];
+        m_simpleSelections = new String[m_selections.length];
+        values = m_simpleSelections;
 
         if(m_selections[0] instanceof Named)
           for(int i = 0; i < m_selections.length; i++)

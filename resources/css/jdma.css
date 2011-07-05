@@ -574,14 +574,21 @@ DIV.label-name
 }
 
 DIV.label-job,
+DIV.label-description
 {
   width: 40%;
 }
 
-SPAN.date DIV
+SPAN.date DIV,
+DIV.label-part
 {
   display: inline-block;
   width: auto;
+}
+
+DIV.label-number
+{
+  width: 20%;
 }
 
 /******************************************************************************

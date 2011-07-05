@@ -415,7 +415,7 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
-  //------------------------------ getChoices ------------------------------
+  //------------------------------ getRelated ------------------------------
 
   /**
    * Get the all the possibly related values this value can be edited

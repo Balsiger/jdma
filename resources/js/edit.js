@@ -731,6 +731,7 @@ edit.Selection = function(inEditable, inProperties)
 {
   // this is used in the constructor
   this._selections = inProperties.values;
+  window.console.log("selections", this._selections);
 
   edit.Field.call(this, inEditable, inProperties);
 
@@ -851,7 +852,7 @@ edit.List.prototype._createLine = function(inValue, inPrevious)
     value: inValue,
     key: this.key,
     script: null,
-    values: this._values,
+    values: this.properties.values,
     note: null,
     label: type.label,
     related: null,
@@ -980,6 +981,7 @@ edit.Multiple.prototype._createElement = function()
       key: this.key,
       script: null,
       value: i < this.subvalues.length ? this.subvalues[i] : "",
+      values: this.properties.values,
       note: null,
       label: type.label,
       related: null,
