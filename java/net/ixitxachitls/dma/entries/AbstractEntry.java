@@ -1667,7 +1667,7 @@ public class AbstractEntry extends ValueGroup
       if(m_file == null)
         return new FormattedValue
           (new Editable(getName(), getType(), "<please select>", "file", "",
-                        "selection",
+                        "selection[file]",
                         Strings.toString(m_data.files(getType()), "||", "")),
            null, "file", true, false, false, false, "files", "");
       else
@@ -1677,9 +1677,11 @@ public class AbstractEntry extends ValueGroup
                                     m_file.getStorageName(),
                                     "file",
                                     m_file.getStorageName(),
-                                    "selection",
+                                    "selection[file]",
+                                    null,
                                     Strings.toString(m_data.files(getType()),
-                                                     "||", "")),
+                                                     "||", ""),
+                                    null),
                        " lines ",
                        m_startLine,
                        " to ",

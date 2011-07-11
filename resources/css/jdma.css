@@ -582,7 +582,8 @@ DIV.label-pages
 }
 
 SPAN.date DIV,
-DIV.label-part
+DIV.label-part,
+DIV.label-file
 {
   display: inline-block;
   width: auto;
