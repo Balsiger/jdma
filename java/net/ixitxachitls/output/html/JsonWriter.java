@@ -24,6 +24,7 @@
 package net.ixitxachitls.output.html;
 
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -82,6 +83,9 @@ public class JsonWriter
   /** If an array delimiter is necessary before adding text. */
   protected boolean m_needsDelimiter = false;
 
+  /** If a newline is next to print. */
+  protected boolean m_needsNewline = false;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -114,6 +118,34 @@ public class JsonWriter
   }
 
   //........................................................................
+  //------------------------------- strings --------------------------------
+
+  /**
+   * Add the given strings as an array to the output.
+   *
+   * @param       inStrings the strings to add
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public JsonWriter strings(@Nonnull Map<? extends Object, ? extends Object>
+                            inStrings)
+  {
+    startArray();
+
+    for(Map.Entry<? extends Object, ? extends Object> entry :
+          inStrings.entrySet())
+      startObject()
+        .add("\"label\": ").string(entry.getKey().toString()).next()
+        .add("\"value\": ").string(entry.getKey().toString())
+        .endObject().next();
+
+    endArray();
+
+    return this;
+  }
+
+  //........................................................................
   //-------------------------------- string --------------------------------
 
   /**
@@ -126,8 +158,27 @@ public class JsonWriter
    */
   public JsonWriter string(@Nonnull String inString)
   {
-    add("\"").add(inString.replace("\"", "\\\"")
+    add("\"").add(inString.replace("\"", "\\\"").replace("\\", "\\\\")
                   .replace("\n", "\\\n").replace("\r", "\\\r")).add("\"");
+
+    return this;
+  }
+
+  //........................................................................
+  //-------------------------------- string --------------------------------
+
+  /**
+   * Add some JSON object value.
+   *
+   * @param       inKey   the key
+   * @param       inValue the value
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public JsonWriter value(@Nonnull String inKey, @Nonnull String inValue)
+  {
+    add(inKey).add(": ").add(inValue);
 
     return this;
   }
@@ -147,9 +198,16 @@ public class JsonWriter
   {
     if(m_needsDelimiter)
     {
-      m_writer.println(", ");
-      m_writer.print(Strings.spaces(m_nestingLevel));
       m_needsDelimiter = false;
+      m_writer.print(",");
+      newline();
+    }
+
+    if(m_needsNewline)
+    {
+      m_needsNewline = false;
+      m_writer.println("");
+      m_writer.print(Strings.spaces(m_nestingLevel * 2));
     }
 
     m_writer.print(inText);
@@ -168,16 +226,15 @@ public class JsonWriter
    */
   public JsonWriter startArray()
   {
-    m_writer.print(Strings.spaces(m_nestingLevel));
-    m_writer.println("[");
+    add("[");
     m_nestingLevel++;
-    m_writer.print(Strings.spaces(m_nestingLevel));
+    newline();
 
     return this;
   }
 
   //........................................................................
-  //------------------------------ startArray ------------------------------
+  //------------------------------- endArray -------------------------------
 
   /**
    * End a Json array.
@@ -189,9 +246,43 @@ public class JsonWriter
   {
     m_needsDelimiter = false;
     m_nestingLevel--;
-    m_writer.println("");
-    m_writer.print(Strings.spaces(m_nestingLevel));
-    m_writer.println("]");
+    newline().add("]").newline();
+
+    return this;
+  }
+
+  //........................................................................
+  //------------------------------ startObject -----------------------------
+
+  /**
+   * Start a Json object.
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public JsonWriter startObject()
+  {
+    add("{");
+    m_nestingLevel++;
+    newline();
+
+    return this;
+  }
+
+  //........................................................................
+  //------------------------------- endObject ------------------------------
+
+  /**
+   * End a Json object.
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public JsonWriter endObject()
+  {
+    m_needsDelimiter = false;
+    m_nestingLevel--;
+    newline().add("}").newline();
 
     return this;
   }
@@ -213,6 +304,22 @@ public class JsonWriter
   }
 
   //........................................................................
+  //-------------------------------- newline -------------------------------
+
+  /**
+   * Start a new line with the proper indent.
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public JsonWriter newline()
+  {
+    m_needsNewline = true;
+
+    return this;
+  }
+
+  //........................................................................
   //-------------------------------- close ---------------------------------
 
   /**
@@ -223,6 +330,9 @@ public class JsonWriter
   {
     if(m_nestingLevel > 0)
       Log.warning("writer closed, but arrays not closed");
+
+    if(m_needsNewline)
+      m_writer.println("");
 
     m_writer.close();
   }

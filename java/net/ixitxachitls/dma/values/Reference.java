@@ -26,14 +26,19 @@ package net.ixitxachitls.dma.values;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.entries.BaseProduct;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
+
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * A text value representing a name.
+ * A text value representing a reference to a product.
  *
- * @file          Name.java
+ * @file          Reference.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -44,22 +49,23 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
-public class Name extends BaseText<Name>
+public class Reference extends BaseText<Reference>
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------------- Name ---------------------------------
+  //------------------------------ Reference -------------------------------
 
   /**
    * Construct the text object with an undefined value.
    *
    */
-  public Name()
+  public Reference(@Nonnull DMAData inData)
   {
+    m_data = inData;
   }
 
   //........................................................................
-  //--------------------------------- Name ---------------------------------
+  //------------------------------ Reference -------------------------------
 
   /**
    * Construct the text object.
@@ -67,7 +73,7 @@ public class Name extends BaseText<Name>
    * @param       inText           the text to store
    *
    */
-  public Name(@Nonnull String inText)
+  public Reference(@Nonnull String inText, @Nonnull DMAData inData)
   {
     super(inText);
   }
@@ -85,9 +91,9 @@ public class Name extends BaseText<Name>
    */
   @SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
-  public @Nonnull Name create()
+  public @Nonnull Reference create()
   {
-    return super.create(new Name());
+    return super.create(new Reference(m_data));
   }
 
   //........................................................................
@@ -95,9 +101,52 @@ public class Name extends BaseText<Name>
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** All the available base data. */
+  private @Nonnull DMAData m_data;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //------------------------------- doFormat -------------------------------
+
+  /**
+   * Really to the formatting.
+   *
+   * @return      the command for setting the value
+   *
+   */
+  protected @Nonnull Command doFormat()
+  {
+    BaseProduct product = m_data.getEntry(get(), BaseProduct.TYPE);
+
+    if(product == null)
+      return new Command(getEditValue());
+
+    return new Link(getEditValue(), "/product/" + product.getName());
+  }
+
+  //........................................................................
+  //----------------------------- getEditValue -----------------------------
+
+  /**
+   * Get the value to be used for editing.
+   *
+   * @return      the value for editing
+   *
+   */
+  public String getEditValue()
+  {
+    BaseProduct product = m_data.getEntry(get(), BaseProduct.TYPE);
+
+    if(product == null)
+      return super.getEditValue();
+
+    return product.getFullTitle() + " (" + get() + ")";
+  }
+
+  //........................................................................
 
   //........................................................................
 

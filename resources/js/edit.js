@@ -313,6 +313,9 @@ edit.Base.create = function(inElement)
     case 'autoname':
       return new edit.AutocompleteName(element, properties);
 
+    case 'autokey':
+      return new edit.AutocompleteKey(element, properties);
+
     case 'date':
       return new edit.Date(element, properties);
 
@@ -322,6 +325,10 @@ edit.Base.create = function(inElement)
 
     case 'isbn13':
       properties.validate = 'isbn13';
+      return new edit.Name(element, properties);
+
+    case 'pages':
+      properties.validate = 'pages';
       return new edit.Name(element, properties);
 
     case 'number':
@@ -576,7 +583,9 @@ edit.Field.prototype._updateDecoration = function(inFocus, inMouse) {
   */
 edit.Field.prototype._getValue = function()
 {
-  return this._field.attr('value');
+  window.console.log("base value", this, this._field);
+  return $(this._field).attr('value');
+  this._field = "guru";
 };
 
 /**
@@ -586,6 +595,7 @@ edit.Field.prototype._undefine = function()
 {
   edit.Field._super._undefine.call(this);
 
+  window.console.log("undefine", this._field);
   $(this._field).attr('value', '');
   $(this._field).addClass('edit-undefined');
 };
@@ -731,7 +741,6 @@ edit.Selection = function(inEditable, inProperties)
 {
   // this is used in the constructor
   this._selections = inProperties.values;
-  window.console.log("selections", this._selections);
 
   edit.Field.call(this, inEditable, inProperties);
 
@@ -1034,7 +1043,7 @@ edit.AutocompleteString = function(inEditable, inProperties)
   this.addition = options[1];
   edit.String.call(this, inEditable, inProperties);
 
-  this._field.focus(this._update.bind(this));
+  this._field.focus(edit.AutocompleteString._update.bind(this));
 };
 extend(edit.AutocompleteString, edit.String);
 
@@ -1042,16 +1051,26 @@ extend(edit.AutocompleteString, edit.String);
  * Update the value on focus to make sure we have the proper autocomplete
  * installed (as some depend on the values of other fields).
  */
-edit.AutocompleteString.prototype._update = function()
+edit.AutocompleteString._update = function()
 {
   var source = '/autocomplete/' + this.source;
 
   if(this.addition)
   {
+    // Try to get an addition in the siblings first.
     var addition =
       this._element.siblings().find('input.label-' + this.addition);
+
+    // How about a field with the given name
+    if(addition.length == 0)
+      addition = $('#field-' + this.addition);
+
+    // Last but not least, take the editable itself
+    if(addition.length == 0)
+      addition = $('dmaeditable[key=' + this.addition + ']');
+
     if(addition.length > 0)
-      source += '/' + addition[0].value;
+      source += '/' + addition.attr('value');
   }
 
   this._field.autocomplete({
@@ -1077,34 +1096,45 @@ edit.AutocompleteName = function(inEditable, inProperties)
   var options = inProperties.options.split(/\|/);
   this.source = options[0];
   this.addition = options[1];
-  edit.String.call(this, inEditable, inProperties);
+  edit.Name.call(this, inEditable, inProperties);
 
-  this._field.focus(this._update.bind(this));
+  this._field.focus(edit.AutocompleteString._update.bind(this));
 };
 extend(edit.AutocompleteName, edit.Name);
 
+//..........................................................................
+//---------------------------------------------------------- AutocompleteKey
+
 /**
- * Update the value on focus to make sure we have the proper autocomplete
- * installed (as some depend on the values of other fields).
+ * An object representing an editable autocomplete name field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
  */
-edit.AutocompleteName.prototype._update = function()
+edit.AutocompleteKey = function(inEditable, inProperties)
 {
-  var source = '/autocomplete/' + this.source;
+  inProperties.validate = 'any';
+  edit.AutocompleteName.call(this, inEditable, inProperties);
 
-  if(this.addition)
-  {
-    var addition =
-      this._element.siblings().find('input.label-' + this.addition);
-    if(addition.length > 0)
-      source += '/' + addition[0].value;
-  }
+  this._field.focus(edit.AutocompleteString._update.bind(this));
+};
+extend(edit.AutocompleteKey, edit.AutocompleteName);
 
-  this._field.autocomplete({
-    source: source,
-    autoFocus: true,
-    minLength: 0,
-    delay: 100
-  });
+/**
+  * Get the value entered for this editable.
+  *
+  * @return A string with the value for this editable.
+  *
+  */
+edit.AutocompleteKey.prototype._getValue = function()
+{
+  var value = edit.AutocompleteKey._super._getValue.call(this);
+  var match = value.match(/\((.*)\)/);
+  if(!match || match.length < 2)
+    return value;
+
+  return match[1];
 };
 
 //..........................................................................

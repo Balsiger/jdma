@@ -45,6 +45,7 @@ import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
+import net.ixitxachitls.dma.server.servlets.ProductsAutocomplete;
 import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
 import net.ixitxachitls.dma.server.servlets.TypedEntryListServlet;
@@ -615,6 +616,10 @@ public class DMAServer extends WebServer
       (new ServletHolder
        (new JobAutocomplete(m_baseData.getEntries(BaseProduct.TYPE))),
        "/autocomplete/jobs/*");
+    context.addServlet
+      (new ServletHolder
+       (new ProductsAutocomplete(m_baseData.getEntries(BaseProduct.TYPE))),
+       "/autocomplete/products/*");
 
 //     // ajax data requests
 //     context.addServlet

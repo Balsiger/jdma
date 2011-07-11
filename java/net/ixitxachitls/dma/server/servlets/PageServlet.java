@@ -182,9 +182,10 @@ public class PageServlet extends DMAServlet
       .comment("This file was generate by " + PROJECT + ", version " + VERSION
                + " (" + BUILD + ")")
       // jquery
-      .addJSFile("jquery-1.5")
-      .addCSSFile("smoothness/jquery-ui-1.8.9.custom")
-      .addJSFile("jquery-ui-1.8.9.custom.min")
+      .addJSFile("jquery-1.5.1.min")
+      .addCSSFile("smoothness/jquery-ui-1.8.14.custom")
+      //.addJSFile("jquery-ui-1.8.14")
+      .addJSFile("jquery-ui-1.8.14.custom.min")
       // jdma
       .addJSFile("util")
       .addJSFile("form")

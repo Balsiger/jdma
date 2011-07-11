@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Range;
+import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.ValueList;
@@ -278,10 +279,6 @@ public class BaseEntry extends AbstractEntry
   //........................................................................
   //----- references -------------------------------------------------------
 
-  /** The page formatter. */
-  protected static final Formatter<ValueList<Range>> s_pagesFormatter =
-    new DelimFormatter<ValueList<Range>>("p. ", "");
-
   // TODO: was modifiable; check if it needs to be
   /** The references for this entry. */
   @Key("references")
@@ -289,29 +286,11 @@ public class BaseEntry extends AbstractEntry
   protected ValueList<Multiple> m_references =
     new ValueList<Multiple>
     (new Multiple
-     (new Multiple.Element(new Text()
-                            // we use an instance specific formatter because
-                            // we need the campaign
-//                             .withFormatter(new ValueFormatter<Text>()
-//       {
-//         public @Nonnull Command format(@Nonnull Text inReference)
-//         {
-//           String name  = inReference.get();
-//           String title = resolveReference(name);
-
-//           Command result = new Link(title, TYPE.getLink() + name);
-
-//           if(name == title)
-//             return new Color("error", result);
-
-//           return result;
-//         }
-//       })
-                           .withEditType("dynselection(references)"), false),
+     (new Multiple.Element(new Reference(m_data)
+                           .withEditType("autokey(products)[product]"), false),
       new Multiple.Element
-      (new ValueList<Range>(new Range(0, Integer.MAX_VALUE)
-                            .withEditType("number[page]"), "/")
-       .withFormatter(s_pagesFormatter), true)));
+      (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")
+       .withEditType("pages[pages]"), true, ": ", null)));
 
   static
   {

@@ -42,12 +42,13 @@ var util = new Object();
  * @param  inURL      the url to send to
  * @param  inValues   the key value pairs with the data to send
  * @param  inFunction the function to call on an asynchronous request
+ * @param  inEval     if the result should be evalued (parsed)
  *
  * @return the result from the server (or an empty string for asynchronous
  *         requests)
  *
  */
-util.ajax = function(inURL, inValues, inFunction)
+util.ajax = function(inURL, inValues, inFunction, inEval)
 {
   var request;
 
@@ -83,9 +84,11 @@ util.ajax = function(inURL, inValues, inFunction)
                            'application/x-www-form-urlencoded');
 
   request.send(data);
-
   if(!inFunction)
-    return request.responseText;
+    if(inEval)
+      return eval(request.responseText);
+    else
+      return request.responseText;
 
   // build up the arguments array
   var args = [ '<nothing yet>' ];
@@ -98,7 +101,10 @@ util.ajax = function(inURL, inValues, inFunction)
     {
       if(request.readyState == 4)
       {
-        args[0] = request.responseText;
+        if(inEval)
+          args[0] = eval(request.responseText);
+        else
+          args[0] = request.responseText;
 
         inFunction.apply(null, args);
       }
@@ -297,11 +303,10 @@ util.restoreMainImage = function()
   */
 function extend(inSubClass, inBaseClass)
 {
+  function tempConstructor() {};
+  tempConstructor.prototype = inBaseClass.prototype;
   inSubClass._super = inBaseClass.prototype;
-
-  function temp() {};
-  temp.prototype = inBaseClass.prototype;
-  inSubClass.prototype = new temp();
+  inSubClass.prototype = new tempConstructor();
   inSubClass.prototype.constructor = inSubClass;
 }
 

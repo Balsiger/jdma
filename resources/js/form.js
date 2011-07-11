@@ -98,6 +98,9 @@ form.checkValue = function(inType, inValue)
 {
   switch(inType)
   {
+    case 'any':
+    return true;
+
     case 'non-empty':
       if(inValue)
         return true;
@@ -141,6 +144,20 @@ form.checkValue = function(inType, inValue)
 
     case 'price':
       return inValue.match(/^[^\d\s]+\s?\d+(\.\d\d)?$/);
+
+    case 'pages':
+      if(!inValue.match(/^\d+(\s*-\s*\d+)?(\/\d+(\s*-\s*\d+)?)*$/))
+        return false;
+
+      parts = inValue.split('/');
+      for(var i = 0; i < parts.length; i++)
+      {
+        var pages = parts[i].split(/\s*-\s*/);
+        if(pages.length > 1 && Number(pages[0]) > Number(pages[1]))
+          return false;
+      }
+
+      return true;
   }
 
   return true;

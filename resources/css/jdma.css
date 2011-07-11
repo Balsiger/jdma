@@ -568,15 +568,17 @@ DIV.label-title
   width: 70%;
 }
 
-DIV.label-name
+DIV.label-name,
+DIV.label-product
 {
   width: 60%;
 }
 
 DIV.label-job,
-DIV.label-description
+DIV.label-description,
+DIV.label-pages
 {
-  width: 40%;
+  width: 38%;
 }
 
 SPAN.date DIV,

@@ -55,6 +55,7 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Price;
+import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.output.Print;
@@ -822,10 +823,8 @@ public class BaseProduct extends BaseEntry
               + "%date %ISBN %ISBN13 "
               + "%pages %series %number %volume "
               + "%price %contents %requirements"
-              // incomplete
-              + "%incomplete "
               // admin
-              + "%{+references} %file %errors"
+              + "%references %file %errors"
               );
 
   /** The type of this entry. */
@@ -1458,7 +1457,7 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- requirements -----------------------------------------------------
 
-  /** The formatter for a complete person. */
+
   protected static Formatter<Multiple> s_requirementsFormatter =
     new MultipleFormatter<Multiple>(null, null, " optional ", null);
 
@@ -1467,66 +1466,15 @@ public class BaseProduct extends BaseEntry
   @Key("requirements")
   protected @Nonnull Multiple m_requirements =
     new Multiple(new Multiple.Element []
-      { new Multiple.Element(new ValueList<Name>
-                             (new Name()
-                              // we use an instance specific formatter
-                              // because we need the campaign
-                              .withFormatter(new Formatter<Name>()
-      {
-        public Command format(Name inReference)
-        {
-          if(inReference == null)
-            return null;
-
-          String name  = inReference.get();
-          String title = name;
-
-          // check if we find the product
-          // associated with this reference
-          BaseProduct product = m_data.getEntry(name, TYPE);
-
-          if(product != null)
-            title = product.getFullTitle();
-
-          Command result =
-          new Link(title, "/entry/" + name);
-
-          if(name == title)
-            return new Color("error", result);
-
-          return result;
-        }
-      })), true),
-        new Multiple.Element(new ValueList<Name>
-                             (new Name()
-                              // we use an instance specific formatter
-                              // because we need the campaign
-                              .withFormatter(new Formatter<Name>()
-      {
-        public Command format(Name inReference)
-        {
-          if(inReference == null)
-            return null;
-
-          String name  = inReference.get();
-          String title = name;
-
-          // check if we find the product
-          // associated with this reference
-          BaseProduct product = m_data.getEntry(name, TYPE);
-
-          if(product != null)
-            title = product.getFullTitle();
-
-          Command result =
-          new Link(title, "/entry/" + name);
-
-          if(name == title)
-            return new Color("error", result);
-
-          return result;
-        }
-      })), true, ":", null),
+      { new Multiple.Element(new ValueList<Reference>
+                             (new Reference(m_data)
+                              .withEditType("autokey(products|system)"
+                                            + "[required]")), true),
+        new Multiple.Element(new ValueList<Reference>
+                             (new Reference(m_data)
+                              .withEditType("autokey(products|system)"
+                                            + "[optional]")), true, " : ",
+                             null),
       }).withFormatter(s_requirementsFormatter);
 
   //........................................................................
@@ -1758,10 +1706,10 @@ public class BaseProduct extends BaseEntry
       return "";
 
     if(m_leader == null || !m_title.isDefined()
-       || m_leader.toString().isEmpty())
-      return m_title.toString();
+       || m_leader.get().isEmpty())
+      return m_title.get();
 
-    return m_leader + " " + m_title;
+    return m_leader.get() + " " + m_title.get();
   }
 
   //........................................................................

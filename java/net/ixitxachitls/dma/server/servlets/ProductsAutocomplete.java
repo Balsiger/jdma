@@ -60,11 +60,11 @@ import net.ixitxachitls.util.Strings;
 //__________________________________________________________________________
 
 @Immutable
-public class JobAutocomplete extends Autocomplete
+public class ProductsAutocomplete extends Autocomplete
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------- JobAutocomplete ----------------------------
+  //------------------------ ProductsAutocomplete --------------------------
 
   /**
    * Create the autocomplete servlet.
@@ -72,7 +72,7 @@ public class JobAutocomplete extends Autocomplete
    * @param  inProducts all the base products
    *
    */
-  public JobAutocomplete(@Nonnull Map<String, BaseProduct> inProducts)
+  public ProductsAutocomplete(@Nonnull Map<String, BaseProduct> inProducts)
   {
     super(inProducts);
   }
@@ -107,16 +107,24 @@ public class JobAutocomplete extends Autocomplete
   public void writeJson(@Nonnull DMARequest inRequest, @Nonnull String inPath,
                         @Nonnull JsonWriter inWriter)
   {
-    String category = Strings.getPattern(inPath, "jobs/([^/]*)(/|$)");
-    String name = Strings.getPattern(inPath, "jobs/.*/([^/]*)$");
-    if(name != null)
-      name = name.replaceAll("%20", " ");
+    String system = Strings.getPattern(inPath, "products/([^/]*)(/|$)");
+    if(system != null)
+      system = system.replaceAll("%20", " ");
 
-    SortedSet<String> jobs = new TreeSet<String>();
+    String term = inRequest.getParam("term");
+    if(term != null)
+      term = term.toLowerCase();
+
+    SortedSet<String> products = new TreeSet<String>();
     for(BaseProduct product : m_products.values())
-      product.collectJobs(jobs, category, name, inRequest.getParam("term"));
+      if((system == null ||
+          (product.getSystem() != null &&
+           product.getSystem().getName().equalsIgnoreCase(system)))
+         && (term == null
+             || product.getFullTitle().toLowerCase().startsWith(term)))
+        products.add(product.getFullTitle() + " (" + product.getName() + ")");
 
-    inWriter.strings(jobs);
+    inWriter.strings(products);
   }
 
   //........................................................................
