@@ -124,8 +124,8 @@ public class Editable extends BaseCommand
   {
     this(inID, inEntry, inText, inKey, inValue, inType, inNote);
 
-    if((inValues != null && !inValues.isEmpty()) ||
-       (inRelated != null && !inRelated.isEmpty()))
+    if((inValues != null && !inValues.isEmpty())
+       || (inRelated != null && !inRelated.isEmpty()))
     {
       if(inNote == null || inNote.isEmpty())
         withOptionals("");

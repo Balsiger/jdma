@@ -23,18 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,12 +34,13 @@ import net.ixitxachitls.dma.data.DMAData;
 // import net.ixitxachitls.dma.entries.indexes.GroupedKeyIndex;
 // import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.entries.indexes.KeyIndex;
+import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
 import net.ixitxachitls.dma.values.Date;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.ISBN;
 import net.ixitxachitls.dma.values.ISBN13;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
@@ -58,32 +48,17 @@ import net.ixitxachitls.dma.values.Price;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
+import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Editable;
-import net.ixitxachitls.output.commands.Hrule;
-import net.ixitxachitls.output.commands.Label;
-import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.output.commands.Script;
 import net.ixitxachitls.output.commands.Subtitle;
-import net.ixitxachitls.output.commands.Table;
-import net.ixitxachitls.output.commands.Textblock;
-import net.ixitxachitls.output.commands.Title;
-import net.ixitxachitls.util.Filter;
 import net.ixitxachitls.util.Grouping;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -768,6 +743,8 @@ public class BaseProduct extends BaseEntry
   /**
    * This is the internal, default constructor.
    *
+   * @param       inData all the available data
+   *
    */
   protected BaseProduct(@Nonnull DMAData inData)
   {
@@ -781,6 +758,7 @@ public class BaseProduct extends BaseEntry
    * This is the normal constructor.
    *
    * @param       inName the name of the base product
+   * @param       inData all the available data
    *
    */
   public BaseProduct(@Nonnull String inName, @Nonnull DMAData inData)
@@ -1321,8 +1299,8 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Style", "styles", "style",
-//                                          true, FORMATTER, FORMAT, true, null));
+//   s_indexes.add(new KeyIndex<KeyIndex>("Product", "Style", "styles", "style",
+//                                        true, FORMATTER, FORMAT, true, null));
   }
 
   //........................................................................
@@ -1446,7 +1424,7 @@ public class BaseProduct extends BaseEntry
 
 //                        ArrayList<Object> parts = new ArrayList<Object>();
 
-//                        for(Multiple value : ((BaseProduct)inEntry).m_contents)
+//                       for(Multiple value : ((BaseProduct)inEntry).m_contents)
 //                          parts.add(value.get(0).get());
 
 //                        return parts.toArray();
@@ -1457,7 +1435,7 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- requirements -----------------------------------------------------
 
-
+  /** The formatter for requirements. */
   protected static Formatter<Multiple> s_requirementsFormatter =
     new MultipleFormatter<Multiple>(null, null, " optional ", null);
 
@@ -1763,552 +1741,20 @@ public class BaseProduct extends BaseEntry
 
   //........................................................................
 
-  //------------------------------- getJobs --------------------------------
+  //---------------------------- collectPersons ----------------------------
 
   /**
-   * Get an array with all the jobs used in this base product.
+   * Collect all available persons from this product and add them to the given
+   * set.
    *
-   * @return      an array with all the jobs
+   * @param    ioNames     the set to add to
+   * @param    inCategory  the category to add to (e.g. "author")
+   * @param    inPrefix    the prefix for the persons to collect (or null for
+   *                       none)
    *
-   */
-  public @Nonnull Set<String> getJobs()
-  {
-    return getJobsForPerson(null);
-  }
-
-  //........................................................................
-  //------------------------------ getPersons ------------------------------
-
-  /**
-   * Get an array with all the persons defined in this entry with the
-   * persons associated with the respective jobs.
-   *
-   * @return      an array with all the persons
+   * @return   the set of persons given
    *
    */
-  public @Nonnull Set<String> getPersons()
-  {
-    return getPersonsForJob(null);
-  }
-
-  //........................................................................
-  //---------------------------- getAllPersons -----------------------------
-
-  /**
-   * Get all the persons involved in the creation of any of the base products
-   * of the current campaign.
-   *
-   * @param       inCategory the category to limit to (if any)
-   *
-   * @return      A list with all the names found
-   *
-   */
-//   @SuppressWarnings("unchecked") // generic array creation
-//   public static @Nonnull SortedSet<String>
-//     getAllPersons(@Nullable String inCategory)
-//   {
-//     CategoryAccessor categories;
-
-//     if(inCategory == null)
-//       categories = new CategoryAccessor()
-//         {
-//           public ValueList<Multiple> []get(BaseProduct inProduct)
-//           {
-//             if(inProduct == null)
-//               return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//             return (ValueList<Multiple> [])new ValueList<?> []
-//             { inProduct.m_authors, inProduct.m_editors,
-//                 inProduct.m_cover, inProduct.m_cartographers,
-//                 inProduct.m_illustrators, inProduct.m_typographers,
-//                 inProduct.m_managers, };
-//           }
-//         };
-//     else
-//       if(inCategory.equalsIgnoreCase("author"))
-//         categories = new CategoryAccessor()
-//           {
-//             public ValueList<Multiple> []get(BaseProduct inProduct)
-//             {
-//               if(inProduct == null)
-//                 return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//               return (ValueList<Multiple> [])new ValueList<?> []
-//               { inProduct.m_authors, };
-//             }
-//           };
-//       else
-//         if(inCategory.equalsIgnoreCase("editor"))
-//           categories = new CategoryAccessor()
-//             {
-//               public ValueList<Multiple> []get(BaseProduct inProduct)
-//               {
-//                 if(inProduct == null)
-//                   return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                 return (ValueList<Multiple> [])new ValueList<?> []
-//                 { inProduct.m_editors, };
-//               }
-//             };
-//         else
-//           if(inCategory.equalsIgnoreCase("cover"))
-//             categories = new CategoryAccessor()
-//               {
-//                 public ValueList<Multiple> []get(BaseProduct inProduct)
-//                 {
-//                   if(inProduct == null)
-//                     return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                   return (ValueList<Multiple> [])new ValueList<?> []
-//                   { inProduct.m_cover, };
-//                 }
-//               };
-//           else
-//             if(inCategory.equalsIgnoreCase("cartographer"))
-//               categories = new CategoryAccessor()
-//                 {
-//                   public ValueList<Multiple> []get(BaseProduct inProduct)
-//                   {
-//                     if(inProduct == null)
-//                       return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                     return (ValueList<Multiple> [])new ValueList<?> []
-//                     { inProduct.m_cartographers, };
-//                   }
-//                 };
-//             else
-//               if(inCategory.equalsIgnoreCase("illustrator"))
-//                 categories = new CategoryAccessor()
-//                   {
-//                     public ValueList<Multiple> []get(BaseProduct inProduct)
-//                     {
-//                       if(inProduct == null)
-//                         return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                       return (ValueList<Multiple> [])new ValueList<?> []
-//                       { inProduct.m_illustrators, };
-//                     }
-//                   };
-//               else
-//                 if(inCategory.equalsIgnoreCase("typographer"))
-//                   categories = new CategoryAccessor()
-//                     {
-//                       public ValueList<Multiple> []get(BaseProduct inProduct)
-//                       {
-//                         if(inProduct == null)
-//                           return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                         return (ValueList<Multiple> [])new ValueList<?> []
-//                         { inProduct.m_typographers, };
-//                       }
-//                     };
-//                 else
-//                   if(inCategory.equalsIgnoreCase("manager"))
-//                     categories = new CategoryAccessor()
-//                       {
-//                         public ValueList<Multiple> []get(BaseProduct inProduct)
-//                         {
-//                           if(inProduct == null)
-//                             return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                           return (ValueList<Multiple> [])new ValueList<?> []
-//                           { inProduct.m_managers, };
-//                         }
-//                       };
-//                  else
-//                     throw new IllegalArgumentException("invalid category '"
-//                                                        + inCategory
-//                                                        + "' given");
-
-//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
-//       {
-//         public int compare(String inFirst, String inSecond)
-//         {
-//           if(inFirst == null || inSecond == null)
-//             throw new IllegalArgumentException("must have values here");
-
-//           return inFirst.compareToIgnoreCase(inSecond);
-//         }
-//       });
-
-//     for(Iterator<? extends AbstractEntry> i =
-//           BaseCampaign.GLOBAL.iterator(BaseProduct.TYPE); i.hasNext(); )
-//     {
-//       AbstractEntry entry = i.next();
-
-//       if(!(entry instanceof BaseProduct))
-//         continue;
-
-//       BaseProduct product = (BaseProduct)entry;
-
-//       for(ValueList<Multiple> store : categories.get(product))
-//         for(Multiple value : store)
-//         {
-//           String person = ((Text)value.get(0).get()).get();
-
-//           if(person.length() > 0)
-//             result.add(person);
-//         }
-//     }
-
-//     return result;
-//   }
-
-  //........................................................................
-  //------------------------------ getAllJobs ------------------------------
-
-  /**
-   * Get all the jobs involved in the creation of any of the base products
-   * of the current campaign.
-   *
-   * @param       inCategory the category to limit to (if any)
-   *
-   * @return      A list with all the jobs found
-   *
-   */
-//   @SuppressWarnings("unchecked") // generic array creation
-//   public static @Nonnull SortedSet<String>
-//     getAllJobs(@Nullable String inCategory)
-//   {
-//     CategoryAccessor categories;
-
-//     if(inCategory == null)
-//       categories = new CategoryAccessor()
-//         {
-//           public ValueList<Multiple> []get(BaseProduct inProduct)
-//           {
-//             if(inProduct == null)
-//               return (ValueList<Multiple > [])new ValueList<?>[0];
-
-//             return (ValueList<Multiple> [])new ValueList<?> []
-//             {
-//               inProduct.m_authors,
-//               inProduct.m_editors,
-//               inProduct.m_cover, inProduct.m_cartographers,
-//               inProduct.m_illustrators,
-//               inProduct.m_typographers,
-//               inProduct.m_managers,
-//             };
-//           }
-//         };
-//     else
-//       if(inCategory.equalsIgnoreCase("author"))
-//         categories = new CategoryAccessor()
-//           {
-//             public ValueList<Multiple> []get(BaseProduct inProduct)
-//             {
-//               if(inProduct == null)
-//                 return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//               return (ValueList<Multiple> [])new ValueList<?> []
-//               { inProduct.m_authors, };
-//             }
-//           };
-//       else
-//         if(inCategory.equalsIgnoreCase("editor"))
-//           categories = new CategoryAccessor()
-//             {
-//               public ValueList<Multiple> []get(BaseProduct inProduct)
-//               {
-//                 if(inProduct == null)
-//                   return (ValueList<Multiple>[])new ValueList<?>[0];
-
-//                 return (ValueList<Multiple> [])new ValueList<?> []
-//                 { inProduct.m_editors, };
-//               }
-//             };
-//         else
-//           if(inCategory.equalsIgnoreCase("cover"))
-//             categories = new CategoryAccessor()
-//               {
-//                 public ValueList<Multiple> []get(BaseProduct inProduct)
-//                 {
-//                   if(inProduct == null)
-//                     return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                   return (ValueList<Multiple> [])new ValueList<?> []
-//                   { inProduct.m_cover, };
-//                 }
-//               };
-//           else
-//             if(inCategory.equalsIgnoreCase("cartographer"))
-//               categories = new CategoryAccessor()
-//                 {
-//                   public ValueList<Multiple> []get(BaseProduct inProduct)
-//                   {
-//                     if(inProduct == null)
-//                       return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                     return (ValueList<Multiple> [])new ValueList<?> []
-//                     { inProduct.m_cartographers, };
-//                   }
-//                 };
-//             else
-//               if(inCategory.equalsIgnoreCase("illustrator"))
-//                 categories = new CategoryAccessor()
-//                   {
-//                     public ValueList []get(BaseProduct inProduct)
-//                     {
-//                       if(inProduct == null)
-//                         return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                       return (ValueList<Multiple> [])new ValueList<?> []
-//                       { inProduct.m_illustrators, };
-//                     }
-//                   };
-//               else
-//                 if(inCategory.equalsIgnoreCase("typographer"))
-//                   categories = new CategoryAccessor()
-//                     {
-//                       public ValueList<Multiple> []get(BaseProduct inProduct)
-//                       {
-//                         if(inProduct == null)
-//                           return (ValueList<Multiple> [])new ValueList<?> [0];
-
-//                         return (ValueList<Multiple> [])new ValueList<?> []
-//                         { inProduct.m_typographers, };
-//                       }
-//                     };
-//                 else
-//                   if(inCategory.equalsIgnoreCase("manager"))
-//                     categories = new CategoryAccessor()
-//                       {
-//                         public ValueList<Multiple> []get(BaseProduct inProduct)
-//                         {
-//                           if(inProduct == null)
-//                             return (ValueList<Multiple> [])new ValueList<?>[0];
-
-//                           return (ValueList<Multiple> [])new ValueList<?> []
-//                           { inProduct.m_managers, };
-//                         }
-//                       };
-//                  else
-//                     throw new IllegalArgumentException("invalid category '"
-//                                                        + inCategory
-//                                                        + "' given");
-
-//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
-//       {
-//         public int compare(String inFirst, String inSecond)
-//         {
-//           if(inFirst == null)
-//             return -1;
-
-//           return inFirst.compareToIgnoreCase(inSecond);
-//         }
-//       });
-
-//     for(Iterator<? extends AbstractEntry> i =
-//           BaseCampaign.GLOBAL.iterator(BaseProduct.TYPE); i.hasNext(); )
-//     {
-//       AbstractEntry entry = i.next();
-
-//       if(!(entry instanceof BaseProduct))
-//         continue;
-
-//       BaseProduct product = (BaseProduct)entry;
-
-//       for(ValueList<Multiple> store : categories.get(product))
-//         for(Multiple value : store)
-//         {
-//           Text job = (Text)value.get(1).get();
-
-//           if(job.isDefined())
-//             result.add(job.get());
-//         }
-//     }
-
-//     return result;
-//   }
-
-  //........................................................................
-  //--------------------------- getRequirements ----------------------------
-
-  /**
-   * Get all the possible requirements for the given world and system.
-   *
-   * @param       inWorld    the world the requirements is in (or generic)
-   * @param       inSystem   the system to require for
-   *
-   * @return      a sorted set of strings containing all the titles and ids
-   *
-   */
-//   public static @Nonnull SortedSet<String>
-//     getRequirements(@Nonnull String inWorld, @Nonnull String inSystem)
-//   {
-//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
-//       {
-//         public int compare(String inFirst, String inSecond)
-//         {
-//           if(inFirst == null)
-//             return -1;
-
-//           return inFirst.compareToIgnoreCase(inSecond);
-//         }
-//       });
-
-//     for(BaseEntry entry : BaseCampaign.GLOBAL)
-//     {
-//       if(!(entry instanceof BaseProduct))
-//         continue;
-
-//       BaseProduct product = (BaseProduct)entry;
-
-//       // only the given world or generic
-//       if(product.m_world.getSelected() != 0
-//          && (!product.m_world.isDefined()
-//              || !inWorld.equalsIgnoreCase(product.m_world.toString())))
-//         continue;
-
-//       System system = System.valueOfIgnoreCase(inSystem);
-
-//       // only the given system
-//       if(system == null || !product.m_system.isDefined()
-//          || (product.m_system.getSelected() != system
-//              && (system.getGroup() == null
-//                  || !system.getGroup().equals(product.m_system.getSelected()
-//                                               .getGroup()))))
-//         continue;
-
-//       // only rulebooks, campaign settings, campaign expansions, monster
-//       // compendiums, or rulebooks
-//       ProductType type = product.m_type.getSelected();
-
-//       if(type != ProductType.CAMPAIGN_EXPANSION
-//          && type != ProductType.CAMPAIGN_SETTING
-//          && type != ProductType.MONSTER_COMPENDIUM
-//          && type != ProductType.RULEBOOK
-//          && type != ProductType.RULES_SUPPLEMENT
-//          && type != ProductType.MINIATURE)
-//         continue;
-
-//       result.add(product.getRefName() + " (" + product.m_system + ")::"
-//                  + product.getName());
-//     }
-
-//     return result;
-//   }
-
-  //........................................................................
-  //----------------------------- getProducts ------------------------------
-
-  /**
-   *
-   * Get all the possible products for the given world or for the generic
-   * world.
-   *
-   * @param       inWorld    the world the requirements is in (or generic)
-   *
-   * @return      a sorted set of strings containing all the titles and ids
-   *
-   */
-//   public static @Nonnull SortedSet<String> getProducts(@Nonnull String inWorld)
-//   {
-//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
-//       {
-//         public int compare(String inFirst, String inSecond)
-//         {
-//           if(inFirst == null)
-//             return -1;
-
-//           return inFirst.compareToIgnoreCase(inSecond);
-//         }
-//       });
-
-//     for(BaseEntry entry : BaseCampaign.GLOBAL)
-//     {
-//       if(!(entry instanceof BaseProduct))
-//         continue;
-
-//       BaseProduct product = (BaseProduct)entry;
-
-//       // only the given world or generic
-//       if(product.m_world.getSelected() != 0
-//          && (!product.m_world.isDefined()
-//              || !inWorld.equalsIgnoreCase(product.m_world.toString())))
-//         continue;
-
-//       result.add(product.getRefName() + " (" + product.m_system + ")::"
-//                  + product.getName());
-//     }
-
-//     return result;
-//   }
-
-  //........................................................................
-  //--------------------------- getAllReferences ---------------------------
-
-  /**
-   *
-   * Get all the possible references.
-   *
-   * @return      a sorted set of strings containing all the titles and ids
-   *
-   */
-//   public static @Nonnull SortedSet<String> getAllReferences()
-//   {
-//     SortedSet<String> result = new TreeSet<String>(new Comparator<String>()
-//       {
-//         public int compare(String inFirst, String inSecond)
-//         {
-//           if(inFirst == null)
-//             return -1;
-
-//           return inFirst.compareToIgnoreCase(inSecond);
-//         }
-//       });
-
-//     for(BaseEntry entry : BaseCampaign.GLOBAL)
-//     {
-//       if(!(entry instanceof BaseProduct))
-//         continue;
-
-//       BaseProduct product = (BaseProduct)entry;
-
-//       // only catalogs
-//       ProductType type = product.m_type.getSelected();
-
-//       if(type != ProductType.CATALOG)
-//         continue;
-
-//       result.add(product.getRefName() + "::" + product.getName());
-//     }
-
-//     // add some web sites as well
-//     result.add("www.wizards.com");
-//     result.add("www.paizo.com");
-
-//     return result;
-//   }
-
-  //........................................................................
-
-  //--------------------------- getPersonsForJob ---------------------------
-
-  /**
-   *
-   * Get the persons that were involved in this product with the given job.
-   *
-   * @param       inJob the job to look for (may be null for all persons)
-   *
-   * @return      all the persons with this job
-   *
-   */
-  public @Nonnull SortedSet<String> getPersonsForJob(@Nullable String inJob)
-  {
-    TreeSet<String> result = new TreeSet<String>();
-
-    addPersons(result, "author",       inJob, m_authors);
-    addPersons(result, "editor",       inJob, m_editors);
-    addPersons(result, "cover artist", inJob, m_cover);
-    addPersons(result, "cartographer", inJob, m_cartographers);
-    addPersons(result, "illustrator",  inJob, m_illustrators);
-    addPersons(result, "typographer",  inJob, m_typographers);
-    addPersons(result, "manager",      inJob, m_managers);
-
-    return result;
-  }
-
   public @Nonnull Set<String> collectPersons(@Nonnull Set<String> ioNames,
                                              @Nonnull String inCategory,
                                              @Nullable String inPrefix)
@@ -2332,6 +1778,21 @@ public class BaseProduct extends BaseEntry
     return ioNames;
   }
 
+  //........................................................................
+  //----------------------------- collectJobs ------------------------------
+
+  /**
+   * Collect all available jobs from this product and add them to the given set.
+   *
+   * @param    ioJobs      the set to add to
+   * @param    inCategory  the category to add to (e.g. "author")
+   * @param    inName      the name of the person for which to search jobs (or
+   *                       null for all)
+   * @param    inPrefix    the prefix for the jobs to collect (or null for none)
+   *
+   * @return   the set of jobs given
+   *
+   */
   public @Nonnull Set<String> collectJobs(@Nonnull Set<String> ioJobs,
                                           @Nonnull String inCategory,
                                           @Nullable String inName,
@@ -2392,33 +1853,6 @@ public class BaseProduct extends BaseEntry
       return m_managers;
 
     return null;
-  }
-
-  //........................................................................
-
-  //--------------------------- getJobsForPerson ---------------------------
-
-  /**
-   * Get the jobs that were involved in this product with the given person.
-   *
-   * @param       inPerson the job to look for (may be null for all jobs)
-   *
-   * @return      all the jobs with this person
-   *
-   */
-  public @Nonnull Set<String> getJobsForPerson(@Nullable String inPerson)
-  {
-    TreeSet<String> result = new TreeSet<String>();
-
-    addJobs(result, "author",       inPerson, m_authors);
-    addJobs(result, "editor",       inPerson, m_editors);
-    addJobs(result, "cover artist", inPerson, m_cover);
-    addJobs(result, "cartographer", inPerson, m_cartographers);
-    addJobs(result, "illustrator",  inPerson, m_illustrators);
-    addJobs(result, "typographer",  inPerson, m_typographers);
-    addJobs(result, "manager",      inPerson, m_managers);
-
-    return result;
   }
 
   //........................................................................
@@ -2544,7 +1978,7 @@ public class BaseProduct extends BaseEntry
 //                       ("gui.addAction('Add Product', function(event) { "
 //                        + "link(event, '/user/me/product/" + getName()
 //                        + "?create', "
-//                        + "function () { gui.makeEditable(); gui.editAll(); }, "
+//                      + "function () { gui.makeEditable(); gui.editAll(); }, "
 //                        + "'Add this entry as a product.')})\n"),
 //                       false, false, false, "scripts");
 
@@ -2577,6 +2011,8 @@ public class BaseProduct extends BaseEntry
    * Set the audience of the product.
    *
    * @param       inAudience the audience
+   *
+   * @return      true if set, false if not
    *
    */
   public boolean setAudience(@Nonnull Audience inAudience)
@@ -2695,7 +2131,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setISBN(@Nonnull String inGroup, @Nonnull String inPublisher,
+// public boolean setISBN(@Nonnull String inGroup, @Nonnull String inPublisher,
 //                          @Nonnull String inTitle, int inCheck)
 //   {
 //     return m_isbn.set(inGroup, inPublisher, inTitle, inCheck);
@@ -2717,7 +2153,7 @@ public class BaseProduct extends BaseEntry
    *
    */
 //   public boolean setISBN13(@Nonnull String inG13, @Nonnull String inGroup,
-//                            @Nonnull String inPublisher, @Nonnull String inTitle,
+//                         @Nonnull String inPublisher, @Nonnull String inTitle,
 //                            int inCheck)
 //   {
 //     return m_isbn13.set(inG13, inGroup, inPublisher, inTitle, inCheck);
@@ -2803,7 +2239,7 @@ public class BaseProduct extends BaseEntry
 //   @SuppressWarnings("unchecked") // Multiple value cast
 //   public boolean addRequirement(@Nonnull String inRequirement)
 //   {
-//     ValueList<Text> list = (ValueList<Text>)m_requirements.get(0).getMutable();
+//   ValueList<Text> list = (ValueList<Text>)m_requirements.get(0).getMutable();
 
 //     Text requirement = list.newElement();
 //     requirement.set(inRequirement);
@@ -2826,7 +2262,7 @@ public class BaseProduct extends BaseEntry
 //   @SuppressWarnings("unchecked") // multiple value cast
 //   public boolean addOptionalRequirement(@Nonnull String inRequirement)
 //   {
-//     ValueList<Text> list = (ValueList<Text>)m_requirements.get(1).getMutable();
+//   ValueList<Text> list = (ValueList<Text>)m_requirements.get(1).getMutable();
 
 //     Text requirement = list.newElement();
 //     requirement.set(inRequirement);
@@ -3187,7 +2623,7 @@ public class BaseProduct extends BaseEntry
     *
     */
 //   @SuppressWarnings("unchecked") // cast for generic array creation
-//   public boolean updatePersons(@Nonnull String inPerson, @Nonnull String inNew)
+// public boolean updatePersons(@Nonnull String inPerson, @Nonnull String inNew)
 //   {
 //     ValueList<Multiple> []lists = (ValueList<Multiple> [])new ValueList<?> []
 //       {
@@ -3526,17 +2962,21 @@ public class BaseProduct extends BaseEntry
       BaseProduct entry = (BaseProduct)
         BaseProduct.read(reader, new DMAData("path"));
 
-      assertEquals("jobs size", 15, entry.getJobs().size());
+      fail("redo");
+      //assertEquals("jobs size", 15, entry.getJobs().size());
 
-      Set<String> sorted = entry.getJobs();
-      assertContent("jobs", sorted,
-                    "art direction", "author", "business management");
+      fail("redo");
+      //Set<String> sorted = entry.getJobs();
+      // assertContent("jobs", sorted,
+      //               "art direction", "author", "business management");
 
-      sorted = entry.getPersonsForJob("author");
-      assertContent("authors", sorted, "Ed Greenwood", "Jason Carl");
+      fail("redo");
+      //sorted = entry.getPersonsForJob("author");
+      // assertContent("authors", sorted, "Ed Greenwood", "Jason Carl");
 
-      sorted = entry.getPersons();
-      assertContent("persons", sorted, "Adam Rex", "Anthony Valterra");
+      fail("redo");
+      //sorted = entry.getPersons();
+      // assertContent("persons", sorted, "Adam Rex", "Anthony Valterra");
     }
 
     //......................................................................
@@ -3869,10 +3309,10 @@ public class BaseProduct extends BaseEntry
 
 //       Iterator<String> i = requirements.iterator();
 
-//       assertEquals("requirements", "product 1 (D&D 3.5)::product 1", i.next());
-//       assertEquals("requirements", "product 2 (D&D 3.5)::product 2", i.next());
-//       assertEquals("requirements", "product 3 (D&D 3.5)::product 3", i.next());
-//       assertEquals("requirements", "product 4 (D&D 3rd)::product 4", i.next());
+//     assertEquals("requirements", "product 1 (D&D 3.5)::product 1", i.next());
+//     assertEquals("requirements", "product 2 (D&D 3.5)::product 2", i.next());
+//     assertEquals("requirements", "product 3 (D&D 3.5)::product 3", i.next());
+//     assertEquals("requirements", "product 4 (D&D 3rd)::product 4", i.next());
 //       assertFalse("requirements", i.hasNext());
 
 //       // test for all the products
@@ -3881,11 +3321,11 @@ public class BaseProduct extends BaseEntry
 
 //       i = products.iterator();
 
-//       assertEquals("requirements", "product 1 (D&D 3.5)::product 1", i.next());
-//       assertEquals("requirements", "product 2 (D&D 3.5)::product 2", i.next());
-//       assertEquals("requirements", "product 3 (D&D 3.5)::product 3", i.next());
-//       assertEquals("requirements", "product 4 (D&D 3rd)::product 4", i.next());
-//       assertEquals("requirements", "product 5 (D&D 3.5)::product 5", i.next());
+//     assertEquals("requirements", "product 1 (D&D 3.5)::product 1", i.next());
+//     assertEquals("requirements", "product 2 (D&D 3.5)::product 2", i.next());
+//     assertEquals("requirements", "product 3 (D&D 3.5)::product 3", i.next());
+//     assertEquals("requirements", "product 4 (D&D 3rd)::product 4", i.next());
+//     assertEquals("requirements", "product 5 (D&D 3.5)::product 5", i.next());
 //       assertFalse("requirements", i.hasNext());
 
 //       BaseCampaign.GLOBAL.m_bases.clear();

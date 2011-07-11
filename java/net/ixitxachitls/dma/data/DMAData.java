@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.data;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +38,8 @@ import javax.annotation.Nullable;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.util.Files;
-import net.ixitxachitls.util.resources.Resource;
 import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.resources.Resource;
 
 //..........................................................................
 
@@ -263,7 +262,7 @@ public class DMAData implements Serializable
   //------------------------------- addFiles -------------------------------
 
   /**
-   * Load all the dma file from the given path
+   * Load all the dma file from the given path.
    *
    * @param    inPath the path to the directory to load files from
    *

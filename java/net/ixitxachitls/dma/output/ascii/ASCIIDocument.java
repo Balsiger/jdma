@@ -28,7 +28,11 @@ import java.util.HashMap;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import net.ixitxachitls.output.Document;
+import net.ixitxachitls.output.actions.Action;
+import net.ixitxachitls.output.actions.Delimiter;
 import net.ixitxachitls.output.commands.Class;
+import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Event;
 import net.ixitxachitls.output.commands.Feat;
 import net.ixitxachitls.output.commands.God;
@@ -41,10 +45,6 @@ import net.ixitxachitls.output.commands.Product;
 import net.ixitxachitls.output.commands.Quality;
 import net.ixitxachitls.output.commands.Skill;
 import net.ixitxachitls.output.commands.Spell;
-import net.ixitxachitls.output.Document;
-import net.ixitxachitls.output.actions.Action;
-import net.ixitxachitls.output.actions.Delimiter;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 

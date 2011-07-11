@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2007 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -23,19 +23,12 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.output.html.JsonWriter;
@@ -117,9 +110,9 @@ public class ProductsAutocomplete extends Autocomplete
 
     SortedSet<String> products = new TreeSet<String>();
     for(BaseProduct product : m_products.values())
-      if((system == null ||
-          (product.getSystem() != null &&
-           product.getSystem().getName().equalsIgnoreCase(system)))
+      if((system == null
+          || (product.getSystem() != null
+              && product.getSystem().getName().equalsIgnoreCase(system)))
          && (term == null
              || product.getFullTitle().toLowerCase().startsWith(term)))
         products.add(product.getFullTitle() + " (" + product.getName() + ")");

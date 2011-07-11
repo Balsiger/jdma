@@ -27,8 +27,6 @@ package net.ixitxachitls.output.commands;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.output.commands.BaseCommand;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................

@@ -45,7 +45,6 @@ import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.formatters.DelimFormatter;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;

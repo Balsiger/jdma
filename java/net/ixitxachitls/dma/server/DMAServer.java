@@ -55,7 +55,7 @@ import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.server.servlets.TemplateServlet;
 import net.ixitxachitls.util.CommandLineParser;
-import net.ixitxachitls.util.Files;
+//import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.EventLogger;

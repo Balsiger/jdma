@@ -27,7 +27,6 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import net.ixitxachitls.util.Strings;
@@ -133,8 +132,8 @@ public class JsonWriter
   {
     startArray();
 
-    for(Map.Entry<? extends Object, ? extends Object> entry :
-          inStrings.entrySet())
+    for(Map.Entry<? extends Object, ? extends Object> entry
+          : inStrings.entrySet())
       startObject()
         .add("\"label\": ").string(entry.getKey().toString()).next()
         .add("\"value\": ").string(entry.getKey().toString())

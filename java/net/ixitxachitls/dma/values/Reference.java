@@ -58,6 +58,8 @@ public class Reference extends BaseText<Reference>
   /**
    * Construct the text object with an undefined value.
    *
+   * @param       inData           all the available data to satisfy references
+   *
    */
   public Reference(@Nonnull DMAData inData)
   {
@@ -71,6 +73,7 @@ public class Reference extends BaseText<Reference>
    * Construct the text object.
    *
    * @param       inText           the text to store
+   * @param       inData           all the available data to satisfy references
    *
    */
   public Reference(@Nonnull String inText, @Nonnull DMAData inData)

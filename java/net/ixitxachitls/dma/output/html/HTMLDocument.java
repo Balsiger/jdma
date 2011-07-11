@@ -26,6 +26,9 @@ package net.ixitxachitls.dma.output.html;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.ixitxachitls.output.actions.Action;
+import net.ixitxachitls.output.actions.html.Link;
+import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Event;
 import net.ixitxachitls.output.commands.Feat;
 import net.ixitxachitls.output.commands.God;
@@ -38,9 +41,6 @@ import net.ixitxachitls.output.commands.Product;
 import net.ixitxachitls.output.commands.Quality;
 import net.ixitxachitls.output.commands.Skill;
 import net.ixitxachitls.output.commands.Spell;
-import net.ixitxachitls.output.actions.Action;
-import net.ixitxachitls.output.actions.html.Link;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
