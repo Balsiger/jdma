@@ -866,11 +866,11 @@ public class Resource implements Configuration
       m_logger.addExpected("WARNING: cannot load resource file "
                            + "'file:/guru/guru': "
                            + "java.io.FileNotFoundException: /guru/guru "
-                           + "(Not a directory)");
+                           + "(No such file or directory)");
       m_logger.addExpected("WARNING: could not find output file "
                            + "'/guru/guru': "
                            + "java.io.FileNotFoundException: /guru/guru "
-                           + "(Not a directory)");
+                           + "(No such file or directory)");
       handler = new PropertiesHandler(new URL("file:/guru/guru"));
       assertFalse("store invalid", handler.store());
     }

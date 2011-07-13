@@ -29,6 +29,11 @@ import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.output.html.JsonWriter;
@@ -128,12 +133,160 @@ public class ProductsAutocomplete extends Autocomplete
 
   //........................................................................
 
-  //------------------------------------------------------------------- test
+  //------------------------------------------------------------------ tests
 
   /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
+    //----- emptyHandle ----------------------------------------------------
+
+    /**
+     * The handle Test.
+     *
+     * @throws Exception should not happen
+     */
+    @org.junit.Test
+    public void emptyHandle() throws Exception
+    {
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+      HttpServletResponse response =
+        EasyMock.createMock(HttpServletResponse.class);
+      MockServletOutputStream output = new MockServletOutputStream();
+
+      EasyMock.expect(request.getMethod()).andReturn("POST");
+      EasyMock.expect(request.getRequestURI()).andStubReturn("uri");
+      EasyMock.expect(request.getParam("term")).andStubReturn(null);
+      response.setHeader("Content-Type", "application/json");
+      response.setHeader("Cache-Control", "max-age=0");
+      EasyMock.expect(response.getOutputStream()).andReturn(output);
+      EasyMock.replay(request, response);
+
+      Map<String, BaseProduct> products =
+        new java.util.HashMap<String, BaseProduct>();
+      Autocomplete servlet = new ProductsAutocomplete(products);
+
+      servlet.doPost(request, response);
+      assertEquals("empty", "[\n]\n", output.toString());
+
+      EasyMock.verify(request, response);
+    }
+
+    //......................................................................
+    //----- handle ---------------------------------------------------------
+
+    /**
+     * The handle Test.
+     *
+     * @throws Exception should not happen
+     */
+    @org.junit.Test
+    public void handle() throws Exception
+    {
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+      HttpServletResponse response =
+        EasyMock.createMock(HttpServletResponse.class);
+      MockServletOutputStream output = new MockServletOutputStream();
+
+      EasyMock.expect(request.getMethod()).andReturn("POST");
+      EasyMock.expect(request.getRequestURI()).andStubReturn("persons/author");
+      EasyMock.expect(request.getParam("term")).andStubReturn(null);
+      response.setHeader("Content-Type", "application/json");
+      response.setHeader("Cache-Control", "max-age=0");
+      EasyMock.expect(response.getOutputStream()).andReturn(output);
+      EasyMock.replay(request, response);
+
+      Map<String, BaseProduct> products =
+        new java.util.HashMap<String, BaseProduct>();
+
+      BaseProduct product1 =
+        new BaseProduct("First", new net.ixitxachitls.dma.data.DMAData("path"));
+      BaseProduct product2 =
+        new BaseProduct("Second",
+                        new net.ixitxachitls.dma.data.DMAData("path"));
+      BaseProduct product3 =
+        new BaseProduct("Third",
+                        new net.ixitxachitls.dma.data.DMAData("path"));
+
+      net.ixitxachitls.dma.entries.Variable title =
+        product1.getVariable("title");
+      title.setFromString(product1, "\"The first one\"");
+      title.setFromString(product2, "\"On to the second\"");
+      title.setFromString(product3, "\"Last but not least\"");
+      products.put("First", product1);
+      products.put("Second", product2);
+      products.put("Third", product3);
+
+      Autocomplete servlet = new ProductsAutocomplete(products);
+
+      servlet.doPost(request, response);
+      assertEquals("empty",
+                   "[\n  \"Last but not least (Third)\",\n  "
+                   + "\"On to the second (Second)\",\n"
+                   + "  \"The first one (First)\"\n]\n",
+                   output.toString());
+
+      EasyMock.verify(request, response);
+    }
+
+    //......................................................................
+    //----- prefixHandle ---------------------------------------------------
+
+    /**
+     * The handle Test.
+     *
+     * @throws Exception should not happen
+     */
+    @org.junit.Test
+    public void prefixHandle() throws Exception
+    {
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+      HttpServletResponse response =
+        EasyMock.createMock(HttpServletResponse.class);
+      MockServletOutputStream output = new MockServletOutputStream();
+
+      EasyMock.expect(request.getMethod()).andReturn("POST");
+      EasyMock.expect(request.getRequestURI()).andStubReturn("persons/author");
+      EasyMock.expect(request.getParam("term")).andStubReturn("l");
+      response.setHeader("Content-Type", "application/json");
+      response.setHeader("Cache-Control", "max-age=0");
+      EasyMock.expect(response.getOutputStream()).andReturn(output);
+      EasyMock.replay(request, response);
+
+      Map<String, BaseProduct> products =
+        new java.util.HashMap<String, BaseProduct>();
+
+      BaseProduct product1 =
+        new BaseProduct("First", new net.ixitxachitls.dma.data.DMAData("path"));
+      BaseProduct product2 =
+        new BaseProduct("Second",
+                        new net.ixitxachitls.dma.data.DMAData("path"));
+      BaseProduct product3 =
+        new BaseProduct("Third",
+                        new net.ixitxachitls.dma.data.DMAData("path"));
+
+      net.ixitxachitls.dma.entries.Variable title =
+        product1.getVariable("title");
+      title.setFromString(product1, "\"The first one\"");
+      title.setFromString(product2, "\"On to the second\"");
+      title.setFromString(product3, "\"Last but not least\"");
+      products.put("First", product1);
+      products.put("Second", product2);
+      products.put("Third", product3);
+
+      Autocomplete servlet = new ProductsAutocomplete(products);
+
+      servlet.doPost(request, response);
+      assertEquals("empty",
+                   "[\n  \"Last but not least (Third)\"\n]\n",
+                   output.toString());
+
+      EasyMock.verify(request, response);
+    }
+
+    //......................................................................
   }
+
+  //........................................................................
 
   //........................................................................
 

@@ -175,7 +175,8 @@ public class Print extends AbstractPrint
                    + "\\title[entrytitle]"
                    + "{\\image[main-image]{/icons/BaseEntries-dummy.png} "
                    + "test},  middle , "
-                   + "\\editable{test}{base entry}{desc}{description}"
+                   + "\\editable{test}{base entry}"
+                   + "{\\textblock[desc]{\\baseCommand{desc}}}{description}"
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, true)).getArguments()
                    .toString());

@@ -366,7 +366,10 @@ public abstract class EntryListServlet extends PageServlet
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
-                   "    \n"
+                   "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      document.title = 'Title';\n"
+                   + "    </SCRIPT>\n"
+                   + "    \n"
                    + "<table class=\"entrylist\">"
                    + "<tr class=\"title\">"
                    + "<td class=\"title\"></td>"

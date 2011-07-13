@@ -135,7 +135,8 @@ public class Editable extends BaseCommand
       else
         withOptionals(inValues);
 
-      withOptionals(inRelated);
+      if(inRelated != null)
+        withOptionals(inRelated);
     }
   }
 

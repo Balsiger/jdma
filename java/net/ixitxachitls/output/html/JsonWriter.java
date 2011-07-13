@@ -158,13 +158,13 @@ public class JsonWriter
   public JsonWriter string(@Nonnull String inString)
   {
     add("\"").add(inString.replace("\"", "\\\"").replace("\\", "\\\\")
-                  .replace("\n", "\\\n").replace("\r", "\\\r")).add("\"");
+                  .replace("\n", "\\n").replace("\r", "\\r")).add("\"");
 
     return this;
   }
 
   //........................................................................
-  //-------------------------------- string --------------------------------
+  //-------------------------------- value --------------------------------
 
   /**
    * Add some JSON object value.
@@ -349,6 +349,128 @@ public class JsonWriter
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- empty ----------------------------------------------------------
+
+    /** The empty Test. */
+    @org.junit.Test
+    public void empty()
+    {
+      java.io.StringWriter contents = new java.io.StringWriter();
+      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+
+      writer.close();
+
+      assertEquals("contents", "", contents.toString());
+    }
+
+    //......................................................................
+    //----- add ------------------------------------------------------------
+
+    /** The empty Test. */
+    @org.junit.Test
+    public void add()
+    {
+      java.io.StringWriter contents = new java.io.StringWriter();
+      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+
+      writer.add("some\ntext").close();
+
+      assertEquals("contents", "some\ntext", contents.toString());
+    }
+
+    //......................................................................
+    //----- string ---------------------------------------------------------
+
+    /** The empty Test. */
+    @org.junit.Test
+    public void string()
+    {
+      java.io.StringWriter contents = new java.io.StringWriter();
+      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+
+      writer.string("just 'a' \"test\" string\n!").close();
+
+      assertEquals("contents", "\"just 'a' \\\\\"test\\\\\" string\\n!\"",
+                   contents.toString());
+    }
+
+    //......................................................................
+    //----- value ----------------------------------------------------------
+
+    /** The empty Test. */
+    @org.junit.Test
+    public void value()
+    {
+      java.io.StringWriter contents = new java.io.StringWriter();
+      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+
+      writer.value("key", "value").close();
+
+      assertEquals("contents", "key: value", contents.toString());
+    }
+
+    //......................................................................
+    //----- arrays ---------------------------------------------------------
+
+    /** The empty Test. */
+    @org.junit.Test
+    public void arrays()
+    {
+      java.io.StringWriter contents = new java.io.StringWriter();
+      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+
+      writer
+        .startArray()
+        .add("5")
+        .next()
+        .startArray()
+        .add("55")
+        .next()
+        .add("23")
+        .next()
+        .endArray()
+        .endArray()
+        .close();
+
+      assertEquals("contents",
+                   "[\n"
+                   + "  5,\n"
+                   + "  [\n"
+                   + "    55,\n"
+                   + "    23\n"
+                   + "  ]\n"
+                   + "]\n",
+                   contents.toString());
+    }
+
+    //......................................................................
+    //----- object ---------------------------------------------------------
+
+    /** The empty Test. */
+    @org.junit.Test
+    public void object()
+    {
+      java.io.StringWriter contents = new java.io.StringWriter();
+      JsonWriter writer = new JsonWriter(new PrintWriter(contents));
+
+      writer
+        .startObject()
+        .value("key1", "value1")
+        .next()
+        .value("key2", "value2")
+        .next()
+        .endObject()
+        .close();
+
+      assertEquals("contents",
+                   "{\n"
+                   + "  key1: value1,\n"
+                   + "  key2: value2\n"
+                   + "}\n",
+                   contents.toString());
+    }
+
+    //......................................................................
   }
 
   //........................................................................
@@ -357,3 +479,4 @@ public class JsonWriter
 
   //........................................................................
 }
+

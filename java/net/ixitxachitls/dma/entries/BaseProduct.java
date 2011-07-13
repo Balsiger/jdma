@@ -1849,7 +1849,7 @@ public class BaseProduct extends BaseEntry
       return m_illustrators;
     else if("typographer".equalsIgnoreCase(inCategory))
       return m_typographers;
-    else if("manager".equalsIgnoreCase(inCategory))
+    else if("management".equalsIgnoreCase(inCategory))
       return m_managers;
 
     return null;
@@ -2811,7 +2811,7 @@ public class BaseProduct extends BaseEntry
       + "  price         $38.95;\n"
       + "  contents      book 3, poster \"color map\" 2;\n"
       + "  notes         \"test\";\n"
-      + "  references    \"guru guru\" 10, \"test\", \"test\" 304-330/400;\n"
+      + "  references    guru guru : 10, test, test : 304-330/400;\n"
       + "  subtitle      \"A Vast Frontier Fraught with Endless Peril\";\n"
       + "  requirements  DMA 007, DMA 42, DMA 3;\n"
       + "  description   \n"
@@ -2906,9 +2906,9 @@ public class BaseProduct extends BaseEntry
         + "                    DMA 42,\n"
         + "                    DMA 3;\n"
         + "  worlds            Forgotten Realms;\n"
-        + "  references        \"guru guru\" 10,\n"
-        + "                    \"test\",\n"
-        + "                    \"test\" 304-330/400;\n"
+        + "  references        guru guru: 10,\n"
+        + "                    test,\n"
+        + "                    test: 304-330/400;\n"
         + "  description       \"Haunted by malicious dragons, hordes of orcs, "
         + "and other\n"
         + "                    ferocious creatures, the relentless cold and "
@@ -2951,32 +2951,66 @@ public class BaseProduct extends BaseEntry
     }
 
     //......................................................................
-    //----- get ------------------------------------------------------------
+    //----- persons --------------------------------------------------------
 
     /** Testing get. */
     @org.junit.Test
-    public void get()
+    public void persons()
     {
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
       BaseProduct entry = (BaseProduct)
         BaseProduct.read(reader, new DMAData("path"));
 
-      fail("redo");
-      //assertEquals("jobs size", 15, entry.getJobs().size());
+      Set<String> persons = new java.util.TreeSet<String>();
+      entry.collectPersons(persons, "author", null);
+      assertContent("persons", persons, "Ed Greenwood", "Jason Carl",
+                    "Richard Baker");
 
-      fail("redo");
-      //Set<String> sorted = entry.getJobs();
-      // assertContent("jobs", sorted,
-      //               "art direction", "author", "business management");
+      persons.clear();
+      entry.collectPersons(persons, "author", "Ja");
+      assertContent("persons", persons, "Jason Carl");
+    }
 
-      fail("redo");
-      //sorted = entry.getPersonsForJob("author");
-      // assertContent("authors", sorted, "Ed Greenwood", "Jason Carl");
+    //......................................................................
+    //----- jobs -----------------------------------------------------------
 
-      fail("redo");
-      //sorted = entry.getPersons();
-      // assertContent("persons", sorted, "Adam Rex", "Anthony Valterra");
+    /** Testing get. */
+    @org.junit.Test
+    public void jobs()
+    {
+      ParseReader reader =
+        new ParseReader(new java.io.StringReader(s_text), "test");
+      BaseProduct entry = (BaseProduct)
+        BaseProduct.read(reader, new DMAData("path"));
+
+      Set<String> jobs = new java.util.TreeSet<String>();
+      entry.collectJobs(jobs, "management", null, null);
+      assertContent("jobs", jobs,
+                    "art direction",
+                    "business management",
+                    "creative direction",
+                    "graphic design",
+                    "production management",
+                    "project management",
+                    "vice-president RPG R&D",
+                    "vice-president publishing");
+
+      jobs.clear();
+      entry.collectJobs(jobs, "management", null, "cr");
+      assertContent("jobs", jobs, "creative direction");
+
+      jobs.clear();
+      entry.collectJobs(jobs, "management", "Robert Raper", null);
+      assertContent("jobs", jobs, "art direction");
+
+      jobs.clear();
+      entry.collectJobs(jobs, "management", "Robert Raper", "a");
+      assertContent("jobs", jobs, "art direction");
+
+      jobs.clear();
+      entry.collectJobs(jobs, "management", "Robert Raper", "arti");
+      assertContent("jobs", jobs);
     }
 
     //......................................................................

@@ -31,7 +31,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.output.html.JsonWriter;
@@ -137,9 +140,9 @@ public abstract class Autocomplete extends DMAServlet
    * @param       inWriter the writer to write to
    *
    */
-  public abstract void writeJson(@Nonnull DMARequest inRequest,
-                                 @Nonnull String inPath,
-                                 @Nonnull JsonWriter inWriter);
+  protected abstract void writeJson(@Nonnull DMARequest inRequest,
+                                    @Nonnull String inPath,
+                                    @Nonnull JsonWriter inWriter);
 
   //........................................................................
 
@@ -152,8 +155,50 @@ public abstract class Autocomplete extends DMAServlet
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
+    //----- handle ---------------------------------------------------------
+
+    /**
+     * The handle Test.
+     *
+     * @throws Exception should not happen
+     */
+    @org.junit.Test
+    public void handle() throws Exception
+    {
+      HttpServletRequest request =
+        EasyMock.createMock(DMARequest.class);
+      HttpServletResponse response =
+        EasyMock.createMock(HttpServletResponse.class);
+      MockServletOutputStream output = new MockServletOutputStream();
+
+      EasyMock.expect(request.getMethod()).andReturn("POST");
+      EasyMock.expect(request.getRequestURI()).andStubReturn("uri");
+      response.setHeader("Content-Type", "application/json");
+      response.setHeader("Cache-Control", "max-age=0");
+      EasyMock.expect(response.getOutputStream()).andReturn(output);
+      EasyMock.replay(request, response);
+
+      Map<String, BaseProduct> products =
+        new java.util.HashMap<String, BaseProduct>();
+      Autocomplete servlet = new Autocomplete(products) {
+          private static final long serialVersionUID = 1L;
+          protected void writeJson(@Nonnull DMARequest inRequest,
+                                   @Nonnull String inPath,
+                                   @Nonnull JsonWriter inWriter)
+          {
+            inWriter.add(inPath);
+          }
+        };
+
+      servlet.doPost(request, response);
+      assertEquals("post", "uri", output.toString());
+
+      EasyMock.verify(request, response);
+    }
+
+    //......................................................................
   }
 
   //........................................................................

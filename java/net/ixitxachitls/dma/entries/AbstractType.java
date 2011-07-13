@@ -441,7 +441,7 @@ public abstract class AbstractType<T extends AbstractEntry>
     {
       TestType<BaseEntry> type = new TestType<BaseEntry>(BaseEntry.class);
 
-      assertEquals("link", "/entry/baseentry/", type.getLink());
+      assertEquals("link", "baseentry", type.getLink());
       assertEquals("class name", "BaseEntry", type.getClassName());
       assertEquals("name", "base entry", type.getName());
       assertEquals("multiple", "Base Entrys", type.getMultiple());
@@ -459,7 +459,7 @@ public abstract class AbstractType<T extends AbstractEntry>
       TestType<AbstractEntry> type2 =
         new TestType<AbstractEntry>(AbstractEntry.class, "Many More");
 
-      assertEquals("link", "/entry/abstractentry/", type2.getLink());
+      assertEquals("link", "abstractentry", type2.getLink());
       assertEquals("class name", "AbstractEntry", type2.getClassName());
       assertEquals("name", "abstract entry", type2.getName());
       assertEquals("multiple", "Many More", type2.getMultiple());
