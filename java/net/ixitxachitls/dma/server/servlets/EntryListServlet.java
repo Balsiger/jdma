@@ -34,12 +34,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 
@@ -62,7 +65,7 @@ import net.ixitxachitls.util.Strings;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class EntryListServlet extends PageServlet
+public class EntryListServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -70,10 +73,13 @@ public abstract class EntryListServlet extends PageServlet
 
   /**
    * Create the servlet.
+   *
+   * @param inData   all the avaialble data
+   *
    */
-  public EntryListServlet()
+  public EntryListServlet(@Nonnull DMAData inData)
   {
-    // nothing to do
+    m_data = inData;
   }
 
   //........................................................................
@@ -81,6 +87,9 @@ public abstract class EntryListServlet extends PageServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** All the avilable data. */
+  private @Nonnull DMAData m_data;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -99,20 +108,12 @@ public abstract class EntryListServlet extends PageServlet
    * @return      a list of all entries in range
    *
    */
-  public abstract List<AbstractEntry> getEntries(@Nonnull String inID);
-
-  //........................................................................
-  //------------------------------- getTitle -------------------------------
-
-  /**
-   * Get the title for the document.
-   *
-   * @param       inID the id of the request
-   *
-   * @return      the title
-   *
-   */
-  public abstract @Nonnull String getTitle(String inID);
+  @SuppressWarnings("unchecked") // need to cast
+  public List<AbstractEntry> getEntries(@Nonnull String inID)
+  {
+    return (List<AbstractEntry>)
+      m_data.getEntriesList(AbstractType.get(inID));
+  }
 
   //........................................................................
 
@@ -136,19 +137,30 @@ public abstract class EntryListServlet extends PageServlet
                            @Nullable String inPath,
                            @Nonnull DMARequest inRequest)
   {
-    String id = "";
+    String typeName = "";
     if(inPath != null)
-      id = Strings.getPattern(inPath, "([^/]*)$");
+      typeName = Strings.getPattern(inPath, "([^/]*)$");
+
+    AbstractType<? extends AbstractEntry> type = AbstractType.get(typeName);
+
+    if(type == null)
+    {
+      inWriter.add("No entries found for type '" + typeName + "'");
+
+      return;
+    }
+
+    String title = Encodings.toWordUpperCase(type.getMultipleLink());
 
     // determine start and end of index to show
     Pair<Integer, Integer> pagination = inRequest.getPagination();
     int start = pagination.first();
     int end   = pagination.second();
 
-    List<AbstractEntry> entries = getEntries(id);
+    List<AbstractEntry> entries = getEntries(typeName);
 
-    inWriter.title(getTitle(id));
-    HTMLDocument document = new HTMLDocument(getTitle(id));
+    inWriter.title(title);
+    HTMLDocument document = new HTMLDocument(title);
 
     List<String> navigation = new ArrayList<String>();
     if(start > 0)
@@ -174,6 +186,7 @@ public abstract class EntryListServlet extends PageServlet
                      + "&raquo; next</a>");
 
     document.add(navigation);
+    // TODO: extract this from the request
     boolean dm = true;
     if(entries.isEmpty())
       document.add(new Color("error", "No entries found!"));
@@ -190,19 +203,8 @@ public abstract class EntryListServlet extends PageServlet
     document.add(navigation);
 
     inWriter.add(document.toString());
-//     HTMLDocument document;
-
-//     if(id == null || id.length() == 0)
-//       document = handleOverview(inRequest.getServletPath(), start,
-//                                 end > 0 ? end
-//                                 : (m_index.isPaginated()
-//                                    ? start + inRequest.getPageSize()
-//                                    : Integer.MAX_VALUE),
-//                                 inRequest.getUser(), inRequest);
-//     else
-//       document = handleDetailed(id, start,
-//                              end > 0 ? end : start + inRequest.getPageSize(),
-//                                 inRequest.getUser(), inRequest);
+    addNavigation(inWriter,
+                  type.getMultipleLink(), "/" + type.getMultipleLink());
   }
 
   //........................................................................
@@ -313,7 +315,8 @@ public abstract class EntryListServlet extends PageServlet
       m_response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(m_request.isBodyOnly()).andReturn(true).anyTimes();
       EasyMock.expect(m_request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(m_request.getRequestURI()).andReturn("/request/uri")
+      EasyMock.expect(m_request.getRequestURI())
+        .andReturn("/request/entry")
         .anyTimes();
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.getUser()).andStubReturn(null);
@@ -321,7 +324,7 @@ public abstract class EntryListServlet extends PageServlet
         .andStubReturn(new Pair<Integer, Integer>(inStart, inEnd));
       EasyMock.replay(m_request, m_response);
 
-      return new EntryListServlet()
+      return new EntryListServlet(new DMAData("path"))
         {
           private static final long serialVersionUID = 1L;
 
@@ -329,12 +332,6 @@ public abstract class EntryListServlet extends PageServlet
           public List<AbstractEntry> getEntries(String inID)
           {
             return inEntries;
-          }
-
-          @Override
-          public String getTitle(String inID)
-          {
-            return "Title";
           }
         };
     }
@@ -367,7 +364,7 @@ public abstract class EntryListServlet extends PageServlet
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
                    "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'Title';\n"
+                   + "      document.title = 'Entrys';\n"
                    + "    </SCRIPT>\n"
                    + "    \n"
                    + "<table class=\"entrylist\">"
@@ -395,16 +392,18 @@ public abstract class EntryListServlet extends PageServlet
                    + "</td>"
                    + "<td class=\"name\">guru3</td>"
                    + "</tr>"
-                   + "</table>\n",
+                   + "</table>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      $('#subnavigation').html(' &raquo; "
+                   + "<a href=\"/entrys\" class=\"navigation-link\" "
+                   + "onclick=\"return util.link(event, \\'/entrys\\');\" >"
+                   + "entrys</a>');\n"
+                   + "    </SCRIPT>\n",
                    m_output.toString());
     }
 
     //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

@@ -29,8 +29,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.DispatcherType;
 
-import com.google.common.collect.ImmutableMap;
-
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -38,9 +36,16 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.server.filters.DMAFilter;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
+import net.ixitxachitls.dma.server.servlets.EntryListServlet;
+import net.ixitxachitls.dma.server.servlets.EntryPDFServlet;
+import net.ixitxachitls.dma.server.servlets.EntryServlet;
+import net.ixitxachitls.dma.server.servlets.IndexServlet;
 import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
 import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
@@ -48,9 +53,6 @@ import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
 import net.ixitxachitls.dma.server.servlets.ProductsAutocomplete;
 import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
 import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
-import net.ixitxachitls.dma.server.servlets.TypedEntryListServlet;
-import net.ixitxachitls.dma.server.servlets.TypedEntryPDFServlet;
-import net.ixitxachitls.dma.server.servlets.TypedEntryServlet;
 import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.server.servlets.TemplateServlet;
@@ -79,17 +81,17 @@ import net.ixitxachitls.util.logging.Log;
  *   /files-internal/*          static internal files
  *   /robots.txt                static robots.txt file
  *   /favicon.ico               static favicon
+ *   /user/<id>                 specific base characters
+ *   /user/<id>/product/<id>    a user's products
  *   /users                     all base characters
+ *   /<short-type>/<id>         specific base entries
+ *                              internally redirected  to /entry/<type>/<id>
  *   /<multi-type>              index entries of given type
  *                              internally redirected to /entries/<type>
  *   /<multi-type>/<index>      additional index for the given type
  *                              internally redirected to /index/<index>
- *   /user/<id>                 specific base characters
- *   /<type>/<id>               specific base entries
- *                              internally redirected  to /entry/<type>/<id>
- *   /user/<id>/product/<id>    a user's products
  *   /campaign/<id>             campaign information
- *   /cmapaign/<id>/<type>/<id> campaign specific entry
+ *   /campaign/<id>/<type>/<id> campaign specific entry
  *
  * @file          DMAServer.java
  *
@@ -298,16 +300,23 @@ public class DMAServer extends WebServer
     RewriteHandler handler = new RewriteHandler();
     handler.setRewriteRequestURI(true);
     handler.setRewritePathInfo(true);
+    handler.setOriginalPathAttribute(DMARequest.ORIGINAL_PATH);
 
     ServletContextHandler context = new ServletContextHandler();
     handler.setHandler(context);
 
     m_server.setHandler(handler);
 
-    addRewrite(handler, "(.*)\\.pdf", "/pdf$1");
-    addRewrite(handler, "(.*)/user/(.*)", "$1/entry/basecharacter/$2");
-    addRewrite(handler, "(.*)/product/(.*)", "$1/entry/baseproduct/$2");
-    addRewrite(handler, "(.*)/users", "$1/entries/basecharacter");
+    addRewrite(handler, "^(.*)\\.pdf", "/pdf$1");
+    for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
+    {
+      addRewrite(handler, "^(.*)/" + type.getLink() + "/(.*)",
+                 "$1/entry/" + type.getName() + "/$2");
+      addRewrite(handler, "^(.*)/" + type.getMultipleLink(),
+                 "$1/entries/" + type.getName());
+      addRewrite(handler, "^(.*)/" + type.getMultipleLink() + "/(.*)",
+                 "$1/index/" + type.getName() + "/$2");
+    }
 
     // TODO: this is temporary, remove once the main page filter is in
     addRewrite(handler, "/", "/index.html");
@@ -366,22 +375,15 @@ public class DMAServer extends WebServer
 
     // base entries
     context.addServlet
-      (new ServletHolder(new TypedEntryServlet<BaseCharacter>
-                         (BaseCharacter.TYPE, "/entry", m_baseData)
+      (new ServletHolder(new EntryServlet(m_baseData)
                          .withAccess(BaseCharacter.Group.USER)),
         "/entry/*");
     context.addServlet
-      (new ServletHolder(new TypedEntryPDFServlet<BaseCharacter>
-                         (BaseCharacter.TYPE, "/pdf/entry", m_baseData)
+      (new ServletHolder(new EntryPDFServlet(m_baseData)
                          .withAccess(BaseCharacter.Group.USER)),
        "/pdf/entry/*");
     context.addServlet
-      (new ServletHolder
-       (new TypedEntryListServlet(m_baseData,
-                                  new ImmutableMap.Builder<String, String>()
-                                  .put("basecharacter", "Users")
-                                  .build())),
-       "/entries/*");
+      (new ServletHolder(new EntryListServlet(m_baseData)), "/entries/*");
 
 
 //     context.addFilter(new FilterHolder(new MeUserFilter()),
@@ -461,7 +463,9 @@ public class DMAServer extends WebServer
 //     context.addServlet
 //       (new ServletHolder(new UserOverviewServlet(m_campaigns)), "/overview");
 
-//     // indexes
+    // indexes
+    context.addServlet(new ServletHolder(new IndexServlet(m_baseData)),
+                       "/index/*");
 //     for(Iterator<Index<? extends Index>> i = ValueGroup.getIndexes();
 //         i.hasNext(); )
 //     {

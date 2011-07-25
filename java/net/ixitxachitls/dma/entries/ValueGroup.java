@@ -34,6 +34,7 @@ import java.util.HashMap;
 // TODO: clean up commented out code
 // import java.util.Iterator;
 // import java.util.LinkedList;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -1198,8 +1199,8 @@ public abstract class ValueGroup implements Changeable
   private static final @Nonnull Variables s_emptyVariables = new Variables();
 
   /** All the indexes. */
-  protected static final @Nonnull List<Index<? extends Index>> s_indexes =
-    new ArrayList<Index<? extends Index>>();
+  protected static final @Nonnull Map<String, Index> s_indexes =
+    new Hashtable<String, Index>();
 
   // TODO: make this not static and move to campaign.
   /** The name of the current game. */
@@ -1372,18 +1373,20 @@ public abstract class ValueGroup implements Changeable
   //........................................................................
   //------------------------------ getIndexes ------------------------------
 
-//   /**
-//    * Get all the indexes.
-//    *
-//    * @return      a iterator over all indexes
-//    *
-//    * @undefined   never
-//    *
-//    */
-//   public static Iterator<Index<? extends Index>> getIndexes()
-//   {
-//     return s_indexes.iterator();
-//   }
+  /**
+   * Get all the indexes.
+   *
+   * @param       inPath the path to the index to get
+   *
+   * @return      the index found or null if not found
+   *
+   * @undefined   never
+   *
+   */
+  public static @Nullable Index getIndex(@Nonnull String inPath)
+  {
+    return s_indexes.get(inPath);
+  }
 
   //........................................................................
 

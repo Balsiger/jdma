@@ -178,9 +178,11 @@ public class PDFDocument extends ITextDocument
       // document properties (...don't know yet...)
       Map properties = new HashMap();
 
+      String text = super.toString();
+
       // instantiating the document printer
       DocumentPrinter printer =
-        new DocumentPrinter(new StringReader(super.toString()), properties);
+        new DocumentPrinter(new StringReader(text), properties);
 
       // defining the ResourceLoader: This is necessary if you like to
       // dynamically load resources like images during template processing.
@@ -314,7 +316,9 @@ public class PDFDocument extends ITextDocument
                    + "<color-def name=\"#AAAAAA\" color-space=\"RGB\" "
                    + "value=\"0xaa,0xaa,0xaa\" />"
                    + "<color-def name=\"BaseCharacter\" color-space=\"RGB\" "
-                   + "value=\"0xcc,0xcc,0xcc\" />"
+                   + "value=\"0x33,0x99,0xcc\" />"
+                   + "<color-def name=\"BaseProduct\" color-space=\"RGB\" "
+                   + "value=\"0x80,0x80,0x80\" />"
                    + "<color-def name=\"colored-even\" color-space=\"RGB\" "
                    + "value=\"0xee,0xee,0xee\" />"
                    + "<color-def name=\"indent\" color-space=\"RGB\" "

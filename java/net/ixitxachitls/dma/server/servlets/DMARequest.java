@@ -135,7 +135,10 @@ public class DMARequest extends HttpServletRequestWrapper
 
   /** The default size of an index page (number of entries shown). */
   protected static final int def_pageSize =
-    Config.get("resource:html/product.page", 2);
+    Config.get("resource:html/product.page", 50);
+
+  /** The attribute to use for the original path. */
+  public static final @Nonnull String ORIGINAL_PATH = "originalPath";
 
   //........................................................................
 
@@ -448,6 +451,24 @@ public class DMARequest extends HttpServletRequestWrapper
 //   {
 //     return m_dm;
 //   }
+
+  //........................................................................
+  //--------------------------- getOriginalPath ----------------------------
+
+  /**
+   * Get the original path of the request.
+   *
+   * @return  the original path
+   *
+   */
+  public @Nonnull String getOriginalPath()
+  {
+    Object path = getAttribute(ORIGINAL_PATH);
+    if(path != null)
+      return path.toString();
+
+    return getRequestURI();
+  }
 
   //........................................................................
 

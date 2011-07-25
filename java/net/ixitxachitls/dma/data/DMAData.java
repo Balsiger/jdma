@@ -76,9 +76,10 @@ public class DMAData implements Serializable
   {
     m_path = inPath;
 
-    for(String file : inFiles)
-      if(file != null)
-        addFile(file);
+    if(inFiles != null)
+      for(String file : inFiles)
+        if(file != null)
+          addFile(file);
   }
 
   //........................................................................
@@ -91,7 +92,7 @@ public class DMAData implements Serializable
   private @Nonnull String m_path;
 
   /** The name of the files read. */
-  private @Nonnull Set<String> m_names = new HashSet<String>();
+  private @Nonnull HashSet<String> m_names = new HashSet<String>();
 
   /** The files for all the data. */
   private @Nonnull ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();

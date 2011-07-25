@@ -83,8 +83,6 @@ public class Name extends BaseText<Name>
    * @return      a similar text, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // this only works if it is overriden in all
-                                 // derivations
   public @Nonnull Name create()
   {
     return super.create(new Name());

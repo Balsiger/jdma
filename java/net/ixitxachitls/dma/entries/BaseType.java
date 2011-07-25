@@ -86,6 +86,24 @@ public class BaseType<T extends AbstractEntry> extends AbstractType<T>
   }
 
   //........................................................................
+  //------------------------------- withLink -------------------------------
+
+  /**
+   * Set the link to use for this type.
+   *
+   * @param       inLink         the name of the link to use
+   * @param       inMultipleLink the name to link to multiple entries
+   *
+   * @return      the type for chaining
+   *
+   */
+  public @Nonnull BaseType<T> withLink(@Nonnull String inLink,
+                                       @Nonnull String inMultipleLink)
+  {
+    return (BaseType<T>)super.withLink(inLink, inMultipleLink);
+  }
+
+  //........................................................................
 
   //........................................................................
 

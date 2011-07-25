@@ -72,10 +72,11 @@ import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Par;
 //import net.ixitxachitls.output.commands.Link;
-// import net.ixitxachitls.output.commands.Script;
+import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.util.EmptyIterator;
+import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
 // import net.ixitxachitls.util.Extractor;
 // import net.ixitxachitls.util.Identificator;
@@ -1714,21 +1715,24 @@ public class AbstractEntry extends ValueGroup
 
     if("as dma".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-dma.png",
-                                              "/user/" + getName() + ".dma",
+                                              "/" + getType().getLink() + "/"
+                                              + getName() + ".dma",
                                               "doc-link"),
                                 null, "as dma", true, false, false, false,
                                 "as dma", "");
 
     if("as pdf".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
-                                              "/user/" + getName() + ".pdf",
+                                              "/" + getType().getLink() + "/"
+                                              + getName() + ".pdf",
                                               "doc-link"),
                                 null, "as pdf", true, false, false, false,
                                 "as pdf", "");
 
     if("as text".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-txt.png",
-                                              "/user/" + getName() + ".txt",
+                                              "/" + getType().getLink() + "/"
+                                              + getName() + ".txt",
                                               "doc-link"),
                                 null, "as text", true, false, false, false,
                                 "as text", "");
@@ -1743,6 +1747,19 @@ public class AbstractEntry extends ValueGroup
     if("par".equals(inKey))
       return new FormattedValue(new Par(), null, "par", false, false, false,
                                 false, "par", "");
+
+    if("listlink".equals(inKey))
+    {
+      // we have to add a wrapping div to host the id there; when we assing the
+      // body to the innerHTML of the page, script tags will be ignored and
+      // thus the id would be missing
+      String id = "linkrow-user-" + Encodings.toCSSString(getName());
+      return new FormattedValue
+        (new Divider(id, "", new Script
+                     ("util.linkRow(document.getElementById('" + id + "'), "
+                      + "'/" + getType().getLink() + "/" + getName() + "');")),
+         null, "listlink", false, false, false, false, "listlinks", "");
+    }
 
     return super.computeValue(inKey, inDM);
   }
@@ -2887,12 +2904,11 @@ public class AbstractEntry extends ValueGroup
 
       // type
       assertEquals("type", "abstract entry", entry.getType().toString());
-      assertEquals("type", "abstractentry", entry.getType().getLink());
+      assertEquals("type", "entry", entry.getType().getLink());
       assertEquals("type", "AbstractEntry", entry.getType().getClassName());
       assertEquals("type", "Abstract Entries", entry.getType().getMultiple());
       assertEquals("type", "AbstractEntries", entry.getType().getMultipleDir());
-      assertEquals("type", "abstractentries",
-                   entry.getType().getMultipleLink());
+      assertEquals("type", "entrys", entry.getType().getMultipleLink());
 //       assertNull("type", entry.getType().getBaseType());
 
       assertEquals("create", "abstract entry $undefined$ =\n\n.\n",

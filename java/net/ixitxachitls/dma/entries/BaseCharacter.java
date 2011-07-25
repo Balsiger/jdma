@@ -39,9 +39,6 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Text;
 //import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Script;
-import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.TypeIterator;
 import net.ixitxachitls.util.logging.Log;
@@ -174,7 +171,7 @@ public class BaseCharacter extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseCharacter> TYPE =
-    new BaseType<BaseCharacter>(BaseCharacter.class);
+    new BaseType<BaseCharacter>(BaseCharacter.class).withLink("user", "users");
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
@@ -660,19 +657,6 @@ public class BaseCharacter extends BaseEntry
   @Override
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
-    if("listlink".equals(inKey))
-    {
-      // we have to add a wrapping div to host the id there; when we assing the
-      // body to the innerHTML of the page, script tags will be ignored and
-      // thus the id would be missing
-      String id = "linkrow-user-" + Encodings.toCSSString(getName());
-      return new FormattedValue
-        (new Divider(id, "", new Script
-                     ("util.linkRow(document.getElementById('" + id + "'), "
-                      + "'/user/" + getName() + "');")),
-         null, "listlink", false, false, false, false, "listlinks", "");
-    }
-
     return super.computeValue(inKey, inDM);
   }
 

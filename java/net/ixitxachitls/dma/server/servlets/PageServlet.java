@@ -330,21 +330,26 @@ public class PageServlet extends DMAServlet
   {
     StringBuilder builder = new StringBuilder();
 
-    if(inSections.length > 0)
-    {
-      for(String section : inSections)
-        if(section != null)
-        {
-          builder.append(" &raquo; ");
-          builder.append(section);
-        }
-    }
+    for(int i = 0; i < inSections.length; i += 2)
+      if(inSections[i] != null)
+      {
+        builder.append(" &raquo; ");
+
+        if(i + 1 < inSections.length)
+          builder.append("<a href=\"" + inSections[i + 1]
+                         + "\" class=\"navigation-link\" "
+                         + "onclick=\"return util.link(event, \\'"
+                         + inSections[i + 1] + "\\');\" >"
+                         + inSections[i] + "</a>");
+        else
+          builder.append(inSections[i]);
+      }
 
     String navigation = builder.toString();
     if(navigation.isEmpty())
       navigation = "&nbsp;";
 
-    inWriter.script("$('#subnavigation').html('" + navigation + "');");
+    inWriter.bodyScript("$('#subnavigation').html('" + navigation + "');");
   }
 
   //........................................................................
@@ -567,7 +572,7 @@ public class PageServlet extends DMAServlet
 
       PageServlet servlet = new PageServlet();
 
-      servlet.addNavigation(writer, "s1", "s2", "s3");
+      servlet.addNavigation(writer, "s1", "l1", "s2", "l2", "s3", "l3");
       writer.close();
       assertEquals("3 sections",
                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -576,11 +581,17 @@ public class PageServlet extends DMAServlet
                    + "\">\n"
                    + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
                    + "<HTML>\n"
-                   + "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      $('#subnavigation').html(' &raquo; s1 &raquo; "
-                   + "s2 &raquo; s3');\n"
-                   + "    </SCRIPT>\n"
                    + "  <BODY>\n"
+                   + "    <SCRIPT type=\"text/javascript\">\n"
+                   + "      $('#subnavigation').html(' &raquo; <a href=\"l1\" "
+                   + "class=\"navigation-link\" "
+                   + "onclick=\"return util.link(event, \\'l1\\');\" >s1</a> "
+                   + "&raquo; <a href=\"l2\" class=\"navigation-link\" "
+                   + "onclick=\"return util.link(event, \\'l2\\');\" >s2</a> "
+                   + "&raquo; <a href=\"l3\" class=\"navigation-link\" "
+                   + "onclick=\"return util.link(event, \\'l3\\');\" >s3</a>"
+                   + "');\n"
+                   + "    </SCRIPT>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
 
@@ -596,10 +607,10 @@ public class PageServlet extends DMAServlet
                    + "\">\n"
                    + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
                    + "<HTML>\n"
+                   + "  <BODY>\n"
                    + "    <SCRIPT type=\"text/javascript\">\n"
                    + "      $('#subnavigation').html('&nbsp;');\n"
                    + "    </SCRIPT>\n"
-                   + "  <BODY>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
     }

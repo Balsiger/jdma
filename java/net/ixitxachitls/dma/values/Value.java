@@ -185,7 +185,7 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
-  //--------------------------- toStringInternal ---------------------------
+  //------------------------------- toString -------------------------------
 
   /**
    * Return a string representation of the value. The value can be assumed to

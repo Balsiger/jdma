@@ -569,6 +569,30 @@ public class HTMLWriter
   }
 
   //........................................................................
+  //-------------------------------- script --------------------------------
+
+  /**
+   * Add a script tag with contents to the page.
+   *
+   * @param       inLines the lines of the script contents
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter bodyScript(@Nonnull String ... inLines)
+  {
+    ensureHTML();
+    m_bodyWriter.println("    <SCRIPT type=\"text/javascript\">");
+
+    for(String line : inLines)
+      m_bodyWriter.println("      " + line);
+
+    m_bodyWriter.println("    </SCRIPT>");
+
+    return this;
+  }
+
+  //........................................................................
   //-------------------------------- close ---------------------------------
 
   /**

@@ -93,7 +93,7 @@ public class BaseEntry extends AbstractEntry
   //----- worlds -----------------------------------------------------------
 
   /** The game worlds (this is configurable and thus not an enum). */
-  protected static final String []WORLDS =
+  private static final String []WORLDS =
     Config.get("/game/worlds", new String []
     {
       // these are unsorted because they are the most important

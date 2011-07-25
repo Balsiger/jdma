@@ -89,7 +89,7 @@ DIV.subtitletext, DIV.subtitletext A
   color: #09b;
   font-size: small;
   padding: 5px;
-  -webkit-box-shadow: 0 1px 3px #777;
+  box-shadow: 0 1px 3px #777;
   z-index: 1;
 }
 
@@ -153,6 +153,11 @@ DIV.subtitletext, DIV.subtitletext A
 {
   font-size: 60%;
   display: none;
+}
+
+A.navigation-link
+{
+  color: inherit;
 }
 
 DIV.entry-nav
@@ -287,7 +292,7 @@ IMG.main-image
   padding:      5px;
   margin:       0 10px 0 0;
   display:      inline-block;
-  -webkit-box-shadow: 1px 1px 3px #777;
+  box-shadow: 1px 1px 3px #777;
 }
 
 DIV.mainimage IMG.image
@@ -708,3 +713,33 @@ A.Skill           { color: $color_Skill }
 A.Skill:visited   { color: $lightcolor_Skill }
 A.Skill:hover     { color: $hilightcolor_Skill }
 
+/******************************************************************************
+ * Index
+ *****************************************************************************/
+
+DIV.index-overview
+{
+  float:            left;
+  width:            200px;
+  background-color: #eee;
+  margin:           4px;
+  padding:          4px;
+  text-align:       center;
+  border-radius:    5px;
+  box-shadow:       0 1px 3px #777;
+  height:           1em;
+  overflow:         hidden;
+  text-overflow:    ellipsis;
+}
+
+DIV.index-overview:hover
+{
+  background-color: #800;
+  color:            white;
+  text-decoration:  none;
+}
+
+A.index-link:hover
+{
+  text-decoration:  none;
+}

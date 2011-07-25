@@ -123,6 +123,21 @@ public class Text extends BaseText<Text>
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------- doGroup --------------------------------
+
+  /**
+   * Really do grouping for this object. This method can be derived to have
+   * special grouping in derivations.
+   *
+   * @return      a string denoting the group this value is in
+   *
+   */
+  public @Nonnull Object doGroup()
+  {
+    return m_text;
+  }
+
+  //........................................................................
   //------------------------------- doToString ------------------------------
 
   /**

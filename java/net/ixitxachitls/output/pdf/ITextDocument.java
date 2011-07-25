@@ -376,7 +376,8 @@ public class ITextDocument extends Document
     s_actions.put(Nopictures.NAME, new Identity(1));
     s_actions.put(Textblock.NAME,
                   new Pattern
-                  ("<paragraph line-spacing=\"0.5\">$1</paragraph><br />"));
+                  ("<paragraph line-spacing=\"1.1\" spacing-before=\"10\">"
+                   + "$1</paragraph><br />"));
     s_actions.put(Link.NAME, new Identity(1));
     s_actions.put(Editable.NAME, new Identity(3));
     s_actions.put(Hat.NAME,
@@ -481,9 +482,10 @@ public class ITextDocument extends Document
     s_actions.put(Grouped.NAME, new Identity(new int [] { 1 }));
     s_actions.put(Value.NAME,
                   new Pattern("<table columns=\"2\" width=\"100\" "
-                              + "widths=\"1,3\" split-rows=\"true\" "
+                              + "widths=\"1,6\" split-rows=\"true\" "
                               + "keep-together=\"false\">"
-                              + "<cell bgcolor=\"$1\" class=\"label\">$2</cell>"
+                              + "<cell bgcolor=\"$1\" class=\"label\" "
+                              + "valign=\"top\">$2</cell>"
                               + "<cell class=\"value\">$3</cell>"
                               + "</table>"));
     s_actions.put(Columns.NAME,
@@ -634,7 +636,9 @@ public class ITextDocument extends Document
       + "<color-def name=\"#AAAAAA\" color-space=\"RGB\" "
       + "value=\"0xaa,0xaa,0xaa\" />"
       + "<color-def name=\"BaseCharacter\" color-space=\"RGB\" "
-      + "value=\"0xcc,0xcc,0xcc\" />"
+      + "value=\"0x33,0x99,0xcc\" />"
+      + "<color-def name=\"BaseProduct\" color-space=\"RGB\" "
+      + "value=\"0x80,0x80,0x80\" />"
       + "<color-def name=\"colored-even\" color-space=\"RGB\" "
       + "value=\"0xee,0xee,0xee\" />"
       + "<color-def name=\"indent\" color-space=\"RGB\" "
@@ -726,7 +730,7 @@ public class ITextDocument extends Document
   }
 
   //........................................................................
-  //----------------------------- toBodyString -----------------------------
+  //------------------------------- getBody --------------------------------
 
   /**
    * Create a string containing the body only of the document.
@@ -736,7 +740,8 @@ public class ITextDocument extends Document
    */
   protected String getBody()
   {
-    return super.toString().replaceAll("&(?![#\\w]+\\;)", "&amp;");
+    // Don't know why it's necessary to escape twice...
+    return super.toString().replaceAll("&(?![#\\w]+\\;)", "&amp;amp;");
   }
 
   //........................................................................

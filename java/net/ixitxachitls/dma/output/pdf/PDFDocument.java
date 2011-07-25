@@ -183,9 +183,11 @@ public class PDFDocument extends ITextDocument
       // document properties (...don't know yet...)
       Map properties = new HashMap();
 
+      String text = super.toString();
+
       // instantiating the document printer
       DocumentPrinter printer =
-        new DocumentPrinter(new StringReader(super.toString()), properties);
+        new DocumentPrinter(new StringReader(text), properties);
 
       // defining the ResourceLoader: This is necessary if you like to
       // dynamically load resources like images during template processing.
@@ -204,6 +206,7 @@ public class PDFDocument extends ITextDocument
     catch(org.ujac.print.DocumentHandlerException e)
     {
       Log.warning("cannot write pdf: " + e);
+      e.printStackTrace();
 
       try
       {

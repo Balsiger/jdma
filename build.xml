@@ -256,6 +256,7 @@
         <fileset dir="${config.dir}">
           <include name="**/*.config" />
           <exclude name="test/**/*.config" />
+          <exclude name="web/**/*.config" />
           <exclude name="errors.config" />
         </fileset>
       </path>

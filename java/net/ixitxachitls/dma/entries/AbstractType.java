@@ -23,13 +23,18 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
+
+import com.google.common.collect.ImmutableSet;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.util.Classes;
@@ -92,8 +97,35 @@ public abstract class AbstractType<T extends AbstractEntry>
     m_multiple  = inMultiple;
     m_className = inClass.getName().replaceAll(".*\\.", "");
 
-    s_types.put(m_name, this);
+    String []parts = m_name.split("\\s+");
+    m_link = parts[parts.length - 1].toLowerCase(Locale.US);
+    m_multipleLink = m_link + "s";
+
+    s_types.put(getName(), this);
     s_types.put(getLink(), this);
+    s_all.add(this);
+  }
+
+  //........................................................................
+
+  //------------------------------- withLink -------------------------------
+
+  /**
+   * Set the link to use for this type.
+   *
+   * @param       inLink         the name of the link to use
+   * @param       inMultipleLink the name to link to multiple entries
+   *
+   * @return      the type for chaining
+   *
+   */
+  public @Nonnull AbstractType<T> withLink(@Nonnull String inLink,
+                                           @Nonnull String inMultipleLink)
+  {
+    m_link = inLink;
+    m_multipleLink = inMultipleLink;
+
+    return this;
   }
 
   //........................................................................
@@ -114,9 +146,19 @@ public abstract class AbstractType<T extends AbstractEntry>
   /** The class name without package. */
   private @Nonnull String m_className;
 
+  /** The link to use to reference an entry of this type. */
+  private @Nonnull String m_link;
+
+  /** The link to use to reference multiple entries of this type. */
+  private @Nonnull String m_multipleLink;
+
   /** All the available types. */
   private static final Map<String, AbstractType<? extends AbstractEntry>>
     s_types = new ConcurrentHashMap<String, AbstractType<?>>();
+
+  /** All the available types. */
+  private static final Set<AbstractType<? extends AbstractEntry>> s_all
+    = Collections.synchronizedSet(new HashSet<AbstractType<?>>());
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -135,7 +177,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    */
   public @Nonnull String getLink()
   {
-    return m_name.replaceAll(" ", "").toLowerCase(Locale.US);
+    return m_link;
   }
 
   //.......................................................................
@@ -191,7 +233,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    */
   public @Nonnull String getMultipleLink()
   {
-    return m_multiple.replaceAll(" ", "").toLowerCase(Locale.US);
+    return m_multipleLink;
   }
 
   //........................................................................
@@ -223,6 +265,21 @@ public abstract class AbstractType<T extends AbstractEntry>
     get(@Nonnull String inName)
   {
     return s_types.get(inName);
+  }
+
+  //........................................................................
+  //-------------------------------- getAll --------------------------------
+
+  /**
+   * Get the type for the given name.
+   *
+   * @return    the type found, if any
+   *
+   */
+  public static @Nullable Set<AbstractType<? extends AbstractEntry>>
+    getAll()
+  {
+    return ImmutableSet.copyOf(s_all);
   }
 
   //........................................................................
@@ -439,13 +496,13 @@ public abstract class AbstractType<T extends AbstractEntry>
     @org.junit.Test
     public void create()
     {
-      TestType<BaseEntry> type = new TestType<BaseEntry>(BaseEntry.class);
+      AbstractType<BaseEntry> type = new TestType<BaseEntry>(BaseEntry.class);
 
-      assertEquals("link", "baseentry", type.getLink());
+      assertEquals("link", "entry", type.getLink());
       assertEquals("class name", "BaseEntry", type.getClassName());
       assertEquals("name", "base entry", type.getName());
       assertEquals("multiple", "Base Entrys", type.getMultiple());
-      assertEquals("multiple link", "baseentrys", type.getMultipleLink());
+      assertEquals("multiple link", "entrys", type.getMultipleLink());
       assertEquals("multiple dir", "BaseEntrys", type.getMultipleDir());
       assertEquals("string", "base entry", type.toString());
 
@@ -456,14 +513,15 @@ public abstract class AbstractType<T extends AbstractEntry>
       entry = type.create("guru", new DMAData("path"));
       assertEquals("create", "base entry guru =\n\n.\n", entry.toString());
 
-      TestType<AbstractEntry> type2 =
-        new TestType<AbstractEntry>(AbstractEntry.class, "Many More");
+      AbstractType<AbstractEntry> type2 =
+        new TestType<AbstractEntry>(AbstractEntry.class, "Many More")
+        .withLink("baseentry-link", "baseentry-links");
 
-      assertEquals("link", "abstractentry", type2.getLink());
+      assertEquals("link", "baseentry-link", type2.getLink());
       assertEquals("class name", "AbstractEntry", type2.getClassName());
       assertEquals("name", "abstract entry", type2.getName());
       assertEquals("multiple", "Many More", type2.getMultiple());
-      assertEquals("multiple link", "manymore", type2.getMultipleLink());
+      assertEquals("multiple link", "baseentry-links", type2.getMultipleLink());
       assertEquals("multiple dir", "ManyMore", type2.getMultipleDir());
       assertEquals("string", "abstract entry", type2.toString());
     }

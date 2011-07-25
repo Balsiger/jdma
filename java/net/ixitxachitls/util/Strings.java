@@ -41,6 +41,7 @@ import javax.annotation.concurrent.ThreadSafe;
 import com.google.common.base.Joiner;
 
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -394,8 +395,13 @@ public final class Strings
     while(matcher.find())
     {
       String template = matcher.group(1);
-      matcher.appendReplacement(result, Config.get(inPrefix + "." + template,
-                                                   "*unknown*"));
+      String replacement = Config.get(inPrefix + "." + template, "*unknown*");
+
+      if("*unknown*".equals(replacement))
+        Log.warning("could not find template replacement for " + inPrefix
+                    + "." + template);
+
+      matcher.appendReplacement(result, replacement);
     }
 
     matcher.appendTail(result);
@@ -1195,6 +1201,9 @@ public final class Strings
                    Strings.replaceTemplates("some $simple; test",
                                             "test/test/template"));
       Config.setRewriting(true);
+
+      m_logger.addExpected("WARNING: could not find template replacement for "
+                           + "test/test/template.test");
     }
 
     //......................................................................

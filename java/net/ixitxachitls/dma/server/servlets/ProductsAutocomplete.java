@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -109,7 +110,7 @@ public class ProductsAutocomplete extends Autocomplete
 
     String term = inRequest.getParam("term");
     if(term != null)
-      term = term.toLowerCase();
+      term = term.toLowerCase(Locale.US);
 
     SortedSet<String> products = new TreeSet<String>();
     for(BaseProduct product : m_products.values())
@@ -117,7 +118,7 @@ public class ProductsAutocomplete extends Autocomplete
           || (product.getSystem() != null
               && product.getSystem().getName().equalsIgnoreCase(system)))
          && (term == null
-             || product.getFullTitle().toLowerCase().startsWith(term)))
+             || product.getFullTitle().toLowerCase(Locale.US).startsWith(term)))
         products.add(product.getFullTitle() + " (" + product.getName() + ")");
 
     inWriter.strings(products);

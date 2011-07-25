@@ -23,17 +23,19 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMAData;
-// import net.ixitxachitls.dma.entries.indexes.CommandIndex;
-// import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
+import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.entries.indexes.GroupedKeyIndex;
 // import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.entries.indexes.KeyIndex;
+import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
 import net.ixitxachitls.dma.values.Date;
@@ -54,6 +56,7 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Subtitle;
 import net.ixitxachitls.util.Grouping;
@@ -85,7 +88,7 @@ public class BaseProduct extends BaseEntry
   //----- producers --------------------------------------------------------
 
   /** The producers of products. */
-  public static final @Nonnull String []PRODUCERS =
+  private static final @Nonnull String []PRODUCERS =
     Config.get("/game/product.producers", new String []
       {
         "WTC",
@@ -398,7 +401,8 @@ public class BaseProduct extends BaseEntry
     private System(@Nonnull String inName, @Nullable String inGroup)
     {
       m_name  = constant("system.name",  inName);
-      m_group = constant("system.group", inName, inGroup);
+      if(inGroup != null)
+        m_group = constant("system.group", inName, inGroup);
     }
 
     /**
@@ -444,9 +448,6 @@ public class BaseProduct extends BaseEntry
      */
     public static @Nullable System valueOfIgnoreCase(@Nonnull String inName)
     {
-      if(inName == null)
-        return null;
-
       // check ignoring case
       try
       {
@@ -537,7 +538,8 @@ public class BaseProduct extends BaseEntry
     private ProductType(@Nonnull String inName, @Nullable String inGroup)
     {
       m_name  = constant("product.type.name",  inName);
-      m_group = constant("product.type.group", inName, inGroup);
+      if(inGroup != null)
+        m_group = constant("product.type.group", inName, inGroup);
     }
 
     /**
@@ -628,7 +630,8 @@ public class BaseProduct extends BaseEntry
     private Style(@Nonnull String inName, @Nullable String inGroup)
     {
       m_name  = constant("product.style.name",  inName);
-      m_group = constant("product.style.group", inName, inGroup);
+      if(inGroup != null)
+        m_group = constant("product.style.group", inName, inGroup);
     }
 
     /**
@@ -805,53 +808,17 @@ public class BaseProduct extends BaseEntry
               + "%references %file %errors"
               );
 
+  /** The printer for printing in a list. */
+  public static final ListPrint s_listPrint =
+    new ListPrint("1:L(label);5:L(id)[ID];20(producttitle)[Title];"
+                  + "1:L(system)[System];1:L(worlds)[Worlds];"
+                  + "1:L(short)[Short Description]",
+                  "$label $listlink", null, "$name", "$system",
+                  "$worlds", "${short description}");
+
   /** The type of this entry. */
   public static final BaseType<BaseProduct> TYPE =
     new BaseType<BaseProduct>(BaseProduct.class);
-
-  /** The basic formatter for base product. */
-//   public static final Index.Formatter<AbstractEntry> FORMATTER =
-//     new Index.Formatter<AbstractEntry>()
-//     {
-//       public List<Object> format(String inKey, AbstractEntry inEntry)
-//       {
-//         List<Object> list = BaseEntry.FORMATTER.format(inKey, inEntry);
-
-//         if(!(inEntry instanceof BaseProduct))
-//           return list;
-
-//         BaseProduct product = (BaseProduct)inEntry;
-
-//         list.add(product.m_system.format(false));
-//         list.add(product.m_producer.format(false));
-//         list.add(product.m_type.format(false));
-
-//         return list;
-//       }
-//     };
-
-  /** The basic format for base products. */
-//   public static final String FORMAT =
-//     BaseEntry.FORMAT + ";1:L(system)[System];"
-//     + "1:L(producer)[Producer];1:L(type)[Type]";
-
-  // the general index with all items
-  static
-  {
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("index", "index", "baseproducts",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(!(inEntry instanceof BaseProduct))
-//                          return null;
-
-//                        return new Object [] { "base product" };
-//                      }
-//                    }, true, FORMATTER, FORMAT, true)
-//                   .withType(BaseProduct.TYPE));
-  }
 
   //----- title ------------------------------------------------------------
 
@@ -886,103 +853,90 @@ public class BaseProduct extends BaseEntry
   //----- authors ----------------------------------------------------------
 
   /** The formatter for a person. */
-  protected static Formatter<Text> s_personFormatter =
-    new LinkFormatter<Text>("/index/persons/");
+  protected static final Formatter<Text> s_personFormatter =
+    new LinkFormatter<Text>("/products/persons/");
 
   /** The formatter for a job. */
-  protected static Formatter<Name> s_jobFormatter =
-    new LinkFormatter<Name>("/index/jobs/");
+  protected static final Formatter<Name> s_jobFormatter =
+    new LinkFormatter<Name>("/products/jobs/");
 
   /** The formatter for a complete person. */
-  protected static Formatter<Multiple> s_nameFormatter =
+  protected static final Formatter<Multiple> s_nameFormatter =
     new MultipleFormatter<Multiple>(null, null, " (", ")");
 
   /** The formatter for a complete person. */
-  protected static Formatter<ValueList<Multiple>> s_listFormatter =
+  protected static final Formatter<ValueList<Multiple>> s_listFormatter =
     new ListFormatter<ValueList<Multiple>>("; ");
 
   /** All the authors of the product. */
   @Key("author")
-    protected @Nonnull ValueList<Multiple> m_authors =
-      new ValueList<Multiple>(new Multiple(new Multiple.Element []
-        { new Multiple.Element
-          (new Text().withFormatter(s_personFormatter)
-           .withEditType("autostring(persons/author)[name]"),
-           false),
-          new Multiple.Element
-          (new Name().withFormatter(s_jobFormatter)
-           .withEditType("autoname(jobs/author|name)[job]")
-           .withRelated("name"),
-           true, " ", null) })
-                              .withFormatter(s_nameFormatter))
+  protected @Nonnull ValueList<Multiple> m_authors =
+    new ValueList<Multiple>(new Multiple(new Multiple.Element []
+      { new Multiple.Element
+        (new Text().withFormatter(s_personFormatter)
+         .withEditType("autostring(persons/author)[name]"),
+         false),
+        new Multiple.Element
+        (new Name().withFormatter(s_jobFormatter)
+         .withEditType("autoname(jobs/author|name)[job]")
+         .withRelated("name"),
+         true, " ", null) })
+                            .withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
   static
   {
     // the index for all persons
-//     s_indexes.add(new CommandIndex
-//                   ("Product", "Persons", "persons",
-//                    new CommandIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(!(inEntry instanceof BaseProduct))
-//                          return null;
+    s_indexes.put("persons",
+                  new Index("Persons", BaseProduct.TYPE)
+                  {
+                    private static final long serialVersionUID = 1L;
 
-//                        return ((BaseProduct)inEntry).getPersons();
-//                      }
-//                    },
-//                    new CommandIndex.CommandExtractor()
-//                    {
-//                      public Collection<Object> get
-//                        (String inID, View inView)
-//                      {
-//                        TreeMap<String, ArrayList<BaseProduct>> jobs =
-//                          new TreeMap<String, ArrayList<BaseProduct>>();
+                    public Set<String> names(@Nonnull Set<String> ioCollected,
+                                             @Nonnull DMAData inData)
+                    {
+                      for(BaseProduct product
+                            : inData.getEntriesList(BaseProduct.TYPE))
+                        collect(ioCollected, product);
 
-//                        for(Object i : inView)
-//                        {
-//                          BaseProduct entry = (BaseProduct)i;
+                      return ioCollected;
+                    }
 
-//                          for(String job : entry.getJobsForPerson(inID))
-//                          {
-//                            if(!jobs.containsKey(job))
-//                              jobs.put(job, new ArrayList<BaseProduct>());
+                    private Set<String> collect
+                      (@Nonnull Set<String> ioCollected,
+                       @Nonnull BaseProduct inProduct)
+                    {
+                      inProduct.collectPersons(ioCollected, "author", null);
+                      inProduct.collectPersons(ioCollected, "editor", null);
+                      inProduct.collectPersons(ioCollected, "cover", null);
+                      inProduct.collectPersons(ioCollected, "cartographer",
+                                               null);
+                      inProduct.collectPersons(ioCollected, "illustrator",
+                                               null);
+                      inProduct.collectPersons(ioCollected, "typographer",
+                                               null);
+                      inProduct.collectPersons(ioCollected, "management",
+                                               null);
 
-//                            jobs.get(job).add(entry);
-//                          }
-//                        }
+                      return ioCollected;
+                    }
 
-//                        ArrayList<Object> commands = new ArrayList<Object>();
+                    public boolean matches(@Nonnull String inName,
+                                           @Nonnull AbstractEntry inProduct)
+                    {
+                      if(!(inProduct instanceof BaseProduct))
+                        return false;
 
-//                        for(String job : jobs.keySet())
-//                        {
-//                          commands.add(new Label("Job"));
-//                          commands.add(new Link(job,
-//                                                "/index/jobs/" + job));
+                      Set<String> names = new HashSet<String>();
+                      collect(names, (BaseProduct)inProduct);
+                      for(String name : names)
+                        if(name.equalsIgnoreCase(inName))
+                          return true;
 
-//                          ArrayList<Object> references =
-//                            new ArrayList<Object>();
+                      return false;
+                    }
+                  });
 
-//                          for(Iterator<BaseProduct> i =
-//                                jobs.get(job).iterator(); i.hasNext(); )
-//                          {
-//                            BaseProduct product = i.next();
-
-//                            references.add(new Link(product.getFullTitle(),
-//                                                    "/entry/baseproduct/"
-//                                                    + product.getID()));
-//                            if(i.hasNext())
-//                              references.add(", ");
-//                          }
-
-//                          commands.add(new Command(references.toArray()));
-//                        }
-
-//                        return commands;
-//                      }
-//                    }, false, "1:L(icon);20:L(job)[Job];"
-//                    + "20:L(references)[References]", false));
 
     // the index for all jobs
 //     s_indexes.add(new CommandIndex
@@ -1166,7 +1120,7 @@ public class BaseProduct extends BaseEntry
   //----- date -------------------------------------------------------------
 
   /** The formatter for the date. */
-  protected static Formatter<Date> s_dateFormatter =
+  protected static final Formatter<Date> s_dateFormatter =
     new LinkFormatter<Date>("/index/dates/");
 
   /** The date (month and year) the product was released. */
@@ -1198,7 +1152,7 @@ public class BaseProduct extends BaseEntry
   //----- pages ------------------------------------------------------------
 
   /** The formatter for the pages. */
-  protected static Formatter<Number> s_pageFormatter =
+  protected static final Formatter<Number> s_pageFormatter =
     new LinkFormatter<Number>("/index/pages/");
 
   /** The grouping for the pages. */
@@ -1207,9 +1161,6 @@ public class BaseProduct extends BaseEntry
       {
         public Long extract(Number inValue)
         {
-          if(inValue == null)
-              return 0L;
-
           return inValue.get();
         }
       }, new Long [] { 5L, 10L, 20L, 25L, 50L, 100L, 200L, 250L, 300L, 400L,
@@ -1235,7 +1186,7 @@ public class BaseProduct extends BaseEntry
   //----- system -----------------------------------------------------------
 
   /** The formatter for the system. */
-  protected static Formatter<EnumSelection<System>> s_systemFormatter =
+  protected static final Formatter<EnumSelection<System>> s_systemFormatter =
     new LinkFormatter<EnumSelection<System>>("/index/systems/");
 
   /** The game system of the product. */
@@ -1254,7 +1205,7 @@ public class BaseProduct extends BaseEntry
   //----- audience ---------------------------------------------------------
 
   /** The formatter for the audience. */
-  protected static Formatter<EnumSelection<Audience>>
+  protected static final Formatter<EnumSelection<Audience>>
     s_audienceFormatter =
     new LinkFormatter<EnumSelection<Audience>>("/index/audiences/");
 
@@ -1275,13 +1226,13 @@ public class BaseProduct extends BaseEntry
   //----- type -------------------------------------------------------------
 
   /** The formatter for the type. */
-  protected static Formatter<EnumSelection<ProductType>>
+  protected static final Formatter<EnumSelection<ProductType>>
     s_typeFormatter =
     new LinkFormatter<EnumSelection<ProductType>>("/index/categories/");
 
   /** The type of product. */
   @Key("product type")
-  protected @Nonnull EnumSelection<ProductType> m_type =
+  protected @Nonnull EnumSelection<ProductType> m_productType =
     new EnumSelection<ProductType>(ProductType.class)
     .withFormatter(s_typeFormatter);
 
@@ -1289,7 +1240,7 @@ public class BaseProduct extends BaseEntry
   //----- style ------------------------------------------------------------
 
   /** The formatter for the style. */
-  protected static Formatter<EnumSelection<Style>> s_styleFormatter =
+  protected static final Formatter<EnumSelection<Style>> s_styleFormatter =
     new LinkFormatter<EnumSelection<Style>>("/index/styles/");
 
   /** The style of the product, its general outlook. */
@@ -1307,7 +1258,7 @@ public class BaseProduct extends BaseEntry
   //----- producer ---------------------------------------------------------
 
   /** The formatter for the producer. */
-  protected static Formatter<Selection> s_producerFormatter =
+  protected static final Formatter<Selection> s_producerFormatter =
     new LinkFormatter<Selection>("/index/producers/");
 
   /** The name of the company that produced the product. */
@@ -1340,7 +1291,7 @@ public class BaseProduct extends BaseEntry
   //----- series -----------------------------------------------------------
 
   /** The formatter for the series. */
-  protected static Formatter<Name> s_seriesFormatter =
+  protected static final Formatter<Name> s_seriesFormatter =
     new LinkFormatter<Name>("/index/series/");
 
   /** The name of the series, even multiple if necessary, this product belongs
@@ -1361,7 +1312,7 @@ public class BaseProduct extends BaseEntry
   //----- price ------------------------------------------------------------
 
   /** The formatter for the price. */
-  protected static Formatter<Price> s_priceFormatter =
+  protected static final Formatter<Price> s_priceFormatter =
     new LinkFormatter<Price>("/index/prices/");
 
   /** The grouping for the pages. */
@@ -1370,9 +1321,6 @@ public class BaseProduct extends BaseEntry
       {
         public Long extract(Price inValue)
         {
-          if(inValue == null)
-              return 0L;
-
           return inValue.get();
         }
       }, new Long [] { 100L, 500L, 1000L, 2500L, 5000L, 10000L, },
@@ -1395,7 +1343,7 @@ public class BaseProduct extends BaseEntry
   //----- contents ---------------------------------------------------------
 
   /** The formatter for the price. */
-  protected static Formatter<EnumSelection<Part>> s_partFormatter =
+  protected static final Formatter<EnumSelection<Part>> s_partFormatter =
     new LinkFormatter<EnumSelection<Part>>("/index/parts/");
 
   /** The contents of the product, what kind of individual components it has,
@@ -1436,7 +1384,7 @@ public class BaseProduct extends BaseEntry
   //----- requirements -----------------------------------------------------
 
   /** The formatter for requirements. */
-  protected static Formatter<Multiple> s_requirementsFormatter =
+  protected static final Formatter<Multiple> s_requirementsFormatter =
     new MultipleFormatter<Multiple>(null, null, " optional ", null);
 
   /** The requirements of this product, which products are required to use this
@@ -1459,7 +1407,7 @@ public class BaseProduct extends BaseEntry
   //----- layout -----------------------------------------------------------
 
   /** The formatter for the layout. */
-  protected static Formatter<Selection> s_layoutFormatter =
+  protected static final Formatter<Selection> s_layoutFormatter =
     new LinkFormatter<Selection>("/index/layouts/");
 
   /** The layout of the product. */
@@ -1496,6 +1444,20 @@ public class BaseProduct extends BaseEntry
   protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
+  }
+
+  //........................................................................
+  //----------------------------- getListPrint -----------------------------
+
+  /**
+   * Get the print for a list entry.
+   *
+   * @return the print for list entry
+   *
+   */
+  protected @Nonnull ListPrint getListPrint()
+  {
+    return s_listPrint;
   }
 
   //........................................................................
@@ -1701,7 +1663,7 @@ public class BaseProduct extends BaseEntry
    */
   public @Nonnull ProductType getProductType()
   {
-    return m_type.getSelected();
+    return m_productType.getSelected();
   }
 
   //........................................................................
@@ -1917,12 +1879,12 @@ public class BaseProduct extends BaseEntry
       return new FormattedValue
         (new Command(computeValue("_leader", inDM).format(this, inDM, true),
                      " ",
-                     computeValue("_title", inDM).format(this, inDM, true)),
+                     new BaseCommand(m_title.get())),
          null, "name", false, true, false, true, "names", "");
 
     if("subtitle".equals(inKey))
       return new FormattedValue
-        (new Subtitle(computeValue("_subtitle", inDM).format(this, inDM, true)),
+        (new Subtitle(new BaseCommand(m_subtitle.get())),
          null, "subtitle", false, false, false, false, "subtitles", "");
 
     return super.computeValue(inKey, inDM);
@@ -2407,7 +2369,7 @@ public class BaseProduct extends BaseEntry
    */
 //   public boolean setProductType(@Nonnull ProductType inType)
 //   {
-//     return m_type.set(inType);
+//     return m_productType.set(inType);
 //   }
 
   //........................................................................
@@ -2674,9 +2636,9 @@ public class BaseProduct extends BaseEntry
   {
     for(Multiple person : inList)
     {
-      String job = inKey.toLowerCase();
+      String job = inKey.toLowerCase(Locale.US);
       if(person.get(1).isDefined())
-        job = ((Name)person.get(1)).get().toLowerCase();
+        job = ((Name)person.get(1)).get().toLowerCase(Locale.US);
 
       if(inPerson != null)
       {
