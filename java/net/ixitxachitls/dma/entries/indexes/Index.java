@@ -518,7 +518,7 @@ public abstract class Index implements Serializable
     @org.junit.Test
     public void build()
     {
-      Index index = new Index("title", AbstractEntry.TYPE)
+      Index index = new Index("title", BaseCharacter.TYPE)
         {
           private static final long serialVersionUID = 1L;
 

@@ -366,13 +366,6 @@ public class DMAServer extends WebServer
 //       (new ServletHolder(new StaticFileServlet("/files-internal", "")),
 //        "/files-internal/*");
 
-
-
-//     // base entry servlet
-//     context.addServlet
-//       (new ServletHolder(new BaseEntryServlet(m_baseCampaign)),
-//        "/entry/*");
-
     // base entries
     context.addServlet
       (new ServletHolder(new EntryServlet(m_baseData)

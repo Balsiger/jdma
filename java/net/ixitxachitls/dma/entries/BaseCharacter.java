@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 //import net.ixitxachitls.dma.Global;
 import net.ixitxachitls.dma.data.DMAData;
+//import net.ixitxachitls.dma.entries.Product;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -249,8 +250,9 @@ public class BaseCharacter extends BaseEntry
   @NoEdit
   protected Text m_products = new Text();
 
-//   /** The campaign storing all the products. */
-//   protected Campaign m_productEntries = new Campaign("Products", "prd", 0);
+  /** All the products for this user. */
+  // protected DMAData m_productData = new DMAData
+  //   (Files.concatenate(m_data.getPath(), Product.TYPE.getMultipleDir()));
 
   //........................................................................
   //----- last login -------------------------------------------------------

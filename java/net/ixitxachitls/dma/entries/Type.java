@@ -37,7 +37,7 @@ import javax.annotation.concurrent.Immutable;
 //------------------------------------------------------------------- header
 
 /**
- * The type specification for a base entry.
+ * The type specification for an entry.
  *
  * @file          BaseType.java
  *
@@ -52,7 +52,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
-public class Type<T extends AbstractEntry> extends AbstractType<T>
+public class Type<T extends Entry> extends AbstractType<T>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -65,7 +65,7 @@ public class Type<T extends AbstractEntry> extends AbstractType<T>
    * @param       inBase  the base class for the type
    *
    */
-  public Type(@Nonnull Class<T> inClass, @Nonnull BaseType<T> inBase)
+  public Type(@Nonnull Class<T> inClass, @Nonnull BaseType<BaseEntry> inBase)
   {
     super(inClass);
 
@@ -83,7 +83,7 @@ public class Type<T extends AbstractEntry> extends AbstractType<T>
    * @param       inMultiple the name to use for multiple entries of the type
    *
    */
-  public Type(@Nonnull Class<T> inClass, @Nonnull BaseType<T> inBase,
+  public Type(@Nonnull Class<T> inClass, @Nonnull BaseType<BaseEntry> inBase,
               @Nonnull String inMultiple)
   {
     super(inClass, inMultiple);
@@ -98,7 +98,7 @@ public class Type<T extends AbstractEntry> extends AbstractType<T>
   //-------------------------------------------------------------- variables
 
   /** the type of the corresponding base entry. */
-  private @Nullable BaseType<T> m_base;
+  private @Nullable BaseType<BaseEntry> m_base;
 
   /** All the non-base types available. */
   private static final Map<String, Type<?/* extends Entry */>> s_types =
@@ -149,7 +149,7 @@ public class Type<T extends AbstractEntry> extends AbstractType<T>
    * @return      the requested base type or null if already a base type
    *
    */
-  public @Nullable BaseType<T> getBaseType()
+  public @Nullable BaseType<BaseEntry> getBaseType()
   {
     return m_base;
   }

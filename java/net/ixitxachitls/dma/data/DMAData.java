@@ -97,7 +97,7 @@ public class DMAData implements Serializable
   /** The files for all the data. */
   private @Nonnull ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();
 
-  /** All the entries, by class and by id. */
+  /** All the entries, by type and by id. */
   private @Nonnull HashMap<AbstractType<? extends AbstractEntry>,
                            NavigableMap<String, AbstractEntry>> m_entries =
     new HashMap<AbstractType<? extends AbstractEntry>,
@@ -109,6 +109,21 @@ public class DMAData implements Serializable
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //------------------------------- getPath --------------------------------
+
+  /**
+   * Get the path this data file is reading files from.
+   *
+   * @return      the path to the files.
+   *
+   */
+  public @Nonnull String getPath()
+  {
+    return m_path;
+  }
+
+  //........................................................................
 
   //------------------------------ getEntries ------------------------------
 

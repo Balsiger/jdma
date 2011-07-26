@@ -214,7 +214,7 @@ public class BaseText<T extends BaseText> extends Value<T>
   {
     T result = create();
 
-    result.m_text   = inText;
+    result.m_text = inText;
 
     return result;
   }

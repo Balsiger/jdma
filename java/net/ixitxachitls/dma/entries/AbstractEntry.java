@@ -212,20 +212,6 @@ public class AbstractEntry extends ValueGroup
   //---------------------------- AbstractEntry -----------------------------
 
   /**
-   * The default constructor.
-   *
-   * @param inData all the avaialble data
-   *
-   */
-  protected AbstractEntry(@Nonnull DMAData inData)
-  {
-    this(TYPE, inData);
-  }
-
-  //........................................................................
-  //---------------------------- AbstractEntry -----------------------------
-
-  /**
    * The constructor with a type.
    *
    * @param  inType  the type of the entry
@@ -237,21 +223,6 @@ public class AbstractEntry extends ValueGroup
   {
     m_type = inType;
     m_data = inData;
-  }
-
-  //........................................................................
-  //---------------------------- AbstractEntry -----------------------------
-
-  /**
-   * The constructor with only a name, using the default type.
-   *
-   * @param       inName the name of the entry
-   * @param inData all the avaialble data
-   *
-   */
-  protected AbstractEntry(@Nonnull String inName, @Nonnull DMAData inData)
-  {
-    this(inName, TYPE, inData);
   }
 
   //........................................................................
@@ -329,10 +300,6 @@ public class AbstractEntry extends ValueGroup
   /** The base entries for this entry, in the same order as the names. */
   // TODO: remove uncomment code (are use it)
 //   protected @Nullable List<BaseEntry> m_baseEntries = null;
-
-  /** The type of this abstract entry. */
-  public static final @Nonnull AbstractType<AbstractEntry> TYPE =
-    new BaseType<AbstractEntry>(AbstractEntry.class, "Abstract Entries");
 
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint = new Print("$title");
@@ -2896,7 +2863,9 @@ public class AbstractEntry extends ValueGroup
     public void init()
     {
       AbstractEntry entry =
-        new AbstractEntry("just a test", new DMAData("path"));
+        new AbstractEntry("just a test",
+                          new AbstractType.Test.TestType<AbstractEntry>
+                          (AbstractEntry.class), new DMAData("path"));
 
       // name
       assertEquals("name", "just a test", entry.getName());

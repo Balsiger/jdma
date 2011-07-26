@@ -1159,7 +1159,7 @@ public class BaseProduct extends BaseEntry
   protected static final Grouping<Number, Object> s_pageGroup =
     new Group<Number, Long, Object>(new Group.Extractor<Number, Long>()
       {
-        public Long extract(Number inValue)
+        public Long extract(@Nonnull Number inValue)
         {
           return inValue.get();
         }
@@ -1319,7 +1319,7 @@ public class BaseProduct extends BaseEntry
   protected static final Grouping<Price, Object> s_priceGrouping =
     new Group<Price, Long, Object>(new Group.Extractor<Price, Long>()
       {
-        public Long extract(Price inValue)
+        public Long extract(@Nonnull Price inValue)
         {
           return inValue.get();
         }

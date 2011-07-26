@@ -53,7 +53,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
-public class BaseType<T extends AbstractEntry> extends AbstractType<T>
+public class BaseType<T extends BaseEntry> extends AbstractType<T>
 {
   //--------------------------------------------------------- constructor(s)
 
