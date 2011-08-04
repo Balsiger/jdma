@@ -250,6 +250,20 @@ public class AbstractEntry extends ValueGroup
   //---------------------------- AbstractEntry -----------------------------
 
   /**
+   * Simple constructor for reading entries. This one is only used in tests.
+   *
+   * @param       inData all the avaialble data
+   *
+   */
+  protected AbstractEntry(@Nonnull DMAData inData)
+  {
+    this(BaseEntry.TYPE, inData);
+  }
+
+  //........................................................................
+  //---------------------------- AbstractEntry -----------------------------
+
+  /**
    * The complete constructor, with name and type. It is only used in
    * derivations, where the type has to be set.
    *
@@ -1976,8 +1990,8 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked") // calling complete on base type
-    public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader,
-                                               @Nonnull DMAData inData)
+  public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader,
+                                             @Nonnull DMAData inData)
   {
     if(inReader.isAtEnd())
       return null;
@@ -2875,12 +2889,12 @@ public class AbstractEntry extends ValueGroup
       assertEquals("type", "abstract entry", entry.getType().toString());
       assertEquals("type", "entry", entry.getType().getLink());
       assertEquals("type", "AbstractEntry", entry.getType().getClassName());
-      assertEquals("type", "Abstract Entries", entry.getType().getMultiple());
-      assertEquals("type", "AbstractEntries", entry.getType().getMultipleDir());
+      assertEquals("type", "Abstract Entrys", entry.getType().getMultiple());
+      assertEquals("type", "AbstractEntrys", entry.getType().getMultipleDir());
       assertEquals("type", "entrys", entry.getType().getMultipleLink());
 //       assertNull("type", entry.getType().getBaseType());
 
-      assertEquals("create", "abstract entry $undefined$ =\n\n.\n",
+      assertEquals("create", "base entry $undefined$ =\n\n.\n",
                    entry.getType().create(new DMAData("path")).toString());
 
       // conversion to string
@@ -3110,7 +3124,7 @@ public class AbstractEntry extends ValueGroup
       assertEquals("entry does not match",
                    "#----- just a \\= test\n"
                    + "\n"
-                   + "abstract entry just a \\= test =\n"
+                   + "base entry just a \\= test =\n"
                    + "\n"
                    + ".\n"
                    + "\n"
@@ -3198,7 +3212,7 @@ public class AbstractEntry extends ValueGroup
                    + "\n"
                    + "  # just some test\n"
                    + "\n"
-                   + "abstract entry test =\n\n.\n"
+                   + "base entry test =\n\n.\n"
                    + "# some other text\n",
                    entry.toString());
     }

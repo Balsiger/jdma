@@ -191,20 +191,32 @@ util.link = function(inEvent, inTarget, inFunction)
   else
     bodyTarget += '?body';
 
+  window.console.log("ajax");
   util.ajax(bodyTarget, null, function(inText)
   {
+    window.console.log("setting up page");
     $('#page').html(inText);
 
     busy.done('loading page');
     delete busy;
 
+    window.console.log("delete");
     // Adding something to the innerHTML will not execute any javascript in it.
-    inText.replace(/<script.*?>((\n|.)*?)<\/script>/g,
-                   function(match, group) { eval(group); });
+    try
+    {
+      inText.replace(/<script.*?>((\n|.)*?)<\/script>/g,
+                     function(match, group) { eval(group); });
+    }
+    catch(e)
+    {
+      gui.alert('Error when replaying javascript: ' + e);
+    }
 
+    window.console.log("replace");
     if(inFunction)
       inFunction();
 
+    window.console.log("push state", inEvent, inEvent.state, target, document.title, window.history);
     if(inEvent && !inEvent.state)
       window.history.pushState(target, document.title, target);
 
@@ -215,7 +227,7 @@ util.link = function(inEvent, inTarget, inFunction)
 };
 
 //..........................................................................
-//---------------------------------- link ----------------------------------
+//--------------------------------- linkRow --------------------------------
 
 /**
   * Goto the specified target.
@@ -447,7 +459,14 @@ Function.prototype.bind = function()
 
 // install a handler to support back/forward actions
 $(window).bind('popstate', function(event) {
+    window.console.log("pop", event.originalEvent.state, event.originalEvent,
+                       location.pathname, location.search);
     if(event.originalEvent.state)
       util.link(event.originalEvent, location.pathname + location.search)
   });
 
+// add a history state for the first page to be able to come back here
+$(document).ready(function () {
+    window.history.pushState(location.pathName + location.search,
+                             document.title, null);
+});

@@ -104,14 +104,13 @@ public class JobAutocomplete extends Autocomplete
   public void writeJson(@Nonnull DMARequest inRequest, @Nonnull String inPath,
                         @Nonnull JsonWriter inWriter)
   {
-    String category = Strings.getPattern(inPath, "jobs/([^/]*)(/|$)");
     String name = Strings.getPattern(inPath, "jobs/.*/([^/]*)$");
     if(name != null)
       name = name.replaceAll("%20", " ");
 
     SortedSet<String> jobs = new TreeSet<String>();
     for(BaseProduct product : m_products.values())
-      product.collectJobs(jobs, category, name, inRequest.getParam("term"));
+      product.collectJobs(jobs, name, inRequest.getParam("term"));
 
     inWriter.strings(jobs);
   }
@@ -203,7 +202,7 @@ public class JobAutocomplete extends Autocomplete
 
       servlet.doPost(request, response);
       assertEquals("empty",
-                   "[\n  \"first job\",\n  \"second job\",\n"
+                   "[\n  \"author\",\n  \"first job\",\n  \"second job\",\n"
                    + "  \"third job\"\n]\n",
                    output.toString());
 

@@ -65,7 +65,8 @@ public class Type<T extends Entry> extends AbstractType<T>
    * @param       inBase  the base class for the type
    *
    */
-  public Type(@Nonnull Class<T> inClass, @Nonnull BaseType<BaseEntry> inBase)
+  public Type(@Nonnull Class<T> inClass,
+              @Nonnull BaseType<? extends BaseEntry> inBase)
   {
     super(inClass);
 
@@ -98,11 +99,11 @@ public class Type<T extends Entry> extends AbstractType<T>
   //-------------------------------------------------------------- variables
 
   /** the type of the corresponding base entry. */
-  private @Nullable BaseType<BaseEntry> m_base;
+  private @Nullable BaseType<? extends BaseEntry> m_base;
 
   /** All the non-base types available. */
-  private static final Map<String, Type<?/* extends Entry */>> s_types =
-    new HashMap<String, Type<?/* extends Entry*/>>();
+  private static final Map<String, Type<? extends Entry>> s_types =
+    new HashMap<String, Type<? extends Entry>>();
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -149,7 +150,7 @@ public class Type<T extends Entry> extends AbstractType<T>
    * @return      the requested base type or null if already a base type
    *
    */
-  public @Nullable BaseType<BaseEntry> getBaseType()
+  public @Nullable BaseType<? extends BaseEntry> getBaseType()
   {
     return m_base;
   }

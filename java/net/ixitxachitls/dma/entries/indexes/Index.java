@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.entries.indexes;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,14 +36,9 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
-//import net.ixitxachitls.dma.entries.Campaign;
-//import net.ixitxachitls.dma.entries.Entry;
-//import net.ixitxachitls.output.commands.Command;
-//import net.ixitxachitls.output.commands.Label;
-//import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Identificator;
-//import net.ixitxachitls.util.Encodings;
-//import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.Pair;
 
 //..........................................................................
 
@@ -66,29 +60,6 @@ import net.ixitxachitls.util.Identificator;
 @Immutable
 public abstract class Index implements Serializable
 {
-  //----------------------------------------------------------------- nested
-
-  /**
-   * A simple inferface to format an entry.
-   *
-   */
-  public interface Formatter<S extends AbstractEntry>
-  {
-    /**
-     * Format the entry with the given key.
-     *
-     * @param       inKey   the key of the entry to format
-     * @param       inEntry the entry to format
-     *
-     * @return      a list with all the commands to format the entry
-     *
-     */
-    public @Nonnull List<Object>
-      format(@Nonnull String inKey, @Nonnull S inEntry);
-  }
-
-  //........................................................................
-
   //--------------------------------------------------------- constructor(s)
 
   //-------------------------------- Index ---------------------------------
@@ -466,6 +437,22 @@ public abstract class Index implements Serializable
 
   //......................................................................
 
+  //---------------------------- getNavigation -----------------------------
+
+  /**
+   * Get the navigation information for the current index.
+   *
+   * @param       inName the index name
+   * @param       inPath the path to the index to print
+   *
+   * @return      an array if text/url pairs for the navigation
+   *
+   */
+  public abstract @Nonnull String [] getNavigation(@Nonnull String inName,
+                                                   @Nonnull String inPath);
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -473,35 +460,25 @@ public abstract class Index implements Serializable
 
   //------------------------------------------------- other member functions
 
-  //-------------------------------- names --------------------------------
+  //-------------------------------- write ---------------------------------
 
   /**
-   * Build up all the names to put up into the index.
+   * Write the contents of the index to the given writer and request.
    *
-   * @param       ioNames the names collected so far
-   * @param       inData  all the data to used in the index
-   *
-   * @return      a set with all the names (usually Strings, but can be
-   *              anything)
-   *
-   */
-  public abstract @Nonnull Set<String> names(@Nonnull Set<String> ioNames,
-                                             @Nonnull DMAData inData);
-
-  //........................................................................
-  //------------------------------- matches --------------------------------
-
-  /**
-   * Check if the given entry matches the name.
-   *
-   * @param       inName  the name to match
-   * @param       inEntry the entry to match on
-   *
-   * @return      true if entry matches the index, false if not
+   * @param      inWriter     the writer to output to
+   * @param      inData       the data to print
+   * @param      inName       the nameing part of the index url
+   * @param      inPath       the sub path of the index
+   * @param      inPageSize   the size of the page as number of elements
+   * @param      inPagination start and end entries to show
    *
    */
-  public abstract boolean matches(@Nonnull String inName,
-                                  @Nonnull AbstractEntry inEntry);
+  public abstract void write(@Nonnull HTMLWriter inWriter,
+                             @Nonnull DMAData inData,
+                             @Nonnull String inName,
+                             @Nonnull String inPath,
+                             int inPageSize,
+                             Pair<Integer, Integer> inPagination);
 
   //........................................................................
 
@@ -512,145 +489,42 @@ public abstract class Index implements Serializable
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- build ----------------------------------------------------------
+    //----- init -----------------------------------------------------------
 
-    /** Testing building of commands. */
+    /** The init Test. */
     @org.junit.Test
-    public void build()
+    public void init()
     {
-      Index index = new Index("title", BaseCharacter.TYPE)
+      Index index = new Index("title",
+                              net.ixitxachitls.dma.entries.BaseCharacter.TYPE)
         {
           private static final long serialVersionUID = 1L;
 
-          public Set<String> names(@Nonnull Set<String> ioNames,
-                                   @Nonnull DMAData inData)
+          public @Nonnull String [] getNavigation(@Nonnull String inName,
+                                                  @Nonnull String inPath)
           {
-            ioNames.add("first");
-            ioNames.add("second");
-            ioNames.add("third");
-
-            return ioNames;
+            return new String[0];
           }
 
-          public boolean matches(String inName, AbstractEntry inEntry)
-          {
-            return true;
-          }
+          public void write(@Nonnull HTMLWriter inWriter,
+                            @Nonnull DMAData inData,
+                            @Nonnull String inName,
+                             @Nonnull String inPath,
+                            int inPageSize,
+                            Pair<Integer, Integer> inPagination)
+          { }
         };
-      index.withImages().withoutPagination();
 
+      assertEquals("type", net.ixitxachitls.dma.entries.BaseCharacter.TYPE,
+                   index.getType());
+      assertFalse("images", index.hasImages());
       assertEquals("title", "title", index.getTitle());
+      assertTrue("paginated", index.isPaginated());
+
+      index = index.withImages().withoutPagination();
+
       assertTrue("images", index.hasImages());
-//     assertEquals("identificator", s_identificator, index.getIdentificator());
-//       assertEquals("formater", FORMATTER, index.getFormatter());
-//       assertEquals("format", FORMAT, index.getFormat());
-      assertTrue("allows", index.allows(BaseCharacter.Group.GUEST));
-//       assertEquals("datasource", DataSource.global, index.getDataSource());
       assertFalse("paginated", index.isPaginated());
-
-//       index.withAccess(BaseCharacter.Group.ADMIN)
-//         .withDataSource(DataSource.campaign);
-
-//       assertFalse("allows", index.allows(BaseCharacter.Group.GUEST));
-//       assertEquals("datasource", DataSource.campaign, index.getDataSource());
-
-//       View<AbstractEntry> view =
-//         new View<AbstractEntry>(Arrays.asList(new AbstractEntry []
-//           { new AbstractEntry("a"), new AbstractEntry("b"),
-//             new AbstractEntry("c"), new AbstractEntry("d"), }).iterator(),
-//                                 new Identificator<AbstractEntry>()
-//           {
-//             public String []id(AbstractEntry inEntry)
-//             {
-//               return new String [] { "1", "2", };
-//             }
-//           });
-
-//       Collection<Object> commands = index.buildCommand(null, null);
-
-//       assertFalse("empty", commands.iterator().hasNext());
-
-//       commands = index.buildCommand("id", view);
-
-//       Iterator<Object> i = commands.iterator();
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/a]{1}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/b]{1}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/c]{1}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/d]{1}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/a]{2}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/b]{2}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/c]{2}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/d]{2}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertFalse("simple", i.hasNext());
-
-//       // with pagination
-//       commands = index.buildCommand("id", view, 3, 5);
-
-//       i = commands.iterator();
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/d]{1}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/a]{2}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/b]{2}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertFalse("simple", i.hasNext());
-
-//       // with standard identificator
-//       view = new View<AbstractEntry>(Arrays.asList(new AbstractEntry []
-//         { new AbstractEntry("a"), new AbstractEntry("b"),
-//           new AbstractEntry("c"), new AbstractEntry("d"), }).iterator(),
-//                                      s_identificator);
-
-//       commands = index.buildCommand("id", view);
-
-//       i = commands.iterator();
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/a]{a}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/b]{b}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/c]{c}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertEquals("simple", "\\label{Abstract Entry}", i.next().toString());
-//       assertEquals("simple", "\\link[/entry/abstractentry/d]{d}",
-//                    i.next().toString());
-//       assertEquals("simple", "", i.next().toString());
-//       assertFalse("simple", i.hasNext());
     }
 
     //......................................................................

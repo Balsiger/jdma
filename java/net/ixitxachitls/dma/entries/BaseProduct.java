@@ -25,13 +25,16 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
 // import net.ixitxachitls.dma.entries.indexes.GroupedKeyIndex;
 // import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.entries.indexes.KeyIndex;
@@ -888,49 +891,32 @@ public class BaseProduct extends BaseEntry
   {
     // the index for all persons
     s_indexes.put("persons",
-                  new Index("Persons", BaseProduct.TYPE)
+                  new GroupedIndex("Persons", BaseProduct.TYPE, 1)
                   {
                     private static final long serialVersionUID = 1L;
 
                     public Set<String> names(@Nonnull Set<String> ioCollected,
-                                             @Nonnull DMAData inData)
+                                             @Nonnull DMAData inData,
+                                             @Nonnull String []inGroups)
                     {
                       for(BaseProduct product
                             : inData.getEntriesList(BaseProduct.TYPE))
-                        collect(ioCollected, product);
+                        product.collectPersons(ioCollected, null, null);
 
                       return ioCollected;
                     }
 
-                    private Set<String> collect
-                      (@Nonnull Set<String> ioCollected,
-                       @Nonnull BaseProduct inProduct)
-                    {
-                      inProduct.collectPersons(ioCollected, "author", null);
-                      inProduct.collectPersons(ioCollected, "editor", null);
-                      inProduct.collectPersons(ioCollected, "cover", null);
-                      inProduct.collectPersons(ioCollected, "cartographer",
-                                               null);
-                      inProduct.collectPersons(ioCollected, "illustrator",
-                                               null);
-                      inProduct.collectPersons(ioCollected, "typographer",
-                                               null);
-                      inProduct.collectPersons(ioCollected, "management",
-                                               null);
-
-                      return ioCollected;
-                    }
-
-                    public boolean matches(@Nonnull String inName,
+                    public boolean matches(@Nonnull String []inGroups,
                                            @Nonnull AbstractEntry inProduct)
                     {
                       if(!(inProduct instanceof BaseProduct))
                         return false;
 
                       Set<String> names = new HashSet<String>();
-                      collect(names, (BaseProduct)inProduct);
-                      for(String name : names)
-                        if(name.equalsIgnoreCase(inName))
+                      ((BaseProduct)inProduct)
+                        .collectPersons(names, null, null);
+                     for(String name : names)
+                        if(name.equalsIgnoreCase(inGroups[0]))
                           return true;
 
                       return false;
@@ -939,8 +925,43 @@ public class BaseProduct extends BaseEntry
 
 
     // the index for all jobs
-//     s_indexes.add(new CommandIndex
-//                   ("Product", "Jobs", "jobs",
+    s_indexes.put("jobs",
+                  new GroupedIndex("Jobs", BaseProduct.TYPE, 2)
+                  {
+                    private static final long serialVersionUID = 1L;
+
+                    public Set<String> names(@Nonnull Set<String> ioCollected,
+                                             @Nonnull DMAData inData,
+                                             @Nonnull String []inGroups)
+                    {
+                      if(inGroups.length == 0)
+                        for(BaseProduct product
+                              : inData.getEntriesList(BaseProduct.TYPE))
+                          product.collectJobs(ioCollected, null, null);
+                      else
+                        for(BaseProduct product
+                              : inData.getEntriesList(BaseProduct.TYPE))
+                          product.collectPersons(ioCollected, inGroups[0],
+                                                 null);
+
+                      return ioCollected;
+                    }
+
+                    public boolean matches(@Nonnull String []inGroups,
+                                           @Nonnull AbstractEntry inProduct)
+                    {
+                      if(!(inProduct instanceof BaseProduct))
+                        return false;
+
+                      String job = inGroups[0];
+                      String name = inGroups[1];
+
+                      Set<String> jobs = new HashSet<String>();
+                      ((BaseProduct)inProduct).collectJobs(jobs, name, job);
+                      return !jobs.isEmpty();
+                    }
+                  });
+
 //                    new CommandIndex.Extractor()
 //                    {
 //                      public Object []get(AbstractEntry inEntry)
@@ -1710,7 +1731,7 @@ public class BaseProduct extends BaseEntry
    * set.
    *
    * @param    ioNames     the set to add to
-   * @param    inCategory  the category to add to (e.g. "author")
+   * @param    inJob       the job to limit to
    * @param    inPrefix    the prefix for the persons to collect (or null for
    *                       none)
    *
@@ -1718,23 +1739,36 @@ public class BaseProduct extends BaseEntry
    *
    */
   public @Nonnull Set<String> collectPersons(@Nonnull Set<String> ioNames,
-                                             @Nonnull String inCategory,
+                                             @Nullable String inJob,
                                              @Nullable String inPrefix)
   {
-    ValueList<Multiple> list = categoryList(inCategory);
-    if(list == null)
-      return ioNames;
-
-    for(Multiple person : list)
+    for(Map.Entry<String, ValueList<Multiple>> list
+          : categoryLists().entrySet())
     {
-      String name = ((Text)person.get(0)).get();
+      String listName = list.getKey();
+      for(Multiple person : list.getValue())
+      {
+        if(!person.isDefined() || !person.get(0).isDefined())
+          continue;
 
-      if(name.indexOf('\\') >= 0)
-        name = ASCIIDocument.simpleConvert(name);
+        String name = ((Text)person.get(0)).get();
 
-      if(inPrefix == null || inPrefix.isEmpty()
-         || name.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
-        ioNames.add(name);
+        if(name.isEmpty())
+          continue;
+
+        if(inJob == null
+           || listName.equalsIgnoreCase(inJob)
+           || (person.get(1).isDefined()
+               && ((Name)person.get(1)).get().equalsIgnoreCase(inJob)))
+        {
+          if(name.indexOf('\\') >= 0)
+            name = ASCIIDocument.simpleConvert(name);
+
+          if(inPrefix == null || inPrefix.isEmpty()
+             || name.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
+            ioNames.add(name);
+        }
+      }
     }
 
     return ioNames;
@@ -1744,77 +1778,74 @@ public class BaseProduct extends BaseEntry
   //----------------------------- collectJobs ------------------------------
 
   /**
-   * Collect all available jobs from this product and add them to the given set.
+   * Collect all available jobs from this product and add them to the given
+   * set.
    *
    * @param    ioJobs      the set to add to
-   * @param    inCategory  the category to add to (e.g. "author")
    * @param    inName      the name of the person for which to search jobs (or
    *                       null for all)
-   * @param    inPrefix    the prefix for the jobs to collect (or null for none)
+   * @param    inPrefix    the prefix for the jobs to collect (or null for
+   *                       none)
    *
    * @return   the set of jobs given
    *
    */
   public @Nonnull Set<String> collectJobs(@Nonnull Set<String> ioJobs,
-                                          @Nonnull String inCategory,
                                           @Nullable String inName,
                                           @Nullable String inPrefix)
   {
-    ValueList<Multiple> list = categoryList(inCategory);
-    if(list == null)
-      return ioJobs;
-
-    for(Multiple person : list)
+    for(Map.Entry<String, ValueList<Multiple>> list
+          : categoryLists().entrySet())
     {
-      if(!person.get(1).isDefined())
-        continue;
+      String listName = list.getKey();
+      for(Multiple person : list.getValue())
+        {
+          if(inName != null
+             && !inName.equalsIgnoreCase(((Text)person.get(0)).get()))
+            continue;
 
-      if(inName != null
-         && !inName.equalsIgnoreCase(((Text)person.get(0)).get()))
-        continue;
+          if(inPrefix == null || inPrefix.isEmpty()
+             || listName.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
+            ioJobs.add(listName);
 
-      String job = ((Name)person.get(1)).get();
+          if(!person.get(1).isDefined())
+            continue;
 
-      if(job.indexOf('\\') >= 0)
-        job = ASCIIDocument.simpleConvert(job);
+          String job = ((Name)person.get(1)).get();
 
-      if(inPrefix == null || inPrefix.isEmpty()
-         || job.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
-        ioJobs.add(job);
+          if(job.indexOf('\\') >= 0)
+            job = ASCIIDocument.simpleConvert(job);
+
+          if(inPrefix == null || inPrefix.isEmpty()
+             || job.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
+            ioJobs.add(job);
+        }
     }
 
     return ioJobs;
   }
 
   //........................................................................
-  //----------------------------- categoryList -----------------------------
+  //----------------------------- categoryLists ----------------------------
 
   /**
-   * Get a list of name values for the given category.
-   *
-   * @param     inCategory the category to get names for
+   * Get the lists of name values for the given job.
+   * TODO: move all persons/jobs into a single value.
    *
    * @return    the names of the requested category or null if not found
    *
    */
-  private @Nullable ValueList<Multiple> categoryList(@Nonnull String inCategory)
+  private @Nullable Map<String, ValueList<Multiple>> categoryLists()
   {
-    if("author".equalsIgnoreCase(inCategory))
-      return m_authors;
-    else if("editor".equalsIgnoreCase(inCategory))
-      return m_editors;
-    else if("cover".equalsIgnoreCase(inCategory))
-      return m_cover;
-    else if("cartographer".equalsIgnoreCase(inCategory))
-      return m_cartographers;
-    else if("illustrator".equalsIgnoreCase(inCategory))
-      return m_illustrators;
-    else if("typographer".equalsIgnoreCase(inCategory))
-      return m_typographers;
-    else if("management".equalsIgnoreCase(inCategory))
-      return m_managers;
-
-    return null;
+    return new ImmutableMap.Builder<String, ValueList<Multiple>>()
+      .put("author", m_authors)
+      .put("editor", m_editors)
+      .put("cover", m_cover)
+      .put("cartographer", m_cartographers)
+      .put("illustrator", m_illustrators)
+      .put("typographer", m_typographers)
+      .put("management", m_managers)
+      .build();
   }
 
   //........................................................................
@@ -2925,12 +2956,39 @@ public class BaseProduct extends BaseEntry
         BaseProduct.read(reader, new DMAData("path"));
 
       Set<String> persons = new java.util.TreeSet<String>();
-      entry.collectPersons(persons, "author", null);
-      assertContent("persons", persons, "Ed Greenwood", "Jason Carl",
-                    "Richard Baker");
+      entry.collectPersons(persons, null, null);
+      assertContent("persons", persons,
+                    "Adam Rex",
+                    "Anthony Valterra",
+                    "Arnie Swekel",
+                    "Bill Slavicsek",
+                    "Chas DeLong",
+                    "Christopher Moeller",
+                    "Cynthia Fliege",
+                    "Dee & Barnett",
+                    "Dennis Kauth",
+                    "Ed Greenwood",
+                    "Jason Carl",
+                    "Jeff Easley",
+                    "Kim Mohan",
+                    "Martin Durham",
+                    "Mary Kirchoff",
+                    "Matt Cavotta",
+                    "Matt Mitchel",
+                    "Michael Dubisch",
+                    "Puddnhead",
+                    "Raven Mimura",
+                    "Richard Baker",
+                    "Richard Sardinha",
+                    "Rob Lazzaretti",
+                    "Robert Campbell",
+                    "Robert Raper",
+                    "Sonya Percival",
+                    "Vance Kovacs",
+                    "Wayne England");
 
       persons.clear();
-      entry.collectPersons(persons, "author", "Ja");
+      entry.collectPersons(persons, null, "Ja");
       assertContent("persons", persons, "Jason Carl");
     }
 
@@ -2947,31 +3005,39 @@ public class BaseProduct extends BaseEntry
         BaseProduct.read(reader, new DMAData("path"));
 
       Set<String> jobs = new java.util.TreeSet<String>();
-      entry.collectJobs(jobs, "management", null, null);
+      entry.collectJobs(jobs, null, null);
       assertContent("jobs", jobs,
                     "art direction",
+                    "author",
                     "business management",
+                    "cartographer",
+                    "cover",
                     "creative direction",
+                    "developer",
+                    "editor",
                     "graphic design",
+                    "illustrator",
+                    "management",
                     "production management",
                     "project management",
+                    "typographer",
                     "vice-president RPG R&D",
                     "vice-president publishing");
 
       jobs.clear();
-      entry.collectJobs(jobs, "management", null, "cr");
+      entry.collectJobs(jobs, null, "cr");
       assertContent("jobs", jobs, "creative direction");
 
       jobs.clear();
-      entry.collectJobs(jobs, "management", "Robert Raper", null);
+      entry.collectJobs(jobs, "Robert Raper", null);
+      assertContent("jobs", jobs, "art direction", "management");
+
+      jobs.clear();
+      entry.collectJobs(jobs, "Robert Raper", "a");
       assertContent("jobs", jobs, "art direction");
 
       jobs.clear();
-      entry.collectJobs(jobs, "management", "Robert Raper", "a");
-      assertContent("jobs", jobs, "art direction");
-
-      jobs.clear();
-      entry.collectJobs(jobs, "management", "Robert Raper", "arti");
+      entry.collectJobs(jobs, "Robert Raper", "arti");
       assertContent("jobs", jobs);
     }
 

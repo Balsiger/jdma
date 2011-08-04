@@ -23,44 +23,16 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-//import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.ValueGroup;
-//import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.html.HTMLDocument;
-//import net.ixitxachitls.dma.server.servlets.DMARequest;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Editable;
-import net.ixitxachitls.output.commands.Icon;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.output.commands.Par;
-//import net.ixitxachitls.output.commands.Script;
-import net.ixitxachitls.output.commands.Table;
-import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.html.HTMLWriter;
-//import net.ixitxachitls.util.Files;
-//import net.ixitxachitls.util.Filter;
-//import net.ixitxachitls.util.FilteredIterator;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
-//import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -145,9 +117,10 @@ public class IndexServlet extends PageServlet
 
     String []match =
       Strings.getPatterns(inPath,
-                          "^/index/([^/]+)/([^/]+)(?:/(?:$|([^/]+$)))?");
+                          "^/index/([^/]+)/([^/]+)(?:/(.*$))?");
     String name = match[1];
     String group = match[2];
+
 
     if(name == null || name.isEmpty())
     {
@@ -171,164 +144,9 @@ public class IndexServlet extends PageServlet
       return;
     }
 
-    inWriter.title(index.getTitle());
-
-    if(group == null || group.length() == 0)
-    {
-      inWriter.add(handleOverview(inRequest, name, index).toString());
-      addNavigation(inWriter, index.getType().getMultipleLink(),
-                    "/" + index.getType().getMultipleLink(),
-                    name, "/" + index.getType().getMultipleLink() + "/" + name);
-    }
-    else
-    {
-      inWriter.add(handleDetailed(inRequest, name, group, index).toString());
-      addNavigation(inWriter, index.getType().getMultipleLink(),
-                    "/" + index.getType().getMultipleLink(),
-                    name, "/" + index.getType().getMultipleLink() + "/" + name,
-                    group,
-                    "/" + index.getType().getMultipleLink() + "/" + name + "/"
-                    + group);
-    }
-  }
-
-  //........................................................................
-
-  //---------------------------- handleOverview ----------------------------
-
-  /**
-   * Handle an overview index.
-   *
-   * @param       inRequest the request for the page
-   * @param       inPath    the path to the index pages
-   * @param       inIndex   the index to write
-   *
-   * @return      the html document with all the contents added
-   *
-   */
-  protected HTMLDocument handleOverview(@Nonnull DMARequest inRequest,
-                                        @Nonnull String inPath,
-                                        @Nonnull Index inIndex)
-  {
-    // the general index
-    Log.info("serving dynamic " + inIndex.getTitle() + " index");
-
-    // compute all the different category names
-    SortedSet<String> names =
-      new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-    inIndex.names(names, m_data);
-
-    HTMLDocument document = new HTMLDocument(inIndex.getTitle());
-
-    if(inIndex.hasImages())
-      document.add(new Title(new Icon(inIndex.getType().getLink()
-                                      + "/index.png",
-                                      inIndex.getTitle(), "", true)));
-    else
-      document.add(new Title(inIndex.getTitle()));
-
-    document.add(new Par());
-
-    List<Command> commands = new ArrayList<Command>();
-
-    for(String name : names)
-      if(inIndex.hasImages())
-        commands.add(new Icon(inIndex.getType().getLink() + "/"
-                              + name.toLowerCase(Locale.US)
-                              + ".png", inPath + "/" + name, true));
-      else
-        commands.add(new Link(new Divider("index-overview", name),
-                              inPath + "/" + name, "index-link"));
-
-    commands.add(new Divider("clear", ""));
-
-    document.add(new Command(commands.toArray()));
-
-    return document;
-  }
-
-  //........................................................................
-  //---------------------------- handleDetailed ----------------------------
-
-  /**
-   * Handle a detailed index.
-   *
-   * @param       inRequest the request for the page
-   * @param       inPath    the path to the page
-   * @param       inGroup   the group for the page
-   * @param       inIndex   the index to write
-   *
-   * @return      the html document with all the contents added
-   *
-   */
-  protected HTMLDocument handleDetailed(@Nonnull DMARequest inRequest,
-                                        @Nonnull String inPath,
-                                        @Nonnull String inGroup,
-                                        @Nonnull Index inIndex)
-  {
-    // determine start and end of index to show
-    Pair<Integer, Integer> pagination = inRequest.getPagination();
-    int start = pagination.first();
-    int end   = pagination.second();
-
-    if(end <= 0)
-      end = start + inRequest.getPageSize();
-
-    Log.info("serving dynamic " + inIndex.getTitle() + " index '" + inGroup
-             + "'");
-
-    // create a detailed index file
-    HTMLDocument document =
-      new HTMLDocument(inIndex.getTitle() + ": " + inGroup);
-
-    if(inIndex.hasImages())
-      document.add(new Title(new Editable
-                             ("", inIndex.getType(), inGroup,
-                              "person",
-                              new Icon(inPath + "/"
-                                       + inGroup.toLowerCase(Locale.US)
-                                       + ".png", inPath, inPath, true),
-                              "string")));
-     else
-       document.add(new Title(new Editable
-                              ("", inIndex.getType(), inGroup, "person",
-                               inGroup, "string")));
-
-    List<String> navigation = new ArrayList<String>();
-    if(inIndex.isPaginated())
-      if(start > 0)
-        if(start - inRequest.getPageSize() > 0)
-          navigation.add("<a href=\"?start="
-                         + (start - inRequest.getPageSize())
-                         + "\"  onclick=\"return util.link(event, '?start="
-                         + (start - inRequest.getPageSize()) + "&end=" + end
-                         + "');\" "
-                         + "class=\"paginate-previous\">"
-                         + "&laquo; previous</a>");
-        else
-          navigation.add("<a href=\"?\" "
-                         + "onclick=\"return util.link(event, '?');\" "
-                         + "class=\"paginate-previous\">"
-                         + "&laquo; previous</a>");
-
-    document.add(navigation);
-
-    // TODO: extract this from the request
-    boolean dm = true;
-
-    List<? extends AbstractEntry> entries =
-      m_data.getEntriesList(inIndex.getType());
-    List<Object> cells = new ArrayList<Object>();
-    for(AbstractEntry entry : entries)
-      if(inIndex.matches(inGroup, entry))
-        cells.addAll(entry.printList(entry.getName(), dm));
-
-    document.add(new Table("entrylist", entries.get(0).getListFormat(),
-                           new Command(cells)));
-
-    document.add(navigation);
-
-    return document;
+    index.write(inWriter, m_data, inRequest.getOriginalPath(), group,
+                inRequest.getPageSize(), inRequest.getPagination());
+    addNavigation(inWriter, index.getNavigation(name, group));
   }
 
   //........................................................................

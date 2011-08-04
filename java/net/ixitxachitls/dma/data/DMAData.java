@@ -37,6 +37,7 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
@@ -222,6 +223,24 @@ public class DMAData implements Serializable
   };
 
   //........................................................................
+  //------------------------------ isChanged -------------------------------
+
+  /**
+   * Check if any of the data has been changed and needs saving.
+   *
+   * @return      true if data is changed from store, false if not
+   *
+   */
+  public boolean isChanged()
+  {
+    for(DMAFile file : m_files)
+      if(file.isChanged())
+        return true;
+
+    return false;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -315,7 +334,21 @@ public class DMAData implements Serializable
       m_entries.put(inEntry.getType(), entries);
     }
 
-    entries.put(inEntry.getID(), inEntry);
+    if(inEntry instanceof Entry)
+    {
+      Entry entry = (Entry)inEntry;
+      String id = entry.getID();
+      while(entries.containsKey(id))
+      {
+        entry.randomID();
+        String oldID = id;
+        id = entry.getID();
+        Log.warning("duplicate id detected for '" + oldID
+                    + "', setting new id to '" + id + "'");
+      }
+    }
+    else
+      entries.put(inEntry.getID(), inEntry);
   }
 
   //........................................................................

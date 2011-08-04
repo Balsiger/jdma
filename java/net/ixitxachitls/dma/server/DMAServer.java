@@ -40,6 +40,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseProduct;
+import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.server.filters.DMAFilter;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.server.servlets.EntryListServlet;
@@ -310,12 +311,15 @@ public class DMAServer extends WebServer
     addRewrite(handler, "^(.*)\\.pdf", "/pdf$1");
     for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
     {
-      addRewrite(handler, "^(.*)/" + type.getLink() + "/(.*)",
-                 "$1/entry/" + type.getName() + "/$2");
-      addRewrite(handler, "^(.*)/" + type.getMultipleLink(),
-                 "$1/entries/" + type.getName());
-      addRewrite(handler, "^(.*)/" + type.getMultipleLink() + "/(.*)",
-                 "$1/index/" + type.getName() + "/$2");
+      if(type instanceof BaseType)
+      {
+        addRewrite(handler, "^(.*)/" + type.getLink() + "/(.*)",
+                   "$1/entry/" + type.getName() + "/$2");
+        addRewrite(handler, "^(.*)/" + type.getMultipleLink() + "/?",
+                   "$1/entries/" + type.getName());
+        addRewrite(handler, "^(.*)/" + type.getMultipleLink() + "/(.*)",
+                   "$1/index/" + type.getName() + "/$2");
+      }
     }
 
     // TODO: this is temporary, remove once the main page filter is in
@@ -811,6 +815,7 @@ public class DMAServer extends WebServer
                          @Nonnull String inPattern,
                          @Nonnull String inReplacement)
   {
+    Log.debug("Adding rewrite rule " + inPattern + " -> " + inReplacement);
     RewriteRegexRule rewrite = new RewriteRegexRule();
     rewrite.setRegex(inPattern);
     rewrite.setReplacement(inReplacement);

@@ -40,6 +40,8 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Text;
 //import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.TypeIterator;
 import net.ixitxachitls.util.logging.Log;
@@ -162,6 +164,8 @@ public class BaseCharacter extends BaseEntry
   public BaseCharacter(@Nonnull String inName, @Nonnull DMAData inData)
   {
     super(inName, TYPE, inData);
+
+    addProductFile(getName());
   }
 
   //........................................................................
@@ -224,7 +228,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("real name")
   @DM
-  protected Text m_realName = new Text();
+  protected @Nonnull Text m_realName = new Text();
 
   //........................................................................
   //----- email ------------------------------------------------------------
@@ -232,7 +236,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("email")
   @DM
-  protected Text m_email = new Text();
+  protected @Nonnull Text m_email = new Text();
 
   //........................................................................
   //----- password ---------------------------------------------------------
@@ -240,7 +244,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("password")
   @DM
-  protected Text m_password = new Text();
+  protected @Nonnull Text m_password = new Text();
 
   //........................................................................
   //----- products ---------------------------------------------------------
@@ -248,11 +252,11 @@ public class BaseCharacter extends BaseEntry
   /** The files with the products. */
   @Key("products")
   @NoEdit
-  protected Text m_products = new Text();
+  protected @Nonnull Text m_products = new Text();
 
   /** All the products for this user. */
-  // protected DMAData m_productData = new DMAData
-  //   (Files.concatenate(m_data.getPath(), Product.TYPE.getMultipleDir()));
+  protected @Nonnull DMAData m_productData = new DMAData
+    (Files.concatenate(m_data.getPath(), Product.TYPE.getMultipleDir()));
 
   //........................................................................
   //----- last login -------------------------------------------------------
@@ -260,7 +264,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("last login")
   @NoEdit
-  protected Text m_lastLogin = new Text();
+  protected @Nonnull Text m_lastLogin = new Text();
 
   //........................................................................
   //----- last action ------------------------------------------------------
@@ -268,7 +272,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("last action")
   @NoEdit
-  protected Text m_lastAction = new Text();
+  protected @Nonnull Text m_lastAction = new Text();
 
   //........................................................................
   //----- token ------------------------------------------------------------
@@ -276,14 +280,14 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("token")
   @DM
-  protected Text m_token = new Text();
+  protected @Nonnull Text m_token = new Text();
 
   //........................................................................
   //----- group ------------------------------------------------------------
 
-  /** The files in the base campaign. */
+  /** The access group of the user. */
   @Key("group")
-  protected EnumSelection<Group> m_group =
+  protected @Nonnull EnumSelection<Group> m_group =
     new EnumSelection<Group>(Group.class);
 
   //........................................................................
@@ -326,66 +330,6 @@ public class BaseCharacter extends BaseEntry
 
   //........................................................................
 
-  //------------------------------ printCommand ----------------------------
-
-  /**
-    * Print the item to the document, in the general section.
-    *
-    * @param       inDM   true if set for DM, false for player
-    * @param       inEditable true if values are editable, false if not
-    *
-    * @return      the command representing this item in a list
-    *
-    */
-//   public PrintCommand printCommand(boolean inDM, boolean inEditable)
-//   {
-//     PrintCommand commands = super.printCommand(inDM, inEditable);
-
-//     commands.type = "character";
-
-//     commands.addValue(m_realName, "real name", inEditable);
-//     commands.addValue(m_email, "email", inEditable);
-//     commands.addValue(m_group, "group", inEditable);
-//     commands.addValue(m_products, "products", inEditable);
-//     commands.addValue(m_lastLogin, "last login", false);
-//     commands.addValue(m_lastAction, "last action", false);
-
-//     return commands;
-
-
-// //     // real name
-// //     values.add(new Window(new Bold("Real Name:"),
-// //                           Config.get("resource:help/label.real.name",
-// //                                      "The real name of the user.")));
-// //     values.add(m_realName.format(true));
-
-// //     // email
-// //     values.add(new Window(new Bold("EMail:"),
-// //                           Config.get("resource:help/label.email",
-// //                                      "The email address of the user.")));
-// //     values.add(m_email.format(true));
-
-// //     // group
-// //     values.add(new Window(new Bold("Group:"),
-// //                           Config.get("resource:help/label.group",
-// //                                      "The access group of the user.")));
-// //     values.add(m_group.format(true));
-
-// //     // products
-// //     values.add(new Window(new Bold("Products:"),
-// //                           Config.get("resource:help/label.products",
-// //                                      "The products of the user.")));
-// //     values.add(m_products.format(true));
-
-// //     // last login
-// //     values.add(new Window(new Bold("Last Login:"),
-// //                           Config.get("resource:help/label.last.login",
-// //                                      "The data and time this user last "
-// //                                      + "logged in.")));
-// //     values.add(m_lastLogin.format(true));
-//   }
-
-  //........................................................................
   //------------------------------ checkToken ------------------------------
 
   /**
@@ -657,12 +601,54 @@ public class BaseCharacter extends BaseEntry
    *
    */
   @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+                                            boolean inDM)
   {
     return super.computeValue(inKey, inDM);
   }
 
   //........................................................................
+  //------------------------------ readEntry -------------------------------
+
+  /**
+   * Read an entry, and only the entry without type and comments, from the
+   * reader.
+   *
+   * @param       inReader the reader to read from
+   *
+   * @return      true if read successfully, false else
+   *
+   */
+  protected boolean readEntry(@Nonnull ParseReader inReader)
+  {
+    if(super.readEntry(inReader))
+    {
+      addProductFile(getName());
+      return true;
+    }
+    else
+      return false;
+  }
+
+  //........................................................................
+  //---------------------------- addProductFile ----------------------------
+
+  /**
+   * Add the file to products to this base character.
+   *
+   * @param     inName the name of the file to add (without extension)
+   *
+   */
+  private void addProductFile(@Nonnull String inName)
+  {
+    m_productData.addFile(inName + ".dma");
+    m_productData.read();
+    if(m_productData.isChanged())
+      m_productData.save();
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
@@ -714,6 +700,8 @@ public class BaseCharacter extends BaseEntry
       assertFalse("last action", character.m_lastAction.isDefined());
       assertFalse("token", character.m_token.isDefined());
       assertFalse("group", character.m_group.isDefined());
+
+      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
     }
 
     //......................................................................
@@ -738,6 +726,8 @@ public class BaseCharacter extends BaseEntry
       character.clearToken();
       assertFalse("check", character.checkToken(token));
       assertFalse("check", character.checkToken(token2));
+
+      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
     }
 
     //......................................................................
@@ -768,6 +758,7 @@ public class BaseCharacter extends BaseEntry
       assertTrue("last action", character.m_lastAction.isDefined());
       assertTrue("token", character.m_token.isDefined());
 
+      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
       m_logger.addExpected("WARNING: login with unknown user 'name'");
       m_logger.addExpected("WARNING: login for 'user' with wrong password");
     }
@@ -817,6 +808,8 @@ public class BaseCharacter extends BaseEntry
                    + "\n"
                    + "#.....\n",
                    character.toString());
+
+      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
     }
 
     //......................................................................
@@ -849,6 +842,8 @@ public class BaseCharacter extends BaseEntry
       assertTrue("player", character.hasAccess(Group.PLAYER));
       assertTrue("dm", character.hasAccess(Group.DM));
       assertTrue("admin", character.hasAccess(Group.ADMIN));
+
+      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
     }
 
     //......................................................................
