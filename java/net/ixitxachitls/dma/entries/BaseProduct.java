@@ -55,6 +55,7 @@ import net.ixitxachitls.dma.values.Price;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
@@ -964,68 +965,6 @@ public class BaseProduct extends BaseEntry
                     }
                   });
 
-//                    new CommandIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(!(inEntry instanceof BaseProduct))
-//                          return null;
-
-//                        return ((BaseProduct)inEntry).getJobs();
-//                      }
-//                    },
-//                    new CommandIndex.CommandExtractor()
-//                    {
-//                      public Collection<Object> get
-//                        (String inID, View inView)
-//                      {
-//                        TreeMap<String, ArrayList<BaseProduct>> persons =
-//                          new TreeMap<String, ArrayList<BaseProduct>>();
-
-//                        for(Object i : inView)
-//                        {
-//                          BaseProduct entry = (BaseProduct)i;
-
-//                          for(String person : entry.getPersonsForJob(inID))
-//                          {
-//                            if(!persons.containsKey(person))
-//                              persons.put(person,
-//                                          new ArrayList<BaseProduct>());
-
-//                            persons.get(person).add(entry);
-//                          }
-//                        }
-
-//                        ArrayList<Object> commands = new ArrayList<Object>();
-
-//                        for(String person : persons.keySet())
-//                        {
-//                          commands.add(new Label("Person"));
-//                          commands.add(new Link(person,
-//                                                "/index/persons/" + person));
-
-//                          ArrayList<Object> references =
-//                            new ArrayList<Object>();
-
-//                          for(Iterator<BaseProduct> i =
-//                                persons.get(person).iterator(); i.hasNext(); )
-//                          {
-//                            BaseProduct product = i.next();
-
-//                            references.add(new Link(product.getFullTitle(),
-//                                                    "/entry/baseproduct/"
-//                                                    + product.getID()));
-//                            if(i.hasNext())
-//                              references.add(", ");
-//                          }
-
-//                          commands.add(new Command(references.toArray()));
-//                        }
-
-//                        return commands;
-//                      }
-//                    }, false, "1:L(icon);20:L(person)[Person];"
-//                    + "20:L(references)[References]", false));
   }
 
   //........................................................................
@@ -1152,9 +1091,51 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Date", "dates", "date",
-//                                          false, FORMATTER, FORMAT, false,
-//                                          null));
+    s_indexes.put("dates", new GroupedIndex("Dates", TYPE, 2)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          if(inGroups.length == 0)
+            for(BaseProduct product : inData.getEntriesList(TYPE))
+              if(product.m_date.isDefined())
+                ioCollected.add("" + product.m_date.getYear());
+              else
+                ioCollected.add(Value.UNDEFINED);
+          else
+            if(inGroups[0].equals(Value.UNDEFINED))
+              ioCollected.add(Value.UNDEFINED);
+            else
+              for(BaseProduct product : inData.getEntriesList(TYPE))
+                if(inGroups[0].equals("" + product.m_date.getYear())
+                   && product.m_date.getMonth() >= 0)
+                  ioCollected.add(product.m_date.getMonthAsString());
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+
+          String year = inGroups[0];
+          String month = inGroups[1];
+
+          if(year.equals("" + product.m_date.getYear())
+             || (Value.UNDEFINED.equals(year) && !product.m_date.isDefined()))
+            return product.m_date.getMonth() <= 0
+              || month.equals(product.m_date.getMonthAsString());
+
+          return false;
+        }
+      });
   }
 
   //........................................................................

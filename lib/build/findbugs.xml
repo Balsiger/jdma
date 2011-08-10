@@ -77,6 +77,11 @@
     <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
   </Match>
 
+  <!-- ignore errors in jetty -->
+  <Match>
+    <Class name="~org\.eclipse\.jetty\..*" />
+  </Match>
+
 
 </FindBugsFilter>
 

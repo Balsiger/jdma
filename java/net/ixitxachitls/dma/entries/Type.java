@@ -122,7 +122,7 @@ public class Type<T extends Entry> extends AbstractType<T>
    * @return      < 0 if this is lower, > if this is bigger, 0 if equal
    *
    */
-  public int compareTo(@Nullable AbstractType inOther)
+  public int compareTo(@Nullable AbstractType<? extends AbstractEntry> inOther)
   {
     if(inOther == null)
       return -1;
