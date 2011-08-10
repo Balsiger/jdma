@@ -58,7 +58,7 @@ import net.ixitxachitls.util.Pair;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class Index implements Serializable
+public abstract class Index implements Serializable, Comparable<Index>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -318,20 +318,6 @@ public abstract class Index implements Serializable
   }
 
   //........................................................................
-  //------------------------------ hasImages -------------------------------
-
-  /**
-   * Check if the index shows images or not.
-   *
-   * @return      true if images are used, false not
-   *
-   */
-  public boolean hasImages()
-  {
-    return m_images;
-  }
-
-  //........................................................................
   //--------------------------- getIdentificator ---------------------------
 
   /**
@@ -407,18 +393,34 @@ public abstract class Index implements Serializable
 //   }
 
   //........................................................................
-  //------------------------------- getType --------------------------------
+  //---------------------------- getNavigation -----------------------------
 
   /**
-   * Get the type of entries in this index.
+   * Get the navigation information for the current index.
    *
-   * @return      the type for the entries
+   * @param       inName the index name
+   * @param       inPath the path to the index to print
+   *
+   * @return      an array if text/url pairs for the navigation
    *
    */
-//   public AbstractEntry.Type<? extends AbstractEntry> getType()
-//   {
-//     return m_type;
-//   }
+  public abstract @Nonnull String [] getNavigation(@Nonnull String inName,
+                                                   @Nonnull String inPath);
+
+  //........................................................................
+
+  //------------------------------ hasImages -------------------------------
+
+  /**
+   * Check if the index shows images or not.
+   *
+   * @return      true if images are used, false not
+   *
+   */
+  public boolean hasImages()
+  {
+    return m_images;
+  }
 
   //........................................................................
   //----------------------------- isPaginated ------------------------------
@@ -436,20 +438,59 @@ public abstract class Index implements Serializable
   }
 
   //......................................................................
-
-  //---------------------------- getNavigation -----------------------------
+  //------------------------------ compareTo -------------------------------
 
   /**
-   * Get the navigation information for the current index.
+   * Compare this index to another one for sorting.
    *
-   * @param       inName the index name
-   * @param       inPath the path to the index to print
+   * @param       inOther the other type to compare to
    *
-   * @return      an array if text/url pairs for the navigation
+   * @return      < 0 if this is lower, > if this is bigger, 0 if equal
    *
    */
-  public abstract @Nonnull String [] getNavigation(@Nonnull String inName,
-                                                   @Nonnull String inPath);
+  public int compareTo(@Nullable Index inOther)
+  {
+    if(inOther == null)
+      return -1;
+
+    return m_title.compareTo(inOther.m_title);
+  }
+
+  //........................................................................
+  //-------------------------------- equals --------------------------------
+
+  /**
+   * Check for equality of the given index.
+   *
+   * @param       inOther the object to compare to
+   *
+   * @return      true if equal, false else
+   *
+   */
+  public boolean equals(Object inOther)
+  {
+    if(inOther == null)
+      return false;
+
+    if(inOther instanceof Index)
+      return m_title.equals(((Index)inOther).m_title);
+    else
+      return false;
+  }
+
+  //........................................................................
+  //------------------------------- hashCode -------------------------------
+
+  /**
+   * Compute the hash code for this class.
+   *
+   * @return      the hash code
+   *
+   */
+  public int hashCode()
+  {
+    return m_title.hashCode();
+  }
 
   //........................................................................
 

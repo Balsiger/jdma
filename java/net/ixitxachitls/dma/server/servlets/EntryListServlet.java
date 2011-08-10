@@ -160,6 +160,8 @@ public class EntryListServlet extends PageServlet
     List<AbstractEntry> entries = getEntries(typeName);
 
     inWriter.title(title);
+    inWriter.begin("h1").add(title).end("h1");
+
     HTMLDocument document = new HTMLDocument(title);
 
     List<String> navigation = new ArrayList<String>();
@@ -366,6 +368,9 @@ public class EntryListServlet extends PageServlet
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'Entrys';\n"
                    + "    </SCRIPT>\n"
+                   + "    <H1>\n"
+                   + "      Entrys\n"
+                   + "    </H1>\n"
                    + "    \n"
                    + "<table class=\"entrylist\">"
                    + "<tr class=\"title\">"

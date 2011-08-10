@@ -227,7 +227,8 @@ public class PageServlet extends DMAServlet
     }
 
     inWriter
-      .begin("a").classes("icon", "library").tooltip("Library").end("a")
+      .begin("a").classes("icon", "library").tooltip("Library").href("/library")
+      .onClick("util.link(event, '/library');").end("a")
       .begin("a").classes("icon", "about").tooltip("About").href("/about.html")
       .onClick("util.link(event, '/about.html')").end("a")
       .begin("div").onMouseOver("$('#search :input').show()")
@@ -464,7 +465,9 @@ public class PageServlet extends DMAServlet
                    + "        <A id=\"login-icon\" class=\"icon\" "
                    + "title=\"Login\" onclick=\"login()\">\n"
                    + "        </A>\n"
-                   + "        <A class=\"icon library\" title=\"Library\">\n"
+                   + "        <A class=\"icon library\" title=\"Library\" "
+                   + "href=\"/library\" "
+                   + "onclick=\"util.link(event, '/library');\">\n"
                    + "        </A>\n"
                    + "        <A class=\"icon about\" title=\"About\" "
                    + "href=\"/about.html\" "

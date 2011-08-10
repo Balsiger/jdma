@@ -213,6 +213,40 @@ gui.stop = function(inReference)
 }
 
 //..........................................................................
+//----------------------------- setupHighlight -----------------------------
+
+/**
+ * Setup highlight for all images with highlight.
+ *
+ */
+gui.setupHighlight = function()
+{
+  $('img.highlight').mouseover(gui.toggleHighlight);
+  $('img.highlight').mouseout(gui.toggleHighlight);
+}
+
+//..........................................................................
+//---------------------------- toggleHighlight -----------------------------
+
+/**
+ *
+ *
+ * @param
+ *
+ * @return
+ *
+ */
+gui.toggleHighlight = function()
+{
+  var src = $(this).attr('src').match(/(.*?)(-highlight)?(\.png)/)
+
+  if(src[2])
+    $(this).attr('src', src[1] + src[3]);
+  else
+    $(this).attr('src', src[1] + '-highlight' + src[3]);
+}
+
+//..........................................................................
 
 //----- Busy ---------------------------------------------------------------
 
@@ -269,3 +303,8 @@ gui.Busy.prototype._update = function()
 };
 
 //..........................................................................
+
+// setup highlighting for images
+$(document).ready(function () {
+    gui.setupHighlight();
+});

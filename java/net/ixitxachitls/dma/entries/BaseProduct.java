@@ -23,7 +23,9 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -1891,6 +1893,44 @@ public class BaseProduct extends BaseEntry
   }
 
   //........................................................................
+  //------------------------------- matches --------------------------------
+
+  /**
+   * Check whether the entry matches the given key and value.
+   *
+   * @param       inKey   the key of the value to match
+   * @param       inValue the value to match with
+   *
+   * @return      true if it matches, false if not
+   *
+   */
+  public boolean matches(@Nonnull String inKey, @Nonnull String inValue)
+  {
+    if("jobs".equalsIgnoreCase(inKey))
+    {
+      Set<String> jobs = new HashSet<String>();
+      collectJobs(jobs, null, null);
+      for(String job : jobs)
+        if(inValue.equalsIgnoreCase(job))
+          return true;
+
+      return false;
+    }
+    else if ("persons".equalsIgnoreCase(inKey))
+    {
+      Set<String> persons = new HashSet<String>();
+      collectPersons(persons, null, null);
+      for(String person : persons)
+        if(inValue.equalsIgnoreCase(person))
+          return true;
+
+      return false;
+    }
+    else
+      return super.matches(inKey, inValue);
+  }
+
+  //........................................................................
 
   //----------------------------- computeValue -----------------------------
 
@@ -1997,6 +2037,146 @@ public class BaseProduct extends BaseEntry
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //--------------------------------- set ----------------------------------
+
+  /**
+   * Set the value for the given key.
+   *
+   * @param       inKey  the name of the key to set the value for
+   * @param       inText the text to set the value to
+   *
+   * @return      the part of the string that could not be parsed
+   *
+   */
+  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  {
+    String []parts = Strings.getPatterns(inKey, "(.*?)/(.*)");
+
+    if(parts.length == 2)
+      if("jobs".equalsIgnoreCase(parts[0]))
+      {
+        renameJob(parts[1], inText);
+        return null;
+      }
+      else if("persons".equalsIgnoreCase(parts[0]))
+      {
+        renamePerson(parts[1], inText);
+        return null;
+      }
+
+    return super.set(inKey, inText);
+  }
+
+  //........................................................................
+  //------------------------------ renameJob -------------------------------
+
+  /**
+   * Change all occurrences of the given old job name to a new job name.
+   *
+   * @param       inOld  the old name of the job
+   * @param       inNew  the new name of the job
+   *
+   */
+  public void renameJob(@Nonnull String inOld, @Nonnull String inNew)
+  {
+    m_authors = renameJob(m_authors, inOld, inNew);
+    m_editors = renameJob(m_editors, inOld, inNew);
+    m_cover = renameJob(m_cover, inOld, inNew);
+    m_cartographers = renameJob(m_cartographers, inOld, inNew);
+    m_illustrators = renameJob(m_illustrators, inOld, inNew);
+    m_typographers = renameJob(m_typographers, inOld, inNew);
+    m_managers = renameJob(m_managers, inOld, inNew);
+  }
+
+  //........................................................................
+  //------------------------------ renameJob -------------------------------
+
+  /**
+   * Rename the job in the given list.
+   *
+   * @param       inList the list of person to adjust
+   * @param       inOld  the old name of the job
+   * @param       inNew  the new name of the job
+   *
+   * @return      the changed list
+   *
+   */
+  private @Nonnull ValueList<Multiple>
+    renameJob(@Nonnull ValueList<Multiple> inList, @Nonnull String inOld,
+              @Nonnull String inNew)
+  {
+    List<Multiple> list = new ArrayList<Multiple>();
+    for(Multiple person : inList)
+    {
+      if(person.isDefined() && person.get(1).isDefined()
+         && ((Name)person.get(1)).get().equalsIgnoreCase(inOld))
+      {
+        list.add(person.as(person.get(0), ((Name)person.get(1)).as(inNew)));
+        changed();
+      }
+      else
+        list.add(person);
+      }
+
+    return inList.as(list);
+  }
+
+  //........................................................................
+  //---------------------------- renamePerson ------------------------------
+
+  /**
+   * Change all occurrences of the given old person name to a new job name.
+   *
+   * @param       inOld  the old name of the person
+   * @param       inNew  the new name of the person
+   *
+   */
+  public void renamePerson(@Nonnull String inOld, @Nonnull String inNew)
+  {
+    m_authors = renamePerson(m_authors, inOld, inNew);
+    m_editors = renamePerson(m_editors, inOld, inNew);
+    m_cover = renamePerson(m_cover, inOld, inNew);
+    m_cartographers = renamePerson(m_cartographers, inOld, inNew);
+    m_illustrators = renamePerson(m_illustrators, inOld, inNew);
+    m_typographers = renamePerson(m_typographers, inOld, inNew);
+    m_managers = renamePerson(m_managers, inOld, inNew);
+  }
+
+  //........................................................................
+  //---------------------------- renamePerson ------------------------------
+
+  /**
+   * Rename the person in the given list.
+   *
+   * @param       inList the list of person to adjust
+   * @param       inOld  the old name of the person
+   * @param       inNew  the new name of the person
+   *
+   * @return      the changed list
+   *
+   */
+  private @Nonnull ValueList<Multiple>
+    renamePerson(@Nonnull ValueList<Multiple> inList, @Nonnull String inOld,
+                 @Nonnull String inNew)
+  {
+    List<Multiple> list = new ArrayList<Multiple>();
+    for(Multiple person : inList)
+    {
+      if(person.isDefined() && person.get(0).isDefined()
+         && ((Text)person.get(0)).get().equalsIgnoreCase(inOld))
+      {
+        list.add(person.as(((Text)person.get(0)).as(inNew), person.get(1)));
+        changed();
+      }
+      else
+        list.add(person);
+      }
+
+    return inList.as(list);
+  }
+
+  //........................................................................
 
   //----------------------------- setAudience ------------------------------
 

@@ -144,33 +144,44 @@ public class SaveActionServlet extends ActionServlet
         continue;
       }
 
-      // TODO: get the right campaign here (basically the right m_data), might
-      // have to have campaign specific servlets (or urls)
-      AbstractEntry entry = m_data.getEntry(id, type);
-      if(entry == null)
+      // Figure out the affected entries.
+      Set<AbstractEntry> affectedEntries = new HashSet<AbstractEntry>();
+      parts = Strings.getPatterns(key, "(.*?)/(.*)");
+      System.out.println(key + ": " + java.util.Arrays.toString(parts));
+      if(parts.length == 2)
       {
-        String error = "could not find " + type + " " + id + " for saving";
-        Log.warning(error);
-        errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-        continue;
+        for(AbstractEntry entry : m_data.getEntriesList(type))
+          if(entry.matches(parts[0], parts[1]))
+            affectedEntries.add(entry);
       }
-
-      if(!entry.canEdit(key, user))
+      else
       {
-        String error = "not allowed to edit " + key + " in " + type + " " + id;
-        Log.warning(error);
-        errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-        continue;
-      }
+        // TODO: get the right campaign here (basically the right m_data), might
+        // have to have campaign specific servlets (or urls)
+        AbstractEntry entry = m_data.getEntry(id, type);
+        if(entry == null)
+        {
+          String error = "could not find " + type + " " + id + " for saving";
+          Log.warning(error);
+          errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+          continue;
+        }
 
-      entries.add(entry);
+        if(!entry.canEdit(key, user))
+        {
+          String error = "not allowed to edit " + key + " in " + type + " "
+            + entry.getID();
+          Log.warning(error);
+          errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+          continue;
+        }
+
+        affectedEntries.add(entry);
+      }
 
       String value = param.getValue();
 
-      // we have to treat the name specially, as it is not a readable value
-      if("name".equals(key))
-        entry.setName(value);
-      else
+      for(AbstractEntry entry : affectedEntries)
       {
         String rest = entry.set(key, value);
         if(rest != null)
@@ -183,6 +194,8 @@ public class SaveActionServlet extends ActionServlet
                      + Encodings.toJSString(key) + ", "
                      + Encodings.toJSString(rest) + ");");
         }
+
+        entries.add(entry);
       }
     }
 

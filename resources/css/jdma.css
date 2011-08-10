@@ -282,6 +282,7 @@ DIV.footer DIV.version
   margin-bottom: 3px;
 }
 
+
 /******************************************************************************
  * entry
  *****************************************************************************/
@@ -358,7 +359,6 @@ DIV.textblock.desc {
   color:      #444;
   text-align: justify;
 }
-
 
 /******************************************************************************
  * entry lists
@@ -634,7 +634,7 @@ DIV.label-number
 }
 
 /******************************************************************************
- * links
+ * general links
  *****************************************************************************/
 
 /* general link style */
@@ -661,7 +661,7 @@ A:hover   { font-style: normal; text-decoration: underline; }
 A.bold:hover { font-weight: bold; }
 
 /******************************************************************************
- * links
+ * dma links
  *****************************************************************************/
 
 /* now the colors for each specific link */
@@ -717,7 +717,8 @@ A.Skill:hover     { color: $hilightcolor_Skill }
  * Index
  *****************************************************************************/
 
-DIV.index-overview
+DIV.index-overview,
+A.type-index
 {
   float:            left;
   width:            200px;
@@ -732,7 +733,8 @@ DIV.index-overview
   text-overflow:    ellipsis;
 }
 
-DIV.index-overview:hover
+DIV.index-overview:hover,
+A.type-index:hover
 {
   background-color: #800;
   color:            white;
@@ -743,3 +745,27 @@ A.index-link:hover
 {
   text-decoration:  none;
 }
+
+/******************************************************************************
+ * Types
+ ******************************************************************************/
+
+A.type-image {
+  color:        #ccc;
+  text-align:   center;
+  font-size:    small;
+  float:        left;
+  margin-right: 20px;
+}
+
+A.type-image:hover {
+  color: #444;
+  text-decoration: none;
+}
+
+DIV.type-indexes {
+  height:         120px;
+  display:        table-cell;
+  vertical-align: middle;
+}
+

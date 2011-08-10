@@ -582,12 +582,14 @@ public class HTMLWriter
   public HTMLWriter bodyScript(@Nonnull String ... inLines)
   {
     ensureHTML();
-    m_bodyWriter.println("    <SCRIPT type=\"text/javascript\">");
+    indent();
+    m_bodyWriter.println("<SCRIPT type=\"text/javascript\">");
 
     for(String line : inLines)
       m_bodyWriter.println("      " + line);
 
-    m_bodyWriter.println("    </SCRIPT>");
+    indent();
+    m_bodyWriter.println("</SCRIPT>");
 
     return this;
   }
@@ -707,7 +709,6 @@ public class HTMLWriter
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test

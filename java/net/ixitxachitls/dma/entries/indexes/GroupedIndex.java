@@ -193,7 +193,7 @@ public abstract class GroupedIndex extends Index
    *
    * @param      inWriter     the writer to output to
    * @param      inData       the data to print
-   * @param      inName       the nameing part of the index url
+   * @param      inName       the naming part of the index url
    * @param      inPath       the sub path of the index
    * @param      inPageSize   the size of the page as number of elements
    * @param      inPagination start and end entries to show
@@ -241,10 +241,13 @@ public abstract class GroupedIndex extends Index
     names(names, inData, inGroups);
 
     String title;
+    String titleValue;
     if(inGroups.length == 0)
-      title = getTitle();
+      titleValue = getTitle();
     else
-      title = Encodings.toWordUpperCase(s_groupJoiner.join(inGroups));
+      titleValue = s_groupJoiner.join(inGroups);
+
+    title = Encodings.toWordUpperCase(titleValue);
 
     HTMLDocument document = new HTMLDocument(title);
 
@@ -252,7 +255,9 @@ public abstract class GroupedIndex extends Index
       document.add(new Title(new Icon(getType().getLink() + "/index.png",
                                       title, "", true)));
     else
-      document.add(new Title(title));
+      document.add(new Title(new Editable("*/" + title, getType(), title,
+                                          getTitle() + "/" + title, titleValue,
+                                          "name")));
 
     document.add(new Par());
 
@@ -324,8 +329,12 @@ public abstract class GroupedIndex extends Index
                                        + ".png", inPath, inPath, true),
                               "string")));
     else
-      document.add(new Title(new Editable("", getType(), title, title,
-                                          inPath, "string")));
+      if(inGroups.length == 1)
+        document.add(new Title(new Editable("*/" + title, getType(), title,
+                                            getTitle() + "/" + title,
+                                            inPath, "string")));
+      else
+        document.add(new Title(title));
 
     List<String> navigation = new ArrayList<String>();
     if(isPaginated())
@@ -465,7 +474,10 @@ public abstract class GroupedIndex extends Index
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    \n"
-                   + "<h1>title</h1>\n"
+                   + "<h1><dmaeditable key=\"title/Title\" value=\"title\" "
+                   + "id=\"*/Title\" class=\"editable\" "
+                   + "entry=\"base character\" type=\"name\"><span>Title"
+                   + "</span></dmaeditable></h1>\n"
                    + "\n"
                    + "<p />\n"
                    + "<a href=\"index-name/first1\" class=\"index-link\" "
@@ -545,7 +557,10 @@ public abstract class GroupedIndex extends Index
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    \n"
-                   + "<h1>First1</h1>\n"
+                   + "<h1><dmaeditable key=\"title/First1\" value=\"first1\" "
+                   + "id=\"*/First1\" class=\"editable\" "
+                   + "entry=\"base character\" type=\"name\"><span>First1"
+                   + "</span></dmaeditable></h1>\n"
                    + "\n"
                    + "<p />\n"
                    + "<a href=\"index-name/second\" class=\"index-link\" "
@@ -619,10 +634,7 @@ public abstract class GroupedIndex extends Index
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    \n"
-                   + "<h1><dmaeditable key=\"First1 - Second\" "
-                   + "value=\"first1/second\" id=\"\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"string\"><span>"
-                   + "First1 - Second</span></dmaeditable></h1>\n"
+                   + "<h1>First1 - Second</h1>\n"
                    + "\n"
                    + "<table class=\"entrylist\"><tr class=\"title\">"
                    + "<td class=\"title\"></td><td class=\"title\">Name</td>"

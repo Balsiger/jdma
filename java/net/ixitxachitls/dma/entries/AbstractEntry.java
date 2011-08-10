@@ -1839,6 +1839,30 @@ public class AbstractEntry extends ValueGroup
 
   //----------------------------------------------------------- manipulators
 
+  //--------------------------------- set ----------------------------------
+
+  /**
+   * Set the value for the given key.
+   *
+   * @param       inKey  the name of the key to set the value for
+   * @param       inText the text to set the value to
+   *
+   * @return      the part of the string that could not be parsed
+   *
+   */
+  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  {
+    // we have to treat the name specially, as it is not a readable value
+    if("name".equals(inKey))
+    {
+      setName(inText);
+      return null;
+    }
+    else
+      return super.set(inKey, inText);
+  }
+
+  //........................................................................
   //------------------------------- setName --------------------------------
 
   /**

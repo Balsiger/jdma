@@ -30,6 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 // TODO: clean up commented out code
 // import java.util.Iterator;
@@ -1327,6 +1328,28 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //------------------------------- matches --------------------------------
+
+  /**
+   * Check whether the entry matches the given key and value.
+   *
+   * @param       inKey   the key of the value to match
+   * @param       inValue the value to match with
+   *
+   * @return      true if the group matches the given key and value, false if
+   *              not
+   *
+   */
+  public boolean matches(@Nonnull String inKey, @Nonnull String inValue)
+  {
+    Value value = getValue(inKey);
+    if(value == null)
+      return false;
+
+    return inValue.equalsIgnoreCase(value.toString());
+  }
+
+  //........................................................................
 
   //-------------------------------- getKey --------------------------------
 
@@ -1371,7 +1394,7 @@ public abstract class ValueGroup implements Changeable
   public abstract @Nonnull String getID();
 
   //........................................................................
-  //------------------------------ getIndexes ------------------------------
+  //------------------------------- getIndex -------------------------------
 
   /**
    * Get all the indexes.
@@ -1389,6 +1412,21 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //------------------------------ getIndexes ------------------------------
+
+  /**
+   * Get all the registered indexes.
+   *
+   * @return      all the registered indexes
+   *
+   */
+  public static Collection<Index> getIndexes()
+  {
+    return s_indexes.values();
+  }
+
+  //........................................................................
+
 
   //----------------------------- computeValue -----------------------------
 
@@ -1597,7 +1635,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the part of the string that could not be parsed
    *
    */
-  public @Nonnull String set(@Nonnull String inKey, @Nonnull String inText)
+  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
   {
     Variable variable = getVariable(inKey);
 

@@ -430,6 +430,31 @@ public class ValueList<T extends Value>
 
   //----------------------------------------------------------- manipulators
 
+  //---------------------------------- as ----------------------------------
+
+  /**
+   * Create a new list similar to this one but with different values.
+   *
+   * @param     inValues the values to create a new list from
+   *
+   * @return    the newly created value list
+   *
+   */
+  public @Nonnull ValueList<T> as(@Nonnull List<T> inValues)
+  {
+    ValueList<T> result = create();
+
+    if(inValues.isEmpty())
+      return result;
+
+    define();
+    m_values.addAll(inValues);
+
+    return result;
+  }
+
+  //........................................................................
+
   //--------------------------------- add ----------------------------------
 
   /**
@@ -446,9 +471,7 @@ public class ValueList<T extends Value>
     if(!inValue.isDefined())
       return false;
 
-    if(m_values == null)
-      m_values = new ArrayList<T>();
-
+    define();
     m_values.add(inValue);
 
     return true;
@@ -472,9 +495,7 @@ public class ValueList<T extends Value>
     if(!inValue.isDefined())
       return false;
 
-    if(m_values == null)
-      m_values = new ArrayList<T>();
-
+    define();
     m_values.add(inIndex, inValue);
 
     return true;
@@ -587,18 +608,18 @@ public class ValueList<T extends Value>
    * @return      the result of the addition
    *
    */
-  public @Nonnull ValueList<T> add(ValueList<T> inValue)
-  {
-    ValueList<T> result = this.create();
+  // public @Nonnull ValueList<T> add(ValueList<T> inValue)
+  // {
+  //   ValueList<T> result = this.create();
 
-    for(T value : m_values)
-      result.add(value);
+  //   for(T value : m_values)
+  //     result.add(value);
 
-    for(T value : inValue)
-      result.add(value);
+  //   for(T value : inValue)
+  //     result.add(value);
 
-    return result;
-  }
+  //   return result;
+  // }
 
   //........................................................................
   //------------------------------ subtract --------------------------------
@@ -863,7 +884,7 @@ public class ValueList<T extends Value>
 
     /** Test removing of elements. */
     @org.junit.Test
-    public void emove()
+    public void remove()
     {
       ValueList<Name> list = new ValueList<Name>(new Name(), " - ");
 
@@ -903,29 +924,29 @@ public class ValueList<T extends Value>
     //......................................................................
     //----- compute --------------------------------------------------------
 
-    /** The compute Test. */
-    @org.junit.Test
-    public void compute()
-    {
-      ValueList<Name> list = new ValueList<Name>(" ",
-                                                 new Name("hello"),
-                                                 new Name("there,"),
-                                                 new Name("how"),
-                                                 new Name("are"),
-                                                 new Name("you?"));
+    // /** The compute Test. */
+    // @org.junit.Test
+    // public void compute()
+    // {
+    //   ValueList<Name> list = new ValueList<Name>(" ",
+    //                                              new Name("hello"),
+    //                                              new Name("there,"),
+    //                                              new Name("how"),
+    //                                              new Name("are"),
+    //                                              new Name("you?"));
 
-      list = list.subtract(new ValueList<Name>(new Name("guru"),
-                                               new Name("there,"),
-                                               new Name("are"),
-                                               new Name("you")));
+    //   list = list.subtract(new ValueList<Name>(new Name("guru"),
+    //                                            new Name("there,"),
+    //                                            new Name("are"),
+    //                                            new Name("you")));
 
-      assertEquals("subtract", "hello how you?", list.toString());
+    //   assertEquals("subtract", "hello how you?", list.toString());
 
-      list = list.add(new ValueList<Name>(new Name("guru"),
-                                          new Name("guru")));
+    //   list = list.add(new ValueList<Name>(new Name("guru"),
+    //                                       new Name("guru")));
 
-      assertEquals("subtract", "hello how you? guru guru", list.toString());
-    }
+    //   assertEquals("subtract", "hello how you? guru guru", list.toString());
+    // }
 
     //......................................................................
 
