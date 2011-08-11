@@ -75,7 +75,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
     m_number  = inBaseNumber;
     m_defined = true;
     m_editType = "number";
-    m_grouping = (Grouping<T, Object>)s_grouping;
+    m_grouping = (Grouping<T, String>)s_grouping;
 
     check();
   }
@@ -120,7 +120,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
     m_number  = (inMin + inMax) / 2;
     m_defined = false;
     m_editType = "number";
-    m_grouping = (Grouping<T, Object>)s_grouping;
+    m_grouping = (Grouping<T, String>)s_grouping;
   }
 
   //........................................................................
@@ -178,8 +178,8 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
   protected boolean m_sign = false;
 
   /** The grouping. */
-  public static final @Nonnull Grouping<BaseNumber, Object> s_grouping =
-    new Group<BaseNumber, Long, Object>(new Group.Extractor<BaseNumber, Long>()
+  public static final @Nonnull Grouping<BaseNumber, String> s_grouping =
+    new Group<BaseNumber, Long, String>(new Group.Extractor<BaseNumber, Long>()
       {
         public @Nonnull Long extract(@Nonnull BaseNumber inValue)
         {
@@ -534,7 +534,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       assertEquals("undefined value not correct", "$undefined$",
                    number.toString());
       assertEquals("undefined value not correct", 15, number.get());
-      assertEquals("group", "$undefined$", number.group().toString());
+      assertEquals("group", "$undefined$", number.group());
       assertEquals("format", "\\color{error}{$undefined$}",
                    number.format().toString());
 
@@ -544,14 +544,14 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       assertEquals("not defined after setting", true, number.isDefined());
       assertEquals("value not correctly gotten", 10, number.get());
       assertEquals("value not correctly converted", "10", number.toString());
-      assertEquals("group", "10", number.group().toString());
+      assertEquals("group", "10", number.group());
       assertEquals("format", "10", number.format().toString());
 
       assertEquals("max", 20, number.getMax());
       assertEquals("min", 0, number.getMin());
 
       BaseNumber<BaseNumber> number2 = new BaseNumber<BaseNumber>(522, 0, 1000);
-      assertEquals("group", "750", number2.group().toString());
+      assertEquals("group", "750", number2.group());
 
       // comparisons
       assertTrue("equal", number.compareTo(number) == 0);

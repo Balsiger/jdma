@@ -151,7 +151,7 @@ public abstract class Value<T extends Value> implements
   protected @Nullable Formatter<T> m_formatter = null;
 
   /** A grouping of the values, if any. */
-  protected @Nullable Grouping<T, Object> m_grouping = null;
+  protected @Nullable Grouping<T, String> m_grouping = null;
 
   /** The type to use for editing. */
   protected @Nonnull String m_editType = "";
@@ -358,7 +358,7 @@ public abstract class Value<T extends Value> implements
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull Object group()
+  public @Nonnull String group()
   {
     if(m_grouping != null)
       return m_grouping.group((T)this);
@@ -376,9 +376,9 @@ public abstract class Value<T extends Value> implements
    * @return      a string denoting the group this value is in
    *
    */
-  public @Nonnull Object doGroup()
+  public @Nonnull String doGroup()
   {
-    return this;
+    return this.toString();
   }
 
   //........................................................................
@@ -651,7 +651,7 @@ public abstract class Value<T extends Value> implements
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withGrouping(@Nonnull Grouping<T, Object> inGrouping)
+  public @Nonnull T withGrouping(@Nonnull Grouping<T, String> inGrouping)
   {
     m_grouping = inGrouping;
 

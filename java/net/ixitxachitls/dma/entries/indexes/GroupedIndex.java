@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.entries.indexes;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -64,7 +65,7 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @file          GroupedIndex.java
  *
- * @author        balsiger@ixitxachitls.net (Peter Balsiger)
+ * @author        balsiger@ixitxachitels.net (Peter Balsiger)
  *
  */
 
@@ -94,12 +95,35 @@ public abstract class GroupedIndex extends Index
                       AbstractType<? extends AbstractEntry> inType,
                       int inLevels)
   {
+    this(inTitle, inType, inLevels, String.CASE_INSENSITIVE_ORDER);
+  }
+
+  //........................................................................
+  //----------------------------- GroupedIndex -----------------------------
+
+  /**
+   * Create the simple index.
+   *
+   * @param         inTitle      the index title
+   * @param         inType       the type of entries served
+   * @param         inLevels     the number of grouping levels (1 means one
+   *                             name index pointing to entries, 2 means a first
+   *                             name index pointing to a second name index
+   *                             pointing to a list of entries)
+   * @param         inComparator the comparator for ordering groups
+   *
+   */
+  public GroupedIndex(@Nonnull String inTitle,
+                      AbstractType<? extends AbstractEntry> inType,
+                      int inLevels, @Nonnull Comparator<String> inComparator)
+  {
     super(inTitle, inType);
 
     if(inLevels < 0)
       throw new IllegalArgumentException("must have a positive number of "
                                          + "levels here");
     m_levels = inLevels;
+    m_comparator = inComparator;
   }
 
   //........................................................................
@@ -109,7 +133,10 @@ public abstract class GroupedIndex extends Index
   //-------------------------------------------------------------- variables
 
   /** The number of grouping levels. */
-  private int m_levels = 0;
+  private int m_levels;
+
+  /** The comparator for ordering groups. */
+  private @Nonnull Comparator<String> m_comparator;
 
   /** Joiner to concatenare groups. */
   private static Joiner s_groupJoiner = Joiner.on(" - ");
@@ -236,8 +263,7 @@ public abstract class GroupedIndex extends Index
     Log.info("serving dynamic " + getTitle() + " index");
 
     // compute all the different category names
-    SortedSet<String> names =
-      new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+    SortedSet<String> names = new TreeSet<String>(m_comparator);
     names(names, inData, inGroups);
 
     String title;
@@ -316,7 +342,8 @@ public abstract class GroupedIndex extends Index
     if(inGroups.length == 0)
       title = getTitle();
     else
-      title = Encodings.toWordUpperCase(s_groupJoiner.join(inGroups));
+      title = getTitle() + " - "
+        + Encodings.toWordUpperCase(s_groupJoiner.join(inGroups));
 
     // create a detailed index file
     HTMLDocument document = new HTMLDocument(title);
@@ -634,7 +661,7 @@ public abstract class GroupedIndex extends Index
                    + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    \n"
-                   + "<h1>First1 - Second</h1>\n"
+                   + "<h1>title - First1 - Second</h1>\n"
                    + "\n"
                    + "<table class=\"entrylist\"><tr class=\"title\">"
                    + "<td class=\"title\"></td><td class=\"title\">Name</td>"

@@ -1160,8 +1160,8 @@ public class BaseProduct extends BaseEntry
     new LinkFormatter<Number>("/index/pages/");
 
   /** The grouping for the pages. */
-  protected static final Grouping<Number, Object> s_pageGroup =
-    new Group<Number, Long, Object>(new Group.Extractor<Number, Long>()
+  protected static final Group<Number, Long, String> s_pageGroup =
+    new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         public Long extract(@Nonnull Number inValue)
         {
@@ -1169,9 +1169,9 @@ public class BaseProduct extends BaseEntry
         }
       }, new Long [] { 5L, 10L, 20L, 25L, 50L, 100L, 200L, 250L, 300L, 400L,
                        500L, },
-                                new String []
+                                    new String []
       { "5", "10", "20", "25", "50", "100", "200", "250", "300", "400", "500",
-        "1000", }, "$undefined");
+        "500+", }, "$undefined");
 
   /** The total number of pages of the product. */
   @SuppressWarnings("unchecked")
@@ -1182,8 +1182,30 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-//     s_indexes.add(new GroupedKeyIndex("Product", "Pages", "pages", "pages",
-//                                       true, FORMATTER, FORMAT, false));
+    s_indexes.put("pages", new GroupedIndex("Pages", TYPE, 1, s_pageGroup)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_pages.group());
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+          return inGroups[0].equalsIgnoreCase(product.m_pages.group());
+        }
+      });
   }
 
   //........................................................................
@@ -1320,8 +1342,8 @@ public class BaseProduct extends BaseEntry
     new LinkFormatter<Price>("/index/prices/");
 
   /** The grouping for the pages. */
-  protected static final Grouping<Price, Object> s_priceGrouping =
-    new Group<Price, Long, Object>(new Group.Extractor<Price, Long>()
+  protected static final Grouping<Price, String> s_priceGrouping =
+    new Group<Price, Long, String>(new Group.Extractor<Price, Long>()
       {
         public Long extract(@Nonnull Price inValue)
         {
@@ -1721,9 +1743,10 @@ public class BaseProduct extends BaseEntry
    * @return   the set of persons given
    *
    */
-  public @Nonnull Set<String> collectPersons(@Nonnull Set<String> ioNames,
-                                             @Nullable String inJob,
-                                             @Nullable String inPrefix)
+  public @Nonnull Set<? super String>
+    collectPersons(@Nonnull Set<? super String> ioNames,
+                   @Nullable String inJob,
+                   @Nullable String inPrefix)
   {
     for(Map.Entry<String, ValueList<Multiple>> list
           : categoryLists().entrySet())
@@ -1773,9 +1796,10 @@ public class BaseProduct extends BaseEntry
    * @return   the set of jobs given
    *
    */
-  public @Nonnull Set<String> collectJobs(@Nonnull Set<String> ioJobs,
-                                          @Nullable String inName,
-                                          @Nullable String inPrefix)
+  public @Nonnull Set<? super String>
+    collectJobs(@Nonnull Set<? super String> ioJobs,
+                @Nullable String inName,
+                @Nullable String inPrefix)
   {
     for(Map.Entry<String, ValueList<Multiple>> list
           : categoryLists().entrySet())

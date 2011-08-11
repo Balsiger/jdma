@@ -132,7 +132,7 @@ public class Text extends BaseText<Text>
    * @return      a string denoting the group this value is in
    *
    */
-  public @Nonnull Object doGroup()
+  public @Nonnull String doGroup()
   {
     return m_text;
   }

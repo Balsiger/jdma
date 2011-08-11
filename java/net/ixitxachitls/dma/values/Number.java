@@ -163,7 +163,7 @@ public class Number extends BaseNumber<Number>
       assertEquals("undefined value not correct", "$undefined$",
                    number.toString());
       assertEquals("undefined value not correct", 15, number.get());
-      assertEquals("group", "$undefined$", number.group().toString());
+      assertEquals("group", "$undefined$", number.group());
 
       // now with some number
       number = new Number(10, 0, 20);
@@ -171,13 +171,13 @@ public class Number extends BaseNumber<Number>
       assertEquals("not defined after setting", true, number.isDefined());
       assertEquals("value not correctly gotten", 10, number.get());
       assertEquals("value not correctly converted", "10", number.toString());
-      assertEquals("group", "10", number.group().toString());
+      assertEquals("group", "10", number.group());
 
       assertEquals("max", 20, number.getMax());
       assertEquals("min", 0, number.getMin());
 
       number = new Number(522, 0, 1000);
-      assertEquals("group", "750", number.group().toString());
+      assertEquals("group", "750", number.group());
 
       Value.Test.createTest(number);
     }

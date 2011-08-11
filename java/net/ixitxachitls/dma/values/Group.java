@@ -24,8 +24,11 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.io.Serializable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.Grouping;
@@ -53,7 +56,7 @@ import net.ixitxachitls.util.Grouping;
 
 @Immutable
 public class Group<T extends Value, S extends Comparable<S>, U>
-  implements Grouping<T, U>
+  implements Grouping<T, U>, Comparator<U>
 {
   //----------------------------------------------------------------- nested
 
@@ -125,6 +128,9 @@ public class Group<T extends Value, S extends Comparable<S>, U>
   /** The undefined value to use. */
   private @Nonnull U m_undefined;
 
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -166,6 +172,50 @@ public class Group<T extends Value, S extends Comparable<S>, U>
   public @Nonnull String toString()
   {
     return Arrays.toString(m_groups);
+  }
+
+  //........................................................................
+  //------------------------------ compareTo -------------------------------
+
+  /**
+   * Compare two values for ordering.
+   *
+   * @param  inFirst  the first value to compare
+   * @param  inSecond the second values to compare
+   *
+   * @return <0 if first is smaller, 0 if equal, >0 if first is bigger
+   *
+   */
+  public int compare(@Nullable U inFirst, @Nullable U inSecond)
+  {
+    return ordinal(inFirst) - ordinal(inSecond);
+  }
+
+  //........................................................................
+  //------------------------------- ordinal --------------------------------
+
+  /**
+   * The number of the given string in the list of groups.
+   *
+   * @param       inGroup the group to get the ordinal for
+   *
+   * @return      the index into the possible groups, can be higher in case of
+   *              undefined or null
+   *
+   */
+  public int ordinal(@Nullable U inGroup)
+  {
+    if(inGroup == null)
+      return m_groups.length + 2;
+
+    if(inGroup.equals(m_undefined))
+      return m_groups.length + 1;
+
+    for(int i = 0; i < m_groups.length; i++)
+      if(inGroup == m_groups[i] || inGroup.equals(m_groups[i]))
+        return i;
+
+    return m_groups.length;
   }
 
   //........................................................................
