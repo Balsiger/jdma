@@ -1251,10 +1251,6 @@ public class BaseProduct extends BaseEntry
         // CHECKSTYLE:OFF
       }.withImages());
     // CHECKSTYLE:ON
-
-//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "System", "systems",
-//                                          "system", true, FORMATTER, FORMAT,
-//                                          true, null));
   }
 
   //........................................................................
@@ -1273,9 +1269,35 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Audience", "audiences",
-//                                          "audience", true, FORMATTER, FORMAT,
-//                                          false, null));
+    s_indexes.put("audiences", new GroupedIndex("Audiences", TYPE, 1)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_audience.toString());
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+
+          String audience = inGroups[0];
+
+          return audience.equals(product.m_audience.toString());
+        }
+        // CHECKSTYLE:OFF
+      }.withImages());
+    // CHECKSTYLE:ON
   }
 
   //........................................................................
