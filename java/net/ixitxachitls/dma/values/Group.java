@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.values;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

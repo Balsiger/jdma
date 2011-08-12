@@ -147,7 +147,6 @@ public class SaveActionServlet extends ActionServlet
       // Figure out the affected entries.
       Set<AbstractEntry> affectedEntries = new HashSet<AbstractEntry>();
       parts = Strings.getPatterns(key, "(.*?)/(.*)");
-      System.out.println(key + ": " + java.util.Arrays.toString(parts));
       if(parts.length == 2)
       {
         for(AbstractEntry entry : m_data.getEntriesList(type))

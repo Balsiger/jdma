@@ -278,8 +278,11 @@ public abstract class GroupedIndex extends Index
     HTMLDocument document = new HTMLDocument(title);
 
     if(hasImages())
-      document.add(new Title(new Icon(getType().getLink() + "/index.png",
-                                      title, "", true)));
+      document.add(new Title(new Editable("*/" + title, getType(),
+                                          new Icon(inPath + "/index.png",
+                                                   title, "", true),
+                                          getTitle() + "/" + title, titleValue,
+                                          "name")));
     else
       document.add(new Title(new Editable("*/" + title, getType(), title,
                                           getTitle() + "/" + title, titleValue,
@@ -291,9 +294,8 @@ public abstract class GroupedIndex extends Index
 
     for(String name : names)
       if(hasImages())
-        commands.add(new Icon(getType().getLink() + "/"
-                              + name.toLowerCase(Locale.US) + ".png",
-                              inPath + "/" + name, true));
+        commands.add(new Icon(inPath + "/" + name.toLowerCase(Locale.US)
+                              + ".png", name, inPath + "/" + name, true));
       else
         commands.add(new Link(new Divider("index-overview", name),
                               inPath + "/" + name, "index-link"));
@@ -348,13 +350,13 @@ public abstract class GroupedIndex extends Index
     // create a detailed index file
     HTMLDocument document = new HTMLDocument(title);
 
+    System.out.println("images: " + hasImages());
     if(hasImages())
       document.add(new Title(new Editable
-                             ("", getType(), title, title,
-                              new Icon(inName + "/"
-                                       + inPath.toLowerCase(Locale.US)
-                                       + ".png", inPath, inPath, true),
-                              "string")));
+                             ("", getType(),
+                              new Icon(inName.toLowerCase(Locale.US) + ".png",
+                                       inPath, inPath, true),
+                              getTitle() + "/" + title, inPath, "string")));
     else
       if(inGroups.length == 1)
         document.add(new Title(new Editable("*/" + title, getType(), title,

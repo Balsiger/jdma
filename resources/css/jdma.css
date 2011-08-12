@@ -110,7 +110,7 @@ DIV.subtitletext, DIV.subtitletext A
   margin-top: -2px;
 }
 
-.icon
+.sprite
 {
   background-image: url('/icons/icons.png');
   width: 10px;
@@ -759,7 +759,7 @@ A.type-image {
 }
 
 A.type-image:hover {
-  color: #444;
+  color:           #444;
   text-decoration: none;
 }
 
@@ -769,3 +769,24 @@ DIV.type-indexes {
   vertical-align: middle;
 }
 
+/******************************************************************************
+ * Captions
+ *****************************************************************************/
+
+.caption-container {
+  display: inline-block;
+  text-align: center;
+  font-size:  small;
+  color:      #ccc;
+  margin:     2px;
+}
+
+A.icon-link {
+  color: #ccc;
+}
+
+.caption-container:hover,
+A.icon-link:hover {
+  color:           #444;
+  text-decoration: none;
+}

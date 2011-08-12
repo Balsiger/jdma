@@ -136,7 +136,7 @@ public class FileServlet extends BaseServlet
 
   /** The path to use for missign images. */
   protected static final @Nonnull String s_missingImage =
-    Config.get("web/image.missing", "icons/missing.png");
+    Config.get("web/image.missing", "/icons/missing.png");
 
   /** The time of the startup of this servlet. */
   protected static final long s_startupTime = new Date().getTime();

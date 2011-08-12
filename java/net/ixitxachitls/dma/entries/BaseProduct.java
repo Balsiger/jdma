@@ -1222,6 +1222,36 @@ public class BaseProduct extends BaseEntry
 
   static
   {
+    s_indexes.put("systems", new GroupedIndex("Systems", TYPE, 1)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_system.toString());
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+
+          String system = inGroups[0];
+
+          return system.equals(product.m_system.toString());
+        }
+        // CHECKSTYLE:OFF
+      }.withImages());
+    // CHECKSTYLE:ON
+
 //     s_indexes.add(new KeyIndex<KeyIndex>("Product", "System", "systems",
 //                                          "system", true, FORMATTER, FORMAT,
 //                                          true, null));

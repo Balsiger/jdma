@@ -209,7 +209,7 @@ public class PageServlet extends DMAServlet
 
     if(user == null)
       inWriter
-        .begin("a").id("login-icon").classes("icon").tooltip("Login")
+        .begin("a").id("login-icon").classes("sprite").tooltip("Login")
         .onClick("login()").end("a");
     else
     {
@@ -222,21 +222,21 @@ public class PageServlet extends DMAServlet
       inWriter
         .end("span")
         .add(" | ")
-        .begin("a").id("logout-icon").classes("icon").tooltip("Logout")
+        .begin("a").id("logout-icon").classes("sprite").tooltip("Logout")
         .onClick("logout()").end("a");
     }
 
     inWriter
-      .begin("a").classes("icon", "library").tooltip("Library").href("/library")
-      .onClick("util.link(event, '/library');").end("a")
-      .begin("a").classes("icon", "about").tooltip("About").href("/about.html")
-      .onClick("util.link(event, '/about.html')").end("a")
+      .begin("a").classes("sprite", "library").tooltip("Library")
+      .href("/library").onClick("util.link(event, '/library');").end("a")
+      .begin("a").classes("sprite", "about").tooltip("About")
+      .href("/about.html").onClick("util.link(event, '/about.html')").end("a")
       .begin("div").onMouseOver("$('#search :input').show()")
       .onMouseOut("$('#search :input').hide()")
       .begin("form").classes("search").id("search")
       .onSubmit("util.link(event, '/search/' + this.search.value)")
       .begin("input").name("search").end("input")
-      .begin("div").classes("icon", "search").tooltip("Search").end("div")
+      .begin("div").classes("sprite", "search").tooltip("Search").end("div")
       .end("form") // search
       .end("div") // search
       .end("div") // header-right
@@ -244,7 +244,7 @@ public class PageServlet extends DMAServlet
       .add("DMA")
       .end("div") // header-left
       .begin("div").id("navigation")
-      .begin("a").id("home").classes("icon").tooltip("Home").href("/")
+      .begin("a").id("home").classes("sprite").tooltip("Home").href("/")
       .onClick("util.link(event, '/')").end("a")
       .begin("span").id("subnavigation").add("&nbsp;").end("span")
       .end("div")
@@ -462,14 +462,14 @@ public class PageServlet extends DMAServlet
                    + "Allip () -->\n"
                    + "    <DIV id=\"header\">\n"
                    + "      <DIV id=\"header-right\">\n"
-                   + "        <A id=\"login-icon\" class=\"icon\" "
+                   + "        <A id=\"login-icon\" class=\"sprite\" "
                    + "title=\"Login\" onclick=\"login()\">\n"
                    + "        </A>\n"
-                   + "        <A class=\"icon library\" title=\"Library\" "
+                   + "        <A class=\"sprite library\" title=\"Library\" "
                    + "href=\"/library\" "
                    + "onclick=\"util.link(event, '/library');\">\n"
                    + "        </A>\n"
-                   + "        <A class=\"icon about\" title=\"About\" "
+                   + "        <A class=\"sprite about\" title=\"About\" "
                    + "href=\"/about.html\" "
                    + "onclick=\"util.link(event, '/about.html')\">\n"
                    + "        </A>\n"
@@ -479,7 +479,7 @@ public class PageServlet extends DMAServlet
                    + "onsubmit=\"util.link(event, '/search/' + "
                    + "this.search.value)\">\n"
                    + "            <INPUT name=\"search\"/>\n"
-                   + "            <DIV class=\"icon search\" "
+                   + "            <DIV class=\"sprite search\" "
                    + "title=\"Search\">\n"
                    + "            </DIV>\n"
                    + "          </FORM>\n"
@@ -489,7 +489,7 @@ public class PageServlet extends DMAServlet
                    + "        DMA\n"
                    + "      </DIV>\n"
                    + "      <DIV id=\"navigation\">\n"
-                   + "        <A id=\"home\" class=\"icon\" title=\"Home\" "
+                   + "        <A id=\"home\" class=\"sprite\" title=\"Home\" "
                    + "href=\"/\" onclick=\"util.link(event, '/')\">\n"
                    + "        </A>\n"
                    + "        <SPAN id=\"subnavigation\">\n"

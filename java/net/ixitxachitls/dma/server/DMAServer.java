@@ -318,8 +318,8 @@ public class DMAServer extends WebServer
                    "$1/entry/" + type.getName() + "/$2");
         addRewrite(handler, "^(.*)/" + type.getMultipleLink() + "/?",
                    "$1/entries/" + type.getName());
-        addRewrite(handler, "^(.*)/" + type.getMultipleLink() + "/(.*)",
-                   "$1/index/" + type.getName() + "/$2");
+        addRewrite(handler, "^/" + type.getMultipleLink() + "/(.*)",
+                   "/index/" + type.getName() + "/$1");
       }
     }
 

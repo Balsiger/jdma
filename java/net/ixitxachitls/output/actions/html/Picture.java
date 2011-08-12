@@ -188,29 +188,14 @@ public class Picture extends Action
 
     String style = "";
     if(inOptionals != null && !inOptionals.isEmpty())
-    {
-      style = inDocument.convert(inOptionals.get(0));
-      if(style.equals("highlight"))
-        style = "\" onmouseover=\"gui.iconHighlight(this);\" "
-          + "onmouseout=\"gui.iconNormal(this);";
-      else
-        style = " " + style;
-    }
+      style = " " + inDocument.convert(inOptionals.get(0));
 
     if(m_caption)
-    {
-      inDocument.add("<span class=\"table ");
-      inDocument.add(m_class);
-      inDocument.add("\"><span class=\"table-row ");
-      inDocument.add(m_class);
-      inDocument.add("\"><span class=\"table-cell align-center ");
-      inDocument.add(m_class);
-      inDocument.add("\">");
-    }
+      inDocument.add("<div class=\"caption-container\">");
 
     if(m_link)
     {
-      inDocument.add("<a ");
+      inDocument.add("<a class=\"" + m_class + "-link\" ");
 
       if(link.startsWith("js:"))
         inDocument.add("onclick=\"" + link.substring(3) + "\">");
@@ -260,7 +245,7 @@ public class Picture extends Action
       inDocument.add("</a>");
 
     if(m_caption)
-      inDocument.add("</span></span></span>");
+      inDocument.add("</div>");
   }
 
   //........................................................................
@@ -288,14 +273,13 @@ public class Picture extends Action
                      ("picture.extension", "caption", "link"));
 
       assertEquals("execution did not produce desired result",
-                   "<span class=\"table test\">"
-                   + "<span class=\"table-row test\">"
-                   + "<span class=\"table-cell align-center test\">"
-                   + "<a href=\"link\" onclick=\"link(event, 'link');\">"
+                   "<div class=\"caption-container\">"
+                   + "<a class=\"test-link\" href=\"link\" "
+                   + "onclick=\"link(event, 'link');\">"
                    + "<img src=\"sub/picture.extension\" "
                    + "alt=\"picture\" class=\"test\"/>"
                    + "<div class='caption'>caption</div></a>"
-                   + "</span></span></span>",
+                   + "</div>",
                    doc.toString());
 
       assertTrue("error number", doc.getErrors().isEmpty());
@@ -319,15 +303,13 @@ public class Picture extends Action
                      ("picture.extension", "caption", "link"));
 
       assertEquals("execution did not produce desired result",
-                   "<span class=\"table test\">"
-                   + "<span class=\"table-row test\">"
-                   + "<span class=\"table-cell align-center test\">"
-                   + "<a href=\"link\" onclick=\"link(event, 'link');\">"
+                   "<div class=\"caption-container\">"
+                   + "<a class=\"test-link\" href=\"link\" "
+                   + "onclick=\"link(event, 'link');\">"
                    + "<img src=\"picture.extension\" alt=\"picture\" "
-                   + "class=\"test\" onmouseover=\"gui.iconHighlight(this);\" "
-                   + "onmouseout=\"gui.iconNormal(this);\"/>"
+                   + "class=\"test highlight\"/>"
                    + "<div class='caption'>caption</div></a>"
-                   + "</span></span></span>",
+                   + "</div>",
                    doc.toString());
 
       assertTrue("error number", doc.getErrors().isEmpty());
@@ -352,9 +334,7 @@ public class Picture extends Action
                       "css3", "overlay3"));
 
       assertEquals("execution did not produce desired result",
-                   "<span class=\"table test\">"
-                   + "<span class=\"table-row test\">"
-                   + "<span class=\"table-cell align-center test\">"
+                   "<div class=\"caption-container\">"
                    + "<div class='overlay'>"
                    + "<img src=\"sub/picture.extension\" "
                    + "alt=\"picture\" class=\"test\"/>"
@@ -363,7 +343,7 @@ public class Picture extends Action
                    + "<img src='sub/overlay3.png' class='overlay css3'/>"
                    + "</div>"
                    + "<div class='caption'>caption</div>"
-                   + "</span></span></span>",
+                   + "</div>",
                    doc.toString());
 
       assertTrue("error number", doc.getErrors().isEmpty());
