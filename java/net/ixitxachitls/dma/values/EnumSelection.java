@@ -243,7 +243,7 @@ public class EnumSelection<T extends Enum<T>>
    */
   protected @Nonnull Command doFormat()
   {
-    return new Command(toString());
+    return new Command(m_selected);
   }
 
   //........................................................................

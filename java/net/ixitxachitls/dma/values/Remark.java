@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Span;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.ArrayIterator;
@@ -240,8 +241,11 @@ public class Remark
                       new Window(inContents, m_type.getDescription()));
     else
       return new Span(m_type.name(),
-                      new Window(inContents, m_type.getDescription() + ": "
-                                 + m_comment));
+                      new Window(inContents,
+                                 new Command(m_type.getDescription(),
+                                             ":",
+                                             new Linebreak(),
+                                             m_comment)));
   }
 
   //........................................................................
@@ -326,7 +330,11 @@ public class Remark
       assertEquals("first", "{~,just a test}", remark.toString());
       assertEquals("first",
                    new Span("ESTIMATION",
-                            new Window("hello", "Estimation: just a test")),
+                            new Window("hello",
+                                       new Command("Estimation",
+                                                   ":",
+                                                   new Linebreak(),
+                                                   "just a test"))),
                    remark.format("hello"));
 
       remark = Remark.read(reader);

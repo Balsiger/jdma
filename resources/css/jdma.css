@@ -790,3 +790,69 @@ A.icon-link:hover {
   color:           #444;
   text-decoration: none;
 }
+
+/******************************************************************************
+ * Windowed
+ *****************************************************************************/
+
+/* windows that are activated by mouse-over */
+SPAN.window, DIV.window
+{
+  position:           absolute;
+  background:         #ffffee;
+  z-index:            20;
+  margin-top:         25px;
+  margin-left:        -100px;
+  border-style:       ridge;
+  border-color:       blue;
+  border-width:       2px;
+  padding:            10px;
+  visibility:         hidden;
+  -moz-border-radius: 5pt;
+  color:              #222211;
+  font-weight:        normal;
+  max-width:          200px;
+  white-space:        normal;
+}
+
+
+/******************************************************************************
+ * Value Hints
+ *****************************************************************************/
+
+SPAN.HOUSE_RULE
+{
+  border-bottom-color: #880000;
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+}
+
+SPAN.ESTIMATION
+{
+    border-bottom-color: #008800;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+}
+
+SPAN.computed
+{
+    border-bottom-color: #8888FF;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+}
+
+SPAN.HOUSE_RULE > SPAN.window
+{
+    margin-top:   -60px;
+    border-color: #AA0000;
+    color:        #440000;
+    background:   #ffffee;
+}
+
+SPAN.ESTIMATION > SPAN.window
+{
+    margin-top:   -60px;
+    border-color: #00AA00;
+    color:        #004400;
+    background:   #eeffee;
+}

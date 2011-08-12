@@ -136,6 +136,105 @@ public abstract class Value<T extends Value> implements
 
   //........................................................................
 
+  //---------------------------- withFormatter -----------------------------
+
+  /**
+   * Set a formatter for this value.
+   *
+   * @param       inFormatter to formatter to use when printing the value
+   *
+   * @return      the value itself (to allow new T().setFormatter())
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withFormatter(@Nonnull Formatter<T> inFormatter)
+  {
+    m_formatter = inFormatter;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withGrouping -----------------------------
+
+  /**
+   * Set a grouping for this value.
+   *
+   * @param       inGrouping to grouping to use when printing the value
+   *
+   * @return      the value itself (to allow new T().setFormatter())
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withGrouping(@Nonnull Grouping<T, String> inGrouping)
+  {
+    m_grouping = inGrouping;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withEditType -----------------------------
+
+  /**
+   * Set a edit type for this value.
+   *
+   * @param       inType the type to set to
+   *
+   * @return      the value itself (to allow new T().setFormatter())
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withEditType(@Nonnull String inType)
+  {
+    if(inType.length() == 0)
+      throw new IllegalArgumentException("must have a type here");
+
+    m_editType = inType;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withChoices ------------------------------
+
+  /**
+   * Set the edit values for this value.
+   *
+   * @param       inValues the edit values to use
+   *
+   * @return      the value itself (to allow new T().setFormatter())
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withChoices(@Nonnull String inValues)
+  {
+    m_choices = inValues;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withRelated ------------------------------
+
+  /**
+   * Set the related edits for this value.
+   *
+   * @param       inValues the related values to use
+   *
+   * @return      the value itself (to allow new T().setFormatter())
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withRelated(@Nonnull String inValues)
+  {
+    m_related = inValues;
+
+    return (T)this;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //-------------------------------------------------------------- variables
@@ -173,19 +272,34 @@ public abstract class Value<T extends Value> implements
    *
    * @return      a String representation for human reading
    *
-   * @undefined   never
-   *
    */
   public @Nonnull String toString()
   {
-    if(!isDefined())
-      return UNDEFINED;
-
-    return (m_remark == null ? "" : m_remark.toString()) + doToString();
+    return toString(true);
   }
 
   //........................................................................
   //------------------------------- toString -------------------------------
+
+  /**
+   * Convert the value into a String that can be shown to a user.
+   *
+   * @param       inAll true if printing all bvalues, false just for humans
+   *
+   * @return      a String representation for human reading
+   *
+   */
+  public @Nonnull String toString(boolean inAll)
+  {
+    if(!isDefined())
+      return UNDEFINED;
+
+    return (!inAll || m_remark == null ? "" : m_remark.toString())
+      + doToString();
+  }
+
+  //........................................................................
+  //------------------------------ doToString ------------------------------
 
   /**
    * Return a string representation of the value. The value can be assumed to
@@ -378,7 +492,7 @@ public abstract class Value<T extends Value> implements
    */
   public @Nonnull String doGroup()
   {
-    return this.toString();
+    return this.toString(false);
   }
 
   //........................................................................
@@ -618,105 +732,6 @@ public abstract class Value<T extends Value> implements
    *
    */
   protected abstract boolean doRead(@Nonnull ParseReader inReader);
-
-  //........................................................................
-
-  //---------------------------- withFormatter -----------------------------
-
-  /**
-   * Set a formatter for this value.
-   *
-   * @param       inFormatter to formatter to use when printing the value
-   *
-   * @return      the value itself (to allow new T().setFormatter())
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public @Nonnull T withFormatter(@Nonnull Formatter<T> inFormatter)
-  {
-    m_formatter = inFormatter;
-
-    return (T)this;
-  }
-
-  //........................................................................
-  //----------------------------- withGrouping -----------------------------
-
-  /**
-   * Set a grouping for this value.
-   *
-   * @param       inGrouping to grouping to use when printing the value
-   *
-   * @return      the value itself (to allow new T().setFormatter())
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public @Nonnull T withGrouping(@Nonnull Grouping<T, String> inGrouping)
-  {
-    m_grouping = inGrouping;
-
-    return (T)this;
-  }
-
-  //........................................................................
-  //----------------------------- withEditType -----------------------------
-
-  /**
-   * Set a edit type for this value.
-   *
-   * @param       inType the type to set to
-   *
-   * @return      the value itself (to allow new T().setFormatter())
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public @Nonnull T withEditType(@Nonnull String inType)
-  {
-    if(inType.length() == 0)
-      throw new IllegalArgumentException("must have a type here");
-
-    m_editType = inType;
-
-    return (T)this;
-  }
-
-  //........................................................................
-  //----------------------------- withChoices ------------------------------
-
-  /**
-   * Set the edit values for this value.
-   *
-   * @param       inValues the edit values to use
-   *
-   * @return      the value itself (to allow new T().setFormatter())
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public @Nonnull T withChoices(@Nonnull String inValues)
-  {
-    m_choices = inValues;
-
-    return (T)this;
-  }
-
-  //........................................................................
-  //----------------------------- withRelated ------------------------------
-
-  /**
-   * Set the related edits for this value.
-   *
-   * @param       inValues the related values to use
-   *
-   * @return      the value itself (to allow new T().setFormatter())
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public @Nonnull T withRelated(@Nonnull String inValues)
-  {
-    m_related = inValues;
-
-    return (T)this;
-  }
 
   //........................................................................
 

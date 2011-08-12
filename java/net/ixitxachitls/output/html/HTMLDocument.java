@@ -367,11 +367,10 @@ public class HTMLDocument extends Document
                                new Replace.Replacement("i", "&igrave;"),
                                new Replace.Replacement("I", "&Igrave;")));
      s_actions.put(Window.NAME,
-                   new Pattern("<span onmouseover=\"document.getElementById"
-                               + "('window$count').style.visibility="
-                               + "'visible'\" "
-                               + "onmouseout=\"document.getElementById"
-                               + "('window$count').style.visibility='hidden'\" "
+                   new Pattern("<span onmouseover=\"$('#window$count')."
+                               + "css('visibility', 'visible');\" "
+                               + "onmouseout=\"$('#window$count')."
+                               + "css('visibility', 'hidden');\" "
                                + "class=\"windowed\">$1</span>"
                                + "<span id=\"window$count\" "
                                + "class=\"window\">"

@@ -1231,7 +1231,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull String []inGroups)
         {
           for(BaseProduct product : inData.getEntriesList(TYPE))
-            ioCollected.add(product.m_system.toString());
+            ioCollected.add(product.m_system.toString(false));
 
           return ioCollected;
         }
@@ -1246,7 +1246,7 @@ public class BaseProduct extends BaseEntry
 
           String system = inGroups[0];
 
-          return system.equals(product.m_system.toString());
+          return system.equals(product.m_system.toString(false));
         }
         // CHECKSTYLE:OFF
       }.withImages());
@@ -1278,7 +1278,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull String []inGroups)
         {
           for(BaseProduct product : inData.getEntriesList(TYPE))
-            ioCollected.add(product.m_audience.toString());
+            ioCollected.add(product.m_audience.toString(false));
 
           return ioCollected;
         }
@@ -1293,7 +1293,7 @@ public class BaseProduct extends BaseEntry
 
           String audience = inGroups[0];
 
-          return audience.equals(product.m_audience.toString());
+          return audience.equals(product.m_audience.toString(false));
         }
         // CHECKSTYLE:OFF
       }.withImages());
@@ -1306,13 +1306,46 @@ public class BaseProduct extends BaseEntry
   /** The formatter for the type. */
   protected static final Formatter<EnumSelection<ProductType>>
     s_typeFormatter =
-    new LinkFormatter<EnumSelection<ProductType>>("/index/categories/");
+    new LinkFormatter<EnumSelection<ProductType>>("/products/types/");
 
   /** The type of product. */
   @Key("product type")
   protected @Nonnull EnumSelection<ProductType> m_productType =
     new EnumSelection<ProductType>(ProductType.class)
     .withFormatter(s_typeFormatter);
+
+  static
+  {
+    s_indexes.put("types", new GroupedIndex("Types", TYPE, 1)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_productType.toString(false));
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+
+          String type = inGroups[0];
+
+          return type.equals(product.m_productType.toString(false));
+        }
+        // CHECKSTYLE:OFF
+      }.withImages());
+    // CHECKSTYLE:ON
+  }
 
   //........................................................................
   //----- style ------------------------------------------------------------
