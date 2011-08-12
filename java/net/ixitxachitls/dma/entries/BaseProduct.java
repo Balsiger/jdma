@@ -1083,7 +1083,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the date. */
   protected static final Formatter<Date> s_dateFormatter =
-    new LinkFormatter<Date>("/index/dates/");
+    new LinkFormatter<Date>("/products/dates/");
 
   /** The date (month and year) the product was released. */
   @Key("date")
@@ -1157,7 +1157,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the pages. */
   protected static final Formatter<Number> s_pageFormatter =
-    new LinkFormatter<Number>("/index/pages/");
+    new LinkFormatter<Number>("/products/pages/");
 
   /** The grouping for the pages. */
   protected static final Group<Number, Long, String> s_pageGroup =
@@ -1213,7 +1213,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the system. */
   protected static final Formatter<EnumSelection<System>> s_systemFormatter =
-    new LinkFormatter<EnumSelection<System>>("/index/systems/");
+    new LinkFormatter<EnumSelection<System>>("/product/systems/");
 
   /** The game system of the product. */
   @Key("system")
@@ -1259,7 +1259,7 @@ public class BaseProduct extends BaseEntry
   /** The formatter for the audience. */
   protected static final Formatter<EnumSelection<Audience>>
     s_audienceFormatter =
-    new LinkFormatter<EnumSelection<Audience>>("/index/audiences/");
+    new LinkFormatter<EnumSelection<Audience>>("/product/audiences/");
 
   /** The intended audience of the product. */
   @Key("audience")
@@ -1352,7 +1352,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the style. */
   protected static final Formatter<EnumSelection<Style>> s_styleFormatter =
-    new LinkFormatter<EnumSelection<Style>>("/index/styles/");
+    new LinkFormatter<EnumSelection<Style>>("/products/styles/");
 
   /** The style of the product, its general outlook. */
   @Key("style")
@@ -1397,7 +1397,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the producer. */
   protected static final Formatter<Selection> s_producerFormatter =
-    new LinkFormatter<Selection>("/index/producers/");
+    new LinkFormatter<Selection>("/product/producers/");
 
   /** The name of the company that produced the product. */
   @Key("producer")
@@ -1456,7 +1456,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the series. */
   protected static final Formatter<Name> s_seriesFormatter =
-    new LinkFormatter<Name>("/index/series/");
+    new LinkFormatter<Name>("/product/series/");
 
   /** The name of the series, even multiple if necessary, this product belongs
    *  to. */
@@ -1467,9 +1467,33 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Series", "series",
-//                                          "series", true, FORMATTER, FORMAT,
-//                                          true, null));
+    s_indexes.put("series", new GroupedIndex("Series", TYPE, 1)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_series.toString(false));
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+
+          String series = inGroups[0];
+
+          return series.equals(product.m_series.toString(false));
+        }
+      });
   }
 
   //........................................................................
@@ -1477,7 +1501,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the price. */
   protected static final Formatter<Price> s_priceFormatter =
-    new LinkFormatter<Price>("/index/prices/");
+    new LinkFormatter<Price>("/product/prices/");
 
   /** The grouping for the pages. */
   protected static final Grouping<Price, String> s_priceGrouping =
@@ -1508,7 +1532,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the price. */
   protected static final Formatter<EnumSelection<Part>> s_partFormatter =
-    new LinkFormatter<EnumSelection<Part>>("/index/parts/");
+    new LinkFormatter<EnumSelection<Part>>("/product/parts/");
 
   /** The contents of the product, what kind of individual components it has,
    *  if any. */
@@ -1572,7 +1596,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the layout. */
   protected static final Formatter<Selection> s_layoutFormatter =
-    new LinkFormatter<Selection>("/index/layouts/");
+    new LinkFormatter<Selection>("/product/layouts/");
 
   /** The layout of the product. */
   @Key("layout")

@@ -321,7 +321,7 @@ public abstract class GroupedIndex extends Index
    * @param       inPageSize   the size of the page as number of elements
    * @param       inPagination start and end entries to show
    *
-   */
+   Ba   */
   protected void writeEntries(@Nonnull HTMLWriter inWriter,
                               @Nonnull DMAData inData,
                               @Nonnull String inName,
@@ -350,7 +350,6 @@ public abstract class GroupedIndex extends Index
     // create a detailed index file
     HTMLDocument document = new HTMLDocument(title);
 
-    System.out.println("images: " + hasImages());
     if(hasImages())
       document.add(new Title(new Editable
                              ("", getType(),
