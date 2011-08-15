@@ -65,7 +65,6 @@ import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Subtitle;
-import net.ixitxachitls.util.Grouping;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -1571,7 +1570,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("series", new GroupedIndex("Series", TYPE, 1)
+    s_indexes.put("parts", new GroupedIndex("Parts", TYPE, 1)
       {
         private static final long serialVersionUID = 1L;
 
@@ -1580,7 +1579,8 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull String []inGroups)
         {
           for(BaseProduct product : inData.getEntriesList(TYPE))
-            ioCollected.add(product.m_series.toString(false));
+            for(Multiple content : product.m_contents)
+              ioCollected.add(content.get(0).toString(false));
 
           return ioCollected;
         }
@@ -1593,30 +1593,15 @@ public class BaseProduct extends BaseEntry
 
           BaseProduct product = (BaseProduct)inProduct;
 
-          String series = inGroups[0];
+          String part = inGroups[0];
 
-          return series.equals(product.m_series.toString(false));
+          for(Multiple content : product.m_contents)
+            if(part.equalsIgnoreCase(content.get(0).toString(false)))
+              return true;
+
+          return false;
         }
       });
-
-
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("Product", "Part", "parts",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(!(inEntry instanceof BaseProduct))
-//                          return null;
-
-//                        ArrayList<Object> parts = new ArrayList<Object>();
-
-//                       for(Multiple value : ((BaseProduct)inEntry).m_contents)
-//                          parts.add(value.get(0).get());
-
-//                        return parts.toArray();
-//                      }
-//                    }, true, FORMATTER, FORMAT, true));
   }
 
   //........................................................................
