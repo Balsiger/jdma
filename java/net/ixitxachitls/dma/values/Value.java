@@ -169,7 +169,6 @@ public abstract class Value<T extends Value> implements
   public @Nonnull T withGrouping(@Nonnull Grouping<T, String> inGrouping)
   {
     m_grouping = inGrouping;
-
     return (T)this;
   }
 

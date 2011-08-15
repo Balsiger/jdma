@@ -103,7 +103,7 @@ public class Price extends Decimal<Price>
    */
   public @Nonnull Price create()
   {
-    return new Price(m_min, m_max);
+    return super.create(new Price(m_min, m_max));
   }
 
   //........................................................................

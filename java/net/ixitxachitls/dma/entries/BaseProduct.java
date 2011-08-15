@@ -1504,7 +1504,7 @@ public class BaseProduct extends BaseEntry
     new LinkFormatter<Price>("/product/prices/");
 
   /** The grouping for the pages. */
-  protected static final Grouping<Price, String> s_priceGrouping =
+  protected static final Group<Price, Long, String> s_priceGrouping =
     new Group<Price, Long, String>(new Group.Extractor<Price, Long>()
       {
         public Long extract(@Nonnull Price inValue)
@@ -1518,13 +1518,35 @@ public class BaseProduct extends BaseEntry
   /** This is the price of the series. */
   @Key("price")
     protected @Nonnull Price m_price =
-      new Price(0, 1000 * 100).withFormatter(s_priceFormatter)
-        .withGrouping(s_priceGrouping);
+      new Price(0, 1000 * 100).withGrouping(s_priceGrouping)
+        .withFormatter(s_priceFormatter);
 
   static
   {
-//     s_indexes.add(new GroupedKeyIndex("Product", "Price", "prices", "price",
-//                                       true, FORMATTER, FORMAT, true));
+    s_indexes.put("prices", new GroupedIndex("Prices", TYPE, 1, s_priceGrouping)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_price.group());
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+          return inGroups[0].equalsIgnoreCase(product.m_price.group());
+        }
+      });
   }
 
   //........................................................................
@@ -1549,6 +1571,35 @@ public class BaseProduct extends BaseEntry
 
   static
   {
+    s_indexes.put("series", new GroupedIndex("Series", TYPE, 1)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_series.toString(false));
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+
+          String series = inGroups[0];
+
+          return series.equals(product.m_series.toString(false));
+        }
+      });
+
+
 //     s_indexes.add(new ExtractorIndex<ExtractorIndex>
 //                   ("Product", "Part", "parts",
 //                    new ExtractorIndex.Extractor()
