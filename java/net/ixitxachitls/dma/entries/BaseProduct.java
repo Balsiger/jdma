@@ -1641,9 +1641,33 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-//     s_indexes.add(new KeyIndex<KeyIndex>("Product", "Layout", "layouts",
-//                                          "layout", true, FORMATTER, FORMAT,
-//                                          false, null));
+    s_indexes.put("layouts", new GroupedIndex("Layouts", TYPE, 1)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct product : inData.getEntriesList(TYPE))
+            ioCollected.add(product.m_layout.toString(false));
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct product = (BaseProduct)inProduct;
+
+          String layout = inGroups[0];
+
+          return layout.equals(product.m_layout.toString(false));
+        }
+      });
   }
 
   //........................................................................
