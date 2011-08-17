@@ -47,12 +47,10 @@ import net.ixitxachitls.output.commands.Editable;
 import net.ixitxachitls.output.commands.Icon;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Par;
-import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Pair;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -205,6 +203,88 @@ public abstract class GroupedIndex extends Index
   }
 
   //........................................................................
+  //----------------------------- listEntries ------------------------------
+
+  /**
+   * Check if we have to show entries or an index overview.
+   *
+   * @param     inPath the sub path of the index
+   *
+   * @return    true for printing entries, false for overview(s)
+   *
+   */
+  @Override
+  public boolean listEntries(@Nonnull String inPath)
+  {
+    return groups(inPath).length == m_levels;
+  }
+
+  //........................................................................
+  //------------------------------- getTitle -------------------------------
+
+  /**
+   * Get the title of the index for the given path.
+   *
+   * @param       inPath the sub pasth to the index
+   *
+   * @return      the title for the page
+   *
+   */
+  public @Nonnull String getTitle(@Nonnull String inPath)
+  {
+    String []groups = groups(inPath);
+
+    if(groups.length == 0)
+      return getTitle();
+
+    return getTitle() + " - "
+      + Encodings.toWordUpperCase(s_groupJoiner.join(groups));
+  }
+
+  //........................................................................
+  //------------------------------ getEntries ------------------------------
+
+  /**
+   * Get all the entries to be included in this index.
+   *
+   * @param    inData  all the available data
+   * @param    inPath  the sub path to the index
+   *
+   * @return   a list of all the entries to print
+   *
+   */
+  @Override
+  public @Nonnull List<AbstractEntry>
+    getEntries(@Nonnull DMAData inData, @Nonnull String inPath)
+  {
+    String []groups = groups(inPath);
+    List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
+    for(AbstractEntry entry : inData.getEntriesList(getType()))
+      if(matches(groups, entry))
+        entries.add(entry);
+
+    System.out.println("entries: " + entries);
+    return entries;
+  }
+
+  //........................................................................
+  //------------------------------ isEditable ------------------------------
+
+  /**
+   * Check whether the index can be edited.
+   *
+   * @param       inPath the sub path to the index
+   *
+   * @return      true if index is editable, false if not
+   *
+   */
+  @Override
+  public boolean isEditable(@Nonnull String inPath)
+  {
+    return super.isEditable(inPath) && groups(inPath).length == 1;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -225,179 +305,68 @@ public abstract class GroupedIndex extends Index
    * @param      inPageSize   the size of the page as number of elements
    * @param      inPagination start and end entries to show
    *
+   * @return     the page with the entries to show instead, if any
+   *
    */
-  public void write(@Nonnull HTMLWriter inWriter,
-                    @Nonnull DMAData inData,
-                    @Nonnull String inName,
-                    @Nonnull String inPath,
-                    int inPageSize, Pair<Integer, Integer> inPagination)
+  public @Nullable String write(@Nonnull HTMLWriter inWriter,
+                                @Nonnull DMAData inData,
+                                @Nonnull String inName,
+                                @Nonnull String inPath,
+                                int inPageSize,
+                                Pair<Integer, Integer> inPagination)
   {
     inWriter.title(getTitle());
 
     String []groups = groups(inPath);
-    if(groups.length < m_levels)
-      writeNames(inWriter, inData, inName, groups);
-    else
-      writeEntries(inWriter, inData, inName, inPath, groups, inPageSize,
-                   inPagination);
-  }
-
-  //........................................................................
-  //------------------------------ writeNames ------------------------------
-
-  /**
-   * Handle the name index.
-   *
-   * @param       inWriter  the output to write to
-   * @param       inData    the data to print
-   * @param       inPath    the path to the index pages
-   * @param       inGroups  the groups for each level
-   *
-   */
-  protected void writeNames(@Nonnull HTMLWriter inWriter,
-                            @Nonnull DMAData inData,
-                            @Nonnull String inPath,
-                            @Nonnull String []inGroups)
-  {
-    // the general index
-    Log.info("serving dynamic " + getTitle() + " index");
 
     // compute all the different category names
     SortedSet<String> names = new TreeSet<String>(m_comparator);
-    names(names, inData, inGroups);
+    names(names, inData, groups);
+
+    if(names.size() == 1)
+      return inPath + "/" + names.iterator().next();
 
     String title;
     String titleValue;
-    if(inGroups.length == 0)
+    if(groups.length == 0)
       titleValue = getTitle();
     else
-      titleValue = s_groupJoiner.join(inGroups);
+      titleValue = s_groupJoiner.join(groups);
 
     title = Encodings.toWordUpperCase(titleValue);
 
     HTMLDocument document = new HTMLDocument(title);
 
-    if(hasImages())
-      document.add(new Title(new Editable("*/" + title, getType(),
-                                          new Icon(inPath + "/index.png",
-                                                   title, "", true),
-                                          getTitle() + "/" + title, titleValue,
-                                          "name")));
-    else
-      document.add(new Title(new Editable("*/" + title, getType(), title,
-                                          getTitle() + "/" + title, titleValue,
-                                          "name")));
+    Object titleCommand = title;
 
+    if(hasImages())
+      titleCommand = new Icon(inName + "/index.png", titleCommand, "", true);
+
+    if(isEditable(inName))
+      titleCommand = new Editable("*/" + title, getType(), titleCommand,
+                                  getTitle() + "/" + title, titleValue,
+                                  "name");
+
+    document.add(new Title(titleCommand));
     document.add(new Par());
 
     List<Command> commands = new ArrayList<Command>();
 
     for(String name : names)
       if(hasImages())
-        commands.add(new Icon(inPath + "/" + name.toLowerCase(Locale.US)
-                              + ".png", name, inPath + "/" + name, true));
+        commands.add(new Icon(inName + "/" + name.toLowerCase(Locale.US)
+                              + ".png", name, inName + "/" + name, true));
       else
         commands.add(new Link(new Divider("index-overview", name),
-                              inPath + "/" + name, "index-link"));
+                              inName + "/" + name, "index-link"));
 
     commands.add(new Divider("clear", ""));
 
     document.add(new Command(commands.toArray()));
 
     inWriter.add(document.toString());
-  }
 
-  //........................................................................
-  //----------------------------- writeEntries -----------------------------
-
-  /**
-   * Handle a detailed index.
-   *
-   * @param       inWriter     the writer to output to
-   * @param       inData       the data to print
-   * @param       inName       the name of the index
-   * @param       inPath       the path to the page
-   * @param       inGroups     the groups for the page
-   * @param       inPageSize   the size of the page as number of elements
-   * @param       inPagination start and end entries to show
-   *
-   Ba   */
-  protected void writeEntries(@Nonnull HTMLWriter inWriter,
-                              @Nonnull DMAData inData,
-                              @Nonnull String inName,
-                              @Nonnull String inPath,
-                              @Nonnull String []inGroups,
-                              int inPageSize,
-                              @Nonnull Pair<Integer, Integer> inPagination)
-  {
-    // determine start and end of index to show
-    int start = inPagination.first();
-    int end   = inPagination.second();
-
-    if(end <= 0)
-      end = start + inPageSize;
-
-    Log.info("serving dynamic " + getTitle() + " index '" + inName + "/"
-             + inPath + "'");
-
-    String title;
-    if(inGroups.length == 0)
-      title = getTitle();
-    else
-      title = getTitle() + " - "
-        + Encodings.toWordUpperCase(s_groupJoiner.join(inGroups));
-
-    // create a detailed index file
-    HTMLDocument document = new HTMLDocument(title);
-
-    if(hasImages())
-      document.add(new Title(new Editable
-                             ("", getType(),
-                              new Icon(inName.toLowerCase(Locale.US) + ".png",
-                                       inPath, inPath, true),
-                              getTitle() + "/" + title, inPath, "string")));
-    else
-      if(inGroups.length == 1)
-        document.add(new Title(new Editable("*/" + title, getType(), title,
-                                            getTitle() + "/" + title,
-                                            inPath, "string")));
-      else
-        document.add(new Title(title));
-
-    List<String> navigation = new ArrayList<String>();
-    if(isPaginated())
-      if(start > 0)
-        if(start - inPageSize > 0)
-          navigation.add("<a href=\"?start="
-                         + (start - inPageSize)
-                         + "\"  onclick=\"return util.link(event, '?start="
-                         + (start - inPageSize) + "&end=" + end
-                         + "');\" "
-                         + "class=\"paginate-previous\">"
-                         + "&laquo; previous</a>");
-        else
-          navigation.add("<a href=\"?\" "
-                         + "onclick=\"return util.link(event, '?');\" "
-                         + "class=\"paginate-previous\">"
-                         + "&laquo; previous</a>");
-
-    document.add(navigation);
-
-    // TODO: extract this from the request
-    boolean dm = true;
-
-    List<? extends AbstractEntry> entries = inData.getEntriesList(getType());
-    List<Object> cells = new ArrayList<Object>();
-    for(AbstractEntry entry : entries)
-      if(matches(inGroups, entry))
-        cells.addAll(entry.printList(entry.getName(), dm));
-
-    document.add(new Table("entrylist", entries.get(0).getListFormat(),
-                           new Command(cells)));
-
-    document.add(navigation);
-
-    inWriter.add(document.toString());
+    return null;
   }
 
   //........................................................................
@@ -471,6 +440,7 @@ public abstract class GroupedIndex extends Index
           }
         };
       index.withoutPagination();
+      index.withEditable();
 
       assertEquals("title", "title", index.getTitle());
       assertFalse("images", index.hasImages());
@@ -544,6 +514,7 @@ public abstract class GroupedIndex extends Index
                                    @Nonnull String []inGroups)
           {
             ioNames.add("second");
+            ioNames.add("other");
 
             return ioNames;
           }
@@ -554,6 +525,7 @@ public abstract class GroupedIndex extends Index
           }
         };
       index.withoutPagination();
+      index.withEditable();
 
       assertEquals("title", "title", index.getTitle());
       assertFalse("images", index.hasImages());
@@ -591,123 +563,15 @@ public abstract class GroupedIndex extends Index
                    + "</span></dmaeditable></h1>\n"
                    + "\n"
                    + "<p />\n"
+                   + "<a href=\"index-name/other\" class=\"index-link\" "
+                   + "onclick=\"return util.link(event, "
+                   + "'index-name/other');\">"
+                   + "<div class=\"index-overview\">other</div></a>"
                    + "<a href=\"index-name/second\" class=\"index-link\" "
                    + "onclick=\"return util.link(event, "
                    + "'index-name/second');\">"
                    + "<div class=\"index-overview\">second</div>"
                    + "</a><div class=\"clear\"></div>\n"
-                   + "  </BODY>\n"
-                   + "</HTML>\n", content.toString());
-
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/first.dma'");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/second.dma'");
-    }
-
-    //......................................................................
-    //----- writeEntries ---------------------------------------------------
-
-    /** Testing building of commands. */
-    @org.junit.Test
-    public void writeEntries()
-    {
-      GroupedIndex index =
-        new GroupedIndex("title",
-                         net.ixitxachitls.dma.entries.BaseCharacter.TYPE, 2)
-        {
-          private static final long serialVersionUID = 1L;
-
-          public Set<String> names(@Nonnull Set<String> ioNames,
-                                   @Nonnull DMAData inData,
-                                   @Nonnull String []inGroups)
-          {
-            return ioNames;
-          }
-
-          public boolean matches(String []inGroups, AbstractEntry inEntry)
-          {
-            return true;
-          }
-        };
-      index.withoutPagination();
-
-      assertEquals("title", "title", index.getTitle());
-      assertFalse("images", index.hasImages());
-      assertFalse("paginated", index.isPaginated());
-
-      java.io.StringWriter content = new java.io.StringWriter();
-      HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
-
-      index.write(writer,
-                  new DMAData.Test.Data(new net.ixitxachitls.dma.entries
-                                        .BaseCharacter("first",
-                                                       new DMAData("path")),
-                                        new net.ixitxachitls.dma.entries
-                                        .BaseCharacter("second",
-                                                       new DMAData("path"))),
-                  "index-name", "first1/second", 50,
-                  new Pair<Integer, Integer>(0, 10));
-      writer.close();
-
-      assertEquals("content",
-                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
-                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-                   + "\">\n"
-                   + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                   + "<HTML>\n"
-                   + "  <HEAD>\n"
-                   + "    <TITLE>title</TITLE>\n"
-                   + "  </HEAD>\n"
-                   + "  <BODY>\n"
-                   + "    \n"
-                   + "<h1>title - First1 - Second</h1>\n"
-                   + "\n"
-                   + "<table class=\"entrylist\"><tr class=\"title\">"
-                   + "<td class=\"title\"></td><td class=\"title\">Name</td>"
-                   + "<td class=\"title\">Real Name</td>"
-                   + "<td class=\"title\">Group</td>"
-                   + "<td class=\"title\">Last Login</td>"
-                   + "<td class=\"title\">Last Action</td>"
-                   + "</tr><tr><td class=\"label\">"
-                   + "<img src=\"/icons/labels/BaseCharacter.png\" "
-                   + "alt=\"BaseCharacter\" class=\"image label\"/> "
-                   + "<div id=\"linkrow-user-first\" class=\"\">\n"
-                   + "<script type='text/javascript'>"
-                   + "util.linkRow(document.getElementById"
-                   + "('linkrow-user-first'), '/user/first');</script>\n"
-                   + "</div></td><td class=\"name\">first</td>"
-                   + "<td class=\"name\"><dmaeditable key=\"real name\" "
-                   + "value=\"$undefined$\" id=\"first\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"string\"><span></span>"
-                   + "</dmaeditable></td>"
-                   + "<td class=\"group\"><dmaeditable key=\"group\" "
-                   + "value=\"$undefined$\" id=\"first\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"selection\" note=\"\" "
-                   + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
-                   + "</dmaeditable></td>"
-                   + "<td class=\"last\"></td>"
-                   + "<td class=\"action\"></td></tr>"
-                   + "<tr><td class=\"label\">"
-                   + "<img src=\"/icons/labels/BaseCharacter.png\" "
-                   + "alt=\"BaseCharacter\" class=\"image label\"/> "
-                   + "<div id=\"linkrow-user-second\" class=\"\">\n"
-                   + "<script type='text/javascript'>"
-                   + "util.linkRow(document.getElementById"
-                   + "('linkrow-user-second'), '/user/second');</script>\n"
-                   + "</div></td><td class=\"name\">second</td>"
-                   + "<td class=\"name\"><dmaeditable key=\"real name\" "
-                   + "value=\"$undefined$\" id=\"second\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"string\"><span></span>"
-                   + "</dmaeditable></td>"
-                   + "<td class=\"group\"><dmaeditable key=\"group\" "
-                   + "value=\"$undefined$\" id=\"second\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"selection\" note=\"\" "
-                   + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
-                   + "</dmaeditable></td>"
-                   + "<td class=\"last\"></td>"
-                   + "<td class=\"action\"></td></tr></table>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", content.toString());
 

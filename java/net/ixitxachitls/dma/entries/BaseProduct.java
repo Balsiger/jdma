@@ -725,23 +725,6 @@ public class BaseProduct extends BaseEntry
 
   //........................................................................
 
-  //----- CategoryAccessor -------------------------------------------------
-
-//   /** A simple interface to get categories out of a product. */
-//   public interface CategoryAccessor
-//   {
-//       /** Get the categories.
-//        *
-//        * @param  inProduct the product to get categories from
-//        *
-//        * @return all the categories
-//        *
-//        */
-//     public ValueList<Multiple> []get(BaseProduct inProduct);
-//   }
-
-  //........................................................................
-
   //........................................................................
 
   //--------------------------------------------------------- constructor(s)
@@ -775,19 +758,6 @@ public class BaseProduct extends BaseEntry
   }
 
   //........................................................................
-
-  //........................................................................
-
-  //----- printing commands ------------------------------------------------
-
-//   /** The command for printing on a page. */
-//   public static Command PAGE_COMMAND = new Command(new Object []
-//     {
-//       new Divider("center",
-//                   new Command("#system #audience #style #producer #layout "
-//                               + "#{product type}")),
-//       "$scripts",
-//     });
 
   //........................................................................
 
@@ -923,7 +893,9 @@ public class BaseProduct extends BaseEntry
 
                       return false;
                     }
-                  });
+                    // CHECKSTYLE:OFF
+                  }.withEditable());
+    // CHECKSTYLE:ON
 
 
     // the index for all jobs
@@ -962,8 +934,9 @@ public class BaseProduct extends BaseEntry
                       ((BaseProduct)inProduct).collectJobs(jobs, name, job);
                       return !jobs.isEmpty();
                     }
-                  });
-
+                    // CHECKSTYLE:OFF
+                  }.withEditable());
+        // CHECKSTYLE:ON
   }
 
   //........................................................................
@@ -1111,7 +1084,10 @@ public class BaseProduct extends BaseEntry
               for(BaseProduct product : inData.getEntriesList(TYPE))
                 if(inGroups[0].equals("" + product.m_date.getYear())
                    && product.m_date.getMonth() >= 0)
-                  ioCollected.add(product.m_date.getMonthAsString());
+                  if(product.m_date.getMonth() == 0)
+                    ioCollected.add(Value.UNDEFINED);
+                  else
+                    ioCollected.add(product.m_date.getMonthAsString());
 
           return ioCollected;
         }
@@ -2189,79 +2165,8 @@ public class BaseProduct extends BaseEntry
   }
 
   //........................................................................
-  //------------------------------ printCommand ----------------------------
 
-  /**
-   * Print the item to the document, in the general section.
-   *
-   * @param       inDM   true if set for DM, false for player
-   * @param       inEditable true if values are editable, false if not
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-//   public PrintCommand printCommand(boolean inDM, boolean inEditable)
-//   {
-//     PrintCommand commands = super.printCommand(inDM, inEditable);
-
-//     commands.type = "product";
-
-//     commands.replaceValue
-//       ("title",
-//        new Title(new Command(new Object []
-//          {
-//            inEditable ? new Editable(getName(), "", "leader",
-//                                      m_leader.toStore(), "string") : "",
-//            inEditable ? new Editable(getName(), getFullTitle(), "title",
-//                                      m_title.toStore(), "string")
-//            : getFullTitle(),
-//          }), "title", new Link(getType(),
-//                                "/index/" + getType().getMultipleLink())),
-//        false, false, false, "titles");
-
-//     commands.replaceValue
-//       ("ISBN",
-//        new Command(new Object []
-//          {
-//            inEditable ? new Editable(getName(), m_isbn.format(true), "ISBN",
-//                                      m_isbn.toEdit(), m_isbn.getEditType())
-//            : m_isbn,
-//            m_isbn.isDefined() && m_isbn13.isDefined() ? " / " : " ",
-//            inEditable ? new Editable(getName(), m_isbn13.format(true),
-//                                      "ISBN13", m_isbn13.toEdit(),
-//                                      m_isbn.getEditType())
-//            : m_isbn13,
-//          }), false, false, false, "ISBNs");
-
-//     commands.addValue("scripts",
-//                       new Script
-//                       ("gui.addAction('Add Product', function(event) { "
-//                        + "link(event, '/user/me/product/" + getName()
-//                        + "?create', "
-//                      + "function () { gui.makeEditable(); gui.editAll(); }, "
-//                        + "'Add this entry as a product.')})\n"),
-//                       false, false, false, "scripts");
-
-//     commands.addValue("series",
-//                       new Command(new Object []
-//                         {
-//                           createValueCommand(m_series, "series", inEditable),
-//                           m_volume.isDefined() ? ", " : " ",
-//                           createValueCommand(m_volume, "volume", inEditable),
-//                           m_number.isDefined() ? ", " : " ",
-//                           createValueCommand(m_number, "number", inEditable),
-//                         }));
-
-//     commands.temp = new ArrayList<Object>();
-//     commands.temp.add(PAGE_COMMAND.transform(new ValueTransformer(commands,
-//                                                                   inDM)));
-
-//     return commands;
-//   }
-
-  //....................................................1....................
-
-  //........................................................................
+  //...........................................................................
 
   //----------------------------------------------------------- manipulators
 
@@ -3005,49 +2910,6 @@ public class BaseProduct extends BaseEntry
 //     m_managers.add(manager);
 
 //     return true;
-//   }
-
-  //........................................................................
-
-  //---------------------------- updatePersons -----------------------------
-
-  /**
-    * Update all the persons with the given name to the given new name.
-    *
-    * @param       inPerson the persons to change
-    * @param       inNew    the new value to set to
-    *
-    * @return      true if any person was changed, false if not
-    *
-    * @example     product.update("Ed Greenwood", "Greendwood, Ed");
-    *
-    */
-//   @SuppressWarnings("unchecked") // cast for generic array creation
-// public boolean updatePersons(@Nonnull String inPerson, @Nonnull String inNew)
-//   {
-//     ValueList<Multiple> []lists = (ValueList<Multiple> [])new ValueList<?> []
-//       {
-//         m_authors, m_editors, m_cover, m_cartographers, m_illustrators,
-//         m_typographers, m_managers,
-//       };
-
-//     boolean result = false;
-
-//     for(ValueList<Multiple> list : lists)
-//       for(Multiple value : list)
-//       {
-//         Text person = (Text)value.get(0).getMutable();
-
-//         if(inPerson.equalsIgnoreCase(person.get()))
-//         {
-//           person.set(inNew);
-
-//           changed();
-//           result = true;
-//         }
-//       }
-
-//     return result;
 //   }
 
   //........................................................................

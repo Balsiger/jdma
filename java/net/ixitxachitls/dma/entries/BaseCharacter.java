@@ -196,26 +196,6 @@ public class BaseCharacter extends BaseEntry
                   "$label $listlink", null, "${real name}", "$group",
                   "${last login}", "${last action}");
 
-  // the general index with all base characters
-  static
-  {
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("index", "index", "basecharacters",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(!(inEntry instanceof BaseCharacter))
-//                          return null;
-
-//                        Object []result = { "base character" };
-
-//                        return result;
-//                      }
-//                    }, true, FORMATTER, FORMAT, false).withAccess(Group.ADMIN)
-//                   .withDataSource(Index.DataSource.user));
-  }
-
   /** A random generator to create tokens. */
   private static final @Nonnull Random s_random =
     new Random(System.currentTimeMillis());

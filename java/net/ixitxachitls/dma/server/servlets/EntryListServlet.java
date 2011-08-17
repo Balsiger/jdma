@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -37,14 +36,12 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.output.html.HTMLDocument;
-import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Table;
+import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -89,7 +86,7 @@ public class EntryListServlet extends PageServlet
   //-------------------------------------------------------------- variables
 
   /** All the avilable data. */
-  private @Nonnull DMAData m_data;
+  protected @Nonnull DMAData m_data;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -103,16 +100,16 @@ public class EntryListServlet extends PageServlet
   /**
    * Get the entries in the given page range.
    *
-   * @param       inID    the id for the entries to get
+   * @param       inType the type of entries to get
    *
    * @return      a list of all entries in range
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public List<AbstractEntry> getEntries(@Nonnull String inID)
+  public List<AbstractEntry>
+    getEntries(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    return (List<AbstractEntry>)
-      m_data.getEntriesList(AbstractType.get(inID));
+    return (List<AbstractEntry>)m_data.getEntriesList(inType);
   }
 
   //........................................................................
@@ -142,7 +139,6 @@ public class EntryListServlet extends PageServlet
       typeName = Strings.getPattern(inPath, "([^/]*)$");
 
     AbstractType<? extends AbstractEntry> type = AbstractType.get(typeName);
-
     if(type == null)
     {
       inWriter.add("No entries found for type '" + typeName + "'");
@@ -151,60 +147,12 @@ public class EntryListServlet extends PageServlet
     }
 
     String title = Encodings.toWordUpperCase(type.getMultipleLink());
+    Log.info("serving dynamic list " + title);
 
-    // determine start and end of index to show
-    Pair<Integer, Integer> pagination = inRequest.getPagination();
-    int start = pagination.first();
-    int end   = pagination.second();
+    // TODO: extract dm from request
+    format(inWriter, getEntries(type), true, title, new Title(title),
+           inRequest.getPagination(), inRequest.getPageSize());
 
-    List<AbstractEntry> entries = getEntries(typeName);
-
-    inWriter.title(title);
-    inWriter.begin("h1").add(title).end("h1");
-
-    HTMLDocument document = new HTMLDocument(title);
-
-    List<String> navigation = new ArrayList<String>();
-    if(start > 0)
-      if(start - inRequest.getPageSize() > 0)
-        navigation.add("<a href=\"?start="
-                       + (start - inRequest.getPageSize())
-                       + "\"  onclick=\"return util.link(event, '?start="
-                       + (start - inRequest.getPageSize()) + "');\" "
-                       + "class=\"paginate-previous\">"
-                       + "&laquo; previous</a>");
-      else
-        navigation.add("<a href=\"?\" "
-                       + "onclick=\"return util.link(event, '?');\" "
-                       + "class=\"paginate-previous\">"
-                       + "&laquo; previous</a>");
-
-    if(entries.size() >= end)
-      navigation.add("<a href=\"?start="
-                     + (start + inRequest.getPageSize()) + "\" "
-                     + " onclick=\"return util.link(event, '?start="
-                     + (start + inRequest.getPageSize()) + "');\" "
-                     + "class=\"paginate-next\">"
-                     + "&raquo; next</a>");
-
-    document.add(navigation);
-    // TODO: extract this from the request
-    boolean dm = true;
-    if(entries.isEmpty())
-      document.add(new Color("error", "No entries found!"));
-    else
-    {
-      List<Object> cells = new ArrayList<Object>();
-      for(AbstractEntry entry : sublist(entries, start, end))
-        cells.addAll(entry.printList(entry.getName(), dm));
-
-      document.add(new Table("entrylist",
-                             entries.get(0).getListFormat(),
-                             new Command(cells)));
-    }
-    document.add(navigation);
-
-    inWriter.add(document.toString());
     addNavigation(inWriter,
                   type.getMultipleLink(), "/" + type.getMultipleLink());
   }
@@ -214,43 +162,6 @@ public class EntryListServlet extends PageServlet
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //------------------------------- sublist --------------------------------
-
-  /**
-   * Create a sublist using the given limits.
-   *
-   * @param       <T>     the type of elements in the list
-   * @param       inList  the list with the elements
-   * @param       inStart the start position (inclusive)
-   * @param       inEnd   the end position (exclusive)
-   *
-   * @return      a sublist for the given range
-   *
-   */
-  public @Nonnull <T> List<T> sublist(@Nonnull List<T> inList, int inStart,
-                                      int inEnd)
-  {
-    if(inList.isEmpty())
-      return inList;
-
-    int start = inStart;
-    int end = inEnd;
-
-    if(start < 0)
-      start = 0;
-
-    if(end > inList.size())
-      end = inList.size();
-
-    if(start > end || start > inList.size())
-      start = end;
-
-    return inList.subList(start, end);
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -324,6 +235,7 @@ public class EntryListServlet extends PageServlet
       EasyMock.expect(m_request.getUser()).andStubReturn(null);
       EasyMock.expect(m_request.getPagination())
         .andStubReturn(new Pair<Integer, Integer>(inStart, inEnd));
+      EasyMock.expect(m_request.getPageSize()).andStubReturn(50);
       EasyMock.replay(m_request, m_response);
 
       return new EntryListServlet(new DMAData("path"))
@@ -331,7 +243,8 @@ public class EntryListServlet extends PageServlet
           private static final long serialVersionUID = 1L;
 
           @Override
-          public List<AbstractEntry> getEntries(String inID)
+          public List<AbstractEntry>
+            getEntries(AbstractType<? extends AbstractEntry> inType)
           {
             return inEntries;
           }
@@ -368,10 +281,9 @@ public class EntryListServlet extends PageServlet
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'Entrys';\n"
                    + "    </SCRIPT>\n"
-                   + "    <H1>\n"
-                   + "      Entrys\n"
-                   + "    </H1>\n"
                    + "    \n"
+                   + "<h1>Entrys</h1>\n"
+                   + "\n"
                    + "<table class=\"entrylist\">"
                    + "<tr class=\"title\">"
                    + "<td class=\"title\"></td>"

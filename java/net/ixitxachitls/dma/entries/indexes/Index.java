@@ -34,10 +34,7 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.output.html.HTMLWriter;
-import net.ixitxachitls.util.Identificator;
 import net.ixitxachitls.util.Pair;
 
 //..........................................................................
@@ -107,6 +104,22 @@ public abstract class Index implements Serializable, Comparable<Index>
   public @Nonnull Index withoutPagination()
   {
     m_paginated = false;
+
+    return this;
+  }
+
+  //........................................................................
+  //-------------------------- withoutPagination ---------------------------
+
+  /**
+   * Disables pagination for the index.
+   *
+   * @return  the index for chaining
+   *
+   */
+  public @Nonnull Index withEditable()
+  {
+    m_editable = true;
 
     return this;
   }
@@ -192,99 +205,14 @@ public abstract class Index implements Serializable, Comparable<Index>
   /** Flag if showing images or not. */
   private boolean m_images = false;
 
-  /** The formatter to use. */
-//   private @Nonnull Formatter<AbstractEntry> m_formatter = FORMATTER;
-
-  /** The format to use. */
-  private @Nonnull String m_format = FORMAT;
+  /** Flag if index is editable or not. */
+  private boolean m_editable = false;
 
   /** Flag if index is paginated or not. */
   private boolean m_paginated = true;
 
   /** The access level required for this index. */
-  private @Nullable BaseCharacter.Group m_access = null;
-
-  /** The possible data sources. */
-  //public enum DataSource { global, campaign, products, dm, user, typed };
-
-  /** The data that is to be used. */
-  //private DataSource m_source = DataSource.global;
-
-  /** The type of entries in the index, if any. */
-  //private AbstractEntry.Type m_type = null;
-
-  /** The standard identificator for indexes. */
-  protected static final Identificator<AbstractEntry> s_identificator =
-    new Identificator<AbstractEntry>()
-    {
-      public @Nonnull List<String> id(@Nonnull AbstractEntry inEntry)
-      {
-        List<String> ids = new ArrayList<String>();
-
-        if(inEntry instanceof BaseEntry)
-          ids.addAll(((BaseEntry)inEntry).getSynonyms());
-
-        ids.add(inEntry.getRefName());
-
-        return ids;
-      }
-    };
-
-  /** The standard table format for indexes. */
-  public static final @Nonnull String FORMAT =
-    "1:L(icon);20:L(name)[Name];20:L(short)[Short Description]";
-
-  /** The standard formatter for indexes. */
-//   public static final @Nonnull Formatter<AbstractEntry>
-//     FORMATTER = new Formatter<AbstractEntry>()
-//     {
-//       public @Nonnull List<Object>
-//         format(@Nonnull String inKey, @Nonnull AbstractEntry inEntry)
-//       {
-//         ArrayList<Object> list = new ArrayList<Object>();
-
-//         // label
-//         list.add(new Label(Encodings.toWordUpperCase
-//                            (inEntry.getType().toString())));
-
-//         String name = inKey;
-
-//         // try to find the real, unchanged name
-//         if(name.equalsIgnoreCase(inEntry.getID()))
-//           name = inEntry.getID();
-//         else
-//           if(inEntry instanceof BaseEntry)
-//           {
-//             List<String> synonyms = ((BaseEntry)inEntry).getSynonyms();
-
-//             for(String synonym : synonyms)
-//               if(name.equalsIgnoreCase(synonym))
-//               {
-//                 name = synonym;
-
-//                 break;
-//               }
-//           }
-
-//         // name
-//         CampaignData campaign = inEntry.getCampaign();
-
-//         String prefix = "";
-//         if(campaign instanceof Campaign)
-//           prefix = "/campaign/" + ((Campaign)campaign).getID();
-//         else
-//           prefix = "/entry";
-
-//         list.add(new Link(name, prefix
-//                             + "/" + inEntry.getType().getLink()
-//                             + "/" + inEntry.getID()));
-
-//         // short description
-//         list.add(new Command(inEntry.getShortDescription()));
-
-//         return list;
-//       }
-//     };
+  //private @Nullable BaseCharacter.Group m_access = null;
 
   //........................................................................
 
@@ -370,13 +298,13 @@ public abstract class Index implements Serializable, Comparable<Index>
    * @return      true if allowed, false if not
    *
    */
-  public boolean allows(@Nonnull BaseCharacter.Group inLevel)
-  {
-    if(m_access == null)
-      return true;
+  // public boolean allows(@Nonnull BaseCharacter.Group inLevel)
+  // {
+  //   if(m_access == null)
+  //     return true;
 
-    return m_access.allows(inLevel);
-  }
+  //   return m_access.allows(inLevel);
+  // }
 
   //........................................................................
   //---------------------------- getDataSource -----------------------------
@@ -406,6 +334,34 @@ public abstract class Index implements Serializable, Comparable<Index>
    */
   public abstract @Nonnull String [] getNavigation(@Nonnull String inName,
                                                    @Nonnull String inPath);
+
+  //........................................................................
+  //------------------------------ getEntries ------------------------------
+
+  /**
+   * Get all the entries to be included in this index.
+   *
+   * @param    inData all the available data
+   * @param    inPath the sub path to the index
+   *
+   * @return   a list of all the entries to print
+   *
+   */
+  public abstract @Nonnull List<AbstractEntry>
+    getEntries(@Nonnull DMAData inData, @Nonnull String inPath);
+
+  //........................................................................
+  //------------------------------- getTitle -------------------------------
+
+  /**
+   * Get the title of the index for the given path.
+   *
+   * @param       inPath the sub path to the index
+   *
+   * @return      the title for the page
+   *
+   */
+  public abstract @Nonnull String getTitle(@Nonnull String inPath);
 
   //........................................................................
 
@@ -493,6 +449,35 @@ public abstract class Index implements Serializable, Comparable<Index>
   }
 
   //........................................................................
+  //----------------------------- listEntries ------------------------------
+
+  /**
+   * Check if we have to show entries or an index overview.
+   *
+   * @param     inPath the sub path of the index
+   *
+   * @return    true for printing entries, false for overview(s)
+   *
+   */
+  public abstract boolean listEntries(@Nonnull String inPath);
+
+  //........................................................................
+  //------------------------------ isEditable ------------------------------
+
+  /**
+   * Check whether the index can be edited.
+   *
+   * @param       inPath the sub path to the index
+   *
+   * @return      true if index is editable, false if not
+   *
+   */
+  public boolean isEditable(@Nonnull String inPath)
+  {
+    return m_editable;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -513,13 +498,15 @@ public abstract class Index implements Serializable, Comparable<Index>
    * @param      inPageSize   the size of the page as number of elements
    * @param      inPagination start and end entries to show
    *
+   * @return     the page with the entries to show instead, if any
+   *
    */
-  public abstract void write(@Nonnull HTMLWriter inWriter,
-                             @Nonnull DMAData inData,
-                             @Nonnull String inName,
-                             @Nonnull String inPath,
-                             int inPageSize,
-                             Pair<Integer, Integer> inPagination);
+  public abstract @Nullable String write(@Nonnull HTMLWriter inWriter,
+                                         @Nonnull DMAData inData,
+                                         @Nonnull String inName,
+                                         @Nonnull String inPath,
+                                         int inPageSize,
+                                         Pair<Integer, Integer> inPagination);
 
   //........................................................................
 
@@ -547,13 +534,30 @@ public abstract class Index implements Serializable, Comparable<Index>
             return new String[0];
           }
 
-          public void write(@Nonnull HTMLWriter inWriter,
-                            @Nonnull DMAData inData,
-                            @Nonnull String inName,
-                             @Nonnull String inPath,
-                            int inPageSize,
-                            Pair<Integer, Integer> inPagination)
-          { }
+          public String write(@Nonnull HTMLWriter inWriter,
+                              @Nonnull DMAData inData,
+                              @Nonnull String inName,
+                              @Nonnull String inPath,
+                              int inPageSize,
+                              Pair<Integer, Integer> inPagination)
+          {
+            return null;
+          }
+
+          public boolean listEntries(String inPath)
+          {
+            return false;
+          }
+
+          public List<AbstractEntry> getEntries(DMAData inData, String inPath)
+          {
+            return new ArrayList<AbstractEntry>();
+          }
+
+          public String getTitle(String inPath)
+          {
+            return inPath;
+          }
         };
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseCharacter.TYPE,

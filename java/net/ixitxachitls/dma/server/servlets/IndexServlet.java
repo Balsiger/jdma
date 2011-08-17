@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.util.Locale;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -31,6 +33,9 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.output.commands.Editable;
+import net.ixitxachitls.output.commands.Icon;
+import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -76,15 +81,16 @@ public class IndexServlet extends PageServlet
 
   //-------------------------------------------------------------- variables
 
-  /** All the available data. */
-  private @Nonnull DMAData m_data;
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
+
+  /** All the avilable data. */
+  protected @Nonnull DMAData m_data;
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -144,9 +150,35 @@ public class IndexServlet extends PageServlet
       return;
     }
 
-    index.write(inWriter, m_data, inRequest.getOriginalPath(), group,
-                inRequest.getPageSize(), inRequest.getPagination());
-    addNavigation(inWriter, index.getNavigation(name, group));
+    Log.info("serving dynamic " + index.getTitle() + " index '" + name + "/"
+             + group + "'");
+
+    String title = index.getTitle(group);
+    Object titleCommand = title;
+
+    if(index.hasImages())
+      titleCommand =
+        new Icon(inRequest.getOriginalPath().toLowerCase(Locale.US) + ".png",
+                 group, group, true);
+
+    if(index.isEditable(group))
+      titleCommand = new Editable("*/" + index.getTitle(), index.getType(),
+                                  titleCommand, index.getTitle() + "/" + group,
+                                  group, "string");
+
+    if(!index.listEntries(group))
+      group = index.write(inWriter, m_data,
+                            inRequest.getOriginalPath(), group,
+                            inRequest.getPageSize(),
+                            inRequest.getPagination());
+
+    if(group != null)
+      format(inWriter, index.getEntries(m_data, group), true,
+             title, new Title(titleCommand), inRequest.getPagination(),
+             inRequest.getPageSize());
+
+    if(group != null)
+      addNavigation(inWriter, index.getNavigation(name, group));
   }
 
   //........................................................................
@@ -159,3 +191,4 @@ public class IndexServlet extends PageServlet
   //------------------------------------------------------------------- test
   //........................................................................
 }
+

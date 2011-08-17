@@ -25,6 +25,8 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,9 +37,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
+import net.ixitxachitls.output.html.HTMLDocument;
 import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -359,6 +367,116 @@ public class PageServlet extends DMAServlet
 
   //------------------------------------------------- other member functions
 
+  //-------------------------------- format --------------------------------
+
+  /**
+   * Format the given list of entries.
+   *
+   * @param       inWriter       the write to write to
+   * @param       inEntries      the entries to be written
+   * @param       inDM           true for writing for DMs, false otherwise
+   * @param       inTitle        the title of the page
+   * @param       inTitleCommand the command to set the title
+   * @param       inPagination   the start and end entries to print
+   * @param       inPageSize     the full size of the page
+   *
+   */
+  protected void format(@Nonnull HTMLWriter inWriter,
+                        @Nonnull List<? extends AbstractEntry> inEntries,
+                        boolean inDM, @Nonnull String inTitle,
+                        @Nonnull Command inTitleCommand,
+                        @Nonnull Pair<Integer, Integer> inPagination,
+                        int inPageSize)
+  {
+    inWriter.title(inTitle);
+
+    int start = inPagination.first();
+    int end   = inPagination.second();
+
+    HTMLDocument document = new HTMLDocument(inTitle);
+
+    document.add(inTitleCommand);
+
+    List<String> navigation = new ArrayList<String>();
+    if(start > 0)
+      if(start - inPageSize > 0)
+        navigation.add("<a href=\"?start="
+                       + (start - inPageSize)
+                       + "\"  onclick=\"return util.link(event, '?start="
+                       + (start - inPageSize) + "');\" "
+                       + "class=\"paginate-previous\">"
+                       + "&laquo; previous</a>");
+      else
+        navigation.add("<a href=\"?\" "
+                       + "onclick=\"return util.link(event, '?');\" "
+                       + "class=\"paginate-previous\">"
+                       + "&laquo; previous</a>");
+
+    if(inEntries.size() >= end)
+      navigation.add("<a href=\"?start="
+                     + (start + inPageSize) + "\" "
+                     + " onclick=\"return util.link(event, '?start="
+                     + (start + inPageSize) + "');\" "
+                     + "class=\"paginate-next\">"
+                     + "&raquo; next</a>");
+
+    document.add(navigation);
+
+    if(inEntries.isEmpty())
+      document.add(new Color("error", "No entries found!"));
+    else
+    {
+      List<Object> cells = new ArrayList<Object>();
+      for(AbstractEntry entry : sublist(inEntries, start, end))
+        cells.addAll(entry.printList(entry.getName(), inDM));
+
+      document.add(new Table("entrylist",
+                             inEntries.get(0).getListFormat(),
+                             new Command(cells)));
+    }
+    document.add(navigation);
+
+    inWriter.add(document.toString());
+  }
+
+  //........................................................................
+
+  //------------------------------- sublist --------------------------------
+
+  /**
+   * Create a sublist using the given limits.
+   *
+   * @param       <T>     the type of elements in the list
+   * @param       inList  the list with the elements
+   * @param       inStart the start position (inclusive)
+   * @param       inEnd   the end position (exclusive)
+   *
+   * @return      a sublist for the given range
+   *
+   */
+  public @Nonnull <T> List<T> sublist(@Nonnull List<T> inList, int inStart,
+                                      int inEnd)
+  {
+    if(inList.isEmpty())
+      return inList;
+
+    int start = inStart;
+    int end = inEnd;
+
+    if(start < 0)
+      start = 0;
+
+    if(end > inList.size())
+      end = inList.size();
+
+    if(start > end || start > inList.size())
+      start = end;
+
+    return inList.subList(start, end);
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -616,6 +734,99 @@ public class PageServlet extends DMAServlet
                    + "    </SCRIPT>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", output.toString());
+    }
+
+    //......................................................................
+    //----- formatEntries --------------------------------------------------
+
+    /** The formatEntries Test. */
+    @org.junit.Test
+    public void formatEntries()
+    {
+
+      java.io.StringWriter content = new java.io.StringWriter();
+      HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
+
+      List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
+      entries.add(new net.ixitxachitls.dma.entries.BaseCharacter
+                  ("first", new net.ixitxachitls.dma.data.DMAData("path")));
+      entries.add(new net.ixitxachitls.dma.entries.BaseCharacter
+                  ("second", new net.ixitxachitls.dma.data.DMAData("path")));
+
+      PageServlet servlet = new PageServlet();
+      servlet.format(writer, entries, true,
+                     "title",
+                     new net.ixitxachitls.output.commands.Title
+                     ("First1 - Second"),
+                     new Pair<Integer, Integer>(0, 50), 50);
+
+      writer.close();
+
+      assertEquals("content",
+                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
+                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
+                   + "\">\n"
+                   + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+                   + "<HTML>\n"
+                   + "  <HEAD>\n"
+                   + "    <TITLE>title</TITLE>\n"
+                   + "  </HEAD>\n"
+                   + "  <BODY>\n"
+                   + "    \n"
+                   + "<h1>First1 - Second</h1>\n"
+                   + "\n"
+                   + "<table class=\"entrylist\"><tr class=\"title\">"
+                   + "<td class=\"title\"></td><td class=\"title\">Name</td>"
+                   + "<td class=\"title\">Real Name</td>"
+                   + "<td class=\"title\">Group</td>"
+                   + "<td class=\"title\">Last Login</td>"
+                   + "<td class=\"title\">Last Action</td>"
+                   + "</tr><tr><td class=\"label\">"
+                   + "<img src=\"/icons/labels/BaseCharacter.png\" "
+                   + "alt=\"BaseCharacter\" class=\"image label\"/> "
+                   + "<div id=\"linkrow-user-first\" class=\"\">\n"
+                   + "<script type='text/javascript'>"
+                   + "util.linkRow(document.getElementById"
+                   + "('linkrow-user-first'), '/user/first');</script>\n"
+                   + "</div></td><td class=\"name\">first</td>"
+                   + "<td class=\"name\"><dmaeditable key=\"real name\" "
+                   + "value=\"$undefined$\" id=\"first\" class=\"editable\" "
+                   + "entry=\"base character\" type=\"string\"><span></span>"
+                   + "</dmaeditable></td>"
+                   + "<td class=\"group\"><dmaeditable key=\"group\" "
+                   + "value=\"$undefined$\" id=\"first\" class=\"editable\" "
+                   + "entry=\"base character\" type=\"selection\" note=\"\" "
+                   + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
+                   + "</dmaeditable></td>"
+                   + "<td class=\"last\"></td>"
+                   + "<td class=\"action\"></td></tr>"
+                   + "<tr><td class=\"label\">"
+                   + "<img src=\"/icons/labels/BaseCharacter.png\" "
+                   + "alt=\"BaseCharacter\" class=\"image label\"/> "
+                   + "<div id=\"linkrow-user-second\" class=\"\">\n"
+                   + "<script type='text/javascript'>"
+                   + "util.linkRow(document.getElementById"
+                   + "('linkrow-user-second'), '/user/second');</script>\n"
+                   + "</div></td><td class=\"name\">second</td>"
+                   + "<td class=\"name\"><dmaeditable key=\"real name\" "
+                   + "value=\"$undefined$\" id=\"second\" class=\"editable\" "
+                   + "entry=\"base character\" type=\"string\"><span></span>"
+                   + "</dmaeditable></td>"
+                   + "<td class=\"group\"><dmaeditable key=\"group\" "
+                   + "value=\"$undefined$\" id=\"second\" class=\"editable\" "
+                   + "entry=\"base character\" type=\"selection\" note=\"\" "
+                   + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
+                   + "</dmaeditable></td>"
+                   + "<td class=\"last\"></td>"
+                   + "<td class=\"action\"></td></tr></table>\n"
+                   + "  </BODY>\n"
+                   + "</HTML>\n", content.toString());
+
+      m_logger.addExpected("WARNING: cannot find file "
+                           + "'path/Products/first.dma'");
+      m_logger.addExpected("WARNING: cannot find file "
+                           + "'path/Products/second.dma'");
     }
 
     //......................................................................

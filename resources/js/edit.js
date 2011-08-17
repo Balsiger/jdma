@@ -527,11 +527,12 @@ edit.Field = function(inEditable, inProperties)
   // add the button to undefine a value
   if(this.properties.buttons)
   {
-    $('<div class="icon edit-undefine edit-dynamic" title="Undefine"></div>').
+    $('<div class="sprite edit-undefine edit-dynamic" title="Undefine">' +
+      '</div>').
       prependTo(this._element).
       click(this._undefine.bind(this));
 
-    $('<div class="icon edit-cancel edit-dynamic" title="Cancel"></div>').
+    $('<div class="sprite edit-cancel edit-dynamic" title="Cancel"></div>').
       prependTo(this._element).
       click(this._cancel.bind(this));
 
@@ -894,11 +895,11 @@ edit.List.prototype._createLine = function(inValue, inPrevious)
   line.append(entry._element);
 
   // add the buttons
-  $('<div class="icon edit-list-add" title="Add"></div>').
+  $('<div class="sprite edit-list-add" title="Add"></div>').
   appendTo(line).
   click(this._add.bind(this, entry))
   ;
-  $('<div class="icon edit-list-remove" title="Remove"></div>').
+  $('<div class="sprite edit-list-remove" title="Remove"></div>').
   appendTo(line).
   click(this._remove.bind(this, entry))
   ;
