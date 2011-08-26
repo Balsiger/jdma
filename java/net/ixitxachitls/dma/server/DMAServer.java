@@ -84,6 +84,7 @@ import net.ixitxachitls.util.logging.Log;
  *   /robots.txt                static robots.txt file
  *   /favicon.ico               static favicon
  *   /user/<id>                 specific base characters
+ *   /user/<id>/products        all a users products
  *   /user/<id>/product/<id>    a user's products
  *   /users                     all base characters
  *   /<short-type>/<id>         specific base entries
@@ -127,8 +128,7 @@ public class DMAServer extends WebServer
     super(inHost, inPort);
 
     // determine which base files to read
-    m_baseData =
-      new DMAData(DATA_DIR);
+    m_baseData = new DMAData(DATA_DIR);
     for(String baseDir : inBaseDirs.split(",\\s*"))
       m_baseData.addAllFiles(baseDir);
 
@@ -314,12 +314,17 @@ public class DMAServer extends WebServer
     {
       if(type instanceof BaseType)
       {
-        addRewrite(handler, "^(.*)/" + type.getLink() + "/(.*)",
-                   "$1/entry/" + type.getName() + "/$2");
-        addRewrite(handler, "^(.*)/" + type.getMultipleLink() + "/?",
-                   "$1/entries/" + type.getName());
+        addRewrite(handler, "^(|pdf)/" + type.getLink() + "/(.*)",
+                   "$1/_entry/" + type.getName() + "/$2");
+        addRewrite(handler, "^/" + type.getMultipleLink() + "/?",
+                   "/_entries/" + type.getName());
         addRewrite(handler, "^/" + type.getMultipleLink() + "/(.*)",
-                   "/index/" + type.getName() + "/$1");
+                   "/_index/" + type.getName() + "/$1");
+      }
+      else
+      {
+        addRewrite(handler, "/user/(.*)/" + type.getName() + "/(.*)",
+                   "/_entry/user/$1/" + type.getName() + "/$2");
       }
     }
 
@@ -375,13 +380,13 @@ public class DMAServer extends WebServer
     context.addServlet
       (new ServletHolder(new EntryServlet(m_baseData)
                          .withAccess(BaseCharacter.Group.USER)),
-        "/entry/*");
+        "/_entry/*");
     context.addServlet
       (new ServletHolder(new EntryPDFServlet(m_baseData)
                          .withAccess(BaseCharacter.Group.USER)),
-       "/pdf/entry/*");
+       "/pdf/_entry/*");
     context.addServlet
-      (new ServletHolder(new EntryListServlet(m_baseData)), "/entries/*");
+      (new ServletHolder(new EntryListServlet(m_baseData)), "/_entries/*");
 
     context.addServlet(new ServletHolder(new LibraryServlet(m_baseData)),
                        "/library");
@@ -465,7 +470,7 @@ public class DMAServer extends WebServer
 
     // indexes
     context.addServlet(new ServletHolder(new IndexServlet(m_baseData)),
-                       "/index/*");
+                       "/_index/*");
 //     for(Iterator<Index<? extends Index>> i = ValueGroup.getIndexes();
 //         i.hasNext(); )
 //     {
@@ -876,7 +881,8 @@ public class DMAServer extends WebServer
        new CommandLineParser.StringOption
        ("b", "base-directories",
         "Comma separated list of the directories with base files.",
-        Config.get("entries/base.dirs", "BaseCharacters, BaseProducts/DnD")),
+        Config.get("entries/base.dirs", "BaseProducts/DnD, BaseCharacters")),
+       // base characters need base products
        new CommandLineParser.StringOption
        ("c", "campaigns",
         "The file containing the campaigns.", "Campaigns.dma"),

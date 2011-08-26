@@ -81,33 +81,30 @@ DIV.subtitletext, DIV.subtitletext A
 
 #header
 {
-  height: 28px;
   border-bottom: solid 1px #88a;
   background-color: #eef;
   width: 100%;
   position: fixed;
   color: #09b;
   font-size: small;
-  padding: 5px;
+  padding: 5px 10px;
   box-shadow: 0 1px 3px #777;
   z-index: 1;
 }
 
 #header-left
 {
-  margin-bottom: 3px;
+  margin-bottom: 1px;
 }
 
 #header-right
 {
   float: right;
-  padding-right: 10px;
   text-align: right;
 }
 
 #navigation
 {
-  margin-top: -2px;
 }
 
 .sprite
@@ -430,7 +427,7 @@ A.paginate-previous
   background-color: $color_Character;
 }
 
-.back-base-product
+.back-base-product, .back-product
 {
   color:            white;
   background-color: $color_Product;
@@ -598,6 +595,22 @@ DIV.label-number
 {
   width: 20%;
 }
+
+DIV.unparsed
+{
+  background-color: #fcc;
+}
+
+DIV.unparsed-rest
+{
+  color: #800;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  font-size: small;
+  font-style: italic;
+}
+
 
 /******************************************************************************
  * actions

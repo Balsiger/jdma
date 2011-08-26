@@ -34,8 +34,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -126,6 +128,33 @@ public abstract class DMAServlet extends BaseServlet
 
   //........................................................................
 
+  //------------------------------- getData --------------------------------
+
+  /**
+   * Get the data associated with the given request.
+   *
+   * @param       inPath     the path to the page
+   * @param       inBaseData the available base data
+   *
+   * @return      the data to use
+   *
+   */
+  public @Nullable DMAData getData(@Nonnull String inPath,
+                                   @Nonnull DMAData inBaseData)
+  {
+    // check if we need some nested data
+    String userID = Strings.getPattern(inPath, "^(?:/_entry)?/user/([^/]*)/");
+    if(userID != null)
+    {
+      BaseCharacter user = inBaseData.getEntry(userID, BaseCharacter.TYPE);
+      if(user != null)
+        return user.getProductData();
+    }
+
+    return inBaseData;
+  }
+
+  //........................................................................
 
   //........................................................................
 

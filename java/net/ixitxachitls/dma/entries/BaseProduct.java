@@ -2083,7 +2083,7 @@ public class BaseProduct extends BaseEntry
 
   /**
    * Check whether the given user is the DM for this entry. Everybody is a DM
-   * for a product.
+   * for a base product.
    *
    * @param       inUser the user accessing
    *

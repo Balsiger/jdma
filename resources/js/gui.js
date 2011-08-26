@@ -171,7 +171,8 @@ gui.notification = function(inMessage, inImage, inClass)
 //..........................................................................
 //-------------------------------- delayed ---------------------------------
 
-/** Delay an action for some time.
+/**
+ * Delay an action for some time.
  *
  * @param inAction the action to do at each step (the action returns false if
  *                 end is reached)

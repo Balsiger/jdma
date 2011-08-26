@@ -148,6 +148,7 @@ util.reload = function(inPage)
   */
 util.link = function(inEvent, inTarget, inFunction)
 {
+  window.console.log(inTarget);
   if(inEvent)
   {
     inEvent.preventDefault();
@@ -191,16 +192,13 @@ util.link = function(inEvent, inTarget, inFunction)
   else
     bodyTarget += '?body';
 
-  window.console.log("ajax");
   util.ajax(bodyTarget, null, function(inText)
   {
-    window.console.log("setting up page");
     $('#page').html(inText);
 
     busy.done('loading page');
     delete busy;
 
-    window.console.log("delete");
     // Adding something to the innerHTML will not execute any javascript in it.
     try
     {
@@ -212,12 +210,10 @@ util.link = function(inEvent, inTarget, inFunction)
       gui.alert('Error when replaying javascript: ' + e);
     }
 
-    window.console.log("replace");
     if(inFunction)
       inFunction();
 
-    window.console.log("push state", inEvent, inEvent.state, target, document.title, window.history);
-    if(inEvent && !inEvent.state)
+    if(!inEvent || !inEvent.state)
       window.history.pushState(target, document.title, target);
 
     edit.refresh();

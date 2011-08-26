@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 // import java.util.Collection;
-// import java.util.Collections;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -70,8 +70,8 @@ import net.ixitxachitls.output.commands.Editable;
 import net.ixitxachitls.output.commands.Image;
 import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Par;
-//import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
@@ -312,8 +312,7 @@ public class AbstractEntry extends ValueGroup
   protected @Nullable List<String> m_baseNames = null;
 
   /** The base entries for this entry, in the same order as the names. */
-  // TODO: remove uncomment code (are use it)
-//   protected @Nullable List<BaseEntry> m_baseEntries = null;
+  protected @Nullable List<BaseEntry> m_baseEntries = null;
 
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint = new Print("$title");
@@ -661,13 +660,13 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested base names
    *
    */
-//   public List<String> getBaseNames()
-//   {
-//     if(m_baseNames == null)
-//       return new ArrayList<String>();
+  public List<String> getBaseNames()
+  {
+    if(m_baseNames == null)
+      return new ArrayList<String>();
 
-//     return Collections.unmodifiableList(m_baseNames);
-//   }
+    return Collections.unmodifiableList(m_baseNames);
+  }
 
   //........................................................................
   //---------------------------- getBaseEntries ----------------------------
@@ -678,10 +677,13 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested base entries
    *
    */
-//   public List<BaseEntry> getBaseEntries()
-//   {
-//     return m_baseEntries;
-//   }
+  public List<BaseEntry> getBaseEntries()
+  {
+    if(m_baseNames == null)
+      return new ArrayList<BaseEntry>();
+
+    return m_baseEntries;
+  }
 
   //........................................................................
   //------------------------------ getRefName ------------------------------
@@ -725,6 +727,20 @@ public class AbstractEntry extends ValueGroup
   public @Nonnull AbstractType<? extends AbstractEntry> getType()
   {
     return m_type;
+  }
+
+  //........................................................................
+  //----------------------------- getEditType ------------------------------
+
+  /**
+   * Get the type of the entry.
+   *
+   * @return      the requested name
+   *
+   */
+  public @Nonnull String getEditType()
+  {
+    return m_type.toString();
   }
 
   //........................................................................
@@ -826,14 +842,15 @@ public class AbstractEntry extends ValueGroup
    * @undefined   never
    *
    */
-//   protected String getQuantifiers()
-//   {
-//     if(m_baseNames != null && m_baseNames.size() > 0)
-//       return s_baseStart + Strings.toString(m_baseNames, ", ", "")
-//         + s_baseEnd + " ";
+  protected String getQuantifiers()
+  {
+    if(m_baseNames != null && !m_baseNames.isEmpty()
+       && (m_baseNames.size() > 1 || !m_baseNames.get(0).equals(getName())))
+      return s_baseStart + Strings.toString(m_baseNames, ", ", "")
+        + s_baseEnd + " ";
 
-//     return "";
-//   }
+    return "";
+  }
 
   //........................................................................
   //------------------------------ getErrors -------------------------------
@@ -1245,7 +1262,7 @@ public class AbstractEntry extends ValueGroup
     result.append(m_name);
     result.append(' ');
 
-//     result.append(getQuantifiers());
+    result.append(getQuantifiers());
 
     result.append(s_introducer);
     result.append("\n\n");
@@ -1256,7 +1273,7 @@ public class AbstractEntry extends ValueGroup
     if(m_trailingComment.isDefined())
       result.append(m_trailingComment);
 
-     return result.toString();
+    return result.toString();
   }
 
   //........................................................................
@@ -1608,18 +1625,30 @@ public class AbstractEntry extends ValueGroup
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
     if("title".equals(inKey))
-      return new FormattedValue(new Title
-                                (new Command
-                                 (new Image(DMAFiles.mainImage
-                                            (getID(),
-                                             getType().getMultipleDir()),
-                                            "main-image"),
-                                  " ",
-                                  computeValue("name", inDM)
-                                  .format(this, inDM, false)),
-                                 "entrytitle"), null,
-                                "title", false, false, false, false, "titles",
-                                "");
+    {
+      AbstractType<? extends AbstractEntry> type = getType();
+
+      String baseType = null;
+      String []baseNames = null;
+      if(this instanceof Entry)
+      {
+        baseType = ((Type)type).getBaseType().getMultipleDir();
+        List<String> names = getBaseNames();
+        baseNames = names.toArray(new String[names.size()]);
+      }
+
+      return new FormattedValue
+        (new Title(new Command(new Image
+                               (DMAFiles.mainImage
+                                (getID(), type.getMultipleDir(), baseType,
+                                 baseNames),
+                                "main-image"),
+                               " ",
+                               computeValue("name", inDM)
+                               .format(this, inDM, false)),
+                   "entrytitle"),
+         null, "title", false, false, false, false, "titles", "");
+    }
 
     if("clear".equals(inKey))
       // we need a non empty string here, because when parsing trailing empty
@@ -1630,9 +1659,21 @@ public class AbstractEntry extends ValueGroup
 
     if("files".equals(inKey))
     {
+      AbstractType<? extends AbstractEntry> type = getType();
+
+      String baseType = null;
+      String []baseNames = null;
+      if(this instanceof Entry)
+      {
+        baseType = ((Type)type).getBaseType().getMultipleDir();
+        List<String> names = getBaseNames();
+        baseNames = names.toArray(new String[names.size()]);
+      }
+
       List<Command> commands = new ArrayList<Command>();
       for(String file
-            : DMAFiles.otherFiles(getID(), getType().getMultipleDir()))
+            : DMAFiles.otherFiles(getID(), type.getMultipleDir(), baseType,
+                                  baseNames))
         if(Files.isImage(file))
           commands.add(new Image(file, "other-image"));
         else if(Files.isPDF(file))
@@ -1742,6 +1783,31 @@ public class AbstractEntry extends ValueGroup
          null, "listlink", false, false, false, false, "listlinks", "");
     }
 
+    if("base".equals(inKey))
+    {
+      String type;
+      if(this instanceof Entry)
+        type = ((Type)getType()).getBaseType().getLink();
+      else
+        type = getType().getLink();
+
+      List<Object> entries = new ArrayList<Object>();
+      List<Object> values = new ArrayList<Object>();
+      for(String entry : getBaseNames())
+      {
+        if(!entries.isEmpty())
+          entries.add(", ");
+
+        entries.add(new Link(entry, "/" + type + "/" + entry));
+        values.add(entry);
+      }
+
+      return new FormattedValue(new Command(entries),
+                                Strings.toString(values, ", ", ""), "base",
+                                true, true, false, false, null, null)
+      .withEditType("list(, )#name");
+    }
+
     return super.computeValue(inKey, inDM);
   }
 
@@ -1784,6 +1850,21 @@ public class AbstractEntry extends ValueGroup
 
 //     return commands;
 //   }
+
+  //........................................................................
+
+  //------------------------------- getPath --------------------------------
+
+  /**
+   * Get the path to this entry.
+   *
+   * @return      the path to read this entry
+   *
+   */
+  public @Nonnull String getPath()
+  {
+    return "/" + getType().getMultipleLink() + "/" + getID();
+  }
 
   //........................................................................
 
@@ -1858,8 +1939,20 @@ public class AbstractEntry extends ValueGroup
       setName(inText);
       return null;
     }
-    else
-      return super.set(inKey, inText);
+
+    // base is also special
+    if("base".equals(inKey))
+    {
+      m_baseNames = null;
+      m_baseEntries = null;
+      for(String base : inText.split(",\\s*"))
+        addBase(base);
+
+      changed();
+      return null;
+    }
+
+    return super.set(inKey, inText);
   }
 
   //........................................................................
@@ -2309,16 +2402,7 @@ public class AbstractEntry extends ValueGroup
       for(String name = inReader.read(s_baseEnd + ","); name.length() > 0;
           name = inReader.read(s_baseEnd + ","))
       {
-//         name = name.trim();
-
-//         BaseEntry entry =
-//           BaseCampaign.GLOBAL.getBaseEntry(name, getType().getBaseType());
-
-//         addBase(entry, name);
-
-//         if(entry == null)
-//           inReader.logWarning(inReader.getPosition(), "base.not-found",
-//                               "base " + getType() + " '" + name + "'");
+        addBase(name.trim());
 
         if(!inReader.expect(","))
           break;
@@ -2332,6 +2416,9 @@ public class AbstractEntry extends ValueGroup
         return false;
       }
     }
+    else if(!isBase())
+      addBase(getName());
+
 
     return true;
   }
@@ -2480,29 +2567,30 @@ public class AbstractEntry extends ValueGroup
   /**
    * Add a base to this entry. The entry is ignored if name and entry are null.
    *
-   * @param       inBase the base entry to add
    * @param       inName the name to add with (or null to use the name of the
    *                     given base entry, if any)
    *
    */
-// protected void addBase(@MayBeNull BaseEntry inBase, @MayBeNull String inName)
-//   {
-//     if(inBase == null && inName == null)
-//       return;
+  @SuppressWarnings("unchecked") // need to cast to base entry
+  protected void addBase(@Nonnull String inName)
+  {
+    AbstractType<? extends AbstractEntry> baseType = getType();
+    if(baseType instanceof Type)
+      baseType = ((Type)baseType).getBaseType();
 
-//     if(m_baseEntries == null)
-//     {
-//       m_baseEntries = new ArrayList<BaseEntry>();
-//       m_baseNames = new ArrayList<String>();
-//     }
+    if(m_baseNames == null)
+    {
+      m_baseNames = new ArrayList<String>();
+      m_baseEntries = new ArrayList<BaseEntry>();
+    }
 
-//     m_baseEntries.add(inBase);
+    BaseEntry entry = (BaseEntry)m_data.getEntry(inName, baseType);
+    if(entry == null)
+      Log.warning("base " + getType() + " '" + inName + "' not found");
 
-//     if(inName != null)
-//       m_baseNames.add(inName);
-//     else
-//       m_baseNames.add(inBase.getName());
-//   }
+    m_baseNames.add(inName);
+    m_baseEntries.add(entry);
+  }
 
   //........................................................................
   //--------------------------- addToModifiable ----------------------------
@@ -3154,6 +3242,9 @@ public class AbstractEntry extends ValueGroup
                    + "\n"
                    + "#.....\n",
                    entry.toString());
+
+      m_logger.addExpected("WARNING: base base entry 'just a = test' not "
+                           + "found");
     }
 
     //......................................................................
@@ -3239,6 +3330,8 @@ public class AbstractEntry extends ValueGroup
                    + "base entry test =\n\n.\n"
                    + "# some other text\n",
                    entry.toString());
+
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

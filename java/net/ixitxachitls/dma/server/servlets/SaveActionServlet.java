@@ -123,6 +123,7 @@ public class SaveActionServlet extends ActionServlet
     Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
     List<String> errors = new ArrayList<String>();
 
+    Set<DMAData> datas = new HashSet<DMAData>();
     for(Map.Entry<String, String> param : inRequest.getParams().entries())
     {
       String []parts = param.getKey().split("::");
@@ -131,14 +132,21 @@ public class SaveActionServlet extends ActionServlet
       if(parts.length != 3)
         continue;
 
-      AbstractType<? extends AbstractEntry> type =
-        AbstractType.get(parts[0]);
+      String fullType = parts[0];
+      DMAData data = getData(fullType, m_data);
+      String typeName = Strings.getPattern(fullType, "/([^/]+)$");
+      AbstractType<? extends AbstractEntry> type = null;
+      if(typeName != null)
+        type = AbstractType.get(typeName);
+      else
+        type = AbstractType.get(fullType);
+
       String id = parts[1];
       String key = parts[2];
 
       if(type == null)
       {
-        String error = "invalid type '" + parts[0] + "' ignored";
+        String error = "invalid type '" + fullType + "' ignored";
         Log.warning(error);
         errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
         continue;
@@ -147,19 +155,15 @@ public class SaveActionServlet extends ActionServlet
       // Figure out the affected entries.
       Set<AbstractEntry> affectedEntries = new HashSet<AbstractEntry>();
       parts = Strings.getPatterns(key, "(.*?)/(.*)");
-      System.out.println("parts: " + java.util.Arrays.toString(parts));
-      System.out.println(key + " / " + type);
       if(parts.length == 2)
       {
-        for(AbstractEntry entry : m_data.getEntriesList(type))
-          if(entry.matches(parts[0], parts[1]))
+        for(AbstractEntry entry : data.getEntriesList(type))
+          if(entry.matches(fullType, id))
             affectedEntries.add(entry);
       }
       else
       {
-        // TODO: get the right campaign here (basically the right m_data), might
-        // have to have campaign specific servlets (or urls)
-        AbstractEntry entry = m_data.getEntry(id, type);
+        AbstractEntry entry = data.getEntry(id, type);
         if(entry == null)
         {
           String error = "could not find " + type + " " + id + " for saving";
@@ -190,7 +194,7 @@ public class SaveActionServlet extends ActionServlet
           Log.warning("Could not fully parse " + key + " value for "
                       + type + " " + id + ": '" + rest + "'");
           errors.add("edit.unparsed("
-                     + Encodings.toJSString(type.toString()) + ", "
+                     + Encodings.toJSString(fullType) + ", "
                      + Encodings.toJSString(id) + ", "
                      + Encodings.toJSString(key) + ", "
                      + Encodings.toJSString(rest) + ");");
@@ -198,15 +202,23 @@ public class SaveActionServlet extends ActionServlet
 
         entries.add(entry);
       }
+
+      datas.add(data);
     }
 
     List<String> saved = new ArrayList<String>();
 
     // do we really have something to do?
+    String path = "";
     if(entries.size() <= 0)
       errors.add("gui.alert('No values to save');");
     else
-      if(!m_data.save())
+    {
+      boolean success = true;
+      for(DMAData data : datas)
+        success &= data.save();
+
+      if(!success)
         errors.add("gui.alert('Could not save all changes');");
       else
       {
@@ -216,11 +228,17 @@ public class SaveActionServlet extends ActionServlet
                     + Encodings.escapeJS(entry.getName()));
       }
 
-    return Strings.NEWLINE_JOINER.join(errors)
+      if(entries.size() == 1)
+        path = Encodings.toJSString(entries.iterator().next().getPath());
+    }
+
+    return
+      (errors.isEmpty() ? "" : "gui.alert('Parse error for values');")
       + (saved.isEmpty() ? ""
          : "gui.info('The following entries were changed:<p>"
          + Strings.BR_JOINER.join(saved) + "'); "
-         + "util.link();");
+         + "util.link(null, " + path + ");")
+      + Strings.NEWLINE_JOINER.join(errors);
   }
 
   //........................................................................
@@ -253,7 +271,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("base entry::test::name", "guru");
+        ("/base entry::test::name", "guru");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -267,7 +285,7 @@ public class SaveActionServlet extends ActionServlet
 
       assertEquals("result",
                    "gui.info('The following entries were changed:"
-                   + "<p>base entry guru'); util.link();",
+                   + "<p>base entry guru'); util.link(null, '/entrys/guru');",
                    servlet.doAction(request, response));
 
       assertTrue("saved", data.wasSaved());
@@ -295,7 +313,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("base entry::test::name", "guru");
+        ("/base entry::test::name", "guru");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -308,7 +326,9 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", "test", entry.getName());
 
       assertEquals("result",
-                   "gui.alert('not allowed to edit name in base entry test');\n"
+                   "gui.alert('Parse error for values');"
+                   + "gui.alert('not allowed to edit name in base entry "
+                   + "test');\n"
                    + "gui.alert('No values to save');",
                    servlet.doAction(request, response));
 
@@ -339,7 +359,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("base entry::guru::name", "guru");
+        ("/base entry::guru::name", "guru");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -352,7 +372,8 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", "test", entry.getName());
 
       assertEquals("result",
-                   "gui.alert('could not find base entry guru for saving');\n"
+                   "gui.alert('Parse error for values');"
+                   + "gui.alert('could not find base entry guru for saving');\n"
                    + "gui.alert('No values to save');",
                    servlet.doAction(request, response));
 
@@ -396,7 +417,8 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", "test", entry.getName());
 
       assertEquals("result",
-                   "gui.alert('invalid type \\'guru\\' ignored');\n"
+                   "gui.alert('Parse error for values');"
+                   + "gui.alert('invalid type \\'guru\\' ignored');\n"
                    + "gui.alert('No values to save');",
                    servlet.doAction(request, response));
 
@@ -426,7 +448,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("base entry::test::guru", "guru");
+        ("/base entry::test::guru", "guru");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -439,9 +461,11 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", "test", entry.getName());
 
       assertEquals("result",
-                   "edit.unparsed('base entry', 'test', 'guru', 'guru');"
+                   "gui.alert('Parse error for values');"
                    + "gui.info('The following entries were changed:"
-                   + "<p>base entry test'); util.link();",
+                   + "<p>base entry test'); "
+                   + "util.link(null, '/entrys/test');"
+                   + "edit.unparsed('/base entry', 'test', 'guru', 'guru');",
                    servlet.doAction(request, response));
 
       assertTrue("saved", data.wasSaved());

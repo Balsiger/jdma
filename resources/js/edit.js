@@ -199,10 +199,15 @@ edit.save = function()
  */
 edit.unparsed = function(inEntry, inID, inKey, inText)
 {
-  var editable =
-    $('dmaeditable[key=' + inKey+ '][entry=' + inEntry + '][id=' + inID + ']');
+  gui.delayed(function() {
+      var container =
+      $('dmaeditable[key=' + inKey+ '][entry=' + inEntry + '][id=' +
+        inID + ']').parent();
+      container.addClass('unparsed');
+      container.append('<div class="unparsed-rest">' + inText + '</div>');
+    }, 100);
 
-  editable.addClass('unparsed');
+
 
 //     if(element.getAttribute("key") == inKey)
 //     {

@@ -90,6 +90,43 @@ public abstract class ValueHandle
 
   //........................................................................
 
+  //----------------------------- withEditType -----------------------------
+
+  /**
+   * Set the edit type for the value.
+   *
+   * @param       inType the edit type to use
+   *
+   * @return      this object for chaining
+   *
+   */
+  public @Nonnull ValueHandle withEditType(@Nonnull String inType)
+  {
+    m_editType = inType;
+
+    return this;
+  }
+
+  //........................................................................
+  //---------------------------- withEditChoices ---------------------------
+
+  /**
+   * Set the edit choices for the value.
+   *
+   * @param       inChoices the edit choices to use
+   *
+   * @return      this object for chaining
+   *
+   */
+  public @Nonnull ValueHandle withEditChoices(@Nonnull String inChoices)
+  {
+    m_editChoices = inChoices;
+
+    return this;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //-------------------------------------------------------------- variables
@@ -114,6 +151,12 @@ public abstract class ValueHandle
 
   /** A string with a special note for editing. */
   protected @Nullable String m_note;
+
+  /** The edit type. */
+  protected @Nonnull String m_editType = "string";
+
+  /** The edit choices. */
+  protected @Nonnull String m_editChoices = "";
 
   //........................................................................
 
@@ -158,8 +201,8 @@ public abstract class ValueHandle
     }
     else
     {
-      type = "string";
-      choices = "";
+      type = m_editType;
+      choices = m_editChoices;
       related = "";
       edit = value.toString();
     }
@@ -173,7 +216,8 @@ public abstract class ValueHandle
       note = "";
 
     if(inEdit && m_editable && (inDM || m_playerEditable))
-      return new Editable(inEntry.getID(), ((AbstractEntry)inEntry).getType(),
+      return new Editable(inEntry.getID(),
+                          ((AbstractEntry)inEntry).getEditType(),
                           formatted, m_key, edit, type, note,
                           choices, related);
 

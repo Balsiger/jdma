@@ -263,7 +263,6 @@ public abstract class GroupedIndex extends Index
       if(matches(groups, entry))
         entries.add(entry);
 
-    System.out.println("entries: " + entries);
     return entries;
   }
 

@@ -71,17 +71,17 @@ public class DMAFile //implements Storage<AbstractEntry>
   /**
    * Create the file, this will also read all the entries from the given file.
    *
-   * @param       inName     the filename of the file to read
-   * @param       inPath     the path to the file
-   * @param       inData     all the avaialble data
+   * @param       inName      the filename of the file to read
+   * @param       inPath      the path to the file
+   * @param       inBaseData  all the avaialble base data
    *
    */
   public DMAFile(@Nonnull String inName, @Nonnull String inPath,
-                 @Nonnull DMAData inData)
+                 @Nonnull DMAData inBaseData)
   {
     m_name = inName;
     m_path = inPath;
-    m_data = inData;
+    m_data = inBaseData;
   }
 
   //........................................................................
@@ -475,7 +475,7 @@ public class DMAFile //implements Storage<AbstractEntry>
   //--------------------------------- add ----------------------------------
 
   /**
-   * Add the given entry to the file. New entries will not mark the file as
+   * Add the given entry to the file. New entries will mark the file as
    * changed.
    *
    * @param       inEntry the entry to add

@@ -82,6 +82,12 @@
     <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" />
   </Match>
 
+  <!-- we don't really need them to be serializable, just use in the servlet -->
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.data\.UserData.*" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
  <!-- ignore errors in jetty -->
   <Match>
     <Class name="~org\.eclipse\.jetty\..*" />

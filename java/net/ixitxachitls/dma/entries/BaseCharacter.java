@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 //import net.ixitxachitls.dma.Global;
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.UserData;
 //import net.ixitxachitls.dma.entries.Product;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
@@ -235,8 +236,10 @@ public class BaseCharacter extends BaseEntry
   protected @Nonnull Text m_products = new Text();
 
   /** All the products for this user. */
-  protected @Nonnull DMAData m_productData = new DMAData
-    (Files.concatenate(m_data.getPath(), Product.TYPE.getMultipleDir()));
+  protected @Nonnull UserData m_productData =
+    new UserData(this, Files.concatenate(m_data.getPath(),
+                                         Product.TYPE.getMultipleDir()),
+                 m_data);
 
   //........................................................................
   //----- last login -------------------------------------------------------
@@ -393,10 +396,10 @@ public class BaseCharacter extends BaseEntry
     * @undefined   never
     *
     */
-//   public Campaign getProductData()
-//   {
-//     return m_productEntries;
-//   }
+  public DMAData getProductData()
+  {
+    return m_productData;
+  }
 
   //........................................................................
   //------------------------------- getEMail -------------------------------
@@ -625,6 +628,41 @@ public class BaseCharacter extends BaseEntry
     m_productData.read();
     if(m_productData.isChanged())
       m_productData.save();
+  }
+
+  //........................................................................
+  //---------------------------- removeProduct -----------------------------
+
+  /**
+   * Remove the given product from the list of a user's products.
+   *
+   * @param       inID the id of the product to remove
+   *
+   * @return      true if removed, false if not
+   *
+   */
+  public boolean removeProduct(@Nonnull String inID)
+  {
+    return m_productData.removeEntry(inID, Product.TYPE);
+  }
+
+  //........................................................................
+  //------------------------------ addProduct ------------------------------
+
+  /**
+   * Add the given product to this owner.
+   *
+   * @param       inProduct the product to add
+   *
+   */
+  public void addProduct(@Nonnull Product inProduct)
+  {
+    inProduct.setOwner(this);
+    m_productData.addEntry(inProduct,
+                           m_productData.files(Product.TYPE).iterator().next());
+
+    // since whoever adds this might not be able to save our file, we do it here
+    m_productData.save();
   }
 
   //........................................................................

@@ -202,6 +202,20 @@ public class DMAData implements Serializable
   }
 
   //........................................................................
+  //----------------------------- getBaseData ------------------------------
+
+  /**
+   * Get the base data for entries.
+   *
+   * @return      the repository with all the base data
+   *
+   */
+  public @Nonnull DMAData getBaseData()
+  {
+    return this;
+  }
+
+  //........................................................................
 
   //--------------------------------- files --------------------------------
 
@@ -224,6 +238,27 @@ public class DMAData implements Serializable
   };
 
   //........................................................................
+  //------------------------------- getFile --------------------------------
+
+  /**
+   * Get the file with the given name.
+   *
+   * @param       inName the name of the file to get
+   *
+   * @return      the file found or null if not found
+   *
+   */
+  public @Nullable DMAFile getFile(@Nonnull String inName)
+  {
+    for(DMAFile file : m_files)
+      if(file.getStorageName().equals(inName))
+        return file;
+
+    return null;
+  }
+
+  //........................................................................
+
   //------------------------------ isChanged -------------------------------
 
   /**
@@ -239,6 +274,31 @@ public class DMAData implements Serializable
         return true;
 
     return false;
+  }
+
+  //........................................................................
+
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Convert to human readable string.
+   *
+   * @return      the string representation
+   *
+   */
+  public @Nonnull String toString()
+  {
+    StringBuilder result =
+      new StringBuilder("path " + m_path + ", files " + m_names);
+
+    for(AbstractType<? extends AbstractEntry> type : m_entries.keySet())
+    {
+      result.append(", " + type + ": ");
+      for(String name : m_entries.get(type).keySet())
+        result.append(name + "/");
+    }
+
+    return result.toString();
   }
 
   //........................................................................
@@ -289,7 +349,7 @@ public class DMAData implements Serializable
       return false;
 
     m_names.add(inFile);
-    m_files.add(new DMAFile(inFile, m_path, this));
+    m_files.add(new DMAFile(inFile, m_path, getBaseData()));
 
     return true;
   }
@@ -305,10 +365,8 @@ public class DMAData implements Serializable
    */
   public void addAllFiles(@Nonnull String inPath)
   {
-    System.out.println("reading all files from " + inPath);
     Resource path = Resource.get(Files.concatenate(m_path, inPath));
 
-    System.out.println(path + " : " + path.files());
     for(String name : path.files())
     {
       if(name.endsWith(".dma"))
@@ -325,10 +383,11 @@ public class DMAData implements Serializable
    * @param     inEntry the entry to add
    *
    */
-  protected void add(AbstractEntry inEntry)
+  protected void add(@Nonnull AbstractEntry inEntry)
   {
     NavigableMap<String, AbstractEntry> entries =
       m_entries.get(inEntry.getType());
+
     if(entries == null)
     {
       entries = new TreeMap<String, AbstractEntry>();
@@ -348,8 +407,8 @@ public class DMAData implements Serializable
                     + "', setting new id to '" + id + "'");
       }
     }
-    else
-      entries.put(inEntry.getID(), inEntry);
+
+    entries.put(inEntry.getID(), inEntry);
   }
 
   //........................................................................
@@ -370,6 +429,60 @@ public class DMAData implements Serializable
     Log.event("*system*", "save",
               "Saved all data " + (success ? "without errors" : "with errors"));
     return success;
+  }
+
+  //........................................................................
+  //------------------------------- addEntry -------------------------------
+
+  /**
+   * Adds the given entry to the data, using the given file. Contrary to add(),
+   * this will also add the entry to the correct file.
+   *
+   * @param       inEntry the entry to add
+   * @param       inFile  the name of the file to add to
+   *
+   * @return      true if added, false if not, usually due to wrong file name
+   *
+   */
+  public boolean addEntry(@Nonnull AbstractEntry inEntry,
+                          @Nonnull String inFile)
+  {
+    DMAFile file = getFile(inFile);
+    if(file == null)
+      return false;
+
+    file.add(inEntry, true);
+    add(inEntry);
+
+    return true;
+  }
+
+  //........................................................................
+
+  //----------------------------- removeEntry ------------------------------
+
+  /**
+   * Remove the indicated entry from the repository.
+   *
+   * @param       inID   the id of the entry to remove
+   * @param       inType the type of entry to remove
+   *
+   * @return      true if removed, false if not
+   *
+   */
+  public boolean removeEntry
+    (@Nonnull String inID,
+     @Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    AbstractEntry entry = getEntries(inType).remove(inID);
+    if(entry == null)
+      return false;
+
+    for(DMAFile file : m_files)
+      if(file.remove(entry))
+        return true;
+
+    return false;
   }
 
   //........................................................................
@@ -436,9 +549,13 @@ public class DMAData implements Serializable
     @org.junit.Test
     public void read()
     {
-      DMAData data = new DMAData("dma", "BaseCharacters/Ixitxachitls.dma");
+      DMAData data = new DMAData("dma", "BaseCharacters/Test.dma");
 
       assertTrue("read", data.read());
+
+      m_logger.addExpected("WARNING: cannot find file "
+                           + "'dma/Products/Myrddin.dma'");
+      m_logger.addExpected("WARNING: cannot find file 'dma/Products/zzz.dma'");
     }
 
     //......................................................................

@@ -107,12 +107,14 @@ public class EntryServlet extends PageServlet
   /**
    * Get the abstract entry associated with the given request.
    *
+   * @param       inData the data to use
    * @param       inPath the path to the page
    *
    * @return      the entry or null if it could not be found
    *
    */
-  public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
+  public @Nullable AbstractEntry getEntry(@Nonnull DMAData inData,
+                                          @Nonnull String inPath)
   {
     String id = getID(inPath);
     AbstractType<? extends AbstractEntry> type = getType(inPath);
@@ -120,7 +122,7 @@ public class EntryServlet extends PageServlet
     if(type == null || id == null)
       return null;
 
-    return m_data.getEntry(id, type);
+    return inData.getEntry(id, type);
   }
 
   //........................................................................
@@ -182,15 +184,18 @@ public class EntryServlet extends PageServlet
   /**
    * Get the first available entry.
    *
+   * @param       inData the data to use
    * @param     inType the type entry to get
    *
    * @return    the first entry available
    *
    */
   public @Nonnull AbstractEntry getFirst
-    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+    (@Nonnull DMAData inData,
+     @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    return m_data.getEntries(inType).get(m_data.getEntries(inType).firstKey());
+    return
+      inData.getEntries(inType).get(inData.getEntries(inType).firstKey());
   }
 
   //........................................................................
@@ -199,6 +204,7 @@ public class EntryServlet extends PageServlet
   /**
    * Get the first available entry.
    *
+   * @param     inData the data to use
    * @param     inID   the id of the current entry
    * @param     inType the type entry to get
    *
@@ -206,16 +212,17 @@ public class EntryServlet extends PageServlet
    *
    */
   public @Nullable AbstractEntry getPrevious
-    (@Nonnull String inID,
+    (@Nonnull DMAData inData,
+     @Nonnull String inID,
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    NavigableSet<String> keys = m_data.getEntries(inType).navigableKeySet();
+    NavigableSet<String> keys = inData.getEntries(inType).navigableKeySet();
     String previous = keys.lower(inID);
 
     if(previous == null)
       return null;
 
-    return m_data.getEntry(previous, inType);
+    return inData.getEntry(previous, inType);
   }
 
   //........................................................................
@@ -224,6 +231,7 @@ public class EntryServlet extends PageServlet
   /**
    * Get the first available entry.
    *
+   * @param     inData the data to use
    * @param     inID   the id of the current entry
    * @param     inType the type entry to get
    *
@@ -231,17 +239,18 @@ public class EntryServlet extends PageServlet
    *
    */
   public @Nullable AbstractEntry getNext
-    (@Nonnull String inID,
+    (@Nonnull DMAData inData,
+     @Nonnull String inID,
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    NavigableSet<String> keys = m_data.getEntries(inType).navigableKeySet();
+    NavigableSet<String> keys = inData.getEntries(inType).navigableKeySet();
     String next = keys.higher(inID);
 
     if(next == null)
       return null;
 
 
-    return m_data.getEntry(next, inType);
+    return inData.getEntry(next, inType);
   }
 
   //........................................................................
@@ -250,15 +259,17 @@ public class EntryServlet extends PageServlet
   /**
    * Get the last available entry.
    *
+   * @param     inData the data to use
    * @param     inType the type entry to get
    *
    * @return    the first entry available
    *
    */
   public @Nonnull AbstractEntry getLast
-    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+    (@Nonnull DMAData inData,
+     @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    return m_data.getEntries(inType).get(m_data.getEntries(inType).lastKey());
+    return inData.getEntries(inType).get(inData.getEntries(inType).lastKey());
   }
 
   //........................................................................
@@ -324,7 +335,8 @@ public class EntryServlet extends PageServlet
       inPath = inPath.substring(0, inPath.length() - 4);
     }
 
-    AbstractEntry entry = getEntry(inPath);
+    DMAData data = getData(inPath, m_data);
+    AbstractEntry entry = getEntry(data, inPath);
 
     if(entry == null)
     {
@@ -382,35 +394,35 @@ public class EntryServlet extends PageServlet
 
     HTMLDocument document = new HTMLDocument(title);
 
-    AbstractEntry first = getFirst(entry.getType());
+    AbstractEntry first = getFirst(data, entry.getType());
     if(first == entry)
       first = null;
 
-    AbstractEntry previous = getPrevious(entry.getID(), entry.getType());
-    AbstractEntry next = getNext(entry.getID(), entry.getType());
+    AbstractEntry previous = getPrevious(data, entry.getID(), entry.getType());
+    AbstractEntry next = getNext(data, entry.getID(), entry.getType());
 
-    AbstractEntry last = getLast(entry.getType());
+    AbstractEntry last = getLast(data, entry.getType());
     if(last == entry)
       last = null;
 
     Command navigation =
       new Divider("entry-nav",
-                  new Command(new Link(new Divider("first icon"
+                  new Command(new Link(new Divider("first sprite"
                                                    + (first == null
                                                       ? " disabled" : ""), ""),
                                        first == null ? "" : getPath(first)),
-                              new Link(new Divider("previous icon"
+                              new Link(new Divider("previous sprite"
                                                    + (previous == null
                                                       ? " disabled" : ""), ""),
                                        previous == null ? ""
                                        : getPath(previous)),
-                              new Link(new Divider("index icon", ""),
+                              new Link(new Divider("index sprite", ""),
                                        "/" + entry.getType().getMultipleLink()),
-                              new Link(new Divider("next icon"
+                              new Link(new Divider("next sprite"
                                                    + (next == null
                                                       ? " disabled" : ""), ""),
                                        next == null ? "" : getPath(next)),
-                              new Link(new Divider("last icon"
+                              new Link(new Divider("last sprite"
                                                    + (last == null
                                                       ? " disabled" : ""), ""),
                                        last == null ? "" : getPath(last))));
@@ -481,20 +493,20 @@ public class EntryServlet extends PageServlet
     /** Expected text for the dummy navigation. */
     private static final String s_navigation = "<div class=\"entry-nav\">"
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"first icon disabled\"></div>"
+      + "<div class=\"first sprite disabled\"></div>"
       + "</a>"
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"previous icon disabled\"></div>"
+      + "<div class=\"previous sprite disabled\"></div>"
       + "</a>"
       + "<a href=\"/entrys\" class=\"link\" "
       + "onclick=\"return util.link(event, '/entrys');\">"
-      + "<div class=\"index icon\"></div>"
+      + "<div class=\"index sprite\"></div>"
       + "</a>"
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"next icon disabled\"></div>"
+      + "<div class=\"next sprite disabled\"></div>"
       + "</a>"
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"last icon disabled\"></div>"
+      + "<div class=\"last sprite disabled\"></div>"
       + "</a>"
       + "</div>";
 
@@ -593,7 +605,7 @@ public class EntryServlet extends PageServlet
           }
 
           @Override
-          public AbstractEntry getEntry(String inPath)
+          public AbstractEntry getEntry(DMAData inData, String inPath)
           {
             m_paths.add(inPath);
             return inEntry;
@@ -601,14 +613,14 @@ public class EntryServlet extends PageServlet
 
           @Override
           public AbstractEntry getFirst
-            (AbstractType<? extends AbstractEntry> inType)
+            (DMAData inData, AbstractType<? extends AbstractEntry> inType)
           {
             return inEntry;
           }
 
           @Override
           public @Nullable AbstractEntry getPrevious
-            (String inID,
+            (DMAData inData, String inID,
              AbstractType<? extends AbstractEntry> inType)
           {
             return null;
@@ -616,14 +628,15 @@ public class EntryServlet extends PageServlet
 
           @Override
           public AbstractEntry getNext
-            (String inID, AbstractType<? extends AbstractEntry> inType)
+            (DMAData inData, String inID,
+             AbstractType<? extends AbstractEntry> inType)
           {
             return null;
           }
 
           @Override
           public AbstractEntry getLast
-            (AbstractType<? extends AbstractEntry> inType)
+            (DMAData inData, AbstractType<? extends AbstractEntry> inType)
           {
             return inEntry;
           }
@@ -863,13 +876,14 @@ public class EntryServlet extends PageServlet
       assertEquals("simple", "", servlet.getID("/just/some/path/"));
 
       assertEquals("entry", "test",
-                   servlet.getEntry("/just/some/entry/test").getName());
+                   servlet.getEntry(servlet.m_data,
+                                    "/just/some/entry/test").getName());
       assertEquals("entry", "test",
-                   servlet.getEntry("/entry/test").getName());
-      assertNull("entry", servlet.getEntry("test"));
-      assertNull("entry", servlet.getEntry(""));
-      assertNull("entry", servlet.getEntry("test/"));
-      assertNull("entry", servlet.getEntry("test/guru"));
+                   servlet.getEntry(servlet.m_data, "/entry/test").getName());
+      assertNull("entry", servlet.getEntry(servlet.m_data, "test"));
+      assertNull("entry", servlet.getEntry(servlet.m_data, ""));
+      assertNull("entry", servlet.getEntry(servlet.m_data, "test/"));
+      assertNull("entry", servlet.getEntry(servlet.m_data, "test/guru"));
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
                    servlet.getType("/entry/test"));
@@ -906,23 +920,23 @@ public class EntryServlet extends PageServlet
       net.ixitxachitls.dma.entries.BaseEntry five =
         new net.ixitxachitls.dma.entries.BaseEntry("last", data);
 
-      EntryServlet servlet = new EntryServlet
-       (new DMAData.Test.Data(one, two, three, four, five));
+      data = new DMAData.Test.Data(one, two, three, four, five);
+      EntryServlet servlet = new EntryServlet(data);
 
-      assertEquals("first", one, servlet.getFirst(type));
-      assertEquals("last", five, servlet.getLast(type));
+      assertEquals("first", one, servlet.getFirst(data, type));
+      assertEquals("last", five, servlet.getLast(data, type));
 
-      assertEquals("next", two, servlet.getNext("first", type));
-      assertEquals("next", three, servlet.getNext("further-1", type));
-      assertEquals("next", four, servlet.getNext("further-2", type));
-      assertEquals("next", five, servlet.getNext("further-3", type));
-      assertNull("next", servlet.getNext("last", type));
+      assertEquals("next", two, servlet.getNext(data, "first", type));
+      assertEquals("next", three, servlet.getNext(data, "further-1", type));
+      assertEquals("next", four, servlet.getNext(data, "further-2", type));
+      assertEquals("next", five, servlet.getNext(data, "further-3", type));
+      assertNull("next", servlet.getNext(data, "last", type));
 
-      assertNull("next", servlet.getPrevious("first", type));
-      assertEquals("next", one, servlet.getPrevious("further-1", type));
-      assertEquals("next", two, servlet.getPrevious("further-2", type));
-      assertEquals("next", three, servlet.getPrevious("further-3", type));
-      assertEquals("next", four, servlet.getPrevious("last", type));
+      assertNull("next", servlet.getPrevious(data, "first", type));
+      assertEquals("next", one, servlet.getPrevious(data, "further-1", type));
+      assertEquals("next", two, servlet.getPrevious(data, "further-2", type));
+      assertEquals("next", three, servlet.getPrevious(data, "further-3", type));
+      assertEquals("next", four, servlet.getPrevious(data, "last", type));
     }
 
     //......................................................................
