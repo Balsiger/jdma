@@ -1,0 +1,87 @@
+# These are the people comprising the ixitxachtils
+
+#----- Merlin
+
+base character Merlin =
+
+  real name         "Balsiger, Peter";
+  email             "balsiger@ixitxachitls.net";
+  password          "retep$reg";
+  products          "Products/Merlin.dma";
+  last login        "Friday, August 26 2011 (09:22)";
+  last action       "Friday, August 26 2011 (09:22)";
+  token             "OSNNRHGFIVZIHLVZOHQW";
+  group             Admin.
+
+#.....
+#----- Salamix
+
+base character Salamix =
+
+  real name         "Balsiger, Manuel";
+  email             "manuel.balsiger@gmx.ch";
+  password          "gaston";
+  products          "Products/Salamix.dma";
+  last login        "Monday, March 21 2011 (20:54)";
+  last action       "Monday, March 21 2011 (20:56)";
+  group             User.
+
+#.....
+#----- Ylene
+
+base character Ylene =
+
+  real name         "Dauwalder, Yvonne";
+  email             "yvonnedauwalder@gmx.ch";
+  password          "stumpy";
+  products          "Products/Ylene.dma";
+  group             User.
+
+#.....
+#----- Nadia
+
+base character Nadia =
+
+  real name         "Kernen, Nadia";
+  email             "nadia.kernen@gmx.ch";
+  password          "nad";
+  products          "Products/Nadia.dma";
+  group             User.
+
+#.....
+#----- Mythos
+
+base character Mythos =
+
+  real name         "Dobler, Fred";
+  email             "fred@dobler.net";
+  password          "fred";
+  products          "Products/Mythos.dma";
+  last login        "Friday, September 12 2008 (19:10)";
+  last action       "Monday, September 8 2008 (18:56)";
+  token             "SKHCTLRFQWKNODBBZYZW";
+  group             Admin.
+
+#.....
+#----- Flexi
+
+base character Flexi =
+
+  real name         "Aeschlimann, Felix";
+  email             "flexi@gmx.ch";
+  password          "uxif";
+  products          "Products/Flexi.dma";
+  group             User.
+
+#.....
+#----- Thomas
+
+base character Thomas =
+
+  real name         "Fischer, Thomas";
+  email             "t.m.fischer@gmail.com";
+  password          "tom";
+  products          "Products/Thomas.dma";
+  group             User.
+
+#.....
