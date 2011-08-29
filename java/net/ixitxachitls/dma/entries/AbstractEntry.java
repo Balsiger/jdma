@@ -1687,29 +1687,33 @@ public class AbstractEntry extends ValueGroup
     }
 
     if("file".equals(inKey))
+    {
       if(m_file == null)
         return new FormattedValue
           (new Editable(getName(), getType(), "<please select>", "file", "",
                         "selection[file]",
-                        Strings.toString(m_data.files(getType()), "||", "")),
+                        Strings.toString(m_file.getData().files(getType()),
+                                         "||", "")),
            null, "file", true, false, false, false, "files", "");
       else
         return new FormattedValue
-          (new Command(new Editable(getName(),
-                                    getType(),
-                                    m_file.getStorageName(),
-                                    "file",
-                                    m_file.getStorageName(),
-                                    "selection[file]",
-                                    null,
-                                    Strings.toString(m_data.files(getType()),
-                                                     "||", ""),
-                                    null),
-                       " lines ",
-                       m_startLine,
-                       " to ",
-                       m_endLine),
+          (new Command
+           (new Editable(getName(),
+                         getType(),
+                         m_file.getStorageName(),
+                         "file",
+                         m_file.getStorageName(),
+                         "selection[file]",
+                         null,
+                         Strings.toString(m_file.getData().files(getType()),
+                                          "||", ""),
+                         null),
+            " lines ",
+            m_startLine,
+            " to ",
+            m_endLine),
            null, "file", true, false, false, false, "files", "");
+    }
 
     if("errors".equals(inKey))
     {

@@ -88,6 +88,11 @@
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.data\.DMAData.*" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
  <!-- ignore errors in jetty -->
   <Match>
     <Class name="~org\.eclipse\.jetty\..*" />

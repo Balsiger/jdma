@@ -171,6 +171,20 @@ public class DMAFile //implements Storage<AbstractEntry>
   }
 
   //........................................................................
+  //------------------------------- getData --------------------------------
+
+  /**
+   * Get the data repository this file belongs to.
+   *
+   * @return    the data repository
+   *
+   */
+  public @Nonnull DMAData getData()
+  {
+    return m_data;
+  }
+
+  //........................................................................
 
   //----------------------------- getCampaign ------------------------------
 
@@ -283,16 +297,18 @@ public class DMAFile //implements Storage<AbstractEntry>
   /**
    * Read a dma file into the campaign.
    *
+   * @param       inBaseData all the available base data
+   *
    * @return      true if read without error, false else
    *
    */
-  public synchronized boolean read()
+  public synchronized boolean read(@Nonnull DMAData inBaseData)
   {
     try
     {
       String name = Files.concatenate(m_path, m_name);
 
-      return read(new BufferedReader(new FileReader(name)));
+      return read(inBaseData, new BufferedReader(new FileReader(name)));
     }
     catch(java.io.FileNotFoundException e)
     {
@@ -309,12 +325,14 @@ public class DMAFile //implements Storage<AbstractEntry>
   /**
    * Read a dma file into the campaign.
    *
+   * @param       inBaseData all the available base data
    * @param       inReader the reader to read from
    *
    * @return      true if read without error, false else
    *
    */
-  protected synchronized boolean read(@Nonnull Reader inReader)
+  protected synchronized boolean read(@Nonnull DMAData inBaseData,
+                                      @Nonnull Reader inReader)
   {
     ParseReader reader = new ParseReader(inReader, m_name);
 
@@ -332,7 +350,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     while(!reader.isAtEnd())
     {
       //ParseReader.Position start = reader.getPosition();
-      AbstractEntry entry = AbstractEntry.read(reader, m_data);
+      AbstractEntry entry = AbstractEntry.read(reader, inBaseData);
       //ParseReader.Position end = reader.getPosition();
 
       if(entry == null)
@@ -622,7 +640,7 @@ public class DMAFile //implements Storage<AbstractEntry>
       // start the test
       DMAFile file = new DMAFile("read.dma", "path", new DMAData("path"));
 
-      assertTrue("read", file.read(reader));
+      assertTrue("read", file.read(new DMAData("path"), reader));
       synchronized(file)
       {
         assertEquals("comment", "# A test file\n\n", file.m_comment.toString());

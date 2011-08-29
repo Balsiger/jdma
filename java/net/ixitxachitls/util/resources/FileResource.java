@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -100,6 +101,7 @@ public class FileResource extends Resource
     else
       result.add(file.getName());
 
+    Collections.sort(result);
     return result;
   }
 

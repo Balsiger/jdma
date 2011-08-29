@@ -881,7 +881,9 @@ public class DMAServer extends WebServer
        new CommandLineParser.StringOption
        ("b", "base-directories",
         "Comma separated list of the directories with base files.",
-        Config.get("entries/base.dirs", "BaseProducts/DnD, BaseCharacters")),
+        Config.get("entries/base.dirs",
+                   "BaseProducts, BaseProducts/DnD, BaseProducts/Novels, "
+                   + "BaseProducts/Magazines, BaseCharacters")),
        // base characters need base products
        new CommandLineParser.StringOption
        ("c", "campaigns",

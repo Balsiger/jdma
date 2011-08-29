@@ -134,7 +134,7 @@ public final class DMAFiles
   //------------------------------ mainImage -------------------------------
 
   /**
-   * Get the main iamge for the given id and type
+   * Get the main iamge for the given id and type.
    *
    * @param       inID     the id of the entry
    * @param       inType   the path to the type

@@ -26,10 +26,8 @@ package net.ixitxachitls.dma.data;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.NavigableMap;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
@@ -93,7 +91,7 @@ public class DMAData implements Serializable
   private @Nonnull String m_path;
 
   /** The name of the files read. */
-  private @Nonnull HashSet<String> m_names = new HashSet<String>();
+  private @Nonnull List<String> m_names = new ArrayList<String>();
 
   /** The files for all the data. */
   private @Nonnull ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();
@@ -227,14 +225,10 @@ public class DMAData implements Serializable
    * @return      a list of names that can be used for storage
    *
    */
-  public @Nonnull Set<String> files
+  public @Nonnull List<String> files
     (@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    Set<String> names = new HashSet<String>();
-    for(DMAFile file : m_files)
-      names.add(file.getStorageName());
-
-    return names;
+    return m_names;
   };
 
   //........................................................................
@@ -323,7 +317,7 @@ public class DMAData implements Serializable
     for(DMAFile file : m_files)
       if(!file.wasRead())
       {
-        result &= file.read();
+        result &= file.read(getBaseData());
 
         for(AbstractEntry entry : file.getEntries())
           add(entry);
@@ -349,7 +343,7 @@ public class DMAData implements Serializable
       return false;
 
     m_names.add(inFile);
-    m_files.add(new DMAFile(inFile, m_path, getBaseData()));
+    m_files.add(new DMAFile(inFile, m_path, this));
 
     return true;
   }
