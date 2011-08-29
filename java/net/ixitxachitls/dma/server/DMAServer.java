@@ -325,6 +325,8 @@ public class DMAServer extends WebServer
       {
         addRewrite(handler, "/user/(.*)/" + type.getName() + "/(.*)",
                    "/_entry/user/$1/" + type.getName() + "/$2");
+        addRewrite(handler, "/user/(.*)/" + type.getMultipleLink() + "/(.*)",
+                   "/_entries/" + type.getName() + "/$2");
       }
     }
 
