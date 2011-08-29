@@ -1,0 +1,1270 @@
+#----- WTC 17643 -----------------------------------------------------------
+
+
+#----- WTC 17643
+
+base product WTC 17643 =
+
+  title             "City of Towers";
+  leader            "The";
+  subtitle          "";
+  author            "Baker, Keith";
+  cover             "Zug, Mark";
+  cartography       "Kauth, Dennis",
+                    "Lazzaretti, Rob";
+  date              February 2005;
+  ISBN              0-7869-3584-7;
+  pages             378;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 1;
+  series            The Dreaming Dark;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  worlds            Eberron;
+  description
+  "Hardened by the \Event{Last War}, four soldiers have come to \Place{Sharn},
+  fabled \Place{City of Towers}, capital of adventure, home to the best and
+  worst that \Place{Eberron} has to offer. After a lifetime of fighting, war is
+  all they know. Now, in a time of uneasy peace, the must struggle to survive.
+
+  But then people start turning up dead.
+
+  The heroes soon find themselves caught in a plot that will take them from the
+  highest reaches of power to the most sordid dephts of the \Place{city of
+  wonder}, shadow, and adventure.
+
+  \Product{The City of Towers} launches a brand new novel line set in the world
+  of \Place{Eberron}, Wizards of the Coast's newest D&D campaign setting.".
+#.....
+#----- WTC 17676
+
+base product WTC 17676 =
+
+  title             "Marked for Death";
+  leader            "";
+  subtitle          "Twelve Dragonmarks";
+  author            "Forbeck, Matt";
+  cover             "Rex, Adam";
+  cartography       "Kauth, Dennis";
+  date              March 2005;
+  ISBN              0-7869-3610-X;
+  pages             377;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 1;
+  series            The Lost Mark;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  worlds            Eberron;
+  description
+  "Sigils of immense magical power.
+
+  Borne by scions of mighty Houses, used through the centuries to wield
+  authority and shape wonders throughout \Place{Eberron}. But there are only
+  twelve marks.
+
+  Until now.
+
+  Matt Forbeck begins the terrifying saga of the thirteenth dragonmark...
+
+  \large{The Mark of Death}
+
+  \Product{Marked for Death} begins a new epic trilogy set in the world of
+  \Place{Eberron}, Wizards of the Coast's newest D&D campaign setting.".
+#.....
+
+#----- WTC 88722
+
+base product WTC 88722 =
+
+  title             "Crimson Talisman";
+  leader            "The";
+  subtitle          "";
+  author            "Cole, Adrian";
+  editor            "",
+                    "";
+  cover             "Reynolds, Wayne";
+  cartography       "Kauth, Dennis";
+  date              May 2005;
+  ISBN              0-7869-3739-4;
+  pages             312;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            The War-Torn;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  worlds            Eberron;
+  description
+  "A world torn by generations of war...
+
+  \Item{Erethindel}, the fabled \Item{Crimson Talisman}.
+
+  Long sought by the forces of darkness. Long guarded in secret by one family.
+
+  But now the secret has been revealed, and only one young man can keep it
+  safe. As the \Item{talisman}'s powers awaken within him, \Item{Erethindel}
+  tears at his soul.
+
+  \Product{The Crimson Talisman} is the first title in a new \Place{Eberron}
+  series that focuses on war-torn souls that have known nothing but a world in
+  chaos. Each book in this series will focus on the aftermath of \Event{The
+  Last War}, in which every realm of the \Place{Eberron} setting fought a
+  bitter and long-lasting battle.".
+#.....
+
+#----- WTC 96929
+
+base product WTC 96929 =
+
+  title             "Binding Stone";
+  leader            "The";
+  subtitle          "In \Place{Eberron}, There are Terrors Older Than the Nations of Men";
+  author            "Bassingthwaite, Don";
+  cover             "Komarck, Michael";
+  cartography       "Kauth, Dennis";
+  date              August 2005;
+  ISBN              0-7869-3784-X;
+  pages             309;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            The Dragon Below;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  worlds            Eberron;
+  description
+  "A chance rescue brings bitter rivals together. With a mysterious ally, the
+  two warriors embark on a mission of vengeance, but the enemy waiting for them
+  in the depths of the \Place{Shadow Marches} is far mor sinister than they've
+  faced before.
+
+  \large{In the Dark Places of the Wild, the Secrets of the Dragon Below are
+  Better Left Undisturbed...}
+
+  \Product{The Binding Stone} features the brand new races that were created
+  specifically for the \Place{Eberron} campaign setting. It's also the first
+  \Place{Eberron} novel to take its readers on an exploration of many uncharted
+  territories in the setting.".
+#.....
+
+#----- WTC 9501374
+
+base product WTC 9501374 =
+
+  title             "Orb of Xoriat";
+  leader            "The";
+  subtitle          "A world torn by generations of war...";
+  author            "Bolme, Edward";
+  cover             "Reynolds, Wayne";
+  cartography       "Kauth, Dennis";
+  date              October 2005;
+  ISBN              0-7869-3819-6;
+  pages             310;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            The War Torn;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  worlds            Eberron;
+  description
+  "\Place{Xoriat}, the realm of madness, a plane of existence far beyond mortal
+  comprehension.
+
+  The last time \Place{Xoriat} touched the world, years of warfare and death
+  erupted. Unspeakable terrors and vile monsters wandered free until the
+  \Group{Gatekeepers} managed to close the passage to \Place{Xoriat}.
+
+  But a new portal to the \Place{Realm of Madness} has been found---a fabled
+  \Item{orb}, long thought lost. In the final days of the \Event{Last War}, the
+  \Item{Orb of Xoriat} was used only once. Now it has been stolen.
+
+  \Product{The Orb of Xoriat} continues the story line in the \Place{Eberron}
+  series that focuses on war-torn souls who have known nothing but a world in
+  chaos. This is the second book in the \Product{War-Torn series}, following
+  \Product{The Crimson Talisman}. In the aftermath of the \Event{Last War},
+  \NPC{Teron}, a \Class{monk} trained for war, is the last of his
+  \Group{Order}. Now he is on a quest to find a powerful \Item{weapon} that
+  might set the world at war again.".
+#.....
+#----- WTC 9501474
+
+base product WTC 9501474 =
+
+  title             "Shattered Land";
+  leader            "The";
+  subtitle          "The Dreaming Dark Book 2";
+  author            "Baker, Keith";
+  cover             "Zug, Mark";
+  date              February 2006;
+  ISBN              0-7869-3821-8;
+  pages             374;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            The Dreaming Dark;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "\Place{Xend'rik}. \Place{The dark continent}. A land of once-proud empires
+  that now lie in ruin. A land shrouded in mystery where monsters and dark
+  powers stalk the jungles, where only the bravest and most foolhardy will
+  venture.
+
+  Now a band of war-weary soldiers must brave the depths of \Place{Xen'drik} in
+  search of an artifact that is the last hope to save one of their own.";
+  short description "The Dreaming Dark Book 2".
+#.....
+#----- WTC 9546774
+
+base product WTC 9546774 =
+
+  title             "Grieving Tree";
+  leader            "The";
+  subtitle          "For three heroes, the past is about to come back to hunt them.";
+  author            "Bassingthwaite, Don";
+  cover             "Komarck, Michael";
+  cartography       "Lazzaretti, Rob";
+  date              March 2006;
+  pages             342;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            The Dragon Below;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "A renegade warrior, a mystic exile, and a magic-wielding soldier are on the
+  run. Their enemies are closing in. Some want to control them, some want to
+  rob them, and others just want them dead.
+
+  Their only hope for survival may be an ancient device of evil, the long-lost
+  \Item{Grieving Tree}...";
+  short description "".
+#.....
+#----- WTC 9546874
+
+base product WTC 9546874 =
+
+  title             "Tales of the Last War";
+  leader            "The";
+  subtitle          "LAST WAR";
+  author            "Baker, Keith",
+                    "Crilley, Paul",
+                    "Waggoner, Tim",
+                    "Rosenberg, Aaron",
+                    "Page, David A.",
+                    "Bolme, Edward",
+                    "Burton-Oakes, Ian",
+                    "Wyatt, James",
+                    "Marmell, Ari";
+  editor            "Seheshted, Mark";
+  cover             "Knutson, Dana";
+  date              April 2006;
+  ISBN              0-7869-3986-9;
+  pages             338;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            anthology;
+  series            Last War;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "The war to end all wars -- or so it is hoped. For generations battle broke
+  the once-proud kingdom of \NPC{Galifar}. As nation fought nation, adventure
+  was never far away from those eager to find it.
+
+  Hunters of evil, seekers of fortune, loyal soldiers, and those just trying to
+  stay alive. These are their tales.
+
+  Tales of the Last War.";
+  short description "".
+#.....
+#----- WTC 9546974
+
+base product WTC 9546974 =
+
+  title             "Road to Death";
+  leader            "";
+  subtitle          "The Mark of Death";
+  author            "Forbeck, Matt";
+  cover             "Rex, Adam";
+  cartography       "Lazzaretti, Rob";
+  date              January 2006;
+  ISBN              0-7869-3987-7;
+  pages             375;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            The Lost Mark;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Black & White;
+  worlds            Eberron;
+  description
+  "After hundreds of years, it has returned to \Place{Eberron}, and the forces
+  of good and evil want to control it. But one man only wants to get his
+  daughter back alive. To save her, he must walk a perilous path...
+
+  \large{The Road to Death.}";
+  short description "".
+#.....
+#----- WTC 9553674
+
+base product WTC 9553674 =
+
+  title             "Thieves of Blood";
+  leader            "";
+  subtitle          "One Man Searching for Peace in a Land that Knows Only Blood";
+  author            "Waggoner, Tim";
+  cover             "Swandland, Raymond";
+  cartography       "Lazzaretti, Rob";
+  date              May 2006;
+  pages             342;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 1;
+  series            Blade of Flame;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "\NPC{Diran} was once one of the most feared assassins in the land. But he
+  has turned his back on murder, seeking the life of a wandering priest. But in
+  a rough port town on the edge of the world, his past is about to catch up on
+  him.
+
+  When raiders hit the town, capturing \NPC{Diran}'s former lover, he must risk
+  everything to save her. And he's running out of time---for these are not
+  ordinary pirates bent on plunder, but minions of \NPC{Erdas Cai}, a warlord
+  and servant of the Blood of Vol.";
+  short description "".
+#.....
+#----- WTC 9553774
+
+base product WTC 9553774 =
+
+  title             "Voyage of the Morning Dawn";
+  leader            "";
+  subtitle          "";
+  author            "Wulf, Rich";
+  cover             "Thiemeyer, Thomas";
+  cartography       "Lazzaretti, Rob";
+  date              June 2006;
+  ISBN              0-7869-4006-9;
+  pages             312;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            Heirs of Ash;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "For years, rumors have spoken of Ashrem's Legacy, a device beyond
+  imagination. Some say it was a weapon, some a portal to other worlds. But in
+  Cyre, on the Day of Mourning, Ashrem and his Legacy vanished in the
+  destruction.
+
+  Now a young thief on the streets of Wroat has stumbled upon a clue that may
+  lead to the lost Legacy. To stay alive, she and the crew of The Mourning Dawn
+  must find Ashrem's Legacy, for if they fail, Eberron will plunge into another
+  century of war.";
+  short description "".
+#.....
+#----- WTC 9554374
+
+base product WTC 9554374 =
+
+  title             "In the Claws of the Tiger";
+  leader            "";
+  subtitle          "";
+  author            "Wyatt, James";
+  cover             "Reynolds, Wayne";
+  cartography       "Lazzaretti, Bob";
+  date              July 2006;
+  ISBN              0-7869-4015-8;
+  pages             312;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 3;
+  series            The War-Torn;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "\Place{Mel Aqat}, a ruined city, old when the ancestors of humanity were
+  young...
+
+  \NPC{Dhavibastha} is a powerful \Monster{demon} imprisoned in the city, once
+  worshiped as a tiger god by the \Monster{giants} of \Place{Xen'dril}. Finding
+  the ruins gave \NPC{Janik Martell} wealth and fame, but the last time he was
+  there the woman he loved betrayed him and tried to kill him.
+
+  Now, the ancient evil is stirring again. \NPC{Janik} may be the only one who
+  can stop it, but to do that he'll have to return to the one place he swore
+  he'd never go again, to face his own \Monster{demons}, to place
+  himself...
+
+  \Product{In the Claws of the Tiger}";
+  short description "".
+#.....
+#----- WTC 9558974
+
+base product WTC 9558974 =
+
+  title             "Blood and Honor";
+  leader            "";
+  subtitle          "Karrnath, Born in War...";
+  author            "Davis, Graeme";
+  editor            "",
+                    "";
+  cover             "Reynolds, Wayne";
+  cartography       "Lazzaretti, Rob";
+  date              September 2006;
+  ISBN              0-7869-4069-7;
+  pages             308;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 4;
+  series            The War-Torn;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "The daughter of a noble family has gone missing. A proud and ancient house
+  has fallen to ruin. Even the dead are disappearing.
+
+  And a disgraced exile may be the only one who can save them.
+
+  Returning home from the \Event{Last War}, a bitter soldier discovers a
+  criminal operation trafficking in slaves. When members of his own family turn
+  up missing, his attempt to get them back embroil him in a plot involving
+  illegal necromantic activities that run from the lowliest criminals to the
+  highest reaches of government.";
+  short description "".
+#.....
+#----- WTC 9554074
+
+base product WTC 9554074 =
+
+  title             "Queen of the Death";
+  leader            "The";
+  subtitle          "";
+  author            "Forbeck, Matt";
+  cover             "Rex, Adam";
+  cartography       "Lazzaretti, Rob";
+  date              October 2006;
+  ISBN              0-7869-4012-3;
+  pages             378;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 3;
+  series            The Lost Mark;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "They've been hunted across the \Place{Mournland}, captured in
+  \Place{Karrnath}, and attacked in a \Monster{dragon}'s mountain lair. One
+  band of adventurers has had enough. Time to take the battle to the
+  enemy. Time to fight back. One young woman will have to decide to give in or
+  embrace her destiny as -- the \NPC{Queen of Death}.";
+  short description "".
+#.....
+#----- WTC 9554174
+
+base product WTC 9554174 =
+
+  title             "Gates of Night";
+  leader            "The";
+  subtitle          "";
+  author            "Baker, Keith";
+  cover             "Zug, Mark";
+  cartography       "Lazzaretti, Robert";
+  date              November 2006;
+  ISBN              0-7869-4013-1;
+  pages             375;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 3;
+  series            The Dreaming Dark;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "A band of war-weary soldiers have uncovered a plot that may tear the very
+  fabric of reality forever. To save their own lives and to prevent a
+  long-banished race of monsters from unleashing an army of horrors upon the
+  waking world, they must reach the very hear of \Place{Dal Quor}. To stop the
+  cataclysm in time, they must fight their way to ...
+
+  \large{The Gates of Night}.
+
+  After their near-fatal adventure in Xen'drik, \NPC{Daine} and his companions
+  are left with one choice: they must enter the plane of \Place{Dal Quor} to
+  stop the Dreaming Dark before the forces of darkness can open the \Item{Gates
+  of Night} and unlease an army of horrors upon the waking world. Their
+  adventure takes them throughout the \Place{outer planes}, into realms beyond
+  imagining. As \NPC{Daine} struggles to retain his sanity, \NPC{Lei} unravels
+  more of her past and discovers that her heritage is far darker -- and
+  stranger -- then she'd ever imagined.";
+  short description "".
+#.....
+#----- WTC 9590974
+
+base product WTC 9590974 =
+
+  title             "Killing Song";
+  leader            "The";
+  subtitle          "Sealed away for ages, a forgotten horror reaches out for new power.";
+  author            "Bassingthwaite, Don";
+  cover             "Komarck, Michael";
+  cartography       "Lazzaretti, Rob";
+  date              December 2006;
+  ISBN              0-7869-4243-6;
+  pages             343;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 3;
+  series            The Dragon Below;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "Three heroes know the danger. In the \Place{City of Towers}, a tormented
+  mystic and a soldier-wizard try to thwart a monstrous scheme. In the
+  \Place{Shadow Marches}, a disgraced warrior summons an ancient sect to
+  battle.
+
+  As a \Monster{dragon} rises, can their struggle succeed? Or will they fall to
+  madness and the music of the \Product{Killing Song}....";
+  short description "".
+#.....
+#----- WTC 9597474
+
+base product WTC 9597474 =
+
+  title             "Flight of the Dying Sun";
+  leader            "";
+  subtitle          "\NPC{Ashrem}'s Legacy";
+  author            "Wulf, Rich";
+  cover             "Straub, Philip";
+  date              February 2007;
+  ISBN              0-7869-4316-5;
+  ISBN13            978-0-7869-4316-6;
+  pages             311;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            Heirs of Ash;
+  price             $ 6.99;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "Some say it was a super weapon, some a portal to other worlds. Whatever the
+  truth, all know that the \Item{Legacy} disappeared on the \Event{Day of
+  Mourning}. But now \NPC{Ashrem}'s heirs have unearthed clues of the
+  \Item{Legacy}'s whereabouts, and the hunt is on.
+
+  Some want to use the \Item{Legacy} to bring about a new age. Others want to
+  destroy it before it shatters the fragile peace in a world that is trying to
+  put war behind it. But others find their fate caught in \NPC{Ashrem}'s
+  \Item{Legacy}, and in the frozen lands of the \Place{far north}, they'll have
+  to find a way to stay alive before they can save the world.";
+  short description "Heirs of Ash series, Book 2".
+#.....
+
+#----- WTC 9597174
+
+base product WTC 9597174 =
+
+  title             "Forge of the Mind Slayers";
+  leader            "";
+  subtitle          "One man searching for peace in a land that knows only blood.";
+  notes             "";
+  author            "Waggoner, Tim";
+  editor            "";
+  cover             "Swanland, Raymond";
+  cartography       "Lazzaretti, Robert";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              March 2007;
+  ISBN              0-7869-4313-0;
+  ISBN13            978-0-7869-4313-5;
+  pages             312;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            Blade of the Flame;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "\NPC{Diran}, once a feared assassin, has turned his back on murder, seeking the life of a wandering \Class{priest}. His travels have taken him north, into lands caught between warring political factions and plagued by lawless pirates. But \NPC{Diran} refuses to take sides.
+
+But when he stumbles upon a plot to restore an ancient relic and use its powers to create an army of assassins, remaining neutral is no longer an option. It’s kill or be killed, take the fight to the enemy... even if it means embracing the \Class{assassin}’s nature within his soul.".
+#.....
+
+#----- WTC 9593074
+
+base product WTC 9593074 =
+
+  title             "Bound by Iron";
+  leader            "";
+  subtitle          "";
+  notes             "";
+  author            "Bolme, Edward";
+  editor            "";
+  cover             "Komarck, Michael";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              April 2007;
+  ISBN              0-7869-4264-9;
+  ISBN13            978-0-7869-4264-0;
+  pages             310;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            The Inquisitives;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "He was a decorated soldier, thought to have died twenty years ago.
+
+But yesterday in \Place{Karrnath} his body washed ashore, unkempt, dressed in rags...
+
+and MURDERED.
+
+Now it's up to a hardened soldier out for cold vengeance and a chronicler looking for a story to unravel a dead man's past---and with it, the future of \Place{Khorvaire}.".
+#.....
+#----- WTC 9593674
+
+base product WTC 9593674 =
+
+  title             "Night of the Long Shadows";
+  leader            "";
+  subtitle          "Nights of the Long Shadows";
+  notes             "";
+  author            "Crilley, Paul";
+  editor            "";
+  cover             "Komarck, Michael";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              May 2007;
+  ISBN              0-7869-4270-3;
+  ISBN13            978-0-7869-4270-1;
+  pages             306;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book II;
+  series            The Inquisitives;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "The three nights of the year when the dark powers of the world gain strength and rise to prey upon the unwary.
+
+When one of \Place{Sharn}'s most famed Inquisitives is hired to investigate a brutal murder at \Place{Morgrave Univeristy}, his brilliance may be his damnation, as he uncovers a trail of blood leading from the seediest neighborhoods of the \Place{City of Towers} to the highest reaches of power.".
+#.....
+
+#----- WTC 9595974
+
+base product WTC 9595974 =
+
+  title             "Legacy of Wolves";
+  leader            "";
+  subtitle          "'We are all forged in the fires of our past.'";
+  notes             "";
+  author            "Rockwell, Marsheila";
+  editor            "Seheshted, Mark";
+  cover             "Komarck, Michael";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              June 2007;
+  ISBN              0-7869-4293-2;
+  ISBN13            978-0-7869-4293-0;
+  pages             311;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            3;
+  series            The inquisitives;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "Grisly murders shake the small city of \Place{Aruldusk}. Both the Church and the Crown send in agents to investigate. But when the body count continues to rise, these rival factions will have to learn to work together to track down the killers -- even if it means hunting a killer in the highest reaches of power.
+
+".
+
+
+#.....
+#----- WTC 2153274
+
+base product WTC 2153274 =
+
+  title             "Left Hand of Death";
+  leader            "The";
+  subtitle          "\NPC{Ulther Whitsun} is a fixer.";
+  notes             "";
+  author            "DeWolf Parker";
+  editor            "Sehestedt, Mark";
+  cover             "Van Der Haegen, Cyril";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              July 2007;
+  ISBN              0-7869-4713-6;
+  ISBN13            978-0-7869-4713-3;
+  pages             277;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 1;
+  series            The Lanternlight Files;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "When you've got a problem, he's your man. But when he finds himself in possession of a strange relic, he gets even more trouble than he can handle. His enemies want the relic, he wants its owner, and the City Watch wants him locked away for good. As if that weren’t enough, a mysterious woman just hired him to find a magic device that could bring the world to its knees. Could the two be related?
+
+When a job turns this dangerous, whether you win or lose doesn’t matter. The best you can hope for is just to survive.".
+#.....
+#----- WTC 9594872
+
+base product WTC 9594872 =
+
+  title             "Storm Dragon";
+  leader            "";
+  subtitle          "";
+  notes             "";
+  author            "Wyatt, James";
+  editor            "";
+  cover             "Swanland, Raymond";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              August 2007;
+  ISBN              0-7869-4710-1;
+  ISBN13            978-0-7869-4710-2;
+  pages             346;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  producer          WTC;
+  number            Book One;
+  series            Draconic Prophecies;
+  price             $25.95;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "When the Eternal Day dawns, the Time of the Dragon Above draws night. Showers of light fall upon the City of the Dead, and after twice thirteen years the Storm Dragon emerges.
+
+From the land of desolation under the dark of the great moon, the Eye of Siberys will lift the Sky Caves of Thieren Kor. The Storm Dragon will tread the paths of the first of sixteen.
+
+\large{And All of \Place{Eberron} Will Tremble at His Day's Dawning}".
+#.....
+
+#----- WTC 9598874
+
+base product WTC 9598874 =
+
+  title             "Rise of the Seventh Moon";
+  leader            "";
+  subtitle          "The Legacy Reborn";
+  notes             "";
+  author            "Rich Wulf";
+  cover             "Straub, Philip";
+  date              November 2007;
+  ISBN              0-7869-4342-4;
+  ISBN13            978-0-7869-4342-5;
+  pages             313;
+  system            D&D 1st;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  producer          WTC;
+  number            Book 3;
+  series            Heirs of Ash;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "\Item{Ashrem's Legacy} has been found, and it lies in the hands of a madman.
+
+As one of the deadliest weapons of the \Event{Last War} races to \Place{Sharn}, the greatest city in all the \Place{Five Nations}, it is up to a desperate band of heroes to stop it before it causes world-shaking devastation. The fate of the world's fragile peace rests in the hands of the renegade knights, fortune-seekers, a thief out for vengeance, and an assassin who bends shadow and darkness to his will. But behind it all, the \NCP{Mad Prophet Zamiel} begins his final gambit, and secrets buried for millennia will finally be revealed.".
+
+#.....
+#----- WTC 2172274
+
+base product WTC 2172274 =
+
+  title             "Storm Dragon";
+  leader            "";
+  subtitle          "Draconic Prophecies";
+  author            "Wyatt, James";
+  editor            "";
+  cover             "Swandland, Raymond";
+  cartography       "Lazzaretti, Robert";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              May 2008;
+  ISBN              0-7869-4854-X;
+  ISBN13            978-0-7869-4854-3;
+  pages             373;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book One;
+  series            Draconic Prophecies;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "During the \Event{Last War}, \NPC{Gaven d'Lyrandar} hunted powerful \Item{dragonshards} in the world's most dangerous places. But on one mission the danger proved too great, and he found an ancient artifact whose power filled his mind with strange visions of impending doom.
+
+Exiled from his House, spurned by his family, \NPC{Gaven} has spent years locked in the island prison of \Place{Dreadhold}, the most impregnable fortress in all the world. He has whiled away the years on the verge of madness, his only companion a hated war criminal who seems all too interested in \NPC{Gaven}.
+
+But when a bold prison break sets \NPC{Gaven} loose upon the world and in the company of a desperate band of outlaws, his strange dreams begin to make sense. The shards of vision begin to form a pattern, a fulfillment of the ancient \Event{Prophecy of the Dragons}. As \NPC{Gaven} becomes both hunter and hunted, he must put the pieces together before it is too late, before the \Monster{Storm Dragon} awakens to shake the foundations of the world.";
+  short description "Draconic Prohecies, Book One".
+
+#.....
+#----- WTC 2177574
+
+base product WTC 2177574 =
+
+  title             "Darkwood Mask";
+  leader            "The";
+  subtitle          "\Place{Karnath}. A cold and unforgiving land.";
+  author            "LaSala, Jeff";
+  editor            "";
+  cover             "Komarck, Michael";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              March 2008;
+  ISBN              0-7869-4970-8;
+  ISBN13            978-0-7869-4970-0;
+  pages             344;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            4;
+  series            The Inquisitives;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "A prominent aristocrat and his entire family are murdered in the heart of the capital city. \NPC{Soneste}, a young inquisitive famous for solving two high-profile cases, is called in to track down the killer. The eyes of her realm are upon her, demanding swift and certain justice.
+
+\NPC{Tallis} could have been a war hero, but fate dealt him a different hand. He survives on the streets, a wanted man in the land to which he devoted his life, unable to give up the fight. Even if it means hunting down the worst of the worst in \Place{Karrnath}.".
+
+#.....
+#----- WTC 2163474
+
+base product WTC 2163474 =
+
+  title             "Sea of Death";
+  leader            "";
+  subtitle          "One man searching for peace in a land that knows only blood.";
+  author            "Waggoner, Tim";
+  editor            "";
+  cover             "Swandland, Raymond";
+  cartography       "Lazzaretti, Robert";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              February 2008;
+  ISBN              0-7869-4791-8;
+  ISBN13            978-0-7869-4791-1;
+  pages             311;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 3;
+  series            Blade of the Flame;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "The \Monster{lich} \NPC{Nathifa} has stolen the mystic \Item{dragonwand} and intends to use it to summon an army of \Monster{weresharks} to ravage the \Place{Lhazaar Principalities} in the name of the \NPC{Lich Queen Vol}. To stop her, assassin-turned-priest \NPC{Diran Bastiaan} must defeat a \Monster{demon} that holds a city in its thrall, contend with a \Monster{werewolf} whose only wish is to die, and survive deadly peril on the fabled isle of \Place{Trebaz Sinara}. \NPC{Diran} will need all his faith, a brace of well-honed \Item{daggers}, and more than a little luck to succeed. For if he fails, the \Placa{Principalities} will be swept away in a sea of death.";
+  short description "Blade of the Flame, Book 3".
+
+#.....
+#----- WTC 2182274
+
+base product WTC 2182274 =
+
+  title             "Doom of Kings";
+  leader            "The";
+  subtitle          "Even Mighty Empires Fall.";
+  author            "Bassingthwaite, Don";
+  cover             "Komarck, Michael";
+  cartography       "Lazzaretti, Robert";
+  date              August 2008;
+  ISBN              0-7869-4918-X;
+  ISBN13            978-0-7869-4918-2;
+  pages             372;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            Legacy of Dhakaan;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "\Place{Darguun}. Nation of \Monster{goblin}s. Built on the vision of a single warlord, \NPC{Lhesh Haruuc}.
+
+But \NPC{Lhesh Haruuc} grows old, and \Place{Darguun} threatens to tear itself apart. With the help of \NPC{Geth}, a lordless shifter, he'll seek an ancient relic with which he can unite his people. Treachery and the machination of the dragonmarked houses are already tearing at his rule. Will the legacy of ancient glories be enough to save a nation's future?
+
+The beginning of a thrilling tale of empire, betrayal, and power by the author of the acclaimed \Product{Dragon Below} trilogy!
+";
+  short description "First book in the Legacy of Dhakaan trilogy.".
+
+#.....
+#----- WTC 2164174
+
+base product WTC 2164174 =
+
+  title             "When Night Falls";
+  leader            "";
+  subtitle          "\NPC{Ulther Whitsun} Is A Fixer.";
+  author            "DeWolf Parker";
+  cover             "Van Der Haegen, Cyril";
+  date              October 2008;
+  ISBN              0-7869-4792-6;
+  ISBN13            978-0-7869-4792-8;
+  pages             274;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            The Lanternlight Files;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "A swollen summer sun beats down mercilessly on the \Place{City of Towers} as a savage series of senseless slaughters spreads throughout the city. Shimmering in the stifling heat, \Place{Sharn} trembles on the brink of an explosion.
+
+\NPC{Ulther Whitsun} is just trying to do his job of fixing problems. But when he finds himself teamed up with a young and ambitious chronicler, events thrust him into the center of the city's agony. And he finds that treachery can touch everything around him.";
+  short description "Book 2 of the Landernlight Files".
+
+#.....
+#----- WTC 2182374
+
+base product WTC 2182374 =
+
+  title             "Queen of Stone";
+  leader            "The";
+  subtitle          "Code Name: Thorn of Breland";
+  author            "Baker, Keith";
+  cover             "Reynolds, Wayne";
+  cartography       "Lazzaretti, Rob";
+  date              November 2008;
+  ISBN              0-7869-5009-9;
+  ISBN13            978-0-7869-5009-6;
+  pages             293;
+  number            1;
+  series            Thorn of Breland;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  description
+  "The Daughters of \NPC{Sora Kell} demand recognition for \Place{Doaam}, their fledgling kingdom of monsters. Ambassadors from the \Place{Five Nations} gather at the fortress of the \Place{Great Crag} to hear what their dangerous new neighbors have to say.
+
+\NPC{Thorn}'s mission: protected the \Place{Brelish} ambassador and rescue a captured hero of the crown. It will take all of \NPC{Thorn}'s skills to manage both without bringing war to \Place{Breland}.
+
+That is, if she can prevail on the \Group{Daughter}'s deadly warlod.
+
+The Queen of Stone.";
+  short description "Thorn of Breland, Book 1.".
+
+#.....
+#----- WTC 2397074
+
+base product WTC 2397074 =
+
+  title             "Dragon Forge";
+  leader            "";
+  subtitle          "It takes power to seize power. And the dragons have power to spare.";
+  author            "Wyatt, James";
+  cover             "Swanland Raymond";
+  cartography       "Lazzaretti, Robert";
+  date              April 2009;
+  ISBN              0-7869-5105-2;
+  pages             372;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book Two;
+  series            Draconic Prophecies;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "For millennia, the \Monster{dragons} have watched the great events of the world unfold, nurturing and destroying entire nations when necessary, always guided by the \Item{Draconic Prophecy}.
+
+But now, the younger races are seizing their own destiny. Mere mortals have taken a hand in the \Item{Prophecy} --- and a select few think they have found a way to harness the power of the mighty \Monster{dragons} for their own ends:
+
+The Dragon Forge.
+
+\NPC{Gaven Lyrandar}, Exile and Storm Dragon, stands on the edge to two destinies: master of the Dragon Forge --- or its slave.";
+  short description "Draconic Prophecies, Book Two".
+
+#.....
+#----- WTC 24196
+
+base product WTC 24196 =
+
+  title             "Son of Khyber";
+  leader            "";
+  subtitle          "Thorn of Breland";
+  author            "Baker, Keith";
+  cover             "Reynolds, Wayne";
+  cartography       "Lazzaretti, Robert";
+  management        "";
+  date              November 2009;
+  ISBN              0-7869-5234-2;
+  ISBN13            978-0-7869-5234-2;
+  pages             274;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            2;
+  series            Son of Breland;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "Out of sight of the Twelve \Group{Dragonmarked Houses}, a thirteenth house operates in the dark lower levels of \NPC{Sharn}. A new leader has arisen from the ranks of the aberrent dragonmarks, a man who calls himself the \NPC{Son of Khyber}.
+
+\NPC{Thorn} is sent to infiltrate the group, before he incites \Group{House Tarkanan} to revolt against the \Group{Twelve}.
+
+But is she lying to the \Group{Tarkanans}, or are the strange powers she's manifesting the signs of an aberrent dragonmark? The answers may lie with her mysterious adversary
+
+\Large{THE SON OF KHYBER}";
+  short description "Book 2 in the Thorn of Breland series.".
+
+#.....
+#----- WTC 25356
+
+base product WTC 25356 =
+
+  title             "Dragon War";
+  leader            "";
+  subtitle          "'Whatever you deserve, freedom is what you have been given. Use your freedom as if you deservice it.'";
+  author            "Wyatt, James";
+  cover             "Swanland Raymond";
+  cartography       "Lazzaretti, Robert";
+  date              March 2010;
+  ISBN              0-7869-5482-5;
+  ISBN13            978-0-7869-5482-7;
+  pages             372;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book Three;
+  series            Draconic Prophecies;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "Eberron's fragile peace is crumbling. Armies gather, and for the first time in generations, \Monster{dragons} rise to war. Prophecies are fulfilled. And the one man at the center of it all, the prophesied \NPC{Storm Dragon}, lies helpless, his powers stripped away, his mind teetering on the edge of madness.
+
+Even as a band of desperate heroes try to restore the \NPC{Storm Dragon} and prevent another world war, darker forces are at work. Some lust for power and are willing to do anything to seize it, even rouse \Place{Eberron}'s most fearsome powers for a full-scale...
+
+\Large{Dragon War}.";
+  short description "Book Three of the Draconic Prophecies trilogy.";
+  synonyms          "".
+
+#.....
+#----- WTC 25452
+
+base product WTC 25452 =
+
+  title             "Tyranny of Ghosts";
+  leader            "The";
+  subtitle          "The Rod of Kings has Spoken.";
+  author            "Bassingthwaite, Don";
+  cover             "Komarck, Michael";
+  cartography       "Lazzaretti, Robert";
+  date              June 2010;
+  ISBN              0-7869-5506-6;
+  ISBN13            978-0-7869-5506-0;
+  pages             309;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            3;
+  series            Legacy of Dhakaan;
+  price             $6.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "\Place{Darguun}. A nation forged out of the fires of war. Brought together under the wisdom of \NPC{Lhesh Haruuc}, now bound by the charisma of \NPC{Lhesh Tariic}.
+
+But \NPC{Lhesh Tariic} is bound by the powers of the Emperors of \Place{Dhakaan}, manifest in the influential artifact, the \Item{Rod of Kings}. With the dominance of the rod in hand, \NPC{Tariic} plans to lead his fledgling kingdom into battle and gain more land, more glory, more power --- whatever the cost.
+
+But the Empire of \Place{Dhakaan} has left behind one more artifact, a force to bring doom to the \Monster{goblin} king... if only the heroes of \Place{Darguun} can find it.";
+  short description "Legacy of Dhakaan, Book 3";
+  synonyms          "".
+
+#.....

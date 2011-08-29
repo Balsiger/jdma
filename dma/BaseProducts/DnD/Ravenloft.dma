@@ -1,0 +1,2371 @@
+#
+# File:         Accessory.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  These are the Ravenloft accessories
+#
+# Worlds:       Ravenloft
+#
+#
+
+#----- TSR 1053
+
+base product TSR 1053 =
+
+  title             "Ravenloft Realm of Terror";
+  leader            "";
+  author            "Nesmith, Bruce",
+                    "Hayday, Andria";
+  cover             "Caldwell, Clyde";
+  cartography       "III, David C. Sutherland",
+                    "Goehre, Linda",
+                    "Kauth, Ron";
+  illustrations     "Fabian, Stephen",
+                    "Baxa, Thomas M.",
+                    "III, David C. Sutherland",
+                    "Goehre, Linda",
+                    "Kauth, Ron",
+                    "Caldwell, Clyde",
+                    "Frank, Ken";
+  typography        "Lokotz, Angelika";
+  management        "Parker, Roy E." graphic design,
+                    "Hanchette, Paul" production,
+                    "Feggestad, Sara" production;
+  date              1990;
+  ISBN              0-88038-853-6;
+  pages             144;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $18.00;
+  contents          Book "Realm of Terror book",
+                    Card "color" 24,
+                    Poster "color map" 4,
+                    Overlay "clear plastic measuring";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description       "\large{A New Realm of Horror Adventures}
+                    \emph{In the dead of the night, as mists cloak the land, a traveler walks a
+                    country road. Footsteps echo behind him, in pace with his beating heart. Is
+                    it Death who follows? The man turns, and so turns the phantom. A flash of
+                    fang, a bloodcurdling howl, red eyes fueled by a passion from beyond the
+                    grave. The traveler discovers what others have learned before him: all roads
+                    lead to \Place{Ravenloft}.}
+                    \Place{Ravenloft} is a new realm of terror for AD&D adventures, rooted in the
+                    Gothic tradition. It is a \Place{demiplane of dread and desire}, a world
+                    whose misty fingers can reach into any other campaign setting and draw
+                    unsuspecting heroes into its midst. Once it holds them in its icy embrace, it
+                    may never let them go...
+                    \bold{What lurks beneath the covers of this box?}
+                    \list
+                    {A 144-page book detailing a complete, terrifying new campaign world,
+                    which was inspired by the classic TSR adventure
+                    \Product{Ravenloft}. You'll find new twists on magic and the AD&D
+                    rules, tips for adding fear to your games, plus a portrait of over 30
+                    new lands and the powerful lords who rule them---from
+                    \Monster{vampires}, \Monster{ghosts}, and \Monster{werewolves} to
+                    \Monster{men} who are even more monstrous.}
+                    {4 big, full-color maps, detailing deadly domains and shadowy
+                    settlements.}
+                    {24 full-color cardstock sheets, featuring haunted castles, horrid
+                    houses, and fiendish folk.}
+                    {1 transparent map overlay, for measuring distance in the \Place{realm
+                    of doom}.}".
+
+
+#.....
+#----- TSR 1079
+
+base product TSR 1079 =
+
+  title             "Forbidden Lore";
+  leader            "";
+  author            "Connors, William W.",
+                    "Nesmith, Bruce";
+  editor            "Breault, Mike";
+  cover             "Caldwell, Clyde",
+                    "Fabian, Stephen";
+  cartography       "III, David C. Sutherland",
+                    "Kauth, Dennis";
+  illustrations     "Fabian, Stephen",
+                    "Klasnich, Bob";
+  typography        "Zamagne, Tracey";
+  management        "Parker, Roy E." graphic design;
+  date              November 1992;
+  ISBN              1-56076-354-X;
+  pages             160;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  contents          Booklet "The Waking Dream",
+                    Booklet "Cryptic Allegiances",
+                    Booklet "Nova Arcanum",
+                    Booklet "Dark Recesses",
+                    Booklet "Oaths of Evil",
+                    Poster "color map",
+                    Dice 5,
+                    Card 54;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description       "\large{The Horror Continues...}
+                    \emph{A new era in horror role-playing began with the introduction of the
+                    \Place{Ravenloft} boxed set. Combining the best elements of fantasy
+                    adventures with spine-tingling techniques of gothic horror, the
+                    \Place{Ravenloft} game became an instant sensation. Now the time has come to
+                    learn more about the secrets of the lands in the \Place{demiplane of
+                    dread}.
+                    \Product{Forbidden Lore} brings you five books, each containing a wealth of
+                    material designed to make your \Place{Ravenloft} game adventures more
+                    terrifying than ever before. Brush away the centuries-old dust, sweep aside
+                    the cobwebs, and look upon long-forgotten knowledge.}
+                    \Product{Forbidden Lore} contains:
+                    \list
+                    {\emph{Dark Recesses:} This book details psionics, the powers of the
+                    mind, and their place in the \Place{demiplane of dread}}
+                    {\emph{Nova Arcanum:} New spells and magical lore from the darkes of
+                    \Place{Ravenloft}'s lords---\NPC{Strahd Von Zarovich}}
+                    {\emph{Oaths of Evil:} Expanded rules for curses and tips on how to
+                    make them an important part of any \Place{Ravenloft} adventure.}
+                    {\emph{Cruptic Allegiances:} An in-depth look at the secret societies
+                    hidden within the lands of \Place{Ravenloft}. Some serve the lords of
+                    darkness, while others battle them at every turn.}
+                    {\emph{The Waking Dream:} For centuries, the \Group{Vistani} have been
+                    the masters of prophecy and fortune telling. This book reveals their
+                    secrets and shows how to be use the \Group{Vistani} techniques in
+                    \Place{Ravenloft} adventures.}
+                    {\emph{The Tarokka:} Agenuine deck of 54 \Group{Vistani}
+                    fortune-telling cards and complete instructions for their use in the
+                    game.}
+                    {\emph{The Dikesha:} A set of runic dice used to predict the future,
+                    from the mysterious land of \Place{Har'Akir}.}".
+
+
+#.....
+#----- TSR 1088
+
+base product TSR 1088 =
+
+  title             "Castles Forlorn";
+  leader            "";
+  author            "Smedman, Lisa";
+  editor            "Wise, David";
+  cover             "Knutson, Dana M.",
+                    "Fabian, Stephen";
+  cartography       "III, David C. Sutherland",
+                    "Felegy, Cynthia";
+  illustrations     "Ruppel, Robh",
+                    "Fabian, Stephen",
+                    "Swekel, Arnie",
+                    "Klasnich, Robert";
+  management        "Watry, Dori Jean" project coordinator,
+                    "Feggestad, Sarah" graphics coordinator,
+                    "Cooper, Peggy" art coordinator;
+  date              October 1993;
+  ISBN              1-56076-645-X;
+  pages             160;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  price             $20.00;
+  contents          Booklet "Eve of Sorrows",
+                    Booklet "The Weeping Land",
+                    Booklet "Melancholy Meetings",
+                    Poster "2-sided color maps" 2,
+                    Poster "color";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93,
+                    catalog95;
+  description       "\large{Time Is Meaningless in \Place{Castle Tristenoira}}
+                    \emph{\Place{Forlorn} has long remained hidden in the shadows of notorious
+                    \Place{Barovia} and \Place{Kartakass}, yet the tiniest domain in the
+                    \Place{lands of the core} is nearly as old as \Place{Ravenloft} itself. This
+                    land is sick with evil, a twisted mockery of the place it once was. It is
+                    filled with creatures of despair who were drawn into the \Place{demiplane of
+                    dread}...
+                    Within \Place{Castle Tristenoira} lies oblivion. The crumbling keep slips in
+                    and out of time, carrying its unwary explorers across the centuries, where
+                    they may bye abandoned to the cold winds of eternity---and to the ghosts in
+                    the castle! Spirits both innocent and guilty haunt the timeless passages,
+                    whispering tales of murder and vengeance. Escape is for the lucky...or the
+                    hopelessly mad.}
+                    The \Product{Castles Forlorn} boxed adventure set provides the Dungeon Master
+                    with a rich and complex domain in which to set a campaign of any size and
+                    duration. It includes a 96-page sourcebook, \emph{The Weeping Land}, which
+                    reveals the complete history of the domain and the strange terrible lord who
+                    rules over it. Descriptions of the living and dead who call this lonely land
+                    home abound, as do details of the forbidding \Place{Tristonia castle}, where
+                    adventurers may spend an evening or an age.
+                    After learning \Place{Forlorn}'s history of sorrow, the DM can lead player
+                    characters into \emph{Melancholy Meetings}, a 32-page collection of
+                    encounters that provide adventure in every corner of the domain. Finally,
+                    only \emph{Eve of Sorrows} remains, which is a 32-page assortment of
+                    mysteries and nightmares within the castle itself.
+                    This deluxe boxed adventure set complete the portrait of \Place{Forlorn} with
+                    a highly detailed, double-sided poster map of the castle, a poster map of the
+                    domain, and a special wall poster created by award-winning artist Robh
+                    Ruppel---all in full color.".
+
+
+#.....
+#----- TSR 1103
+
+base product TSR 1103 =
+
+  title             "Masque of the Red Death and Other Tales";
+  leader            "";
+  author            "Connors, William W.",
+                    "Hensley, Shane",
+                    "McComb, Colin",
+                    "Heinrich, D. J.";
+  editor            "Brown, Anne K.",
+                    "Pike-Brown, Richard",
+                    "Caspian, Jonatha Ariadne";
+  cover             "Ruppel, Robh",
+                    "Fabian, Stephen";
+  cartography       "III, David C. Sutherland";
+  illustrations     "Dameron, Ned";
+  typography        "Lokotz, Angelika";
+  management        "Hayday, Andria" project coordination,
+                    "Feggestad, Sarah" graphics coordination,
+                    "Cooper, Peggy" art coordination,
+                    "Coumbe, Tim" electronic prepress coordination,
+                    "Hanchette, Paul" production;
+  date              November 1994;
+  pages             224;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $25.00;
+  contents          Book "A Guide to Gothic Earth",
+                    Booklet "Red Tide",
+                    Booklet "Red Jack",
+                    Booklet "Red Death booklet",
+                    Poster "map" 2,
+                    Screen "DM";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    Dragon 211;
+  description       "Welcome to Gothic \Place{Earth}, a world almost identical to our own in the
+                    1890's...until the sun goes down!
+                    \Product{Masque of the Read Death} is a new variant of the
+                    \Product{Ravenloft} rules that allows players to explore the macabre world of
+                    the 1890's. From the brave cavalryman with his trusty revolver to the
+                    mysterious spiritualist and her store of secret knowledge, no one is safe
+                    from the horrors of the night. \Product{Masque of the Read Death} contains
+                    everything you need to adventure in the fictional worlds of Edgar Allan Poe,
+                    Bram Stoker, and Arthur Conan Doyle.
+                    In this box you'll find:
+                    \list
+                    {\emph{A Guide to Gothic Earth:} A 128-page book by the author of
+                    \Product{Van Richten's Guide to Ghots} and \Product{Forbidden Lore}
+                    that gives you all the rules and information you'll need to run
+                    adventures on Gothic \Place{Earth}. Included are 16 character kits, a
+                    revised spellcasting system, complete rules for firearms and
+                    explosives, and a proficiency system especially designed to reflect
+                    life in the Victorian Era.}
+                    {\emph{Red Tide:} A chilling 32-page adventure in which PCs must face
+                    one of mankind's oldest enemies while exploring the gloomy waterfront
+                    of \Place{San Francisco}.}
+                    {\emph{Red Jasck:} The most frightening figure ever to stalk the
+                    streets of \Place{London} is on the loose in this 32-page
+                    adventure. This time, \NPC{Jack} takes his unique brand of terror to
+                    \Place{Boston}.}
+                    {\emph{Red Death:} An isolated mansion hidden in the eastern
+                    \Place{Europe} is the setting for this 32-page drama in which the PCs
+                    must face death itself.}
+                    {A full-color, poster-sized map of \Place{Gothic Earth}.}
+                    {A bonus full-color poster of the cover painting by renowned artist
+                    Robh Ruppel.}
+                    {A three-panel DM Screen that places all essential reference charts at
+                    your fingertips!}".
+
+
+#.....
+#----- TSR 1108
+
+base product TSR 1108 =
+
+  title             "Ravenloft Campaign Setting";
+  leader            "";
+  author            "Neshmith, Bruce",
+                    "Hayday, Andria",
+                    "Connors, William W.";
+  editor            "Wise, David",
+                    "Reid, Thomas M.";
+  cover             "Ruppel, Robh";
+  cartography       "Knecht, John";
+  illustrations     "Fabian, Stephen";
+  typography        "Lokotz, Angelika";
+  management        "Hein, Dori Jean" project coordination,
+                    "Feggestad, Sarah" graphics coordination,
+                    "Cooper, Peggy" art coordination,
+                    "Coumbe, Tim" electronic press coordination;
+  date              June 1994;
+  ISBN              1-56076-942-4;
+  pages             288;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $30.00;
+  contents          Book "Realm of Terror",
+                    Book "Domains and Denizens",
+                    Card "tarokka" 54,
+                    Poster "color map" 2,
+                    Screen "DM",
+                    Poster "color";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description       "\large{Terror in the \Place{Land of Mists}}
+                    In the year 351 of the \Place{Barovian} calendar, \NPC{Strahd von Zarovich}
+                    made a pact with \God{Death}---a pact that sealed his fate and created a land
+                    of nightmares known as \Place{Ravenloft}. Other lords of darkness have
+                    embraced the \Place{Demiplane of Dread} as their own, and woe to heroes who
+                    wander there. Creatures of the night prey freely upon the living in this
+                    land, and day is but a prelude to another night of horror.
+                    This new edition of the \Product{Ravenloft} game combines the original
+                    \Product{Realm of Terror} boxed set with elements from \Product{Forbidden
+                    Lore} and updated rules from other accessories. Domains destroyed in the
+                    famous \Event{Grand Conjunction} have been deleted, new domains added, and
+                    key personalities detailed. This boxed set includes:
+                    \list
+                    {\bold{Realm of Terror}---a 160-page book of rules concerning the
+                    reshaping of character classes; fear, horror, madness, and power
+                    checks; curses; spells and magical items, both new and old; psionics;
+                    techniques of terror; and more.}
+                    {\bold{Domains and Denizens}---a 128-page book describing the dark
+                    lands of the \Place{Core}, the \Place{islands of terror}, and many
+                    nefarious personages.}
+                    {Two maps depicting the reshaped \Place{Core} domains and the
+                    \Place{islands of terror}.}
+                    {A post featuring a painting by artist Robh Ruppel.}
+                    {A tarokka deck of beautifully illustrated cards for role-playing
+                    fortunetelling.}
+                    {A DM screen specifically designed to be used with a
+                    \Product{Ravenloft} campaign.}".
+
+
+#.....
+#----- TSR 1124
+
+base product TSR 1124 =
+
+  title             "Nightmare Lands";
+  leader            "The";
+  date              November 1995;
+  ISBN              0-7869-0174-8;
+  pages             176;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  contents          Booklet "Book One: The Journal of Dr. Illhousen",
+                    Booklet "Book Two: The Rules of Dreams and Nightmares",
+                    Booklet "Book Three: Book of Nightmares",
+                    Booklet "Book Four: The Nightmare Lands",
+                    Poster "color map" 2;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96,
+                    Dragon 227;
+  description       "\large{It's just a bad dream---a very bad dream...}
+                    Beware the night, for sleep provides another path to the \Place{Demiplane of
+                    Dread}. In the unique domain called the \Place{Nightmare Lands}, darkness
+                    offers not blissful slumber, but ultimate terror. Heroes enter this realm at
+                    the bidding of the night, drawn from their dreaming bodies and captured by an
+                    enigmatic figure known only as the \NPC{Nightmare Man}. Trapped in this
+                    region of psychological fear, heroes face their worst nightmares in strange,
+                    surrealistic terrain. If they escape the treacherous clutches of dark
+                    slumber, they'll be safe---at least until the next time sleep overtakes
+                    them...
+                    This boxed set contains everything necessary to adventure among dark
+                    dreamscapes and twisted nightmares, including:
+                    \list
+                    {\emph{The Journal of Dr. Illhousen:} 32 pages of notes and
+                    information on the \Place{Nightmare Lands}, compiled by the chief
+                    physician of \Place{Nova Vaasa}'s infamous \Place{Clinic for the
+                    Mentally Distressed}.}
+                    {\emph{Rules of Dreams and Nightmares:} 64 pages full of rules dealing
+                    with adventuring in dreams and nightmares, setting up nightmare
+                    scenarios, and translating player characters into dreamscape versions
+                    of themselves.}
+                    {\emph{Book of Nightmares:} 64 pages of ready-to-play nightmares that
+                    incorporates all of the information in this campaign expansion into
+                    one full-lengthadventure.}
+                    {\emph{New Monsters:} 16 pages of never-before-seen creatures unique
+                    to the \Place{Nightmare Lands} and the dimensions of dreams.}
+                    {\emph{Poster Maps:} Two full-color, poster-sized maps of the
+                    \Place{Nightmare Lands} and other locations described herein.}".
+
+
+#.....
+#----- TSR 1141
+
+base product TSR 1141 =
+
+  title             "Bleak House";
+  leader            "";
+  date              April 1996;
+  ISBN              0-7869-0386-4;
+  pages             190;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  price             $25.00;
+  contents          Booklet "Sea of Madness",
+                    Booklet "Homecoming",
+                    Booklet "Heroes, Monsters, and Settings",
+                    Poster "map" 2;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 227,
+                    Dragon 228;
+  description       "\large{The Death of \NPC{Rudolph van Richten}}
+                    \bold{Old soldiers never die...}
+                    For more than three decades, \NPC{Dr. Rudolph van Richten} stood against the
+                    forces of darkness, and hunted their servants in the far corners of the
+                    \Place{land of Mists}. Now he had thought his long battle over, had thought
+                    he could spend his declining years in quiet enjoyment with old friends.
+                    \bold{But for some, a tragic end is inevitable.}
+                    Dark forces have been gathering in the \Place{Mists}. Their objective is to
+                    see \Place{Ravenloft}'s foremost expert on the supernatural destroyed,
+                    shattered in spirit as well as in body. From the crumbling edifice of
+                    \NPC{Van Richten}'s childhood home, an enemy long though vanquished spins a
+                    web of powerful evils and lost souls, drawing \NPC{Van Richten} to his
+                    doom. And then a group of heroes gets trapped in the web as well...
+                    \bold{Witness the final stand of \NPC{Rudolph van Richten!}}
+                    Inside this box is a grand-scale \Product{Ravenloft} adventure that pushes
+                    heroes to the brink of madness, and draws them into the terrifying scheme to
+                    annihilate \NPC{Rudolph van Richten}.
+                    The set contains:
+                    \list
+                    {\bold{Sea of Madness}, a 96-page book detailing the island of
+                    \Place{Dominia} and relating the events that start the cycle of doom.}
+                    {\bold{Homecoming}, a 64-page book describing the \NPC{Van Richten}
+                    family estate and the large haunted mansion known as \Place{Bleak
+                    House}. Suitable for use with the \Product{Bleak House} campaign or
+                    the \Product{Masque of the Red Death} setting, this adventure is
+                    designed so that it can be played several times, and no two
+                    experiences will be the same.}
+                    {\bold{Heroes, Monsters, and Settings}, a 32-page book containing game
+                    statistics for some of \Place{Ravenloft}'s best known, yet never
+                    detailed, villains; a new type of \Monster{vampire}; information on
+                    \Place{Martira Bay} in \Place{Darkon}; and maps intended for use with
+                    the \Product{Bleak House} campaign.}
+                    {\bold{A color map} revealing the layout and secrets of \Place{Bleak
+                    House} itself.}".
+
+
+#.....
+#----- TSR 1146
+
+base product TSR 1146 =
+
+  title             "Requiem: The Grim Harvest";
+  leader            "";
+  author            "Connors, William W.",
+                    "Smedman, Lisa";
+  date              October 1996;
+  ISBN              0-7869-0431-3;
+  pages             192;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $30.00;
+  contents          Booklet 3,
+                    Poster "map" 3,
+                    Sheet "cardsheets" 8;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 233,
+                    Dragon 234,
+                    Dragon 240;
+  description       "Kits, proficiencies for undeads, Grim Harvest series, levels 5-10".
+
+
+#.....
+#----- TSR 1163
+
+base product TSR 1163 =
+
+  title             "Shadow Rift";
+  leader            "The";
+  author            "Connors, William W.",
+                    "Rice, Cindi",
+                    "Ratecliff, John";
+  date              April 1998;
+  ISBN              0-7869-1200-6;
+  pages             160;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $22.95;
+  contents          Booklet,
+                    Sheet "map";
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    catalog98,
+                    Dragon 244,
+                    Dragon 245,
+                    Dragon 246;
+  description       "Sequel to Servants of Darkness.".
+
+
+#.....
+
+#----- TSR 2122
+
+base product TSR 2122 =
+
+  title             "Monstrous Compendium Ravenloft Appendix I";
+  leader            "";
+  date              May 1991;
+  ISBN              1-56076-108-3;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Rules Supplement;
+  number            10;
+  series            Monster Compendium;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91S,
+                    catalog95,
+                    catalog93;
+  description       "a lot of monsters";
+  synonyms          "MC10".
+
+
+#.....
+#----- TSR 2153
+
+base product TSR 2153 =
+
+  title             "Monstrous Compendium Ravenloft Appendix, Volume III: Creatures of Darkness";
+  leader            "";
+  author            "Botula, Kirk",
+                    "Hensley, Shane",
+                    "Rea, Nicky",
+                    "Woodruff, Teeuwynn",
+                    "Brown, Anne K.",
+                    "Connors, William W.",
+                    "Hayday, Andria",
+                    "McComb, Colin",
+                    "Nesmith, Bruce",
+                    "Wise, David";
+  editor            "Connors, William W.";
+  cover             "Easley, Jeff";
+  illustrations     "Nelson, Mark",
+                    "Baxa, Thomas M.",
+                    "Fabian, Stephen";
+  typography        "Kerkstra, Nancy J.";
+  management        "Murin, Dawn" graphic design;
+  date              November 1994;
+  ISBN              1-56076-914-9;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Soft Cover;
+  number            Appendix III;
+  series            Monster Compendium;
+  price             $18.00;
+  contents          Book;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description       "\large{Something moves in the darkness. Your heart pounds. Death is upon you
+                    before you know it.}
+                    Inside this book are dozens of sinister beings waiting to strike terror into
+                    the hearts of role-players everywhere. From the dreaded \Monster{scarab
+                    beetles of Har'Akir} to the \Monster{archer skeletons of Darkon} and the
+                    \Monster{drow vampires of Arak}, these \Product{Creatures of Darkness} will
+                    provide hours of diabolical adventure. But be warned---if you buy this
+                    accessory, your AD&D game players may never forgive you.".
+
+
+#.....
+#----- TSR 2162
+
+base product TSR 2162 =
+
+  title             "Monstrous Compendium: Appendices I & II";
+  leader            "";
+  date              May 1996;
+  ISBN              0-7869-0392-9;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Soft Cover;
+  number            Appendix I & II;
+  series            Monster Compendium;
+  price             $20.00;
+  contents          Book;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 228,
+                    Dragon 229;
+  description       "\bold{They lurk in the shadows.}
+                    \bold{They linger in your dreams.}
+                    \bold{They strike in the darkness.}
+                    They are the foul and horrible creatures that dwell in \Place{Ravenloft}, the
+                    \Place{Demiplane of Dread}, and they are waiting for you. From the
+                    dream-stalking \Monster{bastellus} to the body-snatching
+                    \Monster{doppleganger plant}, this horrific tome contains a great assortment
+                    of creatures that will haunt the nightmares of player characters for years to
+                    come. In addition, this book presents over 20 unique creatures, including the
+                    living brain of \NPC{Rudolph Von Aubrecker} and the dreaded \Monster{night
+                    hat} \NPC{Styrx}, all of whom are perfect for use as master villans and
+                    NPCs.
+                    TSR is proud to present this compilation of diabolical beings fomr the first
+                    two Monstrous Compendium appendices dedicated to the \Place{Ravenloft}
+                    campaign setting. First released in 1991 and 1993, these collections have
+                    been unavailable for some time, but always in demand. Now they're back---at a
+                    price that's lower than the combined price of the two earlier products. No
+                    \Place{Ravenloft} campaign is complete without this book.
+                    \bold{The time has come to return to your nightmares.}".
+
+
+#.....
+#----- TSR 2174
+
+base product TSR 2174 =
+
+  title             "Domains of Dread";
+  leader            "";
+  date              August 1997;
+  ISBN              0-7869-0672-3;
+  pages             288;
+  system            AD&D revised;
+  audience          DM;
+  product type      Rulebook;
+  style             Hardcover;
+  price             $30.00;
+  contents          Book,
+                    Sheet "map";
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    catalog98,
+                    Dragon 237,
+                    Dragon 238;
+  description       "\large{Night is Falling. The Mists are Rising. Embrace the Darkness.}
+                    \emph{Enter the dark and macabre world of \Place{Ravenloft}. But
+                    beware---once you begin to walk among the mists and shadows, you can never
+                    leave.}
+                    \Product{Domains of Dread} is the core rulebook for the second edition of the
+                    award-winning \Product{Ravenloft} campaign setting---the original fantasy
+                    horror role-playing game. Within the pages of this book, players and Dungeon
+                    Masters will discover the darkest secrets of the \Place{Land of the Mists},
+                    including many never-before-seen features:
+                    \list
+                    {Detailed guidelines on designing anything from short-term horror
+                    adventures to long-running campaigns of twisted terror.}
+                    {Complete rules for generating player characters native to the
+                    \Place{Demiplane of Dread}.}
+                    {Four new character classes specifically for use in \Product{Ravenloft}
+                    campaigns---the avenger, the anchorite, the gypsy, and the arcanist!}
+                    {An all-new player character race---the half-\Monster{Vistani}!}
+                    {Updated and expanded descriptions of the \Place{Demiplane} and the
+                    foul lords who rule its tortured domains!}
+                    {Revised fear, horror, and madness checks to enhance the terror.}
+                    {New rules for power checks, plus thirteen detailed steps that lead
+                    from grace to absolute corruption!}".
+
+
+#.....
+
+#----- TSR 9075
+
+base product TSR 9075 =
+
+  title             "Ravenloft";
+  leader            "";
+  author            "Hickman, Tracy",
+                    "Hickman, Laura";
+  editor            "Smith, Curtis";
+  cover             "Caldwell, Clyde";
+  cartography       "III, Dave Sutherland";
+  illustrations     "Caldwell, Clyde";
+  management        "Stubbe, Debra" graphic designer;
+  date              1983;
+  ISBN              0-88038-042-X;
+  pages             32;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $15.00;
+  contents          Booklet,
+                    Gatefold "lose cover",
+                    Misc "folding map";
+  requirements      ;
+  worlds            Ravenloft;
+  references        net price list;
+  description       "Under raging stormclouds, a lone figure stands silhouetted against the
+                    ancient walls of castle \Place{Ravenloft}. Count \NPC{Strah von Zarovich}
+                    stares down a sheer cliff at the village below. A cold, bitter wind spins
+                    dead leaves about him, billowing his cape in the darkness.
+                    Lightning splits the clouds overhead, casting stark white light across
+                    him. \NPC{Strahd} turns to the sky, revealing the angular muscles of his face
+                    and hands. He has a look of power---and of madness. His once-handsome face is
+                    contorted by a tragedy darken than the night itself.
+                    Rumbling thunder pounds the castle spires. The wind's howling increases as
+                    \NPC{Strahd} turns his gaze back to the village. Far below, yet not beyond
+                    his keen eyesight, a party of adventurers has just entered his
+                    domain. \NPC{Strahd}'s face forms a twisted smile as his dark plan
+                    unfolds. He knew they were coming, and he knows why they came, all according
+                    to his plan. He, the master of \Place{Ravenloft}, will attend to them.
+                    Another lightning flash rips through the darkness, its thunder echoing
+                    through the castle's towers. But \NPC{Strahd} is gone. Only the howling of
+                    the wind---or perhaps a lone wolf---fills the midnight air. The master of
+                    \Place{Ravenloft} is having guests for dinner. And you are invited.";
+  synonyms          "I6".
+
+
+#.....
+
+#----- TSR 9181
+
+base product TSR 9181 =
+
+  title             "Ravenloft II: Gryphon Hill";
+  leader            "";
+  date              1986;
+  price             $ 8.00;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net price list;
+  description       "";
+  synonyms          "I10".
+
+
+#.....
+
+#----- TSR 9298
+#  ISBN          0-88038-887-3; ?
+
+base product TSR 9298 =
+
+  title             "Feast of Goblyns";
+  leader            "";
+  date              1990;
+  audience          DM;
+  product type      Adventure;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalog93;
+  description       "a poor vampire with a horde of little goblins invading its home";
+  synonyms          "RA1".
+
+
+#.....
+
+#----- TSR 9321
+
+base product TSR 9321 =
+
+  title             "Ship of Horror";
+  leader            "";
+  date              March 1991;
+  ISBN              1-56076-127-X;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91S,
+                    catalog95,
+                    catalog93;
+  description       "rescue prisoners and escape the dark ship of horror";
+  synonyms          "RA2".
+
+
+#.....
+#----- TSR 9331
+
+base product TSR 9331 =
+
+  title             "Darklords";
+  leader            "";
+  date              August 1991;
+  ISBN              1-56076-137-7;
+  system            AD&D 2nd;
+  product type      Accessory;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog95;
+  description       "hideous creatures roaming the mists of Ravenloft";
+  synonyms          "RR1".
+
+
+#.....
+#----- TSR 9336
+
+base product TSR 9336 =
+
+  title             "Book of Crypts";
+  leader            "";
+  date              October 1991;
+  ISBN              1-56076-142-3;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91W,
+                    catalog95,
+                    catalog93;
+  description       "crypts filled with great wealth and powerful creatures";
+  synonyms          "RR2".
+
+
+#.....
+#----- TSR 9338
+
+base product TSR 9338 =
+
+  title             "Touch of Death";
+  leader            "";
+  date              November 1991;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W;
+  description       "stop the plot of the mummy";
+  synonyms          "RA3".
+
+
+#.....
+#----- TSR 9348
+
+base product TSR 9348 =
+
+  title             "Islands of Terror";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-349-3;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description       "information on new domains and lords";
+  synonyms          "RR4".
+
+
+#.....
+#----- TSR 9345
+
+base product TSR 9345 =
+
+  title             "Van Richten's Guide to Vampires";
+  leader            "";
+  author            "Findley, Nigel D.";
+  editor            "Wise, David",
+                    "Brown, Anne K.",
+                    "Hayday, Andria",
+                    "King, Rob";
+  cover             "Beauvais, Denis";
+  illustrations     "Fabian, Stephen";
+  typography        "Zamagne, Tracey";
+  management        "Parker, Roy" graphic design;
+  date              January 1992;
+  ISBN              1-56076-151-2;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $10.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description       "At last some means of combatting the ultimate undead, \Monster{vampires},
+                    have found their way into print. Within these pages, \NPC{Dr. Rudolph Van
+                    Richten} shares his vast background as one of \Place{Ravenloft}'s most
+                    formidable lore masters and \Monster{Vampire} hunters. Decades of research
+                    and experience have been compiled into discussions which define the very
+                    nature of those 'kings of the undead', and help put them at a disadvantage to
+                    mortals, whom they consider to be 'mere cattle'.
+                    \NPC{Dr. Van Richten} has detailed vampiric poers, weaknesses, feeding and
+                    sleeping habits, even their varied relationships with others of their own
+                    kind. Old myths are dispelled, new facts are uncovered, and the experiences
+                    of both \Monster{vampires} and those who hunt them are recorded for your
+                    safety and elightment.
+                    Quickly! Soon the sun sets and the dead will rise! The \Monster{vampires} of
+                    \Place{Ravenloft} know no mercy, and you must be prepared before the darkness
+                    engulfs you.";
+  synonyms          "RR3".
+
+
+#.....
+#----- TSR 9352
+
+base product TSR 9352 =
+
+  title             "Night of the Walking Dead";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-350-7;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $�6.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog95,
+                    catalog93;
+  description       "an unearthly army of zombies attacks Port d'Elhour by night";
+  synonyms          "RQ1".
+
+
+#.....
+#----- TSR 9355
+
+base product TSR 9355 =
+
+  title             "Van Richten's Guide to Ghosts";
+  leader            "";
+  author            "Connors, William W.";
+  editor            "Watry, Dori 'the Barbarian'";
+  cover             "Wood, Robin";
+  illustrations     "Klasnich, Robert",
+                    "Fabian, Stephen";
+  typography        "O'Keefe, Gaye";
+  management        "Feggestaed, Sarah" production;
+  date              1992;
+  ISBN              1-56076-351-5;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $ 10.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Ravenloft;
+  description       "Beware the darkness, for it is alive with the dead! Now, the nights of
+                    \Place{Ravenloft} are more horrifying than ever. You'll find out why in the
+                    pages within.
+                    Follow \NPC{Dr. Rudolph Van Richten}, \Place{Ravenloft}'s leading authority
+                    on the supernatural, as he reveals how to hunt the ghosts that lurk in the
+                    blackest shadows of midnight. For countless years, \NPC{Van Richten} has
+                    traveled the misty roads of \Place{Ravenloft} on a mission to destroy the
+                    undead wherever they might be. Now, your characters can join him on his
+                    courageous quest.
+                    \NPC{Dr. Van Richten} tells all that he has discovered about the incorporeal
+                    undead. He explains their origins, the passions that draw them back from
+                    beyond the grave, and the horrible powers bestowed upon them in unlife. In
+                    addition, he offers his wise counsel on the ways in which these fiends can be
+                    stalked, confronted, and destroyed.
+                    Be careful, for these ghosts are not simple, moaning spirits of darkest
+                    night. These are the ghosts of \Place{Ravenloft}";
+  synonyms          "RR5".
+
+
+#.....
+#----- TSR 9364
+
+base product TSR 9364 =
+
+  title             "Thoughts of Darkness";
+  leader            "";
+  author            "Wise, David";
+  editor            "Baur, Wolfgang H.";
+  cover             "Fields, Fred";
+  cartography       "Knecht, John";
+  illustrations     "Fabian, Stephen",
+                    "Fields, Fred";
+  typography        "Zamagne, Tracey";
+  management        "Brown, Timothy B." project coordination,
+                    "Watson, Charles" production;
+  date              September 1992;
+  ISBN              1-56076-353-1;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet,
+                    Gatefold "separate cover",
+                    Poster "color map";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description       "Of all the inhospitable domains in the \Place{Ravenloft} campaign world,
+                    \Place{Bluetspur} is the cruelest and most gruesome. Nothing grows in the
+                    endless night, and lightning periodically falls like rain. The only place to
+                    escape those stormes is inside the \Monster{mind flayers}' complex under
+                    \Place{Mt. Makab}, but that is the last place where any sane person would
+                    want to go.
+                    The High Master \Monster{Illithid} has been hatching black plots by hatching
+                    vampiric \Monster{mind flayers} in his laboratories! His prodigies are
+                    horribly insane, but if he can complete his plans, he will achieve a new
+                    level of dark immortality. A pair of heroes has stolen the key to his
+                    success, but they have paid a heavy price for the bravery and are in
+                    desperate need of aid unlooked for.
+                    Meanwhile, the \NPC{Lord of the Realm} watches over the proceedings and plays
+                    havoc with the wits of both sides, sapping strength and will with
+                    all-powerful thoughts of darkness. A party of adventurers will need all of
+                    their skills to escape this black domain without the loss of life, power, or
+                    sanity!
+                    For 4 to 6 players, levels 12-15.";
+  synonyms          "RQ2".
+
+
+#.....
+#----- TSR 9375
+
+base product TSR 9375 =
+
+  title             "From the Shadows";
+  leader            "";
+  date              December 1992;
+  ISBN              1-56076-353-1;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $�9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description       "Lord Azalikn sends creatures of the night to othre worlds";
+  synonyms          "RQ3".
+
+
+#.....
+
+#----- TSR 9412
+
+#  ISBN          1-56076-572-5; ?
+
+base product TSR 9412 =
+
+  title             "Van Richten's Guide to the Lich";
+  leader            "";
+  author            "Haddock, Erik W.",
+                    "Wise, David";
+  editor            "Wise, David";
+  cover             "Easley, Jeff";
+  illustrations     "Fabian, Stephen";
+  typography        "Zamagne, Tracey";
+  management        "Brown, Timothy B." product coordination,
+                    "Watry, Dori 'the Barbarian'" product coordination,
+                    "Barnett, Dee" production;
+  date              March 1993;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93W,
+                    catalog93,
+                    catalog95;
+  description       "There is a black terror that amasses great authority in the farthest reaches
+                    of \Place{Ravenloft}, quietly insinuating its sway upon the land like a
+                    creeping poison in the body: Its name is \Monster{lich}.
+                    Until now, \Monster{vampires} have been the undisputed masters of darkness,
+                    but the sheer genius of the \Monster{lich} (coupled with its immortal quest
+                    for ever more powerful magic) has proven to be a malevolent threat to the
+                    cause of Goodness. \Monster{Liches} were once all-powerful wizards in life,
+                    yet they have sacrificed everything to leap beyond the bounds of humanity and
+                    acquire unspeakable necromantic mastery.
+                    In the face of such might and malice, there appears to be one hope:
+                    \NPC{Dr. Rudolph Van Richten}, scholar and bane to all creatures of the
+                    night, has once again picked up quill and parchment---this time to expose
+                    this dreaded monster's darkest secrets! Within these pages the reader will
+                    learn of the \Monster{lich}'s origins, its powers, its lair, and even its
+                    very psychological makeup as well as the keys to a successful hunt and
+                    termination. Deadly new minions and unique \Monster{lich} magicks are also
+                    brought to the fore.
+                    Take back the night, all ye of courageous heart and keen blade! With each
+                    chime of the clock, the \Monster{lich} seeks to complete another of its
+                    diabolical schemes. Unchecked, the monster will obliterate the light of day,
+                    and \Place{Ravenloft} is already much too dark...";
+  synonyms          "RR6".
+
+
+#.....
+#----- TSR 9413
+
+base product TSR 9413 =
+
+  title             "Roots of Evil";
+  leader            "";
+  author            "Haddock, Erik";
+  date              May 1993;
+  ISBN              1-56076-597-6;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description       "return to castle Ravenloft";
+  synonyms          "RM1".
+
+
+#.....
+#----- TSR 9414
+
+base product TSR 9414 =
+
+  title             "Created";
+  leader            "The";
+  author            "Staff, TSR";
+  date              June 1993;
+  ISBN              1-56076-610-7;
+  pages             32;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93W,
+                    catalog93,
+                    catalog95;
+  description       "a mad puppeteer has set up a shop in a small town, levels 5-8";
+  synonyms          "RM2".
+
+
+#.....
+#----- TSR 9415
+
+base product TSR 9415 =
+
+  title             "Web of Illusions";
+  leader            "";
+  author            "Connors, William W.";
+  editor            "Phillips, Dezra D.",
+                    "Phillips, C. Terry";
+  cover             "Rupple, Robh";
+  cartography       "III, David C. Sutherland";
+  illustrations     "Sweckel, Arnie";
+  typography        "Lokotz, Angelika";
+  management        "Hanchette, Paul" production;
+  date              July 1993;
+  ISBN              1-56076-618-2;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet,
+                    Poster "color map";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description       "\Monster{Rakshasa...} For centuries, these diabolical creatures have hunted
+                    humanity and preyed upon its flehs. Now the \Place{Mists} have opened upon
+                    the land of \Place{Sri Raji}---home of dread \NPC{Arijani}, the
+                    \Monster{rakshasa} lord. He is the mastermind behind a deadly game of
+                    illusion where plots lie within plots that lie within plots. Wise player
+                    characters will trust neither their eyes nor their wits, for nothing is as it
+                    seems in \Place{Sri Raji}. The \Monster{rakshasa} have laid their traps of
+                    intrigue for the unwary. This time, the unwary are your characters.";
+  synonyms          "RM3".
+
+
+#.....
+#----- TSR 9416
+
+base product TSR 9416 =
+
+  title             "Van Richten's Guide to Werebeasts";
+  leader            "";
+  author            "Findley, Nigel";
+  editor            "Hayday, Andria";
+  cover             "Ruppel, Robh";
+  illustrations     "Fabian, Stephen",
+                    "Murim, Dawn";
+  typography        "Lokotz, Angelika";
+  management        "Nesmith, Bruce" additional design,
+                    "Wise, David" additional design & editorial assistance,
+                    "Watry, Dori" editorial assistance,
+                    "Feggestad, Sarah" art coordination,
+                    "Lokotz, Angelika" production;
+  date              August 1993;
+  ISBN              1-56076-633-6;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $ 12.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Ravenloft;
+  description       "\emph{I know now the shape of madness, of ravening insanity, and it is me! I
+                    dread the waxing of the moon, yet how can I flee from time itself? The hour
+                    of transformation is at hand, and my heart surges in bloodlust!}
+                    \right{---The Cry of a Werewolf}
+                    Werebeasts: men and women who assume the shape of animals. In this volume,
+                    \NPC{Dr. Rudolph Van Richten}---\Place{Ravenloft}'s eminent expert on the
+                    horrific---exposes the truth about their ravenous kind. For years, \NPC{Van
+                    Richten} has doggedly pursued these creatures.
+                    More than once, the hunter became the hunted, yet lived to tell the tale. Now
+                    \NPC{Van Richten} reveals the secrets of his survival.
+                    Discover the werebeasts' many forms, from the common to the bizarre. Read how
+                    they live, lust, and multiply, spreading their affliction among the
+                    innocent. Learn to see through their human facade, and how to follow their
+                    beastly spoor. Finally, discover what it \emph{really} takes to cure
+                    lycantrophy in \Place{Ravenloft}. For upon the \Place{demiplane of dread},
+                    few adventurers can avoid the werebeast's fang forver...";
+  synonyms          "RR7".
+
+
+#.....
+#----- TSR 9417
+
+base product TSR 9417 =
+
+  title             "Van Richten's Guide to the Created";
+  leader            "";
+  author            "Woodruff, Teeuwynn";
+  editor            "Hayday, Andria";
+  cover             "Ruppel, Robh";
+  illustrations     "Fabian, Stephen";
+  management        "Watry, Dori Jean" project coordination,
+                    "Cooper, Peggy" art coordination,
+                    "Feggestad, Sarah" graphics coordination,
+                    "Lokotz, Angelika" production;
+  date              February 1994;
+  ISBN              1-56076-819-3;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $ 12.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Ravenloft;
+  description       "\emph{...by the glimmer of the half-extinguished light, I saw the dull
+                    yellow eye of the creature open; it breathed hard, and a convulsive motion
+                    agitated its limbs.}
+                    \right{---Mary Shelley, \emph{Frankenstein}}
+                    Armed with satchel and saw, the creator slips into the night. He seeks the
+                    freshly dug grave and the unguarded morgue, selecting each body part with
+                    care. In the twilight before dawn, he tailors a perfect form, seeing no fault
+                    in the livid flesh or the crude black stitching. Creating a new life is his
+                    sole obsession---yet the thing he creates brings only misery and death.
+                    The \Monster{golems} of Ravenloft boast powers unsee in other realms, for
+                    they are shaped by the demiplane's mysterious forces. Join \NPC{Dr. Van
+                    Richten} as he exposes the evil that is the Created. Learn his theories on
+                    construction and animation, and discover his hard-won notes on the
+                    \Monster{golem}'s phenomenal strength. Heed well his sage advice, for whether
+                    their parts are \Monster{human} or otherwise, the Created are cunning and
+                    relentless foes, rising again and again from apparent death. Only with the
+                    knowledge herein can a hunter utterly destroy such a monster, until nothing
+                    but ashes and nightmares remain.".
+
+
+#.....
+#----- TSR 9418
+
+base product TSR 9418 =
+
+  title             "House of Strahd";
+  leader            "";
+  author            "Hickman, Tracy",
+                    "Staff, TSR";
+  date              September 1993;
+  ISBN              1-56076-671-9;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $10.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description       "new version of the 1982 release, levels 9-12";
+  synonyms          "RM4".
+
+
+#.....
+#----- TSR 9419
+
+base product TSR 9419 =
+
+  title             "Dark of the Moon";
+  leader            "";
+  author            "Staff, TSR";
+  date              January 1994;
+  ISBN              1-56076-688-3;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description       "classic adventure about werewolves, levels 5-8";
+  synonyms          "RM5".
+
+
+#.....
+#----- TSR 9439
+
+base product TSR 9439 =
+
+  title             "Adam's Wrath";
+  leader            "";
+  date              April 1994;
+  ISBN              1-56076-833-9;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description       "Revenloft version of Frankenstein".
+
+
+#.....
+#----- TSR 9451
+
+base product TSR 9451 =
+
+  title             "Van Richten's Guide to the Ancient Dead";
+  leader            "";
+  author            "Williams, Skip";
+  editor            "Caspian, Jonatha Ariadne";
+  cover             "Easley, Jeff";
+  illustrations     "Fabian, Stephen",
+                    "Jaquays, Paul";
+  typography        "Lokotz, Angelika";
+  management        "Hein, Dori Jean" product coordination,
+                    "Hayday, Andria" product coordination,
+                    "Cooper, Peggy" interior art,
+                    "Feggestad, Sarah" graphics coordination,
+                    "Coumbe, Tim" electronic press coordination,
+                    "Hanchette, Paul" production,
+                    "Wise, David" proofreading;
+  date              August 1994;
+  ISBN              1-56076-873-8;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $ 12.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Ravenloft;
+  description       "In the caverns, crypts, and chasms of \Place{Ravenloft} lie
+                    \Monster{mummies} and other horrors for whom sleep is a natural state. These
+                    are the ancient dead. Dreams of love, glory, and wealth subdue them trough
+                    the ages, and time grows meaningless---until the greedy or foolish disturb
+                    their rest. When the ancient dead rise and walk again, evil spreads before
+                    them and destruction lies in their wake.
+                    In the land of mists, the ancient dead are unique monstrosities of
+                    astonishing power, capable of rising again and again despite the efforts of
+                    the mightiest heroes. Only \NPC{Rudolph van Richten}, \Place{Ravenloft}'s
+                    greatest foe of darkness, has accrued the knowledge necessary to stop
+                    them. Within this treatise the doctor classifies these complex creatures,
+                    defines their common characteristics, and speculates upon their salient
+                    abilities. It may be impossible to destroy the ancient dead, but with
+                    persistence, good fortune, and \NPC{Van Richten}'s wise counsel, one might
+                    send them back to their dreams...".
+
+
+#.....
+#----- TSR 9452
+#  ISBN          1-56076-572-5; ?
+
+base product TSR 9452 =
+
+  title             "Awakening";
+  leader            "The";
+  date              September 1994;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue94,
+                    catalog95,
+                    catalog96;
+  description       "awakening of a mummy".
+
+
+#.....
+#----- TSR 9456
+
+base product TSR 9456 =
+
+  title             "Hour of the Knife";
+  leader            "";
+  date              October 1994;
+  ISBN              1-56076-892-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description       "Jack the Ripper in Ravenloft".
+
+
+#.....
+#----- TSR 9466
+
+base product TSR 9466 =
+
+  title             "Howls in the Night";
+  leader            "";
+  date              January 1995;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description       "race against time to solve the mystery before the beast kills again".
+
+
+#.....
+#----- TSR 9476
+
+base product TSR 9476 =
+
+  title             "When the Black Roses Bloom";
+  leader            "";
+  author            "Smedman, Lisa";
+  date              March 1995;
+  ISBN              0-7869-0101-2;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description       "Lord Soth and his army of death knights emerge from the mists".
+
+
+#.....
+#----- TSR 9477
+
+base product TSR 9477 =
+
+  title             "Van Richten's Guide to Fiends";
+  leader            "";
+  author            "Woodruff, Teeuwynn";
+  editor            "Miller, Steven";
+  cover             "Burdick, Scott";
+  cartography       "III, David C. Sutherland";
+  illustrations     "Fabian, Stephen";
+  typography        "Lokotz, Angelika";
+  management        "Johnson, Harold" project coordination,
+                    "Feggestad, Sarah" graphics coordination,
+                    "Cooper, Peggy" art coordination;
+  date              May 1995;
+  ISBN              0-7869-0122-5;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $12.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description       "\emph{There are realms and realms incomprehensible to the puny mortals who
+                    dwell within this cage that they term the \Place{Land of the Mists}!}
+                    \right{--- The Madrigorian, Book I, Chapter I}
+                    \Monster{Fiends} have come forth from the \Place{Abyss} and into
+                    \Place{Ravenloft}! Masters of deception and manipulation, these ancient evil
+                    beings stalk the Lands, roaming freely in pursuit of their foul ends, and
+                    warping the very Land around them to suit their needs.
+                    \NPC{Dr. Rudolph Van Richten} has set himself on their trail and presents
+                    here his preliminary findings and theories on these beings from places
+                    of unimaginable horror.
+                    \NPC{Dr. Van Richten} exposes the nature, origin, strengths and weaknesses of
+                    the \Monster{Fiend}, and how it reaches the \Place{Land of the Mists}. He
+                    explores the character of these beings, and their connections to the people
+                    and the Land itself. In the ultimate irony, these awesome creatures are as
+                    trapped by the Land as any mortal, seduced by the prospects of power and
+                    glory!
+                    Beware of the \Monster{Fiend}! For those caught in the web of a Fiendish
+                    plot, nothing as it seems. To defeat a \Monster{Fiend}, a quick wit and a
+                    strong heart are more important than a strong arm or flashing blade!
+                    \bold{96 pages - Recommended for All Character Levels}";
+  synonyms          "RR10".
+
+
+#.....
+#----- TSR 9493
+
+base product TSR 9493 =
+
+  title             "Circle of Darkness";
+  leader            "";
+  author            "Bittner, Drew";
+  date              June 1995;
+  ISBN              0-7869-0128-4;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description       "a tanar'ri fiend of the Abyss trapped in Ravenloft".
+
+
+#.....
+#----- TSR 9494
+
+base product TSR 9494 =
+
+  title             "Light in the Belfry";
+  leader            "A";
+  author            "Connors, William W.",
+                    "Hein, Dori";
+  date              June 1995;
+  pages             32;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96,
+                    Dragon 224;
+  description       "collection of 7 quick-play adventures".
+
+
+#.....
+#----- TSR 9496
+
+base product TSR 9496 =
+
+  title             "Van Richten's Guide to the Vistani";
+  leader            "";
+  author            "Wise, David";
+  date              August 1995;
+  ISBN              0-7869-0155-1;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  series            Van Richten's Guide;
+  price             $12.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description       "the greatest foe of evil revealed".
+
+
+#.....
+#----- TSR 9497
+
+base product TSR 9497 =
+
+  title             "Evil Eye";
+  leader            "The";
+  author            "Kurtz, Steven";
+  date              September 1995;
+  ISBN              0-7869-0167-5;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description       "players prevail upon the powers of a Vistani seer to complete their misso";
+  synonyms          "RR12".
+
+
+#.....
+#----- TSR 9498
+
+base product TSR 9498 =
+
+  title             "Gothic Earth";
+  leader            "The";
+  author            "Connors, William W.";
+  date              December 1995;
+  ISBN              0-7869-0193-4;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96,
+                    Dragon 223,
+                    Dragon 224;
+  description       "experience the dark night in the 1890's on Gothic Earth".
+
+
+#.....
+#----- TSR 9499
+
+base product TSR 9499 =
+
+  title             "Neither Man Nor Beast";
+  leader            "";
+  author            "Grubb, Jeff";
+  date              January 1996;
+  ISBN              0-7869-0205-1;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalog95,
+                    catalogue96,
+                    catalog96,
+                    Dragon 224;
+  description       "a confrontation with the lord of Markovia".
+
+
+#.....
+
+#----- TSR 9510
+
+base product TSR 9510 =
+
+  title             "Forged of Darkness";
+  leader            "";
+  author            "Connors, William W.";
+  editor            "Tornabene, Elizabeth A.";
+  cover             "Fields, Fred";
+  illustrations     "Bryant, Steve",
+                    "Dollar, John",
+                    "Guldan, Karolyn",
+                    "Fabian, Stephen",
+                    "Zamjahn, Bruce";
+  typography        "Lokotz, Angelika";
+  management        "Johnson, Harold" development & creative director,
+                    "Miller, Steve" development,
+                    "Tornabene, Elizabeth" development,
+                    "Zamjahn, Bruce" art director,
+                    "Kerkman, Greg" graphic design;
+  date              February 1996;
+  ISBN              0-7869-0369-4;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 12.95;
+  contents          Booklet,
+                    Gatefold "loose cover";
+  requirements      ;
+  worlds            Ravenloft;
+  description       "\bold{Absolute Power.}
+                    In the bewitched domain of \Place{Tepest}, under the pale amber light of a
+                    full moon, a wandering band of adventurers comes across the severed hand of a
+                    hanged man. Far beneath \NPC{Darkon}'s dread \Place{Castle Avernus}, a
+                    mysterious Black Vault is sealed, locking away an assortment of magical arms
+                    and armor until such time as the cause of evil demands their service. Across
+                    the dread domains of \Place{Ravenloft}, sinister craftsmen created the
+                    magical items of unequaled power---and absolute evil.
+                    \bold{Absolute Corruption.}
+                    \Product{Forged of Darkness} presents players and Dungeon Masters with a
+                    collection of magical items, each of which carries the distinctive taint of
+                    the \Place{Demiplane of Dread}. The 64-page omnibus of diabolic devices is
+                    certain to add an element of the macabre to any \Place{Ravenloft} campaign.".
+
+
+#.....
+#----- TSR 9513
+
+base product TSR 9513 =
+
+  title             "Children of the Night: Vampires";
+  leader            "";
+  author            "Culotta, Paul F.",
+                    "Miller, Steve";
+  editor            "Johnson, Carol L.",
+                    "Caspian, Jonatha Ariadne";
+  cover             "Horne, Daniel";
+  cartography       "Lazzzaretti, Rob";
+  illustrations     "Burrows, Jason";
+  typography        "Isler, Tracey L.";
+  management        "Johnson, Harold" project coordinator,
+                    "Miller, Steve" project coordinator,
+                    "Adelsperger, Matt" graphic designer,
+                    "Daniele, Stephen A." art director;
+  date              December 1996;
+  ISBN              0-7869-0378-3;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $15.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 240;
+  description       "\bold{Behold the many faces of mankdind's darkest enemy}
+                    Twin puncture wounds mark the kiss of the \Monster{nosferatu}. Blood trickles
+                    with the slow crawl of despair. A shadow lingers, black against black. Chill
+                    mist clings damply to every surface, and the echo of an anguished shriek
+                    still hangs in the air....
+                    \Product{Vampires} introduces 13 unique and terrifying villains of horrific
+                    proportions. Each one challenges \Monster{vampire} hunters to rethink common
+                    perceptions of these foes---for these are no ordinary undead. Each creature
+                    presented in this book is a unique individual with its own history,
+                    personality, and powers.
+                    The lords of the night that adventurers will meet include:
+                    \list
+                    {\NPC{Jander Sunstar}, one of the oldest \Monster{vampires} in the
+                    \Place{Land of Mists.}}
+                    {\NPC{Myxitzajal}, a seagoing monster with a taste for fishermen.}
+                    {\NPC{Lady Adeline}, an \Monster{elf} \Monster{vampire} who seeks out
+                    light rather than hiding from it.}
+                    {\NPC{Lyssa von Zarovich}, who covets the power of her great-uncle
+                    \NPC{Strahd}.}
+                    {And many more!}
+                    \bold{These are the Children of the Night}
+                    \Product{Children of the Night: Vampires} is the first book in a new series
+                    that brings to unlife the creature types treated in the best-selling
+                    \Product{Van Richten's Guides}. Each volume offers biographies of distinct
+                    and monstrous villains easily added to any game; short adventures featuring
+                    each nemesis, which can stand alone or form a mini-campaign; unique ways to
+                    fight each foe; and adventure hooks for using them as recurring villains.
+                    For all character levels.".
+
+
+#.....
+#----- TSR 9523
+
+base product TSR 9523 =
+
+  title             "Death Unchained";
+  leader            "";
+  author            "Smedman, Lisa";
+  date              July 1996;
+  ISBN              0-7869-0408-9;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $12.95;
+  contents          Poster "map";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231;
+  description       "Grim Harvest Series, levels 5-7".
+
+
+#.....
+#----- TSR 9526
+
+base product TSR 9526 =
+
+  title             "Death Ascendant";
+  leader            "";
+  author            "Smedman, Lisa";
+  date              August 1996;
+  ISBN              0-7869-0414-3;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $12.95;
+  contents          Poster "map";
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231,
+                    Dragon 232;
+  description       "Grim Harvest Series, levels 6-9".
+
+
+#.....
+#----- TSR 9529
+
+base product TSR 9529 =
+
+  title             "Guide to Transylvania";
+  leader            "A";
+  author            "Rea, Nicky";
+  date              September 1996;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $12.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 232,
+                    Dragon 233,
+                    Dragon 240;
+  description       "traveler's guide to transylvania".
+
+
+#.....
+#----- TSR 9537
+
+base product TSR 9537 =
+
+  title             "Forgotten Terror";
+  leader            "The";
+  date              October 1997;
+  ISBN              0-7869-0699-5;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $12.95;
+  contents          Booklet,
+                    Gatefold "separate cover";
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    Dragon 238;
+  description       "\large{A knife flashes in the darkness. You never see the face of your
+                    attacker. The adventure begins.}
+                    \emph{Their spirits trapped by a cursed magical weapon, the heroes find
+                    themselves imprisoned in the surreal domain of \Place{Aggarath}. Here, they
+                    must explore the mind of \NPC{Chardath Spulzeer}, the insane lord of the
+                    realm. Somewhere in his shattered dreams and tormented memories lie secrets
+                    that may enable the adventurers to escape.}
+                    \Product{The Forgotten Terror} is a new adventure for the \Product{Ravenloft}
+                    campaign setting. It can be played as a stand-alone scenario or as a sequel
+                    to the events depicted in the \Product{Forgotten Realms} adventure
+                    \Product{Castle Spulzeer}. The unique nature of this domain and scenario
+                    makes \Product{The Forgotten Terror} easy for the Dungeon Master to run
+                    without forcing players through a linear plot. Alternate endings allow the DM
+                    to link this adventure to \Place{Ravenloft}, the \Place{Realms}, or any other
+                    campaign world.".
+
+
+#.....
+#----- TSR 9541
+
+base product TSR 9541 =
+
+  title             "Servants of Darkness";
+  leader            "";
+  author            "Miller, Steve",
+                    "Melka, Kevin";
+  date              February 1998;
+  ISBN              0-7869-0659-6;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $13.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    catalog98,
+                    Dragon 242,
+                    Dragon 243,
+                    Dragon 244;
+  description       "a massive witch hunt".
+
+
+#.....
+#----- TSR 9555
+
+base product TSR 9555 =
+
+  title             "Children of the Night: Ghosts";
+  leader            "";
+  author            "Kargat, The";
+  date              October 1997;
+  ISBN              0-7869-0752-5;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $18.00;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net;
+  description       "an adventure anthology".
+
+
+#.....
+#----- TSR 9559
+
+base product TSR 9559 =
+
+  title             "Champions of the Mists";
+  leader            "";
+  author            "Connors, William W.";
+  date              June 1998;
+  ISBN              0-7869-0765-7;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $13.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    catalog98,
+                    Dragon 246,
+                    Dragon 247,
+                    Dragon 248;
+  description       "a collection of popular heroic figures from Ravenloft novels".
+
+
+#.....
+#----- TSR 9582
+
+base product TSR 9582 =
+
+  title             "Vecna Reborn";
+  leader            "";
+  author            "Cook, Monte J.";
+  date              August 1998;
+  ISBN              0-7869-1201-4;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $13.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    catalog98,
+                    Dragon 248;
+  description       "Vecna is trapped in the Demiplane of Dread".
+
+
+#.....
+#----- TSR 9583
+
+base product TSR 9583 =
+
+  title             "Children of the Night: Werebeasts";
+  leader            "";
+  author            "Connors, William W.";
+  date              November 1998;
+  ISBN              0-7869-1202-2;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $16.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    catalog98;
+  description       "anthology of short adventures".
+
+
+#.....
+
+#----- TSR 11360
+
+base product TSR 11360 =
+
+  title             "Children of the Night: Created";
+  leader            "";
+  author            "Staff, TSR";
+  date              May 1999;
+  ISBN              0-7869-1360-6;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  price             $18.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    Dragon 257;
+  description       "thirteen golems along with complete descriptions and short adventures".
+
+
+#.....
+#----- TSR 11382
+
+base product TSR 11382 =
+
+  title             "Carnival";
+  leader            "";
+  author            "Mangrum, John",
+                    "Miller, Steve";
+  date              October 1999;
+  ISBN              0-7869-1382-7;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  price             $13.95;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    Dragon 263;
+  description       "eerie sideshow".
+
+
+#.....
+#----- TSR 11397
+
+base product TSR 11397 =
+
+  title             "Ravenloft";
+  leader            "";
+  author            "Hickman, Tracy",
+                    "Hickman, Laura",
+                    "Nesmith, Bruce";
+  editor            "Cagle, Eric";
+  cover             "Caldwell, Clyde";
+  cartography       "Sutherland, David";
+  illustrations     "Caldwell, Clyde",
+                    "Crabtree, James";
+  typography        "Lokotz, Angelika";
+  management        "Hanchette, Paul" art coordination;
+  date              November 1999;
+  pages             48;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  series            Silver Anniversary,
+                    RPGA;
+  price             $ 0.00;
+  contents          Booklet,
+                    Gatefold "separate cover",
+                    Map "color";
+  requirements      ;
+  worlds            Ravenloft;
+  description       "\emph{Under raging stormclouds, a lone figure stands upon the ancient walls
+                    of \Place{Castle Ravenloft}. Lightning splits the sky, its cold light
+                    revealing a tall form wrapped in a billowing cape of shadows. Another flash
+                    exposes a face full of power and madness, contorted by a tragedy darker than
+                    the night. Far below, a party of adventurers has entered his dread domain. He
+                    smiles. Another lightning bold rips through the night, but the figure is
+                    gone. Only a howling wind fills the midnight air.
+                    domain. \NPC{Strahd}'s face forms a twisted smile as his dark plan
+                    unfolds. He knew they were coming, and he knows why they came, all according
+                    to his plan. He, the master of \Place{Ravenloft}, will attend to them.
+                    The master of \Place{Castle Ravenloft} is having guests for dinner---and
+                    you're invited!}
+                    Originally published in 1983, this classic adventure for four to eight
+                    characters of levels 5 to 7 mixes elements of gothic horror with AD&D fantasy
+                    for a unique experience. Updated to 2nd Edition, \Product{Ravenloft} features
+                    a haunted castle, gypsy fortunetellers, a tragic back story, and a
+                    \Monster{vampire} who is as powerful and intelligent as he is frightening---a
+                    menace worthy of the braves adventuring party!".
+
+
+#.....
+#----- TSR 11447
+
+base product TSR 11447 =
+
+  title             "Van Richten's Monster Hunter's Compendium, Volume One";
+  leader            "";
+  date              February 1999;
+  ISBN              0-7869-1447-5;
+  pages             288;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Soft Cover;
+  number            Volume One;
+  series            Van Richten's Monster Hunter's Compendium;
+  price             $24.95;
+  contents          Book;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net;
+  description       "Few creatures strike more terror into the hears of AD&D game characters and
+                    their players than these vile beings. They grip one's heart in a fist of fear
+                    from which no escape is possible.
+                    This compilation contains the complete texts of \Product{Van Richten's Guide
+                    to Vampires}, \Product{Van Richten's Guide to Werebeasts}, and \Product{Van
+                    Richten's Guide to the Created}, updated and usable in any AD&D campaign.".
+
+
+#.....
+#----- TSR 11507
+
+base product TSR 11507 =
+
+  title             "Van Richten's Monster Hunter's Compendium, Volume Two";
+  leader            "";
+  date              December 1999;
+  ISBN              0-7869-1507-2;
+  pages             288;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Soft Cover;
+  number            Volume Two;
+  series            Van Richten's Monster Hunter's Compendium;
+  price             $24.95;
+  contents          Book;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    Dragon 264;
+  description       "Once again, the undead arise to terrify AD&D game characters everywhere with
+                    the aid of this, the second in a series of works detailing the most dreadful
+                    and evil creatures imaginable.
+                    This compilation contains the complete texts of \Product{Van Richten's Guide
+                    to Ghosts}, \Product{Van Richten's Guide to the Lich}, and \Product{Van
+                    Richten's Guide to the Ancient Dead}, updated and usable in any AD&D
+                    campaign.".
+
+
+#.....
+#----- TSR 11613
+
+base product TSR 11613 =
+
+  title             "Van Richten's Monster Hunter's Compendium, Volume Three";
+  leader            "";
+  date              April 2000;
+  ISBN              0-7869-1613-3;
+  pages             288;
+  system            AD&D revised;
+  audience          All;
+  product type      Accessory;
+  style             Paperback;
+  number            Volume Three;
+  series            Van Richten's Monster Hunter's Compendium;
+  price             $24.95;
+  contents          Book;
+  requirements      ;
+  worlds            Ravenloft;
+  references        net,
+                    Dragon 268,
+                    Dragon 270;
+  description       "\Monster{Demons}, \Monster{devils}, and murderous \Monster{hags} stretch
+                    their hideous claws toward AD&D game characters everywhere, while crafty
+                    \Group{Vistani} and secretive witches hatch their plots in this tome, the
+                    third volume in \NPC{Doctor Van Richten}'s guides for monster hunters.
+                    This compilation contains the complete and updated texts of \Product{Van
+                    Richten's Guide to Fiends}, and \Product{Van Richten's Guide to the Vistani},
+                    with a surprise---the \bold{previously unpublished} \emph{\NPC{Van Richten}'s
+                    Guide to Witches}, all for use in any AD&D campaign.".
+
+
+#.....
+#----- WTC 9568974
+
+base product WTC 9568974 =
+
+  title             "I Strahd, Memoirs of a Vampire";
+  leader            "";
+  subtitle          "Reprint!";
+  author            "Elrod, Patricia Nead";
+  cover             "Foster, Jon";
+  date              November 2006;
+  ISBN              0-7869-4123-5;
+  ISBN13            978-0-7869-4123-0;
+  pages             277;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  price             $12.95;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Ravenloft;
+  description       "He sold his soul for her.
+                    But when that fatal decision leaves him horribly changed, will she be the agent of his deliverance or his damnation?".
+
+#.....

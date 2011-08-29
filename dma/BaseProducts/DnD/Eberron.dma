@@ -1,0 +1,1595 @@
+#----- WTC 17730 -----------------------------------------------------------
+
+#----- WTC 17730
+
+base product WTC 17730 =
+
+  title             "Grasp of the Emerald Claw";
+  leader            "";
+  subtitle          "Scramble to Claim a Key to Untold Power";
+  author            "Cordell, Bruce R.",
+                    "Slavicsek, Bill" additional design;
+  editor            "Kim Mohan" managing editor;
+  cover             "Reynolds, Wayne";
+  cartography       "Kauth, Dennis";
+  illustrations     "Prescott, Steve",
+                    "Hanson, Lisa" graphic designer,
+                    "Adams, Travis M." image technician;
+  typography        "Cheung, Carmen" graphic productions specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Longstreet, Stacy" senior art director RPG R&D,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Raper, Robert" eberron brand art director,
+                    "DeLong, Chas" production manager,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              January 2005;
+  ISBN              0-7869-3652-5;
+  pages             32;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  producer          WTC;
+  price             $ 9.95;
+  contents          Booklet;
+  worlds            Eberron;
+  description
+  "Deep in the jungles of \Place{Xen'drik}, a relic of great power has lain
+  hidden for thousands of years. Now, determined adventurers race against time
+  and the nefarious agents of the \Group{Order of the Emerald Claw} to locate
+  the relic, overcome unimagined obstacles, and unlock its ancient secret.
+
+  \Product{Grasp of the Emerald Claw} may be used as the conclusion to the
+  storyline from \Product{Shadows of the Last War} and \Product{Whispers of the
+  Vampire's Blade} or as a stand-alone adventure for the Dungeon & Dragons game
+  that will immerse your characters in the \Product{Eberron} campaign
+  setting. Designed to challenge 6th-level D&D heroes, it sends them on a
+  perilous journey to the heart of the mysterious and uncharted continent of
+  \Place{Xen'drik}.
+
+  To use this adventures, a Dungeon Master also needs the \Product{Eberron
+  Campaign Setting}, the \Product{Player's Handbook}, \Product{Dungeon Master's
+  Guide}, and \Product{Monster Manual}. A player needs only the
+  \Product{Eberron Campaign Setting} and the \Product{Player's Handbook}.".
+#.....
+#----- WTC 17868
+
+base product WTC 17868 =
+
+  title             "Five Nations";
+  leader            "";
+  subtitle          "Danger Knows No Borders";
+  author            "Slavicsek, Bill",
+                    "Noonan, David",
+                    "Perkins, Christopher",
+                    "Campbell, Brian 'Chainsaw'" additional material,
+                    "Gearin, Scott" additional material,
+                    "Liquette, Kolja Raven" additional material;
+  editor            "Slavicsek, Bill" game development and editing,
+                    "Wyatt, James" game development and editing,
+                    "Mohan, Kim" editing manager,
+                    "Raper, Robert" art director,
+                    "Sansaver, Ryan" art director;
+  cover             "Reynolds, Wayne",
+                    "Hawkins, Daniel" sculpted cover design;
+  cartography       "Kauth, Dennis",
+                    "Lazzaretti, Rob";
+  illustrations     "Fischer, Scott",
+                    "Giorello, Tomas",
+                    "Lim, Michael Frederick",
+                    "Marchesi, Roberto",
+                    "Parrillo, Lucio",
+                    "Prescott, Steve",
+                    "Sardinha, Richard",
+                    "Sook, Ryan",
+                    "Stokes, Anne",
+                    "Zhang, Xi James",
+                    "Wiley, Jason" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              July 2005;
+  ISBN              0-7869-3690-8;
+  pages             160;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book;
+  requirements      WTC 17524,
+                    WTC 17752,
+                    WTC 17755,
+                    WTC 86400;
+  worlds            Eberron;
+  description
+  "Secure your traveling papers and jump aboard the lightning rail as it
+  hurtles across the \Place{Five Nations}. Once united as the kingdom of
+  \Place{Galifar} then sundered by the \Event{Last War}, \Place{Aundair},
+  \Place{Breland}, the \Place{Mournland}, \Place{Karrnath}, and \Place{Thrane}
+  now enjoy a tenuous peace. Regardless of your destination, ready your weapons
+  as well as your wits---intrigue, opportunity, risk, and reward await at every
+  stop.
+
+  Inside this book, you'll find everything you need to adventure in the mighty
+  kingdoms that form the heart of \Place{Khorvaire}:
+
+  \list
+  {Comprehensive overview of each kingdom, including its postwar status,
+   government, and economy, as well as important locations, communities,
+   organizations, and NPCs}
+  {Detailed, full-color maps of each nation and its capital city}
+  {Spells and magic items developed during the \Event{Last War}}
+  {Descriptions of battlefields, ruins, cities, and other notable places}
+  {Information for creating characters who hail from each of the
+   \Place{Five Nations}}
+  {New monsters and monster templates}
+
+  A geographical sourcebook for play in the \Place{Five Nations} of the
+  \Place{Eberron} world.
+
+  \Product{Five Nations} offers players a rich source of information about
+  playing and dealing with characters from the \Place{Five Nations} of the
+  \Place{Eberron} world. As any play in the \Place{Eberron} world is likely to
+  involve the \Place{Five Nations} or characters from them, the book is useful
+  to anyone involved in an \Place{Eberron} campaign. The individual nation
+  chapters include information on culture, geography (including maps), guilds
+  and factions and, new prestige classes, equipment, creatures, spells, magic
+  items, and adventure sites.".
+#.....
+#----- WTC 17869
+
+base product WTC 17869 =
+
+  title             "Explorer's Handbook";
+  leader            "";
+  subtitle          "Fortune Favors the Bold";
+  author            "Noonan, David",
+                    "Brunner, Frank",
+                    "Burlew, Rich",
+                    "Decker, Jesse" development,
+                    "Slavicsek, Bill" development;
+  editor            "Lyons, Michelle",
+                    "Gray, Scott Fitzgerald",
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Kauth, Dennis";
+  illustrations     "Stokes, Anne",
+                    "Draxhall Jump Entertainment",
+                    "Deschamps, Eric",
+                    "Tsai, Francis",
+                    "Lyon, Howard",
+                    "Chevalier, Igor-Alban",
+                    "Tedin, Mark",
+                    "Prescott, Steve",
+                    "Sansaver, Ryan" art director,
+                    "Raper, Robert" art director,
+                    "Hanson, Lisa" graphic designer,
+                    "Adams, Travis M." image technician;
+  typography        "Dorries, Erin" graphic production specialist,
+                    "Cheung, Carmen" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Joshua C.J." production manager,
+                    "Crews, Randall" production manager;
+  date              August 2005;
+  ISBN              0-7869-3691-6;
+  pages             160;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book;
+  requirements      WTC 17524,
+                    WTC 17752,
+                    WTC 17755,
+                    WTC 86400;
+  worlds            Eberron;
+  description
+  "The world of the \Place{Eberron} settings holds many wonders beyond the
+  soaring spires of \Place{Sharn}. Explorers who chase distant horizons might
+  find themselves infiltrating the \Monster{demon}-haunted city of
+  \Place{Ashtakala}, prowling the jungles of \Place{Xen'drik}, snatching relics
+  from the \Place{City of the Dead}, or invading a \Monster{dragon} observatory
+  in the mountains of \Place{Argonnessen}. The secrets of an entire world are
+  within your reach, but be warned: Glory and peril walk hand in hand, and a
+  journey's end can come sooner than you think!
+
+  This book gives players everything they need to explore a variety of sites
+  across \Place{Eberron}, including modes of travel, exploring tips, and rules
+  for joining organizations such as the prestigious \Group{Wayfinder
+  Foundation}. For Dms, the book describes several likely 'launching pads' and
+  destinations, complete with maps, ready-to-play encounters, and pregenerated
+  NPCs. \Product{Explorer's Handbook} also provides rules and maps for various
+  modes of transport, including \Item{lightning trail coaches} and
+  \Item{elemental-bound vessels}.
+
+  The ultimate sourcebook for players wishing to explore the world of
+  \Place{Eberron}.
+
+  The \Product{Explorer's Handbook} showcases the multi-continental aspect of
+  the \Place{Eberron} setting. The chapter on travel discusses instantaneous
+  and played-out travel and provides deck plans for \Item{airships}, the
+  \Item{lightning rail}, and \Item{galleons}, plus other methods of
+  conveyance. A chapter on Explorer's Essentials offers information
+  on travel papers, preassembled equipment kits, how to join the
+  \Group{Wayfarers' Foundation}, and more. This handbook will encourage you
+  to explore the entire world rather than remain fixed in one region.".
+#.....
+
+#----- WTC 86400
+
+base product WTC 86400 =
+
+  title             "Campaign Setting";
+  leader            "";
+  subtitle          "Find Action Around Every Corner of the World";
+  author            "Baker, Keith",
+                    "Slavicsek, Bill" world and story development,
+                    "Baker, Keith" game design,
+                    "Slavicsek, Bill" game design,
+                    "Wyatt, James" game design,
+                    "Decker, Jesse" game development,
+                    "Donais, Michael 'Mike'" game development,
+                    "Finch, Andrew J." game development;
+  editor            "Carter, Michele",
+                    "Perkins, Christopher",
+                    "Rateliff, John",
+                    "Mohan, Kim" managing editor;
+  cover             "Reynolds, Wayne",
+                    "Hawkins, Daniel" sculpted cover design;
+  cartography       "Kauth, Dennis",
+                    "Lazzaretti, Robert";
+  illustrations     "Allsop, Dave",
+                    "Andrasofszky, Kalman",
+                    "Avon, John",
+                    "Beargeon, Tom",
+                    "Beet",
+                    "Bircham, David",
+                    "Coker, Tomm",
+                    "Garres, Rafa",
+                    "Irving, Frazer",
+                    "Jones, Andrew",
+                    "Knutson, Dana",
+                    "Lemen, Ron",
+                    "Moyer, Lee",
+                    "Parillo, Lucio",
+                    "Pilcerova, Martina",
+                    "Stokes, Anne",
+                    "Tedin, Mark",
+                    "Vohlwinkel, Franz",
+                    "Walker, Ken",
+                    "Wood, Sam",
+                    "Zhang, James",
+                    "Raper, Robert" art director,
+                    "Jordan, Robert" image technician;
+  typography        "Hanson, Lisa" graphic designer,
+                    "";
+  management        "Perkins, Christopher" design manager,
+                    "Finch, Andrew J." development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              June 2004;
+  pages             320;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 39.95;
+  contents          Book;
+  worlds            Eberron;
+  description
+  "Grab your pack and leap into an action-packed, intrigue-laced world of
+  cinematic adventure. Within the \Product{Eberron Campaign Setting}, you'll
+  discover a vast, richly detailed world infused with magic and waiting to be
+  filled with daring escapades and dangerous exploits. Throw open the
+  cover---and be ready for anything.
+
+  Inside this book, you'll find all the details you'll need to embark on
+  Dungeon & Dragons adventures in the exiting world of \Place{Eberron}:
+
+  \list
+  {4 new racess: \Monster{changeling}, \Monster{kalashtar}, \Monster{shifter},
+   and \Monster{warforged}}
+  {Over 70 new feats, 8 new prestige classes, and a new character class: the
+   \Class{artificer}}
+  {New equipment, weapons, spells, and magic items}
+  {New monsters and monster templates}
+  {Highly detailed regions, new organizations, and a short adventure to launch
+   your campaign}".
+#.....
+#----- WTC 86410
+
+base product WTC 86410 =
+
+  title             "Shadows of the Last War";
+  leader            "";
+  subtitle          "Race to Uncover Secrets Buried by Disaster";
+  author            "Baker, Keith",
+                    "Slavicsek, Bill" additional design;
+  editor            "Slavicsek, Bill",
+                    "Mohan, Kim" managing editor;
+  cover             "Reynolds, Wayne",
+                    "Hawkins, Daniel" sculpted cover design,
+                    "Hanson, Lisa" graphic designer;
+  cartography       "Kauth, Dennis",
+                    "Lazzaretti, Rob";
+  illustrations     "Castillo, Tommy",
+                    "Raper, Robert" art director,
+                    "Baker, Candice" image technician;
+  typography        "Cheung, Carmen" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Finch, Andrew" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              July 2004;
+  ISBN              0-7869-3276-7;
+  pages             48;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  producer          WTC;
+  price             $ 9.95;
+  contents          Booklet "Shadows of the Last War",
+                    Booklet "Death at Whiteearth";
+  worlds            Eberron;
+  description
+  "The ruined \Place{House Cannith citadel of Whitehearth} holds the key to
+  constructing a terrible magic weapon. Agents of the \Group{Emerald Claw} will
+  stop at nothing to recover the ancient device. As malevolent forces hunt for
+  the artifact, resourceful heroes battle the perils of the \Place{Mournland}
+  to reach \Place{Whitehearth} first and discover the secrets that lie
+  within.
+
+  \Product{Shadows of the Last War} is a stand-alone adventure for the Dungeon
+  & Dragons game that will immerse your characters in the \Place{Eberron}
+  \Product{campaign setting}. Designed to challenge 2nd-level D&D heroes, it
+  pits them against one of \Place{Eberron}'s most nefarious organizations.
+
+  To use this adventure, a Dungeon Master also needs the \Product{Eberron
+  Campaign Setting}, the \Product{Player's Handbook}, \Product{Dungeon Master's
+  Guide}, and \Product{Monster Manual}.
+
+  A player needs only the \Product{Eberron Campaign Setting} and the
+  \Product{Player's Handbook}.".
+#.....
+#----- WTC 86420
+
+base product WTC 86420 =
+
+  title             "Sharn: City of Towers";
+  leader            "";
+  subtitle          "Discover a City Filled with Endless Adventure";
+  author            "Baker, Keith",
+                    "Wyatt, James",
+                    "Slavicsek, Bill" developer;
+  editor            "Slavicsek, Bill",
+                    "Mohan, Kim" managing editor;
+  cover             "Reynolds, Wayne",
+                    "Hawkins, Daniel" sculpted cover design;
+  cartography       "Kauth, Dennis",
+                    "Lazzaretti, Rob";
+  illustrations     "Alexander, Jason",
+                    "Coker, Tomm",
+                    "Deschamps, Eric",
+                    "Giorello, Tomas",
+                    "Lyon, Howard",
+                    "Morrow, Charles P.",
+                    "Parrillo, Lucio",
+                    "Prescott, Steve",
+                    "Tsai, Francis",
+                    "Stokes, Anne",
+                    "Waters, Anthony",
+                    "Zhang, James",
+                    "Raper, Robert" art director,
+                    "Hanson, Lisa" graphic design,
+                    "Baker, Candice" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              November 2004;
+  ISBN              0-7869-3434-4;
+  pages             193;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Accessory;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book,
+                    CD "soundtrack";
+  worlds            Eberron;
+  description
+  "Hop aboard a \Item{skycoach} and hurl yourself into adventure amid the
+  soaring towers of \Place{Khorvaire}'s most spectacular city. Plunge into
+  perilous aerial battles miles above the earth. Embark on deadly expeditions
+  through the bowels of the city. Arrange clandestine meetings in shadowy
+  taverns and undertake daring quests to faraway lands. For those bold enough
+  to seek it, the \Place{City of Towers} promises limitless excitement, danger,
+  fame, and fortune.
+
+  Inside this book, you'll find all the details you'll need to explore the
+  awe-inspiring city of \Place{Sharn} -- a cornerstone of the \Place{Eberron}
+  campaign setting:
+
+  \list
+  {Descriptions of over 100 city districts}
+  {More than a dozen new guilds and organizations to help or hinder characters,
+   including the \Group{Deathsgate Guild}, the \Group{Circle of Song}, and the
+   \Group{Boromar Clan}}
+  {More than three dozen fully developed NPCs ranging from specific individuals
+   to generic citizens}
+  {New feats, spells, prestige classes, magic items, and monsters}
+  {Detailed maps of \Place{Sharn} and various locations around the city}
+  {Free CD soundtrack -- nine tracks of original cinema-quality music to evoke
+   the mood of \Place{Eberron} on an audio CD bundled with the book}".
+#.....
+#----- WTC 86430
+
+base product WTC 86430 =
+
+  title             "Whispers of the Vampire's Blade";
+  leader            "";
+  subtitle          "Join the Hunt for an Elusive Traitor";
+  author            "Noonan, David",
+                    "Slavicsek, Bill" development;
+  editor            "Slavicsek, Bill",
+                    "Mohan, Kim" managing editor;
+  cover             "Reynolds, Wayne";
+  cartography       "Gamble, Todd";
+  illustrations     "Prescott, Steve",
+                    "Raper, Robert" art director,
+                    "Hanson, Lisa" graphic designer,
+                    "Adams, Travis M." image technician;
+  typography        "Cheung, Carmen" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Finch, Andrew" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "DeLong, Chas" production manager,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              September 2004;
+  ISBN              0-7869-3510-3;
+  pages             32;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  producer          WTC;
+  price             $ 9.95;
+  contents          Booklet;
+  worlds            Eberron;
+  description
+  "A \Place{Brelish} spay has vanished with a powerful magic sword. Pursuing
+  the fugitive are operatives from a number of other factions intent on
+  recovering the traitor, his stolen weapon, or both. As the slippery agent
+  flees across \Place{Khorvaire}, only the most relentless heroes will stay on
+  the intrigue-laced trail and capture their target.
+
+  \Product{Whispers of the Vampire's Blade} is a stand-alone adventure for the
+  Dungeons & Dragons game that will immerse your characters in the
+  \Place{Eberron} campaign setting. Designed to challenge 4th-level D&D heroes,
+  it hurls them across the continent of \Place{Khorvaire} with action-packed
+  overland and aerial travel.
+
+  To use this adventure, a Dungeon Master also needs the \Product{Eberron
+  Campaign Setting}, the \Product{Player's Handbook}, \Product{Dungeon Master's
+  Guide}, and \Product{Monster Manual}. A player only needs the
+  \Product{Eberron Campaign Setting} and the \Product{Player's Handbook}.
+
+  Take advantage of the RPGA's Player Rewards Program by scoring points with
+  this adventure.".
+#.....
+
+#----- WTC 95005
+
+base product WTC 95005 =
+
+  title             "Deluxe Eberron Player Character Sheets";
+  leader            "";
+  subtitle          "";
+  author            "Perkins, Christopher";
+  date              August 2005;
+  ISBN              0-7869-3849-8;
+  pages             64;
+  system            D&D 3rd;
+  audience          Player;
+  product type      Accessory;
+  style             Paperback;
+  producer          WTC;
+  price             $ 14.95;
+  contents          Folder "cover",
+                    Folder "character sheet storage",
+                    Sheet "character sheets" 16;
+  worlds            Eberron;
+  description
+  "Inside the pockets of this protected folder, you'll find a full set of
+  Dungeons & Dragons character sheets for use in any \Place{Eberron} or other
+  D&D campaign. Each character sheet features an attractive folio-style layout,
+  giving you plenty of room to keep track of everything that makes your
+  character unique.
+
+  INCLUDES:
+
+  \list
+  {A four-page introductory character sheet designed for new players.}
+  {Four-page character sheets suitable for martial characters, skill-focused
+   characters, spellcasters, psionics users, and multiclass characters.}
+  {Four-page character development sheets, which you can use to flesh out your
+   character's background and personality, as well as track your character's
+   career path.}
+  {Four-page adventure log sheets, which you can use to keep track of
+   encounters, NPCs, and campaign details.}
+  {Spell lists for all the spellcasting classes in the \Product{Player's
+   Handbook}, \Product{Complete Adventurer}, \Product{Complete Arcane}, and
+   \Product{Complete Divine}, plus spell lists for the \Class{assassin} and
+   \Class{blackguard} prestige classes described in the \Product{Dungeon
+   Master's Guide}.}
+  {A list of infusions for the \Class{artificer} class described in the
+   \Place{Eberron Campaign Setting}.}
+
+  Every character sheet, adventure log, and spell list is easy to photocopy, so
+  you'll always have a fresh sheet on hand when you need one.
+
+  Encased in a handy pocket folder featuring a beautiful piece of
+  \Place{Eberron} artwork, these character sheets contain all the information
+  from the \Product{D&D Deluxe Player Character Sheets}, with modifications and
+  additional material appropriate for game elements unique to the
+  \Place{Eberron} setting. In addition to the standard D&D classes, a sheet is
+  included for the new class introduced in \Place{Eberron}. Each character
+  folio is four pages long and includes not only extensive for a character
+  record, but space for roleplaying information and campaign progress as
+  well. Spell sheets for spellcasters are also included.".
+#.....
+#----- WTC 95006
+
+base product WTC 95006 =
+
+  title             "Deluxe Dungeon Master's Screen";
+  leader            "";
+  subtitle          "The Eberron DM's Best Friend";
+  author            "Perkins, Christopher";
+  date              July 2005;
+  ISBN              0-7869-3850-1;
+  pages             4;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Folder;
+  producer          WTC;
+  price             $ 14.95;
+  contents          Folder "cover",
+                    Poster "color map",
+                    Screen;
+  requirements      WTC 17524,
+                    WTC 17752,
+                    WTC 86400;
+  worlds            Eberron;
+  description
+  "Behind this sturdy, four-panel screen, you control your \Place{Eberron}
+  campaign. This invaluable game aid helps you conceal notes, miniatures, and
+  other surprises from your player's eyes. The landscape format makes it easier
+  for you to see the game in front of your screen while maximizing the space
+  you have behind it. In addition to providing useful tables from the
+  \Product{Player's Handbook} and \Product{Dungeon Master's Guide}, this deluxe
+  screen provides information of particular interest to \Place{Eberron} DMs,
+  including a lost of dragonmarked houses and guilds and an \Place{Eberron}
+  calendar.
+
+  This product also includes a detailed poster map of the continent of
+  \Place{Khorvaire}, the point of origin of most \Place{Eberron}
+  campaigns. This comprehensive and richly detailed poster map includes
+  political borders, settlements, roads, lightning rail routes, and
+  never-before-seen sites for adventurers to explore.
+
+  Produced by popular demand, this DM screen is useful to Dungeon Masters
+  running campaigns in the \Place{Eberron} setting. It includes all the tables
+  from the \Product{D&D Deluxe Dungeon Master's Screen}, with modifications and
+  additional material appropriate for game elements unique to the
+  \Place{Eberron} setting. The front showcases a beautiful widescreen-format
+  piece of \Place{Eberron} artwork. Also included is a poster map of
+  \Place{Khorvaire}, the primary setting of the \Place{Eberron} campaign, with
+  borders, trade routes, and other details not printed on any previous
+  full-sized map.".
+#.....
+
+#----- WTC 8829172
+
+base product WTC 8829172 =
+
+  title             "Magic of Eberron";
+  leader            "";
+  subtitle          "A Trove of Magical Lore for Spellcasters and Artificers";
+  author            "Cordell, Bruce R.",
+                    "Schubert, Stephen",
+                    "Thomasson, Chris",
+                    "Collins, Andy" development,
+                    "Donais, Michael 'Mike'" development,
+                    "Decker, Jesse" development;
+  editor            "Thomasson, Chris",
+                    "Gray, Scott Fitzgerald",
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Moyer, Lee";
+  illustrations     "Stokes, Anne",
+                    "Beck, David Michael",
+                    "Draxhall Jump Entertainment",
+                    "Deschamps, Eric",
+                    "Tsai, Francis",
+                    "Parrillo, Lucio",
+                    "Tedin, Mark",
+                    "Prescott, Steve",
+                    "Giorello, Tomas",
+                    "Sansaver, Ryan" art director,
+                    "Hanson, Lisa" graphic design,
+                    "Adams, Travis M." image technician;
+  typography        "Cheung, Carmen" graphic production specialist,
+                    "Dorries, Erin" graphic production specialist;
+  management        "Perkins Christoper" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Joshua C.J." production manager,
+                    "Crews, Randall" production manager;
+  date              October 2005;
+  ISBN              0-7869-3696-7;
+  pages             160;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Hardcover;
+  producer          WTC;
+  series            Eberron Campaign Supplement;
+  price             $ 29.95;
+  contents          Book;
+  requirements      WTC 17524,
+                    WTC 17752,
+                    WTC 86400;
+  worlds            Eberron;
+  description
+  "Magic suffuses the world of \Place{Eberron}, enriching it with
+  power. \Monster{Dragons} were the first to master it, but over time it has
+  evolved to server the needs of countless others, from the \Monster{giants} of
+  \Place{Xen'drik} and the \Monster{elves} of \Place{Aerenal} to the citizens
+  of modern \Place{Khorvaire}. Whether you choose to explore the magic of the
+  present age or delve into the truly ancient arts is up to you.
+
+  This book exposes the magic and eldritch wonders of \Place{Eberron}. In
+  addition to presenting new arcane and divine spells, feats, prestige classes,
+  and magic items, \Product{Magic of Eberron} offers new options and infusions
+  for \Class{artificiers}, explorer dragon totem magic and the twisted
+  experiments of the \Monster{daelkyr}, sheds light on the process of elemental
+  binding, and touches on other types of magic present in the world.
+
+  \Product{Magic of Eberron} explores the variety of magic available in the
+  \Place{Eberron} world. It introduces a wealth of new arcane and divine
+  spells, and artificer infusions. Chapters explore the more unusual
+  manifestations of magic in \Place{Eberron}, such as elemental binding,
+  dragonshards and dragon magic, and the corrupted magic of the
+  \Group{daelkyr}. A chapter on lost magic explains how to make the discovery
+  of new magical secrets a central feature of any \Place{Eberron} campaign.".
+#.....
+
+#----- WTC 9536374
+
+base product WTC 9536374 =
+
+  title             "Voyage of the Golden Dragon";
+  leader            "";
+  subtitle          "Set a Course for Adventure";
+  author            "Logue, Nicolas",
+                    "Stark, Ed" additional design;
+  editor            "Gray, Scott Fitzgerald",
+                    "Thomasson, Chris" proofreader,
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Hill, Jonathan";
+  illustrations     "Prescott, Steve",
+                    "Hanson, Lisa" graphic designer,
+                    "Bolen, Sven" image technician,
+                    "Longstreet, Stacy" senior art director D&D,
+                    "Sansaver, Ryan" Eberron brand art director;
+  typography        "Cheung, Carmen" graphic production specialist,
+                    "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              April 2006;
+  ISBN              0-7869-3907-9;
+  pages             32;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  producer          WTC;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      Player's Handbook,
+                    Dungeon Master's Guide,
+                    Monster Manual,
+                    Eberron Campaign Setting;
+  layout            Color Cover;
+  worlds            Eberron;
+  description
+  "The \Item{Golden Dragon}, conceived as a skyfaring warship, now serves as a
+  symbol of peace among the \Place{Five Nations}. Even before the luxurious
+  airship embarks on its maiden voyage, nefarious pirates, thieves, and
+  saboteurs conspire to defame, steal, or destroy it. Resourceful adventurers
+  are needed to protect the ship and its passengers, but can they uncover the
+  secret enemy lurking in their midst?
+
+  \Product{Voyage of the Golden Dragon} is a stand-alone adventure for the
+  Dungeon & Dragons game that immerses your characters in the \Product{Eberron
+  campaign setting}. Designed to challenge 7th-level characters, it takes
+  heroes on a perilous journey from \Place{Sharn} to \Place{Stormreach} and
+  also serves as a launching pad for adventures the world over.
+
+  The fourth stand-alone adventure for the \Place{Eberron} campaign setting.
+
+  This low-level stand-alone \Place{Eberron} adventure revolves around the
+  maiden voyage of the \Item{Golden Dragon}, an immense elemental
+  \Item{skyship} created as a symbol of peace by the \Place{Five Nations of
+  Khorvaire}. On the \Item{Golden Dragon} itself and at the locations it
+  visits, the player characters must unravel plots of intrigue against the ship
+  and its important passengers. Though it is not necessary to play the previous
+  \Place{Eberron} adventures before \Product{Voyage of the Golden Dragon},
+  sidebars explaining how they can be linked together are included.";
+  short description "".
+#.....
+#----- WTC 9536872
+
+base product WTC 9536872 =
+
+  title             "Player's Guide to Eberron";
+  leader            "";
+  subtitle          "Secrets Every Hero should Know";
+  author            "Wyatt, James",
+                    "Baker, Keith",
+                    "Johnson, Luke",
+                    "Brown, Steven 'Stan!'",
+                    "Collins, Andy" development;
+  editor            "Carter, Michele",
+                    "Gray, Scott",
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Moyer, Lee";
+  illustrations     "Stokes, Anne",
+                    "Chumley, Brent",
+                    "Beck, David Michael",
+                    "Draxhall Jump Entertainment",
+                    "Deschamps, Eric",
+                    "Tsai, Francis",
+                    "Lyon, Howard",
+                    "Parrillo, Lucio",
+                    "Ellis, Steve",
+                    "Prescott, Steve",
+                    "Sansaver, Ryan" art director,
+                    "Jordan, Robert" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall";
+  date              January 2006;
+  ISBN              0-7869-3912-5;
+  pages             160;
+  system            D&D 3rd;
+  audience          Player;
+  product type      Accessory;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book;
+  requirements      Player's Handbook,
+                    Dungeon Master's Guide,
+                    Monster Manual,
+                    Eberron Campaign Setting;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "What does an \Monster{elf} from the \Place{Shae Cairdal} know about the
+  nation of \Place{Aerenal}? How do you play a \Monster{half-orc} from the
+  \Place{Shadow Marches}? What does your character know about the Blood of Vol
+  or the royal line of \Place{Califar}? The \Product{Player's Guide to Eberron}
+  supplement answers these questions and more. This companion to the
+  \Product{Eberron Campaign Setting} explores the world from the player's point
+  of view and presents exciting new options for Eberron characters.
+
+  \Product{Player's Guide to Eberron} describes important locations, events,
+  organizations, races, and features of the Eberron campaign setting, organized
+  in an accessible and easily digestible format so that players can use the
+  book as a handy reference guide. In addition, this book provides new feats,
+  prestige classes, spells, and magic items.
+
+  The Player's Guide to Eberron contains everything a player needs to know
+  about the Eberron campaign setting. Presenting information in an innovative
+  spread format, this comprehensive gazetteer covers key topics a character
+  should know about, from Aerenal to Zilargo, house politics to the Last War,
+  dragons to the Lords of Dust, without revealing information meant for Dungeon
+  Masters only. New feats, prestige classes, magic items, and spells are
+  included in the relevant entries.";
+  short description "The ultimate rules companion and gazetteer for Eberron players.".
+#.....
+#----- WTC 9537272
+
+base product WTC 9537272 =
+
+  title             "Secrets of Xen'drik";
+  leader            "";
+  subtitle          "Here Be Monsters... And More";
+  author            "Baker, Keith",
+                    "Bulmahn, Jason",
+                    "Scott, Amber",
+                    "Collins, Andy" development;
+  editor            "Gray, Scott Fitzgerald",
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Gamble, Todd",
+                    "Haga, Brian",
+                    "Lazzaretti, Robert";
+  illustrations     "Brase, Andy",
+                    "Cotie, Mitch",
+                    "Deschamps, Eric",
+                    "Ellis, Steve",
+                    "England, Wayne",
+                    "Engle, Jason",
+                    "Hodgson, John",
+                    "Lemen, Ron",
+                    "Parrillo, Lucio",
+                    "Tedin, Mark",
+                    "Vohwinkel, Franz",
+                    "Sansaver, Ryan" art director,
+                    "Hanson, Lisa" graphic designer,
+                    "Bolen, Sven" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Joshau J.C." production manager,
+                    "Crews, Randall" production manager;
+  date              July 2006;
+  ISBN              0-7869-3916-8;
+  pages             160;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Sourcebook;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 39.95;
+  contents          Book;
+  requirements      player's handbook,
+                    Dungeon Master's Guide,
+                    Monster Manual,
+                    Eberron Campaign Setting;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "There's an old saying in \Place{Stormreach}: 'Great power rests in the ruins
+  of the past.' The shattered ruins and vast dungeons of \Place{Xen'drik} hold
+  the secrets of countless fallen empires. Legends speak of titanic landmarks,
+  sunken treasure vaults, and forgotten places suffused with powerful
+  magic. Beyond the walls of \Place{Stormreach}, an entire continent waits to
+  be rediscovered. But beware! Terrible monsters rule \Place{Xen'drik} now, and
+  explorers searching for gold or glory often find death instead.
+
+  Inside this book, you'll find everything you need to adventure in the
+  continent of \Place{Xen'drik}:
+
+  \list
+  {Comprehensive overview of the continent of \Place{Xen'drik} and the gateway
+   city of \Place{Stormreach}}
+  {New feats, prestige classes, spells, equipment, and magic items}
+  {Encounters and magical locations you can drop into your existing campaign}
+  {Ready-to-play adventures, monsters, and villains}
+
+  A sourcebook for play and exploration across the mysterious Eberron
+  continent of Xen'drik.
+
+  Secrets of Xen'drik offers the first in-depth look at the lost continent of
+  Xen'drik, the adventure-rich, ruin-laden, unknown land to the south of
+  Khorvaire. A chapter is devoted to the cosmopolitan trade city of Stormreach,
+  base camp of most adventures into Xen¢drik. Also included are specific
+  locations of interest, new information on the secretive drow of Xen'drik,
+  adventure seeds, and encounters that DMs can drop into their games. Secrets
+  of Xen'drik includes new equipment, spells, magic items, monsters, and
+  prestige classes as well.  ";
+  short description "".
+#.....
+#----- WTC 9538072
+
+base product WTC 9538072 =
+
+  title             "Dragonmarked";
+  leader            "";
+  subtitle          "The Mark of Dragons - a Sign of Destiny";
+  author            "Baker, Keith",
+                    "Lyons, Michelle",
+                    "Suleiman, C.A.",
+                    "Marmell, Ari" additional design,
+                    "Perkins, Christopher" additional design;
+  editor            "Gray, Scott Fitzgerald",
+                    "Bonner, Logan" editorial assistant,
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  illustrations     "Cotie, Mitch",
+                    "Drennan, Rick",
+                    "Flores, Gonzalo",
+                    "Giorello, Tomas",
+                    "Hodgson, Jon",
+                    "Hooper, Fred",
+                    "Lemen, Ron",
+                    "Lyon, Howard",
+                    "Mahy, Warren",
+                    "Parrillo, Lucio",
+                    "Stokes, Anne",
+                    "Sansaver, Ryan" art director,
+                    "Sansaver, Ryan" graphic designer,
+                    "Wiley, Christina" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              November 2006;
+  ISBN              0-7869-3933-8;
+  pages             160;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book;
+  requirements      Player's Handbook,
+                    Dungeon Master's Guide,
+                    Monster Manual,
+                    Eberron Campaign Setting;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "You belong to one of the great dynastic houses of commerce, and you bear an
+  arcane symbol of your house's power on your skin. This dragonmark makes you
+  special. It grant you access to arcane powers. Whether it's a gift of the
+  great \Monster{dragon} Eberron or a sign of the draconic Prophecy, no one
+  knows. However, one thing is certain: Those who possess dragonmarks have a
+  destiny, the exact nature of which has yet to be revealed.
+
+  This supplement explores each of the thirteen dragonmarked houses in detail
+  and presents advice for playing dragonmarked characters within a house or
+  house guild. In addition, the book introduces exciting new options for
+  dragonmarked characters, including prestige classes, feats, and
+  spells. Finally, it discusses aberrant dragonmarks and their role in the
+  campaign.
+
+  Dragonmarked offers an in-depth look at the power of dragonmarks and the
+  thirteen dragonmarked houses of the Eberron world. It also provides exciting
+  new options for players with dragonmarked characters, including roleplaying
+  hooks, new feats, new prestige classes, and new spells.";
+  short description "A new supplement exploring a unique aspect of the Eberron world.".
+#.....
+#----- WTC 9538172
+
+base product WTC 9538172 =
+
+  title             "Faiths of Eberron";
+  leader            "";
+  subtitle          "Many Faiths, Many Truths";
+  author            "Wilkes, Jennifer Clarke",
+                    "Marmell, Ari",
+                    "Suleiman, C.A.",
+                    "Baker, Keith" additional design,
+                    "Collins, Andy" developer;
+  editor            "Jurkat, M. Alexander",
+                    "Trombley, Bernard C." editing assistance,
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Lazzaretti, Robert";
+  illustrations     "Andrasofszky, Kalman",
+                    "Cotie, Mitch",
+                    "Lyon, Howard",
+                    "Mahy, Warren",
+                    "Martin, Michael",
+                    "Parrillo, Lucio",
+                    "Tedin, Mark",
+                    "Sansaver, Ryan" graphic designer,
+                    "Sansaver, Ryan" art director,
+                    "Jordan, Bob" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              September 2006;
+  ISBN              0-7869-3934-6;
+  pages             160;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book;
+  requirements      Player's Handbook,
+                    Dungeon Master's Guide,
+                    Monster Manual,
+                    Eberron Campaign Setting;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "In the world of \Place{Eberron}, the reality of the gods depends on the
+  belief of the followers. Contradictory truths might both be correct. Vague
+  legend might be fact, and accepted fact only dogma. But to every worshiper,
+  the divine presence manifests in miraculous magic, boons for the faithful,
+  and undeniable holy power. In short, faith shapes reality.
+
+  This supplement presents detailed descriptions of the major religions of
+  \Place{Eberron}, including the rival pantheons of the \God{Sovereign Host}
+  and the \God{Dark Six}, the young faith of the \God{Silver Flame}, and the
+  shadowed \God{Blood of Vol}. You'll also find intriguing details of lesser
+  religions, such as the beliefs of the laconic warforged, the mad cults of the
+  \Group{Dragon Below}, and the various druid sects of the \Place{Eldeen
+  Reaches}. The \Product{Faiths of Eberron} supplement also includes new feats,
+  spells, prestige classes, and equipment to give more options to devout
+  worshipers and sometime followers alike.";
+  short description "".
+#.....
+#----- WTC 9556772
+
+base product WTC 9556772 =
+
+  title             "Secrets of Sarlona";
+  leader            "";
+  subtitle          "Mystery and Madness Await";
+  author            "Baker, Keith",
+                    "Fitzgerald Gray, Scott",
+                    "McDonald, Glenn",
+                    "Sims, Chris",
+                    "Collins, Andy" developer;
+  editor            "Jurkat, M. Alexander",
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Moyer, Lee";
+  illustrations     "Andrasofszky, Kalman",
+                    "Bircham, David",
+                    "Coker, Tomm",
+                    "Hopper, Fred",
+                    "Lemen, Ron",
+                    "Lyon, Howard",
+                    "Mahy, Warren",
+                    "Parrillo, Lucio",
+                    "Pavelec, Jim",
+                    "Pilcerova, Martina",
+                    "Prescott, Steve",
+                    "Stokes, Anne",
+                    "Tedin, Mark",
+                    "Vohwinkel, Franz",
+                    "Zhang, James",
+                    "Irwin, Kate" art director,
+                    "Hanson, Lisa" graphic designer,
+                    "Bolen, Sven" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              February 2007;
+  ISBN              0-7869-4037-9;
+  ISBN13            978-0-7869-4037-0;
+  pages             160;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book;
+  requirements      Player's Handbook,
+                    Dungeon Master's Guide,
+                    Monster Manual,
+                    Eberron Campaign Setting,
+                    D&D Miniatures;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "Join the struggle to save the cradle of humanity from monstrous and alien
+  overlords. Venture to the frozen land of the shifters to make your fortune,
+  or smuggle exotic goods and strange dissidents from a freewheeling southern
+  port. Stand on the world's tallest mountain, or rove the vast wilderness that
+  makes up the empire of \Place{Riedra}. Seek venerated masters, and learn
+  powers and abilities unheard of in \Place{Khorvaire}. Come to
+  \Place{Sarlona}, ancient homeland of \Monster{couatls} and \Monster{fiends},
+  and explore a land of lost empires and esoteric arts.
+
+  Inside this book, you'll find everything you need to explore the enigmatic
+  continent of \Place{Sarlona}:
+
+  \list
+
+  {Comprehensive overview of \Place{Sarlona}'s nations, including their
+   governments and relations, as well as locations, communities, organizations,
+   and NPCs.}
+  {Detailed maps of the continent, nations, settlements, and adventure sites.}
+  {Unique new feats, magic items, prestige classes, psionic powers, and
+   spells.}
+  {Bizarre monsters and templates unique to \Place{Sarlona}.}
+
+  \Product{Secrets of Sarlona} explores the continent of \Place{Sarlona} for
+  the first time. It gives players and Dungeon Masters their first real glimpse
+  inside the empire of \Place{Riedra}, home of the \Group{Inspired} and the
+  \Group{kalashtar}. It also explores the mysteries of \Place{Adar}, a nation
+  isolated from the rest of the world, and never-before seen
+  locations. \Product{Secrets of Sarlona} also presents new options (feats,
+  prestige classes, spells, and magic items) available to Sarlonan characters
+  and characters with psionics";
+  short description "Information about Sarlona".
+#.....
+
+#----- WTC 9597774
+
+base product WTC 9597774 =
+
+  title             "Eyes of the Lich Queen";
+  leader            "";
+  subtitle          "Be the First to Find the \Item{Dragon's Eye}";
+  notes             "";
+  author            "Schubert, Stephen",
+                    "Logue, Nicolas",
+                    "Hitchcock, Tim",
+                    "Schubert, Stephen" developer;
+  editor            "Gray, Scott Fitzgerald",
+                    "Mohan, Kim" managing editor;
+  cover             "Reynold, Wayne";
+  cartography       "Hunter, Kyle",
+                    "Yochum, Trish" tactical map design;
+  illustrations     "Lemen, Ron",
+                    "Bolen, Sven" image technician,
+                    "Hanson, Lisa" graphic designer,
+                    "Sansaver, Ryan" art director,
+                    "Waters, Anthony S.",
+                    "Tsai, Francis",
+                    "Parrillo, Lucio";
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Crews, Randall" production manager,
+                    "Fischer, Josh" production manager,
+                    "Slavicsek, Bill" direction of RPG R&D,
+                    "Decker, Jesse" development manager;
+  date              April 2007;
+  ISBN              0-7869-4319-X;
+  ISBN13            978-0-7869-4319-7;
+  pages             128;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Adventure;
+  style             Soft Cover;
+  producer          WTC;
+  price             $24.95;
+  contents          Book "";
+  requirements      WTC 17524,
+                    WTC 86400,
+                    WTC 17755,
+                    WTC 17752;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "What begins as a simple expedition to explore an ancient jungle temple sends adventurers headlong into a search of the \Item{Dragon's Eye}, an artifact created ages ago by \Monster{demons} in order to gain power over \Monster{dragons}. But where exactly is this mysterious artifact, and why do the \Group{Cloudreavers} and the \Group{Emerald Claw} think the adventurers already have it? Only \NPC{Lady Vol} knows the truth. Her deadly cat-and-mouse game leads the characters from the wilderness of \Place{Q'barra} to the wild coasts of the \Place{Lhazaar Principalities} and the soaring peaks of \Place{Argonessen}. There, at last, they can learn the secret of the \Item{Dragon's Eye} and foil the \Monster{lich queens} plans... if they survive!
+
+The \Product[WTC 9597774]{Eyes of the Lich Queen} adventure for the Dungeons & Dragons game draws on the richness of the \Place{Eberron} campaign setting. Designed for heroes of 5th level, this adventures sends them on a world-spanning journey as they battle cultists, pirates, long-dead spirits, and even \Monster{dragons} in their search for the enigmatic \Item{Dragon's Eye}.".
+#.....
+
+#----- WTC 9572872
+
+base product WTC 9572872 =
+
+  title             "Forge of War";
+  leader            "The";
+  subtitle          "The Last War Never Ended...";
+  notes             "";
+  author            "Wyatt, James" designer,
+                    "Marmell, Ari" designer,
+                    "Baur, Wolfgang H." designer;
+  editor            "Jurkat, M. Alexander" development and editing,
+                    "Mohan, Kim" editing manager;
+  cover             "Reynolds, Wayne";
+  cartography       "Hunter, Kyle",
+                    "Kauth, Dennis",
+                    "Lazzaretti, Robert";
+  illustrations     "Bircham, David",
+                    "Coker, Tomm",
+                    "Doong, Arnold",
+                    "Giorello, Tomas",
+                    "Hooper, Fred",
+                    "Lemen, Ron",
+                    "Lyon, Howard",
+                    "Parillo, Lucio",
+                    "Pavelec, Jim",
+                    "Pilcerova, Martina",
+                    "Vohwinkel, Franz",
+                    "Zhang, James",
+                    "Irwin, Kate" art director,
+                    "Hanson, Lisa" graphic designer,
+                    "Jordan, Robert" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Kestrel, Gwendolyn F.M." freelance manager,
+                    "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" direction of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              June 2007;
+  ISBN              0-7869-4153-7;
+  ISBN13            978-0-7869-4153-7;
+  pages             160;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Hardcover;
+  producer          WTC;
+  price             $37.95;
+  contents          Book "";
+  requirements      WTC 17524,
+                    WTC 17752,
+                    WTC 17755,
+                    WTC 86400;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "The \Event{Treaty of \Place{Thronehold}} stopped the massive march of armies across \Place{Khorvaire}, but it didn't put an end to espionage, unrest, and border skirmishes among the nations of \Place{Eberron}. And no treaty could ever end the horrors that haunt the dreams of every soldier, spy, and adventurer whose life was shattered by a century of warfare.
+
+This supplement for the \Place{Eberron} campaign setting presents everything you need to bring the \Event{Last War} to life in your Eberron game, whether you're playing a character who fought in the war or running adventures that take place during the century of conflict. New character options let you explore battlefield backgrounds, the magic of war, battle scars, and the benefits of working as a team. Campaign seeds help the Dungeon Master introduce the themes and events of the \Event{Last War} in a current-day campaign or send characters back to their wartime days through flashbacks or actual travel through time. A comprehensive overview of the \Event{Last War} provides all you need to know about the events, armies, battlefields, and themes of \Place{Eberron}'s greatest clash of nations.".
+
+
+#.....
+
+#----- WTC 9572972
+
+base product WTC 9572972 =
+
+  title             "Dragons of Eberron";
+  leader            "";
+  subtitle          "Like the Wings of a Great Dragon, The Prophecy Unfolds...";
+  notes             "";
+  author            "Baker, Keith",
+                    "Gray, Scott Fitzgerald",
+                    "Logue, Nicolas",
+                    "Scott, Amber E.";
+  editor            "Jurkat, M. Alexander",
+                    "Noonan, David" editorial assistance,
+                    "Mohan, Kim" editing manager;
+  cover             "Prescott, Steve";
+  cartography       "Lazzaretti, Robert";
+  illustrations     "Giorello, Tomas",
+                    "Lemen, Ron",
+                    "Parrillo, Lucio",
+                    "Riche, Darrell",
+                    "Stokes, Anne",
+                    "Vohwinkel, Franz",
+                    "Zhang, James",
+                    "Irwin, Kate" art director,
+                    "Hanson, Lisa" graphic designer,
+                    "Shinkle, Allison" image technician;
+  typography        "Dorir" graphic production specialist;
+  management        "Kestrel, Gwendolyn F.M." freelance manager,
+                    "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Walker, Kris" production manager,
+                    "Overbay, Shari" production manager;
+  date              October 2007;
+  ISBN              0-7869-4154-5;
+  ISBN13            978-0-7869-4154-4;
+  pages             160;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Hardcover;
+  producer          WTC;
+  price             $29.95;
+  contents          Book "";
+  requirements      WTC 17524,
+                    WTC 17752,
+                    WTC 86400,
+                    WTC 17755;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "This supplement delves into the mysterious draconic Prophecy and various dragon-themed organizations. It explores the continent of \Place{Argonnessen}, homeland of hte \Monster{dragons}, and describes various new adventure sites. The book also investigates \Monster{dragons}, on the continents of \Place{Khorvaire}, \Place{Sarlona}, and \Place{Xen'drik} and provides several ready-to-play \Monster{dragons} for your campaign.
+
+Inside this book, you'll find:
+
+\list
+{A detailed exploration of \Place{Argonnessen}, the great continent of the \Monster{dragons}
+{Secrets of the draconic Prophecy, and guidelines on how to use it in your campaign}
+{Ready-to-play \Monster{dragons}, complete with statistics, lairs, and adventure hooks}
+    ".
+
+#.....
+#----- WTC 2165072
+
+base product WTC 2165072 =
+
+  title             "City of Stormreach";
+  leader            "";
+  subtitle          "Welcome to \Place{Stormreach}, Gateway to Adventure!";
+  author            "Baker, Keith",
+                    "Logue, Nicolas",
+                    "Desborough, James &#39Grim&#39",
+                    "Suleiman, C.A.",
+                    "MacDonald, Glenn" additional design,
+                    "Hahn, August" additional design,
+                    "Mackey, Brian" additional design,
+                    "Marks, Greg" additional design,
+                    "Merwin, Shawn" additional design,
+                    "Crawford, Jeremy" development;
+  editor            "Carter, Michele",
+                    "Crawford, Jeremy",
+                    "Martin, Julia" editorial assistance,
+                    "Bilsland, Greg" editorial assistance,
+                    "Mohan, Kim" managing editor;
+  cover             "Prescott, Steve";
+  cartography       "Lazzaretti, Robert";
+  illustrations     "Esbri, David",
+                    "Giorello, Tomas",
+                    "Lemen, Ron",
+                    "O&#39Connor, William",
+                    "Parillo, Lucio",
+                    "Prescott, Steve",
+                    "Tsai, Francis",
+                    "Vohwinkel, Franz",
+                    "Yanner, Kieran",
+                    "Zhang, James",
+                    "Irwin, Kate" art director,
+                    "Hanson, Lisa" graphic designer,
+                    "Bolen, Sven" graphic designer,
+                    "Jordan, Robert" image technician;
+  typography        "Dorries, Erin" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Collins, Andy" development manager,
+                    "Slavicsek, Bill" direction of RPG R&D,
+                    "Overbay, Shari" production manager,
+                    "Callaway, Cynda" production manager;
+  date              February 2008;
+  ISBN              0-7869-4803-5;
+  ISBN13            978-0-7869-4803-1;
+  pages             160;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Hardcover;
+  producer          WTC;
+  price             $29.95;
+  contents          Book "";
+  requirements      WTC 17524,
+                    WTC 17752,
+                    WTC 17755,
+                    WTC 86400;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "Explore the most important frontier city of \Place{Xen'drik}, where opportunity and peril walk hand in hand. Whether you're looking for shadowy ruins, sinister organizations, or a treasure-laden dungeon, \Place{Stormreach} is the place to start.
+
+This Dungeons & Dragons supplements brings \Place{Stormreach} to life:
+
+\list{Information on the movers and shakers, both in front of and behind the scenes}
+{Ready-to-use adversaries to challenge your characters}
+{Adventure hooks to spice up your game}";
+  short description "Description of \Place{Stormreach} on \Place{Xen'drik}.".
+
+#.....
+#----- WTC 2172372
+
+base product WTC 2172372 =
+
+  title             "Adventurer's Guide to Eberron";
+  leader            "An";
+  subtitle          "A World of Mystery and Magic Awaits";
+  author            "Bonner, Logan",
+                    "Sims, Chris";
+  editor            "Martin, Julia",
+                    "Mohan, Kim",
+                    "Perkins, Christopher";
+  illustrations     "Allsop, Dave",
+                    "Andrasofszky, Kalman",
+                    "Avon, John",
+                    "Beleddin, Steven",
+                    "Cotie, Mitch",
+                    "Daarken",
+                    "Dechamps, Eric",
+                    "Ellis, Steve",
+                    "Fischer, Scott",
+                    "Flores, Gonzalo",
+                    "Giorello, Tomas",
+                    "Gregory, D. Alexander",
+                    "Hodgson, John",
+                    "Jones, Andrew",
+                    "Kauth, Dennis",
+                    "Lazzaretti, Robert",
+                    "Lemen, Ron",
+                    "Lyon, Howard",
+                    "Mahy, Warren",
+                    "Moyer, Lee",
+                    "O&#39Connor, William",
+                    "Parillo, Lucio",
+                    "Prescott, Steve",
+                    "Rams, Vinod",
+                    "Reynolds, Wayne",
+                    "Sook, Ryan",
+                    "Stokes, Anne",
+                    "Tedin, Mark",
+                    "Tsai, Francis",
+                    "Vohwinkel, Franz",
+                    "Waters, Anthony",
+                    "Wen, Charlie",
+                    "Widermann, Eva",
+                    "Wimberly, Ronald",
+                    "Wood, Sam",
+                    "Zhang, James",
+                    "Smith, Keven" graphic designer,
+                    "Irwin, Kate" art director;
+  date              April 2008;
+  ISBN              0-7869-4855-8;
+  ISBN13            978-0-7869-4855-0;
+  pages             64;
+  system            D&D 4th;
+  audience          Player;
+  product type      Accessory;
+  style             Hardcover;
+  producer          WTC;
+  price             $19.95;
+  contents          Book "";
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "Prepare to be whisked away on a fantastic adventure. This book explores every aspect of \Place{Eberron}, a magical, medieval world of dragonmarked heroes and elemental \Item{airships}, warforged soldiers and lost treasures.
+
+Enjoy the tour, but watch out for \Monster{dragons}!";
+  short description "A player's overview of \Place{Eberron}.".
+
+#.....
+#----- WTC 2396572
+
+base product WTC 2396572 =
+
+  title             "Eberron Player's Guide";
+  leader            "";
+  subtitle          "Give Your Hero an Edge";
+  author            "Schubert, Stephen" developer,
+                    "Collins, Andy" additional development,
+                    "Baker, Keith" consultation and review;
+  cover             "Reynolds, Wayne";
+  cartography       "Moyer, Lee";
+  illustrations     "Tapia, Matias",
+                    "Widermann, Eva",
+                    "Wootten, Ben",
+                    "Smith, Keven" art director,
+                    "Tanji, Emi" graphic designer,
+                    "Cortez, Leon" additional graphic designer,
+                    "Smith, Keven" additional graphic designer,
+                    "Brock, Ashley" image technician;
+  typography        "Dorries, Erin" publishing production specialist;
+  date              June 2009;
+  ISBN              0-7869-5100-1;
+  ISBN13            978-0-7869-5100-0;
+  pages             160;
+  system            D&D 4th;
+  audience          Player;
+  product type      Accessory;
+  style             Hardcover;
+  producer          WTC;
+  price             $29.95;
+  contents          Book "";
+  worlds            Eberron;
+  layout            Full Color;
+  description
+  "The \Event{Last War} has ended, but the adventure is just beginning! Explore a world of action and intrigue, a world in which glory and peril walk hand in hand, a world in dire need of heroes whose names strike fear into the very heart of evil.
+
+The \Product{Eberron Player's Guide} presents everything a Dungeons & Dragons player needs to create and run a character in the 4th Edition \Place{Eberron} campaign setting. This supplement gives players rules, advice, and options about the world of \Place{Eberron} and character backgrounds associated with the various regions and dragonmarked houses. The book includes the articier class, three new races (changelings, kalashtar, and warforged), and rules for dragonmarks, as well as new feats, powers, paragon paths, epic destinies, and more.";
+  short description "A player's guide to the Eberron campaign world.".
+
+#.....
+#----- WTC 2396472
+
+base product WTC 2396472 =
+
+  title             "Eberron Campaign Guide";
+  leader            "";
+  subtitle          "Explore a World of Magic and Intrigue";
+  author            "Schaefer, Peter" developer,
+                    "Collins, Andy" additional development;
+  editor            "Mohan, Kim" managing editor,
+                    "Grubb, Jeff" text review,
+                    "Kestrel, Gwendolyn F.M." text review,
+                    "Lance, Neil" text review,
+                    "Rogers, John" text review,
+                    "Tweet, Jonathan" text review;
+  cover             "Reynolds, Wayne";
+  cartography       "Moyer, Lee",
+                    "Schley, Mike";
+  illustrations     "Tedin",
+                    "Tsai, Francis",
+                    "Valenzuela, Brian",
+                    "Wootten, Ben",
+                    "Irwin, Kate" art director,
+                    "Tanji, Emi" graphic designer,
+                    "Cortez, Leon" additional graphic designer,
+                    "Smith, Keven" additional graphic designer,
+                    "Brock, Ashley" image technician,
+                    "Cheung, Carmen" image technician;
+  typography        "Dorries, Erin" publishing production specialist;
+  date              June 2009;
+  ISBN              0-7869-5099-4;
+  ISBN13            978-0-7869-5099-7;
+  pages             288;
+  system            D&D 4th;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Hardcover;
+  producer          WTC;
+  price             $39.95;
+  contents          Book "rules" 1,
+                    Map "Khorvaire, full color, poster-sized" 1;
+  layout            Full Color;
+  worlds            Eberron;
+  description
+  "Welcome to a world of swashbuckling action and dark fantasy, a world ruled by great dynasties and tempered by war. The \Product{Eberron Campaign Setting} holds many wonders, from dragonmarks to \Monster{warforged}, deadly dungeons to \Item{elemental airships}. As the shadows of evil and conspiracy threaten to envelop the land, heroes of prophecy come forth to save the day.
+
+This Dungeons & Dragons supplement contains everything you need to run thrilling adventures i the world of \Place{Eberron}: historical and geographical information, adventure hooks, monsters, villains, an introductory adventure, and a full-color poster map of the continent of \Place{Khorvaire}.
+
+\bold{Use this material to run an \World{Eberron} campaign or to add new elements to any D&D game.}";
+  short description "The 4th edition Eberron Campaign Setting.".
+
+#.....
+#----- WTC 2502674
+
+base product WTC 2502674 =
+
+  title             "Word of Traitors";
+  leader            "";
+  subtitle          "Legacy of \Place{Dhakaan}";
+  author            "Bassingthwaite, Don";
+  cover             "Komarck, Michael";
+  cartography       "Lazzaretti, Robert";
+  date              September 2009;
+  ISBN              0-7869-5196-6;
+  ISBN13            978-0-7869-5196-3;
+  pages             374;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            Legacy of Dhakaan;
+  price             $6.99;
+  contents          Book "";
+  worlds            Eberron;
+  layout            Color Cover;
+  description
+  "\NPC{Darguun}. Heir to an empire long fallen. Forged anew in the fires of the \Event{Last War} and held together by the iron will of \NPC{Lhesh Haruuc}.
+
+But \NPC{Lhesh Haruuc} is dead, assassinated by a warrior sworn to serve him. His trusted inner circle suspects more than treachery. Something darker is at work. As \NPC{Dharguun}'s ancient enemies stoke the flames of a new war and the \Group{Five Nations} vie for power and influence, the fate of an entire nation rests in the hands of a few desperate heroes.
+
+A thrilling tale of empire, betrayal, and power by the author of the acclaimed Dragon Below trilogy!
+";
+  short description "Book 2 of the Legacy of Dhakaan.".
+
+#.....

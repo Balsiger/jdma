@@ -1,0 +1,810 @@
+#
+# File:         DarkSun.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  Dark Sun Books
+#
+# Worlds:       Dark Sun
+#
+#
+
+#----- TSR 2400
+
+base product TSR 2400 =
+
+  title             "Dark Sun";
+  leader            "";
+  date              October 1991;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $20.00;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog91W,
+                    catalog93;
+  description
+  "original campaign setting".
+
+
+#.....
+#----- TSR 2401
+
+base product TSR 2401 =
+
+  title             "Freedom";
+  leader            "";
+  date              January 1992;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $12.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog95,
+                    catalog93;
+  description
+  "slave revolt, beginning-level";
+  synonyms          "DS1".
+
+
+#.....
+#----- TSR 2404
+
+base product TSR 2404 =
+
+  title             "Slave Tribes";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-271-3;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $10.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "outside the cities in barely tamed wilderness";
+  synonyms          "DSR1".
+
+
+#.....
+#----- TSR 2405
+
+base product TSR 2405 =
+
+  title             "Monstrous Compendium";
+  leader            "Dark Sun Appendix I";
+  date              1992;
+  ISBN              1-56076-272-1;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Monster Compendium;
+  number            12;
+  series            Monstrous Compendium;
+  price             $12.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "a lot of monsters";
+  synonyms          "MC12".
+
+
+#.....
+#----- TSR 2406
+
+base product TSR 2406 =
+
+  title             "Road to Urik";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-248-9;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $12.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog93;
+  description
+  "players part of a great army to conquer nearby city-state, levels 4-7";
+  synonyms          "DSQ1".
+
+
+#.....
+#----- TSR 2407
+
+base product TSR 2407 =
+
+  title             "Dune Trader";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-462-7;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $10.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "players deal with merchants of every class";
+  synonyms          "DSR2".
+
+
+#.....
+#----- TSR 2408
+
+base product TSR 2408 =
+
+  title             "Dragon Kings";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-235-7;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Hardcover;
+  price             $20.00;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog93;
+  description
+  "super high-level characters".
+
+
+#.....
+#----- TSR 2410
+
+base product TSR 2410 =
+
+  title             "Arcane Shadows";
+  leader            "";
+  date              August 1992;
+  ISBN              1-56076-312-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $12.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description
+  "outlawed magicians against sorcerer-kings, levels 5-8";
+  synonyms          "DSQ2".
+
+
+#.....
+#----- TSR 2411
+
+base product TSR 2411 =
+
+  title             "Veiled Alliance";
+  leader            "";
+  date              October 1992;
+  ISBN              1-56076-313-2;
+  system            AD&D 2nd;
+  product type      Accessory;
+  price             $10.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "information on the undergounrd magic users";
+  synonyms          "DSR3".
+
+
+#.....
+#----- TSR 2412
+
+base product TSR 2412 =
+
+  title             "Asticlian Gambit";
+  leader            "";
+  date              November 1992;
+  ISBN              1-56076-315-9;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $12.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description
+  "nobility wars to gain the throne, levels 7-10";
+  synonyms          "DSQ3".
+
+
+#.....
+#----- TSR 2413
+
+base product TSR 2413 =
+
+  title             "Valley of Dust and Fire";
+  leader            "";
+  date              December 1992;
+  ISBN              1-56076-313-2;
+  system            AD&D 2nd;
+  product type      Accessory;
+  price             $10.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description
+  "most powerful dragon of Dark Sun revealed";
+  synonyms          "DSR4".
+
+
+#.....
+#----- TSR 2416
+
+base product TSR 2416 =
+
+  title             "Dragon's Crown";
+  leader            "";
+  author            "Staff, TSR";
+  date              March 1993;
+  ISBN              1-56076-567-4;
+  pages             304;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $24.95;
+  contents          Booklet,
+                    Poster "maps",
+                    Sheet "card" 6;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description
+  "epic adventure all over Dark Sun, level 11+";
+  synonyms          "DSE1".
+
+
+#.....
+#----- TSR 2417
+
+base product TSR 2417 =
+
+  title             "Black Flames";
+  leader            "";
+  author            "Staff, TSR";
+  date              April 1993;
+  ISBN              1-56076-580-1;
+  pages             112;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $14.95;
+  contents          Book "spiral-bound flip-books" 2,
+                    Booklet;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95;
+  description
+  "flip-book adventure, levels 3-5";
+  synonyms          "DSM1".
+
+
+#.....
+#----- TSR 2418
+
+base product TSR 2418 =
+
+  title             "Ivory Triangle";
+  leader            "The";
+  author            "Staff, TSR";
+  date              June 1993;
+  pages             176;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  contents          Booklet 4,
+                    Card 12,
+                    Map 2;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95;
+  description
+  "war between Guld and Nibenay".
+
+
+#.....
+#----- TSR 2419
+
+base product TSR 2419 =
+
+  title             "Complete Gladiators Handbook";
+  leader            "";
+  author            "McComb, Colin";
+  date              July 1993;
+  ISBN              1-56076-616-6;
+  pages             128;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Rules Supplement;
+  price             $15.00;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93,
+                    catalog95;
+  description
+  "information on gladiators";
+  synonyms          "CGR2".
+
+
+#.....
+#----- TSR 2420
+
+base product TSR 2420 =
+
+  title             "City-State of Tyr";
+  leader            "";
+  author            "Baas, Walt";
+  date              August 1993;
+  ISBN              1-56076-629-8;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $10.95;
+  contents          Booklet,
+                    Sheet "map";
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description
+  "information on Tyr";
+  synonyms          "DSS1".
+
+
+#.....
+#----- TSR 2421
+
+base product TSR 2421 =
+
+  title             "Merchant House of Amketch";
+  leader            "";
+  author            "Staff, TSR";
+  date              September 1993;
+  ISBN              1-56076-643-3;
+  pages             112;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $14.95;
+  contents          Book "spiral-bound flip-books" 2,
+                    Booklet;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95;
+  description
+  "players at the reins of a trading company, levels 6-8";
+  synonyms          "DSM2".
+
+
+#.....
+#----- TSR 2422
+
+base product TSR 2422 =
+
+  title             "Earth";
+  leader            "Air, Fire and Water";
+  author            "Staff, TSR";
+  date              October 1993;
+  ISBN              1-56076-652-2;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $10.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description
+  "elemental magic";
+  synonyms          "DSS2".
+
+
+#.....
+#----- TSR 2423
+
+base product TSR 2423 =
+
+  title             "Elves of Athas";
+  leader            "";
+  author            "Staff, TSR";
+  date              November 1993;
+  ISBN              1-56076-665-4;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $10.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description
+  "elves on Athas";
+  synonyms          "DSS3".
+
+
+#.....
+#----- TSR 2424
+
+base product TSR 2424 =
+
+  title             "Marauders of Nibenay";
+  leader            "";
+  author            "Staff, TSR";
+  date              December 1993;
+  ISBN              1-56076-677-8;
+  pages             112;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $14.95;
+  contents          Book "spiral-bound filp-books" 2,
+                    Booklet;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95;
+  description
+  "two cities engaged im a never-ending war, levels 5-8";
+  synonyms          "DSM3".
+
+
+#.....
+#----- TSR 2428
+
+base product TSR 2428 =
+
+  title             "Black Spine";
+  leader            "";
+  date              March 1994;
+  ISBN              1-56076-824-X;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $25.00;
+  worlds            Dark Sun;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "culmination of Black Flames";
+  synonyms          "DSE2".
+
+
+#.....
+#----- TSR 2430
+
+base product TSR 2430 =
+
+  title             "Forest Maker";
+  leader            "";
+  date              May 1994;
+  ISBN              1-56076-841-X;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $15.00;
+  worlds            Dark Sun;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "solve a terrifying mystery, high-level".
+
+
+#.....
+#----- TSR 2431
+
+base product TSR 2431 =
+
+  title             "Will and the Way: Psionicists of Athas";
+  leader            "The";
+  date              July 1994;
+  ISBN              1-56076-861-4;
+  system            AD&D 2nd;
+  product type      Accessory;
+  price             $12.95;
+  worlds            Dark Sun;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "information on psionics".
+
+
+#.....
+#----- TSR 2432
+
+base product TSR 2432 =
+
+  title             "City by the Silt Sea";
+  leader            "";
+  date              September 1994;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  price             $25.00;
+  worlds            Dark Sun;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "epic underground adventure".
+
+
+#.....
+#----- TSR 2433
+
+base product TSR 2433 =
+
+  title             "Monstrous Compendium";
+  leader            "Dark Sun Appendix II";
+  date              March 1995;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Monster Compendium;
+  number            unknown;
+  series            Monstrous Compendium;
+  price             $18.00;
+  worlds            Dark Sun;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "a lot of monsters".
+
+
+#.....
+#----- TSR 2437
+
+base product TSR 2437 =
+
+  title             "Thri-Kreen of Athas";
+  leader            "";
+  author            "Beach, Tim",
+                    "Hein, Dori";
+  date              April 1995;
+  ISBN              0-7869-0125-X;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $15.00;
+  worlds            Dark Sun;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "kits and PC information for Thri-kreen, with an adventure".
+
+
+#.....
+#----- TSR 2438
+
+base product TSR 2438 =
+
+  title             "Dark Sun Revised Edtion";
+  leader            "";
+  author            "Slavicsek, Bill";
+  date              November 1995;
+  ISBN              0-7869-0162-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  price             $30.00;
+  worlds            Dark Sun;
+  references        catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "expanded and revised campaign setting".
+
+
+#.....
+#----- TSR 2439
+
+base product TSR 2439 =
+
+  title             "Windriders of the Jagged Cliffs";
+  leader            "The";
+  author            "Cook, Monte J.";
+  date              January 1996;
+  ISBN              0-7869-0169-1;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $15.00;
+  worlds            Dark Sun;
+  references        catalogue96,
+                    catalog95,
+                    catalog96,
+                    Dragon 224;
+  description
+  "nation of halflings, the Windriders, Wanderers Chronciles".
+
+
+#.....
+#----- TSR 2441
+
+base product TSR 2441 =
+
+  title             "Beyond the Prism Pentad";
+  leader            "";
+  author            "Slavicsek, Bill";
+  date              July 1995;
+  ISBN              0-7869-0308-2;
+  pages             32;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 6.95;
+  contents          Booklet 2,
+                    Poster "map";
+  worlds            Dark Sun;
+  references        catalog95,
+                    catalogue96,
+                    catalog96,
+                    Dragon 218;
+  description
+  "incorporate the changes wrought by the Prism Pentad novels".
+
+
+#.....
+#----- TSR 2444
+
+base product TSR 2444 =
+
+  title             "Mind Lords of the Last Sea";
+  leader            "The";
+  author            "Forbeck, Matt";
+  date              February 1996;
+  ISBN              0-7869-0367-8;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  worlds            Dark Sun;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 225,
+                    Dragon 226;
+  description
+  "mysteries in the Last Sea, Wanderers Chronicles".
+
+
+#.....
+#----- TSR 2445
+
+base product TSR 2445 =
+
+  title             "Defilers and Preservers: Wizards of Athas";
+  leader            "";
+  author            "Rea, Nicky";
+  date              July 1996;
+  ISBN              0-7869-0383-X;
+  pages             96;
+  system            AD&D revised;
+  audience          Player;
+  product type      Accessory;
+  style             Booklet;
+  price             $15.95;
+  worlds            Dark Sun;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231;
+  description
+  "player information about wizards".
+
+
+#.....
+#----- TSR 2446
+
+base product TSR 2446 =
+
+  title             "Psionic Artifacts of Athas";
+  leader            "";
+  author            "Melka, Kevin",
+                    "Nesmith, Bruce";
+  date              October 1996;
+  ISBN              0-7869-0390-2;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  price             $20.00;
+  worlds            Dark Sun;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 233,
+                    Dragon 234;
+  description
+  "psionic magical items and artifacts".
+
+
+#.....

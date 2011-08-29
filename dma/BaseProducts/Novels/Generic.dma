@@ -1,0 +1,871 @@
+#------ TSR 8040 -----------------------------------------------------------
+
+#----- TSR 8040
+
+base product TSR 8040 =
+
+  title             "Rod of Seven Parts";
+  leader            "The";
+  author            "Niles, Douglas";
+  cover             "Jeff Easley";
+  date              February 1996;
+  ISBN              0-7869-0479-8;
+  pages             348;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  series            AD&D Tomes;
+  price             $21.99;
+  contents          Book;
+  worlds            Generic;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226,
+                    Dragon 227;
+  description
+  "The \Item{Rod of Seven Parts}...
+
+  ...originated at the dawn of time, the symbolic centerpiece of the conflict
+  between law and chaos.
+
+  Broken into pieces by powerful magic, scattered across a dangerous landscape,
+  the \Item{rod}'s components draw menacing forces from distant planes---and
+  change, forever, the life of any unsuspecting mortal who finds himself in
+  possession of even a single segment.
+
+  From the \Group{Wind Dukes}, guardians of law, to the hideous \NPC{Queen of
+  Chaos} herself, heroes and monsters compete to find the pieces of the
+  \Item{rod}. Violent conflicts surround the bold heroes who strive to protect
+  the artifact, until the companions realize that only by facing ultimate chaos
+  can the forces of evil be vanquished.".
+
+
+#.....
+
+#----- WTC 17644
+
+base product WTC 17644 =
+
+  title             "Figure in the Frost";
+  leader            "";
+  subtitle          "";
+  author            "Perez, Lana";
+  date              February 2005;
+  ISBN              0-7869-3587-1;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 5;
+  series            Knights of the Silver Dragon;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "The fifth title in an all-new series for young readers.
+
+  \Product{Figure in the Frost} continues a new series of adventures written
+  specifically for readers ages 8 and up. Sized to fit the young reader market,
+  the series follows the adventures of three children who, through their heroic
+  deeds, become members of the \Group{Order of the Knights of the Silver
+  Dragon}. The opportunity will be extended to readers of the series as well,
+  whereby young readers can become members of the Knights of the Silver Dragon
+  and receive a free promotional figurine of a \Monster{silver dragon}. The
+  series has extensive web support through knightsofthesilverdragon.com.".
+
+
+#.....
+#----- WTC 17723
+
+base product WTC 17723 =
+
+  title             "Dagger of Doom";
+  leader            "";
+  subtitle          "";
+  author            "Roberts, Kerry Daniel";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              April 2005;
+  ISBN              0-7869-3631-2;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Knights of the Silver Dragon;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "\Product{Dagger of Doom} continues a new series of adventures written
+  specifically for readers ages 8 and up. Sized to fit the young reader market,
+  the series follows the adventures of three children who, through their heroic
+  deeds, become members of the \Group{Order of the Knights of the Silver
+  Dragon}. This opportunity will be extended to readers of the series as well,
+  whereby young readers can become members of the Knights of the Silver Dragon
+  and receive a free promotional figurine of a silver dragon. The series will
+  be given extensive web support through knightsofthesilverdragon.com.".
+
+
+#.....
+#----- WTC 17852
+
+base product WTC 17852 =
+
+  title             "Bloody Eye";
+  leader            "The";
+  author            "T.H. Lain";
+  cover             "Sam Wood",
+                    "Matthew Mitchell";
+  date              January 2003;
+  pages             181;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 5;
+  series            D&D 3rd Edition Introduction Series;
+  price             $5.99;
+  contents          Book;
+  worlds            Generic;
+  description
+  "Far beneath the earth, a sinister ritual takes place. A corrupt cleric seeks
+  the \Item{Eye of Gruumsh}, a relic sacred to the hideous god of the
+  orcs. Against hi m stand a scullery maid, a paladin, a priest of the god
+  \God{Pelor}, and a half-orc barbarian.
+
+  Will they be enough?".
+
+
+#.....
+#----- WTC 17855
+
+base product WTC 17855 =
+
+  title             "Treachery's Wake";
+  leader            "";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood",
+                    "Sam Wood";
+  date              March 2003;
+  ISBN              0-7869-2926-X;
+  pages             181;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 6;
+  series            D&D 3rd Edition Introduction Series;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Generic;
+  description
+  "A ship lies wrecked on an ice-bound coast. Desperate to recover a magic item
+  from its cargo, a wizard enlists the help of the \Group{Thieves' Guild}. They
+  soon discover that the shipwreck was no accident. The artifact's trail leads
+  to frozen wilderness, savage brigands, and foes no one expected.
+
+  The heroes can fulfill their contract... but can they survive the
+  consequences?".
+
+
+#.....
+#----- WTC 17882
+
+base product WTC 17882 =
+
+  title             "Plague of Ice";
+  leader            "";
+  author            "T.H. Lain";
+  cover             "Sam Wood",
+                    "Matthew Mitchel";
+  date              March 2003;
+  ISBN              0-7869-2953-7;
+  pages             178;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 7;
+  series            D&D 3rd Edition Introduction Series;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Generic;
+  description
+  "Frigid cold and ice sweep across the realm at the height of summer. Arctic
+  monsters prowl the flash-frozen landscape. To unlock the mystery, a small
+  band of heroes must traverse the depths of a ruined, ice-clogged city that
+  now houses only unearthly creatures and deadly traps.
+
+  Will they find the key to salvation.".
+
+
+#.....
+#----- WTC 17972
+
+base product WTC 17972 =
+
+  title             "Sundered Arms";
+  leader            "The";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood",
+                    "Sam Wood";
+  date              July 2003;
+  ISBN              0-7869-2074-2;
+  pages             184;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 8;
+  series            D&D 3rd Edition Introduction Series;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Generic;
+  description
+  "\Place{Andaron's Delve}, a great \Monster{dwarven} stronghold ravaged by
+  war, has for ages lain abandoned. Now, smoke once again pours from the
+  immense furnaces, and \Monster{goblins} and beasts guard the ancient
+  entrance. Evil is rekindled in the hear of the mountain and strives to forge
+  anew \Place{Anaron}'s sundered arms.
+
+  This time, it's about survival.".
+
+
+#.....
+#----- WTC 17983
+
+base product WTC 17983 =
+
+  title             "Return of the Damned";
+  leader            "";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood",
+                    "Sam Wood";
+  date              October 2003;
+  ISBN              0-7869-3003-9;
+  pages             180;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 9;
+  series            D&D 3rd Edition Introduction series;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Generic;
+  description
+  "An ancient, jeweled bottle, a missing lover, mysterious black-clad invadors,
+  and a warrior haunted by grief collide in the wilderness and on the
+  battlefield. Driven by rumors that his beloved \NPC{Naull} may have survived
+  her abduction to the \Place{Plane of Fire}, \NPC{Regdar} and a band of loyal
+  mercenaries defy their overlord's wrath to seek the truth. Their quest leads
+  the to unexpected discoveries and unearthly danger.
+
+  Will their efforts bring about the return of the damned?".
+
+
+#.....
+#----- WTC 17992
+
+base product WTC 17992 =
+
+  title             "Death Ray";
+  leader            "The";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood",
+                    "Wayne Reynolds";
+  date              October 2003;
+  ISBN              0-7869-3030-6;
+  pages             183;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 10;
+  series            D&D 3rd Edition Introduction Series;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Generic;
+  description
+  "The mighty warrior \NPC{Regdar} is unsuited to a life of inaction, even as
+  an officer of the \Group{Ducal Guard} in \Place{New Koratia}. His position
+  brings him unwanted attention from the \NPC{Duke}'s scheeming
+  \NPC{daughter}---a deadly predicament when the girl's suitors begin turning
+  up dead, slain by a mysterious, unseen force. \NPC{Regdar} can trust no one
+  when magic and murder prowl the palace halls.
+
+  Will he become the next victim of the death ray?".
+
+
+#.....
+
+#----- WTC 88220
+
+base product WTC 88220 =
+
+  title             "Savage Caves";
+  leader            "The";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood";
+  date              July 2002;
+  ISBN              0-7869-2845-X;
+  pages             182;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 1;
+  series            D&D 3rd Edition Introduction Series;
+  price             $ 7.99;
+  contents          Book;
+  worlds            Generic;
+  description
+  "Between the mountains of the \Place{Merciless Rage} and the tall boughs of
+  the \Place{Hellwood} lurks a foul presence. Those who approach it,
+  perish. Those who flee it are slain. These are dark times for the citizens of
+  \Place{Fairbye}, but there is still hope. Four heroes rise to the challenge,
+  determined to save the small hamlet from the clutches of evil.
+
+  But will the heroes survive the depths of the savage caves?".
+
+
+#.....
+#----- WTC 88230
+
+base product WTC 88230 =
+
+  title             "Living Dead";
+  leader            "The";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood";
+  date              May 2002;
+  ISBN              0-7869-2848-4;
+  pages             186;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 2;
+  series            D&D 3rd edition Introduction Series;
+  price             $ 5.99;
+  contents          Book "the text";
+  worlds            Generic;
+  description
+  "Hunting parties from an \Monster{elven} village are mysteriously
+  disappearing. Similar mysterious plague a \Monster{dwarven} settlement on the
+  far side of the mountains. Each side blames the other. Only a band of tried
+  and true heroes can root out what sinister force manipulates these normally
+  peaceful people.
+
+  But can the conquer the evil before the tribes go to war?".
+
+
+#.....
+#----- WTC 88240
+
+base product WTC 88240 =
+
+  title             "Oath of Nerull";
+  leader            "";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood";
+  date              September 2002;
+  ISBN              0-7869-2851-4;
+  pages             180;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 3;
+  series            D&D 3rd Edition Introduction Series;
+  price             $ 5.99;
+  contents          Book "the text";
+  worlds            Generic;
+  description
+  "The wizard and sorcerer who wins the well-known Duel Arcane will be awarded
+  the \Item{Golden Wand}, a magical device that holds incredible power. Magic
+  users come from far and wide to compete in the contest. Some are drawn to
+  glory, others to the competition. Still more come for other, darker reasons,
+  driven by an oath to a merciless death god.
+
+  And some oaths cannot be broken.".
+
+
+#.....
+#----- WTC 88250
+
+base product WTC 88250 =
+
+  title             "City of Fire";
+  leader            "";
+  author            "T.H. Lain";
+  cover             "Todd Lockwood";
+  date              September 2002;
+  ISBN              0-7869-2854-9;
+  pages             183;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 4;
+  series            D&D 3rd Edition Introduction Series;
+  price             $ 5.99;
+  contents          Book "the story";
+  worlds            Generic;
+  description
+  "In the sands of a great desert, a once-heroic paladin has turned to evil and
+  enlisted an army of \Monster{gnolls} to help retrieve a powerful relic,
+  reputed to be kept in the vaults of the \Place{City of Fire}. If they find
+  it, the world will never be at peace.
+
+  Can a party of four stop an army of hundreds?".
+
+
+#.....
+#----- WTC 88607
+
+base product WTC 88607 =
+
+  title             "Wind of Honor";
+  leader            "";
+  subtitle          "The Emperor is Dead.";
+  author            "Soesbee, Ree";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              August 2002;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            First Scroll;
+  series            The Four Winds Sage;
+  price             $ 6.99;
+  worlds            Rokugan;
+  description
+  "The Steel Throne, seat of imperial power in \Place{Rokugan}, sits
+  empty. Ambition wars with justice and deception with truth as the emperor's
+  heirs seek to gain the favor of the Clans. The fate of the Empire walks the
+  edge of a blade, and before all is lost, the \NPC{Lady of the Sword} must
+  step forward to restore honor to a land in need.".
+
+
+#.....
+#----- WTC 88615
+
+base product WTC 88615 =
+
+  title             "Hazezon";
+  leader            "";
+  subtitle          "Who dares speak of the prophecy?";
+  author            "Emery, Clayton";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              August 2002;
+  ISBN              0-7869-2792-5;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book III;
+  series            Legends Cycle;
+  price             $ 6.99;
+  worlds            Dominaria;
+  description
+  "The denizens of the desert live in the shadow of the sacred, where battles
+  are won or lost at the whims of the gods. Now the outcome of one desert war
+  could change the history of \Place{Dominaria} forever.
+
+  The prophecy of None, One, and Two will finally be fulfilled.".
+
+
+#.....
+#----- WTC 88980
+
+base product WTC 88980 =
+
+  title             "Silver Spell";
+  leader            "The";
+  subtitle          "";
+  author            "Banerjee, Anjali";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              August 2005;
+  ISBN              0-7869-3750-5;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Knights of the Silver Dragon;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "\Product{The Silver Spell} continues a new series of adventures written
+  specifically for readers ages 8-12. Sized to fit young readers, the series
+  follows the adventures of three children who, through their heroic deeds,
+  become members of the Order of the \Group{Knights of the Silver Dragon}. This
+  opportunity will be extended to readers of the series as well, whereby young
+  readers can become Knights of the Silver Dragon. Young readers are encouraged
+  to join and participate in the club, and in turn they will receive free
+  giveaways, special correspondence, and other benefits. The series will be
+  given extensive support through knightsofthesilverdragon.com.".
+
+
+#.....
+
+#----- WTC 96530
+
+base product WTC 96530 =
+
+  title             "Secret of the Spiritkeeper";
+  leader            "";
+  subtitle          "";
+  author            "Forbeck, Matt";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              June 2004;
+  ISBN              0-7869-3143-4;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "\NPC{Zendric} the wizard has been robbed and enchanted into a lifeless
+  sleep. His \Item{spiritkeeper} is missing, and only \NPC{Moyra},
+  \NPC{Kellach}, and \NPC{Driskoll} know how to find it. Deep in the
+  \Place{Dungeons of Doom}, they must outsmart a \Monster{zombie},
+  \Monster{goblins}, even an \Monster{owlbear}. But can the \Group{Knights}
+  unlock the secret of the \Item{spiritkeeper} in time to save their friend?
+
+  \Product{Secret of the Spiritkeeper} launches a new series of adventures
+  written specifically for readers ages 8 and up. To ensure the appeal of these
+  titles to the proper age group, young readers were involved in the
+  development of this novel at the manuscript stage.
+
+  Sized to fit the young reader market, the series features a group of young
+  companions who, through their heroic deeds, become members of the
+  \Group{Order of the Knights of the Silver Dragon}.
+
+  This opportunity will be extended to readers of the series as well as through
+  the Knights of the Silver Dragon Book Club. Young readers are encouraged to
+  join and participate in the club, and in turn they will receive free
+  giveaways, special correspondence, and other benefits.".
+
+
+#.....
+#----- WTC 96531
+
+base product WTC 96531 =
+
+  title             "Riddle in Stone";
+  leader            "";
+  subtitle          "Dungeons & Dragons Novel";
+  author            "Soesbee, Ree";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              August 2004;
+  ISBN              0-7869-3211-2;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "Watchers are disappearing. \NPC{Moyra}'s dad is acting crazy. And a
+  suspicious stranger races through town, her face hidden beneath a rustling
+  hood. Something's wrong in \Place{Curston}, and \NPC{Kellach} thinks the new
+  statue in \Place{Main Square} is a clue. But can the \Group{Knights} unravel
+  the statue's riddle before it's too late?
+
+  \Product{Riddle in Stone} continues a new series of adventures written
+  specifically for readers ages 8 and up. Sized to fit the young reader market,
+  the series features a group of young companions who, through their heroic
+  deeds, become members of the \Group{Order of the Knights of the Silver
+  Dragon}. This opportunity will be extended to readers of the series as well
+  through the Knights of the Silver Dragon Book Club. Young readers are
+  encouraged to join and participate in the club, and in turn they will receive
+  free giveaways, special correspondence, and other benefits.".
+
+
+#.....
+#----- WTC 96532
+
+base product WTC 96532 =
+
+  title             "Sign of the Shapeshifter";
+  leader            "";
+  subtitle          "";
+  author            "Donovan, Dale A.",
+                    "Johns, Linda";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              October 2004;
+  ISBN              0-7869-3220-1;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Knights of the Silver Dragon;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "The town of \Place{Curston} is hit with a dastardly crime spree: fires,
+  thefts, even vicious attacks. All the clues point to one suspect:
+  \NPC{Kellach} and \NPC{Driskoll}'s dad, \NPC{Torin}. But the \Group{Knights}
+  are convinced \NPC{Torin} has been framed. Deep in the \Place{Dungeons of
+  Doom}, a terrifying creature holds the key to proving \NPC{Torin}'s
+  innocence. Can the \Group{Knights} find the creature before \NPC{Torin} is
+  sent to prison ... or worse?
+
+  \Product{Sign of the Shapeshifter} continues a new series of adventures
+  written specifically for readers ages 8 and up. Sized to fit young hands, the
+  series follows the adventures of three children who, through their heroic
+  deeds, become members of the \Group{Order of the Knights of the Silver
+  Dragon}. This opportunity will be extended to readers of the series as well
+  through the Knights of the Silver Dragon Club. Young readers are encouraged
+  to join and participate in the club, and in turn they will receive free
+  giveaways, special correspondence, and other benefits. Fans will also be
+  encouraged to interact with the club through an exclusive member area on
+  \link{www.knightsofthesilverdragon.com}.".
+
+
+#.....
+#----- WTC 96537
+
+base product WTC 96537 =
+
+  title             "Eye of Fortune";
+  leader            "";
+  subtitle          "";
+  author            "Graham, Denise";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              December 2004;
+  ISBN              0-7869-3169-8;
+  pages             92;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Knights of the Silver Dragon;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "A young thief.
+
+   A wizard's apprentice.
+
+   A twelve-year-old boy.
+
+   Meet the \Group{Knights of the Silver Dragon}!
+
+  \Group{The Knights} are headed back to the \Place{Dungeons of Doom}, this
+  time in search of buried treasure. But they aren't alone. Two
+  \Monster{half-orcs} and a mysterious girl want to find the fortune first. The
+  \Monster{half-orcs} are hostile. And the girl hides a secret that could
+  endanger them all. Will the \Group{Knights} find the treasure or just more
+  trouble?
+
+  \Product{Eye of Fortune} continues a new series of adventures written
+  specifically for readers ages 8 and up. Sized to fit young hands, the series
+  follows the adventures of three children who, through their heroic deeds,
+  become members of the \Group{Order of the Knights of the Silver Dragon}. This
+  opportunity will be extended to readers of the series as well through the
+  Knights of the Silver Dragon Club. Young readers are encouraged to join and
+  participate in the club, and in turn they will receive free giveaways,
+  special correspondence, and other benefits. Fans will also be encouraged to
+  interact with the club through an exclusive member area on
+  www.knightsofthesilverdragon.com.".
+
+
+#.....
+
+#----- WTC 9547274
+
+base product WTC 9547274 =
+
+  title             "Mystery of the Wizard's Tomb";
+  leader            "";
+  subtitle          "";
+  author            "Plummer, Rachel";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              February 2006;
+  ISBN              0-7869-3990-7;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 11;
+  series            Knights of the Silver Dragon;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "It's \NPC{Zendric}s 500th birthday! But with one bite of birthday cake,
+  \NPC{Zendric}s memory completely vanishes, along with all his powers. The
+  search for an antidote to the poisoned cake leads \NPC{Moyra}, \NPC{Kellach},
+  and \NPC{Driskoll} to the \God{Wee Jas} cemetery. The \Monster{mummies},
+  \Monster{ghasts}, and \Monster{ghouls} that haunt the place can't scare away
+  the \Group{Knights of the Silver Dragon}. But are the \Group{Knights}
+  prepared for what they'll find inside the wizard's tomb?";
+  short description "".
+
+
+#.....
+#----- WTC 9556374
+
+base product WTC 9556374 =
+
+  title             "Mark of the Yuan-Ti";
+  leader            "";
+  subtitle          "";
+  author            "Roberts, Kerry Daniel";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              April 2006;
+  ISBN              0-7869-4033-6;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 12;
+  series            Knights of the Silver Dragon;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "When \NPC{Driskoll} discovers a \Monster{small snake} in an alley, he names
+  it \NPC{Suma} and takes it home. \NPC{Driskoll} loves his new pet, but
+  \NPC{Kellach} is worried. Ever since \NPC{Suma} arrived, a mysterious
+  sleeping sickness has swept through \NPC{Curston} -- the only clue a mark
+  like a serpent's tongue left on the victims' skin. Is \NPC{Suma} really just
+  a harmless pet? Or is there more to this snake than meets the eye?";
+  short description "".
+
+
+#.....

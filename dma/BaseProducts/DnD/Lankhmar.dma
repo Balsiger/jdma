@@ -1,0 +1,367 @@
+#
+# File:         Accessories.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  Accessories for Lankhmar
+#
+# Worlds:       Lankmahr
+#
+#
+
+#----- TSR 1144
+
+base product TSR 1144 =
+
+  title             "New Adventures of Fafhrd and the Gray Mouser";
+  leader            "The";
+  author            "Hensley, Shane";
+  date              August 1996;
+  ISBN              0-7869-0417-8;
+  pages             192;
+  system            AD&D revised;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $25.00;
+  contents          Booklet 4,
+                    Poster 3,
+                    Card "player reference" 6;
+  worlds            Lankhmar;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231,
+                    Dragon 232;
+  description
+  "All thats needed for Lankhmar.".
+
+
+#.....
+
+#----- TSR 9150
+
+base product TSR 9150 =
+
+  title             "Swords of the Undercity";
+  leader            "";
+  date              1985;
+  price             $ 6.00;
+  worlds            Lankhmar;
+  references        net price list;
+  description
+  "";
+  synonyms          "CA1".
+
+
+#.....
+#----- TSR 9162
+
+base product TSR 9162 =
+
+  title             "Lankhmar, City of Adventure";
+  leader            "";
+  date              1985;
+  ISBN              0-88038-247-3;
+  pages             96;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Campaign Setting;
+  price             $12.00;
+  contents          Booklet,
+                    Booklet "maps",
+                    Map "city";
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalog93;
+  description
+  "step into a new world of intrigue and adventure".
+
+
+#.....
+#----- TSR 9170
+
+base product TSR 9170 =
+
+  title             "Swords of Deceit";
+  leader            "";
+  date              1986;
+  price             $ 8.00;
+  worlds            Lankhmar;
+  references        net price list;
+  description
+  "";
+  synonyms          "CA2".
+
+
+#.....
+
+#----- TSR 9276
+
+base product TSR 9276 =
+
+  title             "Thieves of Lankhmar";
+  leader            "";
+  date              1990;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalogue94,
+                    catalog95,
+                    catalog93;
+  description
+  "characters are caught in a frenzied chase";
+  synonyms          "LNA1".
+
+
+#.....
+#----- TSR 9278
+
+base product TSR 9278 =
+
+  title             "Otherlands";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-829-3;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "tales and travels from beyond the shores";
+  synonyms          "DLR1".
+
+
+#.....
+#----- TSR 9295
+
+base product TSR 9295 =
+
+  title             "Wonders of Lankhmar";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-870-6;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog96,
+                    catalog93;
+  description
+  "short adventures";
+  synonyms          "LNR1".
+
+
+#.....
+
+#----- TSR 9305
+
+base product TSR 9305 =
+
+  title             "Nehwon";
+  leader            "";
+  date              1990;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "players are sent after invisible furry snakes and deathless dragons";
+  synonyms          "LNA2".
+
+
+#.....
+#----- TSR 9318
+
+base product TSR 9318 =
+
+  title             "Prince of Lankhmar";
+  leader            "";
+  date              April 1991;
+  ISBN              1-56076-072-9;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91S,
+                    catalog95,
+                    catalog96;
+  description
+  "a web of intrigue, deceit, and theft";
+  synonyms          "LNA3".
+
+
+#.....
+#----- TSR 9329
+
+base product TSR 9329 =
+
+  title             "Tales of Lankhmar";
+  leader            "";
+  date              July 1991;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog95,
+                    catalog93;
+  description
+  "adventures in Newhon";
+  synonyms          "LNR2".
+
+
+#.....
+#----- TSR 9371
+
+base product TSR 9371 =
+
+  title             "Slayers of Lankhmar";
+  leader            "";
+  date              November 1992;
+  ISBN              1-56076-373-6;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description
+  "slayers guild";
+  synonyms          "LNQ1".
+
+
+#.....
+
+#----- TSR 9461
+
+base product TSR 9461 =
+
+  title             "Rogues in Lankhmar";
+  leader            "";
+  author            "Nicholson, 'Uncle' Wes";
+  editor            "Schend, Steven";
+  cover             "Elmore, Larry";
+  cartography       "Diesel";
+  illustrations     "Rosema, Scott",
+                    "Barker, Jeffery";
+  typography        "Kerkstra, Nancy J.";
+  management        "Hanchette, Paul" production;
+  date              October 1994;
+  ISBN              1-56076-907-6;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet,
+                    Poster "color map";
+  worlds            Lankhmar;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "Looking to match steel and strength with the \NPC{Black Knight}, a
+  forbidding armored figure new to \Place{Lankhmar}? He's in here. Need to find
+  out about the \Group{Vermin Catchers} or the crafty \Group{Beggars' Guild}?
+  Look inside for all the information you'll need to catch them. Are you
+  looking for new thrills for your \Place{City of Lankhmar} campaign? If so,
+  this is the book for you.
+
+  \Product{Rogues in Lankhmar} is the first of a series of supplements that
+  expand the information on the city of \Place{Lankhmar}. This initial product
+  covers the \Place{Plaza} and \Place{Tenderloin} Districts, a favorite place
+  for \NPC{Fafhrd} and the \NPC{Gray Mouser} in the city and an area notorious
+  for tavern brawls, back street thievery, and all sorts of excitement and
+  danger. \Product{Rogues in Lankhmar} provides Dungeon Masters with new places
+  detailed and ready for adventure, new guilds and groups vying for power in
+  \Place{Lankhmar}'s shadowed streets, and many new nonplayer characters for
+  allies and enemies galore.
+
+  Whether it's sunset at the \Place{Plaza} of \Place{Dark Delights} or sunrise
+  at the \Place{End Gate}, the adventure never stops in \Place{Lankhmar}!
+
+  Suitable for all levels of play.".
+
+
+#.....
+#----- TSR 9470
+
+base product TSR 9470 =
+
+  title             "Cutthroats of Lankhmar";
+  leader            "";
+  author            "Nicholson, Wes";
+  date              March 1995;
+  ISBN              0-7869-0103-9;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "information on cash, mercantile, festival, river".
+
+
+#.....
+#----- TSR 9481
+
+base product TSR 9481 =
+
+  title             "Avengers in Lankhmar";
+  leader            "";
+  author            "Henson, Dale 'Slade'";
+  date              September 1995;
+  ISBN              0-7869-0160-8;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  worlds            Lankhmar;
+  references        catalog95,
+                    catalogue96,
+                    catalog96,
+                    Dragon 227;
+  description
+  "Elad Edals is back, intermedia to high level".
+
+
+#.....

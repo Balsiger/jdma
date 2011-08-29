@@ -1,0 +1,66 @@
+#
+# File:         Lankhmar.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:
+#
+# Reviewer(s):
+#
+# Description:  Lankhmar novels
+#
+# Worlds:       Lankhmar
+#
+# Keywords:
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/Lankhmar.dma,v $
+#
+# $Revision: 1.4 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Lankhmar.dma,v $
+# Revision 1.4  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.3  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.2  2007/06/09 09:50:27  merlin
+# *** empty log message ***
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2003/05/21 16:37:16  merlin
+# updated to version Aboleth
+#
+# Revision 1.1  2001/08/21 22:31:12  merlin
+# *** empty log message ***
+#
+#
+#..............................................................................
+#
+#
+
+#----- TSR 8465
+
+base product TSR 8465 =
+
+  title             "Dragonsword of Lankhmar";
+  leader            "";
+  date              1986;
+  system            1 on 1;
+  audience          All;
+  product type      Novel;
+  number            Book Five;
+  worlds            Lankhmar;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....

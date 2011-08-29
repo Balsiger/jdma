@@ -1,0 +1,154 @@
+#
+# File:         Mystara.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:
+#
+# Reviewer(s):
+#
+# Description:  Mystara novels
+#
+# Worlds:       Mystara
+#
+# Keywords:
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/Mystara.dma,v $
+#
+# $Revision: 1.4 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Mystara.dma,v $
+# Revision 1.4  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.3  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.2  2007/06/09 09:50:27  merlin
+# *** empty log message ***
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2003/05/21 21:19:04  merlin
+# updated to version Aboleth
+#
+# Revision 1.1  2001/07/20 11:56:24  merlin
+# *** empty log message ***
+#
+#
+#..............................................................................
+#
+#
+
+#----- TSR 2503
+#  ISBN          1-56976-906-8;
+
+base product TSR 2503 =
+
+  title             "Dragonlord of Mystara";
+  leader            "";
+  date              August 1994;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  series            Dragonlord Chronicles;
+  price             $ 5.95;
+  worlds            Mystara;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "Dragonlord Chronicles, book one".
+
+
+#.....
+#----- TSR 2508
+
+base product TSR 2508 =
+
+  title             "Dragonmage of Mystara";
+  leader            "";
+  author            "Thorarinn Gunnarsson";
+  date              April 1996;
+  ISBN              0-7869-0488-7;
+  pages             400;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            Dragonlord Chronicles;
+  price             $ 5.99;
+  contents          Booklet 2,
+                    Card "playing" 54,
+                    Misc "player handouts" 24,
+                    Gatefold "cover";
+  worlds            Mystara;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 227,
+                    Dragon 228;
+  description
+  "Dragonlord Chronicles, book three".
+
+
+#.....
+#----- TSR 2514
+
+base product TSR 2514 =
+
+  title             "Dragonking of Mystara";
+  leader            "";
+  author            "Thorarinn Gunnarsson";
+  date              July 1995;
+  ISBN              0-7869-0153-5;
+  pages             400;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Dragonlord Chronicles;
+  price             $ 5.95;
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "Dragonlord Chronicles, book two".
+
+
+#.....
+#----- TSR 2519
+
+base product TSR 2519 =
+
+  title             "Black Vessel";
+  leader            "The";
+  author            "Morris Simon";
+  date              August 1996;
+  ISBN              0-7869-0507-7;
+  pages             320;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  contents          Booklet 2,
+                    Gatefold "self-cover with map sheets",
+                    Sheet "looseleaf handouts" 8;
+  worlds            Savage Coast;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231,
+                    Dragon 232;
+  description
+  "race against time and treachery".
+
+
+#.....

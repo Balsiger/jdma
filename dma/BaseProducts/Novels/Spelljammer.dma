@@ -1,0 +1,258 @@
+#
+# File:         Spelljammer.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:  Peter 'Merlin' Balsiger
+#
+# Reviewer(s):
+#
+# Description:  Spelljammer novels
+#
+# Worlds:       Spelljammer
+#
+# Keywords:     novels; spelljammer;
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/Spelljammer.dma,v $
+#
+# $Revision: 1.7 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Spelljammer.dma,v $
+# Revision 1.7  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.6  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.5  2008/10/04 21:34:16  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2007/07/16 20:02:14  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2007/06/09 09:50:27  merlin
+# *** empty log message ***
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2003/05/21 21:31:53  merlin
+# updated to version Aboleth
+#
+# Revision 1.2  2001/08/21 22:31:13  merlin
+# *** empty log message ***
+#
+# Revision 1.1  2001/07/20 11:56:25  merlin
+# *** empty log message ***
+#
+#
+#..............................................................................
+#
+#
+
+#----- TSR 8030
+
+base product TSR 8030 =
+
+  title             "Beyond the Moons";
+  leader            "";
+  author            "Cook, David 'Zeb'";
+  cover             "Easley, Jeff";
+  date              July 1991;
+  ISBN              1-56076-153-9;
+  pages             311;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            One;
+  series            Cloakmaster Cycle;
+  price             $ 4.95;
+  contents          Book "";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94,
+                    catalog93;
+  description
+  "".
+#.....
+#----- TSR 8031
+
+base product TSR 8031 =
+
+  title             "Into the void";
+  leader            "";
+  author            "Findley, Nigel";
+  cover             "Freas, Kelly";
+  date              October 1991;
+  ISBN              1-56076-154-7;
+  pages             311;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Cloakmaster Cycle;
+  price             $ 4.95;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94,
+                    catalog93;
+  description
+  "Plunged into a sea of alien faces, \NCP{Teldin Moore} isn't sure whom to
+  trust. His \Monster[gnome]{gnomish} sidewheeler is attacked by space pirates,
+  and \NCP{Teldin} is saved by a hideous \Monster{mind flayer} who offers to
+  help the \Monster{human} use his \Item{magical cloak}---but for whose gain?
+  \NPC{Teldin} learns the basics of spelljamming, and he seeks an ancient
+  arcane, one who might tell him more.
+
+  \Product{Into the Void}, set in the \Place{Forgotten Realms} fantasy world,
+  is the second book in the \Product{Cloakmaster Cycle} of \Place{Spelljammer}
+  space fantasy novels from TSR, Inc.".
+
+#.....
+#----- TSR 8032
+
+base product TSR 8032 =
+
+  title             "Maelston's Eye";
+  leader            "The";
+  author            "Roger E. Moore";
+  cover             "Kelly Freas";
+  date              May 1992;
+  ISBN              1-56076-344-2;
+  pages             313;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Three;
+  series            The Cloakmaster Cycle;
+  price             $ 4.95;
+  contents          Book;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "From an \Monster[elf]{elven} admiral at the \Place{Rock of Bral},
+  \NPC{Teldin Moore} learns more about his cloak's past and its potential
+  powers---but he doesn't count on being caught up in the hurricane of the
+  second \Event{Unhuman War}. Vengeful humanoids rampage through the
+  \Place{Known Spheres}, and they're on \NPC{Teldin}'s trail even as he hunts
+  for the ultimate spacefaring ship of all: the mighty \Place{Spelljammer}.".
+#.....
+#----- TSR 8033
+
+base product TSR 8033 =
+
+  title             "Radiant Dragon";
+  leader            "The";
+  author            "Cunningham, Elaine";
+  cover             "Freas, Kelly";
+  date              November 1992;
+  ISBN              1-56076-346-9;
+  pages             312;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Four;
+  series            Cloakmaster Cycle;
+  price             $ 3.99;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description
+  "\NPC{Teldin Moore} is looking for the great ship \Item{Spelljammer}. A
+  \Monste{radiant dragon} holds the key to commanding the great ship but needs
+  \NPC{Teldin}'s help to take control. Meanwhile, the \Monster[elf]{elves} seek
+  his assistance in the second \Event{Unhuman War}, where a group of
+  \Monster{elf}-hating monsters trades with \Monster[goblin]{goblinoids} for a
+  secret weapon against the \Monster[elf]{elven} \Group{Imperial Fleet}. But
+  someone in \NPC{Teldin}'s inner circle is pulling all parties toward
+  battle.
+
+  \Product{The Radiant Dragon}, set in the \Place{Spelljammer} fantasy
+  universe, is the fourth book in the \Product{Cloakmaster Cycle} of
+  \Place{Spelljammer} space fantasy novels from TSR, Inc.".
+#.....
+#----- TSR 8034
+
+base product TSR 8034 =
+
+  title             "Broken Sphere";
+  leader            "The";
+  author            "Findley, Nigel";
+  cover             "Scott, Michael";
+  date              May 1993;
+  ISBN              1-56076-596-8;
+  pages             314;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Five;
+  series            Cloakmaster Cycle;
+  price             $ 3.99;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog93W,
+                    catalog93;
+  description
+  "\NPC{Teldin Moore}'s magical amulet allows him to 'see' through the eyes of
+  the great ship \Item{Spelljammer}, across the wilds of space. Following clues
+  from an ancient \Monster[gnome]{gnomish} library and the vision he sees, he
+  traces the mighty craft through the \Place{crystal spheres}. He employs his
+  magical cloak's power and discovers his quarry's home, but \NPC{Teldin}'s
+  cloak---and the possibility it could give him control over the
+  \Item{Spelljammer}---continues to drawn enemies, often in the guise of
+  friends. Will he survive long enough to face the final danger that awaits him
+  at the point of the \Item{Spelljammer}'s origin---the \Place{Broken
+  Sphere}?
+
+  \Product{The Broken Sphere}, set in the \Place{Spelljammer} fantasy universe,
+  is the fifth book in the \Product{Cloakmaster Cycle} of \Place{Spelljammer}
+  space fantasy novels from TSR, Inc.".
+#.....
+#----- TSR 8038
+
+base product TSR 8038 =
+
+  title             "Ultimate Helm";
+  leader            "The";
+  author            "Howard, Russ T.";
+  cover             "Scott, Michael";
+  date              September 1993;
+  ISBN              1-56076-651-4;
+  pages             307;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Six;
+  series            Cloakmaster Cycle;
+  price             $ 4.95;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog93S,
+                    catalog93;
+  description
+  "\NPC{Teldin Moore} has gone from 'dirtkicker' to spacefarer, from farmer to
+  soul searcher, from muleskinner to captain in an \Monster[elf]{elven}
+  \Group{Imperial Fleet}, from outcast to political magnet. Now, in
+  \Product{The Ultimate Helm}, \NPC{Teldin Moore} discovers the key to his
+  destiny, the great ship \Item{Spelljammer} itself. He battles to control the
+  vessel amid the myriad plots of its inhabitants. Political intrigue mixes
+  with colossal forces for an explosive ending to the \Product{Cloakmaster
+  Cycle}. \NPC{Teldin} grapples with the choice of taking the ship's helm, and
+  his decision could rend the bonds of fantasy space forever.
+
+  \Product{The Ultimate Helm}, set in the \Place{Spelljammer} fantasy universe,
+  is the sixth and final book in the \Product{Cloakmaster Cycle} of
+  \Place{Spelljammer} space fantasy novels from TSR, Inc.".
+#.....

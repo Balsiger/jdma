@@ -1,0 +1,1908 @@
+#
+# File:         Polyhedron.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:  Peter 'Merlin' Balsiger
+#
+# Reviewer(s):
+#
+# Description:  This file contains the product information about the available
+#               polyhedron magazines.
+#
+# Worlds:       all
+#
+# Keywords:     polyhedron; rpga; magazine;
+#
+# See_also:     dungeon; dragon;
+#
+#----------------------------------------------------------------------- RCS
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Magazines/Polyhedron.dma,v $
+#
+# $Revision: 1.7 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Polyhedron.dma,v $
+# Revision 1.7  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.6  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.5  2007/07/16 20:02:14  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2006/12/11 17:22:10  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2006/09/02 14:48:09  merlin
+# removed some typos
+#
+# Revision 1.1  2004/09/19 09:33:08  merlin
+# *** empty log message ***
+#
+# Revision 1.10  2003/09/27 13:10:06  merlin
+# corrected some world entries (from all to generic)
+#
+# Revision 1.9  2003/05/19 19:56:41  merlin
+# updated to version Aboleth
+#
+# Revision 1.8  2002/04/14 00:31:23  merlin
+# added some stuff again
+#
+# Revision 1.7  2001/12/07 19:07:13  merlin
+# updated once more
+#
+# Revision 1.6  2001/11/26 22:11:36  merlin
+# updates
+#
+# Revision 1.5  2001/11/13 22:47:31  merlin
+# updated again
+#
+# Revision 1.4  2001/07/20 11:55:15  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2001/03/27 08:59:50  merlin
+# added some products
+#
+# Revision 1.2  2001/03/15 11:41:34  merlin
+# changed some description
+#
+# Revision 1.1  2001/03/15 09:40:20  merlin
+# first version
+#
+#
+#..............................................................................
+#
+#
+
+#----- Polyhedron Europe 7
+
+base product Polyhedron Europe 7 =
+
+  title             "Polyhedron";
+  leader            "";
+  author            "Mark Peoples",
+                    "Steven James",
+                    "Ferbrache, Debbie",
+                    "Steve 'Taz' Cansdale",
+                    "Simon Collins",
+                    "Paul 'Wiggy' Williams",
+                    "Steve 'Sad' Pennington",
+                    "Iain Lowson";
+  editor            "Ian 'Twin' Richards";
+  cover             "Interplay";
+  management        "Ian 'Twin' Richards",
+                    "Ian Revill",
+                    "Louise Richards",
+                    "Steve 'Taz' Cansdale";
+  date              2000;
+  pages             68;
+  system            AD&D revised;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  number            Europe 7;
+  series            Polyhedron;
+  contents          Booklet;
+  worlds            Generic;
+  description
+  "Issue 7 of the RPGA magazine for Europe, Asia Pacific and Africa.".
+
+
+#.....
+#----- Polyhedron Europe 8
+
+base product Polyhedron Europe 8 =
+
+  title             "Polyhedron";
+  leader            "";
+  author            "Mark Peoples",
+                    "van Dam, Ann",
+                    "Steve 'Taz' Cansdale",
+                    "Jonathon Scott",
+                    "Preece, Anthony",
+                    "Ian 'Twin' Richards",
+                    "Wes Nicholson",
+                    "Baylis, Chris";
+  editor            "Ian 'Twin' Richards",
+                    "Iain Lowson",
+                    "Steve 'Taz' Cansdale";
+  cover             "Havas Interactive";
+  management        "Ian 'Twin' Richards",
+                    "Ian Revill",
+                    "Louise Richards";
+  date              2000;
+  pages             68;
+  system            AD&D revised;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  number            Europe 8;
+  series            Polyhedron;
+  contents          Booklet;
+  worlds            Generic;
+  description
+  "Issue 8 of the RPGA magazine for Europe, Asia Pacific and Africa.".
+
+
+#.....
+
+#----- Polyhedron 110
+
+base product Polyhedron 110 =
+
+  title             "Polyhedron 110";
+  leader            "";
+  author            "Willi Burger",
+                    "Rabe, Bruce",
+                    "Boyd, Eric L.",
+                    "Greenwood, Ed",
+                    "Roger Moore",
+                    "Robert Weise";
+  editor            "Maxwell, Duane",
+                    "Julia Martin";
+  cartography       "O'Brien, David";
+  management        "Rick Behling" publishing,
+                    "Scott Douglas" RPGA network coordination,
+                    "Larry Smith" graphic direction,
+                    "Conant, Dave" production,
+                    "Paul Hanchette" production,
+                    "Shirley Surek" production,
+                    "Judy Mueller" subscriptions;
+  date              August 1995;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            15;
+  number            8;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 110 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 121
+
+base product Polyhedron 121 =
+
+  title             "Polyhedron 121";
+  leader            "";
+  author            "Greenwood, Ed",
+                    "Boyd, Eric L.",
+                    "Wellson Clark",
+                    "Roger E. Moore",
+                    "Fred Faber",
+                    "Hesperin, Clio",
+                    "Jacinth Moonspring",
+                    "Scott Douglas";
+  cover             "Phillip Robb";
+  management        "TSR, Inc." valcano god,
+                    "Scott Douglas" big chief,
+                    "Robert Wiese" hunter,
+                    "Conant, Dave" shaman,
+                    "Terry Craig" shaman,
+                    "Barnett, Dee" artisan,
+                    "Lokotz, Angelika" artisan,
+                    "Judy Mueller" drummer,
+                    "Hoeke, Dave" intertribe envoy,
+                    "Jeff Quick" garuda bait;
+  date              July 1996;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            16;
+  number            6;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 121 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 122
+
+base product Polyhedron 122 =
+
+  title             "Polyhedron 122";
+  leader            "";
+  author            "Scott 'Papa' Douglas",
+                    "Robert Wiese",
+                    "Jeff 'Zippy' Quick",
+                    "Wes Nicholson",
+                    "Sandy Douglas",
+                    "Kline, Eric",
+                    "Gail Resse",
+                    "Thompson, Agnes V.",
+                    "Laura Braslow",
+                    "Greenwood, Ed",
+                    "Baker, David",
+                    "Steve Jay",
+                    "Bob Farnsworth",
+                    "Shaun Horner",
+                    "Hauptmann, Andrew",
+                    "Gary Labrecque",
+                    "Roger E. Moore",
+                    "William R. Gilsdorf",
+                    "Kathy Bayles",
+                    "Linda Baldwin",
+                    "Tim Hernandez",
+                    "Thomas Prusa",
+                    "John Paul Carney",
+                    "Weatherbee, Don";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." publisher,
+                    "Scott Douglas" network coordination,
+                    "Robert Wiese" network administration,
+                    "Conant, Dave" production,
+                    "Terry Craig" production;
+  date              August 1996;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            16;
+  number            7;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 122 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 123
+
+base product Polyhedron 123 =
+
+  title             "Polyhedron 123";
+  leader            "";
+  author            "Scott Douglas",
+                    "Skip Williams",
+                    "Greenwood, Ed",
+                    "Harold Johnson",
+                    "Glen R. Goodwin",
+                    "Robert Wiese",
+                    "Nathan Caroland",
+                    "Roger E. Moore",
+                    "Gary Labrecque",
+                    "Fred Faber",
+                    "Hesperin, Clio",
+                    "Jacinth Moonstrping";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." publisher,
+                    "Scott Douglas" network coordination dude,
+                    "Conant, Dave" production dude,
+                    "Terry Craig" production dude,
+                    "Barnett, Dee" stylish babe,
+                    "Lokotz, Angelika" stylish babe,
+                    "Sutherland, Dave" production dude,
+                    "Hoeke, Dave" magic folk;
+  date              September 1996;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            16;
+  number            8;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 123 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 124
+
+base product Polyhedron 124 =
+
+  title             "Polyhedron 124";
+  leader            "";
+  author            "Greenwood, Ed",
+                    "Monte Cook",
+                    "Gary Labrecque",
+                    "Gregory Detwiler",
+                    "William W. Connors",
+                    "Hauptmann, Andrew",
+                    "Nichols, Bobby",
+                    "Roger E. Moore",
+                    "Fred Faber",
+                    "Hesperin, Clio",
+                    "Jacinth Moonspring";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." Mary Shelly,
+                    "Scott Douglas" Dr Victor Frankenstein,
+                    "Robert Wiese" Henry Clerval,
+                    "Conant, Dave" The Villager,
+                    "Terry Craig" The Villager;
+  date              October 1996;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            16;
+  number            9;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 124 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 125
+
+base product Polyhedron 125 =
+
+  title             "Polyhedron 125";
+  leader            "";
+  author            "Keith Strohm",
+                    "Greenwood, Ed",
+                    "Robert Wiese",
+                    "Gary Labrecque",
+                    "Ramon Delgado",
+                    "Susan Threadgill",
+                    "James W. Cameron",
+                    "Blum, Dave",
+                    "Baker, David W.",
+                    "Sheffield, Bill",
+                    "Glenn Smith",
+                    "Boyd, Eric L.",
+                    "Roger E. Moore",
+                    "Fred Faber",
+                    "Hesperin, Clio",
+                    "Jacinth Moonspring";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." publisher,
+                    "Scott Douglas" network coordination,
+                    "Robert Wiese" tournament coordination,
+                    "Conant, Dave" production,
+                    "Terry Craig" production;
+  date              November 1996;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            16;
+  number            10;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 125 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 126
+
+base product Polyhedron 126 =
+
+  title             "Polyhedron 126";
+  leader            "";
+  author            "Greenwood, Ed",
+                    "Richard Dansky",
+                    "Nicky Rea",
+                    "Jackie Cassada",
+                    "Walker, Craig",
+                    "Donnelly, Dan",
+                    "Paul Sudlow",
+                    "Boyd, Eric L.",
+                    "Roger E. Moore",
+                    "Woollums, Erica",
+                    "Sherrie Miller";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." The Globe Theater,
+                    "Scott Douglas" director,
+                    "Woodcock, Donna" propmaster,
+                    "Anway, Carol" stage hand,
+                    "Lisa Stevens" stage hand;
+  date              October 1997;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            17;
+  number            1;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 126 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 127
+
+base product Polyhedron 127 =
+
+  title             "Polyhedron 127";
+  leader            "";
+  author            "Greenwood, Ed",
+                    "Steven Brown",
+                    "Stark, Ed",
+                    "Robert Wiese",
+                    "Shaun Horner",
+                    "Miranda Horner",
+                    "Monte Cook",
+                    "Roger E. Moore";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." Mother Nature,
+                    "Lisa Stevens" Heat Miser,
+                    "Robert Wiese" Snow Miser,
+                    "Woodcock, Donna" Jingle & Jangle,
+                    "Paul Alan Timm" Jingle & Jangle;
+  date              December 1997;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            17;
+  number            2;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 127 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 128
+
+base product Polyhedron 128 =
+
+  title             "Polyhedron 128";
+  leader            "";
+  author            "Greenwood, Ed",
+                    "Nichols, Bobby",
+                    "Eckelberry, David",
+                    "St\acute{e}phane Raymond",
+                    "Shaun A. Horner",
+                    "JD Wiker",
+                    "Lisa Tomihiro",
+                    "Paul Gosselin",
+                    "Bennington, Adam",
+                    "Henry R. Gannon",
+                    "Boyd, Eric L.";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." The Mighty Cray,
+                    "Lisa Stevens" PowerMac 9600,
+                    "Robert Wiese" Pentium II,
+                    "Woodcock, Donna" Toaster,
+                    "Paul Alan Timm" Toaster;
+  date              February 1998;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            18;
+  number            1;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 128 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 129
+
+base product Polyhedron 129 =
+
+  title             "Polyhedron 129";
+  leader            "";
+  author            "John Brown",
+                    "Greenwood, Ed",
+                    "Wayne Melnick",
+                    "John Richardson",
+                    "John A. Harnes",
+                    "Stephen H. Jay",
+                    "Stephen Kenson",
+                    "John Rateliff",
+                    "Gregory W. Detwiler",
+                    "Tom Prusa",
+                    "Morrow, David 'Pasha'",
+                    "Gary S. Watkins",
+                    "Boyd, Eric L.";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." The Dark Continent,
+                    "Lisa Stevens" Sabor,
+                    "Robert Wiese" Tantor,
+                    "Woodcock, Donna" Bara & Horta,
+                    "Paul Alan Timm" Bara & Horta;
+  date              April 1998;
+  pages             48;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            18;
+  number            2;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 129 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 130
+
+base product Polyhedron 130 =
+
+  title             "Polyhedron 130";
+  leader            "";
+  author            "Jeff Quick",
+                    "Keene, Catherine",
+                    "Greenwood, Ed",
+                    "Keith Hoffman",
+                    "Buehler, Carl",
+                    "Gary S. Watkins",
+                    "Sean Reynolds",
+                    "Jeremy Reinhard",
+                    "Spike Y Jones",
+                    "Glen R. Goodwin",
+                    "Smith, Doug",
+                    "Lance Hawvermale",
+                    "Matt Brebner",
+                    "Boyd, Eric L.";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." Home Port,
+                    "Lisa Stevens" Harbormaster,
+                    "Robert Wiese" Cap'n,
+                    "Woodcock, Donna" All Hand,
+                    "Paul Alan Timm" All Hand;
+  date              June 1998;
+  pages             48;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            18;
+  number            3;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 129 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 131
+
+base product Polyhedron 131 =
+
+  title             "Polyhedron 131";
+  leader            "";
+  author            "Grimes, Alan",
+                    "Rich Kohl",
+                    "Miller, Brian",
+                    "Greenwood, Ed",
+                    "Donovan, Dale A.",
+                    "Mike Selinker",
+                    "Penny Williams",
+                    "Skip Williams",
+                    "Steve Kenson",
+                    "Mark T. Barnabo",
+                    "Gregory Detwiler",
+                    "Spike Y Jones",
+                    "Gibson, Ed",
+                    "Stephane Raymond",
+                    "Matt Brebner";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." The Baxter Building,
+                    "Lisa Stevens" Sue Storm,
+                    "Robert Wiese" Mr Fantastic,
+                    "Woodcock, Donna" The Yaucy Street Gang,
+                    "Paul Alan Timm" The Yaucy Street Gang;
+  date              August 1998;
+  pages             48;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            18;
+  number            4;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 131 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 132
+
+base product Polyhedron 132 =
+
+  title             "Polyhedron 132";
+  leader            "";
+  author            "Stephen H. Jay",
+                    "Robert Wiese",
+                    "Robert J. Kinney",
+                    "Wes Nicholson",
+                    "Greenwood, Ed",
+                    "James C. Alpeter Jr.",
+                    "Tom Prusa",
+                    "Ruester, Chris",
+                    "Greenwood, Ed",
+                    "Boyd, Eric L.",
+                    "Gibson, Ed",
+                    "Laura Moody Harvey";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." The Thieves' Guild,
+                    "Lisa Stevens" Master Thief,
+                    "Robert Wiese" Sharper,
+                    "Woodcock, Donna" Cutpurses,
+                    "Paul Alan Timm" Cutpurses;
+  date              October 1998;
+  pages             48;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            18;
+  number            5;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 132 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 133
+
+base product Polyhedron 133 =
+
+  title             "Polyhedron 133";
+  leader            "";
+  author            "Kevin W. Melka",
+                    "Klim Altman",
+                    "Greenwood, Ed",
+                    "James P. Buchanan",
+                    "William James Cuffe",
+                    "Gregory W. Detwiler",
+                    "Michael L. Howard",
+                    "Matt Brebner",
+                    "Kurt Samson",
+                    "Gibson, Ed",
+                    "Laura Moody Harvey";
+  editor            "Jeff Quick";
+  management        "TSR, Inc." The Cordon Blue,
+                    "Lisa Stevens" Floor Manager,
+                    "Robert Wiese" Grand Chef,
+                    "Woodcock, Donna" Wait Staff,
+                    "Paul Alan Timm" Wait Staff;
+  date              December 1998;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            18;
+  number            6;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 133 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 134
+
+base product Polyhedron 134 =
+
+  title             "Polyhedron 134";
+  leader            "";
+  author            "Steve Jay",
+                    "Gibson, Ed",
+                    "Greenwood, Ed",
+                    "William Ronald",
+                    "Schiller, Devon",
+                    "Randy Bisig",
+                    "Matt Kelley",
+                    "Ramsey Lundock",
+                    "Laura Harvey";
+  editor            "Jeff Quick",
+                    "Sean Glenn";
+  management        "TSR, Inc." Commander-in-Chief,
+                    "Ryan Dancey" Secretary of State,
+                    "Robert Wiese" Speaker of the House,
+                    "Woodcock, Donna" Cabinet Member,
+                    "Mark Painter" Cabinet Member;
+  date              January 1999;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            19;
+  number            1;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 134 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 135
+
+base product Polyhedron 135 =
+
+  title             "Polyhedron 135";
+  leader            "";
+  author            "Steve Jay",
+                    "Gibson, Ed",
+                    "Greenwood, Ed",
+                    "V. Simmons, Chadwick",
+                    "Greg Detwiler",
+                    "Mona, Erik",
+                    "Rocco Pisto",
+                    "Joe Masdon",
+                    "Mark Barnabo";
+  editor            "Sean Glenn";
+  management        "TSR, Inc." The Cathedral,
+                    "Ryan Dancey" Cardinal,
+                    "Robert Wiese" Bishop,
+                    "Woodcock, Donna" Choir,
+                    "Mark Painter" Choir;
+  date              April 1999;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            19;
+  number            2;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 135 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 136
+
+base product Polyhedron 136 =
+
+  title             "Polyhedron 136";
+  leader            "";
+  author            "Stephen H. Jay",
+                    "Greenwood, Ed",
+                    "Miller, Brian",
+                    "James C. Alpeter",
+                    "Terence G. Kemper",
+                    "Cooper, Daniel";
+  editor            "Sean Glenn";
+  management        "TSR, Inc." Lord Mayor,
+                    "Ryan Dancey" Guild Master,
+                    "Robert Wiese" Sheriff,
+                    "Woodcock, Donna" City Watch,
+                    "Mark Painter" City Watch;
+  date              June 1999;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            19;
+  number            3;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 136 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 137
+
+base product Polyhedron 137 =
+
+  title             "Polyhedron 137";
+  leader            "";
+  author            "Stephen H. Jay",
+                    "Gibson, Ed",
+                    "Greenwood, Ed",
+                    "Buehler, Carl",
+                    "Paul Gosselin",
+                    "Mark Barnabo",
+                    "William James Cuffe",
+                    "Patricia A. Jackson",
+                    "Waller, Danny J.",
+                    "Gregory Detwiler",
+                    "Lloyd Brown III";
+  editor            "Sean Glenn";
+  management        "TSR, Inc." Scout Ranger Service,
+                    "Ryan Dancey" Native Guide,
+                    "Robert Wiese" Lantern Bearer,
+                    "Woodcock, Donna" Sherpa,
+                    "Mark Painter" Sherpa;
+  date              July 1999;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            19;
+  number            4;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 137 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 138
+
+base product Polyhedron 138 =
+
+  title             "Polyhedron 138";
+  leader            "";
+  author            "Mason Porter",
+                    "Steve Jay",
+                    "Gibson, Ed",
+                    "Greenwood, Ed",
+                    "Matthew Sernett",
+                    "Mike Selinker",
+                    "Woollums, Erica";
+  editor            "Mona, Erik";
+  management        "TSR, Inc." publisher,
+                    "Ryan Dancey" brand management,
+                    "Robert Wiese" RPGA coordination,
+                    "Woodcock, Donna" production,
+                    "Mark Painter" art direction,
+                    "Sean Glenn" graphic design;
+  date              October 1999;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            19;
+  number            5;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 138 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 139
+
+base product Polyhedron 139 =
+
+  title             "Polyhedron 139";
+  leader            "";
+  author            "Steve Jay",
+                    "Keith Hoffman",
+                    "Greenwood, Ed",
+                    "Gary S. Watkins",
+                    "Lance Hawvermale",
+                    "Robert Wiese",
+                    "Phil Tobin";
+  editor            "Mona, Erik";
+  management        "TSR, Inc." publisher,
+                    "Ryan Dancey" brand management,
+                    "Robert Wiese" RPGA coordination,
+                    "Woodcock, Donna" production,
+                    "Mark Painter" art direction,
+                    "Sean Glenn" graphic design;
+  date              December 1999;
+  pages             32;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            19;
+  number            6;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 139 of Polyhedron.".
+
+
+#.....
+#----- Polyhedron 144
+
+base product Polyhedron 144 =
+
+  title             "Polyhedron 144";
+  leader            "";
+  author            "Richard Baker",
+                    "Jum Butler",
+                    "Greenwood, Ed",
+                    "Mark H. Waldron",
+                    "Gregory Detwiler",
+                    "Matthew Hancock",
+                    "Geoff Skellams",
+                    "Keith Hoffman",
+                    "Wes Nicholson",
+                    "Tom Ko",
+                    "van Dam, Ann",
+                    "Ian Richards",
+                    "Simon Taylor",
+                    "Tom Harrison",
+                    "Mona, Erik",
+                    "Gibson, Ed",
+                    "Sean Connor";
+  cartography       "Kauth, Dennis";
+  illustrations     "Matt Wilson",
+                    "Vince Locke",
+                    "Arellano, Carlo",
+                    "Ted Beargeon",
+                    "Michael Kaluta";
+  date              October 2000;
+  pages             64;
+  system            D&D 3rd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            20;
+  number            5;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 144 of Polyhedron. This is the first global, color issue.".
+
+
+#.....
+#----- Polyhedron 145
+
+base product Polyhedron 145 =
+
+  title             "Polyhedron 145";
+  leader            "";
+  author            "Wise, David",
+                    "Wes Nicholson",
+                    "van Dam, Ann",
+                    "Ian Richards",
+                    "Richards, David",
+                    "Watson, Bob",
+                    "John Bacon",
+                    "Stephen Radney-Macfarland",
+                    "Matt Brebner",
+                    "Lisa Gordon",
+                    "Greenwood, Ed",
+                    "Simon Taylor",
+                    "Tom Harrison",
+                    "Mona, Erik",
+                    "Gibson, Ed",
+                    "Lisa A. Chippendale",
+                    "Mark Middleton",
+                    "Massimo Bianchini";
+  illustrations     "Granov, Adi",
+                    "Vince Locke",
+                    "Ted Beargeon";
+  date              December 2000;
+  pages             64;
+  system            D&D 3rd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            20;
+  number            6;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 144 of Polyhedron. This is the second global, color issue.".
+
+
+#.....
+#----- Polyhedron 146
+
+base product Polyhedron 146 =
+
+  title             "Polyhedron 146";
+  leader            "";
+  author            "Wise, David",
+                    "Stephen Radney-Macfarland",
+                    "Matthew Sernett",
+                    "Matt Hancock",
+                    "Greenwood, Ed",
+                    "Ian Richards",
+                    "Wes Nicholson",
+                    "van Dam, Ann",
+                    "Simon Taylor",
+                    "Mona, Erik",
+                    "Gibson, Ed";
+  illustrations     "Vince Locke";
+  date              March 2001;
+  pages             64;
+  system            D&D 3rd;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  volume            21;
+  number            1;
+  series            Polyhedron;
+  worlds            Generic;
+  description
+  "Issue 146 of Polyhedron.".
+
+
+#.....
+
+#----- Polyhedron 149
+
+base product Polyhedron 149 =
+
+  title             "Polyhedron 149";
+  leader            "";
+  subtitle          "Pulp Heroes";
+  author            "Stan!",
+                    "Noonan, David",
+                    "Chambers, Michael",
+                    "Pensingstoke, Sir Ian",
+                    "Hammerton, Karl",
+                    "Fox-Renard, Sylvia",
+                    "Savage, Marko",
+                    "McKill, Archibald",
+                    "Chambers, Dirk",
+                    "Hamilton, Munro H.";
+  editor            "Mona, Erik";
+  cover             "Harris, Tony";
+  illustrations     "Stan!",
+                    "Glenn, Sean" logos and ad design,
+                    "Buckley, Leanne" chapter illustration,
+                    "Andrasofszky, Kalman" class illustration,
+                    "Pace, Richard" interior illustration;
+  typography        "James, Andy";
+  management        "Wilson, Johnny" publisher;
+  date              January 2002;
+  pages             62;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            149;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook,
+                    Psionics Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "January 2002 issue of polyhedron (together with Dungeon 90).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 150
+
+base product Polyhedron 150 =
+
+  title             "Polyhedron 150";
+  leader            "";
+  subtitle          "Shadow Chasers";
+  author            "Stan!",
+                    "Mona, Erik",
+                    "Richards, Ian",
+                    "Gibson, Ed",
+                    "Slavicsek, Bill";
+  editor            "Mona, Erik";
+  cover             "Mahfood, Jim";
+  illustrations     "Stan!",
+                    "Andrasofszky, Kalman",
+                    "Buckley, Leanne",
+                    "Mahfood, Jim",
+                    "Glenn, Sean" logo design,
+                    "Detwiler, Dennis",
+                    "James, Andy" graphic design,
+                    "Mona, Erik" art direction;
+  date              March 2002;
+  pages             62;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            150;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "March 2002 issue of polyhedron (together with Dungeon 91).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 151
+
+base product Polyhedron 151 =
+
+  title             "Polyhedron 151";
+  leader            "";
+  subtitle          "Spelljammer - Shadow of the Spider Moon";
+  author            "Stan!",
+                    "Mona, Erik",
+                    "Richards, Ian",
+                    "Wise, David",
+                    "Collins, Andy";
+  editor            "Mona, Erik";
+  cover             "Schomburg, Scott";
+  illustrations     "Stan!",
+                    "Schomburg, Scott",
+                    "Glenn, Sean" logo design,
+                    "Detwiler, Dennis",
+                    "James, Andy" graphic design,
+                    "Mona, Erik" art direction;
+  date              May 2002;
+  pages             70;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            151;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "May 2002 issue of polyhedron (together with Dungeon 92).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 152
+
+base product Polyhedron 152 =
+
+  title             "Polyhedron 152";
+  leader            "";
+  subtitle          "Thunder Ball Rally";
+  author            "Stan!",
+                    "Mona, Erik",
+                    "Richards, Ian",
+                    "Upchurch, Wil",
+                    "Redman, Rich";
+  editor            "Mona, Erik";
+  cover             "Hampton, Justin";
+  illustrations     "Stan!",
+                    "Rams, Vinod",
+                    "Schomburg, Scott",
+                    "Fowler, Tom",
+                    "Perez, Ramon",
+                    "Carlisle, Jeffrey",
+                    "Trevas, Chris",
+                    "Hunter, Kyle" art direction;
+  date              July 2002;
+  pages             69;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            152;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "July 2002 issue of polyhedron (together with Dungeon 93).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 153
+
+base product Polyhedron 153 =
+
+  title             "Polyhedron 153";
+  leader            "";
+  subtitle          "Omega World";
+  author            "Stan!",
+                    "Thompson, Hunter S.",
+                    "Wiese, Robert",
+                    "Redman, Rich",
+                    "Tweet, Jonathan";
+  editor            "Mona, Erik";
+  cover             "Puddnhead";
+  illustrations     "Stan!",
+                    "Buckley, Leanne",
+                    "Barrum, Joachim",
+                    "Carlisle, Jeffrey",
+                    "Noguchi, Mikael",
+                    "Perez, Ramon",
+                    "Waters, Anthony",
+                    "Glenn, Sean" logo design,
+                    "Hunter, Kyle" art direction;
+  date              September 2002;
+  pages             61;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            153;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "September 2002 issue of polyhedron (together with Dungeon 94).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 154
+
+base product Polyhedron 154 =
+
+  title             "Polyhedron 154";
+  leader            "";
+  subtitle          "Mecha Crusade";
+  author            "Stan!",
+                    "Wiese, Robert",
+                    "Mearls, Mike",
+                    "Noonan, David",
+                    "Tweet, Jonathan";
+  editor            "Mona, Erik";
+  cover             "Martiniere, Stephan";
+  illustrations     "Stan!",
+                    "Shaw, Stan",
+                    "Carlisle, Jeffrey" component illustrations,
+                    "Dogan, Omar",
+                    "UDON",
+                    "Parker, Jake",
+                    "Hattn, Matthew",
+                    "Noguchi, Mikael",
+                    "Lawrence, Chester Laquaian",
+                    "Jansson, Niklas",
+                    "Trevas, Christopher",
+                    "Grun, Chris",
+                    "Detwiler, Dennis",
+                    "Hunter, Kyle" art direction;
+  date              September 2002;
+  pages             61;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            154;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "November 2002 issue of polyhedron (together with Dungeon 95).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 155
+
+base product Polyhedron 155 =
+
+  title             "Polyhedron 155";
+  leader            "";
+  subtitle          "Gene Tech";
+  author            "Stan!",
+                    "Richards, Ian",
+                    "Redman, Rich";
+  editor            "Mona, Erik";
+  cover             "Van Fleet, John";
+  illustrations     "Stan!",
+                    "Parker, Jake",
+                    "Ormston, Dean",
+                    "Carlisle, Jeffrey",
+                    "Fowler, Tom",
+                    "Noguchi, Mikael",
+                    "Huddleston, Michael",
+                    "Treva, Chris",
+                    "Detwiler, Dennis",
+                    "Hunter, Kyle" art direction;
+  date              January 2003;
+  pages             61;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            155;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "January 2003 issue of polyhedron (together with Dungeon 96).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 156
+
+base product Polyhedron 156 =
+
+  title             "Polyhedron 156";
+  leader            "";
+  subtitle          "V for Victory";
+  author            "Stan!",
+                    "Wilson, Johnny L.",
+                    "Richards, Ian",
+                    "Redman, Rich",
+                    "Pramas, Chris";
+  editor            "Mona, Erik";
+  cover             "Fowler, Tom";
+  illustrations     "Stan!",
+                    "Fowler, Tom",
+                    "Detwiler, Dennis",
+                    "Hunter, Kyle" art direction;
+  date              January 2003;
+  pages             65;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            156;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "March 2003 issue of polyhedron (together with Dungeon 97).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 157
+
+base product Polyhedron 157 =
+
+  title             "Polyhedron 157";
+  leader            "";
+  subtitle          "Gun-Fu Fighting";
+  author            "Stan!",
+                    "Mona, Erik",
+                    "Weaver, Derrel",
+                    "Thompson, Rodney",
+                    "Wiker, J.D.",
+                    "Broadhurst, Creighton",
+                    "Radney-MacFarland, Stephan",
+                    "Bulmahn, Jason",
+                    "Christ, David";
+  editor            "Mona, Erik";
+  cover             "Parker, Jake";
+  cartography       "Zipse, Craig",
+                    "West, Christopher";
+  illustrations     "Stan!",
+                    "Adorjany, Attila",
+                    "P\acute{e}rez, Ram\grave{o}n}",
+                    "Carlisle, Jeffrey",
+                    "Hendee, David",
+                    "Hilliker, Phil",
+                    "Hunter, Kyle",
+                    "Hunter, Kyle S." art direction;
+  date              May 2003;
+  pages             41;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            157;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "May 2003 issue of polyhedron (together with Dungeon 98).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 158
+
+base product Polyhedron 158 =
+
+  title             "Polyhedron 158";
+  leader            "";
+  subtitle          "Hijinx";
+  author            "Stan!",
+                    "Quick, Jeff";
+  editor            "Mona, Erik";
+  cover             "Martin, Jason",
+                    "McCollum, Heather";
+  cartography       "West, Christopher";
+  illustrations     "Stan!",
+                    "Crosland, Dave",
+                    "Parker, Jake",
+                    "Morse, C. Scott",
+                    "Shaw, Stan",
+                    "Parker, Rey",
+                    "Hunter, Kyle",
+                    "Hunter, Kyle S." art direction;
+  date              June 2003;
+  pages             41;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            158;
+  series            Polyhedron;
+  price             $ 5.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "June 2003 issue of polyhedron (together with Dungeon 99).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 160
+
+base product Polyhedron 160 =
+
+  title             "Polyhedron 160";
+  leader            "";
+  subtitle          "Iron Lords of Jupiter";
+  author            "Richards, Ian",
+                    "Stan!",
+                    "Cook, Monte J.",
+                    "Lizard";
+  editor            "Mona, Erik";
+  cover             "Janssen, Niklas";
+  cartography       "West, Christopher";
+  illustrations     "Stan!",
+                    "Trevas, Christopher",
+                    "Fowler, Tom",
+                    "Carlisle, Jeffrey",
+                    "Adorjany, Attila",
+                    "Hendee, David",
+                    "Tamai, Tony",
+                    "Hunter, Kyle",
+                    "Hunter, Kyle S." art direction;
+  date              August 2003;
+  pages             49;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            160;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "August 2003 issue of polyhedron (together with Dungeon 101).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 161
+
+base product Polyhedron 161 =
+
+  title             "Polyhedron 161";
+  leader            "";
+  subtitle          "Pulp Heroes";
+  author            "West, Christopher",
+                    "Noonan, David",
+                    "Lizard";
+  editor            "Mona, Erik";
+  cover             "Janssen, Niklas";
+  cartography       "West, Christopher";
+  illustrations     "Stan!",
+                    "Carlisle, Jeffrey",
+                    "Kaluta, Michael",
+                    "Pace, Richard",
+                    "Buckley, Leanne",
+                    "Fowler, Tom",
+                    "Morey, Lee",
+                    "Trevas, Christopher",
+                    "Hill, Jonathan",
+                    "Hunter, Kyle",
+                    "Hunter, Kyle S." art direction;
+  date              September 2003;
+  pages             49;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            161;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "September 2003 issue of polyhedron (together with Dungeon 102).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 162
+
+base product Polyhedron 162 =
+
+  title             "Polyhedron 162";
+  leader            "";
+  subtitle          "Pulp Heroes";
+  author            "Stan!",
+                    "Broadhurst, Creighton",
+                    "Maguire, Andrew",
+                    "Kerrigan, Stuart",
+                    "Looby, Paul",
+                    "Thompson, Rodney",
+                    "West, Christopher";
+  editor            "Mona, Erik";
+  cover             "Janssen, Niklas";
+  cartography       "West, Christopher";
+  illustrations     "Stan!",
+                    "Fowler, Tom",
+                    "Hou, Andrew",
+                    "Tsang, Arnold",
+                    "Dogan, Omar",
+                    "Udon Entertainement",
+                    "",
+                    "Trevas, Christopher",
+                    "Hill, Jonathan",
+                    "Hunter, Kyle",
+                    "Hunter, Kyle S." art direction;
+  date              October 2003;
+  pages             33;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            162;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 103).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 163
+
+base product Polyhedron 163 =
+
+  title             "Polyhedron 163";
+  leader            "";
+  subtitle          "Pulp Heroes";
+  author            "Stan!",
+                    "Richards, Ian",
+                    "Parent, M Jason",
+                    "Holian, Gary";
+  editor            "Mona, Erik";
+  cover             "P\acute{e}rez, Ram\grave{o}n";
+  cartography       "West, Christopher";
+  illustrations     "Stan!",
+                    "Vedder, Eric",
+                    "Hunter, Kyle",
+                    "Hunter, Kyle S." art direction;
+  date              November 2003;
+  pages             30;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            163;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 103).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 164
+
+base product Polyhedron 164 =
+
+  title             "Polyhedron 164";
+  leader            "";
+  subtitle          "Deathnet";
+  author            "Baker, Keith";
+  editor            "Mona, Erik",
+                    "Jacobs, James" associate editor;
+  cover             "P\acute{e}rez, Ram\grave{o}n";
+  illustrations     "Hill, Jonathan",
+                    "Glenn, Sean" art direction;
+  date              December 2003;
+  pages             42;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            164;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 103).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 165
+
+base product Polyhedron 165 =
+
+  title             "Polyhedron 165";
+  leader            "";
+  subtitle          "Deathnet";
+  author            "Radney-MacFarlan, Stephen",
+                    "Bulmahn, Jason",
+                    "Looby, Paul",
+                    "Kerrigan, Stuart",
+                    "Astleford, Gary",
+                    "West, Christopher";
+  editor            "Mona, Erik",
+                    "Jacobs, James" associate editor;
+  cover             "P\acute{e}rez, Ram\grave{o}n";
+  cartography       "Carlisle, Jeffrey",
+                    "Hunter, Kyle",
+                    "West, Christopher";
+  illustrations     "Stan!",
+                    "UDON",
+                    "Hunter, Kyle Stanley",
+                    "Ryman, James",
+                    "Edwards, Tommy Lee",
+                    "Carlisle, Jeffrey",
+                    "Glenn, Sean" art direction;
+  date              January 2004;
+  pages             32;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            165;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 106).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 166
+
+base product Polyhedron 166 =
+
+  title             "Polyhedron 166";
+  leader            "";
+  subtitle          "";
+  author            "Richards, Ian",
+                    "Davis, Graeme";
+  editor            "Mona, Erik",
+                    "Jacobs, James" associate editor;
+  cover             "St. Goddard, Aaron";
+  cartography       "West, Christopher";
+  illustrations     "Ryman, James",
+                    "Glenn, Sean" art direction;
+  date              February 2004;
+  pages             28;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            166;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  requirements      Player's Handbook;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 107).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 167
+
+base product Polyhedron 167 =
+
+  title             "Polyhedron 167";
+  leader            "";
+  subtitle          "Dark Matter - Shades of Grey";
+  author            "Collins, Andy";
+  editor            "Mona, Erik",
+                    "Jacobs, James" associate editor;
+  cover             "Wood, Ashley";
+  cartography       "West, Christopher";
+  illustrations     "Wood, Ashley",
+                    "Glenn, Sean" art direction;
+  date              March 2004;
+  pages             30;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            167;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 108).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 168
+
+base product Polyhedron 168 =
+
+  title             "Polyhedron 168";
+  leader            "";
+  subtitle          "";
+  author            "Thompson, Rodney",
+                    "Looby, Paul";
+  editor            "Mona, Erik",
+                    "Jacobs, James" associate editor;
+  cover             "Smith, Andy";
+  cartography       "West, Christopher";
+  illustrations     "Smith, Andy",
+                    "Atiye, Michael" colors,
+                    "Hunter, Kyle Stanley",
+                    "Glenn, Sean" art direction;
+  date              April 2004;
+  pages             28;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            168;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 109).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 169
+
+base product Polyhedron 169 =
+
+  title             "Polyhedron 169";
+  leader            "";
+  subtitle          "";
+  author            "Noonan, David",
+                    "Looby, Paul";
+  editor            "Mona, Erik",
+                    "Jacobs, James" associate editor;
+  cover             "Ryman, James";
+  cartography       "Lazzaretti, Rob";
+  illustrations     "Trevas, Chris",
+                    "Ryman, James",
+                    "Fowler, Tom",
+                    "Carlisle, Jeffrey",
+                    "Glenn, Sean" art direction;
+  date              May 2004;
+  pages             32;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            169;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 110).";
+  short description "".
+
+
+#.....
+#----- Polyhedron 170
+
+base product Polyhedron 170 =
+
+  title             "Polyhedron 170";
+  leader            "";
+  subtitle          "";
+  author            "Richards, Ian",
+                    "Handley, Rich",
+                    "Pena, Abel G.",
+                    "Noonan, David";
+  editor            "Mona, Erik",
+                    "Jacobs, James" associate editor;
+  cover             "Carlisle, Jeffrey";
+  cartography       "West, Christopher";
+  illustrations     "Carlisle, Jeffrey",
+                    "Fowler, Tom",
+                    "Glenn, Sean" art direction;
+  date              June 2004;
+  pages             22;
+  system            d20;
+  audience          All;
+  product type      Magazine;
+  style             Soft Cover;
+  producer          WTC;
+  number            170;
+  series            Polyhedron;
+  price             $ 6.99;
+  contents          Book;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Issue of polyhedron (together with Dungeon 110).";
+  short description "".
+
+
+#.....

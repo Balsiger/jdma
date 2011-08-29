@@ -1,0 +1,685 @@
+#
+# File:         Accessories.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  These are the Al-Qadim accessories
+#
+# Worlds:       Al-Qadim
+#
+#
+
+#----- TSR 1077
+
+base product TSR 1077 =
+
+  title             "Land of Fate";
+  leader            "";
+  author            "Grubb, Jeff",
+                    "Hayday, Andria";
+  editor            "Hayday, Andria",
+                    "Boomgarden, Karen S.";
+  cover             "Fields, Fred",
+                    "Mayo, Henry";
+  cartography       "III, David C. Sutherland",
+                    "Kauth, Dennis";
+  illustrations     "Waller, Karl",
+                    "Raab, Robin";
+  typography        "Lokotz, Angelika",
+                    "Knecht, John",
+                    "Martin, Julia";
+  management        "Cooper, Peggy" art coordination,
+                    "Barnett, Dee" cover design,
+                    "Lokotz, Angelika" production,
+                    "Knecht, John" production,
+                    "Martin, Julia" production,
+                    "Hayday, Andria" page design and coordination,
+                    "Tabat, Stephanie" page design;
+  date              August 1992;
+  ISBN              1-56076-329-9;
+  pages             188;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  contents          Book "Adventurer's Guide to Zakhara",
+                    Booklet "Fortunes and Fates",
+                    Card "color" 12,
+                    Misc "clear plastic measuring overlay",
+                    Poster "color map" 3,
+                    Page "Monstrous Compendium" 16;
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog93;
+  description       "Ride a \Item{magic carpet} to the land of a thousand and one adventures!
+                    Visit spired cities, lush oases, and mysterious isles set in glittering
+                    seas. Meet sultans and sheikhs. See \Monster{genies} and
+                    \Monster{giants}. Discover a trove of new magical treasures! Whether your
+                    character starts from the compatible \Place{Forgotten Realms} game setting or
+                    begins the journey elsewhere, this box contains everything a bold adventurer
+                    needs to explore the exotic \Place{Al-Qadim} campaign world.
+                    Contents:
+                    \list
+                    {2 guidebooks totaling 192 pages}
+                    {12 full-color reference cards}
+                    {8 Monstrous Compendium sheets}
+                    {3 full-color poster maps}
+                    {1 clear map overlay for measuring distance}".
+
+
+#.....
+#----- TSR 1091
+
+base product TSR 1091 =
+
+  title             "City of Delights";
+  leader            "";
+  author            "Prusa, Tom",
+                    "Beach, Tim",
+                    "Kurtz, Steve";
+  editor            "Breault, Mike";
+  cover             "Ruppel, Robh";
+  cartography       "III, David C. Sutherland",
+                    "Felegy, Cynthia K.";
+  illustrations     "Waller, Karl",
+                    "Raab, Robin";
+  typography        "O'Keefe, Gaye";
+  management        "Beach, Tim" project coordination,
+                    "Hayday, Andria" page design,
+                    "Tabat, Stephanie" page design,
+                    "Barnett, Dee" cover design,
+                    "Cooper, Peggy" art coordination,
+                    "O'Keefe, Gaye" production;
+  date              July 1993;
+  ISBN              1-56076-589-5;
+  pages             192;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  contents          Booklet "Gem of Zakhara",
+                    Booklet "Golden Huzuz",
+                    Page "Monstrous Compendium" 16,
+                    Sheet "color cardsheet" 8,
+                    Misc "clear plastic measuring overlay";
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description       "Golden \Place{Huzuz}, the \Place{City of Delights}, is the 'heart of the
+                    heart' of the enlightened lands. It is the religious and political center of
+                    \Place{Zakhara} and, say its inhabitants, the most beautiful city in the
+                    entire world. But beneath the beauty lies mystery, for the court of the
+                    \NPC{Grand Caliph} is as full of intrigue as the \Place{Grand Bazaar} is full
+                    of adventures waiting to happen. Come, explore the delights and dangers of
+                    \Place{Huzuz the Golden}, heart of the \Place{Al-Qadim} campaign world.
+                    Contents:
+                    \list
+                    {2 guidebooks totaling 192 pages}
+                    {8 full-color reference cards}
+                    {8 Monstrous Compendium sheets}
+                    {1 clear map overlay for measuring distance}
+                    {2 full-color poster map sheets!}".
+
+
+#.....
+
+#----- TSR 2126
+
+base product TSR 2126 =
+
+  title             "Arabian Adventures";
+  leader            "";
+  author            "Grubb, Jeff",
+                    "Hayday, Andria";
+  cover             "Easley, Jeff";
+  cartography       "III, David C. Sutherland";
+  illustrations     "Waller, Karl",
+                    "Bober, Richard",
+                    "Fields, Fred",
+                    "Mayo, Henry",
+                    "Barnard, Bryn",
+                    "Heyer, Carol";
+  typography        "Hayday, Andria",
+                    "Tabat, Stephanie",
+                    "Barnett, Dee",
+                    "Feggestad, Sarah";
+  management        "Cooper, Peggy" art coordinator,
+                    "Knecht, John" production;
+  date              1992;
+  ISBN              1-56076-358-2;
+  pages             160;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Soft Cover;
+  price             $18.00;
+  contents          Book;
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description       "\Item{Magic carpets}, ghoulish \Monster{vixens}, \Monster{genies} rising
+                    from the sand in a whirlwind of smoke and fire---such wonders, spun into
+                    tales by the fable \NPC{Scheherazade}, enchanted a king for a thousand and
+                    one nights.
+                    The \Place{Al-Qadim} campaign will enchant role-players for a thousand and
+                    one more.
+                    You are about to discover an exotic realm inspired by the tales of
+                    \NPC{Sindbad}, \NPC{Ali Baba}, and other classics from the \emph{Arabian
+                    Nights}. The first in a series of products, this volume features everything
+                    DMs and players need to launch the \Place{Al-Qadim}\footnote{pronounced
+                    'ahl-kah-DEEM', meaning 'the ancient'} campaign:
+                    \list
+                    {New rules for adventure, including desert survival, turning the hand
+                    of Fate, and averting the mysterious power of the evil eye}
+                    {New roles to play: bold desert raiders, swashbuckling corsairs,
+                    clandestine slayers, mystic clerics, wizards of fire, sorcerers who
+                    command the genies, and more---over 20 roles in all!}
+                    {New proficiencies, from camel-riding to haggling at the bazaar}
+                    {New spells and a unique realm of magic, featuring the provinces of
+                    flame, wind, sea, and sand}
+                    {An introduction to \Place{Zakhara}, the \Place{Land of Fate}, a new
+                    setting for the \Place{Al-Qadim} campaign.}
+                    \large{Your flying carped awaits: step aboard and let the magical journey
+                    begin}".
+
+
+#.....
+#----- TSR 2129
+
+base product TSR 2129 =
+
+  title             "Monstrous Compendium";
+  leader            "Al-Qadim Appendix";
+  date              1992;
+  ISBN              1-56076-370-1;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Monster Compendium;
+  number            Volume 13;
+  series            Monstrous Compendium;
+  price             $10.95;
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue93,
+                    catalog93;
+  description       "A lot of monsters.";
+  synonyms          "MC13".
+
+
+#.....
+
+#----- TSR 9366
+
+base product TSR 9366 =
+
+  title             "Golden Voyages";
+  leader            "";
+  author            "Cook, David 'Zeb'";
+  editor            "Slavicsek, Bill";
+  cover             "Easley, Jeff";
+  cartography       "III, Dave Sutherland";
+  illustrations     "Waller, Karl";
+  date              1992;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $18.00;
+  contents          Box "contains the rest",
+                    Booklet "Book 1: Home Port: Wherein the Tale Begins",
+                    Booklet "Book 2: Al-Sartan",
+                    Booklet "Book 3: Nada al-Hazan",
+                    Booklet "Book 4: The Djinni's Claws",
+                    Booklet "Book 5: The Steaming Isles",
+                    Booklet "Book 6: Map Booklet",
+                    Poster "color map",
+                    Sheet "monstrous compendium" 16;
+  requirements      ;
+  worlds            Al-Qadim;
+  description       "\large{Who amon you dares to challenge the high seas?}
+                    Inspired by the tales of \NPC{Sindbad}, \Product{Golden Voyages} provides the
+                    source material and adventures needed to run a mini-campaign on the
+                    \Place{Crowded Sea}. Detailed backgrounds, perilous locations, and wondrous
+                    NPCs populate the enchanted seas. Player characters will discover wildly
+                    different adventures as they sail from place to place.
+                    \Product{Golden Voyages} includes: six booklets filled with mini-adventures,
+                    an overall framing adventure, expanded rules on ships and sailing, details
+                    and background concerning topography, tribes, and new locations, and plenty
+                    of maps and player handouts; Monstrous Compendium pages detailing new
+                    monsters; a custom DM screen for use in all \Product{Al-Qadim} games; and a
+                    poster map of the \Place{Crowded Sea}.";
+  synonyms          "ALQ1".
+
+
+#.....
+
+#----- TSR 9431
+
+base product TSR 9431 =
+
+  title             "Assassin Mountain";
+  leader            "";
+  author            "Baur, Wolfgang H.";
+  editor            "Carter, Michele",
+                    "Brown, Anne K.";
+  cover             "Easley, Jeff";
+  cartography       "III, Dave Sutherland",
+                    "Knecht, John",
+                    "Raab, Robin";
+  illustrations     "Waller, Karl";
+  typography        "Lokotz, Angelika";
+  management        "";
+  date              February 1993;
+  ISBN              1-56076-564-X;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $18.00;
+  contents          Booklet "Holy Slayer Sourcebook",
+                    Booklet "Assassin Mountain",
+                    Sheet "Monstrous Compendium insert" 4,
+                    Poster "color map",
+                    Card "color" 6;
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93W,
+                    catalog93;
+  description       "The \Group{Assassins of \Place{Zakhara}} strike in silence and from
+                    darkness, certain of their faith and the rightness of their cause. The
+                    slayers carry out the orders of their \NPC{Grandfather assassin}, never
+                    questioning his wisdom or direction.
+                    \Product{Assassin Mountain} is the DM's guide to the secrets and objectives
+                    of the assassins.
+                    Captured inside this Sourcebox, you'll find new information about the holy
+                    slayers of \Place{Zakhara}, from their methods, tools, and secret structure
+                    to the means used to unsure the silence of their members.
+                    The adventures within pit the player characters against the slayers of the
+                    \Group{Everlasting}, one of the most powerful and influential sects in
+                    \Place{Zakhara}. The web of deceit and terror spun by the \Group{Everlasting}
+                    weaves its way into the city of \Place{Liham}, entangling the PCs and leading
+                    them to the perils of the assassins' stronghold.
+                    \Product{Assassin Mountain} includes:
+                    \list
+                    {two booklets filled with source material on the holy slayers of
+                    \Place{Zakhara} and adventures with the \Group{Everlasting};}
+                    {six cardsheets;}
+                    {\Product{Monstrous Compendium} pages detailing new \Monster{genies}
+                    and other monsters; and}
+                    {a poster map of \Place{Jabal Sarahin}, the fortress of the
+                    \Group{Everlasting}.}
+                    Recommended for use with the \Product{Arabian Adventures} rulebook.";
+  synonyms          "ALQ2".
+
+
+#.....
+#----- TSR 9432
+
+base product TSR 9432 =
+
+  title             "Dozen and One Adventures";
+  leader            "A";
+  author            "Kurtz, Steve";
+  editor            "Pike-Brown, Richard",
+                    "Winter, Steve";
+  cover             "Fields, Fred";
+  cartography       "III, David Sutherland";
+  illustrations     "Waller, Karl";
+  typography        "Lokotz, Angelika";
+  date              April 1993;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  price             $18.00;
+  contents          Booklet "Campaign Book",
+                    Booklet "Muluk, City of Kings",
+                    Card "color" 6,
+                    Sheet "Monstrous Compendium inserts" 4,
+                    Poster "color map";
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93W,
+                    catalog93;
+  description       "\large{High Adventure is Your Companion Throughout the \Place{Land of Fate}}
+                    There is no escaping Fate in the world of \Place{Zakhara}, home of caliphs
+                    and favored land of the \Monster{genies}. And the Fate of brave adventurers
+                    is to travel the wide realms, vanquishing the unrighteous and protecting the
+                    meek.
+                    \Product{A Dozen and One Adventures} leads the characters from bustling
+                    \Place{Muluk}, \Place{City of Kings}, to the mysterious \Place{citadel of
+                    flame}, and many points between. They may meet the king who never died, the
+                    fish-people of the \Place{Great Sea}, and other wonders too amazing to
+                    mention.
+                    This adventure sourcebox contains a 64-page booklet of 13 adventures, a
+                    32-page campaign guide describing \Place{Muluk} and \Place{Krak al-Niraan},
+                    six map cards, and four \Product{MC} insert pages featuring NPCs.
+                    Recommended for use with the \Product{Arabian Adventures} rulebook.";
+  synonyms          "ALQ3".
+
+
+#.....
+#----- TSR 9433
+
+base product TSR 9433 =
+
+  title             "Secrets of the Lamp";
+  leader            "";
+  author            "Baur, Wolfgang H.";
+  editor            "Pickens, Jon";
+  cover             "Heyer, Carol";
+  cartography       "III, David Sutherland";
+  illustrations     "Waller, Karl";
+  typography        "O'Keefe, Gaye";
+  date              November 1993;
+  ISBN              1-56076-647-6;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $18.00;
+  contents          Booklet "Genie Lore",
+                    Booklet "Adventure Book",
+                    Card "color" 6,
+                    Sheet "Monstrous Compendium insert" 4,
+                    Poster "color map";
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description       "\large{Exciting Adventures in the \Place{City of Brass} And Other
+                    \Monster{Genie} Lands!}
+                    Revealed within are the greatest secrets of the \Monster{genies}: their
+                    magics, their rulers, and their homelands. From the \Place{Citadel of Ice and
+                    Steel} to the \Place{Great Dismal Delve}, the works of \Monster{geniekind}
+                    are as wondrous as they are magnificent.  Tour the \Place{City of Brass},
+                    from its golden towers to its brazen streets, foil the evil \Monster{yak men}
+                    and their \Monster{dao} servants, travel on the desert whirlwinds of the
+                    \Monster{jann}. Learn the legends and secret history of the \Monster{genies},
+                    their cities, their foibles, and their feuds.
+                    \Product{Secrets of the Lamp} includes a 64-page sourcebook about
+                    \Monster{genies}, a 32-page booklet of adventures set in \Place{Zakhara} and
+                    the \Place{City of Brass}, a full-color poster map, six cards showing details
+                    of the \Place{City}, and four \Product{Monstrous Compendium} pages that
+                    introduce new \Monster{genies} and other elemental creatures.";
+  synonyms          "ALQ4".
+
+
+#.....
+#----- TSR 9440
+
+base product TSR 9440 =
+
+  title             "Ruined Kingdoms";
+  leader            "";
+  author            "Kurtz, Steven";
+  editor            "Pike-Brown, Richard",
+                    "Rateliff, John D.";
+  cover             "Fields, Fred";
+  cartography       "III, David C. Sutherland";
+  illustrations     "Waller, Karl";
+  typography        "Kerkstra, Nancy J.";
+  date              February 1994;
+  pages             72;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  price             $18.00;
+  contents          Booklet "Campaign Guide",
+                    Booklet "Adventure Book",
+                    Booklet "Monstrous Compendium",
+                    Card "color" 6,
+                    Poster "color map";
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue94;
+  description       "\large{Unveil the forbidden secrets of \Place{Nog} and \Place{Kadar}!}
+                    The \Place{Nogaro River} has seen the rise and fall of countless empires,
+                    unequaled in their evil and terror. Buried but not destroyed, their legacy
+                    lives on, shrouded by the tangled jungle and by time itself.
+                    With \Product{Ruined Kingdoms}, bold explorers can at last lift the veil of
+                    oblivion and unravel the mysteries of a dark and sinister past. Inside you'll
+                    discover:
+                    \list
+                    {A 32-page campaign booklet describing the \Place{Ruined Kingdoms} and
+                    their many secrets.}
+                    {A 64-page book packed with adventures---nine plots of intrigue and
+                    danger that transport player characters from \Place{Dihliz} to
+                    \Place{Afyal} and into the heat of the ruin-choked jungle. Adventurers
+                    face \Monster{yak-men}, \Monster{genies}, and \Monster{giants}, and
+                    unearth artifacts of awesome magical power.}
+                    {A 8-page booklet filled with villainous women and deadly reptilian
+                    monsters.}
+                    {Six cardstock sheets featuring detailed maps and player aids.}
+                    {A stunning poster map of eastern \Place{Zakhara}, depicting the
+                    twisting valleys and ancient capitals of the \Place{Ruined Kingdoms}.}
+                    Recommended for use with the \Product{Arabian Adventures} rulebook.";
+  synonyms          "ALQ5".
+
+
+#.....
+#----- TSR 9449
+
+base product TSR 9449 =
+
+  title             "Corsairs of the Great Sea";
+  leader            "";
+  author            "Rea, Nicky";
+  editor            "Rateliff, John D.";
+  cover             "Fields, Fred";
+  cartography       "III, David C. Sutherland";
+  illustrations     "Waller, Karl";
+  typography        "Lokotz, Angelika";
+  management        "Wells, Janis" proofreading;
+  date              August 1994;
+  ISBN              1-56076-867-3;
+  pages             104;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $18.00;
+  contents          Booklet "Campaign Guide",
+                    Booklet "Adventures in the Corsair Domains",
+                    Booklet "Monstrous Compendium",
+                    Card "color" 6,
+                    Poster "color map";
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue94;
+  description       "\large{Set Sail with the \Group{Pirates of Chaos}!}
+                    A thousand welcomes, noble friend! I see your eye is as keen as the
+                    \Monster{eagle} and your mind as sharp as my \Item{jambiya}, for you hold in
+                    your hand a great treasure. This box contains everything needed to launch an
+                    epic adventure featuring corsairs and mamluks:
+                    \list
+                    {A stunning poster map of the \Place{Corsair Domains} and
+                    \Place{Zakhara}'s northern shores.}
+                    {Six full-color cardstock sheets containing maps and player aids.}
+                    {An 8-page booklet filled with new monsters, including the dreaded
+                    \Monster{ghul-kin}.}
+                    {A 32-page sourcebook detailing the wily pirates of \Place{Hawa} and
+                    their greatest enemies, the stalwart mamluks of \Place{Qudra}, plus
+                    several new magical items.}
+                    {A 64-page adventure book presenting a fabulous array of tales set in
+                    or near the \Place{Corsair Domains}. Meet the beautiful and notorious
+                    \NPC{Jayani al-Jasir}, called by some the \NPC{Queen of Pirates}. Face
+                    untold perils to fetch the wondrous waters of the
+                    \Place{River of Gold}. Save \Place{Hawa}'s people from the horrible
+                    \NPC{Soultaker}, and much, much more. But beware! Treachery awaits at
+                    the hands of those you trust most!}
+                    Recommended for use with the \Product{Arabian Adventures} rulebook.";
+  synonyms          "ALQ7".
+
+
+#.....
+#----- TSR 9459
+
+base product TSR 9459 =
+
+  title             "Caravans";
+  leader            "";
+  author            "Swan, Rick";
+  editor            "Terry, C.",
+                    "Philips, Dezra D.";
+  cover             "Fields, Fred";
+  cartography       "III, David Sutherland";
+  illustrations     "Waller, Karl",
+                    "Barnett, Dee";
+  typography        "Lokotz, Angelika";
+  date              November 1994;
+  ISBN              1-56076-903-3;
+  pages             104;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  price             $18.00;
+  contents          Booklet "Campaign Guide",
+                    Booklet "Adventure Book",
+                    Booklet "Handout and Monstrous Compendium",
+                    Card "color" 6,
+                    Poster "color map";
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue94,
+                    Dragon 211;
+  description       "\large{Journey through a perilous realm of searing sands and burning
+                    passions!}
+                    \Place{Pit of the Ghuls}, \Place{Genies' Anvil}, \Place{Vishap's
+                    Teeth}... the mere mention of these mystical sites fills men's hearts with
+                    fear and apprehension. Now the mysteries of the High Desert are revealed!
+                    \Product{Caravans} takes player characters into \Place{Zakhara}'s greatest
+                    sea of sand to face its most treacherous denizens. Heroes match wits with
+                    \Monster{djinn} and \Monster{ins} alike---and fulfill a lover's obligation
+                    more than a half-century old.
+                    This sourcebox includes:
+                    \list
+                    {A 32-page Campaign Book with notes from famed travelers of the
+                    \Place{Hight Desert}, plus details on a wondrous magical carpet}
+                    {A 64-page Adventure Book featuring tales of honor, riches, and
+                    unrequited love}
+                    {A 8-page book of player aids}
+                    {A magnificent full-color poster depicting \Item{Ala'i the Hungry}, a
+                    fortune-telling carpet whose profound wisdom and wondrous powers will
+                    guide heroes on their epic adventure}
+                    Recommended for use with the \Product{Arabian Adventures} Campaign Setting
+                    Rulebook.";
+  synonyms          "ALQ8".
+
+
+#.....
+#----- TSR 9467
+
+base product TSR 9467 =
+
+  title             "Cities of Bone";
+  leader            "";
+  author            "Kurtz, Steve";
+  editor            "Weinlein, Sue";
+  cover             "Loveless, Rover";
+  cartography       "III, David C. Sutherland";
+  illustrations     "Waller, Karl";
+  typography        "Kerkstra, Nancy J.";
+  management        "Hayday, Andria" project coordination,
+                    "Feggestad, Sarah" graphics coordination,
+                    "Cooper, Peggy" art coordination,
+                    "Coumbe, Tim" electronic prepress coordination;
+  date              June 1994;
+  ISBN              1-56076-847-9;
+  pages             104;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $18.00;
+  contents          Booklet "Campaign Guide",
+                    Booklet "Adventure Book",
+                    Booklet "Monstrous Compendium",
+                    Card "color" 6,
+                    Poster "color map";
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue94;
+  description       "\large{Uncover vast riches among the ruins!}
+                    On moonlit nights in the \Place{Land of Fate}, many adventurers hear the call
+                    of long-forgotten cities rich with burial treasure. But is it bravery to
+                    breach the tombs of \Place{Zakhara}'s ancients and risk the ire of vengeful
+                    spirits, or is it greed? Fate knows the answer and will guide all to their
+                    destinies among the \Product{Cities of Bone}!
+                    This sourcebox includes:
+                    \list
+                    {A 32-page \emph{Campaign Guide} describing three ancient, mysterious
+                    cities}
+                    {A 64-page book of six adventures set in ruins and crypts throughout
+                    \Place{Zakhara}}
+                    {An 8-page booklet introducing foes and guides to meet while
+                    adventuring}
+                    {A full-color poster map of the fabled \Place{Jade Palace} and its
+                    \Place{Bone Pavillion}}
+                    {six illustrated cards with full-color fronts to dazzle players, plus
+                    detailed maps for the Dungeon Master}
+                    Recommended for use with the \Product{Arabian Adventures} rulebook.";
+  synonyms          "ALQ6".
+
+
+#.....
+
+#----- TSR 9584
+
+base product TSR 9584 =
+
+  title             "Reunion";
+  leader            "";
+  date              April 1998;
+  ISBN              0-7869-1196-4;
+  pages             32;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Book;
+  requirements      ;
+  worlds            Al-Qadim;
+  references        net,
+                    catalog98,
+                    Dragon 244,
+                    Dragon 245,
+                    Dragon 246;
+  description       "Once, the \Group{Tribe of Altair} roamed the sands, free as the great eagle
+                    on the wind. Now, caged by an evil mage, these desert riders yearn for their
+                    lots freedom. But Fate takes a hand as a noble \Monster{djinn} seeks to
+                    fulfill an ancient wish...
+                    In this unusual three-part scenario, players first take the roles of the men
+                    of the tribe, who stage a revolt after being enslaved in the \Place{Pit of
+                    the Laughing \Monster{Efreeti}} and then try to battle their way to
+                    freedom. In the second part, the PCs are the women of the tribe, who must
+                    escape the evil flame mage's harem and use all their wits to win free of a
+                    strange city. Finally, the children of the tribe have to slip away from an
+                    evil temple before they can be scrificed, which calls for them to embark on a
+                    magic carpet ride that promises to be the adventure of their lifetimes.
+                    \emph{An \Product{Al-Qadim} adventure for up to six characters.}".
+
+
+#.....

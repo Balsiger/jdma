@@ -1,0 +1,85 @@
+#Wheel of Time Roleplaying Game
+#----- WTC 11996
+
+#----- WTC 11996
+
+base product WTC 11996 =
+
+  title             "Wheel of Time Roleplaying Game";
+  leader            "The";
+  subtitle          "";
+  author            "Ryan, Charles",
+                    "Steven Long",
+                    "Moore, Christian",
+                    "Owen K.C. Stephens";
+  cover             "Robert Raper",
+                    "Sweet, Darrell K.";
+  cartography       "Mitchell, Ellisa";
+  date              August 2001;
+  ISBN              0-7869-1996-5;
+  pages             317;
+  system            d20;
+  audience          All;
+  product type      Rulebook;
+  style             Hardcover;
+  producer          WTC;
+  price             $33.95;
+  worlds            Wheel of Time;
+  description
+  "THE WHEEL TURNS AND NEW LEGENDS ARE BORN
+
+As the Third Age unfolds, the tales of many heroes will be Woven
+into the Great Pattern. While those stories have yet to be written,
+your part in them is unmistakable. Whether a Maiden of the Spear
+or a Hunter for the Horn, Aes Sedai or Asha'man, you are destined
+to join the struggle against Trollocs, Darkfriends, the Forsaken,
+and countless other evils revealed by the turning of the Wheel.
+
+From the Aryth Ocean to the Aiel Waste, the entire Wheel of Time series
+is covered in this complete, self-contained d20 System roleplaying game
+approved by Robert Jordan. This single volume contains statistics for all
+the major characters, a unique system for channeling the One Power, feats,
+prestige classes, and everything else you'll need to make your visions
+become reality in Robert Jordan's world of epic fantasy.
+
+Take your place in the legends that have yet to be told.";
+  synonyms          "WTC 88780".
+
+
+#Prophecies of the Dragon
+#----- WTC 88293
+
+base product WTC 88293 =
+
+  title             "Prophecies of the Dragon";
+  leader            "";
+  subtitle          "An Adventure Taking Characters from 1st to 6th Level";
+  cover             "Sweet, Darrell K.";
+  cartography       "Mitchell, Ellisa";
+  date              2002;
+  pages             191;
+  system            d20;
+  audience          DM;
+  product type      Adventure;
+  style             Soft Cover;
+  producer          WTC;
+  price             $29.95;
+  worlds            Wheel of Time;
+  description
+  "The Shadow Looms Ever Nearer
+
+The events leading up to Tarmon Gai'don have long been foretold.
+Treacherous Darkfriends conspire to permanently sever the Dragon
+Reborn's link to the One Power. Brave, new heroes must emerge from
+the Great Pattern and discover those insidious plans to give the forces
+of light a chance to prevail over the Dark One.
+
+Prophecies of the Dragon is a stand-alone adventure of epic scope for
+The Wheel of Time Roleplaying Game. Designed to serve as the
+foundation of an ongoing campaign, it weaves the players into the
+storyline of Robert Jordans Wheel of Time series,
+
+To use this accessory a Gamemaster also needs
+The Wheel of Time Roleplaying Game.".
+
+#.....

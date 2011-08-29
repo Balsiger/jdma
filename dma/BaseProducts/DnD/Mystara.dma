@@ -1,0 +1,411 @@
+#
+# File:         Accessory.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  These are the Mystara Accessories
+#
+# Worlds:       Mystara
+#
+#
+
+#----- TSR 1094
+
+base product TSR 1094 =
+
+  title             "Champions of Mystara: Heroes of the Princess Ark";
+  leader            "";
+  author            "Dupuis, Ann";
+  date              October 1993;
+  ISBN              1-56076-615-8;
+  pages             224;
+  system            D&D 1st;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $20.00;
+  contents          Booklet 3,
+                    Poster "maps" 4,
+                    Card "cardstock" 8;
+  worlds            Generic;
+  references        catalogue93,
+                    catalog93S,
+                    catalog93,
+                    catalogue94;
+  description
+  "Boxed set with world of Mystara.".
+
+
+#.....
+
+#----- TSR 2500
+
+base product TSR 2500 =
+
+  title             "Mystara Karameikos: Kingdom of Adventure";
+  leader            "";
+  date              August 1994;
+  ISBN              1-56076-853-3;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  price             $30.00;
+  contents          CD "audio",
+                    Booklet "adventure";
+  worlds            Mystara;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "campaign setting for novice players".
+
+
+#.....
+#----- TSR 2501
+
+base product TSR 2501 =
+
+  title             "Monstrous Compendium Mystara Appendix";
+  leader            "";
+  date              August 1994;
+  ISBN              1-56076-875-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Monster Compendium;
+  price             $18.00;
+  worlds            Mystara;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "a lot of monsters from D&D updated to AD&D".
+
+
+#.....
+#----- TSR 2502
+#  ISBN          1-56075-910-6; ?
+
+base product TSR 2502 =
+
+  title             "Hail the Heroes";
+  leader            "";
+  date              November 1994;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $15.00;
+  worlds            Mystara;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "audio CD adventure".
+
+
+#.....
+#----- TSR 2504
+
+base product TSR 2504 =
+
+  title             "Red Steel";
+  leader            "";
+  author            "Beach, Tim";
+  date              November 1994;
+  ISBN              1-56076-895-9;
+  pages             160;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  price             $30.00;
+  contents          Booklet 2,
+                    Poster "maps" 3;
+  worlds            Red Steel;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    Dragon 211;
+  description
+  "expansion to any world".
+
+
+#.....
+#----- TSR 2506
+#  ISBN          1-56976-918-1; ?
+
+base product TSR 2506 =
+
+  title             "Poor Wizard's Almanac & Book of Facts";
+  leader            "";
+  author            "Dupuis, Ann";
+  date              December 1994;
+  pages             240;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  contents          CD "audio",
+                    Booklet "adventure";
+  worlds            Mystara;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    Dragon 211;
+  description
+  "transition from old D&D Known World to AD&D".
+
+
+#.....
+#----- TSR 2509
+
+base product TSR 2509 =
+
+  title             "Night of the Vampire";
+  leader            "";
+  date              November 1994;
+  ISBN              0-7869-0043-1;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $15.00;
+  contents          Booklet 2,
+                    CD "audio",
+                    Sheet "loosleaf handouts" 16,
+                    Card "characters" 16,
+                    Poster "map" 2;
+  worlds            Mystara;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "audio CD adventure".
+
+
+#.....
+#----- TSR 2510
+
+base product TSR 2510 =
+
+  title             "Player's Survival Kit";
+  leader            "";
+  author            "Ratecliff, John D.";
+  editor            "Brown, Anne K.";
+  cover             "Higgenbotham, Henry";
+  illustrations     "Frazier, Daniel",
+                    "Waller, Karl",
+                    "Kimble, Mike";
+  typography        "Lokotz, Angelika";
+  management        "Moore, Roger E." project coordination,
+                    "Feggestad, Sarah" graphics coordination,
+                    "Cooper, Peggy" art coordination,
+                    "Coumbe, Tim" electronic prepress coordination;
+  date              February 1995;
+  ISBN              0-7869-0099-7;
+  pages             32;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  style             Folder;
+  price             $12.95;
+  contents          Booklet "character book",
+                    Booklet "Adventurer's Log",
+                    Card "Fame and Fortune" 54,
+                    Sheet "handouts" 24,
+                    Gatefold "wraparound cover";
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96;
+  description
+  "\bold{At last! Everything you need to breathe life into your player
+  character!}
+
+  Herein lies a treasure trove of game props and playing aids no bold
+  adventurer can afford to be without! Whether you're trying to choose the
+  perfect name for your first character, designing a shield for your favorite
+  fighter, or just trying to remember who's carrying the magical broad sword,
+  the \Product{Player's Survival Kit} has what you need.
+
+  Inside you'll discover...
+
+  \list
+  {a 16-page full-color \emph{Character Book} that includes a
+   'Dictionary of Names' (with more than a thousand names to choose
+   from) and 'Heraldry Made Easy' (simple instructions to create your
+   own heraldic designs)}
+  {a 16-page full color \emph{Adventurer's Log} to keep track of
+   monsters slain, treasures gained, and mysteries yet to be solved.}
+  {24 handouts, including spell lists for speciality wizards, a complete
+   system for rolling up a character's family, letters of credit,
+   diplomas, an advertisment for henchmen, and the character's last will
+   & testament (don't go adventuring wihtout it!)}
+  {A deck of 54 'Fame & Fortune' cards designed to help player
+   characters get out of sticky situations.}
+
+  Explore the world of \Place{Mystara} with your handy Survival Kit at your
+  side...".
+
+
+#.....
+#----- TSR 2511
+
+base product TSR 2511 =
+
+  title             "Glantri: Kingdom of Magic";
+  leader            "";
+  author            "Cook, Monte J.",
+                    "Heard, Bruce";
+  date              April 1995;
+  ISBN              0-7869-0120-9;
+  pages             160;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $30.00;
+  contents          CD "audio",
+                    Booklet,
+                    Sheet "handouts" 8;
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96;
+  description
+  "an powerful audio CD quest".
+
+
+#.....
+#----- TSR 2512
+
+base product TSR 2512 =
+
+  title             "Dungeon Master Survival Kit";
+  leader            "";
+  author            "Schend, Steven";
+  editor            "Connors, William W.";
+  cover             "Higginbotham, Henry";
+  cartography       "LaForce, Diesel";
+  illustrations     "Hotz, Eric",
+                    "Asplund-Faith, Randy";
+  typography        "Lokotz, Angelika";
+  management        "Grubb, Jeff" additional design concepts,
+                    "Hayday, Andria" project coordinator,
+                    "Moore, Roger" project coordinator,
+                    "Feggestad, Sarah" graphics coordinator,
+                    "Barnett, Dee" page design,
+                    "Coumbe, Tim" electronic prepress coordinator;
+  date              February 1995;
+  ISBN              0-7869-0110-1;
+  pages             32;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Folder;
+  price             $12.95;
+  contents          Booklet "Character Book",
+                    Booklet "Campaign Log",
+                    Sheet "Handouts" 24,
+                    Card "game" 54;
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96;
+  description
+  "\bold{With the new Dungeon Master Survival Kit, the mazing world of
+  \Place{Mystara} will take on a new life right before your eyes!}
+
+  Whether you're an experienced Dungeon Master or a novice taking his first
+  steps on the road to adventure, the \Product{Dungeon Master Survival Kit}
+  will make your campaign more exciting and dramatic than ever!
+
+  \bold{Within this unusual product you'' find...}
+
+  \list
+  {Two dozen loose sheets covered with a wide array of forms, charts and
+   handouts designed to make the DM's job easier and his games more
+   exciting.}
+  {A special deck of cards that introduces over 20 new magical items to
+   the \Place{Mystara} campaign. Plus, DM's will find a copy of the}
+  {\Item{Deck of Spheres}, a new artifact tha may well be the most
+   powerful magical item in the \Place{Known World}.}
+  {A 16-page booklet of DM's information that includes information about
+   the languages of \Place{Mystara} and tips on making better, more
+   exciting maps.}
+  {A full-color, 16-page Campaign Log that allows the DM to keep track
+   of the highlights of his campaign.}
+
+  \emph{Master the world of \Place{Mystara} with the \Product{Dungeon Master
+  Survival Kit}.}".
+
+
+#.....
+#----- TSR 2513
+
+base product TSR 2513 =
+
+  title             "Mark of Amber";
+  leader            "";
+  author            "Grubb, Jeff",
+                    "Allston, Aaron";
+  date              July 1995;
+  ISBN              0-7869-0140-3;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  price             $18.00;
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96,
+                    Dragon 218;
+  description
+  "audio CD adventure".
+
+
+#.....
+#----- TSR 2517
+
+base product TSR 2517 =
+
+  title             "Joshuan's Almanac";
+  leader            "";
+  author            "Dupuis, Ann",
+                    "Tornabene, Liz";
+  date              December 1995;
+  ISBN              0-7869-0192-6;
+  pages             240;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $12.95;
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96,
+                    Dragon 223,
+                    Dragon 224;
+  description
+  "events, peoples, kingdoms".
+
+
+#.....
+#----- TSR 2518
+
+base product TSR 2518 =
+
+  title             "Dark Knight of Karameikos";
+  leader            "";
+  author            "Brown, Timothy B.";
+  date              October 1995;
+  ISBN              0-7869-0307-4;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.95;
+  contents          Poster "map";
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96;
+  description
+  "chivalry meets 'the Dirty Dozen'".
+
+
+#.....

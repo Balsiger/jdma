@@ -1,0 +1,1164 @@
+#
+# File:         Accessories.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  The Spelljammer accessories and campaign
+#
+# Worlds:       Spelljammer
+#
+#
+
+#----- TSR 1049
+
+base product TSR 1049 =
+
+  title             "Spelljammer";
+  leader            "";
+  author            "Grubb, Jeff";
+  editor            "Winter, Steve",
+                    "Lowder, Jim",
+                    "Pickens, Jon",
+                    "Boomgarden, Karen S.",
+                    "Severson, Eric",
+                    "Mohan, Kim";
+  cover             "Easley, Jeff",
+                    "Holloway, Jim";
+  cartography       "Diesel";
+  illustrations     "Holloway, Jim";
+  typography        "Lokotz, Ankelika",
+                    "O'Keefe, Gaye";
+  management        "Ward, Jim" spiritual guidance,
+                    "Tabat, Stephanie" graphic design;
+  date              1989;
+  ISBN              0-88038-762-9;
+  pages             192;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $18.00;
+  contents          Book "Lorebook of the Void",
+                    Book "Concordance of Arcane Space",
+                    Poster "color map" 4,
+                    Sheet "ship cardstock" 20,
+                    Miniature "cards stand-up pieces" 3,
+                    Miniature "figure bases" 24;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description
+  "\large{Ad&D Adventures in Space}
+
+  Multitudes of worlds wheel through \Place{Wildspace}. The crystal shells that
+  encase them bob and drift in a turbulent, rainbow ocean which fills all the
+  cosmos. Sturdy merchants, bold pirates, and daring explorers venture into the
+  great, unknown vastness of the universe, seeking wealth and adventure.
+
+  The \Product{Spelljammer} Game puts you in command of a fantastic ship
+  capable of spanning the tremendous distances between planets. Graceful
+  \Monster{elven} flitters, stately \Monster{illithid} galleys, deadly
+  \Monster{beholder} tyrants, and the awesome \Item{Spelljammer} itself carry
+  trade, emissaries, and heroic action throughout all the worlds of the AD&D
+  game.
+
+  The \Product{Spelljammer} Game includes:
+
+  \list
+  {Two 96-page books describing the mysteries of travel through
+   wildspace, how to design ships for your adventures, new spells, space
+   monsters, intelligent, star-spanning races, and the lore of
+   \Place{wildspace};}
+  {Four maps shoing planetary orbits, the gigantic \Item{Spelljammer},
+   an asteroid city, and a tactical grid for space battles;}
+  {Full-color cardstock sheets showing deck plans of the most commonly
+   encountered space-going ships;}
+  {Full-color, stand-up pieces for playing out tactical battles and
+   encounters in space.}".
+
+
+#.....
+#----- TSR 1065
+
+base product TSR 1065 =
+
+  title             "Legend of Spelljammer";
+  leader            "The";
+  author            "Grubb, Jeff";
+  editor            "Winter, Steve 'Old Man'",
+                    "Watry, Dori 'the Barbarian'";
+  cover             "Easley, Jeff";
+  cartography       "Diesel";
+  illustrations     "Holloway, Jim",
+                    "Dorscheid, Les";
+  typography        "O'Keefe, Gaye",
+                    "Lokotz, Angelika";
+  management        "Ward, James M." spiritual guidance,
+                    "Tabat, Stephanie" graphic design,
+                    "Cooper, Peggy" art coordination;
+  date              September 1991;
+  ISBN              1-56076-083-4;
+  pages             192;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  contents          Booklet "Captains and Ships",
+                    Booklet "The Grand Tour",
+                    Booklet "Legends and More",
+                    Poster "map" 2,
+                    Card "ships" 10,
+                    Card "cards" 2;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94,
+                    catalog93;
+  description
+  "Feared by some, hunted by others, the awesome vessel \Item{Spelljammer}
+  glides through the vastness of space on \Monster{manta} wings. For the first
+  time ever, the myths surrounding the \Item{Great Ship} are unveiled, allowing
+  you to expand your \Place{Spelljammer} game campaign.
+
+  Is the \Item{Spelljammer} a legend from the past or a mystery of the present?
+  Is it truly a ship or a living being? Who commands it? What secrets hide in
+  its massive hull and dark towers? The true story of the \Item{Spelljammer} is
+  revealed in this box.
+
+  This accessory is an epic adventure setting for use with the original
+  \Product{Spelljammer Adventures in Space} boxed set. Within this box you will
+  discover new monsters and races, exciting new ships and characters, plus the
+  fantastic \Item{Spelljammer} itself.
+
+  \bold{The \Product{Legend of Spelljammer} accessory contains:}
+
+  \list
+  {A 32-page book of legends and statistics about the \Item{Great Ship};}
+  {A 64-page guided tour of the citadels, towers, and communities that
+   crowd the back of the \Item{Spelljammer}}
+  {A 96-page book of new ships and nonplayer characters, plus adventures
+   aboard the \Item{Spelljammer}}
+  {Two maps revealing the ship's citadels; and}
+  {Full-color cards showing new ships and their deck plans.}".
+
+
+#.....
+#----- TSR 1072
+
+base product TSR 1072 =
+
+  title             "War Captain's Companion";
+  leader            "";
+  author            "Henson, Dale 'Slade'";
+  editor            "Pickens, Jon",
+                    "Ratecliff, John D.";
+  cover             "Olson, Erik";
+  cartography       "Diesel",
+                    "Kauth, Dennis";
+  illustrations     "Diesel",
+                    "Easley, Jeff",
+                    "Ewell, Newton H.",
+                    "Nelson, Mark",
+                    "Olson, Erik",
+                    "Sullivan, Stephen D.";
+  typography        "Lokotz, Angelika",
+                    "Zamagne, Tracey";
+  date              1992;
+  ISBN              1-56076-343-4;
+  pages             192;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  contents          Booklet "The War Captain's Guide",
+                    Booklet "Ship Recognition Manual",
+                    Booklet "Combat Among the Stars",
+                    Poster "color hex maps" 2,
+                    Poster "color",
+                    Miniature "stand up battle ships";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog93;
+  description
+  "\large{Combat in Fantasy Space!}
+
+  The worlds of fantasy space are legion. Not all are friendly. The spider-like
+  \Monster{Neogi} slavers, the cold and calculating \Monster{Mind Flayers},
+  the savage \Monster{Scro}, and others all build great ships of war to catch
+  the magical currents of space.
+
+  Now YOU can face the perils of deadly combat in the depths of void. This game
+  accessory gives you the chance to storm enemy ships or brave a barrage of
+  wizard spells that could tear your ship apart. This latest boxed set, the
+  \Product{War Cpatain's Companion} (sequel to the earlier \Place{Spelljammer}
+  boxed set, \Product{Adventures in Space}) contains the following:
+
+  \list
+  {\bold{Ship-to-Ship game:} Tactical ship rules and two 22''x31''
+   mapsheets with an extra large hex grid.}
+  {\bold{Three complete books:} Over 190 pages of vital information
+   designed to expand your \Place{Spelljammer} campaign setting.}
+  {\bold{Addtional game cards:} 6 full-sized 8 1/2''x11'' cards: player
+   aid cards, game markers, and three new color ship cards.}
+  {\bold{Colorful playing pieces:} 6 sheets of full-color 3-D ship
+   pieces, over 30 ships in all.}
+
+  \bold{War Captain's Guide}, 96 pages.
+
+  \list
+  {New role-playing rules, including new character skills and magical
+   items.}
+  {New section allows creative players to design their own ships.}
+  {War fleet and shipyard bases for our major campaign worlds!}
+
+  \bold{Ship Recognition Manual}, 64 pages.
+
+  \list
+  {Updated and expanded information on all existing ship types.}
+  {Each ship in this book is accompanied by a detailed line illustration.}
+  {Introduces over a dozen ship types for the first time anywhere!}
+
+  \bold{Combat Among Stars}, 32 pages.
+
+  \list
+  {Easy-to-learn ship-to-ship rules will give hours of enjoyment.}
+  {Includes ramming, boarding actions, magic use, and much more.}
+  {Optional rules for 3-D movement and advanced weapons and equipment!}".
+
+
+#.....
+#----- TSR 1087
+
+base product TSR 1087 =
+
+  title             "Astromundi Cluster";
+  leader            "The";
+  author            "Witt, Sam";
+  editor            "Carter, Michele";
+  cover             "Olson, Erik",
+                    "Miller, David O.",
+                    "Easley, Jeff";
+  cartography       "Knecht, John",
+                    "Diesel",
+                    "Kauth, Dennis";
+  illustrations     "Miller, David O.";
+  typography        "Lokotz, Angelika";
+  management        "Baker, Richard L. III" design concept;
+  date              August 1993;
+  ISBN              1-56076-632-8;
+  pages             192;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  contents          Booklet "The Celestial Almanac",
+                    Booklet "Adventures in the Shattered Sphere",
+                    Booklet "The Astrogator's Guide",
+                    Sheet "color cardsheets" 24,
+                    Map "planetary" 2;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog93S,
+                    catalogue94,
+                    catalog93;
+  description
+  "Far off the traveled paths of \Place{wildspace}, a lone crystal sphere bobs
+  in the \Place{phlogiston}, waiting for unwary visitors greedy for
+  adventure. This is the \Place{Astromundi Cluster}, a setting easy to
+  find...and nigh-impossible to escape.
+
+  Unique among the spheres, \Place{Clusterspace} holds no planets---only
+  thousands of asteroids that wander in a seemingly endless realm. Here
+  \Group{Arcane}, \Monster{neogi}, \Monster{illithids} and \Monster{humans}
+  have learned to coexist in a semblance of peace to ensure their survival. But
+  the carefully-wrought balance of power may change at any time, and heroes
+  have to choose their allies and enemies carefully. Within the
+  \Place{Cluster}, there are no such fine guarantees as honor or trust between
+  friends and foes.
+
+  \bold{The Astromundi Cluster} accessory includes:
+
+  \list
+  {A 32-page player's manual to the factions and features of
+   \Place{Clusterspace}. \emph{The Astrogator's Guide} gives players all
+   the information they need about the races and major asteroid clusters
+   of the \Place{Shattered Sphere}, life and culture in the
+   \Place{Cluster}, and a new ship and weapon types.}
+  {A 64-page DM guide, \emph{Adventures in the \Place{Shattered Sphere}},
+   which reveals to the Dungeon Master the secrets of the
+   \Place{Astromuni Cluster}, from the magically powerful \Group{Antilan
+   Empire} to the behind-the-scenes plots of the \Group{Arcane}}
+  {A 96-page DM book describing in full detail the most important
+   asteroids and other features of the \Place{Cluster}, its physical
+   makeup and economy, and new magic and spells.}
+  {Two full-size maps illustrating the planetary orbits of the
+   \Place{Cluster}'s celestial bodies, and schematic layouts of a feared
+   crystal citadel and important trading post.}
+  {Twenty-four cards filled with ship blueprints, important faction
+   illustrations and descriptions, orbital maps, and more.}".
+
+
+#.....
+
+#----- TSR 2109
+
+base product TSR 2109 =
+
+  title             "Monstrous Compendium, Spelljammer Appendix";
+  leader            "";
+  author            "Boomgarden, Karen S.",
+                    "Brown, Tim",
+                    "Connors, William W.",
+                    "Denning, Troy",
+                    "Donovan, Dale A.",
+                    "Ewell, Newton H.",
+                    "Hayday, Andria",
+                    "Heard, Bruce",
+                    "Henson, Dale 'Slade'",
+                    "Johnson, Harold",
+                    "LaFountain, J. Paul",
+                    "Lowder, Jim",
+                    "Mobley, Blake",
+                    "Mohan, Kim",
+                    "Moore, Roger",
+                    "Nesmith, Bruce",
+                    "Niles, Doug",
+                    "Rabe, Jean",
+                    "Schend, Steven",
+                    "Williams, Skip",
+                    "Winter, Steve";
+  editor            "Breault, Mike";
+  cover             "Easley, Jeff";
+  illustrations     "Baxa, Thomas M.",
+                    "Nelson, Mark";
+  typography        "Zamagne, Tracey";
+  management        "Cooper, Peggy" artistic coordinator,
+                    "Grubb, Jeff" design coordinator and noodger;
+  date              1990;
+  ISBN              0-88038-871-4;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Folder;
+  number            Volume VII Spelljammer Appendix;
+  series            Monster Compendium;
+  price             $ 9.95;
+  contents          Sheet 32,
+                    Misc "4 color dividers";
+  worlds            Spelljammer;
+  description
+  "Thought you'd seen it all when you met the \Monster{neogi}? Threw up your
+  hands in horror at the sight of \Monster{space barnacles}? Well...get ready
+  for the \Place{giant space hamster}, the \Monster{symbionts}, and lots of
+  other wild and weird \Place{Spelljammer} campaign monsters!
+
+  In this product are some olf the most fantastic creatures ever seen (or not
+  seen, as the case may be), in \Place{wildspace} or out of it. Yes, Virgina,
+  there really are \Monster{giant space hamsters} lurking in these pages, a
+  swell as whole new races ready for the DM to launch into a
+  \Place{Spelljammer} campaign. Once again, there are 64 pages of new beasties
+  for your playing enjoyment, 5-hole punched and ready for insertion in your
+  Monstrous Compendium binder. Plust, the gread full-color divider pages with
+  identification tabs make it easier to organize your critters.
+
+  \Place{Spelljammer} campaigns will never be the same again...";
+  synonyms          "MC7".
+
+
+#.....
+#----- TSR 2119
+
+base product TSR 2119 =
+
+  title             "Monstrous Compendium, Spelljammer Appendix 2";
+  leader            "";
+  author            "Davis, Scott",
+                    "Ewell, Newton H.",
+                    "Terra, John";
+  editor            "Varney, Allen";
+  cover             "Easley, Jeff";
+  illustrations     "Baxa, Thomas M.",
+                    "Nelson, Mark";
+  typography        "O'Keefe, Gaye";
+  date              April 1991;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Sheets;
+  producer          TSR;
+  number            IX;
+  series            Monster Compendium;
+  price             $10.95;
+  contents          Sheet "loose" 32,
+                    Page "full-color divider" 4;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "Prepare to be boarded! Here are still more new, inventive, dangerous, and
+  entertaining creatures and races for your \Place{Spelljammer} campaign
+  setting! There are \Monster{giant undead insects}, \Monster{star gypsies},
+  \Monster{space plants}, and much, much more awaiting your stellar travelers
+  in these pages. \Monster{Elven war-beasts}, \Monster{giant space turtles},
+  \Monster{orcish death-creatures}, and other beings of the \Place{phlogiston},
+  \Place{crystal spheres}, and \Place{wildspace} roam this volume. Some look
+  nasty, and are; some look nasty, and aren't. Which are which? Read the
+  entries and find out for yourself! And of course, they are ogranized into
+  five-hole-punched pages that fit into your \Product{Monstrous Compendium}
+  binders.";
+  synonyms          "MC9".
+
+
+#.....
+#----- TSR 2130
+
+base product TSR 2130 =
+
+  title             "Complete Spacefarer's Handbook";
+  leader            "";
+  author            "Scott, Curtis M.";
+  editor            "Young, Barbara G.";
+  illustrations     "Miller, David O.",
+                    "Easley, Jeff",
+                    "Brom",
+                    "Olson, Eric";
+  typography        "Zamagne, Tracey";
+  management        "Samuels, Laura" keylining,
+                    "Moore, Roger E." additional quotes;
+  date              November 1992;
+  ISBN              1-56076-347-7;
+  pages             128;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Rules Supplement;
+  style             Soft Cover;
+  number            1;
+  series            CGR;
+  price             $15.00;
+  contents          Book;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description
+  "Out of the depths of wildspace come astonishing new ideas for
+  \Place{Spelljammer} campaigns. Now you can create player characters from the
+  nonhuman races of the \Monster{giff}, \Monster{dracons}, \Monster{scro},
+  \Monster{grommams}, and more. Equip your characters with kits like the
+  Corsair, War Mage, and Aperusa. Then add some new space-oriented proficiences
+  and equipment, enlist your character in a spacefaring organization, and head
+  off into the \Place{Void}!";
+  synonyms          "CGR1".
+
+
+#.....
+
+#----- TSR 9273
+
+base product TSR 9273 =
+
+  title             "Wildspace";
+  leader            "";
+  author            "Varney, Allen";
+  editor            "Brown, Anne K.";
+  cover             "Brom";
+  cartography       "Diesel";
+  illustrations     "Statema, John";
+  typography        "O'Keefe, Gaye",
+                    "Lokotz, Angelika";
+  management        "Tabat, Stephanie" graphic design,
+                    "Tabat, Stephanie" keylining,
+                    "Parker, Roy" keylining;
+  date              1990;
+  ISBN              0-88038-819-6;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 8.95;
+  contents          Booklet,
+                    Gatefold "cover",
+                    Poster "color map";
+  worlds            Spelljammer;
+  references        catalogue93;
+  description
+  "On a busy day in the marketplace, something hurtles down out of a clear
+  sky. When the dust clears, you see that it's a ship's anchor, attached to a
+  rope that stretches up as far as you can see. What do you do?
+
+  Pull your AD&D game players up the rope and into the astounding universe of
+  fantasy space! Send their spacegoing galleon, the \Item{Skyrunner}, across
+  the vast reaches of \Place{Wildspace}. Drop them in the \Place{Hive}, the
+  largest dungeon ever created. Then pit them against the \NPC{Ravager}, a
+  monster that threatens the characters' entire homeworld!
+
+  \Product{Wildspace} is the first adventure for the AD&D \Product{Spelljammer}
+  Campaign Set. The \Product{Spelljammer} boxed set is required to play. This
+  64-page adventure fits easily into your existing campaign, as either a change
+  of pace from goundling adventures or the beginning of a new career in
+  space.
+
+  This adventure is designed for four to six player characters of levels 6 to
+  8.";
+  synonyms          "SJA1".
+
+
+#.....
+#----- TSR 9280
+
+base product TSR 9280 =
+
+  title             "Lost Ships";
+  leader            "";
+  author            "Greenwood, Ed";
+  editor            "Jaquays, Paul",
+                    "Brown, Anne K.";
+  cover             "Brom";
+  cartography       "Diesel";
+  illustrations     "Barras, Dell";
+  typography        "O'Keefe, Gaye";
+  management        "Grubb, Jeff" mentor,
+                    "Tabat, Stephanie" graphic design;
+  date              1990;
+  ISBN              0-88038-831-5;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "Who among you who have dared to enter the starry deeps has not heard of the
+  dark, drifting derelcits of earlier spacefarers? The silent, menacing lairs
+  of monsters that may hide great treasures for those bold enough to explore
+  them? And what space-captain plies the spacelanes who does not dream of a
+  bigger, sleeker, more powerful ship than his present one?
+
+  \Product{Lost Ships} holds the answer that bold spacefarers have been
+  seeking:
+
+  \list
+  {\bold{Monsters!}}
+  {\bold{New spells} to better arm intrepid adventurers.}
+  {\bold{New Ships!} Twenty new ship types.}
+  {\bold{Flotsam of Space}---mini-menaces that can bring space to
+   exciting life.}
+  {\bold{New rules} to help DMs run extended space adventures.}
+  {\bold{New adventures} galore that can make any spacebound AD&D game
+   campaign an exciting (and dangerous) place for your characters!}
+
+  \Product{Lost Ships} is your first-class ticket to high adventure in space!";
+  synonyms          "SJR1".
+
+
+#.....
+#----- TSR 9286
+
+base product TSR 9286 =
+
+  title             "Skull & Crossbows";
+  leader            "";
+  author            "Findley, Nigel D.";
+  editor            "Schend, Steven",
+                    "Brown, Anne K.";
+  cover             "Brom";
+  cartography       "Diesel";
+  illustrations     "Abrams, Paul";
+  typography        "Lokotz, Angelika";
+  management        "Tabat, Stephanie" graphic design;
+  date              1990;
+  ISBN              0-88038-845-5;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 8.95;
+  contents          Booklet,
+                    Gatefold "cover",
+                    Poster "color map";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "Different worlds have different laws. But everywhere you go, you're going to
+  find people who bend and break those laws and turn a healthy profit doing
+  it. Whether sailing the high seas or the \Place{Flow}, they are called
+  pirates.
+
+  It's these pirates that you've been hired to hunt. With letters of marque in
+  your mapcase, your job is to track down and capture, alive or dead, some of
+  the most dangerous characters in the known (and unknown) spheres.
+
+  Of course, not everyone in space is a pirate. You'll also meet \NPC{Torgan
+  Betz} (a man famous for bending the laws, rarely breaking them),
+  \NPC{Tiktitik}, the \Monster{Thri-kree} crusader, \NPC{'Thought Taker'} the
+  \Monster{illithid}, and feared \Monster{Drow} commander \NPC{Teela
+  Darkcloud}. Even so, they all have their personal agendas, and it's often
+  hard to tell enemies from friends.
+
+  \Product{Skulls & Crossbows} is an anthology of adventures for the
+  \Product{Spelljammer} campaign setting. This 64-page anthology easily follows
+  \Product{Wildspace}, but can be used in any existing AD&D \Place{Spelljammer}
+  campaign.
+
+  This adventure is designed for a party of four to six characters, levels 6 to
+  10.";
+  synonyms          "SJA2".
+
+
+#.....
+#----- TSR 9299
+
+base product TSR 9299 =
+
+  title             "Crystal Spheres";
+  leader            "";
+  author            "LaFountain, J. Paul";
+  editor            "Brown, Anne K.";
+  cover             "Brom";
+  cartography       "Diesel";
+  illustrations     "Abrams, Paul";
+  typography        "Lokotz, Angelika";
+  management        "Hanchette, Paul";
+  date              1990;
+  ISBN              0-88038-878-1;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 8.95;
+  contents          Booklet,
+                    Gatefold "cover",
+                    Poster "color map";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog93;
+  description
+  "Traveling the space lanes is risky and mysterious, and danger comes in many
+  forms. The rescue of a tiny ship from pirate attackers leads to the discovery
+  of a monumental, supernatural evil. Nothing is ever routine in space...
+
+  \Product{Crystal Spheres} takes player characters through four unique crystal
+  spheres to battle a powerful force of darkness. Player Characters will find
+  themselves fighting not just for their lives, but the fate of an entire solar
+  system and its millions of inhabitants.
+
+  \Product{Crystal Spheres} is an adventure for the AD&D \Place{Spelljammer}
+  campaign setting. The \Product{Spelljammer} boxed set is required to
+  play. This 64-page adventure will easily adapt to any campaign world.
+
+  This adventure is designed for four to eight characters of levesl 5 to 7.";
+  synonyms          "SJA3".
+
+
+#.....
+
+#----- TSR 9312
+
+base product TSR 9312 =
+
+  title             "Realmspace";
+  leader            "";
+  author            "Henson, Dale 'Slade'",
+                    "Boomgarden, Karen S.";
+  editor            "Thomas, Gary L.",
+                    "Boomgarden, Karen S.";
+  cover             "Baxa, Thomas M.";
+  cartography       "Ewell, Newton H.";
+  illustrations     "Ewell, Newton H.";
+  typography        "Zamagne, Tracey";
+  management        "Feggestad, Sarah" keylining;
+  date              February 1991;
+  ISBN              1-56076-052-4;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  producer          TSR;
+  price             $10.95;
+  contents          Booklet,
+                    Poster "map";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91S,
+                    catalog93;
+  description
+  "\Place{Toril}: that blue-green orb on which live \NPC{Elminster},
+  \NPC{Lhaeo}, and the \Group{Harpers}, to name but a few. The planet so many
+  adventurers call 'home'. To many, it seems to be the center of the
+  universe.
+
+  For be that from the truth! There are seven other planets in \Place{Toril}'s
+  system, some close to the primary star, other farther from its warmth. These
+  pages real little-known facts about every planet in \Place{Realmspace}: the
+  crystal sphere containing the lands known as the \Place{Forgotten Realms}.
+
+  \Product{Realmspace} is an accessory for the \Place{Spelljammer} campaign
+  setting. The \Product{Spelljammer} boxed set is needed to use this
+  booklet. The material in this accessory will enhance any \Place{Forgotten
+  Realms} campaign in which the concept of spelljamming has been (or is about
+  to be) introduced.
+
+  In addition to the 96-page booklet, this product includes:
+
+  \list
+  {a full-size poster map of the \Place{Realmspace} crystal sphere,
+          showing all the planets in their relative orbits.}
+  {statistics on new ship types, including the \Item{Batship} and the
+   \Item{Tsunami}.}
+  {several short adventures, suitable for introducing characters to the
+   wonders of \Place{Realmspace}.}";
+  synonyms          "SJR2".
+
+
+#.....
+#----- TSR 9313
+
+base product TSR 9313 =
+
+  title             "Spelljammer DM Screen";
+  leader            "";
+  author            "LaFountain, J. Paul",
+                    "Schend, Steven E.";
+  cover             "LaForce, Dave 'Diesel'";
+  illustrations     "LaForce, Dave 'Diesel'";
+  date              February 1991;
+  ISBN              1-56076-053-2;
+  pages             0;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Screen;
+  producer          TSR;
+  price             $ 8.95;
+  contents          Gatefold "screen",
+                    Misc "paper ships",
+                    Page "instruction";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91S,
+                    catalog93;
+  description
+  "This \emph{all new} AD&D Dungeon Master's Screen has been designed
+  especially for use with the \Place{Spelljammer} campaign system. From basic
+  combat tables to planetary statistics, the screen provides all the special
+  tables needed to smoothly run an AD&D space campaign, placing them
+  immediately within the DM's reach.
+
+  In addition to the useful tables, the screen gives you:
+
+  \list
+  {combat statistics for your favorite ships from \Product{Lost Ships}
+   and the \Place{Spelljammer} campaign adventures!}
+  {a 3-panel panoramic painting depicting an epic battle in
+   \Place{Wildspace}}
+  {full color three-dimensional fold-up for space-faring ships suitable
+   for use in ship-to-ship combat}";
+  synonyms          "SJR3".
+
+
+#.....
+#----- TSR 9325
+
+base product TSR 9325 =
+
+  title             "Under the Dark Fist";
+  leader            "";
+  author            "Boucher, Grant";
+  editor            "Pickens, Jon";
+  cover             "Brom, Gerald";
+  cartography       "LaForce, David S.";
+  illustrations     "Baxa, Thomas M.",
+                    "Holloway, Jim";
+  typography        "O'Keefe, Gaye";
+  management        "Hanchette, Paul" keylining;
+  date              June 1991;
+  ISBN              1-56076-131-8;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet,
+                    Gatefold "cover",
+                    Poster "map";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "Few creatures inhabiting the realms of \Place{Greyspace},
+  \Place{Krynnspace}, and \Place{Realmspace} know (or even dream) of each
+  others' existence. Fewer still understand the celestial bonds they secretly
+  share.
+
+  As the worlds of \Monster{men} and \Monster{elves}, \Monster{dwarves} and
+  \Monster{dragons} are about to discover, no less than \bold{twelve} unknown
+  spheres stand poised for war...a war as unexpected as it will be
+  devastating!
+
+  Twelve spheres against three---hardly fair ods. But then again, \NPC{Emperor
+  Vulkaran the Dark}, \NPC{Master of the Twelve Spheres} and \NPC{Ruler of All
+  Known Space}, doesn't like a fair fight. He's never fought one yet!
+
+  \Product{Under the Dark Fist}, a 64-page adventure for the
+  \Product{Spelljammer setting}, provides enough material to wage an
+  intergalactic war across 15 sphere! It can be used as an epic stand-alone
+  adventure or easily incorporated into an existing campaign. This challenging
+  adventure is recommended for experienced players and referees.
+
+  This adventure is designed for a party of four to eight characters, levels 10
+  to 14.";
+  synonyms          "SJA4".
+
+
+#.....
+#----- TSR 9328
+
+base product TSR 9328 =
+
+  title             "Practical Planetology";
+  leader            "";
+  author            "Findley, Nigel";
+  editor            "Nephew, John A.";
+  cover             "Jaquays, Paul";
+  cartography       "Beck, Steve";
+  illustrations     "Nelson, Mark",
+                    "Statema, John",
+                    "Holloway, Jim";
+  typography        "Partners, Design";
+  date              July 1991;
+  ISBN              1-56076-134-2;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet,
+                    Poster "full-color map";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94,
+                    catalog93;
+  description
+  "Groundlings have no idea, but any spelljamming adventurer worth his salt
+  knows the universe is \emph{huge}! Let \Product{Practical Planetology} open
+  new possibilities for your AD&D \Place{Spelljammer} campaign.
+
+  Herein find fifteen unique planets, exotic and mysterious, ripe for plunder
+  or other less profitable adventures. Weigh anchor at the air world of
+  \Place{Alabeth}, and float with marooned \Monster{elves} atop their massive
+  \Item{holbags}. Visit the \Monster{mithril dragons} of \Place{Radole} who
+  ride the hot thermals over lakes of molten tin. Endure the searing flames of
+  the \Monster{efreeti} city on \Place{Ignia}, or swim among the island
+  necrocracies---nations of undead from a destroyed planet---on
+  \Place{Charon}.
+
+  These and other bizarre worlds of adventure await you in \Product{Practical
+  Planetology}, along with beasts native to them, eleven new monsters in
+  all. All you'll need is a ship, a \Item{helm}, and a start to steer them
+  by!
+
+  \Product{Practical Planetology} contains material suitable for characters of
+  any level.";
+  synonyms          "SRJ4".
+
+
+#.....
+#----- TSR 9343
+
+base product TSR 9343 =
+
+  title             "Goblins' Return";
+  leader            "";
+  author            "Nesmith, Bruce";
+  editor            "Brown, Anne K.";
+  cover             "Freas, Kelly";
+  cartography       "Diesel",
+                    "Beck, Steve";
+  illustrations     "Nelson, Mark",
+                    "Diesel";
+  typography        "Lokotz, Angelika";
+  management        "Hanchette, Paul" graphic design;
+  date              December 1991;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet,
+                    Gatefold "cover";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94,
+                    catalog93;
+  description
+  "Hundreds of years ago, the \Monster{elves} and \Monster{goblinkin} faought
+  for control of known space in the \Event{Unhuman War}. The \Monster{elves}
+  emerged victorious and the \Monster{goblinkin} were driven out to lick their
+  wounds and plot revenge for another day.
+
+  The day has come.
+
+  After centuries of plotting and building, a new race of advanced
+  \Monster{orcs} known as the \Monster{scro} have rallied the
+  \Monster{goblins}, \Monster{hobgoblins}, and \Monster{kobolds}. It is only a
+  matter of time before they infiltrate known space to wreak destruction on the
+  inhabited planets.
+
+  The \Monster{elves} are looking for a few good adventurers to infiltrate a
+  \Monster{scro} base and steal any information valuable to the war
+  effort. Your PCs are offered the chance to become heroes---or die trying.
+
+  \Product{Goblins' Return} is a 64-page adventure set in the \Event{second
+  Unhuman War}. The first of a two-part module series, it can later be linked
+  with \Product{Heart of the Enemy} or it can be played as a stand-alone
+  adventure.
+
+  \Product{Goblins' Return}  is designed for  four to six characters  of levels
+  7-10.";
+  synonyms          "SJS1".
+
+
+#.....
+#----- TSR 9347
+
+base product TSR 9347 =
+
+  title             "Heart of the Enemy";
+  leader            "";
+  author            "Swan, Rick";
+  editor            "Capsian, Jonatha";
+  cover             "Freas, Kelly";
+  cartography       "Beck, Steve";
+  illustrations     "Miller, David O.";
+  typography        "Zamagne, Tracey";
+  management        "Brown, Timothy B." project coordination;
+  date              1992;
+  ISBN              1-56076-342-6;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $10.95;
+  contents          Booklet,
+                    Poster "map";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "A little information is a very frightening thing.
+
+  Hundreds of years ago, the \Monster{elves} and the \Monster{goblinkin} fought
+  for control of known space in the \Event{Unhuman War}. Though the
+  \Monster{elves} won that first campaign, they know the \Monster{goblinkin}
+  are clamoring for a rematch. Recently the \Monster{elves} commissioned a few
+  good adventurers to infiltrate the base of a new race of advanced
+  \Monster{orcs} known as the \Monster{scro}. They are hoping to gain
+  information on their enemies' numbers and plans.
+
+  The news they found was far worse.
+
+  The \Monster{scro} have discovered a weapon of awesome destruction, one that
+  can lay waste to entire worlds. But the key to unlock its power lies lost and
+  forgotten.
+
+  Even now the \Monster{scro} are searching for it. When they find it, they
+  will wreak destruction and revenge on the inhabited planets.
+
+  The \Monster{elves} are looking for an adventuring team who can win this
+  desperate race, and find the key first. Your PCs may be the only thing that
+  stands between known space and doom.
+
+  \Product{Heart of the Enemy} is a 96-page adventure set in the \Event{Second
+  Unhuman War}. The second of a two-part series, it can either be linked with
+  the previous \Product{Goblins' Return} or it can be player as a stand-alone
+  adventure.
+
+  \Product{Heart of the Enemy} is designed for four to six characters of levels
+  8-11.";
+  synonyms          "SJQ1".
+
+
+#.....
+#----- TSR 9361
+
+base product TSR 9361 =
+
+  title             "Rock of Bral";
+  leader            "";
+  author            "Baker, Richard L. III";
+  editor            "Stewart, Doug";
+  cover             "Olson, Erik";
+  cartography       "Diesel";
+  illustrations     "Miller, David O.";
+  typography        "Zamagne, Tracey";
+  management        "Brown, Timothy B." project coordination,
+                    "Hanchette, Paul" production;
+  date              August 1992;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Booklet;
+  price             $10.95;
+  contents          Booklet,
+                    Poster "color map";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description
+  "Welcome to the \Place{city of twilight}, the \Place{city of thieves}, the
+  \Place{city among the stars}. Founded by pirates, \Place{Bral} is now a
+  prosperious city of rogues and merchants, adrift in the vast realms of
+  \Place{Wildspace}. Its docks are crowded with graceful ships, its streets are
+  teeming with intrigue and adventure, and its population includes shining
+  heroes and dark villains. \Place{The Rock of Bral} is a haven for any
+  adventurer with a quick wit and a dash of greed---opportunity only awaits the
+  hand bold enough to seize it!
+
+  \Product{Rock of Bral} is an accessory to the \Place{Spelljammer} campaign
+  setting and is intended to provide a ready guide to this most fascinating of
+  cities. Your character will find the \Place{Rock} to be the perfect base from
+  which to explore the magical reaches of \Place{Wildspace}.";
+  synonyms          "SRJ5".
+
+
+#.....
+#----- TSR 9374
+
+base product TSR 9374 =
+
+  title             "Greyspace";
+  leader            "";
+  date              November 1992;
+  ISBN              1-56076-348-5;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $10.95;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description
+  "links Spelljammer with Greyhawk";
+  synonyms          "SRJ6".
+
+
+#.....
+
+#----- TSR 9409
+
+base product TSR 9409 =
+
+  title             "Krynnspace";
+  leader            "";
+  author            "Rabe, Jean";
+  date              February 1993;
+  ISBN              1-56076-560-7;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $10.95;
+  contents          Booklet,
+                    Map;
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog93W,
+                    catalog93;
+  description
+  "link between Spellhammer and Dragonlance";
+  synonyms          "SRJ7".
+
+
+#.....
+#----- TSR 9411
+
+base product TSR 9411 =
+
+  title             "Space Lairs";
+  leader            "";
+  author            "Rea, Nicky",
+                    "Nicholson, Wes";
+  editor            "Weinlein, Sue";
+  cover             "Miller, David O.";
+  cartography       "Knecht, John";
+  illustrations     "Miller, David O.",
+                    "Miller, Andrew";
+  typography        "Lokotz, Angelika";
+  management        "Watry, Dori Jean" project coordination;
+  date              June 1993;
+  ISBN              1-56076-609-3;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet,
+                    Gatefold "cover";
+  worlds            Spelljammer;
+  references        catalogue93,
+                    catalog93W,
+                    catalog93;
+  description
+  "'Avast, me hearties, and listen to me tales o' monsters that lair in the
+  vastness of \Place{wildspace} and the fiery streams o' the
+  \Place{phlogiston}. Great and terrible beasties they be, just waitin' for a
+  daring band o' adventurers to stumble upon 'em---or seek 'em out! Here's a
+  toast to those brave enough to face the challenge!'
+
+  \Place{Wildspace} and the \Place{phlogiston} are vast. Even when ships travel
+  at spelljamming speed, a journey can take months to complete. Now a Dungeon
+  Master can inject the unexpected into those days when 'nothing happens' with
+  the exciting encounters found in \Product{Space Lairs}.
+
+  Like the original Advanced Dungeons & Dragons \Product{Book of Lairs}, this
+  collection contains 14 intriguing and innovative mini-adventures that can be
+  inserted into any \Product{Spelljammer} campaign with little or no
+  preparation by the Dungeon Master. Featuring \Product{Spelljammer} monsters
+  from the \Product{Monstrous Compendium}, these adventures provide challenges
+  suitable for players of all levels.
+
+  From puzzle-solving to action from humor to high adventure, it's all here in
+  this 64-page accessory for the \Product{Spelljammer campaign setting}. The
+  \Product{Spelljammer Adventurers in Space boxed set} is needed to use this
+  book. So, come aboard, take the \Item{helm}, and prepare to meet
+  \NPC{Blackleg Bart} and lots of other fantastic adversaries! ";
+  synonyms          "SRJ8".
+
+
+#.....

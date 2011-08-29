@@ -1,0 +1,282 @@
+#
+# File:         Birthright.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:
+#
+# Reviewer(s):
+#
+# Description:  These are the birthright novels
+#
+# Worlds:       Birthright
+#
+# Keywords:
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/Birthright.dma,v $
+#
+# $Revision: 1.5 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Birthright.dma,v $
+# Revision 1.5  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.4  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.3  2007/07/16 20:02:14  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2007/06/09 09:50:27  merlin
+# *** empty log message ***
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2003/05/19 20:18:45  merlin
+# updated to version Aboleth
+#
+# Revision 1.1  2001/08/21 22:31:11  merlin
+# *** empty log message ***
+#
+#
+
+#.....
+#
+#
+
+#----- TSR 3112
+
+base product TSR 3112 =
+
+  title             "Iron Throne";
+  leader            "The";
+  date              1995;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 6.99;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96;
+  description
+  "story of Emperor Michael Roele".
+
+
+#.....
+#----- TSR 3113
+
+base product TSR 3113 =
+
+  title             "Greatheart";
+  leader            "";
+  author            "McKeone, Dixie Lee";
+  date              February 1996;
+  ISBN              0-7869-0480-1;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Birthright;
+  references        complete product listing,
+                    catalogue96,
+                    catalog96,
+                    Dragon 226,
+                    Dragon 227;
+  description
+  "elves mount fierce resistance against the humans".
+
+
+#.....
+#----- TSR 3114
+
+base product TSR 3114 =
+
+  title             "Hag's Contract";
+  leader            "The";
+  author            "John Betancourt";
+  date              June 1996;
+  ISBN              0-7869-0496-8;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229;
+  description
+  "legendary pirate King Ulrich".
+
+
+#.....
+#----- TSR 3115
+
+base product TSR 3115 =
+
+  title             "Spider's Test";
+  leader            "The";
+  author            "McKeone, Dixie Lee";
+  date              September 1996;
+  ISBN              0-7869-0512-3;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 232,
+                    Dragon 233;
+  description
+  "story of Richard Endier".
+
+
+#.....
+#----- TSR 3116
+
+base product TSR 3116 =
+
+  title             "Falcon and the Wolf";
+  leader            "The";
+  author            "L. Richard III Baker";
+  date              August 1997;
+  ISBN              0-7869-0529-8;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 235,
+                    Dragon 236,
+                    Dragon 238;
+  description
+  "Birthright Realm novel #5".
+
+
+#.....
+#----- TSR 3133
+
+base product TSR 3133 =
+
+  title             "War";
+  leader            "";
+  author            "Simon Hawke";
+  date              May 1996;
+  ISBN              0-7869-0495-X;
+  pages             352;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  price             $21.99;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 237,
+                    Dragon 228,
+                    Dragon 229;
+  description
+  "war and anarchy for the throne of Anuire".
+
+
+#.....
+#----- TSR 3133P
+
+base product TSR 3133P =
+
+  title             "War";
+  leader            "";
+  author            "Simon Hawke";
+  date              September 1997;
+  ISBN              0-7869-0720-7;
+  pages             352;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 5.99;
+  worlds            Birthright;
+  references        net,
+                    Dragon 238;
+  description
+  "war and anarchy for the throne of Anuire".
+
+
+#.....
+#----- TSR 3138
+
+base product TSR 3138 =
+
+  title             "Shadow Stone";
+  leader            "The";
+  author            "Richard Baker";
+  date              July 1997;
+  ISBN              0-7869-0666-9;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Birthright;
+  references        net;
+  description
+  "the early years of Aelies Morren".
+
+
+#.....
+#----- TSR 3145
+
+base product TSR 3145 =
+
+  title             "Siege";
+  leader            "";
+  author            "Simon Hawke";
+  date              October 1997;
+  ISBN              0-7869-0759-2;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Birthright;
+  references        net;
+  description
+  "sequel to War".
+
+
+#.....
+#----- TSR 3150
+
+base product TSR 3150 =
+
+  title             "Aquitania";
+  leader            "";
+  author            "Lynn Abbey";
+  date              November 1997;
+  ISBN              0-7869-0768-1;
+  pages             336;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  price             $19.99;
+  worlds            Birthright;
+  references        net;
+  description
+  "the young queen of Aduria begins a new dynasty".
+
+
+#.....

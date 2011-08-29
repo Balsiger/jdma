@@ -1,0 +1,1014 @@
+#
+# File:         Accessory.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Reviewer(s):
+#
+# Description:  These are the Greyhawk accessories
+#
+# Worlds:       Greyhawk
+#
+#
+
+#----- TSR 1015
+
+base product TSR 1015 =
+
+  title             "World of Greyhawk Campaign Setting";
+  leader            "";
+  date              1983;
+  price             $15.00;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "Unknown".
+
+
+#.....
+#----- TSR 1043
+
+base product TSR 1043 =
+
+  title             "City of Greyhawk";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-731-9;
+  pages             192;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $18.00;
+  contents          Poster "map" 3,
+                    Poster,
+                    Booklet 2;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "Unknown".
+
+
+#.....
+#----- TSR 1064
+
+base product TSR 1064 =
+
+  title             "From the Ashes";
+  leader            "";
+  date              November 1992;
+  ISBN              1-56076-341-8;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog91W,
+                    catalog93;
+  description
+  "Sequel to the Greyhawk Wars boxed set.".
+
+
+#.....
+#----- TSR 1068
+
+base product TSR 1068 =
+
+  title             "Greyhawk Wars";
+  leader            "";
+  date              December 1991;
+  ISBN              1-56076-086-9;
+  system            D&D 1st;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91W,
+                    catalog93;
+  description
+  "A boxed set and boardgame.".
+
+
+#.....
+
+#----- TSR 2003A
+
+base product TSR 2003A =
+
+  title             "Greyhawk";
+  leader            "";
+  date              1975;
+  price             $ 5.00;
+  references        net price list;
+  description
+  "".
+
+
+#.....
+#----- TSR 2003B
+
+base product TSR 2003B =
+
+  title             "Greyhawk (black and white)";
+  leader            "";
+  date              1975;
+  price             $15.00;
+  references        net price list;
+  description
+  "".
+
+
+#.....
+#----- TSR 2023
+
+base product TSR 2023 =
+
+  title             "Greyhawk Adventures";
+  leader            "";
+  date              1988;
+  ISBN              0-88038-649-5;
+  price             $15.00;
+  worlds            Greyhawk;
+  references        net price list,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 2107
+
+base product TSR 2107 =
+
+  title             "Monstrous Compendium, Greyhawk Appendix";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-836-6;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Monster Compendium;
+  style             Sheets;
+  number            Volume IV Greyhawk Appendix;
+  series            Monstrous Compendium;
+  price             $ 9.95;
+  contents          Folder;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalog93;
+  description
+  "A lot of monsters";
+  synonyms          "MC5".
+
+
+#.....
+
+#----- TSR 9025
+
+base product TSR 9025 =
+
+  title             "World of Greyhawk Folio";
+  leader            "";
+  date              1980;
+  price             $12.00;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "".
+
+
+#.....
+#----- TSR 9065
+
+base product TSR 9065 =
+
+  title             "Forgotten Temple of Tharzidun";
+  leader            "The";
+  date              1982;
+  price             $ 6.00;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "WG4".
+
+
+#.....
+#----- TSR 9072
+
+base product TSR 9072 =
+
+  title             "Dungeonland";
+  leader            "";
+  date              1983;
+  price             $ 6.00;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "EX1".
+
+
+#.....
+#----- TSR 9073
+
+base product TSR 9073 =
+
+  title             "Land Beyond the Magic Mirror";
+  leader            "The";
+  date              1983;
+  price             $ 6.00;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "EX2".
+
+
+#.....
+
+#----- TSR 9112
+
+base product TSR 9112 =
+
+  title             "Mordenkainen's Fantastic Adventure";
+  leader            "";
+  date              1984;
+  price             $ 6.00;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "WG5".
+
+
+#.....
+#----- TSR 9147
+
+base product TSR 9147 =
+
+  title             "Temple of Elemental Evil";
+  leader            "";
+  author            "Gygax, E. Gary",
+                    "Mentzer, Frank";
+  date              1985;
+  ISBN              0-88038-018-7;
+  pages             144;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $15.00;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalog93;
+  description
+  "from the little village of Hommlet to the dephs of the Temple, levels 1-8";
+  synonyms          "T1-4".
+
+
+#.....
+#----- TSR 9153
+
+base product TSR 9153 =
+
+  title             "Isle of the Ape";
+  leader            "";
+  date              1985;
+  price             $ 8.00;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "WG6".
+
+
+#.....
+
+#----- TSR 9222
+
+base product TSR 9222 =
+
+  title             "Castle Greyhawk";
+  leader            "";
+  date              1988;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "WG7".
+
+
+#.....
+#----- TSR 9251
+
+base product TSR 9251 =
+
+  title             "Gargoyle";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-719-X;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $�5.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "two gargoyles wake up to find their wings stolen, levels 1-4";
+  synonyms          "WG9".
+
+
+#.....
+#----- TSR 9253
+
+base product TSR 9253 =
+
+  title             "Fate of Istus";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-712-2;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $10.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "update to 2nd Edition, levels 0-10";
+  synonyms          "WG8".
+
+
+#.....
+#----- TSR 9265
+
+base product TSR 9265 =
+
+  title             "Child's Play";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-756-4;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $ 5.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "the monarchy of Rhesdain is in danger of toppling, levels 13-15";
+  synonyms          "WG10".
+
+
+#.....
+#----- TSR 9269
+
+base product TSR 9269 =
+
+  title             "Puppets";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-781-5;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $ 5.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "an evil with has been making puppets with strang powers, levels 2-3";
+  synonyms          "WG11".
+
+
+#.....
+#----- TSR 9270
+
+base product TSR 9270 =
+
+  title             "Vale of the Mage";
+  leader            "";
+  date              1990;
+  price             $ 8.95;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "WG12".
+
+
+#.....
+#----- TSR 9279
+
+base product TSR 9279 =
+
+  title             "Falcon's Revenge";
+  leader            "";
+  date              1990;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $ 8.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96;
+  description
+  "search for clues to stop a cult from resurfacing";
+  synonyms          "WGA1".
+
+
+#.....
+#----- TSR 9289
+
+base product TSR 9289 =
+
+  title             "Falconmaster";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-830-7;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $ 8.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "assassins try to kill off the player characters one by one";
+  synonyms          "WGA2".
+
+
+#.....
+#----- TSR 9292
+
+base product TSR 9292 =
+
+  title             "Greyhawk Ruins";
+  leader            "";
+  date              1990;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Accessory;
+  price             $15.00;
+  worlds            Greyhawk;
+  references        catalogue93;
+  description
+  "the ruins of Castle Greyhawk";
+  synonyms          "WGR1".
+
+
+#.....
+
+#----- TSR 9302
+
+base product TSR 9302 =
+
+  title             "Flames of the Falcon";
+  leader            "";
+  date              1990;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $ 8.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96;
+  description
+  "someone or something is killing the guild leaders";
+  synonyms          "WGA3".
+
+
+#.....
+#----- TSR 9309
+
+base product TSR 9309 =
+
+  title             "Vecna Lives";
+  leader            "";
+  date              1990;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net price list;
+  description
+  "";
+  synonyms          "WGA4".
+
+
+#.....
+#----- TSR 9317
+
+base product TSR 9317 =
+
+  title             "Five Shall be One";
+  leader            "";
+  date              April 1991;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net price list,
+                    catalog91S;
+  description
+  "";
+  synonyms          "WGS1".
+
+
+#.....
+#----- TSR 9337
+
+base product TSR 9337 =
+
+  title             "Howl from the North";
+  leader            "";
+  date              October 1991;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net price list,
+                    catalog91W;
+  description
+  "the Ice Barbarians try to steal the five blades";
+  synonyms          "WGS2".
+
+
+#.....
+#----- TSR 9360
+
+base product TSR 9360 =
+
+  title             "Treasures of Greyhawk";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-366-3;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $10.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalog93;
+  description
+  "several mini adventures";
+  synonyms          "WGR2".
+
+
+#.....
+#----- TSR 9385
+
+base product TSR 9385 =
+
+  title             "Patriots of Ulek";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-449-X;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "stop the orc invasion";
+  synonyms          "WGQ1".
+
+
+#.....
+#----- TSR 9386
+
+base product TSR 9386 =
+
+  title             "Rary the Traitor";
+  leader            "";
+  date              August 1992;
+  ISBN              1-56076-497-X;
+  system            AD&D 2nd;
+  product type      Accessory;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalogue96,
+                    catalog93;
+  description
+  "land and persons";
+  synonyms          "WGR3".
+
+
+#.....
+#----- TSR 9398
+
+base product TSR 9398 =
+
+  title             "Marklands";
+  leader            "The";
+  author            "Sargent, Carl";
+  date              February 1993;
+  ISBN              1-56076-559-3;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $10.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalog93W,
+                    catalog93,
+                    catalogue96;
+  description
+  "adventure on the war-stricken frontier of Furyondy";
+  synonyms          "WGR4".
+
+
+#.....
+#----- TSR 9399
+
+base product TSR 9399 =
+
+  title             "Iuz the Evil";
+  leader            "";
+  author            "Sargent, Carl";
+  date              April 1993;
+  ISBN              1-56076-584-4;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $10.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalog93W,
+                    catalog93,
+                    catalogue96;
+  description
+  "dare to infiltrate Iuz's blood-red empire";
+  synonyms          "WGR5".
+
+
+#.....
+
+#----- TSR 9400
+
+base product TSR 9400 =
+
+  title             "Krynn Trail Map";
+  leader            "";
+  date              1989;
+  price             $ 3.95;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "TM3".
+
+
+#.....
+#----- TSR 9405
+
+base product TSR 9405 =
+
+  title             "City of Skulls";
+  leader            "The";
+  author            "Sargent, Carl";
+  date              June 1993;
+  ISBN              1-56076-608-5;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93W,
+                    catalog93;
+  description
+  "infiltrate the city on a secret mission";
+  synonyms          "WGR6".
+
+
+#.....
+#----- TSR 9406
+
+base product TSR 9406 =
+
+  title             "Border Watch";
+  leader            "";
+  author            "Staff, TSR";
+  date              August 1993;
+  ISBN              1-56076-631-X;
+  pages             32;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 6.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description
+  "battle the tides of evil from the vast northern empire of Iuz, levels 1-3";
+  synonyms          "WGM1".
+
+
+#.....
+
+#----- TSR 9576
+
+base product TSR 9576 =
+
+  title             "Return of the Eight";
+  leader            "";
+  author            "Moore, Roger";
+  date              May 1998;
+  ISBN              0-7869-1247-2;
+  pages             80;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $13.95;
+  worlds            Greyhawk;
+  references        net,
+                    catalog98,
+                    Dragon 245,
+                    Dragon 246,
+                    Dragon 247;
+  description
+  "the Circle of Eight must be made whole again".
+
+
+#.....
+#----- TSR 9577
+
+base product TSR 9577 =
+
+  title             "Adventure Begins";
+  leader            "The";
+  author            "Moore, Roger";
+  date              July 1998;
+  ISBN              0-7869-1249-9;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  price             $21.95;
+  worlds            Greyhawk;
+  references        net,
+                    catalog98,
+                    Dragon 247,
+                    Dragon 248;
+  description
+  "explore the Wild Coast and the deadly Bright Desert".
+
+
+#.....
+#----- TSR 9578
+
+base product TSR 9578 =
+
+  title             "Player's Guide to Greyhawk";
+  leader            "";
+  date              June 1998;
+  pages             48;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net,
+                    catalog98,
+                    Dragon 246,
+                    Dragon 247,
+                    Dragon 248;
+  description
+  "new legends and deadly dungeons to explore".
+
+
+#.....
+#----- TSR 9579
+
+base product TSR 9579 =
+
+  title             "Star Cairns";
+  leader            "The";
+  author            "Moore, Roger";
+  date              September 1998;
+  ISBN              0-7869-1250-2;
+  pages             48;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net,
+                    catalog98;
+  description
+  "an epic in the ongoing saga known as Lost Tombs".
+
+
+#.....
+#----- TSR 9580
+
+base product TSR 9580 =
+
+  title             "Crypt of Lyzandred";
+  leader            "";
+  author            "Moore, Roger";
+  date              October 1998;
+  pages             48;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net,
+                    catalog98;
+  description
+  "the second adventure in the Lost Tombs series".
+
+
+#.....
+#----- TSR 9581
+
+base product TSR 9581 =
+
+  title             "Doomgrinder";
+  leader            "The";
+  author            "Moore, Roger";
+  date              November 1998;
+  ISBN              0-7869-1252-9;
+  pages             48;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  worlds            Greyhawk;
+  references        net,
+                    catalog98;
+  description
+  "the third adventure in the Lost Tombs series".
+
+
+#.....
+
+#----- TSR 11374
+
+base product TSR 11374 =
+
+  title             "Scarlet Brotherhood";
+  leader            "The";
+  author            "Reynolds, Sean";
+  date              March 1999;
+  ISBN              0-7869-1374-6;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  price             $17.95;
+  worlds            Greyhawk;
+  references        net,
+                    Dragon 257;
+  description
+  "sourcebook about the shadowy villains of the Greyhawk setting".
+
+
+#.....
+#----- TSR 11413
+
+base product TSR 11413 =
+
+  title             "Against the Giants: The Liberation of Geoff";
+  leader            "";
+  author            "Reynolds, Sean";
+  date              August 1999;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  price             $17.95;
+  worlds            Greyhawk;
+  references        net;
+  description
+  "revision of the classic Gygax adventure".
+
+
+#.....
+#----- TSR 11434
+
+base product TSR 11434 =
+
+  title             "Return to White Plume Mountain";
+  leader            "";
+  author            "Cordell, Bruce R.";
+  date              November 1999;
+  ISBN              0-7869-1434-3;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $12.95;
+  worlds            Greyhawk;
+  references        net,
+                    Dragon 263,
+                    Dragon 264;
+  description
+  "revision of a classic Greyhawk adventure".
+
+
+#.....
+#----- TSR 11621
+
+base product TSR 11621 =
+
+  title             "Slavers";
+  leader            "";
+  author            "Reynolds, Sean K.",
+                    "Pramas, Chris";
+  date              April 2000;
+  ISBN              0-7869-1621-4;
+  pages             128;
+  system            AD&D 1st;
+  audience          DM;
+  product type      Adventure;
+  style             Paperback;
+  price             $18.95;
+  contents          Map "black-and-white" 6,
+                    Misc "black-and-white illustrations" 13;
+  worlds            Greyhawk;
+  references        net,
+                    Dragon 268,
+                    Dragon 270;
+  description
+  "uncover the slavers secret contacts and destroy hidden bases".
+
+
+#.....
+#----- TSR 11743
+
+base product TSR 11743 =
+
+  title             "Living Greyhawk Gazetteer";
+  leader            "";
+  subtitle          "Make the world your own!";
+  author            "Holian, Gary",
+                    "Mona, Erik",
+                    "Reynolds, Sean K",
+                    "Weining, Frederick";
+  date              November 2000;
+  ISBN              0-7869-1743-1;
+  pages             192;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Soft Cover;
+  producer          RPGA;
+  price             $26.95;
+  worlds            Greyhawk;
+  references        net;
+  description
+  "At gaming tables everywhere, the future of the \Place{Greyhawk} setting
+  turns on the rolls of dice and the actions of thousands of Dungeons & Dragons
+  players.
+
+  This comprehensive sourcebook contains everything you need to get started in
+  the RPGA Network's exciting Living Greyhawk shared world campaign.
+
+  Inside you'll find descriptions of dozens of nations and scores of deities,
+  as well as hundreds of adventure hooks to get heores immersed in the dangers
+  of the world. In the Living Greyhawk campaign, you determine the fate of the
+  \Place{Flanaess}. It's your world!";
+  synonyms          "WTC 86727".
+
+
+#.....

@@ -1,0 +1,100 @@
+#
+# File:         Al-Qadim.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:
+#
+# Reviewer(s):
+#
+# Description:  Al-Qadim Novels
+#
+# Worlds:       Al-Qadim
+#
+# Keywords:
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/Al-Qadim.dma,v $
+#
+# $Revision: 1.5 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Al-Qadim.dma,v $
+# Revision 1.5  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.4  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.3  2007/06/09 09:50:27  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2006/04/15 16:44:26  merlin
+# new products
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2003/05/19 19:57:27  merlin
+# updated to version Aboleth
+#
+# Revision 1.2  2001/10/23 22:20:39  merlin
+# updated again
+#
+# Revision 1.1  2001/08/21 22:31:11  merlin
+# *** empty log message ***
+#
+#
+
+#.....
+#
+#
+
+#----- TSR 8090
+
+base product TSR 8090 =
+
+  title             "Secret of the Djinn";
+  leader            "";
+  author            "Jean Rabe";
+  cover             "Jeff Easley";
+  illustrations     "Terry Dykstra";
+  date              May 1994;
+  ISBN              1-56076-864-9;
+  pages             188;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book Three;
+  series            New Series;
+  price             � 3.99;
+  contents          Book;
+  worlds            Al-Qadim;
+  references        catalogue94,
+                    catalogue96;
+  description
+  "You are a young pearl diver who is propelled into an amazing adventure when
+  you uncork an old bottle you discover at the bottom of the sea.
+
+  You are whisked far from your home in \Place{Zakhara}, the \Place{Land of
+  Fate}, on a magical quest to free the king of the \Monster{sea djinn}. There
+  are many decisions you must make along the way. You are courageous and
+  clever, but can you hope to overcome the dangers that lie before you? Riches
+  and fame could be yours if you choose the correct path.
+
+  Only your choices can help you discover the \Product{Secret of the Djinn}.
+
+  \Product{Endless Quest} Books are action-packed stories based on exciting
+  role-playing games that allow you, the reader, to make the decisions that
+  determine the adventure's outcome. Read them over and over to experience new
+  paths of excitement!
+
+  \Product{Endless Quest} Books, where you control the adventure!".
+
+
+#.....

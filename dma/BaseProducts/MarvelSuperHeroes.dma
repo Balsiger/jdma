@@ -1,0 +1,560 @@
+#
+# File:         MarvelSuperHeroes.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:
+#
+# Reviewer(s):
+#
+# Description:  Marve Super Heroes products
+#
+# Worlds:
+#
+# Keywords:
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/MarvelSuperHeroes.dma,v $
+#
+# $Revision: 1.6 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: MarvelSuperHeroes.dma,v $
+# Revision 1.6  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.5  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.4  2007/07/16 20:02:13  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2006/05/03 21:36:45  merlin
+# some more stuff
+#
+# Revision 1.1  2004/09/19 09:31:32  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2004/04/16 21:14:24  merlin
+# corrected Marvel Super Heroes Adventure Game
+#
+# Revision 1.2  2003/05/03 21:57:19  merlin
+# adjusted to current version
+#
+# Revision 1.1  2001/08/21 22:32:46  merlin
+# *** empty log message ***
+#
+#
+
+#.....
+#
+#
+
+#----- TSR 6899
+
+base product TSR 6899 =
+
+  title             "X-Terminate";
+  leader            "";
+  date              June 1991;
+  system            Marvel Super Heroes;
+  audience          DM;
+  price             $ 6.95;
+  worlds            Generic;
+  references        catalog91S;
+  description
+  "";
+  synonyms          "MSL1".
+
+
+#.....
+
+#----- TSR 6900
+
+base product TSR 6900 =
+
+  title             "Marvel Super Heroes Basic Set";
+  leader            "";
+  date              May 1991;
+  system            Marvel Super Heroes;
+  audience          DM;
+  price             $20.00;
+  worlds            Generic;
+  references        catalog91S;
+  description
+  "".
+
+
+#.....
+#----- TSR 6901
+
+base product TSR 6901 =
+
+  title             "Warlord of Baluur";
+  leader            "";
+  date              August 1991;
+  system            Marvel Super Heroes;
+  audience          DM;
+  price             $ 6.95;
+  worlds            Generic;
+  references        catalog91W;
+  description
+  "STYGIAN has stolen the cosmic control rod";
+  synonyms          "MLS2".
+
+
+#.....
+#----- TSR 6902
+
+base product TSR 6902 =
+
+  title             "Spore of Arthros";
+  leader            "";
+  date              October 1991;
+  system            Marvel Super Heroes;
+  audience          DM;
+  price             $ 6.95;
+  worlds            Generic;
+  references        catalog91W;
+  description
+  "someone uses cosmic control rods to create chaos on Earth";
+  synonyms          "MSL3".
+
+
+#.....
+#----- TSR 6903
+
+base product TSR 6903 =
+
+  title             "Gamer's Handbook of the MARVEL UNIVERSE";
+  leader            "";
+  date              December 1991;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Accessory;
+  price             $15.95;
+  worlds            Generic;
+  references        catalog91W;
+  description
+  "latest info on heroes and villains";
+  synonyms          "MU7".
+
+
+#.....
+#----- TSR 6904
+
+base product TSR 6904 =
+
+  title             "Stygian Knight";
+  leader            "";
+  date              December 1991;
+  system            Marvel Super Heroes;
+  audience          DM;
+  price             $ 6.95;
+  worlds            Generic;
+  references        catalog91W;
+  description
+  "STYGIAN tries to conquer Earth";
+  synonyms          "MSL4".
+
+
+#.....
+#----- TSR 6907
+
+base product TSR 6907 =
+
+  title             "Webs: The Spider-Man Dossier";
+  leader            "";
+  date              October 1992;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Accessory;
+  price             $15.00;
+  worlds            Generic;
+  references        catalog92;
+  description
+  "information, stats, solo adventure, map and fold-ups";
+  synonyms          "MHR2".
+
+
+#.....
+#----- TSR 6908
+
+base product TSR 6908 =
+
+  title             "Go West: The Avengers Archives";
+  leader            "";
+  date              January 1993;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Accessory;
+  price             $15.00;
+  worlds            Generic;
+  references        catalog92;
+  description
+  "information, adventures, 3-D fold-ups, equipment and more";
+  synonyms          "MHR3".
+
+
+#.....
+#----- TSR 6909
+
+base product TSR 6909 =
+
+  title             "Gamer's Handbook of the Marvel Universe";
+  leader            "";
+  date              September 1992;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Accessory;
+  price             $15.95;
+  worlds            Generic;
+  references        catalog92
+;
+  description
+  "details of favorite characters";
+  synonyms          "MU8".
+
+
+#.....
+#----- TSR 6920
+
+base product TSR 6920 =
+
+  title             "MARVEL Super Dice Game";
+  leader            "";
+  author            "James M. Ward",
+                    "Wise, David";
+  date              March 1997;
+  ISBN              0-7869-0673-1;
+  system            Marvel Super Dice;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $14.95;
+  contents          Dice "random" 16,
+                    Booklet "rules",
+                    Card "area";
+  worlds            None;
+  references        net,
+                    catalog98;
+  description
+  "collectibel dice game, base".
+
+
+#.....
+#----- TSR 6920P
+
+base product TSR 6920P =
+
+  title             "MARVEL Super Dice Game";
+  leader            "";
+  author            "James M. Ward",
+                    "Wise, David";
+  ISBN              0-7869-0839-4;
+  system            Marvel Super Dice;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $19.95;
+  contents          Dice "random" 16,
+                    Booklet "rules",
+                    Card "areas";
+  worlds            None;
+  references        net;
+  description
+  "collectibel dice game, base".
+
+
+#.....
+#----- TSR 6921
+
+base product TSR 6921 =
+
+  title             "Super Dice Kicker Pack 1: Avengers";
+  leader            "";
+  author            "Michele Carter",
+                    "Steve Miller";
+  date              April 1998;
+  ISBN              0-7869-0700-2;
+  system            Marvel Super Dice;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 8.95;
+  contents          Dice "random" 8,
+                    Booklet "expanded rules";
+  worlds            None;
+  references        net,
+                    catalog98,
+                    Dragon 244,
+                    Dragon 245;
+  description
+  "dices for the game".
+
+
+#.....
+#----- TSR 6922
+
+base product TSR 6922 =
+
+  title             "Clash Game";
+  leader            "";
+  author            "TSR Staf";
+  date              May 1998;
+  pages             16;
+  system            Marvel Super Dice;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $19.95;
+  contents          Dice "sets of random" 2,
+                    Misc "dice bag" 2,
+                    Card "area" 10,
+                    Booklet;
+  worlds            None;
+  references        net,
+                    catalog98,
+                    Dragon 245,
+                    Dragon 246;
+  description
+  "two games in one".
+
+
+#.....
+#----- TSR 6924
+
+base product TSR 6924 =
+
+  title             "Fantastic Four";
+  leader            "";
+  author            "Michele Carter";
+  date              October 1998;
+  ISBN              0-7869-0739-8;
+  system            Marvel Super Dice;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 8.95;
+  contents          Dice "random" 8,
+                    Booklet "expanded rules";
+  worlds            None;
+  references        net,
+                    catalog98;
+  description
+  "dices for the game".
+
+
+#.....
+#----- TSR 6925
+
+base product TSR 6925 =
+
+  title             "Spider-Man";
+  leader            "";
+  author            "Olmesdahl, Bill",
+                    "Steven Brown",
+                    "Steve Miller";
+  date              June 1998;
+  ISBN              0-7869-0779-7;
+  system            Marvel Super Dice;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 8.95;
+  contents          Dice "random" 8,
+                    Booklet "expanded rules";
+  worlds            None;
+  references        net,
+                    catalog98;
+  description
+  "dices for the game".
+
+
+#.....
+#----- TSR 6926
+
+base product TSR 6926 =
+
+  title             "Marvel Super Heroes Adventure Game";
+  leader            "";
+  author            "Mike Selinker",
+                    "Michele Carter",
+                    "Olmesdahl, Bill",
+                    "Steven E. Shent",
+                    "Steven 'Stan!' Brown";
+  cover             "Pazcheco, Carlos",
+                    "Scott Koblish",
+                    "Bongotone";
+  illustrations     "Tata, Dave",
+                    "Scott Koblish",
+                    "Bongotone",
+                    "The Marvel Bullpen";
+  typography        "Lokotz, Angelika";
+  date              1998;
+  ISBN              0-7869-1227-8;
+  pages             272;
+  system            Saga;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Medium Box;
+  price             $10.95;
+  contents          Book "Game Book",
+                    Book "Roster Book",
+                    Card 95;
+  worlds            Marvel Super Heroes;
+  description
+  "\large{'It's Clobberin' Time!'}
+
+  Join the adventure game where you can play the one and only Marvel Super
+  Heroes!
+
+  Swing into action with your friendly neighborhood \NPC{Spider-Man} or bust up
+  the bad guys as the wild-eye \NPC{Wolverine} with the new \Product{Marvel
+  Super Heroes} Adventure Game.
+
+  Join in on the mighty Marvel excitement of your favorite comic book
+  heroes. This fast-paced, action packed adventure game features roleplaying
+  ripped right from the pages of the best-selling Marvel comics. Your favorite
+  Super Heroes and Super-Villains are your friends and foes as you experience
+  the Marvel Universe as you never have before!
+
+  The \Product{Marvel Super Heroes Adventure Game} showcases the award-winning
+  SAGA game rules for an easy-to-use, dramatic roleplaying experience in the
+  style of your favorite comics. Instead of the randomness of dice, you plan
+  your strategies and take your chances with the Hand of Fate dealt to you. Are
+  you ready for some action?
+
+  Contains:
+
+  \list
+  {Basic rules and advanced options, plus an introductory adventure.}
+  {A Narrator's guide to creating nonstop action adventures.}
+  {A catalog of the superpowers of the Marvel Universe.}
+  {A roster of featured Super Heroes and Super-Villains with official
+   game stats!}
+  {A Mighty Marvel Fate Deck for resolving all the pulse-pounding action!}
+
+  So What Are You Waiting For, an Engraved Invitation?
+
+  It's Clobberin' Time, True Believer!".
+
+
+#.....
+#----- TSR 6927
+
+base product TSR 6927 =
+
+  title             "X-Men Roster";
+  leader            "";
+  author            "TSR Staff";
+  date              July 1998;
+  ISBN              0-7869-1228-6;
+  pages             128;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Accessory;
+  style             Soft Cover;
+  price             $14.95;
+  worlds            Generic;
+  references        net,
+                    catalog98;
+  description
+  "all information for the heroes".
+
+
+#.....
+#----- TSR 6928
+
+base product TSR 6928 =
+
+  title             "X-Men: Who Goes There";
+  leader            "";
+  author            "TSR Staff";
+  date              July 1998;
+  ISBN              0-7869-1229-4;
+  pages             48;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 6.95;
+  worlds            Generic;
+  references        net,
+                    catalog98;
+  description
+  "anthology of adventures".
+
+
+#.....
+#----- TSR 6929
+
+base product TSR 6929 =
+
+  title             "Guide to Marvel Earth";
+  leader            "A";
+  author            "Olmesdahl, Bill";
+  date              September 1998;
+  ISBN              0-7869-1230-8;
+  pages             192;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Accessory;
+  price             $14.95;
+  worlds            Generic;
+  references        net,
+                    catalog98;
+  description
+  "details of home and equipments of the heroes".
+
+
+#.....
+#----- TSR 6930
+
+base product TSR 6930 =
+
+  title             "Avengers Roster";
+  leader            "";
+  author            "TSR Staff";
+  date              October 1998;
+  ISBN              0-7869-1231-6;
+  pages             128;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Accessory;
+  price             $14.95;
+  worlds            Generic;
+  references        net,
+                    catalog98;
+  description
+  "reference guide to the Avengers".
+
+
+#.....
+#----- TSR 6931
+
+base product TSR 6931 =
+
+  title             "Avengers: Mastsers of Evil";
+  leader            "";
+  author            "Steve Miller";
+  date              November 1998;
+  ISBN              0-7869-1232-4;
+  pages             48;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 6.95;
+  worlds            Generic;
+  references        net,
+                    catalog98;
+  description
+  "epic adventure featuring the ultimate team of Super-Villains".
+
+
+#.....

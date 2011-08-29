@@ -1,0 +1,633 @@
+#
+# File:         Catalogs.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:  Peter 'Merlin' Balsiger
+#
+# Reviewer(s):
+#
+# Description:  These are the catalogs for TSR and WoC products
+#
+# Worlds:       all
+#
+# Keywords:     catalog;
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Catalogs.dma,v $
+#
+# $Revision: 1.12 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Catalogs.dma,v $
+# Revision 1.12  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.11  2010/05/28 19:28:39  merlin
+# *** empty log message ***
+#
+# Revision 1.10  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.9  2008/11/02 17:36:22  merlin
+# *** empty log message ***
+#
+# Revision 1.8  2008/05/01 18:00:02  merlin
+# *** empty log message ***
+#
+# Revision 1.7  2007/12/02 22:22:46  merlin
+# *** empty log message ***
+#
+# Revision 1.6  2007/09/29 23:49:23  merlin
+# removed some empty synonyms
+#
+# Revision 1.5  2007/09/05 19:41:03  merlin
+# *** empty log message ***
+#
+# Revision 1.4  2007/06/09 09:50:27  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2006/04/30 19:43:44  merlin
+# corrections and new stuff
+#
+# Revision 1.2  2006/04/15 16:44:10  merlin
+# new products
+#
+# Revision 1.1  2004/09/19 09:31:32  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2003/05/03 21:44:59  merlin
+# adjusted to current version
+#
+# Revision 1.2  2001/11/08 22:04:06  merlin
+# updated again
+#
+# Revision 1.1  2001/07/20 12:09:10  merlin
+# *** empty log message ***
+#
+#
+
+#.....
+#
+#
+
+#----- TSR 9912
+
+base product TSR 9912 =
+
+  title             "1993 TSR Master Catalog - Collector's Edition";
+  leader            "";
+  author            "TSR Staff";
+  date              1993;
+  ISBN              1-56076-621-2;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Hardcover;
+  price             $ 9.95;
+  contents          Book;
+  requirements      ;
+  references        DMA 000005;
+  description
+  "Now let your imagination run rampant through 136 pages featuring the best in
+  adventure games and books: the \emph{1993 TSR Master Catalog - Collector's
+  Edition}.
+
+  Inside you will find:
+  \list
+  {the history of the Dungeons & Dragons game and TSR, Inc. accompanied
+   by lavish illustrations}
+  {32 pages of unique insights into all of TSR's game worlds---written
+   by the designers synonymous with each---that appear only in this
+   edition}
+  {A brilliant, visual tour of TSR's game worlds and campaign settings}
+  {Four-color illustrations of all game and book releases for 1993}
+  {The description, on sale date, and suggested retail price for each
+   new product}
+  {And, so you won't miss a treasure, all product releases from the
+   past that are currently available are listed}
+
+  You get all this and more!
+
+  \bold{Open the door to adventure!}".
+
+
+#.....
+
+#----- DMA 000002
+
+base product DMA 000002 =
+
+  title             "1991 Spring/Summer Catalog";
+  leader            "";
+  date              1991;
+  pages             8;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Catalog of the 1991 spring/summer stock of TSR.".
+
+
+#.....
+#----- DMA 000003
+
+base product DMA 000003 =
+
+  title             "1992 Fall/Winter Catalog";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-696-4;
+  pages             12;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Catalog of the 1992 fall/winter stock of TSR.".
+
+
+#.....
+#----- DMA 000004
+
+base product DMA 000004 =
+
+  title             "Summer Fall 1993";
+  leader            "";
+  date              1993;
+  pages             16;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Catalog of the 1993 summer/fall stock of TSR.".
+
+
+#.....
+#----- DMA 000005
+
+base product DMA 000005 =
+
+  title             "Winter 1993";
+  leader            "";
+  date              1993;
+  pages             12;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Catalog of the 1983 winter stock of TSR.".
+
+
+#.....
+#----- DMA 000006
+
+base product DMA 000006 =
+
+  title             "Hobby Shop Catalogue 1993";
+  leader            "";
+  date              1993;
+  pages             49;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "British catalog of the 1993 stock of TSR".
+
+
+#.....
+#----- DMA 000007
+
+base product DMA 000007 =
+
+  title             "1994 Hobby Shop Catalogue";
+  leader            "The";
+  date              1994;
+  pages             66;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "British catalog of the 1994 stock of TSR.".
+
+
+#.....
+#----- DMA 000008
+
+base product DMA 000008 =
+
+  title             "Best in Games and Books 1995";
+  leader            "The";
+  date              1995;
+  pages             128;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Soft Cover;
+  price             $ 0.00;
+  contents          Book,
+                    Poster "shipment";
+  requirements      ;
+  description
+  "Catalog of the 1995 stock of TSR".
+
+
+#.....
+#----- DMA 000009
+
+base product DMA 000009 =
+
+  title             "Hobby Shop Catalogue 1996";
+  leader            "The";
+  date              1996;
+  pages             98;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "British catalog of the 1996 stock of TSR.".
+
+
+#.....
+#----- DMA 000010
+
+base product DMA 000010 =
+
+  title             "1992 TSR";
+  leader            "";
+  date              1992;
+  pages             104;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Catalog of the 1992 stock of TSR.".
+
+
+#.....
+#----- DMA 000011
+
+base product DMA 000011 =
+
+  title             "1991 Fall/Winter Catalog";
+  leader            "";
+  date              1991;
+  pages             11;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Catalog of the 1991 fall/winter stock of TSR.".
+
+
+#.....
+#----- DMA 000012
+
+base product DMA 000012 =
+
+  title             "1998 Dragonlance Book Catalog";
+  leader            "";
+  date              1998;
+  pages             4;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Flyer;
+  price             $ 0.00;
+  contents          Flyer;
+  requirements      ;
+  description
+  "Catalog of the 1998 \Place{Dragonlance} books of TSR.".
+
+
+#.....
+#----- DMA 000013
+
+base product DMA 000013 =
+
+  title             "1998 Product Release Schedule";
+  leader            "";
+  date              1998;
+  pages             1;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Poster;
+  price             $ 0.00;
+  contents          Poster;
+  requirements      ;
+  description
+  "Poster with the 1998 release schedule of Wizards of the Coast.".
+
+
+#.....
+#----- DMA 000046
+
+base product DMA 000046 =
+
+  title             "1992 Spring/Summer Catalog";
+  leader            "";
+  date              1992;
+  pages             12;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "The 1992 spring and summer catalog of TSR.".
+
+
+#.....
+#----- DMA 000064
+
+base product DMA 000064 =
+
+  title             "May - August 2001 Catalogue";
+  leader            "";
+  date              2001;
+  pages             30;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "The 2001 May to August catalog of Wizards of the Coast.".
+
+
+#.....
+#----- DMA 000065
+
+base product DMA 000065 =
+
+  title             "Verlagsprogramm 2000 millenium";
+  leader            "";
+  subtitle          "";
+  author            "Immig, Michael",
+                    "Simon, Robert";
+  editor            "Don-Schauen, Florian",
+                    "Simon, Robert";
+  illustrations     "Berszuck, Ralf" Satz & Druck;
+  date              2000;
+  pages             54;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          Fantasy Productions;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  layout            Full Color;
+  description
+  "";
+  short description "".
+
+
+#.....
+#----- DMA 000066
+
+base product DMA 000066 =
+
+  title             "White Wolf Publishing 2000 Catalog";
+  leader            "";
+  subtitle          "";
+  date              2000;
+  pages             72;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          White Wolf;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  layout            Full Color;
+  worlds            None;
+  description
+  "Combine this supplement with your January to June 2000 White Wolf Catalog
+  for our full-year listings.";
+  short description "July to December Supplement".
+
+
+#.....
+#----- DMA 000067
+
+base product DMA 000067 =
+
+  title             "RPG International Spring Catalog";
+  leader            "";
+  subtitle          "";
+  pages             16;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          RPG International;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  layout            Full Color;
+  worlds            None;
+  description
+  "";
+  short description "".
+
+
+#.....
+#----- DMA 000068
+
+base product DMA 000068 =
+
+  title             "Casket Works";
+  leader            "";
+  subtitle          "";
+  date              2000;
+  pages             56;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          Reaper;
+  number            issue 5;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  layout            Black & White;
+  worlds            None;
+  description
+  "";
+  short description "".
+
+
+#.....
+
+#----- DMA 000077
+
+base product DMA 000077 =
+
+  title             "Spring Catalog 2007";
+  leader            "";
+  subtitle          "Paizo Publishing";
+  notes             "";
+  author            "";
+  editor            "";
+  cover             "";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              January 2007;
+  pages             32;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          Paizo;
+  price             $0.00;
+  contents          Booklet "";
+  requirements      ;
+  layout            Full Color;
+  description
+  "The Spring 2007 products of Paizo Publishing.".
+
+
+#.....
+
+#----- DMA 000078
+
+base product DMA 000078 =
+
+  title             "Paizo Publishing Summer Catalog 2007";
+  leader            "";
+  subtitle          "Campaigns Have Evolved.";
+  notes             "";
+  date              June 2007;
+  pages             32;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          Paizo;
+  price             $0.00;
+  contents          Booklet "";
+  requirements      ;
+  layout            Full Color;
+  description
+  "Catalog of the Summer 2007 products of Paizo and affiliated.".
+
+#.....
+#----- DMA 000082
+
+base product DMA 000082 =
+
+  title             "Winter Catalog 2008";
+  leader            "";
+  subtitle          "Catalog of Products from Winter 2008";
+  date              December 2007;
+  pages             32;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          Paizo;
+  contents          Booklet "";
+  requirements      ;
+  layout            Full Color;
+  description
+  "All the Paizo products of Winter 2008";
+  short description "Catalog of Products from Winter 2008".
+
+#.....
+#----- DMA 000083
+
+base product DMA 000083 =
+
+  title             "Paizo Summer Catalog 2008";
+  leader            "";
+  subtitle          "Summer Catalog 2008";
+  date              January 2008;
+  pages             32;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          Paizo;
+  price             $0.00;
+  contents          Booklet "Catalog" 1;
+  requirements      ;
+  layout            Full Color;
+  description
+  "Paizo Catalog of Summer 2008.";
+  short description "Paizo Catalog of Summer 2008.".
+
+#.....
+#----- DMA 000084
+
+base product DMA 000084 =
+
+  title             "2009 Catalog";
+  leader            "";
+  subtitle          "Paizo Publishing";
+  date              January 2009;
+  pages             64;
+  system            None;
+  audience          All;
+  product type      Catalog;
+  style             Booklet;
+  producer          Paizo;
+  price             $0.00;
+  contents          Booklet "";
+  requirements      ;
+  layout            Full Color;
+  description
+  "Catalog of 2009.";
+  short description "Catalog of 2009.";
+  synonyms          "".
+
+#.....

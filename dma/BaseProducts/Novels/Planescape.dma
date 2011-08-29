@@ -1,0 +1,321 @@
+#
+# File:         Planescape.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:  Peter 'Merlin' Balsiger
+#
+# Reviewer(s):
+#
+# Description:  Planescape novels
+#
+# Worlds:       Planescape
+#
+# Keywords:     novel
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/Planescape.dma,v $
+#
+# $Revision: 1.6 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Planescape.dma,v $
+# Revision 1.6  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.5  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.4  2007/07/16 20:02:14  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2005/01/02 12:04:19  merlin
+# added 1998 stuff
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.6  2003/09/27 14:53:18  merlin
+# removed an entry that is already present in the D&D version of this world
+#
+# Revision 1.5  2003/05/21 21:25:35  merlin
+# updated to version Aboleth
+#
+# Revision 1.4  2001/11/08 22:04:08  merlin
+# updated again
+#
+# Revision 1.3  2001/11/04 18:59:49  merlin
+# updated again
+#
+# Revision 1.2  2001/08/21 22:31:12  merlin
+# *** empty log message ***
+#
+# Revision 1.1  2001/07/20 11:56:24  merlin
+# *** empty log message ***
+#
+#
+
+#.....
+#
+#
+
+#----- TSR 2616
+
+base product TSR 2616 =
+
+  title             "Blood Hostages";
+  leader            "";
+  author            "Robert J. King";
+  editor            "Larson, Bill",
+                    "Jim Lowder",
+                    "Severson, Eric",
+                    "Patrick McGilligan",
+                    "Young, Barbara",
+                    "Thomson, Brian",
+                    "Marlys Heeszel",
+                    "Lisa Neuberger",
+                    "Sue Weinlein";
+  cover             "Pollack, Alan";
+  illustrations     "Diesel";
+  date              January 1996;
+  ISBN              0-7869-0473-9;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book One;
+  series            Blood Wars Trilogy;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Planescape;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 225;
+  description
+  "\NPC{Aeraes} knew nothing about the \Place{planes} and the evil denizens
+  that dwelt there...until his uncle was abducted by a pair of
+  \Monster{gargoyles} in the employ of an eight-armed god.
+
+  Hot on the trail of these other-worldy kidnappers, \NPC{Aereas} and his
+  cousin, \NPC{Nina}, enter bizarre and twisted worlds beyond
+  imagining. \NPC{Aereas} finds that his uncle's abduction is part of a much
+  larger plot to turn the tide of the fiendish \Event{Blood War} and loose an
+  unspeakable evil throughout the \Place{planes}.
+
+  Though the \Place{planes} hold unspeakable evil, they also hold unimaginable
+  good---the two in a delicate balance. The only question is: Which way will
+  \NPC{Aereas} and \NPC{Nina} tip the scales?".
+
+
+#.....
+#----- TSR 2617
+
+base product TSR 2617 =
+
+  title             "Abyssal Warriors";
+  leader            "";
+  author            "Robert J. King";
+  cover             "Pollack, Alan";
+  illustrations     "Diesel";
+  date              June 1996;
+  ISBN              0-7869-0501-8;
+  pages             314;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book Two;
+  series            Blood Wars Trilogy;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Planescape;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229;
+  description
+  "Lost... Lost...
+
+  Though \NPC{Areas} rescued his uncle from the clutches of \Monster{fiends},
+  he lost his love, \NPC{Nina}, to a conniving \Monster{tiefling}...and to the
+  very pits of the \Place{Abyss}. Now he descends to the \Place{underworld} to
+  find her but discovers that, in the \Place{planes}, a person can be lost in
+  more than body.
+
+  \NPC{Nina} has gone mad. With powers she only now is discovering, she draws
+  to herself a hellish army bent on capturing a beachhead on the
+  \Place{Beastlands}. What \NPC{Areas} and the forces of good do not realize is
+  that this toehold provides her monstrous horde a doorway to all the
+  \Place{planes}.".
+
+
+#.....
+#----- TSR 2618
+
+base product TSR 2618 =
+
+  title             "Planar Powers";
+  leader            "";
+  subtitle          "\NPC{Nina} and her \Monster{fiend} legions scoured the \Place{Abyss}.";
+  author            "King, J. Robert";
+  cover             "Pollak, Alan";
+  illustrations     "Diesel";
+  date              July 1997;
+  ISBN              0-7869-0532-8;
+  pages             313;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  number            Book Three;
+  series            Blood Wars Trilogy;
+  price             $ 5.99;
+  layout            Color Cover;
+  worlds            Planescape;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 235,
+                    Dragon 236,
+                    Dragon 238;
+  description
+  "\NPC{Aereas} and his \Monster{angel} allies saved the \Place{City of Doors}.
+
+But what is left of the cousins? \NPC{Nina} is a soulless body, and \NPC{Areas} a bodiless soul.
+
+It is time for new heroes to rise and carve out their own utopias. It is time for \NPC{Tara} and \NPC{Aegis}, daughter of \NPC{Aereas} and son of \NPC{Nina}, to make a stand.
+
+Of course, they may need some help from a skeletal god, a \Monster[Gnome]{gnomish} music maker, a fallen \Monster{angel}, and other planar powers.".
+
+
+#.....
+#----- TSR 2627
+
+base product TSR 2627 =
+
+  title             "Pages of Pain";
+  leader            "";
+  author            "Troy Denning";
+  cover             "Robh Ruppel";
+  illustrations     "Diesel";
+  date              September 1996;
+  ISBN              0-7869-0508-5;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  price             $19.99;
+  contents          Book;
+  worlds            Planescape;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 232,
+                    Dragon 233,
+                    Dragon 241,
+                    Dragon 242;
+  description
+  "\large{Some questions are better left unasked...}
+
+  There is a void in my chest where I once had a heart, and from this emptiness
+  springs all the suffering of the \Place{Multiverse}. At first, the Pains are
+  like a kiss, hot and breathy and welcome. They reach out with long, cajoling
+  fingers and make my bones hum with delight. I warm to the touch and, though I
+  know what must follow, yearn for more. My flesh tingles and flushes and
+  shudders, and the more my ecstasy builds, the more the void pours forth until
+  bliss rolls half a turn and becomes sweet agony.
+
+  Then my body nettles with a blistering itch no ointment can heal, and the
+  greater my woe, the more scalding the anguish that seethes from the empty
+  well inside. I boil in my own sick regret, and I cannot staunch the flow. It
+  billows up in white plumes and blanches my bones with sorrow. I burn with the
+  shame of a thousand evils I cannot recall, and still the well pours
+  forth....".
+
+
+#.....
+#----- TSR 2627P
+
+base product TSR 2627P =
+
+  title             "Pages of Pain";
+  leader            "";
+  author            "Troy Denning";
+  cover             "Robh Ruppel";
+  illustrations     "Diesel";
+  date              December 1997;
+  ISBN              0-7869-0671-5;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Planescape;
+  references        net,
+                    Dragon 240;
+  description
+  "\large{Some questions are better left unasked...}
+
+  There is a void in my chest where I once had a heart, and from this emptiness
+  springs all the suffering of the \Place{Multiverse}. At first, the Pains are
+  like a kiss, hot and breathy and welcome. They reach out with long, cajoling
+  fingers and make my bones hum with delight. I warm to the touch and, though I
+  know what must follow, yearn for more. My flesh tingles and flushes and
+  shudders, and the more my ecstasy builds, the more the void pours forth until
+  bliss rolls half a turn and becomes sweet agony.
+
+  Then my body nettles with a blistering itch no ointment can heal, and the
+  greater my woe, the more scalding the anguish that seethes from the empty
+  well inside. I boil in my own sick regret, and I cannot staunch the flow. It
+  billows up in white plumes and blanches my bones with sorrow. I burn with the
+  shame of a thousand evils I cannot recall, and still the well pours
+  forth....".
+
+
+#.....
+
+#----- TSR 21527
+
+base product TSR 21527 =
+
+  title             "Torment";
+  leader            "";
+  subtitle          "An eternal war";
+  author            "Ray Vallese",
+                    "Valerie Vallese";
+  illustrations     "Knutson, Dana";
+  date              November 1999;
+  ISBN              0-7869-1527-7;
+  pages             247;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  price             $ 5.99;
+  contents          Book;
+  worlds            Planescape;
+  references        net,
+                    Dragon 263,
+                    Dragon 264;
+  description
+  "The endless \Event{Blood War} rages, a never-ending battle between the
+  \Monster{fiends} of the \Place{planes}. Amid this horrific conflict, a single
+  hero with no memory of his past seeks to discover his true identity.
+
+  Of course, this being the \Place{planes}, his companions on his quest
+  are...unusual. But if you can't trust a floating skull, an eccentric
+  inventor, and a \Monster{succubus}, who can you trust?
+
+  Practically no one.
+
+  Base on the best-selling computer game from Interplay.".
+
+
+#.....

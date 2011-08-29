@@ -1,0 +1,1405 @@
+#
+# File:         Accessories.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  The accessories of the Dragonlance world
+#
+# Worlds:       Dragonlance
+#
+#
+
+#----- TSR 1039
+
+base product TSR 1039 =
+
+  title             "Dragonlance Boardgame";
+  leader            "";
+  date              1988;
+  price             $24.95;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "Unknown".
+
+
+#.....
+#----- TSR 1050
+
+base product TSR 1050 =
+
+  title             "Time of the Dragon";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-773-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $18.00;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalog93;
+  description
+  "The other continent of Krynn.".
+
+
+#.....
+#----- TSR 1058
+
+base product TSR 1058 =
+
+  title             "Mage Stones";
+  leader            "";
+  date              1990;
+  audience          All;
+  product type      Board Game;
+  price             $17.95;
+  worlds            Dragonlance;
+  references        complete product listing,
+                    catalog93;
+  description
+  "A fast-paced strategy and positioning game.".
+
+
+#.....
+#----- TSR 1074
+
+base product TSR 1074 =
+
+  title             "Tales of the Lance";
+  leader            "";
+  date              1992;
+  ISBN              1-56076-338-8;
+  system            D&D 1st;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $20.00;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog93;
+  description
+  "Create Dragonlance saga.".
+
+
+#.....
+#----- TSR 1086
+
+base product TSR 1086 =
+
+  title             "Dwarven Kingdoms of Krynn";
+  leader            "The";
+  author            "Niles, Douglas";
+  date              November 1993;
+  ISBN              1-56076-669-7;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  price             $20.00;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95;
+  description
+  "\Monster{Dwarven} nations on \Place{Krynn}.".
+
+
+#.....
+#----- TSR 1148
+
+base product TSR 1148 =
+
+  title             "Dragonlance Fifth Age";
+  leader            "";
+  author            "Connors, William W.",
+                    "Weinlein, Sue";
+  date              September 1996;
+  ISBN              0-7869-0535-2;
+  pages             240;
+  system            Saga;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  series            5th Age;
+  price             $25.00;
+  contents          Booklet 3,
+                    Poster "map",
+                    Card "playing" 100,
+                    Card "double-sided reference";
+  worlds            Dragonlance;
+  references        catalogue96,
+                    catalog96,
+                    catalog98,
+                    Dragon 237,
+                    Dragon 232,
+                    Dragon 233;
+  description
+  "Campaign setting and new game system.".
+
+
+#.....
+#----- TSR 1149
+
+base product TSR 1149 =
+
+  title             "Last Tower: The Legacy of Raistlin";
+  leader            "The";
+  author            "Williams, Skip";
+  date              January 1997;
+  ISBN              0-7869-0538-7;
+  pages             192;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  series            5th Age;
+  price             $20.00;
+  contents          Booklet 2,
+                    Poster "map";
+  worlds            Dragonlance;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 235,
+                    Dragon 236,
+                    Dragon 237,
+                    Dragon 239,
+                    Dragon 240,
+                    Dragon 241,
+                    Dragon 246;
+  description
+  "Mysteries of Wayreth Tower.".
+
+
+#.....
+#----- TSR 1150
+
+base product TSR 1150 =
+
+  title             "Heroes of Steel";
+  leader            "";
+  author            "Connors, William W.",
+                    "Weinlein, Sue";
+  date              November 1996;
+  ISBN              0-7869-0539-5;
+  pages             144;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  series            5th Age;
+  price             $18.00;
+  worlds            Dragonlance;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 235,
+                    Dragon 234;
+  description
+  "Reference for fighting and an epic adventure.".
+
+
+#.....
+
+#----- TSR 2105
+
+base product TSR 2105 =
+
+  title             "Monstrous Compendium, Dragonlance Appendix";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-822-6;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Monster Compendium;
+  style             Sheets;
+  number            Volume IV Dragonlance Appendix;
+  series            Monstrous Compendium;
+  price             $20.00;
+  contents          Folder;
+  worlds            Dragonlance;
+  references        catalogue94,
+                    catalog93;
+  description
+  "a lot of monsters";
+  synonyms          "MC4".
+
+
+#.....
+#----- TSR 2021
+
+base product TSR 2021 =
+
+  title             "Dragonlance Adventures";
+  leader            "";
+  date              1987;
+  ISBN              0-88038-452-2;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $ 7.95;
+  worlds            Dragonlance;
+  references        catalogue94,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 2143
+
+base product TSR 2143 =
+
+  title             "Player's Guide to the Dragonlance Campaign";
+  leader            "The";
+  author            "Staff, TSR";
+  date              August 1993;
+  pages             128;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  number            1;
+  series            Player's Guide;
+  price             $15.00;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95;
+  description
+  "Players campaign infos.";
+  synonyms          "PG1".
+
+
+#.....
+
+#----- TSR 8447
+
+base product TSR 8447 =
+
+  title             "Art of the Dragonlance Saga";
+  leader            "The";
+  author            "Kirchoff, Mary";
+  date              September 1998;
+  pages             128;
+  audience          All;
+  product type      Special Book;
+  worlds            Dragonlance;
+  references        catalog98;
+  description
+  "the splendid artwork of the Dragonlance artists".
+
+
+#.....
+#----- TSR 8448
+
+base product TSR 8448 =
+
+  title             "Atlas of the Dragonlance World";
+  leader            "The";
+  date              1987;
+  ISBN              0-88038-448-4;
+  audience          DM;
+  product type      Accessory;
+  price             $15.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "the complete atlas for Krynn".
+
+
+#.....
+
+#----- TSR 9130
+
+base product TSR 9130 =
+
+  title             "Dragons of Despair";
+  leader            "";
+  date              1984;
+  price             $ 6.00;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL1".
+
+
+#.....
+#----- TSR 9131
+
+base product TSR 9131 =
+
+  title             "Dragons of Hope";
+  leader            "";
+  date              1984;
+  price             $ 6.95;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL3".
+
+
+#.....
+#----- TSR 9132
+
+base product TSR 9132 =
+
+  title             "Dragons of Flame";
+  leader            "";
+  date              1984;
+  price             $ 6.00;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL2".
+
+
+#.....
+#----- TSR 9133
+
+base product TSR 9133 =
+
+  title             "Dragons of Faith";
+  leader            "";
+  date              1986;
+  ISBN              0-88038-092-6;
+  price             $10.00;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description
+  "";
+  synonyms          "DL12".
+
+
+#.....
+#----- TSR 9135
+
+base product TSR 9135 =
+
+  title             "Dragons of Mystery";
+  leader            "";
+  date              1984;
+  price             $10.00;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL5".
+
+
+#.....
+#----- TSR 9136
+
+base product TSR 9136 =
+
+  title             "Dragons of Light";
+  leader            "";
+  date              1985;
+  ISBN              0-88038-093-4;
+  price             $ 6.00;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description
+  "";
+  synonyms          "DL7".
+
+
+#.....
+#----- TSR 9137
+
+base product TSR 9137 =
+
+  title             "Dragons of Deceit";
+  leader            "";
+  date              1985;
+  price             $ 7.50;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description
+  "";
+  synonyms          "DL9".
+
+
+#.....
+#----- TSR 9139
+
+base product TSR 9139 =
+
+  title             "Dragons of Desolation";
+  leader            "";
+  date              1984;
+  price             $ 6.95;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL4".
+
+
+#.....
+#----- TSR 9140
+
+base product TSR 9140 =
+
+  title             "Dragons of Ice";
+  leader            "";
+  date              1985;
+  price             $ 6.00;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL6".
+
+
+#.....
+#----- TSR 9141
+
+base product TSR 9141 =
+
+  title             "Dragons of War";
+  leader            "";
+  date              1985;
+  ISBN              0-88038-097-7;
+  price             $ 6.00;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description
+  "";
+  synonyms          "DL8".
+
+
+#.....
+#----- TSR 9142
+
+base product TSR 9142 =
+
+  title             "Dragons of Dreams";
+  leader            "";
+  date              1985;
+  ISBN              0-88038-098-5;
+  price             $ 6.00;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description
+  "";
+  synonyms          "DL10".
+
+
+#.....
+#----- TSR 9144
+
+base product TSR 9144 =
+
+  title             "Dragons of Glory";
+  leader            "";
+  date              1985;
+  price             $10.00;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL11".
+
+
+#.....
+#----- TSR 9176
+
+base product TSR 9176 =
+
+  title             "Dragons of Truth";
+  leader            "";
+  date              1986;
+  price             $ 8.00;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL13".
+
+
+#.....
+
+#----- TSR 9231
+
+base product TSR 9231 =
+
+  title             "Mists of Krynn";
+  leader            "";
+  date              1988;
+  price             $ 9.95;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "DL15".
+
+
+#.....
+#----- TSR 9243
+
+base product TSR 9243 =
+
+  title             "In Search of Dragons";
+  leader            "";
+  date              1989;
+  price             $ 8.95;
+  worlds            Dragonlance;
+  references        catalogue93;
+  description
+  "";
+  synonyms          "DLE1".
+
+
+#.....
+#----- TSR 9244
+
+base product TSR 9244 =
+
+  title             "Dragon Magic";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-740-8;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 8.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "evil forces are close to the portal to the Celestial Dragon, levels 5-9";
+  synonyms          "DLE2".
+
+
+#.....
+#----- TSR 9245
+
+base product TSR 9245 =
+
+  title             "Dragon Keep";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-764-5;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 8.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "all is not right in the dimenson of dragons, levels 7-10";
+  synonyms          "DLE3".
+
+
+#.....
+#----- TSR 9275
+
+base product TSR 9275 =
+
+  title             "Dragon Dawn";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-823-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  number            Module One;
+  series            Taladas Trilogy;
+  price             $ 8.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue96,
+                    catalog93;
+  description
+  "";
+  synonyms          "DLA1".
+
+
+#.....
+#----- TSR 9285
+
+base product TSR 9285 =
+
+  title             "Dragon Knight";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-843-9;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 8.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "infiltrate a brotherhood of bounty hunters";
+  synonyms          "DLA2".
+
+
+#.....
+#----- TSR 9291
+
+base product TSR 9291 =
+
+  title             "Dragonlance Classics Volume #1 (DL1-4)";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-859-5;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $15.00;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalog93;
+  description
+  "updated old material";
+  synonyms          "DLC1".
+
+
+#.....
+#----- TSR 9294
+
+base product TSR 9294 =
+
+  title             "Dragon's Rest";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-869-2;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  number            Module Three;
+  series            Taladas Trilogy;
+  price             $ 8.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "";
+  synonyms          "DLA3".
+
+
+#.....
+
+#----- TSR 9314
+
+base product TSR 9314 =
+
+  title             "New Beginnings";
+  leader            "";
+  date              March 1991;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $�6.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalog91S;
+  description
+  "updates to 2nd Edition";
+  synonyms          "DLS1".
+
+
+#.....
+#----- TSR 9319
+
+base product TSR 9319 =
+
+  title             "Tree Lords";
+  leader            "";
+  date              May 1991;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $�6.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalog91S;
+  description
+  "the mysterious life and culture of the Silvanesti High Elves";
+  synonyms          "DLS2".
+
+
+#.....
+#----- TSR 9327
+
+base product TSR 9327 =
+
+  title             "Oak Lords";
+  leader            "";
+  date              August 1991;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W;
+  description
+  "the powerful Qualinesti elves";
+  synonyms          "DLS3".
+
+
+#.....
+#----- TSR 9334
+
+base product TSR 9334 =
+
+  title             "Wild Elves";
+  leader            "";
+  date              November 1991;
+  ISBN              1-56076-140-7;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog93;
+  description
+  "Kagonesti elves in all their splendour";
+  synonyms          "DLS4".
+
+
+#.....
+#----- TSR 9344
+
+base product TSR 9344 =
+
+  title             "Taladas: The Minotaurs";
+  leader            "";
+  date              January 1992;
+  ISBN              1-56076-150-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91W,
+                    catalog93;
+  description
+  "the culture and military strategies of Taladas Minotaurs";
+  synonyms          "DLR2".
+
+
+#.....
+#----- TSR 9381
+
+base product TSR 9381 =
+
+  title             "Knight's Sword";
+  leader            "";
+  date              August 1992;
+  ISBN              1-56076-421-X;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog93;
+  description
+  "introductory adventure about Solamnic Knights";
+  synonyms          "DLQ1".
+
+
+#.....
+#----- TSR 9382
+
+base product TSR 9382 =
+
+  title             "Flint's Axe";
+  leader            "";
+  date              October 1992;
+  ISBN              1-56076-422-8;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog93;
+  description
+  "a hunt for the lost axe";
+  synonyms          "DLQ2".
+
+
+#.....
+#----- TSR 9383
+
+base product TSR 9383 =
+
+  title             "Unsung Heroes";
+  leader            "";
+  date              January 1993;
+  ISBN              1-56076-423-6;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog93;
+  description
+  "new heroes in the world of Krynn";
+  synonyms          "DLR3".
+
+
+#.....
+#----- TSR 9394
+
+base product TSR 9394 =
+
+  title             "Dragonlance Classics Volume #2 (DL6-9)";
+  leader            "";
+  author            "Staff, TSR";
+  date              March 1993;
+  ISBN              1-56076-570-4;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $15.00;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95;
+  description
+  "several older adventures";
+  synonyms          "DLC2".
+
+
+#.....
+#----- TSR 9395
+
+base product TSR 9395 =
+
+  title             "New Tales: The Land Reborn";
+  leader            "";
+  author            "Staff, TSR";
+  date              August 1993;
+  ISBN              1-56076-607-7;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $10.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description
+  "the tale of Tika's quest for her missing father and more";
+  synonyms          "DLT1".
+
+
+#.....
+#----- TSR 9396
+
+base product TSR 9396 =
+
+  title             "Book of Lairs";
+  leader            "";
+  author            "Staff, TSR";
+  date              January 1994;
+  ISBN              1-56076-630-1;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $10.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description
+  "a collection of short adventures";
+  synonyms          "DLT2".
+
+
+#.....
+
+#----- TSR 9453
+
+base product TSR 9453 =
+
+  title             "Dragonlance Classics, Volume 3";
+  leader            "";
+  date              October 1994;
+  ISBN              1-56076-885-1;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $15.00;
+  worlds            Dragonlance;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95;
+  description
+  "several older adventures";
+  synonyms          "DLC3".
+
+
+#.....
+
+#----- TSR 9517
+
+base product TSR 9517 =
+
+  title             "Heroes of Defiance";
+  leader            "";
+  author            "Miller, Steve";
+  date              August 1997;
+  ISBN              0-7869-0656-1;
+  pages             144;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  contents          Booklet 2,
+                    Sheet "map";
+  worlds            Dragonlance;
+  references        net,
+                    Dragon 237,
+                    Dragon 238;
+  description
+  "rules for playing the bravest freedom fighters".
+
+
+#.....
+#----- TSR 9543
+
+base product TSR 9543 =
+
+  title             "Heroes of Sorcery";
+  leader            "";
+  author            "Brown, Steven";
+  date              May 1997;
+  ISBN              0-7869-0680-4;
+  pages             144;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  price             $20.00;
+  contents          Booklet 2,
+                    Sheet "map";
+  worlds            Dragonlance;
+  references        net;
+  description
+  "new rules for sorcery".
+
+
+#.....
+#----- TSR 9546
+
+base product TSR 9546 =
+
+  title             "Heroes of Hope";
+  leader            "";
+  author            "Maxwell, Duane";
+  date              January 1998;
+  ISBN              0-7869-0707-X;
+  pages             144;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  contents          Booklet 2,
+                    Sheet "map";
+  worlds            Dragonlance;
+  references        net,
+                    catalog98,
+                    Dragon 241,
+                    Dragon 242,
+                    Dragon 243;
+  description
+  "heroes are ona quest to find the ancestral crown".
+
+
+#.....
+#----- TSR 9551
+
+base product TSR 9551 =
+
+  title             "Wings of Fury";
+  leader            "";
+  author            "Niles, Douglas";
+  date              March 1998;
+  ISBN              0-7869-0722-3;
+  pages             192;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $22.00;
+  contents          Booklet 2,
+                    Sheet "map";
+  worlds            Dragonlance;
+  references        net,
+                    catalog98,
+                    Dragon 243,
+                    Dragon 244,
+                    Dragon 245;
+  description
+  "examines the lifes and goals of dragons, their agends, powers and passion".
+
+
+#.....
+#----- TSR 9554
+
+base product TSR 9554 =
+
+  title             "Citadel of Light";
+  leader            "";
+  author            "Miller, Steve";
+  date              July 1998;
+  ISBN              0-7869-0748-7;
+  pages             192;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $21.95;
+  contents          Booklet 2,
+                    Sheet "map";
+  worlds            Dragonlance;
+  references        net,
+                    catalog98,
+                    Dragon 247,
+                    Dragon 248;
+  description
+  "explores the center of the new faith, the Citadel of Light".
+
+
+#.....
+#----- TSR 9564
+
+base product TSR 9564 =
+
+  title             "Bestiary";
+  leader            "The";
+  author            "Brown, Steve",
+                    "slade";
+  date              September 1998;
+  ISBN              0-7869-0795-9;
+  pages             240;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  style             Hardcover;
+  price             $24.95;
+  worlds            Dragonlance;
+  references        net,
+                    catalog98;
+  description
+  "master guide to beasts kind and cruel".
+
+
+#.....
+#----- TSR 9565
+
+base product TSR 9565 =
+
+  title             "Sage Fate Deck";
+  leader            "The";
+  author            "Miller, Steve",
+                    "Stark, Ed",
+                    "Brown, Steven";
+  date              September 1997;
+  ISBN              0-7869-1145-X;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  worlds            Dragonlance;
+  references        catalog98,
+                    Dragon 238,
+                    Dragon 239;
+  description
+  "the secret behind the Saga rules system".
+
+
+#.....
+#----- TSR 9566
+
+base product TSR 9566 =
+
+  title             "Saga Companion";
+  leader            "A";
+  author            "Connors, William W.";
+  date              May 1998;
+  ISBN              0-7869-1197-2;
+  pages             128;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  price             $14.95;
+  worlds            Dragonlance;
+  references        net,
+                    catalog98,
+                    Dragon 245,
+                    Dragon 246,
+                    Dragon 247;
+  description
+  "rules questions and new ideas for hear creation, magic use and plot twist".
+
+
+#.....
+#----- TSR 9587
+
+base product TSR 9587 =
+
+  title             "Seeds of Chaos";
+  leader            "";
+  author            "Niles, Douglas";
+  date              October 1998;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $13.95;
+  worlds            Dragonlance;
+  references        net,
+                    catalog98;
+  description
+  "fight the final battles of the Fourth Age".
+
+
+#.....
+#----- TSR 9588
+
+base product TSR 9588 =
+
+  title             "Palanthas";
+  leader            "";
+  author            "Brown, Steven";
+  date              December 1998;
+  ISBN              0-7869-1199-9;
+  pages             96;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  price             $11.95;
+  worlds            Dragonlance;
+  references        net,
+                    catalog98;
+  description
+  "a detailed look at Ansalon's best-known city".
+
+
+#.....
+
+#----- TSR 11329
+
+base product TSR 11329 =
+
+  title             "Sylvan Veil";
+  leader            "The";
+  author            "Connors, William W.",
+                    "Horner, Miranda";
+  date              February 1999;
+  pages             96;
+  system            AD&D 2nd & Saga;
+  audience          DM;
+  product type      Accessory;
+  price             $18.95;
+  worlds            Dragonlance;
+  references        net;
+  description
+  "epic adventure".
+
+
+#.....
+#----- TSR 11350
+
+base product TSR 11350 =
+
+  title             "Dragonlance Classic: 15th Anniversary Edition";
+  leader            "";
+  author            "Miller, Steve",
+                    "Brown, Stan";
+  date              May 1999;
+  pages             224;
+  system            AD&D 2nd & Saga;
+  audience          DM;
+  product type      Adventure;
+  price             $25.95;
+  worlds            Dragonlance;
+  references        net,
+                    Dragon 257;
+  description
+  "based on the original DL 1-14 modules".
+
+
+#.....
+#----- TSR 11372
+
+base product TSR 11372 =
+
+  title             "Chaos Spawn: A Chaos War Adventure";
+  leader            "";
+  author            "Niles, Douglas";
+  date              December 1999;
+  ISBN              0-7869-1372-X;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $13.95;
+  worlds            Dragonlance;
+  references        net,
+                    Dragon 264;
+  description
+  "ancient enemies must cooperate or all hope will be lost".
+
+
+#.....
+#----- TSR 11396
+
+base product TSR 11396 =
+
+  title             "Rise of the Titans";
+  leader            "";
+  author            "Dakan, Richard 'Ricko'";
+  date              February 2000;
+  ISBN              0-7869-1396-7;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Paperback;
+  price             $18.95;
+  worlds            Dragonlance;
+  references        net,
+                    Dragon 267,
+                    Dragon 268;
+  description
+  "the heroes are taken deep into new militant ogre realms".
+
+
+#.....
+#----- TSR 11446
+
+base product TSR 11446 =
+
+  title             "Odyssey of Gilthanas";
+  leader            "The";
+  author            "Niles, Douglas",
+                    "Miller, Steve",
+                    "Stan";
+  date              July 1999;
+  ISBN              0-7869-1446-7;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 6.99;
+  worlds            Dragonlance;
+  references        net;
+  description
+  "a novel and sourcebook about Dragonlance".
+
+
+#.....
+
+#----- WTC 96990
+
+base product WTC 96990 =
+
+  title             "Dragonlance Campaign Setting";
+  leader            "";
+  subtitle          "";
+  author            "Weis, Margaret",
+                    "Perrin, Don",
+                    "Chambers, Jamie",
+                    "Coyle, Christopher";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              August 2003;
+  ISBN              0-7869-3086-1;
+  pages             320;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 39.95;
+  worlds            Dragonlance;
+  description
+  "Sagas from the lands of \Place{Krynn} are filled with valiant heroes
+  destined to discover ancient secrets and vanquish terrible evils. Like those
+  great champions, you will band together with brave companions to set forth on
+  daring adventures. The tales of those bold deeds will become the newest
+  legends in the world of \Place{Dragon lance}.
+
+  From \Group{Solamnic Knights} and \Group{Dragon Riders} to \Monster{kender},
+  \Monster{tinker gnomes}, and \Monster{draconians}, the rich tapestry of the
+  \Place{Dragonlance} world comes alive in this campaign setting for the
+  Dungeons & Dragons roleplaying game. With historical content covering eras
+  from the \Product{War of the Lance} to the \Product{War of Souls}, along with
+  expanded rules for aerial combat, the \Product{Dragonlance Campaign Setting}
+  provides the character races, prestige classes, feats, spells, monsters, and
+  maps you need to fully explore the world of \Place{Dragonlance}.".
+
+
+#.....

@@ -1,0 +1,386 @@
+#
+# File:         DarkSun.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:
+#
+# Reviewer(s):
+#
+# Description:  Dark Sun Novels
+#
+# Worlds:       Dark Sun
+#
+# Keywords:
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/DarkSun.dma,v $
+#
+# $Revision: 1.4 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: DarkSun.dma,v $
+# Revision 1.4  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.3  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.2  2007/06/09 09:50:27  merlin
+# *** empty log message ***
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2003/05/19 20:23:10  merlin
+# updated to version Aboleth
+#
+# Revision 1.1  2001/07/20 11:56:24  merlin
+# *** empty log message ***
+#
+#
+#..............................................................................
+#
+#
+
+#----- TSR 2402
+
+base product TSR 2402 =
+
+  title             "Verdant Passage";
+  leader            "The";
+  date              October 1991;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  series            Prism Pentad;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "Prism Pentad, book one".
+
+
+#.....
+#----- TSR 2403
+
+base product TSR 2403 =
+
+  title             "Crimson Legion";
+  leader            "The";
+  date              1992;
+  ISBN              1-56076-260-8;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Prism Pentad;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "Prism Pentad, book two".
+
+
+#.....
+#----- TSR 2409
+
+base product TSR 2409 =
+
+  title             "Amber Enchantress";
+  leader            "The";
+  author            "Troy Denning";
+  date              October 1992;
+  ISBN              1-56076-236-5;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            Prism Pentad;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "Prism Pentad, book three".
+
+
+#.....
+#----- TSR 2414
+
+base product TSR 2414 =
+
+  title             "Obsidian Oracle";
+  leader            "The";
+  author            "Troy Denning";
+  date              June 1993;
+  ISBN              1-56076-603-4;
+  pages             352;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Four;
+  series            Prism Pentad;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description
+  "Prism Pentad, book four".
+
+
+#.....
+#----- TSR 2415
+
+base product TSR 2415 =
+
+  title             "Cerulean Storm";
+  leader            "The";
+  author            "Troy Denning";
+  date              September 1993;
+  ISBN              1-56076-642-5;
+  pages             352;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Five;
+  series            Prism Pentad;
+  price             $ 5.99;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description
+  "Prism Pentad, book five".
+
+
+#.....
+#----- TSR 2425
+
+base product TSR 2425 =
+
+  title             "Outcast";
+  leader            "The";
+  author            "Simon Hawke";
+  date              December 1993;
+  ISBN              1-56076-676-X;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  series            Tribe of One Trilogy;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description
+  "Tribe of One Trilogy, book one".
+
+
+#.....
+#----- TSR 2426
+
+base product TSR 2426 =
+
+  title             "Seeker";
+  leader            "The";
+  date              April 1994;
+  ISBN              1-56076-701-4;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Tribe of One Trilogy;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "Tribe of One Trilogy, book two".
+
+
+#.....
+#----- TSR 2427
+
+base product TSR 2427 =
+
+  title             "Nomad";
+  leader            "The";
+  date              October 1994;
+  ISBN              1-56076-702-2;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            Tribe of One Trilogy;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "Tribe of One Trilogy, book three".
+
+
+#.....
+#----- TSR 2434
+
+base product TSR 2434 =
+
+  title             "Brazen Gambit";
+  leader            "The";
+  date              July 1994;
+  ISBN              1-56076-872-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  series            Chronicles of Athas;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "Chronicles of Athas Series, book one".
+
+
+#.....
+#----- TSR 2435
+
+base product TSR 2435 =
+
+  title             "Darkness Before the Dawn";
+  leader            "The";
+  author            "Jerry Oltion",
+                    "Ryan Hughes";
+  date              February 1995;
+  ISBN              0-7869-0104-7;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Chronicles of Athas;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "Chronicles of Athas Series, book two".
+
+
+#.....
+#----- TSR 2436
+
+base product TSR 2436 =
+
+  title             "Broken Blade";
+  leader            "The";
+  author            "Simon Hawke";
+  date              May 1995;
+  ISBN              0-7869-0137-3;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            Chronicles of Athas;
+  price             $ 4.95;
+  worlds            Dark Sun;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "Chronicles of Athas Series, book three".
+
+
+#.....
+#----- TSR 2440
+
+base product TSR 2440 =
+
+  title             "Cinnabar Shadows";
+  leader            "";
+  author            "Lynn Abbey";
+  date              July 1995;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Four;
+  series            Chronicles of Athas;
+  price             $ 5.99;
+  worlds            Dark Sun;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "Chronicles of Athas Series, book four".
+
+
+#.....
+#----- TSR 2442
+
+base product TSR 2442 =
+
+  title             "Rise and Fall of a Dragon King";
+  leader            "The";
+  author            "Lynn Abbey";
+  date              March 1996;
+  ISBN              0-7869-0476-3;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Ch;
+  price             $ 5.99;
+  worlds            Dark Sun;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226;
+  description
+  "Chronicles of Athas Series, book five".
+
+
+#.....

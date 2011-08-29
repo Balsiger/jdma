@@ -1,0 +1,5428 @@
+#
+# File:         Misc.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:  Peter 'Merlin' Balsiger
+#
+# Description:  Miscellaneous novels
+#
+# Worlds:       various
+#
+# Keywords:
+#
+# See_also:
+#
+
+#----- TSR 1514
+
+base product TSR 1514 =
+
+  title             "Time of Champions";
+  leader            "The";
+  author            "Stark, Ed";
+  date              December 1997;
+  ISBN              0-7869-0755-X;
+  pages             320;
+  system            Dragon Dice;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  contents          Book,
+                    Dice "DRAGON DICE die";
+  worlds            None;
+  references        net;
+  description
+  "Dragon Dice Book, book three".
+
+
+#.....
+
+#----- TSR 3551P
+
+base product TSR 3551P =
+
+  title             "Arrival";
+  leader            "";
+  date              1993;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 3553
+
+base product TSR 3553 =
+
+  title             "First 60 Years";
+  leader            "The";
+  date              1994;
+  ISBN              0-88038-604-5;
+  system            XXVC;
+  audience          All;
+  product type      Novel;
+  price             $24.95;
+  worlds            Buck Rogers;
+  references        catalogue94,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 3558P
+
+base product TSR 3558P =
+
+  title             "Rebellion 2456";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-728-9;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 3559P
+
+base product TSR 3559P =
+
+  title             "Hammer of Mars";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-751-3;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 3560P
+
+base product TSR 3560P =
+
+  title             "Armageddon off Vesta";
+  leader            "";
+  date              1993;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 3561
+
+base product TSR 3561 =
+
+  title             "First Power";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-840-4;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  series            Inner Planets Trilogy;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog93;
+  description
+  "Inner Planets Trilogy, book one".
+
+
+#.....
+#----- TSR 3564
+#  ISBN          0-88038-863-8;
+
+base product TSR 3564 =
+
+  title             "Prime Squared";
+  leader            "";
+  date              1993;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Inner Planets Trilogy;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog93;
+  description
+  "Inner Planets Trilogy, book two".
+
+
+#.....
+#----- TSR 3568
+
+base product TSR 3568 =
+
+  title             "Matrix Cubed";
+  leader            "";
+  date              May 1991;
+  ISBN              0-88038-885-4;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            Inner Planets Trilogy;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog91S,
+                    catalog93;
+  description
+  "Inner Planets Trilogy, book three".
+
+
+#.....
+#----- TSR 3576
+
+base product TSR 3576 =
+
+  title             "Genesis Web";
+  leader            "The";
+  date              1993;
+  ISBN              1-56076-093-1;
+  system            None;
+  audience          DM;
+  product type      Novel;
+  number            Volume One;
+  series            Invaders of Charon;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "Invaders of Charon Series, volume one".
+
+
+#.....
+#----- TSR 3581
+
+base product TSR 3581 =
+
+  title             "Nomads of the Sky";
+  leader            "";
+  date              October 1992;
+  ISBN              1-56076-098-2;
+  system            XXVC;
+  audience          DM;
+  product type      Novel;
+  number            Volume Two;
+  series            Invaders of Charon;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog93;
+  description
+  "Invaders of Charon Series, volume two".
+
+
+#.....
+#----- TSR 3585
+
+base product TSR 3585 =
+
+  title             "Warlords of Jupiter";
+  leader            "";
+  author            "William H. Jr. Keith";
+  date              March 1993;
+  ISBN              1-56076-576-3;
+  pages             288;
+  system            None;
+  audience          DM;
+  product type      Novel;
+  number            Volume Three;
+  series            Invaders of Charon;
+  price             $ 3.95;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93;
+  description
+  "Invaders of Charon Series, volume three".
+
+
+#.....
+#----- TSR 3590
+
+base product TSR 3590 =
+
+  title             "A Life in the Future";
+  leader            "";
+  author            "Martin Caidin";
+  date              June 1995;
+  ISBN              0-7869-0144-6;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  price             $19.95;
+  worlds            None;
+  references        catalogue96;
+  description
+  "authorized biography of Anthony 'Buck' Rogers".
+
+
+#.....
+#----- TSR 3590P
+
+base product TSR 3590P =
+
+  title             "A Life in the Future";
+  leader            "";
+  author            "Martin Caidin";
+  date              November 1996;
+  ISBN              0-7869-0527-1;
+  pages             352;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            None;
+  references        catalog96,
+                    Dragon 235,
+                    Dragon 234;
+  description
+  "authorized biography of Anthony 'Buck' Rogers".
+
+
+#.....
+
+#----- TSR 8035
+
+base product TSR 8035 =
+
+  title             "Tainted Sword";
+  leader            "The";
+  author            "Heinrich, D.J.";
+  date              1992;
+  ISBN              1-56076-395-7;
+  system            D&D 1st;
+  audience          All;
+  product type      Novel;
+  number            Volume One;
+  series            Penhalion Trilogy;
+  price             $ 4.95;
+  worlds            Generic;
+  references        catalog92,
+                    complete product listing,
+                    catalog93W,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8036
+
+base product TSR 8036 =
+
+  title             "Dragon's Tomb";
+  leader            "The";
+  author            "Heinrich, D.J.";
+  date              April 1993;
+  ISBN              1-56076-592-5;
+  pages             320;
+  system            D&D 1st;
+  audience          All;
+  product type      Novel;
+  number            Volume Two;
+  series            Penhalion Trilogy;
+  price             $ 4.95;
+  worlds            Generic;
+  references        complete product listing,
+                    catalog93W,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8037
+
+base product TSR 8037 =
+
+  title             "Fall of Magic";
+  leader            "The";
+  author            "Heinrich, D.J.";
+  date              October 1993;
+  ISBN              1-56076-663-8;
+  pages             320;
+  system            D&D 1st;
+  audience          All;
+  product type      Novel;
+  number            Volume Three;
+  series            Penhalion Trilogy;
+  price             $ 4.95;
+  worlds            Generic;
+  references        complete product listing,
+                    catalog93S,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8041
+
+base product TSR 8041 =
+
+  title             "Tale of the Comet";
+  leader            "";
+  author            "Roland Green";
+  cover             "Martin, David";
+  cartography       "Roy Boholst";
+  date              July 1997;
+  ISBN              0-7869-0654-5;
+  pages             311;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net,
+                    Dragon 236,
+                    Dragon 237,
+                    Dragon 238;
+  description
+  "\large{It falls one night onto the village of \Place{Aston Point}.}
+
+  When the valiant \Group{Rael} emerge from their crashed starship, the people
+  of \Place{Ashton Point} are drawn into a deadly struggle against the
+  mechanical constructs of the \NPC{Overseer}---and before their adventures are
+  done, they will travel to the stars to match spells against computers and
+  battle-axes against tanks, to save a dozen worlds as innocent as their own.".
+
+
+#.....
+#----- TSR 8042
+
+base product TSR 8042 =
+
+  title             "Thief in the Tomb of Horrors";
+  leader            "A";
+  author            "Simon Hawke";
+  date              July 1997;
+  ISBN              0-7869-0674-X;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  price             $14.99;
+  worlds            Generic;
+  references        net;
+  description
+  "this novel revisits the site of a classic AD&D game adventure".
+
+
+#.....
+#----- TSR 8088
+
+base product TSR 8088 =
+
+  title             "Dungeon of Fear";
+  leader            "";
+  date              March 1994;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  number            Book One;
+  series            New Series,
+                    Dragon Strike;
+  price             £ 3.99;
+  references        catalogue94,
+                    catalogue96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8091
+
+base product TSR 8091 =
+
+  title             "American Knights";
+  leader            "";
+  author            "Nick Pollotta";
+  date              January 1995;
+  ISBN              1-56076-899-1;
+  pages             192;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  series            Gamma World;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96;
+  description
+  "300 years after the destruction of civilization".
+
+
+#.....
+#----- TSR 8092
+
+base product TSR 8092 =
+
+  title             "Wild Ride";
+  leader            "A";
+  date              September 1994;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  number            Book Five;
+  series            New Series,
+                    Wildspace;
+  price             £ 3.99;
+  references        catalogue94,
+                    catalogue96;
+  description
+  "New Series, Book five".
+
+
+#.....
+#----- TSR 8093
+
+base product TSR 8093 =
+
+  title             "Forest of Darkness";
+  leader            "";
+  author            "Michael Andrews";
+  date              December 1994;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  number            Book Six;
+  series            New Series,
+                    Dragon Strike;
+  price             $ 3.95;
+  references        catalogue94,
+                    catalogue96,
+                    Dragon 211;
+  description
+  "".
+
+
+#.....
+#----- TSR 8098
+
+base product TSR 8098 =
+
+  title             "Galactic Challenge";
+  leader            "";
+  author            "Varney, Allen";
+  date              July 1995;
+  ISBN              0-7869-0158-6;
+  pages             192;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  series            Amazing Engine;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96;
+  description
+  "a Resistance fighter battles evil alien life-forms".
+
+
+#.....
+
+#----- TSR 8100
+
+base product TSR 8100 =
+
+  title             "24-Hour War";
+  leader            "The";
+  author            "Nick Pollotta";
+  date              November 1995;
+  ISBN              0-7869-0198-5;
+  pages             192;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  price             $ 3.95;
+  worlds            Gamma World;
+  references        catalog95,
+                    catalogue96;
+  description
+  "teenage dogcatcher returns to 24th Century to destroy hated foes".
+
+
+#.....
+#----- TSR 8118
+
+base product TSR 8118 =
+
+  title             "Snarf Quest: The Book";
+  leader            "";
+  date              1987;
+  price             $ 9.95;
+  references        net price list;
+  description
+  "comic strip collection".
+
+
+#.....
+#----- TSR 8150
+
+base product TSR 8150 =
+
+  title             "Rogues to Riches";
+  leader            "";
+  author            "Robert J. King";
+  date              February 1995;
+  ISBN              1-56076-825-8;
+  pages             320;
+  system            First Quest;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  series            First Quest;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8151
+
+base product TSR 8151 =
+
+  title             "Unicorn Hunt";
+  leader            "The";
+  author            "Cunningham, Elaine";
+  date              February 1995;
+  ISBN              0-7869-0105-5;
+  pages             256;
+  system            First Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            First Quest Books;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8152
+
+base product TSR 8152 =
+
+  title             "Pawns & Prevail";
+  leader            "";
+  author            "Niles, Douglas";
+  date              May 1995;
+  ISBN              1-56076-854-1;
+  pages             320;
+  system            First Quest;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  series            Quest Triad;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8153
+#  ISBN          1-56076-994-3;
+
+base product TSR 8153 =
+
+  title             "Son of Dawn";
+  leader            "";
+  author            "McKeone, Dixie Lee";
+  date              May 1995;
+  pages             320;
+  system            First Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            First Quest Books;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8154
+
+base product TSR 8154 =
+
+  title             "Suitors Duel";
+  leader            "";
+  author            "Niles, Douglas";
+  date              August 1995;
+  ISBN              1-56076-922-X;
+  pages             288;
+  system            First Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Quest Triad;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8155
+
+base product TSR 8155 =
+
+  title             "Summerhill Hounds";
+  leader            "";
+  author            "Robert J. King";
+  date              November 1996;
+  ISBN              0-7869-0196-9;
+  pages             288;
+  system            First Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Four;
+  series            First Quest Books;
+  price             $ 3.95;
+  references        catalog95,
+                    catalogue96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8157
+
+base product TSR 8157 =
+
+  title             "Immortal Game";
+  leader            "";
+  author            "Niles, Douglas";
+  date              February 1996;
+  ISBN              0-7869-0478-X;
+  pages             288;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            Quest Triad;
+  price             $ 3.99;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226,
+                    Dragon 227;
+  description
+  "".
+
+
+#.....
+#----- TSR 8160-XX
+
+base product TSR 8160-XX =
+
+  title             "Amazing Stories '93";
+  leader            "";
+  date              1993;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  number            93;
+  series            Amazing Stories;
+  price             $ 3.95;
+  worlds            None;
+  references        catalog93;
+  description
+  "the world's first science fiction magazine".
+
+
+#.....
+#----- TSR 8161-XX
+
+base product TSR 8161-XX =
+
+  title             "Amazing Stories '94";
+  leader            "";
+  date              1994;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  number            94;
+  series            Amazing Stories;
+  price             $ 3.95;
+  worlds            None;
+  references        catalog93;
+  description
+  "the world's first science fiction magazine".
+
+
+#.....
+
+#----- TSR 8200P
+#  ISBN          0-88038-536;
+
+base product TSR 8200P =
+
+  title             "Starsong";
+  leader            "";
+  date              1993;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            None;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "a Cenozoic race returns to Earth seeking the answer to a plague".
+
+
+#.....
+#----- TSR 8201
+
+base product TSR 8201 =
+
+  title             "St. John the Pursuer: Vampire in Moscow";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-552-9;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalogue93,
+                    catalog93;
+  description
+  "all signs indicate the presence of a beast from the darkness beyond".
+
+
+#.....
+#----- TSR 8203
+
+base product TSR 8203 =
+
+  title             "Red Sands";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-591-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            None;
+  references        catalogue94,
+                    catalogue93,
+                    catalog93;
+  description
+  "five companions have escaped the dungones of Sultan Fazir".
+
+
+#.....
+#----- TSR 8204
+
+base product TSR 8204 =
+
+  title             "Illegal Aliens";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-715-7;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalogue93,
+                    catalog93;
+  description
+  "a gang foils the plans of a group of weirdo aliens".
+
+
+#.....
+#----- TSR 8205
+
+base product TSR 8205 =
+
+  title             "Jewels of Elvish";
+  leader            "The";
+  date              1993;
+  ISBN              0-88038-726-2;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalogue93,
+                    catalog93;
+  description
+  "a threat forces elvish and Mannish races into an alliance".
+
+
+#.....
+#----- TSR 8206
+
+base product TSR 8206 =
+
+  title             "Monkey Station";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-743-2;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalogue93,
+                    catalog93;
+  description
+  "an error has sent a deadly mutating plague across the globe".
+
+
+#.....
+#----- TSR 8208
+
+base product TSR 8208 =
+
+  title             "Earh Remembers";
+  leader            "The";
+  date              1993;
+  ISBN              0-88038-778-5;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalogue93,
+                    catalog93;
+  description
+  "Cimmarron Lantry returns to th eland of his youth".
+
+
+#.....
+#----- TSR 8210
+
+base product TSR 8210 =
+
+  title             "Too";
+  leader            "Too Solid Flesh";
+  date              1993;
+  ISBN              0-88038-767-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue93,
+                    catalog93;
+  description
+  "in the bleak, terrifying techno world of a not so very distant future".
+
+
+#.....
+#----- TSR 8211
+
+base product TSR 8211 =
+
+  title             "Dark Horse";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-916-8;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Dark Horse Series;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8212
+
+base product TSR 8212 =
+
+  title             "Warsprite";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-915-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "on a quiet night in Wyoming, two robots from the future crash to Earth".
+
+
+#.....
+#----- TSR 8214
+
+base product TSR 8214 =
+
+  title             "Outbanker";
+  leader            "";
+  date              1993;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             £ 2.50;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96;
+  description
+  "they protect their home colonies".
+
+
+#.....
+#----- TSR 8215
+
+base product TSR 8215 =
+
+  title             "Road West";
+  leader            "The";
+  date              1993;
+  ISBN              0-88038-927-3;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "Keven becomes a King's Free Ranger at Arms".
+
+
+#.....
+#----- TSR 8216
+
+base product TSR 8216 =
+
+  title             "Alien Dark";
+  leader            "The";
+  date              1993;
+  ISBN              0-88038-928-1;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "one hundret million years in the future".
+
+
+#.....
+#----- TSR 8217
+
+base product TSR 8217 =
+
+  title             "Web of Futures";
+  leader            "";
+  date              February 1991;
+  ISBN              1-56076-059-1;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91S,
+                    catalog93;
+  description
+  "it was he who was picked to save men's lives".
+
+
+#.....
+#----- TSR 8218
+
+base product TSR 8218 =
+
+  title             "Sorcerer's Stone";
+  leader            "";
+  date              April 1991;
+  ISBN              1-56076-074-5;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Sorcerer's Stone Trilogy;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91S,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8219
+
+base product TSR 8219 =
+
+  title             "Falcon Rises";
+  leader            "The";
+  date              June 1991;
+  ISBN              1-56076-075-3;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91S,
+                    catalog93;
+  description
+  "an overworked college professor is propelled into another plane".
+
+
+#.....
+#----- TSR 8220
+
+base product TSR 8220 =
+
+  title             "Token of Dragonsblood";
+  leader            "";
+  author            "Cole, Damaris";
+  date              August 1991;
+  ISBN              1-56076-076-1;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog93;
+  description
+  "Noressa leaves her primitive home to fulfil her destiny".
+
+
+#.....
+#----- TSR 8221
+
+base product TSR 8221 =
+
+  title             "Cloud People";
+  leader            "The";
+  author            "Robert B. Kelly";
+  date              October 1991;
+  ISBN              1-56076-077-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91W,
+                    catalog93;
+  description
+  "the prince investiages the crash of a flying machine".
+
+
+#.....
+#----- TSR 8222
+
+base product TSR 8222 =
+
+  title             "Lightning's Daughter";
+  leader            "";
+  date              December 1991;
+  ISBN              1-56076-078-8;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Dark Horse Series;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog91W,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8223
+
+base product TSR 8223 =
+
+  title             "Thorn and Needle";
+  leader            "";
+  date              1993;
+  ISBN              1-56076-397-3;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "two powerful forces collied, who will triumph ?".
+
+
+#.....
+#----- TSR 8224
+
+base product TSR 8224 =
+
+  title             "Kingslayer";
+  leader            "";
+  date              1993;
+  ISBN              1-56076-398-1;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Sorcerer's Stone Trilogy;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8225
+
+base product TSR 8225 =
+
+  title             "Nine Gates";
+  leader            "The";
+  author            "Philip Brugalette";
+  date              August 1992;
+  ISBN              1-56076-399-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.50;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog93;
+  description
+  "Gopal must discover the elusive city of Nine Gates".
+
+
+#.....
+#----- TSR 8226
+
+base product TSR 8226 =
+
+  title             "Half-Light";
+  leader            "";
+  author            "Vitola, Denise";
+  date              December 1992;
+  ISBN              1-56076-400-7;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.50;
+  worlds            None;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog92,
+                    catalog93;
+  description
+  "a travel to a wtilight plane called Half-Light".
+
+
+#.....
+#----- TSR 8227
+
+base product TSR 8227 =
+
+  title             "Valorian";
+  leader            "";
+  author            "Mary H. Herbert";
+  date              February 1993;
+  ISBN              1-56076-566-6;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Dark Horse Series;
+  price             $ 4.50;
+  worlds            None;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8228
+
+#  ISBN          1-56076-703-6;
+
+base product TSR 8228 =
+
+  title             "Naked Came the Sasquatch";
+  leader            "";
+  author            "John Boston";
+  date              May 1993;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.50;
+  worlds            None;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93W,
+                    catalog93,
+                    catalog95;
+  description
+  "an adventure/myster/comed about saying goodby to one's monsters".
+
+
+#.....
+#----- TSR 8229
+
+base product TSR 8229 =
+
+  title             "Book of Stones";
+  leader            "";
+  author            "L. Dean James";
+  date              August 1993;
+  ISBN              1-56076-639-5;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Sorcerer's Stone Trilogy;
+  price             $ 4.50;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8232
+
+base product TSR 8232 =
+
+  title             "Greenfire";
+  leader            "";
+  author            "Louise Titchener";
+  date              December 1993;
+  ISBN              1-56076-685-9;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.50;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95;
+  description
+  "a mesmering battle of wits between a water goddes and a king".
+
+
+#.....
+#----- TSR 8233
+
+base product TSR 8233 =
+
+  title             "Captains Outrageous / For Doom the Bell Tolls";
+  leader            "";
+  date              May 1994;
+  ISBN              1-56076-855-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "a wild and wacky tale".
+
+
+#.....
+#----- TSR 8234
+
+base product TSR 8234 =
+
+  title             "City of Sorcerers";
+  leader            "";
+  date              July 1994;
+  ISBN              1-56076-876-2;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Dark Horse Series;
+  price             $ 4.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8235
+
+base product TSR 8235 =
+
+  title             "Go Quest, Young Man";
+  leader            "";
+  date              September 1994;
+  ISBN              1-56076-898-3;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96;
+  description
+  "portrays the conventions of traditional fantasy in humorous light".
+
+
+#.....
+#----- TSR 8236
+
+base product TSR 8236 =
+
+  title             "Hidden War";
+  leader            "The";
+  author            "Michael Armstrong";
+  date              November 1994;
+  ISBN              1-56076-921-1;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.95;
+  worlds            Generic;
+  references        catalogue94,
+                    catalogue96,
+                    catalog95,
+                    catalog96,
+                    Dragon 211;
+  description
+  "futuristic combat in the virtual reality of cyberspace".
+
+
+#.....
+#----- TSR 8237
+
+base product TSR 8237 =
+
+  title             "Yor's Revenge";
+  leader            "";
+  author            "Roy V. Young";
+  date              August 1995;
+  ISBN              0-7869-0131-4;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  series            Days of Yor Series;
+  price             $ 5.99;
+  worlds            Generic;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8238
+
+base product TSR 8238 =
+
+  title             "Mus of Kerbridge";
+  leader            "";
+  author            "Paul Kidd";
+  date              April 1995;
+  ISBN              0-7869-0094-6;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.95;
+  worlds            Generic;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "tale of a noble mouse".
+
+
+#.....
+#----- TSR 8239
+
+base product TSR 8239 =
+
+  title             "F.R.E.E.Lancers";
+  leader            "";
+  author            "Mel Odom";
+  date              June 1995;
+  ISBN              0-7869-0113-6;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.95;
+  worlds            Generic;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "thriller of the future".
+
+
+#.....
+#----- TSR 8251
+
+base product TSR 8251 =
+
+  title             "Dragons Can Only Rust";
+  leader            "";
+  author            "Cymri, Chrys";
+  date              October 1995;
+  ISBN              0-7869-0157-8;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Generic;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "blend of science fictionl, magic, and mythos".
+
+
+#.....
+#----- TSR 8252
+
+base product TSR 8252 =
+
+  title             "Dragon Reforged";
+  leader            "";
+  author            "Cymri, Chrys";
+  date              December 1995;
+  ISBN              0-7869-0177-2;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            Generic;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "sequel to Dragons Can Only Rust".
+
+
+#.....
+#----- TSR 8253
+
+base product TSR 8253 =
+
+  title             "Winged Magic";
+  leader            "";
+  author            "Mary H. Herbert";
+  date              March 1996;
+  ISBN              0-7869-0484-4;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Dark Horse Series;
+  price             $ 5.99;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226;
+  description
+  "".
+
+
+#.....
+#----- TSR 8254
+
+base product TSR 8254 =
+
+  title             "Knorrman Steel and Charonti";
+  leader            "";
+  author            "Jeff Grubb";
+  date              May 1997;
+  ISBN              0-7869-0686-3;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 6.99;
+  worlds            None;
+  references        net;
+  description
+  "evil darkness lurks in the island of the Charonti and the Knorr".
+
+
+#.....
+#----- TSR 8255
+
+base product TSR 8255 =
+
+  title             "F.R.E.E.Fall";
+  leader            "";
+  author            "Mel Odom";
+  date              May 1996;
+  ISBN              0-7869-0493-3;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 228,
+                    Dragon 229;
+  description
+  "sequel to F.R.E.E.Lancers".
+
+
+#.....
+#----- TSR 8256
+
+base product TSR 8256 =
+
+  title             "Runes of Autumn";
+  leader            "";
+  author            "Larry Elmore",
+                    "Robert Elmore";
+  date              July 1996;
+  ISBN              0-7869-0504-2;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231;
+  description
+  "tale of old and new magic, legends and skepticism".
+
+
+#.....
+#----- TSR 8257
+
+base product TSR 8257 =
+
+  title             "Trail of Darkness";
+  leader            "";
+  author            "Bolesny, Darlene D.";
+  date              September 1996;
+  ISBN              0-7869-0517-4;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 232,
+                    Dragon 233;
+  description
+  "historical fantasy novel".
+
+
+#.....
+#----- TSR 8258
+
+base product TSR 8258 =
+
+  title             "From the Dragon's Mouth";
+  leader            "";
+  author            "Richard Awlinson";
+  date              June 1997;
+  ISBN              0-7869-0891-2;
+  pages             256;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 7.95;
+  worlds            None;
+  references        net;
+  description
+  "an easy-to-understand primer explaining the TSR universe of games".
+
+
+#.....
+
+#----- TSR 8420
+
+base product TSR 8420 =
+
+  title             "Fearie Mound of Dragonkind";
+  leader            "";
+  date              1987;
+  audience          All;
+  product type      Novel;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "solo quest".
+
+
+#.....
+#----- TSR 8461
+
+base product TSR 8461 =
+
+  title             "Castle Arcania";
+  leader            "";
+  date              1985;
+  system            1 on 1;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8463
+
+base product TSR 8463 =
+
+  title             "Revenge of the Red Dragon";
+  leader            "";
+  date              1985;
+  system            1 on 1;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8464
+
+base product TSR 8464 =
+
+  title             "Challenge of Druid's Grove";
+  leader            "";
+  date              1985;
+  system            1 on 1;
+  audience          All;
+  product type      Novel;
+  number            Book Four;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8466
+
+base product TSR 8466 =
+
+  title             "Amber Sword of World's End";
+  leader            "The";
+  date              1986;
+  system            1 on 1;
+  audience          All;
+  product type      Novel;
+  number            Book Six;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8467
+
+base product TSR 8467 =
+
+  title             "Warlords";
+  leader            "";
+  date              1986;
+  system            1 on 1;
+  audience          All;
+  product type      Novel;
+  number            Book Seven;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 8501
+
+base product TSR 8501 =
+
+  title             "Dungeon of Dead";
+  leader            "";
+  date              1982;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book One;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8502
+
+base product TSR 8502 =
+
+  title             "Mountain of Mirrors";
+  leader            "";
+  date              1982;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8503
+
+base product TSR 8503 =
+
+  title             "Pillars of Pentegarn";
+  leader            "";
+  date              1982;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8504
+
+base product TSR 8504 =
+
+  title             "Return to Brookmere";
+  leader            "";
+  date              1982;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Four;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8505
+
+base product TSR 8505 =
+
+  title             "Revolt of the Dwarves";
+  leader            "";
+  date              1983;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Five;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8506
+
+base product TSR 8506 =
+
+  title             "Revenge of the Rainbow Dragons";
+  leader            "";
+  date              1983;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Six;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8510
+
+base product TSR 8510 =
+
+  title             "Circus of Fear";
+  leader            "";
+  date              1983;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Ten;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8511
+
+base product TSR 8511 =
+
+  title             "Spell of the Winter Wizard";
+  leader            "";
+  date              1983;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Eleven;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8513
+
+base product TSR 8513 =
+
+  title             "Dragon of Doom";
+  leader            "";
+  date              1983;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirteen;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8514
+
+base product TSR 8514 =
+
+  title             "Raid on Nightmare Castle";
+  leader            "";
+  date              1983;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Fourteen;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8515
+
+base product TSR 8515 =
+
+  title             "Under Dragon's Wing";
+  leader            "";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Fifteen;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8516
+
+base product TSR 8516 =
+
+  title             "Dragon's Ransom";
+  leader            "The";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Sixteen;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8518
+
+base product TSR 8518 =
+
+  title             "King's Quest";
+  leader            "";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Eighteen;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8519
+
+base product TSR 8519 =
+
+  title             "Duel of the Masters";
+  leader            "";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Twenty-one;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8520
+
+base product TSR 8520 =
+
+  title             "Endless Catacombs";
+  leader            "";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Twenty-two;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8521
+
+base product TSR 8521 =
+
+  title             "Blade of the Young Samurai";
+  leader            "";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Twenty-three;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8527
+
+base product TSR 8527 =
+
+  title             "Lair of the Lich";
+  leader            "";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Twenty-seven;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8529
+
+base product TSR 8529 =
+
+  title             "Tower of Darkness";
+  leader            "";
+  date              1984;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Twenty-nine;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8530
+
+base product TSR 8530 =
+
+  title             "Fireseed";
+  leader            "The";
+  date              1985;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirty;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8532
+
+base product TSR 8532 =
+
+  title             "Prisoner of Elderwood";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirty-two;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8533
+
+base product TSR 8533 =
+
+  title             "Knight of Illusion";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirty-three;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8534
+
+base product TSR 8534 =
+
+  title             "Claw of the Dragon";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirty-four;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8535
+
+base product TSR 8535 =
+
+  title             "Vision of Doom";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirty-five;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8536
+
+base product TSR 8536 =
+
+  title             "Song of the Dark Druid";
+  leader            "";
+  date              1987;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirty-six;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 8711
+
+base product TSR 8711 =
+
+  title             "Tower of Midnight Dreams";
+  leader            "";
+  date              1985;
+  audience          All;
+  product type      Novel;
+  number            1;
+  series            Cartoon Show;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8712
+
+base product TSR 8712 =
+
+  title             "Backward Magic";
+  leader            "";
+  date              1985;
+  audience          All;
+  product type      Novel;
+  number            2;
+  series            Cartoon Show;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8713
+
+base product TSR 8713 =
+
+  title             "Witch's Spell Book";
+  leader            "The";
+  date              1985;
+  audience          All;
+  product type      Novel;
+  number            3;
+  series            Cartoon Show;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8714
+
+base product TSR 8714 =
+
+  title             "Maze and the Magic Dragon";
+  leader            "The";
+  date              1985;
+  audience          All;
+  product type      Novel;
+  number            4;
+  series            Cartoon Show;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8715
+
+base product TSR 8715 =
+
+  title             "King Who Wore No Crown";
+  leader            "The";
+  date              1985;
+  audience          All;
+  product type      Novel;
+  number            5;
+  series            Cartoon Show;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8716
+
+base product TSR 8716 =
+
+  title             "Star Snatchers";
+  leader            "The";
+  date              1985;
+  audience          All;
+  product type      Novel;
+  number            6;
+  series            Cartoon Show;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8721
+
+base product TSR 8721 =
+
+  title             "Bimbos of the Death Sun";
+  leader            "";
+  date              1995;
+  ISBN              0-88038-455-7;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Generic;
+  references        catalog95,
+                    catalog96,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8731
+
+base product TSR 8731 =
+
+  title             "Rath and Storm";
+  leader            "";
+  subtitle          "Gerrard's Legacy";
+  editor            "Archer, Peter";
+  date              July 1998;
+  ISBN              0-7869-1175-1;
+  pages             352;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  producer          TSR;
+  series            Anthology;
+  worlds            Generic;
+  references        catalog98,
+                    net;
+  description
+  "A collection of powerful magical artifacts is the only defense against the
+  forces of evil that are arrayed against \Place{Dominaria}. \NPC{Gerrard}, the
+  heir to the Legacy, together with \NPC{Sisay}, captain of the flying ship
+  \Item{Weatherlight}, has sought out many parts of the Legacy.
+
+  \bold{Gerrard's Quest}
+
+  \NPC{Sisay} has been kidnapped by \NPC{Volrath}, ruler of the plane of
+  \Place{Rath}. \NPC{Gerrard} stands at a crossroads. His companion is in
+  danger, the Legacy may be lost forever. Only he -- with the loyal crew of the
+  \Item{Weatherlight} -- can rescue \NPC{Sisay} and recover the Legacy.".
+
+
+#.....
+#----- TSR 8732
+
+base product TSR 8732 =
+
+  title             "Planeswalker";
+  leader            "";
+  subtitle          "Urza Triumphant.";
+  author            "Abbey, Lynn";
+  date              September 1998;
+  ISBN              0-7869-1182-4;
+  pages             359;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  producer          TSR;
+  number            Book 2;
+  series            Artifacts Cycle;
+  worlds            Generic;
+  references        catalog98;
+  description
+  "The war between \NPC{Urza} and \NPC{Mishra} is over. Brooding on the death
+  of his brother at the hands of extraplanar forces, \NPC{Urza} drifts among
+  the planes.
+
+  But the end of the \Event{Brother's War} has transformed him into something
+  greater. Deep within his heart, a spark has been kindled to a flame that
+  cannot be quenched.
+
+  \NPC{Urza} has become a planeswalker.".
+
+
+#.....
+#----- TSR 8733
+
+base product TSR 8733 =
+
+  title             "Mercadian Masques";
+  leader            "";
+  subtitle          "Treachery stalks the Weatherlight.";
+  author            "Lebaron, Francis";
+  date              November 1998;
+  ISBN              0-7869-1188-3;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  number            Book 1;
+  series            Masquerade Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  references        catalog98;
+  description
+  "Escaping from \Place{Rath}, the crew of the flying ship \Item{Weatherlight}
+  finds itself adrift. Grieving for their lost comrades and in need of repairs,
+  they make their painful way to \Place{Mercadia}, a city where everything is
+  for sale.
+
+  But not everything is as it seems. In the streets of \Place{Mercadia}, the
+  heroes of the \Item{Weatherlight} find that more than merchandise can be
+  bought and sold.".
+
+
+#.....
+#----- TSR 8733P
+
+base product TSR 8733P =
+
+  title             "Mercadian Masques";
+  leader            "";
+  author            "Francis Lebaron";
+  date              September 1999;
+  ISBN              0-7869-1188-3;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book II;
+  series            Weatherlight Cycle;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "".
+
+
+#.....
+#----- TSR 8734
+
+base product TSR 8734 =
+
+  title             "Brothers' War";
+  leader            "The";
+  subtitle          "The Myth. The Magic.";
+  author            "Grubb, Jeff";
+  date              May 1998;
+  pages             409;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  number            Book 1;
+  series            Artifacts Cycle;
+  worlds            Generic;
+  references        catalog98,
+                    net;
+  description
+  "\Place{Dominarian} legends speak of a mighty conflict, obscured by the mists
+  of history. Of a conflict between the brothers \NPC{Urza} and \NPC{Mishra}
+  for supremacy on the continent of \Place{Terisiare}. Of titantic engines that
+  scarred and twisted the very planet. Of a final battle that sank continents
+  and shook the skies.
+
+  The saga of the Brothers' War.".
+
+
+#.....
+#----- TSR 8734P
+
+base product TSR 8734P =
+
+  title             "Brother's War";
+  leader            "The";
+  author            "Jeff Grubb";
+  date              September 1999;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 1;
+  series            Artifacts Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  references        net;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 8883
+
+base product TSR 8883 =
+
+  title             "Realms of Wonder";
+  leader            "";
+  date              1983;
+  audience          All;
+  product type      Calendar;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8893
+
+base product TSR 8893 =
+
+  title             "Women of Fantasy Calendar 1993";
+  leader            "";
+  date              1993;
+  system            None;
+  audience          All;
+  product type      Calendar;
+  price             £ 6.99;
+  worlds            Generic;
+  references        catalogue93,
+                    catalogue96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8894
+
+base product TSR 8894 =
+
+  title             "Women of Fantasy Calendar 1994";
+  leader            "";
+  date              June 1993;
+  ISBN              1-56076-624-7;
+  system            None;
+  audience          All;
+  product type      Calendar;
+  price             $ 9.95;
+  worlds            Generic;
+  references        catalog93W,
+                    catalog93,
+                    catalogue96;
+  description
+  "art calendar".
+
+
+#.....
+#----- TSR 8897
+
+base product TSR 8897 =
+
+  title             "1997 TSR Calendar";
+  leader            "";
+  date              August 1996;
+  ISBN              0-7869-0615-4;
+  pages             24;
+  system            None;
+  audience          All;
+  product type      Calendar;
+  style             Booklet;
+  price             $12.95;
+  worlds            Generic;
+  references        catalogue96,
+                    catalog96;
+  description
+  "annual art calendar".
+
+
+#.....
+#----- TSR 8898
+
+base product TSR 8898 =
+
+  title             "Magic: The Gathering 1999 Calendar";
+  leader            "";
+  author            "Lizz Baldwin";
+  date              May 1998;
+  ISBN              0-7869-1192-1;
+  pages             24;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Calendar;
+  style             Booklet;
+  references        catalog98;
+  description
+  "annual art calendar".
+
+
+#.....
+#----- TSR 8899
+
+base product TSR 8899 =
+
+  title             "1999 Dragonlance Calendar";
+  leader            "";
+  date              May 1998;
+  ISBN              0-7869-1193-X;
+  pages             24;
+  system            None;
+  audience          All;
+  product type      Calendar;
+  style             Booklet;
+  price             $12.99;
+  worlds            Dragonlance;
+  references        net,
+                    catalog98,
+                    Dragon 245,
+                    Dragon 246,
+                    Dragon 247;
+  description
+  "annual art calendar".
+
+
+#.....
+
+#----- TSR 8952
+
+base product TSR 8952 =
+
+  title             "Ghost Tower";
+  leader            "The";
+  date              1985;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Two;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8953
+
+base product TSR 8953 =
+
+  title             "Escape from Castle Quarras";
+  leader            "";
+  date              1985;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8955
+
+base product TSR 8955 =
+
+  title             "Test of the Ninja";
+  leader            "";
+  date              1985;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Five;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8957
+
+base product TSR 8957 =
+
+  title             "Sceptre of Power";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Seven;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8958
+
+base product TSR 8958 =
+
+  title             "Nightmare Realm of Baba Yaga";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Eight;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8959
+
+base product TSR 8959 =
+
+  title             "Socerer's Crown";
+  leader            "The";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Nine;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8960
+
+base product TSR 8960 =
+
+  title             "Lords of Doom";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Ten;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8961
+
+base product TSR 8961 =
+
+  title             "Clash of the Socerers";
+  leader            "";
+  date              1986;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Eleven;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8962
+
+base product TSR 8962 =
+
+  title             "Curse of the Werewolf";
+  leader            "";
+  date              1987;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Twelve;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8963
+
+base product TSR 8963 =
+
+  title             "Gates of Death";
+  leader            "";
+  date              1987;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Thirteen;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8964
+
+base product TSR 8964 =
+
+  title             "Trail Sinister";
+  leader            "";
+  date              1987;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Fourteen;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8965
+
+base product TSR 8965 =
+
+  title             "Vanishing City";
+  leader            "The";
+  date              1987;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Fifteen;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8967
+
+base product TSR 8967 =
+
+  title             "Spawn of Dragonspear";
+  leader            "";
+  date              1988;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Seventeen;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8968
+
+base product TSR 8968 =
+
+  title             "Prince of Thieves";
+  leader            "";
+  date              1988;
+  system            Endless Quest;
+  audience          All;
+  product type      Novel;
+  number            Book Eighteen;
+  worlds            Generic;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- WTC 17595
+
+base product WTC 17595 =
+
+  title             "Wind of Justice";
+  leader            "";
+  subtitle          "Darkness Grows in the Empire...";
+  author            "Wulf, Rich";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              June 2003;
+  ISBN              0-7869-3073-X;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Third Scroll;
+  series            The Four Winds Saga;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "\NPC{Naseru}, known as 'The Anvil', will stop at nothing to sit upon the
+  Throne of \Place{Rokugan}. When dark forces rise in the \Place{City of
+  Night}, he must act swiftly. To save his beloved \Place{Empire},
+  \Product{Naseru} must learn to wield the most unlikely weapon of all
+  --- justice.".
+
+
+#.....
+#----- WTC 17630
+
+base product WTC 17630 =
+
+  title             "Heretic: Betrayers of Kamigawa";
+  leader            "";
+  subtitle          "";
+  author            "McGough, Scott";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              January 2005;
+  ISBN              0-7869-3575-8;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book II;
+  series            Kamigawa Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "The second title in a series that peers into a mysterious new area of the
+  Magic world.
+
+  \Product{Heretic: Betrayers of Kamigawa} continues a series that will explore
+  a new and mysterious area of the \Place{Magic: The Gathering} world that you
+  have never seen before. This novel previews the newest trading card game set
+  to be released in February, giving you a sneak peek at the new elements of
+  the game.".
+
+
+#.....
+#----- WTC 17750
+
+base product WTC 17750 =
+
+  title             "Outlaw: Champions of Kamigawa";
+  leader            "";
+  subtitle          "The war with the spirit world has begun";
+  author            "McGough, Scott";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              September 2004;
+  ISBN              0-7869-3358-5;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            Kamigawa Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "In a world of mysticism and honor, a war is brewing. Spirits launch attacks
+  against humans as, in the shadows, a terror lurks just beyond sight.
+
+  \NPC{Michiko}, daughter of the warlord \NPC{Konda}, must brave the dangers
+  outside her father's fortress to consult holy monks and the \Monster{orochi},
+  \Monster{snake folk} with a strong connection to the spirit world. Yet when
+  \NPC{Michiko} meets \NPC{Umezawa}, a \Class{thief} and \Class{black magic}
+  user, she realizes that to stop the war that is about to sweep the land, she
+  may have to make alliances with her enemies.
+
+  And the most dangerous foes may be her friends.
+
+  \Product{Outlaw: Champions of Kamigawa} kicks off a series that explores a
+  new and mysterious area of the \Product{Magic: The Gathering} world that you
+  have never seen before.".
+
+
+#.....
+#----- WTC 17851
+
+base product WTC 17851 =
+
+  title             "Legions";
+  leader            "";
+  subtitle          "In Titanic Battle, the World Stands Divided.";
+  author            "King, J. Robert";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              January 2003;
+  ISBN              0-7869-2914-6;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book II;
+  series            Onslaught Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "On the side stand the followers of \NPC{Phage}, who cry out for new arena
+  combats, new champions, new blood spilled in the sand. On the other are the
+  supporters of \NPC{Akroma}, the \Monster{angel}, who preaches a terrifying
+  religion hallowing her creator.
+
+  In the middle stands the lonely figure of \NPC{Kamahl}. Once a champion of
+  the pits, he must now atone for the terrible wrongs he has wrought. Those
+  wrongs gave birth to \NPC{Phage} and \NPC{Akroma}. They gave birth to the
+  suffering of the world.
+
+  Now \NPC{Kamahl} must sweep the land clean of this terrible blight. But his
+  fury may destroy that which he most loves.".
+
+
+#.....
+#----- WTC 17876
+
+base product WTC 17876 =
+
+  title             "Emperor's Fist";
+  leader            "";
+  subtitle          "Honor Tested by War";
+  author            "McGough, Scott";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              March 2003;
+  ISBN              0-7869-2935-9;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book II;
+  series            Magic Legends Cycle Two;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "Though his assassins have failed, the godlike \Place{Madaran} emperor has
+  other ways of crushing rebellion. He sends the brutal imperial army to rein
+  in a defiant island chain, and the empire is once more plunged into
+  violence. The emperor's champion accompanies the army, but his
+  loyalty will be tested by the horrors of war. Can the champion achieve
+  honorable victory, or will he and the rebels alike be crushed by the
+  Emperor's Fist?".
+
+
+#.....
+#----- WTC 17883
+
+base product WTC 17883 =
+
+  title             "Scourge";
+  leader            "";
+  subtitle          "The battle rages on!";
+  author            "King, Robert J.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              May 2003;
+  ISBN              0-7869-2956-1;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book III;
+  series            Onslaught Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "Amid the titanic clash between \NPC{Phage} and \NPC{Akroma}, all
+  \Place{Dominaria} shuddered. Now, out of the destruction and chaos a new
+  force arises, and \NPC{Kamahl} must face his greatest foe: \NPC{Karoma}. Her
+  arms spread to the very clouds, and her robes trail like rays of sunlight.
+
+  She is the destroyer.
+
+  She is the answer.".
+
+
+#.....
+#----- WTC 17975
+
+base product WTC 17975 =
+
+  title             "Monster of Magic";
+  leader            "The";
+  subtitle          "";
+  author            "McGough, Scott",
+                    "McDermott, Will",
+                    "Ryan, Tim",
+                    "Thomsen, Briam M.",
+                    "Lassieur, A.L.",
+                    "Graham, Denise R.",
+                    "Moore, Vance",
+                    "Schend, Steven E.",
+                    "Lebow, Jess",
+                    "Dupree, Tom",
+                    "Sullivan, Stephen D.",
+                    "Thompson, Paul B.";
+  editor            "King, Robert J.",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              August 2003;
+  ISBN              0-7869-2983-9;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Anthology;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "\Product{The Monsters of Magic} is a collection of short stories exploring
+  the strengths and weaknesses of the creatures that inhabit the Magic: The
+  Gathering world. The monsters highlighted are drawn not only from Magic card
+  sets, but from the novels as well, giving any reader broader exposure to the
+  entire Magic world.".
+
+
+#.....
+#----- WTC 17979
+
+base product WTC 17979 =
+
+  title             "Moons of Mirrodin";
+  leader            "The";
+  subtitle          "A World Beyond Imagination";
+  author            "McDermott, Wil";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              September 2003;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            Mirrodin Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "Where forests of metal claw the sky.
+
+  Where razor-sharp metallic grasses stretch across the plains.
+
+  Where vast oceans of quicksilver conceal predators awaiting the unwary.
+
+  Across this harsh landscape, an orphaned \Monster{elf} must make her way,
+  seeking the secrets of her past, daring the perils of her present. And she
+  must tear aside the veil that hides the face of a hidden enemy whose power
+  extends across all \Place{Mirrodin}.".
+
+
+#.....
+#----- WTC 17987
+
+base product WTC 17987 =
+
+  title             "Champion's Trial";
+  leader            "";
+  subtitle          "Evil Triumphant";
+  author            "McGough, Scott";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              November 2003;
+  ISBN              0-7869-3015-2;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book III;
+  series            Magic Legends Cycle Two;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "A \Monster{dragon} sits on the throne of \Place{Madara}, and his regent
+  rules with knives in the dark. The islands bleed, the mainland shakes, and
+  even the champion has forsaken his office. Does no honor remain in the
+  empire?
+
+  Ask \NPC{Ayesha}, who has turned her hands from breaking artifacts to making
+  forests. Ask \NPC{Wasitora}, whose \Monster{cat-dragon} kits fight the armies
+  of evil. Most of all, ask \NPC{Tetsuo}, who must regain his honor by
+  destroying the emperor he once served.".
+
+
+#.....
+#----- WTC 17997
+
+base product WTC 17997 =
+
+  title             "Wind of Truth";
+  leader            "";
+  subtitle          "";
+  author            "Soesbee, Ree";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              December 2003;
+  ISBN              0-7869-3045-4;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Fourth Scroll;
+  series            The Four Winds Saga;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "This concluding title to \Product{The Four Winds Saga} explores a different
+  character's perspective on the events taking place in the series. The overall
+  storyline is based on the \Product{Gold Edition} set for the \Product{Legend
+  of the Five Rings} trading card game released by AEG. The ending of this
+  title will actually be decided by the \Product{Legend of the Five Rings}
+  readers and fans in a tournament during the Summer of 2003, allowing players
+  to have direct impact on novel content.".
+
+
+#.....
+#----- TSR 21323
+
+base product TSR 21323 =
+
+  title             "Colors of Magic";
+  leader            "The";
+  subtitle          "The brothers' struggle for power has ended...";
+  editor            "Lebow, Jess";
+  date              February 1999;
+  ISBN              0-7869-1323-1;
+  pages             342;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  series            Anthology;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "Argoth is decimated...
+
+  Tidal waves have turned canyons into rivers...
+
+  Earthquakes leveled the cities...
+
+  \Place{Dominaria} is in ruins.
+
+  Now the struggle for this war-torn world is to survive.".
+
+
+#.....
+#----- TSR 21332
+
+#  ISBN          0-7869-1332-2;
+
+base product TSR 21332 =
+
+  title             "Deck Construction Companion";
+  leader            "";
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  price             $ 9.99;
+  worlds            Generic;
+  references        net;
+  description
+  "".
+
+
+#.....
+#----- TSR 21334
+
+base product TSR 21334 =
+
+  title             "Storm at Eldala";
+  leader            "";
+  author            "Duane, Diane";
+  date              March 1999;
+  ISBN              0-7869-1334-7;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Book 2;
+  series            The Harbringer Trilogy;
+  price             $ 5.99;
+  worlds            Star*Drive;
+  references        Dragon 257;
+  description
+  "".
+
+
+#.....
+#----- TSR 21439
+
+base product TSR 21439 =
+
+  title             "Dungeons & Dragons: Movie";
+  leader            "The";
+  author            "Neal Jr. Barrett";
+  cartography       "Kauth, Dennis";
+  date              October 2000;
+  ISBN              0-7869-1439-4;
+  pages             278;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 6.99;
+  contents          Book;
+  worlds            Generic;
+  references        net;
+  description
+  "\bold{A novelization of the fantasy movie of the year.}
+
+  \emph{It began as a game.}
+
+  \emph{It became a phenomenon.}
+
+  Now Dungeons & Dragons has come to the big screen in a stunning tale of good
+  and evil, heroes and villains, monsters and mayhem.
+
+  When an evil wizard calls upon foul magic to bend the powerful \Monster{red
+  dragons} to his will, a young empress must find unlikely champions: two
+  streetwise thieves, an apprentice sorceress, an \Monster{elven} ranger, and a
+  bloodlusty \Monster{dwarf}.
+
+  \bold{Join the adventure. Fell the magic.}".
+
+
+#.....
+#----- TSR 21344
+
+base product TSR 21344 =
+
+  title             "Time Streams";
+  leader            "";
+  subtitle          "\NPC{Urza}'s Legacy Unfolds.";
+  author            "King, Robert J.";
+  ISBN              0-7869-1344-4;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book 3;
+  series            Artifacts Cycle;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "\NPC{Urza Planeswalker} has enlisted the most brilliant minds from across
+  \Place{Dominaria} to study at his academy on \Place{Tolaria}. Together they
+  work to bring to life the greatest artifact weapon \NPC{Urza} has ever
+  devised, hoping to use it to defend their home from an imminent
+  \Place{Phyrexian} invasion. But treachery and tragedy stalk the tiny island,
+  as \NPC{Urza} and his followers seek to manipulate time itself.";
+  synonyms          "WTC 86523".
+
+
+#.....
+#----- TSR 21353
+
+base product TSR 21353 =
+
+  title             "Official Urza's Legacy Game Guide";
+  leader            "";
+  ISBN              0-7869-1353-3;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  price             $11.99;
+  references        net;
+  description
+  "".
+
+
+#.....
+#----- TSR 21355
+
+base product TSR 21355 =
+
+  title             "Starfall";
+  leader            "";
+  author            "Martin H. Greenberg";
+  date              May 1999;
+  ISBN              0-7869-1355-X;
+  system            None;
+  audience          All;
+  product type      Novel;
+  series            Anthology;
+  price             $ 5.99;
+  worlds            Star*Drive;
+  references        Dragon 257;
+  description
+  "collection of short stories".
+
+
+#.....
+#----- TSR 21357
+
+base product TSR 21357 =
+
+  title             "Gathering Dark";
+  leader            "The";
+  subtitle          "After the war comes the darkness";
+  author            "Grubb, Jeff";
+  date              June 1999;
+  ISBN              0-7869-1357-6;
+  pages             342;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  number            Book I;
+  series            Ice Age Cycle;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "\Place{Terisiare} lies in ruins. Nations have fallen, \Monster{goblins} raid
+  the land, and an oppressive faith throttles the city-states. Now deep within
+  the walls of the \Place{Conclave of Mages}, \NPC{Jodah} must decide if
+  unlocking his own immense power is worth taking a step into the dark lands.
+
+  The epic of the \Event{Ice Age} begins.".
+
+
+#.....
+#----- TSR 21367
+
+base product TSR 21367 =
+
+  title             "Zero Point";
+  leader            "";
+  author            "Richard Baker";
+  date              June 1999;
+  ISBN              0-7869-1367-3;
+  system            Alternity;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 5.99;
+  worlds            Star*Drive;
+  references        net;
+  description
+  "a bounty hunter and cybernetic killer in a deadly struggle for power".
+
+
+#.....
+#----- TSR 21375
+
+base product TSR 21375 =
+
+  title             "Official Classic Sixth Edition Game Strategy Guide";
+  leader            "";
+  author            "Randy Buehler";
+  date              May 1999;
+  ISBN              0-7869-1375-4;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  series            Strategy Guide;
+  price             $16.99;
+  worlds            Generic;
+  references        net;
+  description
+  "comprehensive strategy guide for Magic: The Gathering".
+
+
+#.....
+#----- TSR 21380
+
+base product TSR 21380 =
+
+  title             "Bloodlines";
+  leader            "";
+  subtitle          "Blood has been spilled. Battle lines have been drawn.";
+  author            "Coleman, Loren L.";
+  date              August 1999;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  number            Book IV;
+  series            Artifacts Cycle;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "Time is getting short as \Place{Tolaria} races to find the one who will
+  wield the power of the Legacy. Deep in the inner circle, the dark lord
+  \NPC{Yawgmoth} sends out an edict: Kill \NPC{Urza Planeswalker}.
+
+  From the bloodlines of the \Place{Benalish plains}, a hero is born.";
+  synonyms          "WTC 866526".
+
+
+#.....
+#----- TSR 21400
+
+base product TSR 21400 =
+
+  title             "Official Urza's Destiny Game Guide";
+  leader            "";
+  author            "Will McDermott";
+  date              July 1999;
+  ISBN              0-7869-1400-9;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  price             $11.99;
+  worlds            Urza's Destiny;
+  references        net;
+  description
+  "a comprehensive guide to the newest card expansion".
+
+
+#.....
+#----- TSR 21403
+
+base product TSR 21403 =
+
+  title             "Shattered Alliance";
+  leader            "The";
+  subtitle          "After the ice comes the peril";
+  author            "Jeff Grubb";
+  date              December 2000;
+  ISBN              0-7869-1403-3;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  number            Book III;
+  series            Ice Age Cycle;
+  price             $ 6.99;
+  references        net;
+  description
+  "The \Event{Ice Age} has come to an abrupt end, but the world's troubles have
+  not. Legions of \Monster{undead} still plague the living. The temporary peace
+  in \Place{Kjeldor} has come to an end, and an evil far more treacherous than
+  \NPC{Lim Dûl} has been unleashed upon the land.
+
+  The ice has gone, but the evil remains.".
+
+
+#.....
+#----- TSR 21425
+
+base product TSR 21425 =
+
+  title             "Official Starter Game Guide";
+  leader            "";
+  author            "Herndon, Cory J.";
+  date              August 1999;
+  ISBN              0-7869-1425-4;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  price             $11.99;
+  worlds            Generic;
+  references        net;
+  description
+  "M:TG Strategy Guide".
+
+
+#.....
+#----- TSR 21438
+
+base product TSR 21438 =
+
+  title             "Invasion";
+  leader            "";
+  subtitle          "The Phyrexian nightmare begins.";
+  author            "Robert J. King";
+  date              October 2000;
+  ISBN              0-7869-1438-6;
+  pages             311;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book I;
+  series            Invasion Cycle;
+  price             $ 6.99;
+  references        net;
+  description
+  "\Place{Dominaria} faces its biggest threat -- an invasion by its greatest
+  enemy, an attack planned for eons by merciless foes. No one is exempt from
+  their terror. No land is safe from their onslaught. In the shadow of the
+  \Group{Phyrexian} horde, \NPC{Dominaria} has but one hope -- the
+  \NPC{Weatherlight} and her crew. The time has come to defend hearth and home
+  from invasion.".
+
+
+#.....
+#----- TSR 21517
+
+base product TSR 21517 =
+
+  title             "Official Turnament Players' Guide";
+  leader            "";
+  author            "DCI Staff";
+  date              June 1999;
+  ISBN              0-7869-1517-X;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  price             $ 9.99;
+  worlds            Generic;
+  references        net;
+  description
+  "".
+
+
+#.....
+#----- TSR 21529
+
+base product TSR 21529 =
+
+  title             "Myths of Magic";
+  leader            "The";
+  subtitle          "Perhaps the stories are true...";
+  author            "Jess Lebow";
+  date              August 2000;
+  ISBN              0-7869-1529-3;
+  pages             342;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  series            Anthology;
+  price             $ 7.99;
+  worlds            Generic;
+  references        net;
+  description
+  "Welcome to a world of rich folklore where \Monster{angels} watch over the
+  righteous, in which sea monsters sink ships, where dark figures lurk under
+  every child's bed. Now the mysteries of \Place{Dominaria} are explained.".
+
+
+#.....
+#----- TSR 21558
+
+base product TSR 21558 =
+
+  title             "Two of Minds";
+  leader            "";
+  author            "William H. Jr. Keith";
+  date              July 2000;
+  ISBN              0-7869-1558-7;
+  system            Alternity;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 6.99;
+  worlds            Star*Drive;
+  references        net;
+  description
+  "life in a street gane in the underground hellf of Oberon".
+
+
+#.....
+#----- TSR 21559
+
+base product TSR 21559 =
+
+  title             "Nemesis";
+  leader            "";
+  subtitle          "A new threat looms on the horizon.";
+  author            "Paul B. Thompson";
+  date              February 2000;
+  ISBN              0-7869-1559-5;
+  pages             311;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "The long-awaited completion of Rath is approaching. The \NPC{Dark Lord}'s
+  plans to invade \Place{Dominaria} will soon see fruition. Only the struggle
+  for power in this artificial plane remains. \NPC{Urza Planeswalker} will not
+  stop the \Place{Phyrexian} empire.
+
+  Witness the creation of his nemesis.".
+
+
+#.....
+#----- TSR 21562
+
+base product TSR 21562 =
+
+  title             "Eternal Ice";
+  leader            "The";
+  subtitle          "After the darkness comes the ice";
+  author            "Jeff Grubb";
+  date              May 2000;
+  ISBN              0-7869-1562-5;
+  pages             311;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  number            Book II;
+  series            Ice Age Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  references        net;
+  description
+  "Thousands of years after the explosion at \Place{Argoth} that ended the
+  \Event{Brothers' War}, ice has covered the world of \Place{Dominaria}. The
+  strong have turned to barbarism. The weak have died. Now \NPC{Lim Dûl}, a
+  \Class{necromancer} with a taste for power, seeks to awaken a deeper evil.".
+
+
+#.....
+#----- TSR 21563
+
+base product TSR 21563 =
+
+  title             "Nightfall at Algemron";
+  leader            "";
+  author            "Duane, Diane";
+  date              April 2000;
+  ISBN              0-7869-1563-3;
+  system            Alternity;
+  audience          All;
+  product type      Novel;
+  number            Book Three;
+  series            Harbringer Trilogy;
+  price             $ 5.99;
+  worlds            Star*Drive;
+  references        net,
+                    Dragon 268,
+                    Dragon 270;
+  description
+  "".
+
+
+#.....
+#----- TSR 21570
+
+base product TSR 21570 =
+
+  title             "Prophecy";
+  leader            "";
+  author            "Vance Moore";
+  date              June 2000;
+  ISBN              0-7869-1570-6;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Book III;
+  series            Masquerade Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  references        net;
+  description
+  "".
+
+
+#.....
+#----- TSR 21573
+
+base product TSR 21573 =
+
+  title             "Gridrunner";
+  leader            "";
+  author            "Thomas Reid";
+  date              September 2000;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 6.99;
+  worlds            Star*Drive;
+  references        net;
+  description
+  "a black market courier journeys to the Verge to contact The Fool".
+
+
+#.....
+#----- TSR 21600
+
+base product TSR 21600 =
+
+  title             "Thran";
+  leader            "The";
+  subtitle          "Before the Brothers' War. Before the five colors of magic.";
+  author            "Robert J. King";
+  date              December 1999;
+  ISBN              0-7869-1438-6;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "Before history itself, the plane of \Place{Dominaira} was ruled by the
+  \Group{Thran}. They built machines and artifacts, the likes of which have
+  never since been seen. But amid this civilization, a shadow took root, one
+  that would stretch its arms across space and time.
+
+  The hideous evil of \Place{Phyrexia} was born.".
+
+
+#.....
+#----- TSR 21636
+
+base product TSR 21636 =
+
+  title             "In Hollow Houses";
+  leader            "";
+  author            "Gary A. Braunback";
+  date              August 2000;
+  ISBN              0-7869-1636-2;
+  system            Alternity;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 6.99;
+  worlds            Dark.Matter;
+  references        net;
+  description
+  "an unspeakable evil stirs beneath the nation's capital".
+
+
+#.....
+#----- TSR 21658
+
+base product TSR 21658 =
+
+  title             "Unicorn";
+  leader            "The";
+  subtitle          "The Land is Wounded.";
+  author            "Lassieur, Allison";
+  date              September 2000;
+  ISBN              0-7869-1658-3;
+  pages             312;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Second Scroll;
+  series            The Clan War;
+  price             $ 6.99;
+  references        net;
+  description
+  "\Place{Shadowlands} monsters mass on the edges of \Place{Rokugan}. The
+  \Group{Crab Clan}, long vigilant in battling them, seems unable or unwilling
+  to stop the \Monster{demonic} onslaught.
+
+  But from an unlikely quarter, a hero arises. She will lead her forces in a
+  battle that will rend the world: \bold{The \Event{Battle at Beiden Pass.}}".
+
+
+#.....
+#----- TSR 21659
+
+base product TSR 21659 =
+
+  title             "Crane";
+  leader            "The";
+  subtitle          "A Spring of War.";
+  author            "Ree Soesbee";
+  date              November 2000;
+  ISBN              0-7869-1659-1;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  number            Third Scroll;
+  series            The Clan War;
+  price             $ 6.99;
+  references        net;
+  description
+  "\NPC{Doji Hoturi}, the young Champion of the \Group{Crane}, is everything a
+  \Class{samurai} could wish to be: swift of sword and pure of heart . . . but
+  his eyes hide a terrible secret.
+
+  Bloody magic whispers through \Place{Rokugan}'s greatest cities, and the
+  undead servants of a Dark God rise. From the shadows, \NPC{Doji Hoturi}
+  watches as a new champion of evil lifts his sword and laughs -- and the face
+  beneath the armor is his own.".
+
+
+#.....
+#----- TSR 21679
+
+base product TSR 21679 =
+
+  title             "If Whispers Call";
+  leader            "";
+  author            "Bassingthwaite, Don";
+  date              December 2000;
+  ISBN              0-7869-1679-6;
+  pages             288;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 6.99;
+  worlds            Dark.Matter;
+  references        net;
+  description
+  "unraveling the dark secrets of a ghost in Chicago".
+
+
+#.....
+#----- TSR 21684
+
+base product TSR 21684 =
+
+  title             "Scorpion";
+  leader            "The";
+  subtitle          "\Place{Rokugan} is Doomed!";
+  author            "Steven Sullivan";
+  date              July 2000;
+  ISBN              0-7869-1684-2;
+  pages             312;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  series            Clan War Series;
+  price             $ 6.99;
+  references        net;
+  description
+  "The \NPC{Serene Prophet} foresaw its downfall -- tides of \Monster{demons}
+  flooding out of the \Place{Shadowlands}. One man seeks to avert the
+  catastrophe -- the leader of the \Group{Scorpion Clan}. He will pay any
+  price, perpetrate any deception, to save the \Place{empire}. If he must, he
+  will become evil to fight evil. He and the emperor's champion will battle
+  each other to the death for that which they both hold dear: \Place{Rokugan}".
+
+
+#.....
+#----- TSR 21785
+
+base product TSR 21785 =
+
+  title             "Movie";
+  leader            "The";
+  author            "Steve Atley";
+  date              November 2000;
+  ISBN              0-7869-1785-7;
+  pages             192;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  price             $ 5.99;
+  worlds            Generic;
+  references        net;
+  description
+  "novelization of the movie for younger fans".
+
+
+#.....
+#----- WTC 21798
+
+base product WTC 21798 =
+
+  title             "Phoenix";
+  leader            "The";
+  subtitle          "Ashes of the Phoenix";
+  author            "Sullivan, Stephen D.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              March 2001;
+  ISBN              0-7869-1798-9;
+  pages             271;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Fourth Scroll;
+  series            Clan War;
+  price             $ 6.99;
+  description
+  "Magic is power for the \Group{Phoenix} clan. During the depths of the
+  \Event{Clan War}, the \Group{Elemental Masters} seek ultimate power in the
+  form of a magic that will permanently destroy the \Place{Shadowlands}
+  armies. Without it, the enemy will reduce the clan to ahses from which even
+  the \Group{Phoenix} cannot rise. All hope rests in the mysteries of a dark
+  and dreaded source: \Item{The Black Scrolls}.".
+
+
+#.....
+#----- WTC 21802
+
+base product WTC 21802 =
+
+  title             "Planeshift";
+  leader            "";
+  subtitle          "The first wave is over, but the invasion rages on.";
+  author            "King, Robert J";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              February 2000;
+  pages             311;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            Invasion Cycle;
+  price             $ 6.99;
+  worlds            Dominaria;
+  description
+  "In the midst of an all-out war, the ground shifts and moves. Milliions upon
+  millions of invaders appear out of nowhere as the artificial plane of
+  \Place{Rath} overlays \Place{Dominaria}, covering the natural landscape with
+  the unnatural horros of \Place{Phyrexia}.
+
+  There is no rest for the wicked.".
+
+
+#.....
+
+#----- TSR 91302
+
+base product TSR 91302 =
+
+  title             "Official Guide to Urza's Saga";
+  leader            "";
+  ISBN              0-7869-1302-9;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  price             $16.99;
+  references        net;
+  description
+  "".
+
+
+#.....
+#----- TSR 91400
+
+base product TSR 91400 =
+
+  title             "Official Urza's Destiny Game Guide";
+  leader            "";
+  author            "Will McDermott";
+  date              July 1999;
+  ISBN              0-7869-1400-9;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Guide;
+  style             Paperback;
+  price             $11.99;
+  worlds            Generic;
+  references        net;
+  description
+  "".
+
+
+#.....
+
+#----- WTC 17721
+
+base product WTC 17721 =
+
+  title             "Nova Rocks!";
+  leader            "";
+  subtitle          "Act like a rock star in front of a group of strangers. Would you dare?";
+  author            "Emesse, Tea";
+  date              April 2005;
+  ISBN              0-7869-3625-8;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 1;
+  series            Star Sisterz;
+  price             $ 5.99;
+  worlds            None;
+  description
+  "When \NPC{Nova Darling} sees the weird message on the mall ATM, she can't
+  believe her eyes. True, Nova loves to play the electric guitar. But that's
+  one secret she's never told anyone, especially her mom. Nova's mom is
+  convinced that Nova is destined to be a ballet star. But Nova's more
+  interested in practicing riffs on her ax, and gazing at the oh-so-cute
+  \NPC{Joe Tsai}. Will the mystery message help Nova follow her dreams without
+  breaking her mom's heart?".
+
+
+#.....
+#----- WTC 17763
+
+base product WTC 17763 =
+
+  title             "Carmen Dives In";
+  leader            "";
+  subtitle          "Make up a cheer using the words dive, goat, and processed cheese. Would you dare?";
+  author            "Johns, Linda";
+  date              April 2005;
+  ISBN              0-7869-3714-9;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            Star Sisterz;
+  price             $ 5.99;
+  worlds            None;
+  description
+  "\NPC{Carmen Bernstein} feels like she's become invisible. Her dad recently
+  got re-married, and now he's very involved with his 'new and improved'
+  family: stepdaughter Riley, an ultra popular cheerleader, and stepson
+  Sam. Then one day, while snooping on her Dad's PocketPC, Carmen sees a
+  message telling her to make up a crazy cheer. HUH?! Carmen doesn't know
+  anything about cheerleading. In fact, she hates Riley and her cheerleading
+  friends. But in a moment of desperation, Carmen gives the silly cheer a
+  try... and discovers something she never expected.".
+
+
+#.....
+
+#----- WTC 88093
+
+base product WTC 88093 =
+
+  title             "Johan";
+  leader            "";
+  subtitle          "The battle for Bryce has begun.";
+  author            "Emery, Clayton";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              April 2001;
+  ISBN              0-7869-1803-9;
+  pages             311;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 1;
+  series            Legends Cycle;
+  price             $ 6.99;
+  description
+  "The city of \Place{Bryce} is being watched by unfriendly eyes. A mysterious
+  prophesy, a desperate \Class{wizard}, and an extraordinary \Monster{tiger
+  man} are somehow caught up in the city's destiny. One man must race against
+  time to understand how -- and why -- or risk the enslavement of his people.".
+
+
+#.....
+#----- WTC 88188
+
+base product WTC 88188 =
+
+  title             "Dragons of Magic";
+  leader            "";
+  subtitle          "";
+  author            "Moore, Vance",
+                    "Lassieur, A.L.",
+                    "Lebow, Jess",
+                    "Bolme, Edward",
+                    "Schend, Steven E.",
+                    "Graham, Denise R.",
+                    "Thompson, Paul B.",
+                    "Ryan, Tim",
+                    "Dupree, Tom",
+                    "Belkom, Edo van",
+                    "Thomsen, Brian M.",
+                    "McGough, Scott";
+  editor            "King, Robert J.";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              August 2001;
+  ISBN              0-7869-1872-1;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Anthology;
+  price             $ 6.99;
+  worlds            Dominaria;
+  description
+  "What beasts rule our dreams?
+
+  Ancient Primevals enslaved our ancestors, and modern \Monster{dragon} engines
+  enslave us. \Monster{Plains dragons} defend \Monster{humans}, and
+  \Monster{undead dragons} destroy them. And all \Monster{dragons} hold
+  mysteries deep within.
+
+  Uncover the secrets of the \Monster{dragons} of \Place{Dominaria}.".
+
+
+#.....
+#----- WTC 88195
+
+base product WTC 88195 =
+
+  title             "Crab";
+  leader            "The";
+  subtitle          "";
+  author            "Brown, Stan";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              June 2001;
+  ISBN              0-7869-1879-9;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Fifth Scroll;
+  series            Clan War;
+  price             $ 6.99;
+  worlds            Rokugan;
+  description
+  "\Group{The Crab} have defended the \Place{Emerald Empire} against
+  \Place{Shadowlands} hordes for a millennium and beyond. Nothing will drive
+  them from the \Place{Carpenter's Wall}.
+
+  Nothing but the destruction of the \Place{empire} itself.
+
+  Plague has gripped the land, dangling \Place{Rokugan} by a thread. The
+  defenders of the empire must now become its saviors by doing the unthinkable:
+  Joining the enemy.".
+
+
+#.....
+#----- WTC 88196
+
+base product WTC 88196 =
+
+  title             "Apocalypse";
+  leader            "";
+  subtitle          "";
+  author            "King, Robert J.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              June 2001;
+  ISBN              0-7869-1880-2;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book III;
+  series            Invasion Cycle;
+  price             $ 6.99;
+  worlds            Dominaria;
+  description
+  "The end is near!
+
+  \Place{Phyrexian} plagues and shock troops have taken their toll. The final
+  stage of the invasion has begun, and the dark lord \NPC{Yawgmoth} himself
+  plans to cross over into \Place{Dominaria} to claim his prize. With time
+  running out, the battered heroes' last hope to save their home lies in an
+  ancient, untested weapon, a jumble of artifacts known as the \Item{Legacy}.
+
+  Bear witness to the apocalypse.".
+
+
+#.....
+#----- WTC 88552
+
+base product WTC 88552 =
+
+  title             "Secrets of Magic";
+  leader            "The";
+  subtitle          "The world is a mystery";
+  author            "Thompson, Paul B.",
+                    "Athans, Philip",
+                    "Levin, Nate",
+                    "Bishop, Jim",
+                    "Pramas, Chris",
+                    "Herndon, Cory J.",
+                    "King, Robert J.",
+                    "McDermott, Will",
+                    "Moore, Vance",
+                    "McGough, Scott";
+  editor            "Lebow, Jess";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              March 2002;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Anthology;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "Ancient troves of artifacts await discovery. The origins of potent spells
+  rest lost between the pages of archaic tomes. The evolution of monstrous
+  beasts lies outside of a researcher's grasp---until now. At last,
+  long-forgotten and expertly hidden secrets will be revealed.".
+
+
+#.....
+#----- WTC 88553
+
+base product WTC 88553 =
+
+  title             "Steel Throne";
+  leader            "The";
+  subtitle          "";
+  author            "Bolme, Edward";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              March 2002;
+  ISBN              0-7869-2712-7;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Prelude;
+  series            Four Winds Saga;
+  price             $ 6.99;
+  worlds            Rokugan;
+  description
+  "The Clan War is over. The danger is not.
+
+  Once the greatest samurai in all \Place{Rokugan}, \NPC{Toturi} has managed to
+  hold the \Place{Empire} together despite warring clans and internal
+  treacheries. But nothing has prepared him for the hordes of vile spirits
+  ravaging his beloved realm.
+
+  As the Spirit Wars rage, \NPC{Toturi} and his children are the only hope for
+  \Place{Rokugan}.
+
+  The prelude to an upcoming Legend of the Five Rings series.
+
+  This novel introduces new characters and settings based on the events in the
+  Legend of the Five Rings: The Spirit Wars card set. This book also sets up
+  the story for future novels in the upcoming series \Product{The Four Winds
+  Saga}.
+
+  Edward Bolme has been involved in Origins award-winning game design and
+  fiction for 14 years. This is his first novel for Wizards of the Coast, Inc.,
+  but he has contributed short stories to various anthologies, including
+  \Product{The Dragons of Magic}, a Magic: The Gathering anthology, and
+  \Product{Neverwinter Nights}, a \Place{Forgotten Realms} anthology. He lives
+  in Washington.".
+
+
+#.....
+#----- WTC 88603
+
+base product WTC 88603 =
+
+  title             "Judgment";
+  leader            "";
+  subtitle          "";
+  author            "McDermott, Will";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              May 2002;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book III;
+  series            Odyssey Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "The time has come.
+
+  Every powerful wizard and fighter on the continent of \Place{Otaria} wants
+  one thing: power. One artifact can give them---undeniably---that which they
+  seek, and nothing will stop any of them from possessing it.
+
+  But in the end, only one can have it, and his actions will determine the fate
+  of the world.
+
+  The day of judgment has arrived.".
+
+
+#.....
+#----- WTC 88618
+
+base product WTC 88618 =
+
+  title             "Onslaught";
+  leader            "";
+  subtitle          "The land is in upheaval.";
+  author            "King, Robert J.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              September 2002;
+  ISBN              0-7869-2801-8;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Onslaught Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "The forest grows out of control. The mountains erupt. The seas boil. The
+  swamps spew acid, and the plains turn to desert. Yet, amidst the turmoil
+  there is civilization, brutal and unforgiving. Pit fighters battle to the
+  death before tremendous crowds, making some rich, while others lose
+  everything in one stroke of a sword.
+
+  The games must continue.
+
+  So must the struggle for survival.".
+
+
+#.....
+#----- WTC 88621
+
+base product WTC 88621 =
+
+  title             "Wind of War";
+  leader            "";
+  subtitle          "The Steel Throne Sits Empty...";
+  author            "Lebow Jess";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              December 2002;
+  ISBN              0-7869-2810-7;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Second Scroll;
+  series            The Four Windows Saga;
+  price             $ 6.99;
+  worlds            Rokugan;
+  description
+  "\Place{Rokugan} stands on the brink of chaos. As his brothers and sister
+  seek the favor of the clans, the illegitimate son \NPC{Akodo Kaneka} forsakes
+  grasping for power and takes up a new quest---defending the helpless and
+  destroying those who ravage the common people. But as his world crumbles
+  about him, he discovers that no son of \NPC{Toturi} can escape his destiny.".
+
+
+#.....
+#----- WTC 88627
+
+base product WTC 88627 =
+
+  title             "Assassin's Blade";
+  leader            "";
+  subtitle          "Assassination hast its price!";
+  author            "McGough, Scott";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              December 2002;
+  ISBN              0-7869-2830-1;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            2;
+  series            Magic Legends Cycle;
+  worlds            Generic;
+  description
+  "Scheming, intelligent, and power-hungry, the emperor's assassin moves always
+  in shadow. He kills whom his master wishes and plans his own rise to
+  power. Against him, one man stands on his honor, determined to end the cycle
+  of death dealt from dark corners.
+
+  Amid a dark landscape ravaged by war, the two at last confront one
+  another. At stake is the future of the empire.".
+
+
+#.....
+#----- WTC 88690
+
+base product WTC 88690 =
+
+  title             "Dragon";
+  leader            "The";
+  subtitle          "";
+  author            "Soesbee, Ree";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              September 2001;
+  ISBN              0-7869-1883-7;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Sixth Scroll;
+  series            Clan War;
+  price             $ 6.99;
+  worlds            Rokugan;
+  description
+  "Legend of the Five Rings fans played a key role in the development of the
+  \Product{Clan War} storyline. Author Ree Soesbee is well recognized among
+  those fans and has been extremely instrumental in the design of the Legend of
+  the Five Rings storyline.".
+
+
+#.....
+#----- WTC 88692
+
+base product WTC 88692 =
+
+  title             "Odyssey";
+  leader            "";
+  subtitle          "";
+  author            "Moore, Vance";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              September 2001;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            Odyssey Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "This book will appeal to new readers, as well as die-hard fans. The perfect
+  entry point for new readers, this book focuses on a fierce competition for
+  one of the most powerful artifacts ever to exist in the Magic: The Gathering
+  game and novels. Major changes are occurring in the Magic universe-changes
+  that devoted fans will be eager to find out about.".
+
+
+#.....
+#----- WTC 88696
+
+base product WTC 88696 =
+
+  title             "Lion";
+  leader            "The";
+  subtitle          "";
+  author            "Sullivan, Stephen D.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              November 2001;
+  ISBN              0-7869-1904-3;
+  pages             288;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Seventh Scroll;
+  series            Clan War;
+  price             $ 6.99;
+  worlds            Rokugan;
+  description
+  "The last book in the \Product{Clan War} series, \Product{The Lion} will
+  generate a great deal of interest. All the great clan heroes from the six
+  previous books play critical roles in this novel. This book provides an
+  exciting conclusion that is eagerly anticipated by fans of the popular
+  series.".
+
+
+#.....
+#----- WTC 88698
+
+base product WTC 88698 =
+
+  title             "Jedit";
+  leader            "";
+  subtitle          "";
+  author            "Emery, Clayton";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              December 2001;
+  ISBN              0-7869-1907-8;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book II;
+  series            Legends Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "Revealing the previously untold story of one of the Magic: The Gathering
+  game's most popular characters, this book will give fans a glimpse into the
+  history of the Magic universe and provide an alternative storyline to the
+  current stories being told in the \Product{Invasion trilogy} and the
+  \Product{Odyssey Cycle series}.".
+
+
+#.....
+
+#----- WTC 96473
+
+base product WTC 96473 =
+
+  title             "Darksteel Eye";
+  leader            "The";
+  subtitle          "";
+  author            "Lebow, Jess";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              January 2004;
+  ISBN              0-7869-3140-X;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Mirrodin Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "\Product{The Darksteel Eye} continues a series that explores a new and
+  mysterious world in the \Place{Magic: The Gathering} setting. This novel
+  previews the newest card set to be released in February, giving you a sneak
+  peek at the newest elements of the game.".
+
+
+#.....
+#----- WTC 96542
+
+base product WTC 96542 =
+
+  title             "Fifth Dawn";
+  leader            "The";
+  subtitle          "";
+  author            "Herndon, Cory J.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              May 2004;
+  ISBN              0-7869-3205-8;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 3;
+  series            Mirrodin Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "\Product{The Fifth Dawn} concludes a series that explores a new and
+  mysterious world in the \Place{Magic: The Gathering} setting.".
+
+
+#.....
+#----- WTC 96705
+
+base product WTC 96705 =
+
+  title             "Bright Lights for Bella";
+  leader            "";
+  subtitle          "Fess up! Tell a friend your secret fear. Would you dare?";
+  author            "Perez, Lana";
+  date              August 2005;
+  ISBN              0-7869-3746-7;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 3;
+  series            Star Sisterz;
+  price             $ 5.99;
+  worlds            None;
+  description
+  "When \NPC{Bella DeLuca} gets a starring role in the school production of A
+  Midsummer Night's Dream, it's truly a dream come true. Yet soon \NPC{Bella}'s
+  dream turns to a nightmare. As a fairy, \NPC{Bella} will have to fly above
+  the audience, attached to a cable. But \NPC{Bella}'s afraid of heights, a
+  fact she hasn't revealed to anyone, not even her best friend. Will the
+  mystery message help \NPC{Bella} overcome her fear before she soars across
+  the stage?".
+
+
+#.....
+#----- WTC 96884
+
+base product WTC 96884 =
+
+  title             "Guardian: Saviors of Kamigawa";
+  leader            "";
+  subtitle          "The Victory of the Spirit World is at Hand.";
+  author            "McGough, Scott";
+  date              May 2005;
+  ISBN              0-7869-3786-6;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book III;
+  series            Kamigawa Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "The ronin \NPC{Toshi} has sought to avoid the great conflict between the
+  spirit and \Monster{human} realms. But despite his best efforts, he's not
+  only involved in it -- he's at the center of it. Together with \NPC{Princess
+  Michiko}, daughter of \NPC{Daimyo Konda}, he must find a way to stave off the
+  impending victory of the \Monster{kami}, while preserving his own life into
+  the bargain.
+
+  Amid the complicated maneuvers of the \Monster{fox people}, the \Monster{moon
+  folk}, and the \NPC{Daimyo} himself, \NPC{Toshi} can rely on only one person.
+
+  Himself.".
+
+
+#.....
+
+#----- WTC 9547174
+
+base product WTC 9547174 =
+
+  title             "Guildpact";
+  leader            "";
+  subtitle          "";
+  author            "Herndon, Cory J.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              January 2006;
+  ISBN              0-7869-3989-3;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book II;
+  series            The Ravnica Cycle;
+  price             $ 6.99;
+  layout            Black & White;
+  worlds            Generic;
+  description
+  "One guild ravages the streets. \NPC{Teysa} leads another to 'cleanse'
+  them. And \NPC{Agrus Kos} doesn't give a damn.
+
+  But as he watches the guilds nip and tear at each other like
+  snakes... something clicks.
+
+  Now his mind is clear, as are his options. A disaster grows under the city's
+  crowded streets. He knows what he must do.";
+  short description "".
+
+
+#.....
+#----- WTC 9547374
+
+base product WTC 9547374 =
+
+  title             "Nova and the Charmed Three";
+  leader            "";
+  subtitle          "Read your favorite book to your least favorite person -- in Pig Latin!";
+  author            "Emesse, Tea";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              February 2006;
+  ISBN              0-7869-3991-5;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 5;
+  series            Star Sisterz;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "Would you dare?
+
+  \NPC{Nova Darling}'s dream of joining \NPC{Joe}s band, \Group{The Charmed
+  Three}, has finally come true. \NPC{Nova} should be walking on air about
+  their upcoming Band Idol competition -- not to mention all that quality time
+  with her crush. But in the \Group{Charmed Three}, it turns out three is a
+  crowd! The band's drummer \NPC{Ivy} has a crush on Joe too and she wants
+  \NPC{Nova} out of the way. Will the azy-cray are-day help \NPC{Nova} rock her
+  way past \NPC{Ivy} and into \NPC{Joe}'s heart?
+
+  Do a dare, earn a charm, change your life!";
+  short description "".
+
+
+#.....
+#----- WTC 9647474
+
+base product WTC 9647474 =
+
+  title             "Yumi Talks the Talk";
+  leader            "";
+  subtitle          "Talk to an animal in its own language. Would you dare?";
+  author            "Emesse, Tea";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              April 2006;
+  ISBN              0-7869-3992-3;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 6;
+  series            Star Sisterz;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "\NPC{Yumi Suzuki}'s mom is acting really weird. When \NPC{Yumi} brings home
+  a stray kitten, her animal-loving mom is furious. \NPC{Mrs. Suzuki} normally
+  hates pizza but has been eating it every night. What's the deal? Has
+  \NPC{Yumi}'s real mom been kidnapped by aliens? Has a robot taken over her
+  brain? \NPC{Nova}, \NPC{Yumi}'s best friend, tells her that the mysterious
+  dare might help her find answers. So \NPC{Yumi} gives it a try, and what she
+  discovers is a big surprise.";
+  short description "".
+
+
+#.....
+#----- WTC 9692874
+
+base product WTC 9692874 =
+
+  title             "Rani and the Fashion Divas";
+  leader            "";
+  subtitle          "Put cold cream on your face and go out in public. Would you dare?";
+  author            "Banerjee, Anjali";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              November 2005;
+  ISBN              0-7869-3782-3;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 4;
+  series            Star Sisterz;
+  price             $ 5.99;
+  worlds            Generic;
+  description
+  "\NPC{Rani Sen} longs to fit in at school. So she joins the \Group{Fashion
+  Divas}, a club whose members are some of the most popular girls at
+  \Place{Middletown High}. As she helps plan the \Group{Divas}' annual
+  fashion show, \NPC{Rani}'s popularity grows. But still, something feels
+  wrong. It takes a chance encounter and a crazy dare to show her what really
+  matters: true friends.".
+
+
+#.....
+#----- WTC 9698874
+
+base product WTC 9698874 =
+
+  title             "Ravnica";
+  leader            "";
+  subtitle          "";
+  author            "Herndon, Cory J.";
+  date              September 2005;
+  pages             320;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            Ravnica Cycle;
+  price             $ 6.99;
+  worlds            Generic;
+  description
+  "This is the first title in an exciting trilogy dealing with the new Magic:
+  The Gathering expansion sets. It will give players a sneak peek at the
+  upcoming card releases.".
+
+
+#.....
+
+#----- DMA 000080
+
+base product DMA 000080 =
+
+  title             "Dungeon & Dragons for Dummies";
+  leader            "";
+  subtitle          "";
+  author            "Slavicsek, Bill",
+                    "Baker, Richard W.";
+  date              April 2005;
+  ISBN              0-7645-8459-6;
+  pages             384;
+  system            None;
+  audience          All;
+  product type      Accessory;
+  style             Paperback;
+  producer          WTC;
+  series            For Dummies;
+  price             $ 19.99;
+  worlds            None;
+  description
+  "Overwhelmed? Just want to play? Learn the ins and outs of D&D and start
+  playing right away with Dungeons & Dragons For Dummies. Book produced in
+  partnership with Wizards of the Coast and written by D&D game designers!
+
+  Topics include:
+
+  \list
+  {Finding a game}
+  {Learning the rules}
+  {Choosing a character}
+  {Creating a character}
+  {D&D etiquette}
+  {Becoming a Dungeon Master...}
+  {and much more!}
+
+  Special 4-page fold-out color cheat sheet will include a scale dungeon that
+  players can use as a game board as well as many other valuable tips, tricks,
+  short-cuts and quick reference tools for gameplay convenience.".
+
+
+#.....
+#----- WTC 2178174
+
+base product WTC 2178174 =
+
+  title             "Dragons Worlds Afire";
+  leader            "";
+  subtitle          "Featuring 4 Novellas From R.A. Salvatore, Margaret Weis & Tracy Hickman, Keith Baker, and Scott McGough";
+  cover             "Myers, Duane O.";
+  illustrations     "Sergesketter, Chad" black & white,
+                    "Adelsperger, Matt" art director,
+                    "Adelsperger, Matt" designer;
+  date              July 2008;
+  ISBN              0-7869-4976-7;
+  ISBN13            978-0-7869-4976-2;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Soft Cover;
+  producer          WTC;
+  price             $18.95;
+  contents          Book "";
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "Ancient beasts imbued with magic, and prone to madness. Masters of a world where they are kings among men. Legendary creatures few have ever seen, and lived to tell the tale. Eldritch constructs bent to the service of godlike wizards. From four worlds of magic and mystery, one monster rises above all others to threaten death, offer hope, spread fear, or horde treasure. No matter what the world, only a \Monster{dragon} can set it, and the imaginations of millions, afire. Four of the most exciting shared worlds in the history of fantasy come together for the first time in one volume, drawn together at last by the mighty dragons of myth and legend.";
+  short description "Four stories about dragons set in the Forgotten Realms, Dragonlance, Eberron, and Magic: The Gathering.".
+
+#.....

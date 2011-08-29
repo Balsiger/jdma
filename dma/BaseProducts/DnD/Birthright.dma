@@ -1,0 +1,853 @@
+#
+# File:         Comics.dma
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  The Birthright comics
+#
+# Worlds:       Birthright
+#
+#
+
+#----- TSR 3100
+
+base product TSR 3100 =
+
+  title             "Birthright: Lagacy of Kings";
+  leader            "";
+  author            "Baker, Richard L. III",
+                    "McComb, Colin";
+  date              July 1995;
+  ISBN              0-7869-0143-8;
+  pages             192;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $30.00;
+  contents          Booklet 3,
+                    Card "reference" 12,
+                    Card "war" 112,
+                    Misc "cardboard treasure chest",
+                    Screen "four-panel referee",
+                    Sheet "map" 3;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 224,
+                    Dragon 218;
+  description       "the base campaign setting".
+
+
+#.....
+#----- TSR 3100N
+
+base product TSR 3100N =
+
+  title             "Birthright";
+  leader            "";
+  author            "Baker, Richard L. III",
+                    "McComb, Ed",
+                    "Stark, Colin";
+  date              July 1998;
+  ISBN              0-7869-1240-5;
+  pages             256;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Setting;
+  price             $29.95;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    catalog98;
+  description       "the base campaign setting, net edition".
+
+
+#.....
+#----- TSR 3101
+
+base product TSR 3101 =
+
+  title             "Blood Enemies: Abominations of Cerilla";
+  leader            "";
+  author            "slade";
+  date              July 1995;
+  ISBN              0-7869-0194-2;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $18.00;
+  contents          Booklet,
+                    Card "war" 56;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 218;
+  description       "awesome creatures of the Birthright campaign".
+
+
+#.....
+#----- TSR 3102
+
+base product TSR 3102 =
+
+  title             "Sword and Crown";
+  leader            "";
+  date              1995;
+  ISBN              0-7869-0176-4;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 233;
+  description       "3 interwoven plots".
+
+
+#.....
+#----- TSR 3103
+
+base product TSR 3103 =
+
+  title             "Cities of the Sun";
+  leader            "";
+  author            "Baker, Richard L. III";
+  date              December 1995;
+  ISBN              0-7869-0194-2;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Campaign Expansion;
+  price             $18.00;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 223,
+                    Dragon 224,
+                    Dragon 233;
+  description       "new lands and war cards".
+
+
+#.....
+#----- TSR 3104
+
+base product TSR 3104 =
+
+  title             "Roesone";
+  leader            "";
+  author            "Baker, Richard L. III";
+  date              July 1995;
+  ISBN              0-7869-0284-1;
+  pages             32;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  price             $ 7.00;
+  contents          Booklet,
+                    Screen "four-panel";
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 224,
+                    Dragon 229,
+                    Dragon 218;
+  description       "information on this domain".
+
+
+#.....
+#----- TSR 3105
+
+base product TSR 3105 =
+
+  title             "Endier";
+  leader            "";
+  author            "McComb, Colin";
+  date              July 1995;
+  ISBN              0-7869-0286-8;
+  pages             32;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  price             $ 6.95;
+  contents          Booklet,
+                    Screen "four-panel";
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 224,
+                    Dragon 229,
+                    Dragon 218;
+  description       "information on this domain".
+
+
+#.....
+#----- TSR 3106
+
+base product TSR 3106 =
+
+  title             "Medoere";
+  leader            "";
+  author            "Slavicsek, Bill";
+  date              1995;
+  ISBN              0-7869-0287-6;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229;
+  description       "information on this domain".
+
+
+#.....
+#----- TSR 3107
+
+base product TSR 3107 =
+
+  title             "Tuornen";
+  leader            "";
+  author            "Gross, Dave";
+  date              1995;
+  ISBN              0-7869-0288-4;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229;
+  description       "information on this domain".
+
+
+#.....
+#----- TSR 3108
+
+base product TSR 3108 =
+
+  title             "Ilien";
+  leader            "";
+  author            "Melka, Kevin";
+  date              1995;
+  ISBN              0-7869-0290-6;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229;
+  description       "information on this domain".
+
+
+#.....
+#----- TSR 3109
+
+base product TSR 3109 =
+
+  title             "Talinie";
+  leader            "";
+  author            "Varney, Allen";
+  date              December 1995;
+  ISBN              0-7869-0255-8;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 223,
+                    Dragon 224,
+                    Dragon 229;
+  description       "information on this domain".
+
+
+#.....
+#----- TSR 3110
+
+base product TSR 3110 =
+
+  title             "Warlock of the Stonecrowns";
+  leader            "";
+  author            "Baur, Wolfgang H.";
+  date              December 1995;
+  ISBN              0-7869-0185-3;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 223,
+                    Dragon 224,
+                    Dragon 233;
+  description       "getting into the Stonecrowns and getting out alive, leves mid to high".
+
+
+#.....
+#----- TSR 3111
+
+base product TSR 3111 =
+
+  title             "Ariya";
+  leader            "";
+  author            "Varney, Allen";
+  date              December 1995;
+  ISBN              0-7869-0186-1;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Accessory;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 223,
+                    Dragon 224,
+                    Dragon 229;
+  description       "information on this domain".
+
+
+#.....
+#----- TSR 3117
+
+base product TSR 3117 =
+
+  title             "Book of Magecraft";
+  leader            "";
+  author            "Rabe, Jean";
+  date              March 1996;
+  ISBN              0-7869-0373-2;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  price             $20.00;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226,
+                    Dragon 227,
+                    Dragon 233;
+  description       "rules for wizards in Cerilia".
+
+
+#.....
+#----- TSR 3118
+
+base product TSR 3118 =
+
+  title             "Sword of Roele";
+  leader            "";
+  author            "Baur, Wolfgang H.";
+  date              March 1996;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $12.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226,
+                    Dragon 227;
+  description       "hero-regents from Anuire and Khinasi against the Abomination, levels 5-8".
+
+
+#.....
+#----- TSR 3119
+
+base product TSR 3119 =
+
+  title             "Binsada";
+  leader            "";
+  author            "Varney, Allen";
+  date              March 1996;
+  ISBN              0-7869-0375-9;
+  pages             32;
+  system            AD&D revised;
+  audience          Player;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 7.95;
+  contents          Booklet,
+                    Sheet "looseleaf handouts" 6,
+                    Card "war" 110,
+                    Poster "map";
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226,
+                    Dragon 227;
+  description       "details on geography, history, and NPCs".
+
+
+#.....
+#----- TSR 3120
+
+base product TSR 3120 =
+
+  title             "Baruk-Azhik";
+  leader            "";
+  author            "Brown, Anne K.";
+  date              June 1996;
+  ISBN              0-7869-0376-7;
+  pages             32;
+  system            AD&D revised;
+  audience          Player;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 7.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229;
+  description       "the only dwarven Kingdom players can rule".
+
+
+#.....
+#----- TSR 3121
+
+base product TSR 3121 =
+
+  title             "Rjurik Highlands";
+  leader            "The";
+  author            "Pryor, Anthony";
+  date              June 1996;
+  ISBN              0-7869-0395-3;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229,
+                    Dragon 233;
+  description       "new territory, with the lands and culture of Viking-like people".
+
+
+#.....
+#----- TSR 3122
+
+base product TSR 3122 =
+
+  title             "Halskapa";
+  leader            "";
+  author            "Wenger, Dan";
+  date              June 1996;
+  ISBN              0-7869-0396-1;
+  pages             32;
+  system            AD&D revised;
+  audience          Player;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 7.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 229;
+  description       "ruling a barbarian domain".
+
+
+#.....
+#----- TSR 3123
+
+base product TSR 3123 =
+
+  title             "Khourane";
+  leader            "";
+  author            "Brown, Anne K.";
+  date              September 1996;
+  ISBN              0-7869-0397-X;
+  pages             32;
+  system            AD&D revised;
+  audience          Player;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 7.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 232,
+                    Dragon 233;
+  description       "sea power ruled by wizards".
+
+
+#.....
+#----- TSR 3124
+
+base product TSR 3124 =
+
+  title             "Tuarhievel";
+  leader            "";
+  author            "Maxwell, Duane",
+                    "Miller, Steve";
+  date              December 1996;
+  ISBN              0-7869-0398-8;
+  pages             32;
+  system            AD&D revised;
+  audience          Player;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 7.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96;
+  description       "first elven kingdom for players to rule".
+
+
+#.....
+#----- TSR 3125
+
+base product TSR 3125 =
+
+  title             "Legends of the Hero-Kings";
+  leader            "";
+  author            "Stark, Ed";
+  date              September 1996;
+  ISBN              0-7869-0419-4;
+  pages             160;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  price             $20.00;
+  contents          Booklet,
+                    Sheet "looseleaf handouts" 6,
+                    Card "war" 110,
+                    Poster "map";
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 232,
+                    Dragon 233;
+  description       "collection of more than a dozen adventures for any region and levels".
+
+
+#.....
+#----- TSR 3126
+
+base product TSR 3126 =
+
+  title             "Book of Priestcraft";
+  leader            "The";
+  author            "Baker, Richard L. III",
+                    "Donovan, Dale A.",
+                    "Maxwell, Duane",
+                    "Stark, Ed";
+  date              November 1997;
+  ISBN              0-7869-0655-3;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  price             $20.00;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    Dragon 239,
+                    Dragon 240,
+                    Dragon 241;
+  description       "a large amount of information for priests in the Birthright setting".
+
+
+#.....
+#----- TSR 3127
+
+base product TSR 3127 =
+
+  title             "Stjordvik";
+  leader            "";
+  date              December 1996;
+  ISBN              0-7869-0421-6;
+  pages             32;
+  system            AD&D revised;
+  audience          Player;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 7.95;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96;
+  description       "second Rjurik domain opens to players".
+
+
+#.....
+#----- TSR 3129
+
+base product TSR 3129 =
+
+  title             "Havens of the Great Bay";
+  leader            "";
+  author            "Stark, Ed";
+  date              December 1996;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96;
+  description       "new lands to conquer and rule, the renaissance culture of Brecht".
+
+
+#.....
+#----- TSR 3134
+
+base product TSR 3134 =
+
+  title             "Naval Battle System: The Seas of Cerilla";
+  leader            "";
+  author            "Baker, Richard L. III";
+  date              August 1996;
+  ISBN              0-7869-0628-6;
+  pages             16;
+  system            AD&D revised;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Box;
+  price             $10.95;
+  contents          Booklet,
+                    Card "war" 51,
+                    Counter 200;
+  requirements      ;
+  worlds            Birthright;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231,
+                    Dragon 232;
+  description       "all the rules needed for naval combat".
+
+
+#.....
+#----- TSR 3135
+
+base product TSR 3135 =
+
+  title             "Hogunmark";
+  leader            "";
+  date              February 1998;
+  pages             32;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $ 8.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    Dragon 236,
+                    Dragon 237;
+  description       "Details to the domain of \Place{Hogunmark}".
+
+
+#.....
+#----- TSR 3136
+
+base product TSR 3136 =
+
+  title             "Shadow Moon";
+  leader            "";
+  author            "Stark, Ed";
+  date              September 1998;
+  ISBN              0-7869-1242-1;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $16.95;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    catalog98;
+  description       "an evil triumvirate open a door into the ominous Shadow World".
+
+
+#.....
+#----- TSR 3137
+
+base product TSR 3137 =
+
+  title             "Book of Regency";
+  leader            "The";
+  author            "Stark, Ed";
+  date              August 1998;
+  ISBN              0-7869-1241-3;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  price             $19.95;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    catalog98;
+  description       "vital tips for the success of a rule or warrior hero".
+
+
+#.....
+#----- TSR 3140
+
+base product TSR 3140 =
+
+  title             "Blood Spawn";
+  leader            "";
+  author            "Bebris, Carrie A.";
+  date              October 1998;
+  ISBN              0-7869-1243-X;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $16.95;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    catalog98;
+  description       "first bestiary for Cerilia with a host of new creatures".
+
+
+#.....
+#----- TSR 3141
+
+base product TSR 3141 =
+
+  title             "Charge of the Cold Rider";
+  leader            "";
+  author            "Stark, Ed";
+  date              November 1998;
+  ISBN              0-7869-1244-8;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $13.95;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    catalog98;
+  description       "conclusion of the Essence of Evil epic storyline".
+
+
+#.....
+#----- TSR 3142
+
+base product TSR 3142 =
+
+  title             "King of the Giantdowns";
+  leader            "";
+  date              August 1997;
+  ISBN              0-7869-0719-3;
+  pages             64;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $12.95;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    Dragon 238;
+  description       "an adventure set in the Rjurik lands".
+
+
+#.....
+#----- TSR 3147
+
+base product TSR 3147 =
+
+  title             "Tribes of the Heartless Wastes";
+  leader            "";
+  author            "Stark, Ed";
+  date              December 1997;
+  ISBN              0-7869-0773-8;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  contents          Booklet 2,
+                    Sheet "map",
+                    Card "war" 32;
+  requirements      ;
+  worlds            Birthright;
+  references        net,
+                    Dragon 240,
+                    Dragon 241,
+                    Dragon 242,
+                    Dragon 247;
+  description       "the savage lands of the brutal Vos, laid open".
+
+
+#.....
+
+
+#----- DMA 000048
+
+base product DMA 000048 =
+
+  title             "Serpent's Eye";
+  leader            "The";
+  author            "Stark, Ed";
+  cover             "Szezudlo";
+  illustrations     "Gross, Dave",
+                    "Sergesketter, Chad",
+                    "Becker, Barbara",
+                    "Ken Lopez";
+  management        "Karen Boomgarden" special thanks,
+                    "Wise, David" special thanks,
+                    "Jim Ward" special thanks,
+                    "Robert Galica" special thanks;
+  date              1996;
+  pages             32;
+  system            AD&D revised;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  worlds            Birthright;
+  description       "A stand-alone comic book set in the Birthright setting.".
+
+
+#.....

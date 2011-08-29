@@ -1,0 +1,2752 @@
+#
+# File:         Miniatures.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  Some of the TSR/WTC and related miniatures
+#
+# Worlds:       all
+#
+# Keywords:     miniature
+#
+# See_also:
+#
+
+#----- TSR 5006
+
+base product TSR 5006 =
+
+  title             "Stalwart Men-At-Arms";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5007
+
+base product TSR 5007 =
+
+  title             "Steadfast Men-At-Arms";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5008
+
+base product TSR 5008 =
+
+  title             "Heroic Men-At-Arms";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5009
+
+base product TSR 5009 =
+
+  title             "Elves of the Woodlands";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5010
+
+base product TSR 5010 =
+
+  title             "Dwarves of the Mountain King";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5011
+
+base product TSR 5011 =
+
+  title             "Sarken Mercenaries";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5012
+
+base product TSR 5012 =
+
+  title             "Orcs of the Broken Bone";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5013
+
+base product TSR 5013 =
+
+  title             "Troglodyte & Goblin";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5014
+
+base product TSR 5014 =
+
+  title             "Bugbear & Goblin";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5015
+
+base product TSR 5015 =
+
+  title             "Bullywugs of the Bog";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5016
+
+base product TSR 5016 =
+
+  title             "Skeleton Soldiers of Sith";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5017
+
+base product TSR 5017 =
+
+  title             "Sinister Spectre & Lich";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5018
+
+base product TSR 5018 =
+
+  title             "Five-Headed Hydra (bendable)";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5019
+
+base product TSR 5019 =
+
+  title             "Neo-Otyugh (bendable)";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5020
+
+base product TSR 5020 =
+
+  title             "Raging Roper (bendable)";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5021
+
+base product TSR 5021 =
+
+  title             "Deadly Grell (bendable)";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5022
+
+base product TSR 5022 =
+
+  title             "Carrion Crawler (bendable)";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5023
+
+base product TSR 5023 =
+
+  title             "Chimera (bendable)";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5024
+
+base product TSR 5024 =
+
+  title             "Fire Elemental & Crystal Ball";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5025
+
+base product TSR 5025 =
+
+  title             "Shambling Mound & Treasure Sack";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5026
+
+base product TSR 5026 =
+
+  title             "Minotaur of the Maze & Crown";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5027
+
+base product TSR 5027 =
+
+  title             "Odious Ogre & Treasure Chest";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5028
+
+base product TSR 5028 =
+
+  title             "Terrible Troll & Goblin";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5029
+
+base product TSR 5029 =
+
+  title             "Umber Hulk & Dungeon Treasure";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 5301
+
+base product TSR 5301 =
+
+  title             "Fighters";
+  leader            "Rangers & Paladins";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5302
+
+base product TSR 5302 =
+
+  title             "Clerics & Druids";
+  leader            "";
+  date              1983;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5303
+
+base product TSR 5303 =
+
+  title             "Magic Users & Illusionists";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  contents          Miniature "metal" 12;
+  requirements      ;
+  references        complete product listing;
+  description
+  "\large{'A \Monster{troll} is that much bigger than my magic-user?'}
+
+  Your magic-user could throw a \Spell{fireball} at the beast, but where's the
+  rest of your party---the fighter, the cleric and the \Monster{dwarf}? Would
+  the flames engulf them, too?
+
+  AD&D game action is fast-paced. Keeping track of who's where in the dungeon
+  can be hard, especially during combat. That's why players and DM's agree that
+  official AD&D miniatures make a great game even greater.
+
+  And yes, a \Monster{troll} \emph{is} that much bigger than your
+  character. All 25mm AD&D miniatures are in scale to one another, for added
+  realism.".
+
+
+#.....
+#----- TSR 5304
+
+base product TSR 5304 =
+
+  title             "Monks, Bards & Thieves";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  contents          Miniature "metal" 12;
+  requirements      ;
+  references        complete product listing;
+  description
+  "\large{'A \Monster{troll} is that much bigger than my thief?'}
+
+  Your thief could throw a \Item{flask of flaming oil} at the beast, but
+  where's the rest of your party---the fighter, the cleric and the
+  \Monster{dwarf}? Would the flames engulf them, too?
+
+  AD&D game action is fast-paced. Keeping track of who's where in the dungeon
+  can be hard, especially during combat. That's why players and DM's agree that
+  official AD&D miniatures make a great game even greater.
+
+  And yes, a \Monster{troll} \emph{is} that much bigger than your
+  character. All 25mm AD&D miniatures are in scale to one another, for added
+  realism.".
+
+
+#.....
+#----- TSR 5305
+
+base product TSR 5305 =
+
+  title             "AD&D Monster Tribes";
+  leader            "";
+  system            AD&D 1st;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5306
+
+base product TSR 5306 =
+
+  title             "D&D Basic Figure Set";
+  leader            "";
+  system            D&D 1st;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5307
+
+base product TSR 5307 =
+
+  title             "Gen Con RPGA Set 1";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5308
+
+base product TSR 5308 =
+
+  title             "AD&D Heroes";
+  leader            "";
+  system            AD&D 2nd;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5310
+
+base product TSR 5310 =
+
+  title             "D&D Expert Figure Set";
+  leader            "";
+  system            D&D 1st;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 5402
+
+base product TSR 5402 =
+
+  title             "AD&D Conan Set 1";
+  leader            "";
+  system            AD&D 1st;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5403
+
+base product TSR 5403 =
+
+  title             "AD&D Conan Set 2";
+  leader            "";
+  system            AD&D 1st;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5404
+
+base product TSR 5404 =
+
+  title             "Dragonlance Set 1";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  worlds            Dragonlance;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5405
+
+base product TSR 5405 =
+
+  title             "Dragonlance Heroes";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  worlds            Dragonlance;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5409
+
+base product TSR 5409 =
+
+  title             "D&D Companion Figure Set";
+  leader            "";
+  system            D&D 1st;
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 5601
+
+base product TSR 5601 =
+
+  title             "Roper & Shambling Mound";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5602
+
+base product TSR 5602 =
+
+  title             "Elementals";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 2;
+  requirements      ;
+  references        complete product listing;
+  description
+  "An \Monster{earth elemental} and an \Monster{air elemental} miniature.".
+
+
+#.....
+#----- TSR 5603
+
+base product TSR 5603 =
+
+  title             "Ogre & Cyclopskin";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 2;
+  requirements      ;
+  references        complete product listing;
+  description
+  "An \Monster{Ogre} and a \Monster{Cyclopskin} miniature.".
+
+
+#.....
+#----- TSR 5604
+
+base product TSR 5604 =
+
+  title             "Ant Lion & Piscodaemon";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 2;
+  requirements      ;
+  references        complete product listing;
+  description
+  "An \Monster{Ant Lion} and a \Monster{Piscodaemon} metal miniature.".
+
+
+#.....
+#----- TSR 5605
+
+base product TSR 5605 =
+
+  title             "Scrag, Yuan-Ti & Banderlog";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 3;
+  requirements      ;
+  references        complete product listing;
+  description
+  "An \Monster{Scrag}, a \Monster{Yuan-Ti} and a \Monster{Banderlog}
+   miniature.".
+
+
+#.....
+#----- TSR 5606
+
+base product TSR 5606 =
+
+  title             "Vilstrak & Rock Reptile";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 2;
+  requirements      ;
+  references        complete product listing;
+  description
+  "A \Monster{Vilstrak} and a \Monster{Rock Reptile} miniature.".
+
+
+#.....
+#----- TSR 5607
+
+base product TSR 5607 =
+
+  title             "Kampfult, Quickwood & Executioner Hoods";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5608
+
+base product TSR 5608 =
+
+  title             "Phoenix & Aarakocra";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 2;
+  requirements      ;
+  references        complete product listing;
+  description
+  "A \Monster{Phoenix} and an \Monster{Aarakocra} miniature.".
+
+
+#.....
+#----- TSR 5609
+
+base product TSR 5609 =
+
+  title             "Owlbear & Polar Bear";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5610
+
+base product TSR 5610 =
+
+  title             "Neo-Otyugh, Azer & Korred";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5611
+
+base product TSR 5611 =
+
+  title             "Firbold & Boobrie";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 2;
+  requirements      ;
+  references        complete product listing;
+  description
+  "A \Monster{Firbolg} and a \Monster{Boobrie} miniature.".
+
+
+#.....
+#----- TSR 5612
+
+base product TSR 5612 =
+
+  title             "Rust Monster & Rakshasa";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "figures" 2;
+  requirements      ;
+  references        complete product listing;
+  description
+  "A \Monster{Rust Monster} and a \Monster{Rakshasa} miniature.".
+
+
+#.....
+#----- TSR 5613
+
+base product TSR 5613 =
+
+  title             "White Dragon, Sleet";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5614
+
+base product TSR 5614 =
+
+  title             "Black Dragon, Onyx";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5615
+
+base product TSR 5615 =
+
+  title             "Young Brass Dragon, Blaize";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5616
+
+base product TSR 5616 =
+
+  title             "Hill Giants";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5617
+
+base product TSR 5617 =
+
+  title             "Stone Giants";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5618
+
+base product TSR 5618 =
+
+  title             "Baku";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 5701
+
+base product TSR 5701 =
+
+  title             "Paladins";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5702
+
+base product TSR 5702 =
+
+  title             "Cavaliers";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "cavalier" 3,
+                    Miniature "weapons" 5;
+  requirements      ;
+  references        complete product listing;
+  description
+  "Three miniatures of cavaliers.".
+
+
+#.....
+#----- TSR 5703
+
+base product TSR 5703 =
+
+  title             "Elves";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5704
+
+base product TSR 5704 =
+
+  title             "Dwarves";
+  leader            "";
+  date              1983;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature "dwarf" 3,
+                    Miniature "shields" 3,
+                    Miniature "weapons" 3;
+  requirements      ;
+  references        complete product listing;
+  description
+  "Three miniatures of \Monster{dwarves}.".
+
+
+#.....
+#----- TSR 5705
+
+base product TSR 5705 =
+
+  title             "Clerics";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5706
+
+base product TSR 5706 =
+
+  title             "Druids";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5707
+
+base product TSR 5707 =
+
+  title             "Rangers";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5708
+
+base product TSR 5708 =
+
+  title             "Magic Users";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5709
+
+base product TSR 5709 =
+
+  title             "Illusionists";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5710
+
+base product TSR 5710 =
+
+  title             "Thieves & Assassin";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5711
+
+base product TSR 5711 =
+
+  title             "Half-Elves";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5712
+
+base product TSR 5712 =
+
+  title             "Fighters";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5713
+
+base product TSR 5713 =
+
+  title             "Monks & Bards";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5714
+
+base product TSR 5714 =
+
+  title             "Half-Orcs";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5715
+
+base product TSR 5715 =
+
+  title             "Halflings";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5716
+
+base product TSR 5716 =
+
+  title             "Barbarians";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5717
+
+base product TSR 5717 =
+
+  title             "Gnomes";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 5718
+
+base product TSR 5718 =
+
+  title             "Females";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 5826
+
+base product TSR 5826 =
+
+  title             "AD&D Basic Adhesive Set";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 5900
+
+base product TSR 5900 =
+
+  title             "AD&D Basic Paint Set";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 6071
+
+base product TSR 6071 =
+
+  title             "RPGA Prophecy of Brie collector's figures set";
+  leader            "";
+  product type      Miniature;
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- GG 100
+
+base product GG 100 =
+
+  title             "Delta Legionnaire Standard Bearer";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Global Games Europe;
+  series            Legendary Creatures;
+  price             DM 20.00;
+  contents          Miniature;
+  requirements      ;
+  description
+  "One ugly, horse like miniature.";
+  short description "".
+
+
+#.....
+#----- GG 103
+
+base product GG 103 =
+
+  title             "Minotaur Scout Unarmed & Unarmoured";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Global Games Europe;
+  series            Legendary Creatures;
+  price             DM 20.00;
+  contents          Miniature;
+  requirements      ;
+  description
+  "One ugly, horse like miniature.";
+  short description "".
+
+
+#.....
+
+#----- MM 001
+
+base product MM 001 =
+
+  title             "Room Set";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  producer          Dwarven Forge;
+  contents          Miniature "Room" 29,
+                    Miniature "'Swining' Door" 2,
+                    Booklet "example setups",
+                    Miniature "Bow Tie Connector" 50;
+  requirements      ;
+  description
+  "Some additions to the rooms.";
+  short description "".
+
+
+#.....
+#----- MM 006
+
+base product MM 006 =
+
+  title             "Wicked Additions Set";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  producer          Dwarven Forge;
+  contents          Miniature "Curved Passage" 2,
+                    Miniature "Curved Corner Room" 4,
+                    Miniature "Large Rectangualr Floor" 2,
+                    Miniature "Sets of Upper and Lower Stairs" 2,
+                    Miniature "Red Pillars" 4,
+                    Miniature "Long Straight Passage",
+                    Miniature "Demon Archway",
+                    Miniature "'Raisable' Portcullis",
+                    Booklet "example setups",
+                    Miniature "Bow Tie Connector" 40;
+  requirements      ;
+  description
+  "Some additions to the rooms.";
+  short description "".
+
+
+#.....
+#----- MM 009
+
+base product MM 009 =
+
+  title             "Deluxe Room Set";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  producer          Dwarven Forge;
+  contents          Miniature "Wall Piece with Torch Holder" 6,
+                    Miniature "'Unlit' Torches" 6,
+                    Miniature "'Lit and Smoking' Torches" 6,
+                    Miniature "Corner Wall" 6,
+                    Miniature "Straight Wall" 5,
+                    Miniature "Floor" 11,
+                    Miniature "Swinging Door" 2,
+                    Miniature "Swiveling 'Secret' Door Wall",
+                    Miniature "Bow Tie Connector" 50;
+  requirements      ;
+  description
+  "The deluxe room pieces.";
+  short description "".
+
+
+#.....
+#----- MM 012
+
+base product MM 012 =
+
+  title             "Dungeon Accessories Set";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  producer          Dwarven Forge;
+  contents          Miniature "sleeping places" 2,
+                    Miniature "batch of pots",
+                    Miniature "small bags",
+                    Miniature "bags" 2,
+                    Miniature "bag pile",
+                    Miniature "large crate",
+                    Miniature "barrel" 2,
+                    Miniature "broken barrel",
+                    Miniature "large bag pile",
+                    Miniature "stack of crates";
+  requirements      ;
+  description
+  "General dungeon accessories.";
+  short description "".
+
+
+#.....
+#----- MM 013
+
+base product MM 013 =
+
+  title             "Medieval Furniture Set";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  producer          Dwarven Forge;
+  contents          Miniature "torches" 4,
+                    Miniature "table" 2,
+                    Miniature "bench" 2,
+                    Miniature "chair" 6;
+  requirements      ;
+  description
+  "Some medieval furniture.";
+  short description "".
+
+
+#.....
+#----- MM 014
+
+base product MM 014 =
+
+  title             "Narrow Passages Set";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  producer          Dwarven Forge;
+  contents          Miniature "Narrow Straight Passage" 8,
+                    Miniature "Narrow Right Angle Passage" 4,
+                    Miniature "Narrow 'T' Shaped Passage" 4,
+                    Miniature "Narrow 4-Way Passage" 2,
+                    Miniature "Narrow to Wide Passage Conversion" 2,
+                    Miniature "Narrow Swinging Doors" 2,
+                    Miniature "Narrow Bow Tie Connector" 50;
+  requirements      ;
+  description
+  "Some narrow passages and doors..";
+  short description "".
+
+
+#.....
+#----- MM 016
+
+base product MM 016 =
+
+  title             "Treasures & Magic Item Set";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  producer          Dwarven Forge;
+  contents          Miniature "big pile of coppers",
+                    Miniature "big pile of silvers",
+                    Miniature "big pile of golds",
+                    Miniature "medium pile of coppers",
+                    Miniature "medium pile of silvers",
+                    Miniature "medium pile of golds",
+                    Miniature "small pile of coppers",
+                    Miniature "small pile of silvers",
+                    Miniature "small pile of golds",
+                    Miniature "axe",
+                    Miniature "sword",
+                    Miniature "chest",
+                    Miniature "chest lid",
+                    Miniature "big vase" 2,
+                    Miniature "pile of vases",
+                    Miniature "monster head",
+                    Miniature "armor",
+                    Miniature "small chest",
+                    Miniature "quiver",
+                    Miniature "shield",
+                    Miniature "scroll",
+                    Miniature "book",
+                    Miniature "scroll heap";
+  requirements      ;
+  description
+  "Treasure and magical items for the dungeon crawl.";
+  short description "".
+
+
+#.....
+
+#----- Reaper 02034
+
+base product Reaper 02034 =
+
+  title             "Kurff, the Swift";
+  leader            "";
+  author            "S. Garrity";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Apocalypse;
+  price             $ 2.25;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Kurff, the Swift. A human rogue with rope and hook.".
+
+
+#.....
+#----- Reaper 02067
+
+base product Reaper 02067 =
+
+  title             "Stefan Von Kruger";
+  leader            "";
+  author            "Rodolfi, B.";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Apocalypse;
+  price             $ 2.25;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Stefan Von Kruger, a human (?) fighter with large (bat)sword and shield".
+
+
+#.....
+#----- Reaper 02072
+
+base product Reaper 02072 =
+
+  title             "Darius The Blue";
+  leader            "";
+  author            "Sandra Garrity";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Apocalypse;
+  price             $ 2.75;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Darius The Blue, a \Monster{human} mage with staff, pointing.".
+
+
+#.....
+#----- Reaper 02156
+
+base product Reaper 02156 =
+
+  title             "Mummy of Hakir";
+  leader            "";
+  author            "Ridolfi, B.";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Apocalypse;
+  price             $ 4.95;
+  contents          Miniature;
+  requirements      ;
+  description
+  "A mummy with outstreched hand.".
+
+
+#.....
+#----- Reaper 2114
+
+base product Reaper 2114 =
+
+  title             "Galladon";
+  leader            "";
+  author            "Garrity, S.";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Legends;
+  price             $ 2.75;
+  contents          Miniature;
+  requirements      ;
+  description
+  "A casting mage with staff..".
+
+
+#.....
+#----- Reaper 2116
+
+base product Reaper 2116 =
+
+  title             "Cthal T'Chuk";
+  leader            "";
+  author            "Sandra Garrity";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Legends;
+  price             $ 2.75;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Cthal T'Chuk, a gesticulating \Monster{mind flayer} with staff.".
+
+
+#.....
+#----- Reaper 2236
+
+base product Reaper 2236 =
+
+  title             "Sturm Jagstone";
+  leader            "";
+  author            "Sandra Garrity";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Legends;
+  price             $ 2.75;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Sturm Jagstone, a \Monster{dwarf} with a big hammer.".
+
+
+#.....
+#----- Reaper 2319
+
+base product Reaper 2319 =
+
+  title             "Amathor Arch Mage";
+  leader            "";
+  author            "Johnson, J.";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Legends;
+  price             $ 2.75;
+  contents          Miniature;
+  requirements      ;
+  description
+  "An arch mage with owl and staff".
+
+
+#.....
+#----- Reaper 2340
+
+base product Reaper 2340 =
+
+  title             "Unthar Godshand";
+  leader            "";
+  author            "Sandra Garrity";
+  pages             0;
+  system            Dark Heaven;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            Legends;
+  price             $ 2.75;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Unthar Godshand, a male, human cleric with mace and shield.".
+
+
+#.....
+
+#----- RP 10-511
+
+base product RP 10-511 =
+
+  title             "Denizens of Ravenloft";
+  leader            "The";
+  author            "Mize, Dennis";
+  cover             "Cladwell, Clyde";
+  management        "Sturm, Matt" painting;
+  date              1991;
+  pages             0;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  producer          Ral Partha;
+  contents          Miniature "pewter" 10;
+  requirements      ;
+  worlds            Ravenloft;
+  description
+  "Ral Partha proudly presents an official \Place{Ravenloft} boxed set. The
+  role-playing experts at TSR believe that this set provides the best figures
+  for the \Place{Ravenloft} campaign setting.";
+  short description "".
+
+
+#.....
+#----- RP 10-550
+
+base product RP 10-550 =
+
+  title             "Heroes";
+  leader            "";
+  date              1988;
+  pages             0;
+  system            AD&D 1st;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  producer          Ral Partha;
+  contents          Miniature "pewter" 10;
+  requirements      ;
+  worlds            Forgotten Realms;
+  description
+  "Ral Partha proudly presents an official \Place{Forgotten Realms} boxed
+  set. Having worked closely with the excellent staff at Ral Partha during the
+  evolution of this set, TSR believes these to be the finest miniatures
+  possible for the \Place{Forgotten Relmas} campaign setting.";
+  short description "".
+
+
+#.....
+
+#----- WOC 40051
+
+base product WOC 40051 =
+
+  title             "Umber Hulk";
+  leader            "";
+  author            "Kim Graham";
+  date              2000;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Make your dungeons come to life with this new line of miniatures for the
+  king of the RPGs. No Dungeons & Dragons game could be complete without
+  great-looking miniatures to represent heroes, villains, and monsters in your
+  campaign.
+
+  Hand-cast in lead-free pewter for superior quality and outstanding
+  detail. Some miniatures are cast in multiple pieces to produce the most
+  dynamic pose possible.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!".
+
+
+#.....
+#----- WOC 40053
+
+base product WOC 40053 =
+
+  title             "Beholder";
+  leader            "";
+  author            "Kimg Graham",
+                    "Will Hannah";
+  date              2000;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Make your dungeons come to life with this new line of miniatures for the
+  king of the RPGs. No Dungeons & Dragons game could be complete without
+  great-looking miniatures to represent heroes, villains, and monsters in your
+  campaign.
+
+  Hand-cast in lead-free pewter for superior quality and outstanding
+  detail. Some miniatures are cast in multiple pieces to produce the most
+  dynamic pose possible.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!".
+
+
+#.....
+#----- WOC 40055
+
+base product WOC 40055 =
+
+  title             "Black Dragon";
+  leader            "";
+  author            "Kim Graham";
+  date              2000;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "This boxed set contains one \Monster{black dragon} model, stunningly
+  sculpted by Kim Graham and hand-cast in lead-free pewter. As a foe for your
+  D&D game or just as a collector's piece, the black dragon is a must for the
+  serious fantasy fan.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!".
+
+
+#.....
+#----- WOC 40059
+
+base product WOC 40059 =
+
+  title             "Monsters";
+  leader            "";
+  date              2001;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Heroes need monsters to slay, and this boxed set gives you six nasties to
+  test your mettle. From the \Monster{orc}, the classic killer of 1st-level
+  characters, to the \Monster{ogre}, the dumb muscle of the humanoid tribes,
+  this boxed set provides a great starting roster of monsters for your D&D
+  campaign. Sculpted by the finest artists in the industry, these miniatures
+  add depth of play to any D&D game. Hand-cast in lead-free pewter, they are
+  equally at home on your gaming table or in your display case.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!
+
+  Miniatures include:
+
+  \list{2 \Monster{Goblins}}
+       {\Monster{Dire Rat}}
+       {\Monster{Orc}}
+       {\Monster{Displacer Beast}}
+       {\Monster{Ogre}}".
+
+
+#.....
+#----- WOC 40090
+
+base product WOC 40090 =
+
+  title             "Female Half-Elven Sorcerer";
+  leader            "";
+  author            "Mize, Dennis";
+  date              2000;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Make your dungeons come to life with this new line of miniatures for the
+  king of the RPGs. No Dungeons & Dragons game could be complete without
+  great-looking miniatures to represent heroes, villains, and monsters in your
+  campaign.
+
+  Hand-cast in lead-free pewter for superior quality and outstanding
+  detail. Some miniatures are cast in multiple pieces to produce the most
+  dynamic pose possible.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!".
+
+
+#.....
+#----- WOC 40092
+
+base product WOC 40092 =
+
+  title             "Ogre";
+  leader            "";
+  author            "Elliot, Chaz";
+  date              2000;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Make your dungeons come to life with this new line of miniatures for the
+  king of the RPGs. No Dungeons & Dragons game could be complete without
+  great-looking miniatures to represent heroes, villains, and monsters in your
+  campaign.
+
+  Hand-cast in lead-free pewter for superior quality and outstanding
+  detail. Some miniatures are cast in multiple pieces to produce the most
+  dynamic pose possible.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!".
+
+
+#.....
+#----- WOC 40095
+
+base product WOC 40095 =
+
+  title             "Earth Elemental";
+  leader            "";
+  author            "Elliot, Chaz";
+  date              2000;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Make your dungeons come to life with this new line of miniatures for the
+  king of the RPGs. No Dungeons & Dragons game could be complete without
+  great-looking miniatures to represent heroes, villains, and monsters in your
+  campaign.
+
+  Hand-cast in lead-free pewter for superior quality and outstanding
+  detail. Some miniatures are cast in multiple pieces to produce the most
+  dynamic pose possible.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!".
+
+
+#.....
+#----- WOC 40097
+
+base product WOC 40097 =
+
+  title             "Fire Elemental";
+  leader            "";
+  author            "Will Hannah";
+  date              2000;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  contents          Miniature;
+  requirements      ;
+  description
+  "Make your dungeons come to life with this new line of miniatures for the
+  king of the RPGs. No Dungeons & Dragons game could be complete without
+  great-looking miniatures to represent heroes, villains, and monsters in your
+  campaign.
+
+  Hand-cast in lead-free pewter for superior quality and outstanding
+  detail. Some miniatures are cast in multiple pieces to produce the most
+  dynamic pose possible.
+
+  Unsheathe your sword and kick down the door---it's time to play D&D!".
+
+
+#.....
+
+#----- DMA 000062
+
+base product DMA 000062 =
+
+  title             "Dwarves";
+  leader            "";
+  subtitle          "";
+  date              1995;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          TSR;
+  contents          Miniature "pewter" 2;
+  requirements      ;
+  description
+  "A female dwarf and a male dwarven king.";
+  short description "".
+
+
+#.....
+#----- DMA 000063
+
+base product DMA 000063 =
+
+  title             "Spiegel der Portale";
+  leader            "";
+  subtitle          "";
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Fenryll;
+  contents          Miniature "plastic" 3;
+  requirements      ;
+  description
+  "3 miniatures and a portal mirror, one miniature just crossing it.";
+  short description "".
+
+
+#.....
+
+#----- MVRG 01
+
+base product MVRG 01 =
+
+  title             "Guerriers Squelettes I";
+  leader            "";
+  subtitle          "";
+  author            "",
+                    "";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              1998;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Rackham;
+  series            Confrontation;
+  price             Euro 9.10;
+  contents          Miniature 3;
+  requirements      ;
+  worlds            Confrontation;
+  description
+  "3 miniatures.";
+  short description "".
+
+
+#.....
+#----- MVVO 01
+
+base product MVVO 01 =
+
+  title             "Anges Morbides I";
+  leader            "";
+  subtitle          "";
+  author            "",
+                    "";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              2000;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Rackham;
+  series            Confrontation;
+  price             Euro 10.70;
+  contents          Miniature 2;
+  requirements      ;
+  worlds            Confrontation;
+  description
+  "2 miniatures.";
+  short description "".
+
+
+#.....
+#----- ACCOL 01
+
+base product ACCOL 01 =
+
+  title             "S\umlaut{a}len des Schweigens";
+  leader            "";
+  subtitle          "";
+  author            "",
+                    "";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              2000;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Rackham;
+  series            Confrontation;
+  contents          Miniature 3;
+  requirements      ;
+  worlds            Confrontation;
+  description
+  "3 miniature pillars.";
+  short description "".
+
+
+#.....
+
+#----- C 12311
+
+base product C 12311 =
+
+  title             "Taranis (Swordsman)";
+  leader            "";
+  subtitle          "";
+  author            "",
+                    "";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Celtos;
+  price             DM 13.00;
+  contents          Miniature;
+  requirements      ;
+  description
+  "1 miniture";
+  short description "".
+
+
+#.....
+
+#----- GF9 11202
+
+base product GF9 11202 =
+
+  title             "Wall of Smoke";
+  leader            "";
+  subtitle          "Game Accessories Pack 11";
+  notes             "";
+  author            "";
+  editor            "";
+  cover             "";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              May 2007;
+  system            d20;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Gale Force Nine;
+  number            11;
+  series            Game Accessories Pack;
+  price             $9.89;
+  contents          Miniature "Wall of Smoke" 2;
+  requirements      ;
+  layout            Full Color;
+  description
+  "".
+
+
+#.....
+#----- GF9 11201
+
+base product GF9 11201 =
+
+  title             "Wall of Fire";
+  leader            "";
+  subtitle          "Game Accessories Pack #10";
+  notes             "";
+  author            "";
+  editor            "";
+  cover             "";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              May 2007;
+  system            d20;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Gale Force Nine;
+  number            10;
+  series            Game Accessories Pack;
+  price             $9.89;
+  contents          Miniature "Wall of Fire" 2;
+  requirements      ;
+  layout            Full Color;
+  description
+  "".
+
+
+#.....
+#----- GF9 11203
+
+base product GF9 11203 =
+
+  title             "Wall of Ice";
+  leader            "";
+  subtitle          "Game Accessories Pack #12";
+  notes             "";
+  author            "";
+  editor            "";
+  cover             "";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              May 2007;
+  system            d20;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Gale Force Nine;
+  number            12;
+  series            Game Accessories;
+  price             $9.89;
+  contents          Miniature "Wall of Ice" 2;
+  requirements      ;
+  layout            Full Color;
+  description
+  "".
+
+
+#.....
+
+#----- WTC 10773
+
+base product WTC 10773 =
+
+  title             "Legend of Drizzt Scenario Pack";
+  leader            "The";
+  subtitle          "Some Legends Are Born out of Darkness";
+  date              September 2007;
+  ISBN              0-7869-4350-5;
+  ISBN13            978-0-7869-4350-0;
+  system            D&D 3.5;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  series            Icons;
+  price             $49.99;
+  contents          Miniature "Drizzt, Wulfgar, and Icingdeath" 3,
+                    Map "Poster sized battle map" 1,
+                    Card "Game stat cards" 5,
+                    Booklet "Scenario booklet" 1;
+  requirements      WTC 96582;
+  layout            Full Color;
+  description
+  "\NPC{Drizzt Do'Urden} was raised in the underground city of \Place{Menzoberranzan, home of the \Monster{drow}---a race of twisted, evil dark \Monster{elves}. However, \NPC{Drizzt} fled the \Place{Underdark} for the surface realm, where he befriended the human barbarian \NPC{Wulfgar}. Together they battled the most terrible threat ever to ravage \Place{Icewind Dale}: the \Monster{white draong} \NPC{Icingdeath}!
+
+\bold{Collect}
+
+Proudly display \NPC{Drizzt}, \NCP{Wulfgar}, and \NPC{Icingdeath} with your finest collectable figures
+
+\bold{Battle}
+
+Play out the legendary battle between \NPC{Drizzt}, \NCP{Wulfgar}, and \NPC{Icingdeath}, or pit the Gargantuan \Monster{White Dragon} against the best warbands your friends can muster.
+
+\bold{Roleplay}
+
+Unleash the \NPCP{Terror of Icewind Dale}---the \Monster{white dragon} \NPC{Icingdeath}---upon your party of unsuspecting adventurers.
+".
+
+#.....
+
+#----- DPS 9011
+
+base product DPS 9011 =
+
+  title             "Bendy Dungeon Walls";
+  leader            "";
+  subtitle          "3D Dungeon Terrain has just gotten Fast, Fun and Flexible!!!";
+  notes             "";
+  date              October 2007;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Small Box;
+  producer          Dark Platypus Studio;
+  price             $24.99;
+  contents          Miniature "wall piece" 50,
+                    Miniature "door" 5;
+  requirements      ;
+  layout            Full Color;
+  description
+  "\emph{Your mini's deserve someplace cool to play!}
+
+\produyct{Dungeon Life: Bendy Dungeon Walls} offers an excellent solution to the age-old problem of the 3D dungeon. Durable interlocking wall segments quickly snap together to form 'chains' of dungeon walls. Simple place a length of walls onto the game mat, and 'bend' it into the shape of your dungeon room. Snap it apart to add freestanding doors, and just like that, you're done! It's easy, convenient, adds a cool factor of 3D to your game, and most important... it's fast!
+
+Build just the dungeon areas you need... as you need them. During play! No need for the gamemaster to spend hours of extra prep time setting up the dungeon, and the players don't get the peek ahead. It's easy to recycle, too... just pick up the pieces of the rooms your party are done with, and use them to build the next room! \bold{The adventure never ends with \Product{Bendy Dungeon Walls}... It's a Dungeon Life!}
+
+\list
+{Durable Plastic}
+{Fully painted and ready for play!}
+{Snap together wall - Then place 'em on the map, and bend to any shape you need!}
+{Build the Dungeon while you play!}
+{Works great with an 1'' game mat!}".
+
+#.....
+
+#----- WTC 10774
+
+base product WTC 10774 =
+
+  title             "Desert of Desolation";
+  leader            "";
+  subtitle          "Denizens of the Dungeon Surge Forth!";
+  notes             "";
+  date              October 2007;
+  ISBN              0-7869-4351-3;
+  ISBN13            978-0-7869-4351-7;
+  pages             0;
+  system            D&D 3.5;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            D&D Miniatures;
+  price             $14.99;
+  contents          Miniature "randomized, fully painted, plastic" 8,
+                    Card "full color, game stats" 8,
+                    Sheet "Miniatures list" 1;
+  requirements      :WTC 96582;
+  layout            Full Color;
+  description
+  "Ancient ruins buried beneath the desert wastes are infested by deadly monsters. Deep within the sandy tombs, \Monster{mummies} and swarms of \Monster{scarab beetles} guard priceless treasure, \Monster{yuan-ti} cultists scheme, \Monster{umber hulks} delve, and \Monster{drow} \Monster{elves} plan their next invasion.
+
+\large[Ancient Evil Never Dies}
+
+Create classic battles when you collect all 60 miniatures in the \Product{Desort of Desolation} set. Use a mix of adventuring heroes, dungeon denizes, and other archetypal monsters to compete against your friends in fast, head-to-head combat, or to create thrilling D&D adventures.".
+
+#.....
+#----- MEONOD1
+
+base product MEONOD1 =
+
+  title             "Nodwick";
+  leader            "";
+  subtitle          "Nodwick hauling treasure.";
+  author            "Van Horne, Gene" sculptor;
+  date              December 2007;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  producer          Magnificient Egos;
+  series            Uncommon Character;
+  price             $4.99;
+  contents          Miniature "Nodwick" 1;
+  requirements      ;
+  layout            Full Color;
+  description
+  "Magnificient Egos produces high quality figures of unique character and appearance to stimulate customers' imaginations and provide alternative choices to the more generic lines produced for RPGs and Wargames.
+
+We accomplish this by combining highly-experienced miniatures hobbyist's with artists at the top of their field and some of the industry's most respected sculptors.";
+  short description "Nodwick hauling treasure.".
+
+#.....
+#----- MM 20033
+
+base product MM 20033 =
+
+  title             "Weapons Assortment";
+  leader            "";
+  subtitle          "Dungeon Decor";
+  date              January 2008;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Small Box;
+  producer          Mega Miniatures;
+  series            Dungeon Decor;
+  price             $9.99;
+  contents          Miniature "random weapon" 20;
+  requirements      ;
+  layout            Full Color;
+  description
+  "Assortment of weapons.";
+  short description "Assortment of weapons.".
+
+#.....
+#----- MM 20019
+
+base product MM 20019 =
+
+  title             "Bookshelves";
+  leader            "";
+  subtitle          "Dungeon Decor";
+  illustrations     "Ochmann, J." sculptor;
+  date              January 2008;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Accessory;
+  style             Small Box;
+  producer          Mega Miniatures;
+  series            Dungeon Decor;
+  price             $8.99;
+  contents          Miniature "bookshelf" 2;
+  requirements      ;
+  layout            Full Color;
+  description
+  "Two bookshelves for the dungeon.";
+  short description "Two bookshelves for the dungeon.".
+
+#.....
+#----- MM 20006
+
+base product MM 20006 =
+
+  title             "Beds";
+  leader            "";
+  illustrations     "Ochmann, J." sculptor;
+  date              January 2008;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Accessory;
+  style             Small Box;
+  producer          Mega Miniatures;
+  series            Dungeon Decor;
+  price             $8.50;
+  contents          Miniature "Bed" 4;
+  requirements      ;
+  layout            Full Color.
+
+#.....
+#----- MM 20024
+
+base product MM 20024 =
+
+  title             "Tombstones";
+  leader            "";
+  subtitle          "Dungeon Decor";
+  illustrations     "Grassnick" sc;
+  date              January 2008;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Small Box;
+  producer          Mega Miniatures;
+  series            Dungeon Decor;
+  price             $11.99;
+  contents          Miniature "Tombstone" 25;
+  requirements      ;
+  layout            Full Color;
+  description
+  "An assortment of Tombstones.";
+  short description "An assortment of Tombstones.".
+
+#.....
+#----- MM 20032
+
+base product MM 20032 =
+
+  title             "Shields Assortment";
+  leader            "";
+  subtitle          "Dungeon Decor";
+  date              January 2008;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Small Box;
+  producer          Mega Miniatures;
+  series            Dungeon Decor;
+  price             $9.99;
+  contents          Miniature "Shield" 20;
+  requirements      ;
+  layout            Full Color;
+  description
+  "An assortment of Shields.";
+  short description "An assortment of Shields".
+
+#.....
+#----- MM 20014
+
+base product MM 20014 =
+
+  title             "Sarcophagus His & Hers";
+  leader            "";
+  subtitle          "Dungeon Decor";
+  illustrations     "Ochmann, J." sculptor;
+  date              January 2008;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Small Box;
+  producer          Mega Miniatures;
+  series            Dungeon Decor;
+  price             $11.99;
+  contents          Miniature "Sarcophagus" 2;
+  requirements      ;
+  layout            Full Color;
+  description
+  "A pair of sarcophagi.";
+  short description "A pair of sarcophagi.".
+
+#.....
+#----- TTL 001
+
+base product TTL 001 =
+
+  title             "Combat Tiers Family Pack";
+  leader            "";
+  subtitle          "Combat Tiers bring a new dimension to tabletop gaming!";
+  date              November 2008;
+  pages             0;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Medium Box;
+  producer          Paizo;
+  price             $49.95;
+  requirements      ;
+  layout            Full Color;
+  description
+  "Combat Tiers bring a new dimension to tabletop gaming scenarios where height and distance are needed. Eliminating guesswork, Combat Tiers place any size miniatures at the exact height and distance needed to determine where combatants are during your battle scenarios.
+
+Made from durable acrylic, Combat Tiers are designed to easily engage your gaming experience. The transparent material will not obscure the gaming environment. Multi-tier possibilities allow you to create various heights, while the large staging platforms allow the players to place multiple figures in simulated flight or combat, keeping everything sturdy and precise. Combat Tiers are gauged in one inch increments both on the prominent staging platforms and on the supporting columns, so ranges can be easily determined at a glance. With additional extensions, your figures can soar to even higher heights. No longer are ranges reduced to estimations—know exactly how the battle unfolds!
+
+Combat Tiers can simulate many environments—use them to gauge underwater and space environments in addition to flight. For military enthusiasts, planes come alive during raids and strafing runs, and ships and submarines enjoy a new level of silent running as altitudes and depths take on a whole new gaming dimension.
+
+Combat Tiers truly invigorate all your combat gaming situations.";
+  short description "Combat Terrain for flying monsters and characters.".
+
+#.....
+#----- AFS 047
+
+base product AFS 047 =
+
+  title             "Figure Flight Stand, 1 inch circle bases";
+  leader            "";
+  subtitle          "Figure Flight Stand";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Litko;
+  contents          Miniature "flight stand" 2;
+  requirements      ;
+  layout            Black & White;
+  description
+  "Two stands for flying figures.";
+  short description "Two stands for flying figures.";
+  synonyms          "".
+
+#.....
+#----- TS 026-LRG
+
+base product TS 026-LRG =
+
+  title             "Flaming Wreckage - Large Set";
+  leader            "";
+  subtitle          "Flaming Wreckage";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Litko;
+  contents          Miniature "Large Flaming Wreckage" 3;
+  requirements      ;
+  layout            Black & White;
+  description
+  "Large set of flames.";
+  short description "Large set of flames.";
+  synonyms          "".
+
+#.....
+#----- TS 026-MED
+
+base product TS 026-MED =
+
+  title             "Flaming Wreckage - Medium Set";
+  leader            "";
+  subtitle          "Flaming Wreckage";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Litko;
+  contents          Miniature "Medium Flaming Wreckage" 5;
+  requirements      ;
+  layout            Black & White;
+  description
+  "Medium Set of flaming wreckage.";
+  short description "Medium Set of flaming wreckage.";
+  synonyms          "".
+
+#.....
+#----- TS 026-SML
+
+base product TS 026-SML =
+
+  title             "Flaming Wreckage - Small Set";
+  leader            "";
+  subtitle          "Flaming Wreckage";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Litko;
+  contents          Miniature "Small flaming wreckage" 7;
+  requirements      ;
+  layout            Black & White;
+  description
+  "Small set of flaming wreckage.";
+  short description "Small set of flaming wreckage.";
+  synonyms          "".
+
+#.....
+#----- TS 105
+
+base product TS 105 =
+
+  leader            "";
+  subtitle          "Flaming Wreckage";
+  management        "";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  producer          WTC;
+  contents          Miniature "flaming wreckage marker";
+  requirements      ;
+  layout            Full Color;
+  description
+  "Huge flaming wreckage marker.";
+  short description "Huge flaming wreckage marker.";
+  synonyms          "".
+
+#.....
+#----- TS 121
+
+base product TS 121 =
+
+  title             "X-bones Marker Set";
+  leader            "";
+  subtitle          "Skull and Bones";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Litko;
+  contents          Miniature "skull and bones" 5;
+  requirements      ;
+  layout            Black & White;
+  description
+  "Skull and bones set.";
+  short description "Skull and bones set.";
+  synonyms          "".
+
+#.....
+#----- TS 127
+
+base product TS 127 =
+
+  title             "Torch Bearer Marker Set";
+  leader            "";
+  subtitle          "Who bears the torch?";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Litko;
+  contents          Miniature "torch bearer marker" 3;
+  requirements      ;
+  layout            Black & White;
+  description
+  "Set of three torch bearer markers.";
+  short description "Set of three torch bearer markers.";
+  synonyms          "".
+
+#.....
+#----- TS 051
+
+base product TS 051 =
+
+  title             "Weather Effect Markers";
+  leader            "";
+  subtitle          "Weather";
+  author            "";
+  editor            "";
+  cover             "";
+  cartography       "";
+  illustrations     "";
+  typography        "";
+  management        "";
+  date              January 2010;
+  system            None;
+  audience          DM;
+  product type      Miniature;
+  style             Pack;
+  producer          Litko;
+  contents          Miniature "weather effect marker" 5;
+  requirements      ;
+  layout            Black & White;
+  description
+  "Markers for Weather effects. Fog, rain, snow, heat, wind.";
+  short description "Markers for Weather effects.";
+  synonyms          "".
+
+#.....
+#----- WTC 24463
+
+base product WTC 24463 =
+
+  title             "Orcus, Prince of Undeath";
+  leader            "";
+  subtitle          "Unleash the Horror of the \Place{Abyss}!";
+  cartography       "";
+  management        "";
+  date              June 2010;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  producer          WTC;
+  series            Limited-Edition Miniature;
+  price             $74.99;
+  requirements      ;
+  layout            Full Color;
+  description
+  "\God{Orcus}, the \Monster{demon prince} of the undead, is one of the most powerful \Monster{demon} lords of the \Place{Abyss}. He commands legions of followers, living and dead, and he takes great pleasure in the suffering of others. During his eternal reign, the \Monster{demon} prince vanquished hundreds of mighty heroes and destroyed countless kingdoms. With every conquest, he adds the corpses of fallen enemies to his vast undead army.
+
+One of the greatest villains of the Dungeons & Dragons Roleplaying Game, \God{Orcus}, Prince of Undeath, sets out to destroy the world of the living and rule over the undead. Can you adventurers stand against this vile demon prince?";
+  short description "An gargantuan, iconic miniature of Orcus, Prince of Undeath.".
+
+#.....

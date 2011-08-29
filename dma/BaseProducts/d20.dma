@@ -1,0 +1,1245 @@
+# d20 files
+
+#----- DD 17
+
+base product DD 17 =
+
+  title             "Traps & Treachery";
+  leader            "";
+  subtitle          "A Sourcebook of Deadly Machinations";
+  author            "Benage, Greg" line developer,
+                    "Benage, Greg",
+                    "Brown, Kurt",
+                    "Chance, Mark",
+                    "Ferrenz, Brian",
+                    "Lizard",
+                    "Lyons, David",
+                    "Patterson, Brian",
+                    "Stoecker, Scott",
+                    "Upchurch, Wil";
+  editor            "Benage, Greg" content editing,
+                    "Benage, Greg" copy editing,
+                    "Ely, Catten" copy editing;
+  cover             "Schomburg, Brian";
+  illustrations     "Bertuzzi, Massimilliano",
+                    "Brown, Ron",
+                    "Butler, Paul",
+                    "Cotie, Mitch",
+                    "Ejsing, Jesper",
+                    "Kay, Kenneth",
+                    "Lofgren Eric",
+                    "Rodriguez, Hian",
+                    "Schomburg, Brian",
+                    "Yanner, Kieran";
+  typography        "Schomburg, Brian" graphic design,
+                    "Benage, Greg" layout;
+  management        "Petersen, Christian T." publisher;
+  date              2001;
+  ISBN              1-58994-020-2;
+  pages             176;
+  system            d20;
+  audience          DM;
+  product type      Accessory;
+  style             Hardcover;
+  producer          Fantasy Flight Games;
+  series            Legends & Lairs;
+  price             $ 24.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "\large{The definitive d20 System resource for traps, tricks, puzzles, and
+  poisons.}
+
+  \list
+  {More than 60 complete descriptions of magic and mechanical traps, all
+   beautifully illustrated.}
+  {Detailed guidelines on trap design and classification that organizes and
+   streamlines the process of designing new traps and integrating them into you
+   adventures.}
+  {Comprehensive rules for creating and using poisons.}
+  {Detailed listings of new poisons, natural and supernatural alike.}
+  {New prestige classes, including the \Class{trapmaster}, \Class{roofrunner},
+   and \Class{descreet companion}.}
+  {A new NPC class, the \Class{thug}.}
+  {New skills and feats, such as \Skill{Urbon Lore} and \Skill{Brew Poison.}}
+  {New equipment and magic items}
+  {The Thievery clerical domain, as well as new arcane and divine spells.}
+  {Tricks and techniques for disabling traps.}
+  {A comprehensive section on designing, developing, and integrating thieves'
+   guilds into your campaign.}
+  {A chapter detailing a variety of mind-bending puzzles with which to confound
+   your players, including logic puzzles, math puzzles, word puzzles, and chess
+   puzzles, as well as physical challenges and obstacles to test your
+   characters.}".
+
+
+#.....
+#----- DD 29
+
+base product DD 29 =
+
+  title             "Traps & Treachery II";
+  leader            "";
+  subtitle          "A Sourcebook of More Deadly Machinations";
+  author            "Upchurch, Wil" lead developer,
+                    "Benage, Greg" managing developer,
+                    "Bourelle, Ed",
+                    "Brown, Kurt",
+                    "Cashman, Shaun",
+                    "Chance, Mark",
+                    "Ely, Catten",
+                    "Lizard",
+                    "Patterson, Brian",
+                    "Stoecker, Scott",
+                    "Sudlow, Paul",
+                    "Timmins, William",
+                    "Zastrow, Bree";
+  editor            "Benage, Greg",
+                    "Upchurch, Wil";
+  cover             "Schomburg, Brian";
+  illustrations     "Atkinson, Toren 'MacBin'",
+                    "Butler, Paul",
+                    "Griffith, David",
+                    "Kay, Kenneth",
+                    "Schomburg, Brian",
+                    "Seaman, Chris",
+                    "Walpole, Tyler",
+                    "Upchurch, Wil" art direction;
+  typography        "Schomburg, Brian" graphic design,
+                    "Upchurch, Wil" layout;
+  management        "Petersen, Christian T." publisher;
+  ISBN              1-58994-027-X;
+  pages             172;
+  system            d20;
+  audience          DM;
+  product type      Accessory;
+  style             Hardcover;
+  producer          Fantasy Flight Games;
+  series            Legends & Lairs;
+  price             $ 24.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "\large{The characters might rest between adventures, but their adversaries
+  don't...}
+
+  \list
+  {More than 150 complete descriptions of magic and mechanical traps}
+  {Dozens of beautiful illustrations detailing the mechanisms behind these
+   sinister creations}
+  {Tricks and techniques for making traps even more difficult to bypass}
+  {Rules for poison rarity, two new types of poisons, and more than 80
+   detailed listings of new poisons, natural and supernatural alike}
+  {A chapter devoted to unique puzzles and challenges to test the abilities of
+   both the players and their characters}".
+
+
+#.....
+
+#----- SJG 3401
+
+base product SJG 3401 =
+
+  title             "Munchkin Player's Handbook";
+  leader            "";
+  subtitle          "D20... The Way It Should Be Played!";
+  author            "Hackard, Andrew",
+                    "Jackson, Steve",
+                    "Ganger, David L." additional material,
+                    "Haring, Scott" additional material,
+                    "Mangrum, John W." additional material;
+  editor            "Hackard, Andrew" managing editor;
+  cover             "Kovalic, John";
+  illustrations     "Kovalic, John";
+  management        "Chapman, Monique" project administration,
+                    "Sherman, Mia" production manager,
+                    "Fernandez, Alex" page design,
+                    "Reed, Philip" production artist,
+                    "Stephens, Monica" print buyer,
+                    "Jepson, Ross" sales management,
+                    "Nicewarner, Steve" marketing director,
+                    "Vetromile, Andy" errata coordination;
+  date              2003;
+  pages             48;
+  system            d20;
+  audience          DM;
+  product type      Rulebook;
+  style             Hardcover;
+  series            Munchkin;
+  contents          Book;
+  worlds            Generic;
+  description
+  "\emph{Munchkin} is the Origins Award-winning card game of dungeon
+  delving. Now the great characters, monsters, and loot have flown off the
+  cards... and right into your d20 game!
+
+  The \Product{Munchkin d20 Player's Handbook} is the ultimate guide to
+  roleplaying that is fast, dirty, and hellaciously \emph{fun}! Fully
+  compatible with other d20 games, \Product{Munchkin d20} will jazz up your
+  sessions as your characters rocket up in power! This book includes munchkin
+  classes, races, skills, feats, and spells designed to go through a dungeon
+  like a rock through a window. (But DMs don't worry... your book is coming
+  soon...)
+
+  Watch for more \Product{Munchkin d20} books, coming soon from Steve Jackson
+  Games.".
+
+
+#.....
+#----- SJG 3402
+
+base product SJG 3402 =
+
+  title             "Munchkin Master's Guide";
+  leader            "";
+  subtitle          "Munchkin. It's not just for players any more";
+  author            "Hackard, Andrew",
+                    "Reed, Philip",
+                    "Jackson, Steve",
+                    "Haring, Scott" additional material,
+                    "Schmidt, Mark A." additional material,
+                    "Marsh, Steven" additional material;
+  editor            "Hackard, Andrew" managing editor;
+  cover             "Kovalic, John";
+  illustrations     "Kovalic, John";
+  management        "Chapman, Monique" project administration,
+                    "Hall, Kellar" production manager,
+                    "Fernandez, Alex" page design,
+                    "Fernandez, Alex" production artist,
+                    "De Witt, Justin" production assistant,
+                    "Stephens, Monica" print buyer,
+                    "Jepson, Ross" sales management,
+                    "Vetromile, Andy" errata coordination;
+  date              2003;
+  ISBN              1-55634-668-9;
+  pages             48;
+  system            d20;
+  audience          DM;
+  product type      Rulebook;
+  style             Hardcover;
+  series            Munchkin;
+  contents          Book;
+  worlds            Generic;
+  description
+  "What can a \emph{Munchkin} GM do?
+
+  Whatever he wants. Player annoys you? Kill him. Or change his sex. Or turn
+  him into a Canada goose. Go all the way and turn him into a dead sex-changed
+  Canada goose. No one can stop you. When you're the GM, the rules are only
+  suggestions --- and mild ones at that.
+
+  So the \Product{Munchkin Master's Guide} is 48 pages of evil suggestions:
+  magic items, powerful NPC classes, terrifying tables, and a loaded 100-sided
+  die's worth of dirty tricks.
+
+  Remember --- It's \emph{good} to be the GM.".
+
+
+#.....
+#----- SJG 3403
+
+base product SJG 3403 =
+
+  title             "Munchkin Monster Manual";
+  leader            "";
+  author            "Mangrum, John W.",
+                    "Haring, Scott" additional material,
+                    "Witt, Justin De" additional material;
+  editor            "Hackard, Andrew",
+                    "Jackson, Steve";
+  cover             "Kovalic, John";
+  illustrations     "Kovalic, John";
+  management        "Hackard, Andrew" managing editor,
+                    "Chapman, Monique" project administration,
+                    "Fernandez, Alex" page design,
+                    "Witt, Justin De" production art,
+                    "Hackard, Andrew" art direction,
+                    "Stephens, Monica" print buyer,
+                    "Jepson, Ross" sales management,
+                    "Vetromile, Andy" errata coordination;
+  date              April 2003;
+  ISBN              1-55634-669-7;
+  pages             48;
+  system            d20;
+  audience          DM;
+  product type      Monster Compendium;
+  style             Hardcover;
+  series            Munchkin;
+  contents          Book;
+  worlds            Generic;
+  description
+  "It's all about the thrill of combat... meeting worthy foes and murdering
+  them by surprise.... gleefully slaughtering their low-level
+  minions... defiling the corpses... and, of course, TAKING THEIR STUFF. The
+  \Product[SJG 3403]{Munchkin Monster Manual} contains dozens of foes for you
+  and your comrades to slay, from the dreaded \Monster{Gazebo} to the
+  despicable \Monster{Potted Plant}! And yes, of course there are stats for
+  \Monster{Plutonium Dragons}. Of \emph{all} ages.
+
+  \small{Requires the use of the \Product{Dungeons & Dragons Player's
+  Handbook}, Third Edition, published by Wizards of the Coast.}".
+
+
+#.....
+#----- SJG 3407
+
+base product SJG 3407 =
+
+  title             "Munchkin Monster Manual 2.5";
+  leader            "";
+  subtitle          "Contains 150% more than the first volume!";
+  author            "Mangrum, John W.";
+  editor            "Hackard, Andrew",
+                    "Bernard, Kimara",
+                    "Hackard, Andrew" managing editor;
+  cover             "Kovalic, John",
+                    "Reed, Philip";
+  illustrations     "Kovalic, John";
+  typography        "Fernandex, Alex" page design;
+  management        "Chapman, Monique" project administration,
+                    "Witt, Justin De" production art,
+                    "Hackard, Andrew" art direction,
+                    "Stephens, Monica" print buyer,
+                    "Jepson, Ross" sales management,
+                    "Vetromile, Andy" errata coordination;
+  date              2004;
+  ISBN              1-55634-722-7;
+  pages             48;
+  system            d20;
+  audience          DM;
+  product type      Monster Compendium;
+  style             Hardcover;
+  series            Munchkin;
+  contents          Book;
+  worlds            Generic;
+  description
+  "(Just don't ask 150% more what.)
+
+  The twisted geniuses behind the first \Product{Munchkin Monster Manual} are
+  back! The \Product{Munchkin Monster Manual 2.5} contains 3'905 monsters---of
+  which only 3'872 are \Monster{orcs}---including such fell nasties as
+  \Monster{Auntie Paladin}, the \Monster{Misplacer Beast}, and the dreaded
+  \Monster{Thing With a Name So Long There's No Room for a Picture in the
+  Book}. It also has new monster templates, guidelines for updating your
+  \Product{Munchkin} campaigns to the 2.5 rules, and the wit for which the
+  \Product{Munchking RPG} has become (in)famous.
+
+  More creatures to slay... more treasure to plunder... more levels to
+  gain... the \Product{Munchkin Monster Manual 2.5} has it all!".
+
+
+#.....
+
+#----- TLG NGU1
+
+base product TLG NGU1 =
+
+  title             "Mother of All Encounter Tables";
+  leader            "The";
+  subtitle          "One Table to Rule Them All!";
+  author            "Ragland, Greg",
+                    "Webb, Bill" design,
+                    "Ragland, Greg" design,
+                    "Webb, Bill" developer;
+  editor            "Webb, Bill",
+                    "Greene, Scott" d20 content editor;
+  cover             "Bourelle, Ed" front & back cover design;
+  cartography       "",
+                    "";
+  illustrations     "Hudson, Heather",
+                    "Chenault, David" art director;
+  typography        "Wright, Charles A." layout and typesetting,
+                    "";
+  management        "Peterson, Clark" producer,
+                    "";
+  date              2003;
+  ISBN              1-931275-54-8;
+  pages             142;
+  system            d20;
+  audience          DM;
+  product type      Accessory;
+  style             Hardcover;
+  producer          Necromancer Games;
+  price             $ 27.95;
+  contents          Book;
+  layout            Color Cover;
+  worlds            Generic;
+  description
+  "\Product{The Mother of All Encounter Tables} is here! This utility unlike any
+  before conceived! This is not just a random book of tables, but a well
+  thought out DM utility that will make wilderness travel, city streets and
+  dungeon corridors all more interesting. It contains encounters for each
+  terrain type from mountains to the ocean, in each climate from artic to
+  tropical, and has separate tables for day and night encounters, with space
+  left for the DM to insert new monsters of his choosing. In addition to
+  encounters with monsters and men, there are tables for unusual weather
+  events, strange occurrences, accidents, and encounters with NPCs. Trade
+  routes and caravans are detailed as well as \Monster{trolls} and
+  \Monster{dragons}. After all, you never know when ants will infest your food,
+  or when a cleric will get struck by lightning!";
+  short description "The Ultimate Sourcebook for Overworked DMs".
+
+
+#.....
+
+#----- WTC 17740
+
+base product WTC 17740 =
+
+  title             "d20 Past";
+  leader            "";
+  subtitle          "Rally Heroes and Rewrite History";
+  author            "Wyatt, James",
+                    "Kestrel, Gwendolyn F.M.",
+                    "Noonan, David" additional designer;
+  editor            "Ryan, Tammie Webb",
+                    "Thomasson, Chris",
+                    "Mohan, Kim" managing editor;
+  cover             "Johnson, Dave";
+  cartography       "Gamble, Todd";
+  illustrations     "Andrasofszky, Kalman",
+                    "Ksismik, Grafi",
+                    "Maheh, Warren",
+                    "Raper, Robert" art director,
+                    "Cortez, Leon" graphic designer,
+                    "Barnett, Dee" graphic designer,
+                    "Wiley, Jason" image technician;
+  typography        "Lokotz Angelika" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Joshua" production manager,
+                    "Crews, Randall" production manager;
+  date              March 2005;
+  ISBN              0-7869-3656-8;
+  pages             96;
+  system            d20 Modern;
+  audience          All;
+  product type      Rules Supplement;
+  style             Soft Cover;
+  producer          WTC;
+  price             $ 19.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "Dash down the gaslit streets of Victorian horror or ride the dusty trails of
+  the \Place{Wild West}. Board the tall ships of the Spanish Main or raid the
+  trenches of the Great War. In \Product{d20 Past}, heroes can find excitement
+  in any historical era from the \Event{Renaissance} to \Event{World War
+  II}. Whether period-specific or pulp-flavored, the possibilities for
+  adventure in the world of yesteryear are endless.
+
+  To use this product, you also need the \Product{d20 Modern Roleplaying Game}
+  core rulebook. For players and Gamemasters, this product is compatible with
+  other d20 System roleplaying games.
+
+  This new rules supplement provides everything players and gamemasters need to
+  participate in adventures in the time period between the \Event{Renaissance}
+  and \Event{World War II}, including new character options and rules for early
+  modern \Item{firearms}. It begins with an exploration of the historical
+  period between 1450 and 1950, then provides rules for creating characters and
+  campaigns that blend realism and fantasy. \Product{d20 Past} also presents
+  alternative campaign models, along with all the rules needed to play
+  swashbuckling pirate adventures, Victorian horror investigations, thrilling
+  Pulp Era escapades, and more, including three ready-to-play campaign
+  modules.".
+
+
+#.....
+#----- WTC 17761
+
+base product WTC 17761 =
+
+  title             "d20 Menace Manual";
+  leader            "";
+  subtitle          "Keep Your Guard Up and Your Pistol Loaded";
+  author            "Wikder, JD",
+                    "Cagle, Eric",
+                    "Sernett, Matthew",
+                    "Perkins, Christopher" additional design;
+  editor            "Horner, Miranda",
+                    "Williams, Penny",
+                    "Stan!",
+                    "Perkins, Christopher" managing editor and design manager;
+  cover             "Johnson, Dave";
+  cartography       "Lazzaretti, Rob",
+                    "Kauth, Dennis";
+  illustrations     "Andrasofszky, Kalman",
+                    "Alexander, Jason",
+                    "Barrum, Joachim",
+                    "Beargeon, Ted",
+                    "Foss, Langdon",
+                    "Irving, Frazer",
+                    "Kerschl, Karl",
+                    "Lawrence, Chester",
+                    "McLeod, Kagan",
+                    "Mimura, Raven",
+                    "Noguchi, Mikael",
+                    "Ormston, Dean",
+                    "Parker, Jake",
+                    "Plucinski, Zak",
+                    "Schomburg, Scott",
+                    "Thomas, Joel",
+                    "Wayshak, Jonathon",
+                    "Wood, Sam",
+                    "Raper, Robert" art director,
+                    "Fliege, Cynthia" original graphic design;
+  typography        "Lokotz, Angelika" digital production specialist,
+                    "";
+  management        "Slavicsek, Bill" director of RPG R&D,
+                    "Kirchoff, Mary" vice president of publishing,
+                    "Valterra, Anthony" category manager,
+                    "Durham, Martin" project manager,
+                    "DeLong, Chas" production manager;
+  date              September 2003;
+  ISBN              0-7869-2899-9;
+  pages             224;
+  system            d20 Modern;
+  audience          DM;
+  product type      Monster Compendium;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 34.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "Kick down the door and be ready for anything. Inside, you'll confront
+  animals, aliens, aberrations, adversaries, and even a few allies. The
+  \Product{d20 Menace Manual} provides creatures, characters, and organizations
+  to challenge or confound the heroes of any d20 Modern roleplaying game---so
+  watch your back.
+
+  To use this product, you also need the \Product{d20 Modern Roleplaying Game}
+  core rulebook. For players and Gamemasters, this product is compatible with
+  other d20 System roleplaying games.".
+
+
+#.....
+
+#----- WTC 88046
+
+base product WTC 88046 =
+
+  title             "d20 Apocalypse";
+  leader            "";
+  subtitle          "It's the End of the World";
+  author            "Cagle, Eric",
+                    "Drader, Darrin",
+                    "Ryan, Charles",
+                    "Stephens, Owen K.C.",
+                    "Perkins, Christopher" development,
+                    "Ryan, Charles" development;
+  editor            "Ryan, Tammie Webb",
+                    "Mohan, Kim" editing manager;
+  cover             "Johnson, Dave";
+  cartography       "Gamble, Todd";
+  illustrations     "Andrasofszky, Kalman",
+                    "Grafiksismik Inc.",
+                    "Kerschl, Karl",
+                    "Perez, Ramon",
+                    "Trevas, Chris",
+                    "Barnett, Dee" graphic design,
+                    "Irwin, Kate" graphic design,
+                    "Bolen, Sven" image technician;
+  typography        "Lokotz, Angelika" graphic production specialist;
+  management        "Perkins, Christoper" design manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Crews, Randall" production manager,
+                    "Fischer, Joshua" production manager;
+  date              June 2005;
+  ISBN              0-7869-3273-2;
+  pages             96;
+  system            d20 Modern;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Soft Cover;
+  producer          WTC;
+  price             $ 19.95;
+  contents          Book;
+  requirements      WTC 88190,
+                    WTC 88597;
+  worlds            Generic;
+  description
+  "In the aftermath of a nuclear holocaust, alien invasion, supernatural
+  Armageddon, or some other terrible cataclysm, life as we know it has
+  ended. Doomsday has left in its wake a world filled with mutants, scavengers,
+  rogue technology, environmental hazards, or other perils. In \Product{d20
+  Apocalypse}, heroes must salvage the remnants of civilization and survive the
+  dangers that await in a grim future.
+
+  New rules designed for running a \Product{d20 Modern} campaign in a
+  postapocalyptic setting.
+
+  This new rules supplement provides everything players and Gamemasters need to
+  participate in adventures in a post-apocalyptic setting, including rules and
+  designs for apocalyptic events, such as nuclear war, environmental disaster,
+  alien invasion, or \Event{Armageddon}. The book provides new rules for
+  barter, scavenging, equipment, mutations and robots. Three ready-to-play
+  campaign models are included.".
+
+
+#.....
+#----- WTC 88157
+
+base product WTC 88157 =
+
+  title             "Weapons Locker";
+  leader            "";
+  subtitle          "Lock and Load, then Rock and Roll";
+  author            "Potter, Keith",
+                    "Perkins, Christopher" additional design,
+                    "Redman, Rich" additional design,
+                    "Rosenberg, Ross" additional design,
+                    "Vortisch, Hans-Christian" additional design;
+  editor            "Nagasawa, Katsuyo",
+                    "Mohan, Kim" managing editor,
+                    "Ryan, Charles" managing editor;
+  cover             "Wight, Joe";
+  illustrations     "Chatterjee, Eric",
+                    "Martin, N. David",
+                    "Potter, Keith",
+                    "Stewart, Richard",
+                    "Wight, Joe";
+  typography        "Raper, Robert" graphic design,
+                    "Cheung, Carmen" digital production specialist;
+  management        "Slavicsek, Bill" director RPG R&D,
+                    "Fischer, Joshua CJ" Production Manager;
+  date              February 2004;
+  ISBN              0-7869-3132-9;
+  pages             192;
+  system            d20 Modern;
+  audience          DM;
+  product type      Accessory;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 29.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "Check your target and open fire. Inside, you'll find a fully illustrated
+  arsenal ranging from pistols and submachine guns to grenade launchers and
+  antimateriel rifles. The \Product{d20 Modern Weapons Locker} provides
+  detailed descriptions and statistics for each firearm to make sure the
+  characters of any d20 Modern roleplaying game are packing the right gun for
+  the job.
+
+  To use this product, you also need the \Product{d20 Modern Roleplaying Game}
+  core rulebook. For players and Gamemasters, this product is compatible with
+  other d20 System roleplaying games.".
+
+
+#.....
+#----- WTC 88172
+
+base product WTC 88172 =
+
+  title             "Urban Arcana";
+  leader            "";
+  author            "Cagle, Eric",
+                    "Grubb, Jeff",
+                    "Noonan, David",
+                    "Stan!",
+                    "Slavicsek, Bill" original concept;
+  editor            "Perkins, Christopher" development and editing,
+                    "Slavicsek, Bill" development and editing;
+  cover             "Johnson, Dave";
+  cartography       "Lazzaretti, Robert";
+  illustrations     "Alexander, Jason",
+                    "Andrasofszky, Kalman",
+                    "Ballard, Lee",
+                    "Hampton, Justin",
+                    "McLeod, Kagan",
+                    "Jr., Ken Meyer",
+                    "Ormston, Dean",
+                    "Parker, Jake",
+                    "Puddnhead",
+                    "Shy, Christopher",
+                    "Ward, Chad Michael",
+                    "Wayshak, Jonothan",
+                    "Wood, Sam";
+  typography        "Lokotz, Angelika" graphic production specialist,
+                    "Cheung, Carmen" graphic production specialist;
+  management        "Perkins, Christopher" game design manager,
+                    "Raper, Robert" art director,
+                    "Kirchoff, Mary" vice president of publishing,
+                    "Valterra, Anthony" category manager,
+                    "Durham, Martin" project manager,
+                    "DeLong, Chas" production manager;
+  date              May 2003;
+  ISBN              0-7869-2659-7;
+  pages             320;
+  system            d20 Modern;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 39.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "\large{Sling fireballs and dodge bullets}
+
+  Explosive action and epic adventure fill the modern world when fantasy and
+  reality collide. In \Product{Urban Arcana}, heroes armed with swords, spells,
+  shotguns, and cell phones dive headlong into trouble with monsters, mobsters,
+  cabals, and corporations. Take a deep breath, and discover the realms of
+  fantasy within the gritty shadows of the modern world.
+
+  To use this product, you also need the \Product{d20 Modern Roleplaying Game}
+  core rulebook, for players and Gamemasters, this product is compatible with
+  other d20 System roleplaying games.".
+
+
+#.....
+#----- WTC 88190
+
+base product WTC 88190 =
+
+  title             "d20 Modern";
+  leader            "";
+  author            "Slavicsek, Bill",
+                    "Grubb, Jeff",
+                    "Redman, Rich",
+                    "Ryan, Charles",
+                    "Perkins, Christopher" design assistance and advice,
+                    "Stan!" design assistance and advice;
+  editor            "Carter, Michele",
+                    "Ryan, Cherles",
+                    "Mohan, Kim" managing editor;
+  cover             "Johnson, Dave";
+  cartography       "Lazzaretti, Rob";
+  illustrations     "Andrasofszky, Kalman",
+                    "Buckley, Leanne",
+                    "Collins, Julie",
+                    "Fischer, Scott",
+                    "Granato, Anthony",
+                    "Gregory, Doug",
+                    "Kerschl, Karl",
+                    "Noto, Phil",
+                    "Ormstom, Dean",
+                    "Pucinski, Zak",
+                    "Riche, Darrel",
+                    "Robinson, Andrew",
+                    "Schomburg, Scott",
+                    "Sook, Ryan",
+                    "Talon, Durwin";
+  management        "Raper, Robert" art direction,
+                    "Fliege, Cynthia" graphic design,
+                    "Kestrel, Gwendolyn F.M." proofreading,
+                    "Williams, Penny" proofreading,
+                    "Perkins, Christopher" design management,
+                    "Slavicsek, Bill" vice president,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Kirchoff, Mary" vice president of publishing,
+                    "Valterra, Anthony" category management,
+                    "Durham, Martin" project management,
+                    "DeLong, Chas" production management,
+                    "Lokotz, Angelika" graphic production specialist,
+                    "Cheung, Carmen" graphic production specialist;
+  date              November 2002;
+  pages             384;
+  system            d20 Modern;
+  audience          All;
+  product type      Rulebook;
+  style             Hardcover;
+  price             $ 39.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "\large{Play every adventure you can imagine}
+
+  Experience the thrills of every blockbuster action movie, every
+  heart-pounding first-person shooter, and every explosive, high-octane
+  escapade you can dream up. Inside this book, you'll discover everything you
+  need to build the ultimate moder-world campaign filled with cinematic
+  adventure, and to create the dynamic heores needed to face the harrowing
+  dangers that await within.
+
+  For players and Gamemasters, this product is compatible with the Dungeons &
+  Dragons roleplaying game and other d20 System roleplaying games.".
+
+
+#.....
+#----- WTC 88597
+
+base product WTC 88597 =
+
+  title             "d20 Future";
+  leader            "";
+  subtitle          "High Tech Meets High Adventure";
+  author            "Perkins, Christopher",
+                    "Thompson, Rodney",
+                    "Wiker, JD",
+                    "Baker, Richard L. III" additional design,
+                    "Noonan, David" additional design,
+                    "Redman, Rich" additional design,
+                    "Slavicsek, Bill" additional design,
+                    "Stan!" additional design;
+  editor            "Webb Ryan, Tammie",
+                    "Vuckovich, Michelle",
+                    "Kestrel, Gwendolyn F.M." managing editor;
+  cover             "Johnson, Dave";
+  cartography       "Gamble, Todd";
+  illustrations     "Timothy II",
+                    "Andrasofszky, Kalman",
+                    "Falconer, Daniel",
+                    "Foss, Langdon",
+                    "Grafikismik",
+                    "Hatton, Matthew",
+                    "Kerschl, Karl",
+                    "Martiniere, Stephan",
+                    "Mahey, Warren",
+                    "Piccolo, Christian",
+                    "Thomas, Joel",
+                    "Trevas, Chris",
+                    "Tasi, Francis",
+                    "Wimberly, Ronald",
+                    "Raper, Robert" art director,
+                    "Irwin, Kate" graphic design,
+                    "Lathrop, Jennifer" graphic design,
+                    "Barnett, Dee" graphic design,
+                    "Sakamoto, Jay" image technician,
+                    "Baker, Candice" image technician;
+  typography        "Lokotz, Angelika" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Crews, Randall" production manager,
+                    "Fisher, Joshua" production manager;
+  date              August 2004;
+  ISBN              0-7869-3423-9;
+  pages             224;
+  system            d20 Modern;
+  audience          All;
+  product type      Campaign Setting;
+  style             Hardcover;
+  producer          WTC;
+  price             $ 34.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "The future is what you make of it. With access to space travel, cybernetics,
+  mutations, mecha, and more in \Product{d20 Future}, heroes may battle across
+  alien worlds, survive on postapocalyptic \Place{Earth}, voyage to distance
+  galaxies, and explore alternate dimensions. Charge your weapons and embark on
+  never-ending adventure within the infinite possibilities of the near and
+  distant future.
+
+  To use this product, you also need the \Product{d20 Modern Roleplaying Game}
+  core rulebook. For players and Gamemasters, this product is compatible with
+  other d20 System roleplaying games.".
+
+
+#.....
+
+#----- WTC 1076972
+
+base product WTC 1076972 =
+
+  title             "Dark*Matter";
+  leader            "";
+  subtitle          "Supernatural Conspiracy Roleplaying";
+  author            "Baur, Wolfgang H.",
+                    "Cook, Monte J.",
+                    "Baker, Richard L. III" additional design,
+                    "Cagle, Eric" additional design,
+                    "Collins, Andy" additional design,
+                    "Perkins, Christopher" additional design,
+                    "Redman, Rich" additional design,
+                    "Reynolds, Sean K" additional design,
+                    "Schend, Steven" additional design,
+                    "Slavicsek, Bill" additional design,
+                    "Wiker, JD" additional design,
+                    "Carter, Michele" developer,
+                    "Collins, Andy" developer,
+                    "Cook, Monte J." developer,
+                    "Reynolds, Sean K" developer,
+                    "Wiker, JD" developer;
+  editor            "Carter, Michele",
+                    "Collins, Andy",
+                    "Horner, Miranda",
+                    "Perkins, Christopher",
+                    "Mohan, Kim" editing manager;
+  cover             "Wood, Ashley" front,
+                    "Hagler, Joshua" back;
+  cartography       "Perkins, Christopher";
+  illustrations     "Angus, Glen Michael",
+                    "Fischer, Scott",
+                    "Hagler, Joshua",
+                    "Matson, John",
+                    "Rex, Adam",
+                    "Seeley, David",
+                    "Stone, Steven",
+                    "Wood, Ashley",
+                    "Hebron, Paul" graphic designer,
+                    "Hebron, Paul" art director,
+                    "Murin, Dawn" art director,
+                    "Adams, Travis M." image technician;
+  typography        "Lokotz, Angelika" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Fischer, Josh" production manager,
+                    "Crews, Randall" production manager;
+  date              September 2006;
+  ISBN              0-7869-4349-1;
+  pages             160;
+  system            d20;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Hardcover;
+  producer          WTC;
+  series            Dark*Matter;
+  price             $ 39.95;
+  contents          Book;
+  requirements      d20 Modern Roleplaying Game;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "\large{All you see is not all there is.}
+
+  Devious organizations scheme for world domination, otherworldly forces
+  infiltrate our power structures, and creatures from our nightmares lurk in
+  the shadows. Working for a clandestine organization called the
+  \Group{Hoffmann Institute}, heroes explore hidden mysteries while eluding
+  forces both human and alien that conspire to control the truth.
+
+  This book updates the classic \Product{DARK*MATTER Campaign Setting}
+  originally designed for the \Product{ALTERNITY} Science Fiction Roleplaying
+  Game.
+
+  This product is compatible with other d20 System roleplaying games.";
+  short description "".
+
+
+#.....
+
+#----- WTC 8818474
+
+base product WTC 8818474 =
+
+  title             "d20 Cyberspace";
+  leader            "";
+  subtitle          "We Can Improve You. We Have the Technology...";
+  author            "Stephens, Owen K.C.",
+                    "Thompson, Rodney" additional design;
+  editor            "Ryan, Tammie Webb",
+                    "Mohan, Kim" editing manager;
+  cover             "Andrasofszky, Kalman";
+  cartography       "Gamble, Todd";
+  illustrations     "Grafiksismik",
+                    "Falconer, Daniel",
+                    "Wimberly, Ronald",
+                    "Andrasofszky, Kalman",
+                    "Hebron, Paul" art director,
+                    "Barnett, Dee" graphic design,
+                    "Hebron, Paul" graphic design,
+                    "Jordan, Robert" image technician;
+  typography        "Lokotz, Angelika" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Crews, Randall" production manager,
+                    "Fisher, Joshua" production manager;
+  date              September 2005;
+  ISBN              0-7869-3695-9;
+  pages             96;
+  system            d20 Modern;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Paperback;
+  producer          WTC;
+  price             $ 19.95;
+  contents          Book;
+  requirements      WTC 88190,
+                    WTC 88597;
+  worlds            Generic;
+  description
+  "Take the next step in human evolution. With cybernetics, you can advance in
+  ways nature never intended. Cyborgs are the people of the future, and the
+  world of tomorrow is theirs for the taking---a world of virtually limitless
+  possibilities! \Product{d20 Cyberspace} contains everything you need to build
+  cybernetically enhanced heroes and virtual realities, as well as rules for
+  including cybernetics in a modern, near-future, or far-future campaign.
+
+  This new rules supplement provides everything players and Gamemasters need
+  to create and run campaigns featuring cybernetics in the post-modern realm of
+  cyberpunk fiction. Building on the d20 Future cybernetic rules, d20
+  Cyberscape includes rules for installing cybernetics and playing cyborgs, as
+  well as new advanced classes and enhancements. d20 Cyberscape also features
+  rules for magical and psionic cybernetics and virtual reality networks.".
+
+
+#.....
+
+#----- WTC 9539674
+
+base product WTC 9539674 =
+
+  title             "d20 Future Tech";
+  leader            "";
+  subtitle          "Whoever Has the Most Stuff Wins!";
+  author            "Thompson, Rodney",
+                    "Wiker, JD";
+  editor            "Ryan, Tammie Webb",
+                    "Mohan, Kim" editing manager;
+  cover             "Andrasofszky, Kalman";
+  illustrations     "Adorjany, Attila",
+                    "Andrasofszky, Kalman",
+                    "Carlisle, Jeffrey",
+                    "Gaston, Anderson",
+                    "Gaston, Andez",
+                    "Gregory, D. Alexander",
+                    "Jomes, Jaime",
+                    "Mahy, Warren",
+                    "Thomas, Joel",
+                    "Tasi, Francis",
+                    "Hebron, Paul" art director,
+                    "Hebron, Paul" graphic design,
+                    "Irwin, Kate" graphic design,
+                    "Lathrop, Jennifer" graphic design,
+                    "Murayama, Soe" graphic design,
+                    "Adams, Travis M." image technician;
+  typography        "Lokoth, Angelika" graphic production specialist;
+  management        "Perkins, Christopher" design manager,
+                    "Slavicsek, Bill" director RPG R&D,
+                    "Crews, Randall" production manager,
+                    "Fischer, Joshua" production manager;
+  date              February 2006;
+  ISBN              0-7869-3949-4;
+  pages             96;
+  system            d20 Modern;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Booklet;
+  producer          WTC;
+  price             $ 19.95;
+  contents          Book;
+  requirements      d20 Modern Roleplaying Game,
+                    d20 Future;
+  layout            Full Color;
+  worlds            Generic;
+  description
+  "The \Product{d20 Future Tech} supplement describes a dazzling array of new
+  gear and gadgets---the latest and greatest technology for heroes and villains
+  of the future. In addition, it presents new types of \Item{starships},
+  \Item{robots}, and \Item{mecha} and expands the rules for combining
+  character, vehicular, starship, and mech combat.
+
+  \Product{d20 Future Tech} is an extensive collection of high-tech items for
+  use by players and Gamemasters. Building on subsystems first presented in
+  \Product{d20 Future}, \Product{d20 Future Tech} presents new gear and options
+  for characters, vehicles, starships, and mecha. Covering technology levels
+  from the current era to the far future, this supplement can be used in any
+  style of modern or future campaign.";
+  short description "New gear and technology for any d20 Modern or d20 Future campaign.".
+
+
+#.....
+
+#----- WW 16140
+
+base product WW 16140 =
+
+  title             "Arcana Unearthed";
+  leader            "";
+  subtitle          "A Variant Player's Handbook";
+  author            "Cook, Monte J.",
+                    "";
+  editor            "Cook, Sue Weinlein";
+  cover             "Zug, Mark";
+  illustrations     "Atkinson, Toren 'MacBin'",
+                    "Hendee, David",
+                    "Meyer, Jennifer",
+                    "Shepherd, Stephen",
+                    "Wood, Sam";
+  typography        "Whitley, Peter" cover and interior page design;
+  management        "Ashton, Mark" proofreading;
+  date              2003;
+  ISBN              1-58846-065-7;
+  pages             256;
+  system            Sword & Sorcery;
+  audience          All;
+  product type      Rulebook;
+  style             Hardcover;
+  producer          Malhavoc Press;
+  price             $ 29.95;
+  contents          Book;
+  worlds            Generic;
+  description
+  "The 3rd Edition of the world's most popular roleplaying game has trhilled
+  hundreds of thousands. But surely there's more to fantasy that the
+  traditional \Monster{elves}, \Monster{dwarves}, fighters, and wizards. What
+  if there were a whole new player's handbook, presented just like the
+  original, but with different character classes, races, skill, feats, and
+  spells?
+
+  \large{You've Got It!}
+
+  This variant player's handbook from 3rd Edition codesigner Monte Cook
+  features:
+
+  \list
+  {9 new PC races, like \Monster{giants} and the lionlike \Monster{litorians},
+   plus \Monster{humans}}
+  {11 new classes, such as witches, mage blades, and the unfettered;}
+  {Hundreds of skills, feats, and spells;}
+  {And variant rules for handling magic and combat}
+
+  \bold{'No question about it, \Product{Monte Cook's Arcana Unearthed} is a
+  knockout}
+
+  \right{---Gary Gygax}
+
+  \bold{Monte Cook's Arcana Unearthed} is the new roleplaying game that you
+  already know how to play! The alternatives here, created to be compatible
+  with the 3rd Edition and Revised 3rd Edition rules under the Open Game
+  License, give you new ways to handle spellcasting, combat, and other game
+  functions while remaining true to the core game. Use this book to supplement
+  an existing game or as a complete rules system unto itself.
+
+  Malhavoc Press is game designer Monte Cook's game imprint devoted to
+  publishing unusual magic, monsters, and evocative elements that go beyond
+  traditional fantasy. Malhavoc Press products exhibit the mastery of the 3rd
+  Edition rules that only one of the game's original designers can offer.".
+
+
+#.....
+
+#----- WW 16114
+
+base product WW 16114 =
+
+  title             "Ptolus";
+  leader            "";
+  subtitle          "City by the Spire";
+  author            "Cook, Monte J.",
+                    "Reynolds, Sean K" Ptolus Resident,
+                    "Perkins, Christopher" Ptolus Resident,
+                    "Mona, Erik" Ptolus Resident,
+                    "Decker, Jesse" Ptolus Resident,
+                    "Cordell, Bruce R." Ptolus Resident,
+                    "Cook, Sue Weinlein" Ptolus Resident,
+                    "Collins, Andy" Ptolus Resident,
+                    "Carter, Michele" Ptolus Resident,
+                    "Mona, Erik" Midtown Partisan,
+                    "Ryan, Charles" Visitor to the City,
+                    "Reynolds, Keri" Visitor to the City,
+                    "Quick, Jeff" Visitor to the City,
+                    "Brown, Steven 'Stan!'" Visitor to the City,
+                    "Strohm, Keith" Ptolus Resident,
+                    "Stark, Ed" Visitor to the City,
+                    "Reynolds, Sean K" Hero of Ancient Praemal,
+                    "Reid, Teresa" Hero of Ancient Praemal,
+                    "Rateliff, John" Hero of Ancient Praemal,
+                    "Perkins, Christopher" Hero of Ancient Praemal,
+                    "Cordell, Bruce R." Hero of Ancient Praemal,
+                    "Carter, Michele" Hero of Ancient Praemal,
+                    "Wyatt, James" Visitor to the City;
+  editor            "Cook, Sue Weinlein";
+  cover             "Lockwood, Todd";
+  cartography       "Bourelle, Ed";
+  illustrations     "Lockwood, Todd" logo,
+                    "Engle, Jason" featured artist,
+                    "Zagorski, Maciej" featured artist,
+                    "Dobosz, Pawel" featured artist,
+                    "Komarck, Michael" featured artist,
+                    "Lofgren, Eric" featured artist,
+                    "Lyon, Howard" featured artist,
+                    "Philippi, Michael" featured artist,
+                    "Atkinson, Toren 'MacBin'" contributing artist,
+                    "Dunning, Talon" contributing artist,
+                    "Crossley, Kev" contributing artist,
+                    "Schlough, Peter" contributing artist,
+                    "post, rk" contributing artist,
+                    "Pollack, Alan" contributing artist,
+                    "LeBlanc, Brian" contributing artist,
+                    "Yanner, Kieran" contributing artist,
+                    "Wood, Sam" contributing artist,
+                    "Swekel, Arnie" contributing artist,
+                    "Sparks, J.D." contributing artist,
+                    "Rasmussen, Brian" graphic design,
+                    "Chido, Lisa" graphic design;
+  typography        "Chido, Lisa",
+                    "Horner, Miranda" proofreader,
+                    "Gute, Brian" proofreader,
+                    "Curley, Lori Ann" Indexing;
+  management        "Cook, Sue Weinlein" production;
+  date              August 2006;
+  ISBN              1-58846-789-9;
+  pages             672;
+  system            d20;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Hardcover;
+  producer          Malhavoc Press;
+  price             $119.99;
+  contents          Book "" 1,
+                    CD "Bonus Materials" 1,
+                    Map "double sided color poster" 1,
+                    Sheet "Character Sheet" 1,
+                    Sheet "various sheets (handouts, random encounters, etc.)" 24,
+                    Misc "bookmarks" 4;
+  layout            Full Color;
+  worlds            Ptolus;
+  description
+  "Imagine the most deluxe roleplaying product ever. It would have fabulous color art and maps---and lots of both. It would offer an in-depth treatment of hundreds of locales and characters, with new rules elegantly integrated with the d20 core rules. Such a book would be designed to offer optimum content and usability, with bound-in bookmarks and extensive cross-referencing to help you navigate its pages with ease. It would be a big book, with reinforced binding to stand up to years of play. It would include a double-sided poster map, two dozen handouts, and maybe even a CD-ROM full of all the cool stuff that wouldn't fit in the book.
+
+But why just imagine? \Product{Ptolus} is here! This high-quality book offers almost 700 pages of source and adventure material from one of the industry's gratest designers. A fantasy city built above extensive dungeons beside the \Place{Spire} of an ancient foe, \Product{Ptolus} is a self-contained campaign---or insert it into your home setting, if you prefer. Its unique design makes it the most DM-friendly book on your shelf. And the CD-ROM inside contains 400+ pages of bonus material, including \Product{The Night of Dissolution}, an all-new 96-page adventure. \Product{Ptolus} was created by one of the architects of 3rd Edition for the gaming professionals in his group.
+
+Now you can make it yours!".
+
+
+#.....
+#----- PZOMAL 1001
+
+base product PZOMAL 1001 =
+
+  title             "Collected Book of Experimental Might";
+  leader            "The";
+  subtitle          "For the First Time in Print!";
+  author            "Cook, Monte",
+                    "Reynolds, Sean K" developer;
+  editor            "Cook, Sue Weinlein" editing and production,
+                    "Jacobs, James" editor-in-chief;
+  illustrations     "Wood, Sam",
+                    "Yanner, Kieran",
+                    "White, Peter" interior page design,
+                    "Pocza, Drew" graphic design assistant,
+                    "Davis, James" managing art director;
+  typography        "";
+  date              January 2009;
+  ISBN              1-60125-080-0;
+  ISBN13            978-1-60125-080-3;
+  pages             144;
+  system            D&D 3.5;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Hardcover;
+  producer          Malhavoc Press;
+  number            Collected;
+  series            Book of Exerpimental Might;
+  price             $29.99;
+  contents          Book "";
+  layout            Color Cover;
+  description
+  "What started out as just an experiment on Monte's home campaigns has become the hottest set of options designed to enhance the excitement of your favorite roleplaying game --- so popular it spawned a sequel! Now, for the first time, you can get these two books in one print volume as \Product{The Collected Book of Experimental Might}.
+
+This collection of Monte's own house rules includes...
+
+\list
+{A spell progression system redefinging spell levels from 1 to 20}
+{New rules for fighting domains: areas of specialization like Two-Weapon Fighting, Mounted Combat, and Fighting Dirty, as well as techniques based on agility, speed, strength, and intellect --- the 15 domains provide new abilities to fighter types willing to devote themselves to a focused path}
+{A retooling of the feat system, with three new concepts --- double feats, oblation feats, and ueberfeats --- and dozens of new choices}
+{special benefits for choosing a feat as a fighter bonus feat, reinstating the fighter class as the king of feats}
+{New rules for healing and curative magic}
+{Powerful magical disciplines that allow wizards, clerics, druids, paladins, and rangers to have magic always active}
+{The runeblade, a base class that combines magic and martial skill without the need for spells}
+{Additional skills, feats, and combat rules}
+{Dozens of spells and magic items}
+
+Inherent within these two books is the idea that characters should be able to keep on adventuring longer than the rules currently allow and that every class can use some extra options for greater playability.
+
+\bold{Start your own experiment now!}
+
+This book combines \Product{The Book of Experimental Might} and \Product{The Book of Experimental Might II: Bloody, Bold, and Resolute}.
+".
+
+#.....

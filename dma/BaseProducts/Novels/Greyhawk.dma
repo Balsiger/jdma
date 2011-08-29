@@ -1,0 +1,481 @@
+#
+# File:         Greyhawk.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:
+#
+# Reviewer(s):
+#
+# Description:  Greyhawk novels
+#
+# Worlds:       Greyhawk
+#
+# Keywords:
+#
+# See_also:
+#
+#----------------------------------------------------------------------- RCS
+#
+# $Source: /home/cvsroot/DnD/Information/BaseProducts/Novels/Greyhawk.dma,v $
+#
+# $Revision: 1.8 $
+#
+# $Locker:  $
+# $State: Exp $
+# $Log: Greyhawk.dma,v $
+# Revision 1.8  2011-08-29 08:14:36  merlin
+# Updated to new structure.
+#
+# Revision 1.7  2009/03/25 16:27:11  merlin
+# no message
+#
+# Revision 1.6  2007/07/16 20:02:14  merlin
+# *** empty log message ***
+#
+# Revision 1.4  2005/01/02 12:04:19  merlin
+# added 1998 stuff
+#
+# Revision 1.3  2004/12/30 23:13:38  merlin
+# added year 2000
+#
+# Revision 1.2  2004/12/28 22:50:20  merlin
+# added year 2001
+#
+# Revision 1.1  2004/09/19 09:33:20  merlin
+# *** empty log message ***
+#
+# Revision 1.3  2003/05/21 16:35:57  merlin
+# updated to version Aboleth
+#
+# Revision 1.2  2001/11/09 21:53:01  merlin
+# updated again
+#
+# Revision 1.1  2001/08/21 22:31:11  merlin
+# *** empty log message ***
+#
+#
+#..............................................................................
+#
+#
+
+#----- TSR 8094
+
+base product TSR 8094 =
+
+  title             "Siege of the Tower";
+  leader            "The";
+  date              July 1994;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  number            Book Four;
+  series            New Series;
+  price             � 3.99;
+  worlds            Greyhawk;
+  references        catalogue94,
+                    catalogue96;
+  description
+  "".
+
+
+#.....
+#----- TSR 8099
+
+base product TSR 8099 =
+
+  title             "Bigby's Curse";
+  leader            "";
+  author            "Sargent, Carl";
+  date              October 1995;
+  pages             192;
+  system            Endless Quest;
+  audience          All;
+  product type      Adventure;
+  number            Book Ten;
+  series            New Series;
+  price             $ 3.95;
+  worlds            Greyhawk;
+  references        catalog95,
+                    catalogue96,
+                    Dragon 221;
+  description
+  "".
+
+
+#.....
+#----- TSR 8207
+
+base product TSR 8207 =
+
+  title             "Eye Have It";
+  leader            "The";
+  date              1989;
+  ISBN              0-88038-755-6;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalog93;
+  description
+  "".
+
+
+#.....
+#----- TSR 8213
+
+base product TSR 8213 =
+
+  title             "Nightwatch";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-914-1;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 3.95;
+  worlds            Greyhawk;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "all the fabled seers of Greyhawk have been killed".
+
+
+#.....
+#----- TSR 8240
+
+base product TSR 8240 =
+
+  title             "Saga of Old City";
+  leader            "";
+  date              1985;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            One;
+  series            Greyhawk;
+  worlds            Greyhawk;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8241
+
+base product TSR 8241 =
+
+  title             "Artifact of Evil";
+  leader            "";
+  date              1986;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Two;
+  series            Greyhawk;
+  worlds            Greyhawk;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8242
+
+base product TSR 8242 =
+
+  title             "Master Wolf";
+  leader            "";
+  date              1987;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Three;
+  series            Greyhawk;
+  worlds            Greyhawk;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8243
+
+base product TSR 8243 =
+
+  title             "Price of Power";
+  leader            "The";
+  date              1987;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Four;
+  series            Greyhawk;
+  worlds            Greyhawk;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8248
+
+base product TSR 8248 =
+
+  title             "Demon Hand";
+  leader            "The";
+  date              1988;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Five;
+  series            Greyhawk;
+  worlds            Greyhawk;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+#----- TSR 8249
+
+base product TSR 8249 =
+
+  title             "Name of the Game";
+  leader            "The";
+  date              1988;
+  system            None;
+  audience          All;
+  product type      Novel;
+  number            Six;
+  series            Greyhawk;
+  worlds            Greyhawk;
+  references        complete product listing;
+  description
+  "".
+
+
+#.....
+
+#----- TSR 21379
+
+base product TSR 21379 =
+
+  title             "Against the Giants";
+  leader            "";
+  subtitle          "Vengeance will be served";
+  author            "Emerson, Ru";
+  date              July 1999;
+  ISBN              0-7869-1379-7;
+  pages             310;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  price             $ 5.99;
+  worlds            Greyhawk;
+  references        net;
+  description
+  "A village burns while its attackers flee into the night. Enraged, the
+  \NPC{King of Keoland} orders an aging \Class{warrior} to lead a band of
+  adventurers on a retaliatory strike. As they prepare to enter the heart of
+  the monsters' lair, each knows only the bravest will survive. Against the
+  odds. Against the giants.".
+
+
+#.....
+#----- TSR 21424
+
+base product TSR 21424 =
+
+  title             "White Plume Mountain";
+  leader            "";
+  author            "Paul Kidd";
+  date              October 1999;
+  ISBN              0-7869-1424-6;
+  pages             310;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  series            Greyhawk Classics;
+  price             $ 5.99;
+  worlds            Greyhawk;
+  references        net,
+                    Dragon 263,
+                    Dragon 264;
+  description
+  "A remorseless \Class{ranger}.
+
+  A sentient \Monster{hell hound} pelt with a penchant for pyromania.
+
+  An irksome \Monster{pixie} who sells intrigue and information.
+
+  Three companions who find themselves trapped in a city filled with warring
+  priestly factions, devious machinations, and an angry \Monster{fiend}. To
+  save the city, they must find three weapons of power, which lie in the most
+  trap-laden, monster-infested place this side of \Place{\NPC{Acererak}'s
+  tomb}: \Place{White Plume Mountain}.".
+
+
+#.....
+#----- TSR 21635
+
+base product TSR 21635 =
+
+  title             "Descent into the Depths of the Earth";
+  leader            "";
+  subtitle          "The \Class{ranger} and the \Monster{faerie} are back!";
+  author            "Paul Kidd";
+  date              June 2000;
+  ISBN              0-7869-1635-4;
+  pages             310;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          TSR;
+  series            Greyhawk Classics;
+  price             $ 6.99;
+  worlds            Greyhawk;
+  references        net,
+                    Dragon 270;
+  description
+  "Fresh from their encounter at \Place{White Plume Mountain}, the
+  \NPC{Justicar} and \NPC{Escalla} are on the way to \Place{Hommlet}. But life
+  around a \Monster{pixie} is never exactly . . . stable. \NPC{Escalla} is
+  drawn into the intrigues of the \Monster{faerie} court. Before he knows it,
+  to save her life the \NPC{Justicar} is on his way into the depts of the earth
+  to fight \Monster{hobgoblins}, \Monster{drow}, and the \God{queen of the
+  demonweb pits}.
+
+  For an adventurer, it's all in a day's work.".
+
+
+#.....
+
+#----- WTC 88187
+
+base product WTC 88187 =
+
+  title             "Temple of Elemental Evil";
+  leader            "The";
+  subtitle          "";
+  author            "Reid, Thomas M.";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              May 2001;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Greyhawk Classics;
+  price             $ 6.99;
+  worlds            Greyhawk;
+  description
+  "A sinister force, long thought destroyed, stirs in the land. As a
+  \Monster{she-demon} bent on wreaking worldwide havoc struggles to escape her
+  prison and a foul demigod plots to bend her to his will, a band of desperate
+  heroes must infiltrate the very heart of darkness in a daring attempt to stop
+  them both.".
+
+
+#.....
+#----- WTC 88688
+
+base product WTC 88688 =
+
+  title             "Keep on the Borderlands";
+  leader            "";
+  subtitle          "";
+  author            "Emerson, Ru";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              November 2001;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Greyhawk Classics;
+  price             $ 6.99;
+  worlds            Greyhawk;
+  description
+  "\Product{Keep on the Borderlands} was one of the very first D&D adventures,
+  so seasoned gamers remember this product from their early days, and newer
+  gamers will recognize it from the 25th anniversary rerelease.
+
+  \Place{Greyhawk} novels are based on the classic D&D modules from this world
+  and provide readers with the same kind of feeling that they get playing
+  classic D&D modules.".
+
+
+#.....
+#----- WTC 88695
+
+base product WTC 88695 =
+
+  title             "Queen of the Demonweb Pits";
+  leader            "";
+  subtitle          "";
+  author            "Kidd, Paul";
+  editor            "",
+                    "";
+  cover             "",
+                    "";
+  cartography       "",
+                    "";
+  illustrations     "",
+                    "";
+  typography        "",
+                    "";
+  management        "",
+                    "";
+  date              October 2001;
+  ISBN              0-7869-1903-5;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  series            Greyhawk Classics;
+  price             $ 6.99;
+  worlds            Greyhawk;
+  description
+  "Revisiting classic adventures has been extremely successful. \Product{Queen
+  of the Demonweb Pits} was one of the most popular adventures ever created for
+  the Dungeons & Dragons game. This novelization appeals to those who have
+  played through the adventure, as well as to those who have an interest in
+  \Monster{drow elves}--one of the most popular races in the game.".
+
+
+#.....
