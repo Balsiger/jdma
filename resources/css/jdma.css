@@ -811,21 +811,20 @@ A.icon-link:hover {
 /* windows that are activated by mouse-over */
 SPAN.window, DIV.window
 {
-  position:           absolute;
-  background:         #ffffee;
-  z-index:            20;
-  margin-top:         25px;
-  margin-left:        -100px;
-  border-style:       ridge;
-  border-color:       blue;
-  border-width:       2px;
-  padding:            10px;
-  visibility:         hidden;
-  -moz-border-radius: 5pt;
-  color:              #222211;
-  font-weight:        normal;
-  max-width:          200px;
-  white-space:        normal;
+  position:     absolute;
+  background:   #eee;
+  z-index:      20;
+  margin-top:   25px;
+  margin-left:  -100px;
+  border-style: outset;
+  border-width: 2px;
+  padding:      10px;
+  visibility:   hidden;
+  color:        #222211;
+  font-weight:  normal;
+  max-width:    200px;
+  white-space:  normal;
+  box-shadow:   0 1px 3px #777;
 }
 
 
@@ -842,9 +841,9 @@ SPAN.HOUSE_RULE
 
 SPAN.ESTIMATION
 {
-    border-bottom-color: #008800;
-    border-bottom-width: 1px;
-    border-bottom-style: dotted;
+  border-bottom-color: #008800;
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
 }
 
 SPAN.computed

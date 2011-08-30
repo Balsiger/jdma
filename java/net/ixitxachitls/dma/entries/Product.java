@@ -29,6 +29,7 @@ import javax.annotation.Nullable;
 import net.ixitxachitls.dma.data.DMAData;
 // import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.entries.indexes.KeyIndex;
+import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
@@ -251,6 +252,14 @@ public class Product extends Entry<BaseProduct>
               + "%file %errors"
               );
 
+  /** The printer for printing in a list. */
+  public static final ListPrint s_listPrint =
+    new ListPrint("1:L(label);20:L(id)[ID];20(producttitle)[Title];"
+                  + "1:L(system)[System];1:L(worlds)[Worlds];"
+                  + "1:L(status)[Status]",
+                  "$label $listlink", null, "$name", "$+system", "$+worlds",
+                  "$status");
+
 //   /** The basic formatter for product. */
 //   public static final Index.Formatter<AbstractEntry> FORMATTER =
 //     new Index.Formatter<AbstractEntry>()
@@ -392,6 +401,20 @@ public class Product extends Entry<BaseProduct>
   protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
+  }
+
+  //........................................................................
+  //----------------------------- getListPrint -----------------------------
+
+  /**
+   * Get the print for a list entry.
+   *
+   * @return the print for list entry
+   *
+   */
+  protected @Nonnull ListPrint getListPrint()
+  {
+    return s_listPrint;
   }
 
   //........................................................................

@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -149,8 +150,9 @@ public class FormattedText extends BaseText<FormattedText>
    */
   protected @Nonnull Command doFormat()
   {
-    return new Command(m_text.replaceAll("\\s*(?:\n\n|\r\r)\\s*", "\\\\par ")
-                       .replaceAll("\\s+", " ").trim());
+    return new BaseCommand(m_text.replaceAll("\\s*(?:\n\n|\r\r)\\s*",
+                                             "\\\\par ")
+                           .replaceAll("\\s+", " ").trim());
   }
 
   //........................................................................

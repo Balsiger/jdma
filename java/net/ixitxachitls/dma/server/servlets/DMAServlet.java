@@ -143,7 +143,9 @@ public abstract class DMAServlet extends BaseServlet
                                    @Nonnull DMAData inBaseData)
   {
     // check if we need some nested data
-    String userID = Strings.getPattern(inPath, "^(?:/_entry)?/user/([^/]*)/");
+    String userID =
+      Strings.getPattern(inPath, "^(?:/_entry|/_entries|)/user/([^/]*)/");
+    System.out.println(inPath + ": " + userID);
     if(userID != null)
     {
       BaseCharacter user = inBaseData.getEntry(userID, BaseCharacter.TYPE);

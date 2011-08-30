@@ -55,7 +55,7 @@ import net.ixitxachitls.dma.values.Comment;
 import net.ixitxachitls.dma.values.Name;
 // import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
-// import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.ValueList;
 // import net.ixitxachitls.dma.values.modifiers.BaseModifier;
 // import net.ixitxachitls.dma.values.modifiers.NumberModifier;
 // import net.ixitxachitls.dma.values.modifiers.ValueModifier;
@@ -75,12 +75,13 @@ import net.ixitxachitls.output.commands.Par;
 import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
+import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.EmptyIterator;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
 // import net.ixitxachitls.util.Extractor;
 // import net.ixitxachitls.util.Identificator;
-// import net.ixitxachitls.util.Pair;
+import net.ixitxachitls.util.Pair;
 // import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Strings;
 // import net.ixitxachitls.util.UniqueIdentificator;
@@ -1058,6 +1059,115 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
+  //-------------------------- combineBaseValues ---------------------------
+
+  /**
+   * Combine specific values of all base entries into a single command.
+   *
+   * @param      inName the name of the value to obtain
+   *
+   * @return     the command for printing the value
+   *
+   */
+  public @Nonnull Command combineBaseValues(@Nonnull String inName)
+  {
+    List<Pair<BaseEntry, Value>> baseValues = getBaseValues(inName);
+
+    if(baseValues.isEmpty())
+      return new Command("");
+
+    List<Value> values = new ArrayList<Value>();
+    List<List<BaseEntry>> entries = new ArrayList<List<BaseEntry>>();
+    for(Pair<BaseEntry, Value> value : baseValues)
+      addBaseValue(values, entries, value.second(), value.first());
+
+    // Compute the command for printing.
+    List<Command> commands = new ArrayList<Command>();
+    Iterator<Value> i = values.iterator();
+    Iterator<List<BaseEntry>> j = entries.iterator();
+    while(i.hasNext() && j.hasNext())
+    {
+      Value value = i.next();
+      List<BaseEntry> entryList = j.next();
+      List<String> names = new ArrayList<String>();
+      for(BaseEntry entry : entryList)
+        names.add(entry.getName());
+
+      commands.add(new Window(value.format(), "from "
+                              + Strings.toString(names, ", ", "none")));
+    }
+
+    return new Command(commands);
+  }
+
+  //........................................................................
+  //----------------------------- addBaseValue -----------------------------
+
+  /**
+   * Add the given value to the list of entries currently process for base
+   * entry computation. This will add only unique values to the lists and
+   * groups entries together for the same values. Additionally, a ValueList
+   * will be added by it's element.
+   *
+   * @param       ioValues  all the values encountered
+   * @param       ioEntries all the entries encountered per value
+   * @param       inValue   the value to add
+   * @param       inEntry   the entry containing the value
+   *
+   */
+  private void addBaseValue(@Nonnull List<Value> ioValues,
+                            @Nonnull List<List<BaseEntry>> ioEntries,
+                            @Nonnull Value inValue, @Nonnull BaseEntry inEntry)
+  {
+    if(inValue instanceof ValueList)
+      for(Value value : (ValueList<? extends Value>)inValue)
+        addBaseValue(ioValues, ioEntries, value, inEntry);
+    else
+    {
+      int pos = ioValues.indexOf(inValue);
+      if(pos < 0)
+      {
+        ioValues.add(inValue);
+        List<BaseEntry> entries = new ArrayList<BaseEntry>();
+        entries.add(inEntry);
+        ioEntries.add(entries);
+      }
+      else
+        ioEntries.get(pos).add(inEntry);
+    }
+  }
+
+  //........................................................................
+  //---------------------------- getBaseValues -----------------------------
+
+  /**
+   * Get a list of all base values for a given name.
+   *
+   * @param       inName the name of the value to get
+   *
+   * @return      a list with all the values and where they were found
+   *
+   */
+  public @Nonnull List<Pair<BaseEntry, Value>> getBaseValues
+    (@Nonnull String inName)
+  {
+    List<Pair<BaseEntry, Value>> values =
+      new ArrayList<Pair<BaseEntry, Value>>();
+
+    if(m_baseEntries != null)
+      for(BaseEntry base : m_baseEntries)
+      {
+        values.addAll(base.getBaseValues(inName));
+        Value value = base.getValue(inName);
+        if(value != null && value.isDefined())
+          values.add(new Pair<BaseEntry, Value>(base, value));
+      }
+
+    return values;
+  }
+
+  //........................................................................
+
   //----------------------- getFirstDefinedBaseValue -----------------------
 
   /**
@@ -1102,7 +1212,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested value or null if not found or undefined
    *
    */
-//   @SuppressWarnings("unchecked") // having to case base entry to given T
+//   @SuppressWarnings("unchecked") // having to cast base entry to given T
 //   protected <T extends BaseEntry, S, V>
 //   S getBaseValues(Extractor<T, V> inExtractor, Combiner<S, V> inCombiner,
 //                   S ioResult)

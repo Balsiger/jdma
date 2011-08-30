@@ -309,24 +309,24 @@ public class DMAServer extends WebServer
 
     m_server.setHandler(handler);
 
-    addRewrite(handler, "^(.*)\\.pdf", "/pdf$1");
+    addRewrite(handler, "^(.+)\\.pdf", "/pdf$1");
     for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
     {
       if(type instanceof BaseType)
       {
-        addRewrite(handler, "^(|pdf)/" + type.getLink() + "/(.*)",
+        addRewrite(handler, "^(|pdf)/" + type.getLink() + "/([^/]+)$",
                    "$1/_entry/" + type.getName() + "/$2");
         addRewrite(handler, "^/" + type.getMultipleLink() + "/?",
                    "/_entries/" + type.getName());
-        addRewrite(handler, "^/" + type.getMultipleLink() + "/(.*)",
+        addRewrite(handler, "^/" + type.getMultipleLink() + "/(.+)",
                    "/_index/" + type.getName() + "/$1");
       }
       else
       {
-        addRewrite(handler, "/user/(.*)/" + type.getName() + "/(.*)",
+        addRewrite(handler, "/user/([^/]+)/" + type.getName() + "/(.+)",
                    "/_entry/user/$1/" + type.getName() + "/$2");
-        addRewrite(handler, "/user/(.*)/" + type.getMultipleLink() + "/(.*)",
-                   "/_entries/" + type.getName() + "/$2");
+        addRewrite(handler, "/user/([^/]+)/" + type.getMultipleLink(),
+                   "/_entries/user/$1/" + type.getName());
       }
     }
 

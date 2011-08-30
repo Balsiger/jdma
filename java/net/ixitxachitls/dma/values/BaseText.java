@@ -28,6 +28,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -154,8 +155,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    */
   protected @Nonnull Command doFormat()
   {
-    // TODO: we might have to parse the string here!
-    return new Command(m_text);
+    return new BaseCommand(m_text);
   }
 
   //........................................................................

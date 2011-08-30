@@ -100,6 +100,7 @@ public class EntryListServlet extends PageServlet
   /**
    * Get the entries in the given page range.
    *
+   * @param       inPath the path used to access the entries
    * @param       inType the type of entries to get
    *
    * @return      a list of all entries in range
@@ -107,9 +108,10 @@ public class EntryListServlet extends PageServlet
    */
   @SuppressWarnings("unchecked") // need to cast
   public List<AbstractEntry>
-    getEntries(@Nonnull AbstractType<? extends AbstractEntry> inType)
+    getEntries(@Nonnull String inPath,
+               @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    return (List<AbstractEntry>)m_data.getEntriesList(inType);
+    return (List<AbstractEntry>)getData(inPath, m_data).getEntriesList(inType);
   }
 
   //........................................................................
@@ -150,7 +152,7 @@ public class EntryListServlet extends PageServlet
     Log.info("serving dynamic list " + title);
 
     // TODO: extract dm from request
-    format(inWriter, getEntries(type), true, title, new Title(title),
+    format(inWriter, getEntries(inPath, type), true, title, new Title(title),
            inRequest.getPagination(), inRequest.getPageSize());
 
     addNavigation(inWriter,
@@ -244,7 +246,8 @@ public class EntryListServlet extends PageServlet
 
           @Override
           public List<AbstractEntry>
-            getEntries(AbstractType<? extends AbstractEntry> inType)
+            getEntries(String inPath,
+                       AbstractType<? extends AbstractEntry> inType)
           {
             return inEntries;
           }

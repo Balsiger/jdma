@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
@@ -137,14 +138,16 @@ public class AbstractPrint
         if(token.isEmpty())
           continue;
 
-        if("$%".indexOf(token.charAt(0)) < 0)
+        char prefix = token.charAt(0);
+
+        if("$%".indexOf(prefix) < 0)
           result.add(token);
         else
         {
           String name = token.substring(1);
-          ValueHandle handle = inEntry.computeValue(name, inDM);
+          ValueHandle handle = compute(inEntry, name, inDM);
 
-          switch(token.charAt(0))
+          switch(prefix)
           {
             case '$':
               // A simple, directly printed value
@@ -156,6 +159,7 @@ public class AbstractPrint
               }
               else
                 result.add(new Color("error", " * " + name + " * "));
+
               break;
 
             case '%':
@@ -195,6 +199,35 @@ public class AbstractPrint
   }
 
   //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Computes the value for the given name.
+   *
+   * @param       inEntry     the entry with the values
+   * @param       inName the name of the value to compute
+   * @param       inDM   true if computing for dm, false if not
+   *
+   * @return      the computed value or null if not found
+   *
+   */
+  public @Nullable ValueHandle compute(@Nonnull AbstractEntry inEntry,
+                                       @Nonnull String inName, boolean inDM)
+  {
+    switch(inName.charAt(0))
+    {
+      case '+':
+        return new FormattedValue
+          (inEntry.combineBaseValues(inName.substring(1)), null, inName, inDM,
+           false, false, false, null, null);
+
+      default:
+        return inEntry.computeValue(inName, inDM);
+    }
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

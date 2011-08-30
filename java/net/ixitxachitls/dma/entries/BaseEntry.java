@@ -50,7 +50,7 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
 //import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.BaseCommand;
+//import net.ixitxachitls.output.commands.BaseCommand;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.Hrule;
@@ -59,7 +59,7 @@ import net.ixitxachitls.output.commands.BaseCommand;
 // import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Super;
-import net.ixitxachitls.output.commands.Textblock;
+//import net.ixitxachitls.output.commands.Textblock;
 //import net.ixitxachitls.util.MultiIterator;
 //import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.Encodings;
@@ -742,30 +742,6 @@ public class BaseEntry extends AbstractEntry
 
   //........................................................................
 
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("description".equals(inKey))
-      return new FormattedValue
-        (new Textblock(new BaseCommand(m_description.get()), "desc"),
-         m_description, "description", false, true, false, false,
-         "descriptions", "");
-
-    return super.computeValue(inKey, inDM);
-  }
-
-  //........................................................................
   //----------------------------- printCommand -----------------------------
 
   /**
