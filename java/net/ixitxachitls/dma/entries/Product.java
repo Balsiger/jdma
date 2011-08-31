@@ -260,69 +260,6 @@ public class Product extends Entry<BaseProduct>
                   "$label $listlink", null, "$name", "$+system", "$+worlds",
                   "$status");
 
-//   /** The basic formatter for product. */
-//   public static final Index.Formatter<AbstractEntry> FORMATTER =
-//     new Index.Formatter<AbstractEntry>()
-//     {
-//    public java.util.List<Object> format(String inKey, AbstractEntry inEntry)
-//       {
-//       java.util.List<Object> list = Entry.FORMATTER.format(inKey, inEntry);
-
-//         if(!(inEntry instanceof Product))
-//           return list;
-
-//         Product product  = (Product)inEntry;
-
-//         // title
-//         list.add(new Link(product.getFullTitle(),
-//                           "/entry/" + product.getBaseType().getLink()
-//                           + "/" + product.getName()));
-//         list.add(product.getWorld());
-//         list.add(product.getSystem());
-//         list.add(product.getProductType());
-//         list.add(product.getStyle());
-
-//         // series
-//         List<String> series = product.getSeries();
-
-//         String volume = product.getVolume();
-//         if(volume != null && volume.length() > 0)
-//         {
-//           series.add(", ");
-//           series.add(volume);
-//         }
-
-//         int number = product.getNumberValue();
-//         if(number > 0)
-//         {
-//           series.add(", ");
-//           series.add("" + number);
-//         }
-
-//         list.add(new Command(series.toArray()));
-//         list.add(product.createValueCommand(product.m_edition, "edition",
-//                                             true));
-//         list.add(product.createValueCommand(product.m_printing, "printing",
-//                                             true));
-//         list.add(product.createValueCommand(product.m_condition, "condition",
-//                                             true));
-
-//         return list;
-//       }
-//     };
-
-//   /** The basic format for a product. */
-//   public static final String FORMAT = Entry.FORMAT
-//     + ";30:L(fullname)[Title];"
-//     + "12:L(world)[World];"
-//     + "10:L(system)[System];"
-//     + "10:L(type)[Type];"
-//     + "10:L(style)[style];"
-//     + "20:L(series)[Series];"
-//     + "5:L(edition)[Ed.];"
-//     + "5:L(printing)[Pr.];"
-//     + "10:L(condition)[Cond.]";
-
   //----- edition ----------------------------------------------------------
 
   /** The edition of the copy. */
@@ -826,27 +763,31 @@ public class Product extends Entry<BaseProduct>
 //                         }, COMBINER_KEEP_FIRST);
 //   }
 
-//   //........................................................................
-//   //------------------------------ getFullTitle ----------------------------
+//   //.......................................................................
+  //------------------------------ getFullTitle ----------------------------
 
-//   /**
-//    * Get the full title of the product.
-//    *
-//    * @return      the requested title or null if undefined
-//    *
-//    */
-//   public @MayReturnNull String getFullTitle()
-//   {
-//     return getBaseValue(new Extractor<BaseProduct, String>()
-//                         {
-//                           public String get(BaseProduct inBase)
-//                           {
-//                             return inBase.getFullTitle();
-//                           }
-//                         }, COMBINER_KEEP_FIRST);
-//   }
+  /**
+   * Get the full title of the product.
+   *
+   * @return      the requested title or null if undefined
+   *
+   */
+  public @Nonnull String getFullTitle()
+  {
+    for(BaseEntry base : getBaseEntries())
+    {
+      if(!(base instanceof BaseProduct))
+        continue;
 
-//   //........................................................................
+      String title = ((BaseProduct)base).getFullTitle();
+      if(!title.isEmpty())
+        return title;
+    }
+
+    return null;
+  }
+
+  //........................................................................
 
 //   //----------------------------- hasSeries ------------------------------
 

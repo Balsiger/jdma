@@ -23,8 +23,10 @@
 
 package net.ixitxachitls.dma.entries;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
 //import java.util.Iterator;
+  import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -42,9 +44,12 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Text;
 //import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.TypeIterator;
+import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -186,7 +191,7 @@ public class BaseCharacter extends BaseEntry
               + "$clear $files\n " // need to start a new line for ascii
               + "%name "
               + "%{real name} %email %password %products %{last login} "
-              + "%{last action} %token %group %characters "
+              + "%{last action} %token %group %characters %products "
               + "%file %errors");
 
   /** The printer for printing in a list. */
@@ -203,6 +208,10 @@ public class BaseCharacter extends BaseEntry
 
   /** The length of a token. */
   private static final int TOKEN_LENGTH = 20;
+
+  /** The number of recent products to show. */
+  private static final int MAX_PRODUCTS =
+    Config.get("entries/basecharacter.products", 5);
 
   //----- real name --------------------------------------------------------
 
@@ -587,6 +596,42 @@ public class BaseCharacter extends BaseEntry
   public @Nullable ValueHandle computeValue(@Nonnull String inKey,
                                             boolean inDM)
   {
+    if("products".equals(inKey))
+    {
+      List<AbstractEntry> products = new ArrayList<AbstractEntry>();
+      List<AbstractEntry> entries =
+        m_productData.getFile(m_productData.files(Product.TYPE).get(0))
+        .getEntries();
+      ListIterator<AbstractEntry> i = entries.listIterator();
+      while(i.hasNext())
+        i.next();
+
+      while(i.hasPrevious() && products.size() <= MAX_PRODUCTS)
+        products.add(i.previous());
+
+      List<Object> commands = new ArrayList<Object>();
+      boolean more = products.size() > MAX_PRODUCTS;
+      if(more)
+        products.remove(products.size() - 1);
+
+      for(AbstractEntry product : products)
+      {
+        commands.add(new Link(((Product)product).getFullTitle(),
+                              product.getPath()));
+        commands.add(", ");
+      }
+
+      if(more)
+        commands.add("... ");
+
+      commands.add("| ");
+      commands.add(new Link("view all", getPath() + "/products"));
+
+      return new FormattedValue(new Command(commands), null, "products", false,
+                                false, false, false, null, null);
+    }
+
+
     return super.computeValue(inKey, inDM);
   }
 

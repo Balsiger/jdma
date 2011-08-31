@@ -1167,38 +1167,28 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-
   //----------------------- getFirstDefinedBaseValue -----------------------
 
   /**
    * Get the first defined value from any of the bases.
    *
-   * @param       inExtractor the extractor to get the values
+   * @param       inName the name of the value to get
    *
    * @return      the requested value or null if not found or undefined
    *
    */
-//   @MayReturnNull
-//   @SuppressWarnings("unchecked") // having to case base entry to given T
-//   protected <T extends BaseEntry, V extends Value>
-//     V getFirstDefinedBaseValue(Extractor<T, V> inExtractor)
-//   {
-//     if(m_baseEntries == null)
-//       return null;
+  public @Nullable Value getFirstDefinedBaseValue(@Nonnull String inName)
+  {
+    if(m_baseEntries == null)
+      return null;
 
-//     for(BaseEntry base : m_baseEntries)
-//     {
-//       if(base == null)
-//         continue;
+    List<Pair<BaseEntry, Value>> values = getBaseValues(inName);
+    for(Pair<BaseEntry, Value> value : values)
+      if(value.second().isDefined())
+        return value.second();
 
-//       V value = inExtractor.get((T)base);
-
-//       if(value.isDefined())
-//         return value;
-//     }
-
-//     return null;
-//   }
+    return null;
+  }
 
   //........................................................................
   //----------------------------- getBaseValues ----------------------------
@@ -1977,7 +1967,7 @@ public class AbstractEntry extends ValueGroup
    */
   public @Nonnull String getPath()
   {
-    return "/" + getType().getMultipleLink() + "/" + getID();
+    return "/" + getType().getLink() + "/" + getID();
   }
 
   //........................................................................
