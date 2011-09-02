@@ -8,9 +8,9 @@ base character Merlin =
   email             "balsiger@ixitxachitls.net";
   password          "retep$reg";
   products          "Products/Merlin.dma";
-  last login        "Friday, August 26 2011 (09:22)";
-  last action       "Friday, August 26 2011 (09:22)";
-  token             "OSNNRHGFIVZIHLVZOHQW";
+  last login        "Friday, September 2 2011 (19:06)";
+  last action       "Friday, September 2 2011 (19:06)";
+  token             "MNRKFOOGZMYJYKIVGDBO";
   group             Admin.
 
 #.....

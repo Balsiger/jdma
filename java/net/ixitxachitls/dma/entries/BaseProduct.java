@@ -64,6 +64,7 @@ import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Subtitle;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -772,7 +773,7 @@ public class BaseProduct extends BaseEntry
               + "${short description} $description"
               + "$par "
               + "%base %synonyms "
-              + "%notes "
+              + "%notes %owners "
               + "%system %audience %style %producer %layout %{product type} "
               + "%author %editor %cover %cartography "
               + "%illustrations %typography %management "
@@ -2160,6 +2161,27 @@ public class BaseProduct extends BaseEntry
       return new FormattedValue
         (new Subtitle(new BaseCommand(m_subtitle.get())),
          null, "subtitle", false, false, false, false, "subtitles", "");
+
+    if("owners".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      for(BaseCharacter owner : m_data.getEntriesList(BaseCharacter.TYPE))
+        for(Product product : owner.getProducts())
+        {
+          if(product.isBasedOn(this))
+          {
+            if(!commands.isEmpty())
+              commands.add(", ");
+
+            commands.add(new Link(owner.getName(), product.getPath()));
+          }
+        }
+
+      commands.add(" | ");
+      commands.add(new Link("add", "/user/me/product/" + getID() + "?create"));
+      return new FormattedValue(new Command(commands), null, "owners", false,
+                                false, false, false, null, null);
+    }
 
     return super.computeValue(inKey, inDM);
   }

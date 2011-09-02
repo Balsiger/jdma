@@ -386,7 +386,7 @@ public class AbstractEntry extends ValueGroup
   /** The name of the abstract entry. */
   @Key("name")
   @NoStore
-  @Note("Changing this value will not change any references to entries with "
+  @Note("Changing the name will not change any references to entries with "
         + "that name, thus leaving these references dangling. You will have "
         + "to update these manually.")
   protected Name m_name = new Name();
@@ -1332,6 +1332,32 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------------ isBasedOn -------------------------------
+
+  /**
+   * Checks whether this entry is based on the given one, directly or
+   * indirectly.
+   *
+   * @param      inBase the base entry to look for
+   *
+   * @return     true if this entry is directly or indirectly based on the
+   *             given entry, false else
+   *
+   */
+  public boolean isBasedOn(@Nonnull BaseEntry inBase)
+  {
+    if(m_baseEntries == null)
+      return false;
+
+    for(BaseEntry base : m_baseEntries)
+      if(base == inBase || inBase.isBasedOn(inBase))
+        return true;
+
+    return false;
+  }
+
+  //........................................................................
+
 
   //------------------------------- toString -------------------------------
 
@@ -1791,10 +1817,10 @@ public class AbstractEntry extends ValueGroup
       if(m_file == null)
         return new FormattedValue
           (new Editable(getName(), getType(), "<please select>", "file", "",
-                        "selection[file]",
-                        Strings.toString(m_file.getData().files(getType()),
-                                         "||", "")),
-           null, "file", true, false, false, false, "files", "");
+                        "selection[file]", null,
+                        Strings.toString(m_data.files(getType()),
+                                         "||", ""), null),
+           null, "file", true, false, false, false, null, null);
       else
         return new FormattedValue
           (new Command
@@ -1812,7 +1838,7 @@ public class AbstractEntry extends ValueGroup
             m_startLine,
             " to ",
             m_endLine),
-           null, "file", true, false, false, false, "files", "");
+           null, "file", true, false, false, false, null, null);
     }
 
     if("errors".equals(inKey))
@@ -2101,6 +2127,20 @@ public class AbstractEntry extends ValueGroup
   public void setTrailingComment(@Nonnull Comment inComment)
   {
     m_trailingComment = inComment;
+  }
+
+  //........................................................................
+  //------------------------------- setOwner -------------------------------
+
+  /**
+   * Set the owner of the entry.
+   *
+   * @param       AbstractEntry the owning entry
+   *
+   */
+  public void setOwner(@Nonnull AbstractEntry inOwner)
+  {
+    // abstract entries don't have an owner
   }
 
   //........................................................................

@@ -384,14 +384,13 @@ public class BaseCharacter extends BaseEntry
     *
     * Get all the products of this character.
     *
-    * @return      an iterator over all the products
+    * @return      all the products
     *
     */
-//   public Iterator<Product> getProducts()
-//   {
-//     return new TypeIterator<AbstractEntry, Product>
-//       (m_productEntries.getAbstractEntries(), Product.class);
-//   }
+  public List<Product> getProducts()
+  {
+    return m_productData.getEntriesList(Product.TYPE);
+  }
 
   //........................................................................
   //--------------------------- getProductData -----------------------------

@@ -133,25 +133,32 @@ public abstract class DMAServlet extends BaseServlet
   /**
    * Get the data associated with the given request.
    *
+   * @param       inRequest  the request for the page
    * @param       inPath     the path to the page
    * @param       inBaseData the available base data
    *
    * @return      the data to use
    *
    */
-  public @Nullable DMAData getData(@Nonnull String inPath,
+  public @Nullable DMAData getData(@Nonnull DMARequest inRequest,
+                                   @Nonnull String inPath,
                                    @Nonnull DMAData inBaseData)
   {
     // check if we need some nested data
     String userID =
-      Strings.getPattern(inPath, "^(?:/_entry|/_entries|)/user/([^/]*)/");
-    System.out.println(inPath + ": " + userID);
-    if(userID != null)
-    {
-      BaseCharacter user = inBaseData.getEntry(userID, BaseCharacter.TYPE);
-      if(user != null)
-        return user.getProductData();
-    }
+      Strings.getPattern(inPath,
+                         "^(?:/_entry|/_entries|)/(?:user|base character)/"
+                         + "([^/]*)/.+");
+
+    BaseCharacter user = null;
+    if("me".equals(userID))
+      user = inRequest.getUser();
+    else
+      if(userID != null)
+        user = inBaseData.getEntry(userID, BaseCharacter.TYPE);
+
+    if(user != null)
+      return user.getProductData();
 
     return inBaseData;
   }

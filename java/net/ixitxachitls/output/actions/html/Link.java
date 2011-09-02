@@ -170,7 +170,7 @@ public class Link extends Action
 
     if(!name.equals("index") && !name.matches(".*/index")
        && !name.startsWith("http://") && !name.startsWith("/index/")
-       && !"/".equals(name))
+       && !"/".equals(name) && !name.startsWith("javascript:"))
     {
       String dir = Files.path(name);
       name = dir + Files.encodeName(name.substring(dir.length()));

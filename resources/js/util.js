@@ -148,7 +148,10 @@ util.reload = function(inPage)
   */
 util.link = function(inEvent, inTarget, inFunction)
 {
-  window.console.log(inTarget);
+  window.console.log("target", inTarget)
+  if(inTarget && inTarget.match('^javascript:'))
+    return true;
+
   if(inEvent)
   {
     inEvent.preventDefault();

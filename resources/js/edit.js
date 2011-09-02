@@ -54,13 +54,6 @@ edit.makeEditable = function()
 
   $(target).dblclick(edit.edit);
   $(target).bind('contextmenu', edit.edit);
-
-  if(location.search == '?create')
-  {
-    edit.editAll();
-    $(':input')[0].focus();
-    window.scroll(0, 0);
-  }
 }
 
 //..........................................................................
@@ -85,8 +78,9 @@ edit.makeEditable = function()
   $(element).unbind('dblclick', edit.edit);
   $(element).unbind('contextmenu', edit.edit);
 
-  for(var i = 0; i < element.__edit.length; i++)
-    edit.editValue(element.__edit[i], element, inNoRelated);
+  if(element.__edit)
+    for(var i = 0; i < element.__edit.length; i++)
+      edit.editValue(element.__edit[i], element, inNoRelated);
 
   gui.addAction('save', 'Save', edit.save);
   gui.addAction('cancel', 'Cancel', util.link);
@@ -177,7 +171,6 @@ edit.save = function()
   for(var i = 0, editable; editable = edit.all[i]; i++)
     editable.save(values);
 
-  window.console.log("saving", values);
   // send the data to the server
   util.ajax('/actions/save', values,
             function(inResult) { eval(inResult); });
@@ -206,18 +199,6 @@ edit.unparsed = function(inEntry, inID, inKey, inText)
       container.addClass('unparsed');
       container.append('<div class="unparsed-rest">' + inText + '</div>');
     }, 100);
-
-
-
-//     if(element.getAttribute("key") == inKey)
-//     {
-//       element.__unparsed = inText;
-//       element.innerHTML += "<span class='error'>" + inText + "</span>";
-//       element.style.display = "";
-//       element.parentNode.removeChild(element.__edit._element);
-
-//       break;
-//     }
 }
 
 //..........................................................................
@@ -233,6 +214,13 @@ edit.refresh = function()
   $('dmaeditable').each(edit.makeEditable);
   gui.removeAction('save');
   gui.removeAction('cancel');
+
+  if(location.search == '?create')
+  {
+    edit.editAll();
+    $(':input')[0].focus();
+    window.scroll(0, 0);
+  }
 };
 
 //..........................................................................
@@ -589,7 +577,6 @@ edit.Field.prototype._updateDecoration = function(inFocus, inMouse) {
   */
 edit.Field.prototype._getValue = function()
 {
-  window.console.log("base value", this, this._field);
   return $(this._field).attr('value');
   this._field = "guru";
 };
@@ -601,7 +588,6 @@ edit.Field.prototype._undefine = function()
 {
   edit.Field._super._undefine.call(this);
 
-  window.console.log("undefine", this._field);
   $(this._field).attr('value', '');
   $(this._field).addClass('edit-undefined');
 };

@@ -133,7 +133,7 @@ public class SaveActionServlet extends ActionServlet
         continue;
 
       String fullType = parts[0];
-      DMAData data = getData(fullType, m_data);
+      DMAData data = getData(inRequest, fullType, m_data);
       String typeName = Strings.getPattern(fullType, "/([^/]+)$");
       AbstractType<? extends AbstractEntry> type = null;
       if(typeName != null)

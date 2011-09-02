@@ -370,8 +370,7 @@ public class Product extends Entry<BaseProduct>
   }
 
   //........................................................................
-
-  //------------------------------- getEditType --------------------------------
+  //----------------------------- getEditType ------------------------------
 
   /**
    * Get the type of the entry.
@@ -406,6 +405,7 @@ public class Product extends Entry<BaseProduct>
   }
 
   //........................................................................
+
 
 //   //----------------------------- getEdition -------------------------------
 
@@ -971,6 +971,21 @@ public class Product extends Entry<BaseProduct>
 //   }
 
 //   //........................................................................
+    //------------------------------- setOwner -------------------------------
+
+  /**
+   * Set the owner of the entry.
+   *
+   * @param       AbstractEntry the owning entry
+   *
+   */
+  public void setOwner(@Nonnull AbstractEntry inOwner)
+  {
+    if(inOwner instanceof BaseCharacter)
+      setOwner((BaseCharacter)inOwner);
+  }
+
+  //........................................................................
   //------------------------------ setOwner -------------------------------
 
   /**
@@ -981,7 +996,7 @@ public class Product extends Entry<BaseProduct>
    * @return      true if set, false if not
    *
    */
-  public boolean setOwner(BaseCharacter inOwner)
+  public boolean setOwner(@Nonnull BaseCharacter inOwner)
   {
     m_owner = inOwner;
     return true;

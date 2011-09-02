@@ -229,7 +229,8 @@ public class Variable extends ValueHandle
    */
   public @Nonnull String toString()
   {
-    return "var " + m_key;
+    return "var " + m_key + " (" + (isEditable() ? "editable" : "not editable")
+      + (isDMOnly() ? ", DM" : "") + ")";
   }
 
   //........................................................................

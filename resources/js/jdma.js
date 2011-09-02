@@ -56,7 +56,7 @@ function login()
       modal: true,
       resizable: false,
       width: 300,
-      dialogClass: 'login-dialog',
+      dialogClass: 'login-dialog dialog',
       buttons: [
           {
             id:  'login-button',
@@ -75,7 +75,14 @@ function login()
         ]
     });
 
-  setupValidation(loginDialog);
+  // submit on return if valid
+  loginDialog.keyup(function(event) {
+      if(event.keyCode == 13 && !$('#login-button').is(':disabled'))
+        $('#login-button').click();
+    });
+
+
+  form.setupValidation(loginDialog);
 }
 
 //..........................................................................
@@ -88,6 +95,55 @@ function login()
 function logout()
 {
   doLogout();
+}
+
+//..........................................................................
+//------------------------------ createEntry -------------------------------
+
+/**
+ * Create a new entry.
+ */
+function createEntry()
+{
+  var entryDialog = $('<div id="create-entry"/>')
+    .html('<label>ID<br>'
+          + '<input type="text" name="id" validate="name" '
+          + 'validateButton="#create-button" size="30" maxlength="30">'
+          + '</label>'
+          + '<p>')
+    .dialog({
+      title: 'Entry Creation',
+      modal: true,
+      resizable: false,
+      width: 300,
+      closeOnEscape: true,
+      dialogClass: 'create-dialog dialog',
+      buttons: [
+          {
+            id:  'create-button',
+            text: 'Create',
+            click: function() {
+              $(this).dialog('close');
+              util.link(event,
+                        $('input[name="id"]', this)[0].value + '?create');
+            }
+          },
+          {
+            text: 'Cancel',
+            click: function() {
+              $(this).dialog('close');
+            }
+          }
+      ]
+    });
+
+  // submit on return if valid
+  entryDialog.keyup(function(event) {
+      if(event.keyCode == 13 && !$('#create-button').is(':disabled'))
+        $('#create-button').click();
+    });
+
+  form.setupValidation(entryDialog);
 }
 
 //..........................................................................

@@ -193,6 +193,15 @@ DIV.last
   background-position: -140px;
 }
 
+DIV.add
+{
+  background-position: -180px;
+}
+
+DIV.remove
+{
+  background-position: -190px;
+}
 
 /******************************************************************************
  * about
@@ -437,7 +446,7 @@ A.paginate-previous
  * jQuery overrides
  *****************************************************************************/
 
-.login-dialog
+.dialog
 {
   font-size:  90%;
   box-shadow: 3px 3px 7px #777;

@@ -107,16 +107,18 @@ public class EntryServlet extends PageServlet
   /**
    * Get the abstract entry associated with the given request.
    *
-   * @param       inData the data to use
-   * @param       inPath the path to the page
+   * @param       inRequest the original request for the page
+   * @param       inData    the data to use
+   * @param       inPath    the path to the page
    *
    * @return      the entry or null if it could not be found
    *
    */
-  public @Nullable AbstractEntry getEntry(@Nonnull DMAData inData,
+  public @Nullable AbstractEntry getEntry(@Nonnull DMARequest inRequest,
+                                          @Nonnull DMAData inData,
                                           @Nonnull String inPath)
   {
-    String id = getID(inPath);
+    String id = getID(inRequest, inPath);
     AbstractType<? extends AbstractEntry> type = getType(inPath);
 
     if(type == null || id == null)
@@ -168,13 +170,19 @@ public class EntryServlet extends PageServlet
   /**
    * Get the id associated with the given request.
    *
-   * @param       inPath the path to the page
+   * @param       inRequest the original request for the page
+   * @param       inPath    the path to the page
    *
    * @return      the id of the entry
    *
    */
-  public @Nullable String getID(@Nonnull String inPath)
+  public @Nullable String getID(@Nonnull DMARequest inRequest,
+                                @Nonnull String inPath)
   {
+    // handle /user/me specially
+    if(inPath.endsWith("/base character/me"))
+      return inRequest.getUser().getID();
+
     return Strings.getPattern(inPath, "/([^/]*?)$");
   }
 
@@ -335,8 +343,8 @@ public class EntryServlet extends PageServlet
       inPath = inPath.substring(0, inPath.length() - 4);
     }
 
-    DMAData data = getData(inPath, m_data);
-    AbstractEntry entry = getEntry(data, inPath);
+    DMAData data = getData(inRequest, inPath, m_data);
+    AbstractEntry entry = getEntry(inRequest, data, inPath);
 
     if(entry == null)
     {
@@ -352,7 +360,7 @@ public class EntryServlet extends PageServlet
         return;
       }
 
-      String id = getID(inPath);
+      String id = getID(inRequest, inPath);
 
       if(id == null || id.isEmpty())
       {
@@ -370,6 +378,7 @@ public class EntryServlet extends PageServlet
         Log.info("creating " + type + " '" + id + "'");
 
         entry = type.create(id, m_data);
+        entry.setOwner(inRequest.getUser());
       }
 
       if(entry == null)
@@ -425,7 +434,12 @@ public class EntryServlet extends PageServlet
                               new Link(new Divider("last sprite"
                                                    + (last == null
                                                       ? " disabled" : ""), ""),
-                                       last == null ? "" : getPath(last))));
+                                       last == null ? "" : getPath(last)),
+                              new Link(new Divider("add sprite", ""),
+                                       "javascrip:createEntry()"),
+                              new Link(new Divider("remove sprite", ""),
+                                       "javascript:removeEntry('"
+                                       + entry.getID() + "')")));
 
     document.add(navigation);
 
@@ -585,7 +599,7 @@ public class EntryServlet extends PageServlet
           private static final long serialVersionUID = 1L;
 
           @Override
-          public String getID(String inPath)
+          public String getID(DMARequest inRequest, String inPath)
           {
             m_paths.add(inPath);
             return inID;
@@ -605,7 +619,8 @@ public class EntryServlet extends PageServlet
           }
 
           @Override
-          public AbstractEntry getEntry(DMAData inData, String inPath)
+          public AbstractEntry getEntry(DMARequest inRequest, DMAData inData,
+                                        String inPath)
           {
             m_paths.add(inPath);
             return inEntry;
@@ -868,22 +883,25 @@ public class EntryServlet extends PageServlet
 
       EasyMock.replay(m_request, m_response);
 
-      assertEquals("simple", "id", servlet.getID("/just/some/path/id"));
-      assertEquals("simple", "id", servlet.getID("/id"));
+      assertEquals("simple", "id", servlet.getID(m_request,
+                                                 "/just/some/path/id"));
+      assertEquals("simple", "id", servlet.getID(m_request, "/id"));
       assertEquals("simple", "id.txt-some",
-                   servlet.getID("/just/some/path/id.txt-some"));
-      assertNull("simple", servlet.getID("id"));
-      assertEquals("simple", "", servlet.getID("/just/some/path/"));
+                   servlet.getID(m_request, "/just/some/path/id.txt-some"));
+      assertNull("simple", servlet.getID(m_request, "id"));
+      assertEquals("simple", "", servlet.getID(m_request, "/just/some/path/"));
 
       assertEquals("entry", "test",
-                   servlet.getEntry(servlet.m_data,
+                   servlet.getEntry(m_request, servlet.m_data,
                                     "/just/some/entry/test").getName());
       assertEquals("entry", "test",
-                   servlet.getEntry(servlet.m_data, "/entry/test").getName());
-      assertNull("entry", servlet.getEntry(servlet.m_data, "test"));
-      assertNull("entry", servlet.getEntry(servlet.m_data, ""));
-      assertNull("entry", servlet.getEntry(servlet.m_data, "test/"));
-      assertNull("entry", servlet.getEntry(servlet.m_data, "test/guru"));
+                   servlet.getEntry(m_request, servlet.m_data,
+                                    "/entry/test").getName());
+      assertNull("entry", servlet.getEntry(m_request, servlet.m_data, "test"));
+      assertNull("entry", servlet.getEntry(m_request, servlet.m_data, ""));
+      assertNull("entry", servlet.getEntry(m_request, servlet.m_data, "test/"));
+      assertNull("entry", servlet.getEntry(m_request, servlet.m_data,
+                                           "test/guru"));
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
                    servlet.getType("/entry/test"));

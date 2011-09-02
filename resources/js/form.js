@@ -108,7 +108,7 @@ form.checkValue = function(inType, inValue)
       return false;
 
     case 'name':
-      return !inValue.match(/[\":,.;=\[\]\{\}\|\(\)]/);
+      return inValue && !inValue.match(/[\":,.;=\[\]\{\}\|\(\)]/);
 
     case 'isbn':
       var parts = inValue.match(/^(\d+-\d+-\d+)-([0-9xX])$/);

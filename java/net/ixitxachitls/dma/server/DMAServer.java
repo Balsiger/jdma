@@ -393,9 +393,6 @@ public class DMAServer extends WebServer
     context.addServlet(new ServletHolder(new LibraryServlet(m_baseData)),
                        "/library");
 
-//     context.addFilter(new FilterHolder(new MeUserFilter()),
-//                             "/user/me/*", 0);
-
 //     // products
 //     for(BaseEntry entry : m_users)
 //       if(entry instanceof BaseCharacter)
