@@ -81,15 +81,15 @@ DIV.subtitletext, DIV.subtitletext A
 
 #header
 {
-  border-bottom: solid 1px #88a;
+  border-bottom:    solid 1px #88a;
   background-color: #eef;
-  width: 100%;
-  position: fixed;
-  color: #09b;
-  font-size: small;
-  padding: 5px 10px;
-  box-shadow: 0 1px 3px #777;
-  z-index: 1;
+  width:            100%;
+  position:         fixed;
+  color:            #09b;
+  font-size:        small;
+  padding:          5px 10px;
+  box-shadow:       0 1px 3px #777;
+  z-index:          1;
 }
 
 #header-left
@@ -99,8 +99,9 @@ DIV.subtitletext, DIV.subtitletext A
 
 #header-right
 {
-  float: right;
-  text-align: right;
+  float:        right;
+  text-align:   right;
+  margin-right: 20px;
 }
 
 #navigation
@@ -115,10 +116,10 @@ DIV.subtitletext, DIV.subtitletext A
 .sprite
 {
   background-image: url('/icons/icons.png');
-  width: 10px;
-  height: 10px;
-  display: inline-block;
-  cursor: pointer;
+  width:            10px;
+  height:           10px;
+  display:          inline-block;
+  cursor:           pointer;
 }
 
 #home
