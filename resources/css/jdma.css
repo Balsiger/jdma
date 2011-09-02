@@ -107,6 +107,11 @@ DIV.subtitletext, DIV.subtitletext A
 {
 }
 
+.user
+{
+  color: #09b;
+}
+
 .sprite
 {
   background-image: url('/icons/icons.png');
@@ -195,6 +200,7 @@ DIV.last
 
 DIV.add
 {
+  margin-left:         10px !important;
   background-position: -180px;
 }
 

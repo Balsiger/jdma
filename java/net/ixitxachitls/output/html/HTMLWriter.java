@@ -382,8 +382,11 @@ public class HTMLWriter
     }
     else
     {
-      maybeCloseTag();
-      indent();
+      if(!inTag.equalsIgnoreCase("a"))
+        indent();
+      else
+        maybeCloseTag();
+
       m_bodyWriter.print("</");
       m_bodyWriter.print(inTag.toUpperCase(Locale.US));
       m_bodyWriter.println(">");
@@ -446,7 +449,10 @@ public class HTMLWriter
   public HTMLWriter add(@Nonnull String inText)
   {
     indent();
-    m_bodyWriter.println(inText);
+    if("a".equalsIgnoreCase(m_tags.peek()))
+      m_bodyWriter.print(inText);
+    else
+      m_bodyWriter.println(inText);
 
     return this;
   }
@@ -671,7 +677,11 @@ public class HTMLWriter
     if(!m_unclosed)
       return;
 
-    m_bodyWriter.println(">");
+    if("a".equalsIgnoreCase(m_tags.peek()))
+      m_bodyWriter.print(">");
+    else
+      m_bodyWriter.println(">");
+
     m_unclosed = false;
   }
 
@@ -701,7 +711,8 @@ public class HTMLWriter
   protected void indent()
   {
     maybeCloseTag();
-    m_bodyWriter.print(Strings.spaces(m_tags.size() * 2 + 4));
+    if(!"a".equalsIgnoreCase(m_tags.peek()))
+      m_bodyWriter.print(Strings.spaces(m_tags.size() * 2 + 4));
   }
 
   //........................................................................

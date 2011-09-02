@@ -221,13 +221,16 @@ public class PageServlet extends DMAServlet
     else
     {
       inWriter
-        .begin("span").classes("user").add(user.getName());
+        .begin("a").classes("user")
+        .onClick("util.link(event, '/user/" + user.getName() + "')")
+        .href("/user/" + user.getName())
+        .add(user.getName());
 
       if(inRequest.hasUserOverride())
         inWriter.add(" (" + inRequest.getRealUser().getName() + ")");
 
       inWriter
-        .end("span")
+        .end("a")
         .add(" | ")
         .begin("a").id("logout-icon").classes("sprite").tooltip("Logout")
         .onClick("logout()").end("a");

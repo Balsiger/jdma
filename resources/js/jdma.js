@@ -147,6 +147,21 @@ function createEntry()
 }
 
 //..........................................................................
+//------------------------------ removeEntry -------------------------------
+
+/**
+ * Remove the entry with the given id from the data store.
+ *
+ * @param       inID the id of the entry to remove
+ *
+ */
+function removeEntry(inID)
+{
+  gui.alert('Not yet implemented');
+}
+
+//..........................................................................
+
 
 //-------------------------------- doLogin ---------------------------------
 
