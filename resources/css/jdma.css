@@ -127,7 +127,7 @@ DIV.subtitletext, DIV.subtitletext A
   background-position: 0;
 }
 
-#login-icon
+#login-icon, .login
 {
   background-position: -120px;
 }
