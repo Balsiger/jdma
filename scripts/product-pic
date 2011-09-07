@@ -1,0 +1,32 @@
+#!/bin/sh
+
+url=$1
+id=$2
+path=resources/files/BaseProducts/$id
+tmp=/tmp/product-pic.tmp
+
+if test $# != 2; then
+  echo "Usage: product-pic <url> <id>";
+
+  exit 1;
+fi
+
+echo "downloading image from $url..."
+curl $url --output $tmp
+
+case $url in
+     *.jpg) extension=.jpg;;
+     *.jpeg) extension=.jpg;;
+     *.JPG) extension=.jpg;;
+     *) extension=.png;;
+esac
+
+output=$path/official$extension
+
+echo "copying image to $output..."
+mkdir "$path"
+mv $tmp "$output"
+
+echo "adding to subversion..."
+svn add "$path"
+

@@ -172,6 +172,7 @@ edit.save = function()
     editable.save(values);
 
   // send the data to the server
+  window.console.log("saving", values);
   util.ajax('/actions/save', values,
             function(inResult) { eval(inResult); });
 

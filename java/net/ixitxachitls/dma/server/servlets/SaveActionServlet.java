@@ -164,6 +164,29 @@ public class SaveActionServlet extends ActionServlet
       else
       {
         AbstractEntry entry = data.getEntry(id, type);
+
+        if(entry == null)
+        {
+          String file = inRequest.getParam(fullType + "::" + id + "::file");
+          System.out.println(file + ": " + inRequest.getParams());
+          if(file != null)
+          {
+            // create a new entry for filling out
+            Log.event(user.getID(), "create",
+                      "creating " + type + " entry '" + id + "'");
+
+            entry = type.create(id, m_data);
+
+            // store it in the campaign
+            if(!data.addEntry(entry, file))
+            {
+              Log.warning("Could not store " + type + " '" + id + "' in '"
+                          + file + "'");
+              entry = null;
+            }
+          }
+        }
+
         if(entry == null)
         {
           String error = "could not find " + type + " " + id + " for saving";

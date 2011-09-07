@@ -436,7 +436,7 @@ public class EntryServlet extends PageServlet
                                                       ? " disabled" : ""), ""),
                                        last == null ? "" : getPath(last)),
                               new Link(new Divider("add sprite", ""),
-                                       "javascrip:createEntry()"),
+                                       "javascript:createEntry()"),
                               new Link(new Divider("remove sprite", ""),
                                        "javascript:removeEntry('"
                                        + entry.getID() + "')")));

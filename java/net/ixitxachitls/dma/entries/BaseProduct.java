@@ -2193,7 +2193,7 @@ public class BaseProduct extends BaseEntry
       return new FormattedValue
         (new Command(computeValue("_leader", inDM).format(this, inDM, true),
                      " ",
-                     new BaseCommand(m_title.get())),
+                     computeValue("_title", inDM).format(this, inDM, true)),
          null, "name", false, true, false, true, "names", "");
 
     if("subtitle".equals(inKey))
