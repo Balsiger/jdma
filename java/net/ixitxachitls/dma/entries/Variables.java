@@ -280,7 +280,10 @@ public class Variables implements Iterable<Variable>
 
       assertEquals("width", 7, variables.getKeyWidth());
       assertEquals("string",
-                   "1234=var 1234, 123456=var 123456, 123=var 123, 1=var 1",
+                   "1234=var 1234 (not editable, DM), "
+                   + "123456=var 123456 (not editable, DM), "
+                   + "123=var 123 (not editable, DM), "
+                   + "1=var 1 (not editable, DM)",
                    variables.toString());
     }
 

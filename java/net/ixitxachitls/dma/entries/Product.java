@@ -784,7 +784,7 @@ public class Product extends Entry<BaseProduct>
         return title;
     }
 
-    return null;
+    return getName();
   }
 
   //........................................................................
@@ -976,7 +976,7 @@ public class Product extends Entry<BaseProduct>
   /**
    * Set the owner of the entry.
    *
-   * @param       AbstractEntry the owning entry
+   * @param       inOwner the owning entry
    *
    */
   public void setOwner(@Nonnull AbstractEntry inOwner)

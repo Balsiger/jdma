@@ -882,7 +882,7 @@ public class DMAServer extends WebServer
         "Comma separated list of the directories with base files.",
         Config.get("entries/base.dirs",
                    "BaseProducts, BaseProducts/DnD, BaseProducts/Novels, "
-                   + "BaseProducts/Magazines, BaseCharacters")),
+                   + "BaseProducts/Magazines, BaseCharacters, BaseCampaigns")),
        // base characters need base products
        new CommandLineParser.StringOption
        ("c", "campaigns",

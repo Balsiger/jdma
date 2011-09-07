@@ -477,7 +477,8 @@ public abstract class AbstractAttachment<T /*extends AbstractEntry*/>
         new TestAttachment<String>("guru", null, "name");
 
       Variables variables = attachment.getVariables();
-      assertEquals("variables", "value=var value", variables.toString());
+      assertEquals("variables", "value=var value (editable)",
+                   variables.toString());
       assertEquals("name", "name", attachment.getName());
       assertEquals("id", "name", attachment.getID());
       assertEquals("entry", "guru", attachment.getEntry());
@@ -485,7 +486,7 @@ public abstract class AbstractAttachment<T /*extends AbstractEntry*/>
       attachment = new TestAttachment<String>("guru", "tag", "name");
 
       variables = attachment.getVariables();
-      assertEquals("variables", "tag:value=var value [tag tag]",
+      assertEquals("variables", "tag:value=var value (editable) [tag tag]",
                    variables.toString());
       assertEquals("name", "name", attachment.getName());
       assertEquals("id", "tag:name", attachment.getID());

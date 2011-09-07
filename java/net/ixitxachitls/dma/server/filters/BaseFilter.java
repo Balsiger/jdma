@@ -27,23 +27,19 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// import net.ixitxachitls.dma.entries.BaseCampaign;
-import net.ixitxachitls.dma.entries.BaseCharacter;
+//import net.ixitxachitls.dma.entries.BaseCampaign;
+//import net.ixitxachitls.dma.entries.BaseCharacter;
 //import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
-import net.ixitxachitls.dma.server.servlets.LoginServlet;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -53,7 +49,8 @@ import net.ixitxachitls.util.logging.Log;
  * The base filter for all our filters.
  *
  * @file          BaseFilter.java
- * @author        Peter Balsiger
+ *
+ * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
 
@@ -65,8 +62,19 @@ public abstract class BaseFilter implements Filter
 {
   //----- nested -----------------------------------------------------------
 
+  //------------------------------------------------------------------ Error
+
+  /**
+   * A simple error with a message that can be sent back to the client.
+   */
   protected static class Error
   {
+    /**
+     * Create the error.
+     *
+     * @param   inCode    the error code
+     * @param   inMessage the message printed for the error
+     */
     public Error(int inCode, String inMessage)
     {
       m_code = inCode;
@@ -77,17 +85,39 @@ public abstract class BaseFilter implements Filter
     protected int m_code;
 
     /** The text message of the error. */
-    protected String m_message;
+    protected @Nonnull String m_message;
 
-    public void send(HttpServletResponse inResponse) throws IOException
+    /**
+     * Sent the error to the given response.
+     *
+     * @param inResponse the response to send to
+     *
+     * @throws IOException when writing fails
+     */
+    public void send(@Nonnull HttpServletResponse inResponse) throws IOException
     {
       inResponse.sendError(m_code, m_message);
     }
   }
 
+  //........................................................................
+  //-------------------------------------------------------------- HTMLError
+
+  /**
+   * An error class to print an html formatted error.
+   */
   protected static class HTMLError extends Error
   {
-    public HTMLError(int inCode, String inTitle, String inMessage)
+    /**
+     * Create the html error.
+     *
+     * @param   inCode    the error code of the page
+     * @param   inTitle   the title of the page
+     * @param   inMessage the message printed on the page
+     *
+     */
+    public HTMLError(int inCode, @Nonnull String inTitle,
+                     @Nonnull String inMessage)
     {
       super(inCode, inMessage);
 
@@ -95,9 +125,16 @@ public abstract class BaseFilter implements Filter
     }
 
     /** The page title. */
-    private String m_title;
+    private @Nonnull String m_title;
 
-    public void send(HttpServletResponse inResponse) throws IOException
+    /**
+     * Sent the error to the given response.
+     *
+     * @param inResponse the response to send to
+     *
+     * @throws IOException when writing fails
+     */
+    public void send(@Nonnull HttpServletResponse inResponse) throws IOException
     {
       inResponse.addHeader("Content-Type", "text/html");
 
@@ -115,6 +152,8 @@ public abstract class BaseFilter implements Filter
       inResponse.setStatus(m_code);
     }
   }
+
+  //........................................................................
 
   //........................................................................
 
@@ -143,7 +182,7 @@ public abstract class BaseFilter implements Filter
     */
   public void init(@Nonnull FilterConfig inConfig)
   {
-    // m_users = (BaseCampaign)inConfig.getServletContext().getAttribute("users");
+  // m_users = (BaseCampaign)inConfig.getServletContext().getAttribute("users");
     // m_campaigns =
     //   (Campaign)inConfig.getServletContext().getAttribute("campaigns");
   }
@@ -201,11 +240,14 @@ public abstract class BaseFilter implements Filter
                        @Nonnull FilterChain inChain)
     throws ServletException, IOException
   {
+    if(!(inResponse instanceof HttpServletResponse))
+      throw new ServletException("expected http servlet repsonse");
+
     Error error = null;
 
     if(!(inRequest instanceof DMARequest))
       error = new Error(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "expected a dma request, but got something else");
+                        "expected a different request or response");
     else
       doFilter((DMARequest)inRequest, (HttpServletResponse)inResponse, inChain);
 
@@ -224,6 +266,9 @@ public abstract class BaseFilter implements Filter
     * @param       inChain    the other filters in the chain
     *
     * @return      an error, if any occured
+    *
+    * @throws      ServletException on an error with the servlet
+    * @throws      IOException      on errors for writing the contents
     *
     */
   protected abstract Error doFilter(@Nonnull DMARequest inRequest,

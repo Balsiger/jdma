@@ -123,7 +123,8 @@ public class IndexServlet extends PageServlet
 
     String []match =
       Strings.getPatterns(inPath,
-                          "^/index/([^/]+)/([^/]+)(?:/(.*$))?");
+                          "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
+    System.out.println(inPath + ": " + java.util.Arrays.toString(match));
     String name = match[1];
     String group = match[2];
 

@@ -522,6 +522,14 @@ public class EntryServlet extends PageServlet
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
       + "<div class=\"last sprite disabled\"></div>"
       + "</a>"
+      + "<a href=\"javascrip-3A-createEntry()\" class=\"link\" "
+      + "onclick=\"return util.link(event, 'javascrip-3A-createEntry()');\">"
+      + "<div class=\"add sprite\"></div>"
+      + "</a>"
+      + "<a href=\"javascript:removeEntry('guru')\" class=\"link\" "
+      + "onclick=\"return util.link(event, "
+      + "'javascript:removeEntry('guru')');\">"
+      + "<div class=\"remove sprite\"></div></a>"
       + "</div>";
 
     /** Exepcted test for the image script. */

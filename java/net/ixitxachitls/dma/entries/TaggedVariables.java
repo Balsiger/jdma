@@ -214,8 +214,10 @@ public class TaggedVariables extends Variables
 
       assertEquals("width", 11, variables.getKeyWidth());
       assertEquals("string",
-                   "tag:1234=var 1234, tag:123456=var 123456, tag:123=var 123, "
-                   + "tag:1=var 1 [tag tag]",
+                   "tag:1234=var 1234 (not editable, DM), "
+                   + "tag:123456=var 123456 (not editable, DM), "
+                   + "tag:123=var 123 (not editable, DM), "
+                   + "tag:1=var 1 (not editable, DM) [tag tag]",
                    variables.toString());
     }
 

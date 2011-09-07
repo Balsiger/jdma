@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -108,6 +109,22 @@ public class ID extends BaseText<ID>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //------------------------------- doFormat -------------------------------
+
+  /**
+   * Really to the formatting.
+   *
+   * @return      the command for setting the value
+   *
+   */
+  protected @Nonnull Command doFormat()
+  {
+    return new Command(m_text);
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators

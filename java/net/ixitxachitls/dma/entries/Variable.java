@@ -397,7 +397,7 @@ public class Variable extends ValueHandle
       assertFalse("player only", variable.isPlayerOnly());
       assertFalse("player editable", variable.isPlayerEditable());
       assertFalse("player editable", variable.isEditable());
-      assertEquals("string", "var key", variable.toString());
+      assertEquals("string", "var key (not editable, DM)", variable.toString());
       assertEquals("string", "keys", variable.getPluralKey());
     }
 

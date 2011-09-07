@@ -2135,7 +2135,7 @@ public class AbstractEntry extends ValueGroup
   /**
    * Set the owner of the entry.
    *
-   * @param       AbstractEntry the owning entry
+   * @param       inOwner the owning entry
    *
    */
   public void setOwner(@Nonnull AbstractEntry inOwner)

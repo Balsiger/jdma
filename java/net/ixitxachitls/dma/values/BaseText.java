@@ -307,7 +307,8 @@ public class BaseText<T extends BaseText> extends Value<T>
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \\= test",
                    text.toString());
-      assertEquals("value not correctly gotten", "just some = test",
+      assertEquals("value not correctly gotten",
+                   "\\baseCommand{just some = test}",
                    text.format().toString());
       assertEquals("value not correctly converted", "just some = test",
                    text.get());
@@ -316,7 +317,8 @@ public class BaseText<T extends BaseText> extends Value<T>
       text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
-      assertEquals("value not correctly gotten", "just some \" test",
+      assertEquals("value not correctly gotten",
+                   "\\baseCommand{just some \" test}",
                    text.format().toString());
       assertEquals("value not correctly gotten", "just some \\\" test",
                    text.toString());
@@ -326,12 +328,13 @@ public class BaseText<T extends BaseText> extends Value<T>
       // add something to the text
       BaseText added = text.add(new BaseText<BaseText>("more text"));
       assertEquals("added", "just some \\\" test more text", added.toString());
-      assertEquals("added", "just some \" test more text",
+      assertEquals("added",
+                   "\\baseCommand{just some \" test more text}",
                    added.format().toString());
 
       added = text.add(new BaseText<BaseText>(" and more"));
       assertEquals("added", "just some \\\" test and more", added.toString());
-      assertEquals("added", "just some \" test and more",
+      assertEquals("added", "\\baseCommand{just some \" test and more}",
                    added.format().toString());
 
       Value.Test.createTest(text);

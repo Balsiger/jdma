@@ -320,6 +320,7 @@ DIV.files
   margin-top:  -20px;
   padding-top: 2px;
   border-top:  1px solid #ddd;
+  min-height:  10px;
 }
 
 DIV.files IMG
@@ -437,7 +438,7 @@ A.paginate-previous
  * type colors
  *****************************************************************************/
 
-.back-base-character
+.back-base-character, .back-character
 {
   color:            white;
   background-color: $color_Character;
@@ -447,6 +448,12 @@ A.paginate-previous
 {
   color:            white;
   background-color: $color_Product;
+}
+
+.back-base-campaign, .back-campaign
+{
+  color:            black;
+  background-color: $color_Campaign;
 }
 
 /******************************************************************************
@@ -697,6 +704,10 @@ A.bold:hover { font-weight: bold; }
 A.Product         { color: $color_Product }
 A.Product:visited { color: $lightcolor_Product }
 A.Product:hover   { color: $hilightcolor_Product }
+
+A.Campaign         { color: $color_Campaign }
+A.Campaign:visited { color: $lightcolor_Campaign }
+A.Campaign:hover   { color: $hilightcolor_Campaign }
 
 A.Place           { color: $color_Place }
 A.Place:visited   { color: $lightcolor_Place }

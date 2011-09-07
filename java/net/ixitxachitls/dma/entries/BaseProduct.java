@@ -37,9 +37,6 @@ import com.google.common.collect.ImmutableMap;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
-// import net.ixitxachitls.dma.entries.indexes.GroupedKeyIndex;
-// import net.ixitxachitls.dma.entries.indexes.Index;
-// import net.ixitxachitls.dma.entries.indexes.KeyIndex;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
@@ -1654,6 +1651,48 @@ public class BaseProduct extends BaseEntry
     extractVariables(BaseProduct.class);
   }
 
+  //----- worlds index -----------------------------------------------------
+
+  static
+  {
+    s_indexes.put("worlds", new GroupedIndex("Worlds", TYPE, 1)
+      {
+        private static final long serialVersionUID = 1L;
+
+        public Set<String> names(@Nonnull Set<String> ioCollected,
+                                 @Nonnull DMAData inData,
+                                 @Nonnull String []inGroups)
+        {
+          for(BaseProduct campaign : inData.getEntriesList(TYPE))
+            for(Selection world : campaign.m_worlds)
+              ioCollected.add(world.toString(false));
+
+          return ioCollected;
+        }
+
+        public boolean matches(@Nonnull String []inGroups,
+                               @Nonnull AbstractEntry inProduct)
+        {
+          if(!(inProduct instanceof BaseProduct))
+            return false;
+
+          BaseProduct campaign = (BaseProduct)inProduct;
+
+          String requestedWorld = inGroups[0];
+
+          for(Selection world : campaign.m_worlds)
+            if(requestedWorld.equals(world.toString(false)))
+              return true;
+
+          return false;
+        }
+        // CHECKSTYLE:OFF
+      }.withImages());
+    // CHECKSTYLE:ON
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -2083,7 +2122,7 @@ public class BaseProduct extends BaseEntry
   //--------------------------------- isDM ---------------------------------
 
   /**
-   * Check whether the given user is the DM for this entry. Everybody is a DM
+   * Check whether the given user is the DM for this entry. Every user is a DM
    * for a base product.
    *
    * @param       inUser the user accessing
@@ -2093,7 +2132,7 @@ public class BaseProduct extends BaseEntry
    */
   public boolean isDM(@Nonnull BaseCharacter inUser)
   {
-    return true;
+    return inUser.hasAccess(BaseCharacter.Group.USER);
   }
 
   //........................................................................

@@ -36,6 +36,8 @@ import com.google.common.collect.TreeMultimap;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.output.html.HTMLWriter;
@@ -126,29 +128,33 @@ public class LibraryServlet extends PageServlet
     for(Index index : ValueGroup.getIndexes())
       types.put(index.getType(), index);
 
-    for(AbstractType<? extends AbstractEntry> type : types.keySet())
+    for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
     {
+      if(!(type instanceof BaseType) || type == BaseEntry.TYPE)
+        continue;
+
       inWriter
         .begin("a").classes("type-image").href("/" + type.getMultipleLink())
         .onClick("util.link(event, '/" + type.getMultipleLink() + "');")
         .begin("img").classes("type", "highlight")
         .src("/icons/types/" + type.getName() + ".png")
         .alt(type.getMultiple()).end("img")
-        .begin("div").classes("caption").add(type.getMultiple()).end("div")
+        .begin("div").classes("caption").add(type.getMultipleLink()).end("div")
         .end("a") // type-image
         .begin("div").classes("type-indexes");
 
-      for(Index index : types.get(type))
-      {
-        String link = "/" + type.getMultipleLink() + "/"
-          + index.getTitle().toLowerCase(Locale.US);
+      if(types.get(type) != null)
+        for(Index index : types.get(type))
+        {
+          String link = "/" + type.getMultipleLink() + "/"
+            + index.getTitle().toLowerCase(Locale.US);
 
-        inWriter
-          .begin("a").classes("type-index").href(link)
-          .onClick("util.link(event, '" + link + "');")
-          .add(index.getTitle())
-          .end("a");
-      }
+          inWriter
+            .begin("a").classes("type-index").href(link)
+            .onClick("util.link(event, '" + link + "');")
+            .add(index.getTitle())
+            .end("a");
+        }
 
       inWriter
         .end("div") // type-indexes

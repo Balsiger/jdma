@@ -244,7 +244,8 @@ public class Text extends BaseText<Text>
                    text.toString());
       assertEquals("value not correctly converted", "just some = test",
                    text.get());
-      assertEquals("format", "just some = test", text.format(true).toString());
+      assertEquals("format", "\\baseCommand{just some = test}",
+                   text.format(true).toString());
 
       // now some string representation stuff
       text = new Text();
@@ -264,7 +265,8 @@ public class Text extends BaseText<Text>
                    text.toString());
       assertEquals("value not correctly converted", "just some \" test",
                    text.get());
-      assertEquals("format", "just some \" test", text.format(true).toString());
+      assertEquals("format", "\\baseCommand{just some \" test}",
+                   text.format(true).toString());
 
       text = new Text();
 
@@ -284,7 +286,7 @@ public class Text extends BaseText<Text>
       assertEquals("value not correctly converted",
                    "  just \n   some \n\n\" test",
                    text.get());
-      assertEquals("format", " just some \" test",
+      assertEquals("format", "\\baseCommand{ just some \" test}",
                    text.format(true).toString());
 
       Value.Test.createTest(text);

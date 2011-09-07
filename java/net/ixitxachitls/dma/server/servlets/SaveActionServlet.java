@@ -285,7 +285,7 @@ public class SaveActionServlet extends ActionServlet
 
       assertEquals("result",
                    "gui.info('The following entries were changed:"
-                   + "<p>base entry guru'); util.link(null, '/entrys/guru');",
+                   + "<p>base entry guru'); util.link(null, '/entry/guru');",
                    servlet.doAction(request, response));
 
       assertTrue("saved", data.wasSaved());
@@ -464,7 +464,7 @@ public class SaveActionServlet extends ActionServlet
                    "gui.alert('Parse error for values');"
                    + "gui.info('The following entries were changed:"
                    + "<p>base entry test'); "
-                   + "util.link(null, '/entrys/test');"
+                   + "util.link(null, '/entry/test');"
                    + "edit.unparsed('/base entry', 'test', 'guru', 'guru');",
                    servlet.doAction(request, response));
 
