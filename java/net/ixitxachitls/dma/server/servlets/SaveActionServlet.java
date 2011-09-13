@@ -24,13 +24,18 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
@@ -44,7 +49,7 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 // import net.ixitxachitls.dma.entries.BaseEntry;
 // import net.ixitxachitls.dma.entries.Campaign;
 // import net.ixitxachitls.dma.entries.Character;
-// import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -118,116 +123,41 @@ public class SaveActionServlet extends ActionServlet
   protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
                                      @Nonnull HttpServletResponse inResponse)
   {
-    BaseCharacter user = inRequest.getUser();
-
-    Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
-    List<String> errors = new ArrayList<String>();
-
     Set<DMAData> datas = new HashSet<DMAData>();
-    for(Map.Entry<String, String> param : inRequest.getParams().entries())
-    {
-      String []parts = param.getKey().split("::");
-
-      // not a real key value pair
-      if(parts.length != 3)
-        continue;
-
-      String fullType = parts[0];
-      DMAData data = getData(inRequest, fullType, m_data);
-      String typeName = Strings.getPattern(fullType, "/([^/]+)$");
-      AbstractType<? extends AbstractEntry> type = null;
-      if(typeName != null)
-        type = AbstractType.get(typeName);
-      else
-        type = AbstractType.get(fullType);
-
-      String id = parts[1];
-      String key = parts[2];
-
-      if(type == null)
+    List<String> errors = new ArrayList<String>();
+    Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
+    for(Changes change : preprocess(inRequest, inRequest.getParams(), errors))
+      for(AbstractEntry entry : change.entries(errors))
       {
-        String error = "invalid type '" + fullType + "' ignored";
-        Log.warning(error);
-        errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-        continue;
-      }
-
-      // Figure out the affected entries.
-      Set<AbstractEntry> affectedEntries = new HashSet<AbstractEntry>();
-      parts = Strings.getPatterns(key, "(.*?)/(.*)");
-      if(parts.length == 2)
-      {
-        for(AbstractEntry entry : data.getEntriesList(type))
-          if(entry.matches(fullType, id))
-            affectedEntries.add(entry);
-      }
-      else
-      {
-        AbstractEntry entry = data.getEntry(id, type);
-
-        if(entry == null)
+        for(Map.Entry<String, String> keyValue : change.m_values.entrySet())
         {
-          String file = inRequest.getParam(fullType + "::" + id + "::file");
-          System.out.println(file + ": " + inRequest.getParams());
-          if(file != null)
+          if(!entry.canEdit(keyValue.getKey(), inRequest.getUser()))
           {
-            // create a new entry for filling out
-            Log.event(user.getID(), "create",
-                      "creating " + type + " entry '" + id + "'");
+            String error = "not allowed to edit " + keyValue.getKey() + " in "
+              + change.m_type + " " + entry.getID();
+            Log.warning(error);
+            errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+            continue;
+          }
 
-            entry = type.create(id, m_data);
-
-            // store it in the campaign
-            if(!data.addEntry(entry, file))
-            {
-              Log.warning("Could not store " + type + " '" + id + "' in '"
-                          + file + "'");
-              entry = null;
-            }
+          String rest = entry.set(keyValue.getKey(), keyValue.getValue());
+          if(rest != null)
+          {
+            Log.warning("Could not fully parse " + keyValue.getKey()
+                        + " value for " + change.m_type + " " + change.m_id
+                        + ": '" + rest + "'");
+            errors.add("edit.unparsed("
+                       + Encodings.toJSString(change.m_fullType) + ", "
+                       + Encodings.toJSString(change.m_id) + ", "
+                       + Encodings.toJSString(keyValue.getKey()) + ", "
+                       + Encodings.toJSString(rest) + ");");
+          } else
+          {
+            entries.add(entry);
+            datas.add(change.m_data);
           }
         }
-
-        if(entry == null)
-        {
-          String error = "could not find " + type + " " + id + " for saving";
-          Log.warning(error);
-          errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-          continue;
-        }
-
-        if(!entry.canEdit(key, user))
-        {
-          String error = "not allowed to edit " + key + " in " + type + " "
-            + entry.getID();
-          Log.warning(error);
-          errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-          continue;
-        }
-
-        affectedEntries.add(entry);
       }
-
-      String value = param.getValue();
-
-      for(AbstractEntry entry : affectedEntries)
-      {
-        String rest = entry.set(key, value);
-        if(rest != null)
-        {
-          Log.warning("Could not fully parse " + key + " value for "
-                      + type + " " + id + ": '" + rest + "'");
-          errors.add("edit.unparsed("
-                     + Encodings.toJSString(fullType) + ", "
-                     + Encodings.toJSString(id) + ", "
-                     + Encodings.toJSString(key) + ", "
-                     + Encodings.toJSString(rest) + ");");
-        }
-
-        entries.add(entry);
-      }
-
-      datas.add(data);
-    }
 
     List<String> saved = new ArrayList<String>();
 
@@ -265,6 +195,159 @@ public class SaveActionServlet extends ActionServlet
   }
 
   //........................................................................
+  //------------------------------ preprocess ------------------------------
+
+  /**
+   *
+   *
+   * @param       inParams the parameters given
+   *
+   * @return
+   *
+   */
+  private Collection<Changes> preprocess
+    (@Nonnull DMARequest inRequest,
+     @Nonnull Multimap<String, String> inParams,
+     @Nonnull List<String> inErrors)
+  {
+    Map<String, Changes> changes = new HashMap<String, Changes>();
+    for(Map.Entry<String, String> param : inParams.entries())
+    {
+      String []parts = param.getKey().split("::");
+
+      // not a real key value pair
+      if(parts.length != 3)
+        continue;
+
+      String fullType = parts[0];
+      String typeName = Strings.getPattern(fullType, "/([^/]+)$");
+      AbstractType<? extends AbstractEntry> type = null;
+      if(typeName != null)
+        type = AbstractType.get(typeName);
+      else
+        type = AbstractType.get(fullType);
+
+      String id = parts[1];
+      String key = parts[2];
+
+      if(type == null)
+      {
+        String error = "invalid type '" + fullType + "' ignored";
+        Log.warning(error);
+        inErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+        continue;
+      }
+
+      Changes change = changes.get(id + ":" + fullType);
+      if(change == null)
+      {
+        change = new Changes(id, type, fullType,
+                             getData(inRequest, fullType, m_data),
+                             inRequest.getUser());
+        changes.put(id + ":" + fullType, change);
+      }
+
+      change.set(key, param.getValue());
+    }
+
+    return changes.values();
+  }
+
+  //........................................................................
+
+  private static class Changes {
+    public Changes(@Nonnull String inID,
+                   @Nonnull AbstractType<? extends AbstractEntry> inType,
+                   @Nonnull String inFullType,
+                   @Nonnull DMAData inData,
+                   @Nonnull AbstractEntry inOwner) {
+      m_id = inID;
+      m_name = m_id;
+      m_type = inType;
+      m_fullType = inFullType;
+      m_data = inData;
+      m_owner = inOwner;
+    }
+
+    public @Nonnull String m_id;
+    public @Nonnull AbstractType<? extends AbstractEntry> m_type;
+    public @Nonnull DMAData m_data;
+    public @Nonnull AbstractEntry m_owner;
+    public @Nullable String m_name;
+    public @Nullable String m_file;
+    public @Nonnull String m_fullType;
+    public boolean m_multiple = false;
+    public @Nonnull Map<String, String>m_values = new HashMap<String, String>();
+
+    public @Nonnull String toString() {
+      return m_name + " [" + m_id + "]/" + m_type + " (" + m_owner.getName()
+        + "/" + m_file + (m_multiple ? ", single" : ", multiple") + "):"
+        + m_values;
+    }
+
+    public void set(@Nonnull String inKey, @Nonnull String inValue)
+    {
+      if("file".equals(inKey))
+        m_file = inValue;
+      else
+      {
+        if("name".equals(inKey))
+          m_name = inValue;
+
+        m_values.put(inKey, inValue);
+      }
+
+      if(inKey.indexOf("/") > 0)
+        m_multiple = true;
+    }
+
+    // Figure out the affected entries.
+    public @Nonnull Set<AbstractEntry> entries(@Nonnull List<String> ioErrors)
+    {
+      Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
+      if(m_multiple)
+      {
+        for(AbstractEntry entry : m_data.getEntriesList(m_type))
+          if(entry.matches(m_fullType, m_id))
+            entries.add(entry);
+      }
+      else
+      {
+        AbstractEntry entry = m_data.getEntry(m_id, m_type);
+
+        if(entry == null && m_file != null)
+        {
+          // create a new entry for filling out
+          Log.event(m_owner.getID(), "create",
+                    "creating " + m_type + " entry '" + m_name + "'");
+
+          entry = m_type.create(m_name, m_data);
+          if(entry instanceof Entry)
+            entry.setOwner(m_owner);
+
+          // store it in the campaign
+          if(!m_data.addEntry(entry, m_file))
+          {
+            Log.warning("Could not store " + m_type + " '" + m_name + "' in '"
+                        + m_file + "'");
+            entry = null;
+          }
+        }
+
+        if(entry == null)
+        {
+          String error = "could not find " + m_type + " " + m_name
+            + " for saving";
+          Log.warning(error);
+          ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+        }
+        else
+          entries.add(entry);
+      }
+
+      return entries;
+    }
+  }
 
   //........................................................................
 
@@ -296,6 +379,7 @@ public class SaveActionServlet extends ActionServlet
         com.google.common.collect.ImmutableMultimap.of
         ("/base entry::test::name", "guru");
 
+      EasyMock.expect(user.getName()).andStubReturn("user");
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
@@ -318,7 +402,7 @@ public class SaveActionServlet extends ActionServlet
     }
 
     //......................................................................
-    //----- no access -------------------------------------------------------
+    //----- no access ------------------------------------------------------
 
     /** The save Test. */
     @org.junit.Test
@@ -471,7 +555,8 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("/base entry::test::guru", "guru");
+        ("/base entry::test::guru", "guru",
+         "/base entry::test::description", "\"test\"");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -497,6 +582,78 @@ public class SaveActionServlet extends ActionServlet
       m_logger.addExpected("WARNING: Could not fully parse guru value for "
                            + "base entry test: 'guru'");
       EasyMock.verify(request, response, user);
+    }
+
+    //......................................................................
+    //----- changes --------------------------------------------------------
+
+    /** The changes Test. */
+    @org.junit.Test
+    public void collectChanges()
+    {
+      net.ixitxachitls.dma.entries.BaseEntry entry =
+        new net.ixitxachitls.dma.entries.BaseEntry
+        ("test", new DMAData.Test.Data());
+      DMAData.Test.Data data = new DMAData.Test.Data(entry);
+
+      SaveActionServlet servlet = new SaveActionServlet(data);
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+      BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
+
+      EasyMock.expect(request.getUser()).andStubReturn(user);
+
+      EasyMock.replay(request);
+
+      Multimap<String, String> params =
+        com.google.common.collect.ImmutableSetMultimap.<String, String>builder()
+        .put("/base entry::id::name", "guru")
+        .put("/base entry::id::description", "\"text\"")
+        .put("/base entry::id2::name", "guru2")
+        .put("/base entry::id2::file", "file")
+        .put("/base entry::id2::worlds", "wolrd")
+        .put("something/base entry::my-id::name", "name guru")
+        .put("/user/me/base entry::id::key", "value")
+        .put("/user/me/base entry::id::file", "file")
+        .put("/user/me/base entry::id::key2", "value2")
+        .put("/base entry::*/Person::key", "value")
+        .put("/base entry::*/Something::key", "value")
+        .build();
+      List<String> errors = new ArrayList<String>();
+      Collection<Changes> changes = servlet.preprocess(request, params, errors);
+
+      java.util.Iterator<Changes> i = changes.iterator();
+      checkChanges(i.next(), "my-id", "name guru", null, "something/base entry",
+                   data, user, "name", "name guru");
+      checkChanges(i.next(), "id", "id", "file", "/user/me/base entry", null,
+                   user, "key", "value", "key2", "value2");
+      checkChanges(i.next(), "id2", "guru2", "file", "/base entry", data, user,
+                   "name", "guru2", "worlds", "wolrd");
+      checkChanges(i.next(), "id", "guru", null, "/base entry", data, user,
+                   "name", "guru", "description", "\"text\"");
+      checkChanges(i.next(), "*/Something", "*/Something", null, "/base entry",
+                   data, user, "key", "value");
+      checkChanges(i.next(), "*/Person", "*/Person", null, "/base entry",
+                   data, user, "key", "value");
+      assertFalse(i.hasNext());
+    }
+
+    /** Check assertions for changes. */
+    private void checkChanges(Changes inChanges, String inID, String inName,
+                              String inFile, String inFullType, DMAData inData,
+                              AbstractEntry inOwner, String ... inKeyValues)
+    {
+      assertEquals("id", inID, inChanges.m_id);
+      assertEquals("name", inName, inChanges.m_name);
+      assertEquals("file", inFile, inChanges.m_file);
+      assertEquals("full type", inFullType, inChanges.m_fullType);
+      assertEquals("data", inData, inChanges.m_data);
+      assertEquals("owner", inOwner, inChanges.m_owner);
+
+      assertEquals("number of values", inChanges.m_values.keySet().size(),
+                   inKeyValues.length / 2);
+      for(int i = 0; i < inKeyValues.length; i += 2)
+        assertEquals(inKeyValues[i], inKeyValues[i + 1],
+                     inChanges.m_values.get(inKeyValues[i]));
     }
 
     //......................................................................

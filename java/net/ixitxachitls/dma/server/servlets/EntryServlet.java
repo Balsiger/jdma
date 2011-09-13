@@ -377,7 +377,7 @@ public class EntryServlet extends PageServlet
         // create a new entry for filling out
         Log.info("creating " + type + " '" + id + "'");
 
-        entry = type.create(id, m_data);
+        entry = type.create(id, getData(inRequest, inPath, m_data));
         entry.setOwner(inRequest.getUser());
       }
 

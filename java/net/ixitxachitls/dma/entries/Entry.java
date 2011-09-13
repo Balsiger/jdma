@@ -908,37 +908,25 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
   // }
 
   // //........................................................................
-  // //-------------------------------- setID ---------------------------------
+  //-------------------------------- setID ---------------------------------
 
-  // /**
-  //  * Set the id of the entry.
-  //  *
-  //  * @param       inID the new id to set
-  //  *
-  //  * @return      true if id set, false if an error occurred
-  //  *
-  //  * @undefined   UnsupportedOperationException if already in a campaign
-  //  *                                            (thus id can no more be
-  //  *                                            changed)
-  //  *
-  //  */
-  // public boolean setID(String inID)
-  // {
-  //   if(m_campaign != null)
-  //     throw new
-  //       UnsupportedOperationException("cannot change the id of an entry in "
-  //                                     + "a campaign");
+  /**
+   * Set the id of the entry. Does not check if the id is unique.
+   *
+   * @param       inID the new id to set
+   *
+   * @return      true if id set, false if an error occurred
+   *
+   */
+  public boolean setID(String inID)
+  {
+    m_id = m_id.as(inID);
+    changed();
 
-  //   Log.info("changing id for '" + getName() + "' from " + m_id + " to "
-  //            + inID);
+    return true;
+  }
 
-  //   m_id.set(inID);
-  //   changed();
-
-  //   return true;
-  // }
-
-  // //........................................................................
+  //........................................................................
   // //---------------------------- addToCampaign -----------------------------
 
   // /**

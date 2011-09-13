@@ -875,8 +875,8 @@ public class Product extends Entry<BaseProduct>
     if("owner".equals(inKey) && m_owner != null)
     {
       String users =
-        Strings.toString(m_data.getEntries(BaseCharacter.TYPE).keySet(), "||",
-                         m_owner.getID());
+        Strings.toString(m_data.getBaseData().getEntries(BaseCharacter.TYPE)
+                         .keySet(), "||", m_owner.getID());
       return new FormattedValue(new Link(m_owner.getID(),
                                          "/user/" + m_owner.getID()),
                                 m_owner.getID(), "owner", true, true, false,
@@ -906,7 +906,7 @@ public class Product extends Entry<BaseProduct>
     if("owner".equals(inKey))
     {
       // nothing to do if setting to current
-      if(inText.equals(m_owner.getID()))
+      if(inText.equals(m_owner.getID()) || inText.isEmpty())
         return null;
 
       // determine the new owner
@@ -915,7 +915,7 @@ public class Product extends Entry<BaseProduct>
         return inText;
 
       // remove from old user
-      if(!m_owner.removeProduct(getID()))
+      if(m_owner != null && !m_owner.removeProduct(getID()))
         return inText;
 
       // add to new user

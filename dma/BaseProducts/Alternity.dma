@@ -75,14 +75,14 @@ base product TSR 2800 =
   product type      Rulebook;
   style             Hardcover;
   price             $29.95;
+  requirements      ;
   worlds            Generic;
   references        net,
                     catalog98,
                     Dragon 244,
                     Dragon 245,
                     Dragon 246;
-  description
-  "players introduction and rules for the alternity game".
+  description       "players introduction and rules for the alternity game".
 
 
 #.....
@@ -101,14 +101,14 @@ base product TSR 2801 =
   product type      Rulebook;
   style             Hardcover;
   price             $29.95;
+  requirements      ;
   worlds            Generic;
   references        net,
                     catalog98,
                     Dragon 245,
                     Dragon 246,
                     Dragon 247;
-  description
-  "DM rules for the alternity game".
+  description       "DM rules for the alternity game".
 
 
 #.....
@@ -128,13 +128,13 @@ base product TSR 2802 =
   product type      Campaign Setting;
   style             Hardcover;
   price             $29.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     catalog98,
                     Dragon 247,
                     Dragon 248;
-  description
-  "a 26th century campaign setting for the alternity game".
+  description       "a 26th century campaign setting for the alternity game".
 
 
 #.....
@@ -153,11 +153,11 @@ base product TSR 2804 =
   product type      Accessory;
   style             Booklet;
   price             $13.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     catalog98;
-  description
-  "description central location of the campaign to get supplies and be home".
+  description       "description central location of the campaign to get supplies and be home".
 
 
 #.....
@@ -177,13 +177,13 @@ base product TSR 2805 =
   product type      Accessory;
   style             Hardcover;
   price             $21.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     catalog98,
                     Dragon 247,
                     Dragon 248;
-  description
-  "monstrous compendium for the alternity game".
+  description       "monstrous compendium for the alternity game".
 
 
 #.....
@@ -204,14 +204,14 @@ base product TSR 2808 =
   price             $10.95;
   contents          Booklet,
                     Screen "4-panel";
+  requirements      ;
   worlds            Generic;
   references        net,
                     catalog98,
                     Dragon 246,
                     Dragon 247,
                     Dragon 248;
-  description
-  "referee screen and player records".
+  description       "referee screen and player records".
 
 
 #.....
@@ -230,12 +230,12 @@ base product TSR 2809 =
   product type      Accessory;
   style             Hardcover;
   price             $16.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     catalog98,
                     Dragon 248;
-  description
-  "more than 100 weapons and equipment".
+  description       "more than 100 weapons and equipment".
 
 
 #.....
@@ -254,11 +254,11 @@ base product TSR 2810 =
   product type      Novel;
   style             Hardcover;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net,
                     catalog98;
-  description
-  "a scapegoat for a political mistake is disgraced and should be used as mo".
+  description       "a scapegoat for a political mistake is disgraced and should be used as mo".
 
 
 #.....
@@ -277,11 +277,11 @@ base product TSR 2811 =
   product type      Accessory;
   style             Hardcover;
   price             $16.95;
+  requirements      ;
   worlds            Generic;
   references        net,
                     catalog98;
-  description
-  "descriptions of computers, robots, and other types of AI".
+  description       "descriptions of computers, robots, and other types of AI".
 
 
 #.....
@@ -300,11 +300,11 @@ base product TSR 2813 =
   style             Booklet;
   price             $13.95;
   contents          Book;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     catalog98;
-  description
-  "adventure around the discovery of a relic from the last galactic war".
+  description       "adventure around the discovery of a relic from the last galactic war".
 
 
 #.....
@@ -323,11 +323,11 @@ base product TSR 2814 =
   product type      Novel;
   style             Hardcover;
   price             $ 5.99;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     catalog93;
-  description
-  "the Concord Marines in desperate action on the frontier".
+  description       "the Concord Marines in desperate action on the frontier".
 
 
 #.....
@@ -346,11 +346,11 @@ base product TSR 2815 =
   product type      Accessory;
   style             Hardcover;
   price             $18.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     catalog98;
-  description
-  "reveals the details of the emerging alien menace".
+  description       "reveals the details of the emerging alien menace".
 
 
 #.....
@@ -368,10 +368,10 @@ base product TSR 02815 =
   audience          DM;
   product type      Accessory;
   price             $18.95;
+  requirements      ;
   worlds            Star*Drive;
   references        Dragon 257;
-  description
-  "reveals the details of an emerging alian conspiracy".
+  description       "reveals the details of an emerging alian conspiracy".
 
 
 #.....
@@ -389,10 +389,10 @@ base product TSR 11319 =
   audience          DM;
   product type      Accessory;
   price             $18.95;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "information about the processes and possibilities of starship constructio".
+  description       "information about the processes and possibilities of starship constructio".
 
 
 #.....
@@ -410,10 +410,10 @@ base product TSR 11328 =
   audience          DM;
   product type      Adventure;
   price             $13.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net;
-  description
-  "an alternity adventure on the planet of Lison".
+  description       "an alternity adventure on the planet of Lison".
 
 
 #.....
@@ -431,11 +431,11 @@ base product TSR 11339 =
   audience          DM;
   product type      Accessory;
   price             $18.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     Dragon 257;
-  description
-  "descriptions of new systems and planets".
+  description       "descriptions of new systems and planets".
 
 
 #.....
@@ -453,11 +453,11 @@ base product TSR 11352 =
   audience          DM;
   product type      Accessory;
   price             $18.95;
+  requirements      ;
   worlds            Generic;
   references        net,
                     Dragon 257;
-  description
-  "rules for dimensional travel, parallel universes, play tips, adventure ho".
+  description       "rules for dimensional travel, parallel universes, play tips, adventure ho".
 
 
 #.....
@@ -476,10 +476,10 @@ base product TSR 11364 =
   product type      Adventure;
   style             Booklet;
   price             $ 9.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net;
-  description
-  "an alternity adventure".
+  description       "an alternity adventure".
 
 
 #.....
@@ -497,10 +497,10 @@ base product TSR 11371 =
   audience          DM;
   product type      Accessory;
   price             $21.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net;
-  description
-  "detailed information on many star systems".
+  description       "detailed information on many star systems".
 
 
 #.....
@@ -518,12 +518,12 @@ base product TSR 11384 =
   audience          DM;
   product type      Accessory;
   price             $18.95;
+  requirements      ;
   worlds            Generic;
   references        net,
                     Dragon 263,
                     Dragon 264;
-  description
-  "comprehensive guide expands upon the psionics".
+  description       "comprehensive guide expands upon the psionics".
 
 
 #.....
@@ -541,10 +541,10 @@ base product TSR 11407 =
   audience          DM;
   product type      Adventure;
   price             $13.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net;
-  description
-  "adventure around a diplomatic meeting about a starship".
+  description       "adventure around a diplomatic meeting about a starship".
 
 
 #.....
@@ -564,12 +564,12 @@ base product TSR 11433 =
   product type      Campaign Setting;
   style             Hardcover;
   price             $29.95;
+  requirements      ;
   worlds            Dark.Matter;
   references        net,
                     Dragon 263,
                     Dragon 264;
-  description
-  "introducing a near-future world".
+  description       "introducing a near-future world".
 
 
 #.....
@@ -592,11 +592,11 @@ base product TSR 11510 =
                     Folder "heros",
                     Screen "DM",
                     Dice;
+  requirements      ;
   worlds            Generic;
   references        net,
                     Dragon 263;
-  description
-  "the alternity game essentials".
+  description       "the alternity game essentials".
 
 
 #.....
@@ -613,10 +613,10 @@ base product TSR 11514 =
   audience          DM;
   product type      Accessory;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        Dragon 263;
-  description
-  "fast-play fintrodction to Alternity".
+  description       "fast-play fintrodction to Alternity".
 
 
 #.....
@@ -635,11 +635,11 @@ base product TSR 11615 =
   product type      Adventure;
   style             Paperback;
   price             $13.95;
+  requirements      ;
   worlds            Dark.Matter;
   references        net,
                     Dragon 267;
-  description
-  "stand-alone adventure revealing a disturbing reality".
+  description       "stand-alone adventure revealing a disturbing reality".
 
 
 #.....
@@ -659,12 +659,12 @@ base product TSR 11616 =
   product type      Accessory;
   style             Paperback;
   price             $18.95;
+  requirements      ;
   worlds            Dark.Matter;
   references        net,
                     Dragon 267,
                     Dragon 268;
-  description
-  "dozens of new gunds and hundrets of gadgets and tools".
+  description       "dozens of new gunds and hundrets of gadgets and tools".
 
 
 #.....
@@ -685,12 +685,12 @@ base product TSR 11617 =
   product type      Accessory;
   style             Paperback;
   price             $19.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     Dragon 268,
                     Dragon 270;
-  description
-  "full-color guide to alien worlds".
+  description       "full-color guide to alien worlds".
 
 
 #.....
@@ -709,12 +709,12 @@ base product TSR 11618 =
   product type      Accessory;
   style             Paperback;
   price             $19.95;
+  requirements      ;
   worlds            Generic;
   references        net,
                     Dragon 267,
                     Dragon 268;
-  description
-  "easy introduction to Alternity with the Starcraft universe".
+  description       "easy introduction to Alternity with the Starcraft universe".
 
 
 #.....
@@ -733,12 +733,12 @@ base product TSR 11619 =
   product type      Accessory;
   style             Paperback;
   price             $18.95;
+  requirements      ;
   worlds            Generic;
   references        net,
                     Dragon 267,
                     Dragon 268;
-  description
-  "a fresh new look at the rules for FX or paranormal abilities".
+  description       "a fresh new look at the rules for FX or paranormal abilities".
 
 
 #.....
@@ -758,11 +758,11 @@ base product TSR 11620 =
   product type      Accessory;
   style             Paperback;
   price             $18.95;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     Dragon 267;
-  description
-  "this sourcebook reveals the secrets of the Aegis system".
+  description       "this sourcebook reveals the secrets of the Aegis system".
 
 
 #.....
@@ -779,10 +779,10 @@ base product TSR 11625 =
   audience          DM;
   product type      Accessory;
   price             $ 9.95;
+  requirements      ;
   worlds            Dark.Matter;
   references        net;
-  description
-  "insidious, internaltional consipray having a world bound in terror".
+  description       "insidious, internaltional consipray having a world bound in terror".
 
 
 #.....
@@ -802,11 +802,11 @@ base product TSR 11628 =
   product type      Campaign Setting;
   style             Soft Cover;
   price             $24.95;
+  requirements      ;
   worlds            Gamma World;
   references        net,
                     Dragon 270;
-  description
-  "all-new update of the classic post-apocalyptic world".
+  description       "all-new update of the classic post-apocalyptic world".
 
 
 #.....
@@ -825,10 +825,10 @@ base product TSR 11648 =
   product type      Accessory;
   style             Soft Cover;
   price             $19.95;
+  requirements      ;
   worlds            Dark.Matter;
   references        net;
-  description
-  "the ultimate reference guide".
+  description       "the ultimate reference guide".
 
 
 #.....
@@ -847,11 +847,11 @@ base product DMA 000044 =
   style             Booklet;
   price             $ 0.00;
   contents          Booklet;
+  requirements      ;
   worlds            Generic;
-  description
-  "This is a fast-play introduction to the Alternity game. It includes basic
-  rule information for players and dungeon masters, as well as am introductory
-  adventure \Product{Cauldron Station}.".
+  description       "This is a fast-play introduction to the Alternity game. It includes basic
+                    rule information for players and dungeon masters, as well as am introductory
+                    adventure \Product{Cauldron Station}.".
 
 
 #.....

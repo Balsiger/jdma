@@ -587,7 +587,7 @@ public class DMAServer extends WebServer
 
     // actions
     context.addServlet
-      (new ServletHolder(new SaveActionServlet(m_baseData)), "/actions/save");
+      (new ServletHolder(new SaveActionServlet(m_baseData)), "/actions/save/*");
 
     context.addServlet
       (new ServletHolder(new LoginServlet

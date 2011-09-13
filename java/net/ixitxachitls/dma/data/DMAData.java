@@ -317,7 +317,7 @@ public class DMAData implements Serializable
     for(DMAFile file : m_files)
       if(!file.wasRead())
       {
-        result &= file.read(getBaseData());
+        result &= file.read(this);
 
         for(AbstractEntry entry : file.getEntries())
           add(entry);

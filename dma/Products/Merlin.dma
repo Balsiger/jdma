@@ -20238,3 +20238,14 @@ product WTC 88567 =
   id        KJVL.
 
 #.....
+#----- WTC 31724
+
+product WTC 31724 =
+
+  edition   1st;
+  printing  1st;
+  status    available;
+  condition good "";
+  id        KATT.
+
+#.....

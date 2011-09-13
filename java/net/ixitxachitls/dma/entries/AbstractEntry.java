@@ -1815,7 +1815,7 @@ public class AbstractEntry extends ValueGroup
     {
       if(m_file == null)
         return new FormattedValue
-          (new Editable(getName(), getType(), "<please select>", "file", "",
+          (new Editable(getID(), getEditType(), "<please select>", "file", "",
                         "selection[file]", null,
                         Strings.toString(m_data.files(getType()),
                                          "||", ""), null),
@@ -1823,8 +1823,8 @@ public class AbstractEntry extends ValueGroup
       else
         return new FormattedValue
           (new Command
-           (new Editable(getName(),
-                         getType(),
+           (new Editable(getID(),
+                         getEditType(),
                          m_file.getStorageName(),
                          "file",
                          m_file.getStorageName(),
@@ -2074,8 +2074,9 @@ public class AbstractEntry extends ValueGroup
     {
       m_baseNames = null;
       m_baseEntries = null;
-      for(String base : inText.split(",\\s*"))
-        addBase(base);
+      if(!inText.startsWith(Value.UNDEFINED))
+        for(String base : inText.split(",\\s*"))
+          addBase(base);
 
       changed();
       return null;
@@ -2097,6 +2098,9 @@ public class AbstractEntry extends ValueGroup
   {
     m_name = m_name.as(inName);
     m_leadingComment = m_leadingComment.as("#----- " + m_name + "\n\n");
+    if(!m_trailingComment.isDefined())
+      m_trailingComment = m_trailingComment.as("\n#.....");
+
     changed();
   }
 
@@ -2717,6 +2721,8 @@ public class AbstractEntry extends ValueGroup
   @SuppressWarnings("unchecked") // need to cast to base entry
   protected void addBase(@Nonnull String inName)
   {
+    System.out.println("adding base: " + inName);
+    new Throwable().printStackTrace();
     AbstractType<? extends AbstractEntry> baseType = getType();
     if(baseType instanceof Type)
       baseType = ((Type)baseType).getBaseType();
@@ -2727,7 +2733,8 @@ public class AbstractEntry extends ValueGroup
       m_baseEntries = new ArrayList<BaseEntry>();
     }
 
-    BaseEntry entry = (BaseEntry)m_data.getEntry(inName, baseType);
+    BaseEntry entry =
+      (BaseEntry)m_data.getBaseData().getEntry(inName, baseType);
     if(entry == null)
       Log.warning("base " + getType() + " '" + inName + "' not found");
 
