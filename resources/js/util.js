@@ -148,7 +148,6 @@ util.reload = function(inPage)
   */
 util.link = function(inEvent, inTarget, inFunction)
 {
-  window.console.log("target", inTarget)
   if(inTarget && inTarget.match('^javascript:'))
     return true;
 
@@ -186,8 +185,15 @@ util.link = function(inEvent, inTarget, inFunction)
     pageTracker._trackPageview(inTarget);
 
   var target = inTarget;
-  if(!target.match(/\?/) && location.search)
-    target += location.search;
+  if(!target.match(/\?/))
+  {
+    var search = location.search.replace(/([?&])create&/, '$1').
+      replace(/[?&]create$/, "");
+
+    window.console.log("search: ", search);
+    if(search)
+      target += search;
+  }
 
   var bodyTarget = target;
   if(bodyTarget.match(/\?/))

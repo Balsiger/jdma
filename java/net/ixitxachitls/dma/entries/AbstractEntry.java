@@ -245,6 +245,7 @@ public class AbstractEntry extends ValueGroup
     this(inType, inData);
 
     m_name = m_name.as(inName);
+    addBase(inName);
   }
 
   //........................................................................
@@ -2099,7 +2100,7 @@ public class AbstractEntry extends ValueGroup
     m_name = m_name.as(inName);
     m_leadingComment = m_leadingComment.as("#----- " + m_name + "\n\n");
     if(!m_trailingComment.isDefined())
-      m_trailingComment = m_trailingComment.as("\n#.....");
+      m_trailingComment = m_trailingComment.as("\n#.....\n");
 
     changed();
   }
@@ -2721,8 +2722,6 @@ public class AbstractEntry extends ValueGroup
   @SuppressWarnings("unchecked") // need to cast to base entry
   protected void addBase(@Nonnull String inName)
   {
-    System.out.println("adding base: " + inName);
-    new Throwable().printStackTrace();
     AbstractType<? extends AbstractEntry> baseType = getType();
     if(baseType instanceof Type)
       baseType = ((Type)baseType).getBaseType();

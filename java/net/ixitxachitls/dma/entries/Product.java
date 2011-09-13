@@ -861,12 +861,10 @@ public class Product extends Entry<BaseProduct>
 
       if(base != null)
         return new FormattedValue
-          (new Command(base.computeValue("_leader", inDM)
-                       .format(base, inDM, true),
-                       " ",
-                       new BaseCommand(base.m_title.get()),
+          (new Command(new Link(new BaseCommand(base.getFullTitle()),
+                                "/product/" + getName()),
                        " (",
-                       new Link(getName(), "/product/" + getName()),
+                       getName(),
                        ")"),
            getName(), "name", false, true, false, true, "names", "")
           .withEditType("name");
