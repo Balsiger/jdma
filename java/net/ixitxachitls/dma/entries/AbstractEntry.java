@@ -244,8 +244,9 @@ public class AbstractEntry extends ValueGroup
   {
     this(inType, inData);
 
-    m_name = m_name.as(inName);
+    setName(inName);
     addBase(inName);
+    m_changed = false;
   }
 
   //........................................................................
@@ -1351,7 +1352,7 @@ public class AbstractEntry extends ValueGroup
       return false;
 
     for(BaseEntry base : m_baseEntries)
-      if(base == inBase || inBase.isBasedOn(inBase))
+      if(base == inBase || (base != this && inBase.isBasedOn(base)))
         return true;
 
     return false;
