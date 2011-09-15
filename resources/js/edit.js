@@ -67,7 +67,7 @@ edit.makeEditable = function()
  * @param inNoRelated true when not editing related values
  *
  */
-  edit.edit = function(inEvent, inElement, inNoRelated)
+edit.edit = function(inEvent, inElement, inNoRelated)
 {
   var element = inElement || this;
 
@@ -579,7 +579,6 @@ edit.Field.prototype._updateDecoration = function(inFocus, inMouse) {
 edit.Field.prototype._getValue = function()
 {
   return $(this._field).attr('value');
-  this._field = "guru";
 };
 
 /**
@@ -688,7 +687,7 @@ edit.String.prototype._createElement = function()
 edit.String.prototype._getValue = function()
 {
   var value = edit.String._super._getValue.call(this);
-  value = value.replace(/(["'])/g, '\\$1'); // '"
+  value = value.replace(/(["'])/g, '\$1'); // '"
   return "\"" + value + "\"";
 };
 
