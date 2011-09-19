@@ -61,6 +61,7 @@ import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Subtitle;
 import net.ixitxachitls.util.Strings;
@@ -763,11 +764,13 @@ public class BaseProduct extends BaseEntry
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
-    new Print("$title "
-              + "${as pdf} ${as text} ${as dma}"
-              + "$clear $files\n"
-              + " $subtitle "
-              + "${short description} $description"
+    new Print("$image "
+              + "${as pdf} ${as text} ${as dma} "
+              + "$title "
+              + "$desc "
+              + "$clear "
+              + "$files "
+              + "\n"
               + "$par "
               + "%base %synonyms "
               + "%notes %owners "
@@ -2196,10 +2199,28 @@ public class BaseProduct extends BaseEntry
                      computeValue("_title", inDM).format(this, inDM, true)),
          null, "name", false, true, false, true, "names", "");
 
+    if("desc".equals(inKey))
+      return new FormattedValue
+        (new Divider("desc",
+                     new Command(computeValue("subtitle", inDM)
+                                 .format(this, inDM, true),
+                                 computeValue("description", inDM)
+                                 .format(this, inDM, true),
+                                 computeValue("short description", inDM)
+                                 .format(this, inDM, true))),
+         null, "desc", false, false, false, false, "desc", "");
+
+    if("short description".equals(inKey))
+      return new FormattedValue
+        (new Divider("short-description",
+                     computeValue("_short description", inDM)
+                     .format(this, inDM, true)),
+         null, "short-desc", false, false, false, false, "short-desc", "");
+
     if("subtitle".equals(inKey))
       return new FormattedValue
         (new Subtitle(new BaseCommand(m_subtitle.get())),
-         null, "subtitle", false, false, false, false, "subtitles", "");
+         m_subtitle, "subtitle", false, true, false, false, "subtitles", "");
 
     if("owners".equals(inKey))
     {

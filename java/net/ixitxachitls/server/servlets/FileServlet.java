@@ -23,6 +23,12 @@
 
 package net.ixitxachitls.server.servlets;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
@@ -32,12 +38,16 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.Multimap;
+
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -64,6 +74,55 @@ import net.ixitxachitls.util.resources.Resource;
 @ThreadSafe
 public class FileServlet extends BaseServlet
 {
+  //----------------------------------------------------------------- nested
+
+  //----- Type -------------------------------------------------------------
+
+  private static class Type
+  {
+    public Type(@Nonnull String inExtension, @Nonnull String inMimeType)
+    {
+      m_extension = inExtension;
+      m_mimeType = inMimeType;
+    }
+
+    public Type(@Nonnull String inExtension, @Nonnull String inMimeType,
+                @Nonnull String inImageFormat)
+    {
+      this(inExtension, inMimeType);
+
+      m_imageFormat = inImageFormat;
+    }
+
+    @Nonnull String m_extension;
+    @Nonnull String m_mimeType;
+    @Nullable String m_imageFormat;
+
+    public @Nonnull String getExtension()
+    {
+      return m_extension;
+    }
+
+    public @Nonnull String getMimeType()
+    {
+      return m_mimeType;
+    }
+
+    public @Nullable String getImageFormat()
+    {
+      return m_imageFormat;
+    }
+
+    public boolean isImage()
+    {
+      return m_imageFormat != null;
+    }
+  }
+
+  //........................................................................
+
+  //........................................................................
+
   //--------------------------------------------------------- constructor(s)
 
   //----------------------------- FileServlet ------------------------------
@@ -97,8 +156,12 @@ public class FileServlet extends BaseServlet
                      boolean inCache)
   {
     m_root = inRoot;
-    m_type = inType;
     m_handleModification = inCache;
+
+    if(inType != null)
+      for(Type type : s_types.values())
+        if(inType.equals(type.getMimeType()))
+          m_type = type;
   }
 
   //........................................................................
@@ -111,24 +174,24 @@ public class FileServlet extends BaseServlet
   protected @Nonnull String m_root;
 
   /** The type of content to return. */
-  protected @Nullable String m_type;
+  protected @Nullable Type m_type;
 
   /** A flag denoting if checking for modification requests or not. */
   protected boolean m_handleModification;
 
   /** The possible type for different extensions. */
-  protected static final @Nonnull Map<String, String> s_types =
-    new HashMap<String, String>();
+  protected static final @Nonnull Map<String, Type> s_types =
+    new HashMap<String, Type>();
 
   // initialize the possible content types according to file extension
   static
   {
-    s_types.put(".png", "image/png");
-    s_types.put(".jpg", "image/jpeg");
-    s_types.put(".gif", "image/gif");
-    s_types.put(".pdf", "application/pdf");
-    s_types.put(".css", "text/css");
-    s_types.put(".js",  "text/javascript");
+    s_types.put(".png", new Type(".png", "image/png", "png"));
+    s_types.put(".jpg", new Type(".jpg", "image/jpeg", "jpg"));
+    s_types.put(".gif", new Type(".gif", "image/gif", "gif"));
+    s_types.put(".pdf", new Type(".pdf", "application/pdf"));
+    s_types.put(".css", new Type(".css", "text/css"));
+    s_types.put(".js",  new Type(".js", "text/javascript"));
   }
 
   /** The id for serialization. */
@@ -206,8 +269,8 @@ public class FileServlet extends BaseServlet
       {
         long modified = inRequest.getDateHeader("If-Modified-Since");
 
-        // miliseconds are not transmitted back to the client, thus we can't use
-        // them here
+        // miliseconds are not transmitted back to the client, thus we can't
+        // use them here
         if(modified + 1000 >= s_startupTime)
           return new NotModified();
       }
@@ -222,7 +285,7 @@ public class FileServlet extends BaseServlet
     if(Resource.has(path))
       resource = getResource(path);
     else
-      if(m_type != null && m_type.startsWith("image/"))
+      if(m_type != null && m_type.isImage())
         resource = Resource.get(s_missingImage);
 
     if(resource == null)
@@ -235,15 +298,15 @@ public class FileServlet extends BaseServlet
     }
 
     // set the content type
-    if(m_type != null && m_type.length() > 0)
-      inResponse.setHeader("Content-Type", m_type);
+    if(m_type != null)
+      inResponse.setHeader("Content-Type", m_type.getMimeType());
     else
     {
       // determine the content type from the given file name
-      if(s_types.containsKey(Files.extension(path)))
+      m_type = s_types.get(Files.extension(path));
+      if(m_type != null)
         inResponse.setHeader("Content-Type",
-                           s_types.get(Files.extension(path))
-                           + "; charset=utf-8");
+                             m_type.getMimeType() + "; charset=utf-8");
       else
         // We just hope the client knows what to do with the type...
         Log.warning("extension " + Files.extension(path)
@@ -260,6 +323,40 @@ public class FileServlet extends BaseServlet
 
     // write the file to the output
     OutputStream output = inResponse.getOutputStream();
+
+    // check if we are dealiong with an image and we have to scale it
+    if(m_type.isImage())
+    {
+      Multimap<String, String> params = ServerUtils.extractParams(inRequest);
+      int width = -1;
+      int height = -1;
+
+      if(params.containsKey("h"))
+        height = Integer.parseInt(params.get("h").iterator().next());
+
+      if(params.containsKey("w"))
+        width = Integer.parseInt(params.get("w").iterator().next());
+
+      if(width > 0 || height > 0)
+      {
+        InputStream imageStream =
+          new BufferedInputStream(resource.getInput());
+        Image image = ImageIO.read(imageStream)
+          .getScaledInstance(width, height, Image.SCALE_SMOOTH);
+
+        BufferedImage out =
+          new BufferedImage(image.getWidth(null), image.getHeight(null),
+                            BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = out.getGraphics();
+        graphics.drawImage(image, 0, 0, null);
+        graphics.dispose();
+        ImageIO.write(out, m_type.getImageFormat(), output);
+
+        output.close();
+        return null;
+      }
+    }
+
     resource.write(output);
     output.close();
 

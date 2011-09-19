@@ -1753,6 +1753,14 @@ public class AbstractEntry extends ValueGroup
   {
     if("title".equals(inKey))
     {
+      return new FormattedValue
+        (new Title(computeValue("name", inDM).format(this, inDM, false),
+                   "entrytitle"),
+         null, "title", false, false, false, false, "titles", "");
+    }
+
+    if("image".equals(inKey))
+    {
       AbstractType<? extends AbstractEntry> type = getType();
 
       String baseType = null;
@@ -1765,16 +1773,10 @@ public class AbstractEntry extends ValueGroup
       }
 
       return new FormattedValue
-        (new Title(new Command(new Image
-                               (DMAFiles.mainImage
-                                (getID(), type.getMultipleDir(), baseType,
-                                 baseNames),
-                                "main-image"),
-                               " ",
-                               computeValue("name", inDM)
-                               .format(this, inDM, false)),
-                   "entrytitle"),
-         null, "title", false, false, false, false, "titles", "");
+        (new Image(DMAFiles.mainImage(getID(), type.getMultipleDir(),
+                                      baseType, baseNames) + "?w=300",
+                   "main"),
+         null, "image", false, false, false, false, "images", "");
     }
 
     if("clear".equals(inKey))

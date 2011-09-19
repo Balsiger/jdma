@@ -45,7 +45,7 @@ H1
 
 H1.entrytitle
 {
-  display:        inline-block;
+  margin-left: 330px;
 }
 
 H2
@@ -300,27 +300,31 @@ DIV.footer DIV.version
  * entry
  *****************************************************************************/
 
-IMG.main-image
+IMG.main.image
 {
-  border:       1px solid #ccc;
-  padding:      5px;
-  margin:       0 10px 0 0;
-  display:      inline-block;
+  border:     1px solid #ccc;
+  padding:    5px;
+  margin:     0 10px 0 0;
+  display:    inline-block;
   box-shadow: 1px 1px 3px #777;
+  float:      left;
 }
 
-DIV.mainimage IMG.image
+DIV.desc
 {
-  max-height: 100px;
-  max-width:  100px;
+  margin-left: 330px;
+}
+
+DIV.short-description
+{
+  margin-top: 15px;
+  color:      #888;
 }
 
 DIV.files
 {
-  margin-top:  -20px;
+  margin-top:  10px;
   padding-top: 2px;
-  border-top:  1px solid #ddd;
-  min-height:  10px;
 }
 
 DIV.files IMG
@@ -499,7 +503,7 @@ DIV.snippet { color: #aaa; font-size: 80%; }
  * edit
  *****************************************************************************/
 
-INPUT.edit
+INPUT.edit, TEXTAREA.edit
 {
   font-size:     100%;
   width:         100%;

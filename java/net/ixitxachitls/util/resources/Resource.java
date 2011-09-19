@@ -229,6 +229,21 @@ public abstract class Resource
   }
 
   //........................................................................
+  //------------------------------- getInput -------------------------------
+
+  /**
+   * Get the input stream to read the resource.
+   *
+   * @return      the input stream to read from
+   *
+   */
+  public InputStream getInput()
+  {
+    return FileResource.class.getResourceAsStream(m_name);
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
@@ -246,8 +261,7 @@ public abstract class Resource
    */
   public boolean write(@Nonnull OutputStream inOutput)
   {
-    InputStream input =
-      FileResource.class.getResourceAsStream(m_name);
+    InputStream input = getInput();
 
     if(input == null)
     {

@@ -270,13 +270,13 @@ public class Variables implements Iterable<Variable>
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
         new Variables(new Variable("1234", field, false, true, false, false,
-                                   false, null, null),
+                                   false, null, null, false),
                       new Variable("123456", field, false, true, false, false,
-                                   false, null, null),
+                                   false, null, null, false),
                       new Variable("123", field, false, true, false, false,
-                                   false, null, null),
+                                   false, null, null, false),
                       new Variable("1", field, false, true, false, false, false,
-                                   null, null));
+                                   null, null, false));
 
       assertEquals("width", 7, variables.getKeyWidth());
       assertEquals("string",
@@ -302,13 +302,13 @@ public class Variables implements Iterable<Variable>
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
         new Variables(new Variable("1234", field, false, true, false, false,
-                                   false, null, null),
+                                   false, null, null, false),
                       new Variable("123456", field, false, true, false, false,
-                                   false, null, null),
+                                   false, null, null, false),
                       new Variable("123", field, false, true, false, false,
-                                   false, null, null),
+                                   false, null, null, false),
                       new Variable("1", field, false, true, false, false, false,
-                                   null, null));
+                                   null, null, false));
 
       assertEquals("variable", "1234", variables.getVariable("1234").getKey());
       assertNull("not found", variables.getVariable("guru"));

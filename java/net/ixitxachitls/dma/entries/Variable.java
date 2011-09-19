@@ -73,18 +73,21 @@ public class Variable extends ValueHandle
    * @param       inPlayerEditable true if the value is editable for a player
    * @param       inPlural         the plural of the key
    * @param       inNote           a note for editing, if any
+   * @param       inPrintUndefined if printing the value when undefined
    *
    */
   public Variable(@Nonnull String inKey, @Nonnull Field inField,
                   boolean inStored, boolean inDM, boolean inEditable,
                   boolean inPlayer, boolean inPlayerEditable,
-                  @Nullable String inPlural, @Nullable String inNote)
+                  @Nullable String inPlural, @Nullable String inNote,
+                  boolean inPrintUndefined)
   {
     super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
           inNote);
 
     m_field          = inField;
     m_store          = inStored;
+    m_printUndefined = inPrintUndefined;
   }
 
   //......................................................................
@@ -98,6 +101,9 @@ public class Variable extends ValueHandle
 
   /** A flag denoting if the variable is to be stored (or computed). */
   protected boolean m_store;
+
+  /** Flag if printing the value even when undefined. */
+  protected boolean m_printUndefined;
 
   //........................................................................
 
@@ -157,7 +163,7 @@ public class Variable extends ValueHandle
    */
   public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
   {
-    return get(inEntry).format(true);
+    return get(inEntry).format(!m_printUndefined);
   }
 
   //........................................................................
@@ -382,7 +388,7 @@ public class Variable extends ValueHandle
       Field field = Variable.Test.TestObject.class.getDeclaredField("m_value");
       Variable variable =
         new Variable("key", field, false, true, false, false, false, null,
-                     null);
+                     null, false);
 
       assertEquals("key", "key", variable.getKey());
       assertEquals("value", "$undefined$",
@@ -415,7 +421,7 @@ public class Variable extends ValueHandle
       Field field = Variable.Test.TestObject.class.getDeclaredField("m_value");
       Variable variable =
         new Variable("key", field, false, true, false, false, false, null,
-                     null);
+                     null, false);
       TestObject test = new TestObject();
 
       variable.setFromString(test, "guru");

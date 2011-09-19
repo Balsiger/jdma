@@ -7698,10 +7698,11 @@ base product WTC 88567 =
                     {Indigenous monster}
                     {Post map of the region}
                     To use this accessory, you also need the \Product[WTC 11836]{Forgotten Realms
-                    Campaign Setting}, the \Product[TSR 11550]{Player\\'s Handbook}, the
-                    \Product[TSR 11551]{Dungeon Master\\'s Guide}, and the \Product[TSR
+                    Campaign Setting}, the \Product[TSR 11550]{Player's Handbook}, the
+                    \Product[TSR 11551]{Dungeon Master's Guide}, and the \Product[TSR
                     11552]{Monster Manual}.
                     ";
+  short description "An accessory detailing the region of the Silver Marches.";
   synonyms          "Marches, Silver".
 #.....
 #----- WTC 88574

@@ -21,8 +21,7 @@ base product TSR 5006 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -35,8 +34,7 @@ base product TSR 5007 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -49,8 +47,7 @@ base product TSR 5008 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -63,8 +60,7 @@ base product TSR 5009 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -77,8 +73,7 @@ base product TSR 5010 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -91,8 +86,7 @@ base product TSR 5011 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -105,8 +99,7 @@ base product TSR 5012 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -119,8 +112,7 @@ base product TSR 5013 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -133,8 +125,7 @@ base product TSR 5014 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -147,8 +138,7 @@ base product TSR 5015 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -161,8 +151,7 @@ base product TSR 5016 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -175,8 +164,7 @@ base product TSR 5017 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -189,8 +177,7 @@ base product TSR 5018 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -203,8 +190,7 @@ base product TSR 5019 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -217,8 +203,7 @@ base product TSR 5020 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -231,8 +216,7 @@ base product TSR 5021 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -245,8 +229,7 @@ base product TSR 5022 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -259,8 +242,7 @@ base product TSR 5023 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -273,8 +255,7 @@ base product TSR 5024 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -287,8 +268,7 @@ base product TSR 5025 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -301,8 +281,7 @@ base product TSR 5026 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -315,8 +294,7 @@ base product TSR 5027 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -329,8 +307,7 @@ base product TSR 5028 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -343,8 +320,7 @@ base product TSR 5029 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -358,8 +334,7 @@ base product TSR 5301 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -373,8 +348,7 @@ base product TSR 5302 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -393,20 +367,16 @@ base product TSR 5303 =
   contents          Miniature "metal" 12;
   requirements      ;
   references        complete product listing;
-  description
-  "\large{'A \Monster{troll} is that much bigger than my magic-user?'}
-
-  Your magic-user could throw a \Spell{fireball} at the beast, but where's the
-  rest of your party---the fighter, the cleric and the \Monster{dwarf}? Would
-  the flames engulf them, too?
-
-  AD&D game action is fast-paced. Keeping track of who's where in the dungeon
-  can be hard, especially during combat. That's why players and DM's agree that
-  official AD&D miniatures make a great game even greater.
-
-  And yes, a \Monster{troll} \emph{is} that much bigger than your
-  character. All 25mm AD&D miniatures are in scale to one another, for added
-  realism.".
+  description       "\large{'A \Monster{troll} is that much bigger than my magic-user?'}
+                    Your magic-user could throw a \Spell{fireball} at the beast, but where's the
+                    rest of your party---the fighter, the cleric and the \Monster{dwarf}? Would
+                    the flames engulf them, too?
+                    AD&D game action is fast-paced. Keeping track of who's where in the dungeon
+                    can be hard, especially during combat. That's why players and DM's agree that
+                    official AD&D miniatures make a great game even greater.
+                    And yes, a \Monster{troll} \emph{is} that much bigger than your
+                    character. All 25mm AD&D miniatures are in scale to one another, for added
+                    realism.".
 
 
 #.....
@@ -425,20 +395,16 @@ base product TSR 5304 =
   contents          Miniature "metal" 12;
   requirements      ;
   references        complete product listing;
-  description
-  "\large{'A \Monster{troll} is that much bigger than my thief?'}
-
-  Your thief could throw a \Item{flask of flaming oil} at the beast, but
-  where's the rest of your party---the fighter, the cleric and the
-  \Monster{dwarf}? Would the flames engulf them, too?
-
-  AD&D game action is fast-paced. Keeping track of who's where in the dungeon
-  can be hard, especially during combat. That's why players and DM's agree that
-  official AD&D miniatures make a great game even greater.
-
-  And yes, a \Monster{troll} \emph{is} that much bigger than your
-  character. All 25mm AD&D miniatures are in scale to one another, for added
-  realism.".
+  description       "\large{'A \Monster{troll} is that much bigger than my thief?'}
+                    Your thief could throw a \Item{flask of flaming oil} at the beast, but
+                    where's the rest of your party---the fighter, the cleric and the
+                    \Monster{dwarf}? Would the flames engulf them, too?
+                    AD&D game action is fast-paced. Keeping track of who's where in the dungeon
+                    can be hard, especially during combat. That's why players and DM's agree that
+                    official AD&D miniatures make a great game even greater.
+                    And yes, a \Monster{troll} \emph{is} that much bigger than your
+                    character. All 25mm AD&D miniatures are in scale to one another, for added
+                    realism.".
 
 
 #.....
@@ -452,8 +418,7 @@ base product TSR 5305 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -467,8 +432,7 @@ base product TSR 5306 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -481,8 +445,7 @@ base product TSR 5307 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -496,8 +459,7 @@ base product TSR 5308 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -511,8 +473,7 @@ base product TSR 5310 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -527,8 +488,7 @@ base product TSR 5402 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -542,8 +502,7 @@ base product TSR 5403 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -557,8 +516,7 @@ base product TSR 5404 =
   requirements      ;
   worlds            Dragonlance;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -572,8 +530,7 @@ base product TSR 5405 =
   requirements      ;
   worlds            Dragonlance;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -587,8 +544,7 @@ base product TSR 5409 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -602,8 +558,7 @@ base product TSR 5601 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -622,8 +577,7 @@ base product TSR 5602 =
   contents          Miniature "figures" 2;
   requirements      ;
   references        complete product listing;
-  description
-  "An \Monster{earth elemental} and an \Monster{air elemental} miniature.".
+  description       "An \Monster{earth elemental} and an \Monster{air elemental} miniature.".
 
 
 #.....
@@ -642,8 +596,7 @@ base product TSR 5603 =
   contents          Miniature "figures" 2;
   requirements      ;
   references        complete product listing;
-  description
-  "An \Monster{Ogre} and a \Monster{Cyclopskin} miniature.".
+  description       "An \Monster{Ogre} and a \Monster{Cyclopskin} miniature.".
 
 
 #.....
@@ -662,8 +615,7 @@ base product TSR 5604 =
   contents          Miniature "figures" 2;
   requirements      ;
   references        complete product listing;
-  description
-  "An \Monster{Ant Lion} and a \Monster{Piscodaemon} metal miniature.".
+  description       "An \Monster{Ant Lion} and a \Monster{Piscodaemon} metal miniature.".
 
 
 #.....
@@ -682,9 +634,8 @@ base product TSR 5605 =
   contents          Miniature "figures" 3;
   requirements      ;
   references        complete product listing;
-  description
-  "An \Monster{Scrag}, a \Monster{Yuan-Ti} and a \Monster{Banderlog}
-   miniature.".
+  description       "An \Monster{Scrag}, a \Monster{Yuan-Ti} and a \Monster{Banderlog}
+                    miniature.".
 
 
 #.....
@@ -703,8 +654,7 @@ base product TSR 5606 =
   contents          Miniature "figures" 2;
   requirements      ;
   references        complete product listing;
-  description
-  "A \Monster{Vilstrak} and a \Monster{Rock Reptile} miniature.".
+  description       "A \Monster{Vilstrak} and a \Monster{Rock Reptile} miniature.".
 
 
 #.....
@@ -717,8 +667,7 @@ base product TSR 5607 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -737,8 +686,7 @@ base product TSR 5608 =
   contents          Miniature "figures" 2;
   requirements      ;
   references        complete product listing;
-  description
-  "A \Monster{Phoenix} and an \Monster{Aarakocra} miniature.".
+  description       "A \Monster{Phoenix} and an \Monster{Aarakocra} miniature.".
 
 
 #.....
@@ -751,8 +699,7 @@ base product TSR 5609 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -765,8 +712,7 @@ base product TSR 5610 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -785,8 +731,7 @@ base product TSR 5611 =
   contents          Miniature "figures" 2;
   requirements      ;
   references        complete product listing;
-  description
-  "A \Monster{Firbolg} and a \Monster{Boobrie} miniature.".
+  description       "A \Monster{Firbolg} and a \Monster{Boobrie} miniature.".
 
 
 #.....
@@ -805,8 +750,7 @@ base product TSR 5612 =
   contents          Miniature "figures" 2;
   requirements      ;
   references        complete product listing;
-  description
-  "A \Monster{Rust Monster} and a \Monster{Rakshasa} miniature.".
+  description       "A \Monster{Rust Monster} and a \Monster{Rakshasa} miniature.".
 
 
 #.....
@@ -819,8 +763,7 @@ base product TSR 5613 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -833,8 +776,7 @@ base product TSR 5614 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -847,8 +789,7 @@ base product TSR 5615 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -861,8 +802,7 @@ base product TSR 5616 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -875,8 +815,7 @@ base product TSR 5617 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -889,8 +828,7 @@ base product TSR 5618 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -904,8 +842,7 @@ base product TSR 5701 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -925,8 +862,7 @@ base product TSR 5702 =
                     Miniature "weapons" 5;
   requirements      ;
   references        complete product listing;
-  description
-  "Three miniatures of cavaliers.".
+  description       "Three miniatures of cavaliers.".
 
 
 #.....
@@ -939,8 +875,7 @@ base product TSR 5703 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -961,8 +896,7 @@ base product TSR 5704 =
                     Miniature "weapons" 3;
   requirements      ;
   references        complete product listing;
-  description
-  "Three miniatures of \Monster{dwarves}.".
+  description       "Three miniatures of \Monster{dwarves}.".
 
 
 #.....
@@ -975,8 +909,7 @@ base product TSR 5705 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -989,8 +922,7 @@ base product TSR 5706 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1003,8 +935,7 @@ base product TSR 5707 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1017,8 +948,7 @@ base product TSR 5708 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1031,8 +961,7 @@ base product TSR 5709 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1045,8 +974,7 @@ base product TSR 5710 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1059,8 +987,7 @@ base product TSR 5711 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1073,8 +1000,7 @@ base product TSR 5712 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1087,8 +1013,7 @@ base product TSR 5713 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1101,8 +1026,7 @@ base product TSR 5714 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1115,8 +1039,7 @@ base product TSR 5715 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1129,8 +1052,7 @@ base product TSR 5716 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1143,8 +1065,7 @@ base product TSR 5717 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1157,8 +1078,7 @@ base product TSR 5718 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1171,8 +1091,7 @@ base product TSR 5826 =
   leader            "";
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1185,8 +1104,7 @@ base product TSR 5900 =
   leader            "";
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1200,8 +1118,7 @@ base product TSR 6071 =
   product type      Miniature;
   requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1223,8 +1140,7 @@ base product GG 100 =
   price             DM 20.00;
   contents          Miniature;
   requirements      ;
-  description
-  "One ugly, horse like miniature.";
+  description       "One ugly, horse like miniature.";
   short description "".
 
 
@@ -1246,8 +1162,7 @@ base product GG 103 =
   price             DM 20.00;
   contents          Miniature;
   requirements      ;
-  description
-  "One ugly, horse like miniature.";
+  description       "One ugly, horse like miniature.";
   short description "".
 
 
@@ -1271,8 +1186,7 @@ base product MM 001 =
                     Booklet "example setups",
                     Miniature "Bow Tie Connector" 50;
   requirements      ;
-  description
-  "Some additions to the rooms.";
+  description       "Some additions to the rooms.";
   short description "".
 
 
@@ -1301,8 +1215,7 @@ base product MM 006 =
                     Booklet "example setups",
                     Miniature "Bow Tie Connector" 40;
   requirements      ;
-  description
-  "Some additions to the rooms.";
+  description       "Some additions to the rooms.";
   short description "".
 
 
@@ -1330,8 +1243,7 @@ base product MM 009 =
                     Miniature "Swiveling 'Secret' Door Wall",
                     Miniature "Bow Tie Connector" 50;
   requirements      ;
-  description
-  "The deluxe room pieces.";
+  description       "The deluxe room pieces.";
   short description "".
 
 
@@ -1360,8 +1272,7 @@ base product MM 012 =
                     Miniature "large bag pile",
                     Miniature "stack of crates";
   requirements      ;
-  description
-  "General dungeon accessories.";
+  description       "General dungeon accessories.";
   short description "".
 
 
@@ -1384,8 +1295,7 @@ base product MM 013 =
                     Miniature "bench" 2,
                     Miniature "chair" 6;
   requirements      ;
-  description
-  "Some medieval furniture.";
+  description       "Some medieval furniture.";
   short description "".
 
 
@@ -1411,8 +1321,7 @@ base product MM 014 =
                     Miniature "Narrow Swinging Doors" 2,
                     Miniature "Narrow Bow Tie Connector" 50;
   requirements      ;
-  description
-  "Some narrow passages and doors..";
+  description       "Some narrow passages and doors..";
   short description "".
 
 
@@ -1454,8 +1363,7 @@ base product MM 016 =
                     Miniature "book",
                     Miniature "scroll heap";
   requirements      ;
-  description
-  "Treasure and magical items for the dungeon crawl.";
+  description       "Treasure and magical items for the dungeon crawl.";
   short description "".
 
 
@@ -1477,8 +1385,7 @@ base product Reaper 02034 =
   price             $ 2.25;
   contents          Miniature;
   requirements      ;
-  description
-  "Kurff, the Swift. A human rogue with rope and hook.".
+  description       "Kurff, the Swift. A human rogue with rope and hook.".
 
 
 #.....
@@ -1498,8 +1405,7 @@ base product Reaper 02067 =
   price             $ 2.25;
   contents          Miniature;
   requirements      ;
-  description
-  "Stefan Von Kruger, a human (?) fighter with large (bat)sword and shield".
+  description       "Stefan Von Kruger, a human (?) fighter with large (bat)sword and shield".
 
 
 #.....
@@ -1519,8 +1425,7 @@ base product Reaper 02072 =
   price             $ 2.75;
   contents          Miniature;
   requirements      ;
-  description
-  "Darius The Blue, a \Monster{human} mage with staff, pointing.".
+  description       "Darius The Blue, a \Monster{human} mage with staff, pointing.".
 
 
 #.....
@@ -1540,8 +1445,7 @@ base product Reaper 02156 =
   price             $ 4.95;
   contents          Miniature;
   requirements      ;
-  description
-  "A mummy with outstreched hand.".
+  description       "A mummy with outstreched hand.".
 
 
 #.....
@@ -1561,8 +1465,7 @@ base product Reaper 2114 =
   price             $ 2.75;
   contents          Miniature;
   requirements      ;
-  description
-  "A casting mage with staff..".
+  description       "A casting mage with staff..".
 
 
 #.....
@@ -1582,8 +1485,7 @@ base product Reaper 2116 =
   price             $ 2.75;
   contents          Miniature;
   requirements      ;
-  description
-  "Cthal T'Chuk, a gesticulating \Monster{mind flayer} with staff.".
+  description       "Cthal T'Chuk, a gesticulating \Monster{mind flayer} with staff.".
 
 
 #.....
@@ -1603,8 +1505,7 @@ base product Reaper 2236 =
   price             $ 2.75;
   contents          Miniature;
   requirements      ;
-  description
-  "Sturm Jagstone, a \Monster{dwarf} with a big hammer.".
+  description       "Sturm Jagstone, a \Monster{dwarf} with a big hammer.".
 
 
 #.....
@@ -1624,8 +1525,7 @@ base product Reaper 2319 =
   price             $ 2.75;
   contents          Miniature;
   requirements      ;
-  description
-  "An arch mage with owl and staff".
+  description       "An arch mage with owl and staff".
 
 
 #.....
@@ -1645,8 +1545,7 @@ base product Reaper 2340 =
   price             $ 2.75;
   contents          Miniature;
   requirements      ;
-  description
-  "Unthar Godshand, a male, human cleric with mace and shield.".
+  description       "Unthar Godshand, a male, human cleric with mace and shield.".
 
 
 #.....
@@ -1670,10 +1569,9 @@ base product RP 10-511 =
   contents          Miniature "pewter" 10;
   requirements      ;
   worlds            Ravenloft;
-  description
-  "Ral Partha proudly presents an official \Place{Ravenloft} boxed set. The
-  role-playing experts at TSR believe that this set provides the best figures
-  for the \Place{Ravenloft} campaign setting.";
+  description       "Ral Partha proudly presents an official \Place{Ravenloft} boxed set. The
+                    role-playing experts at TSR believe that this set provides the best figures
+                    for the \Place{Ravenloft} campaign setting.";
   short description "".
 
 
@@ -1694,11 +1592,10 @@ base product RP 10-550 =
   contents          Miniature "pewter" 10;
   requirements      ;
   worlds            Forgotten Realms;
-  description
-  "Ral Partha proudly presents an official \Place{Forgotten Realms} boxed
-  set. Having worked closely with the excellent staff at Ral Partha during the
-  evolution of this set, TSR believes these to be the finest miniatures
-  possible for the \Place{Forgotten Relmas} campaign setting.";
+  description       "Ral Partha proudly presents an official \Place{Forgotten Realms} boxed
+                    set. Having worked closely with the excellent staff at Ral Partha during the
+                    evolution of this set, TSR believes these to be the finest miniatures
+                    possible for the \Place{Forgotten Relmas} campaign setting.";
   short description "".
 
 
@@ -1719,17 +1616,14 @@ base product WOC 40051 =
   style             Small Box;
   contents          Miniature;
   requirements      ;
-  description
-  "Make your dungeons come to life with this new line of miniatures for the
-  king of the RPGs. No Dungeons & Dragons game could be complete without
-  great-looking miniatures to represent heroes, villains, and monsters in your
-  campaign.
-
-  Hand-cast in lead-free pewter for superior quality and outstanding
-  detail. Some miniatures are cast in multiple pieces to produce the most
-  dynamic pose possible.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!".
+  description       "Make your dungeons come to life with this new line of miniatures for the
+                    king of the RPGs. No Dungeons & Dragons game could be complete without
+                    great-looking miniatures to represent heroes, villains, and monsters in your
+                    campaign.
+                    Hand-cast in lead-free pewter for superior quality and outstanding
+                    detail. Some miniatures are cast in multiple pieces to produce the most
+                    dynamic pose possible.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!".
 
 
 #.....
@@ -1749,17 +1643,14 @@ base product WOC 40053 =
   style             Small Box;
   contents          Miniature;
   requirements      ;
-  description
-  "Make your dungeons come to life with this new line of miniatures for the
-  king of the RPGs. No Dungeons & Dragons game could be complete without
-  great-looking miniatures to represent heroes, villains, and monsters in your
-  campaign.
-
-  Hand-cast in lead-free pewter for superior quality and outstanding
-  detail. Some miniatures are cast in multiple pieces to produce the most
-  dynamic pose possible.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!".
+  description       "Make your dungeons come to life with this new line of miniatures for the
+                    king of the RPGs. No Dungeons & Dragons game could be complete without
+                    great-looking miniatures to represent heroes, villains, and monsters in your
+                    campaign.
+                    Hand-cast in lead-free pewter for superior quality and outstanding
+                    detail. Some miniatures are cast in multiple pieces to produce the most
+                    dynamic pose possible.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!".
 
 
 #.....
@@ -1778,13 +1669,11 @@ base product WOC 40055 =
   style             Medium Box;
   contents          Miniature;
   requirements      ;
-  description
-  "This boxed set contains one \Monster{black dragon} model, stunningly
-  sculpted by Kim Graham and hand-cast in lead-free pewter. As a foe for your
-  D&D game or just as a collector's piece, the black dragon is a must for the
-  serious fantasy fan.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!".
+  description       "This boxed set contains one \Monster{black dragon} model, stunningly
+                    sculpted by Kim Graham and hand-cast in lead-free pewter. As a foe for your
+                    D&D game or just as a collector's piece, the black dragon is a must for the
+                    serious fantasy fan.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!".
 
 
 #.....
@@ -1802,24 +1691,20 @@ base product WOC 40059 =
   style             Medium Box;
   contents          Miniature;
   requirements      ;
-  description
-  "Heroes need monsters to slay, and this boxed set gives you six nasties to
-  test your mettle. From the \Monster{orc}, the classic killer of 1st-level
-  characters, to the \Monster{ogre}, the dumb muscle of the humanoid tribes,
-  this boxed set provides a great starting roster of monsters for your D&D
-  campaign. Sculpted by the finest artists in the industry, these miniatures
-  add depth of play to any D&D game. Hand-cast in lead-free pewter, they are
-  equally at home on your gaming table or in your display case.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!
-
-  Miniatures include:
-
-  \list{2 \Monster{Goblins}}
-       {\Monster{Dire Rat}}
-       {\Monster{Orc}}
-       {\Monster{Displacer Beast}}
-       {\Monster{Ogre}}".
+  description       "Heroes need monsters to slay, and this boxed set gives you six nasties to
+                    test your mettle. From the \Monster{orc}, the classic killer of 1st-level
+                    characters, to the \Monster{ogre}, the dumb muscle of the humanoid tribes,
+                    this boxed set provides a great starting roster of monsters for your D&D
+                    campaign. Sculpted by the finest artists in the industry, these miniatures
+                    add depth of play to any D&D game. Hand-cast in lead-free pewter, they are
+                    equally at home on your gaming table or in your display case.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!
+                    Miniatures include:
+                    \list{2 \Monster{Goblins}}
+                    {\Monster{Dire Rat}}
+                    {\Monster{Orc}}
+                    {\Monster{Displacer Beast}}
+                    {\Monster{Ogre}}".
 
 
 #.....
@@ -1838,17 +1723,14 @@ base product WOC 40090 =
   style             Small Box;
   contents          Miniature;
   requirements      ;
-  description
-  "Make your dungeons come to life with this new line of miniatures for the
-  king of the RPGs. No Dungeons & Dragons game could be complete without
-  great-looking miniatures to represent heroes, villains, and monsters in your
-  campaign.
-
-  Hand-cast in lead-free pewter for superior quality and outstanding
-  detail. Some miniatures are cast in multiple pieces to produce the most
-  dynamic pose possible.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!".
+  description       "Make your dungeons come to life with this new line of miniatures for the
+                    king of the RPGs. No Dungeons & Dragons game could be complete without
+                    great-looking miniatures to represent heroes, villains, and monsters in your
+                    campaign.
+                    Hand-cast in lead-free pewter for superior quality and outstanding
+                    detail. Some miniatures are cast in multiple pieces to produce the most
+                    dynamic pose possible.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!".
 
 
 #.....
@@ -1867,17 +1749,14 @@ base product WOC 40092 =
   style             Small Box;
   contents          Miniature;
   requirements      ;
-  description
-  "Make your dungeons come to life with this new line of miniatures for the
-  king of the RPGs. No Dungeons & Dragons game could be complete without
-  great-looking miniatures to represent heroes, villains, and monsters in your
-  campaign.
-
-  Hand-cast in lead-free pewter for superior quality and outstanding
-  detail. Some miniatures are cast in multiple pieces to produce the most
-  dynamic pose possible.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!".
+  description       "Make your dungeons come to life with this new line of miniatures for the
+                    king of the RPGs. No Dungeons & Dragons game could be complete without
+                    great-looking miniatures to represent heroes, villains, and monsters in your
+                    campaign.
+                    Hand-cast in lead-free pewter for superior quality and outstanding
+                    detail. Some miniatures are cast in multiple pieces to produce the most
+                    dynamic pose possible.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!".
 
 
 #.....
@@ -1896,17 +1775,14 @@ base product WOC 40095 =
   style             Small Box;
   contents          Miniature;
   requirements      ;
-  description
-  "Make your dungeons come to life with this new line of miniatures for the
-  king of the RPGs. No Dungeons & Dragons game could be complete without
-  great-looking miniatures to represent heroes, villains, and monsters in your
-  campaign.
-
-  Hand-cast in lead-free pewter for superior quality and outstanding
-  detail. Some miniatures are cast in multiple pieces to produce the most
-  dynamic pose possible.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!".
+  description       "Make your dungeons come to life with this new line of miniatures for the
+                    king of the RPGs. No Dungeons & Dragons game could be complete without
+                    great-looking miniatures to represent heroes, villains, and monsters in your
+                    campaign.
+                    Hand-cast in lead-free pewter for superior quality and outstanding
+                    detail. Some miniatures are cast in multiple pieces to produce the most
+                    dynamic pose possible.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!".
 
 
 #.....
@@ -1925,17 +1801,14 @@ base product WOC 40097 =
   style             Small Box;
   contents          Miniature;
   requirements      ;
-  description
-  "Make your dungeons come to life with this new line of miniatures for the
-  king of the RPGs. No Dungeons & Dragons game could be complete without
-  great-looking miniatures to represent heroes, villains, and monsters in your
-  campaign.
-
-  Hand-cast in lead-free pewter for superior quality and outstanding
-  detail. Some miniatures are cast in multiple pieces to produce the most
-  dynamic pose possible.
-
-  Unsheathe your sword and kick down the door---it's time to play D&D!".
+  description       "Make your dungeons come to life with this new line of miniatures for the
+                    king of the RPGs. No Dungeons & Dragons game could be complete without
+                    great-looking miniatures to represent heroes, villains, and monsters in your
+                    campaign.
+                    Hand-cast in lead-free pewter for superior quality and outstanding
+                    detail. Some miniatures are cast in multiple pieces to produce the most
+                    dynamic pose possible.
+                    Unsheathe your sword and kick down the door---it's time to play D&D!".
 
 
 #.....
@@ -1956,8 +1829,7 @@ base product DMA 000062 =
   producer          TSR;
   contents          Miniature "pewter" 2;
   requirements      ;
-  description
-  "A female dwarf and a male dwarven king.";
+  description       "A female dwarf and a male dwarven king.";
   short description "".
 
 
@@ -1977,8 +1849,7 @@ base product DMA 000063 =
   producer          Fenryll;
   contents          Miniature "plastic" 3;
   requirements      ;
-  description
-  "3 miniatures and a portal mirror, one miniature just crossing it.";
+  description       "3 miniatures and a portal mirror, one miniature just crossing it.";
   short description "".
 
 
@@ -2017,8 +1888,7 @@ base product MVRG 01 =
   contents          Miniature 3;
   requirements      ;
   worlds            Confrontation;
-  description
-  "3 miniatures.";
+  description       "3 miniatures.";
   short description "".
 
 
@@ -2056,8 +1926,7 @@ base product MVVO 01 =
   contents          Miniature 2;
   requirements      ;
   worlds            Confrontation;
-  description
-  "2 miniatures.";
+  description       "2 miniatures.";
   short description "".
 
 
@@ -2066,7 +1935,7 @@ base product MVVO 01 =
 
 base product ACCOL 01 =
 
-  title             "S\umlaut{a}len des Schweigens";
+  title             "S\umlaut{a}ulen des Schweigens";
   leader            "";
   subtitle          "";
   author            "",
@@ -2094,8 +1963,7 @@ base product ACCOL 01 =
   contents          Miniature 3;
   requirements      ;
   worlds            Confrontation;
-  description
-  "3 miniature pillars.";
+  description       "3 miniature pillars.";
   short description "".
 
 
@@ -2130,8 +1998,7 @@ base product C 12311 =
   price             DM 13.00;
   contents          Miniature;
   requirements      ;
-  description
-  "1 miniture";
+  description       "1 miniture";
   short description "".
 
 
@@ -2164,8 +2031,7 @@ base product GF9 11202 =
   contents          Miniature "Wall of Smoke" 2;
   requirements      ;
   layout            Full Color;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2196,8 +2062,7 @@ base product GF9 11201 =
   contents          Miniature "Wall of Fire" 2;
   requirements      ;
   layout            Full Color;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2228,8 +2093,7 @@ base product GF9 11203 =
   contents          Miniature "Wall of Ice" 2;
   requirements      ;
   layout            Full Color;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2256,21 +2120,14 @@ base product WTC 10773 =
                     Booklet "Scenario booklet" 1;
   requirements      WTC 96582;
   layout            Full Color;
-  description
-  "\NPC{Drizzt Do'Urden} was raised in the underground city of \Place{Menzoberranzan, home of the \Monster{drow}---a race of twisted, evil dark \Monster{elves}. However, \NPC{Drizzt} fled the \Place{Underdark} for the surface realm, where he befriended the human barbarian \NPC{Wulfgar}. Together they battled the most terrible threat ever to ravage \Place{Icewind Dale}: the \Monster{white draong} \NPC{Icingdeath}!
-
-\bold{Collect}
-
-Proudly display \NPC{Drizzt}, \NCP{Wulfgar}, and \NPC{Icingdeath} with your finest collectable figures
-
-\bold{Battle}
-
-Play out the legendary battle between \NPC{Drizzt}, \NCP{Wulfgar}, and \NPC{Icingdeath}, or pit the Gargantuan \Monster{White Dragon} against the best warbands your friends can muster.
-
-\bold{Roleplay}
-
-Unleash the \NPCP{Terror of Icewind Dale}---the \Monster{white dragon} \NPC{Icingdeath}---upon your party of unsuspecting adventurers.
-".
+  description       "\NPC{Drizzt Do'Urden} was raised in the underground city of \Place{Menzoberranzan, home of the \Monster{drow}---a race of twisted, evil dark \Monster{elves}. However, \NPC{Drizzt} fled the \Place{Underdark} for the surface realm, where he befriended the human barbarian \NPC{Wulfgar}. Together they battled the most terrible threat ever to ravage \Place{Icewind Dale}: the \Monster{white draong} \NPC{Icingdeath}!
+                    \bold{Collect}
+                    Proudly display \NPC{Drizzt}, \NCP{Wulfgar}, and \NPC{Icingdeath} with your finest collectable figures
+                    \bold{Battle}
+                    Play out the legendary battle between \NPC{Drizzt}, \NCP{Wulfgar}, and \NPC{Icingdeath}, or pit the Gargantuan \Monster{White Dragon} against the best warbands your friends can muster.
+                    \bold{Roleplay}
+                    Unleash the \NPCP{Terror of Icewind Dale}---the \Monster{white dragon} \NPC{Icingdeath}---upon your party of unsuspecting adventurers.
+                    ".
 
 #.....
 
@@ -2294,19 +2151,15 @@ base product DPS 9011 =
                     Miniature "door" 5;
   requirements      ;
   layout            Full Color;
-  description
-  "\emph{Your mini's deserve someplace cool to play!}
-
-\produyct{Dungeon Life: Bendy Dungeon Walls} offers an excellent solution to the age-old problem of the 3D dungeon. Durable interlocking wall segments quickly snap together to form 'chains' of dungeon walls. Simple place a length of walls onto the game mat, and 'bend' it into the shape of your dungeon room. Snap it apart to add freestanding doors, and just like that, you're done! It's easy, convenient, adds a cool factor of 3D to your game, and most important... it's fast!
-
-Build just the dungeon areas you need... as you need them. During play! No need for the gamemaster to spend hours of extra prep time setting up the dungeon, and the players don't get the peek ahead. It's easy to recycle, too... just pick up the pieces of the rooms your party are done with, and use them to build the next room! \bold{The adventure never ends with \Product{Bendy Dungeon Walls}... It's a Dungeon Life!}
-
-\list
-{Durable Plastic}
-{Fully painted and ready for play!}
-{Snap together wall - Then place 'em on the map, and bend to any shape you need!}
-{Build the Dungeon while you play!}
-{Works great with an 1'' game mat!}".
+  description       "\emph{Your mini's deserve someplace cool to play!}
+                    \produyct{Dungeon Life: Bendy Dungeon Walls} offers an excellent solution to the age-old problem of the 3D dungeon. Durable interlocking wall segments quickly snap together to form 'chains' of dungeon walls. Simple place a length of walls onto the game mat, and 'bend' it into the shape of your dungeon room. Snap it apart to add freestanding doors, and just like that, you're done! It's easy, convenient, adds a cool factor of 3D to your game, and most important... it's fast!
+                    Build just the dungeon areas you need... as you need them. During play! No need for the gamemaster to spend hours of extra prep time setting up the dungeon, and the players don't get the peek ahead. It's easy to recycle, too... just pick up the pieces of the rooms your party are done with, and use them to build the next room! \bold{The adventure never ends with \Product{Bendy Dungeon Walls}... It's a Dungeon Life!}
+                    \list
+                    {Durable Plastic}
+                    {Fully painted and ready for play!}
+                    {Snap together wall - Then place 'em on the map, and bend to any shape you need!}
+                    {Build the Dungeon while you play!}
+                    {Works great with an 1'' game mat!}".
 
 #.....
 
@@ -2331,14 +2184,11 @@ base product WTC 10774 =
   contents          Miniature "randomized, fully painted, plastic" 8,
                     Card "full color, game stats" 8,
                     Sheet "Miniatures list" 1;
-  requirements      :WTC 96582;
+  requirements       : WTC 96582;
   layout            Full Color;
-  description
-  "Ancient ruins buried beneath the desert wastes are infested by deadly monsters. Deep within the sandy tombs, \Monster{mummies} and swarms of \Monster{scarab beetles} guard priceless treasure, \Monster{yuan-ti} cultists scheme, \Monster{umber hulks} delve, and \Monster{drow} \Monster{elves} plan their next invasion.
-
-\large[Ancient Evil Never Dies}
-
-Create classic battles when you collect all 60 miniatures in the \Product{Desort of Desolation} set. Use a mix of adventuring heroes, dungeon denizes, and other archetypal monsters to compete against your friends in fast, head-to-head combat, or to create thrilling D&D adventures.".
+  description       "Ancient ruins buried beneath the desert wastes are infested by deadly monsters. Deep within the sandy tombs, \Monster{mummies} and swarms of \Monster{scarab beetles} guard priceless treasure, \Monster{yuan-ti} cultists scheme, \Monster{umber hulks} delve, and \Monster{drow} \Monster{elves} plan their next invasion.
+                    \large[Ancient Evil Never Dies}
+                    Create classic battles when you collect all 60 miniatures in the \Product{Desort of Desolation} set. Use a mix of adventuring heroes, dungeon denizes, and other archetypal monsters to compete against your friends in fast, head-to-head combat, or to create thrilling D&D adventures.".
 
 #.....
 #----- MEONOD1
@@ -2361,10 +2211,8 @@ base product MEONOD1 =
   contents          Miniature "Nodwick" 1;
   requirements      ;
   layout            Full Color;
-  description
-  "Magnificient Egos produces high quality figures of unique character and appearance to stimulate customers' imaginations and provide alternative choices to the more generic lines produced for RPGs and Wargames.
-
-We accomplish this by combining highly-experienced miniatures hobbyist's with artists at the top of their field and some of the industry's most respected sculptors.";
+  description       "Magnificient Egos produces high quality figures of unique character and appearance to stimulate customers' imaginations and provide alternative choices to the more generic lines produced for RPGs and Wargames.
+                    We accomplish this by combining highly-experienced miniatures hobbyist's with artists at the top of their field and some of the industry's most respected sculptors.";
   short description "Nodwick hauling treasure.".
 
 #.....
@@ -2387,8 +2235,7 @@ base product MM 20033 =
   contents          Miniature "random weapon" 20;
   requirements      ;
   layout            Full Color;
-  description
-  "Assortment of weapons.";
+  description       "Assortment of weapons.";
   short description "Assortment of weapons.".
 
 #.....
@@ -2412,8 +2259,7 @@ base product MM 20019 =
   contents          Miniature "bookshelf" 2;
   requirements      ;
   layout            Full Color;
-  description
-  "Two bookshelves for the dungeon.";
+  description       "Two bookshelves for the dungeon.";
   short description "Two bookshelves for the dungeon.".
 
 #.....
@@ -2458,8 +2304,7 @@ base product MM 20024 =
   contents          Miniature "Tombstone" 25;
   requirements      ;
   layout            Full Color;
-  description
-  "An assortment of Tombstones.";
+  description       "An assortment of Tombstones.";
   short description "An assortment of Tombstones.".
 
 #.....
@@ -2482,8 +2327,7 @@ base product MM 20032 =
   contents          Miniature "Shield" 20;
   requirements      ;
   layout            Full Color;
-  description
-  "An assortment of Shields.";
+  description       "An assortment of Shields.";
   short description "An assortment of Shields".
 
 #.....
@@ -2507,8 +2351,7 @@ base product MM 20014 =
   contents          Miniature "Sarcophagus" 2;
   requirements      ;
   layout            Full Color;
-  description
-  "A pair of sarcophagi.";
+  description       "A pair of sarcophagi.";
   short description "A pair of sarcophagi.".
 
 #.....
@@ -2529,14 +2372,10 @@ base product TTL 001 =
   price             $49.95;
   requirements      ;
   layout            Full Color;
-  description
-  "Combat Tiers bring a new dimension to tabletop gaming scenarios where height and distance are needed. Eliminating guesswork, Combat Tiers place any size miniatures at the exact height and distance needed to determine where combatants are during your battle scenarios.
-
-Made from durable acrylic, Combat Tiers are designed to easily engage your gaming experience. The transparent material will not obscure the gaming environment. Multi-tier possibilities allow you to create various heights, while the large staging platforms allow the players to place multiple figures in simulated flight or combat, keeping everything sturdy and precise. Combat Tiers are gauged in one inch increments both on the prominent staging platforms and on the supporting columns, so ranges can be easily determined at a glance. With additional extensions, your figures can soar to even higher heights. No longer are ranges reduced to estimations—know exactly how the battle unfolds!
-
-Combat Tiers can simulate many environments—use them to gauge underwater and space environments in addition to flight. For military enthusiasts, planes come alive during raids and strafing runs, and ships and submarines enjoy a new level of silent running as altitudes and depths take on a whole new gaming dimension.
-
-Combat Tiers truly invigorate all your combat gaming situations.";
+  description       "Combat Tiers bring a new dimension to tabletop gaming scenarios where height and distance are needed. Eliminating guesswork, Combat Tiers place any size miniatures at the exact height and distance needed to determine where combatants are during your battle scenarios.
+                    Made from durable acrylic, Combat Tiers are designed to easily engage your gaming experience. The transparent material will not obscure the gaming environment. Multi-tier possibilities allow you to create various heights, while the large staging platforms allow the players to place multiple figures in simulated flight or combat, keeping everything sturdy and precise. Combat Tiers are gauged in one inch increments both on the prominent staging platforms and on the supporting columns, so ranges can be easily determined at a glance. With additional extensions, your figures can soar to even higher heights. No longer are ranges reduced to estimations—know exactly how the battle unfolds!
+                    Combat Tiers can simulate many environments—use them to gauge underwater and space environments in addition to flight. For military enthusiasts, planes come alive during raids and strafing runs, and ships and submarines enjoy a new level of silent running as altitudes and depths take on a whole new gaming dimension.
+                    Combat Tiers truly invigorate all your combat gaming situations.";
   short description "Combat Terrain for flying monsters and characters.".
 
 #.....
@@ -2556,8 +2395,7 @@ base product AFS 047 =
   contents          Miniature "flight stand" 2;
   requirements      ;
   layout            Black & White;
-  description
-  "Two stands for flying figures.";
+  description       "Two stands for flying figures.";
   short description "Two stands for flying figures.";
   synonyms          "".
 
@@ -2578,8 +2416,7 @@ base product TS 026-LRG =
   contents          Miniature "Large Flaming Wreckage" 3;
   requirements      ;
   layout            Black & White;
-  description
-  "Large set of flames.";
+  description       "Large set of flames.";
   short description "Large set of flames.";
   synonyms          "".
 
@@ -2600,8 +2437,7 @@ base product TS 026-MED =
   contents          Miniature "Medium Flaming Wreckage" 5;
   requirements      ;
   layout            Black & White;
-  description
-  "Medium Set of flaming wreckage.";
+  description       "Medium Set of flaming wreckage.";
   short description "Medium Set of flaming wreckage.";
   synonyms          "".
 
@@ -2622,8 +2458,7 @@ base product TS 026-SML =
   contents          Miniature "Small flaming wreckage" 7;
   requirements      ;
   layout            Black & White;
-  description
-  "Small set of flaming wreckage.";
+  description       "Small set of flaming wreckage.";
   short description "Small set of flaming wreckage.";
   synonyms          "".
 
@@ -2644,8 +2479,7 @@ base product TS 105 =
   contents          Miniature "flaming wreckage marker";
   requirements      ;
   layout            Full Color;
-  description
-  "Huge flaming wreckage marker.";
+  description       "Huge flaming wreckage marker.";
   short description "Huge flaming wreckage marker.";
   synonyms          "".
 
@@ -2666,8 +2500,7 @@ base product TS 121 =
   contents          Miniature "skull and bones" 5;
   requirements      ;
   layout            Black & White;
-  description
-  "Skull and bones set.";
+  description       "Skull and bones set.";
   short description "Skull and bones set.";
   synonyms          "".
 
@@ -2688,8 +2521,7 @@ base product TS 127 =
   contents          Miniature "torch bearer marker" 3;
   requirements      ;
   layout            Black & White;
-  description
-  "Set of three torch bearer markers.";
+  description       "Set of three torch bearer markers.";
   short description "Set of three torch bearer markers.";
   synonyms          "".
 
@@ -2717,8 +2549,7 @@ base product TS 051 =
   contents          Miniature "weather effect marker" 5;
   requirements      ;
   layout            Black & White;
-  description
-  "Markers for Weather effects. Fog, rain, snow, heat, wind.";
+  description       "Markers for Weather effects. Fog, rain, snow, heat, wind.";
   short description "Markers for Weather effects.";
   synonyms          "".
 
@@ -2743,10 +2574,8 @@ base product WTC 24463 =
   price             $74.99;
   requirements      ;
   layout            Full Color;
-  description
-  "\God{Orcus}, the \Monster{demon prince} of the undead, is one of the most powerful \Monster{demon} lords of the \Place{Abyss}. He commands legions of followers, living and dead, and he takes great pleasure in the suffering of others. During his eternal reign, the \Monster{demon} prince vanquished hundreds of mighty heroes and destroyed countless kingdoms. With every conquest, he adds the corpses of fallen enemies to his vast undead army.
-
-One of the greatest villains of the Dungeons & Dragons Roleplaying Game, \God{Orcus}, Prince of Undeath, sets out to destroy the world of the living and rule over the undead. Can you adventurers stand against this vile demon prince?";
+  description       "\God{Orcus}, the \Monster{demon prince} of the undead, is one of the most powerful \Monster{demon} lords of the \Place{Abyss}. He commands legions of followers, living and dead, and he takes great pleasure in the suffering of others. During his eternal reign, the \Monster{demon} prince vanquished hundreds of mighty heroes and destroyed countless kingdoms. With every conquest, he adds the corpses of fallen enemies to his vast undead army.
+                    One of the greatest villains of the Dungeons & Dragons Roleplaying Game, \God{Orcus}, Prince of Undeath, sets out to destroy the world of the living and rule over the undead. Can you adventurers stand against this vile demon prince?";
   short description "An gargantuan, iconic miniature of Orcus, Prince of Undeath.".
 
 #.....

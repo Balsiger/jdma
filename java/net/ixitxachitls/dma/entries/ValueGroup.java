@@ -116,6 +116,15 @@ public abstract class ValueGroup implements Changeable
     boolean value() default true;
   }
 
+  /** The annotation for a variable printed even when undefined. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface PrintUndefined {
+    /** Flag if the value should be printed when undefined. */
+    boolean value() default true;
+  }
+
   /** The annotation for a not editable variable. */
   @Target(ElementType.FIELD)
   @Retention(RetentionPolicy.RUNTIME)
@@ -1696,6 +1705,8 @@ public abstract class ValueGroup implements Changeable
         Plural plural = field.getAnnotation(Plural.class);
         NoStore noStore = field.getAnnotation(NoStore.class);
         Note note = field.getAnnotation(Note.class);
+        PrintUndefined printUndefined =
+          field.getAnnotation(PrintUndefined.class);
 
         variables.add(new Variable(key.value(), field,
                                    noStore == null || !noStore.value(),
@@ -1704,7 +1715,9 @@ public abstract class ValueGroup implements Changeable
                                    player != null && player.value(),
                                    playerEdit != null && playerEdit.value(),
                                    plural == null ? null : plural.value(),
-                                   note == null ? null : note.value()));
+                                   note == null ? null : note.value(),
+                                   printUndefined == null ?
+                                   false : printUndefined.value()));
       }
     }
 

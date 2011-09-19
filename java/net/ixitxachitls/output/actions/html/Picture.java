@@ -221,9 +221,12 @@ public class Picture extends Action
     inDocument.add(m_class);
     inDocument.add(style);
     inDocument.add("\"");
-    if(thumbnail && !m_link)
+    if((thumbnail || target.contains("w=") || target.contains("h=")) && !m_link)
       inDocument.add(" onclick=\"util.link(event, '"
-                     + Files.concatenate(m_subDir, Files.encodeName(target))
+                     + Files.concatenate(m_subDir,
+                                         Files.encodeName
+                                         (target.replaceAll
+                                          ("(\\?|&)(w|h)=\\d+(&|$)", "$1")))
                      .replaceAll("%", "%25") + "');\" "
                      + "style=\"cursor: pointer\"");
     inDocument.add("/>");
