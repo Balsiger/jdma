@@ -438,6 +438,30 @@ A.paginate-previous
   float:       left;
 }
 
+TABLE.entrylist TD.label
+{
+  width: 1%;
+}
+
+TABLE.entrylist TD.id,
+TABLE.entrylist TD.system
+{
+  width: 10%;
+}
+
+TABLE.entrylist TD.worlds
+{
+  width: 20%;
+}
+
+TABLE.entrylist TD.producttitle,
+TABLE.entrylist TD.short
+{
+  width: 30%;
+}
+
+
+
 /******************************************************************************
  * type colors
  *****************************************************************************/

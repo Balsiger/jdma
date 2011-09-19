@@ -226,6 +226,7 @@ util.link = function(inEvent, inTarget, inFunction)
       window.history.pushState(target, document.title, target);
 
     edit.refresh();
+    gui.setupHighlight();
   });
 
   return false;

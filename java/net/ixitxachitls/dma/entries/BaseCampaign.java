@@ -113,10 +113,13 @@ public class BaseCampaign extends BaseEntry
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
-    new Print("$title "
+    new Print("$image "
               + "${as pdf} ${as text} ${as dma} "
-              + "$clear $files \n"
-              + "$description "
+              + "$title "
+              + "$desc"
+              + "$clear "
+              + "$files "
+              + "\n"
               + "$par "
               + "%campaigns "
               // admin
