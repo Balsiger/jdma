@@ -323,6 +323,10 @@ public class EntryListServlet extends PageServlet
                    + "entrys</a>');\n"
                    + "    </SCRIPT>\n",
                    m_output.toString());
+
+      m_logger.addExpected("WARNING: base base entry 'guru1' not found");
+      m_logger.addExpected("WARNING: base base entry 'guru2' not found");
+      m_logger.addExpected("WARNING: base base entry 'guru3' not found");
     }
 
     //......................................................................

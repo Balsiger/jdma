@@ -314,8 +314,7 @@ public class EntryPDFServlet extends PDFServlet
                    m_output.toString().substring(0, 10));
       assertContent("paths", m_paths, "/baseentry/guru");
 
-      m_logger.addExpected("WARNING: image file 'icons/BaseEntries-dummy.png' "
-                           + "not found, using placeholder");
+      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................
@@ -379,6 +378,8 @@ public class EntryPDFServlet extends PDFServlet
       assertNull("entry", servlet.getEntry(""));
       assertNull("entry", servlet.getEntry("test/"));
       assertNull("entry", servlet.getEntry("test/guru"));
+
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

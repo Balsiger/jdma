@@ -179,9 +179,10 @@ public class ListPrint extends AbstractPrint
       assertEquals("printing",
                    "[start, \\color{error}{ * first * }, "
                    + "\\title[entrytitle]"
-                   + "{\\image[main-image]{/icons/BaseEntries-dummy.png} "
-                   + "test}]",
+                   + "{test}]",
                    print.print("key", entry, true).toString());
+
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

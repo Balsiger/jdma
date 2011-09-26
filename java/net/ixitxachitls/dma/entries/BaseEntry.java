@@ -50,8 +50,8 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
 //import net.ixitxachitls.output.commands.Color;
-//import net.ixitxachitls.output.commands.BaseCommand;
-// import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.Hrule;
 // import net.ixitxachitls.output.commands.Icon;
@@ -743,6 +743,38 @@ public class BaseEntry extends AbstractEntry
 
   //........................................................................
 
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("desc".equals(inKey))
+      return new FormattedValue
+        (new Divider("desc",
+                     new Command(computeValue("description", inDM)
+                                 .format(this, inDM, true),
+                                 computeValue("short description", inDM)
+                                 .format(this, inDM, true))),
+         null, "desc", false, false, false, false, "desc", "");
+
+    if("short description".equals(inKey))
+      return new FormattedValue
+        (new Divider("short-description",
+                     computeValue("_short description", inDM)
+                     .format(this, inDM, true)),
+         null, "short-desc", false, false, false, false, "short-desc", "");
+
+    return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
   //----------------------------- printCommand -----------------------------
 
   /**

@@ -25,11 +25,10 @@ package net.ixitxachitls.server.servlets;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
@@ -78,14 +77,32 @@ public class FileServlet extends BaseServlet
 
   //----- Type -------------------------------------------------------------
 
+  /**
+   * The type of a file.
+   */
   private static class Type
   {
+    /**
+     * Create a file type.
+     *
+     * @param inExtension the file extension
+     * @param inMimeType  the mime type
+     *
+     */
     public Type(@Nonnull String inExtension, @Nonnull String inMimeType)
     {
       m_extension = inExtension;
       m_mimeType = inMimeType;
     }
 
+    /**
+     * Create a file type for an image.
+     *
+     * @param inExtension the file extension
+     * @param inMimeType  the mime type
+     * @param inImageFormat the image format for images
+     *
+     */
     public Type(@Nonnull String inExtension, @Nonnull String inMimeType,
                 @Nonnull String inImageFormat)
     {
@@ -94,25 +111,50 @@ public class FileServlet extends BaseServlet
       m_imageFormat = inImageFormat;
     }
 
-    @Nonnull String m_extension;
-    @Nonnull String m_mimeType;
-    @Nullable String m_imageFormat;
+    /** The extension of the file. */
+    private @Nonnull String m_extension;
 
+    /** The mime type of the file. */
+    private @Nonnull String m_mimeType;
+
+    /** The image format, if any. */
+    private @Nullable String m_imageFormat;
+
+    /**
+     * Get the extension of the file.
+     *
+     * @return the file extension
+     */
     public @Nonnull String getExtension()
     {
       return m_extension;
     }
 
+    /**
+     * Get the mim type of the file.
+     *
+     * @return the file's mime type
+     */
     public @Nonnull String getMimeType()
     {
       return m_mimeType;
     }
 
+    /**
+     * Get the format of the image or null if not an image.
+     *
+     * @return the format of the image or null
+     */
     public @Nullable String getImageFormat()
     {
       return m_imageFormat;
     }
 
+    /**
+     * Check wether the file represents an image.
+     *
+     * @return true if the file is an image, false if not
+     */
     public boolean isImage()
     {
       return m_imageFormat != null;
@@ -192,6 +234,8 @@ public class FileServlet extends BaseServlet
     s_types.put(".pdf", new Type(".pdf", "application/pdf"));
     s_types.put(".css", new Type(".css", "text/css"));
     s_types.put(".js",  new Type(".js", "text/javascript"));
+    s_types.put(".config", new Type(".config", "text/plain"));
+    s_types.put(".config", new Type(".template", "text/plain"));
   }
 
   /** The id for serialization. */
@@ -308,9 +352,11 @@ public class FileServlet extends BaseServlet
         inResponse.setHeader("Content-Type",
                              m_type.getMimeType() + "; charset=utf-8");
       else
+      {
         // We just hope the client knows what to do with the type...
         Log.warning("extension " + Files.extension(path)
                     + " is not registered for " + path);
+      }
     }
 
     // add the date (for caching on the client)
@@ -325,7 +371,7 @@ public class FileServlet extends BaseServlet
     OutputStream output = inResponse.getOutputStream();
 
     // check if we are dealiong with an image and we have to scale it
-    if(m_type.isImage())
+    if(m_type != null && m_type.isImage())
     {
       Multimap<String, String> params = ServerUtils.extractParams(inRequest);
       int width = -1;
@@ -396,12 +442,12 @@ public class FileServlet extends BaseServlet
         .andReturn("/config/test/test.config");
       EasyMock.expect(request.getDateHeader("If-Modified-Since"))
         .andReturn(0L);
-      response.setHeader("Content-Type", "text/plain");
       response.setHeader("Cache-Control", "max-age=86400");
       response.setDateHeader(EasyMock.eq("Last-Modified"),
                              EasyMock.gt(new Date().getTime()));
       response.setDateHeader(EasyMock.eq("Expires"),
                              EasyMock.gt(new Date().getTime()));
+      response.setHeader("Content-Type", "text/plain");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 

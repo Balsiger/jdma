@@ -2210,13 +2210,6 @@ public class BaseProduct extends BaseEntry
                                  .format(this, inDM, true))),
          null, "desc", false, false, false, false, "desc", "");
 
-    if("short description".equals(inKey))
-      return new FormattedValue
-        (new Divider("short-description",
-                     computeValue("_short description", inDM)
-                     .format(this, inDM, true)),
-         null, "short-desc", false, false, false, false, "short-desc", "");
-
     if("subtitle".equals(inKey))
       return new FormattedValue
         (new Subtitle(new BaseCommand(m_subtitle.get())),

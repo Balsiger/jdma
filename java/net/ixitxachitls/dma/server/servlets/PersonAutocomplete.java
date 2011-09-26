@@ -205,6 +205,8 @@ public class PersonAutocomplete extends Autocomplete
                    output.toString());
 
       EasyMock.verify(request, response);
+
+      m_logger.addExpected("WARNING: base base product 'Test' not found");
     }
 
     //......................................................................
@@ -252,14 +254,12 @@ public class PersonAutocomplete extends Autocomplete
                    output.toString());
 
       EasyMock.verify(request, response);
+
+      m_logger.addExpected("WARNING: base base product 'Test' not found");
     }
 
     //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

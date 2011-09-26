@@ -1716,8 +1716,8 @@ public abstract class ValueGroup implements Changeable
                                    playerEdit != null && playerEdit.value(),
                                    plural == null ? null : plural.value(),
                                    note == null ? null : note.value(),
-                                   printUndefined == null ?
-                                   false : printUndefined.value()));
+                                   printUndefined == null
+                                   ? false : printUndefined.value()));
       }
     }
 

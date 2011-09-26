@@ -173,6 +173,7 @@ public class LogoutServlet extends LoginServlet
       servlet.doPost(request, response);
       assertEquals("post", "", output.toString());
 
+      m_logger.addExpected("WARNING: base base character 'somebody' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/somebody.dma'");
       EasyMock.verify(request, response);

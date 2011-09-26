@@ -73,6 +73,158 @@ import net.ixitxachitls.util.logging.Log;
 
 public class SaveActionServlet extends ActionServlet
 {
+  //----------------------------------------------------------------- nested
+
+  /**
+   * Storage for the change information for one or multiple entries.
+   */
+  private static class Changes
+  {
+    /**
+     * Create a change for one or multiple entries.
+     *
+     * @param inID       entry id
+     * @param inType     entry type
+     * @param inFullType the full type of the entries
+     * @param inData     the data the entry is stored
+     * @param inOwner    the owner of the entry/entries
+     *
+     */
+    public Changes(@Nonnull String inID,
+                   @Nonnull AbstractType<? extends AbstractEntry> inType,
+                   @Nonnull String inFullType,
+                   @Nonnull DMAData inData,
+                   @Nonnull AbstractEntry inOwner)
+    {
+      m_id = inID;
+      m_name = m_id;
+      m_type = inType;
+      m_fullType = inFullType;
+      m_data = inData;
+      m_owner = inOwner;
+    }
+
+    /** The id of the entry/entries changed. */
+    protected @Nonnull String m_id;
+
+    /** The type of entry/entries changed. */
+    protected @Nonnull AbstractType<? extends AbstractEntry> m_type;
+
+    /** The data where the entry/entries is stored. */
+    protected @Nonnull DMAData m_data;
+
+    /** The owner of the entry/entries changed. */
+    protected @Nonnull AbstractEntry m_owner;
+
+    /** The name of the entry changed. */
+    protected @Nullable String m_name;
+
+    /** The file for the entry/entries. */
+    protected @Nullable String m_file;
+
+    /** The full type of the entriy/entries changed. */
+    protected @Nonnull String m_fullType;
+
+    /** A flag if multiple entries are affected by the change. */
+    protected boolean m_multiple = false;
+
+    /** A map with all the changed values. */
+    protected @Nonnull Map<String, String>m_values =
+      new HashMap<String, String>();
+
+    /**
+     * Convert to a human readable string for debugging.
+     *
+     * @return the converted string
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return m_name + " [" + m_id + "]/" + m_type + " (" + m_owner.getName()
+        + "/" + m_file + (m_multiple ? ", single" : ", multiple") + "):"
+        + m_values;
+    }
+
+    /**
+     * Set a value in the change for a given key.
+     *
+     * @param inKey   the key of the value to change
+     * @param inValue the value to change to
+     *
+     */
+    public void set(@Nonnull String inKey, @Nonnull String inValue)
+    {
+      if("file".equals(inKey))
+        m_file = inValue;
+      else
+      {
+        if("name".equals(inKey))
+          m_name = inValue;
+
+        m_values.put(inKey, inValue);
+      }
+
+      if(inKey.indexOf("/") > 0)
+        m_multiple = true;
+    }
+
+    /**
+     * Figure out the affected entries.
+     *
+     * @param ioErrors the errors encountered, will be adjusted
+     *
+     * @return a set with all the entries affected by this change
+     *
+     */
+    public @Nonnull Set<AbstractEntry> entries(@Nonnull List<String> ioErrors)
+    {
+      Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
+      if(m_multiple)
+      {
+        for(AbstractEntry entry : m_data.getEntriesList(m_type))
+          if(entry.matches(m_fullType, m_id))
+            entries.add(entry);
+      }
+      else
+      {
+        AbstractEntry entry = m_data.getEntry(m_id, m_type);
+
+        if(entry == null && m_file != null)
+        {
+          // create a new entry for filling out
+          Log.event(m_owner.getID(), "create",
+                    "creating " + m_type + " entry '" + m_name + "'");
+
+          entry = m_type.create(m_name, m_data);
+          if(entry instanceof Entry)
+            entry.setOwner(m_owner);
+
+          // store it in the campaign
+          if(!m_data.addEntry(entry, m_file))
+          {
+            Log.warning("Could not store " + m_type + " '" + m_name + "' in '"
+                        + m_file + "'");
+            entry = null;
+          }
+        }
+
+        if(entry == null)
+        {
+          String error = "could not find " + m_type + " " + m_name
+            + " for saving";
+          Log.warning(error);
+          ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+        }
+        else
+          entries.add(entry);
+      }
+
+      return entries;
+    }
+  }
+
+  //........................................................................
+
   //--------------------------------------------------------- constructor(s)
 
   //--------------------------- SaveActionServlet --------------------------
@@ -151,7 +303,8 @@ public class SaveActionServlet extends ActionServlet
                        + Encodings.toJSString(change.m_id) + ", "
                        + Encodings.toJSString(keyValue.getKey()) + ", "
                        + Encodings.toJSString(rest) + ");");
-          } else
+          }
+          else
           {
             entries.add(entry);
             datas.add(change.m_data);
@@ -198,17 +351,19 @@ public class SaveActionServlet extends ActionServlet
   //------------------------------ preprocess ------------------------------
 
   /**
+   * Preprocess the request by collecting all changes that need to be made.
    *
+   * @param       inRequest the original request for the page
+   * @param       inParams  the params for the request
+   * @param       ioErrors  the errors encountered
    *
-   * @param       inParams the parameters given
-   *
-   * @return
+   * @return      a collection of all changes requested
    *
    */
   private Collection<Changes> preprocess
     (@Nonnull DMARequest inRequest,
      @Nonnull Multimap<String, String> inParams,
-     @Nonnull List<String> inErrors)
+     @Nonnull List<String> ioErrors)
   {
     Map<String, Changes> changes = new HashMap<String, Changes>();
     for(Map.Entry<String, String> param : inParams.entries())
@@ -234,7 +389,7 @@ public class SaveActionServlet extends ActionServlet
       {
         String error = "invalid type '" + fullType + "' ignored";
         Log.warning(error);
-        inErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+        ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
         continue;
       }
 
@@ -254,100 +409,6 @@ public class SaveActionServlet extends ActionServlet
   }
 
   //........................................................................
-
-  private static class Changes {
-    public Changes(@Nonnull String inID,
-                   @Nonnull AbstractType<? extends AbstractEntry> inType,
-                   @Nonnull String inFullType,
-                   @Nonnull DMAData inData,
-                   @Nonnull AbstractEntry inOwner) {
-      m_id = inID;
-      m_name = m_id;
-      m_type = inType;
-      m_fullType = inFullType;
-      m_data = inData;
-      m_owner = inOwner;
-    }
-
-    public @Nonnull String m_id;
-    public @Nonnull AbstractType<? extends AbstractEntry> m_type;
-    public @Nonnull DMAData m_data;
-    public @Nonnull AbstractEntry m_owner;
-    public @Nullable String m_name;
-    public @Nullable String m_file;
-    public @Nonnull String m_fullType;
-    public boolean m_multiple = false;
-    public @Nonnull Map<String, String>m_values = new HashMap<String, String>();
-
-    public @Nonnull String toString() {
-      return m_name + " [" + m_id + "]/" + m_type + " (" + m_owner.getName()
-        + "/" + m_file + (m_multiple ? ", single" : ", multiple") + "):"
-        + m_values;
-    }
-
-    public void set(@Nonnull String inKey, @Nonnull String inValue)
-    {
-      if("file".equals(inKey))
-        m_file = inValue;
-      else
-      {
-        if("name".equals(inKey))
-          m_name = inValue;
-
-        m_values.put(inKey, inValue);
-      }
-
-      if(inKey.indexOf("/") > 0)
-        m_multiple = true;
-    }
-
-    // Figure out the affected entries.
-    public @Nonnull Set<AbstractEntry> entries(@Nonnull List<String> ioErrors)
-    {
-      Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
-      if(m_multiple)
-      {
-        for(AbstractEntry entry : m_data.getEntriesList(m_type))
-          if(entry.matches(m_fullType, m_id))
-            entries.add(entry);
-      }
-      else
-      {
-        AbstractEntry entry = m_data.getEntry(m_id, m_type);
-
-        if(entry == null && m_file != null)
-        {
-          // create a new entry for filling out
-          Log.event(m_owner.getID(), "create",
-                    "creating " + m_type + " entry '" + m_name + "'");
-
-          entry = m_type.create(m_name, m_data);
-          if(entry instanceof Entry)
-            entry.setOwner(m_owner);
-
-          // store it in the campaign
-          if(!m_data.addEntry(entry, m_file))
-          {
-            Log.warning("Could not store " + m_type + " '" + m_name + "' in '"
-                        + m_file + "'");
-            entry = null;
-          }
-        }
-
-        if(entry == null)
-        {
-          String error = "could not find " + m_type + " " + m_name
-            + " for saving";
-          Log.warning(error);
-          ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-        }
-        else
-          entries.add(entry);
-      }
-
-      return entries;
-    }
-  }
 
   //........................................................................
 
@@ -399,6 +460,7 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", "guru", entry.getName());
 
       EasyMock.verify(request, response, user);
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................
@@ -442,6 +504,7 @@ public class SaveActionServlet extends ActionServlet
       assertFalse("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: not allowed to edit name in base entry "
                            + "test");
       EasyMock.verify(request, response, user);
@@ -487,6 +550,7 @@ public class SaveActionServlet extends ActionServlet
       assertFalse("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: could not find base entry guru for "
                            + "saving");
       EasyMock.verify(request, response, user);
@@ -532,6 +596,7 @@ public class SaveActionServlet extends ActionServlet
       assertFalse("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: invalid type 'guru' ignored");
       EasyMock.verify(request, response, user);
     }
@@ -579,13 +644,14 @@ public class SaveActionServlet extends ActionServlet
       assertTrue("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: Could not fully parse guru value for "
                            + "base entry test: 'guru'");
       EasyMock.verify(request, response, user);
     }
 
     //......................................................................
-    //----- changes --------------------------------------------------------
+    //----- collet changes -------------------------------------------------
 
     /** The changes Test. */
     @org.junit.Test
@@ -635,9 +701,22 @@ public class SaveActionServlet extends ActionServlet
       checkChanges(i.next(), "*/Person", "*/Person", null, "/base entry",
                    data, user, "key", "value");
       assertFalse(i.hasNext());
+
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
-    /** Check assertions for changes. */
+    /** Check assertions for changes.
+     *
+     * @param inChanges   the changes to check
+     * @param inID        the expected id of the entry changed
+     * @param inName      the expected name of the entry changed
+     * @param inFile      the expected file for the entry changed
+     * @param inFullType  the expected full type for the entry changed
+     * @param inData      the expected data object for the entry changed
+     * @param inOwner     the expected owner for the entry changed
+     * @param inKeyValues the expected key value pairs for the entry changed
+     *
+     */
     private void checkChanges(Changes inChanges, String inID, String inName,
                               String inFile, String inFullType, DMAData inData,
                               AbstractEntry inOwner, String ... inKeyValues)

@@ -187,10 +187,11 @@ util.link = function(inEvent, inTarget, inFunction)
   var target = inTarget;
   if(!target.match(/\?/))
   {
-    var search = location.search.replace(/([?&])create&/, '$1').
-      replace(/[?&]create$/, "");
+    var search = location.search;
+    search = util.removeQueryParam(search, 'create');
+    search = util.removeQueryParam(search, 'start');
+    search = util.removeQueryParam(search, 'end');
 
-    window.console.log("search: ", search);
     if(search)
       target += search;
   }
@@ -304,6 +305,26 @@ util.restoreMainImage = function()
 {
   $('DIV.mainimage IMG').attr('src', util.mainImage);
 };
+
+//..........................................................................
+//---------------------------- removeQueryParam ----------------------------
+
+/**
+ * Remove the query param (with value) from the given url/search string, if it
+ * is there at all.
+ *
+ * @param       inText the url or search text to replace in
+ * @param       inName the query param to remove
+ *
+ * @return      the replace string that can be used as a query param
+ *
+ */
+util.removeQueryParam = function(inText, inName)
+{
+  var text = inText.replace(new RegExp('[?&]' + inName + '(=[^&]*)?', 'g'), '');
+  text = text.replace(/^&/, '?');
+  return text;
+}
 
 //..........................................................................
 

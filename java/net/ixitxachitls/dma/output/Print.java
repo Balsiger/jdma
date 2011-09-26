@@ -173,13 +173,14 @@ public class Print extends AbstractPrint
       assertEquals("printing",
                    "[start , \\color{error}{ * first * },  , "
                    + "\\title[entrytitle]"
-                   + "{\\image[main-image]{/icons/BaseEntries-dummy.png} "
-                   + "test},  middle , "
+                   + "{test},  middle , "
                    + "\\editable{test}{base entry}"
                    + "{\\baseCommand{desc}}{description}"
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, true)).getArguments()
                    .toString());
+
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

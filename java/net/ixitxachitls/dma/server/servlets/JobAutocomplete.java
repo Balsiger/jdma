@@ -207,6 +207,8 @@ public class JobAutocomplete extends Autocomplete
                    output.toString());
 
       EasyMock.verify(request, response);
+
+      m_logger.addExpected("WARNING: base base product 'Test' not found");
     }
 
     //......................................................................
@@ -254,6 +256,8 @@ public class JobAutocomplete extends Autocomplete
                    output.toString());
 
       EasyMock.verify(request, response);
+
+      m_logger.addExpected("WARNING: base base product 'Test' not found");
     }
 
     //......................................................................
@@ -302,6 +306,8 @@ public class JobAutocomplete extends Autocomplete
                    output.toString());
 
       EasyMock.verify(request, response);
+
+      m_logger.addExpected("WARNING: base base product 'Test' not found");
     }
 
     //......................................................................

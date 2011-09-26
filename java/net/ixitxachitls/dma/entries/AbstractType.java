@@ -512,7 +512,15 @@ public abstract class AbstractType<T extends AbstractEntry>
                    entry.toString());
 
       entry = type.create("guru", new DMAData("path"));
-      assertEquals("create", "base entry guru =\n\n.\n", entry.toString());
+      assertEquals("create",
+                   "#----- guru\n"
+                   + "\n"
+                   + "base entry guru =\n"
+                   + "\n"
+                   + ".\n"
+                   + "\n"
+                   + "#.....\n",
+                   entry.toString());
 
       AbstractType<AbstractEntry> type2 =
         new TestType<AbstractEntry>(AbstractEntry.class, "Many More")
@@ -525,6 +533,7 @@ public abstract class AbstractType<T extends AbstractEntry>
       assertEquals("multiple link", "baseentry-links", type2.getMultipleLink());
       assertEquals("multiple dir", "ManyMore", type2.getMultipleDir());
       assertEquals("string", "abstract entry", type2.toString());
+      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................

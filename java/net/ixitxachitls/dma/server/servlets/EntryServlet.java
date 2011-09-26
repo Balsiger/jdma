@@ -522,8 +522,8 @@ public class EntryServlet extends PageServlet
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
       + "<div class=\"last sprite disabled\"></div>"
       + "</a>"
-      + "<a href=\"javascrip-3A-createEntry()\" class=\"link\" "
-      + "onclick=\"return util.link(event, 'javascrip-3A-createEntry()');\">"
+      + "<a href=\"javascript:createEntry()\" class=\"link\" "
+      + "onclick=\"return util.link(event, 'javascript:createEntry()');\">"
       + "<div class=\"add sprite\"></div>"
       + "</a>"
       + "<a href=\"javascript:removeEntry('guru')\" class=\"link\" "
@@ -692,9 +692,7 @@ public class EntryServlet extends PageServlet
                    + s_imageScript
                    + "    " + s_navigation
                    + "\n<h1 class=\"entrytitle\">"
-                   + "<img src=\"/icons/BaseEntries-dummy.png\" "
-                   + "alt=\"BaseEntries-dummy\" class=\"image main-image\"/>"
-                   + " guru</h1>\n"
+                   + "guru</h1>\n"
                    + s_navigation
                    + "\n"
                    + "    <SCRIPT type=\"text/javascript\">\n"
@@ -708,6 +706,8 @@ public class EntryServlet extends PageServlet
                    + "    </SCRIPT>\n",
                    m_output.toString());
       assertContent("paths", m_paths, "/baseentry/guru");
+
+      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................
@@ -822,9 +822,7 @@ public class EntryServlet extends PageServlet
                    + s_imageScript
                    + "    " + s_navigation
                    + "\n<h1 class=\"entrytitle\">"
-                   + "<img src=\"/icons/BaseEntries-dummy.png\" "
-                   + "alt=\"BaseEntries-dummy\" class=\"image main-image\"/>"
-                   + " guru</h1>\n"
+                   + "guru</h1>\n"
                    + s_navigation
                    + "\n"
                    + "    <SCRIPT type=\"text/javascript\">\n"
@@ -839,6 +837,8 @@ public class EntryServlet extends PageServlet
                    m_output.toString());
       assertContent("paths", m_paths,
                     "/baseentry/guru", "/baseentry/guru", "/baseentry/guru");
+
+      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................
@@ -922,6 +922,9 @@ public class EntryServlet extends PageServlet
       assertEquals("path", "id",
                    servlet.getPath(new net.ixitxachitls.dma.entries.BaseEntry
                                    ("id", new DMAData.Test.Data())));
+
+      m_logger.addExpected("WARNING: base base entry 'test' not found");
+      m_logger.addExpected("WARNING: base base entry 'id' not found");
     }
 
     //......................................................................
@@ -963,6 +966,12 @@ public class EntryServlet extends PageServlet
       assertEquals("next", two, servlet.getPrevious(data, "further-2", type));
       assertEquals("next", three, servlet.getPrevious(data, "further-3", type));
       assertEquals("next", four, servlet.getPrevious(data, "last", type));
+
+      m_logger.addExpected("WARNING: base base entry 'first' not found");
+      m_logger.addExpected("WARNING: base base entry 'further-1' not found");
+      m_logger.addExpected("WARNING: base base entry 'further-2' not found");
+      m_logger.addExpected("WARNING: base base entry 'further-3' not found");
+      m_logger.addExpected("WARNING: base base entry 'last' not found");
     }
 
     //......................................................................

@@ -197,6 +197,7 @@ public class LoginServlet extends ActionServlet
       servlet.doPost(request, response);
       assertEquals("post", "Invalid username or password!", output.toString());
 
+      m_logger.addExpected("WARNING: base base character 'somebody' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/somebody.dma'");
       m_logger.addExpected("WARNING: invalid username 'null'");
@@ -243,6 +244,7 @@ public class LoginServlet extends ActionServlet
       servlet.doPost(request, response);
       assertEquals("post", "Invalid username or password!", output.toString());
 
+      m_logger.addExpected("WARNING: base base character 'somebody' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/somebody.dma'");
       m_logger.addExpected("WARNING: login for 'somebody' with wrong password");
@@ -291,6 +293,7 @@ public class LoginServlet extends ActionServlet
       servlet.doPost(request, response);
       assertEquals("post", "", output.toString());
 
+      m_logger.addExpected("WARNING: base base character 'somebody' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/somebody.dma'");
       EasyMock.verify(request, response);

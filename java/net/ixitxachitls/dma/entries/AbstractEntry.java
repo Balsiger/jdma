@@ -1759,6 +1759,17 @@ public class AbstractEntry extends ValueGroup
          null, "title", false, false, false, false, "titles", "");
     }
 
+    if("desc".equals(inKey))
+      return new FormattedValue
+        (new Divider("desc",
+                     new Command(computeValue("subtitle", inDM)
+                                 .format(this, inDM, true),
+                                 computeValue("description", inDM)
+                                 .format(this, inDM, true),
+                                 computeValue("short description", inDM)
+                                 .format(this, inDM, true))),
+         null, "desc", false, false, false, false, "desc", "");
+
     if("image".equals(inKey))
     {
       AbstractType<? extends AbstractEntry> type = getType();
@@ -3162,7 +3173,14 @@ public class AbstractEntry extends ValueGroup
                    entry.getType().create(new DMAData("path")).toString());
 
       // conversion to string
-      assertEquals("converted", "abstract entry just a test =\n\n.\n",
+      assertEquals("converted",
+                   "#----- just a test\n"
+                   + "\n"
+                   + "abstract entry just a test =\n"
+                   + "\n"
+                   + ".\n"
+                   + "\n"
+                   + "#.....\n",
                    entry.toString());
 
       // an abstract entry with a base type
@@ -3194,6 +3212,9 @@ public class AbstractEntry extends ValueGroup
 //       // conversion to string
 //       assertEquals("converted", "abstract entry name =\n\n.\n",
 //                    entry.toString());
+
+      m_logger.addExpected("WARNING: base abstract entry 'just a test' not "
+                           + "found");
     }
 
     //......................................................................

@@ -225,6 +225,10 @@ public class ProductsAutocomplete extends Autocomplete
                    output.toString());
 
       EasyMock.verify(request, response);
+
+      m_logger.addExpected("WARNING: base base product 'First' not found");
+      m_logger.addExpected("WARNING: base base product 'Second' not found");
+      m_logger.addExpected("WARNING: base base product 'Third' not found");
     }
 
     //......................................................................
@@ -280,6 +284,10 @@ public class ProductsAutocomplete extends Autocomplete
                    output.toString());
 
       EasyMock.verify(request, response);
+
+      m_logger.addExpected("WARNING: base base product 'First' not found");
+      m_logger.addExpected("WARNING: base base product 'Second' not found");
+      m_logger.addExpected("WARNING: base base product 'Third' not found");
     }
 
     //......................................................................

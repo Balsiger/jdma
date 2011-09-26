@@ -489,8 +489,10 @@ public abstract class GroupedIndex extends Index
                    + "  </BODY>\n"
                    + "</HTML>\n", content.toString());
 
+      m_logger.addExpected("WARNING: base base character 'first' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/first.dma'");
+      m_logger.addExpected("WARNING: base base character 'second' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/second.dma'");
     }
@@ -574,8 +576,10 @@ public abstract class GroupedIndex extends Index
                    + "  </BODY>\n"
                    + "</HTML>\n", content.toString());
 
+      m_logger.addExpected("WARNING: base base character 'first' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/first.dma'");
+      m_logger.addExpected("WARNING: base base character 'second' not found");
       m_logger.addExpected("WARNING: cannot find file "
                            + "'path/Products/second.dma'");
     }

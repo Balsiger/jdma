@@ -710,9 +710,13 @@ public class DMAFile //implements Storage<AbstractEntry>
                    + ".\n"
                    + "\n"
                    + "#.....\n"
+                   + "#----- guru\n"
+                   + "\n"
                    + "base entry guru =\n"
                    + "\n"
-                   + ".\n",
+                   + ".\n"
+                   + "\n"
+                   + "#.....\n",
                    writer.toString());
 
       assertFalse("changed", file.isChanged());
@@ -739,6 +743,8 @@ public class DMAFile //implements Storage<AbstractEntry>
                    + "\n"
                    + "#.....\n",
                    writer.toString());
+
+      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................

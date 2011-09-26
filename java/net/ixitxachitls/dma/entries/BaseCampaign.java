@@ -116,11 +116,12 @@ public class BaseCampaign extends BaseEntry
     new Print("$image "
               + "${as pdf} ${as text} ${as dma} "
               + "$title "
-              + "$desc"
+              + "$desc "
               + "$clear "
               + "$files "
               + "\n"
               + "$par "
+              + "%synonyms "
               + "%campaigns "
               // admin
               + "%file %errors"
