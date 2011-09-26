@@ -239,11 +239,6 @@ public class BaseCharacter extends BaseEntry
   //........................................................................
   //----- products ---------------------------------------------------------
 
-  /** The files with the products. */
-  @Key("products")
-  @NoEdit
-  protected @Nonnull Text m_products = new Text();
-
   /** All the products for this user. */
   protected @Nonnull UserData m_productData =
     new UserData(this, Files.concatenate(m_data.getPath(),
@@ -363,21 +358,6 @@ public class BaseCharacter extends BaseEntry
   }
 
   //........................................................................
-  //----------------------------- hasProducts ------------------------------
-
-  /**
-    *
-    * Check if the base characters has a product file associated with him.
-    *
-    * @return      true if a file is available, false if not
-    *
-    */
-//   public boolean hasProducts()
-//   {
-//     return m_products.isDefined();
-//   }
-
-  //........................................................................
   //----------------------------- getProducts ------------------------------
 
   /**
@@ -461,27 +441,6 @@ public class BaseCharacter extends BaseEntry
 
   //----------------------------------------------------------- manipulators
 
-  //------------------------------- complete -------------------------------
-
-  /**
-   * Complete the entry and make sure that all values are filled.
-   *
-   */
-//   public void complete()
-//   {
-//     super.complete();
-
-//     // read the products file and store the entries found there
-//     if(m_products.isDefined())
-//     {
-//       m_productEntries.readFile(m_products.get(), Global.DATA_DIR);
-
-//       // if the file was completed while reading, save it
-//       m_productEntries.write();
-//     }
-//   }
-
-  //........................................................................
   //-------------------------------- login ---------------------------------
 
   /**

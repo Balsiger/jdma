@@ -35,6 +35,8 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseType;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
@@ -196,7 +198,20 @@ public class DMAData implements Serializable
                       getEntry(@Nonnull String inID,
                                @Nonnull AbstractType<T> inType)
   {
-    return getEntries(inType).get(inID);
+    NavigableMap<String, T> entries = getEntries(inType);
+    {
+      T entry = entries.get(inID);
+
+      if(entry != null || !(inType instanceof BaseType))
+        return entry;
+    }
+
+    // could not find the entry by id, try synonyms
+    for(T entry : entries.values())
+      if(((BaseEntry)entry).hasSynonym(inID))
+        return entry;
+
+    return null;
   }
 
   //........................................................................

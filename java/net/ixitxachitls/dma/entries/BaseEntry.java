@@ -475,6 +475,27 @@ public class BaseEntry extends AbstractEntry
   }
 
   //........................................................................
+  //------------------------------ hasSynonym ------------------------------
+
+  /**
+   * Check if the given base entry has a synonym with the given name.
+   *
+   * @param       inName the name to look for
+   *
+   * @return      true if the entry has a synonym, false if not
+   *
+   */
+  public boolean hasSynonym(@Nonnull String inName)
+  {
+    for(Text text : m_synonyms)
+      if(text.get().equalsIgnoreCase(inName))
+        return true;
+
+    return false;
+  }
+
+  //........................................................................
+
 
   //------------------------------- getWorld -------------------------------
 
