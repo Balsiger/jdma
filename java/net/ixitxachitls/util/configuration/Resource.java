@@ -201,6 +201,9 @@ public class Resource implements Configuration
     /** The url loaded from (used for storing again). */
     @Nullable private URL m_url;
 
+    /** Flag if values should be saved or not. */
+    private static boolean s_shouldSave = false;
+
     /** The Default header written to each file. */
     protected static final String def_header =
     "#\n"
@@ -257,7 +260,8 @@ public class Resource implements Configuration
      */
     public boolean canSave()
     {
-      return m_url != null && m_url.getProtocol().equals("file");
+      return s_shouldSave &&
+        m_url != null && m_url.getProtocol().equals("file");
     }
 
     //......................................................................
@@ -389,6 +393,21 @@ public class Resource implements Configuration
       }
 
       return true;
+    }
+
+    //......................................................................
+
+    //----------------------------- shouldSave -----------------------------
+
+    /**
+     * Sets whether the resources should be saved on setting or not.
+     *
+     * @param       inSave true to save, false to not
+     *
+     */
+    public static void shouldSave(boolean inSave)
+    {
+      s_shouldSave = inSave;
     }
 
     //......................................................................
@@ -732,6 +751,7 @@ public class Resource implements Configuration
       assertTrue("hash code", first.hashCode() != second.hashCode());
 
       // saving
+      PropertiesHandler.shouldSave(true);
       assertTrue("save first?", first.canSave());
       assertTrue("save second?", second.canSave());
       assertFalse("save invalid?", invalid.canSave());

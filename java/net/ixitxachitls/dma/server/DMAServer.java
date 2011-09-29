@@ -953,6 +953,10 @@ public class DMAServer extends WebServer
 
     Log.info(s_version);
 
+    // TODO: remove all this when config is app engine compatible
+    net.ixitxachitls.util.configuration.Resource.PropertiesHandler
+      .shouldSave(true);
+
     DMAServer server = new DMAServer(name, port, base, campaigns);
     server.start();
   }
