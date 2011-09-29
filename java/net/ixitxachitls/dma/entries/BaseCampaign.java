@@ -36,6 +36,7 @@ package net.ixitxachitls.dma.entries;
 import javax.annotation.Nonnull;
 //import javax.annotation.Nullable;
 
+import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAData;
 //import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
 // import net.ixitxachitls.dma.data.DMAFile;
@@ -48,7 +49,8 @@ import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.values.ValueList;
 // import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 // import net.ixitxachitls.dma.values.formatters.ValueFormatter;
-// import net.ixitxachitls.util.Filter;
+import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.Files;
 // import net.ixitxachitls.util.FilteredIterator;
 // import net.ixitxachitls.util.Identificator;
 // import net.ixitxachitls.util.UniqueIdentificator;
@@ -103,6 +105,8 @@ public class BaseCampaign extends BaseEntry
   public BaseCampaign(@Nonnull String inName, @Nonnull DMAData inData)
   {
     super(inName, TYPE, inData);
+
+    addCampaignFile(getName());
   }
 
   //........................................................................
@@ -138,8 +142,20 @@ public class BaseCampaign extends BaseEntry
   /** The type of this entry. */
   public static final BaseType<BaseCampaign> TYPE =
     new BaseType<BaseCampaign>(BaseCampaign.class);
-  // TODO: do this right?
-  //.withAccess(BaseCharacter.Group.DM);
+
+  //----- campaigns --------------------------------------------------------
+
+  /** All the campaigns for this world. */
+  protected @Nonnull CampaignData m_campaignData =
+    new CampaignData(this, Files.concatenate(m_data.getPath(),
+                                             Campaign.TYPE.getMultipleDir()),
+                     m_data);
+
+  /** Flag if campaign data has been read. */
+  protected boolean m_campaignDataRead = false;
+
+  //........................................................................
+
 
   static
   {
@@ -149,6 +165,31 @@ public class BaseCampaign extends BaseEntry
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //--------------------------- getCampaignData ----------------------------
+
+  /**
+   * Get all the data available for the campaign. This will lazily read
+   * necessariy data.
+   *
+   * @return      the campaign data
+   *
+   */
+  public CampaignData getCampaignData()
+  {
+    if(!m_campaignDataRead)
+    {
+      m_campaignData.read();
+      if(m_campaignData.isChanged())
+        m_campaignData.save();
+
+      m_campaignDataRead = true;
+    }
+
+    return m_campaignData;
+  }
+
+  //........................................................................
 
   //----------------------------- getPagePrint -----------------------------
 
@@ -192,7 +233,7 @@ public class BaseCampaign extends BaseEntry
    */
   public boolean isDM(@Nonnull BaseCharacter inUser)
   {
-    return inUser.hasAccess(BaseCharacter.Group.USER);
+    return inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
 
   //........................................................................
@@ -578,6 +619,44 @@ public class BaseCampaign extends BaseEntry
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------ readEntry -------------------------------
+
+  /**
+   * Read an entry, and only the entry without type and comments, from the
+   * reader.
+   *
+   * @param       inReader the reader to read from
+   *
+   * @return      true if read successfully, false else
+   *
+   */
+  protected boolean readEntry(@Nonnull ParseReader inReader)
+  {
+    if(super.readEntry(inReader))
+    {
+      addCampaignFile(getName());
+      return true;
+    }
+    else
+      return false;
+  }
+
+  //........................................................................
+  //---------------------------- addCampaignFile ---------------------------
+
+  /**
+   * Add the file to products to this base character.
+   *
+   * @param     inName the name of the file to add (without extension)
+   *
+   */
+  private void addCampaignFile(@Nonnull String inName)
+  {
+    m_campaignData.addFile(inName + ".dma");
+  }
+
+  //........................................................................
 
   // //------------------------------- readFile -------------------------------
 

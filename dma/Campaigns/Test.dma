@@ -1,0 +1,311 @@
+# file: Campaigns/Test.dma
+
+
+#------------------------------ Guru (tst-63) ------------------------------
+
+character Guru [Merlin] =
+
+  state       adventuring;
+  possessions 
+              #-------------------------- Morningstar (tst-54) ---------------------------
+              
+              item with weapon, incomplete Morningstar =
+              
+                incomplete   
+                "magical properties";
+                hp           12;
+                value        1008 gp;
+                description  
+                "A rusty morningstar";
+                player notes "magisch";
+                dm notes     "Morningstar +1";
+                user size    Medium-size;
+                id           tst-54.
+              
+              #...........................................................................
+              , 
+              
+              #--------------------- Studded Leather Armor (tst-55) ----------------------
+              
+              item with armor, wearable Studded Leather Armor =
+              
+                value        25 gp;
+                description  
+                "A suite of studded leather armor.";
+                user size    Medium-size;
+                id           tst-55.
+              
+              #...........................................................................
+              , 
+              
+              #----------------------------- Arrows (tst-56) -----------------------------
+              
+              item with counted, weapon, incomplete Arrows =
+              
+                count        20;
+                incomplete   
+                "projectile; missing arrow has 50% chance of being destroyed";
+                hp           1;
+                value        1 gp;
+                description  
+                "A leather quiver with some arrows.";
+                user size    Medium-size;
+                id           tst-56.
+              
+              #...........................................................................
+              , 
+              
+              #----------------------- Bag of Holding II (tst-62) ------------------------
+              
+              item with contents Bag of Holding II =
+              
+                contents     
+                             #--------------------------- Waterskin (tst-57) ----------------------------
+                             
+                             item with contents, incomplete Waterskin =
+                             
+                               incomplete   
+                               "how many rations are this?";
+                               hp           1;
+                               value        1 gp;
+                               description  
+                               "A simple waterskin.";
+                               user size    Medium-size;
+                               id           tst-57.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #------------------------- Winter Blanket (tst-58) -------------------------
+                             
+                             item Winter Blanket =
+                             
+                               hp           1;
+                               value        5 sp;
+                               description  
+                               "A fine, black woolen blanket.";
+                               user size    Medium-size;
+                               id           tst-58.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #---------------------------- Bedroll (tst-59) -----------------------------
+                             
+                             item Bedroll =
+                             
+                               hp           1;
+                               value        1 sp 4 cp;
+                               description  
+                               "A simple bedroll with a thin cotton blanket.";
+                               user size    Medium-size;
+                               id           tst-59.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #-------------------------- Trail Ration (tst-60) --------------------------
+                             
+                             item with multiple Trail Ration =
+                             
+                               count        80;
+                               hp           1;
+                               value        4 sp 1 cp;
+                               description  
+                               "A cloth enwrapped package of dry, high-energy foods (jerky, hardtack, and nuts).";
+                               user size    Medium-size;
+                               id           tst-60.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #----------------------- Explorer's Outfit (tst-61) ------------------------
+                             
+                             item with incomplete Explorer's Outfit =
+                             
+                               incomplete   
+                               "this should be stored as a composite with the mentioned items";
+                               hp           1;
+                               value        10 gp;
+                               description  
+                               "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+                               user size    Medium-size;
+                               id           tst-61.
+                             
+                             #...........................................................................
+                             ;
+                hp           1;
+                value        5000 gp;
+                description  
+                "A common cloth sack, about 2 feet by 4 feet in size.";
+                player name  "Sack";
+                user size    Medium-size;
+                id           tst-62.
+              
+              #...........................................................................
+              ;
+  id          tst-63.
+
+#...........................................................................
+#------------------------------ AAAA (tst-64) ------------------------------
+
+character AAAA [Merlin] =
+
+  state       dead;
+  id          tst-64.
+
+#...........................................................................
+#------------------------------ ZZZZ (tst-65) ------------------------------
+
+character ZZZZ [zzz] =
+
+  state       retired;
+  id          tst-65.
+
+#...........................................................................
+#----------------------------- other (tst-75) ------------------------------
+
+character other [zzz] =
+
+  state       incapacitated;
+  possessions 
+              #-------------------------- Morningstar (tst-66) ---------------------------
+              
+              item with weapon, incomplete Morningstar =
+              
+                incomplete   
+                "magical properties";
+                hp           12;
+                value        1008 gp;
+                description  
+                "A rusty morningstar";
+                player notes "magisch";
+                dm notes     "Morningstar +1";
+                user size    Medium-size;
+                id           tst-66.
+              
+              #...........................................................................
+              , 
+              
+              #--------------------- Studded Leather Armor (tst-67) ----------------------
+              
+              item with armor, wearable Studded Leather Armor =
+              
+                value        25 gp;
+                description  
+                "A suite of studded leather armor.";
+                user size    Medium-size;
+                id           tst-67.
+              
+              #...........................................................................
+              , 
+              
+              #----------------------------- Arrows (tst-68) -----------------------------
+              
+              item with counted, weapon, incomplete Arrows =
+              
+                count        20;
+                incomplete   
+                "projectile; missing arrow has 50% chance of being destroyed";
+                hp           1;
+                value        1 gp;
+                description  
+                "A leather quiver with some arrows.";
+                user size    Medium-size;
+                id           tst-68.
+              
+              #...........................................................................
+              , 
+              
+              #----------------------- Bag of Holding II (tst-74) ------------------------
+              
+              item with contents Bag of Holding II =
+              
+                contents     
+                             #--------------------------- Waterskin (tst-69) ----------------------------
+                             
+                             item with contents, incomplete Waterskin =
+                             
+                               incomplete   
+                               "how many rations are this?";
+                               hp           1;
+                               value        1 gp;
+                               description  
+                               "A simple waterskin.";
+                               user size    Medium-size;
+                               id           tst-69.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #------------------------- Winter Blanket (tst-70) -------------------------
+                             
+                             item Winter Blanket =
+                             
+                               hp           1;
+                               value        5 sp;
+                               description  
+                               "A fine, black woolen blanket.";
+                               user size    Medium-size;
+                               id           tst-70.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #---------------------------- Bedroll (tst-71) -----------------------------
+                             
+                             item Bedroll =
+                             
+                               hp           1;
+                               value        1 sp 4 cp;
+                               description  
+                               "A simple bedroll with a thin cotton blanket.";
+                               user size    Medium-size;
+                               id           tst-71.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #-------------------------- Trail Ration (tst-72) --------------------------
+                             
+                             item with multiple Trail Ration =
+                             
+                               count        80;
+                               hp           1;
+                               value        4 sp 1 cp;
+                               description  
+                               "A cloth enwrapped package of dry, high-energy foods (jerky, hardtack, and nuts).";
+                               user size    Medium-size;
+                               id           tst-72.
+                             
+                             #...........................................................................
+                             , 
+                             
+                             #----------------------- Explorer's Outfit (tst-73) ------------------------
+                             
+                             item with incomplete Explorer's Outfit =
+                             
+                               incomplete   
+                               "this should be stored as a composite with the mentioned items";
+                               hp           1;
+                               value        10 gp;
+                               description  
+                               "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+                               user size    Medium-size;
+                               id           tst-73.
+                             
+                             #...........................................................................
+                             ;
+                hp           1;
+                value        5000 gp;
+                description  
+                "A common cloth sack, about 2 feet by 4 feet in size.";
+                player name  "Sack";
+                user size    Medium-size;
+                id           tst-74.
+              
+              #...........................................................................
+              ;
+  id          tst-75.
+
+#...........................................................................

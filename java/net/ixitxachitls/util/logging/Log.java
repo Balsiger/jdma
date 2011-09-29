@@ -203,7 +203,7 @@ public final class Log
     new LinkedList<Message>();
 
   /** The analytics tracker. */
-  private static Analytics s_analytics = new Analytics();
+  //private static Analytics s_analytics = new Analytics();
 
   //........................................................................
 
@@ -398,7 +398,7 @@ public final class Log
     */
   public static void track(@Nonnull String inTitle, @Nonnull String inPage)
   {
-    s_analytics.track(inTitle, inPage);
+    //s_analytics.track(inTitle, inPage);
   }
 
   //........................................................................
@@ -418,7 +418,7 @@ public final class Log
                                 @Nonnull String inLabel,
                                 @Nonnull String inValue)
   {
-    s_analytics.event(inObject, inAction, inLabel, inValue);
+    //s_analytics.event(inObject, inAction, inLabel, inValue);
   }
 
   //........................................................................
@@ -1378,7 +1378,7 @@ public final class Log
       assertEquals("value of", Type.WARNING, Log.Type.valueOf("WARNING"));
       assertTrue("values", Log.Type.values().length > 0);
 
-      s_analytics.stop();
+      //s_analytics.stop();
     }
 
     //......................................................................

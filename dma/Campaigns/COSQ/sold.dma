@@ -1,0 +1,689 @@
+              #----- Silver Bowl (fr-5380)
+              item Silver Bowl [Art Object] =
+              hp                24;
+              max hp            24;
+              value             50 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Silver Bowl";
+              id                fr-5380.
+              #.....
+              #----- Diamnond Pendant (fr-5874)
+              item Diamnond Pendant [Art Object] =
+              hp                ;
+              max hp            ;
+              value             660 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Pendant";
+              id                fr-5874.
+              #.....
+              #----- Elven Chain +2 (fr-5202)
+              item with armor, incomplete, wearable Elven Chain +2 [Elven Chain, Armor +2] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              appearance
+              "A suprisingly light chainmail. Good workmanship.";
+              id                fr-5390.
+              #.....
+              #----- Light Steel Shield +1 (fr-5203)
+              item with armor, incomplete, wearable Light Steel Shield +1 [Light Steel Shield, Armor +1] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A light, steel shield. Finely crafted.";
+              player name       "Light Steel Shield +1";
+              id                fr-5391.
+              #.....
+              #----- Elven Chain +2 (fr-5202)
+              item with armor, incomplete, wearable Elven Chain +2 [Elven Chain, Armor +2] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              appearance
+              "A suprisingly light chainmail. Good workmanship.";
+              id                fr-5400.
+              #.....
+              #----- Light Steel Shield +1 (fr-5203)
+              item with armor, incomplete, wearable Light Steel Shield +1 [Light Steel Shield, Armor +1] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A light, steel shield. Finely crafted.";
+              player name       "Light Steel Shield +1";
+              id                fr-5401.
+              #.....
+              #----- Corrosive Dagger +1 (fr-5204)
+              item with incomplete, weapon, wearable Corrosive Dagger +1 [Dagger, Weapon +1, Corrosive Weapon +2] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A simple dagger. Well made.";
+              player name       "Corrosive Dagger";
+              id                fr-5402.
+              #.....
+              #----- Ring of Counterspells (fr-5205)
+              item Ring of Counterspells [Ring of Counterspells] =
+              hp                1;
+              max hp            1;
+              value             4000 gp;
+              hardness          ;
+              appearance
+              "";
+              dm notes          "Storing \Spell{Slay Living}.";
+              id                fr-5403.
+              #.....
+              #----- Dire Flail +2 +1 (fr-5263)
+              item with incomplete, weapon, wearable Dire Flail +2 +1 [Dire Flail, Weapon +2, Weapon +1] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A dire flail. Finely crafted. Finely crafted.";
+              id                fr-5436.
+              #.....
+              #----- Comb (dm-16454)
+              item Comb [Art Object] =
+              hp                24;
+              max hp            24;
+              value             300 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Comb";
+              id                fr-5419.
+              #.....
+              #----- Hairbrush (dm-16455)
+              item Hairbrush [Art Object] =
+              hp                24;
+              max hp            24;
+              value             120 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Hairbrush";
+              id                fr-5420.
+              #.....
+              #----- Drow House Insignia (dm-16456)
+              item with incomplete Drow House Insignia [Drow House Insignia] =
+              hp                12;
+              max hp            12;
+              hardness          ;
+              appearance
+              "A small metal token with a symbol on it.";
+              player name       "Brooch";
+              dm notes          "Holds \SpellRef{Shield}";
+              id                fr-5421.
+              #.....
+              #----- Silk Pouch (dm-16457)
+              item Silk Pouch [Art Object] =
+              hp                24;
+              max hp            24;
+              value             96 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Pouch with a dozen stones";
+              id                fr-5422.
+              #.....
+              #----- Elven Chain +2 (fr-5202)
+              item with armor, incomplete, wearable Elven Chain +2 [Elven Chain, Armor +2] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              appearance
+              "A suprisingly light chainmail. Good workmanship.";
+              id                fr-6497.
+              #.....
+              #----- Heavy Mace +2 (fr-6498)
+              item with incomplete, weapon, wearable Heavy Mace +2 [Heavy Mace, Weapon +2, Magic Attack +2] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A heavy mace. Finely crafted.";
+              id                fr-6498.
+              #.....
+                    #----- Gloves of Arrow Snaring (fr-6340)
+                    item Gloves of Arrow Snaring [Gloves of Arrow Snaring] =
+                    hp                ;
+                    max hp            ;
+                    value             ;
+                    hardness          ;
+                    appearance
+                    "Fine, think leather gloves.";
+                    id                fr-6340.
+                    #.....
+              #----- Gem (fr-175)
+              item Gem [Gem] =
+              hp                ;
+              max hp            ;
+              value             80 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              player notes      "From the Challenge of Champions";
+              id                fr-175.
+              #.....
+              #----- Ring (fr-176)
+              item Ring [Ring] =
+              hp                1;
+              max hp            1;
+              value             10 gp;
+              hardness          ;
+              appearance
+              "A simple brass ring.";
+              player notes      "From the Challenge of Champions II";
+              id                fr-176.
+              #.....
+              #----- Gold Ring (fr-372)
+              item Gold Ring [Ring] =
+              hp                1;
+              max hp            1;
+              value             900 gp;
+              hardness          ;
+              appearance
+              "A simple gold ring.";
+              id                fr-372.
+              #.....
+                    #----- Assassin's Dagger (fr-6220)
+                    item with incomplete, weapon, wearable Assassin's Dagger [Assassin's Dagger] =
+                    incomplete        ;
+                    user size         Medium-size;
+                    hp                ;
+                    max hp            ;
+                    value             ;
+                    hardness          ;
+                    appearance
+                    "A wicked looking, curved dagger.";
+                    id                fr-6220.
+                    #.....
+              #----- Wand of Hold Person (fr-5206)
+              item with multiuse Wand of Hold Person [Wand of Hold Person] =
+              count             37;
+              hp                5;
+              max hp            5;
+              value             90 gp;
+              hardness          ;
+              appearance
+              "";
+              player name       "Wand of Hold Person";
+              id                fr-5404.
+              #.....
+                    #----- Flaming Nunchaku +1 (fr-6116)
+                    item with incomplete, weapon, wearable Flaming Nunchaku +1 [Nunchaku, Flaming, Weapon +2, Magic Attack +1] =
+                    incomplete        ;
+                    user size         Medium-size;
+                    hp                ;
+                    max hp            ;
+                    value             ;
+                    hardness          ;
+                    appearance
+                    "A nunchaku. Good workmanship.";
+                    id                fr-6116.
+                    #.....
+                    #----- Frost Nunchaku +1 (fr-6117)
+                    item with incomplete, weapon, wearable Frost Nunchaku +1 [Nunchaku, Flaming, Weapon +2, Magic Attack +1] =
+                    incomplete        ;
+                    user size         Medium-size;
+                    hp                ;
+                    max hp            ;
+                    value             ;
+                    hardness          ;
+                    appearance
+                    "A nunchaku. Good workmanship.";
+                    id                fr-6117.
+                    #.....
+              #----- Cloak of Resistance +1 (fr-5207)
+              item Cloak of Resistance +1 [Cloak of Resistance +1] =
+              hp                1;
+              max hp            1;
+              value             1000 gp;
+              hardness          ;
+              appearance
+              "";
+              player name       "Cloak of Resistance +1";
+              id                fr-5405.
+              #.....
+              #----- Mithral Shirt +1 (dm-10346)
+              item with armor, incomplete, wearable Mithral Shirt + 1 [Mithral Shirt, Armor +1] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A chain shirt. Finely crafted.";
+              player name       "Mithral Shirt +1";
+              id                fr-4613.
+              #.....
+
+
+
+
+                    #----- Crown of Silver (fr-6479)
+                    item with multiple Crown of Silver [Gem] =
+                    count             2;
+                    hp                ;
+                    max hp            ;
+                    value             7 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6479.
+                    #.....
+                    #----- Violone (fr-6480)
+                    item Violone [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             11 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6480.
+                    #.....
+                    #----- Moonstone (fr-6481)
+                    item Moonstone [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             40 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6481.
+                    #.....
+                    #----- Onyx (fr-6482)
+                    item Onyx [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             50 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6482.
+                    #.....
+                    #----- Jet (fr-6483)
+                    item Jet [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             80 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6483.
+                    #.....
+                    #----- Black Pearl (fr-6484)
+                    item Black Pearl [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             300 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6484.
+                    #.....
+                    #----- Black Corundum (fr-6485)
+                    item Black Corundum [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             900 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6485.
+                    #.....
+                    #----- Black Opal (fr-6486)
+                    item Black Opal [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             1000 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6486.
+                    #.....
+                    #----- Black Star Sapphire (fr-6487)
+                    item Black Star Sapphire [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             1000 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6487.
+                    #.....
+                    #----- Jacinth (fr-6488)
+                    item Jacinth [Gem] =
+                    hp                ;
+                    max hp            ;
+                    value             6000 gp;
+                    hardness          ;
+                    appearance
+                    "A shining stone.";
+                    id                fr-6488.
+                    #.....
+              #----- Spellbook (dm-10771)
+              item Spellbook [Book] =
+              hp                1;
+              max hp            1;
+              value             1 gp;
+              hardness          ;
+              appearance
+              "A simple, leather bound book.";
+              player notes      "0: arcane mark, dancing lights, detect magic, detect poison, disrupt undead, flare, light, mage hand, mending, open/close, prestidigitation, ray of frost, read magic, resistance; 1st: burning hands, cause fear, mage armor, magic missile, magic weapon, ray of enfeeblement, shield, spider climb, true strike; 2nd: cat’s grace, day- light, endurance, flaming sphere, see invisibility, web; 3rd: dispel magic, fly, halt undead, haste, lightning bolt, protection from elements; 4th: fire shield, fire trap, ice storm, stoneskin.";
+              player name       "Spellbook";
+              id                fr-4512.
+              #.....
+              #----- Spellbook (dm-10772)
+              item Spellbook [Book] =
+              hp                1;
+              max hp            1;
+              value             1 gp;
+              hardness          ;
+              appearance
+              "A simple, leather bound book.";
+              player notes      "0: arcane mark, dancing lights, detect magic, detect poison, disrupt undead, flare, light, mage hand, mending, open/close, prestidigitation, ray of frost, read magic, resistance; 1st: burning hands, cause fear, mage armor, magic missile, magic weapon, ray of enfeeblement, shield, spider climb, true strike; 2nd: cat’s grace, day- light, endurance, flaming sphere, see invisibility, web; 3rd: dispel magic, fly, halt undead, haste, lightning bolt, protection from elements; 4th: fire shield, fire trap, ice storm, stoneskin.";
+              player name       "Spellbook";
+              id                fr-4513.
+              #.....
+              #----- Spellbook (dm-15746)
+              item Spellbook [Book] =
+              hp                1;
+              max hp            1;
+              value             1000 gp;
+              hardness          ;
+              appearance
+              "A simple, leather bound book.";
+              player notes      "With the spells \Spell{arcane mark}, \Spell{dancing lights}, \Spell{daze}, \Spell{detect magic}, \Spell{detect poison}, \Spell{disrupt undead}, \Spell{flare}, \Spell{ghost sound}, \Spell{light}, \Spell{mage hand}, \Spell{mending}, \Spell{open & close}, \Spell{prestidigitation}, \Spell{ray of frost}, \Spell{read magic}, \Spell{resistance}, \Spell{change self}, \Spell{charm person}, \Spell{color spray}, \Spell{endure elements}, \Spell{expeditious retreat}, \Spell{feather fall}, \Spell{mage armor}, \Spell{magic missile}, \Spell{obscuring mist}, \Spell{shield}, \Spell{spider climb}, \Spell{cat’s grace}, \Spell{endurance}, \Spell{flaming sphere}, \Spell{invisibility}, \Spell{Melf’s acid arrow}, \Spell{see invisibility}, \Spell{web}, \Spell{fly}, \Spell{haste}, \Spell{hold person}, \Spell{magic circle against good}, \Spell{protection from elements}, \Spell{slow}, \Spell{arcane eye}, \Spell{charm monster}, \Spell{detect scrying}, \Spell{dimension door}, \Spell{fire shield}, \Spell{improved invisibility}, \Spell{scrying}, \Spell{solid fog}";
+              player name       "Spellbook";
+              id                fr-4970.
+              #.....
+              #----- Spellbook (dm-15748)
+              item Spellbook [Book] =
+              hp                1;
+              max hp            1;
+              value             1 gp;
+              hardness          ;
+              appearance
+              "A rugged, leather bound book.";
+              dm notes          "With the spells \Spell{arcane mark}, \Spell{daze}, \Spell{detect magic}, \Spell{detect poison}, \Spell{disrupt undead}, \Spell{ghost sound}, \Spell{mage hand}, \Spell{mending}, \Spell{open & close}, \Spell{prestidigitation}, \Spell{ray of frost}, \Spell{read magic}, \Spell{resistance}, \Spell{cause fear}, \Spell{change self}, \Spell{color spray}, \Spell{feather fall}, \Spell{mage armor}, \Spell{Nystul’s magical aura}, \Spell{Nystul’s undetectable aura}, \Spell{ray of enfeeblement}, \Spell{silent image}, \Spell{sleep}, \Spell{spider climb}, \Spell{true strike}, \Spell{blur}, \Spell{hypnotic pattern}, \Spell{invisibility}, \Spell{minor image}, \Spell{mirror image}, \Spell{spectral hand}, \Spell{web}, \Spell{displacement}, \Spell{fly}, \Spell{halt undead}, \Spell{haste}, \Spell{illusory script}, \Spell{invisibility sphere}, \Spell{suggestion}, \Spell{vampiric touch}, \Spell{confusion}, \Spell{detect scrying}, \Spell{enervation}, \Spell{illusory wall}, \Spell{greater invisibility}, \Spell{phantasmal killer}, \Spell{rainbow pattern}, \Spell{scrying}, \Spell{ stoneskin}, \Spell{dominate person}, \Spell{greater shadow conjuration}, \Spell{hold monster}, \Spell{mirage arcana}, \Spell{seeming}, \Spell{shadow evocation}, \Spell{teleport}; \Spell{greater dispelling}, \Spell{greater shadow evocation}, \Spell{mass suggestion}, \Spell{permanent image}.";
+              id                fr-4974.
+              #.....
+              #----- Spellbook (dm-10771)
+              item Spellbook [Book] =
+              hp                1;
+              max hp            1;
+              value             1 gp;
+              hardness          ;
+              appearance
+              "A simple, leather bound book.";
+              player notes      "0: arcane mark, dancing lights, detect magic, detect poison, disrupt undead, flare, light, mage hand, mending, open/close, prestidigitation, ray of frost, read magic, resistance; 1st: burning hands, cause fear, mage armor, magic missile, magic weapon, ray of enfeeblement, shield, spider climb, true strike; 2nd: cat’s grace, day- light, endurance, flaming sphere, see invisibility, web; 3rd: dispel magic, fly, halt undead, haste, lightning bolt, protection from elements; 4th: fire shield, fire trap, ice storm, stoneskin.";
+              player name       "Spellbook";
+              id                fr-5614.
+              #.....
+              #----- Spellbook (dm-15626)
+              item Spellbook [Book] =
+              hp                1;
+              max hp            1;
+              value             1000 gp;
+              hardness          ;
+              appearance
+              "A rugged, leather bound book.";
+              player notes      "With the spells \Spell{arcane mark}, \Spell{dancing lights}, \Spell{daze}, \Spell{detect magic}, \Spell{detect poison}, \Spell{disrupt undead}, \Spell{flare}, \Spell{ghost sound}, \Spell{light}, \Spell{mage hand}, \Spell{mending}, \Spell{open & close}, \Spell{prestidigitation}, \Spell{ray of frost}, \Spell{read magic}, \Spell{resistance}; \Spell{cause fear}, \Spell{chill touch}, \Spell{feather fall}, \Spell{mage armor}, \Spell{ray of enfeeblement}, \Spell{shocking grasp}, \Spell{spider climb}, \Spell{summon monster I}, \Spell{true strike}; \Spell{blindness & deafness}, \Spell{blur}, \Spell{ghoul touch}, \Spell{see invisibility}, \Spell{spectral hand}, \Spell{summon swarm}, \Spell{blink}, \Spell{fly}, \Spell{haste}, \Spell{hold person}, \Spell{stinking cloud}, \Spell{summon monster III}, \Spell{vampiric touch}; \Spell{bestow curse}, \Spell{contagion}, \Spell{detect scrying}, \Spell{enervation}, \Spell{fear}, \Spell{phantasmal killer}, \Spell{remove curse}.";
+              id                fr-4968.
+              #.....
+              #----- Bracers of Armor +2 (fr-260)
+              item Bracers of Armor +2 [Bracers of Armor +2] =
+              hp                24;
+              max hp            24;
+              value             ;
+              hardness          ;
+              appearance
+              "Metal wrist and arm guards.";
+              player name       "Bracers of Armor +2";
+              id                fr-260.
+              #.....
+              #----- Mithral Shirt +1 (dm-10338)
+              item with armor, incomplete, wearable Mithral Shirt + 1 [Mithral Shirt, Armor +1] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A chain shirt. Finely crafted.";
+              player name       "Mithral Shirt +1";
+              id                fr-4605.
+              #.....
+              #----- Bottle of Elverquist (fr-409)
+              item Bottle of Elverquist [Art Object] =
+              hp                24;
+              max hp            24;
+              value             1800 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Bottle of Elverquist";
+              id                fr-409.
+              #.....
+              #----- Silver Necklace (fr-371)
+              item Silver Necklace [Art Object] =
+              hp                ;
+              max hp            ;
+              value             600 gp;
+              hardness          ;
+              appearance
+              "Some valuable art obje.";
+              player name       "Silver Necklace";
+              id                fr-371.
+              #.....
+              #----- Gold Torc (fr-376)
+              item Gold Torc [Art Object] =
+              hp                ;
+              max hp            ;
+              value             350 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Gold Torc";
+              id                fr-376.
+              #.....
+              #----- Silver Candleholder (dm-16427)
+              item Silver Candleholder [Art Object] =
+              hp                24;
+              max hp            24;
+              value             200 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Silver Candleholder";
+              id                fr-5377.
+              #.....
+              #----- Silver Candleholder (dm-16428)
+              item Silver Candleholder [Art Object] =
+              hp                24;
+              max hp            24;
+              value             200 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Silver Candleholder";
+              id                fr-5378.
+              #.....
+              #----- Silver Candleholder (dm-16429)
+              item Silver Candleholder [Art Object] =
+              hp                24;
+              max hp            24;
+              value             200 gp;
+              hardness          ;
+              appearance
+              "Some valuable art object.";
+              player name       "Silver Candleholder";
+              id                fr-5379.
+              #.....
+
+              #----- Garnet Ring (fr-357)
+              item Garnet Ring [Ring] =
+              hp                ;
+              max hp            ;
+              value             140 gp;
+              hardness          ;
+              appearance
+              "A simple brass ring with a green stone.";
+              id                fr-357.
+              #.....
+              #----- Gem (fr-45)
+              item Gem [Gem] =
+              hp                ;
+              max hp            ;
+              value             5000 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              dm notes          "A diamond";
+              id                fr-45.
+              #.....
+
+              #----- Gem (fr-43)
+              item Gem [Gem] =
+              hp                ;
+              max hp            ;
+              value             4000 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-43.
+              #.....
+              #----- Gem (fr-42)
+              item Gem [Gem] =
+              hp                ;
+              max hp            ;
+              value             1500 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-42.
+              #.....
+              #----- Gem (fr-41)
+              item Gem [Gem] =
+              hp                ;
+              max hp            ;
+              value             800 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-41.
+              #.....
+              #----- Ruby (fr-38)
+              item Ruby [Gem] =
+              hp                ;
+              max hp            ;
+              value             400 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-38.
+              #.....
+              #----- Gem (fr-48)
+              item with multiple Gem [Gem] =
+              count             4;
+              hp                ;
+              max hp            ;
+              value             200 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-48.
+              #.....
+              #----- Gem (fr-49)
+              item with multiple Gem [Gem] =
+              count             22;
+              hp                ;
+              max hp            ;
+              value             200 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-49.
+              #.....
+              #----- Gem (fr-52)
+              item Gem [Gem] =
+              hp                ;
+              max hp            ;
+              value             50 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-52.
+              #.....
+              #----- Short Sword +1 (fr-6)
+              item with incomplete, weapon, wearable Short Sword +1 [Short Sword, Weapon +2, Magic Attack +2] =
+              incomplete        "magical properties";
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A short sword. Good workmanship.";
+              player name       "Short Sword +1";
+              id                fr-6.
+              #.....
+              #----- Leather Armor (fr-25)
+              item with armor, wearable Leather Armor [Leather Armor] =
+              user size         Medium-size;
+              hp                0;
+              max hp            ;
+              value             ;
+              appearance
+              "A battered suite of leather armor.";
+              id                fr-25.
+              #.....
+              #----- Emerald (fr-358)
+              item Emerald [Gem] =
+              hp                24;
+              max hp            24;
+              value             800 gp;
+              hardness          ;
+              appearance
+              "A shining stone.";
+              id                fr-358.
+              #.....
+              #----- Periapt of Wisdom +2 (fr-1070)
+              item Periapt of Wisdom +2 [Periapt of Wisdom +2] =
+              max hp            ;
+              value             ;
+              appearance
+              "A pearl on a light chain.";
+              player name       "Periapt of Wisdom +2";
+              id                fr-1070.
+              #.....

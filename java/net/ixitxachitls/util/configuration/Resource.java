@@ -591,7 +591,7 @@ public class Resource implements Configuration
 
     // no '/' in front needed, because it's not accessed over Class
 
-    //add "config" as prefix, resource are relative to the config package
+    // add "config" as prefix, resource are relative to the config package
     URL url = Config.getCurrentClassLoader().getResource("config/" + name);
 
     if(url == null)

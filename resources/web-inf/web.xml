@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+  <servlet>
+    <servlet-name>static-page</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.StaticPageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>static-page</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+  <servlet>
+    <servlet-name>icons</servlet-name>
+    <servlet-class>net.ixitxachitls.server.servlets.FileServlet</servlet-class>
+    <init-param>
+      <param-name>type</param-name>
+      <param-value>image/png</param-value>
+    </init-param>
+    <init-param>
+      <param-name>root</param-name>
+      <param-value>/icons</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cache</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>icons</servlet-name>
+    <url-pattern>/icons/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>css</servlet-name>
+    <servlet-class>net.ixitxachitls.server.servlets.FileServlet</servlet-class>
+    <init-param>
+      <param-name>type</param-name>
+      <param-value>text/css</param-value>
+    </init-param>
+    <init-param>
+      <param-name>root</param-name>
+      <param-value>/css</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cache</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>css</servlet-name>
+    <url-pattern>/css/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>js</servlet-name>
+    <servlet-class>net.ixitxachitls.server.servlets.FileServlet</servlet-class>
+    <init-param>
+      <param-name>type</param-name>
+      <param-value>text/javascript</param-value>
+    </init-param>
+    <init-param>
+      <param-name>root</param-name>
+      <param-value>/js</param-value>
+    </init-param>
+    <init-param>
+      <param-name>cache</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>js</servlet-name>
+    <url-pattern>/js/*</url-pattern>
+  </servlet-mapping>
+
+  <filter>
+    <filter-name>DMARequest</filter-name>
+    <filter-class>net.ixitxachitls.dma.server.filters.DMAFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>DMARequest</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+</web-app>

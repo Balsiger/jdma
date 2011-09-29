@@ -1,0 +1,63 @@
+              #----- Flaming Arrows +1 (fr-5812)
+              item with incomplete, multiuse, weapon, wearable Flaming Arrows +1 [Arrows, Magic Attack +1, Ammunition +2, Flaming] =
+              incomplete        ;
+              count             20;
+              user size         Medium-size;
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A leather quiver with some arrows. Well made.";
+              player name       "Fire Arrows";
+              id                fr-5812.
+              #.....
+              #----- Trail Ration (fr-3939)
+              item with multiple Trail Ration [Trail Ration] =
+              count             10;
+              hp                1;
+              max hp            1;
+              value             ;
+              hardness          ;
+              appearance
+              "A simple cloth enwrapped package of dry, high-energry foods (jerky and hardtack).";
+              id                fr-3939.
+              #.....
+                    #----- Shocking Arrows +2 (fr-6496)
+                    item with incomplete, multiuse, weapon, wearable Shocking Arrows +2 [Arrows, Shock, Magic Attack +2, Ammunition +3] =
+                    incomplete        ;
+                    count             14;
+                    user size         Medium-size;
+                    hp                ;
+                    max hp            ;
+                    value             ;
+                    hardness          ;
+                    appearance
+                    "A leather quiver with some arrows. Extraordinarily well made.";
+                    id                fr-6496.
+                    #.....
+              #----- Potion of Bull's Strength (fr-5873)
+              item Potion of Bull's Strength [Potion of Bull's Strength] =
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "Some clear liquid in a ceramic vial";
+              player name       "Potion of Bull's Strength";
+              id                fr-5873.
+              #.....
+              #----- Robe of Useful Items (fr-76)
+              item with wearable Robe of Useful Items [Robe of Useful Items] =
+              user size         Medium-size;
+              hp                1;
+              max hp            1;
+              value             ;
+              hardness          ;
+              appearance
+              "An unremarkable, unadorned robe.";
+              player notes      "\bold{Contains:} dagger (2x), Bullseye lantern (lit and filled, 2x), Mirror (2''x4'', 2x), 10'' Pole (2x), Hempen rope (50'', 2x), Sack (2x), Iron Door, 10 Gems, Silver Coffer, Open pit, Window, 10 Gems, Gold Bag, Portable ram";
+              player name       "Robe of Useful Items";
+              dm notes          "\bold{Contains:} dagger, dagger, Bullseye lantern (lit and filled), Bullseye lantern (lit and filled), Mirror (2''x4''), Mirror (2''x4''), 10'' Pole, 10'' Pole, Hempen rope (50''), Hempen rope (50''), Sack, Sack, Iron Door (up 10 ft. wide and high, barred on one side, must be placed upright, attaches and hinges itself), 10 Gems (100 gp each), Silver Coffer (500 gp), Open pit (10 ft. by 10 ft. by 10 ft.), Window (2 ft. by 4 ft., up to 2 ft. deep), 10 Gems (100 gp each), Bag (100 gp), Portable ram";
+              id                fr-76.
+              #.....

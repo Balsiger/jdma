@@ -21,27 +21,33 @@
   <property file="build.properties" />
   <property file="build.properties.${os.name}" />
 
+  <!-- Google App Engine -->
+  <property name="gae.dir" location="../../appengine-java-sdk-1.5.4" />
+  <import file="${gae.dir}/config/user/ant-macros.xml" />
+
   <!-- constants for the directory structure -->
-  <property name="source.dir"    value="java"                            />
-  <property name="build.dir"     value="build"                           />
-  <property name="build.test.dir" value="${build.dir}/test"              />
-  <property name="classes.dir"   value="${build.dir}/classes"            />
-  <property name="dist.dir"      value="dist"                            />
-  <property name="doc.dir"       value="doc"                             />
-  <property name="api.dir"       value="${doc.dir}/api"                  />
-  <property name="lib.dir"       value="lib"                             />
-  <property name="lib.build.dir" value="${lib.dir}/build"                />
-  <property name="lib.test.dir"  value="${lib.dir}/test"                 />
-  <property name="resources.dir" value="resources"                       />
-  <property name="config.dir"    value="${resources.dir}/config"         />
-  <property name="files.dir"     value="${resources.dir}/files"          />
-  <property name="files-int.dir" value="${resources.dir}/files-internal" />
-  <property name="coverage.dir"  value="${build.dir}/coverage"           />
-  <property name="coverage.instr.dir" value="${coverage.dir}/instr"      />
-  <property name="dma.dir"       value="../DnD/Information"              />
-  <property name="tools.dir"     value="tools"                           />
-  <property name="findbugs.dir"  value="${tools.dir}/findbugs-1.3.9"     />
-  <property name="jetty.version" value="8.0.0.M2"                 />
+  <property name="source.dir"     location="java"                            />
+  <property name="build.dir"      location="build"                           />
+  <property name="build.test.dir" location="${build.dir}/test"               />
+  <property name="war.dir"        location="${build.dir}/war"                />
+  <property name="webinf.dir"     location="${war.dir}/WEB-INF"              />
+  <property name="classes.dir"    location="${build.dir}/classes"            />
+  <property name="dist.dir"       location="dist"                            />
+  <property name="doc.dir"        location="doc"                             />
+  <property name="api.dir"        location="${doc.dir}/api"                  />
+  <property name="lib.dir"        location="lib"                             />
+  <property name="lib.build.dir"  location="${lib.dir}/build"                />
+  <property name="lib.test.dir"   location="${lib.dir}/test"                 />
+  <property name="resources.dir"  location="resources"                       />
+  <property name="config.dir"     location="${resources.dir}/config"         />
+  <property name="files.dir"      location="${resources.dir}/files"          />
+  <property name="files-int.dir"  location="${resources.dir}/files-internal" />
+  <property name="coverage.dir"   location="${build.dir}/coverage"           />
+  <property name="coverage.instr.dir" location="${coverage.dir}/instr"       />
+  <property name="dma.dir"        location="../DnD/Information"              />
+  <property name="tools.dir"      location="tools"                           />
+  <property name="findbugs.dir"   location="${tools.dir}/findbugs-1.3.9"     />
+  <property name="jetty.version"  value="8.0.0.M2"                           />
 
   <!-- other values -->
   <property name="classpath.orig"       value=".classpath" />
@@ -134,6 +140,10 @@
     <pathelement location="${lib.dir}/slf4j-log4j12-1.5.8.jar" />
     <pathelement location="${lib.dir}/log4j-1.2.14.jar" />
     -->
+    <!-- Google App Engine -->
+    <fileset dir="${gae.dir}/lib">
+      <include name="shared/**/*.jar" />
+    </fileset>
   </path>
 
   <!-- define also as property for printing -->
@@ -155,7 +165,9 @@
       <format property="today" pattern="yyyy-MM-dd HH:mm:ss" locale="en"/>
     </tstamp>
     <mkdir dir="${build.dir}" />
+    <mkdir dir="${war.dir}" />
     <mkdir dir="${classes.dir}" />
+    <mkdir dir="${webinf.dir}" />
     <mkdir dir="${dist.dir}" />
     <mkdir dir="${coverage.dir}" />
     <property name="plugin.destination" value="${dist.dir}" />
@@ -165,6 +177,34 @@
     <!-- time! -->
     <replace file="${config.dir}/default.config" token="project.build="
              value="project.build=${today};" />
+    <copy todir="${webinf.dir}/lib" flatten="true">
+      <fileset dir="${gae.dir}/lib/user">
+        <include name="**/*.jar" />
+      </fileset>
+      <fileset dir="${lib.dir}">
+        <include name="*.jar" />
+      </fileset>
+    </copy>
+    <copy todir="${webinf.dir}" flatten="true">
+      <fileset dir="${resources.dir}/web-inf">
+        <include name="*.xml" />
+      </fileset>
+      <fileset dir="${resources.dir}/web-inf">
+        <include name="*.properties" />
+      </fileset>
+    </copy>
+    <symlink link="${webinf.dir}/classes" resource="${classes.dir}"
+             overwrite="Yes" />
+    <symlink link="${classes.dir}/html" resource="${resources.dir}/html"
+             overwrite="Yes" />
+    <symlink link="${classes.dir}/icons" resource="${resources.dir}/icons"
+             overwrite="Yes" />
+    <symlink link="${classes.dir}/js" resource="${resources.dir}/js"
+             overwrite="Yes" />
+    <symlink link="${classes.dir}/css" resource="${resources.dir}/css"
+             overwrite="Yes" />
+    <symlink link="${classes.dir}/config" resource="${resources.dir}/config"
+             overwrite="Yes" />
   </target>
 
   <!-- show the internal values -->
@@ -219,6 +259,38 @@
     <copy todir="${classes.dir}">
       <fileset dir="${source.dir}" excludes="**/*.java" />
     </copy>
+  </target>
+
+  <target name="gae" depends="compile"
+      description="Starts the development server.">
+    <dev_appserver war="${war.dir}" port="8888" />
+  </target>
+
+  <target name="gae-update" depends="compile"
+          description="Uploads the application to App Engine.">
+    <appcfg action="update" war="${war.dir}" />
+  </target>
+
+  <target name="gae-update_indexes" depends="compile"
+          description="Uploads the datastore index config to App Engine.">
+    <appcfg action="update_indexes" war="${war.dir}" />
+  </target>
+
+  <target name="gae-rollback" depends="compile"
+      description="Rolls back an interrupted application update.">
+    <appcfg action="rollback" war="${war.dir}" />
+  </target>
+
+  <target name="gae-logs"
+      description="Downloads log data from App Engine for the application.">
+    <appcfg action="request_logs" war="${war.dir}">
+      <options>
+        <arg value="--num_days=5"/>
+      </options>
+      <args>
+        <arg value="logs.txt"/>
+      </args>
+    </appcfg>
   </target>
 
   <!-- clean everything -->

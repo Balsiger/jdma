@@ -505,7 +505,7 @@ public class DMARequest extends HttpServletRequestWrapper
             token = cookie.getValue();
       }
 
-    if(user != null && token != null)
+    if(user != null && token != null && m_users != null)
     {
       m_user = m_users.get(user);
 

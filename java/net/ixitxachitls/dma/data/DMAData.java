@@ -376,6 +376,7 @@ public class DMAData implements Serializable
   {
     Resource path = Resource.get(Files.concatenate(m_path, inPath));
 
+    System.out.println(inPath + " / " + path + ": " + path.files());
     for(String name : path.files())
     {
       if(name.endsWith(".dma"))

@@ -7,7 +7,6 @@ base character Myrddin =
   real name         "Balsiger, Peter";
   email             "balsiger@ixitxachitls.net";
   password          "retep$reg";
-  products          "Products/Test.dma";
   last login        "Wednesday, July 6 2011 (16:02)";
   last action       "Wednesday, July 6 2011 (16:02)";
   token             "ZWMUDKNFPJTFTFHCLUPU";

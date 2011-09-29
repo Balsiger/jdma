@@ -73,6 +73,9 @@ public class DMAFilter implements Filter
    * @param inUsers all available users
    *
    */
+  public DMAFilter()
+  {
+  }
   public DMAFilter(Map<String, BaseCharacter> inUsers)
   {
     m_users = inUsers;

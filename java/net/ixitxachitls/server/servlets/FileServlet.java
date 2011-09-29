@@ -38,6 +38,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -207,6 +208,12 @@ public class FileServlet extends BaseServlet
   }
 
   //........................................................................
+
+  public FileServlet()
+  {
+    m_root = "/";
+    m_handleModification = true;
+  }
 
   //........................................................................
 
@@ -410,6 +417,26 @@ public class FileServlet extends BaseServlet
   }
 
   //........................................................................
+
+  public void init(ServletConfig inConfig)
+  {
+    // root
+    String param = inConfig.getInitParameter("root");
+    if(param != null)
+      m_root = param;
+
+    // type
+    param = inConfig.getInitParameter("type");
+    if(param != null)
+      for(Type type : s_types.values())
+        if(param.equals(type.getMimeType()))
+          m_type = type;
+
+    // cache
+    param = inConfig.getInitParameter("cache");
+    if(param != null)
+      m_handleModification = !"false".equals(param);
+  }
 
   //........................................................................
 

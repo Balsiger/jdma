@@ -70,6 +70,17 @@ import net.ixitxachitls.util.configuration.Config;
 @Immutable
 public class PageServlet extends DMAServlet
 {
+  static
+  {
+    // Setup logging, we might want to do that properly somewhere else
+    net.ixitxachitls.util.logging.Log.add("web server (ansi)",
+                                          new net.ixitxachitls.util.logging.
+                                          ANSILogger());
+    net.ixitxachitls.util.logging.Log.setLevel(net.ixitxachitls.util.logging.
+                                               Log.Type.DEBUG);
+    net.ixitxachitls.util.logging.Log.info("logging something");
+  }
+
   //--------------------------------------------------------- constructor(s)
 
   /**

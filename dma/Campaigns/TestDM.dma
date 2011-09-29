@@ -1,0 +1,337 @@
+# file: Campaigns/Test.dma
+
+#----- Guru (dm-146)
+
+character Guru [Merlin] =
+
+  state       adventuring;
+  possessions 
+              #----- Ink (blue) (dm-225)
+              item with composite Ink (blue) [Ink (blue)] =
+              include
+              #----- Vial (ceramic) (dm-230)
+              item with contents Vial (ceramic) [Vial (ceramic)] =
+              description
+              "This ceramic vial is fitted with a tight stopper and holds 1 ounce of
+              liquid. The stoppered container usually is no more than 1 inch wide and 3
+              inches high.";
+              appearance
+              "A ceramic vial with a tight stopper.";
+              player name  "Vial (ceramic)";
+              id           dm-230.
+              #.....
+              ;
+              description
+              "Some blue liquid.";
+              appearance
+              "Some blue liquid.";
+              player name  "Black Liquid";
+              id           dm-225.
+              #.....
+              #----- Torch (dm-224)
+              item with light, timed, weapon, wearable Torch [Torch] =
+              duration     1 hour;
+              user size    Medium-size;
+              description
+              "A simple torch.";
+              appearance
+              "A simple torch.";
+              player name  "Torch";
+              id           dm-224.
+              #.....
+              #----- Arrows (dm-223)
+              item with counted, incomplete, multiple, weapon, wearable Arrows [Arrows] =
+              count        20;
+              count        20;
+              user size    Medium-size;
+              description
+              "A leather quiver with some arrows.";
+              appearance
+              "A leather quiver with some arrows.";
+              player name  "Arrows";
+              id           dm-223.
+              #.....
+              #----- Canvas (dm-209)
+              item with commodity Canvas [Canvas] =
+              amount       5;
+              description
+              "A piece of white canvas.";
+              appearance
+              "A piece of white canvas.";
+              player name  "Canvas";
+              id           dm-209.
+              #.....
+              #----- Chainmail (dm-208)
+              item with armor, incomplete, wearable Chainmail [Chainmail] =
+              user size    Medium-size;
+              hp           5000;
+              description
+              "A suite of chainmail.";
+              appearance
+              "A suite of chainmail.";
+              player name  "Chainmail";
+              id           dm-208.
+              #.....
+              #----- Morningstar (null)
+              item with incomplete, weapon, wearable Morningstar [Morningstar] =
+              incomplete
+              "magical properties";
+              user size    Diminutive;
+              hp           1;
+              description
+              "A rusty morningstar";
+              appearance
+              "A sturdy morningstar.";
+              player notes "magisch";
+              player name  "Morningstar";
+              dm notes     "Morningstar +1";
+              id           dm-150.
+              #.....
+              #----- Studded Leather Armor (null)
+              item with armor, wearable Studded Leather Armor [Studded Leather Armor] =
+              user size    Medium-size;
+              hp           5000;
+              value        25 gp;
+              description
+              "A suite of studded leather armor.";
+              appearance
+              "A battered suite of studded leather armor.";
+              player name  "Studded Leather Armor";
+              id           dm-151.
+              #.....
+              #----- Arrows (null)
+              item with counted, incomplete, multiple, weapon, wearable Arrows [Arrows] =
+              count        20;
+              incomplete
+              "projectile; missing arrow has 50% chance of being destroyed";
+              count        20;
+              user size    Medium-size;
+              value        1 gp;
+              description
+              "A leather quiver with some arrows.";
+              appearance
+              "A leather quiver with some arrows.";
+              player name  "Arrows";
+              id           dm-152.
+              #.....
+              #----- Bag of Holding II (null)
+              item with contents Bag of Holding II [Sack] =
+              contents
+              #----- Waterskin (dm-154)
+              item with contents, incomplete Waterskin [Waterskin] =
+              incomplete
+              "how many rations are this?";
+              value        1 gp;
+              description
+              "A simple waterskin.";
+              appearance
+              "A crude waterskin.";
+              player name  "Waterskin";
+              id           dm-154.
+              #.....
+              #----- Winter Blanket (dm-155)
+              item Winter Blanket [Winter Blanket] =
+              value        5 sp;
+              description
+              "A fine, black woolen blanket.";
+              appearance
+              "A fine, golden embroidered, colored woolen blanket.";
+              player name  "Winter Blanket";
+              id           dm-155.
+              #.....
+              #----- Bedroll (dm-156)
+              item Bedroll [Bedroll] =
+              value        1 sp 4 cp;
+              description
+              "A simple bedroll with a thin cotton blanket.";
+              appearance
+              "A simple bedroll with a thin cotton blanket.";
+              player name  "Bedroll";
+              id           dm-156.
+              #.....
+              #----- Trail Ration (dm-157)
+              item with multiple Trail Ration [Trail Ration] =
+              count        80;
+              value        4 sp 1 cp;
+              description
+              "A cloth enwrapped package of dry, high-energy foods (jerky, hardtack, and nuts).";
+              appearance
+              "A simple cloth enwrapped package of dry, high-energry foods (jerky and hardtack).";
+              player name  "Trail Ration";
+              id           dm-157.
+              #.....
+              #----- Explorer's Outfit (dm-158)
+              item with incomplete Explorer's Outfit [Explorer's Outfit] =
+              incomplete
+              "this should be stored as a composite with the mentioned items";
+              value        10 gp;
+              description
+              "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+              appearance
+              "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+              player name  "Explorer's Outfit";
+              id           dm-158.
+              #.....
+              ;
+              value        5000 gp;
+              description
+              "A common cloth sack, about 2 feet by 4 feet in size.";
+              appearance
+              "A shabby cloth sack.";
+              player name  "Sack";
+              id           dm-153.
+              #.....
+              #----- Mwk Spiked Chain (dm-16610)
+              item with incomplete, weapon, wearable Mwk Spiked Chain [Spiked Chain, Mwk Weapon] =
+              user size    Medium-size;
+              appearance
+              "Well made.";
+              player name  "Spiked Chain";
+              id           dm-16610.
+              #.....
+              ;
+  level       8;
+  id          dm-146.
+
+#.....
+
+#----- AAAA (dm-147)
+
+character AAAA [Merlin] =
+
+  state       dead;
+  level       1;
+  id          dm-147.
+
+#.....
+
+#----- ZZZZ (dm-148)
+
+character ZZZZ [zzz] =
+
+  state       retired;
+  level       20;
+  id          dm-148.
+
+#.....
+
+#----- other (dm-149)
+
+character other [zzz] =
+
+  state       incapacitated;
+  possessions 
+              #----- Morningstar (null)
+              item with incomplete, weapon, wearable Morningstar [Morningstar] =
+              incomplete
+              "magical properties";
+              user size    Medium-size;
+              value        1008 gp;
+              description
+              "A rusty morningstar";
+              appearance
+              "A rusty morningstar";
+              player notes "magisch";
+              player name  "Morningstar";
+              dm notes     "Morningstar +1";
+              id           dm-159.
+              #.....
+              #----- Studded Leather Armor (null)
+              item with armor, wearable Studded Leather Armor [Studded Leather Armor] =
+              user size    Medium-size;
+              hp           5000;
+              value        25 gp;
+              description
+              "A suite of studded leather armor.";
+              appearance
+              "A battered suite of studded leather armor.";
+              player name  "Studded Leather Armor";
+              id           dm-160.
+              #.....
+              #----- Arrows (null)
+              item with counted, incomplete, multiple, weapon, wearable Arrows [Arrows] =
+              count        20;
+              incomplete
+              "projectile; missing arrow has 50% chance of being destroyed";
+              count        20;
+              user size    Medium-size;
+              value        1 gp;
+              description
+              "A leather quiver with some arrows.";
+              appearance
+              "A leather quiver with some arrows.";
+              player name  "Arrows";
+              id           dm-161.
+              #.....
+              #----- Bag of Holding II (null)
+              item with contents Bag of Holding II [Sack] =
+              contents
+              #----- Waterskin (dm-163)
+              item with contents, incomplete Waterskin [Waterskin] =
+              incomplete
+              "how many rations are this?";
+              value        1 gp;
+              description
+              "A simple waterskin.";
+              appearance
+              "A simple waterskin.";
+              player name  "Waterskin";
+              id           dm-163.
+              #.....
+              #----- Winter Blanket (dm-164)
+              item Winter Blanket [Winter Blanket] =
+              value        5 sp;
+              description
+              "A fine, black woolen blanket.";
+              appearance
+              "A fine, golden embroidered, colored woolen blanket.";
+              player name  "Winter Blanket";
+              id           dm-164.
+              #.....
+              #----- Bedroll (dm-165)
+              item Bedroll [Bedroll] =
+              value        1 sp 4 cp;
+              description
+              "A simple bedroll with a thin cotton blanket.";
+              appearance
+              "A shabby bedroll with holes and a rag as a blanket.";
+              player name  "Bedroll";
+              id           dm-165.
+              #.....
+              #----- Trail Ration (dm-166)
+              item with multiple Trail Ration [Trail Ration] =
+              count        80;
+              value        4 sp 1 cp;
+              description
+              "A cloth enwrapped package of dry, high-energy foods (jerky, hardtack, and nuts).";
+              appearance
+              "A fine cloth enwrapped package of dry, high-energy foods (jerky, dried fruit, hardtack, and nuts).";
+              player name  "Trail Ration";
+              id           dm-166.
+              #.....
+              #----- Explorer's Outfit (dm-167)
+              item with incomplete Explorer's Outfit [Explorer's Outfit] =
+              incomplete
+              "this should be stored as a composite with the mentioned items";
+              value        10 gp;
+              description
+              "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+              appearance
+              "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+              player name  "Explorer's Outfit";
+              id           dm-167.
+              #.....
+              ;
+              value        5000 gp;
+              description
+              "A common cloth sack, about 2 feet by 4 feet in size.";
+              appearance
+              "A shabby cloth sack.";
+              player name  "Sack";
+              id           dm-162.
+              #.....
+              ;
+  level       1;
+  id          dm-149.
+
+#.....

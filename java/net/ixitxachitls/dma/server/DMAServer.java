@@ -129,6 +129,7 @@ public class DMAServer extends WebServer
 
     // determine which base files to read
     m_baseData = new DMAData(DATA_DIR);
+    System.out.println(inBaseDirs);
     for(String baseDir : inBaseDirs.split(",\\s*"))
       m_baseData.addAllFiles(baseDir);
 
@@ -329,6 +330,10 @@ public class DMAServer extends WebServer
                    "/_entries/user/$1/" + type.getName());
       }
     }
+
+    // campaign information
+    addRewrite(handler, "/campaign/([^/]+)/(.*)",
+               "/_entry/base campaign/$1/campaign/$2");
 
     // TODO: this is temporary, remove once the main page filter is in
     addRewrite(handler, "/", "/index.html");
@@ -795,8 +800,8 @@ public class DMAServer extends WebServer
 
   /**
    * General initialization to be done while the server is starting up. The
-   * server will server requests but will return an error message about it
-   * being started up. This means this can take some time.
+   * server will serve requests but will return an error message about starting
+   * up. This means this can take some time.
    *
    */
   @OverridingMethodsMustInvokeSuper
@@ -804,7 +809,7 @@ public class DMAServer extends WebServer
   {
     Log.info("Loading user information");
     if(!m_baseData.read())
-      Log.error("Could not properly read user files!");
+      Log.error("Could not properly base data files!");
   }
 
   //........................................................................

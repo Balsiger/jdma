@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Strings;
@@ -144,7 +145,7 @@ public abstract class DMAServlet extends BaseServlet
                                    @Nonnull String inPath,
                                    @Nonnull DMAData inBaseData)
   {
-    // check if we need some nested data
+    // check if we need some user specific data
     String userID =
       Strings.getPattern(inPath,
                          "^(?:/_entry|/_entries|)/(?:user|base character)/"
@@ -159,6 +160,21 @@ public abstract class DMAServlet extends BaseServlet
 
     if(user != null)
       return user.getProductData();
+
+    // check if we need some campaign specific data
+    String campaignID =
+      Strings.getPattern(inPath,
+                         "^(?:/_entry|/_entries|)/(?:campaign|base campaign)/"
+                         + "([^/]*)/.+");
+
+    if(campaignID != null)
+    {
+      BaseCampaign campaign =
+        inBaseData.getEntry(campaignID, BaseCampaign.TYPE);
+
+      if(campaign != null)
+        return campaign.getCampaignData();
+    }
 
     return inBaseData;
   }

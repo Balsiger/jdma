@@ -1,0 +1,158 @@
+# file: Campaigns/Test.dma
+
+#----- Merlin's Character (player-18)
+
+character Merlin's Character [Merlin] =
+
+  state       adventuring;
+  possessions                #----- Chainmail (player-63)
+              item with armor, incomplete, wearable Chainmail [Chainmail] =
+              incomplete        ;
+              user size         Medium-size;
+              hp                0;
+              max hp            ;
+              value             150 gp;
+              appearance
+              "A battered suite of chainmail.";
+              id                player-63.
+              #.....
+              #----- Studded Leather Armor (null)
+              item with armor, wearable Studded Leather Armor [Studded Leather Armor] =
+              user size         Medium-size;
+              hp                0;
+              max hp            ;
+              value             25 gp;
+              appearance
+              "A suite of studded leather armor.";
+              id                player-21.
+              #.....
+              #----- Morningstar (null)
+              item with incomplete, weapon, wearable Morningstar [Morningstar] =
+              incomplete        "magical properties";
+              user size         Medium-size;
+              hp                12;
+              max hp            12;
+              value             8 gp;
+              hardness          ;
+              appearance
+              "A sturdy morningstar.";
+              player notes      "magisch";
+              dm notes          "Morningstar +1";
+              id                player-20.
+              #.....
+              #----- Arrows (null)
+              item with counted, incomplete, multiuse, weapon, wearable Arrows [Arrows] =
+              count             20;
+              incomplete        "projectile; missing arrow has 50% chance of being destroyed";
+              count             20;
+              user size         Medium-size;
+              hp                1;
+              max hp            1;
+              value             1 gp;
+              hardness          ;
+              appearance
+              "A leather quiver with some arrows.";
+              id                player-22.
+              #.....
+              #----- Bag of Holding II (player-23)
+              item with contents Bag of Holding II [Sack] =
+              contents                                                      #----- Waterskin (player-24)
+              item with contents, incomplete Waterskin [Waterskin] =
+              incomplete        "how many rations are this?";
+              hp                1;
+              max hp            1;
+              value             1 gp;
+              hardness          ;
+              appearance
+              "A simple waterskin.";
+              id                player-24.
+              #.....
+              #----- Winter Blanket (player-25)
+              item Winter Blanket [Winter Blanket] =
+              hp                1;
+              max hp            1;
+              value             5 sp;
+              hardness          ;
+              appearance
+              "A rough, brown woolen blanket.";
+              id                player-25.
+              #.....
+              #----- Bedroll (player-26)
+              item Bedroll [Bedroll] =
+              hp                1;
+              max hp            1;
+              value             1 sp 4 cp;
+              hardness          ;
+              appearance
+              "A simple bedroll with a thin cotton blanket.";
+              id                player-26.
+              #.....
+              #----- Trail Ration (player-27)
+              item with multiple Trail Ration [Trail Ration] =
+              count             80;
+              hp                1;
+              max hp            1;
+              value             4 sp 1 cp;
+              hardness          ;
+              appearance
+              "A simple cloth enwrapped package of dry, high-energry foods (jerky and hardtack).";
+              id                player-27.
+              #.....
+              #----- Explorer's Outfit (player-28)
+              item with incomplete Explorer's Outfit [Explorer's Outfit] =
+              incomplete        "this should be stored as a composite with the mentioned items";
+              hp                1;
+              max hp            1;
+              value             10 gp;
+              hardness          ;
+              appearance
+              "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+              id                player-28.
+              #.....
+              ;
+              hp                1;
+              max hp            1;
+              value             5000 gp;
+              hardness          ;
+              appearance
+              "A shabby cloth sack.";
+              player name       "Sack";
+              id                player-23.
+              #.....
+              ;
+  level       20;
+  id          player-18.
+
+#.....
+
+#----- Former Character (player-19)
+
+character Former Character [Merlin] =
+
+  state       dead;
+  level       1;
+  id          player-19.
+
+#.....
+
+#----- Other Character (player-73)
+
+character Other Character [zzz] =
+
+  state       adventuring;
+  possessions 
+              #----- Winter Blanket (player-74)
+              item Winter Blanket [Winter Blanket] =
+              hp                ;
+              max hp            ;
+              value             ;
+              hardness          ;
+              appearance
+              "A fine, brown woolen blanket.";
+              id                player-74.
+              #.....
+              ;
+  level       1;
+  id          player-73.
+
+#.....

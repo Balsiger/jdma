@@ -64,6 +64,10 @@ public class StaticPageServlet extends PageServlet
    * @param inRoot the root in the resources for the html pages to get
    *
    */
+  public StaticPageServlet()
+  {
+    this("/html");
+  }
   public StaticPageServlet(@Nonnull String inRoot)
   {
     m_root = inRoot;
