@@ -1215,7 +1215,7 @@ public abstract class ValueGroup implements Changeable
   // TODO: make this not static and move to campaign.
   /** The name of the current game. */
   public static final String CURRENT =
-    Config.get("user:configuration", "default");
+    Config.get("configuration", "default");
 
   //........................................................................
 

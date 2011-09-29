@@ -1426,7 +1426,6 @@ public final class Config
       m_logger.logClass(Resource.class);
       m_logger.logClass(Resource.class);
       m_logger.logClass(Bundle.BundleHandler.class);
-      m_logger.logClass(User.PreferencesHandler.class);
 
       m_logger.addExpected("USEFUL: loaded configuration class "
                            + "net.ixitxachitls.util.configuration.Resource for "
@@ -1453,14 +1452,6 @@ public final class Config
       assertEquals("get (bundle)", "guru",
                    Config.get("bundle:test/test/test.config", "guru"));
 
-
-      m_logger.addExpected("USEFUL: loaded configuration class "
-                           + "net.ixitxachitls.util.configuration.User for "
-                           + "user");
-      m_logger.addExpected("COMPLETE: creating user preferences test/test");
-
-      assertEquals("get (user)", "guru",
-                   Config.get("user:test/test/test.config", "guru"));
 
       m_logger.verify();
     }
