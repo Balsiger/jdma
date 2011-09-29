@@ -1429,6 +1429,9 @@ public final class Config
       m_logger.logClass(User.PreferencesHandler.class);
       m_logger.logClass(System.SystemPreferencesHandler.class);
 
+      m_logger.addExpected("USEFUL: loaded configuration class "
+                           + "net.ixitxachitls.util.configuration.Resource for "
+                           + "resource");
       m_logger.addExpectedPattern("COMPLETE: loading resource "
                                   + ".*/test.config");
 

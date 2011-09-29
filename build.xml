@@ -302,7 +302,9 @@
   <!-- clean the build -->
   <target name       ="clean"
           description="clean up the build directories" >
-    <delete dir="${build.dir}"/>
+    <delete>
+      <fileset dir="${build.dir}" followsymlinks="false"/>
+    </delete>
     <delete>
       <fileset dir="${basedir}" defaultexcludes="no"
                includes="**/*.class, **/*~, **/#*#, **/.#*, **/default.log"/>

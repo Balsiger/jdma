@@ -87,7 +87,7 @@ public class BaseCampaign extends BaseEntry
    * @param     inData all the available data
    *
    */
-  protected BaseCampaign(@Nonnull DMAData inData)
+  public BaseCampaign(@Nonnull DMAData inData)
   {
     super(TYPE, inData);
   }
@@ -882,7 +882,7 @@ public class BaseCampaign extends BaseEntry
         new net.ixitxachitls.input.ParseReader
         (new java.io.StringReader(s_text), "test");
 
-      return (BaseCampaign)AbstractEntry.read(reader, null);
+      return (BaseCampaign)AbstractEntry.read(reader, new DMAData("path"));
     }
 
     //......................................................................
