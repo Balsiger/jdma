@@ -24,7 +24,10 @@
 package net.ixitxachitls.util.configuration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -148,6 +151,10 @@ public final class Config
 
   /** The postfix for array values. */
   private static final String s_list = "list";
+
+  /** All the configuration values used so far. */
+  private static final Map<String, String> s_values =
+    Collections.synchronizedSortedMap(new TreeMap<String, String>());
 
   //........................................................................
 
@@ -495,6 +502,7 @@ public final class Config
     {
       Log.warning("could not find configuration for '" + keys.first() + "'");
 
+      s_values.put(inKey, inDefault);
       return inDefault;
     }
 
@@ -510,8 +518,6 @@ public final class Config
       s_rewrite = false;
       result = configuration.get(key, "");
       s_rewrite = true;
-
-      return result;
     }
     else
       if(inDefault == null)
@@ -522,6 +528,7 @@ public final class Config
     // make sure a non null value is returned
     assert result != null : "lookup should not have resulted in null";
 
+    s_values.put(inKey, result);
     return result;
   }
 
@@ -756,6 +763,22 @@ public final class Config
   }
 
   //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * A map with all configuration values. Although you can change the values
+   * here, it will not actually change the configuration values if you do.
+   *
+   * @return  all the configuration values used so far
+   *
+   */
+  public static Map<String, String> getValues()
+  {
+    return s_values;
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
@@ -1018,10 +1041,14 @@ public final class Config
       return false;
     }
     else
+    {
+      String name = keys.second();
       if(inPostfix != null)
-        return configuration.set(keys.second() + "." + inPostfix, inValue);
-      else
-        return configuration.set(keys.second(), inValue);
+        name += "." + inPostfix;
+
+      s_values.put(name, inValue);
+      return configuration.set(name, inValue);
+    }
   }
 
   //........................................................................

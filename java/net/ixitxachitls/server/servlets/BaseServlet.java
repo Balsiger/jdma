@@ -63,6 +63,17 @@ import net.ixitxachitls.util.logging.Log;
 @Immutable
 public abstract class BaseServlet extends HttpServlet
 {
+  static
+  {
+    // Setup logging, we might want to do that properly somewhere else
+    net.ixitxachitls.util.logging.Log.add("web server (ansi)",
+                                          new net.ixitxachitls.util.logging.
+                                          ASCIILogger());
+    net.ixitxachitls.util.logging.Log.setLevel(net.ixitxachitls.util.logging.
+                                               Log.Type.DEBUG);
+    net.ixitxachitls.util.logging.Log.info("logging something");
+  }
+
   //----------------------------------------------------------------- nested
 
   //----- SpecialResult ----------------------------------------------------

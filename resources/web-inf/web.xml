@@ -5,13 +5,23 @@
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
   <servlet>
+    <servlet-name>config</servlet-name>
+    <servlet-class>net.ixitxachitls.server.servlets.ConfigServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>config</servlet-name>
+    <url-pattern>/configuration</url-pattern>
+  </servlet-mapping>
+
+<!--
+  <servlet>
     <servlet-name>static-page</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.StaticPageServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>static-page</servlet-name>
-        <url-pattern>/*</url-pattern>
-    </servlet-mapping>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>static-page</servlet-name>
+    <url-pattern>/*</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>icons</servlet-name>
@@ -88,4 +98,5 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+-->
 </web-app>

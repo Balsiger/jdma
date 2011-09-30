@@ -641,8 +641,7 @@ public class HTMLWriter
         ("<!DOCTYPE html "
          + "PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" "
          + "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
-      m_writer.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-      m_writer.println("<HTML>");
+      m_writer.println("<HTML xmlns=\"http://www.w3.org/1999/xhtml\">");
       m_inHTML = true;
     }
   }

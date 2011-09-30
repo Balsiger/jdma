@@ -4,5 +4,7 @@
   <version>1</version>
   <system-properties>
     <property name="java.util.logging.config.file"
-              value="WEB-INF/logging.properties"/>
-</system-properties></appengine-web-app>
+              value="WEB-INF/logging.properties" />
+    <property name="jdma.config.writable" value="false" />
+  </system-properties>
+</appengine-web-app>
