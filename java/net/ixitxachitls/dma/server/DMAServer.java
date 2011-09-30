@@ -66,6 +66,10 @@ import net.ixitxachitls.util.logging.EventLogger;
 import net.ixitxachitls.util.logging.FileLogger;
 import net.ixitxachitls.util.logging.Log;
 
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.webapp.WebAppContext;
+
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -300,15 +304,20 @@ public class DMAServer extends WebServer
 
     Log.info("Setting up real contexts");
 
+    WebAppContext appContext = new WebAppContext();
+    appContext.setWar("build/war");
+    appContext.setContextPath("/@");
+
     RewriteHandler handler = new RewriteHandler();
     handler.setRewriteRequestURI(true);
     handler.setRewritePathInfo(true);
     handler.setOriginalPathAttribute(DMARequest.ORIGINAL_PATH);
 
     ServletContextHandler context = new ServletContextHandler();
-    handler.setHandler(context);
 
-    m_server.setHandler(handler);
+    ContextHandlerCollection handlers = new ContextHandlerCollection();
+    handlers.setHandlers(new Handler [] { appContext, context });
+    m_server.setHandler(handlers);
 
     addRewrite(handler, "^(.+)\\.pdf", "/pdf$1");
     for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())

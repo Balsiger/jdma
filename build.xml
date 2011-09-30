@@ -123,6 +123,8 @@
     <pathelement location="${lib.dir}/jetty-servlet-${jetty.version}.jar" />
     <pathelement location="${lib.dir}/jetty-servlets-${jetty.version}.jar" />
     <pathelement location="${lib.dir}/jetty-util-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-webapp-${jetty.version}.jar" />
+    <pathelement location="${lib.dir}/jetty-xml-${jetty.version}.jar" />
     <pathelement location="${lib.dir}/servlet-api-3.0.jar" />
     <!-- mail -->
     <pathelement location="${lib.dir}/mail.jar" />
