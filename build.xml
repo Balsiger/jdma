@@ -96,6 +96,7 @@
 
   <!-- classpath -->
   <path id="classpath">
+    <pathelement location="" />
     <pathelement location="${classes.dir}" />
     <pathelement location="${config.dir}" />
     <pathelement location="${resources.dir}" />
