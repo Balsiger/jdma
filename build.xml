@@ -18,8 +18,8 @@
   </description>
 
   <!-- local valules -->
-  <property file="build.properties" />
   <property file="build.properties.${os.name}" />
+  <property file="build.properties" />
 
   <!-- Google App Engine -->
   <property name="gae.dir" location="../../appengine-java-sdk-1.5.4" />
@@ -196,7 +196,7 @@
         <include name="*.properties" />
       </fileset>
     </copy>
-    <symlink link="${webinf.dir}/classes" resource="${classes.dir}"
+<!--<symlink link="${webinf.dir}/classes" resource="${classes.dir}"
              overwrite="Yes" />
     <symlink link="${classes.dir}/html" resource="${resources.dir}/html"
              overwrite="Yes" />
@@ -207,7 +207,7 @@
     <symlink link="${classes.dir}/css" resource="${resources.dir}/css"
              overwrite="Yes" />
     <symlink link="${classes.dir}/config" resource="${resources.dir}/config"
-             overwrite="Yes" />
+             overwrite="Yes" />-->
   </target>
 
   <!-- show the internal values -->
