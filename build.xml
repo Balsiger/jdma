@@ -189,10 +189,10 @@
       </fileset>
     </copy>
     <copy todir="${webinf.dir}" flatten="true">
-      <fileset dir="${resources.dir}/web-inf">
+      <fileset dir="${resources.dir}/WEB-INF">
         <include name="*.xml" />
       </fileset>
-      <fileset dir="${resources.dir}/web-inf">
+      <fileset dir="${resources.dir}/WEB-INF">
         <include name="*.properties" />
       </fileset>
     </copy>
