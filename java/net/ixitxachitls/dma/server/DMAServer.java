@@ -31,9 +31,12 @@ import javax.servlet.DispatcherType;
 
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -65,10 +68,6 @@ import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.EventLogger;
 import net.ixitxachitls.util.logging.FileLogger;
 import net.ixitxachitls.util.logging.Log;
-
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.webapp.WebAppContext;
 
 //..........................................................................
 
@@ -304,20 +303,24 @@ public class DMAServer extends WebServer
 
     Log.info("Setting up real contexts");
 
-    // WebAppContext appContext = new WebAppContext();
-    // appContext.setWar("build/war");
-    // appContext.setContextPath("/@");
-
     RewriteHandler handler = new RewriteHandler();
     handler.setRewriteRequestURI(true);
     handler.setRewritePathInfo(true);
     handler.setOriginalPathAttribute(DMARequest.ORIGINAL_PATH);
 
-    ServletContextHandler context = new ServletContextHandler();
-    handler.setHandler(context);
+    WebAppContext appContext = new WebAppContext();
+    appContext.setWar("build/war");
+    appContext.setContextPath("/@");
 
-    // ContextHandlerCollection handlers = new ContextHandlerCollection();
-    // handlers.setHandlers(new Handler [] { appContext, context });
+    addRewrite(handler, "/configuration", "/@/configuration");
+
+    ServletContextHandler context = new ServletContextHandler();
+
+    HandlerCollection handlers = new HandlerCollection();
+    handlers.addHandler(appContext);
+    handlers.addHandler(context);
+
+    handler.setHandler(handlers);
     m_server.setHandler(handler);
 
     addRewrite(handler, "^(.+)\\.pdf", "/pdf$1");
