@@ -304,9 +304,9 @@ public class DMAServer extends WebServer
 
     Log.info("Setting up real contexts");
 
-    WebAppContext appContext = new WebAppContext();
-    appContext.setWar("build/war");
-    appContext.setContextPath("/@");
+    // WebAppContext appContext = new WebAppContext();
+    // appContext.setWar("build/war");
+    // appContext.setContextPath("/@");
 
     RewriteHandler handler = new RewriteHandler();
     handler.setRewriteRequestURI(true);
@@ -314,10 +314,11 @@ public class DMAServer extends WebServer
     handler.setOriginalPathAttribute(DMARequest.ORIGINAL_PATH);
 
     ServletContextHandler context = new ServletContextHandler();
+    handler.setHandler(context);
 
-    ContextHandlerCollection handlers = new ContextHandlerCollection();
-    handlers.setHandlers(new Handler [] { appContext, context });
-    m_server.setHandler(handlers);
+    // ContextHandlerCollection handlers = new ContextHandlerCollection();
+    // handlers.setHandlers(new Handler [] { appContext, context });
+    m_server.setHandler(handler);
 
     addRewrite(handler, "^(.+)\\.pdf", "/pdf$1");
     for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
