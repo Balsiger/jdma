@@ -98,7 +98,7 @@ public class ValueList<T extends Value>
     m_editType  = "list(" + inDelimiter + ")#" + m_type.getEditType();
     m_joiner    = Joiner.on(inDelimiter);
 
-    add(inType);
+    append(inType);
   }
 
   //........................................................................
@@ -138,7 +138,7 @@ public class ValueList<T extends Value>
 
     // add all the elements (they must be copied!)
     for(T value : inValues)
-      add(value);
+      append(value);
   }
 
   //........................................................................
@@ -179,7 +179,7 @@ public class ValueList<T extends Value>
 
     // add all the elements (they must be copied!)
     for(int i = 0; i < inValues.length; i++)
-      add(inValues[i]);
+      append(inValues[i]);
   }
 
   //........................................................................
@@ -455,7 +455,7 @@ public class ValueList<T extends Value>
 
   //........................................................................
 
-  //--------------------------------- add ----------------------------------
+  //------------------------------- append --------------------------------
 
   /**
    * Add a value to the list (only defined values are added!).
@@ -466,7 +466,7 @@ public class ValueList<T extends Value>
    * @return      true if added, false else
    *
    */
-  protected boolean add(@Nonnull T inValue)
+  protected boolean append(@Nonnull T inValue)
   {
     if(!inValue.isDefined())
       return false;
@@ -478,7 +478,7 @@ public class ValueList<T extends Value>
   }
 
   //........................................................................
-  //--------------------------------- add ----------------------------------
+  //-------------------------------- insert --------------------------------
 
   /**
    * Add a value to the list (only defined values are added!).
@@ -490,7 +490,7 @@ public class ValueList<T extends Value>
    * @return      true if added, false else
    *
    */
-  protected boolean add(int inIndex, @Nonnull T inValue)
+  protected boolean insert(int inIndex, @Nonnull T inValue)
   {
     if(!inValue.isDefined())
       return false;
@@ -639,7 +639,7 @@ public class ValueList<T extends Value>
     ValueList<T> result = create();
 
     for(T value : m_values)
-      result.add(value);
+      result.append(value);
 
     for(T value : inValue)
       result.remove(value);
@@ -686,7 +686,7 @@ public class ValueList<T extends Value>
         return false;
       }
 
-      add(value);
+      append(value);
 
       // read ok so far...
       pos = inReader.getPosition();
@@ -851,28 +851,28 @@ public class ValueList<T extends Value>
       assertEquals("undefined value not correct", "$undefined$",
                    list.toString());
 
-      assertTrue(list.add(new Name("test 1")));
+      assertTrue(list.append(new Name("test 1")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1",
                    list.toString());
 
-      assertTrue(list.add(new Name("test 2")));
+      assertTrue(list.append(new Name("test 2")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1,\ntest 2",
                    list.toString());
 
-      assertTrue(list.add(1, new Name("test 3")));
+      assertTrue(list.insert(1, new Name("test 3")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1,\ntest 3,\ntest 2",
                    list.toString());
 
-      assertFalse(list.add(1, new Name()));
+      assertFalse(list.insert(1, new Name()));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct", "test 1,\ntest 3,\ntest 2",
                    list.toString());
 
       // values with other types are added but with the stored type
-      assertTrue(list.add(1, new Name("guru")));
+      assertTrue(list.insert(1, new Name("guru")));
       assertTrue("not defined", list.isDefined());
       assertEquals("undefined value not correct",
                    "test 1,\nguru,\ntest 3,\ntest 2",
@@ -893,10 +893,10 @@ public class ValueList<T extends Value>
       Name third = new Name("third");
       Name fourth = new Name("fourth");
 
-      list.add(first);
-      list.add(second);
-      list.add(third);
-      list.add(fourth);
+      list.append(first);
+      list.append(second);
+      list.append(third);
+      list.append(fourth);
 
       assertEquals("added", "first - second - third - fourth",
                     list.toString());
