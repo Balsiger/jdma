@@ -366,10 +366,6 @@ public class DMAServer extends WebServer
        "/robots.txt");
 
     context.addServlet
-      (new ServletHolder(new FileServlet("/icons/favicon.png", "image/png")),
-       "/favicon.ico");
-
-    context.addServlet
       (new ServletHolder(new StaticPageServlet("/html")), "/*");
 
     context.addServlet
