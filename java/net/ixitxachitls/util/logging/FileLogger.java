@@ -29,6 +29,8 @@ import java.io.FileOutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.util.configuration.Config;
+
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -130,7 +132,8 @@ public class FileLogger extends ASCIILogger
   protected static final int def_width = 130;
 
   /** The standard name format. */
-  protected static final String s_defNameFormat = "%y-%M-%D.log";
+  protected static final String s_defNameFormat =
+    Config.get("logger.nameformat", "%y-%M-%D.log");
 
   //........................................................................
 

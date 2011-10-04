@@ -34,6 +34,8 @@ import javax.annotation.concurrent.ThreadSafe;
 import net.ixitxachitls.output.WrapBuffer;
 import net.ixitxachitls.util.Strings;
 
+import net.ixitxachitls.util.configuration.Config;
+
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -149,16 +151,19 @@ public class ASCIILogger implements Logger
   private @Nonnull String m_format;
 
   /** The default format for printing. */
-  protected static final String def_format = "%<%Y-%M-%D %h:%m:%s - %L: %>%T";
+  protected static final String def_format =
+    Config.get("logger.format", "%<%Y-%M-%D %h:%m:%s - %L: %>%T");
 
   /** The standard width of the output buffer. */
-  private static final int def_width = 80;
+  private static final int def_width =
+    Config.get("logger.width", 80);
 
   /** The current width for printing. */
   private int m_width = def_width;
 
   /** The default indent to use if a message covers more than one line. */
-  private static final int s_indent = 20;
+  private static final int s_indent =
+    Config.get("logger.indent", 20);
 
   /** The maximally allowed percentage of a line that may be prompt. */
   private static final double s_maxPrompt = 0.9;

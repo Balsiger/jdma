@@ -24,6 +24,7 @@
 package net.ixitxachitls.util.logging;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +35,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
@@ -205,6 +208,21 @@ public final class Log
   /** The analytics tracker. */
   //private static Analytics s_analytics = new Analytics();
 
+  static
+  {
+    // setup default logging
+    String level = Config.get("logging.level", "DEBUG");
+    String []loggers =
+      Config.get("logging.loggers", "ASCIILogger").split(",\\s*");
+
+    Log.setLevel(Type.valueOf(level));
+    for(String logger : loggers)
+      Log.add("default (" + logger + ")", logger);
+
+    Log.important("setup initial debug configuration to level " + level
+                  + " and logger " + Arrays.toString(loggers));
+  }
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -267,6 +285,49 @@ public final class Log
   }
 
   //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+    * Add a logger to be logged to.
+    *
+    * @param       inName   the name of the logger to add
+    * @param       inLogger the logger to add
+    *
+    * @return      true if newly added, false if another logger was replaced
+    *
+    */
+  public static boolean add(@Nonnull String inName, @Nonnull String inLogger)
+  {
+    String name = inLogger;
+    if(name.indexOf(".") < 0)
+      name = "net.ixitxachitls.util.logging." + name;
+
+    try
+    {
+      Logger logger =
+        Class.forName(name).asSubclass(Logger.class).newInstance();
+      return Log.add(inName, logger);
+    }
+    catch(ClassNotFoundException e)
+    {
+      System.err.println("Could not find class " + inName + " for logging: "
+                         + e);
+    }
+    catch(InstantiationException e)
+    {
+      System.err.println("Could not instantiate class " + inName
+                         + " for logging: " + e);
+    }
+    catch(IllegalAccessException e)
+    {
+      System.err.println("Could not access class " + inName
+                         + " for logging: " + e);
+    }
+
+    return false;
+  }
+
+  //........................................................................
   //----------------------------- addMessage -------------------------------
 
   /**
@@ -314,6 +375,21 @@ public final class Log
   public static void setLevel(@Nonnull Type inLevel)
   {
     s_level = inLevel;
+  }
+
+  //........................................................................
+  //------------------------------- setLevel -------------------------------
+
+  /**
+    * Set the logging level to print up to.
+    *
+    * @param       inLevel the level to print (more severe levels are
+    *                      printed as well)
+    *
+    */
+  public static void setLevel(@Nonnull String inLevel)
+  {
+    s_level = Type.valueOf(inLevel);
   }
 
   //........................................................................
@@ -1146,7 +1222,7 @@ public final class Log
       assertNull("get empty", Log.get(""));
       assertNull("get empty", Log.get(null));
       assertFalse("add", Log.add(null, m_logger));
-      assertFalse("add", Log.add("test", null));
+      assertFalse("add", Log.add("test", (Logger)null));
 
       // really adding and removing
       assertTrue("add", Log.add("guru", m_logger));

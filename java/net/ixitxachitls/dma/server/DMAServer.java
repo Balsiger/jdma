@@ -916,6 +916,9 @@ public class DMAServer extends WebServer
       return;
     }
 
+    // prevent default setup of loggers
+    Config.set("logging.loggers", "");
+
     // add ANSI logger
     if(!clp.hasValue("no-ansi"))
     {
