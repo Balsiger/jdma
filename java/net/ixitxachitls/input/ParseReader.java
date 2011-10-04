@@ -2053,23 +2053,26 @@ public class ParseReader
 
       ParseError error = reader.error(pos, "test", "just some text");
 
-      assertEquals("test",                             error.getErrorNumber());
-      assertEquals("just some text",                   error.getParseMessage());
-      assertEquals("not yet defined!",                 error.getError());
-      assertEquals("test",                             error.getDocument());
-      assertEquals(4,                                  error.getLine());
+      assertEquals("test", error.getErrorNumber());
+      assertEquals("just some text", error.getParseMessage());
+      assertEquals("[test] no definition found for this error",
+                   error.getError());
+      assertEquals("test", error.getDocument());
+      assertEquals(4, error.getLine());
       assertEquals("\njust some test text\n\n with #", error.getPre());
-      assertEquals(" an \nerror position",             error.getPost());
-      assertFalse("error",                             reader.hadError());
-      assertFalse("warning",                           reader.hadWarning());
+      assertEquals(" an \nerror position", error.getPost());
+      assertFalse("error", reader.hadError());
+      assertFalse("warning", reader.hadWarning());
 
-      m_logger.addExpected("ERROR: test: not yet defined! (just some text) "
+      m_logger.addExpected("ERROR: test: [test] no definition found for this "
+                           + "error (just some text) "
                            + "on line 4 in document 'test'\n...\njust some "
                            + "test text\n\n with #>>> an \nerror position...");
 
       reader.logError(pos, "test", "just some text");
 
-      m_logger.addExpected("WARNING: test: not yet defined! (some other text) "
+      m_logger.addExpected("WARNING: test: [test] no definition found for this "
+                           + "error (some other text) "
                            + "on line 4 in document 'test'\n...\njust some "
                            + "test text\n\n with #>>> an \nerror position...");
 

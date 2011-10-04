@@ -68,13 +68,6 @@ public class TestCase extends org.junit.Assert
   /** The number of failures occurred. */
   protected int m_failures = 0;
 
-  static
-  {
-    // switch Configuration to test mode; must be done in a static init
-    // to make sure that all static inits in the test use the test mode
-    net.ixitxachitls.util.configuration.Config.setRewriting(true);
-  }
-
   /** The name of the test logger. */
   private static final String s_logger = "test";
 
@@ -280,7 +273,6 @@ public class TestCase extends org.junit.Assert
     m_logger = new Log.Test.MockLogger();
     Log.add(s_logger, m_logger);
     Log.setLevel(Log.Type.DEBUG);
-    net.ixitxachitls.util.configuration.Config.setRewriting(true);
   }
 
   //........................................................................

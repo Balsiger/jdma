@@ -904,7 +904,7 @@ public class Product extends Entry<BaseProduct>
     if("owner".equals(inKey))
     {
       // nothing to do if setting to current
-      if(inText.equals(m_owner.getID()) || inText.isEmpty())
+      if(m_owner != null && inText.equals(m_owner.getID()) || inText.isEmpty())
         return null;
 
       // determine the new owner

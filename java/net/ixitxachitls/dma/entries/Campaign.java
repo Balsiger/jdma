@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+// import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -37,20 +37,20 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Number;
+// import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Span;
-import net.ixitxachitls.util.Filter;
-import net.ixitxachitls.util.FilteredIterator;
-import net.ixitxachitls.util.Identificator;
-import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.UniqueIdentificator;
-import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.dma.values.formatters.LinkFormatter;
+// import net.ixitxachitls.output.commands.Divider;
+// import net.ixitxachitls.output.commands.Span;
+// import net.ixitxachitls.util.Filter;
+// import net.ixitxachitls.util.FilteredIterator;
+// import net.ixitxachitls.util.Identificator;
+// import net.ixitxachitls.util.Strings;
+// import net.ixitxachitls.util.UniqueIdentificator;
+// import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -155,7 +155,7 @@ public class Campaign extends Entry<BaseCampaign>
   //----- dm ---------------------------------------------------------------
 
   /** The formatter for the dm. */
-  protected static Formatter<Name> s_dmFormatter =
+  protected static final Formatter<Name> s_dmFormatter =
     new LinkFormatter<Name>("/index/dms/");
 
   /** The dm for this campaign. */
@@ -165,7 +165,7 @@ public class Campaign extends Entry<BaseCampaign>
   static
   {
     // s_indexes.add(new KeyIndex<KeyIndex>("Campaign", "DMs", "dms", "dm",
-    //                                      true, FORMATTER, FORMAT, false, null)
+    //                                     true, FORMATTER, FORMAT, false, null)
     //               .withAccess(BaseCharacter.Group.DM)
     //               .withDataSource(Index.DataSource.campaign));
   }
@@ -560,7 +560,7 @@ public class Campaign extends Entry<BaseCampaign>
 // //     }
 
 // //     if(base == null)
-// //       Log.warning("base entry " + entry.getName() + " for " + entry.getID()
+// //     Log.warning("base entry " + entry.getName() + " for " + entry.getID()
 // //                   + " not found");
 // //     else
 // //       entry.setBase(base);
@@ -657,7 +657,7 @@ public class Campaign extends Entry<BaseCampaign>
   //     if(inID.startsWith(m_shortName.get() + "-"))
   //     {
   //       // we have an id, thus fix the current max
-  //       long current = Integer.parseInt(Strings.getPattern(inID, ".*-(\\d+)"));
+  //     long current = Integer.parseInt(Strings.getPattern(inID, ".*-(\\d+)"));
 
   //       if(current > m_maxID.get())
   //       {

@@ -164,7 +164,7 @@ public class SaveActionServlet extends ActionServlet
         m_values.put(inKey, inValue);
       }
 
-      if(inKey.indexOf("/") > 0)
+      if(inKey.indexOf("/") >= 0)
         m_multiple = true;
     }
 

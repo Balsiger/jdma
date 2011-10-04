@@ -1187,21 +1187,19 @@ public final class Strings
     @org.junit.Test
     public void replaceTemplates()
     {
-      Config.setRewriting(false);
       assertEquals("no templates", "a test without a template",
                    Strings.replaceTemplates("a test without a template",
                                             "test/test/template"));
       assertEquals("unknown", "a *unknown* test",
                    Strings.replaceTemplates("a $test test",
                                             "test/test/template"));
+      System.setProperty("test/test/template.simple", "single word");
       assertEquals("valid", "some single word test",
                    Strings.replaceTemplates("some $simple test",
                                             "test/test/template"));
       assertEquals("special char", "some single word; test",
                    Strings.replaceTemplates("some $simple; test",
                                             "test/test/template"));
-      Config.setRewriting(true);
-
       m_logger.addExpected("WARNING: could not find template replacement for "
                            + "test/test/template.test");
     }

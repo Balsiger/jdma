@@ -31,10 +31,7 @@ import javax.servlet.DispatcherType;
 
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -308,14 +305,8 @@ public class DMAServer extends WebServer
     handler.setRewritePathInfo(true);
     handler.setOriginalPathAttribute(DMARequest.ORIGINAL_PATH);
 
-    WebAppContext context = new WebAppContext();
-    context.setWar("build/war");
-    context.setContextPath("/");
-
-    HandlerCollection handlers = new HandlerCollection();
-    handlers.addHandler(context);
-
-    handler.setHandler(handlers);
+    WebAppContext context = new WebAppContext(handler, "build/war", "/");
+    context.setParentLoaderPriority(true);
     m_server.setHandler(handler);
 
     addRewrite(handler, "^(.+)\\.pdf", "/pdf$1");
@@ -960,10 +951,6 @@ public class DMAServer extends WebServer
                                                        "Campaigns.dma"));
 
     Log.info(s_version);
-
-    // TODO: remove all this when config is app engine compatible
-    net.ixitxachitls.util.configuration.Resource.PropertiesHandler
-      .shouldSave(true);
 
     DMAServer server = new DMAServer(name, port, base, campaigns);
     server.start();

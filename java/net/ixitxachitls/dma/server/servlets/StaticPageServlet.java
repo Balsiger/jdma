@@ -58,20 +58,31 @@ public class StaticPageServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
 
+  //-------------------------- StaticPageServlet ---------------------------
+
+  /**
+   * Default constructor.
+   */
+  public StaticPageServlet()
+  {
+    this("/html");
+  }
+
+  //........................................................................
+  //-------------------------- StaticPageServlet ---------------------------
+
   /**
    * Create the servlet.
    *
    * @param inRoot the root in the resources for the html pages to get
    *
    */
-  public StaticPageServlet()
-  {
-    this("/html");
-  }
   public StaticPageServlet(@Nonnull String inRoot)
   {
     m_root = inRoot;
   }
+
+  //........................................................................
 
   //........................................................................
 
@@ -177,8 +188,7 @@ public class StaticPageServlet extends PageServlet
                    + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
                    + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
                    + "\">\n"
-                   + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                   + "<HTML>\n"
+                   + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
                    + "  <HEAD>\n"
                    + "    <SCRIPT type=\"text/javascript\" "
                    + "src=\"/js/jquery-1.5.1.min.js\"></SCRIPT>\n"

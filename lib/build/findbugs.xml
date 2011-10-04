@@ -89,8 +89,18 @@
   </Match>
 
   <Match>
+    <Class name="~net\.ixitxachitls\.dma\.data\.CampaignData.*" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
     <Class name="~net\.ixitxachitls\.dma\.data\.DMAData.*" />
     <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.server\.servlets\.FileServlet.*" />
+    <Bug pattern="MTIA_SUSPECT_SERVLET_INSTANCE_FIELD" />
   </Match>
 
  <!-- ignore errors in jetty -->

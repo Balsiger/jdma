@@ -189,7 +189,6 @@ public class TemplateResource extends FileResource
     @org.junit.Test
     public void write()
     {
-      Config.setRewriting(false);
       Resource resource =
         new TemplateResource("/config/test/test.config",
                              TemplateResource.class
@@ -198,6 +197,7 @@ public class TemplateResource extends FileResource
 
       ByteArrayOutputStream output = new ByteArrayOutputStream();
 
+      System.setProperty("test/test/template.simple", "single word");
       assertTrue("writing", resource.write(output));
       assertPattern("content", ".*test.templateresource=single word.*",
                     output.toString());
@@ -207,7 +207,6 @@ public class TemplateResource extends FileResource
       assertFalse("writing", resource.write(output));
 
       m_logger.addExpected("WARNING: cannot obtain input stream for guru");
-      Config.setRewriting(true);
     }
 
     //......................................................................

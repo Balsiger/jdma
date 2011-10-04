@@ -230,10 +230,10 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
                new Command("test")));
 
       assertEquals("simple",
-                   "just <a href=\"/entry/baseproduct/some .html\" "
+                   "just <a href=\"/entry/baseproduct/some \" "
                    + "class=\"Product\" "
                    + "onclick=\"return util.link(event, "
-                   + "'/entry/baseproduct/some .html');\">some </a>test",
+                   + "'/entry/baseproduct/some ');\">some </a>test",
                    doc.toString());
     }
 

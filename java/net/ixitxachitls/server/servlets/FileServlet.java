@@ -30,6 +30,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class FileServlet extends BaseServlet
   /**
    * The type of a file.
    */
-  private static class Type
+  private static class Type implements Serializable
   {
     /**
      * Create a file type.
@@ -120,6 +121,9 @@ public class FileServlet extends BaseServlet
 
     /** The image format, if any. */
     private @Nullable String m_imageFormat;
+
+    /** The id for serialization. */
+    private static final long serialVersionUID = 1L;
 
     /**
      * Get the extension of the file.
@@ -209,11 +213,18 @@ public class FileServlet extends BaseServlet
 
   //........................................................................
 
+  //----------------------------- FileServlet ------------------------------
+
+  /**
+   * Default constructor.
+   */
   public FileServlet()
   {
     m_root = "/";
     m_handleModification = true;
   }
+
+  //........................................................................
 
   //........................................................................
 
@@ -308,7 +319,8 @@ public class FileServlet extends BaseServlet
     if(pathInfo != null && pathInfo.length() > 1)
       path += pathInfo.replaceAll("\\.\\./", "/");
 
-    if("text/html".equals(m_type) && path.endsWith("/"))
+    if(m_type != null && "text/html".equals(m_type.getMimeType())
+       && path.endsWith("/"))
       path += "index.html";
 
     Log.info("serving static file '" + path + "'");
@@ -418,7 +430,15 @@ public class FileServlet extends BaseServlet
 
   //........................................................................
 
-  public void init(ServletConfig inConfig)
+  //----- init -------------------------------------------------------------
+
+  /**
+   * Initialize the servlet.
+   *
+   * @param inConfig the intial configuration (from web.xml)
+   *
+   */
+  public void init(@Nonnull ServletConfig inConfig)
   {
     // root
     String param = inConfig.getInitParameter("root");
@@ -437,6 +457,8 @@ public class FileServlet extends BaseServlet
     if(param != null)
       m_handleModification = !"false".equals(param);
   }
+
+  //........................................................................
 
   //........................................................................
 

@@ -25,9 +25,9 @@ package net.ixitxachitls.util.configuration;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,53 +35,23 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
 
-import net.ixitxachitls.util.Classes;
-import net.ixitxachitls.util.Pair;
-import net.ixitxachitls.util.logging.Log;
-
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
  * This is the static accessor to all the configurations available in the
- * system.
+ * system. The configuration values are backed with system properites and can
+ * also be set that way (you have to set them before accessing them, though).w
  *
- * <P>
- * <STRONG>Removal:</STRONG><BR />
- * This class does not provide a <CODE>remove()</CODE> method, because all get
- * and set methods use the data type that is gotten or set as part of the
- * key name (to prevent clashes). For removal, this would not work, because
- * a type makes not sense when removing and putting the internals into the
- * public interface would not be appropriate.
- *
- * <P>
- * <STRONG>Rewrite Mode:</STRONG><BR />
- * The whole configuration can be setup in rewrite mode (by using
- * <CODE>setRewriting(true)</CODE>). In this mode, all configuration values
- * will be rewritten, even if there are already values present. This means,
- * that the current configuration values will be lost and will be replaced by
- * the ones set in the code. The reasoning behind that is that when testing,
- * the values from the code should be used and not the ones of the
- * configuration. Otherwise, the test might work with the special values of the
- * configuration but not with the default ones currently stored in the code.
- *
- * <P>
- * In the case you don't want to overwrite the current configuration values
- * (mainly because you use the value when checking the values in a test, where
- * you don't want to repeat the default value), simply use a <CODE>null</CODE>
- * as the default value and the currently stored value will be preserved.
  *
  * @file          Config.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
  * @example       <PRE>
- * // set a value
- * Config.set("resource:dir/file/key.subkey", "test");
- *
- * // get a value (and set if not yet set)
- * Config.get("resource:dir/file/key.subkey", "guru");
+ * // get a value
+ * Config.get("dir/file/key.subkey", "guru");
  * </PRE>
  *
  */
@@ -113,48 +83,32 @@ public final class Config
 
   //-------------------------------------------------------------- variables
 
-  /** The list of all active configurations encountered so far. */
-  private static final Hashtable <String, Configuration>s_configurations =
-    new Hashtable<String, Configuration>();
-
-  /** The name of the default configuration to use if none is given. */
-  private static final String s_default = "resource";
-
-  /** A flag if in rewrite mode (replace all stored values with the
-   *  default ones). */
-  private static boolean s_rewrite = false;
-
-  /** The classloader to load class path specific values with. */
-  private static ClassLoader s_classLoader =
-    Config.class.getClassLoader();
-
   /** The postfix for String values. */
   private static final String s_string = null;
 
   /** The postfix for integer values. */
-  private static final String s_int = "int";
+  private static final String s_int = ":int";
 
   /** The postfix for long values. */
-  private static final String s_long = "long";
+  private static final String s_long = ":long";
 
   /** The postfix for float values. */
-  private static final String s_float = "float";
+  private static final String s_float = ":float";
 
   /** The postfix for double values. */
-  private static final String s_double = "double";
+  private static final String s_double = ":double";
 
   /** The postfix for character values. */
-  private static final String s_char = "char";
+  private static final String s_char = ":char";
 
   /** The postfix for boolean values. */
-  private static final String s_boolean = "boolean";
+  private static final String s_boolean = ":boolean";
 
   /** The postfix for array values. */
-  private static final String s_list = "list";
+  private static final String s_list = ":list";
 
   /** All the configuration values used so far. */
-  private static final Map<String, String> s_values =
-    Collections.synchronizedSortedMap(new TreeMap<String, String>());
+  private static final SortedSet<String> s_names = new TreeSet<String>();
 
   //........................................................................
 
@@ -163,22 +117,27 @@ public final class Config
   //--------------------------------- get ----------------------------------
 
   /**
-   * Get a property value from the configuration.
+   * This is the get method for strings.
    *
-   * This will read a simple String value from the configuration.
+   * All public getters use this method to actually access a value.
    *
-   * @param       inKey      the key of the value to obtain
-   * @param       inDefault  the default value if no value is found (if null
-   *                         is given, existing values will not be
-   *                         overwritten, even in rewrite mode)
+   * @param       inKey     the key of the value to get (not null)
+   * @param       inDefault the default value if none is currently stored
+   *                        (may be null to ignore rewrite)
    *
-   * @return      the requested string
+   * @return      the requested configuration value or the default value if
+   *              none was found (guaranteed non null)
    *
    */
-  public static @Nonnull String get(@Nonnull String inKey,
-                                    @Nullable String inDefault)
+  public static synchronized @Nonnull String get(@Nonnull String inKey,
+                                                  @Nullable String inDefault)
   {
-    return get(inKey, inDefault, s_string);
+    String value = System.getProperty(inKey);
+    if(value != null)
+      return value;
+
+    set(inKey, inDefault);
+    return inDefault;
   }
 
   //........................................................................
@@ -195,7 +154,7 @@ public final class Config
    */
   public static int get(@Nonnull String inKey, int inDefault)
   {
-    return Integer.parseInt(get(inKey, "" + inDefault, s_int));
+    return Integer.parseInt(get(inKey + s_int, "" + inDefault));
   }
 
   //........................................................................
@@ -212,7 +171,7 @@ public final class Config
    */
   public static long get(@Nonnull String inKey, long inDefault)
   {
-    return Long.parseLong(get(inKey, "" + inDefault, s_long));
+    return Long.parseLong(get(inKey + s_long, "" + inDefault));
   }
 
   //........................................................................
@@ -229,7 +188,7 @@ public final class Config
    */
   public static float get(@Nonnull String inKey, float inDefault)
   {
-    return Float.parseFloat(get(inKey, "" + inDefault, s_float));
+    return Float.parseFloat(get(inKey + s_float, "" + inDefault));
   }
 
   //........................................................................
@@ -246,7 +205,7 @@ public final class Config
    */
   public static double get(@Nonnull String inKey, double inDefault)
   {
-    return Double.parseDouble(get(inKey, "" + inDefault, s_double));
+    return Double.parseDouble(get(inKey + s_double, "" + inDefault));
   }
 
   //........................................................................
@@ -263,7 +222,7 @@ public final class Config
    */
   public static char get(@Nonnull String inKey, char inDefault)
   {
-    return get(inKey, "" + inDefault, s_char).charAt(0);
+    return get(inKey + s_char, "" + inDefault).charAt(0);
   }
 
   //........................................................................
@@ -280,26 +239,38 @@ public final class Config
    */
   public static boolean get(@Nonnull String inKey, boolean inDefault)
   {
-    return Boolean.valueOf(get(inKey, "" + inDefault,
-                               "boolean")).booleanValue();
+    return Boolean.valueOf(get(inKey + s_boolean, "" + inDefault))
+      .booleanValue();
   }
 
   //........................................................................
-
   //--------------------------------- get ----------------------------------
 
   /**
-   * Get a property value from the configuration.
+   * Get a list of property values from the configuration.
    *
    * @param       inKey      the key of the value to obtain
    * @param       inDefault  the default value if no value is found
    *
-   * @return      the requested string
+   * @return      the requested string list
    *
    */
   public static String []get(@Nonnull String inKey, @Nonnull String []inDefault)
   {
-    return get(inKey, inDefault, s_string);
+    // if it does not yet exists, simply store and return it
+    if(System.getProperty(inKey + s_list + "." + 0) == null)
+    {
+      set(inKey, inDefault);
+
+      return inDefault;
+    }
+
+    // get the real values from the configuration
+    List<String> list = new ArrayList<String>();
+    for(int i = 0; System.getProperty(inKey + s_list + "." + i) != null; i++)
+      list.add(get(inKey + s_list + "." + i, "guru"));
+
+    return list.toArray(new String[list.size()]);
   }
 
   //........................................................................
@@ -311,23 +282,17 @@ public final class Config
    * @param       inKey      the key of the value to obtain
    * @param       inDefault  the default value if no value is found
    *
-   * @return      the requested string
+   * @return      the requested integer array
    *
    */
   public static @Nonnull int []get(@Nonnull String inKey,
-                                   @Nullable int []inDefault)
+                                   @Nonnull int []inDefault)
   {
-    String []defaults = null;
-
-    if(inDefault != null)
-    {
-      defaults = new String[inDefault.length];
-
-      for(int i = 0; i < inDefault.length; i++)
+    String []defaults = new String[inDefault.length];
+    for(int i = 0; i < inDefault.length; i++)
         defaults[i] = "" + inDefault[i];
-    }
 
-    String []strings = get(inKey, defaults, s_int);
+    String []strings = get(inKey + s_int, defaults);
 
     int []result = new int[strings.length];
 
@@ -350,19 +315,14 @@ public final class Config
    *
    */
   public static @Nonnull boolean []get(@Nonnull String inKey,
-                                       @Nullable boolean []inDefault)
+                                       @Nonnull boolean []inDefault)
   {
-    String []defaults = null;
+    String []defaults = new String[inDefault.length];
 
-    if(inDefault != null)
-    {
-      defaults = new String[inDefault.length];
+    for(int i = 0; i < inDefault.length; i++)
+      defaults[i] = "" + inDefault[i];
 
-      for(int i = 0; i < inDefault.length; i++)
-        defaults[i] = "" + inDefault[i];
-    }
-
-    String []strings = get(inKey, defaults, s_boolean);
+    String []strings = get(inKey + s_boolean, defaults);
 
     boolean []result = new boolean[strings.length];
 
@@ -385,9 +345,31 @@ public final class Config
    *
    */
   public static @Nonnull String [][]get(@Nonnull String inKey,
-                                        @Nullable String [][]inDefault)
+                                        @Nonnull String [][]inDefault)
   {
-    return get(inKey, inDefault, s_string);
+    // if it does not yet exists, simply store and return it
+    if(System.getProperty(inKey + s_list + ".0.0") == null)
+    {
+      set(inKey, inDefault);
+
+      return inDefault;
+    }
+
+    // get the real values from the configuration
+    List<String []> list = new ArrayList<String []>();
+    for(int i = 0; System.getProperty(inKey + s_list + "." + i + ".0") != null;
+        i++)
+    {
+      List<String> sub = new ArrayList<String>();
+
+      for(int j = 0;
+          System.getProperty(inKey + s_list + "." + i + "." + j) != null; j++)
+        sub.add(get(inKey + s_list + "." + i + "." + j, "guru"));
+
+      list.add(sub.toArray(new String[sub.size()]));
+    }
+
+    return list.toArray(new String[list.size()][]);
   }
 
   //........................................................................
@@ -409,7 +391,7 @@ public final class Config
   public static @Nonnull String getPattern(@Nonnull String inKey,
                                            @Nullable String inDefault)
   {
-    String pattern = get(inKey, inDefault, null);
+    String pattern = get(inKey, inDefault);
 
     // now replace the pattern(s), if any
     Matcher matcher = Pattern.compile("\\{(.*?)\\}").matcher(pattern);
@@ -419,7 +401,7 @@ public final class Config
       matcher.appendReplacement(result,
                                 Matcher
                                 .quoteReplacement(Config.get(matcher.group(1),
-                                                             "(unknown)")));
+                                                             "[unknown]")));
 
     matcher.appendTail(result);
 
@@ -427,358 +409,20 @@ public final class Config
   }
 
   //........................................................................
-
-  //----------------------------- isRewriting ------------------------------
-
-  /**
-   * Get the flag describing if the configuration is in rewriting mode. This
-   * means if the configuration will rewrite all values, even if they are
-   * already there.
-   *
-   * @return      true if rewriting mode is turned on, false else
-   *
-   */
-   public static boolean isRewriting()
-   {
-     return s_rewrite;
-   }
-
-  //........................................................................
-  //-------------------------------- hasKey --------------------------------
-
-  /**
-   * Check if a key exists in the configuration.
-   *
-   * @param       inKey the key to check for
-   *
-   * @return      true if there is already a configuration value with the
-   *              given key
-   *
-   */
-  public static boolean hasKey(@Nonnull String inKey)
-  {
-    Pair<String, String> keys = splitName(inKey);
-
-    Configuration configuration = getConfiguration(keys.first());
-
-    if(configuration == null)
-    {
-      Log.warning("could not find configuration for '" + keys.first() + "'");
-
-      return false;
-    }
-
-    return configuration.hasKey(keys.second());
-  }
-
-  //........................................................................
-
-  //--------------------------------- get ----------------------------------
-
-  /**
-   * This is the internal get method.
-   *
-   * All public getters use this method to actually access a value.
-   *
-   * @param       inKey     the key of the value to get (not null)
-   * @param       inDefault the default value if none is currently stored
-   *                        (may be null to ignore rewrite)
-   * @param       inPostfix the postfix to add to the key (may be null for no
-   *                        postfix)
-   *
-   * @return      the requested configuration value or the default value if
-   *              none was found (guaranteed non null)
-   *
-   */
-  private static @Nonnull String get(@Nonnull String inKey,
-                                     @Nullable String inDefault,
-                                     @Nullable String inPostfix)
-  {
-    Pair<String, String> keys = splitName(inKey);
-
-    Configuration configuration = getConfiguration(keys.first());
-
-    if(configuration == null)
-    {
-      Log.warning("could not find configuration for '" + keys.first() + "'");
-
-      s_values.put(inKey, inDefault);
-      return inDefault;
-    }
-
-    String key = keys.second();
-
-    // add the postfix, if any
-    if(inPostfix != null)
-      key += "." + inPostfix;
-
-    String result = null;
-    if(inDefault == null && s_rewrite)
-    {
-      s_rewrite = false;
-      result = configuration.get(key, "");
-      s_rewrite = true;
-    }
-    else
-      if(inDefault == null)
-        result = configuration.get(key, "");
-      else
-        result = configuration.get(key, inDefault);
-
-    // make sure a non null value is returned
-    assert result != null : "lookup should not have resulted in null";
-
-    s_values.put(inKey, result);
-    return result;
-  }
-
-  //........................................................................
-  //--------------------------------- get ----------------------------------
-
-  /**
-   * This is the internal get method for arrays.
-   *
-   * All public getters use this method to actually access a value.
-   *
-   * @param       inKey     the key of the value to get (not null)
-   * @param       inDefault the default value if none is currently stored
-   *                        (may be null to ignore rewrite)
-   * @param       inPostfix the postfix to add to the key (may be null for no
-   *                        postfix)
-   *
-   * @return      the requested configuration values or the default values if
-   *              none was found
-   *
-   */
-  private static @Nonnull String []get(@Nonnull String inKey,
-                                       @Nullable String []inDefault,
-                                       @Nullable String inPostfix)
-  {
-    Pair<String, String> keys = splitName(inKey);
-
-    Configuration configuration = getConfiguration(keys.first());
-
-    if(configuration == null)
-    {
-      Log.warning("could not find configuration for '" + keys.first() + "'");
-
-      return inDefault;
-    }
-
-    String key = keys.second();
-
-    // add the postfix, if any
-    if(inPostfix != null)
-      key += "." + inPostfix;
-
-    // if it does not yet exists, simply store and return it
-    if((s_rewrite && inDefault != null)
-       || !configuration.hasKey(key + "." + s_list + "." + 0))
-    {
-      // set the default value and return it
-      for(int i = 0; i < inDefault.length; i++)
-        configuration.set(key + "." + s_list + "." + i, inDefault[i]);
-
-      return inDefault;
-    }
-
-    // get the real values from the configuration
-    ArrayList<String> list = new ArrayList<String>();
-    for(int i = 0; configuration.hasKey(key + "." + s_list + "." + i); i++)
-      // it has to exist already, so the default value should never be used
-      list.add(configuration.get(key + "." + s_list + "." + i, "guru"));
-
-    return list.toArray(new String[list.size()]);
-  }
-
-  //........................................................................
-  //--------------------------------- get ----------------------------------
-
-  /**
-   * This is the internal get method for arrays.
-   *
-   * All public getters use this method to actually access a value.
-   *
-   * @param       inKey     the key of the value to get (not null)
-   * @param       inDefault the default value if none is currently stored
-   *                        (may be null to ignore rewrite)
-   * @param       inPostfix the postfix to add to the key (may be null for no
-   *                        postfix)
-   *
-   * @return      the requested configuration values or the default values if
-   *              none was found
-   *
-   */
-  private static @Nonnull String [][]get(@Nonnull String inKey,
-                                         @Nullable String [][]inDefault,
-                                         @Nullable String inPostfix)
-  {
-    Pair<String, String> keys = splitName(inKey);
-
-    Configuration configuration = getConfiguration(keys.first());
-
-    if(configuration == null)
-    {
-      Log.warning("could not find configuration for '" + keys.first() + "'");
-
-      return inDefault;
-    }
-
-    String key = keys.second();
-
-    // add the postfix, if any
-    if(inPostfix != null)
-      key += "." + inPostfix;
-
-    // if it does not yet exists, simply store and return it
-    if((s_rewrite && inDefault != null)
-       || !configuration.hasKey(key + "." + s_list + ".0.0"))
-    {
-      // set the default value and return it
-      for(int i = 0; i < inDefault.length; i++)
-        for(int j = 0; j < inDefault[i].length; j++)
-          configuration.set(key + "." + s_list + "." + i + "." + j,
-                            inDefault[i][j]);
-
-      return inDefault;
-    }
-
-    // get the real values from the configuration
-    ArrayList<String []> list = new ArrayList<String []>();
-    for(int i = 0;
-        configuration.hasKey(key + "." + s_list + "." + i + ".0");
-        i++)
-    {
-      ArrayList<String> sub = new ArrayList<String>();
-
-      for(int j = 0;
-          configuration.hasKey(key + "." + s_list + "." + i + "." + j);
-          j++)
-        // it has to exist already, so the default value should never be used
-        sub.add(configuration.get(key + "." + s_list + "." + i + "." + j,
-                                  "guru"));
-
-      list.add(sub.toArray(new String[sub.size()]));
-    }
-
-    return list.toArray(new String[list.size()][]);
-  }
-
-  //........................................................................
-
-  //--------------------------- getConfiguration ---------------------------
-
-  /**
-   * Get a configuration for the given name.
-   *
-   * This method will determine the configuration type required for the name
-   * given. It this type of configuration is already available, it will simply
-   * be returned. Otherwise, this method will try to load the appropriate
-   * class and add it to the pool of available configuration types.
-   *
-   * @param       inName the name of the configuration to get
-   *
-   * @return      the configuration obtained, or null if none was found
-   *
-   * @undefined   null is returned if the configuration cannot be found
-   * @undefined   an assertion is raised when a null name is given
-   *
-   */
-  private static @Nullable Configuration getConfiguration
-    (@Nonnull String inName)
-  {
-    Configuration configuration = s_configurations.get(inName);
-
-    // already loaded
-    if(configuration != null)
-      return configuration;
-
-    // try to load the appropriate class
-    String className =
-      Classes.toClassName(inName, Classes.getPackage(Config.class));
-
-    try
-    {
-      // we have to get an untyped class first and afterwards narrow it down
-      // (otherwise we get an unchecked cast, which we don't want of course...)
-      Class<?> untyped = Class.forName(className);
-
-      // now narrow it down
-      Class<? extends Configuration> load =
-        untyped.asSubclass(Configuration.class);
-
-      // finally load the class
-      configuration = load.newInstance();
-
-      Log.useful("loaded configuration class " + className + " for " + inName);
-    }
-    catch(ClassNotFoundException e)
-    {
-      Log.warning("could not load configuration '" + inName
-                  + "' (tried loading class '" + className + "'");
-
-      return null;
-    }
-    catch(InstantiationException e)
-    {
-      Log.warning("could not instantiate configuration '" + inName
-                  + "' (tried instantiating class '" + className + "'");
-
-      return null;
-    }
-    catch(IllegalAccessException e)
-    {
-      Log.warning("could not access configuration '" + inName
-                  + "' (tried accessing constructor of class '" + className
-                  + "'");
-
-      return null;
-    }
-    catch(ClassCastException e)
-    {
-      Log.warning("configuration class " + className
-                  + " not of correct type!");
-
-      return null;
-    }
-
-    // store the value for later use
-    s_configurations.put(inName, configuration);
-
-    return configuration;
-  }
-
-  //........................................................................
-  //------------------------ getCurrentClassLoader -------------------------
-
-  /**
-   * Get the class loader used.
-   *
-   * @return      the currently used class loader
-   *
-   */
-  protected static ClassLoader getCurrentClassLoader()
-  {
-    return s_classLoader;
-  }
-
-  //........................................................................
   //------------------------------ getValues -------------------------------
 
   /**
-   * A map with all configuration values. Although you can change the values
-   * here, it will not actually change the configuration values if you do.
+   * A map with all configuration names.
    *
-   * @return  all the configuration values used so far
+   * @return  all the configuration names used so far
    *
    */
-  public static Map<String, String> getValues()
+  public static SortedSet<String> getNames()
   {
-    return s_values;
+    return Collections.unmodifiableSortedSet(s_names);
   }
 
   //........................................................................
-
 
   //........................................................................
 
@@ -789,15 +433,14 @@ public final class Config
   /**
    * Set a property value from the configuration.
    *
-   * @param       inKey   the key of the value to obtain
-   * @param       inValue the new value to set to
-   *
-   * @return      true if value was set, false else
+   * @param       inKey     the key of the value to obtain
+   * @param       inValue   the new value to set to
    *
    */
-  public static boolean set(@Nonnull String inKey, @Nonnull String inValue)
+  public static void set(@Nonnull String inKey, @Nonnull String inValue)
   {
-    return set(inKey, inValue, s_string);
+    s_names.add(inKey);
+    System.setProperty(inKey, inValue);
   }
 
   //........................................................................
@@ -809,12 +452,10 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
    */
-  public static boolean set(@Nonnull String inKey, int inValue)
+  public static void set(@Nonnull String inKey, int inValue)
   {
-    return set(inKey, "" + inValue, s_int);
+    set(inKey + s_int, "" + inValue);
   }
 
   //........................................................................
@@ -826,12 +467,10 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
    */
-  public static boolean set(@Nonnull String inKey, long inValue)
+  public static void set(@Nonnull String inKey, long inValue)
   {
-    return set(inKey, "" + inValue, s_long);
+    set(inKey + s_long, "" + inValue);
   }
 
   //........................................................................
@@ -843,12 +482,10 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
    */
-  public static boolean set(@Nonnull String inKey, float inValue)
+  public static void set(@Nonnull String inKey, float inValue)
   {
-    return set(inKey, "" + inValue, s_float);
+    set(inKey + s_float, "" + inValue);
   }
 
   //........................................................................
@@ -860,12 +497,10 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
    */
-  public static boolean set(@Nonnull String inKey, double inValue)
+  public static void set(@Nonnull String inKey, double inValue)
   {
-    return set(inKey, "" + inValue, s_double);
+    set(inKey + s_double, "" + inValue);
   }
 
   //........................................................................
@@ -877,12 +512,10 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
    */
-  public static boolean set(@Nonnull String inKey, char inValue)
+  public static void set(@Nonnull String inKey, char inValue)
   {
-    return set(inKey, "" + inValue, s_char);
+    set(inKey + s_char, "" + inValue);
   }
 
   //........................................................................
@@ -894,30 +527,10 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
    */
-  public static boolean set(@Nonnull String inKey, boolean inValue)
+  public static void set(@Nonnull String inKey, boolean inValue)
   {
-    return set(inKey, "" + inValue, s_boolean);
-  }
-
-  //........................................................................
-
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set a property value from the configuration.
-   *
-   * @param       inKey   the key of the value to obtain
-   * @param       inValue the new value to set to
-   *
-   * @return      true if value was set, false else
-   *
-   */
-  public static boolean set(@Nonnull String inKey, @Nonnull String []inValue)
-  {
-    return set(inKey, inValue, s_string);
+    set(inKey + s_boolean, "" + inValue);
   }
 
   //........................................................................
@@ -929,17 +542,35 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
+   */
+  public static void set(@Nonnull String inKey, @Nonnull String []inValue)
+  {
+    // remove old values
+    for(int i = 0; System.getProperty(inKey + s_list + "." + i) != null; i++)
+      System.clearProperty(inKey + s_list + "." + i);
+
+    for(int i = 0; i < inValue.length; i++)
+      set(inKey + s_list + "." + i, inValue[i]);
+  }
+
+  //........................................................................
+  //--------------------------------- set ----------------------------------
+
+  /**
+   * Set a property value from the configuration.
+   *
+   * @param       inKey   the key of the value to obtain
+   * @param       inValue the new value to set to
    *
    */
-  public static boolean set(@Nonnull String inKey, @Nonnull int []inValue)
+  public static void set(@Nonnull String inKey, @Nonnull int []inValue)
   {
     String []values = new String [inValue.length];
 
     for(int i = 0; i < inValue.length; i++)
       values[i] = "" + inValue[i];
 
-    return set(inKey, values, s_int);
+    set(inKey + s_int, values);
   }
 
   //........................................................................
@@ -951,17 +582,15 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
    */
-  public static boolean set(@Nonnull String inKey, @Nonnull boolean []inValue)
+  public static void set(@Nonnull String inKey, @Nonnull boolean []inValue)
   {
     String []values = new String [inValue.length];
 
     for(int i = 0; i < inValue.length; i++)
       values[i] = "" + inValue[i];
 
-    return set(inKey, values, s_boolean);
+    set(inKey + s_boolean, values);
   }
 
   //........................................................................
@@ -973,182 +602,29 @@ public final class Config
    * @param       inKey   the key of the value to obtain
    * @param       inValue the new value to set to
    *
-   * @return      true if value was set, false else
-   *
-   * @undefined   an assertion is raised if a given value is null
-   *
    */
-  public static boolean set(@Nonnull String inKey, @Nonnull String [][]inValue)
+  public static void set(@Nonnull String inKey, @Nonnull String [][]inValue)
   {
-    return set(inKey, inValue, s_string);
-  }
+    // clear existing values
+    for(int i = 0; System.getProperty(inKey + s_list + "." + i + ".0") != null;
+        i++)
+      for(int j = 0;
+          System.getProperty(inKey + s_list + "." + i + "." + j) != null; j++)
+        System.clearProperty(inKey + s_list + "." + i + "." + j);
 
-  //........................................................................
-
-  //------------------------- setCurrentClassLoader ------------------------
-
-  /**
-   * Set the class loader to use.
-   *
-   * @param       inClassLoader the new class loader to use
-   *
-   */
-  public static void setCurrentClassLoader(@Nonnull ClassLoader inClassLoader)
-  {
-    s_classLoader = inClassLoader;
-  }
-
-  //........................................................................
-  //----------------------------- setRewriting -----------------------------
-
-  /**
-   * Set the rewriting mode to use.
-   *
-   * @param       inMode the new mode to use for rewriting.
-   *
-   */
-  public static void setRewriting(boolean inMode)
-  {
-    s_rewrite = inMode;
-  }
-
-  //........................................................................
-
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set a property value from the configuration.
-   *
-   * @param       inKey     the key of the value to obtain
-   * @param       inValue   the new value to set to
-   * @param       inPostfix the postfix to add to the key name for storage
-   *                        (if any)
-   *
-   * @return      true if value was set, false else
-   *
-   */
-  private static boolean set(@Nonnull String inKey, @Nonnull String inValue,
-                             @Nullable String inPostfix)
-  {
-    Pair<String, String>keys = splitName(inKey);
-
-    Configuration configuration = getConfiguration(keys.first());
-
-    if(configuration == null)
+    for(int i = 0; i < inValue.length; i++)
     {
-      Log.warning("could not find configuration for '" + keys.first() + "'");
+      if(inValue[i] == null)
+        throw new IllegalArgumentException("no value given can be null");
 
-      return false;
-    }
-    else
-    {
-      String name = keys.second();
-      if(inPostfix != null)
-        name += "." + inPostfix;
-
-      s_values.put(name, inValue);
-      return configuration.set(name, inValue);
-    }
-  }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set a property value from the configuration.
-   *
-   * @param       inKey     the key of the value to obtain
-   * @param       inValue   the new value to set to
-   * @param       inPostfix the postfix to add to the name, if any
-   *
-   * @return      true if value was set, false else
-   *
-   */
-  public static boolean set(@Nonnull String inKey, @Nonnull String []inValue,
-                            @Nullable String inPostfix)
-  {
-    Pair<String, String>keys = splitName(inKey);
-
-    Configuration configuration = getConfiguration(keys.first());
-
-    if(configuration == null)
-    {
-      Log.warning("could not find configuration for '" + keys.first() + "'");
-
-      return false;
-    }
-    else
-    {
-      String key = keys.second();
-
-      if(inPostfix != null)
-        key += "." + inPostfix;
-
-      for(int i = 0; i < inValue.length; i++)
+      for(int j = 0; j < inValue[i].length; j++)
       {
-        if(inValue[i] == null)
+        if(inValue[i][j] == null)
           throw new IllegalArgumentException("no value given can be null");
 
-        if(!configuration.set(key + "." + s_list + "." + i, inValue[i]))
-          return false;
+        set(inKey + s_list + "." + i + "." + j, inValue[i][j]);
       }
 
-      return true;
-    }
-  }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set a property value from the configuration.
-   *
-   * @param       inKey     the key of the value to obtain
-   * @param       inValue   the new value to set to
-   * @param       inPostfix the postfix to add to the name, if any
-   *
-   * @return      true if value was set, false else
-   *
-   * @undefined   if key or value is null
-   *
-   */
-  public static boolean set(@Nonnull String inKey, @Nonnull String [][]inValue,
-                            @Nullable String inPostfix)
-  {
-    Pair<String, String>keys = splitName(inKey);
-
-    Configuration configuration = getConfiguration(keys.first());
-
-    if(configuration == null)
-    {
-      Log.warning("could not find configuration for '" + keys.first() + "'");
-
-      return false;
-    }
-    else
-    {
-      String key = keys.second();
-
-      if(inPostfix != null)
-        key += "." + inPostfix;
-
-      for(int i = 0; i < inValue.length; i++)
-      {
-        if(inValue[i] == null)
-          throw new IllegalArgumentException("no value given can be null");
-
-        for(int j = 0; j < inValue[i].length; j++)
-        {
-          if(inValue[i][j] == null)
-            throw new IllegalArgumentException("no value given can be null");
-
-          if(!configuration.set(key + "." + s_list + "." + i + "." + j,
-                                inValue[i][j]))
-            return false;
-        }
-      }
-
-      return true;
     }
   }
 
@@ -1157,32 +633,6 @@ public final class Config
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //------------------------------ splitName -------------------------------
-
-  /**
-   * Split a given configuration name into its key and configuration selection
-   * part.
-   *
-   * @param       inName the name to split
-   *
-   * @return      a Pair with the first value being the configuration
-   *              descriptor and the second value being the key
-   *
-   */
-  protected static @Nonnull Pair<String, String> splitName
-    (@Nonnull String inName)
-  {
-    int pos = inName.indexOf(':');
-    if(pos >= 0)
-      return new Pair<String, String>(inName.substring(0, pos),
-                                      inName.substring(pos + 1));
-
-    return new Pair<String, String>(s_default, inName);
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //---------------------------------------------------------------- testing
@@ -1217,59 +667,6 @@ public final class Config
     /** The error range. */
     private static final double RANGE = 0.0001;
 
-    //----- split ----------------------------------------------------------
-
-    /** Test for splitting values. */
-    @org.junit.Test
-    public void split()
-    {
-      // normal
-      assertEquals("normal", "configuration",
-                   splitName("configuration:key").first());
-      assertEquals("normal", "key", splitName("configuration:key").second());
-
-      // no configuration
-      assertEquals("normal", "resource", splitName("key").first());
-      assertEquals("normal", "key", splitName("key").second());
-
-      // degenerate values
-      assertEquals("normal", "", splitName(":key").first());
-      assertEquals("normal", "", splitName("configuration:").second());
-
-      // multiple colons
-      assertEquals("normal", "config", splitName("config:key:other").first());
-      assertEquals("normal", "key:other",
-                   splitName("config:key:other").second());
-    }
-
-    //......................................................................
-    //----- loading --------------------------------------------------------
-
-    /** Test for loading the values. */
-    @org.junit.Test
-    public void loading()
-    {
-      m_logger.logClass(Config.class);
-
-//       m_logger.addExpected("USEFUL: loaded configuration class " +
-//                            "net.ixitxachitls.util.configuration." +
-//                            "Config$Test$MockConfiguration for " +
-//                            "Config$Test$MockConfiguration");
-
-      assertNotNull("should have obtained configuration",
-                    Config.getConfiguration("Config$Test$MockConfiguration"));
-
-      m_logger.addExpected("WARNING: could not load configuration 'guru' "
-                           + "(tried loading class "
-                           + "'net.ixitxachitls.util.configuration.Guru'");
-
-      assertNull("should not have obtained configuration",
-                 Config.getConfiguration("guru"));
-
-      m_logger.verify();
-    }
-
-    //.........................................................................
     //----- get ------------------------------------------------------------
 
     /** Test for getting values. */
@@ -1334,12 +731,6 @@ public final class Config
                    Config.get("Config$Test$MockConfiguration:test",
                               mCheck)[2][0]);
 
-      MockConfiguration config =
-        (MockConfiguration)
-        Config.getConfiguration("Config$Test$MockConfiguration");
-
-      config.clear();
-
       m_logger.verify();
     }
 
@@ -1350,9 +741,6 @@ public final class Config
     @org.junit.Test
     public void set()
     {
-      // turn off rewrite mode
-      Config.s_rewrite = false;
-
       Config.set("Config$Test$MockConfiguration:test", "guru");
       assertEquals("get", "guru",
                    Config.get("Config$Test$MockConfiguration:test", "a test"));
@@ -1419,7 +807,7 @@ public final class Config
 
       String [][]sCheck  = { { "a", "b", }, { "c", }, };
       String [][]sCheck2 = { { "guru", }, };
-      assertTrue(Config.set("Config$Test$MockConfiguration:test", sCheck));
+      Config.set("Config$Test$MockConfiguration:test", sCheck);
       assertEquals("get", sCheck[0][0],
                    Config.get("Config$Test$MockConfiguration:test",
                               sCheck2)[0][0]);
@@ -1437,50 +825,6 @@ public final class Config
                    Config.get("Config$Test$MockConfiguration:test2", INT));
 
       m_logger.verify();
-
-      // turn REWRITE mode on again
-      Config.s_rewrite = true;
-    }
-
-    //......................................................................
-    //----- integration ----------------------------------------------------
-
-    /** A simple integration test. */
-    @org.junit.Test
-    public void integration()
-    {
-      m_logger.logClass(Config.class);
-      m_logger.logClass(Resource.class);
-      m_logger.logClass(Resource.class);
-      m_logger.logClass(Bundle.BundleHandler.class);
-
-      m_logger.addExpected("USEFUL: loaded configuration class "
-                           + "net.ixitxachitls.util.configuration.Resource for "
-                           + "resource");
-      m_logger.addExpectedPattern("COMPLETE: loading resource "
-                                  + ".*/test.config");
-
-      assertEquals("get (resource)", "guru",
-                   Config.get("resource:test/test/test.config", "guru"));
-
-      m_logger.addExpected("USEFUL: loaded configuration class "
-                           + "net.ixitxachitls.util.configuration.Bundle for "
-                           + "bundle");
-      m_logger.addExpected("COMPLETE: creating bundle test/test for "
-                           + java.util.Locale.getDefault());
-
-      m_logger.addExpected("WARNING: resource text for test.config not "
-                           + "found in test/test for language "
-                           + java.util.Locale.getDefault());
-      m_logger.addExpected("WARNING: configuration value for "
-                           + "test/test/test.config not found and cannot be "
-                           + "stored");
-
-      assertEquals("get (bundle)", "guru",
-                   Config.get("bundle:test/test/test.config", "guru"));
-
-
-      m_logger.verify();
     }
 
     //......................................................................
@@ -1495,7 +839,7 @@ public final class Config
                                      "some pattern"));
 
       assertEquals("pattern (no values)",
-                   "just a (unknown) test with a (unknown) test",
+                   "just a [unknown] test with a [unknown] test",
                    Config.getPattern("Config$Test$MockConfiguration:test.2",
                                      "just a "
                                      + "{Config$Test$MockConfiguration:test.3}"
@@ -1517,122 +861,7 @@ public final class Config
     }
 
     //......................................................................
-    //----- hasKey ---------------------------------------------------------
-
-    /** Test if a key is present. */
-    @org.junit.Test
-    public void hasKey()
-    {
-      assertEquals("not yet", false,
-                   Config.hasKey("Config$Test$MockConfiguration:hasKey"));
-
-      assertEquals("get", "test",
-                   Config.get("Config$Test$MockConfiguration:hasKey", "test"));
-
-      assertEquals("now there", true,
-                   Config.hasKey("Config$Test$MockConfiguration:hasKey"));
-    }
-
-    //......................................................................
-
-    //----- mock -----------------------------------------------------------
-
-    /** A simple mock for testing without the configuration. */
-    public static class MockConfiguration implements Configuration
-    {
-      /** The simple storage for the values. */
-      private java.util.Hashtable<String, String> m_storage =
-        new java.util.Hashtable<String, String>();
-
-      /** Get the given key or the given default, if the key is not found.
-       *
-       * @param   inKey the key to set
-       * @param   inDefault the value to set to
-       *
-       * @return  true if the value was set, false else
-       *
-       */
-      public @Nonnull String get(@Nonnull String inKey,
-                                 @Nullable String inDefault)
-      {
-        if(m_storage.get(inKey) == null)
-        {
-          set(inKey, inDefault);
-
-          return inDefault;
-        }
-
-        return m_storage.get(inKey);
-      }
-
-      /** Set the given key with the given String default.
-       *
-       * @param   inKey the key to set
-       * @param   inDefault the value to set to
-       *
-       * @return  true if the value was set, false else
-       *
-       */
-      public boolean set(@Nonnull String inKey, @Nullable String inDefault)
-      {
-        m_storage.put(inKey, inDefault);
-
-        return true;
-      }
-
-      /** Remove the specified key.
-       *
-       * This is only possible in the mock configuration.
-       *
-       * @param   inKey the key to remove its value
-       *
-       * @return  true if the key was removed, false else
-       */
-      public boolean remove(@Nonnull String inKey)
-      {
-        return m_storage.remove(inKey) != null;
-      }
-
-      /** Clear the configuration. */
-      public void clear()
-      {
-        m_storage.clear();
-      }
-
-      /** Check if a specific key is available.
-       *
-       * @param   inKey the key to get the value for
-       *
-       * @return  true if a key is available, false else
-       *
-       */
-      public boolean hasKey(@Nonnull String inKey)
-      {
-        return m_storage.containsKey(inKey);
-      }
-    }
-
-    //......................................................................
   }
-
-  //........................................................................
-
-  //------------------------------------------------------------------- main
-
-  /** The main method.
-   *
-   * @param inArgs the command line arguments
-   *
-   */
-//   public static void main(String []inArgs)
-//   {
-//     for(int i = 0; i < inArgs.length; i++)
-//     {
-//       java.lang.System.out.println(inArgs[i].replaceAll(".*:", "")
-//                                    .replace('/', '.') + " = "
-//                                    + Config.get(inArgs[i], "<undefined>"));
-//     }
-//  }
 
   //........................................................................
 }

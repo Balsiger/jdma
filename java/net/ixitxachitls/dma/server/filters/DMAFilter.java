@@ -65,6 +65,17 @@ public class DMAFilter implements Filter
 {
   //--------------------------------------------------------- constructor(s)
 
+  //------------------------------ DMAFilter -------------------------------
+
+  /**
+   * Default constructor.
+   */
+  public DMAFilter()
+  {
+    // nothing to do
+  }
+
+  //........................................................................
   //------------------------------ DMAFilter ------------------------------
 
   /**
@@ -73,9 +84,6 @@ public class DMAFilter implements Filter
    * @param inUsers all available users
    *
    */
-  public DMAFilter()
-  {
-  }
   public DMAFilter(Map<String, BaseCharacter> inUsers)
   {
     m_users = inUsers;

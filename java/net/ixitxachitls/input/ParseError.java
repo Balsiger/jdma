@@ -328,7 +328,9 @@ public class ParseError extends BaseError
       ParseError error = new ParseError("id", "message", 42, "document",
                                         "pre", "post");
 
-      assertEquals("name", "not yet defined!", error.getError());
+      // TODO: fix this (should be real error messages!)
+      assertEquals("name", "[id] no definition found for this error",
+                   error.getError());
       assertEquals("id", "id", error.getErrorNumber());
       assertEquals("message", "message", error.getParseMessage());
       assertEquals("line", 42, error.getLine());
@@ -337,7 +339,8 @@ public class ParseError extends BaseError
       assertEquals("post", "post", error.getPost());
 
       assertEquals("string",
-                   "id: not yet defined! (message) on line 42 in document "
+                   "id: [id] no definition found for this error (message) "
+                   + "on line 42 in document "
                    + "'document'\n"
                    + s_dots + "pre" + s_mark + "post" + s_dots,
                    error.toString());
@@ -345,7 +348,8 @@ public class ParseError extends BaseError
       // minimal definition
       error = new ParseError("id", null, -1, null, null, null);
 
-      assertEquals("minimal", "id: not yet defined!", error.toString());
+      assertEquals("minimal", "id: [id] no definition found for this error",
+                   error.toString());
     }
 
     //......................................................................

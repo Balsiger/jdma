@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.resources.Resource;
 import net.ixitxachitls.util.resources.TemplateResource;
 
@@ -134,7 +133,6 @@ public class TemplateServlet extends FileServlet
     @org.junit.Test
     public void handle() throws Exception
     {
-      Config.setRewriting(false);
       HttpServletRequest request =
         EasyMock.createMock(HttpServletRequest.class);
       HttpServletResponse response =
@@ -151,13 +149,13 @@ public class TemplateServlet extends FileServlet
       TemplateServlet servlet =
         new TemplateServlet("", "text/plain", "test/test/template");
 
+      System.setProperty("test/test/template.simple", "single word");
       assertNull("handle", servlet.handle(request, response));
       assertEquals("content", "This is a single word template test.\n",
                    output.toString());
 
       output.close();
       EasyMock.verify(request, response);
-      Config.setRewriting(true);
     }
 
     //......................................................................
