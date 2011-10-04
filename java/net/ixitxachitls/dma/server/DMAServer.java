@@ -362,11 +362,7 @@ public class DMAServer extends WebServer
       (new ServletHolder(new FileServlet("/icons", "image/png")), "/icons/*");
 
     context.addServlet
-      (new ServletHolder(new FileServlet("/text/robots.txt", "text/plain")),
-       "/robots.txt");
-
-    context.addServlet
-      (new ServletHolder(new StaticPageServlet("/html")), "/*");
+      (new ServletHolder(new StaticPageServlet("/html")), "*.html");
 
     context.addServlet
       (new ServletHolder(new FileServlet("/files", "")), "/files/*");

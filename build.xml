@@ -183,6 +183,8 @@
     </copy>
     <copy file="${resources.dir}/icons/favicon.png"
           tofile="${war.dir}/favicon.ico" />
+    <copy file="${resources.dir}/text/robots.txt"
+          tofile="${war.dir}/robots.txt" />
 <!--<symlink link="${webinf.dir}/classes" resource="${classes.dir}"
              overwrite="Yes" />
     <symlink link="${classes.dir}/html" resource="${resources.dir}/html"
