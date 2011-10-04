@@ -23,16 +23,14 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.logging.Log;
+
+import org.easymock.EasyMock;
 
 //..........................................................................
 
@@ -59,13 +57,9 @@ public class LogoutServlet extends LoginServlet
 
   /**
     * Create the servlet.
-    *
-    * @param      inUsers the base campaign with all the user information
-    *
     */
-  public LogoutServlet(@Nonnull Map<String, BaseCharacter> inUsers)
+  public LogoutServlet()
   {
-    super(inUsers);
   }
 
   //........................................................................
@@ -167,8 +161,7 @@ public class LogoutServlet extends LoginServlet
 
       EasyMock.replay(request, response);
 
-      LogoutServlet servlet = new LogoutServlet
-        (com.google.common.collect.ImmutableMap.of("somebody", character));
+      LogoutServlet servlet = new LogoutServlet();
 
       servlet.doPost(request, response);
       assertEquals("post", "", output.toString());

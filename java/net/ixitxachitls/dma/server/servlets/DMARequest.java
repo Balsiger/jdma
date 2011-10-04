@@ -29,7 +29,6 @@ package net.ixitxachitls.dma.server.servlets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-// import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,21 +36,14 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.google.common.collect.Multimap;
+import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.util.Pair;
+import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 import org.easymock.EasyMock;
 
-// import net.ixitxachitls.dma.entries.AbstractEntry;
-// import net.ixitxachitls.dma.entries.BaseCampaign;
-import net.ixitxachitls.dma.entries.BaseCharacter;
-// import net.ixitxachitls.dma.entries.Campaign;
-// import net.ixitxachitls.dma.entries.Character;
-// import net.ixitxachitls.dma.entries.Entry;
-// import net.ixitxachitls.dma.server.servlets.LoginServlet;
-import net.ixitxachitls.util.Pair;
-// import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.logging.Log;
+import com.google.common.collect.Multimap;
 
 //..........................................................................
 
@@ -410,6 +402,20 @@ public class DMARequest extends HttpServletRequestWrapper
       return m_userOverride;
 
     return m_user;
+  }
+
+  //........................................................................
+  //------------------------------- getUsers --------------------------------
+
+  /**
+   * Get the users available in the system.
+   *
+   * @return the currently logged in user
+   *
+   */
+  public @Nonnull Map<String,BaseCharacter> getUsers()
+  {
+    return m_users;
   }
 
   //........................................................................

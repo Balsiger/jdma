@@ -29,10 +29,10 @@ import javax.annotation.Nonnull;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.logging.Log;
+
+import org.easymock.EasyMock;
 
 //..........................................................................
 
@@ -56,16 +56,12 @@ public class LoginServlet extends ActionServlet
   //--------------------------------------------------------- constructor(s)
 
   //----------------------------- LoginServlet -----------------------------
-
   /**
     * Create the servlet.
-    *
-    * @param      inUsers the base campaign with all the user information
-    *
     */
-  public LoginServlet(@Nonnull Map<String, BaseCharacter> inUsers)
+  public LoginServlet()
   {
-    m_users = inUsers;
+    //nothing to do
   }
 
   //........................................................................
@@ -73,9 +69,6 @@ public class LoginServlet extends ActionServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** the base campaign with the user information. */
-  private Map<String, BaseCharacter> m_users;
 
   /** The name of the user cookie. */
   public static final String COOKIE_USER = "USER";
@@ -111,7 +104,7 @@ public class LoginServlet extends ActionServlet
     String username = inRequest.getParam("username");
     String password = inRequest.getParam("password");
 
-    BaseCharacter user = m_users.get(username);
+    BaseCharacter user = inRequest.getUsers().get(username);
 
     if(user == null)
     {
@@ -174,25 +167,26 @@ public class LoginServlet extends ActionServlet
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
+      
+      BaseCharacter character =
+          new BaseCharacter("somebody",
+                            new net.ixitxachitls.dma.data.DMAData("path"));
+        character.setPassword("secret");
+      Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("");
       EasyMock.expect(request.getParam("username")).andReturn(null);
       EasyMock.expect(request.getParam("password")).andReturn(null);
+      EasyMock.expect(request.getUsers()).andReturn(users);
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
 
       EasyMock.replay(request, response);
 
-      BaseCharacter character =
-        new BaseCharacter("somebody",
-                          new net.ixitxachitls.dma.data.DMAData("path"));
-      character.setPassword("secret");
-
-      LoginServlet servlet = new LoginServlet
-        (com.google.common.collect.ImmutableMap.of("somebody", character));
+      LoginServlet servlet = new LoginServlet();
 
       servlet.doPost(request, response);
       assertEquals("post", "Invalid username or password!", output.toString());
@@ -221,25 +215,26 @@ public class LoginServlet extends ActionServlet
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
 
+      BaseCharacter character =
+          new BaseCharacter("somebody",
+                            new net.ixitxachitls.dma.data.DMAData("path"));
+        character.setPassword("secret");
+      Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
+      
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=guru").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("");
       EasyMock.expect(request.getParam("username")).andReturn("somebody");
       EasyMock.expect(request.getParam("password")).andReturn("guru");
+      EasyMock.expect(request.getUsers()).andReturn(users);
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
 
       EasyMock.replay(request, response);
 
-      BaseCharacter character =
-        new BaseCharacter("somebody",
-                          new net.ixitxachitls.dma.data.DMAData("path"));
-      character.setPassword("secret");
-
-      LoginServlet servlet = new LoginServlet
-        (com.google.common.collect.ImmutableMap.of("somebody", character));
+      LoginServlet servlet = new LoginServlet();
 
       servlet.doPost(request, response);
       assertEquals("post", "Invalid username or password!", output.toString());
@@ -267,13 +262,20 @@ public class LoginServlet extends ActionServlet
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
-
+      
+      BaseCharacter character =
+          new BaseCharacter("somebody",
+                            new net.ixitxachitls.dma.data.DMAData("path"));
+        character.setPassword("secret");
+      Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
+      
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=secret").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("");
       EasyMock.expect(request.getParam("username")).andReturn("somebody");
       EasyMock.expect(request.getParam("password")).andReturn("secret");
+      EasyMock.expect(request.getUsers()).andReturn(users);
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       response.addCookie(EasyMock.isA(Cookie.class));
@@ -282,13 +284,7 @@ public class LoginServlet extends ActionServlet
 
       EasyMock.replay(request, response);
 
-      BaseCharacter character =
-        new BaseCharacter("somebody",
-                          new net.ixitxachitls.dma.data.DMAData("path"));
-      character.setPassword("secret");
-
-      LoginServlet servlet = new LoginServlet
-        (com.google.common.collect.ImmutableMap.of("somebody", character));
+      LoginServlet servlet = new LoginServlet();
 
       servlet.doPost(request, response);
       assertEquals("post", "", output.toString());

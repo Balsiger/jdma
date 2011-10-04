@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd">
-
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
+<web-app id="jdmaixit" version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   <servlet>
     <servlet-name>config</servlet-name>
     <servlet-class>net.ixitxachitls.server.servlets.ConfigServlet</servlet-class>
   </servlet>
+  <servlet>
+    <servlet-name>login</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>logout</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.LogoutServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>config</servlet-name>
     <url-pattern>/configuration</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>login</servlet-name>
+    <url-pattern>/actions/login</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>logout</servlet-name>
+    <url-pattern>/actions/logout</url-pattern>
   </servlet-mapping>
 
 <!--

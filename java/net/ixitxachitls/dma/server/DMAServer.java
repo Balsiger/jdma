@@ -49,7 +49,6 @@ import net.ixitxachitls.dma.server.servlets.EntryServlet;
 import net.ixitxachitls.dma.server.servlets.IndexServlet;
 import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
 import net.ixitxachitls.dma.server.servlets.LibraryServlet;
-import net.ixitxachitls.dma.server.servlets.LoginServlet;
 import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
 import net.ixitxachitls.dma.server.servlets.ProductsAutocomplete;
@@ -59,7 +58,6 @@ import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.server.servlets.TemplateServlet;
 import net.ixitxachitls.util.CommandLineParser;
-//import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.EventLogger;
@@ -578,16 +576,6 @@ public class DMAServer extends WebServer
     // actions
     context.addServlet
       (new ServletHolder(new SaveActionServlet(m_baseData)), "/actions/save/*");
-
-    context.addServlet
-      (new ServletHolder(new LoginServlet
-                         (m_baseData.getEntries(BaseCharacter.TYPE))),
-       "/actions/login");
-
-    context.addServlet
-      (new ServletHolder(new LogoutServlet
-                         (m_baseData.getEntries(BaseCharacter.TYPE))),
-       "/actions/logout");
 
 //     context.addServlet
 //       (new ServletHolder(new SelectCharacterServlet(m_campaigns)),
