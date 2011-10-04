@@ -158,6 +158,7 @@
     </tstamp>
     <mkdir dir="${build.dir}" />
     <mkdir dir="${war.dir}" />
+    <mkdir dir="${war.dir}/icons" />
     <mkdir dir="${classes.dir}" />
     <mkdir dir="${webinf.dir}" />
     <mkdir dir="${dist.dir}" />
@@ -185,13 +186,16 @@
           tofile="${war.dir}/favicon.ico" />
     <copy file="${resources.dir}/text/robots.txt"
           tofile="${war.dir}/robots.txt" />
+    <copy todir="${war.dir}/icons" flatten="false">
+      <fileset dir="${resources.dir}/icons">
+        <include name="**/*.png" />
+        <include name="**/*.gif" />
+        <include name="**/*.jpeg" />
+      </fileset>
+    </copy>
 <!--<symlink link="${webinf.dir}/classes" resource="${classes.dir}"
              overwrite="Yes" />
     <symlink link="${classes.dir}/html" resource="${resources.dir}/html"
-             overwrite="Yes" />
-    <symlink link="${classes.dir}/icons" resource="${resources.dir}/icons"
-             overwrite="Yes" />
-    <symlink link="${classes.dir}/js" resource="${resources.dir}/js"
              overwrite="Yes" />
     <symlink link="${classes.dir}/css" resource="${resources.dir}/css"
              overwrite="Yes" />
