@@ -308,16 +308,11 @@ public class DMAServer extends WebServer
     handler.setRewritePathInfo(true);
     handler.setOriginalPathAttribute(DMARequest.ORIGINAL_PATH);
 
-    WebAppContext appContext = new WebAppContext();
-    appContext.setWar("build/war");
-    appContext.setContextPath("/@");
-
-    addRewrite(handler, "/configuration", "/@/configuration");
-
-    ServletContextHandler context = new ServletContextHandler();
+    WebAppContext context = new WebAppContext();
+    context.setWar("build/war");
+    context.setContextPath("/");
 
     HandlerCollection handlers = new HandlerCollection();
-    handlers.addHandler(appContext);
     handlers.addHandler(context);
 
     handler.setHandler(handlers);
