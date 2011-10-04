@@ -205,9 +205,6 @@ public final class Log
   private static final LinkedList<Message> s_last =
     new LinkedList<Message>();
 
-  /** The analytics tracker. */
-  //private static Analytics s_analytics = new Analytics();
-
   static
   {
     // setup default logging
@@ -462,41 +459,6 @@ public final class Log
                            @Nullable String inMessage)
   {
     print(inUser + " - " + inType + " - " + inMessage, Type.EVENT);
-  }
-
-  //........................................................................
-  //--------------------------------- track --------------------------------
-
-  /**
-    * Track a value with analytics message.
-    *
-    * @param       inTitle   the title of the value to track
-    * @param       inPage    the value to track as a hieararchical page name
-    *
-    */
-  public static void track(@Nonnull String inTitle, @Nonnull String inPage)
-  {
-    //s_analytics.track(inTitle, inPage);
-  }
-
-  //........................................................................
-  //------------------------------- trackEvent -----------------------------
-
-  /**
-    * Track a value with analytics message.
-    *
-    * @param       inObject name of the object for the event
-    * @param       inAction name of action that lead to the event
-    * @param       inLabel  label of the event
-    * @param       inValue  the value for the event
-    *
-    */
-  public static void trackEvent(@Nonnull String inObject,
-                                @Nonnull String inAction,
-                                @Nonnull String inLabel,
-                                @Nonnull String inValue)
-  {
-    //s_analytics.event(inObject, inAction, inLabel, inValue);
   }
 
   //........................................................................
@@ -1288,8 +1250,6 @@ public final class Log
       Log.debug("debugging purposes");
       Log.status("some status");
       Log.event("user", "type", "message");
-      Log.track("title", "page");
-      Log.trackEvent("object", "action", "label", "value");
 
       m_logger.verify();
 
@@ -1455,8 +1415,6 @@ public final class Log
       new Log();
       assertEquals("value of", Type.WARNING, Log.Type.valueOf("WARNING"));
       assertTrue("values", Log.Type.values().length > 0);
-
-      //s_analytics.stop();
     }
 
     //......................................................................

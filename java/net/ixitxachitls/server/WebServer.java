@@ -158,8 +158,6 @@ public class WebServer
     Log.info("classpath currently is: "
              + System.getProperty("java.class.path"));
     Log.event("", "server", "server startup on " + m_name + ":" + m_port);
-    Log.track("Startup", "/server/startup/" + m_name + "/" + m_port);
-    Log.track("Startup", "/startup");
 
     m_server = new Server();
 
