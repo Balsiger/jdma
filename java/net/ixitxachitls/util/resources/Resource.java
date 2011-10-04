@@ -464,8 +464,8 @@ public abstract class Resource
       assertNull("unknown", Resource.get("guru/gugus").m_url);
 
       // now for a directory
-      assertPattern("file", "file:/.*/config/test",
-                    Resource.get("config/test").toString());
+      assertPattern("file", "file:/.*/resources/css",
+                    Resource.get("resources/css").toString());
 
       // now for a JAR file
       assertPattern("jar", "jar:file:/.*/test/test.jar!/dir",
@@ -484,7 +484,7 @@ public abstract class Resource
     public void has()
     {
       assertFalse("unknown", Resource.has("guru/gugus"));
-      assertTrue("file", Resource.has("config/test"));
+      assertTrue("file", Resource.has("resources/css"));
       assertTrue("jar", Resource.has("dir"));
       assertTrue("jar file", Resource.has("dir/NPCs.png"));
       assertFalse("not in jar", Resource.has("dir/guru.gugus"));

@@ -212,8 +212,7 @@ public final class Log
   {
     // setup default logging
     String level = Config.get("logging.level", "DEBUG");
-    String []loggers =
-      Config.get("logging.loggers", "ASCIILogger").split(",\\s*");
+    String []loggers = Config.get("logging.loggers", "").split(",\\s*");
 
     Log.setLevel(Type.valueOf(level));
     for(String logger : loggers)
@@ -298,6 +297,9 @@ public final class Log
     */
   public static boolean add(@Nonnull String inName, @Nonnull String inLogger)
   {
+    if(inLogger.isEmpty())
+      return false;
+
     String name = inLogger;
     if(name.indexOf(".") < 0)
       name = "net.ixitxachitls.util.logging." + name;
@@ -310,18 +312,18 @@ public final class Log
     }
     catch(ClassNotFoundException e)
     {
-      System.err.println("Could not find class " + inName + " for logging: "
+      System.err.println("Could not find class '" + inLogger + "' for logging: "
                          + e);
     }
     catch(InstantiationException e)
     {
-      System.err.println("Could not instantiate class " + inName
-                         + " for logging: " + e);
+      System.err.println("Could not instantiate class '" + inLogger
+                         + "' for logging: " + e);
     }
     catch(IllegalAccessException e)
     {
-      System.err.println("Could not access class " + inName
-                         + " for logging: " + e);
+      System.err.println("Could not access class '" + inLogger
+                         + "' for logging: " + e);
     }
 
     return false;

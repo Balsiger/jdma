@@ -128,15 +128,11 @@ public class FileResource extends Resource
     public void directory()
     {
       Resource resource =
-        new FileResource("config/test",
-                         FileResource.class.getResource("/config/test"));
+        new FileResource("resources/css",
+                         FileResource.class.getResource("/resources/css"));
 
-      assertContentAnyOrder("config/test", resource.files(),
-                            ".svn", "project", "project.config", "test",
-                            "test path.config", "test test.config",
-                            "test.config", "test.properties", "test.template",
-                            "test_de.properties", "test_de_CH.properties",
-                            "test_en.properties");
+      assertContentAnyOrder("resouces/css", resource.files(),
+                            ".svn", "gui.css", "jdma.css", "smoothness");
 
       // invalid
       resource = new FileResource("guru", null);
@@ -156,12 +152,12 @@ public class FileResource extends Resource
     public void file() throws Exception
     {
       Resource resource =
-        new FileResource("/config/test/test.config",
+        new FileResource("/resources/css/jdma.css",
                          FileResource.class.getResource
-                         ("/config/test/test.config"));
+                         ("/resources/css/jdma.css"));
 
-      assertContentAnyOrder("config/test/test.config", resource.files(),
-                            "test.config");
+      assertContentAnyOrder("resources/css/jdma.css", resource.files(),
+                            "jdma.css");
 
       resource = new FileResource("guru", new URL("file:/guru"));
       assertContentAnyOrder("non existant", resource.files(), "guru");
@@ -175,13 +171,13 @@ public class FileResource extends Resource
     public void write()
     {
       Resource resource =
-        new FileResource("/config/test/test.config",
-                         FileResource.class.getResource("/config/test"));
+        new FileResource("/resources/css/jdma.css",
+                         FileResource.class.getResource("/resources/css"));
 
       ByteArrayOutputStream output = new ByteArrayOutputStream();
 
       assertTrue("writing", resource.write(output));
-      assertPattern("content", ".*test.config=guru.*", output.toString());
+      assertPattern("content", ".*A\\.Product:hover.*", output.toString());
 
       // invalid resource
       resource = new FileResource("guru", null);
@@ -198,8 +194,8 @@ public class FileResource extends Resource
     public void writeHTML()
     {
       Resource resource =
-        new FileResource("/config/test/test.config",
-                         FileResource.class.getResource("/config/test"));
+        new FileResource("/resources/css/jdma.css",
+                         FileResource.class.getResource("/resource/css"));
 
       ByteArrayOutputStream output = new ByteArrayOutputStream();
       net.ixitxachitls.output.html.HTMLWriter writer =
@@ -208,7 +204,7 @@ public class FileResource extends Resource
 
       assertTrue("writing", resource.write(writer));
       writer.close();
-      assertPattern("content", ".*test.config=guru.*", output.toString());
+      assertPattern("content", ".*A\\.Product:hover.*", output.toString());
 
       // invalid resource
       resource = new FileResource("guru", null);

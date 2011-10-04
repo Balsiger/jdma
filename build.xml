@@ -39,7 +39,6 @@
   <property name="lib.build.dir"  location="${lib.dir}/build"                />
   <property name="lib.test.dir"   location="${lib.dir}/test"                 />
   <property name="resources.dir"  location="resources"                       />
-  <property name="config.dir"     location="${resources.dir}/config"         />
   <property name="files.dir"      location="${resources.dir}/files"          />
   <property name="files-int.dir"  location="${resources.dir}/files-internal" />
   <property name="coverage.dir"   location="${build.dir}/coverage"           />
@@ -98,7 +97,6 @@
   <path id="classpath">
     <pathelement location="" />
     <pathelement location="${classes.dir}" />
-    <pathelement location="${config.dir}" />
     <pathelement location="${resources.dir}" />
     <!-- for testing -->
     <pathelement location="${lib.dir}/test/junit-4.8.2.jar" />
@@ -152,15 +150,6 @@
   <!-- define also as property for printing -->
   <property name="classpath" refid="classpath" />
 
-  <!-- the version number stuff and so on -->
-  <loadproperties resource="config/default.config" classpathref="classpath">
-    <filterchain>
-      <linecontains>
-        <contains value="project."/>
-      </linecontains>
-    </filterchain>
-  </loadproperties>
-
   <!-- prepare the building -->
   <target name="prepare" description="prepare building of the project">
     <tstamp>
@@ -176,10 +165,6 @@
     <property name="plugin.destination" value="${dist.dir}" />
     <property name="project.stem"
               value="${project.name}-${project.version}-${today.file}" />
-    <!-- remove the superfluous build entries in the file from time to -->
-    <!-- time! -->
-    <replace file="${config.dir}/default.config" token="project.build="
-             value="project.build=${today};" />
     <copy todir="${webinf.dir}/lib" flatten="true">
       <fileset dir="${gae.dir}/lib/user">
         <include name="**/*.jar" />
@@ -230,7 +215,6 @@
       document directory:        ${doc.dir}
       API directory:             ${api.dir}
       library directory:         ${lib.dir}
-      configuration directory:   ${config.dir}
       environment setting:       ${cmd.env}
 
       eclipse home               ${eclipse.dir}
@@ -298,7 +282,7 @@
 
   <!-- clean everything -->
   <target name="clean-all"
-          depends="clean, clean-dist, clean-config, clean-coverage"
+          depends="clean, clean-dist, clean-coverage"
           description="call all clean targets" >
   </target>
 
@@ -324,27 +308,6 @@
   <!-- clean the coverage direactory -->
   <target name="clean-coverage" description="clean up the coverage dir">
     <delete dir="${coverage.dir}"/>
-  </target>
-
-  <!-- clean up all configuration values -->
-  <target name="clean-config">
-    <foreach target="-clean-config-file" param="file">
-      <path>
-        <fileset dir="${config.dir}">
-          <include name="**/*.config" />
-          <exclude name="test/**/*.config" />
-          <exclude name="web/**/*.config" />
-          <exclude name="errors.config" />
-        </fileset>
-      </path>
-    </foreach>
-  </target>
-
-  <!-- clean up a single configuraton file -->
-  <target name="-clean-config-file">
-    <echo>cleaning file ${file}</echo>
-    <delete file="${file}" />
-    <touch  file="${file}" />
   </target>
 
   <!-- create the file with the class path -->
@@ -498,8 +461,6 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
   <target name="web" description="DMA web server" depends="compile">
     <jar jarfile="${dist.dir}/${project.stem}.jar" update="false">
       <fileset dir="${classes.dir}" />
-      <zipfileset dir="${config.dir}" prefix="config/"
-                  includes="default.config" />
       <manifest>
         <attribute name="Main-Class"
                    value="net.ixitxachitls.dma.server.WebServer" />
@@ -519,7 +480,7 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
     <delete file="${dist.dir}/${project.stem}-source.tar.gz" />
     <tar destfile="${dist.dir}/${project.stem}-source.tar.gz"
          basedir="${basedir}"
-         includes="${source.dir}/**/*.java,${lib.dir}/**/*,${config.dir}/**/*"
+         includes="${source.dir}/**/*.java,${lib.dir}/**/*"
          compression="gzip" />
   </target>
   <!-- create the distribution source package -->
@@ -527,7 +488,7 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
           description="Create a zip distribution of the source files">
     <delete file="${dist.dir}/${project.stem}-source.zip" />
     <zip destfile="${dist.dir}/${project.stem}-source.zip" basedir="${basedir}"
-         includes="${source.dir}/**/*.java,${lib.dir}/**/*,${config.dir}/**/*"
+         includes="${source.dir}/**/*.java,${lib.dir}/**/*"
     />
   </target>
 
@@ -536,7 +497,6 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
           description="Create a distribution of the binary files">
     <jar jarfile="${dist.dir}/${project.stem}.jar" update="false">
       <fileset dir="${classes.dir}" />
-      <zipfileset dir="${config.dir}" prefix="config/" />
       <manifest>
         <attribute name="Main-Class" value="net.ixitxachitls.dma.cli.CLI" />
         <attribute name="Class-Path"
@@ -556,7 +516,7 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
     <tar destfile="${dist.dir}/${project.stem}-resources.tar.gz"
          basedir="${basedir}"
          includes="${resources.dir}/**/*"
-         excludes="${config.dir}/**/*,${files.dir}/**/*,${files-int.dir}/**/*,${resources.dir}/raw/**/*"
+         excludes="${files.dir}/**/*,${files-int.dir}/**/*,${resources.dir}/raw/**/*"
          compression="gzip" />
   </target>
 
@@ -566,7 +526,7 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
     <zip destfile="${dist.dir}/${project.stem}-resources.zip" update="false"
          basedir="${basedir}"
          includes="${resources.dir}/**/*"
-         excludes="${config.dir}/**/*,${files.dir}/**/*,${files-int.dir}/**/*,${resources.dir}/raw/**/*" />
+         excludes="${files.dir}/**/*,${files-int.dir}/**/*,${resources.dir}/raw/**/*" />
   </target>
 
   <target name="dist-resources-jar" depends="prepare"

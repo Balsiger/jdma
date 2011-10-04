@@ -141,7 +141,7 @@ public class TemplateServlet extends FileServlet
         new BaseServlet.Test.MockServletOutputStream();
 
       EasyMock.expect(request.getPathInfo())
-        .andReturn("/config/test/test.template");
+        .andReturn("/resources/css/jdma.css");
       response.setHeader("Content-Type", "text/plain");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
@@ -149,10 +149,12 @@ public class TemplateServlet extends FileServlet
       TemplateServlet servlet =
         new TemplateServlet("", "text/plain", "test/test/template");
 
-      System.setProperty("test/test/template.simple", "single word");
+      System.setProperty("test/test/template.color_Monster", "single word");
+      m_logger.banClass(net.ixitxachitls.util.Strings.class);
       assertNull("handle", servlet.handle(request, response));
-      assertEquals("content", "This is a single word template test.\n",
-                   output.toString());
+      assertPattern("content",
+                    ".*A.Monster         \\{ color: single word \\}.*",
+                    output.toString());
 
       output.close();
       EasyMock.verify(request, response);

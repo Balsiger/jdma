@@ -190,16 +190,18 @@ public class TemplateResource extends FileResource
     public void write()
     {
       Resource resource =
-        new TemplateResource("/config/test/test.config",
+        new TemplateResource("/resources/css/jdma.css",
                              TemplateResource.class
-                             .getResource("/config/test/test.config"),
+                             .getResource("/resources/css/jdma.css"),
                              "test/test/template");
 
       ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-      System.setProperty("test/test/template.simple", "single word");
+      System.setProperty("test/test/template.color_Monster", "single word");
+      m_logger.banClass(net.ixitxachitls.util.Strings.class);
       assertTrue("writing", resource.write(output));
-      assertPattern("content", ".*test.templateresource=single word.*",
+      assertPattern("content",
+                    ".*A.Monster         \\{ color: single word \\}.*",
                     output.toString());
 
       // invalid resource

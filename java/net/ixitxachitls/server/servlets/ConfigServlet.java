@@ -147,7 +147,10 @@ public class ConfigServlet extends BaseServlet
   {
     //----- simple ---------------------------------------------------------
 
-    /** The simple Test. */
+    /**
+     * The simple Test.
+     * @throws Exception should not happen.
+     */
     @org.junit.Test
     public void simple() throws Exception
     {

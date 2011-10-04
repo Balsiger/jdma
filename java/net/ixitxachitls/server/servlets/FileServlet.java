@@ -488,7 +488,7 @@ public class FileServlet extends BaseServlet
         new BaseServlet.Test.MockServletOutputStream();
 
       EasyMock.expect(request.getPathInfo())
-        .andReturn("/config/test/test.config");
+        .andReturn("/resources/dma/BaseCharacters/Ixitxachitls.dma");
       EasyMock.expect(request.getDateHeader("If-Modified-Since"))
         .andReturn(0L);
       response.setHeader("Cache-Control", "max-age=86400");
@@ -503,7 +503,7 @@ public class FileServlet extends BaseServlet
       FileServlet servlet = new FileServlet("", "text/plain");
 
       assertNull("handle", servlet.handle(request, response));
-      assertPattern("content", ".*test.config=guru.*", output.toString());
+      assertPattern("content", ".*base character Merlin.*", output.toString());
 
       output.close();
       EasyMock.verify(request, response);
@@ -558,7 +558,7 @@ public class FileServlet extends BaseServlet
         new BaseServlet.Test.MockServletOutputStream();
 
       EasyMock.expect(request.getPathInfo())
-        .andReturn("/config/test/test.config");
+        .andReturn("/resources/dma/BaseCharacters/Ixitxachitls.dma");
       response.setHeader("Content-Type", "text/plain");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
@@ -566,7 +566,7 @@ public class FileServlet extends BaseServlet
       FileServlet servlet = new FileServlet("", "text/plain", false);
 
       assertNull("handle", servlet.handle(request, response));
-      assertPattern("content", ".*test.config=guru.*", output.toString());
+      assertPattern("content", ".*base character Merlin.*", output.toString());
 
       EasyMock.verify(request, response);
     }
