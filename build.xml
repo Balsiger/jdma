@@ -159,6 +159,7 @@
     <mkdir dir="${build.dir}" />
     <mkdir dir="${war.dir}" />
     <mkdir dir="${war.dir}/icons" />
+    <mkdir dir="${war.dir}/js" />
     <mkdir dir="${classes.dir}" />
     <mkdir dir="${webinf.dir}" />
     <mkdir dir="${dist.dir}" />
@@ -191,6 +192,11 @@
         <include name="**/*.png" />
         <include name="**/*.gif" />
         <include name="**/*.jpeg" />
+      </fileset>
+    </copy>
+    <copy todir="${war.dir}/js" flatten="false">
+      <fileset dir="${resources.dir}/js">
+        <include name="**/*.js" />
       </fileset>
     </copy>
 <!--<symlink link="${webinf.dir}/classes" resource="${classes.dir}"
