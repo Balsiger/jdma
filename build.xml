@@ -169,7 +169,6 @@
     <mkdir dir="${build.dir}" />
     <mkdir dir="${war.dir}" />
     <mkdir dir="${war.dir}/icons" />
-    <mkdir dir="${war.dir}/files" />
     <mkdir dir="${classes.dir}" />
     <mkdir dir="${webinf.dir}" />
     <mkdir dir="${dist.dir}" />
@@ -203,11 +202,6 @@
         <include name="**/*.png" />
         <include name="**/*.gif" />
         <include name="**/*.jpeg" />
-      </fileset>
-    </copy>
-    <copy todir="${war.dir}/files" flatten="false">
-      <fileset dir="${resources.dir}/files">
-        <include name="**/*" />
       </fileset>
     </copy>
   </target>

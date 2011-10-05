@@ -186,9 +186,12 @@ public class BaseCharacter extends BaseEntry
 
   /** The printer for printing the whole base character. */
   public static final Print s_pagePrint =
-    new Print("$title "
+    new Print("$image "
               + "${as pdf} ${as text} ${as dma}"
-              + "$clear $files\n " // need to start a new line for ascii
+              + "$title "
+              + "$clear $files"
+              + "\n " // need to start a new line for ascii
+              + "$par "
               + "%name "
               + "%{real name} %email %password %products %{last login} "
               + "%{last action} %token %group %characters %products "
