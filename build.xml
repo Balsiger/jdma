@@ -150,8 +150,18 @@
   <!-- define also as property for printing -->
   <property name="classpath" refid="classpath" />
 
+  <!-- special treatment for windows -->
+  <condition property="windows">
+    <os family="windows" />
+  </condition>
+
   <!-- prepare the building -->
-  <target name="prepare" description="prepare building of the project">
+  <target name="prepare" description="prepare building of the project"
+          depends="prepare-windows, prepare-non-windows">
+  </target>
+
+  <target name="prepare-general"
+          description="general preparation steps for all os'">
     <tstamp>
       <format property="today.file" pattern="yyyy-MM-dd" locale="en"/>
       <format property="today" pattern="yyyy-MM-dd HH:mm:ss" locale="en"/>
@@ -159,7 +169,7 @@
     <mkdir dir="${build.dir}" />
     <mkdir dir="${war.dir}" />
     <mkdir dir="${war.dir}/icons" />
-    <mkdir dir="${war.dir}/js" />
+    <mkdir dir="${war.dir}/files" />
     <mkdir dir="${classes.dir}" />
     <mkdir dir="${webinf.dir}" />
     <mkdir dir="${dist.dir}" />
@@ -173,6 +183,7 @@
       </fileset>
       <fileset dir="${lib.dir}">
         <include name="*.jar" />
+        <exclude name="**/jetty-*.jar" />
       </fileset>
     </copy>
     <copy todir="${webinf.dir}" flatten="true">
@@ -194,19 +205,53 @@
         <include name="**/*.jpeg" />
       </fileset>
     </copy>
+    <copy todir="${war.dir}/files" flatten="false">
+      <fileset dir="${resources.dir}/files">
+        <include name="**/*" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="prepare-non-windows" depends="prepare-general"
+          description="preparation steps for non windows machines"
+          unless="windows">
+    <symlink link="${webinf.dir}/classes" resource="${classes.dir}"
+             overwrite="Yes" />
+    <symlink link="${classes.dir}/html" resource="${resources.dir}/html"
+             overwrite="Yes" />
+    <symlink link="${war.dir}/css" resource="${resources.dir}/css"
+             overwrite="Yes" />
+    <symlink link="${war.dir}/js" resource="${resources.dir}/js"
+             overwrite="Yes" />
+  </target>
+
+  <target name="prepare-windows" depends="prepare-general"
+          description="preparation steps for windows machines"
+          if="windows">
+    <mkdir dir="${webinf.dir}/classes" />
+    <mkdir dir="${war.dir}/html" />
+    <mkdir dir="${war.dir}/css" />
+    <mkdir dir="${war.dir}/js" />
+    <copy todir="${webinf.dir}/classes" flatten="false">
+      <fileset dir="${classes.dir}">
+        <include name="**/*" />
+      </fileset>
+    </copy>
+    <copy todir="${war.dir}/html" flatten="false">
+      <fileset dir="${resources.dir}/html">
+        <include name="**/*.html" />
+      </fileset>
+    </copy>
+    <copy todir="${war.dir}/css" flatten="false">
+      <fileset dir="${resources.dir}/css">
+        <include name="**/*.css" />
+      </fileset>
+    </copy>
     <copy todir="${war.dir}/js" flatten="false">
       <fileset dir="${resources.dir}/js">
         <include name="**/*.js" />
       </fileset>
     </copy>
-<!--<symlink link="${webinf.dir}/classes" resource="${classes.dir}"
-             overwrite="Yes" />
-    <symlink link="${classes.dir}/html" resource="${resources.dir}/html"
-             overwrite="Yes" />
-    <symlink link="${classes.dir}/css" resource="${resources.dir}/css"
-             overwrite="Yes" />
-    <symlink link="${classes.dir}/config" resource="${resources.dir}/config"
-             overwrite="Yes" />-->
   </target>
 
   <!-- show the internal values -->
@@ -301,11 +346,10 @@
   </target>
 
   <!-- clean the build -->
-  <target name       ="clean"
+  <target name ="clean"
           description="clean up the build directories" >
-    <delete>
-      <fileset dir="${build.dir}" followsymlinks="false"/>
-    </delete>
+    <delete dir="${build.dir}" followsymlinks="false" includeemptydirs="true"
+            removeNotFollowedSymlinks="true"/>
     <delete>
       <fileset dir="${basedir}" defaultexcludes="no"
                includes="**/*.class, **/*~, **/#*#, **/.#*, **/default.log"/>
