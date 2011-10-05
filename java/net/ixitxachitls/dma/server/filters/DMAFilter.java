@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.server.ServerUtils;
@@ -72,7 +73,7 @@ public class DMAFilter implements Filter
    */
   public DMAFilter()
   {
-    // nothing to do
+    m_users = DMAData.getBaseData().getEntries(BaseCharacter.TYPE);
   }
 
   //........................................................................

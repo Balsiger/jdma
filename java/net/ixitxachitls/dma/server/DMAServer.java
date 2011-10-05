@@ -328,10 +328,10 @@ public class DMAServer extends WebServer
     // TODO: this is temporary, remove once the main page filter is in
     addRewrite(handler, "/", "/index.html");
 
-    context.addFilter
-      (new FilterHolder
-       (new DMAFilter(m_baseData.getEntries(BaseCharacter.TYPE))), "/*",
-       EnumSet.of(DispatcherType.REQUEST));
+    // context.addFilter
+    //   (new FilterHolder
+    //    (new DMAFilter(m_baseData.getEntries(BaseCharacter.TYPE))), "/*",
+    //    EnumSet.of(DispatcherType.REQUEST));
 
 //     context.setAttribute("users", m_users);
 //     context.setAttribute("campaigns", m_campaigns);
