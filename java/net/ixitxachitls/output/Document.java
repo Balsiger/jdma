@@ -1080,8 +1080,8 @@ public class Document
 
       assertEquals("text", "This is just some test file", reader.readLine());
       assertNull("end", reader.readLine());
-      assertTrue("delete", tmp.delete());
       reader.close();
+      assertTrue("delete", tmp.delete());
     }
 
     //......................................................................
