@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.ThreadSafe;
+import javax.servlet.ServletConfig;
 
 import org.easymock.EasyMock;
 
@@ -148,6 +149,23 @@ public class StaticPageServlet extends PageServlet
 
     Resource file = Resource.get(path);
     file.write(inWriter);
+  }
+
+  //........................................................................
+  //--------------------------------- init ---------------------------------
+
+  /**
+   * Initialize the servlet.
+   *
+   * @param inConfig the intial configuration (from web.xml)
+   *
+   */
+  public void init(@Nonnull ServletConfig inConfig)
+  {
+    // root
+    String param = inConfig.getInitParameter("root");
+    if(param != null)
+      m_root = param;
   }
 
   //........................................................................
