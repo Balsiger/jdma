@@ -26,6 +26,7 @@ package net.ixitxachitls.server.servlets;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -57,6 +58,17 @@ public class TemplateServlet extends FileServlet
 {
   //--------------------------------------------------------- constructor(s)
 
+  //--------------------------- TemplateServlet ----------------------------
+
+  /**
+   * The default constructor.
+   */
+  public TemplateServlet()
+  {
+    m_prefix = "web.templates.default";
+  }
+
+  //........................................................................
   //--------------------------- TemplateServlet ----------------------------
 
   /**
@@ -113,6 +125,27 @@ public class TemplateServlet extends FileServlet
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //--------------------------------- init ---------------------------------
+
+  /**
+   * Initialize the servlet.
+   *
+   * @param inConfig the intial configuration (from web.xml)
+   *
+   */
+  public void init(@Nonnull ServletConfig inConfig)
+  {
+    super.init(inConfig);
+
+    // prefix
+    String param = inConfig.getInitParameter("prefix");
+    if(param != null)
+      m_prefix = param;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions

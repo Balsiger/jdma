@@ -175,6 +175,18 @@ public class FileServlet extends BaseServlet
   //----------------------------- FileServlet ------------------------------
 
   /**
+   * Default constructor.
+   */
+  public FileServlet()
+  {
+    m_root = "/";
+    m_handleModification = true;
+  }
+
+  //........................................................................
+  //----------------------------- FileServlet ------------------------------
+
+  /**
    * Create the handler for static files.
    *
    * @param       inRoot         the root directory (in classpath) for the
@@ -209,19 +221,6 @@ public class FileServlet extends BaseServlet
       for(Type type : s_types.values())
         if(inType.equals(type.getMimeType()))
           m_type = type;
-  }
-
-  //........................................................................
-
-  //----------------------------- FileServlet ------------------------------
-
-  /**
-   * Default constructor.
-   */
-  public FileServlet()
-  {
-    m_root = "/";
-    m_handleModification = true;
   }
 
   //........................................................................
@@ -430,7 +429,7 @@ public class FileServlet extends BaseServlet
 
   //........................................................................
 
-  //----- init -------------------------------------------------------------
+  //--------------------------------- init ---------------------------------
 
   /**
    * Initialize the servlet.

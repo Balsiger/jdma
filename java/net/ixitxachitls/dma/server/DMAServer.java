@@ -348,10 +348,10 @@ public class DMAServer extends WebServer
 
 
     // static files
-    context.addServlet
-      (new ServletHolder(new TemplateServlet("/css", "text/css",
-                                             "web/css/template")),
-       "/css/*");
+    // context.addServlet
+    //   (new ServletHolder(new TemplateServlet("/css", "text/css",
+    //                                          "web/css/template")),
+    //    "/css/*");
 
     context.addServlet
       (new ServletHolder(new StaticPageServlet("/html")), "*.html");
@@ -928,6 +928,50 @@ public class DMAServer extends WebServer
                                                        "Campaigns.dma"));
 
     Log.info(s_version);
+
+    // Setup system properties similar to properties in the app web config
+    Config.set("web.template.css.color_Class", "#ff80ff");
+    Config.set("web.template.css.lightcolor_Class", "#ffa0ff");
+    Config.set("web.template.css.hilightcolor_Class", "#ffc0ff");
+    Config.set("web.template.css.color_Campaign", "#ccccff");
+    Config.set("web.template.css.lightcolor_Campaign", "#ddddff");
+    Config.set("web.template.css.hilightcolor_Campaign", "#aaaaff");
+    Config.set("web.template.css.color_Character", "#3399ff");
+    Config.set("web.template.css.lightcolor_Character", "#33ffff");
+    Config.set("web.template.css.hilightcolor_Character", "#33ccff");
+    Config.set("web.template.css.color_Event", "#800080");
+    Config.set("web.template.css.lightcolor_Event", "#a000a0");
+    Config.set("web.template.css.hilightcolor_Event", "#ff00ff");
+    Config.set("web.template.css.color_Feat", "#008080");
+    Config.set("web.template.css.lightcolor_Feat", "#00a0a0");
+    Config.set("web.template.css.hilightcolor_Feat", "#00ffff");
+    Config.set("web.template.css.color_God", "#ff8080");
+    Config.set("web.template.css.lightcolor_God", "#ffa0a0");
+    Config.set("web.template.css.hilightcolor_God", "#ffff00");
+    Config.set("web.template.css.color_Group", "#ff8080");
+    Config.set("web.template.css.lightcolor_Group", "#0000a0");
+    Config.set("web.template.css.hilightcolor_Group", "#ffc0c0");
+    Config.set("web.template.css.color_Item", "#000080");
+    Config.set("web.template.css.lightcolor_Item", "#0000a0");
+    Config.set("web.template.css.hilightcolor_Item", "#0000ff");
+    Config.set("web.template.css.color_Monster", "#008000");
+    Config.set("web.template.css.lightcolor_Monster", "#00a000");
+    Config.set("web.template.css.hilightcolor_Monster", "#00ff00");
+    Config.set("web.template.css.color_NPC", "#800000");
+    Config.set("web.template.css.lightcolor_NPC", "#a00000");
+    Config.set("web.template.css.hilightcolor_NPC", "#ff0000");
+    Config.set("web.template.css.color_Place", "#804000");
+    Config.set("web.template.css.lightcolor_Place", "#a08000");
+    Config.set("web.template.css.hilightcolor_Place", "#ffa000");
+    Config.set("web.template.css.color_Product", "#404040");
+    Config.set("web.template.css.lightcolor_Product", "#808080");
+    Config.set("web.template.css.hilightcolor_Product", "#a0a0a0");
+    Config.set("web.template.css.color_Skill", "#80ffff");
+    Config.set("web.template.css.lightcolor_Skill", "#a0ffff");
+    Config.set("web.template.css.hilightcolor_Skill", "#c0ffff");
+    Config.set("web.template.css.color_Spell", "#8080ff");
+    Config.set("web.template.css.lightcolor_Spell", "#a0a0ff");
+    Config.set("web.template.css.hilightcolor_Spell", "#c0c0fff");
 
     DMAServer server = new DMAServer(name, port, base, campaigns);
     server.start();
