@@ -39,6 +39,7 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.Files;
+import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
 
@@ -88,6 +89,10 @@ public class DMAData implements Serializable
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The static singleton with all the base data. */
+  private static DMAData s_singleton;
+
 
   /** The path from where to load the files. */
   private @Nonnull String m_path;
@@ -221,9 +226,26 @@ public class DMAData implements Serializable
    * @return      the repository with all the base data
    *
    */
-  public @Nonnull DMAData getBaseData()
+  public static @Nonnull DMAData getBaseData()
   {
-    return this;
+    if(s_singleton == null) {
+      synchronized(DMAData.class) {
+        if(s_singleton == null) {
+          DMAData data = new DMAData(Config.get("web.dma.data", "dma"));
+          String dirs =
+            Config.get("web.dma.files",
+                       "BaseProducts, BaseProducts/DnD, BaseProducts/Novels, "
+                       + "BaseProducts/Magazines, BaseCharacters, "
+                       + "BaseCampaigns");
+          for(String baseDir : dirs.split(",\\s*"))
+            data.addAllFiles(baseDir);
+
+          s_singleton = data;
+        }
+      }
+    }
+
+    return s_singleton;
   }
 
   //........................................................................

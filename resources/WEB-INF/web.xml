@@ -62,7 +62,14 @@
     <url-pattern>*.html</url-pattern>
   </servlet-mapping>
 
-
+  <filter>
+    <filter-name>DMARequest</filter-name>
+    <filter-class>net.ixitxachitls.dma.server.filters.DMAFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>DMARequest</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
 <!--
 
@@ -107,15 +114,6 @@
     <servlet-name>js</servlet-name>
     <url-pattern>/js/*</url-pattern>
   </servlet-mapping>
-
-  <filter>
-    <filter-name>DMARequest</filter-name>
-    <filter-class>net.ixitxachitls.dma.server.filters.DMAFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>DMARequest</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
 
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

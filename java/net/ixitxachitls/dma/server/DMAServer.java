@@ -126,10 +126,7 @@ public class DMAServer extends WebServer
     super(inHost, inPort);
 
     // determine which base files to read
-    m_baseData = new DMAData(DATA_DIR);
-    System.out.println(inBaseDirs);
-    for(String baseDir : inBaseDirs.split(",\\s*"))
-      m_baseData.addAllFiles(baseDir);
+    m_baseData = DMAData.getBaseData();
 
 //     java.util.Date start = new java.util.Date();
 
@@ -179,10 +176,6 @@ public class DMAServer extends WebServer
 //   {
 //     String ignore = Global.PROJECT;
 //   }
-
-  /** The directory containing all data files. */
-  public static final @Nonnull String DATA_DIR = Config.get
-    ("resource:web/dir.dma", "dma");
 
   /** The extractor to get the product data. */
 //   private static final Extractor<DMARequest, Iterator<AbstractEntry>>
