@@ -766,9 +766,6 @@ public class DMAServer extends WebServer
   @OverridingMethodsMustInvokeSuper
   public void init()
   {
-    Log.info("Loading user information");
-    if(!m_baseData.read())
-      Log.error("Could not properly base data files!");
   }
 
   //........................................................................

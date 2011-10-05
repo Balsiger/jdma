@@ -93,7 +93,6 @@ public class DMAData implements Serializable
   /** The static singleton with all the base data. */
   private static DMAData s_singleton;
 
-
   /** The path from where to load the files. */
   private @Nonnull String m_path;
 
@@ -231,16 +230,22 @@ public class DMAData implements Serializable
     if(s_singleton == null) {
       synchronized(DMAData.class) {
         if(s_singleton == null) {
-          DMAData data = new DMAData(Config.get("web.dma.data", "dma"));
+          // TODO: this is risky, since we might return the data before it's
+          // actually read, but if we wait here, we end up requesting it (and
+          // rereading it while reading the files below. Since this will go
+          // away, this should do for now.
+          s_singleton = new DMAData(Config.get("web.dma.data", "dma"));
           String dirs =
             Config.get("web.dma.files",
                        "BaseProducts, BaseProducts/DnD, BaseProducts/Novels, "
                        + "BaseProducts/Magazines, BaseCharacters, "
                        + "BaseCampaigns");
+          Log.info("reading base data for " + dirs);
           for(String baseDir : dirs.split(",\\s*"))
-            data.addAllFiles(baseDir);
+            s_singleton.addAllFiles(baseDir);
 
-          s_singleton = data;
+          if(!s_singleton.read())
+            Log.error("Could not properly base data files!");
         }
       }
     }
@@ -396,7 +401,6 @@ public class DMAData implements Serializable
   {
     Resource path = Resource.get(Files.concatenate(m_path, inPath));
 
-    System.out.println(inPath + " / " + path + ": " + path.files());
     for(String name : path.files())
     {
       if(name.endsWith(".dma"))

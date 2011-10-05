@@ -104,6 +104,7 @@ public class LoginServlet extends ActionServlet
     String username = inRequest.getParam("username");
     String password = inRequest.getParam("password");
 
+    System.out.println(username + ": " + inRequest.getUsers());
     BaseCharacter user = inRequest.getUsers().get(username);
 
     if(user == null)
@@ -167,7 +168,7 @@ public class LoginServlet extends ActionServlet
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
-      
+
       BaseCharacter character =
           new BaseCharacter("somebody",
                             new net.ixitxachitls.dma.data.DMAData("path"));
@@ -220,7 +221,7 @@ public class LoginServlet extends ActionServlet
                             new net.ixitxachitls.dma.data.DMAData("path"));
         character.setPassword("secret");
       Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
-      
+
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=guru").anyTimes();
@@ -262,13 +263,13 @@ public class LoginServlet extends ActionServlet
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
-      
+
       BaseCharacter character =
           new BaseCharacter("somebody",
                             new net.ixitxachitls.dma.data.DMAData("path"));
         character.setPassword("secret");
       Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
-      
+
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=secret").anyTimes();

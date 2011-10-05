@@ -5,8 +5,10 @@
   <system-properties>
     <property name="java.util.logging.config.file"
               value="WEB-INF/logging.properties" />
+    <!-- jdma loggin -->
+    <property name="logging.level" value="COMPLETE" />
+    <property name="logging.loggers" value="ANSILogger" />
     <!-- jdma web template values -->
-    <property name="jdma.config.writable" value="false" />
     <property name="web.template.css.color_Class" value="#ff80ff" />
     <property name="web.template.css.lightcolor_Class" value="#ffa0ff" />
     <property name="web.template.css.hilightcolor_Class" value="#ffc0ff" />

@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.data;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Reader;
@@ -43,6 +44,7 @@ import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
 import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.resources.Resource;
 
 //..........................................................................
 
@@ -308,7 +310,16 @@ public class DMAFile //implements Storage<AbstractEntry>
     {
       String name = Files.concatenate(m_path, m_name);
 
-      return read(inBaseData, new BufferedReader(new FileReader(name)));
+      File file = Resource.get(name).asFile();
+
+      if(file == null)
+      {
+        Log.warning("cannot find file '" + Files.concatenate(m_path, m_name)
+                    + "'");
+        return false;
+      }
+
+      return read(inBaseData, new BufferedReader(new FileReader(file)));
     }
     catch(java.io.FileNotFoundException e)
     {

@@ -184,11 +184,11 @@ public final class Log
     /** A general information message, there may be quite a bunch of those. */
     INFO,
 
-    /** A status message. */
-    STATUS,
-
     /** Thats the complete set of logging messages to be shown. */
     COMPLETE,
+
+    /** A status message. */
+    STATUS,
 
     /** This level prints all message, even those that are
         mainly used for debugging purposes. */
