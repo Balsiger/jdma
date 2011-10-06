@@ -270,6 +270,9 @@ public class TestCase extends org.junit.Assert
   @org.junit.Before
   public void setUpTest()
   {
+    if (System.getProperty("os.name").startsWith("Windows")) {
+      System.setProperty("line.separator","\n");
+    }
     m_logger = new Log.Test.MockLogger();
     Log.add(s_logger, m_logger);
     Log.setLevel(Log.Type.DEBUG);

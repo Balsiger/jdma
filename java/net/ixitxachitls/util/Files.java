@@ -630,7 +630,7 @@ public final class Files
                                  + "file.extension"));
       assertEquals("path", "", Files.path("file.extension"));
       assertEquals("path", "", Files.path(""));
-      assertEquals("path", "/", Files.path(File.separator));
+      assertEquals("path", File.separator, Files.path(File.separator));
 
       assertEquals("extension (empty)", "",
                    Files.extension(File.separator + "my" + File.separator
@@ -706,13 +706,18 @@ public final class Files
 
         assertNull("unknown", backup("build/gugus", ""));
         assertEquals("simple",
-                     "build/backups/backup-2008-03-15-20-21.test.bak",
+                     new File("build/backups/backup-2008-03-15-20-21.test.bak")
+                         .getPath(),
                      backup("build/backup.test", "build/backups"));
         assertTrue(new File("build/backup.test").createNewFile());
-        assertEquals("one", "build/backups/backup-2008-03-15-20-21.test.bak.1",
+        assertEquals("one",
+                     new File("build/backups/backup-2008-03-15-20-21.test.bak.1")
+                         .getPath(),
                      backup("build/backup.test", "build/backups"));
         assertTrue(new File("build/backup.test").createNewFile());
-        assertEquals("one", "build/backups/backup-2008-03-15-20-21.test.bak.2",
+        assertEquals("one",
+                     new File("build/backups/backup-2008-03-15-20-21.test.bak.2")
+                         .getPath(),
                      backup("build/backup.test", "build/backups"));
 
         // remove all the files again
