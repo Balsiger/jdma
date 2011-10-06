@@ -30,10 +30,10 @@ import javax.annotation.Nonnull;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.easymock.EasyMock;
+
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.logging.Log;
-
-import org.easymock.EasyMock;
 
 //..........................................................................
 
@@ -213,7 +213,8 @@ public class LoginServlet extends ActionServlet
       MockServletOutputStream output = new MockServletOutputStream();
 
       BaseCharacter character = EasyMock.createMock(BaseCharacter.class);
-      Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
+      Map<String, BaseCharacter> users =
+        com.google.common.collect.ImmutableMap.of("somebody", character);
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())
@@ -254,8 +255,9 @@ public class LoginServlet extends ActionServlet
       MockServletOutputStream output = new MockServletOutputStream();
 
       BaseCharacter character = EasyMock.createMock(BaseCharacter.class);
-      Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
-      
+      Map<String, BaseCharacter> users =
+        com.google.common.collect.ImmutableMap.of("somebody", character);
+
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=secret").anyTimes();
@@ -263,7 +265,8 @@ public class LoginServlet extends ActionServlet
       EasyMock.expect(request.getParam("username")).andReturn("somebody");
       EasyMock.expect(request.getParam("password")).andReturn("secret");
       EasyMock.expect(request.getUsers()).andReturn(users);
-      EasyMock.expect(character.login("somebody", "secret")).andReturn("shdfkjh");
+      EasyMock.expect(character.login("somebody", "secret"))
+        .andReturn("shdfkjh");
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       response.addCookie(EasyMock.isA(Cookie.class));

@@ -711,12 +711,14 @@ public final class Files
                      backup("build/backup.test", "build/backups"));
         assertTrue(new File("build/backup.test").createNewFile());
         assertEquals("one",
-                     new File("build/backups/backup-2008-03-15-20-21.test.bak.1")
+                     new File("build/backups/backup-2008-03-15-20-21.test."
+                              + "bak.1")
                          .getPath(),
                      backup("build/backup.test", "build/backups"));
         assertTrue(new File("build/backup.test").createNewFile());
         assertEquals("one",
-                     new File("build/backups/backup-2008-03-15-20-21.test.bak.2")
+                     new File("build/backups/backup-2008-03-15-20-21.test."
+                              + "bak.2")
                          .getPath(),
                      backup("build/backup.test", "build/backups"));
 

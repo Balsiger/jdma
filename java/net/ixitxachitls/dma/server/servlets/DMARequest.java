@@ -36,14 +36,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.google.common.collect.Multimap;
+
+import org.easymock.EasyMock;
+
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
-import org.easymock.EasyMock;
-
-import com.google.common.collect.Multimap;
 
 //..........................................................................
 
@@ -413,7 +414,7 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return the currently logged in user
    *
    */
-  public @Nonnull Map<String,BaseCharacter> getUsers()
+  public @Nonnull Map<String, BaseCharacter> getUsers()
   {
     return m_users;
   }

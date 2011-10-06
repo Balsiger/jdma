@@ -27,10 +27,10 @@ import javax.annotation.Nonnull;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.easymock.EasyMock;
+
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.logging.Log;
-
-import org.easymock.EasyMock;
 
 //..........................................................................
 

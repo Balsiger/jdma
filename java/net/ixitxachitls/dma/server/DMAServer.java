@@ -23,15 +23,11 @@
 
 package net.ixitxachitls.dma.server;
 
-import java.util.EnumSet;
-
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import javax.servlet.DispatcherType;
 
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RewriteRegexRule;
-import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -41,7 +37,6 @@ import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.BaseType;
-import net.ixitxachitls.dma.server.filters.DMAFilter;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.server.servlets.EntryListServlet;
 import net.ixitxachitls.dma.server.servlets.EntryPDFServlet;
@@ -49,14 +44,11 @@ import net.ixitxachitls.dma.server.servlets.EntryServlet;
 import net.ixitxachitls.dma.server.servlets.IndexServlet;
 import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
 import net.ixitxachitls.dma.server.servlets.LibraryServlet;
-import net.ixitxachitls.dma.server.servlets.LogoutServlet;
 import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
 import net.ixitxachitls.dma.server.servlets.ProductsAutocomplete;
 import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
-import net.ixitxachitls.dma.server.servlets.StaticPageServlet;
 import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
-import net.ixitxachitls.server.servlets.TemplateServlet;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.ANSILogger;

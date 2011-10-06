@@ -91,7 +91,7 @@ public class DMAData implements Serializable
   //-------------------------------------------------------------- variables
 
   /** The static singleton with all the base data. */
-  private static DMAData s_singleton;
+  private static volatile DMAData s_singleton;
 
   /** The path from where to load the files. */
   private @Nonnull String m_path;
@@ -242,9 +242,12 @@ public class DMAData implements Serializable
   public static @Nonnull DMAData createBaseData()
   {
     // new Throwable().printStackTrace();
-    if(s_singleton == null) {
-      synchronized(DMAData.class) {
-        if(s_singleton == null) {
+    if(s_singleton == null)
+    {
+      synchronized(DMAData.class)
+      {
+        if(s_singleton == null)
+        {
           // TODO: this is risky, since we might return the data before it's
           // actually read, but if we wait here, we end up requesting it (and
           // rereading it while reading the files below. Since this will go
