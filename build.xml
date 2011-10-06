@@ -217,8 +217,7 @@
              overwrite="Yes" />
     <symlink link="${war.dir}/js" resource="${resources.dir}/js"
              overwrite="Yes" />
-    <symlink link="${classes.dir}/dma" resource="${resources.dir}/dma"
-             overwrite="Yes" />
+    <symlink link="${classes.dir}/dma" resource="dma" overwrite="Yes" />
   </target>
 
   <target name="prepare-windows" depends="prepare-general"
