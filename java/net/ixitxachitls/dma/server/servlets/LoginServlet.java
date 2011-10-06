@@ -104,7 +104,9 @@ public class LoginServlet extends ActionServlet
     String username = inRequest.getParam("username");
     String password = inRequest.getParam("password");
 
-    System.out.println(username + ": " + inRequest.getUsers());
+    if(username == null || password == null)
+      return "No username or no password given";
+
     BaseCharacter user = inRequest.getUsers().get(username);
 
     if(user == null)

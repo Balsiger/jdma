@@ -432,7 +432,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     // now the path is clear to write the file
     // open the output file
     FileWriter writer = null;
-    boolean result;
+    boolean result = false;
     try
     {
       writer = new FileWriter(Files.concatenate(m_path, m_name));
@@ -449,7 +449,8 @@ public class DMAFile //implements Storage<AbstractEntry>
     {
       try
       {
-        writer.close();
+        if(writer != null)
+          writer.close();
       }
       catch(java.io.IOException e)
       {

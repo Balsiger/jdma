@@ -80,8 +80,7 @@ util.ajax = function(inURL, inValues, inFunction, inEval)
     data += key + '=' + encodeURIComponent(inValues[key]) + '\n';
 
   request.open('POST', inURL, inFunction !=  null);
-  request.setRequestHeader('Content-Type',
-                           'application/x-www-form-urlencoded');
+  request.setRequestHeader('Content-Type', 'application/octet-stream');
 
   request.send(data);
   if(!inFunction)
