@@ -249,7 +249,7 @@
       </fileset>
     </copy>
     <copy todir="${classes.dir}/dma" flatten="false">
-      <fileset dir="${resources.dir}/dma">
+      <fileset dir="dma">
         <include name="**/*.dma" />
       </fileset>
     </copy>
