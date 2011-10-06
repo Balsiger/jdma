@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.util.Collections;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -171,17 +172,13 @@ public class LoginServlet extends ActionServlet
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
 
-      BaseCharacter character =
-          new BaseCharacter("somebody",
-                            new net.ixitxachitls.dma.data.DMAData("path"));
-        character.setPassword("secret");
-      Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
+      Map<String, BaseCharacter> users = Collections.emptyMap();
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("");
-      EasyMock.expect(request.getParam("username")).andReturn(null);
-      EasyMock.expect(request.getParam("password")).andReturn(null);
+      EasyMock.expect(request.getParam("username")).andReturn("sombody");
+      EasyMock.expect(request.getParam("password")).andReturn("sompassword");
       EasyMock.expect(request.getUsers()).andReturn(users);
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
@@ -194,10 +191,7 @@ public class LoginServlet extends ActionServlet
       servlet.doPost(request, response);
       assertEquals("post", "Invalid username or password!", output.toString());
 
-      m_logger.addExpected("WARNING: base base character 'somebody' not found");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/somebody.dma'");
-      m_logger.addExpected("WARNING: invalid username 'null'");
+      m_logger.addExpected("WARNING: invalid username 'sombody'");
       EasyMock.verify(request, response);
     }
 
@@ -218,10 +212,7 @@ public class LoginServlet extends ActionServlet
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
 
-      BaseCharacter character =
-          new BaseCharacter("somebody",
-                            new net.ixitxachitls.dma.data.DMAData("path"));
-        character.setPassword("secret");
+      BaseCharacter character = EasyMock.createMock(BaseCharacter.class);
       Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
@@ -242,10 +233,6 @@ public class LoginServlet extends ActionServlet
       servlet.doPost(request, response);
       assertEquals("post", "Invalid username or password!", output.toString());
 
-      m_logger.addExpected("WARNING: base base character 'somebody' not found");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/somebody.dma'");
-      m_logger.addExpected("WARNING: login for 'somebody' with wrong password");
       m_logger.addExpected("WARNING: invalid password for 'somebody'");
       EasyMock.verify(request, response);
     }
@@ -266,12 +253,9 @@ public class LoginServlet extends ActionServlet
         EasyMock.createMock(HttpServletResponse.class);
       MockServletOutputStream output = new MockServletOutputStream();
 
-      BaseCharacter character =
-          new BaseCharacter("somebody",
-                            new net.ixitxachitls.dma.data.DMAData("path"));
-        character.setPassword("secret");
+      BaseCharacter character = EasyMock.createMock(BaseCharacter.class);
       Map<String, BaseCharacter> users = com.google.common.collect.ImmutableMap.of("somebody", character);
-
+      
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())
         .andReturn("username=somebody&password=secret").anyTimes();
@@ -279,22 +263,20 @@ public class LoginServlet extends ActionServlet
       EasyMock.expect(request.getParam("username")).andReturn("somebody");
       EasyMock.expect(request.getParam("password")).andReturn("secret");
       EasyMock.expect(request.getUsers()).andReturn(users);
+      EasyMock.expect(character.login("somebody", "secret")).andReturn("shdfkjh");
       response.setHeader("Content-Type", "text/javascript");
       response.setHeader("Cache-Control", "max-age=0");
       response.addCookie(EasyMock.isA(Cookie.class));
       response.addCookie(EasyMock.isA(Cookie.class));
       EasyMock.expect(response.getOutputStream()).andReturn(output);
 
-      EasyMock.replay(request, response);
+      EasyMock.replay(request, response, character);
 
       LoginServlet servlet = new LoginServlet();
 
       servlet.doPost(request, response);
       assertEquals("post", "", output.toString());
 
-      m_logger.addExpected("WARNING: base base character 'somebody' not found");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/somebody.dma'");
       EasyMock.verify(request, response);
     }
 
