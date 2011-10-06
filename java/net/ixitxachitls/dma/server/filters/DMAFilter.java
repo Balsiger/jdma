@@ -73,7 +73,7 @@ public class DMAFilter implements Filter
    */
   public DMAFilter()
   {
-    m_users = DMAData.getBaseData().getEntries(BaseCharacter.TYPE);
+    m_users = DMAData.createBaseData().getEntries(BaseCharacter.TYPE);
   }
 
   //........................................................................

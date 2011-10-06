@@ -225,8 +225,23 @@ public class DMAData implements Serializable
    * @return      the repository with all the base data
    *
    */
-  public static @Nonnull DMAData getBaseData()
+  public @Nonnull DMAData getBaseData()
   {
+    return this;
+  }
+
+  //........................................................................
+  //--------------------------- createBaseData ----------------------------
+
+  /**
+   * Get the base data for entries.
+   *
+   * @return      the repository with all the base data
+   *
+   */
+  public static @Nonnull DMAData createBaseData()
+  {
+    // new Throwable().printStackTrace();
     if(s_singleton == null) {
       synchronized(DMAData.class) {
         if(s_singleton == null) {

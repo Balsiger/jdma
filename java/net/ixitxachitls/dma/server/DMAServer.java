@@ -126,7 +126,7 @@ public class DMAServer extends WebServer
     super(inHost, inPort);
 
     // determine which base files to read
-    m_baseData = DMAData.getBaseData();
+    m_baseData = DMAData.createBaseData();
 
 //     java.util.Date start = new java.util.Date();
 

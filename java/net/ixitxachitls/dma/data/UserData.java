@@ -90,6 +90,21 @@ public class UserData extends DMAData
 
   //-------------------------------------------------------------- accessors
 
+  //----------------------------- getBaseData ------------------------------
+
+  /**
+   * Get the base data for entries.
+   *
+   * @return      the repository with all the base data
+   *
+   */
+  public @Nonnull DMAData getBaseData()
+  {
+    return m_base;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
