@@ -208,7 +208,7 @@
     <module name="SuppressionCommentFilter"/>
 
     <module name="SuppressionFilter">
-      <property name="file" value="lib/build/suppressions.xml"/>
+      <property name="file" value="${basedir}/lib/build/suppressions.xml"/>
     </module>
 
 </module>
