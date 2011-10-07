@@ -153,14 +153,23 @@ public class DMAFilter implements Filter
                        @Nonnull FilterChain inChain)
     throws ServletException, IOException
   {
-    ServletRequest request = inRequest;
-    if(!(inRequest instanceof DMARequest)
-       && inRequest instanceof HttpServletRequest)
-      request = new DMARequest
-        ((HttpServletRequest)inRequest,
-         ServerUtils.extractParams((HttpServletRequest)inRequest), m_users);
+    if(inRequest instanceof HttpServletRequest)
+    {
+      HttpServletRequest request = (HttpServletRequest)inRequest;
 
-    inChain.doFilter(request, inResponse);
+      // we don't want to interfere with the remote api
+      if(!"/remote_api".equals(request.getServletPath()))
+      {
+        if(!(inRequest instanceof DMARequest))
+          request = new DMARequest
+            ((HttpServletRequest)inRequest,
+             ServerUtils.extractParams((HttpServletRequest)inRequest), m_users);
+      }
+
+      inChain.doFilter(request, inResponse);
+    }
+    else
+      inChain.doFilter(inRequest, inResponse);
   }
 
   //........................................................................

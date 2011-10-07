@@ -145,6 +145,8 @@
     <fileset dir="${gae.dir}/lib">
       <include name="shared/**/*.jar" />
     </fileset>
+    <pathelement location="${lib.dir}/appengine-remote-api.jar" />
+    <pathelement location="${lib.dir}/appengine-api.jar" />
   </path>
 
   <!-- define also as property for printing -->
@@ -204,6 +206,11 @@
         <include name="**/*.jpeg" />
       </fileset>
     </copy>
+    <copy todir="${classes.dir}/dma" flatten="false">
+      <fileset dir="dma">
+        <include name="**/*.dma" />
+      </fileset>
+    </copy>
   </target>
 
   <target name="prepare-non-windows" depends="prepare-general"
@@ -217,7 +224,6 @@
              overwrite="Yes" />
     <symlink link="${war.dir}/js" resource="${resources.dir}/js"
              overwrite="Yes" />
-    <symlink link="${classes.dir}/dma" resource="dma" overwrite="Yes" />
   </target>
 
   <target name="prepare-windows" depends="prepare-general"
@@ -245,11 +251,6 @@
     <copy todir="${war.dir}/js" flatten="false">
       <fileset dir="${resources.dir}/js">
         <include name="**/*.js" />
-      </fileset>
-    </copy>
-    <copy todir="${classes.dir}/dma" flatten="false">
-      <fileset dir="dma">
-        <include name="**/*.dma" />
       </fileset>
     </copy>
   </target>
