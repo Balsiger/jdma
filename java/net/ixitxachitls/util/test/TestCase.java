@@ -266,6 +266,14 @@ public class TestCase extends org.junit.Assert
    * Setup the test for the next test case. This is called before each
    * test method.
    *
+   * If the tests are run under Windows OS, the line.separator will be
+   * set to the linux default '\n' instead of the windows default '\r\n'.
+   * Otherwise following code will fail:
+   * <pre>
+   *      PrintWriter writer = new PrintWriter();
+   *      writer.println("test line 1");
+   *      assertEquals("contents","test line 1\n",writer.toString())
+   * </pre>
    */
   @org.junit.Before
   public void setUpTest()
