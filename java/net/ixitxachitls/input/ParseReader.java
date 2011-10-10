@@ -2012,13 +2012,14 @@ public class ParseReader
       catch(java.io.FileNotFoundException e)
       { /* nothing to do */ }
 
+      File temp = null;
       try
       {
-        File temp = File.createTempFile("test", "file");
+        temp = File.createTempFile("test", "file");
 
         reader.open(temp.getPath());
 
-        assertTrue(temp.delete());
+
       }
       catch(java.io.FileNotFoundException e)
       {
@@ -2030,6 +2031,7 @@ public class ParseReader
       }
 
       reader.close();
+      assertTrue(temp.delete());
 
       reader.open(new java.io.StringReader("$"), "test");
 
@@ -2184,6 +2186,7 @@ public class ParseReader
         assertEquals("not correctly expected", true, reader.expect("<!--"));
 
         writer.close();
+        reader.close();
         assertTrue(temp.delete());
       }
       catch(java.io.IOException e)
@@ -2201,10 +2204,11 @@ public class ParseReader
     public void empty()
     {
       File file = null;
+      ParseReader reader = null;
       try
       {
         file = File.createTempFile("test", ".guru");
-        ParseReader reader = new ParseReader(file.getPath());
+        reader = new ParseReader(file.getPath());
 
         reader.readChar();
         fail("reading should have failed");
@@ -2215,7 +2219,10 @@ public class ParseReader
       { /* nothing to do */ }
       catch(java.io.IOException e)
       { /* nothing to do */ }
-
+      finally
+      {
+        reader.close();
+      }
       if(file != null)
         assertTrue(file.delete());
     }
