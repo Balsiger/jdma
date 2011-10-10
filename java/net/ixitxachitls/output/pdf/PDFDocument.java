@@ -411,10 +411,11 @@ public class PDFDocument extends ITextDocument
               .Left("This is just some test file"));
 
       java.io.BufferedReader reader = null;
+      java.io.File tmp = null;
       try
       {
         // save to a temp file
-        java.io.File tmp = java.io.File.createTempFile("test", "file");
+        tmp = java.io.File.createTempFile("test", "file");
 
         assertTrue("save", doc.save(tmp.getPath()));
 
@@ -426,12 +427,12 @@ public class PDFDocument extends ITextDocument
         assertNotNull(line);
         assertEquals("text", "%", line.substring(0, 1));
 
-        assertTrue("delete", tmp.delete());
       }
       finally
       {
         reader.close();
       }
+      assertTrue("delete", tmp.delete());
     }
 
     //......................................................................
