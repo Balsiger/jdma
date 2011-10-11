@@ -103,11 +103,10 @@
     <Bug pattern="MTIA_SUSPECT_SERVLET_INSTANCE_FIELD" />
   </Match>
 
- <!-- ignore errors in jetty -->
   <Match>
-    <Class name="~org\.eclipse\.jetty\..*" />
+    <Class name="~net\.ixitxachitls\.dma\.server\.Exporter.*" />
+    <Bug pattern="DLS_DEAD_LOCAL_STORE" />
   </Match>
-
 
 </FindBugsFilter>
 

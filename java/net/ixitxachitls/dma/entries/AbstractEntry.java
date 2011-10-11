@@ -1405,7 +1405,6 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-
   //----------------------------- formatValues -----------------------------
 
   /**
@@ -2740,6 +2739,9 @@ public class AbstractEntry extends ValueGroup
     AbstractType<? extends AbstractEntry> baseType = getType();
     if(baseType instanceof Type)
       baseType = ((Type)baseType).getBaseType();
+    else
+      if(inName.equals(getName()))
+        return;
 
     if(m_baseNames == null)
     {

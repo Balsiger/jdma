@@ -432,22 +432,22 @@ public abstract class AbstractType<T extends AbstractEntry>
     catch(java.lang.NoSuchMethodException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
-                + m_class + "]: " + e);
+                + m_class + "]: " + e + " / " + e.getCause());
     }
     catch(java.lang.reflect.InvocationTargetException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
-                + m_class + "]: " + e);
+                + m_class + "]: " + e + " / " + e.getCause());
     }
     catch(java.lang.InstantiationException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
-                + m_class + "]: " + e);
+                + m_class + "]: " + e + " / " + e.getCause());
     }
     catch(java.lang.IllegalAccessException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
-                + m_class + "]: " + e);
+                + m_class + "]: " + e + " / " + e.getCause());
     }
 
     return null;

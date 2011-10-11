@@ -23,20 +23,20 @@
 
 package net.ixitxachitls.dma.server;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
@@ -46,18 +46,18 @@ import net.ixitxachitls.util.logging.Log;
 //------------------------------------------------------------------- header
 
 /**
- * A utility to import dma entries into the app engine data store.
+ * A utility to export dma entries into the app engine data store.
  *
  * Useage:
  *
- * java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma
+ * java net.ixitxachitls.dma.server.Exporter file.dma
  * -t "base character" -h jdmaixit.appspot.com -p 443
  * -u balsiger@ixitxachitls.net
  *
- * Adds base characters from the Ixitxachitls.dma file to the cloud store
+ * Exports base  characters from the datastore to file file.dma
  * (leave out host and port for local storage).
  *
- * @file          Importer.java
+ * @file          Exporter.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -67,17 +67,17 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-public final class Importer
+public final class Exporter
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Importer -------------------------------
+  //------------------------------- Exporter -------------------------------
 
   /**
    * Prevent instantiation.
    *
    */
-  private Importer()
+  private Exporter()
   {
     // nothing to do
   }
@@ -111,7 +111,7 @@ public final class Importer
   //--------------------------------- main ---------------------------------
 
   /**
-   * Main routine for the importer utility.
+   * Main routine for the exporter utility.
    *
    * @param    inArguments the command line arguments
    *
@@ -133,13 +133,14 @@ public final class Importer
        ("u", "username", "The username to connect with.",
         "balsiger@ixitxachitls.net"),
        new CommandLineParser.StringOption
-       ("t", "type", "The type of entries to import.", ""));
+       ("t", "type", "The type of entries to export.", ""));
 
-    String files = clp.parse(inArguments);
+    String file = clp.parse(inArguments);
 
-    String password = new String(System.console().readPassword
-                                 ("password for " + clp.getString("username")
-                                  + ": "));
+    String password =
+      new String(System.console().readPassword("password for "
+                                               + clp.getString("username")
+                                               + ": "));
 
     RemoteApiOptions options = new RemoteApiOptions()
       .server(clp.getString("host"), clp.getInteger("port"))
@@ -149,15 +150,15 @@ public final class Importer
     installer.install(options);
 
     // read the dma files
-    DMAData data = new DMAData("");
-    for(String file : files.split(",\\s*"))
-      data.addFile(file);
+    DMAData data = new DMAData("./");
+    data.addFile(file);
+    DMAFile dmaFile = data.getFile(file);
 
-    if(!data.read())
-    {
-      Log.error("cannot properly read data file");
-      return;
-    }
+    // in order to actually have the proper types defined, we need to
+    // reference them...
+    // TODO: can we somehow get rid of that?
+    AbstractType<? extends AbstractEntry> dummy =
+      net.ixitxachitls.dma.entries.BaseCharacter.TYPE;
 
     AbstractType<? extends AbstractEntry> type =
       AbstractType.get(clp.getString("type"));
@@ -171,23 +172,34 @@ public final class Importer
     try
     {
       DatastoreService store = DatastoreServiceFactory.getDatastoreService();
+      Log.important("reading entities from datastore");
 
-      List<Entity> entities = new ArrayList<Entity>();
-      for(AbstractEntry entry : data.getEntriesList(type))
+      Query query = new Query(type.toString());
+      for(Entity entity : store.prepare(query).asIterable
+            (FetchOptions.Builder.withChunkSize(100)))
       {
-        Entity entity = new Entity(entry.getType().toString(), entry.getID());
-        for(Map.Entry<String, Value> value : entry.getAllValues().entrySet())
-          entity.setProperty(value.getKey(), value.getValue().toString());
+        Log.important("converting entity " + entity.getKey());
+        String id = (String)entity.getProperty("_id");
 
-        // speciall treat id and type
-        entity.setProperty("_id", entry.getID());
-        entity.setProperty("_type", entry.getType().toString());
-        entities.add(entity);
-        Log.important("importing " + type + " " + entry.getName());
+        if(id == null)
+        {
+          Log.warning("id not found, ignoring entity " + entity);
+          continue;
+        }
+
+        assert type.toString().equals(entity.getProperty("_type"));
+
+        AbstractEntry entry = type.create(id, data);
+
+        for(Map.Entry<String, Object> property
+              : entity.getProperties().entrySet())
+          entry.set(property.getKey(), (String)property.getValue());
+
+        dmaFile.add(entry);
       }
 
-      Log.important("storing entities in datastore");
-      store.put(entities);
+      if(!data.save())
+        Log.error("could not write file '" + file + "'");
     }
     finally
     {
