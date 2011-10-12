@@ -34,6 +34,7 @@ import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -172,6 +173,7 @@ public final class Exporter
     try
     {
       DatastoreService store = DatastoreServiceFactory.getDatastoreService();
+      DMADatastore dmaStore = new DMADatastore();
       Log.important("reading entities from datastore");
 
       Query query = new Query(type.toString());
@@ -179,22 +181,13 @@ public final class Exporter
             (FetchOptions.Builder.withChunkSize(100)))
       {
         Log.important("converting entity " + entity.getKey());
-        String id = (String)entity.getProperty("_id");
+        AbstractEntry entry = dmaStore.convert(entity);
 
-        if(id == null)
+        if(entry == null)
         {
-          Log.warning("id not found, ignoring entity " + entity);
+          Log.warning("could not convert " + entity);
           continue;
         }
-
-        assert type.toString().equals(entity.getProperty("_type"));
-
-        AbstractEntry entry = type.create(id, data);
-
-        for(Map.Entry<String, Object> property
-              : entity.getProperties().entrySet())
-          entry.set(property.getKey().replaceAll("_", " "),
-                    (String)property.getValue());
 
         dmaFile.add(entry);
       }

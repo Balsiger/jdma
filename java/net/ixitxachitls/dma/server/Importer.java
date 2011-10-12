@@ -34,6 +34,7 @@ import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.values.Value;
@@ -171,19 +172,12 @@ public final class Importer
     try
     {
       DatastoreService store = DatastoreServiceFactory.getDatastoreService();
+      DMADatastore dmaStore = new DMADatastore();
 
       List<Entity> entities = new ArrayList<Entity>();
       for(AbstractEntry entry : data.getEntriesList(type))
       {
-        Entity entity = new Entity(entry.getType().toString(), entry.getID());
-        for(Map.Entry<String, Value> value : entry.getAllValues().entrySet())
-          entity.setProperty(value.getKey().replace(" ", "_"),
-                             value.getValue().toString());
-
-        // speciall treat id and type
-        entity.setProperty("_id", entry.getID());
-        entity.setProperty("_type", entry.getType().toString());
-        entities.add(entity);
+        entities.add(dmaStore.convert(entry));
         Log.important("importing " + type + " " + entry.getName());
       }
 
