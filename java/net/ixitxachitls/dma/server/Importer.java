@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.server;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -37,7 +36,6 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
@@ -102,9 +100,6 @@ public final class Importer
 
   //------------------------------------------------- other member functions
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
   //........................................................................
 
   //--------------------------------------------------------- main/debugging
