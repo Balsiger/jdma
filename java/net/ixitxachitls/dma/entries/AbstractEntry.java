@@ -2941,6 +2941,26 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //--------------------------------- save ---------------------------------
+
+  /**
+   * Save the entry if it has been changed.
+   *
+   * @return      true if saved, false if not
+   *
+   */
+  public boolean save()
+  {
+    if(!m_changed)
+      return false;
+
+    if(m_file != null)
+      m_file.write();
+
+    return m_data.save(this);
+  }
+
+  //........................................................................
 
   //........................................................................
 

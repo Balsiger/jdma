@@ -193,7 +193,8 @@ public final class Exporter
 
         for(Map.Entry<String, Object> property
               : entity.getProperties().entrySet())
-          entry.set(property.getKey(), (String)property.getValue());
+          entry.set(property.getKey().replaceAll("_", " "),
+                    (String)property.getValue());
 
         dmaFile.add(entry);
       }

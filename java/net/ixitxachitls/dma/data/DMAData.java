@@ -68,6 +68,19 @@ public class DMAData implements Serializable
   //------------------------------- DMAData --------------------------------
 
   /**
+   * Constructor for derivations.
+   *
+   */
+  protected DMAData()
+  {
+    // nothing to do here
+  }
+
+  //........................................................................
+
+  //------------------------------- DMAData --------------------------------
+
+  /**
    * Create the data repository with the given files.
    *
    * @param       inPath  the base path to all files
@@ -248,22 +261,29 @@ public class DMAData implements Serializable
       {
         if(s_singleton == null)
         {
-          // TODO: this is risky, since we might return the data before it's
-          // actually read, but if we wait here, we end up requesting it (and
-          // rereading it while reading the files below. Since this will go
-          // away, this should do for now.
-          s_singleton = new DMAData(Config.get("web.dma.data", "dma"));
-          String dirs =
-            Config.get("web.dma.files",
-                       "BaseProducts, BaseProducts/DnD, BaseProducts/Novels, "
-                       + "BaseProducts/Magazines, BaseCharacters, "
-                       + "BaseCampaigns");
-          Log.info("reading base data for " + dirs);
-          for(String baseDir : dirs.split(",\\s*"))
-            s_singleton.addAllFiles(baseDir);
+          if(Config.get("web.data.datastore", true))
+          {
+            s_singleton = new DMADatastore();
+          }
+          else
+          {
+            // TODO: this is risky, since we might return the data before it's
+            // actually read, but if we wait here, we end up requesting it (and
+            // rereading it while reading the files below. Since this will go
+            // away, this should do for now.
+            s_singleton = new DMAData(Config.get("web.dma.data", "dma"));
+            String dirs =
+              Config.get("web.dma.files",
+                         "BaseProducts, BaseProducts/DnD, BaseProducts/Novels, "
+                         + "BaseProducts/Magazines, BaseCharacters, "
+                         + "BaseCampaigns");
+            Log.info("reading base data for " + dirs);
+            for(String baseDir : dirs.split(",\\s*"))
+              s_singleton.addAllFiles(baseDir);
 
-          if(!s_singleton.read())
-            Log.error("Could not properly base data files!");
+            if(!s_singleton.read())
+              Log.error("Could not properly read base data files!");
+          }
         }
       }
     }
@@ -484,6 +504,23 @@ public class DMAData implements Serializable
   }
 
   //........................................................................
+  //--------------------------------- save ---------------------------------
+
+  /**
+   * Save the given entry.
+   *
+   * @param       inEntry the entry to save
+   *
+   * @return      true if saved, false if not
+   *
+   */
+  public boolean save(@Nonnull AbstractEntry inEntry)
+  {
+    return false;
+  }
+
+  //........................................................................
+
   //------------------------------- addEntry -------------------------------
 
   /**

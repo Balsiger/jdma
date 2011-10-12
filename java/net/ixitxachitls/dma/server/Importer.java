@@ -177,7 +177,8 @@ public final class Importer
       {
         Entity entity = new Entity(entry.getType().toString(), entry.getID());
         for(Map.Entry<String, Value> value : entry.getAllValues().entrySet())
-          entity.setProperty(value.getKey(), value.getValue().toString());
+          entity.setProperty(value.getKey().replace(" ", "_"),
+                             value.getValue().toString());
 
         // speciall treat id and type
         entity.setProperty("_id", entry.getID());

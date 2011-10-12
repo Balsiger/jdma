@@ -457,8 +457,8 @@ public class BaseCharacter extends BaseEntry
     *              username is wrong
     *
     */
-  public @Nullable String login(@Nullable String inUsername, @
-                                Nullable String inPassword)
+  public @Nullable String login(@Nullable String inUsername,
+                                @Nullable String inPassword)
   {
     if(inUsername == null || inPassword == null)
       return null;
@@ -487,9 +487,7 @@ public class BaseCharacter extends BaseEntry
 
     // make sure the current file is stored now
     changed();
-
-    if(m_file != null)
-      m_file.write();
+    save();
 
     return token;
   }
@@ -672,7 +670,6 @@ public class BaseCharacter extends BaseEntry
   }
 
   //........................................................................
-
 
   //........................................................................
 

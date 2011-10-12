@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.logging.Log;
 
@@ -108,7 +109,8 @@ public class LoginServlet extends ActionServlet
     if(username == null || password == null)
       return "No username or no password given";
 
-    BaseCharacter user = inRequest.getUsers().get(username);
+    BaseCharacter user =
+      DMAData.createBaseData().getEntry(username, BaseCharacter.TYPE);
 
     if(user == null)
     {

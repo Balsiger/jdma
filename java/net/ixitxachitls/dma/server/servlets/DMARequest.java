@@ -40,6 +40,7 @@ import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
@@ -514,7 +515,8 @@ public class DMARequest extends HttpServletRequestWrapper
 
     if(user != null && token != null && m_users != null)
     {
-      m_user = m_users.get(user);
+      m_user =
+        DMAData.createBaseData().getEntry(user, BaseCharacter.TYPE);
 
       if(m_user != null)
         if(m_user.checkToken(token))
