@@ -161,8 +161,6 @@ public class FormattedValue extends ValueHandle
 
       assertEquals("value", "value", formatted.value(entry, true));
       assertEquals("formatted", "formatted", formatted.formatted(entry, true));
-
-      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................

@@ -181,8 +181,6 @@ public class ListPrint extends AbstractPrint
                    + "\\title[entrytitle]"
                    + "{test}]",
                    print.print("key", entry, true).toString());
-
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

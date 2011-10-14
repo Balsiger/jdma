@@ -706,8 +706,6 @@ public class EntryServlet extends PageServlet
                    + "    </SCRIPT>\n",
                    m_output.toString());
       assertContent("paths", m_paths, "/baseentry/guru");
-
-      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................
@@ -837,8 +835,6 @@ public class EntryServlet extends PageServlet
                    m_output.toString());
       assertContent("paths", m_paths,
                     "/baseentry/guru", "/baseentry/guru", "/baseentry/guru");
-
-      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................
@@ -922,9 +918,6 @@ public class EntryServlet extends PageServlet
       assertEquals("path", "id",
                    servlet.getPath(new net.ixitxachitls.dma.entries.BaseEntry
                                    ("id", new DMAData.Test.Data())));
-
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
-      m_logger.addExpected("WARNING: base base entry 'id' not found");
     }
 
     //......................................................................
@@ -966,12 +959,6 @@ public class EntryServlet extends PageServlet
       assertEquals("next", two, servlet.getPrevious(data, "further-2", type));
       assertEquals("next", three, servlet.getPrevious(data, "further-3", type));
       assertEquals("next", four, servlet.getPrevious(data, "last", type));
-
-      m_logger.addExpected("WARNING: base base entry 'first' not found");
-      m_logger.addExpected("WARNING: base base entry 'further-1' not found");
-      m_logger.addExpected("WARNING: base base entry 'further-2' not found");
-      m_logger.addExpected("WARNING: base base entry 'further-3' not found");
-      m_logger.addExpected("WARNING: base base entry 'last' not found");
     }
 
     //......................................................................

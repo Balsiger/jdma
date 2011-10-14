@@ -32,6 +32,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -119,7 +120,7 @@ public class DMAServer extends WebServer
 
     // determine which base files to read
     Config.set("web.data.datastore", false);
-    m_baseData = DMAData.createBaseData();
+    m_baseData = DMADataFactory.getBaseData();
 
 //     java.util.Date start = new java.util.Date();
 

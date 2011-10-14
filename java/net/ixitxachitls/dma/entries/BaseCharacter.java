@@ -722,7 +722,6 @@ public class BaseCharacter extends BaseEntry
       assertFalse("token", character.m_token.isDefined());
       assertFalse("group", character.m_group.isDefined());
 
-      m_logger.addExpected("WARNING: base base character 'Me' not found");
       m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
     }
 
@@ -749,7 +748,6 @@ public class BaseCharacter extends BaseEntry
       assertFalse("check", character.checkToken(token));
       assertFalse("check", character.checkToken(token2));
 
-      m_logger.addExpected("WARNING: base base character 'Me' not found");
       m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
     }
 
@@ -781,7 +779,6 @@ public class BaseCharacter extends BaseEntry
       assertTrue("last action", character.m_lastAction.isDefined());
       assertTrue("token", character.m_token.isDefined());
 
-      m_logger.addExpected("WARNING: base base character 'Me' not found");
       m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
       m_logger.addExpected("WARNING: login with unknown user 'name'");
       m_logger.addExpected("WARNING: login for 'user' with wrong password");
@@ -867,7 +864,6 @@ public class BaseCharacter extends BaseEntry
       assertTrue("dm", character.hasAccess(Group.DM));
       assertTrue("admin", character.hasAccess(Group.ADMIN));
 
-      m_logger.addExpected("WARNING: base base character 'Me' not found");
       m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
     }
 

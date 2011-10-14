@@ -313,8 +313,6 @@ public class EntryPDFServlet extends PDFServlet
       assertEquals("content", "%PDF-1.4\n%",
                    m_output.toString().substring(0, 10));
       assertContent("paths", m_paths, "/baseentry/guru");
-
-      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................
@@ -378,8 +376,6 @@ public class EntryPDFServlet extends PDFServlet
       assertNull("entry", servlet.getEntry(""));
       assertNull("entry", servlet.getEntry("test/"));
       assertNull("entry", servlet.getEntry("test/guru"));
-
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

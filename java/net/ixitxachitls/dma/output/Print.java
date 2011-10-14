@@ -179,8 +179,6 @@ public class Print extends AbstractPrint
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, true)).getArguments()
                    .toString());
-
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

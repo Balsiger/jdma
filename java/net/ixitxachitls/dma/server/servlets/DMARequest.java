@@ -27,8 +27,6 @@ package net.ixitxachitls.dma.server.servlets;
 // import java.io.InputStreamReader;
 // import java.net.URLDecoder;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,6 +39,7 @@ import com.google.common.collect.Multimap;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
@@ -76,19 +75,17 @@ public class DMARequest extends HttpServletRequestWrapper
    *
    * @param       inRequest the request to be wrapped
    * @param       inParams  the parameters to the request (URL & post)
-   * @param       inUsers the users available in the system
    *
    */
 //    * @param       inCampaigns the campaigns
   public DMARequest(@Nonnull HttpServletRequest inRequest,
-                    @Nonnull Multimap<String, String> inParams,
-                    @Nonnull Map<String, BaseCharacter> inUsers
+                    @Nonnull Multimap<String, String> inParams
                     /*, Campaign inCampaigns*/)
   {
     super(inRequest);
 
     m_params = inParams;
-    m_users = inUsers;
+    m_base = DMADataFactory.getBaseData();
 //     m_campaigns = inCampaigns;
 
     extractUser(inRequest);
@@ -106,8 +103,8 @@ public class DMARequest extends HttpServletRequestWrapper
   /** The URL and post parameters. */
   private @Nonnull Multimap<String, String> m_params;
 
-  /** The base campaign with all the users. */
-  private @Nonnull Map<String, BaseCharacter> m_users;
+  /** All the base data. */
+  private @Nonnull DMAData m_base;
 
   /** The campaign containing all campaigns. */
 //   private Campaign m_campaigns = null;
@@ -407,20 +404,6 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   //........................................................................
-  //------------------------------- getUsers --------------------------------
-
-  /**
-   * Get the users available in the system.
-   *
-   * @return the currently logged in user
-   *
-   */
-  public @Nonnull Map<String, BaseCharacter> getUsers()
-  {
-    return m_users;
-  }
-
-  //........................................................................
   //------------------------------- getUser --------------------------------
 
   /**
@@ -513,10 +496,9 @@ public class DMARequest extends HttpServletRequestWrapper
             token = cookie.getValue();
       }
 
-    if(user != null && token != null && m_users != null)
+    if(user != null && token != null)
     {
-      m_user =
-        DMAData.createBaseData().getEntry(user, BaseCharacter.TYPE);
+      m_user = m_base.getEntry(user, BaseCharacter.TYPE);
 
       if(m_user != null)
         if(m_user.checkToken(token))
@@ -527,7 +509,7 @@ public class DMARequest extends HttpServletRequestWrapper
 
     String override = getParam("user");
     if(override != null)
-      m_userOverride = m_users.get(override);
+      m_userOverride = m_base.getEntry(override, BaseCharacter.TYPE);
   }
 
   //........................................................................
@@ -610,13 +592,26 @@ public class DMARequest extends HttpServletRequestWrapper
 
   //........................................................................
 
-  //........................................................................
-
   //------------------------------------------------------------------- test
 
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    /** Setup before tests. */
+    @org.junit.Before
+    public void setUp()
+    {
+      Config.set("web.data.datastore", false);
+      Config.set("web.data.datafiles", false);
+    }
+
+    /** Cleanup after tests. */
+    @org.junit.After
+    public void tearDown()
+    {
+      DMADataFactory.clearBase();
+    }
+
     //----- init -----------------------------------------------------------
 
     /** The init Test. */
@@ -634,8 +629,7 @@ public class DMARequest extends HttpServletRequestWrapper
       DMARequest request =
         new DMARequest(mockRequest,
                        com.google.common.collect.HashMultimap.
-                       <String, String>create(),
-                       new HashMap<String, BaseCharacter>());
+                       <String, String>create());
 
       assertEquals("page size", def_pageSize, request.getPageSize());
 
@@ -651,6 +645,7 @@ public class DMARequest extends HttpServletRequestWrapper
     {
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
+      DMAData data = DMADataFactory.getBaseData();
 
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
 
@@ -661,20 +656,22 @@ public class DMARequest extends HttpServletRequestWrapper
             new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
           });
 
+      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
+        .andStubReturn(user);
+
       EasyMock.expect(user.checkToken("token")).andReturn(true);
       user.action();
 
-      EasyMock.replay(mockRequest, user);
+      EasyMock.replay(mockRequest, data, user);
 
       DMARequest request =
         new DMARequest(mockRequest,
                        com.google.common.collect.HashMultimap.
-                       <String, String>create(),
-                       com.google.common.collect.ImmutableMap.of("user", user));
+                       <String, String>create());
 
       assertEquals("user", user, request.getUser());
 
-      EasyMock.verify(mockRequest);
+      EasyMock.verify(mockRequest, data, user);
     }
 
     //.....................................................................
@@ -686,6 +683,7 @@ public class DMARequest extends HttpServletRequestWrapper
     {
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
+      DMAData data = DMADataFactory.getBaseData();
 
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
 
@@ -696,20 +694,21 @@ public class DMARequest extends HttpServletRequestWrapper
             new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
           });
 
-      EasyMock.expect(user.checkToken("token")).andReturn(false);
-      user.action();
+      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
+        .andStubReturn(user);
 
-      EasyMock.replay(mockRequest, user);
+      EasyMock.expect(user.checkToken("token")).andReturn(false);
+
+      EasyMock.replay(mockRequest, data, user);
 
       DMARequest request =
         new DMARequest(mockRequest,
                        com.google.common.collect.HashMultimap.
-                       <String, String>create(),
-                       com.google.common.collect.ImmutableMap.of("user", user));
+                       <String, String>create());
 
       assertNull("user", request.getUser());
 
-      EasyMock.verify(mockRequest);
+      EasyMock.verify(mockRequest, data, user);
     }
 
     //......................................................................
@@ -721,6 +720,7 @@ public class DMARequest extends HttpServletRequestWrapper
     {
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
+      DMAData data = DMADataFactory.getBaseData();
 
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       BaseCharacter other = EasyMock.createMock(BaseCharacter.class);
@@ -732,27 +732,30 @@ public class DMARequest extends HttpServletRequestWrapper
             new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
           });
 
+      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
+        .andStubReturn(user);
+      EasyMock.expect(data.getEntry("other", BaseCharacter.TYPE))
+        .andStubReturn(other);
+
       EasyMock.expect(user.checkToken("token")).andReturn(true);
       user.action();
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andReturn(true);
 
-      EasyMock.replay(mockRequest, user, other);
+      EasyMock.replay(mockRequest, data, user, other);
 
       DMARequest request =
         new DMARequest(mockRequest,
                        com.google.common.collect.ImmutableMultimap.of
-                       ("user", "other"),
-                       com.google.common.collect.ImmutableMap.of
-                       ("user", user, "other", other));
+                       ("user", "other"));
 
       assertEquals("user", other, request.getUser());
 
-      EasyMock.verify(mockRequest);
+      EasyMock.verify(mockRequest, data, user, other);
     }
 
     //......................................................................
-    //----- user override --------------------------------------------------
+    //----- user override no admin -----------------------------------------
 
     /** The user Test. */
     @org.junit.Test
@@ -760,34 +763,40 @@ public class DMARequest extends HttpServletRequestWrapper
     {
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
+      DMAData data = DMADataFactory.getBaseData();
 
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       BaseCharacter other = EasyMock.createMock(BaseCharacter.class);
 
-      EasyMock.expect(mockRequest.getCookies()).andReturn
+      EasyMock.expect(mockRequest.getCookies()).andStubReturn
         (new javax.servlet.http.Cookie []
           {
             new Cookie(LoginServlet.COOKIE_USER, "user"),
             new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
           });
 
-      EasyMock.expect(user.checkToken("token")).andReturn(true);
+      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
+        .andStubReturn(user);
+      EasyMock.expect(data.getEntry("other", BaseCharacter.TYPE))
+        .andStubReturn(other);
+
+      EasyMock.expect(user.checkToken("token")).andStubReturn(true);
       user.action();
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andReturn(false);
 
-      EasyMock.replay(mockRequest, user, other);
+      EasyMock.replay(mockRequest, data, user, other);
+
+      data.getEntry("user", BaseCharacter.TYPE);
 
       DMARequest request =
-        new DMARequest(mockRequest,
-                       com.google.common.collect.ImmutableMultimap.of
-                       ("user", "other"),
-                       com.google.common.collect.ImmutableMap.of
-                       ("user", user, "other", other));
+         new DMARequest(mockRequest,
+                        com.google.common.collect.ImmutableMultimap.of
+                        ("user", "other"));
 
       assertEquals("user", user, request.getUser());
 
-      EasyMock.verify(mockRequest);
+      EasyMock.verify(mockRequest, data, user, other);
     }
 
     //......................................................................

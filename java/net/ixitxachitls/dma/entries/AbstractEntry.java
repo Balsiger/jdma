@@ -3235,9 +3235,6 @@ public class AbstractEntry extends ValueGroup
 //       // conversion to string
 //       assertEquals("converted", "abstract entry name =\n\n.\n",
 //                    entry.toString());
-
-      m_logger.addExpected("WARNING: base abstract entry 'just a test' not "
-                           + "found");
     }
 
     //......................................................................
@@ -3438,9 +3435,6 @@ public class AbstractEntry extends ValueGroup
                    + "\n"
                    + "#.....\n",
                    entry.toString());
-
-      m_logger.addExpected("WARNING: base base entry 'just a = test' not "
-                           + "found");
     }
 
     //......................................................................
@@ -3526,8 +3520,6 @@ public class AbstractEntry extends ValueGroup
                    + "base entry test =\n\n.\n"
                    + "# some other text\n",
                    entry.toString());
-
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................

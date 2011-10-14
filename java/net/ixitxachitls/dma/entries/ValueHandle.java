@@ -444,8 +444,6 @@ public abstract class ValueHandle
       handle = new TestHandle("test", true, true, false, false, null, null,
                               "value");
       assertNull("dm only for player", handle.format(entry, false, false));
-
-      m_logger.addExpected("WARNING: base base entry 'test id' not found");
     }
 
     //......................................................................
@@ -474,8 +472,6 @@ public abstract class ValueHandle
       assertEquals("name value",
                    "\\editable{test id}{base entry}{name}{test}{name}{name}",
                    handle.format(entry, true, true).toString());
-
-      m_logger.addExpected("WARNING: base base entry 'test id' not found");
     }
 
     //......................................................................
@@ -501,8 +497,6 @@ public abstract class ValueHandle
                               new net.ixitxachitls.dma.values.Name("name"));
       assertEquals("name value", "name",
                    handle.format(entry, false, true).toString());
-
-      m_logger.addExpected("WARNING: base base entry 'test id' not found");
     }
 
     //......................................................................

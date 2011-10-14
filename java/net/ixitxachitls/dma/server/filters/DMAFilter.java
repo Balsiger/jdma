@@ -24,8 +24,6 @@
 package net.ixitxachitls.dma.server.filters;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.servlet.Filter;
@@ -39,8 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.server.ServerUtils;
 
@@ -73,21 +69,7 @@ public class DMAFilter implements Filter
    */
   public DMAFilter()
   {
-    m_users = DMAData.createBaseData().getEntries(BaseCharacter.TYPE);
-  }
-
-  //........................................................................
-  //------------------------------ DMAFilter ------------------------------
-
-  /**
-   * Create the filter.
-   *
-   * @param inUsers all available users
-   *
-   */
-  public DMAFilter(Map<String, BaseCharacter> inUsers)
-  {
-    m_users = inUsers;
+    // nothing to do here
   }
 
   //........................................................................
@@ -124,10 +106,6 @@ public class DMAFilter implements Filter
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The base campaign with all the users. */
-  private Map<String, BaseCharacter> m_users = null;
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -163,7 +141,7 @@ public class DMAFilter implements Filter
         if(!(inRequest instanceof DMARequest))
           request = new DMARequest
             ((HttpServletRequest)inRequest,
-             ServerUtils.extractParams((HttpServletRequest)inRequest), m_users);
+             ServerUtils.extractParams((HttpServletRequest)inRequest));
       }
 
       inChain.doFilter(request, inResponse);
@@ -195,8 +173,7 @@ public class DMAFilter implements Filter
     @org.junit.Test
     public void filter() throws Exception
     {
-      Map<String, BaseCharacter> users = new HashMap<String, BaseCharacter>();
-      DMAFilter filter = new DMAFilter(users);
+      DMAFilter filter = new DMAFilter();
 
       javax.servlet.ServletInputStream inputStream =
         new MockServletInputStream("");
@@ -209,6 +186,7 @@ public class DMAFilter implements Filter
 
       EasyMock.expect(request.getInputStream()).andReturn(inputStream);
       EasyMock.expect(request.getQueryString()).andReturn("").times(2);
+      EasyMock.expect(request.getServletPath()).andReturn("/");
       EasyMock.expect(request.getCookies()).andReturn
         (new javax.servlet.http.Cookie [0]);
 

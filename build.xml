@@ -99,11 +99,14 @@
     <pathelement location="${classes.dir}" />
     <pathelement location="${resources.dir}" />
     <!-- for testing -->
-    <pathelement location="${lib.dir}/test/junit-4.8.2.jar" />
-    <pathelement location="${lib.dir}/test/cglib-nodep-2.2.jar" />
-    <pathelement location="${lib.dir}/test/objenesis-1.2.jar" />
-    <pathelement location="${lib.dir}/test/easymock-3.0.jar" />
-    <pathelement location="${lib.dir}/test/test.jar" />
+    <pathelement location="${lib.test.dir}/junit-4.8.2.jar" />
+    <pathelement location="${lib.test.dir}/cglib-nodep-2.2.jar" />
+    <pathelement location="${lib.test.dir}/objenesis-1.2.jar" />
+    <pathelement location="${lib.test.dir}/easymock-3.0.jar" />
+    <pathelement location="${lib.test.dir}/test.jar" />
+    <pathelement location="${lib.test.dir}/appengine-api-labs.jar" />
+    <pathelement location="${lib.test.dir}/appengine-api-stubs.jar" />
+    <pathelement location="${lib.test.dir}/appengine-testing.jar" />
     <!-- itext -->
     <!-- not compatible with ujac
     <pathelement location="${lib.dir}/iText-5.0.6.jar" /> -->
@@ -403,6 +406,7 @@
       <jvmarg value="-Demma.coverage.out.merge=true" />
       <classpath>
         <pathelement location="${emma.instr.dir}" />
+        <pathelement location="${lib.dir}/appengine-api.jar" />
         <path refid="emma.classpath" />
         <path refid="classpath" />
       </classpath>

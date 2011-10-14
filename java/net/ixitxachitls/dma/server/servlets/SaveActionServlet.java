@@ -460,7 +460,6 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", "guru", entry.getName());
 
       EasyMock.verify(request, response, user);
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     //......................................................................
@@ -504,7 +503,6 @@ public class SaveActionServlet extends ActionServlet
       assertFalse("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: not allowed to edit name in base entry "
                            + "test");
       EasyMock.verify(request, response, user);
@@ -550,7 +548,6 @@ public class SaveActionServlet extends ActionServlet
       assertFalse("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: could not find base entry guru for "
                            + "saving");
       EasyMock.verify(request, response, user);
@@ -596,7 +593,6 @@ public class SaveActionServlet extends ActionServlet
       assertFalse("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: invalid type 'guru' ignored");
       EasyMock.verify(request, response, user);
     }
@@ -644,7 +640,6 @@ public class SaveActionServlet extends ActionServlet
       assertTrue("saved", data.wasSaved());
       assertEquals("name", "test", entry.getName());
 
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
       m_logger.addExpected("WARNING: Could not fully parse guru value for "
                            + "base entry test: 'guru'");
       EasyMock.verify(request, response, user);
@@ -701,8 +696,6 @@ public class SaveActionServlet extends ActionServlet
       checkChanges(i.next(), "*/Person", "*/Person", null, "/base entry",
                    data, user, "key", "value");
       assertFalse(i.hasNext());
-
-      m_logger.addExpected("WARNING: base base entry 'test' not found");
     }
 
     /** Check assertions for changes.

@@ -533,7 +533,6 @@ public abstract class AbstractType<T extends AbstractEntry>
       assertEquals("multiple link", "baseentry-links", type2.getMultipleLink());
       assertEquals("multiple dir", "ManyMore", type2.getMultipleDir());
       assertEquals("string", "abstract entry", type2.toString());
-      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................

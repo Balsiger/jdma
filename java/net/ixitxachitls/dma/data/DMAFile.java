@@ -755,8 +755,6 @@ public class DMAFile //implements Storage<AbstractEntry>
                    + "\n"
                    + "#.....\n",
                    writer.toString());
-
-      m_logger.addExpected("WARNING: base base entry 'guru' not found");
     }
 
     //......................................................................

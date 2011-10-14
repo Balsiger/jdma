@@ -204,7 +204,6 @@ public class DMADatastore extends DMAData
   public boolean save(@Nonnull AbstractEntry inEntry)
   {
     Entity entity = convert(inEntry);
-    System.out.println("storing: " + entity);
     m_store.put(entity);
 
     return true;
