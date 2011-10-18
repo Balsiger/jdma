@@ -2221,7 +2221,10 @@ public class ParseReader
       { /* nothing to do */ }
       finally
       {
-        reader.close();
+        if (reader != null)
+        {
+          reader.close();
+        }
       }
       if(file != null)
         assertTrue(file.delete());
