@@ -247,6 +247,10 @@ public class FileLogger extends ASCIILogger
                  + "long enough to require wrapping of the lines",
                  Log.Type.INFO);
 
+      //close output stream (prevent windows file lock on temp file)
+      if (file.m_out != null)
+        file.m_out.close();
+
       // constructor with name only
       file = new FileLogger(temp.getPath());
 
@@ -297,6 +301,10 @@ public class FileLogger extends ASCIILogger
           fail("exception " + e);
         }
       }
+
+      //close output stream (prevent windows file lock on temp file)
+      if (file.m_out != null)
+        file.m_out.close();
 
       assertTrue("cleanup", temp.delete());
     }
@@ -352,6 +360,10 @@ public class FileLogger extends ASCIILogger
           (net.ixitxachitls.util.Strings.getPattern(files[0].getPath(),
                                                     "-(\\d\\d).file$"))
           + 60) % 60);
+
+      //close output stream (prevent windows file lock on temp file)
+      if (logger.m_out != null)
+        logger.m_out.close();
 
       // delete the files
       assertTrue("cleanup", temp.delete());

@@ -170,6 +170,10 @@ public class EventLogger extends FileLogger
       {
         if(input != null)
           input.close();
+
+        //close output stream (prevent windows file lock on temp file)
+        if(file.m_out != null)
+          file.m_out.close();
       }
 
       assertTrue("cleanup", temp.delete());
