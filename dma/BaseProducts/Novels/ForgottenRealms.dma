@@ -12482,3 +12482,68 @@ base product WTC 31724 =
   synonyms          "".
 
 #.....
+#----- WTC 31683
+
+base product WTC 31683 =
+
+  title             "Elminster Must Die";
+  leader            "";
+  subtitle          "The Goddess Is Dead";
+  author            "Greenwood, Ed";
+  cover             "Kotaki, Kekai";
+  cartography       "Lazzaretti, Robert";
+  date              June 2011;
+  ISBN13            978-0-7869-5799-6;
+  pages             387;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            8;
+  series            Sage of Shadowdale;
+  price             $7.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description       "For centuries \NPC{Elminster Aumar} served his goddess with the powers she granted him, battling tirelessly against the criminal forces of the \Group{Zhentarim}, the \Group{shadow princes of \Place{Netheril}}, and the ruthless \Group{Red Wizards of \Place{Thay}}, making enemies he never had time to take care of, because the fate of the world always hung on his next move. But now
+                    \large{\center{His Goddess is Dead.}}
+                    His protector --- his lover, his goddess, his meaning and his means --- is gone forever. And now the mere touch of magic renders him mad. His enemies scent weakness. They are closing in, saying with one voice:
+                    \large{\ecnter{\NPC{Elminster} Must Die}}
+                    ";
+  short description "Continuation of the Elminster saga.";
+  synonyms          "".
+
+#.....
+#----- WTC 31682
+
+base product WTC 31682 =
+
+  title             "Spectral Blade";
+  leader            "The";
+  subtitle          "And Then We Remembered...";
+  author            "Byers, Richard Lee";
+  cover             "Kotaki, Kekai";
+  date              June 2011;
+  ISBN13            978-0-7869-5798-9;
+  pages             369;
+  system            None;
+  audience          Player;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book III;
+  series            Brotherhood of the Griffon;
+  price             $7.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description       "The madness of the Rage
+                    changed the face of the world.
+                    \Monster{Dragons} lost their thrones, treasures and knowledge of the Great Game.
+                    But now the Rage is over.
+                    \bold{We are the rightful lords of all \Place{Faer\hat{u}n}.";
+  short description "Closing of the Brotherhood of the Griffon Trilogy.";
+  synonyms          "".
+
+#.....

@@ -20249,3 +20249,25 @@ product WTC 31724 =
   id        VTSG.
 
 #.....
+#----- WTC 31683
+
+product WTC 31683 =
+
+  edition   1st;
+  printing  1st;
+  status    available;
+  condition good "";
+  id        LYLJ.
+
+#.....
+#----- WTC 31682
+
+product WTC 31682 =
+
+  edition   1st;
+  printing  1st;
+  status    available;
+  condition good "";
+  id        OENF.
+
+#.....

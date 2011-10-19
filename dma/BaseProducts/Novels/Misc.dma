@@ -29,10 +29,10 @@ base product TSR 1514 =
   price             $ 5.99;
   contents          Book,
                     Dice "DRAGON DICE die";
+  requirements      ;
   worlds            None;
   references        net;
-  description
-  "Dragon Dice Book, book three".
+  description       "Dragon Dice Book, book three".
 
 
 #.....
@@ -48,11 +48,11 @@ base product TSR 3551P =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -68,11 +68,11 @@ base product TSR 3553 =
   audience          All;
   product type      Novel;
   price             $24.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue94,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -88,11 +88,11 @@ base product TSR 3558P =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -108,12 +108,12 @@ base product TSR 3559P =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalogue94,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -128,12 +128,12 @@ base product TSR 3560P =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalogue94,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -151,11 +151,11 @@ base product TSR 3561 =
   number            Book One;
   series            Inner Planets Trilogy;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalog93;
-  description
-  "Inner Planets Trilogy, book one".
+  description       "Inner Planets Trilogy, book one".
 
 
 #.....
@@ -173,11 +173,11 @@ base product TSR 3564 =
   number            Book Two;
   series            Inner Planets Trilogy;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalog93;
-  description
-  "Inner Planets Trilogy, book two".
+  description       "Inner Planets Trilogy, book two".
 
 
 #.....
@@ -195,12 +195,12 @@ base product TSR 3568 =
   number            Book Three;
   series            Inner Planets Trilogy;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalog91S,
                     catalog93;
-  description
-  "Inner Planets Trilogy, book three".
+  description       "Inner Planets Trilogy, book three".
 
 
 #.....
@@ -218,13 +218,13 @@ base product TSR 3576 =
   number            Volume One;
   series            Invaders of Charon;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog93;
-  description
-  "Invaders of Charon Series, volume one".
+  description       "Invaders of Charon Series, volume one".
 
 
 #.....
@@ -242,14 +242,14 @@ base product TSR 3581 =
   number            Volume Two;
   series            Invaders of Charon;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog92,
                     catalog93;
-  description
-  "Invaders of Charon Series, volume two".
+  description       "Invaders of Charon Series, volume two".
 
 
 #.....
@@ -269,14 +269,14 @@ base product TSR 3585 =
   number            Volume Three;
   series            Invaders of Charon;
   price             $ 3.95;
+  requirements      ;
   worlds            Buck Rogers;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog93W,
                     catalog93;
-  description
-  "Invaders of Charon Series, volume three".
+  description       "Invaders of Charon Series, volume three".
 
 
 #.....
@@ -295,10 +295,10 @@ base product TSR 3590 =
   product type      Novel;
   style             Hardcover;
   price             $19.95;
+  requirements      ;
   worlds            None;
   references        catalogue96;
-  description
-  "authorized biography of Anthony 'Buck' Rogers".
+  description       "authorized biography of Anthony 'Buck' Rogers".
 
 
 #.....
@@ -316,12 +316,12 @@ base product TSR 3590P =
   audience          All;
   product type      Novel;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
   references        catalog96,
                     Dragon 235,
                     Dragon 234;
-  description
-  "authorized biography of Anthony 'Buck' Rogers".
+  description       "authorized biography of Anthony 'Buck' Rogers".
 
 
 #.....
@@ -341,13 +341,13 @@ base product TSR 8035 =
   number            Volume One;
   series            Penhalion Trilogy;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        catalog92,
                     complete product listing,
                     catalog93W,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -367,12 +367,12 @@ base product TSR 8036 =
   number            Volume Two;
   series            Penhalion Trilogy;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        complete product listing,
                     catalog93W,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -392,12 +392,12 @@ base product TSR 8037 =
   number            Volume Three;
   series            Penhalion Trilogy;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        complete product listing,
                     catalog93S,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -418,19 +418,18 @@ base product TSR 8041 =
   product type      Novel;
   style             Paperback;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net,
                     Dragon 236,
                     Dragon 237,
                     Dragon 238;
-  description
-  "\large{It falls one night onto the village of \Place{Aston Point}.}
-
-  When the valiant \Group{Rael} emerge from their crashed starship, the people
-  of \Place{Ashton Point} are drawn into a deadly struggle against the
-  mechanical constructs of the \NPC{Overseer}---and before their adventures are
-  done, they will travel to the stars to match spells against computers and
-  battle-axes against tanks, to save a dozen worlds as innocent as their own.".
+  description       "\large{It falls one night onto the village of \Place{Aston Point}.}
+                    When the valiant \Group{Rael} emerge from their crashed starship, the people
+                    of \Place{Ashton Point} are drawn into a deadly struggle against the
+                    mechanical constructs of the \NPC{Overseer}---and before their adventures are
+                    done, they will travel to the stars to match spells against computers and
+                    battle-axes against tanks, to save a dozen worlds as innocent as their own.".
 
 
 #.....
@@ -449,10 +448,10 @@ base product TSR 8042 =
   product type      Novel;
   style             Hardcover;
   price             $14.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "this novel revisits the site of a classic AD&D game adventure".
+  description       "this novel revisits the site of a classic AD&D game adventure".
 
 
 #.....
@@ -470,10 +469,10 @@ base product TSR 8088 =
   series            New Series,
                     Dragon Strike;
   price             £ 3.99;
+  requirements      ;
   references        catalogue94,
                     catalogue96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -492,10 +491,10 @@ base product TSR 8091 =
   product type      Adventure;
   series            Gamma World;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96;
-  description
-  "300 years after the destruction of civilization".
+  description       "300 years after the destruction of civilization".
 
 
 #.....
@@ -513,10 +512,10 @@ base product TSR 8092 =
   series            New Series,
                     Wildspace;
   price             £ 3.99;
+  requirements      ;
   references        catalogue94,
                     catalogue96;
-  description
-  "New Series, Book five".
+  description       "New Series, Book five".
 
 
 #.....
@@ -535,11 +534,11 @@ base product TSR 8093 =
   series            New Series,
                     Dragon Strike;
   price             $ 3.95;
+  requirements      ;
   references        catalogue94,
                     catalogue96,
                     Dragon 211;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -558,10 +557,10 @@ base product TSR 8098 =
   product type      Adventure;
   series            Amazing Engine;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96;
-  description
-  "a Resistance fighter battles evil alien life-forms".
+  description       "a Resistance fighter battles evil alien life-forms".
 
 
 #.....
@@ -580,11 +579,11 @@ base product TSR 8100 =
   audience          All;
   product type      Adventure;
   price             $ 3.95;
+  requirements      ;
   worlds            Gamma World;
   references        catalog95,
                     catalogue96;
-  description
-  "teenage dogcatcher returns to 24th Century to destroy hated foes".
+  description       "teenage dogcatcher returns to 24th Century to destroy hated foes".
 
 
 #.....
@@ -596,9 +595,9 @@ base product TSR 8118 =
   leader            "";
   date              1987;
   price             $ 9.95;
+  requirements      ;
   references        net price list;
-  description
-  "comic strip collection".
+  description       "comic strip collection".
 
 
 #.....
@@ -618,10 +617,10 @@ base product TSR 8150 =
   number            Book One;
   series            First Quest;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -641,10 +640,10 @@ base product TSR 8151 =
   number            Book Two;
   series            First Quest Books;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -664,11 +663,11 @@ base product TSR 8152 =
   number            Book One;
   series            Quest Triad;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96,
                     catalog96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -688,10 +687,10 @@ base product TSR 8153 =
   number            Book Three;
   series            First Quest Books;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -711,11 +710,11 @@ base product TSR 8154 =
   number            Book Two;
   series            Quest Triad;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96,
                     catalog96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -735,10 +734,10 @@ base product TSR 8155 =
   number            Book Four;
   series            First Quest Books;
   price             $ 3.95;
+  requirements      ;
   references        catalog95,
                     catalogue96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -758,13 +757,13 @@ base product TSR 8157 =
   number            Book Three;
   series            Quest Triad;
   price             $ 3.99;
+  requirements      ;
   worlds            None;
   references        catalogue96,
                     catalog96,
                     Dragon 226,
                     Dragon 227;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -783,10 +782,10 @@ base product TSR 8160-XX =
   number            93;
   series            Amazing Stories;
   price             $ 3.95;
+  requirements      ;
   worlds            None;
   references        catalog93;
-  description
-  "the world's first science fiction magazine".
+  description       "the world's first science fiction magazine".
 
 
 #.....
@@ -805,10 +804,10 @@ base product TSR 8161-XX =
   number            94;
   series            Amazing Stories;
   price             $ 3.95;
+  requirements      ;
   worlds            None;
   references        catalog93;
-  description
-  "the world's first science fiction magazine".
+  description       "the world's first science fiction magazine".
 
 
 #.....
@@ -825,12 +824,12 @@ base product TSR 8200P =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            None;
   references        catalogue93,
                     catalogue94,
                     catalog93;
-  description
-  "a Cenozoic race returns to Earth seeking the answer to a plague".
+  description       "a Cenozoic race returns to Earth seeking the answer to a plague".
 
 
 #.....
@@ -846,13 +845,13 @@ base product TSR 8201 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalogue93,
                     catalog93;
-  description
-  "all signs indicate the presence of a beast from the darkness beyond".
+  description       "all signs indicate the presence of a beast from the darkness beyond".
 
 
 #.....
@@ -868,12 +867,12 @@ base product TSR 8203 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            None;
   references        catalogue94,
                     catalogue93,
                     catalog93;
-  description
-  "five companions have escaped the dungones of Sultan Fazir".
+  description       "five companions have escaped the dungones of Sultan Fazir".
 
 
 #.....
@@ -889,13 +888,13 @@ base product TSR 8204 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalogue93,
                     catalog93;
-  description
-  "a gang foils the plans of a group of weirdo aliens".
+  description       "a gang foils the plans of a group of weirdo aliens".
 
 
 #.....
@@ -911,13 +910,13 @@ base product TSR 8205 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalogue93,
                     catalog93;
-  description
-  "a threat forces elvish and Mannish races into an alliance".
+  description       "a threat forces elvish and Mannish races into an alliance".
 
 
 #.....
@@ -933,13 +932,13 @@ base product TSR 8206 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalogue93,
                     catalog93;
-  description
-  "an error has sent a deadly mutating plague across the globe".
+  description       "an error has sent a deadly mutating plague across the globe".
 
 
 #.....
@@ -955,13 +954,13 @@ base product TSR 8208 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalogue93,
                     catalog93;
-  description
-  "Cimmarron Lantry returns to th eland of his youth".
+  description       "Cimmarron Lantry returns to th eland of his youth".
 
 
 #.....
@@ -977,12 +976,12 @@ base product TSR 8210 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue93,
                     catalog93;
-  description
-  "in the bleak, terrifying techno world of a not so very distant future".
+  description       "in the bleak, terrifying techno world of a not so very distant future".
 
 
 #.....
@@ -999,6 +998,7 @@ base product TSR 8211 =
   product type      Novel;
   series            Dark Horse Series;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
@@ -1006,8 +1006,7 @@ base product TSR 8211 =
                     catalog95,
                     catalog96,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1023,12 +1022,12 @@ base product TSR 8212 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalog93;
-  description
-  "on a quiet night in Wyoming, two robots from the future crash to Earth".
+  description       "on a quiet night in Wyoming, two robots from the future crash to Earth".
 
 
 #.....
@@ -1043,11 +1042,11 @@ base product TSR 8214 =
   audience          All;
   product type      Novel;
   price             £ 2.50;
+  requirements      ;
   references        catalogue93,
                     catalogue94,
                     catalogue96;
-  description
-  "they protect their home colonies".
+  description       "they protect their home colonies".
 
 
 #.....
@@ -1063,13 +1062,13 @@ base product TSR 8215 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog93;
-  description
-  "Keven becomes a King's Free Ranger at Arms".
+  description       "Keven becomes a King's Free Ranger at Arms".
 
 
 #.....
@@ -1085,13 +1084,13 @@ base product TSR 8216 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog93;
-  description
-  "one hundret million years in the future".
+  description       "one hundret million years in the future".
 
 
 #.....
@@ -1107,14 +1106,14 @@ base product TSR 8217 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog91S,
                     catalog93;
-  description
-  "it was he who was picked to save men's lives".
+  description       "it was he who was picked to save men's lives".
 
 
 #.....
@@ -1131,6 +1130,7 @@ base product TSR 8218 =
   product type      Novel;
   series            Sorcerer's Stone Trilogy;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
@@ -1139,8 +1139,7 @@ base product TSR 8218 =
                     catalog95,
                     catalog96,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1156,14 +1155,14 @@ base product TSR 8219 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog91S,
                     catalog93;
-  description
-  "an overworked college professor is propelled into another plane".
+  description       "an overworked college professor is propelled into another plane".
 
 
 #.....
@@ -1180,14 +1179,14 @@ base product TSR 8220 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog91W,
                     catalog93;
-  description
-  "Noressa leaves her primitive home to fulfil her destiny".
+  description       "Noressa leaves her primitive home to fulfil her destiny".
 
 
 #.....
@@ -1204,13 +1203,13 @@ base product TSR 8221 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalog91W,
                     catalog93;
-  description
-  "the prince investiages the crash of a flying machine".
+  description       "the prince investiages the crash of a flying machine".
 
 
 #.....
@@ -1227,6 +1226,7 @@ base product TSR 8222 =
   product type      Novel;
   series            Dark Horse Series;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
@@ -1235,8 +1235,7 @@ base product TSR 8222 =
                     catalog95,
                     catalog96,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1252,13 +1251,13 @@ base product TSR 8223 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog93;
-  description
-  "two powerful forces collied, who will triumph ?".
+  description       "two powerful forces collied, who will triumph ?".
 
 
 #.....
@@ -1275,6 +1274,7 @@ base product TSR 8224 =
   product type      Novel;
   series            Sorcerer's Stone Trilogy;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
@@ -1282,8 +1282,7 @@ base product TSR 8224 =
                     catalog95,
                     catalog96,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1300,14 +1299,14 @@ base product TSR 8225 =
   audience          All;
   product type      Novel;
   price             $ 4.50;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog92,
                     catalog93;
-  description
-  "Gopal must discover the elusive city of Nine Gates".
+  description       "Gopal must discover the elusive city of Nine Gates".
 
 
 #.....
@@ -1324,14 +1323,14 @@ base product TSR 8226 =
   audience          All;
   product type      Novel;
   price             $ 4.50;
+  requirements      ;
   worlds            None;
   references        catalogue93,
                     catalogue94,
                     catalogue96,
                     catalog92,
                     catalog93;
-  description
-  "a travel to a wtilight plane called Half-Light".
+  description       "a travel to a wtilight plane called Half-Light".
 
 
 #.....
@@ -1350,6 +1349,7 @@ base product TSR 8227 =
   product type      Novel;
   series            Dark Horse Series;
   price             $ 4.50;
+  requirements      ;
   worlds            None;
   references        catalogue93,
                     catalogue94,
@@ -1358,8 +1358,7 @@ base product TSR 8227 =
                     catalog93,
                     catalog95,
                     catalog96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1378,6 +1377,7 @@ base product TSR 8228 =
   audience          All;
   product type      Novel;
   price             $ 4.50;
+  requirements      ;
   worlds            None;
   references        catalogue93,
                     catalogue94,
@@ -1385,8 +1385,7 @@ base product TSR 8228 =
                     catalog93W,
                     catalog93,
                     catalog95;
-  description
-  "an adventure/myster/comed about saying goodby to one's monsters".
+  description       "an adventure/myster/comed about saying goodby to one's monsters".
 
 
 #.....
@@ -1405,6 +1404,7 @@ base product TSR 8229 =
   product type      Novel;
   series            Sorcerer's Stone Trilogy;
   price             $ 4.50;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
@@ -1413,8 +1413,7 @@ base product TSR 8229 =
                     catalog93,
                     catalog95,
                     catalog96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1432,6 +1431,7 @@ base product TSR 8232 =
   audience          All;
   product type      Novel;
   price             $ 4.50;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue94,
@@ -1439,8 +1439,7 @@ base product TSR 8232 =
                     catalog93S,
                     catalog93,
                     catalog95;
-  description
-  "a mesmering battle of wits between a water goddes and a king".
+  description       "a mesmering battle of wits between a water goddes and a king".
 
 
 #.....
@@ -1456,13 +1455,13 @@ base product TSR 8233 =
   audience          All;
   product type      Novel;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalog95,
                     catalog96;
-  description
-  "a wild and wacky tale".
+  description       "a wild and wacky tale".
 
 
 #.....
@@ -1479,13 +1478,13 @@ base product TSR 8234 =
   product type      Novel;
   series            Dark Horse Series;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalog95,
                     catalog96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1501,13 +1500,13 @@ base product TSR 8235 =
   audience          All;
   product type      Novel;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalog95,
                     catalog96;
-  description
-  "portrays the conventions of traditional fantasy in humorous light".
+  description       "portrays the conventions of traditional fantasy in humorous light".
 
 
 #.....
@@ -1524,14 +1523,14 @@ base product TSR 8236 =
   audience          All;
   product type      Novel;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue94,
                     catalogue96,
                     catalog95,
                     catalog96,
                     Dragon 211;
-  description
-  "futuristic combat in the virtual reality of cyberspace".
+  description       "futuristic combat in the virtual reality of cyberspace".
 
 
 #.....
@@ -1551,12 +1550,12 @@ base product TSR 8237 =
   number            Book Two;
   series            Days of Yor Series;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        catalog95,
                     catalogue96,
                     catalog96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1574,12 +1573,12 @@ base product TSR 8238 =
   audience          All;
   product type      Novel;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        catalog95,
                     catalogue96,
                     catalog96;
-  description
-  "tale of a noble mouse".
+  description       "tale of a noble mouse".
 
 
 #.....
@@ -1597,12 +1596,12 @@ base product TSR 8239 =
   audience          All;
   product type      Novel;
   price             $ 4.95;
+  requirements      ;
   worlds            Generic;
   references        catalog95,
                     catalogue96,
                     catalog96;
-  description
-  "thriller of the future".
+  description       "thriller of the future".
 
 
 #.....
@@ -1620,12 +1619,12 @@ base product TSR 8251 =
   audience          All;
   product type      Novel;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        catalog95,
                     catalogue96,
                     catalog96;
-  description
-  "blend of science fictionl, magic, and mythos".
+  description       "blend of science fictionl, magic, and mythos".
 
 
 #.....
@@ -1643,12 +1642,12 @@ base product TSR 8252 =
   audience          All;
   product type      Novel;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        catalog95,
                     catalogue96,
                     catalog96;
-  description
-  "sequel to Dragons Can Only Rust".
+  description       "sequel to Dragons Can Only Rust".
 
 
 #.....
@@ -1666,12 +1665,12 @@ base product TSR 8253 =
   product type      Novel;
   series            Dark Horse Series;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
   references        catalogue96,
                     catalog96,
                     Dragon 226;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1689,10 +1688,10 @@ base product TSR 8254 =
   audience          All;
   product type      Novel;
   price             $ 6.99;
+  requirements      ;
   worlds            None;
   references        net;
-  description
-  "evil darkness lurks in the island of the Charonti and the Knorr".
+  description       "evil darkness lurks in the island of the Charonti and the Knorr".
 
 
 #.....
@@ -1710,13 +1709,13 @@ base product TSR 8255 =
   audience          All;
   product type      Novel;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
   references        catalogue96,
                     catalog96,
                     Dragon 228,
                     Dragon 229;
-  description
-  "sequel to F.R.E.E.Lancers".
+  description       "sequel to F.R.E.E.Lancers".
 
 
 #.....
@@ -1735,12 +1734,12 @@ base product TSR 8256 =
   audience          All;
   product type      Novel;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
   references        catalogue96,
                     catalog96,
                     Dragon 231;
-  description
-  "tale of old and new magic, legends and skepticism".
+  description       "tale of old and new magic, legends and skepticism".
 
 
 #.....
@@ -1758,13 +1757,13 @@ base product TSR 8257 =
   audience          All;
   product type      Novel;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
   references        catalogue96,
                     catalog96,
                     Dragon 232,
                     Dragon 233;
-  description
-  "historical fantasy novel".
+  description       "historical fantasy novel".
 
 
 #.....
@@ -1782,10 +1781,10 @@ base product TSR 8258 =
   audience          All;
   product type      Novel;
   price             $ 7.95;
+  requirements      ;
   worlds            None;
   references        net;
-  description
-  "an easy-to-understand primer explaining the TSR universe of games".
+  description       "an easy-to-understand primer explaining the TSR universe of games".
 
 
 #.....
@@ -1799,10 +1798,10 @@ base product TSR 8420 =
   date              1987;
   audience          All;
   product type      Novel;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "solo quest".
+  description       "solo quest".
 
 
 #.....
@@ -1817,10 +1816,10 @@ base product TSR 8461 =
   audience          All;
   product type      Novel;
   number            Book One;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1835,10 +1834,10 @@ base product TSR 8463 =
   audience          All;
   product type      Novel;
   number            Book Three;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1853,10 +1852,10 @@ base product TSR 8464 =
   audience          All;
   product type      Novel;
   number            Book Four;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1871,10 +1870,10 @@ base product TSR 8466 =
   audience          All;
   product type      Novel;
   number            Book Six;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1889,9 +1888,9 @@ base product TSR 8467 =
   audience          All;
   product type      Novel;
   number            Book Seven;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1907,9 +1906,9 @@ base product TSR 8501 =
   audience          All;
   product type      Novel;
   number            Book One;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1924,9 +1923,9 @@ base product TSR 8502 =
   audience          All;
   product type      Novel;
   number            Book Two;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1941,9 +1940,9 @@ base product TSR 8503 =
   audience          All;
   product type      Novel;
   number            Book Three;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1958,9 +1957,9 @@ base product TSR 8504 =
   audience          All;
   product type      Novel;
   number            Book Four;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1975,9 +1974,9 @@ base product TSR 8505 =
   audience          All;
   product type      Novel;
   number            Book Five;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -1992,9 +1991,9 @@ base product TSR 8506 =
   audience          All;
   product type      Novel;
   number            Book Six;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2009,9 +2008,9 @@ base product TSR 8510 =
   audience          All;
   product type      Novel;
   number            Book Ten;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2026,9 +2025,9 @@ base product TSR 8511 =
   audience          All;
   product type      Novel;
   number            Book Eleven;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2043,9 +2042,9 @@ base product TSR 8513 =
   audience          All;
   product type      Novel;
   number            Book Thirteen;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2060,9 +2059,9 @@ base product TSR 8514 =
   audience          All;
   product type      Novel;
   number            Book Fourteen;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2077,9 +2076,9 @@ base product TSR 8515 =
   audience          All;
   product type      Novel;
   number            Book Fifteen;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2094,9 +2093,9 @@ base product TSR 8516 =
   audience          All;
   product type      Novel;
   number            Book Sixteen;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2111,9 +2110,9 @@ base product TSR 8518 =
   audience          All;
   product type      Novel;
   number            Book Eighteen;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2128,9 +2127,9 @@ base product TSR 8519 =
   audience          All;
   product type      Novel;
   number            Book Twenty-one;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2145,9 +2144,9 @@ base product TSR 8520 =
   audience          All;
   product type      Novel;
   number            Book Twenty-two;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2162,9 +2161,9 @@ base product TSR 8521 =
   audience          All;
   product type      Novel;
   number            Book Twenty-three;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2179,9 +2178,9 @@ base product TSR 8527 =
   audience          All;
   product type      Novel;
   number            Book Twenty-seven;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2196,9 +2195,9 @@ base product TSR 8529 =
   audience          All;
   product type      Novel;
   number            Book Twenty-nine;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2213,9 +2212,9 @@ base product TSR 8530 =
   audience          All;
   product type      Novel;
   number            Book Thirty;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2230,9 +2229,9 @@ base product TSR 8532 =
   audience          All;
   product type      Novel;
   number            Book Thirty-two;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2247,9 +2246,9 @@ base product TSR 8533 =
   audience          All;
   product type      Novel;
   number            Book Thirty-three;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2264,9 +2263,9 @@ base product TSR 8534 =
   audience          All;
   product type      Novel;
   number            Book Thirty-four;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2281,9 +2280,9 @@ base product TSR 8535 =
   audience          All;
   product type      Novel;
   number            Book Thirty-five;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2298,9 +2297,9 @@ base product TSR 8536 =
   audience          All;
   product type      Novel;
   number            Book Thirty-six;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2316,9 +2315,9 @@ base product TSR 8711 =
   product type      Novel;
   number            1;
   series            Cartoon Show;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2333,9 +2332,9 @@ base product TSR 8712 =
   product type      Novel;
   number            2;
   series            Cartoon Show;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2350,9 +2349,9 @@ base product TSR 8713 =
   product type      Novel;
   number            3;
   series            Cartoon Show;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2367,9 +2366,9 @@ base product TSR 8714 =
   product type      Novel;
   number            4;
   series            Cartoon Show;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2384,9 +2383,9 @@ base product TSR 8715 =
   product type      Novel;
   number            5;
   series            Cartoon Show;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2401,9 +2400,9 @@ base product TSR 8716 =
   product type      Novel;
   number            6;
   series            Cartoon Show;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2419,12 +2418,12 @@ base product TSR 8721 =
   audience          All;
   product type      Novel;
   price             $ 3.95;
+  requirements      ;
   worlds            Generic;
   references        catalog95,
                     catalog96,
                     catalog93;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2444,21 +2443,19 @@ base product TSR 8731 =
   product type      Novel;
   producer          TSR;
   series            Anthology;
+  requirements      ;
   worlds            Generic;
   references        catalog98,
                     net;
-  description
-  "A collection of powerful magical artifacts is the only defense against the
-  forces of evil that are arrayed against \Place{Dominaria}. \NPC{Gerrard}, the
-  heir to the Legacy, together with \NPC{Sisay}, captain of the flying ship
-  \Item{Weatherlight}, has sought out many parts of the Legacy.
-
-  \bold{Gerrard's Quest}
-
-  \NPC{Sisay} has been kidnapped by \NPC{Volrath}, ruler of the plane of
-  \Place{Rath}. \NPC{Gerrard} stands at a crossroads. His companion is in
-  danger, the Legacy may be lost forever. Only he -- with the loyal crew of the
-  \Item{Weatherlight} -- can rescue \NPC{Sisay} and recover the Legacy.".
+  description       "A collection of powerful magical artifacts is the only defense against the
+                    forces of evil that are arrayed against \Place{Dominaria}. \NPC{Gerrard}, the
+                    heir to the Legacy, together with \NPC{Sisay}, captain of the flying ship
+                    \Item{Weatherlight}, has sought out many parts of the Legacy.
+                    \bold{Gerrard's Quest}
+                    \NPC{Sisay} has been kidnapped by \NPC{Volrath}, ruler of the plane of
+                    \Place{Rath}. \NPC{Gerrard} stands at a crossroads. His companion is in
+                    danger, the Legacy may be lost forever. Only he -- with the loyal crew of the
+                    \Item{Weatherlight} -- can rescue \NPC{Sisay} and recover the Legacy.".
 
 
 #.....
@@ -2479,18 +2476,16 @@ base product TSR 8732 =
   producer          TSR;
   number            Book 2;
   series            Artifacts Cycle;
+  requirements      ;
   worlds            Generic;
   references        catalog98;
-  description
-  "The war between \NPC{Urza} and \NPC{Mishra} is over. Brooding on the death
-  of his brother at the hands of extraplanar forces, \NPC{Urza} drifts among
-  the planes.
-
-  But the end of the \Event{Brother's War} has transformed him into something
-  greater. Deep within his heart, a spark has been kindled to a flame that
-  cannot be quenched.
-
-  \NPC{Urza} has become a planeswalker.".
+  description       "The war between \NPC{Urza} and \NPC{Mishra} is over. Brooding on the death
+                    of his brother at the hands of extraplanar forces, \NPC{Urza} drifts among
+                    the planes.
+                    But the end of the \Event{Brother's War} has transformed him into something
+                    greater. Deep within his heart, a spark has been kindled to a flame that
+                    cannot be quenched.
+                    \NPC{Urza} has become a planeswalker.".
 
 
 #.....
@@ -2513,17 +2508,16 @@ base product TSR 8733 =
   number            Book 1;
   series            Masquerade Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
   references        catalog98;
-  description
-  "Escaping from \Place{Rath}, the crew of the flying ship \Item{Weatherlight}
-  finds itself adrift. Grieving for their lost comrades and in need of repairs,
-  they make their painful way to \Place{Mercadia}, a city where everything is
-  for sale.
-
-  But not everything is as it seems. In the streets of \Place{Mercadia}, the
-  heroes of the \Item{Weatherlight} find that more than merchandise can be
-  bought and sold.".
+  description       "Escaping from \Place{Rath}, the crew of the flying ship \Item{Weatherlight}
+                    finds itself adrift. Grieving for their lost comrades and in need of repairs,
+                    they make their painful way to \Place{Mercadia}, a city where everything is
+                    for sale.
+                    But not everything is as it seems. In the streets of \Place{Mercadia}, the
+                    heroes of the \Item{Weatherlight} find that more than merchandise can be
+                    bought and sold.".
 
 
 #.....
@@ -2543,10 +2537,10 @@ base product TSR 8733P =
   number            Book II;
   series            Weatherlight Cycle;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2567,17 +2561,16 @@ base product TSR 8734 =
   producer          TSR;
   number            Book 1;
   series            Artifacts Cycle;
+  requirements      ;
   worlds            Generic;
   references        catalog98,
                     net;
-  description
-  "\Place{Dominarian} legends speak of a mighty conflict, obscured by the mists
-  of history. Of a conflict between the brothers \NPC{Urza} and \NPC{Mishra}
-  for supremacy on the continent of \Place{Terisiare}. Of titantic engines that
-  scarred and twisted the very planet. Of a final battle that sank continents
-  and shook the skies.
-
-  The saga of the Brothers' War.".
+  description       "\Place{Dominarian} legends speak of a mighty conflict, obscured by the mists
+                    of history. Of a conflict between the brothers \NPC{Urza} and \NPC{Mishra}
+                    for supremacy on the continent of \Place{Terisiare}. Of titantic engines that
+                    scarred and twisted the very planet. Of a final battle that sank continents
+                    and shook the skies.
+                    The saga of the Brothers' War.".
 
 
 #.....
@@ -2596,10 +2589,10 @@ base product TSR 8734P =
   number            Book 1;
   series            Artifacts Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2613,9 +2606,9 @@ base product TSR 8883 =
   date              1983;
   audience          All;
   product type      Calendar;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2630,11 +2623,11 @@ base product TSR 8893 =
   audience          All;
   product type      Calendar;
   price             £ 6.99;
+  requirements      ;
   worlds            Generic;
   references        catalogue93,
                     catalogue96;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2650,12 +2643,12 @@ base product TSR 8894 =
   audience          All;
   product type      Calendar;
   price             $ 9.95;
+  requirements      ;
   worlds            Generic;
   references        catalog93W,
                     catalog93,
                     catalogue96;
-  description
-  "art calendar".
+  description       "art calendar".
 
 
 #.....
@@ -2673,11 +2666,11 @@ base product TSR 8897 =
   product type      Calendar;
   style             Booklet;
   price             $12.95;
+  requirements      ;
   worlds            Generic;
   references        catalogue96,
                     catalog96;
-  description
-  "annual art calendar".
+  description       "annual art calendar".
 
 
 #.....
@@ -2695,9 +2688,9 @@ base product TSR 8898 =
   audience          All;
   product type      Calendar;
   style             Booklet;
+  requirements      ;
   references        catalog98;
-  description
-  "annual art calendar".
+  description       "annual art calendar".
 
 
 #.....
@@ -2715,14 +2708,14 @@ base product TSR 8899 =
   product type      Calendar;
   style             Booklet;
   price             $12.99;
+  requirements      ;
   worlds            Dragonlance;
   references        net,
                     catalog98,
                     Dragon 245,
                     Dragon 246,
                     Dragon 247;
-  description
-  "annual art calendar".
+  description       "annual art calendar".
 
 
 #.....
@@ -2738,10 +2731,10 @@ base product TSR 8952 =
   audience          All;
   product type      Novel;
   number            Book Two;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2756,10 +2749,10 @@ base product TSR 8953 =
   audience          All;
   product type      Novel;
   number            Book Three;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2774,9 +2767,9 @@ base product TSR 8955 =
   audience          All;
   product type      Novel;
   number            Book Five;
+  requirements      ;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2791,10 +2784,10 @@ base product TSR 8957 =
   audience          All;
   product type      Novel;
   number            Book Seven;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2809,10 +2802,10 @@ base product TSR 8958 =
   audience          All;
   product type      Novel;
   number            Book Eight;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2827,10 +2820,10 @@ base product TSR 8959 =
   audience          All;
   product type      Novel;
   number            Book Nine;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2845,10 +2838,10 @@ base product TSR 8960 =
   audience          All;
   product type      Novel;
   number            Book Ten;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2863,10 +2856,10 @@ base product TSR 8961 =
   audience          All;
   product type      Novel;
   number            Book Eleven;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2881,10 +2874,10 @@ base product TSR 8962 =
   audience          All;
   product type      Novel;
   number            Book Twelve;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2899,10 +2892,10 @@ base product TSR 8963 =
   audience          All;
   product type      Novel;
   number            Book Thirteen;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2917,10 +2910,10 @@ base product TSR 8964 =
   audience          All;
   product type      Novel;
   number            Book Fourteen;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2935,10 +2928,10 @@ base product TSR 8965 =
   audience          All;
   product type      Novel;
   number            Book Fifteen;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2953,10 +2946,10 @@ base product TSR 8967 =
   audience          All;
   product type      Novel;
   number            Book Seventeen;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -2971,10 +2964,10 @@ base product TSR 8968 =
   audience          All;
   product type      Novel;
   number            Book Eighteen;
+  requirements      ;
   worlds            Generic;
   references        complete product listing;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -3010,13 +3003,13 @@ base product WTC 17595 =
   number            Third Scroll;
   series            The Four Winds Saga;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "\NPC{Naseru}, known as 'The Anvil', will stop at nothing to sit upon the
-  Throne of \Place{Rokugan}. When dark forces rise in the \Place{City of
-  Night}, he must act swiftly. To save his beloved \Place{Empire},
-  \Product{Naseru} must learn to wield the most unlikely weapon of all
-  --- justice.".
+  description       "\NPC{Naseru}, known as 'The Anvil', will stop at nothing to sit upon the
+                    Throne of \Place{Rokugan}. When dark forces rise in the \Place{City of
+                    Night}, he must act swiftly. To save his beloved \Place{Empire},
+                    \Product{Naseru} must learn to wield the most unlikely weapon of all
+                    --- justice.".
 
 
 #.....
@@ -3051,16 +3044,15 @@ base product WTC 17630 =
   number            Book II;
   series            Kamigawa Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "The second title in a series that peers into a mysterious new area of the
-  Magic world.
-
-  \Product{Heretic: Betrayers of Kamigawa} continues a series that will explore
-  a new and mysterious area of the \Place{Magic: The Gathering} world that you
-  have never seen before. This novel previews the newest trading card game set
-  to be released in February, giving you a sneak peek at the new elements of
-  the game.".
+  description       "The second title in a series that peers into a mysterious new area of the
+                    Magic world.
+                    \Product{Heretic: Betrayers of Kamigawa} continues a series that will explore
+                    a new and mysterious area of the \Place{Magic: The Gathering} world that you
+                    have never seen before. This novel previews the newest trading card game set
+                    to be released in February, giving you a sneak peek at the new elements of
+                    the game.".
 
 
 #.....
@@ -3095,23 +3087,20 @@ base product WTC 17750 =
   number            Book I;
   series            Kamigawa Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "In a world of mysticism and honor, a war is brewing. Spirits launch attacks
-  against humans as, in the shadows, a terror lurks just beyond sight.
-
-  \NPC{Michiko}, daughter of the warlord \NPC{Konda}, must brave the dangers
-  outside her father's fortress to consult holy monks and the \Monster{orochi},
-  \Monster{snake folk} with a strong connection to the spirit world. Yet when
-  \NPC{Michiko} meets \NPC{Umezawa}, a \Class{thief} and \Class{black magic}
-  user, she realizes that to stop the war that is about to sweep the land, she
-  may have to make alliances with her enemies.
-
-  And the most dangerous foes may be her friends.
-
-  \Product{Outlaw: Champions of Kamigawa} kicks off a series that explores a
-  new and mysterious area of the \Product{Magic: The Gathering} world that you
-  have never seen before.".
+  description       "In a world of mysticism and honor, a war is brewing. Spirits launch attacks
+                    against humans as, in the shadows, a terror lurks just beyond sight.
+                    \NPC{Michiko}, daughter of the warlord \NPC{Konda}, must brave the dangers
+                    outside her father's fortress to consult holy monks and the \Monster{orochi},
+                    \Monster{snake folk} with a strong connection to the spirit world. Yet when
+                    \NPC{Michiko} meets \NPC{Umezawa}, a \Class{thief} and \Class{black magic}
+                    user, she realizes that to stop the war that is about to sweep the land, she
+                    may have to make alliances with her enemies.
+                    And the most dangerous foes may be her friends.
+                    \Product{Outlaw: Champions of Kamigawa} kicks off a series that explores a
+                    new and mysterious area of the \Product{Magic: The Gathering} world that you
+                    have never seen before.".
 
 
 #.....
@@ -3146,20 +3135,18 @@ base product WTC 17851 =
   number            Book II;
   series            Onslaught Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "On the side stand the followers of \NPC{Phage}, who cry out for new arena
-  combats, new champions, new blood spilled in the sand. On the other are the
-  supporters of \NPC{Akroma}, the \Monster{angel}, who preaches a terrifying
-  religion hallowing her creator.
-
-  In the middle stands the lonely figure of \NPC{Kamahl}. Once a champion of
-  the pits, he must now atone for the terrible wrongs he has wrought. Those
-  wrongs gave birth to \NPC{Phage} and \NPC{Akroma}. They gave birth to the
-  suffering of the world.
-
-  Now \NPC{Kamahl} must sweep the land clean of this terrible blight. But his
-  fury may destroy that which he most loves.".
+  description       "On the side stand the followers of \NPC{Phage}, who cry out for new arena
+                    combats, new champions, new blood spilled in the sand. On the other are the
+                    supporters of \NPC{Akroma}, the \Monster{angel}, who preaches a terrifying
+                    religion hallowing her creator.
+                    In the middle stands the lonely figure of \NPC{Kamahl}. Once a champion of
+                    the pits, he must now atone for the terrible wrongs he has wrought. Those
+                    wrongs gave birth to \NPC{Phage} and \NPC{Akroma}. They gave birth to the
+                    suffering of the world.
+                    Now \NPC{Kamahl} must sweep the land clean of this terrible blight. But his
+                    fury may destroy that which he most loves.".
 
 
 #.....
@@ -3194,15 +3181,15 @@ base product WTC 17876 =
   number            Book II;
   series            Magic Legends Cycle Two;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "Though his assassins have failed, the godlike \Place{Madaran} emperor has
-  other ways of crushing rebellion. He sends the brutal imperial army to rein
-  in a defiant island chain, and the empire is once more plunged into
-  violence. The emperor's champion accompanies the army, but his
-  loyalty will be tested by the horrors of war. Can the champion achieve
-  honorable victory, or will he and the rebels alike be crushed by the
-  Emperor's Fist?".
+  description       "Though his assassins have failed, the godlike \Place{Madaran} emperor has
+                    other ways of crushing rebellion. He sends the brutal imperial army to rein
+                    in a defiant island chain, and the empire is once more plunged into
+                    violence. The emperor's champion accompanies the army, but his
+                    loyalty will be tested by the horrors of war. Can the champion achieve
+                    honorable victory, or will he and the rebels alike be crushed by the
+                    Emperor's Fist?".
 
 
 #.....
@@ -3237,16 +3224,14 @@ base product WTC 17883 =
   number            Book III;
   series            Onslaught Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "Amid the titanic clash between \NPC{Phage} and \NPC{Akroma}, all
-  \Place{Dominaria} shuddered. Now, out of the destruction and chaos a new
-  force arises, and \NPC{Kamahl} must face his greatest foe: \NPC{Karoma}. Her
-  arms spread to the very clouds, and her robes trail like rays of sunlight.
-
-  She is the destroyer.
-
-  She is the answer.".
+  description       "Amid the titanic clash between \NPC{Phage} and \NPC{Akroma}, all
+                    \Place{Dominaria} shuddered. Now, out of the destruction and chaos a new
+                    force arises, and \NPC{Kamahl} must face his greatest foe: \NPC{Karoma}. Her
+                    arms spread to the very clouds, and her robes trail like rays of sunlight.
+                    She is the destroyer.
+                    She is the answer.".
 
 
 #.....
@@ -3291,13 +3276,13 @@ base product WTC 17975 =
   producer          WTC;
   series            Anthology;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "\Product{The Monsters of Magic} is a collection of short stories exploring
-  the strengths and weaknesses of the creatures that inhabit the Magic: The
-  Gathering world. The monsters highlighted are drawn not only from Magic card
-  sets, but from the novels as well, giving any reader broader exposure to the
-  entire Magic world.".
+  description       "\Product{The Monsters of Magic} is a collection of short stories exploring
+                    the strengths and weaknesses of the creatures that inhabit the Magic: The
+                    Gathering world. The monsters highlighted are drawn not only from Magic card
+                    sets, but from the novels as well, giving any reader broader exposure to the
+                    entire Magic world.".
 
 
 #.....
@@ -3331,18 +3316,15 @@ base product WTC 17979 =
   number            Book I;
   series            Mirrodin Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "Where forests of metal claw the sky.
-
-  Where razor-sharp metallic grasses stretch across the plains.
-
-  Where vast oceans of quicksilver conceal predators awaiting the unwary.
-
-  Across this harsh landscape, an orphaned \Monster{elf} must make her way,
-  seeking the secrets of her past, daring the perils of her present. And she
-  must tear aside the veil that hides the face of a hidden enemy whose power
-  extends across all \Place{Mirrodin}.".
+  description       "Where forests of metal claw the sky.
+                    Where razor-sharp metallic grasses stretch across the plains.
+                    Where vast oceans of quicksilver conceal predators awaiting the unwary.
+                    Across this harsh landscape, an orphaned \Monster{elf} must make her way,
+                    seeking the secrets of her past, daring the perils of her present. And she
+                    must tear aside the veil that hides the face of a hidden enemy whose power
+                    extends across all \Place{Mirrodin}.".
 
 
 #.....
@@ -3377,17 +3359,16 @@ base product WTC 17987 =
   number            Book III;
   series            Magic Legends Cycle Two;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "A \Monster{dragon} sits on the throne of \Place{Madara}, and his regent
-  rules with knives in the dark. The islands bleed, the mainland shakes, and
-  even the champion has forsaken his office. Does no honor remain in the
-  empire?
-
-  Ask \NPC{Ayesha}, who has turned her hands from breaking artifacts to making
-  forests. Ask \NPC{Wasitora}, whose \Monster{cat-dragon} kits fight the armies
-  of evil. Most of all, ask \NPC{Tetsuo}, who must regain his honor by
-  destroying the emperor he once served.".
+  description       "A \Monster{dragon} sits on the throne of \Place{Madara}, and his regent
+                    rules with knives in the dark. The islands bleed, the mainland shakes, and
+                    even the champion has forsaken his office. Does no honor remain in the
+                    empire?
+                    Ask \NPC{Ayesha}, who has turned her hands from breaking artifacts to making
+                    forests. Ask \NPC{Wasitora}, whose \Monster{cat-dragon} kits fight the armies
+                    of evil. Most of all, ask \NPC{Tetsuo}, who must regain his honor by
+                    destroying the emperor he once served.".
 
 
 #.....
@@ -3422,15 +3403,15 @@ base product WTC 17997 =
   number            Fourth Scroll;
   series            The Four Winds Saga;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "This concluding title to \Product{The Four Winds Saga} explores a different
-  character's perspective on the events taking place in the series. The overall
-  storyline is based on the \Product{Gold Edition} set for the \Product{Legend
-  of the Five Rings} trading card game released by AEG. The ending of this
-  title will actually be decided by the \Product{Legend of the Five Rings}
-  readers and fans in a tournament during the Summer of 2003, allowing players
-  to have direct impact on novel content.".
+  description       "This concluding title to \Product{The Four Winds Saga} explores a different
+                    character's perspective on the events taking place in the series. The overall
+                    storyline is based on the \Product{Gold Edition} set for the \Product{Legend
+                    of the Five Rings} trading card game released by AEG. The ending of this
+                    title will actually be decided by the \Product{Legend of the Five Rings}
+                    readers and fans in a tournament during the Summer of 2003, allowing players
+                    to have direct impact on novel content.".
 
 
 #.....
@@ -3452,18 +3433,14 @@ base product TSR 21323 =
   producer          TSR;
   series            Anthology;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "Argoth is decimated...
-
-  Tidal waves have turned canyons into rivers...
-
-  Earthquakes leveled the cities...
-
-  \Place{Dominaria} is in ruins.
-
-  Now the struggle for this war-torn world is to survive.".
+  description       "Argoth is decimated...
+                    Tidal waves have turned canyons into rivers...
+                    Earthquakes leveled the cities...
+                    \Place{Dominaria} is in ruins.
+                    Now the struggle for this war-torn world is to survive.".
 
 
 #.....
@@ -3480,10 +3457,10 @@ base product TSR 21332 =
   product type      Guide;
   style             Paperback;
   price             $ 9.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -3502,10 +3479,10 @@ base product TSR 21334 =
   number            Book 2;
   series            The Harbringer Trilogy;
   price             $ 5.99;
+  requirements      ;
   worlds            Star*Drive;
   references        Dragon 257;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -3526,24 +3503,19 @@ base product TSR 21439 =
   style             Paperback;
   price             $ 6.99;
   contents          Book;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "\bold{A novelization of the fantasy movie of the year.}
-
-  \emph{It began as a game.}
-
-  \emph{It became a phenomenon.}
-
-  Now Dungeons & Dragons has come to the big screen in a stunning tale of good
-  and evil, heroes and villains, monsters and mayhem.
-
-  When an evil wizard calls upon foul magic to bend the powerful \Monster{red
-  dragons} to his will, a young empress must find unlikely champions: two
-  streetwise thieves, an apprentice sorceress, an \Monster{elven} ranger, and a
-  bloodlusty \Monster{dwarf}.
-
-  \bold{Join the adventure. Fell the magic.}".
+  description       "\bold{A novelization of the fantasy movie of the year.}
+                    \emph{It began as a game.}
+                    \emph{It became a phenomenon.}
+                    Now Dungeons & Dragons has come to the big screen in a stunning tale of good
+                    and evil, heroes and villains, monsters and mayhem.
+                    When an evil wizard calls upon foul magic to bend the powerful \Monster{red
+                    dragons} to his will, a young empress must find unlikely champions: two
+                    streetwise thieves, an apprentice sorceress, an \Monster{elven} ranger, and a
+                    bloodlusty \Monster{dwarf}.
+                    \bold{Join the adventure. Fell the magic.}".
 
 
 #.....
@@ -3563,15 +3535,15 @@ base product TSR 21344 =
   number            Book 3;
   series            Artifacts Cycle;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "\NPC{Urza Planeswalker} has enlisted the most brilliant minds from across
-  \Place{Dominaria} to study at his academy on \Place{Tolaria}. Together they
-  work to bring to life the greatest artifact weapon \NPC{Urza} has ever
-  devised, hoping to use it to defend their home from an imminent
-  \Place{Phyrexian} invasion. But treachery and tragedy stalk the tiny island,
-  as \NPC{Urza} and his followers seek to manipulate time itself.";
+  description       "\NPC{Urza Planeswalker} has enlisted the most brilliant minds from across
+                    \Place{Dominaria} to study at his academy on \Place{Tolaria}. Together they
+                    work to bring to life the greatest artifact weapon \NPC{Urza} has ever
+                    devised, hoping to use it to defend their home from an imminent
+                    \Place{Phyrexian} invasion. But treachery and tragedy stalk the tiny island,
+                    as \NPC{Urza} and his followers seek to manipulate time itself.";
   synonyms          "WTC 86523".
 
 
@@ -3588,9 +3560,9 @@ base product TSR 21353 =
   product type      Guide;
   style             Paperback;
   price             $11.99;
+  requirements      ;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -3608,10 +3580,10 @@ base product TSR 21355 =
   product type      Novel;
   series            Anthology;
   price             $ 5.99;
+  requirements      ;
   worlds            Star*Drive;
   references        Dragon 257;
-  description
-  "collection of short stories".
+  description       "collection of short stories".
 
 
 #.....
@@ -3634,15 +3606,14 @@ base product TSR 21357 =
   number            Book I;
   series            Ice Age Cycle;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "\Place{Terisiare} lies in ruins. Nations have fallen, \Monster{goblins} raid
-  the land, and an oppressive faith throttles the city-states. Now deep within
-  the walls of the \Place{Conclave of Mages}, \NPC{Jodah} must decide if
-  unlocking his own immense power is worth taking a step into the dark lands.
-
-  The epic of the \Event{Ice Age} begins.".
+  description       "\Place{Terisiare} lies in ruins. Nations have fallen, \Monster{goblins} raid
+                    the land, and an oppressive faith throttles the city-states. Now deep within
+                    the walls of the \Place{Conclave of Mages}, \NPC{Jodah} must decide if
+                    unlocking his own immense power is worth taking a step into the dark lands.
+                    The epic of the \Event{Ice Age} begins.".
 
 
 #.....
@@ -3660,10 +3631,10 @@ base product TSR 21367 =
   product type      Novel;
   style             Paperback;
   price             $ 5.99;
+  requirements      ;
   worlds            Star*Drive;
   references        net;
-  description
-  "a bounty hunter and cybernetic killer in a deadly struggle for power".
+  description       "a bounty hunter and cybernetic killer in a deadly struggle for power".
 
 
 #.....
@@ -3682,10 +3653,10 @@ base product TSR 21375 =
   style             Paperback;
   series            Strategy Guide;
   price             $16.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "comprehensive strategy guide for Magic: The Gathering".
+  description       "comprehensive strategy guide for Magic: The Gathering".
 
 
 #.....
@@ -3706,14 +3677,13 @@ base product TSR 21380 =
   number            Book IV;
   series            Artifacts Cycle;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "Time is getting short as \Place{Tolaria} races to find the one who will
-  wield the power of the Legacy. Deep in the inner circle, the dark lord
-  \NPC{Yawgmoth} sends out an edict: Kill \NPC{Urza Planeswalker}.
-
-  From the bloodlines of the \Place{Benalish plains}, a hero is born.";
+  description       "Time is getting short as \Place{Tolaria} races to find the one who will
+                    wield the power of the Legacy. Deep in the inner circle, the dark lord
+                    \NPC{Yawgmoth} sends out an edict: Kill \NPC{Urza Planeswalker}.
+                    From the bloodlines of the \Place{Benalish plains}, a hero is born.";
   synonyms          "WTC 866526".
 
 
@@ -3732,10 +3702,10 @@ base product TSR 21400 =
   product type      Guide;
   style             Paperback;
   price             $11.99;
+  requirements      ;
   worlds            Urza's Destiny;
   references        net;
-  description
-  "a comprehensive guide to the newest card expansion".
+  description       "a comprehensive guide to the newest card expansion".
 
 
 #.....
@@ -3758,14 +3728,13 @@ base product TSR 21403 =
   number            Book III;
   series            Ice Age Cycle;
   price             $ 6.99;
+  requirements      ;
   references        net;
-  description
-  "The \Event{Ice Age} has come to an abrupt end, but the world's troubles have
-  not. Legions of \Monster{undead} still plague the living. The temporary peace
-  in \Place{Kjeldor} has come to an end, and an evil far more treacherous than
-  \NPC{Lim Dûl} has been unleashed upon the land.
-
-  The ice has gone, but the evil remains.".
+  description       "The \Event{Ice Age} has come to an abrupt end, but the world's troubles have
+                    not. Legions of \Monster{undead} still plague the living. The temporary peace
+                    in \Place{Kjeldor} has come to an end, and an evil far more treacherous than
+                    \NPC{Lim Dûl} has been unleashed upon the land.
+                    The ice has gone, but the evil remains.".
 
 
 #.....
@@ -3783,10 +3752,10 @@ base product TSR 21425 =
   product type      Guide;
   style             Paperback;
   price             $11.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "M:TG Strategy Guide".
+  description       "M:TG Strategy Guide".
 
 
 #.....
@@ -3808,14 +3777,14 @@ base product TSR 21438 =
   number            Book I;
   series            Invasion Cycle;
   price             $ 6.99;
+  requirements      ;
   references        net;
-  description
-  "\Place{Dominaria} faces its biggest threat -- an invasion by its greatest
-  enemy, an attack planned for eons by merciless foes. No one is exempt from
-  their terror. No land is safe from their onslaught. In the shadow of the
-  \Group{Phyrexian} horde, \NPC{Dominaria} has but one hope -- the
-  \NPC{Weatherlight} and her crew. The time has come to defend hearth and home
-  from invasion.".
+  description       "\Place{Dominaria} faces its biggest threat -- an invasion by its greatest
+                    enemy, an attack planned for eons by merciless foes. No one is exempt from
+                    their terror. No land is safe from their onslaught. In the shadow of the
+                    \Group{Phyrexian} horde, \NPC{Dominaria} has but one hope -- the
+                    \NPC{Weatherlight} and her crew. The time has come to defend hearth and home
+                    from invasion.".
 
 
 #.....
@@ -3833,10 +3802,10 @@ base product TSR 21517 =
   product type      Guide;
   style             Paperback;
   price             $ 9.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -3858,12 +3827,12 @@ base product TSR 21529 =
   producer          TSR;
   series            Anthology;
   price             $ 7.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "Welcome to a world of rich folklore where \Monster{angels} watch over the
-  righteous, in which sea monsters sink ships, where dark figures lurk under
-  every child's bed. Now the mysteries of \Place{Dominaria} are explained.".
+  description       "Welcome to a world of rich folklore where \Monster{angels} watch over the
+                    righteous, in which sea monsters sink ships, where dark figures lurk under
+                    every child's bed. Now the mysteries of \Place{Dominaria} are explained.".
 
 
 #.....
@@ -3881,10 +3850,10 @@ base product TSR 21558 =
   product type      Novel;
   style             Paperback;
   price             $ 6.99;
+  requirements      ;
   worlds            Star*Drive;
   references        net;
-  description
-  "life in a street gane in the underground hellf of Oberon".
+  description       "life in a street gane in the underground hellf of Oberon".
 
 
 #.....
@@ -3905,15 +3874,14 @@ base product TSR 21559 =
   style             Paperback;
   producer          TSR;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "The long-awaited completion of Rath is approaching. The \NPC{Dark Lord}'s
-  plans to invade \Place{Dominaria} will soon see fruition. Only the struggle
-  for power in this artificial plane remains. \NPC{Urza Planeswalker} will not
-  stop the \Place{Phyrexian} empire.
-
-  Witness the creation of his nemesis.".
+  description       "The long-awaited completion of Rath is approaching. The \NPC{Dark Lord}'s
+                    plans to invade \Place{Dominaria} will soon see fruition. Only the struggle
+                    for power in this artificial plane remains. \NPC{Urza Planeswalker} will not
+                    stop the \Place{Phyrexian} empire.
+                    Witness the creation of his nemesis.".
 
 
 #.....
@@ -3936,13 +3904,13 @@ base product TSR 21562 =
   number            Book II;
   series            Ice Age Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "Thousands of years after the explosion at \Place{Argoth} that ended the
-  \Event{Brothers' War}, ice has covered the world of \Place{Dominaria}. The
-  strong have turned to barbarism. The weak have died. Now \NPC{Lim Dûl}, a
-  \Class{necromancer} with a taste for power, seeks to awaken a deeper evil.".
+  description       "Thousands of years after the explosion at \Place{Argoth} that ended the
+                    \Event{Brothers' War}, ice has covered the world of \Place{Dominaria}. The
+                    strong have turned to barbarism. The weak have died. Now \NPC{Lim Dûl}, a
+                    \Class{necromancer} with a taste for power, seeks to awaken a deeper evil.".
 
 
 #.....
@@ -3961,12 +3929,12 @@ base product TSR 21563 =
   number            Book Three;
   series            Harbringer Trilogy;
   price             $ 5.99;
+  requirements      ;
   worlds            Star*Drive;
   references        net,
                     Dragon 268,
                     Dragon 270;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -3986,10 +3954,10 @@ base product TSR 21570 =
   number            Book III;
   series            Masquerade Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -4007,10 +3975,10 @@ base product TSR 21573 =
   product type      Novel;
   style             Paperback;
   price             $ 6.99;
+  requirements      ;
   worlds            Star*Drive;
   references        net;
-  description
-  "a black market courier journeys to the Verge to contact The Fool".
+  description       "a black market courier journeys to the Verge to contact The Fool".
 
 
 #.....
@@ -4030,15 +3998,14 @@ base product TSR 21600 =
   style             Paperback;
   producer          TSR;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "Before history itself, the plane of \Place{Dominaira} was ruled by the
-  \Group{Thran}. They built machines and artifacts, the likes of which have
-  never since been seen. But amid this civilization, a shadow took root, one
-  that would stretch its arms across space and time.
-
-  The hideous evil of \Place{Phyrexia} was born.".
+  description       "Before history itself, the plane of \Place{Dominaira} was ruled by the
+                    \Group{Thran}. They built machines and artifacts, the likes of which have
+                    never since been seen. But amid this civilization, a shadow took root, one
+                    that would stretch its arms across space and time.
+                    The hideous evil of \Place{Phyrexia} was born.".
 
 
 #.....
@@ -4056,10 +4023,10 @@ base product TSR 21636 =
   product type      Novel;
   style             Paperback;
   price             $ 6.99;
+  requirements      ;
   worlds            Dark.Matter;
   references        net;
-  description
-  "an unspeakable evil stirs beneath the nation's capital".
+  description       "an unspeakable evil stirs beneath the nation's capital".
 
 
 #.....
@@ -4081,14 +4048,13 @@ base product TSR 21658 =
   number            Second Scroll;
   series            The Clan War;
   price             $ 6.99;
+  requirements      ;
   references        net;
-  description
-  "\Place{Shadowlands} monsters mass on the edges of \Place{Rokugan}. The
-  \Group{Crab Clan}, long vigilant in battling them, seems unable or unwilling
-  to stop the \Monster{demonic} onslaught.
-
-  But from an unlikely quarter, a hero arises. She will lead her forces in a
-  battle that will rend the world: \bold{The \Event{Battle at Beiden Pass.}}".
+  description       "\Place{Shadowlands} monsters mass on the edges of \Place{Rokugan}. The
+                    \Group{Crab Clan}, long vigilant in battling them, seems unable or unwilling
+                    to stop the \Monster{demonic} onslaught.
+                    But from an unlikely quarter, a hero arises. She will lead her forces in a
+                    battle that will rend the world: \bold{The \Event{Battle at Beiden Pass.}}".
 
 
 #.....
@@ -4110,16 +4076,15 @@ base product TSR 21659 =
   number            Third Scroll;
   series            The Clan War;
   price             $ 6.99;
+  requirements      ;
   references        net;
-  description
-  "\NPC{Doji Hoturi}, the young Champion of the \Group{Crane}, is everything a
-  \Class{samurai} could wish to be: swift of sword and pure of heart . . . but
-  his eyes hide a terrible secret.
-
-  Bloody magic whispers through \Place{Rokugan}'s greatest cities, and the
-  undead servants of a Dark God rise. From the shadows, \NPC{Doji Hoturi}
-  watches as a new champion of evil lifts his sword and laughs -- and the face
-  beneath the armor is his own.".
+  description       "\NPC{Doji Hoturi}, the young Champion of the \Group{Crane}, is everything a
+                    \Class{samurai} could wish to be: swift of sword and pure of heart . . . but
+                    his eyes hide a terrible secret.
+                    Bloody magic whispers through \Place{Rokugan}'s greatest cities, and the
+                    undead servants of a Dark God rise. From the shadows, \NPC{Doji Hoturi}
+                    watches as a new champion of evil lifts his sword and laughs -- and the face
+                    beneath the armor is his own.".
 
 
 #.....
@@ -4138,10 +4103,10 @@ base product TSR 21679 =
   product type      Novel;
   style             Paperback;
   price             $ 6.99;
+  requirements      ;
   worlds            Dark.Matter;
   references        net;
-  description
-  "unraveling the dark secrets of a ghost in Chicago".
+  description       "unraveling the dark secrets of a ghost in Chicago".
 
 
 #.....
@@ -4162,14 +4127,14 @@ base product TSR 21684 =
   style             Paperback;
   series            Clan War Series;
   price             $ 6.99;
+  requirements      ;
   references        net;
-  description
-  "The \NPC{Serene Prophet} foresaw its downfall -- tides of \Monster{demons}
-  flooding out of the \Place{Shadowlands}. One man seeks to avert the
-  catastrophe -- the leader of the \Group{Scorpion Clan}. He will pay any
-  price, perpetrate any deception, to save the \Place{empire}. If he must, he
-  will become evil to fight evil. He and the emperor's champion will battle
-  each other to the death for that which they both hold dear: \Place{Rokugan}".
+  description       "The \NPC{Serene Prophet} foresaw its downfall -- tides of \Monster{demons}
+                    flooding out of the \Place{Shadowlands}. One man seeks to avert the
+                    catastrophe -- the leader of the \Group{Scorpion Clan}. He will pay any
+                    price, perpetrate any deception, to save the \Place{empire}. If he must, he
+                    will become evil to fight evil. He and the emperor's champion will battle
+                    each other to the death for that which they both hold dear: \Place{Rokugan}".
 
 
 #.....
@@ -4188,10 +4153,10 @@ base product TSR 21785 =
   product type      Novel;
   style             Paperback;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "novelization of the movie for younger fans".
+  description       "novelization of the movie for younger fans".
 
 
 #.....
@@ -4226,13 +4191,13 @@ base product WTC 21798 =
   number            Fourth Scroll;
   series            Clan War;
   price             $ 6.99;
-  description
-  "Magic is power for the \Group{Phoenix} clan. During the depths of the
-  \Event{Clan War}, the \Group{Elemental Masters} seek ultimate power in the
-  form of a magic that will permanently destroy the \Place{Shadowlands}
-  armies. Without it, the enemy will reduce the clan to ahses from which even
-  the \Group{Phoenix} cannot rise. All hope rests in the mysteries of a dark
-  and dreaded source: \Item{The Black Scrolls}.".
+  requirements      ;
+  description       "Magic is power for the \Group{Phoenix} clan. During the depths of the
+                    \Event{Clan War}, the \Group{Elemental Masters} seek ultimate power in the
+                    form of a magic that will permanently destroy the \Place{Shadowlands}
+                    armies. Without it, the enemy will reduce the clan to ahses from which even
+                    the \Group{Phoenix} cannot rise. All hope rests in the mysteries of a dark
+                    and dreaded source: \Item{The Black Scrolls}.".
 
 
 #.....
@@ -4266,14 +4231,13 @@ base product WTC 21802 =
   number            Book 2;
   series            Invasion Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Dominaria;
-  description
-  "In the midst of an all-out war, the ground shifts and moves. Milliions upon
-  millions of invaders appear out of nowhere as the artificial plane of
-  \Place{Rath} overlays \Place{Dominaria}, covering the natural landscape with
-  the unnatural horros of \Place{Phyrexia}.
-
-  There is no rest for the wicked.".
+  description       "In the midst of an all-out war, the ground shifts and moves. Milliions upon
+                    millions of invaders appear out of nowhere as the artificial plane of
+                    \Place{Rath} overlays \Place{Dominaria}, covering the natural landscape with
+                    the unnatural horros of \Place{Phyrexia}.
+                    There is no rest for the wicked.".
 
 
 #.....
@@ -4290,9 +4254,9 @@ base product TSR 91302 =
   product type      Guide;
   style             Paperback;
   price             $16.99;
+  requirements      ;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -4310,10 +4274,10 @@ base product TSR 91400 =
   product type      Guide;
   style             Paperback;
   price             $11.99;
+  requirements      ;
   worlds            Generic;
   references        net;
-  description
-  "".
+  description       "".
 
 
 #.....
@@ -4337,15 +4301,15 @@ base product WTC 17721 =
   number            Book 1;
   series            Star Sisterz;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
-  description
-  "When \NPC{Nova Darling} sees the weird message on the mall ATM, she can't
-  believe her eyes. True, Nova loves to play the electric guitar. But that's
-  one secret she's never told anyone, especially her mom. Nova's mom is
-  convinced that Nova is destined to be a ballet star. But Nova's more
-  interested in practicing riffs on her ax, and gazing at the oh-so-cute
-  \NPC{Joe Tsai}. Will the mystery message help Nova follow her dreams without
-  breaking her mom's heart?".
+  description       "When \NPC{Nova Darling} sees the weird message on the mall ATM, she can't
+                    believe her eyes. True, Nova loves to play the electric guitar. But that's
+                    one secret she's never told anyone, especially her mom. Nova's mom is
+                    convinced that Nova is destined to be a ballet star. But Nova's more
+                    interested in practicing riffs on her ax, and gazing at the oh-so-cute
+                    \NPC{Joe Tsai}. Will the mystery message help Nova follow her dreams without
+                    breaking her mom's heart?".
 
 
 #.....
@@ -4368,16 +4332,16 @@ base product WTC 17763 =
   number            Book 2;
   series            Star Sisterz;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
-  description
-  "\NPC{Carmen Bernstein} feels like she's become invisible. Her dad recently
-  got re-married, and now he's very involved with his 'new and improved'
-  family: stepdaughter Riley, an ultra popular cheerleader, and stepson
-  Sam. Then one day, while snooping on her Dad's PocketPC, Carmen sees a
-  message telling her to make up a crazy cheer. HUH?! Carmen doesn't know
-  anything about cheerleading. In fact, she hates Riley and her cheerleading
-  friends. But in a moment of desperation, Carmen gives the silly cheer a
-  try... and discovers something she never expected.".
+  description       "\NPC{Carmen Bernstein} feels like she's become invisible. Her dad recently
+                    got re-married, and now he's very involved with his 'new and improved'
+                    family: stepdaughter Riley, an ultra popular cheerleader, and stepson
+                    Sam. Then one day, while snooping on her Dad's PocketPC, Carmen sees a
+                    message telling her to make up a crazy cheer. HUH?! Carmen doesn't know
+                    anything about cheerleading. In fact, she hates Riley and her cheerleading
+                    friends. But in a moment of desperation, Carmen gives the silly cheer a
+                    try... and discovers something she never expected.".
 
 
 #.....
@@ -4413,11 +4377,11 @@ base product WTC 88093 =
   number            Book 1;
   series            Legends Cycle;
   price             $ 6.99;
-  description
-  "The city of \Place{Bryce} is being watched by unfriendly eyes. A mysterious
-  prophesy, a desperate \Class{wizard}, and an extraordinary \Monster{tiger
-  man} are somehow caught up in the city's destiny. One man must race against
-  time to understand how -- and why -- or risk the enslavement of his people.".
+  requirements      ;
+  description       "The city of \Place{Bryce} is being watched by unfriendly eyes. A mysterious
+                    prophesy, a desperate \Class{wizard}, and an extraordinary \Monster{tiger
+                    man} are somehow caught up in the city's destiny. One man must race against
+                    time to understand how -- and why -- or risk the enslavement of his people.".
 
 
 #.....
@@ -4461,16 +4425,14 @@ base product WTC 88188 =
   producer          WTC;
   series            Anthology;
   price             $ 6.99;
+  requirements      ;
   worlds            Dominaria;
-  description
-  "What beasts rule our dreams?
-
-  Ancient Primevals enslaved our ancestors, and modern \Monster{dragon} engines
-  enslave us. \Monster{Plains dragons} defend \Monster{humans}, and
-  \Monster{undead dragons} destroy them. And all \Monster{dragons} hold
-  mysteries deep within.
-
-  Uncover the secrets of the \Monster{dragons} of \Place{Dominaria}.".
+  description       "What beasts rule our dreams?
+                    Ancient Primevals enslaved our ancestors, and modern \Monster{dragon} engines
+                    enslave us. \Monster{Plains dragons} defend \Monster{humans}, and
+                    \Monster{undead dragons} destroy them. And all \Monster{dragons} hold
+                    mysteries deep within.
+                    Uncover the secrets of the \Monster{dragons} of \Place{Dominaria}.".
 
 
 #.....
@@ -4505,17 +4467,15 @@ base product WTC 88195 =
   number            Fifth Scroll;
   series            Clan War;
   price             $ 6.99;
+  requirements      ;
   worlds            Rokugan;
-  description
-  "\Group{The Crab} have defended the \Place{Emerald Empire} against
-  \Place{Shadowlands} hordes for a millennium and beyond. Nothing will drive
-  them from the \Place{Carpenter's Wall}.
-
-  Nothing but the destruction of the \Place{empire} itself.
-
-  Plague has gripped the land, dangling \Place{Rokugan} by a thread. The
-  defenders of the empire must now become its saviors by doing the unthinkable:
-  Joining the enemy.".
+  description       "\Group{The Crab} have defended the \Place{Emerald Empire} against
+                    \Place{Shadowlands} hordes for a millennium and beyond. Nothing will drive
+                    them from the \Place{Carpenter's Wall}.
+                    Nothing but the destruction of the \Place{empire} itself.
+                    Plague has gripped the land, dangling \Place{Rokugan} by a thread. The
+                    defenders of the empire must now become its saviors by doing the unthinkable:
+                    Joining the enemy.".
 
 
 #.....
@@ -4550,17 +4510,15 @@ base product WTC 88196 =
   number            Book III;
   series            Invasion Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Dominaria;
-  description
-  "The end is near!
-
-  \Place{Phyrexian} plagues and shock troops have taken their toll. The final
-  stage of the invasion has begun, and the dark lord \NPC{Yawgmoth} himself
-  plans to cross over into \Place{Dominaria} to claim his prize. With time
-  running out, the battered heroes' last hope to save their home lies in an
-  ancient, untested weapon, a jumble of artifacts known as the \Item{Legacy}.
-
-  Bear witness to the apocalypse.".
+  description       "The end is near!
+                    \Place{Phyrexian} plagues and shock troops have taken their toll. The final
+                    stage of the invasion has begun, and the dark lord \NPC{Yawgmoth} himself
+                    plans to cross over into \Place{Dominaria} to claim his prize. With time
+                    running out, the battered heroes' last hope to save their home lies in an
+                    ancient, untested weapon, a jumble of artifacts known as the \Item{Legacy}.
+                    Bear witness to the apocalypse.".
 
 
 #.....
@@ -4601,12 +4559,12 @@ base product WTC 88552 =
   producer          WTC;
   series            Anthology;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "Ancient troves of artifacts await discovery. The origins of potent spells
-  rest lost between the pages of archaic tomes. The evolution of monstrous
-  beasts lies outside of a researcher's grasp---until now. At last,
-  long-forgotten and expertly hidden secrets will be revealed.".
+  description       "Ancient troves of artifacts await discovery. The origins of potent spells
+                    rest lost between the pages of archaic tomes. The evolution of monstrous
+                    beasts lies outside of a researcher's grasp---until now. At last,
+                    long-forgotten and expertly hidden secrets will be revealed.".
 
 
 #.....
@@ -4641,31 +4599,26 @@ base product WTC 88553 =
   number            Prelude;
   series            Four Winds Saga;
   price             $ 6.99;
+  requirements      ;
   worlds            Rokugan;
-  description
-  "The Clan War is over. The danger is not.
-
-  Once the greatest samurai in all \Place{Rokugan}, \NPC{Toturi} has managed to
-  hold the \Place{Empire} together despite warring clans and internal
-  treacheries. But nothing has prepared him for the hordes of vile spirits
-  ravaging his beloved realm.
-
-  As the Spirit Wars rage, \NPC{Toturi} and his children are the only hope for
-  \Place{Rokugan}.
-
-  The prelude to an upcoming Legend of the Five Rings series.
-
-  This novel introduces new characters and settings based on the events in the
-  Legend of the Five Rings: The Spirit Wars card set. This book also sets up
-  the story for future novels in the upcoming series \Product{The Four Winds
-  Saga}.
-
-  Edward Bolme has been involved in Origins award-winning game design and
-  fiction for 14 years. This is his first novel for Wizards of the Coast, Inc.,
-  but he has contributed short stories to various anthologies, including
-  \Product{The Dragons of Magic}, a Magic: The Gathering anthology, and
-  \Product{Neverwinter Nights}, a \Place{Forgotten Realms} anthology. He lives
-  in Washington.".
+  description       "The Clan War is over. The danger is not.
+                    Once the greatest samurai in all \Place{Rokugan}, \NPC{Toturi} has managed to
+                    hold the \Place{Empire} together despite warring clans and internal
+                    treacheries. But nothing has prepared him for the hordes of vile spirits
+                    ravaging his beloved realm.
+                    As the Spirit Wars rage, \NPC{Toturi} and his children are the only hope for
+                    \Place{Rokugan}.
+                    The prelude to an upcoming Legend of the Five Rings series.
+                    This novel introduces new characters and settings based on the events in the
+                    Legend of the Five Rings: The Spirit Wars card set. This book also sets up
+                    the story for future novels in the upcoming series \Product{The Four Winds
+                    Saga}.
+                    Edward Bolme has been involved in Origins award-winning game design and
+                    fiction for 14 years. This is his first novel for Wizards of the Coast, Inc.,
+                    but he has contributed short stories to various anthologies, including
+                    \Product{The Dragons of Magic}, a Magic: The Gathering anthology, and
+                    \Product{Neverwinter Nights}, a \Place{Forgotten Realms} anthology. He lives
+                    in Washington.".
 
 
 #.....
@@ -4699,18 +4652,15 @@ base product WTC 88603 =
   number            Book III;
   series            Odyssey Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "The time has come.
-
-  Every powerful wizard and fighter on the continent of \Place{Otaria} wants
-  one thing: power. One artifact can give them---undeniably---that which they
-  seek, and nothing will stop any of them from possessing it.
-
-  But in the end, only one can have it, and his actions will determine the fate
-  of the world.
-
-  The day of judgment has arrived.".
+  description       "The time has come.
+                    Every powerful wizard and fighter on the continent of \Place{Otaria} wants
+                    one thing: power. One artifact can give them---undeniably---that which they
+                    seek, and nothing will stop any of them from possessing it.
+                    But in the end, only one can have it, and his actions will determine the fate
+                    of the world.
+                    The day of judgment has arrived.".
 
 
 #.....
@@ -4744,17 +4694,15 @@ base product WTC 88618 =
   producer          WTC;
   series            Onslaught Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "The forest grows out of control. The mountains erupt. The seas boil. The
-  swamps spew acid, and the plains turn to desert. Yet, amidst the turmoil
-  there is civilization, brutal and unforgiving. Pit fighters battle to the
-  death before tremendous crowds, making some rich, while others lose
-  everything in one stroke of a sword.
-
-  The games must continue.
-
-  So must the struggle for survival.".
+  description       "The forest grows out of control. The mountains erupt. The seas boil. The
+                    swamps spew acid, and the plains turn to desert. Yet, amidst the turmoil
+                    there is civilization, brutal and unforgiving. Pit fighters battle to the
+                    death before tremendous crowds, making some rich, while others lose
+                    everything in one stroke of a sword.
+                    The games must continue.
+                    So must the struggle for survival.".
 
 
 #.....
@@ -4789,13 +4737,13 @@ base product WTC 88621 =
   number            Second Scroll;
   series            The Four Windows Saga;
   price             $ 6.99;
+  requirements      ;
   worlds            Rokugan;
-  description
-  "\Place{Rokugan} stands on the brink of chaos. As his brothers and sister
-  seek the favor of the clans, the illegitimate son \NPC{Akodo Kaneka} forsakes
-  grasping for power and takes up a new quest---defending the helpless and
-  destroying those who ravage the common people. But as his world crumbles
-  about him, he discovers that no son of \NPC{Toturi} can escape his destiny.".
+  description       "\Place{Rokugan} stands on the brink of chaos. As his brothers and sister
+                    seek the favor of the clans, the illegitimate son \NPC{Akodo Kaneka} forsakes
+                    grasping for power and takes up a new quest---defending the helpless and
+                    destroying those who ravage the common people. But as his world crumbles
+                    about him, he discovers that no son of \NPC{Toturi} can escape his destiny.".
 
 
 #.....
@@ -4829,15 +4777,14 @@ base product WTC 88627 =
   producer          WTC;
   number            2;
   series            Magic Legends Cycle;
+  requirements      ;
   worlds            Generic;
-  description
-  "Scheming, intelligent, and power-hungry, the emperor's assassin moves always
-  in shadow. He kills whom his master wishes and plans his own rise to
-  power. Against him, one man stands on his honor, determined to end the cycle
-  of death dealt from dark corners.
-
-  Amid a dark landscape ravaged by war, the two at last confront one
-  another. At stake is the future of the empire.".
+  description       "Scheming, intelligent, and power-hungry, the emperor's assassin moves always
+                    in shadow. He kills whom his master wishes and plans his own rise to
+                    power. Against him, one man stands on his honor, determined to end the cycle
+                    of death dealt from dark corners.
+                    Amid a dark landscape ravaged by war, the two at last confront one
+                    another. At stake is the future of the empire.".
 
 
 #.....
@@ -4872,12 +4819,12 @@ base product WTC 88690 =
   number            Sixth Scroll;
   series            Clan War;
   price             $ 6.99;
+  requirements      ;
   worlds            Rokugan;
-  description
-  "Legend of the Five Rings fans played a key role in the development of the
-  \Product{Clan War} storyline. Author Ree Soesbee is well recognized among
-  those fans and has been extremely instrumental in the design of the Legend of
-  the Five Rings storyline.".
+  description       "Legend of the Five Rings fans played a key role in the development of the
+                    \Product{Clan War} storyline. Author Ree Soesbee is well recognized among
+                    those fans and has been extremely instrumental in the design of the Legend of
+                    the Five Rings storyline.".
 
 
 #.....
@@ -4911,13 +4858,13 @@ base product WTC 88692 =
   number            Book I;
   series            Odyssey Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "This book will appeal to new readers, as well as die-hard fans. The perfect
-  entry point for new readers, this book focuses on a fierce competition for
-  one of the most powerful artifacts ever to exist in the Magic: The Gathering
-  game and novels. Major changes are occurring in the Magic universe-changes
-  that devoted fans will be eager to find out about.".
+  description       "This book will appeal to new readers, as well as die-hard fans. The perfect
+                    entry point for new readers, this book focuses on a fierce competition for
+                    one of the most powerful artifacts ever to exist in the Magic: The Gathering
+                    game and novels. Major changes are occurring in the Magic universe-changes
+                    that devoted fans will be eager to find out about.".
 
 
 #.....
@@ -4952,13 +4899,13 @@ base product WTC 88696 =
   number            Seventh Scroll;
   series            Clan War;
   price             $ 6.99;
+  requirements      ;
   worlds            Rokugan;
-  description
-  "The last book in the \Product{Clan War} series, \Product{The Lion} will
-  generate a great deal of interest. All the great clan heroes from the six
-  previous books play critical roles in this novel. This book provides an
-  exciting conclusion that is eagerly anticipated by fans of the popular
-  series.".
+  description       "The last book in the \Product{Clan War} series, \Product{The Lion} will
+                    generate a great deal of interest. All the great clan heroes from the six
+                    previous books play critical roles in this novel. This book provides an
+                    exciting conclusion that is eagerly anticipated by fans of the popular
+                    series.".
 
 
 #.....
@@ -4993,13 +4940,13 @@ base product WTC 88698 =
   number            Book II;
   series            Legends Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "Revealing the previously untold story of one of the Magic: The Gathering
-  game's most popular characters, this book will give fans a glimpse into the
-  history of the Magic universe and provide an alternative storyline to the
-  current stories being told in the \Product{Invasion trilogy} and the
-  \Product{Odyssey Cycle series}.".
+  description       "Revealing the previously untold story of one of the Magic: The Gathering
+                    game's most popular characters, this book will give fans a glimpse into the
+                    history of the Magic universe and provide an alternative storyline to the
+                    current stories being told in the \Product{Invasion trilogy} and the
+                    \Product{Odyssey Cycle series}.".
 
 
 #.....
@@ -5034,12 +4981,12 @@ base product WTC 96473 =
   producer          WTC;
   series            Mirrodin Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "\Product{The Darksteel Eye} continues a series that explores a new and
-  mysterious world in the \Place{Magic: The Gathering} setting. This novel
-  previews the newest card set to be released in February, giving you a sneak
-  peek at the newest elements of the game.".
+  description       "\Product{The Darksteel Eye} continues a series that explores a new and
+                    mysterious world in the \Place{Magic: The Gathering} setting. This novel
+                    previews the newest card set to be released in February, giving you a sneak
+                    peek at the newest elements of the game.".
 
 
 #.....
@@ -5074,10 +5021,10 @@ base product WTC 96542 =
   number            Book 3;
   series            Mirrodin Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "\Product{The Fifth Dawn} concludes a series that explores a new and
-  mysterious world in the \Place{Magic: The Gathering} setting.".
+  description       "\Product{The Fifth Dawn} concludes a series that explores a new and
+                    mysterious world in the \Place{Magic: The Gathering} setting.".
 
 
 #.....
@@ -5100,15 +5047,15 @@ base product WTC 96705 =
   number            Book 3;
   series            Star Sisterz;
   price             $ 5.99;
+  requirements      ;
   worlds            None;
-  description
-  "When \NPC{Bella DeLuca} gets a starring role in the school production of A
-  Midsummer Night's Dream, it's truly a dream come true. Yet soon \NPC{Bella}'s
-  dream turns to a nightmare. As a fairy, \NPC{Bella} will have to fly above
-  the audience, attached to a cable. But \NPC{Bella}'s afraid of heights, a
-  fact she hasn't revealed to anyone, not even her best friend. Will the
-  mystery message help \NPC{Bella} overcome her fear before she soars across
-  the stage?".
+  description       "When \NPC{Bella DeLuca} gets a starring role in the school production of A
+                    Midsummer Night's Dream, it's truly a dream come true. Yet soon \NPC{Bella}'s
+                    dream turns to a nightmare. As a fairy, \NPC{Bella} will have to fly above
+                    the audience, attached to a cable. But \NPC{Bella}'s afraid of heights, a
+                    fact she hasn't revealed to anyone, not even her best friend. Will the
+                    mystery message help \NPC{Bella} overcome her fear before she soars across
+                    the stage?".
 
 
 #.....
@@ -5131,19 +5078,17 @@ base product WTC 96884 =
   number            Book III;
   series            Kamigawa Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "The ronin \NPC{Toshi} has sought to avoid the great conflict between the
-  spirit and \Monster{human} realms. But despite his best efforts, he's not
-  only involved in it -- he's at the center of it. Together with \NPC{Princess
-  Michiko}, daughter of \NPC{Daimyo Konda}, he must find a way to stave off the
-  impending victory of the \Monster{kami}, while preserving his own life into
-  the bargain.
-
-  Amid the complicated maneuvers of the \Monster{fox people}, the \Monster{moon
-  folk}, and the \NPC{Daimyo} himself, \NPC{Toshi} can rely on only one person.
-
-  Himself.".
+  description       "The ronin \NPC{Toshi} has sought to avoid the great conflict between the
+                    spirit and \Monster{human} realms. But despite his best efforts, he's not
+                    only involved in it -- he's at the center of it. Together with \NPC{Princess
+                    Michiko}, daughter of \NPC{Daimyo Konda}, he must find a way to stave off the
+                    impending victory of the \Monster{kami}, while preserving his own life into
+                    the bargain.
+                    Amid the complicated maneuvers of the \Monster{fox people}, the \Monster{moon
+                    folk}, and the \NPC{Daimyo} himself, \NPC{Toshi} can rely on only one person.
+                    Himself.".
 
 
 #.....
@@ -5179,17 +5124,15 @@ base product WTC 9547174 =
   number            Book II;
   series            The Ravnica Cycle;
   price             $ 6.99;
+  requirements      ;
   layout            Black & White;
   worlds            Generic;
-  description
-  "One guild ravages the streets. \NPC{Teysa} leads another to 'cleanse'
-  them. And \NPC{Agrus Kos} doesn't give a damn.
-
-  But as he watches the guilds nip and tear at each other like
-  snakes... something clicks.
-
-  Now his mind is clear, as are his options. A disaster grows under the city's
-  crowded streets. He knows what he must do.";
+  description       "One guild ravages the streets. \NPC{Teysa} leads another to 'cleanse'
+                    them. And \NPC{Agrus Kos} doesn't give a damn.
+                    But as he watches the guilds nip and tear at each other like
+                    snakes... something clicks.
+                    Now his mind is clear, as are his options. A disaster grows under the city's
+                    crowded streets. He knows what he must do.";
   short description "".
 
 
@@ -5225,19 +5168,17 @@ base product WTC 9547374 =
   number            Book 5;
   series            Star Sisterz;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "Would you dare?
-
-  \NPC{Nova Darling}'s dream of joining \NPC{Joe}s band, \Group{The Charmed
-  Three}, has finally come true. \NPC{Nova} should be walking on air about
-  their upcoming Band Idol competition -- not to mention all that quality time
-  with her crush. But in the \Group{Charmed Three}, it turns out three is a
-  crowd! The band's drummer \NPC{Ivy} has a crush on Joe too and she wants
-  \NPC{Nova} out of the way. Will the azy-cray are-day help \NPC{Nova} rock her
-  way past \NPC{Ivy} and into \NPC{Joe}'s heart?
-
-  Do a dare, earn a charm, change your life!";
+  description       "Would you dare?
+                    \NPC{Nova Darling}'s dream of joining \NPC{Joe}s band, \Group{The Charmed
+                    Three}, has finally come true. \NPC{Nova} should be walking on air about
+                    their upcoming Band Idol competition -- not to mention all that quality time
+                    with her crush. But in the \Group{Charmed Three}, it turns out three is a
+                    crowd! The band's drummer \NPC{Ivy} has a crush on Joe too and she wants
+                    \NPC{Nova} out of the way. Will the azy-cray are-day help \NPC{Nova} rock her
+                    way past \NPC{Ivy} and into \NPC{Joe}'s heart?
+                    Do a dare, earn a charm, change your life!";
   short description "".
 
 
@@ -5273,15 +5214,15 @@ base product WTC 9647474 =
   number            Book 6;
   series            Star Sisterz;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "\NPC{Yumi Suzuki}'s mom is acting really weird. When \NPC{Yumi} brings home
-  a stray kitten, her animal-loving mom is furious. \NPC{Mrs. Suzuki} normally
-  hates pizza but has been eating it every night. What's the deal? Has
-  \NPC{Yumi}'s real mom been kidnapped by aliens? Has a robot taken over her
-  brain? \NPC{Nova}, \NPC{Yumi}'s best friend, tells her that the mysterious
-  dare might help her find answers. So \NPC{Yumi} gives it a try, and what she
-  discovers is a big surprise.";
+  description       "\NPC{Yumi Suzuki}'s mom is acting really weird. When \NPC{Yumi} brings home
+                    a stray kitten, her animal-loving mom is furious. \NPC{Mrs. Suzuki} normally
+                    hates pizza but has been eating it every night. What's the deal? Has
+                    \NPC{Yumi}'s real mom been kidnapped by aliens? Has a robot taken over her
+                    brain? \NPC{Nova}, \NPC{Yumi}'s best friend, tells her that the mysterious
+                    dare might help her find answers. So \NPC{Yumi} gives it a try, and what she
+                    discovers is a big surprise.";
   short description "".
 
 
@@ -5317,14 +5258,14 @@ base product WTC 9692874 =
   number            Book 4;
   series            Star Sisterz;
   price             $ 5.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "\NPC{Rani Sen} longs to fit in at school. So she joins the \Group{Fashion
-  Divas}, a club whose members are some of the most popular girls at
-  \Place{Middletown High}. As she helps plan the \Group{Divas}' annual
-  fashion show, \NPC{Rani}'s popularity grows. But still, something feels
-  wrong. It takes a chance encounter and a crazy dare to show her what really
-  matters: true friends.".
+  description       "\NPC{Rani Sen} longs to fit in at school. So she joins the \Group{Fashion
+                    Divas}, a club whose members are some of the most popular girls at
+                    \Place{Middletown High}. As she helps plan the \Group{Divas}' annual
+                    fashion show, \NPC{Rani}'s popularity grows. But still, something feels
+                    wrong. It takes a chance encounter and a crazy dare to show her what really
+                    matters: true friends.".
 
 
 #.....
@@ -5346,11 +5287,11 @@ base product WTC 9698874 =
   number            Book I;
   series            Ravnica Cycle;
   price             $ 6.99;
+  requirements      ;
   worlds            Generic;
-  description
-  "This is the first title in an exciting trilogy dealing with the new Magic:
-  The Gathering expansion sets. It will give players a sneak peek at the
-  upcoming card releases.".
+  description       "This is the first title in an exciting trilogy dealing with the new Magic:
+                    The Gathering expansion sets. It will give players a sneak peek at the
+                    upcoming card releases.".
 
 
 #.....
@@ -5374,26 +5315,23 @@ base product DMA 000080 =
   producer          WTC;
   series            For Dummies;
   price             $ 19.99;
+  requirements      ;
   worlds            None;
-  description
-  "Overwhelmed? Just want to play? Learn the ins and outs of D&D and start
-  playing right away with Dungeons & Dragons For Dummies. Book produced in
-  partnership with Wizards of the Coast and written by D&D game designers!
-
-  Topics include:
-
-  \list
-  {Finding a game}
-  {Learning the rules}
-  {Choosing a character}
-  {Creating a character}
-  {D&D etiquette}
-  {Becoming a Dungeon Master...}
-  {and much more!}
-
-  Special 4-page fold-out color cheat sheet will include a scale dungeon that
-  players can use as a game board as well as many other valuable tips, tricks,
-  short-cuts and quick reference tools for gameplay convenience.".
+  description       "Overwhelmed? Just want to play? Learn the ins and outs of D&D and start
+                    playing right away with Dungeons & Dragons For Dummies. Book produced in
+                    partnership with Wizards of the Coast and written by D&D game designers!
+                    Topics include:
+                    \list
+                    {Finding a game}
+                    {Learning the rules}
+                    {Choosing a character}
+                    {Creating a character}
+                    {D&D etiquette}
+                    {Becoming a Dungeon Master...}
+                    {and much more!}
+                    Special 4-page fold-out color cheat sheet will include a scale dungeon that
+                    players can use as a game board as well as many other valuable tips, tricks,
+                    short-cuts and quick reference tools for gameplay convenience.".
 
 
 #.....
@@ -5419,10 +5357,32 @@ base product WTC 2178174 =
   producer          WTC;
   price             $18.95;
   contents          Book "";
+  requirements      ;
   layout            Full Color;
   worlds            Generic;
-  description
-  "Ancient beasts imbued with magic, and prone to madness. Masters of a world where they are kings among men. Legendary creatures few have ever seen, and lived to tell the tale. Eldritch constructs bent to the service of godlike wizards. From four worlds of magic and mystery, one monster rises above all others to threaten death, offer hope, spread fear, or horde treasure. No matter what the world, only a \Monster{dragon} can set it, and the imaginations of millions, afire. Four of the most exciting shared worlds in the history of fantasy come together for the first time in one volume, drawn together at last by the mighty dragons of myth and legend.";
+  description       "Ancient beasts imbued with magic, and prone to madness. Masters of a world where they are kings among men. Legendary creatures few have ever seen, and lived to tell the tale. Eldritch constructs bent to the service of godlike wizards. From four worlds of magic and mystery, one monster rises above all others to threaten death, offer hope, spread fear, or horde treasure. No matter what the world, only a \Monster{dragon} can set it, and the imaginations of millions, afire. Four of the most exciting shared worlds in the history of fantasy come together for the first time in one volume, drawn together at last by the mighty dragons of myth and legend.";
   short description "Four stories about dragons set in the Forgotten Realms, Dragonlance, Eberron, and Magic: The Gathering.".
 
 #.....
+base product WTC 31417 [$undefined$] =
+
+  title             "Red Sails in the Fallout";
+  leader            "";
+  author            "Kidd, Paul";
+  cover             "Chan, Jason";
+  date              July 2011;
+  ISBN13            978-0-7869-5792-7;
+  pages             307;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  price             $7.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description       "Between a desert and a dried-up sea lies the town of \Place{Watering Hole}, the only oasis for miles and the home of our intrepid heroes, \NCP{Shaani} and {Xoota}. After some rather harrowing adventures in the desert, they are followed home by a swarm of empathic \Monster{earwigs}. As if a psychic bug infestation weren\'t enough, the town\'s water supply has suddenly turned into a trick of brackish sludge.
+                    Theorizing that the water comes from beyond the desert, \NPC{Shaani} and \NPC{Xoota} propose an expedition to find the source. Crossing the desert has never been done --- and with water in short supply, the task seems impossible. But when the Uberhuman \NPC{Benek}, and his love of cryogenically frozen brides, enter\'s the picture, what follows is an adventure for the ages.";
+  short description "Welcome to \Place{Gamma World}, where Apocalypse means never having to say you\'re sorry...";
+  synonyms          "".
