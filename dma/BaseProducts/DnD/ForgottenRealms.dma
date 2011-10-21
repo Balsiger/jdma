@@ -170,6 +170,7 @@ base product TSR 1044 =
   style             Box;
   producer          TSR;
   price             $12.95;
+  system            AD&D 2nd;
   contents          Booklet,
                     Poster "full-color map",
                     Playing Piece "die-cut" 120,
@@ -1763,6 +1764,7 @@ base product TSR 9200 =
   pages             32;
   audience          DM;
   product type      Adventure;
+  system            AD&D 1st;
   producer          TSR;
   price             $ 8.00;
   contents          Booklet,
@@ -2294,6 +2296,7 @@ base product TSR 9240 =
   date              1988;
   pages             96;
   audience          DM;
+  system            D&D 3rd;
   product type      Adventure;
   producer          TSR;
   price             $ 8.95;
@@ -7624,48 +7627,6 @@ base product WTC 88162 =
                     information on new equipment, magic items, psionic powers, poisons, spells,
                     and more.".
 #.....
-#----- WTC 88433
-
-base product WTC 88433 =
-
-  title             "City of the Spider Queen Miniatures Box";
-  leader            "";
-  subtitle          "";
-  author            "",
-                    "";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
-  date              September 2002;
-  ISBN              0-7869-0473-9;
-  pages             0;
-  system            D&D 3rd;
-  audience          All;
-  product type      Miniature;
-  style             Box;
-  producer          WTC;
-  price             $ 19.95;
-  contents          Miniature "unassembled, unpainted" 5;
-  requirements      ;
-  worlds            Forgotten Realms;
-  description       "Designed as a companion to the \Product{City of the Spider Queen}
-                    roleplaying adventure, this boxed set features key characters from the
-                    \Product{City of the Spider Queen adventure}, which ties into the
-                    R.A. Salvatore's War of the \Product{Spider Queen} novel series. Both the
-                    \Monster{drow} as a race and the location referenced in the title are
-                    extremely popular, and this set will allow fans to immerse themselves in the
-                    world of the \Monster{drow}.
-                    The set contains five unassembled and unpainted models. ".
-#.....
 #----- WTC 88567
 
 base product WTC 88567 =
@@ -8280,81 +8241,6 @@ base product WTC 8844674 =
                     The adventure can be played using D&D Minatures.";
   short description "A 4th level adventure revolving around \Monster{orcs}.".
 #.....
-#----- WTC 9501572
-
-base product WTC 9501572 =
-
-  title             "Promise of the Witch-King";
-  leader            "";
-  subtitle          "";
-  author            "Salvatore, R.A.";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
-  date              October 2005;
-  ISBN              0-7869-3823-4;
-  pages             352;
-  system            None;
-  audience          All;
-  product type      Novel;
-  style             Hardcover;
-  producer          WTC;
-  number            Book II;
-  series            The Sellswords;
-  price             $ 27.95;
-  requirements      ;
-  worlds            Forgotten Realms;
-  description       "\emph{I grant you your soul, but not your life. Be happy that I have found a
-                    measure of mercy.}
-                    \bold{The Witch-King}
-                    A \Monster{lich} of unspeakable power that people say has been destroyed, but
-                    whose hand still somehow holds the realm in its grip.
-                    \bold{The Knight}
-                    A champion of good with secrets as dark as any assassin's, she is the
-                    unlikeliest ally a \Monster{dark elf} has ever had.
-                    \NPC{Entreri} and \NPC{Jarlaxle} might be strangers in the rugged,
-                    unforgiving mountains of the \Place{Bloodstone Lands}, but they've been in
-                    difficult places before. Caught between the ghost of a power-mad
-                    \Monster{lich}, and the righteous fury of an oath-bound knight, they've never
-                    felt more at home.".
-#.....
-#----- WTC 9506076
-
-base product WTC 9506076 =
-
-  title             "The Elven Nations Trilogy Gift Set";
-  leader            "";
-  subtitle          "";
-  author            "Thompson, Paul B.",
-                    "Cook, Tonya Carter",
-                    "Niles, Douglas";
-  date              September 2005;
-  ISBN              0-7869-3957-5;
-  pages             0;
-  system            None;
-  audience          All;
-  product type      Novel;
-  style             Box;
-  producer          WTC;
-  series            The Elven Nations;
-  price             $ 20.97;
-  requirements      ;
-  worlds            Forgotten Realms;
-  description       "These three titles chronicle the rise of the \Monster{elven} people, and the
-                    schism between the two nations. The books were originally published in 1991,
-                    and they have been unavailable for several years. Last year the three books
-                    were brought out again in mass-market format to the delight of the fans. Now
-                    they have been collected into one easy-to-purchase gift set.".
-#.....
 #----- WTC 9537172
 
 base product WTC 9537172 =
@@ -8616,31 +8502,6 @@ base product WTC 9568572 =
                     three-part series. Each encounter contains special tactical information for
                     the Dungeon Master and expanded map features for ease of play.";
   short description "An adventure for characters of level 4-7.".
-#.....
-#----- WTC 9677776
-
-base product WTC 9677776 =
-
-  title             "Starlight & Shadows Gift Set";
-  leader            "";
-  subtitle          "";
-  author            "Cunningham, Elaine";
-  date              September 2005;
-  ISBN              0-7869-3816-1;
-  pages             0;
-  system            None;
-  audience          Player;
-  product type      Novel;
-  style             Box;
-  producer          WTC;
-  series            Starlight & Shadows;
-  price             $ 23.99;
-  requirements      ;
-  worlds            Forgotten Realms;
-  description       "This collection of \Product{Daughter of the Drow}, \Product{Tangled Webs},
-                    and \Product{Windwalker} brings together for the first time three magical
-                    books about a member of one of the most popular \Place{Forgotten Realms}
-                    races.".
 #.....
 
 #----- WTC 9556972
@@ -8965,34 +8826,327 @@ base product WTC 2176474 =
   short description "An Adventure for Characters of 2nd-4th Level".
 
 #.....
-#----- WTC 24231
+#----- TSR 11451
 
-base product WTC 24231 =
+base product TSR 11451 =
 
-  title             "Stowaway";
-  leader            "The";
-  subtitle          "Stone of Tymora";
-  author            "Salvatore, R. A.",
-                    "Salvatore, Geno";
-  cover             "Lockwood, Todd";
-  cartography       "Lazzaretti, Robert";
-  date              July 2009;
-  ISBN              0-7869-5257-1;
-  ISBN13            978-0-7869-5257-1;
-  pages             287;
-  system            None;
-  audience          Player;
-  product type      Novel;
-  style             Paperback;
-  producer          WTC;
-  number            Book I;
-  series            Stone of Tymora;
-  price             $9.95;
-  contents          Book "";
+  title             "Interactive Atlas";
+  leader            "";
+  author            "ProFantasy";
+  date              October 1999;
+  ISBN              0-7869-1451-3;
+  pages             0;
+  system            AD&D revised;
+  audience          DM;
+  product type      Electronic Accessory;
+  style             Medium Box;
+  series            CD-ROM;
   requirements      ;
-  layout            Color Cover;
   worlds            Forgotten Realms;
-  description       "Twelve years old and already guarding a secret that could jeopardize his young life, \NPC{Maimun} is marked for death. With a \Monster{demon} called \NPC{Asbeel} tracking his every move through \Place{Baldur's Gate}, the orphaned boy flees out to sea, stowing away on the pirate hunting ship, \Item{Sea Sprite}, where he comes across a most unlikely ally: the \Monster{dark elf} \NPC{Drizzt Do'Urden}. As the ship careens through the \Place{Sea of Swords}, fighting pirates and agents of \NPC{Asbeel}, \NPC{Maimun} must come to terms with the secret he carries and find out what family really means.";
-  short description "First book in the Stone of Tymora series.".
+  references        internet,
+                    Dragon 263,
+                    Dragon 264;
+  description       "\large{The world is at your fingertips.}
+                    The entire planet of \Place{Abeir-Toril} has been laid out before you with
+                    this completely interactive atlas.
+                    Explore never-before-seen realms, sprawling cities, treacherous overland
+                    routes, perilous dungeons---or more than 500 maps from \Product{Forgotten
+                    Realms} adventures.
+                    Examine the maps of entire continents, or zoom in for local details. Players
+                    and DMs alike can print out every square foot, mile, and quadrant to
+                    accentuate their roleplaying adventures.
+                    Everything is customizable. DMs can modify existing maps and add new levels
+                    of detail using the \Product{AD&D Core Rules Version 2.0 CD-ROM} or
+                    ProFantasy's \Product{Campaign Cartographer 2}. The more than 500 new map
+                    symbols are available to use in your own maps as well.
+                    Put the power of the \Product{Forgotten Realms Interactive Atlas} at your
+                    disposal and see a new level of detail in your adventures.".
+#.....
+#----- TSR 9535
 
+base product TSR 9535 =
+
+  title             "Volo's Guide to All Things Magical";
+  leader            "";
+  date              October 1996;
+  ISBN              0-7869-0446-1;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Soft Cover;
+  producer          TSR;
+  series            Volo's Guide;
+  price             $20.00;
+  contents          Book;
+  requirements      ;
+  worlds            Forgotten Realms;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 233,
+                    Dragon 234;
+  description       "For aeons, folk have struggled to master the world of \Place{Toril} through
+                    the use of magic. The \Monster{human} race has stolen what magical knowledge
+                    it can from the \Monster{elves} and other races, gained more through
+                    workship, and created the rest by building on the work of those who have gone
+                    before. For centuries, \Monster{human} wizards have experimented with new
+                    spells and variations on existing magic, striving to grow ever more
+                    powerful. They have succeeded to an astonishing degree, but through the death
+                    of secretive mages and the destruction of realms and entire peoples, much of
+                    the lore they built has been lost, hidden, or distorted. To pierce this heavy
+                    cloak of missing knowledge, cryptic sorcerous codes, and misinformation
+                    requires a writer of rare daring, persistence, and magical skill. Such a man
+                    is \NPC{Volothamp Geddarm}, famous traveler of the \Place{Realms}---and this
+                    is his most important, long suppressed work, the book that archwizards could
+                    not keep from your hands!
+                    Read this 128-page tome, and learn:
+                    \list
+                    {How mages gain special powers for themselves---including the awesome
+                    ability known as spellfire.}
+                    {How items may be enchanted to fire forth magic once, twice, or
+                    whenever called upon.}
+                    {The best materials from which to construct magical items.}
+                    {Powerful spells that have hitherto been the secrets of the most
+                    puissant archmages.}
+                    {Details of many of the fell, awesome artifacts of the \Place{Realms}
+                    known to exist.}
+                    {Lore about teleportation, magical wards, guardian spells, and sites
+                    of power.}
+                    {Much, much more that most wizards would have liked to remain hidden
+                    from the eyes of their rivals---and common folk not skilled in
+                    magic---forever!}
+                    Suitable for all levels of play.
+                    \bold{Special Note:} This edition of \Product{Volo's Guide to All Things
+                    Magical}, intended for travelers from beyond the borders of
+                    \Place{Faer\hat{u}n}, has been heavily rewritten and contains game notes and
+                    commentary by the famous sage and archmage \NPC{Elminster of
+                    \Place{Shadowdale}}.".
+#.....
+#----- TSR 9538
+
+base product TSR 9538 =
+
+  title             "Undermountain Trilogy III: Stardock";
+  leader            "";
+  date              January 1997;
+  ISBN              0-7869-0451-8;
+  pages             32;
+  system            AD&D revised;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  producer          TSR;
+  series            Dungeon Crawl;
+  price             $ 7.95;
+  contents          Booklet,
+                    Gatefold "cover";
+  requirements      ;
+  worlds            Forgotten Realms;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 235,
+                    Dragon 236,
+                    Dragon 237;
+  description       "\emph{Had I not seen the chaos that ensued, I would never have believed the
+                    tale \Place{Shadowdale}'s sage wove for me that day... Who would have
+                    believed that anything had the power to rip \NPC{Halaster Blackcloak} bodily
+                    from his \Place{Undermountain}? Who again could predict the maelstrom of
+                    dangers that a dungeon gone mad would unleash upon an unsuspecting
+                    \Place{Realms}? It is thanks to the brave and noble souls who dared reach
+                    into the villains' clutches to save the life of \NPC{Halaster the Mad Mage}
+                    that we all rise to greet another sun.}
+                    \right{---\NPC{Gamalon Idogyr}, starfaring mage formerly of
+                    \Place{Llorbauth}}
+                    This \Product{Dungeon Crawl} adventure returns once more to the hallowed
+                    halls of \Place{Undermountain}, but it's a different day. At dawn of
+                    Highharvestide 1369, every practitioner of magic on the \Place{Sword Coast}
+                    knew there was a problem. By midmorning, the \Group{Lords of
+                    \Place{Waterdeep}} confirmed the ill omens: Some brave souls worthy of the
+                    title 'Hero' must enter \Place{Undermountain} on a mission to save
+                    \NPC{Halaster Blackcloak}! Could these heroes be your group of player
+                    characters?
+                    This is a stand-alone module and does not require extra support
+                    materials. It can be placed into a campaign on any AD&D world, but best fits
+                    and impacts a \Product{Forgotten Realms} campaign set in
+                    \Place{Undermountain} or \Place{Waterdeep}.
+                    For four to six characters of levels 10--14".
+#.....
+#----- TSR 9369
+
+base product TSR 9369 =
+
+  title             "Hordes of Dragonspear";
+  leader            "";
+  author            "Connors, William W.";
+  editor            "Phillips, C. Terry";
+  cover             "Chaffee, Douglas";
+  cartography       "Beck, Steve";
+  illustrations     "Swekel, Arnie";
+  typography        "O'Keefe, Gaye";
+  management        "Hanchette, Paul" production;
+  date              November 1992;
+  ISBN              1-56076-333-7;
+  pages             32;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  producer          TSR;
+  price             $ 6.95;
+  contents          Booklet,
+                    Gatefold "cover";
+  requirements      ;
+  worlds            Forgotten Realms;
+  references        catalogue93,
+                    catalogue94,
+                    catalog92,
+                    catalog95,
+                    catalog93;
+  description       "\Place{Dragonspear Castle}. All who live within several hundred miles heard
+                    the name and know its import. Once home to the proud and brave, it stands now
+                    a ruin, cloaked behind a history of murder and diabolic plots. Few go there,
+                    for the only reward to be found is death.
+                    Rumors abound that \Place{Dragonspear} holds a portal to the sinister planes,
+                    but until now those have been unfounded. Following a great battle against
+                    \Monster{ords} and \Place{trolls} from the \Place{High Moor} who had taken
+                    possession of the castle, a temple to ward against further evil was
+                    established. However, by the \Event{Time of Troubles}, that temple and its
+                    clergy had disappeared. Now, a horde of \Monster{fiends} and monsters has
+                    amassed at \Place{Dragonspear Castle}, and is terrorizing the surrounding
+                    countryside.
+                    The portal is active, that is for certain. The army of \Place{Daggerford}
+                    needs reinforcements! Is your party made of the stuff of heroes?
+                    \Product{Hordes of Dragonspear} can be played using either the
+                    \Product{Battlesystem} miniatures rules, or the quick combat resolution
+                    system found in DMGR2, \Place{The Castle Guide}. Alternatively, a few simple
+                    changes render the entire module playable without any special rules.";
+  synonyms          "FRQ2".
+#.....
+#----- TSR 9307
+
+base product TSR 9307 =
+
+  title             "Ninja Wars";
+  leader            "";
+  author            "Findley, Nigel";
+  editor            "Connors, William W.";
+  cover             "Fields, Fred";
+  cartography       "Knecht, John";
+  illustrations     "Nelson, Mark";
+  management        "Feggestad, Sarah" production;
+  date              1990;
+  ISBN              0-88038-895-1;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  producer          TSR;
+  series            Oriental Adventures;
+  price             $ 9.95;
+  contents          Booklet,
+                    Poster "color map",
+                    Gatefold "cover";
+  requirements      ;
+  worlds            Forgotten Realms;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96;
+  description       "\bold{Behold The Shining Temple of \Place{Bishamon}!}
+                    Located above the city of \Place{Aru} on the island nation of \Place{Wa},
+                    this shrine is the focus of great pilgrimage. Every year, thousands of people
+                    travel here to celebrate the Ceremony of the Three Thousand Steps. For
+                    townsfolk and travelers alike, it is a time of great celebrations and
+                    revelry.
+                    For \NPC{Benju Matsumoto}, Daimyo of \Place{Aru}, it is a time of worry and
+                    concern. Something is wrong this year. A political rival has hired a clan of
+                    ninja to disrupt the pilgrimage and disgrace \NPC{Matsumoto}. But the daimyo
+                    has his own ninja, and just to be safe, he decides to hire a party of
+                    adventurers to make sure everything runs smoothly.
+                    Of course, it doesn't...";
+  synonyms          "FROA1".
+#.....
+#----- TSR 9252
+
+base product TSR 9252 =
+
+  title             "Hall of Heroes";
+  leader            "";
+  author            "Grubb, Jeff",
+                    "Novak, Kate",
+                    "Martin, David E.",
+                    "Lowder, Jim",
+                    "Nesmith, Bruce",
+                    "Perrin, Steve",
+                    "Pondsmith, Mike",
+                    "Salvatore, R.A.";
+  editor            "Bowles, Scott";
+  cover             "Easley, Jeff";
+  illustrations     "Dameron, Ned";
+  typography        "Janke, Kim",
+                    "Lokotz, Angelika",
+                    "Elmore, Betty";
+  management        "Hanchette, Paul" keylining;
+  date              1989;
+  ISBN              0-88038-711-4;
+  pages             128;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Soft Cover;
+  producer          TSR;
+  price             $10.95;
+  contents          Book;
+  requirements      ;
+  worlds            Forgotten Realms;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description       "The \Place{Forgotten Realms} fantasy world has been the site of many great
+                    adventures and home to countless valiant heroes and infamous villains. Many a
+                    tale of derring-do has been recounted in novels like the \Product{Moonshea
+                    trilogy} by Douglas Niles, \Product{The Crystal Shard} by R.A. Salvatore,
+                    \Product{Azure Bonds} by Kate Novak and Jeff Grubb, and \Product{Spellfire}
+                    by Ed Greenwood (creator of the \Place{Forgotten Realms} fantasy world).
+                    Until now, the characters from these \Place{Forgotten Realms} novels have
+                    been unavailable to AD&D game players. But no longer.
+                    \Product{Hall of Heroes} provides complete histoires and AD&D game statistics
+                    for such beloved characters as \NPC{Elminster}, the greatest sage and magic
+                    user of the \Place{Realms}, \NPC{Tristan Kendrick} and \NPC{Robyn} of the
+                    \Place{Moonshae} isles, \NPC{Wulfgar} the Barbarian, \NPC{Drizzt} the
+                    \Monster{dark elf}, and \NPC{Bruenor} the \Monster{dwarf}, all from the
+                    northern reaches, plus \NPC{Alias} and \NPC{Dragonbait}, \NPC{Shandril}, and
+                    \NPC{Narm Tamaraith}, and many more.
+                    But the \Product{Hall of Heroes} is more than a listing of game statistics:
+                    It's also a sourcebook describing (among other things) artificial and magical
+                    lifeforms of the \Place{Realms}, as well as the lives of the world's
+                    \Monster{elves}, \Monster{dwarves}, \Monster{lizardmen}, and exotic
+                    creatures.
+                    Whatever your interest in the \Place{Forgotten Realms} campaign setting,
+                    you'll find much to entertain and intrigue you in this volume.";
+  synonyms          "FR7".
+#.....
+#----- TSR 9122
+
+base product TSR 9122 =
+
+  title             "Bloodstone Pass";
+  leader            "";
+  author            "Niles, Douglas",
+                    "Dobson, Michael";
+  date              1985;
+  pages             56;
+  audience          DM;
+  system            AD&D 1st;
+  product type      Adventure;
+  producer          TSR;
+  price             $12.25;
+  contents          Booklet 2,
+                    Counter "die-cut" 102,
+                    Sheet "cardboard fold-up buildings and characters" 12;
+  requirements      ;
+  worlds            Forgotten Realms;
+  references        net price list;
+  description       "a combination of role-playing and miniatures campaigning";
+  synonyms          "H1".
 #.....

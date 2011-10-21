@@ -67,7 +67,7 @@ base product TSR 8094 =
   date              July 1994;
   system            Endless Quest;
   audience          All;
-  product type      Adventure;
+  product type      Novel;
   number            Book Four;
   series            New Series;
   price             � 3.99;
@@ -90,7 +90,7 @@ base product TSR 8099 =
   pages             192;
   system            Endless Quest;
   audience          All;
-  product type      Adventure;
+  product type      Novel;
   number            Book Ten;
   series            New Series;
   price             $ 3.95;

@@ -157,7 +157,7 @@ public class FormattedValue extends ValueHandle
                            false, null, null);
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry
-        ("guru", new net.ixitxachitls.dma.data.DMAData("path"));
+        ("guru", new net.ixitxachitls.dma.data.DMAData.Test.Data());
 
       assertEquals("value", "value", formatted.value(entry, true));
       assertEquals("formatted", "formatted", formatted.formatted(entry, true));

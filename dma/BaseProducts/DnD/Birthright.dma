@@ -821,33 +821,3 @@ base product TSR 3147 =
 #.....
 
 
-#----- DMA 000048
-
-base product DMA 000048 =
-
-  title             "Serpent's Eye";
-  leader            "The";
-  author            "Stark, Ed";
-  cover             "Szezudlo";
-  illustrations     "Gross, Dave",
-                    "Sergesketter, Chad",
-                    "Becker, Barbara",
-                    "Ken Lopez";
-  management        "Karen Boomgarden" special thanks,
-                    "Wise, David" special thanks,
-                    "Jim Ward" special thanks,
-                    "Robert Galica" special thanks;
-  date              1996;
-  pages             32;
-  system            AD&D revised;
-  audience          All;
-  product type      Comics;
-  style             Booklet;
-  price             $ 0.00;
-  contents          Booklet;
-  requirements      ;
-  worlds            Birthright;
-  description       "A stand-alone comic book set in the Birthright setting.".
-
-
-#.....

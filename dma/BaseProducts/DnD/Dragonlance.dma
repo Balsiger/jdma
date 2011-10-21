@@ -8,21 +8,6 @@
 #
 #
 
-#----- TSR 1039
-
-base product TSR 1039 =
-
-  title             "Dragonlance Boardgame";
-  leader            "";
-  date              1988;
-  price             $24.95;
-  worlds            Dragonlance;
-  references        net price list;
-  description
-  "Unknown".
-
-
-#.....
 #----- TSR 1050
 
 base product TSR 1050 =
@@ -41,24 +26,6 @@ base product TSR 1050 =
                     catalog93;
   description
   "The other continent of Krynn.".
-
-
-#.....
-#----- TSR 1058
-
-base product TSR 1058 =
-
-  title             "Mage Stones";
-  leader            "";
-  date              1990;
-  audience          All;
-  product type      Board Game;
-  price             $17.95;
-  worlds            Dragonlance;
-  references        complete product listing,
-                    catalog93;
-  description
-  "A fast-paced strategy and positioning game.".
 
 
 #.....
@@ -291,6 +258,7 @@ base product TSR 8447 =
   date              September 1998;
   pages             128;
   audience          All;
+  system            None;
   product type      Special Book;
   worlds            Dragonlance;
   references        catalog98;
@@ -308,6 +276,7 @@ base product TSR 8448 =
   date              1987;
   ISBN              0-88038-448-4;
   audience          DM;
+  system            AD&D 1st;
   product type      Accessory;
   price             $15.95;
   worlds            Dragonlance;
@@ -328,6 +297,7 @@ base product TSR 9130 =
   leader            "";
   date              1984;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list;
   description
@@ -344,6 +314,7 @@ base product TSR 9131 =
   leader            "";
   date              1984;
   price             $ 6.95;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list;
   description
@@ -359,6 +330,7 @@ base product TSR 9132 =
   title             "Dragons of Flame";
   leader            "";
   date              1984;
+  system            AD&D 1st;
   price             $ 6.00;
   worlds            Dragonlance;
   references        net price list;
@@ -376,6 +348,7 @@ base product TSR 9133 =
   leader            "";
   date              1986;
   ISBN              0-88038-092-6;
+  system            AD&D 1st;
   price             $10.00;
   worlds            Dragonlance;
   references        net price list,
@@ -395,6 +368,7 @@ base product TSR 9135 =
   date              1984;
   price             $10.00;
   worlds            Dragonlance;
+  system            AD&D 1st;
   references        net price list;
   description
   "";
@@ -411,6 +385,7 @@ base product TSR 9136 =
   date              1985;
   ISBN              0-88038-093-4;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list,
                     catalog93;
@@ -428,6 +403,7 @@ base product TSR 9137 =
   leader            "";
   date              1985;
   price             $ 7.50;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list,
                     catalog93;
@@ -445,6 +421,7 @@ base product TSR 9139 =
   leader            "";
   date              1984;
   price             $ 6.95;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list;
   description
@@ -461,6 +438,7 @@ base product TSR 9140 =
   leader            "";
   date              1985;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list;
   description
@@ -478,6 +456,7 @@ base product TSR 9141 =
   date              1985;
   ISBN              0-88038-097-7;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list,
                     catalog93;
@@ -496,6 +475,7 @@ base product TSR 9142 =
   date              1985;
   ISBN              0-88038-098-5;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list,
                     catalog93;
@@ -513,6 +493,7 @@ base product TSR 9144 =
   leader            "";
   date              1985;
   price             $10.00;
+  system            AD&D 1st;
   worlds            Dragonlance;
   references        net price list;
   description
@@ -528,6 +509,7 @@ base product TSR 9176 =
   title             "Dragons of Truth";
   leader            "";
   date              1986;
+  system            AD&D 1st;
   price             $ 8.00;
   worlds            Dragonlance;
   references        net price list;
@@ -544,6 +526,7 @@ base product TSR 9231 =
 
   title             "Mists of Krynn";
   leader            "";
+  system            AD&D 1st;
   date              1988;
   price             $ 9.95;
   worlds            Dragonlance;
@@ -562,6 +545,7 @@ base product TSR 9243 =
   leader            "";
   date              1989;
   price             $ 8.95;
+  system            AD&D 2nd;
   worlds            Dragonlance;
   references        catalogue93;
   description
@@ -1329,28 +1313,6 @@ base product TSR 11396 =
 
 
 #.....
-#----- TSR 11446
-
-base product TSR 11446 =
-
-  title             "Odyssey of Gilthanas";
-  leader            "The";
-  author            "Niles, Douglas",
-                    "Miller, Steve",
-                    "Stan";
-  date              July 1999;
-  ISBN              0-7869-1446-7;
-  system            None;
-  audience          All;
-  product type      Novel;
-  price             $ 6.99;
-  worlds            Dragonlance;
-  references        net;
-  description
-  "a novel and sourcebook about Dragonlance".
-
-
-#.....
 
 #----- WTC 96990
 
@@ -1363,18 +1325,6 @@ base product WTC 96990 =
                     "Perrin, Don",
                     "Chambers, Jamie",
                     "Coyle, Christopher";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
   date              August 2003;
   ISBN              0-7869-3086-1;
   pages             320;
@@ -1402,4 +1352,106 @@ base product WTC 96990 =
   maps you need to fully explore the world of \Place{Dragonlance}.".
 
 
+#.....
+#----- TSR 9278
+
+base product TSR 9278 =
+
+  title             "Otherlands";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-829-3;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  worlds            Dragonlance;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93;
+  description
+  "tales and travels from beyond the shores";
+  synonyms          "DLR1".
+
+
+#.....
+#----- TSR 9400
+
+base product TSR 9400 =
+
+  title             "Krynn Trail Map";
+  leader            "";
+  date              1989;
+  price             $ 3.95;
+  system            AD&D 2nd;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "";
+  synonyms          "TM3".
+
+
+#.....
+#----- TSR 9237
+
+base product TSR 9237 =
+
+  title             "World of Krynn";
+  leader            "";
+  date              1988;
+  ISBN              0-88038-609-6;
+  producer          TSR;
+  system            AD&D 1st;
+  price             $ 8.98;
+  requirements      ;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description       "";
+  synonyms          "DL16".
+#.....
+#----- TSR 9237
+
+base product TSR 9237 =
+
+  title             "World of Krynn";
+  leader            "";
+  date              1988;
+  ISBN              0-88038-609-6;
+  producer          TSR;
+  worlds            Generic;
+  price             $ 8.98;
+  system            AD&D 1st;
+  requirements      ;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description       "";
+  synonyms          "DL16".
+#.....
+  producer          TSR;
+  price             $ 5.95;
+  requirements      ;
+  references        net price list;
+  description       "";
+  synonyms          "M5".
+#.....
+#----- TSR 9180
+
+base product TSR 9180 =
+
+  title             "Dragons of Triumph";
+  leader            "";
+  date              1986;
+  ISBN              0-88038-096-9;
+  producer          TSR;
+  system            AD&D 1st;
+  price             $10.00;
+  requirements      ;
+  worlds            Dragonlance;
+  references        net price list,
+                    catalog93;
+  description       "";
+  synonyms          "DL14".
 #.....

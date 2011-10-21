@@ -7906,52 +7906,6 @@ base product WTC 88601 =
 
 
 #.....
-#----- WTC 88602
-
-base product WTC 88602 =
-
-  title             "Dragons of a Vanished Moon";
-  leader            "";
-  subtitle          "";
-  author            "Weis, Margaret",
-                    "Hickman, Tracy";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
-  date              June 2002;
-  ISBN              0-7896-2740-X;
-  pages             560;
-  system            None;
-  audience          All;
-  product type      Novel;
-  style             Hardcover;
-  number            Volume III;
-  series            War of Souls;
-  price             $ 27.95;
-  requirements      ;
-  worlds            Dragonlance;
-  description       "The flames of war devour \Place{Ansalon}. The army of dead souls marches
-                    toward conquest, led by the mystical warrior \NPC{Mina}, who serves the
-                    powerful \God{One God}.
-                    A small band of heroes, driven to desperate measures, leads the fight against
-                    overwhelming odds.
-                    Two unlikely protagonists emerge. One is a \Monster{dragon} overlord who will
-                    not easily relinquish her rule. The other is an irrepressible
-                    \Monster{kender} who has been on a strange and remarkable journey that will
-                    end in startling and unforeseen fashion.
-                    The stirring climax of the \Product{War of Souls}.".
-
-
-#.....
 #----- WTC 88604
 
 base product WTC 88604 =
@@ -11350,6 +11304,7 @@ base product WTC 2173274 =
 
 base product WTC 2162874 =
 
+  title             "Obsidian Ridge";
   leader            "";
   subtitle          "Nothing is beyond the reach of the \Place{Obsidian Ridge}.";
   author            "Lebow, Jess";
@@ -11365,8 +11320,9 @@ base product WTC 2162874 =
   pages             313;
   system            None;
   audience          DM;
-  product type      Accessory;
+  product type      Novel;
   style             Booklet;
+  worlds            Forgotten Realms;
   number            2;
   series            The Citadels;
   price             $6.99;
@@ -11693,7 +11649,7 @@ base product WTC 2181672 =
   pages             168;
   system            None;
   audience          All;
-  product type      Special Book;
+  product type      Novel;
   style             Hardcover;
   price             $24.95;
   contents          Book "";
@@ -11817,7 +11773,9 @@ base product WTC 2173374 =
   ISBN              0-7869-4863-9;
   ISBN13            978-0-7869-4863-5;
   pages             339;
+  worlds            Forgotten Realms;
   number            Book III;
+  product type      Novel;
   series            The Twilight War;
   price             $6.99;
   contents          Book "";
@@ -11842,7 +11800,9 @@ base product WTC 9598174 =
   ISBN13            978-0-7869-4807-9;
   pages             312;
   number            Book II;
+  product type      Novel;
   series            The Empyrean Odyssey;
+  worlds            Forgotten Realms;
   price             $6.99;
   contents          Book "";
   requirements      ;
@@ -11870,6 +11830,7 @@ base product WTC 2395774 =
   system            None;
   audience          All;
   product type      Novel;
+  worlds            Forgotten Realms;
   style             Paperback;
   producer          WTC;
   number            Book 1;
@@ -11901,6 +11862,7 @@ base product WTC 2190974 =
   ISBN              0-7869-5021-8;
   pages             342;
   system            None;
+  worlds            Forgotten Realms;
   audience          All;
   product type      Novel;
   style             Paperback;
@@ -11932,6 +11894,7 @@ base product WTC 2402574 =
   product type      Novel;
   style             Paperback;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            3;
   series            Ed Greenwood Presents Waterdeep;
   price             $7.99;
@@ -11971,6 +11934,7 @@ base product WTC 2191074 =
   audience          All;
   product type      Novel;
   style             Paperback;
+  worlds            Forgotten Realms;
   producer          WTC;
   number            Book I;
   series            Blades of the Moonsea;
@@ -12005,6 +11969,7 @@ base product WTC 2402874 =
   product type      Novel;
   style             Paperback;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            2;
   series            The Wilds;
   price             $7.99;
@@ -12038,6 +12003,7 @@ base product WTC 2189774 =
   product type      Novel;
   style             Paperback;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            Book III;
   series            The Knights of Myth Drannor;
   price             $7.99;
@@ -12066,9 +12032,10 @@ base product WTC 2402674 =
   pages             305;
   system            None;
   audience          DM;
-  product type      Accessory;
+  product type      Novel;
   style             Booklet;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            4;
   series            Ed Greenwood Presents Waterdeep;
   price             $7.99;
@@ -12104,6 +12071,7 @@ base product WTC 2405174 =
   audience          Player;
   product type      Novel;
   style             Paperback;
+  worlds            Forgotten Realms;
   producer          WTC;
   number            II;
   series            Transitions;
@@ -12139,6 +12107,7 @@ base product WTC 24197 =
   product type      Novel;
   style             Paperback;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            Book III;
   series            The Empyrean Odyssey;
   price             $7.99;
@@ -12172,6 +12141,7 @@ base product WTC 2404874 =
   product type      Novel;
   style             Paperback;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            Book I;
   series            Chosen of Nendawen;
   price             $7.99;
@@ -12203,6 +12173,7 @@ base product WTC 2501374 =
   audience          All;
   product type      Novel;
   style             Paperback;
+  worlds            Forgotten Realms;
   producer          WTC;
   number            Book II;
   series            Abolethic Sovereignty;
@@ -12237,6 +12208,7 @@ base product WTC 2502274 =
   system            None;
   audience          Player;
   product type      Novel;
+  worlds            Forgotten Realms;
   style             Paperback;
   producer          WTC;
   series            The Wilds;
@@ -12269,9 +12241,10 @@ base product WTC 25127 =
   pages             335;
   system            None;
   audience          DM;
-  product type      Accessory;
+  product type      Novel;
   style             Booklet;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            Anthology;
   series            The Haunted Lands;
   price             $7.99;
@@ -12301,6 +12274,7 @@ base product WTC 25355 =
   system            None;
   audience          All;
   product type      Novel;
+  worlds            Forgotten Realms;
   style             Paperback;
   producer          WTC;
   number            5;
@@ -12331,6 +12305,7 @@ base product WTC 25380 =
   ISBN13            978-0-7869-5485-8;
   pages             338;
   system            None;
+  worlds            Forgotten Realms;
   audience          All;
   product type      Novel;
   style             Paperback;
@@ -12369,6 +12344,7 @@ base product WTC 25153 =
   product type      Novel;
   style             Paperback;
   producer          WTC;
+  worlds            Forgotten Realms;
   number            Book I;
   series            Brotherhood of the Griffon;
   price             $7.99;
@@ -12401,6 +12377,7 @@ base product WTC 25393 =
   audience          All;
   product type      Novel;
   style             Paperback;
+  worlds            Forgotten Realms;
   producer          WTC;
   number            III;
   series            Transitions;
@@ -12433,6 +12410,7 @@ base product WTC 24745 =
   system            None;
   audience          All;
   product type      Novel;
+  worlds            Forgotten Realms;
   style             Paperback;
   producer          WTC;
   price             $7.99;
@@ -12464,6 +12442,7 @@ base product WTC 31724 =
   pages             389;
   system            None;
   audience          All;
+  worlds            Forgotten Realms;
   product type      Novel;
   style             Paperback;
   producer          WTC;
@@ -12482,6 +12461,125 @@ base product WTC 31724 =
   synonyms          "".
 
 #.....
+#----- WTC 24231
+
+base product WTC 24231 =
+
+  title             "Stowaway";
+  leader            "The";
+  subtitle          "Stone of Tymora";
+  author            "Salvatore, R. A.",
+                    "Salvatore, Geno";
+  cover             "Lockwood, Todd";
+  cartography       "Lazzaretti, Robert";
+  date              July 2009;
+  ISBN              0-7869-5257-1;
+  ISBN13            978-0-7869-5257-1;
+  pages             287;
+  system            None;
+  audience          Player;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book I;
+  series            Stone of Tymora;
+  price             $9.95;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Forgotten Realms;
+  description       "Twelve years old and already guarding a secret that could jeopardize his young life, \NPC{Maimun} is marked for death. With a \Monster{demon} called \NPC{Asbeel} tracking his every move through \Place{Baldur's Gate}, the orphaned boy flees out to sea, stowing away on the pirate hunting ship, \Item{Sea Sprite}, where he comes across a most unlikely ally: the \Monster{dark elf} \NPC{Drizzt Do'Urden}. As the ship careens through the \Place{Sea of Swords}, fighting pirates and agents of \NPC{Asbeel}, \NPC{Maimun} must come to terms with the secret he carries and find out what family really means.";
+  short description "First book in the Stone of Tymora series.".
+
+#.....
+#----- WTC 9501572
+
+base product WTC 9501572 =
+
+  title             "Promise of the Witch-King";
+  leader            "";
+  subtitle          "";
+  author            "Salvatore, R.A.";
+  date              October 2005;
+  ISBN              0-7869-3823-4;
+  pages             352;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  producer          WTC;
+  number            Book II;
+  series            The Sellswords;
+  price             $ 27.95;
+  requirements      ;
+  worlds            Forgotten Realms;
+  description       "\emph{I grant you your soul, but not your life. Be happy that I have found a
+                    measure of mercy.}
+                    \bold{The Witch-King}
+                    A \Monster{lich} of unspeakable power that people say has been destroyed, but
+                    whose hand still somehow holds the realm in its grip.
+                    \bold{The Knight}
+                    A champion of good with secrets as dark as any assassin's, she is the
+                    unlikeliest ally a \Monster{dark elf} has ever had.
+                    \NPC{Entreri} and \NPC{Jarlaxle} might be strangers in the rugged,
+                    unforgiving mountains of the \Place{Bloodstone Lands}, but they've been in
+                    difficult places before. Caught between the ghost of a power-mad
+                    \Monster{lich}, and the righteous fury of an oath-bound knight, they've never
+                    felt more at home.".
+#.....
+#----- WTC 9506076
+
+base product WTC 9506076 =
+
+  title             "The Elven Nations Trilogy Gift Set";
+  leader            "";
+  subtitle          "";
+  author            "Thompson, Paul B.",
+                    "Cook, Tonya Carter",
+                    "Niles, Douglas";
+  date              September 2005;
+  ISBN              0-7869-3957-5;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Box;
+  producer          WTC;
+  series            The Elven Nations;
+  price             $ 20.97;
+  requirements      ;
+  worlds            Forgotten Realms;
+  description       "These three titles chronicle the rise of the \Monster{elven} people, and the
+                    schism between the two nations. The books were originally published in 1991,
+                    and they have been unavailable for several years. Last year the three books
+                    were brought out again in mass-market format to the delight of the fans. Now
+                    they have been collected into one easy-to-purchase gift set.".
+#.....
+#----- WTC 9677776
+
+base product WTC 9677776 =
+
+  title             "Starlight & Shadows Gift Set";
+  leader            "";
+  subtitle          "";
+  author            "Cunningham, Elaine";
+  date              September 2005;
+  ISBN              0-7869-3816-1;
+  pages             0;
+  system            None;
+  audience          Player;
+  product type      Novel;
+  style             Box;
+  producer          WTC;
+  series            Starlight & Shadows;
+  price             $ 23.99;
+  requirements      ;
+  worlds            Forgotten Realms;
+  description       "This collection of \Product{Daughter of the Drow}, \Product{Tangled Webs},
+                    and \Product{Windwalker} brings together for the first time three magical
+                    books about a member of one of the most popular \Place{Forgotten Realms}
+                    races.".
+#.....
 #----- WTC 31683
 
 base product WTC 31683 =
@@ -12497,6 +12595,7 @@ base product WTC 31683 =
   pages             387;
   system            None;
   audience          All;
+  worlds            Forgotten Realms;
   product type      Novel;
   style             Paperback;
   producer          WTC;
@@ -12531,6 +12630,7 @@ base product WTC 31682 =
   audience          Player;
   product type      Novel;
   style             Paperback;
+  worlds            Forgotten Realms;
   producer          WTC;
   number            Book III;
   series            Brotherhood of the Griffon;
@@ -12547,3 +12647,4 @@ base product WTC 31682 =
   synonyms          "".
 
 #.....
+

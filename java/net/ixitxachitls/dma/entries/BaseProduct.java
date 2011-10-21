@@ -297,6 +297,8 @@ public class BaseProduct extends BaseEntry
   {
     /** No game system, e.g. for novels. */
     NONE("None", null),
+    /** Chainmail */
+    CHAINMAIL("Chainmail", null),
     /** Dungeons & Dragons, original edition. */
     DnD_1ST("D&D 1st", "D&D 1st"),
     /** Advanced Dungeon & Dragons, first edition. */
@@ -3277,7 +3279,7 @@ public class BaseProduct extends BaseEntry
         + "\n"
         + "#.....\n";
 
-      AbstractEntry entry = BaseProduct.read(reader, new DMAData("path"));
+      AbstractEntry entry = BaseProduct.read(reader, new DMAData.Test.Data());
 
       //System.out.println("read entry:\n'" + entry + "'");
 
@@ -3297,7 +3299,7 @@ public class BaseProduct extends BaseEntry
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
       BaseProduct entry = (BaseProduct)
-        BaseProduct.read(reader, new DMAData("path"));
+        BaseProduct.read(reader, new DMAData.Test.Data());
 
       Set<String> persons = new java.util.TreeSet<String>();
       entry.collectPersons(persons, null, null);
@@ -3346,7 +3348,7 @@ public class BaseProduct extends BaseEntry
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
       BaseProduct entry = (BaseProduct)
-        BaseProduct.read(reader, new DMAData("path"));
+        BaseProduct.read(reader, new DMAData.Test.Data());
 
       Set<String> jobs = new java.util.TreeSet<String>();
       entry.collectJobs(jobs, null, null);

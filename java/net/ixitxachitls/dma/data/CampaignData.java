@@ -46,7 +46,7 @@ import net.ixitxachitls.dma.entries.BaseCampaign;
 
 //__________________________________________________________________________
 
-public class CampaignData extends DMAData
+public class CampaignData extends DMADatafiles
 {
   //--------------------------------------------------------- constructor(s)
 

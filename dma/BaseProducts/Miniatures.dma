@@ -1089,6 +1089,7 @@ base product TSR 5826 =
 
   title             "AD&D Basic Adhesive Set";
   leader            "";
+  product type      Miniature;
   requirements      ;
   references        complete product listing;
   description       "".
@@ -1103,6 +1104,7 @@ base product TSR 5900 =
   title             "AD&D Basic Paint Set";
   leader            "";
   requirements      ;
+  product type      Miniature;
   references        complete product listing;
   description       "".
 
@@ -2251,7 +2253,7 @@ base product MM 20019 =
   pages             0;
   system            None;
   audience          DM;
-  product type      Accessory;
+  product type      Miniature;
   style             Small Box;
   producer          Mega Miniatures;
   series            Dungeon Decor;
@@ -2274,7 +2276,7 @@ base product MM 20006 =
   pages             0;
   system            None;
   audience          DM;
-  product type      Accessory;
+  product type      Miniature;
   style             Small Box;
   producer          Mega Miniatures;
   series            Dungeon Decor;
@@ -2473,7 +2475,7 @@ base product TS 105 =
   date              January 2010;
   system            None;
   audience          DM;
-  product type      Accessory;
+  product type      Miniature;
   style             Booklet;
   producer          WTC;
   contents          Miniature "flaming wreckage marker";
@@ -2578,4 +2580,1199 @@ base product WTC 24463 =
                     One of the greatest villains of the Dungeons & Dragons Roleplaying Game, \God{Orcus}, Prince of Undeath, sets out to destroy the world of the living and rule over the undead. Can you adventurers stand against this vile demon prince?";
   short description "An gargantuan, iconic miniature of Orcus, Prince of Undeath.".
 
+#.....
+#----- WTC 95050
+
+base product WTC 95050 =
+
+  title             "War Drums Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              March 2006;
+  ISBN              0-7869-3885-4;
+  system            D&D 3.5;
+  audience          All;
+  worlds            Generic;
+  product type      Miniature;
+  style             Medium Box;
+  number            8;
+  series            D&D Miniatures;
+  price             $ 12.99;
+  contents          Miniature "randomized, pre-painted plastic" 8,
+                    Card "stat" 8,
+                    Sheet "checklist" 1;
+  requirements      ;
+  layout            Full Color;
+  description       "Monsters and heroes face off on the miniatures battlefield!
+                    True to the head-to-head nature of the \Product{D&D Miniatures Game}, the
+                    latest expansion set highlights miniatures against the backdrop of war. Per
+                    previous releases, the figures in the set are selected from key D&D
+                    roleplaying game titles such as \Product{Monster Manual}, \Product{Monster
+                    Manual III}, \Product{Miniatures Handbook}, and the \Product{Eberron} and
+                    \Product{Forgotten Realms campaign} settings. The set also includes an elite
+                    group of figures that come with a second, epic-level stat card, allowing
+                    players to assemble higher-value armies with which to do battle.";
+  short description "".
+#.....
+#----- WTC 95051
+
+base product WTC 95051 =
+
+  title             "D&D Miniatures Game Starter Set";
+  leader            "";
+  subtitle          "The Greatest Battles of Fantasy Start Here!";
+  author            "Heinsoo, Rob" game design,
+                    "Donais, Michael 'Mike'" game development lead,
+                    "Decker, Jesse" game development,
+                    "Johnson, Mons" game development,
+                    "Schubert, Stephen" game development,
+                    "Heinsoo, Rob" rulebooks,
+                    "Slavicsek, Rob" rulebooks;
+  editor            "Wilkes, Jennifer Clarke",
+                    "Mohan, Kim" editing manager;
+  cover             "",
+                    "";
+  cartography       "Engle, Jason",
+                    "Gamble, Todd",
+                    "Lazzaretti, Rob";
+  illustrations     "Horsley, Ralph" package art,
+                    "Baxa, Thomas M." model concepting,
+                    "Dorman, Dave" model concepting,
+                    "Dubisch, Michael" model concepting,
+                    "Ellis, Steve" model concepting,
+                    "Frank, Carl" model concepting,
+                    "Giorello, Tomas" model concepting,
+                    "Horsley, Ralph" model concepting,
+                    "Huey, Ken" model concepting,
+                    "McClain, Dennis Crabapple" model concepting,
+                    "Nelson, Jim" model concepting,
+                    "Prescott, Steve" model concepting,
+                    "Rams, Vinod" model concepting,
+                    "Roller, Scott" movel concepting,
+                    "Sergesketter, Chad" model concepting,
+                    "Spencer, Ron" model concepting,
+                    "Stokes, Anne" model concepting,
+                    "Forward-Rollins, Eve" model painting,
+                    "S., Dylan" model painting,
+                    "Beasely, Blake" art direction sculptures,
+                    "Kolkowsky, Mari" art direction print,
+                    "Lathrop, Jennifer" graphic design,
+                    "Smith, Keven" graphic design,
+                    "Kolkowsky, Mari" graphic design,
+                    "Longstreet, Stacy" D&D senior art director;
+  management        "Fullerton, Guy" special assistance,
+                    "Derry, Mike" special assistance,
+                    "Perkins, Christopher" design manager,
+                    "Decker, Jesse" development manager,
+                    "Slavicsek, Bill" director of RPG R&D,
+                    "Allen, Mary Elizabeth" brand manager,
+                    "Delong, Chas" production,
+                    "Yu, Kenneth" project engineer;
+  date              March 2006;
+  ISBN              0-7869-3886-2;
+  pages             54;
+  system            D&D 3.5;
+  worlds            Generic;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  series            D&D Miniatures;
+  price             $ 12.99;
+  contents          Miniature "painted plastic" 12,
+                    Card "full color statistic" 12,
+                    Booklet "advanced rules",
+                    Booklet "Quick Start Battle",
+                    Sheet "Template",
+                    Map "full color poster" 2,
+                    Sheet "20 counters",
+                    Dice "d20";
+  requirements      ;
+  layout            Mixed;
+  description       "New rules and new figures make an all-new Starter Set.
+                    The rulebooks, components, and configuration of this latest Starter Set have
+                    all been modified to introduce those unfamiliar with D&D or miniatures gaming
+                    to basic skirmish concepts in an easy yet fun manner. Key changes include a
+                    new 'Start Here' rulebook that takes a step-by-step approach to terms,
+                    battle tactics, and other game elements. This rulebook also features the two
+                    fixed miniatures that are now found in every Starter Set, allowing every
+                    purchaser the same learning experience right out of the box. Two full-color,
+                    double-sided maps supply vital play surfaces and also make a great visual
+                    impact.
+                    In addition to new components, the overall game rules have been updated to
+                    facilitate faster gameplay and encourage larger battles. Rules have been
+                    adjusted to accommodate any size figure, from tiny to huge and even beyond,
+                    and will be compatible with any D&D Miniatures Game release. Per previous
+                    releases, the figures in the set are selected from key D&D roleplaying games
+                    titles such as Monster Manual, Monster Manual III, Miniatures Handbook, and
+                    the Eberron and Forgotten Realms campaign settings. The set also includes an
+                    elite group of figures that come with a second, epic-level stat card,
+                    allowing players to assemble higher-value armies with which to do battle.";
+  short description "".
+#.....
+#----- WTC 95052
+
+base product WTC 95052 =
+
+  title             "War of the Dragon Queen Huge Pack";
+  leader            "";
+  subtitle          "Loose the Dragons of War";
+  date              July 2006;
+  pages             0;
+  system            D&D 3.5;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  number            9;
+  series            D&D Miniatures;
+  worlds            Generic;
+  price             $ 19.99;
+  contents          Miniature "randomized, pre-painted plastic" 7,
+                    Miniature "randomized, pre-painted huge plastic" 1,
+                    Card "stat" 8,
+                    Sheet "checklist" 1;
+  requirements      Miniatures Game;
+  layout            Full Color;
+  description       "The world trembles when \God{Tiamat}, the evil queen of dragons, unleashes
+                    her horde. Against wing and claw, only the strongest warbands can stand---and
+                    only the best can win!
+                    \large{The Battle Rages On}
+                    The stakes have never been greater! Collect all 60 figures in the
+                    \Product{War of the Dragon Queen} set---including 12 Huge figures---to create
+                    warbands and compete against your friends in fast, head-to-head combat. With
+                    a mix of \Monster[dragon]{dragons}, draconic creatures, and the new spawn of
+                    \God{Tiamat}, as well as other powerful monsters, you warband has never had
+                    more options.";
+  short description "Another set of D&D Miniatures, this time with huge minis.";
+  synonyms          "War of the Dragon Queen Booster Pack".
+#.....
+#----- WTC 95751
+
+base product WTC 95751 =
+
+  title             "Gargantuan Black Dragon";
+  leader            "";
+  subtitle          "The First in a Series of Limited-Edition Highly Collectable Iconic D&D Monsters";
+  date              August 2006;
+  ISBN              0-7869-4167-7;
+  pages             0;
+  system            D&D 3.5;
+  audience          All;
+  product type      Miniature;
+  worlds            Generic;
+  style             Small Box;
+  number            1;
+  series            D&D Icons;
+  price             $ 29.99;
+  contents          Miniature "gargantuan, painted, plastic" 1,
+                    Sheet "Rules and Scenaries" 1,
+                    Poster "color map" 1,
+                    Card "staticstics" 1;
+  requirements      Miniatures Game;
+  layout            Full Color;
+  description       "The \Monster{black dragon}, a temperamental tyrant, rules the swamp. Nearby
+                    villages pay it tribute---or else. It breathes a deadly stream of acid that
+                    dissolves meta, stone, flesh, or bone with terrible ease.  Drawn from the
+                    pages of the Dungeons & Dragons \Product{Monster Manual} and
+                    \Product{Dragonomicon}, the Gargantuan \Monster{Black Dragon} makes a bold
+                    and dramatic statement as it erupts from its fetid swamp to wreck havoc on
+                    unwary adventurers or battle-hardened warbands.";
+  short description "A gargantuan Black Dragon".
+#.....
+#----- WTC 95752
+
+base product WTC 95752 =
+
+  title             "Colossal Red Dragon";
+  leader            "";
+  subtitle          "The Most Fearsome Monster of D&D Legend";
+  date              September 2006;
+  ISBN              0-7869-4168-5;
+  pages             0;
+  system            D&D 3.5;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  worlds            Generic;
+  number            2;
+  series            D&D Icons;
+  price             $ 74.99;
+  contents          Miniature "colossal" 1,
+                    Map "battle map" 1,
+                    Card "game stat" 1,
+                    Sheet "Scenario" 1;
+  requirements      Miniatures Game;
+  layout            Full Color;
+  description       "A new line of massive monsters is joined by the most iconic Dungeons &
+                    Dragons creature.
+                    This intimidating dragon is the second figure in the new Dungeons & Dragons
+                    Icons product line! Part of the D&D Miniatures Game portfolio, these new,
+                    non-randomized figures portray the larger side of the Dungeons & Dragons
+                    creature collection. These limited edition monsters are proportionally sized
+                    per D&D roleplaying rules to be either Gargantuan (4''x4'' base) or Colossal
+                    (6''x6'' base). These truly premium figures will only be available to collect
+                    for a limited time after each release.
+                    This debut Colossal product contains not only a strikingly painted red
+                    dragon, but an accompanying oversized stat card as well. There is a double
+                    sided full-color map and a playable game scenario to really get the battle
+                    going. Like all the figures in the D&D Icons line, this Red Dragon is
+                    playable in both the D&D Miniatures skirmish game and any roleplaying
+                    campaign.";
+  short description "A colossal red dragon miniature.".
+#.....
+#----- WTC 96580
+
+base product WTC 96580 =
+
+  title             "Harbinger Expansion Pack";
+  leader            "";
+  subtitle          "Roll for Initiative!";
+  date              September 2003;
+  ISBN              0-7869-3315-1;
+  worlds            Generic;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            1;
+  series            D&D Miniatures;
+  contents          Miniature "randomized, prepainted, plastic" 8;
+  requirements      ;
+  description       "Prepare yourself for a random encounter with heroes, villains, and monsters
+                    for your Dungeons & Dragons roleplaying game. Taken straight from the D&D
+                    rulebooks, these characters are ready for battle -- right out of the box.
+                    Each \Product{Harbinger expansion pack} contains 8 randomly selected, fully
+                    assembled, prepainted collectible miniatures with double-sided statistic
+                    cards for use with the D&D roleplaying game or for fast, head-to-head
+                    miniatures combat.
+                    Three separate \Product{Harbinger packs} are pictured at left. Each one
+                    contains a random selection of miniatures. ".
+#.....
+#----- WTC 96581
+
+base product WTC 96581 =
+
+  title             "Miniatures Entry Pack";
+  leader            "";
+  subtitle          "";
+  date              September 2003;
+  ISBN              0-7869-3316-X;
+  system            D&D 3rd;
+  audience          All;
+  worlds            Generic;
+  product type      Miniature;
+  style             Medium Box;
+  series            D&D Miniatures;
+  contents          Miniature "randomized, plastic, prepainted" 16,
+                    Booklet "rulebook",
+                    Dice "20-sided",
+                    Sheet "checklist",
+                    Card "terrain mapsheet and cards";
+  requirements      ;
+  description       "Choose a battlefield and prepare to fight for it! Whether you lead the
+                    ragtag outfit rallied inside an Entry Pack, assemble a handpicked force, or
+                    amass a grand army, these adventurous characters, taken straight from the
+                    Dungeons & Dragons rulebooks, are ready for battle -- right out of the box.
+                    Each Dungeons & Dragons Miniatures Entry Pack contains 16 fully assembled,
+                    hand-painted collectible miniatures complete with double-sided statistic
+                    cards for use with the D&D roleplaying game, as well as a 40-page rulebook
+                    for fast, head-to-head miniatures combat.
+                    Each pack contains:
+                    \list
+                    {16 randomized miniatures (1 rare, 5 uncommon, and 10 common) with
+                    statistics cards}
+                    {1 complete basic rulebook}
+                    {1 20-sided die}
+                    {1 checklist for the miniatures set}
+                    {Terrain mapsheet and cards}".
+#.....
+#----- WTC 96583
+
+base product WTC 96583 =
+
+  title             "Dragoneye Expansion Pack";
+  leader            "";
+  subtitle          "Roll for initiative!";
+  date              December 2003;
+  ISBN              0-7869-3317-8;
+  pages             0;
+  worlds            Generic;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            2;
+  series            D&D Miniatures;
+  contents          Miniature "randomized, prepainted plastic" 8;
+  requirements      ;
+  description       "Ready yourself for a random encounter dominated by dragons and
+                    \Monster{dragonkind}, along with a horde of other heroes, villains, and
+                    monsters. Taken straight from D&D rulebooks, such as the
+                    \Product{Draconomicon}, \Product{Complete Warrior}, \Product{Miniatures
+                    Handbook}, and the \Product{Dragonlance Campaign Setting}, these characters
+                    are ready for battle -- right out of the box.
+                    Each randomized \Product{Dragoneye expansion pack} contains 8 randomly
+                    selected, prepainted, fully assembled, collectible miniatures with
+                    double-sided statistic cards for use with D&D roleplaying game or for
+                    fast-paced head-to-head combat.
+                    Three separate \Product{Dragoneye miniatures packs} are pictured at
+                    left. Each one contains a random selection of miniatures.".
+#.....
+#----- WTC 96625
+
+base product WTC 96625 =
+
+  title             "Archfiends Expansion Pack";
+  leader            "";
+  subtitle          "Roll for initiative!";
+  date              March 2004;
+  ISBN              0-7869-3464-6;
+  pages             0;
+  system            D&D 3rd;
+  worlds            Generic;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            3;
+  series            D&D Miniatures;
+  price             $ 9.99;
+  contents          Miniature "random" 8;
+  requirements      ;
+  description       "Brace yourself for a random encounter dominated by \Monster{demons},
+                    \Monster{devils}, and other \Monster{outsiders}, along with a horde of
+                    heroes, villains, and monsters. Taken straight from D&D rulebooks, such as
+                    the \Product{Monster Manual}, \Product{Forgotten Realms Campaign Setting},
+                    \Product{Miniatures Handbook}, \Product{Psionics Handbook}, and
+                    \Product{Savage Species}, these characters are ready for battle -- right out
+                    of the box.
+                    Each Archfiends expansion pack contains 8 randomly selected, prepainted,
+                    fully assembled, collectible miniatures with double-sided statistic cards for
+                    use with the D&D roleplaying game or for fast-paced head-to-head combat.
+                    Three separate Archfiends expansion packs are pictured at left. Each pack
+                    contains eight randomly selected miniatures.".
+#.....
+#----- WTC 96628
+
+base product WTC 96628 =
+
+  title             "Deathknell Expansion Pack";
+  leader            "";
+  subtitle          "The Dead Have Risen";
+  date              March 2005;
+  ISBN              0-7869-3514-6;
+  pages             0;
+  worlds            Generic;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            6;
+  series            D&D Miniatures;
+  price             $ 12.99;
+  contents          Miniature "randomized, prepainted" 8,
+                    Card "color statistics" 8,
+                    Sheet "aberration check list";
+  requirements      ;
+  description       "\large{Collect}
+                    Gather \Class{fighters}, \Class{wizards}, \Monster{dragons}, and all your
+                    favorite Dungeons & Dragons heroes and monsters!
+                    \large{Battle}
+                    Challenge your friends to fast, head-to-head combat between the forces of
+                    good and evil!
+                    \large{Roleplay}
+                    Create new adventures and exiting campaigns using the Dungeons & Dragons
+                    roleplaying game!
+                    Each \Product{Deathknell} Booster Pack Contains:
+                    \list
+                    {8 randomized, prepainted, durable plastic miniatures}
+                    {Full-color game stat cards}
+                    Rules not included
+                    Pick up the \Product{Dungeons & Dragons Miniatures Starter Set} for
+                    collectable miniatures game rules, additional miniatures, and more.
+                    The \Product{Deathknell Expansion Pack} contains a randomized selection of
+                    figures designed to expand any collection of Dungeon & Dragons
+                    miniatures. The figures in this set will be chosen directly from key D&D
+                    titles, including \Product{Libris Mortis: The Book of Undead},
+                    \Product{Monster Manual III}, \Product{Complete Adventurer}, the
+                    \Product{Eberron Campaign Setting}, and the classic D&D adventure,
+                    \Product{The Temple of Elemental Evil}.".
+#.....
+#----- WTC 96621
+
+base product WTC 96621 =
+
+  title             "D&D Miniatures Starter Set";
+  leader            "";
+  subtitle          "Dungeons & Dragons Miniatures";
+  date              October 2004;
+  ISBN              0-7869-3500-6;
+  pages             40;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  series            D&D Miniatures;
+  worlds            Generic;
+  contents          Miniature "randomized, prepainted plastic" 12,
+                    Booklet "complete, basic rulebook",
+                    Sheet "checklist",
+                    Poster "battle grid map sheet",
+                    Sheet "terrain tile" 8,
+                    Counter "damage counters" 20,
+                    Dice "20-sided";
+  requirements      ;
+  description       "\large{Collect}
+                    Encounter \Class{fighters}, \Class{wizards}, \Monster{dragons}, and all your
+                    favorite Dungeons & Dragons heroes and monsters!
+                    \large{Battle}
+                    Challenge your friends to fast, head-to-head combat between the forces of
+                    good and evil!
+                    \large{Roleplay}
+                    Create new adventures and exciting campaigns using the Dungeons & Dragons
+                    roleplaying game!
+                    \bold{This Starter Set Contains:}
+                    \list
+                    {12 randomized, prepainted, durable plastic miniatures}
+                    {Full-color game stat cards}
+                    {Rulebook form miniatures combat}
+                    {Battle grid}
+                    {8 all-new terrain tiles}
+                    {Damage counter}
+                    {20-sided die}
+                    {Checklist for all 60 figures in the \Product{Aberrations} set}
+                    Pick up Dungeon & Dragons Miniatures Booster Packs to add more miniatures to
+                    your collection.
+                    The Starter Set provides all the starting materials a player needs to become
+                    familiar with Dungeon & Dragons miniatures. This Starter Set replaces the
+                    version released in 2003. It contains 8 new terrain tiles, and as the rules
+                    have been revamped to better facilitate multi-player games, it also contains
+                    an updated rulebook. Like the figures in the corresponding
+                    \Product{Aberrations Booster Pack}, the figures in the Starter Set will be
+                    chosen directly from key D&D titles, including \Product{Complete Divine},
+                    \Product{Monster Manual III}, \Product{Serpent Kingdoms}, the new
+                    \Product{Eberron Campaign Setting}, and the first Eberron adventure,
+                    \Product{Shadows of the Last War}.".
+#.....
+#----- WTC 96624
+
+base product WTC 96624 =
+
+  title             "Aberrations Booster Pack";
+  leader            "";
+  subtitle          "Unleash a Horde of Unnatural Monsters";
+  cover             "Reynolds, Wayne";
+  date              October 2004;
+  ISBN              0-7869-3501-4;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  worlds            Generic;
+  style             Medium Box;
+  number            5;
+  series            D&D Miniatures;
+  contents          Miniature "randomized, prepainted" 8,
+                    Card "statistics" 8,
+                    Sheet "aberration check list";
+  requirements      ;
+  description       "\large{Collect}
+                    Encounter \Class{fighters}, \Class{wizards}, \Monster{dragons}, and all your
+                    favorite Dungeons & Dragons heroes and monsters!
+                    \large{Battle}
+                    Challenge your friends to fast, head-to-head combat between the forces of
+                    good and evil!
+                    \large{Roleplay}
+                    Create new adventures and exiting campaigns using the Dungeons & Dragons
+                    roleplaying game!
+                    This Booster Pack Contains:
+                    \list
+                    {8 randomized, prepainted, durable plastic miniatures}
+                    {Full-color game stat cards}
+                    Pick up the \Product{Dungeons & Dragons Miniatures Starter Set} for
+                    collectable miniatures game rules, additional miniatures, and more.".
+#.....
+#----- WTC 96699
+
+base product WTC 96699 =
+
+  title             "Angelfire Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              July 2005;
+  ISBN              0-7869-3521-9;
+  pages             0;
+  system            D&D 3rd;
+  worlds            Generic;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            7;
+  series            D&D Miniatures;
+  price             $ 12.99;
+  requirements      ;
+  description       "Themed around the ultimate battle between \Monster{angels} and
+                    \Monster{devils}, the \Product{Angelfire Booster Pack} contains a randomized
+                    selection of figures designed to expand any collection of D&D miniatures.
+                    The figures in this set are chosen directly from key D&D titles, including
+                    \Product{Complete Divine}, \Product{Monster Manual III}, \Product{Complete
+                    Adventurer}, the \Product{Book of Exalted Deeds}, and more.
+                    Booster pack contents
+                    \list
+                    {Eight randomized, pre-painted, plastic miniatures}
+                    {Stat cards for each miniature}
+                    {Angelfire set checklist}";
+  synonyms          "WTC 96665".
+#.....
+#----- WTC 96701
+
+base product WTC 96701 =
+
+  title             "Giants of Legend Huge Pack";
+  leader            "";
+  subtitle          "";
+  date              June 2004;
+  ISBN              0-7869-3495-6;
+  worlds            Generic;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            4;
+  series            D&D Miniatures;
+  requirements      ;
+  description       "The Huge Pack contains a randomized selection of figures designed to expand
+                    any collection of Dungeons & Dragons miniatures. Figures in this set are
+                    chosen directly from key D&D titles, including the \Product{Miniatures
+                    Handbook}, \Product{Expanded Psionics Handbook} and the new \Product{Eberron
+                    Campaign Setting}. Also, in honor of the 30th anniversary of Dungeons &
+                    Dragons, the set contains characters and creatures made popular during the
+                    history of the game.
+                    In addition, one of the nine miniatures are much larger than any miniatures
+                    released to date and are representative of classic, larger-than-life D&D
+                    icons such as giants and dragons.
+                    Huge Pack components:
+                    \list
+                    {Nine randomized, pre-painted plastic miniatures, including one huge
+                    miniature.}
+                    {Statistics cards for each miniature.}
+                    The product line features:
+                    \list
+                    {72 unique miniatures in the Giants of Legend set, inlcuding 12 huge-sized
+                    creatures.}
+                    {Miniatures are pre-painted plastic, and are built to standard hobby scale
+                    (30mm).}
+                    {All D&D miniatures packages are randomized and made up of rare, uncommon,
+                    and common figures.}
+                    {Every miniature can be used to add dimension to roleplaying games or to
+                    play skirmish-level or mass-battle combat scenarios.}".
+#.....
+#----- WTC 96738
+
+base product WTC 96738 =
+
+  title             "Underdark Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              November 2005;
+  ISBN              0-7869-3522-7;
+  pages             0;
+  worlds            Generic;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            7;
+  series            D&D Miniatures;
+  price             $ 12.99;
+  requirements      ;
+  description       "The source for the latest D&D miniatures release, the \Place{Underdark} is a
+                    vast underground region replete with many iconic D&D monsters, including the
+                    infamous---and popular---\Monster{drow elves}. Per previous releases, the
+                    figures in this set are chosen from key D&D titles such as the
+                    \Product{Monster Manual}, \Product{Book of Exalted Deeds}, and
+                    \Product{Complete Adventurer}. The set also features a wealth of characters
+                    from \Place{Forgotten Realms} products such as \Product{Underdark},
+                    \Product{Unapproachable East}, \Product{City of the Spider Queen}, and the
+                    \Product{Forgotten Realms Campaign Setting}. \Place{Forgotten Realms} novel
+                    readers will also recognize a range of familiar characters from best-selling
+                    titles. As an added bonus, eight miniatures will also have a second stat card
+                    that features epic-level stats specifically for high-level versions of those
+                    figures.
+                    Booster pack contents
+                    \list
+                    {Eight randomized, pre-painted, plastic miniatures}
+                    {Stat cards for each miniature, plus eight additional epic-level stat cards.}
+                    {Underdark set checklist}".
+#.....
+#----- WTC 9780786943449
+
+base product WTC 9780786943449 =
+
+  title             "Night Below Booster Pack";
+  leader            "";
+  subtitle          "The Dwell in Eternal Darkness";
+  date              July 2008;
+  ISBN              0-7869-4344-0;
+  ISBN13            978-0-7869-4344-9;
+  system            D&D 3.5;
+  audience          All;
+  product type      Miniature;
+  style             Medium Box;
+  number            8;
+  worlds            Generic;
+  series            D&D Miniatures;
+  price             $ 14.99;
+  contents          Miniature "randomized, pre-painted plastic" 8,
+                    Card "stat" 8,
+                    Sheet "checklist" 1;
+  requirements      ;
+  layout            Full Color;
+  description       "Deep beneath the earth
+                    and sky, a world of dark dungeons and dense shadows hides from the light of
+                    day. Within this realm of endless night, \Monster{shadow dragons} prowl,
+                    \Monster{dread wraiths} rise from shallow graves, and a \Monster{mind flayer
+                    lich} hatches diabolical plans against the world above.
+                    \large{Be Afraid}
+                    Marge the dungeon with the battlefield when you collect all 60 miniatures in
+                    the \Product{Night Below} set. Use a mix of adventuring heroes, undead
+                    horrors, and other powerful monsters to compete against your friends in fast,
+                    head-to-head combat, or to create exciting D&D adventures.";
+  short description "".
+#.....
+
+#----- WTC B0000006760
+
+base product WTC B0000006760 =
+
+  title             "Sorcerer on Black Dragon";
+  leader            "";
+  subtitle          "Limited Edition";
+  date              June 2006;
+  pages             0;
+  system            None;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  worlds            Generic;
+  number            War of the Dragon Queen;
+  series            D&D Miniature;
+  price             $ 9.95;
+  contents          Miniature "repainted";
+  requirements      ;
+  description       "To celebrate Dragon Magazine's 30th Anniversary, Paizo and Wizards of the
+                    Coast present this exclusive limited-edition Sorcerer on Black Dragon repaint
+                    figure from the forthcoming War of the Dragon Queen D&D Miniatures set. This
+                    is the first Huge repaint figure, and it's available only to Dragon or
+                    Dungeon subscribers.";
+  short description "A limited edition, repainted miniature from the War of the Dragon Queen set.".
+#.....
+#----- WTC 2155100
+
+base product WTC 2155100 =
+
+  title             "D&D Miniatures Game Starter Set";
+  leader            "";
+  subtitle          "The \Monster{Green Dragon} roars its challenge as the \Monster{elf} Warlkock prepares to hurl a deadly curse.";
+  author            "Schubert, Stephen" rulebook,
+                    "Heinsoo, Rob" rulebooks;
+  editor            "";
+  cover             "Reynolds, Wayne" package art,
+                    "Prescott, Steve" package art;
+  cartography       "Engle, Jason";
+  illustrations     "Grant-West, Lars" model concepting,
+                    "Griffith, David" model concepting,
+                    "Horsley, Ralph" model concepting,
+                    "Nelson, James" model concepting,
+                    "O&#39Connor, William" model concepting,
+                    "Plucinski, Zak" model concepting,
+                    "Prescott, Steve" model concepting,
+                    "Reynolds, Wayne" model concepting,
+                    "Spencer, Ron" model concepting,
+                    "Swekel, Arnie" model concepting,
+                    "Zhang, James" model concepting,
+                    "Kolkowsky, Mari" art director,
+                    "Smith, Keven" graphic designer,
+                    "Dunnet, Yasuyo" graphic designer,
+                    "Forward-Rollins, Eve" model painting,
+                    "Goddard, Kimberly" model painting,
+                    "Radney-MacFarland, Stephen" model painting,
+                    "Sharp, Dylan" model painting,
+                    "Longstreet, Stacy" D&D senior art director;
+  typography        "";
+  management        "Vergel de Dois, Erica" production,
+                    "Glasenapp-Horn, Monica" production,
+                    "Dumas, Brian" production,
+                    "Rouse, Scott" brand manager,
+                    "Foster, Lianae" brand manager,
+                    "Xu, Ivan" project engineer,
+                    "Cheung, Henry" project engineer,
+                    "Tsang, Kenny" project engineer;
+  date              April 2008;
+  ISBN              0-7869-4754-3;
+  ISBN13            978-0-7869-4754-6;
+  system            D&D 4th;
+  audience          All;
+  product type      Miniature;
+  style             Small Box;
+  series            D&D Miniatures;
+  worlds            Generic;
+  price             $19.99;
+  contents          Miniature "non random, fully painted, plastic" 5,
+                    Card "full-color game stat" 5,
+                    Booklet "rulebook" 1,
+                    Map "double-sided, full-color" 2,
+                    Dice "20-sided" 1,
+                    Playing Piece "damage counters" 20;
+  requirements      WTC 2155100 : WTC 2155100;
+  layout            Full Color;
+  description       "This starter set contains everything you need to compete in head-to-head D&D battles against a friend. Pit the \Monster{Green Dragon}'s warband against the \Monster{Elf} Warlkock's warband to see which side can control the dungeon!
+                    New, fully illustrated battle maps of dungeons and wilderness areas make every game exciting and different!";
+  short description "The 4th edition miniatures game".
+
+#.....
+#----- WTC 21653
+
+base product WTC 21653 =
+
+  title             "Against the Giants Booster Pack";
+  leader            "";
+  subtitle          "The Bigger they are, the Harder they Hit!";
+  date              July 2008;
+  ISBN              0-7869-4817-5;
+  ISBN13            978-0-7869-4817-8;
+  pages             0;
+  system            D&D 4th;
+  audience          DM;
+  worlds            Generic;
+  product type      Miniature;
+  style             Medium Box;
+  series            Miniatures;
+  price             $21.99;
+  requirements      WTC 2155100,
+                    WTC 2175072,
+                    WTC 2172072,
+                    WTC 2173672;
+  layout            Full Color;
+  description       "From out of the halls of the \Monster{titan} lords, the giants strike! Led by titans of flame, earth, and death, hordes of fire giants and storm giants lay waste to the realms of \Monster{human}s, \Monster[Elf]{elves}, and \Monster[Dwarf]{dwarves}. Such a bold invasion has drawn other threats out of the darkness, including undead creatures, foul devils, and mighty \Monster{dragons}. Can any adventurers stand against such enemies?
+                    Create classic battles and spectacular adventures when you collect all 60 miniatures in the \Product{Against the Giants} set. Build your warband and challenge your friends with the \Product{D&D Miniatures Game}, or set out to conquer countless dungeons with the \Product{Dungeons & Dragons Roleplaying Game} and these fantastic miniatures.";
+  short description "The Against the Giants set of miniatures.".
+
+#.....
+#----- WTC 21795
+
+base product WTC 21795 =
+
+  title             "Demonweb Booster Pack";
+  leader            "";
+  subtitle          "Danger Lurks in the Demonweb!";
+  date              November 2008;
+  ISBN              0-7869-4986-4;
+  ISBN13            978-0-7869-4986-1;
+  pages             0;
+  system            D&D 4th;
+  audience          All;
+  worlds            Generic;
+  product type      Miniature;
+  style             Medium Box;
+  series            Miniatures;
+  price             $14.99;
+  requirements      ;
+  layout            Full Color;
+  description       "Monsters lurk in the maddening, evil realm called the \Place{Demonweb Pits} and the dark, subterranean places of the world. Frenzied \Monster{demon}s, frenzied \Monster{drow}, and \Monster{mind flayer} masterminds prepare to poison the world and destroy all peaceful folk.
+                    Create classic battles and spectacular adventures when you collect all 60 miniatures in the \Product{Demonweb} set. Build you warband and challenge your friends with the D&D Miniatures Game, or set out to conquer countless dungeons with the Dungeons & Dragonsa Roleplaying game and these fantastic miniature figures.";
+  short description "A boster expansion for the miniature game.".
+
+#.....
+#----- WTC 25050
+
+base product WTC 25050 =
+
+  title             "Martial Heroes 1";
+  leader            "";
+  subtitle          "The Character you Need. The Hero You Want to Play.";
+  date              April 2009;
+  ISBN              0-7869-5279-2;
+  ISBN13            978-0-7869-5279-3;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Martial Heroes 1;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the miniature that best matches your player character with Player's Handbook Heroes. This package includes three player character miniatures and three unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Martial Heroes 1".
+
+#.....
+#----- WTC 25051
+
+base product WTC 25051 =
+
+  title             "Martial Heroes 2";
+  leader            "";
+  subtitle          "The Character you Need. The Hero You Want to Play.";
+  date              April 2009;
+  ISBN              0-7869-5278-4;
+  ISBN13            978-0-7869-5278-6;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Martial Heroes 2;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the miniature that best matches your player character with Player's Handbook Heroes. This package includes three player character miniatures and three unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Martial Heroes 2".
+
+#.....
+#----- WTC 25052
+
+base product WTC 25052 =
+
+  title             "Arcane Heroes 1";
+  leader            "";
+  subtitle          "The Character you Need. The Hero You Want to Play.";
+  date              April 2009;
+  ISBN              0-7869-5277-6;
+  ISBN13            978-0-7869-5277-9;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Arcane Heroes 1;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the miniature that best matches your player character with Player's Handbook Heroes. This package includes three player character miniatures and three unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Arcane Heroes 1".
+
+#.....
+#----- WTC 25053
+
+base product WTC 25053 =
+
+  title             "Arcane Heroes 2";
+  leader            "";
+  subtitle          "The Character you Need. The Hero You Want to Play.";
+  date              April 2009;
+  ISBN              0-7869-5276-8;
+  ISBN13            978-0-7869-5276-2;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Arcane Heroes 2;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the miniature that best matches your player character with Player's Handbook Heroes. This package includes three player character miniatures and three unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Arcane Heroes 2".
+
+#.....
+#----- WTC 25054
+
+base product WTC 25054 =
+
+  title             "Divine Heroes 1";
+  leader            "";
+  subtitle          "The Character you Need. The Hero You Want to Play.";
+  date              April 2009;
+  ISBN              0-7869-5275-X;
+  ISBN13            978-0-7869-5275-5;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Divine Heroes 1;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the miniature that best matches your player character with Player's Handbook Heroes. This package includes three player character miniatures and three unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Divine Heroes 1".
+
+#.....
+#----- WTC 25055
+
+base product WTC 25055 =
+
+  title             "Primal Heroes 1";
+  leader            "";
+  subtitle          "The Character you Need. The Hero You Want to Play.";
+  date              April 2009;
+  ISBN              0-7869-5274-1;
+  ISBN13            978-0-7869-5274-8;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Primal Heroes 1;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the miniature that best matches your player character with Player's Handbook Heroes. This package includes three player character miniatures and three unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Primal Heroes 1".
+
+#.....
+#----- WTC 25064
+
+base product WTC 25064 =
+
+  title             "Monster Manual: Legendary Evils";
+  leader            "";
+  subtitle          "Boss Monsters, Unleashed!";
+  cover             "Lyon, Howard";
+  date              August 2009;
+  ISBN              0-7869-5300-4;
+  ISBN13            978-0-7869-5300-4;
+  pages             0;
+  system            D&D 4th;
+  audience          DM;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  series            Monster Manual Miniatures;
+  price             $21.99;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "The new Monster Manual-themed set features 40 D&D monsters from multiple sources --- just what every Dungeon Master or D&D enthusiast needs to create riveting adventures and exciting encounters at all levels of play.";
+  short description "A booster pack with 1 visible and 4 randmon miniatures.";
+  categories        miniature,
+                    boster,
+                    random,
+                    monster.
+
+#.....
+#----- WTC 25060
+
+base product WTC 25060 =
+
+  title             "Arcane Characters 3";
+  leader            "";
+  subtitle          "Only Your Character Can Become a Hero";
+  date              July 2009;
+  ISBN              0-7869-5294-6;
+  ISBN13            978-0-7869-5294-6;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Arcane Characters 3;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the exact figure that best matches your player character with Player's Handbook Heroes. This package includes 3 player character figures and 3 unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Arcane Characters 3".
+
+#.....
+#----- WTC 25063
+
+base product WTC 25063 =
+
+  title             "Primal Characters 2";
+  leader            "";
+  subtitle          "Only Your Character Can Become a Hero";
+  date              July 2009;
+  ISBN              0-7869-5297-0;
+  ISBN13            978-0-7869-5297-7;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Primal Characters 2;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the exact figure that best matches your player character with Player's Handbook Heroes. This package includes 3 player character figures and 3 unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Primal Characters 2".
+
+#.....
+#----- WTC 25058
+
+base product WTC 25058 =
+
+  title             "Martial Characters 3";
+  leader            "";
+  subtitle          "Only Your Character Can Become a Hero";
+  date              July 2009;
+  ISBN              0-7869-5292-X;
+  ISBN13            978-0-7869-5292-2;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  worlds            Generic;
+  number            Marial Characters 3;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  description       "Select the exact figure that best matches your player character with Player's Handbook Heroes. This package includes 3 player character figures and 3 unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Martial Characters 3".
+
+#.....
+#----- WTC 25058
+
+base product WTC 25059 =
+
+  title             "Martial Characters 4";
+  leader            "";
+  subtitle          "Only Your Character Can Become a Hero";
+  date              July 2009;
+  ISBN              0-7869-5293-8;
+  ISBN13            978-0-7869-5293-9;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Marial Characters 4;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the exact figure that best matches your player character with Player's Handbook Heroes. This package includes 3 player character figures and 3 unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Martial Characters 4".
+
+#.....
+#----- WTC 25061
+
+base product WTC 25061 =
+
+  title             "Divine Characters 2";
+  leader            "";
+  subtitle          "Only Your Character Can Become a Hero";
+  date              July 2009;
+  ISBN              0-7869-5295-4;
+  ISBN13            978-0-7869-5295-3;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Divine Characters 2;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the exact figure that best matches your player character with Player's Handbook Heroes. This package includes 3 player character figures and 3 unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Divine Characters 2".
+
+#.....
+#----- WTC 25062
+
+base product WTC 25062 =
+
+  title             "Divine Characters 3";
+  leader            "";
+  subtitle          "Only Your Character Can Become a Hero";
+  date              July 2009;
+  ISBN              0-7869-5296-2;
+  ISBN13            978-0-7869-5296-0;
+  pages             0;
+  system            D&D 4th;
+  audience          Player;
+  product type      Miniature;
+  style             Small Box;
+  producer          WTC;
+  number            Divine Characters 3;
+  series            Player's Handbook Heroes;
+  price             $10.99;
+  contents          Miniature "player character" 3,
+                    Card "class power" 3;
+  requirements      ;
+  layout            Full Color;
+  worlds            Generic;
+  description       "Select the exact figure that best matches your player character with Player's Handbook Heroes. This package includes 3 player character figures and 3 unique power cards featuring brand-new class powers.";
+  short description "Player's Handbook Heroes, Divine Characters 3".
+
+#.....
+#----- WTC 88433
+
+base product WTC 88433 =
+
+  title             "City of the Spider Queen Miniatures Box";
+  leader            "";
+  ISBN              0-7869-0473-9;
+  pages             0;
+  system            D&D 3rd;
+  audience          All;
+  product type      Miniature;
+  style             Box;
+  producer          WTC;
+  price             $ 19.95;
+  contents          Miniature "unassembled, unpainted" 5;
+  requirements      ;
+  worlds            Forgotten Realms;
+  description       "Designed as a companion to the \Product{City of the Spider Queen}
+                    roleplaying adventure, this boxed set features key characters from the
+                    \Product{City of the Spider Queen adventure}, which ties into the
+                    R.A. Salvatore's War of the \Product{Spider Queen} novel series. Both the
+                    \Monster{drow} as a race and the location referenced in the title are
+                    extremely popular, and this set will allow fans to immerse themselves in the
+                    world of the \Monster{drow}.
+                    The set contains five unassembled and unpainted models. ".
 #.....

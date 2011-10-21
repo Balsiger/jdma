@@ -683,3 +683,21 @@ base product TSR 9584 =
 
 
 #.....
+#----- TSR 2146
+
+base product TSR 2146 =
+
+  title             "Complete Sha'ir's Handbook";
+  leader            "The";
+  date              April 1994;
+  system            AD&D 2nd;
+  audience          Player;
+  product type      Rules Supplement;
+  producer          TSR;
+  price             £10.99;
+  requirements      ;
+  worlds            Al-Qadim;
+  references        catalogue94;
+  description       "Sha'irs player characters.";
+  synonyms          "CGR3".
+#.....

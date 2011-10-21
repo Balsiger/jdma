@@ -32,6 +32,7 @@ import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -146,7 +147,7 @@ public final class Exporter
     installer.install(options);
 
     // read the dma files
-    DMAData data = new DMAData("./");
+    DMADatafiles data = new DMADatafiles("./");
     data.addFile(file);
     DMAFile dmaFile = data.getFile(file);
 

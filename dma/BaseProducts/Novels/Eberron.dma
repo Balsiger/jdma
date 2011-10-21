@@ -902,8 +902,9 @@ base product WTC 9598874 =
   pages             313;
   system            D&D 1st;
   audience          DM;
-  product type      Accessory;
+  product type      Novel;
   style             Box;
+  worlds            Eberron;
   producer          WTC;
   number            Book 3;
   series            Heirs of Ash;
@@ -911,7 +912,6 @@ base product WTC 9598874 =
   contents          Book "";
   requirements      ;
   layout            Full Color;
-  worlds            Generic;
   description
   "\Item{Ashrem's Legacy} has been found, and it lies in the hands of a madman.
 
@@ -1110,6 +1110,8 @@ base product WTC 2182374 =
   ISBN              0-7869-5009-9;
   ISBN13            978-0-7869-5009-6;
   pages             293;
+  worlds            Eberron;
+  product type      Novel;
   number            1;
   series            Thorn of Breland;
   price             $6.99;
@@ -1142,6 +1144,7 @@ base product WTC 2397074 =
   system            None;
   audience          All;
   product type      Novel;
+  worlds            Eberron;
   style             Paperback;
   producer          WTC;
   number            Book Two;
@@ -1182,6 +1185,7 @@ base product WTC 24196 =
   style             Paperback;
   producer          WTC;
   number            2;
+  worlds            Eberron;
   series            Son of Breland;
   price             $6.99;
   contents          Book "";
@@ -1218,6 +1222,7 @@ base product WTC 25356 =
   style             Paperback;
   producer          WTC;
   number            Book Three;
+  worlds            Eberron;
   series            Draconic Prophecies;
   price             $6.99;
   contents          Book "";
@@ -1251,6 +1256,7 @@ base product WTC 25452 =
   audience          All;
   product type      Novel;
   style             Paperback;
+  worlds            Eberron;
   producer          WTC;
   number            3;
   series            Legacy of Dhakaan;
@@ -1266,5 +1272,40 @@ But \NPC{Lhesh Tariic} is bound by the powers of the Emperors of \Place{Dhakaan}
 But the Empire of \Place{Dhakaan} has left behind one more artifact, a force to bring doom to the \Monster{goblin} king... if only the heroes of \Place{Darguun} can find it.";
   short description "Legacy of Dhakaan, Book 3";
   synonyms          "".
+
+#.....
+#----- WTC 2502674
+
+base product WTC 2502674 =
+
+  title             "Word of Traitors";
+  leader            "";
+  subtitle          "Legacy of \Place{Dhakaan}";
+  author            "Bassingthwaite, Don";
+  cover             "Komarck, Michael";
+  cartography       "Lazzaretti, Robert";
+  date              September 2009;
+  ISBN              0-7869-5196-6;
+  ISBN13            978-0-7869-5196-3;
+  pages             374;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  number            Book 2;
+  series            Legacy of Dhakaan;
+  price             $6.99;
+  contents          Book "";
+  worlds            Eberron;
+  layout            Color Cover;
+  description
+  "\NPC{Darguun}. Heir to an empire long fallen. Forged anew in the fires of the \Event{Last War} and held together by the iron will of \NPC{Lhesh Haruuc}.
+
+But \NPC{Lhesh Haruuc} is dead, assassinated by a warrior sworn to serve him. His trusted inner circle suspects more than treachery. Something darker is at work. As \NPC{Dharguun}'s ancient enemies stoke the flames of a new war and the \Group{Five Nations} vie for power and influence, the fate of an entire nation rests in the hands of a few desperate heroes.
+
+A thrilling tale of empire, betrayal, and power by the author of the acclaimed Dragon Below trilogy!
+";
+  short description "Book 2 of the Legacy of Dhakaan.".
 
 #.....

@@ -1,0 +1,766 @@
+#----- WTC 11831
+
+base product WTC 11831 =
+
+  title             "Diablo II: to Hell and Back";
+  leader            "";
+  author            "Carl, Jason",
+                    "Eckelberry, David",
+                    "Quick, Jeff",
+                    "Redman, Rich";
+  editor            "Pickens, Jon",
+                    "Eckelberry, David";
+  cover             "post, rk";
+  cartography       "Gamble, Todd";
+  illustrations     "post, rk",
+                    "Roach, David",
+                    "Venter, Pete";
+  typography        "Ausland, Victoria L.",
+                    "Dorries, Erin";
+  management        "Cordell, Bruce R.",
+                    "Grubb, Jeff",
+                    "Reid, Thomas",
+                    "Selinker, Mike",
+                    "Slavicsek, Bill",
+                    "Kesterel, Gwendolyn FM",
+                    "Wiker, JD",
+                    "Barnett, Dee",
+                    "Murin, Dawn",
+                    "Ziran, Justin",
+                    "DeLong, Chas";
+  date              March 2001;
+  ISBN              0-7869-1831-4;
+  pages             192;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Adventure;
+  style             Soft Cover;
+  producer          TSR;
+  price             $ 29.95;
+  contents          Book;
+  requirements      ;
+  worlds            Diablo II;
+  description       "Now play the Diablo II computer game crossed with the brand new D&D
+                    roleplaying game rules. With all the fury, all the excitement, and all the
+                    monsters brought to life by your own imagination. This is face-to-face
+                    roleplaying combat---smoother, faster, and meaner than ever before.
+                    Inside you'll find:
+                    \list
+                    {Hundreds of monsters to battle with the all-new D&D rules!}
+                    {Level after level of thrilling adventure in the pits of hell!}
+                    {Opportunities for millions of experience points!}
+                    {All ne adventures to catch Diablo and D&D players off guard!}
+                    Suitable for all levels of play".
+#.....
+#----- TSR 11760
+
+base product TSR 11760 =
+
+  title             "Diablo II: Diablerie";
+  leader            "";
+  author            "Wiker, JD";
+  editor            "Pickens, Jon";
+  cover             "post, rk";
+  cartography       "Gamble, Todd";
+  illustrations     "post, rk",
+                    "Roach, David",
+                    "Venters, Pete";
+  typography        "Ausland, Victoria L.",
+                    "Dorries, Erin";
+  management        "Cordell, Bruce R.",
+                    "Grubb, Jeff",
+                    "Reid, Thomas",
+                    "Selinker, Mike",
+                    "Slavicsek, Bill",
+                    "Barnett, Dee",
+                    "Murin, Dawn";
+  date              December 2000;
+  ISBN              0-7869-1760-1;
+  pages             96;
+  system            D&D 3rd;
+  audience          DM;
+  product type      Accessory;
+  style             Soft Cover;
+  producer          TSR;
+  price             $ 19.95;
+  contents          Booklet;
+  requirements      ;
+  worlds            Diablo II;
+  description       "\bold{Forget courtly intrigue---this is about stabbing straight into the
+                    heart of Evil!}
+                    Based on the popular computer game by Blizzard Entertainment, Diablo II:
+                    Diablerie recreates the world of DIABLO using the Dungeons & Dragons
+                    roleplaying game system.
+                    Between Diablo II: Diablerie and the Dungeons & Dragons \Product{Player's
+                    Handbook}, you have all the information you need to play your favorite
+                    computer game world:
+                    \list
+                    {A step-by-step guide to creating Amazons, Barbarians, Paladins,
+                    Necromancers, and Sorceresses!}
+                    {A complete list of weapons and gear!}
+                    {Loads of DIABLO II spells and magic items!}
+                    {Enough monsters for adventure after thrilling adventure}
+                    {A ready-to-run adventure with thee different lists of monsters}
+                    \emph{Why are you still looking at the back cover?}
+                    You can't free the land from the clutches of an ancient evil by
+                    \emph{browsing}! Get in there and grab some gold and glory.".
+#.....
+#----- TSR 9378
+
+base product TSR 9378 =
+
+  title             "Milenian Scepter";
+  leader            "The";
+  date              December 1992;
+  ISBN              1-56076-386-8;
+  system            D&D 1st;
+  audience          DM;
+  product type      Adventure;
+  producer          TSR;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description       "unveil the dark conspiracy behind the emperor's death";
+  synonyms          "HWQ1".
+#.....
+#----- TSR 9384
+
+base product TSR 9384 =
+
+  title             "Milenian Empire";
+  leader            "The";
+  date              September 1992;
+  ISBN              1-56076-337-X;
+  system            D&D 1st;
+  audience          DM;
+  product type      Campaign Expansion;
+  producer          TSR;
+  price             $10.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalog92,
+                    catalogue94,
+                    catalog93;
+  description       "ancient greek";
+  synonyms          "HWR3".
+#.....
+#----- TSR 9332
+
+base product TSR 9332 =
+
+  title             "Sons of Azca";
+  leader            "";
+  date              August 1991;
+  ISBN              1-56076-138-5;
+  system            D&D 1st;
+  audience          DM;
+  product type      Campaign Expansion;
+  producer          TSR;
+  price             $10.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalog91W,
+                    catalog93;
+  description       "the Kingdom of Azca";
+  synonyms          "HWR1".
+#.....
+#----- TSR 9311
+
+base product TSR 9311 =
+
+  title             "Nightstorm";
+  leader            "";
+  date              March 1991;
+  ISBN              1-56076-064-8;
+  system            D&D 1st;
+  audience          DM;
+  product type      Adventure;
+  producer          TSR;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalogue94,
+                    catalog91S,
+                    catalog93;
+  description       "meet the arch enemy and fly into the magical sun";
+  synonyms          "HWA3".
+#.....
+#----- TSR 9296
+
+base product TSR 9296 =
+
+  title             "Legions of Thyatis";
+  leader            "";
+  date              1990;
+  system            D&D 1st;
+  audience          DM;
+  product type      Adventure;
+  producer          TSR;
+  price             $ 5.95;
+  requirements      ;
+  worlds            Dawn of the Emperors;
+  references        catalogue93,
+                    catalogue94;
+  description       "foil furhter political plans against the empire";
+  synonyms          "DDA2".
+#.....
+#----- TSR 9306
+
+base product TSR 9306 =
+
+  title             "Atruaghin Clans";
+  leader            "The";
+  date              September 1991;
+  system            D&D 1st;
+  audience          DM;
+  product type      Campaign Expansion;
+  producer          TSR;
+  price             $10.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalog91W;
+  description       "people similar to Amerindians, ways to reach the Hollow World";
+  synonyms          "GAZ14".
+#.....
+#----- TSR 9310
+
+base product TSR 9310 =
+
+  title             "Nightrage";
+  leader            "";
+  date              1990;
+  ISBN              0-88038-898-6;
+  system            D&D 1st;
+  audience          DM;
+  product type      Adventure;
+  producer          TSR;
+  worlds            Generic;
+  price             $ 8.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description       "explore a myriad of new cultures and kingdoms";
+  synonyms          "HWA2".
+#.....
+#----- TSR 9339
+
+base product TSR 9339 =
+
+  title             "Kingdom of Nithia";
+  leader            "";
+  date              November 1991;
+  ISBN              1-56076-145-8;
+  system            D&D 1st;
+  worlds            Generic;
+  audience          DM;
+  product type      Campaign Expansion;
+  producer          TSR;
+  price             $10.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94,
+                    catalog93;
+  description       "ancient Egypt culture";
+  synonyms          "HWR2".
+#.....
+#----- TSR 9284
+
+base product TSR 9284 =
+
+  title             "Arena of Thyatis";
+  leader            "";
+  date              1990;
+  system            D&D 1st;
+  audience          DM;
+  product type      Adventure;
+  producer          TSR;
+  price             $ 5.95;
+  requirements      ;
+  worlds            Dawn of the Emperors;
+  references        catalogue93,
+                    catalog93;
+  description       "foil an attempt to kill the emperor, introductory";
+  synonyms          "DDA1".
+#.....
+#----- TSR 9303
+
+base product TSR 9303 =
+
+  title             "Nightwail";
+  leader            "";
+  date              1990;
+  system            D&D 1st;
+  producer          TSR;
+  worlds            Generic;
+  price             $ 8.95;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalogue94;
+  description       "step by step examples for character creation";
+  synonyms          "HWA1".
+#.....
+#----- TSR 1054
+
+base product TSR 1054 =
+
+  title             "Hollow World";
+  leader            "The";
+  date              1990;
+  ISBN              0-88038-862-5;
+  system            D&D 1st;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  producer          TSR;
+  requirements      ;
+  worlds            Hollow World;
+  references        catalogue93,
+                    catalog93;
+  description       "The inside surface of the hollow Known World.".
+#.....
+#----- TSR 1143
+
+base product TSR 1143 =
+
+  title             "Tale of the Comet";
+  leader            "";
+  date              August 1997;
+  ISBN              0-7869-0653-7;
+  pages             160;
+  system            AD&D revised;
+  worlds            Generic;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  producer          TSR;
+  price             $30.00;
+  contents          Booklet "The Cast & Props",
+                    Booklet "The Adventure Begins",
+                    Booklet "Crossing Over",
+                    Map "color poster",
+                    Sheet "cards" 8;
+  requirements      ;
+  worlds            Odyssey;
+  references        internet,
+                    Dragon 237,
+                    Dragon 238;
+  description       "Strange lights in the sky, prophecies of doom, and a threat unlike any other
+                    draw the heroes to \Place{Aston Point}. In this small frontier town, the fate
+                    of the world will be decided. If the heroes and their strange new allies
+                    defeat the invaders, they must then pass through a portal to another
+                    battleground, a metal city on a far-distant world, where aliens fight
+                    desperately against death machines that threaten to overwhelm all organic
+                    life. So trade in your sword for a blaster rifle, your sling stone for a few
+                    high-explosive grenades, and see what happens when you mix magic with high
+                    technology.
+                    This box contains
+                    \list
+                    {A 32-page book, \emph{The Cast and Props}, describing new, high-tech
+                    equipment, detailing the background of the \Event{Rael-Voerseer war},
+                    and explaining how to mix fantasy and science under the AD&D game
+                    system.}
+                    {Two 64-page books, \emph{The Tale Begins} and \emph{Crossing Over},
+                    presenting the grand adventure that is the \Product[TSR 1143]{Tale of the
+                    Comet}.}
+                    {Eight sheets of charts, maps, art, and statistics for the players and
+                    the DM.}
+                    {Two posters, one a double-sided map of the regions where the action
+                    takes place and the other an illustration of all the technological
+                    terrors the heroes will have to face in the course of the adventure.}".
+#.....
+#----- PZOTGL 3001
+
+base product PZOTGL 3001 =
+
+  title             "Falling: Goblin Edition";
+  leader            "";
+  subtitle          "Goblins here, goblins there, goblins falling everywhere!";
+  author            "Ernest, James" game design;
+  illustrations     "Pocza, Drew";
+  management        "Mona, Erik" publisher,
+                    "Stevens, Lisa" Paizo CEO;
+  date              January 1971;
+  ISBN              1-60125-147-5;
+  ISBN13            978-1-60125-147-3;
+  pages             12;
+  system            None;
+  worlds            None;
+  audience          All;
+  product type      Card Game;
+  style             Small Box;
+  producer          Paizo;
+  price             $9.99;
+  contents          Booklet "rules" 1,
+                    Card "playing cards" 55;
+  requirements      ;
+  layout            Full Color;
+  worlds            None;
+  description
+  "To celebrate the 10th anniversary of Falling, Titanic Games proudly brings you a re-envisioning of James Ernest's highly popular card game. You're all goblins and you're plummeting toward the ground. Be the last one to hit and you win!
+
+Falling is a fast-paced, real-time card game for 5 to 8 players, suitable for any audience.";
+  short description "A fast-paced, real-time card game.".
+
+#.....
+#----- LOO 001
+
+base product LOO 001 =
+
+  title             "Fluxx 3.1";
+  leader            "";
+  subtitle          "The card game with ever-changing rules!";
+  notes             "";
+  date              January 2005;
+  pages             0;
+  system            None;
+  worlds            None;
+  audience          All;
+  product type      Card Game;
+  style             Small Box;
+  producer          Looney Labs;
+  contents          Book "";
+  requirements      TSR 1094:TSR 1094;
+  layout            Full Color;
+  worlds            None;
+  description
+  "\list
+{2-6 players}
+{Ages 8-108}
+{2-30 minutes}
+{84 cards + instructions}".
+
+#.....
+#----- TV 75001
+
+base product TV 75001 =
+
+  title             "Possession";
+  leader            "";
+  subtitle          "";
+  notes             "";
+  author            "Howington, Walt";
+  cover             "Gonzalez, Raul";
+  illustrations     "Gonzalez, Raul";
+  date              October 2007;
+  system            None;
+  worlds            None;
+  audience          All;
+  product type      Card Game;
+  style             Small Box;
+  producer          Toy Vault;
+  price             $19.99;
+  contents          Booklet "instructions" 1,
+                    Card "playing cards" 46;
+  requirements      ;
+  layout            Full Color;
+  worlds            None;
+  description
+  "The Epic battle between Good and Evil... since time in memoriam the entities of darkness has slithered and crept through the World. They conceal themselves withing the liminal, the place in between light and dark, until a weary believer loses enough faith to allow them entrance. Then they attack, forcing themselves into the flesh, quashing the host's spirit until they have control. Opening their fleshly eyes, they see in a new light, and walk among the living. However one such malevolent being is known above the rest, feared throughout time ... \emph{'And he asked him, What is thy name? And he answered, saying, My name is Legion: for we are many.'} He comes even now... pray that your inner light waxes bright to fend off the encroaching evil.
+
+\Product{Possession}, the newest game from Toy Vault, is a deceptively fun party game that lets YOU battle the onslaught of Legion. As the weeks roll past, you must use your wits and special talents to keep Legion's evil essence from spreading throughout the group. With Holy Men, the Parishioners, and the outcast Shaman, you stand in the path of evil, preventing the Old One from gaining the power needed to bring forth his demonic gathering. Hope that you seek Him out in time!".
+
+#.....
+#----- WTC 20112
+
+base product WTC 20112 =
+
+  title             "Inn-Fighting";
+  leader            "";
+  subtitle          "It's a typical night at the inn. Suddenly, a brawl breaks out";
+  notes             "";
+  author            "Heinsoo, Rob" game design,
+                    "Decker, Jesse" game development,
+                    "Donais, Michael &#39Mike&#39" game development,
+                    "Marques, Greg" game development,
+                    "Slavicsek, Bill" rules writing;
+  editor            "Slavicsek, Bill" rules editing;
+  cover             "Adorjany, Attila";
+  illustrations     "Adorjany, Attila" card illustrations,
+                    "Powell, Karin" art director,
+                    "Martin, Michael" graphic design;
+  management        "Foster, Liane" brand management,
+                    "McCart, Mitzi" production,
+                    "Applin, Raini" production;
+  date              October 2007;
+  ISBN              0-7869-4798-5;
+  ISBN13            978-0-7869-4798-0;
+  pages             24;
+  system            None;
+  worlds            None;
+  audience          All;
+  product type      Card Game;
+  style             Small Box;
+  price             $14.99;
+  contents          Booklet "rules" 1,
+                    Dice "custom" 6,
+                    Dice "d20" 1,
+                    Card "deck" 52;
+  requirements      ;
+  layout            Color Cover;
+  description
+  "A chair smashes into \NPC{Balthur} the \Monster{Dwarf} \Class{Cleric}. \NPC{Finno} the \Monster{Halfling} \Class{Rogue} punches \NPC{Xxyzzt} the \Monster{Beholder} Barfly. Mugs of frothy ale fly in all directions. This is the \Product{Inn-Fighting: D&D Dice Game}, a wild and wacky game of tavern brawling set in the fantastic worlds of the Dungeons & Dragons roleplaying game.
+
+This fast-paced, noncollectable dice game for 3-6 players uses custom dice and cards. To play, you also need some kind of counters to represent Hit Points and Victory Points as the humorous melee unfolds.".
+
+#.....
+#----- DMA 000069
+
+base product DMA 000069 =
+
+  title             "European RPGA Member Handbook";
+  leader            "";
+  author            "RPGA";
+  pages             28;
+  system            None;
+  audience          All;
+  product type      Promotion;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  worlds            None;
+  description
+  "This is the member handbook for the European RPGA Network.".
+#.....
+#----- DMA 000070
+
+base product DMA 000070 =
+
+  title             "2001 Gen Con Game Fair";
+  leader            "";
+  pages             8;
+  system            None;
+  audience          All;
+  product type      Promotion;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  worlds            None;
+  description
+  "The promotion flyer for the 2001 Gen Con Game Fair".
+#.....
+#----- DMA 000050
+
+base product DMA 000050 =
+
+  title             "Rezepte aus dem Auenland";
+  leader            "";
+  author            "Uli B\umlaut{o}ckmann",
+                    "Stefan Servos" redaktionelle Beratung;
+  editor            "Petra Hundacker";
+  cover             "Herbert Menzel";
+  illustrations     "Herbert Menzel";
+  date              2002;
+  ISBN              3-89880-127-6;
+  pages             130;
+  system            None;
+  audience          All;
+  product type      Cookbook;
+  style             Soft Cover;
+  producer          Heel;
+  contents          Book;
+  requirements      ;
+  worlds            Middle Earth;
+  description
+  "\large{Das Hobbit Kochbuch}
+
+  Als \NPC{Beregil von Gondor} im Jahr 175 des 4. Zeitalters von
+  \Place{Mittelerde} ins \Place{Auenland} kommt, um dort von der
+  'Erz\umlaut{a}hlung der Jahre', der wahren Geschiche N\acute{u}menors und der
+  Erhebung \NPC{Saurons}, eine Abschrift f\umlaut{u}r die Bibliothek von
+  \Place{Minas Tirith} zu erstellen, macht er eine f\umlaut{u}r ihn
+  erstaunliche Entdeckung:
+
+  'Die \Monster{Hobbits} leven in solch einer unbe\umlaut{u}mmerten Art und
+  Weise und sind so sher mit sich selbst besch\umlaut{a}ftigt, wie ich es bis
+  heute bei keinem anderen Volk von \Place{Mittelerde} und dar\umlaut{u}ber
+  hinaus je gesehen habe. Eigentlich kreisen ihre Gedanken nur im eines: die
+  n\umlaut{a}chste Mahlzeit und was man davor noch schnell zu sich nehmen
+  kann.'
+
+  So beginnt der Reisende damit, die Rezepturen und die Tischsitten der
+  \Monster{Hobbits} aufzuschreiben, die dazu dienen sollen, uns \umlaut{u}ber
+  das Volk der \Monster{Halblinge} mehr zu erz\umlaut{a}hlen, als wir bislang
+  wussten. Lesen Sie nun, was er gesammelt hat:
+
+  \list
+  {alles \umlaut{u}ber die Br\umlaut{a}uche und Sitten der \Monster{Hobbits}}
+  {\umlaut{u}ber 40 leich nachzukochende Rezepte aus dem \Place{Auenland}: vom
+   Haferobstbrei \umlaut{u}ber Maggot'sche Pilze, Wildschweinbraten mit
+   Honigkruste und Kirschbrotkuchen bis hin zur Biersuppe}
+  {alles \umlaut{u}ber das Rauchen von Pfeifen und das Blasen von Kringeln
+   u.v.m.}
+
+  \large{Begleiten Sie uns auf eine kulinarische Reise in die Welt der
+  \Monster{Hobbits!}}".
+#.....
+#----- DMA 000045
+
+base product DMA 000045 =
+
+  title             "Gen Con Benelux, Antwerpen 1999";
+  leader            "";
+  date              1999;
+  pages             26;
+  system            None;
+  worlds            None;
+  audience          All;
+  product type      Promotion;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  description
+  "The programe of the 1999 Gen Con Benelux in Antwerpen.".
+#.....
+#----- DMA 000014
+
+base product DMA 000014 =
+
+  title             "1997 Gen Con Game Fair";
+  leader            "";
+  editor            "Westman, Dee";
+  cover             "Heather LeMay";
+  typography        "Julie Mazurek";
+  management        "Murin, Dawn" graphic designer,
+                    "Poutsch, Debbie" proofreader,
+                    "Cindy Rick" advertising manager;
+  date              1997;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Promotion;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  worlds            None;
+  description
+  "This is the official convention program book of the 30th anniversary gen con
+  game fair of the year 1997.".
+#.....
+#----- DMA 000001
+
+base product DMA 000001 =
+
+  title             "RPGA Member Handbook";
+  leader            "";
+  author            "RPGA";
+  date              March 2001;
+  pages             32;
+  system            None;
+  audience          All;
+  product type      Promotion;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  worlds            None;
+  description
+  "This is the member handbook for the RPGA Network.".
+#.....
+#----- WTC 95699
+
+base product WTC 95699 =
+
+  title             "D&D Bumper Stickers";
+  leader            "";
+  subtitle          "";
+  date              December 2005;
+  ISBN              0-7869-4147-2;
+  pages             0;
+  system            None;
+  worlds            None;
+  audience          All;
+  product type      Accessory;
+  style             Sticker;
+  price             $ 2.50;
+  contents          Sticker "bumper";
+  requirements      ;
+  layout            Full Color;
+  description
+  "Dungeons & Dragons isn't just a game--for millions of fans it's a community
+  and a way of life.
+
+  This assortment features five unique and humorous slogans related to Dungeons
+  & Dragons. It's a fun, easy, and inexpensive way for current and former
+  D&D players to express their love of the game and share an in-joke with other
+  players.
+
+  D&D has never been hotter than it is today—and with tens of thousands of
+  these stickers on cars, notebooks, and elsewhere across America, it's only
+  going to get hotter!";
+  short description "".
+#.....
+#----- TSR 21751
+
+base product TSR 21751 =
+
+  title             "Making of Dungeons & Dragons: The Movie";
+  leader            "The";
+  author            "John Baxter";
+  date              November 2000;
+  ISBN              0-7869-1751-2;
+  pages             128;
+  system            None;
+  worlds            None;
+  audience          All;
+  product type      Special Book;
+  style             Soft Cover;
+  price             $19.95;
+  contents          Book;
+  requirements      ;
+  references        net;
+  description
+  "\bold{Now, learn the behind-the-scenes story of this long-awaited fantasy
+  epic in \Product{The Making of Dungeons & Dragons The Movie}}.
+
+  \list
+  {Read interviews with the people who finally brought the world's
+   greatest role-playing game to the big screen.}
+  {Discover the origins of the film's masterfully evil villain and bold
+   heroes.}
+  {Follow the film's special-effects masters as they bring
+   fire-breathing dragons to life.}
+  {Learn the trials and triumphs of the film shoot in the ancient city
+   of \Place{Prague}}
+
+  \Product{The Making of Dungeons & Dragons: The Movie} is a magical carpet
+  ride that will thrill and entertain everyone from master players who have
+  love the D&D game for two decades to strangers in these fantastic
+  worlds. Bring your imagination and enjoy the show!".
+#.....
+#----- TSR 1037
+
+base product TSR 1037 =
+
+  title             "Dawn of the Emperors: Thyatis and Alphatia";
+  leader            "";
+  date              1989;
+  ISBN              0-88038-736-X;
+  system            D&D 1st;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $18.00;
+  requirements      ;
+  worlds            Dawn of the Emperors;
+  references        catalogue93,
+                    catalog93,
+                    catalogue94;
+  description
+  "Describes Thyatis and Alphatia".
+#.....

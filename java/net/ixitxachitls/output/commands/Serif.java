@@ -85,7 +85,7 @@ public class Serif extends BaseCommand
 
   /** Command for sans serif. */
   public static final @Nonnull String NAME =
-     Config.get("resource:commands/sansserif", "serif");
+     Config.get("resource:commands/serif", "serif");
 
   //........................................................................
 

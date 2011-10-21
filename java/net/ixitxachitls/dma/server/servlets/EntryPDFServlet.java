@@ -279,7 +279,7 @@ public class EntryPDFServlet extends PDFServlet
       EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
       EasyMock.replay(m_request, m_response);
 
-      return new EntryPDFServlet(new DMAData("path"))
+      return new EntryPDFServlet(new DMAData.Test.Data())
         {
           private static final long serialVersionUID = 1L;
 
@@ -306,8 +306,7 @@ public class EntryPDFServlet extends PDFServlet
     {
       EntryPDFServlet servlet =
         createServlet("/baseentry/guru",
-                      new BaseEntry("guru", new net.ixitxachitls.dma.data
-                                    .DMAData("path")));
+                      new BaseEntry("guru", new DMAData.Test.Data()));
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content", "%PDF-1.4\n%",
@@ -370,8 +369,9 @@ public class EntryPDFServlet extends PDFServlet
                                ("test", new DMAData.Test.Data())));
 
       assertEquals("entry", "test",
-                   servlet.getEntry("/just/some/entry/test").getName());
-      assertEquals("entry", "test", servlet.getEntry("/entry/test").getName());
+                   servlet.getEntry("/just/some/base entry/test").getName());
+      assertEquals("entry", "test",
+                   servlet.getEntry("/base entry/test").getName());
       assertNull("entry", servlet.getEntry("test"));
       assertNull("entry", servlet.getEntry(""));
       assertNull("entry", servlet.getEntry("test/"));

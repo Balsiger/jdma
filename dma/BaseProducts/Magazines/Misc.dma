@@ -1,0 +1,44 @@
+#----- TSR 8160-XX
+
+base product TSR 8160-XX =
+
+  title             "Amazing Stories '93";
+  leader            "";
+  date              1993;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  number            93;
+  series            Amazing Stories;
+  price             $ 3.95;
+  worlds            None;
+  references        catalog93;
+  description
+  "the world's first science fiction magazine".
+
+
+#.....
+#----- TSR 8161-XX
+
+base product TSR 8161-XX =
+
+  title             "Amazing Stories '94";
+  leader            "";
+  date              1994;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  number            94;
+  worlds            None;
+  series            Amazing Stories;
+  price             $ 3.95;
+  references        catalog93;
+  description
+  "the world's first science fiction magazine".
+
+
+#.....

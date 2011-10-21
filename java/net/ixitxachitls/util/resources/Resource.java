@@ -463,7 +463,7 @@ public abstract class Resource
       assertNull("unknown", Resource.get("guru/gugus").m_url);
 
       // now for a directory
-      assertPattern("file", "file:/.*/resources/css",
+      assertPattern("file", "file:/.*/resources/css/",
                     Resource.get("resources/css").toString());
 
       // now for a JAR file

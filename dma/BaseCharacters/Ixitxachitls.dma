@@ -1,18 +1,5 @@
 # These are the people comprising the ixitxachtils
 
-#----- Merlin
-
-base character Merlin =
-
-  real name         "Balsiger, Peter";
-  email             "balsiger@ixitxachitls.net";
-  password          "retep";
-  last login        "Friday, September 30 2011 (17:40)";
-  last action       "Friday, September 30 2011 (17:40)";
-  token             "ZCPUHFPGDRYJGKGPBCFI";
-  group             Admin.
-
-#.....
 #----- Salamix
 
 base character Salamix =
@@ -76,5 +63,18 @@ base character Thomas =
   email             "t.m.fischer@gmail.com";
   password          "tom";
   group             User.
+
+#.....
+#----- Merlin
+
+base character Merlin =
+
+  real name         "Balsiger, Peter";
+  email             "balsiger@ixitxachitls.net";
+  password          "retep";
+  last login        "Friday, September 30 2011 (17:40)";
+  last action       "Friday, September 30 2011 (17:40)";
+  token             "ZCPUHFPGDRYJGKGPBCFI";
+  group             Admin.
 
 #.....

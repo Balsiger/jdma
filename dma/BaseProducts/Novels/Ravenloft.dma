@@ -788,7 +788,7 @@ base product TSR 8089 =
   date              March 1994;
   system            Endless Quest;
   audience          All;
-  product type      Adventure;
+  product type      Novel;
   number            Book Two;
   series            New Series;
   price             � 3.99;
@@ -798,6 +798,33 @@ base product TSR 8089 =
   description
   "".
 
+
+#.....
+#----- WTC 9568974
+
+base product WTC 9568974 =
+
+  title             "I Strahd, Memoirs of a Vampire";
+  leader            "";
+  subtitle          "Reprint!";
+  author            "Elrod, Patricia Nead";
+  cover             "Foster, Jon";
+  date              November 2006;
+  ISBN              0-7869-4123-5;
+  ISBN13            978-0-7869-4123-0;
+  pages             277;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Paperback;
+  producer          WTC;
+  price             $12.95;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  worlds            Ravenloft;
+  description       "He sold his soul for her.
+                    But when that fatal decision leaves him horribly changed, will she be the agent of his deliverance or his damnation?".
 
 #.....
 #----- TSR 8096
@@ -812,7 +839,7 @@ base product TSR 8096 =
   pages             192;
   system            Endless Quest;
   audience          All;
-  product type      Adventure;
+  product type      Novel;
   number            Book Eight;
   series            New Series;
   price             $ 3.95;

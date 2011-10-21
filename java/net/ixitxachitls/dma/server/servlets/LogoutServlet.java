@@ -145,7 +145,7 @@ public class LogoutServlet extends LoginServlet
 
       BaseCharacter character =
         new BaseCharacter("somebody",
-                          new net.ixitxachitls.dma.data.DMAData("path"));
+                          new net.ixitxachitls.dma.data.DMAData.Test.Data());
       character.setPassword("secret");
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
@@ -167,7 +167,7 @@ public class LogoutServlet extends LoginServlet
       assertEquals("post", "", output.toString());
 
       m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/somebody.dma'");
+                           + "'/Products/somebody.dma'");
       EasyMock.verify(request, response);
     }
 

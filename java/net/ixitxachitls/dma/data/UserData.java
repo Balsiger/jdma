@@ -47,7 +47,7 @@ import net.ixitxachitls.dma.entries.Product;
 
 //__________________________________________________________________________
 
-public class UserData extends DMAData
+public class UserData extends DMADatafiles
 {
   //--------------------------------------------------------- constructor(s)
 

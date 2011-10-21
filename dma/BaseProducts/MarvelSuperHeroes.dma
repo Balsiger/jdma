@@ -558,3 +558,100 @@ base product TSR 6931 =
 
 
 #.....
+#----- TSR 11668
+
+base product TSR 11668 =
+
+  title             "Spider-Man: Marvel Team-Up";
+  leader            "";
+  author            "Harold Johnson";
+  date              February 2000;
+  system            Marvel Super Heroes;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  references        Dragon 268;
+  description
+  "Spider-Man and other super heroes must stop mob wars".
+#.....
+#----- TSR 11320
+
+base product TSR 11320 =
+
+  title             "Fantastic Four Roster Book";
+  leader            "";
+  author            "Richard Dakan",
+                    "Jack Emmert";
+  date              March 1999;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  price             $18.95;
+  requirements      ;
+  worlds            Marvel Super Heroes;
+  references        Dragon 257;
+  description
+  "descriptions for more than one 100 friends and foes of the Fantastic Four".
+#.....
+#----- TSR 11330
+
+base product TSR 11330 =
+
+  title             "Fantastic Voyages";
+  leader            "";
+  author            "Mike Selinker",
+                    "Teeuwynn Woodruff";
+  date              April 1999;
+  ISBN              0-7869-1330-4;
+  pages             48;
+  system            Saga;
+  audience          DM;
+  product type      Adventure;
+  price             $ 8.95;
+  requirements      ;
+  worlds            Marvel Super Heroes;
+  references        net,
+                    Dragon 257;
+  description
+  "adventure anthology".
+#.....
+#----- TSR 11340
+
+base product TSR 11340 =
+
+  title             "Reed Richards Guide to Everything";
+  leader            "The";
+  author            "Mike Selinker";
+  date              July 1999;
+  ISBN              0-7869-1340-1;
+  pages             128;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  price             $16.95;
+  requirements      ;
+  worlds            Marvel Super Heroes;
+  references        net;
+  description
+  "a lot of infos and optional rules".
+#.....
+#----- TSR 11409
+
+base product TSR 11409 =
+
+  title             "Team-Up Roster Book";
+  leader            "";
+  author            "Harold Johnson";
+  date              September 1999;
+  pages             144;
+  system            Saga;
+  audience          DM;
+  product type      Accessory;
+  price             $18.95;
+  requirements      ;
+  worlds            Marvel Super Heroes;
+  references        net;
+  description
+  "collection of heroes and villans".
+#.....

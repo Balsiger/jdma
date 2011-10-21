@@ -1,6 +1,4 @@
-#Wheel of Time Roleplaying Game
-#----- WTC 11996
-
+# Wheel of Time Roleplaying Game
 #----- WTC 11996
 
 base product WTC 11996 =
@@ -45,8 +43,7 @@ become reality in Robert Jordan's world of epic fantasy.
 Take your place in the legends that have yet to be told.";
   synonyms          "WTC 88780".
 
-
-#Prophecies of the Dragon
+#.....
 #----- WTC 88293
 
 base product WTC 88293 =

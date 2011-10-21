@@ -497,18 +497,18 @@ public class BaseEntry extends AbstractEntry
   //........................................................................
 
 
-  //------------------------------- getWorld -------------------------------
+  //------------------------------- getWorlds ------------------------------
 
   /**
-   * Get the world the product is for.
+   * Get the worlds the product is for.
    *
    * @return      the selection containing the selected world
    *
    */
-//   public String getWorld()
-//   {
-//     return m_world.toString();
-//   }
+  public String getWorlds()
+  {
+    return m_worlds.toString();
+  }
 
   //........................................................................
   //------------------------- getShortDescription --------------------------
@@ -1223,7 +1223,7 @@ public class BaseEntry extends AbstractEntry
         new ParseReader(new java.io.StringReader(s_text), "test");
 
       BaseEntry entry = (BaseEntry)BaseEntry.read
-        (reader, new net.ixitxachitls.dma.data.DMAData("path"));
+        (reader, new net.ixitxachitls.dma.data.DMAData.Test.Data());
 
       //System.out.println(entry);
       m_logger.verify();

@@ -97,7 +97,8 @@ public final class DMADataFactory
           // actually read, but if we wait here, we end up requesting it (and
           // rereading it while reading the files below. Since this will go
           // away, this should do for now.
-          s_base = new DMAData(Config.get("web.dma.data", "dma"));
+          DMADatafiles data =
+            new DMADatafiles(Config.get("web.dma.data", "dma"));
           String dirs =
             Config.get("web.dma.files",
                        "BaseProducts, BaseProducts/DnD, BaseProducts/Novels, "
@@ -105,10 +106,11 @@ public final class DMADataFactory
                        + "BaseCampaigns");
           Log.info("reading base data for " + dirs);
           for(String baseDir : dirs.split(",\\s*"))
-            s_base.addAllFiles(baseDir);
+            data.addAllFiles(baseDir);
 
-          if(!s_base.read())
+          if(!data.read())
             Log.error("Could not properly read base data files!");
+          s_base = data;
         }
         else
           s_base = EasyMock.createMock(DMAData.class);

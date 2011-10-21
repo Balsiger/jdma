@@ -9789,7 +9789,7 @@ base product Dragon 356 =
   pages             98;
   system            D&D 1st;
   audience          DM;
-  product type      Accessory;
+  product type      Magazine;
   style             Box;
   producer          WTC;
   volume            XXXII;
@@ -10314,4 +10314,99 @@ base product Dragon 358 =
   description
   "Issue 358 of the Dragon Magazine.".
 
+#.....
+#----- TSR 8110-XX
+
+base product TSR 8110-XX =
+
+  title             "Dragon Magazine '93";
+  leader            "";
+  date              1993;
+  product type      Magazine;
+  style             Booklet;
+  series            Dragon;
+  price             $ 3.95;
+  requirements      ;
+  references        catalog95,
+                    catalog93;
+  description
+  "1993 issues of Dragon magazine (number of month added to TSR number)".
+#.....
+#----- TSR 8111-XX
+
+base product TSR 8111-XX =
+
+  title             "Dragon Magazine '94";
+  leader            "";
+  date              1994;
+  product type      Magazine;
+  style             Booklet;
+  series            Dragon;
+  price             $ 3.95;
+  requirements      ;
+  references        catalog95,
+                    catalog93;
+  description
+  "1994 issues of Dragon magazine (number of month added to TSR number)".
+#.....
+#----- TSR 8112-XX
+
+base product TSR 8112-XX =
+
+  title             "Dragon Magazine '95";
+  leader            "";
+  product type      Magazine;
+  style             Booklet;
+  series            Dragon;
+  price             $ 3.95;
+  requirements      ;
+  references        catalog95;
+  description
+  "1995 issues of Dragon magazine (number of month added to TSR number)".
+#.....
+#----- TSR 8113-XX
+
+base product TSR 8113-XX =
+
+  title             "Dragon Magazine '96";
+  leader            "";
+  date              1996;
+  product type      Magazine;
+  style             Booklet;
+  series            Dragon;
+  price             $ 4.95;
+  requirements      ;
+  references        catalog96;
+  description
+  "1996 issues of Dragon magazine (number of month added to TSR number)".
+#.....
+#----- TSR 8114-XX
+
+base product TSR 8114-XX =
+
+  title             "Dragon Magazine '97";
+  leader            "";
+  product type      Magazine;
+  style             Booklet;
+  series            Dragon;
+  price             $ 4.95;
+  requirements      ;
+  references        catalog96;
+  description
+  "1997 issues of Dragon magazine (number of month added to TSR number)".
+#.....
+#----- TSR 8115-XX
+
+base product TSR 8115-XX =
+
+  title             "Dragon Magazine '98";
+  leader            "";
+  audience          All;
+  product type      Magazine;
+  style             Booklet;
+  series            Dragon;
+  requirements      ;
+  references        catalog98;
+  description
+  "1998 issues of Dragon magazine (number of month added to TSR number)".
 #.....

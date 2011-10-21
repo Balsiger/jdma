@@ -167,8 +167,8 @@ public class ListPrint extends AbstractPrint
     public void print()
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", new net.ixitxachitls
-                                                   .dma.data.DMAData("path"));
+        new net.ixitxachitls.dma.entries.BaseEntry
+        ("test", new net.ixitxachitls.dma.data.DMAData.Test.Data());
 
       entry.setDescription("desc");
 

@@ -142,13 +142,36 @@ base product TSR 2519 =
   contents          Booklet 2,
                     Gatefold "self-cover with map sheets",
                     Sheet "looseleaf handouts" 8;
-  worlds            Savage Coast;
+  worlds            Mystara;
   references        catalogue96,
                     catalog96,
                     Dragon 231,
                     Dragon 232;
   description
   "race against time and treachery".
+
+
+#.....
+#----- TSR 2518
+
+base product TSR 2518 =
+
+  title             "Dark Knight of Karameikos";
+  leader            "";
+  author            "Brown, Timothy B.";
+  date              October 1995;
+  ISBN              0-7869-0307-4;
+  pages             320;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 4.95;
+  contents          Poster "map";
+  worlds            Mystara;
+  references        catalog95,
+                    catalogue96;
+  description
+  "chivalry meets 'the Dirty Dozen'".
 
 
 #.....

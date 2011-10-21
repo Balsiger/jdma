@@ -41,6 +41,7 @@ import javax.annotation.Nullable;
 
 // import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.data.DMAFiles;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -408,6 +409,7 @@ public class AbstractEntry extends ValueGroup
   //----- storage ----------------------------------------------------------
 
   /** The file this entry will be written to. */
+  @Deprecated
   protected @Nullable DMAFile m_file;
 
 //   /** The place this entry is stored in (not read). */
@@ -1058,6 +1060,21 @@ public class AbstractEntry extends ValueGroup
 
 //     return result;
 //   }
+
+  //........................................................................
+  //------------------------------- getFile --------------------------------
+
+  /**
+   * Get the file this entry is stored in.
+   *
+   * @return      the file stored in, if any
+   *
+   */
+  @Deprecated
+  public @Nullable DMAFile getFile()
+  {
+    return m_file;
+  }
 
   //........................................................................
 
@@ -1828,31 +1845,32 @@ public class AbstractEntry extends ValueGroup
 
     if("file".equals(inKey))
     {
-      if(m_file == null)
-        return new FormattedValue
-          (new Editable(getID(), getEditType(), "<please select>", "file", "",
-                        "selection[file]", null,
-                        Strings.toString(m_data.files(getType()),
-                                         "||", ""), null),
-           null, "file", true, false, false, false, null, null);
-      else
-        return new FormattedValue
-          (new Command
-           (new Editable(getID(),
-                         getEditType(),
-                         m_file.getStorageName(),
-                         "file",
-                         m_file.getStorageName(),
-                         "selection[file]",
-                         null,
-                         Strings.toString(m_file.getData().files(getType()),
-                                          "||", ""),
-                         null),
-            " lines ",
-            m_startLine,
-            " to ",
-            m_endLine),
-           null, "file", true, false, false, false, null, null);
+      if(m_data instanceof DMADatafiles)
+        if(m_file == null)
+          return new FormattedValue
+            (new Editable(getID(), getEditType(), "<please select>", "file", "",
+                          "selection[file]", null,
+                          Strings.toString(((DMADatafiles)m_data)
+                                           .files(getType()), "||", ""), null),
+             null, "file", true, false, false, false, null, null);
+        else
+          return new FormattedValue
+            (new Command
+             (new Editable(getID(),
+                           getEditType(),
+                           m_file.getStorageName(),
+                           "file",
+                           m_file.getStorageName(),
+                           "selection[file]",
+                           null,
+                           Strings.toString(((DMADatafiles)m_file.getData())
+                                            .files(getType()), "||", ""),
+                           null),
+              " lines ",
+              m_startLine,
+              " to ",
+              m_endLine),
+             null, "file", true, false, false, false, null, null);
     }
 
     if("errors".equals(inKey))
@@ -2954,10 +2972,7 @@ public class AbstractEntry extends ValueGroup
     if(!m_changed)
       return false;
 
-    if(m_file != null)
-      m_file.write();
-
-    return m_data.save(this);
+    return m_data.update(this);
   }
 
   //........................................................................
@@ -3177,7 +3192,7 @@ public class AbstractEntry extends ValueGroup
       AbstractEntry entry =
         new AbstractEntry("just a test",
                           new AbstractType.Test.TestType<AbstractEntry>
-                          (AbstractEntry.class), new DMAData("path"));
+                          (AbstractEntry.class), new DMAData.Test.Data());
 
       // name
       assertEquals("name", "just a test", entry.getName());
@@ -3193,7 +3208,7 @@ public class AbstractEntry extends ValueGroup
 //       assertNull("type", entry.getType().getBaseType());
 
       assertEquals("create", "base entry $undefined$ =\n\n.\n",
-                   entry.getType().create(new DMAData("path")).toString());
+                   entry.getType().create(new DMAData.Test.Data()).toString());
 
       // conversion to string
       assertEquals("converted",
@@ -3421,7 +3436,7 @@ public class AbstractEntry extends ValueGroup
                                                  + "\\= test = ."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "just a = test",
@@ -3448,7 +3463,7 @@ public class AbstractEntry extends ValueGroup
         new ParseReader(new java.io.StringReader("abstract entry test."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "test", entry.getName());
@@ -3474,7 +3489,7 @@ public class AbstractEntry extends ValueGroup
         new ParseReader(new java.io.StringReader("abstract entry."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "", entry.getName());
@@ -3507,7 +3522,7 @@ public class AbstractEntry extends ValueGroup
                          + "# now the next entry\n"),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData("path"));
+      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "test",

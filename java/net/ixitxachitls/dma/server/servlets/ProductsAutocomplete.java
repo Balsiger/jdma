@@ -198,13 +198,14 @@ public class ProductsAutocomplete extends Autocomplete
         new java.util.HashMap<String, BaseProduct>();
 
       BaseProduct product1 =
-        new BaseProduct("First", new net.ixitxachitls.dma.data.DMAData("path"));
+        new BaseProduct("First", new net.ixitxachitls.dma.data.DMAData.Test
+                        .Data());
       BaseProduct product2 =
         new BaseProduct("Second",
-                        new net.ixitxachitls.dma.data.DMAData("path"));
+                        new net.ixitxachitls.dma.data.DMAData.Test.Data());
       BaseProduct product3 =
         new BaseProduct("Third",
-                        new net.ixitxachitls.dma.data.DMAData("path"));
+                        new net.ixitxachitls.dma.data.DMAData.Test.Data());
 
       net.ixitxachitls.dma.entries.Variable title =
         product1.getVariable("title");
@@ -255,13 +256,14 @@ public class ProductsAutocomplete extends Autocomplete
         new java.util.HashMap<String, BaseProduct>();
 
       BaseProduct product1 =
-        new BaseProduct("First", new net.ixitxachitls.dma.data.DMAData("path"));
+        new BaseProduct("First",
+                        new net.ixitxachitls.dma.data.DMAData.Test.Data());
       BaseProduct product2 =
         new BaseProduct("Second",
-                        new net.ixitxachitls.dma.data.DMAData("path"));
+                        new net.ixitxachitls.dma.data.DMAData.Test.Data());
       BaseProduct product3 =
         new BaseProduct("Third",
-                        new net.ixitxachitls.dma.data.DMAData("path"));
+                        new net.ixitxachitls.dma.data.DMAData.Test.Data());
 
       net.ixitxachitls.dma.entries.Variable title =
         product1.getVariable("title");

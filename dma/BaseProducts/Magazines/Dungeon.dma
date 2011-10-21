@@ -6071,3 +6071,110 @@ base product Dungeon 150 =
 
 
 #.....
+#----- TSR 8197
+
+base product TSR 8197 =
+
+  title             "Dungeon Magazine '93";
+  leader            "";
+  audience          DM;
+  product type      Magazine;
+  style             Booklet;
+  number            1993;
+  series            Dungeon;
+  price             $ 3.95;
+  requirements      ;
+  references        catalog95,
+                    catalog93;
+  description
+  "1993 issues of Dungeon magazine (number of 2nd month added to TSR number)".
+#.....
+#----- TSR 8198
+
+base product TSR 8198 =
+
+  title             "Dungeon Magazine '94";
+  leader            "";
+  audience          DM;
+  product type      Magazine;
+  style             Booklet;
+  number            1994;
+  series            Dungeon;
+  price             $ 3.95;
+  requirements      ;
+  references        catalog95,
+                    catalog93;
+  description
+  "1994 issues of Dungeon magazine (number of 2nd month added to TSR number)".
+#.....
+#----- TSR 8199
+
+base product TSR 8199 =
+
+  title             "Dungeon Magazine '95";
+  leader            "";
+  date              1995;
+  audience          DM;
+  product type      Magazine;
+  style             Booklet;
+  number            1995;
+  series            Dungeon;
+  price             $ 3.95;
+  requirements      ;
+  references        catalog95;
+  description
+  "1995 issues of Dungeon magazine (number of 2nd month added to TSR number)".
+#.....
+#----- TSR 8200-XX
+
+base product TSR 8200-XX =
+
+  title             "Dungeon Magazine '96";
+  leader            "";
+  date              1996;
+  audience          DM;
+  product type      Magazine;
+  style             Booklet;
+  number            1996;
+  series            Dungeon;
+  price             $ 4.95;
+  requirements      ;
+  references        catalog96;
+  description
+  "1996 issues of Dungeon magazine (number of 2nd month added to TSR number)".
+#.....
+#----- TSR 8201-XX
+
+base product TSR 8201-XX =
+
+  title             "Dungeon Magazine '97";
+  leader            "";
+  date              1997;
+  audience          DM;
+  product type      Magazine;
+  style             Booklet;
+  number            1997;
+  series            Dungeon;
+  price             $ 4.95;
+  requirements      ;
+  references        catalog96;
+  description
+  "1997 issues of Dungeon magazine (number of 2nd month added to TSR number)".
+#.....
+#----- TSR 8203-XX
+
+base product TSR 8203-XX =
+
+  title             "Dungeon Magazine '98";
+  leader            "";
+  date              1998;
+  audience          DM;
+  product type      Magazine;
+  worlds            Generic;
+  number            1994;
+  series            Dungeon;
+  requirements      ;
+  references        catalog98;
+  description
+  "1998 issues of Dungeon magazine (number of 1st month added to TSR number)".
+#.....

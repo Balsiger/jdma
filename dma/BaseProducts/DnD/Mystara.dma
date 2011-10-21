@@ -26,7 +26,7 @@ base product TSR 1094 =
   contents          Booklet 3,
                     Poster "maps" 4,
                     Card "cardstock" 8;
-  worlds            Generic;
+  worlds            Mystara;
   references        catalogue93,
                     catalog93S,
                     catalog93,
@@ -386,26 +386,119 @@ base product TSR 2517 =
 
 
 #.....
-#----- TSR 2518
+#----- TSR 9500
 
-base product TSR 2518 =
+base product TSR 9500 =
 
-  title             "Dark Knight of Karameikos";
+  title             "Savage Baronies";
   leader            "";
-  author            "Brown, Timothy B.";
-  date              October 1995;
-  ISBN              0-7869-0307-4;
-  pages             320;
-  system            None;
-  audience          All;
-  product type      Novel;
-  price             $ 4.95;
-  contents          Poster "map";
-  worlds            Mystara;
+  author            "Beach, Tim",
+                    "Heard, Bruce";
+  date              May 1995;
+  ISBN              0-7869-0123-3;
+  pages             96;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  producer          TSR;
+  price             $20.00;
+  contents          CD "audio",
+                    Booklet 2,
+                    Sheet "handouts" 8,
+                    Poster "map" 2;
+  requirements      ;
+  worlds            Red Steel;
   references        catalog95,
                     catalogue96;
-  description
-  "chivalry meets 'the Dirty Dozen'".
+  description       "untamed lands, with short adventures".
+#.....
+#----- TSR 9502
 
+base product TSR 9502 =
 
+  title             "Campaign Themes";
+  leader            "";
+  date              December 1995;
+  ISBN              0-7869-0338-4;
+  pages             12;
+  system            AD&D 2nd;
+  audience          All;
+  product type      Accessory;
+  style             Box;
+  producer          TSR;
+  price             $14.95;
+  contents          CD "audio",
+                    Booklet;
+  requirements      ;
+  worlds            Red Steel;
+  references        catalog95;
+  description       "music for campaigns".
+#.....
+#----- TSR 2521
+
+base product TSR 2521 =
+
+  title             "Savage Coast Campaign Book";
+  leader            "";
+  author            "Beach, Tim",
+                    "Heard, Bruce";
+  date              August 1996;
+  ISBN              0-7869-0379-1;
+  pages             256;
+  system            AD&D revised;
+  audience          All;
+  product type      Rulebook;
+  producer          TSR;
+  price             $25.00;
+  requirements      ;
+  worlds            Savage Coast;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231;
+  description       "swashbuckling campaign setting".
+#.....
+#----- TSR 2522
+
+base product TSR 2522 =
+
+  title             "Orc's Head Gazetteer";
+  leader            "";
+  author            "Rea, Nicky";
+  date              December 1996;
+  ISBN              0-7869-0387-2;
+  pages             96;
+  system            AD&D revised;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  producer          TSR;
+  price             $15.95;
+  requirements      ;
+  worlds            Savage Coast;
+  references        catalogue96,
+                    catalog96;
+  description       "Orc's Head Peninsula".
+#.....
+#----- TSR 2524
+
+base product TSR 2524 =
+
+  title             "Monstrous Compendium, Savage Coast Appendix";
+  leader            "";
+  author            "Coleman, Loren L.",
+                    "Zuvich, Ted";
+  date              October 1996;
+  ISBN              0-7869-0409-7;
+  pages             128;
+  system            AD&D revised;
+  audience          DM;
+  product type      Rulebook;
+  producer          TSR;
+  price             $20.00;
+  requirements      ;
+  worlds            Savage Coast;
+  references        catalogue96,
+                    catalog96;
+  description       "a lot of monsters".
 #.....

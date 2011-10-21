@@ -432,7 +432,7 @@ public abstract class ValueHandle
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test id",
                                                    new net.ixitxachitls.dma.data
-                                                   .DMAData("path"));
+                                                   .DMAData.Test.Data());
       ValueHandle handle =
         new TestHandle("test", true, true, false, false, null, null, "value");
       assertNull("null", handle.format(entry, false, false));
@@ -456,7 +456,7 @@ public abstract class ValueHandle
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test id",
                                                    new net.ixitxachitls.dma.data
-                                                   .DMAData("path"));
+                                                   .DMAData.Test.Data());
       ValueHandle handle =
         new TestHandle("test", true, true, false, false, null, null,
                        "string value");
@@ -484,7 +484,7 @@ public abstract class ValueHandle
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test id",
                                                    new net.ixitxachitls.dma.data
-                                                   .DMAData("path"));
+                                                   .DMAData.Test.Data());
       ValueHandle handle =
         new TestHandle("test", true, true, false, false, null, null, "value");
       assertEquals("string value", "value", handle.format(entry, true, false));

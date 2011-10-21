@@ -439,87 +439,6 @@ base product WTC 88250 =
 
 
 #.....
-#----- WTC 88607
-
-base product WTC 88607 =
-
-  title             "Wind of Honor";
-  leader            "";
-  subtitle          "The Emperor is Dead.";
-  author            "Soesbee, Ree";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
-  date              August 2002;
-  pages             288;
-  system            Legend of the Five Rings;
-  audience          All;
-  product type      Novel;
-  style             Paperback;
-  producer          WTC;
-  number            First Scroll;
-  series            The Four Winds Sage;
-  price             $ 6.99;
-  worlds            Rokugan;
-  description
-  "The Steel Throne, seat of imperial power in \Place{Rokugan}, sits
-  empty. Ambition wars with justice and deception with truth as the emperor's
-  heirs seek to gain the favor of the Clans. The fate of the Empire walks the
-  edge of a blade, and before all is lost, the \NPC{Lady of the Sword} must
-  step forward to restore honor to a land in need.".
-
-
-#.....
-#----- WTC 88615
-
-base product WTC 88615 =
-
-  title             "Hazezon";
-  leader            "";
-  subtitle          "Who dares speak of the prophecy?";
-  author            "Emery, Clayton";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
-  date              August 2002;
-  ISBN              0-7869-2792-5;
-  pages             320;
-  system            Magic: The Gathering;
-  audience          All;
-  product type      Novel;
-  style             Paperback;
-  producer          WTC;
-  number            Book III;
-  series            Legends Cycle;
-  price             $ 6.99;
-  worlds            Dominaria;
-  description
-  "The denizens of the desert live in the shadow of the sacred, where battles
-  are won or lost at the whims of the gods. Now the outcome of one desert war
-  could change the history of \Place{Dominaria} forever.
-
-  The prophecy of None, One, and Two will finally be fulfilled.".
-
-
-#.....
 #----- WTC 88980
 
 base product WTC 88980 =
@@ -528,18 +447,6 @@ base product WTC 88980 =
   leader            "The";
   subtitle          "";
   author            "Banerjee, Anjali";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
   date              August 2005;
   ISBN              0-7869-3750-5;
   pages             192;
@@ -573,18 +480,6 @@ base product WTC 96530 =
   leader            "";
   subtitle          "";
   author            "Forbeck, Matt";
-  editor            "",
-                    "";
-  cover             "",
-                    "";
-  cartography       "",
-                    "";
-  illustrations     "",
-                    "";
-  typography        "",
-                    "";
-  management        "",
-                    "";
   date              June 2004;
   ISBN              0-7869-3143-4;
   pages             192;
@@ -868,4 +763,51 @@ base product WTC 9556374 =
   short description "".
 
 
+#.....
+#----- TSR 1509
+
+base product TSR 1509 =
+
+  title             "Army of the Dead";
+  leader            "";
+  author            "van Belkom, Edo";
+  date              January 1997;
+  ISBN              0-7869-0652-9;
+  pages             320;
+  system            Dragon Dice;
+  worlds            Generic;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  contents          Dice "DRAGON DICE" 1;
+  requirements      ;
+  references        net,
+                    Dragon 235,
+                    Dragon 236,
+                    Dragon 237;
+  description
+  "Dragon Dice Book, book two".
+#.....
+#----- TSR 1508
+
+base product TSR 1508 =
+
+  title             "Cast of Fate";
+  leader            "";
+  author            "Varney, Allen";
+  date              August 1996;
+  ISBN              0-7869-0510-7;
+  pages             320;
+  system            Dragon Dice;
+  worlds            Generic;
+  audience          All;
+  product type      Novel;
+  price             $ 5.99;
+  requirements      ;
+  references        catalog96,
+                    catalogue96,
+                    Dragon 231,
+                    Dragon 232;
+  description
+  "Dragon Dice Book, book one".
 #.....

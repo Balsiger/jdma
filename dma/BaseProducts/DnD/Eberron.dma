@@ -1558,38 +1558,3 @@ This Dungeons & Dragons supplement contains everything you need to run thrilling
   short description "The 4th edition Eberron Campaign Setting.".
 
 #.....
-#----- WTC 2502674
-
-base product WTC 2502674 =
-
-  title             "Word of Traitors";
-  leader            "";
-  subtitle          "Legacy of \Place{Dhakaan}";
-  author            "Bassingthwaite, Don";
-  cover             "Komarck, Michael";
-  cartography       "Lazzaretti, Robert";
-  date              September 2009;
-  ISBN              0-7869-5196-6;
-  ISBN13            978-0-7869-5196-3;
-  pages             374;
-  system            None;
-  audience          All;
-  product type      Novel;
-  style             Paperback;
-  producer          WTC;
-  number            Book 2;
-  series            Legacy of Dhakaan;
-  price             $6.99;
-  contents          Book "";
-  worlds            Eberron;
-  layout            Color Cover;
-  description
-  "\NPC{Darguun}. Heir to an empire long fallen. Forged anew in the fires of the \Event{Last War} and held together by the iron will of \NPC{Lhesh Haruuc}.
-
-But \NPC{Lhesh Haruuc} is dead, assassinated by a warrior sworn to serve him. His trusted inner circle suspects more than treachery. Something darker is at work. As \NPC{Dharguun}'s ancient enemies stoke the flames of a new war and the \Group{Five Nations} vie for power and influence, the fate of an entire nation rests in the hands of a few desperate heroes.
-
-A thrilling tale of empire, betrayal, and power by the author of the acclaimed Dragon Below trilogy!
-";
-  short description "Book 2 of the Legacy of Dhakaan.".
-
-#.....

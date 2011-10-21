@@ -781,6 +781,7 @@ base product TSR 9181 =
   date              1986;
   price             $ 8.00;
   requirements      ;
+  system            AD&D 1st;
   worlds            Ravenloft;
   references        net price list;
   description       "";
@@ -801,7 +802,9 @@ base product TSR 9298 =
   product type      Adventure;
   price             $10.95;
   requirements      ;
+  system            AD&D 2nd;
   worlds            Ravenloft;
+
   references        catalogue93,
                     catalog93;
   description       "a poor vampire with a horde of little goblins invading its home";
@@ -2342,30 +2345,30 @@ base product TSR 11613 =
 
 
 #.....
-#----- WTC 9568974
+#----- TSR 2139
 
-base product WTC 9568974 =
+base product TSR 2139 =
 
-  title             "I Strahd, Memoirs of a Vampire";
+  title             "Monstrous Compendium Ravenloft Appendix Volume II: Children of the Night";
   leader            "";
-  subtitle          "Reprint!";
-  author            "Elrod, Patricia Nead";
-  cover             "Foster, Jon";
-  date              November 2006;
-  ISBN              0-7869-4123-5;
-  ISBN13            978-0-7869-4123-0;
-  pages             277;
-  system            None;
-  audience          All;
-  product type      Novel;
-  style             Paperback;
-  producer          WTC;
-  price             $12.95;
-  contents          Book "";
+  author            "Staff, TSR";
+  date              December 1993;
+  pages             64;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Rulebook;
+  style             Folder;
+  producer          TSR;
+  number            16;
+  series            Monster Manual;
+  price             $10.95;
+  contents          Sheet;
   requirements      ;
-  layout            Color Cover;
   worlds            Ravenloft;
-  description       "He sold his soul for her.
-                    But when that fatal decision leaves him horribly changed, will she be the agent of his deliverance or his damnation?".
-
+  references        catalogue93,
+                    catalogue94,
+                    catalog93S,
+                    catalog93;
+  description       "A lot of monsters.";
+  synonyms          "MC16".
 #.....

@@ -1,0 +1,5266 @@
+#
+# File:         Misc.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  These are some miscellaneous products that do not fit into
+#               another category
+#
+# Worlds:       All
+#
+
+#----- DSP 203
+
+base product DSP 203 =
+
+  title             "Dork covenant";
+  leader            "";
+  subtitle          "It's All Geek to Me!";
+  author            "Kovalic, John";
+  cover             "Kovalic, John",
+                    "Reed, Phil";
+  illustrations     "Kovalic, John",
+                    "Williams, Aaron" interior design and layout;
+  date              July 2002;
+  ISBN              1-930964-40-4;
+  pages             160;
+  system            Special;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume I;
+  series            The Collected Dork Tower;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "Release your inner nerd with \Product{Dork Covenant}, the first collection
+  of the hilarious, critically acclaimed fan-favorite Dork Tower comic book!
+  From dragon-filled dungeons to star treks, from comic book conventions to
+  internet naughtiness, Dork Tower is the comic that put the 'cult' back into
+  sub-culture! So join Matt, Igor, Ken, Gilly the Perky Goth and Carson the
+  Muskrat in their uproariously dorky adventures!".
+#.....
+#----- DSP 207
+
+base product DSP 207 =
+
+  title             "Dork Shadows";
+  leader            "";
+  subtitle          "Give In to the Dork Side";
+  author            "Kovalic, John";
+  cover             "Kovalic, John",
+                    "Reed, Phil";
+  illustrations     "Kovalic, John",
+                    "Williams, Aaron" interior design and layout;
+  date              November 2002;
+  ISBN              1-930964-41-2;
+  pages             160;
+  system            Special;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume II;
+  series            The Collected Dork Tower;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "Lurking in the dork shadows, you'll find Matt, Igor, Ken, Gilly the Perky
+  Goth and Carson the Muskrat. Whether you're a goth, a gamer, an SF fan, a
+  comics fanboy, a computer wonk or a mundane, you'll recognize them all! DOrk
+  Tower is the worldwide hit amongst geeks and non-geeks alike! Make
+  \Product{Dork Shadows} the brightest spot in your comics collection! Meet the
+  characters from John Kovalic's Dork Tower in the second sellout
+  collection...and welcome the world of Dorkness!".
+#.....
+#----- DSP 208
+
+base product DSP 208 =
+
+  title             "Livin' La Vida Dorka";
+  leader            "";
+  subtitle          "Meet the Global Village Idiots";
+  author            "Kovalic, John";
+  cover             "Kovalic, John",
+                    "Williams, Aaron";
+  illustrations     "Kovalic, John",
+                    "Williams, Aaron" interior design and layout;
+  date              January 2002;
+  pages             160;
+  system            Special;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume I;
+  series            The Complete Dork Tower Comic Strip Collection;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "From computer gaming and online flaming to dot-coms and dot-bombs,
+  \Product{Livin' La Vida Dorka} celebrates the techno-geek life and puts the
+  'pulse' back into 'obsessive compulsive'. Join Matt, Igor, Ken and Carson the
+  muskrat in the comic strips collected in print for the first time! Stright
+  from the pages of Interactive Week, GameSpy.com, Pyramid Online and Scrye,
+  they're all \Product{Livin' La Vida Dorka}!".
+#.....
+#----- DSP 209
+
+base product DSP 209 =
+
+  title             "Heart of Dork Ness";
+  leader            "";
+  subtitle          "Midnight in the Garden of Lawful Good and Chaotic Evil";
+  author            "Kovalic, John";
+  cover             "Kovalic, John",
+                    "Reed, Phil";
+  illustrations     "Kovalic, John",
+                    "Williams, Aaron" interior design and layout;
+  date              April 2002;
+  ISBN              1-930964-43-9;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume III;
+  series            The Collected Dork Tower;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "Give in to the Glory that is Geeks with \Product{Heart of Dorkness}, the
+  third collection of John Kovalic's award winning \Product{Dork Tower} comic
+  books. From goths, gamers and Trekkers to Renaissance Fairies and mundanes,
+  Dork Tower covers the world of Dorkness like nobody else! So have another
+  heaping helping of geekdom that anybody can enjoy as the Dork Tower gang
+  tries to discover the \Product{Heart of Dorkness}!".
+#.....
+#----- DSP 210
+
+base product DSP 210 =
+
+  title             "Understanding Gamers";
+  leader            "";
+  subtitle          "The Game's the Thing";
+  author            "Kovalic, John";
+  cover             "Kovalic, John";
+  illustrations     "Kovalic, John",
+                    "Mackintosh, Jeff" interior design and layout;
+  date              June 2003;
+  ISBN              1-930964-47-1;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume V;
+  series            The Collected Dork Tower;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "\Product{Understanding Gamers} collects critically acclaimed, fan-favorite
+  strips from John Kovalic's Dork Tower, along with the origins award-nominated
+  Dork Tower #18 comic book and the Dork Tower Lord of the Rings Special! From
+  film fandom to the league of extraordinary gentlegamers, from the Internet to
+  inner geeks, Dork Tower puts the 'fan' back into 'fanatical obsessive'!
+
+  What's not to understand?".
+#.....
+#----- DSP 212
+
+base product DSP 212 =
+
+  title             "1d6 degrees of separation";
+  leader            "";
+  subtitle          "1d6 Appeal!";
+  author            "Kovalic, John";
+  cover             "Kovalic, John";
+  illustrations     "Kovalic, John",
+                    "Mackintosh, Jeff" interior design and layout;
+  date              December 2003;
+  ISBN              1-930964-74-9;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume VI;
+  series            The Collected Dork Tower;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "Join six characters in search of an authority on life, love and the perfect
+  set of purple shiny dice! Huzzah! It's the sixth collection of the critically
+  acclaimed \Product{Dork Tower} comic book, and Matt, Ken, Igor, Kayleigh,
+  Carson the Muskrat and Gilly the Perky Goth porve that fandom is just another
+  word for nothing left to lose!".
+#.....
+#----- DSP 213
+
+base product DSP 213 =
+
+  title             "The Dork Side of the Goon";
+  leader            "";
+  subtitle          "Shine On, You Crazy Fanboy!";
+  author            "Kovalic, John";
+  cover             "Kovalic, John";
+  illustrations     "Kovalic, John",
+                    "Mackintosh, Jeff" interior design and layout;
+  date              November 2004;
+  ISBN              1-930964-85-4;
+  pages             176;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume VII;
+  series            The Collected Dork Tower;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "Us...and them...and after all, we're only ordinary fen...
+
+  Join the Dork Tower gang as they take to the streets of Mud Bay one more
+  time, looking for love (and their purple shiny dice) in all the wrong places!
+  Will \NPC{Matt} and \NPC{Gilly} find peace of mind, or even each other? Will
+  \NPC{Kayleigh} find a way to make life even worse for them? Will \NPC{Igor}
+  find a clue? Pick up John Kovalic's seventh Dork Tower collection, and find
+  out yourself!".
+#.....
+#----- DSP 214
+
+base product DSP 214 =
+
+  title             "Go, Dork. Go!";
+  leader            "";
+  subtitle          "";
+  author            "Kovalic, John";
+  cover             "Kovalic, John";
+  illustrations     "Kovalic, John",
+                    "Hal Mangold" interior design and layout;
+  date              July 2005;
+  ISBN              1-930964-47-1;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  number            Volume VIII;
+  series            The Collected Dork Tower;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "Go all the way with the Dork Tower gang once again, as the critically
+  acclaimed Web Comic returns in a volume packed with still more geeky good
+  humor. More than 40'000 people a day check out the DorkTower.com web
+  site. Pick up John Kovalic's eight Dork Tower collection, and find out why!".
+#.....
+
+#----- DSP 1011
+
+base product DSP 1011 =
+
+  title             "Nodwick Chronicles";
+  leader            "The";
+  subtitle          "Lord of the Hirelings";
+  author            "Williams, Aaron";
+  cover             "Williams, Aaron";
+  illustrations     "Williams, Aaron";
+  date              May 2001;
+  ISBN              1-930964-80-3;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Henchman Publishing;
+  number            Book I;
+  series            The Nodwick Chronicles;
+  contents          Book;
+  requirements      ;
+  description
+  "\large{'Where's our treasure-moving thingie?'
+
+  'You mean \NPC{Nodwick}?' 'Yeat, that.'}
+
+  That pretty much sums up life for the legendary henchman, \NPC{Nodwick}. You
+  hold in your hands the first volume of his hilarious adventures with three of
+  the world's most unprofessional heroes. \emph{Thrill} to his being used as a
+  grappling hook! \emph{Marvel} as he helps to thwart evil and gets no credit!
+  \emph{Gasp} in awe that there's anything left of him for \NPC{Piffany the
+  Cleric} to duct tape back together!
+
+  This volume contains the first six issues of the uproariously funny (and
+  slightly sadistic) Nodwick comic book by Aaron Williams. It's the story of
+  the little guy, the temp worker, the person on the payroll with the title
+  'sacrificial lamb'. Read on, and know that while your job may not be the
+  best, there's little chance you'll be swallowed by a big, scaly monster... we
+  \emph{hope}...".
+#.....
+#----- DSP 1014
+
+base product DSP 1014 =
+
+  title             "Obligatory Dragon on the Cover";
+  leader            "";
+  subtitle          "...and the Obligatory Fantasy Map on the Back";
+  author            "Williams, Aaron";
+  cover             "Williams, Aaron";
+  illustrations     "Williams, Aaron";
+  date              May 2003;
+  ISBN              1-930964-97-8;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Henchman Publishing;
+  number            Book IV;
+  series            The Nodwick Chronicles;
+  contents          Book;
+  requirements      ;
+  description
+  "This fourth tome in the \NPC{Nodwick} saga starts with the birth of a new
+  sear word and pretty much goes downhill from there. In these pages you'll
+  find the power of profanity, the perils of omniscience, the rescue of a fair
+  maiden, earsplitting Broadway musical numbers, a parody of the biggest
+  fantasy movie trilogy ever, and a fish story that'll make you wish you owned
+  a horned helmet!
+
+  \NPC{Nodwick} is the critically-acclaimed fantasy humor comic book that
+  presents the adventures of the world's most favorite henchman as he toils for
+  a somewhat inept (but well-meaning) bad of adventurers.".
+#.....
+#----- DSP 1014
+
+base product DSP 1015 =
+
+  title             "Tour of Doodle";
+  leader            "";
+  subtitle          "Nodwick's Taking His Show on the Road, and You're Invited to Come Along";
+  author            "Williams, Aaron";
+  cover             "Williams, Aaron",
+                    "Keith, Jason" colors;
+  illustrations     "Williams, Aaron";
+  date              July 2006;
+  ISBN              1-933288-11-6;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Henchman Publishing;
+  number            Book V;
+  series            The Nodwick Chronicles;
+  contents          Book;
+  requirements      ;
+  description
+  "Epic quests are usually the stuff of heroes... once or twice. For
+  \NPC{Nodwick} and his adventurer employers, it's a way of life! Join them as
+  they seek out mystic weapons, restore the 'bits' of the world, and hide
+  behind fake moustaches, all while fighting evil at the same time! Thrill to
+  the first appearance of 'Orville', their semi-trained war \Monster{dragon}!
+  Discover the history of the legendary 'Clue-by-Four'! And gasp in awe at the
+  somewhat prophetic 'Clergy in Black'! This, the fifth volume of the
+  \NPC{Nodwick} Chronicles sees the continuation of the legendary 'Baphuma'al'
+  tale, with plenty of laughs along the way. So re-enlist with Henchman's Local
+  #246 and come along for the tour of several lifetimes!".
+#.....
+#----- DSP 1201
+
+base product DSP 1201 =
+
+  title             "Haulin' Assets";
+  leader            "";
+  subtitle          "The wait is over, but the weight has just begun!";
+  author            "Williams, Aaron";
+  cover             "Williams, Aaron";
+  illustrations     "Williams, Aaron";
+  date              April 2005;
+  ISBN              1-933288-10-8;
+  pages             308;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Henchman Publishing;
+  number            Book I & II;
+  series            The Nodwick Chronicles;
+  contents          Book;
+  requirements      ;
+  description
+  "You hold in you hands the heaviest reading on Henchmen in the known
+  universe. Journey along with \NPC{Yeagar the Warrior}, \NPC{Artax the
+  Wizard}, \NPC{Piffany the Cleric}, and, the hero of our tales, \NPC{Nodwick
+  the Henchman}! Contained herein are the first twelce issues of the Nodwick
+  Comic book, where you'll meet strange gods, participate in the Hench Games,
+  meet medieval super-men, discover why 'It's a Wonderful Afterlife', go on a
+  dungeon crawl, and even experience \emph{*gasp*} a world without
+  \NPC{Piffany}! So heft a copy of this tome for the ages and get henched!".
+#.....
+
+
+#----- K&C 701
+
+base product K&C 701 =
+
+  title             "Bundle of Trouble: Volume One";
+  leader            "";
+  subtitle          "The First Three Issues of Knights of the Dinner Table Crammed Between Two Covers";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian" reconstructive Assitance;
+  cover             "Vrbanic, Gorge";
+  date              June 1999;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume One;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "96 pages of classic KODT including a brand new storiy!!
+
+  Eight years ago the first \bold{Knights of the Dinner Table} strip was
+  created as an afterthought - filler to take up space on the last page of the
+  small press games publication I was putting out in my spare time.
+
+  Since that time, \bold{KODT} has appeared in numerous magazines and is now a
+  monthly comic book. It's been a strange and wonderful journey.
+
+  When it came time to start pulling the first three issues together for a
+  second printing, I found myself thinking back over that journey - from that
+  first strip to the current issue of the comic book.
+
+  KODT is a celebration, not a gaming, but of games themselves. For me the word
+  'gamers' is synonymous with the word 'friends'. Perhaps that's why all those
+  letters to the KODT mailbox start out with that same familiar phrase, 'These
+  guys remind me of my friends'.
+
+  Although J.R.R. Tolkien warned us not to 'ask to see the bones boiled to make
+  the soup', I really don't think there would be any harm in asking that
+  question regarding the soup that's come to be known as \Product{Knights of
+  the Dinner Table}.
+
+  The 'bones' here are obviously friends and all those things that forge
+  lasting friendships; laughing, fighting, sharing, caring, etc...".
+#.....
+#----- K&C 702
+
+base product K&C 702 =
+
+  title             "Bundle of Trouble: Volume Two";
+  leader            "";
+  subtitle          "Issues four through six of Knights of the Dinner Table crammed between two covers!";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge";
+  date              July 1999;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Two;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "96 pages of classic KODT including a brand new story!!
+
+  The moment I leafed through the first few issues that Jolly produced prior to
+  teaming up with us, I knew they were something special. When he became a
+  partner in Kenzer and Company, we really believed in the power of the strips
+  but were uncertain whether or not the rest of the gaming community would
+  catch on. At this point I think we can safely say that our faith in those
+  early Kenzer and Company produced issues [#4-#6] has paid off.
+
+  We really put a lot of thought into those first few issues as we felt we had
+  something to prove as a new team. While Jolly had the bulk of the issue #4
+  done before joining us, many of the stories in issues #5 and #6 involved some
+  synergistic collaboration by the newly formed development team. There are
+  definitely some classic strips among issues four through six. Of course
+  there's the famous 'Agent of Evil' but looking back over them I can't help
+  feeling like 'Wherever you go - There you are' is the one nearest to my
+  heart. I was often the mapper of the group.
+
+  As you read this, I'm sure you'll find your own favorite stories based on one
+  of your personal experiences. That's what KODT is all about; bringing back
+  the memories of good times past and making new ones. Here's to making new
+  ones.
+
+  \right{Brian Jelke}".
+#.....
+#----- K&C 703
+
+base product K&C 703 =
+
+  title             "Bundle of Trouble: Volume Three";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 7 Thru 9";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge",
+                    "Vrbanic, Jackie";
+  date              July 1999;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Three;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues seven through nine one of Knights of the Dinner Table crammed
+  between two covers!
+
+  96 pages of classic KODT including three brand new stories!!".
+#.....
+#----- K&C 704
+
+base product K&C 704 =
+
+  title             "Bundle of Trouble: Volume Four";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 10 Thru 12";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge",
+                    "Vrbanic, Jackie";
+  date              November 1999;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Four;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues ten through twelve one of Knights of the Dinner Table crammed
+  between two covers!
+
+  96 pages of classic KODT including three brand new stories!!".
+#.....
+#----- K&C 705
+
+base product K&C 705 =
+
+  title             "Bundle of Trouble: Volume Five";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 13 Thru 15";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge",
+                    "Vrbanic, Jackie";
+  date              February 2000;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Five;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues thirteen through fifteen one of Knights of the Dinner Table crammed
+  between two covers!
+
+  96 pages of classic KODT including three brand new stories!!".
+#.....
+#----- K&C 706
+
+base product K&C 706 =
+
+  title             "Bundle of Trouble: Volume Six";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 16 Thru 18";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge",
+                    "Vrbanic, Jackie";
+  date              May 2000;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Six;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues sixteen through eighteen one of Knights of the Dinner Table crammed
+  between two covers!
+
+  96 pages of classic KODT including three brand new stories!!".
+#.....
+#----- K&C 707
+
+base product K&C 707 =
+
+  title             "Bundle of Trouble: Volume Seven";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 19 Thru 21";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge",
+                    "Vrbanic, Jackie";
+  date              November 2000;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Seven;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues nineteen through twenty one of Knights of the Dinner Table crammed
+  between two covers!
+
+  96 pages of classic KODT including three brand new stories!!".
+#.....
+#----- K&C 708
+
+base product K&C 708 =
+
+  title             "Bundle of Trouble: Volume Eight";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 22 Thru 24";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge",
+                    "Vrbanic, Jackie";
+  date              January 2001;
+  pages             97;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Eight;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues twenty-two through twenty four of Knights of the Dinner Table crammed
+  between two covers!
+
+  97 pages of classic KODT including the exicting finish to Bag Wars!".
+#.....
+#----- K&C 709
+
+base product K&C 709 =
+
+  title             "Bundle of Trouble: Volume Nine";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 25 Thru 27";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, Gorge",
+                    "Vrbanic, Jackie";
+  date              May 2002;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Nine;
+  series            Knights of the Dinner Table;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues twenty-five through twenty-seven of Knights of the Dinner Table
+  crammed between two covers!
+
+  Hey, that ain't all! This tome contains a total of 96 page of classic KODT".
+#.....
+#----- K&C 710
+
+base product K&C 710 =
+
+  title             "Bundle of Trouble: Volume Ten";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 28 Thru 30";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Haley, Matt";
+  illustrations     "Hahn, David" inks;
+  management        "Burke, Jennifer 'Jiffy'" compiler;
+  date              November 2002;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Ten;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues twenty-eight through thirty of Knights of the Dinner Table
+  crammed between two covers!
+
+  Hey, that ain't all! This tome contains a total of 96 page of classic KODT".
+#.....
+#----- K&C 711
+
+base product K&C 711 =
+
+  title             "Bundle of Trouble: Volume Eleven";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 31 Thru 33";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Hall, Benjamin";
+  date              November 2004;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Eleven;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues thirty-one through thirty-seven of Knights of the Dinner Table
+  crammed between two covers!
+
+  Hey, that ain't all! This tome contains a total of 96 page of classic KODT".
+#.....
+#----- K&C 712
+
+base product K&C 712 =
+
+  title             "Bundle of Trouble: Volume Twelve";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 33 Thru 37";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Fraim, Brendon",
+                    "Fraim, Brian";
+  date              July 2005;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Twelve;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues thirty-four through thirty-seven of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+#----- K&C 713
+
+base product K&C 713 =
+
+  title             "Bundle of Trouble: Volume Thirteen";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 38 Thru 41";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, George";
+  date              September 2005;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Thirteen;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues thirty-eight through fourty-one of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+#----- K&C 714
+
+base product K&C 714 =
+
+  title             "Bundle of Trouble: Volume Fourteen";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 42 Thru 45";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Fraim, Brendon",
+                    "Fraim, Brian";
+  date              September 2005;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Fourteen;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues fourty-two through fourty-five of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+#----- K&C 715
+
+base product K&C 715 =
+
+  title             "Bundle of Trouble: Volume Fifteen";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 46 Thru 49";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, George";
+  date              September 2005;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Fifteen;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues fourty-six through fourty-nine of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+#----- K&C 716
+
+base product K&C 716 =
+
+  title             "Bundle of Trouble: Volume Sixteen";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 50 Thru 52";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Fraim, Brandon",
+                    "Friam, Brian";
+  date              February 2006;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Sixteen;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues fifty through fifty-two of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+#----- K&C 717
+
+base product K&C 717 =
+
+  title             "Bundle of Trouble: Volume Seveteen";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 53 Thru 56";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vega, Manny";
+  date              February 2006;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Seventeen;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues fifty-three through fifty-six of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+#----- K&C 718
+
+base product K&C 718 =
+
+  title             "Bundle of Trouble: Volume Eighteen";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 57 Thru 60";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Fraim, Brendon",
+                    "Fraim, Brian";
+  date              March 2007;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Seventeen;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues fifty-seven through sixty of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+#----- K&C 719
+
+base product K&C 719 =
+
+  title             "Bundle of Trouble: Volume Nineteen";
+  leader            "";
+  subtitle          "A Compilation of Knights of the Dinner Table: Issues 51 Thru 64";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Fraim, Brendon",
+                    "Fraim, Brian";
+  date              March 2007;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Volume Seventeen;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issues sixty-one through sixty-four of Knights of the Dinner Table
+  crammed between two covers!".
+#.....
+
+#----- KODT 31
+
+base product KODT 31 =
+
+  title             "Don't Fear the Reaper";
+  leader            "";
+  subtitle          "Issue 31";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Hall, Benjamin";
+  date              May 1999;
+  pages             40;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Issue 31;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issue 31 of the Knights of the Dinner Table comics.".
+#.....
+#----- KODT 32
+
+base product KODT 32 =
+
+  title             "Tales from Hog Wallers";
+  leader            "";
+  subtitle          "Issue 32";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Hall, Benjamin";
+  date              June 1999;
+  pages             40;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Issue 32;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issue 32 of the Knights of the Dinner Table comics.".
+#.....
+#----- KODT 33
+
+base product KODT 33 =
+
+  title             "Wild Wild Hack";
+  leader            "";
+  subtitle          "Issue 33";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Hall, Benjamin";
+  date              July 1999;
+  pages             40;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  producer          K&C;
+  number            Issue 33;
+  series            Knights of the Dinner Table;
+  price             $ 11.99;
+  contents          Booklet;
+  requirements      ;
+  description
+  "Issue 33 of the Knights of the Dinner Table comics.".
+#.....
+
+#----- PP 00251
+
+base product PP 00251 =
+
+  title             "Aus Aeonen";
+  leader            "";
+  subtitle          "";
+  author            "Bogdan, Ulrike",
+                    "Frankck, Stefan",
+                    "Geisler, Stefan",
+                    "Heller, Frank",
+                    "K\umlaut{o}hn, Steffen",
+                    "Maser, Christoph",
+                    "O'Connel, Mary",
+                    "Oden, Matthias",
+                    "Steines, Jan Christoph",
+                    "Szachnowski, Lucya",
+                    "Bogdan, Ulrike" Uebersetzung,
+                    "Wichniewski, Micha" Uebersetzung;
+  editor            "Heller, Frank",
+                    "Heller, Frank" Lektorat,
+                    "Steines, Jan Christoph" Lektorat,
+                    "Erdmann, Julia" Korrektorat,
+                    "Gill, Heiko" Korrektorat,
+                    "G\umlaut{o}ttmann, Holger" Korrektorat,
+                    "Heller, Frank" Korrektorat,
+                    "Wessel, Christina" Korrektorat;
+  cover             "",
+                    "";
+  cartography       "Lensig, Bj\umlaut{o}rn",
+                    "Nett, Aljoscha S.",
+                    "Schlicht, Chris";
+  illustrations     "Ertsey, Samar",
+                    "Lensig, Bj\umlaut{o}rn",
+                    "Schlicht, Chris",
+                    "Schneider, Kim",
+                    "Bogdan, Ulrike" Bildarchiv,
+                    "Geisler, Stefan" Bildarchiv,
+                    "Heller Frank" Bildarchiv,
+                    "K\umlaut{o}hn, Steffen" Bildarchiv,
+                    "Kleye, Kostja" Handoutgestaltung,
+                    "Nett, Aljoscha S." Handoutgestaltung,
+                    "Schlicht, Chris" Handoutgestaltung,
+                    "Schneider, Kim" Handoutgestaltung,
+                    "Escher, Manfred" Cover-Konzeption und Design;
+  typography        "Kr\umlaut{u}ger, Maik",
+                    "";
+  management        "Finkernagel, Andreas" Verlagsleitung;
+  date              2004;
+  ISBN              3-930635-90-9;
+  pages             176;
+  system            Chaosium;
+  audience          DM;
+  product type      Adventure;
+  style             Soft Cover;
+  producer          Pegasus Press;
+  series            Cthuloide Welde Bibliothek;
+  price             Euro 16.95;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Call of Cthulhu;
+  description
+  "\bold{Der Blutsauger von Scharzbrunn}
+
+  Im Jahre 998 AD kl\umlaut{a}ren die Charaktere in winterlicher
+  Atmosph\umlaut{a}re eine unheimliche Mordserie beim Kloster
+  \emph{Schwarzbrunn} auf.
+
+  \emph{Ein schauriges Abenteuer f\umlaut{u}r Cthulhu 1000 AD.}
+
+  \bold{Garten der L\umlaut{u}ste}
+
+  Die Charactere, allesamt der Spanischen Inquisition zugeh\umlaut{o}rig, werde
+  in ein Bergdorf geschickt, in dem eine Jungfrau schanger sein und davor
+  stehen soll, \emph{Jesus Christus} wiederzugeb\umlaut{a}ren!
+
+  \emph{Ein blasphemisches Abentuer um die Spanische Inquisition.}
+
+  \bold{Die Zeit der dunklen Tr\umlaut{a}ume}
+
+  Eine Seuche grassiert in \Place{Paris} und eine obskure Fraimaurerloge
+  verfolgt scheinbar gany sonderbare Pl\umlaut{a}ne. Steht dies in Zusammenhang
+  mit dem Bau der Metro und den Einst\umlaut{u}rzen, die sich dabei ereignen?
+
+  \emph{Ein alptraumhaftes Abentuer in Paris der 1890er.}
+
+  \bold{Fairy Tales}
+
+  In einem Dorf irischer Einwanderer in den USA suchen die Charaktere nach
+  einem vermissten M\umlaut{a}dchen und komment in Kontakt zur keltischen Feen-
+  und Geisterwelt, die hier besonders nah ist.
+
+  \emph{Ein Abentuer in den 1920ern und der Anderswelt.}
+
+  \bold{Das Jcarus-Project}
+
+  Die Charactere m\umlaut{u}ssen das im All treibende Raumschiffe Icarus
+  untersuchen. St\umlaut{u}ck f\umlaut{u}r St\umlaut{u}ck begreifen sie, was
+  hier geschehen ist. Am Enede steht der Wahnsinn in seiner pursten Form.
+
+  \emph{Ein Science-Fiction-Abenteuer in der fernen Zukunft.}
+
+  \bold{Reise zur anderen Seite}
+
+  Die Anderswelt der keltischen Mythen und ihre Verbindung zum Cthulhu-Mythos.
+
+  \emph{Ein Quellenteil f\umlaut{u}r Cthulhu in der Anderswelt.}";
+  short description "".
+#.....
+#----- PP 00268
+
+base product PP 00268 =
+
+  title             "Terror Britannicus";
+  leader            "";
+  subtitle          "";
+  author            "Hupperich, Gerd",
+                    "Rahman, Glenn",
+                    "Schiemichen, Wolgang",
+                    "Gill, Heiko" Ergaenzungen;
+  editor            "Heller, Frank",
+                    "Heller, Frank" Lektorat,
+                    "Gill, Heiko" Korrektorat,
+                    "Ungermann-Voss, Miriam" Korrektorat;
+  cover             "Escher, Manfred" Cover-Konzeption und Design;
+  cartography       "Ungermann-Voss, Miriam";
+  illustrations     "Kleye, Kostja" Handoutgestaltung,
+                    "Ungermann-Voss, Miriam" Handoutgestaltung,
+                    "Burri, Dan" Bildredaktion,
+                    "Heller, Frank" Bildredaktion,
+                    "Wessel, Christina" Bildredaktion,
+                    "Schiemichen, Wolfang" Mitwirkung Bildredation,
+                    "Krüger, Maik" Inndendesign-Entwurf,
+                    "Rinke, Holger" Innendesign-Entwurf;
+  typography        "Kr\umlaut{u}ger, Maik";
+  management        "Finkernagel, Andreas" Verlagsleitung;
+  date              2004;
+  ISBN              3-930635-88-7;
+  pages             96;
+  system            Chaosium;
+  audience          DM;
+  product type      Adventure;
+  style             Soft Cover;
+  producer          Pegasus Press;
+  series            Cthulhoide Welten Bibliothek;
+  price             Euro 12.95;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Call of Cthulhu;
+  description
+  "\bold{H\umlaut{a}upter des Schreckens}
+
+  Weihnachten, bei London. Winterlich und friedlich. Doch als sich zur
+  Geisterstunde ein geheimnisvoller Selbstmord ereignet, nehmen die Ereignisse
+  ihren Lauf. Was hat es mit der Treppe des Zauberers auf sich? Welches
+  Geheimnis umgibt das alte Nonnenkloster? Und welche Antworten warten in
+  Madame Tussauds Wachsfigurenkabinett?
+
+  \emph{Ein mysteri\umlaut{o}ses Abenteuer in und um London in the 1920ern.}
+
+  \bold{Geister in Loch Feinn}
+
+  Die Gef\umlaut{a}hrten folgen der Spur eines ermordeten Wissenschaflers von
+  London nach Schottland. Der Pal\umlaut{a}ontologe versuchte, den wahren Kern
+  in all den Sagen von Drachen zu finden - aber was entdeckte er in Lock Feinn,
+  das zu seinem gewaltsamen Tode f\umlaut{u}hrte?
+
+  \emph{Ein Abentuer im nebligen Lond und Schottland in den 1920ern.}";
+  short description "".
+#.....
+
+
+#----- TSR 1038
+
+base product TSR 1038 =
+
+  title             "Mertwig's Maze";
+  leader            "";
+  date              1988;
+  price             $ 9.95;
+  requirements      ;
+  references        net price list;
+  description
+  "Unknown".
+#.....
+#----- TSR 1051
+
+base product TSR 1051 =
+
+  title             "Best of Dragon Magazine Games";
+  leader            "";
+  date              1990;
+  price             $18.00;
+  requirements      ;
+  references        net price list;
+  description
+  "Unknown".
+#.....
+#----- TSR 1116
+
+base product TSR 1116 =
+
+  title             "Spellfire: Master the Magic Card Game";
+  leader            "";
+  date              June 1994;
+  system            Spellfire;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             £ 6.99;
+  contents          Misc "decks of 55 cards each" 2;
+  requirements      ;
+  worlds            None;
+  references        catalogue94;
+  description
+  "Starter deck, 1st edition.".
+#.....
+#----- TSR 1116A
+
+base product TSR 1116A =
+
+  title             "Spellfire: Master the Magic Card Game, no edition";
+  leader            "";
+  date              1994;
+  system            Spellfire;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             £ 6.99;
+  contents          Misc "deck of 55 cards each" 2;
+  requirements      ;
+  worlds            None;
+  references        complete product listing;
+  description
+  "Starter deck, 1st edition".
+#.....
+#----- TSR 1116B
+
+base product TSR 1116B =
+
+  title             "Spellfire: Master the Magic Card Game, 2nd edition";
+  leader            "";
+  date              1994;
+  system            Spellfire;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             £ 6.99;
+  contents          Misc "deck with 55 cards" 2;
+  requirements      ;
+  worlds            None;
+  references        catalogue96;
+  description
+  "Starter deck, 2nd edition.".
+#.....
+#----- TSR 1116C
+
+base product TSR 1116C =
+
+  title             "Spellfire: Master the Magic Card Game, 3rd Edition";
+  leader            "";
+  date              1994;
+  system            Spellfire;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             £ 6.99;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96;
+  description
+  "Starter deck, 3rd edition.".
+#.....
+#----- TSR 1116PC
+
+base product TSR 1116PC =
+
+  title             "Spellfire: Master the Magic Card Game, 3rd Edition, POP Display";
+  leader            "";
+  ISBN              0-7869-0230-2;
+  system            Spellfire;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $53.70;
+  requirements      ;
+  worlds            None;
+  references        net;
+  description
+  "Starter deck, 3rd edition.".
+#.....
+#----- TSR 1117
+
+base product TSR 1117 =
+
+  title             "Spellfire Booster Pack, Set 1";
+  leader            "";
+  date              June 1994;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             £ 1.99;
+  contents          Card "common" 9,
+                    Card "uncommon" 4,
+                    Card "rare" 2;
+  requirements      ;
+  worlds            None;
+  references        catalogue94;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1118
+
+base product TSR 1118 =
+
+  title             "Spellfire Ravenloft Booster Pack, Set 2";
+  leader            "";
+  date              1994;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             £ 1.99;
+  contents          Card "common" 9,
+                    Card "uncommon" 4,
+                    Card "rare" 2;
+  requirements      ;
+  worlds            None;
+  references        catalogue94,
+                    catalogue96,
+                    catalog96;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1119
+
+base product TSR 1119 =
+
+  title             "Spellfire Dragonlance Booster Pack, Set 3";
+  leader            "";
+  date              1994;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             £ 1.99;
+  contents          Card "common" 9,
+                    Card "uncommon" 4,
+                    Card "rare" 2;
+  requirements      ;
+  worlds            None;
+  references        catalogue94,
+                    catalogue96,
+                    catalog96;
+  description
+  "Cards for the game".
+#.....
+#----- TSR 1122
+
+base product TSR 1122 =
+
+  title             "Spellfire AD&D Artifacts Booster Pack, Set 5";
+  leader            "";
+  date              April 1995;
+  ISBN              0-7869-0207-8;
+  system            Spellfire;
+  audience          DM;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card "random" 15;
+  requirements      ;
+  worlds            None;
+  references        catalog95;
+  description
+  "AD&D artifacts for the spellfire game.".
+#.....
+#----- TSR 1123
+
+base product TSR 1123 =
+
+  title             "Spellfire The Underdark Booster Pack, Set 7";
+  leader            "";
+  date              1995;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             £ 1.99;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96;
+  description
+  "More cards for the spellfire game.".
+#.....
+#----- TSR 1126
+
+base product TSR 1126 =
+
+  title             "Spellfire AD&D Powers Booster Pack, Set 6";
+  leader            "";
+  date              September 1995;
+  ISBN              0-7869-0209-4;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card "random" 15;
+  requirements      ;
+  worlds            None;
+  references        catalog95,
+                    catalogue96;
+  description
+  "'Powers' for the spellfire game.".
+#.....
+#----- TSR 1127?
+
+base product TSR 1127? =
+
+  title             "Spellfire AD&D Spelljammer Booster Pack, Set 7";
+  leader            "";
+  date              January 1996;
+  ISBN              0-7869-0201-9;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card "random" 15;
+  requirements      ;
+  worlds            None;
+  references        catalog95;
+  description
+  "(did this ever appear ?)".
+#.....
+#----- TSR 1127
+
+base product TSR 1127 =
+
+  title             "Spellfire: Master the Magic Card Game";
+  leader            "";
+  author            "Jim Butler",
+                    "Dori Hein",
+                    "Kevin Melka";
+  date              June 1996;
+  ISBN              0-7869-0210-8;
+  system            Spellfire;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $ 9.95;
+  contents          Booklet "rules",
+                    Card "deck" 55,
+                    Card "booster" 12;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231;
+  description
+  "Base set for the Spellfire game.".
+#.....
+#----- TSR 1128A
+
+base product TSR 1128A =
+
+  title             "Blood Wars Card Game";
+  leader            "";
+  date              1995;
+  system            Blood Wars;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  requirements      ;
+  worlds            None;
+  references        complete product listing;
+  description
+  "Base set for the Blood Wars game.".
+#.....
+#----- TSR 1128B
+
+base product TSR 1128B =
+
+  title             "Blood Wars Card Game";
+  leader            "";
+  date              1995;
+  system            Blood Wars;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             £ 6.99;
+  contents          Misc "deck of 50 cards" 2;
+  requirements      ;
+  worlds            None;
+  references        catalogue96;
+  description
+  "Base set for the Blood Wars game.".
+#.....
+#----- TSR 1128C
+
+base product TSR 1128C =
+
+  title             "Blood Wars Card Game";
+  leader            "";
+  author            "Steven E. Schend";
+  date              March 1995;
+  ISBN              0-7869-0291-4;
+  system            Blood Wars;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $ 9.95;
+  contents          Misc "deck of 50 cards" 2;
+  requirements      ;
+  worlds            None;
+  references        catalog95,
+                    catalog96;
+  description
+  "Base set fro the Blood Wars game.".
+#.....
+#----- TSR 1129
+
+base product TSR 1129 =
+
+  title             "Spellfire Forgotten Realms Booster Pack, Set 4";
+  leader            "";
+  date              1994;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             £ 1.99;
+  requirements      ;
+  worlds            None;
+  references        catalogue96;
+  description
+  "More cards for the Spellfire game.".
+#.....
+#----- TSR 1130
+
+base product TSR 1130 =
+
+  title             "Blood Wars Escalation Pack 1: Rebels and Reinforcements";
+  leader            "";
+  date              March 1995;
+  system            Blood Wars;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card "random" 15;
+  requirements      ;
+  worlds            None;
+  references        catalog95;
+  description
+  "M<ore troops and leaders for extra-planar legions.".
+#.....
+#----- TSR 1131
+
+base product TSR 1131 =
+
+  title             "Blood Wars Escalation Pack 2: Factols and Factions";
+  leader            "";
+  date              June 1995;
+  system            Blood Wars;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card "random" 15;
+  requirements      ;
+  worlds            None;
+  references        catalog95,
+                    catalogue96;
+  description
+  "Sigil leaders, legions, and secret societies.".
+#.....
+#----- TSR 1132
+
+base product TSR 1132 =
+
+  title             "Blood Wars Escalation Pack 3: Powers and Proxies";
+  leader            "";
+  date              August 1995;
+  system            Blood Wars;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card "random" 15;
+  requirements      ;
+  worlds            None;
+  references        catalog95,
+                    catalogue96;
+  description
+  "Planar gods and their forces.".
+#.....
+#----- TSR 1133
+
+base product TSR 1133 =
+
+  title             "Spellfire Reference Guide, Volume One";
+  leader            "";
+  author            "Time Beach",
+                    "Nesmith, Bruce";
+  date              June 1995;
+  ISBN              0-7869-0304-X;
+  pages             384;
+  system            Spellfire;
+  audience          All;
+  product type      Accessory;
+  price             $12.95;
+  contents          CD,
+                    Booklet 3,
+                    Miniature "plastic" 6,
+                    Card "hero" 6,
+                    Card "player character sheet",
+                    Card "town map",
+                    Map "dungeon",
+                    Screen "DM",
+                    Dice 7;
+  requirements      ;
+  worlds            None;
+  references        catalog95,
+                    catalogue96,
+                    catalog96;
+  description
+  "Reference guide for the card game.".
+#.....
+#----- TSR 1137
+
+base product TSR 1137 =
+
+  title             "Blood Wars Escalation Pack 4: Insurgents of the Inner Planes";
+  leader            "";
+  author            "Slavicsek, Bill";
+  date              February 1996;
+  ISBN              0-7869-0365-1;
+  system            Blood Wars;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 225,
+                    Dragon 226;
+  description
+  "New art, strategies and cards.".
+#.....
+#----- TSR 1138
+
+base product TSR 1138 =
+
+  title             "Blood Wars Escalation Pack 5: Weapons & Warmongers";
+  leader            "";
+  author            "Steven Schend";
+  date              August 1996;
+  ISBN              0-7869-0463-1;
+  system            Blood Wars;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96;
+  description
+  "New Kismet and support cards.".
+#.....
+#----- TSR 1139
+
+base product TSR 1139 =
+
+  title             "Blood Wars Escalation Pack 6: Hand of Fates";
+  leader            "";
+  author            "Steven Schend";
+  date              November 1996;
+  ISBN              0-7869-0465-8;
+  system            Blood Wars;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.50;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96;
+  description
+  "Mighty powers, weapons and Kismet cards.".
+#.....
+#----- TSR 1140
+
+base product TSR 1140 =
+
+  title             "Warlord's Tactical Manual";
+  leader            "";
+  author            "Kevin Melka";
+  date              January 1996;
+  ISBN              0-7869-0433-X;
+  pages             160;
+  system            Blood Wars;
+  audience          All;
+  product type      Accessory;
+  price             $14.95;
+  contents          Booklet 3,
+                    Poster "map";
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 231;
+  description
+  "Reference guide for the Blood Wars card game.".
+#.....
+#----- TSR 1151
+
+base product TSR 1151 =
+
+  title             "Spellfire Runes & Ruins Booster Pack, Set 8";
+  leader            "";
+  author            "Kevin Melka";
+  date              March 1996;
+  ISBN              0-7869-0607-3;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 226,
+                    Dragon 227;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1152
+
+base product TSR 1152 =
+
+  title             "Spellfire Birthright Booster Pack, Set 9";
+  leader            "";
+  author            "Olmesdahl, Bill";
+  date              May 1996;
+  ISBN              0-7869-0609-X;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1153
+
+base product TSR 1153 =
+
+  title             "Spellfire Night Stalkers Booster Pack, Set 11";
+  leader            "";
+  author            "Olmesdahl, Bill";
+  date              October 1996;
+  ISBN              0-7869-0611-1;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96,
+                    Dragon 233,
+                    Dragon 234;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1154
+
+base product TSR 1154 =
+
+  title             "Spellfire Reference Guide, Volume 2";
+  leader            "";
+  author            "Kevin Melka";
+  date              December 1996;
+  ISBN              0-7869-0613-8;
+  pages             448;
+  system            Spellfire;
+  audience          All;
+  product type      Accessory;
+  price             $19.95;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96;
+  description
+  "Latest rules and prints of all cards.".
+#.....
+#----- TSR 1156
+
+base product TSR 1156 =
+
+  title             "Spellfire Draconomicon Booster Pack, Set 10";
+  leader            "";
+  author            "Jim Butler",
+                    "Dori Hein",
+                    "Kevin Melka";
+  date              June 1996;
+  ISBN              0-7869-0629-4;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Box;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        catalogue96,
+                    catalog96;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1160
+
+base product TSR 1160 =
+
+  title             "Spellfire Booster Pack 12: Dungeon";
+  leader            "";
+  author            "Dori Hein";
+  date              May 1997;
+  ISBN              0-7869-0675-8;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        net;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1160P
+
+base product TSR 1160P =
+
+  title             "Spellfire Booster Pack 12: Dungeon";
+  leader            "";
+  author            "Dori Hein";
+  ISBN              0-7869-0676-6;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 100.00;
+  requirements      ;
+  worlds            None;
+  references        net;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1161
+
+base product TSR 1161 =
+
+  title             "Spellfire Booster Pack 13: Fiends";
+  leader            "";
+  author            "Kevin Melka";
+  date              August 1997;
+  ISBN              0-7869-0716-9;
+  system            Spellfire;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        net;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1164
+
+base product TSR 1164 =
+
+  title             "Spellfire Booster Pack 14: Incantations";
+  leader            "";
+  author            "Monte Cook";
+  date              December 1997;
+  ISBN              0-7869-0742-8;
+  system            Spellfire;
+  audience          DM;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.50;
+  contents          Card 12;
+  requirements      ;
+  worlds            None;
+  references        net;
+  description
+  "Cards for the game.".
+#.....
+#----- TSR 1432
+
+base product TSR 1432 =
+
+  title             "Dragon Quest 3rd edition";
+  leader            "";
+  date              1989;
+  price             $15.95;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 1525
+
+base product TSR 1525 =
+
+  title             "Xena: Endless Quest";
+  leader            "";
+  author            "Stark, Ed";
+  date              July 1998;
+  ISBN              0-7869-1254-5;
+  pages             16;
+  system            Endless Quest;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $19.95;
+  requirements      ;
+  worlds            None;
+  references        net,
+                    catalog98,
+                    Dragon 247,
+                    Dragon 248;
+  description
+  "dice based adventure game".
+#.....
+#----- TSR 1526
+
+base product TSR 1526 =
+
+  title             "Hercules: Endless Quest";
+  leader            "";
+  author            "Stark, Ed";
+  date              July 1998;
+  ISBN              0-7869-1255-3;
+  pages             16;
+  system            Endless Quest;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  price             $19.95;
+  requirements      ;
+  worlds            None;
+  references        net,
+                    catalog98,
+                    Dragon 247,
+                    Dragon 248;
+  description
+  "dice based adventure game".
+#.....
+
+#----- TSR 2700
+
+base product TSR 2700 =
+
+  title             "Amazing Engine System Guide";
+  leader            "";
+  author            "Cook, David 'Zeb'";
+  date              October 1993;
+  ISBN              1-56076-590-9;
+  pages             32;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rulebook;
+  style             Booklet;
+  price             $ 9.95;
+  contents          Booklet;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93;
+  description
+  "core rules for the Amaziung Engine game system";
+  synonyms          "AM1".
+#.....
+#----- TSR 2701
+
+base product TSR 2701 =
+
+  title             "For Faerie, Queen and Country";
+  leader            "";
+  author            "Cook, David 'Zeb'";
+  date              October 1993;
+  ISBN              1-56076-591-7;
+  pages             128;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             $18.00;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93;
+  description
+  "rules for survival in Faerie";
+  synonyms          "AM2".
+#.....
+#----- TSR 2702
+
+base product TSR 2702 =
+
+  title             "Bughunters";
+  leader            "";
+  author            "TSR Staff";
+  date              October 1993;
+  ISBN              1-56076-623-9;
+  pages             128;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             $18.00;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93;
+  description
+  "rules for extra-vehicular activity and weapons";
+  synonyms          "AM3".
+#.....
+#----- TSR 2703
+
+base product TSR 2703 =
+
+  title             "Magitech";
+  leader            "";
+  author            "Tim Beach";
+  date              October 1993;
+  ISBN              1-56076-661-1;
+  pages             128;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             $18.00;
+  contents          Booklet,
+                    Map "sheet";
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93;
+  description
+  "rules for Magitech items";
+  synonyms          "AM4".
+#.....
+#----- TSR 2704
+
+base product TSR 2704 =
+
+  title             "Galactos Barrier";
+  leader            "";
+  author            "TSR Staff";
+  date              January 1994;
+  ISBN              1-56076-690-5;
+  pages             128;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             $18.00;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93;
+  description
+  "rules for negotiating alien protocol, operating 2-person spacecraft";
+  synonyms          "AM5".
+#.....
+#----- TSR 2705
+
+base product TSR 2705 =
+
+  title             "Core Rules / For Faerie, Queen and Country Combination Package";
+  leader            "";
+  author            "Cook, David 'Zeb'";
+  date              April 1993;
+  ISBN              1-56076-657-3;
+  pages             160;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             $24.95;
+  contents          Booklet,
+                    Book;
+  requirements      ;
+  references        catalogue93,
+                    catalog93W,
+                    catalog93,
+                    catalogue94,
+                    catalogue96;
+  description
+  "combination of core rules and for Faerie,... supplement".
+#.....
+#----- TSR 2706
+
+base product TSR 2706 =
+
+  title             "Core Rules / Bughunters Combination Pack";
+  leader            "";
+  author            "TSR Staff";
+  date              July 1993;
+  ISBN              1-56076-689-1;
+  pages             160;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             $24.95;
+  contents          Booklet,
+                    Book;
+  requirements      ;
+  references        catalogue93,
+                    catalog93,
+                    catalogue94,
+                    catalogue96;
+  description
+  "combination of core rules and bughunters supplement".
+#.....
+#----- TSR 2707
+
+base product TSR 2707 =
+
+  title             "Once and Future King";
+  leader            "";
+  date              March 1994;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             £ 4.99;
+  requirements      ;
+  references        catalogue94,
+                    catalogue96;
+  description
+  "complete game with adventure and rules".
+#.....
+#----- TSR 2708
+
+base product TSR 2708 =
+
+  title             "Metamorphosis Alpha to Omega";
+  leader            "";
+  date              May 1994;
+  system            Amazing Engine;
+  audience          DM;
+  price             £ 4.99;
+  requirements      ;
+  references        catalogue94,
+                    catalogue96;
+  description
+  "explore origins of Gamma World in Amazing Engine".
+#.....
+#----- TSR 2709
+
+base product TSR 2709 =
+
+  title             "Kromosome";
+  leader            "";
+  date              September 1994;
+  system            Amazing Engine;
+  audience          DM;
+  price             £ 4.99;
+  requirements      ;
+  references        catalogue94,
+                    catalogue96;
+  description
+  "biotechnology and genetic engineering gone amok".
+#.....
+#----- TSR 2710
+
+base product TSR 2710 =
+
+  title             "Tabloid";
+  leader            "";
+  author            "Cook, David 'Zeb'";
+  date              December 1994;
+  pages             144;
+  system            Amazing Engine;
+  audience          DM;
+  product type      Rules Supplement;
+  price             £12.95;
+  requirements      ;
+  references        catalogue94,
+                    catalogue96,
+                    Dragon 223,
+                    Dragon 211;
+  description
+  "players track down the bizarre, impossible and completely improbable".
+#.....
+
+#----- TSR 3028
+
+base product TSR 3028 =
+
+  title             "Europe Aflame";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-742-4;
+  system            World War II;
+  audience          All;
+  product type      Board Game;
+  price             $24.95;
+  requirements      ;
+  worlds            S.P.I.;
+  references        catalogue93,
+                    catalog93;
+  description
+  "go through the wartorn cities and rural areas of Europe".
+#.....
+#----- TSR 3029
+
+base product TSR 3029 =
+
+  title             "European Theater of Operations";
+  leader            "";
+  date              1993;
+  system            World War II;
+  audience          All;
+  product type      Board Game;
+  price             $39.95;
+  requirements      ;
+  worlds            S.P.I.;
+  references        catalogue93,
+                    catalog93;
+  description
+  "a new version of the old SPI game".
+#.....
+#----- TSR 3030
+
+base product TSR 3030 =
+
+  title             "Battle of Britain";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-894-3;
+  audience          All;
+  product type      Board Game;
+  price             $29.95;
+  requirements      ;
+  references        catalog93;
+  description
+  "historical simulation detailing world war II battles in the skies".
+#.....
+#----- TSR 3031
+
+base product TSR 3031 =
+
+  title             "Pacific Theatre of Operations";
+  leader            "";
+  date              June 1991;
+  ISBN              0-88038-896-X;
+  pages             48;
+  system            World War II;
+  audience          All;
+  product type      Board Game;
+  price             $39.95;
+  requirements      ;
+  worlds            S.P.I.;
+  references        catalogue93,
+                    catalog91S,
+                    catalog93;
+  description
+  "replay the battle of Pearl Harbour or Midway".
+#.....
+#----- TSR 3032
+
+base product TSR 3032 =
+
+  title             "Line in the Sand";
+  leader            "A";
+  date              February 1991;
+  pages             32;
+  system            World War II;
+  audience          All;
+  product type      Board Game;
+  price             $29.95;
+  requirements      ;
+  worlds            S.P.I.;
+  references        catalogue93,
+                    catalog91S,
+                    catalog93;
+  description
+  "the holy war in the middle east".
+#.....
+
+#----- TSR 3351P
+
+base product TSR 3351P =
+
+  title             "Arrival";
+  leader            "";
+  date              1994;
+  system            XXVC;
+  price             £ 3.99;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue94;
+  description
+  "".
+#.....
+#----- TSR 3550
+
+base product TSR 3550 =
+
+  title             "Battle for the 25th Century";
+  leader            "";
+  date              1993;
+  audience          All;
+  product type      Board Game;
+  price             $24.95;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog93;
+  description
+  "powerful battles from Mercury to the asteroids".
+#.....
+#----- TSR 3562
+
+base product TSR 3562 =
+
+  title             "XXCV: The 25th Century";
+  leader            "";
+  date              1991;
+  ISBN              0-88038-847-1;
+  system            XXVC;
+  audience          DM;
+  product type      Board Game;
+  style             Box;
+  price             $24.95;
+  contents          Booklet 3,
+                    Card "sheets",
+                    Poster "maps";
+  requirements      ;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "complete starter edition to role play in the 25th Century".
+#.....
+#----- TSR 3563
+
+base product TSR 3563 =
+
+  title             "Buck Roger in the 25th Century";
+  leader            "";
+  date              1994;
+  ISBN              0-88038-854-4;
+  system            XXVC;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "Buck Rogers takes you from adventure to adventure";
+  synonyms          "25CA1".
+#.....
+#----- TSR 3565
+
+base product TSR 3565 =
+
+  title             "Mars on the 25th Century";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-864-1;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "details the richest and most important planet in the inner solar system";
+  synonyms          "25CR1".
+#.....
+#----- TSR 3566
+
+base product TSR 3566 =
+
+  title             "N.E.O. In the 25th Century";
+  leader            "";
+  date              1993;
+  system            XXVC;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "join the group of freedom fighters, the N.E.O.";
+  synonyms          "25CA2".
+#.....
+#----- TSR 3567
+
+base product TSR 3567 =
+
+  title             "Earth in the 25th Century";
+  leader            "";
+  date              1993;
+  ISBN              0-88038-879-X;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "the good, bad and the ugly of the planet Earth in the 25th Century";
+  synonyms          "25CR2".
+#.....
+#----- TSR 3569
+
+base product TSR 3569 =
+
+  title             "Deimos Mandata";
+  leader            "";
+  date              February 1991;
+  ISBN              1-56076-056-7;
+  system            XXVC;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "strike back against the forces of RAM";
+  synonyms          "25CS1".
+#.....
+#----- TSR 3570
+
+base product TSR 3570 =
+
+  title             "Character Record Sheets";
+  leader            "";
+  date              February 1991;
+  ISBN              1-56076-057-5;
+  pages             48;
+  system            XXVC;
+  audience          All;
+  product type      Accessory;
+  price             $ 8.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "record sheets for players and NPCs";
+  synonyms          "25CREF1".
+#.....
+#----- TSR 3571
+
+base product TSR 3571 =
+
+  title             "Sargasso of Space";
+  leader            "";
+  date              March 1993;
+  ISBN              1-56076-065-6;
+  system            XXVC;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "stop the space pirates, once and for all";
+  synonyms          "25CS2".
+#.....
+#----- TSR 3572
+
+base product TSR 3572 =
+
+  title             "Inner Worlds";
+  leader            "";
+  date              May 1991;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "the political and military interaction of the inner worlds";
+  synonyms          "25CR3".
+#.....
+#----- TSR 3573
+
+base product TSR 3573 =
+
+  title             "Matter of Gravitol";
+  leader            "A";
+  date              June 1991;
+  system            XXVC;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog91S,
+                    catalogue94,
+                    catalog93;
+  description
+  "join the force of the New Earth Organisation";
+  synonyms          "25CR3".
+#.....
+#----- TSR 3574
+
+base product TSR 3574 =
+
+  title             "No Humans Allowed";
+  leader            "";
+  date              1993;
+  ISBN              1-56076-387-6;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $15.00;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalog93;
+  description
+  "a compendium of mutant creatures";
+  synonyms          "25CR6".
+#.....
+#----- TSR 3575
+
+base product TSR 3575 =
+
+  title             "Luna";
+  leader            "";
+  date              August 1991;
+  pages             64;
+  system            XXVC;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94;
+  description
+  "struggle for the moons high technology";
+  synonyms          "25CR4".
+#.....
+#----- TSR 3577
+
+base product TSR 3577 =
+
+  title             "Technical Compendium";
+  leader            "";
+  date              September 1991;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $20.00;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalog91W;
+  description
+  "new equipment, rules and ship information".
+#.....
+#----- TSR 3578
+
+base product TSR 3578 =
+
+  title             "Phases of the Moon";
+  leader            "";
+  date              October 1991;
+  system            XXVC;
+  audience          DM;
+  product type      Adventure;
+  price             $ 6.95;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94;
+  description
+  "try to persuade the Lunarians to give up custody";
+  synonyms          "22CS4".
+#.....
+#----- TSR 3579
+
+base product TSR 3579 =
+
+  title             "Belt";
+  leader            "The";
+  date              November 1991;
+  ISBN              1-56076-096-6;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalog91W,
+                    catalogue94,
+                    catalog93;
+  description
+  "the asteroid belt, Bottles, and the trans-Saturnian asteroid, Chiron";
+  synonyms          "22CR5".
+#.....
+#----- TSR 3582
+
+base product TSR 3582 =
+
+  title             "Hardware";
+  leader            "";
+  date              1993;
+  ISBN              1-56076-389-2;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog93;
+  description
+  "a catalog of space tools, vehicles, weaponry and other gadgets";
+  synonyms          "25CR7".
+#.....
+#----- TSR 3583
+
+base product TSR 3583 =
+
+  title             "Cities of Tomorrow";
+  leader            "";
+  date              1993;
+  ISBN              1-56076-390-6;
+  system            XXVC;
+  audience          DM;
+  price             $18.00;
+  requirements      ;
+  references        catalog93;
+  description
+  "".
+#.....
+#----- TSR 3584
+
+base product TSR 3584 =
+
+  title             "Spacestation Hauberk";
+  leader            "";
+  date              February 1993;
+  ISBN              1-56076-391-4;
+  system            XXVC;
+  audience          DM;
+  product type      Accessory;
+  price             $18.00;
+  requirements      ;
+  references        catalogue93,
+                    catalog93;
+  description
+  "all the information needed to run a space station".
+#.....
+#----- TSR 3587
+
+base product TSR 3587 =
+
+  title             "High Adventure Cliffhangers";
+  leader            "";
+  author            "Jeff Grubb";
+  date              September 1993;
+  pages             112;
+  system            XXVC;
+  audience          DM;
+  product type      Campaign Expansion;
+  style             Box;
+  price             $20.00;
+  contents          Booklet 3,
+                    Dice "pack of 10 six-sided",
+                    Miniature "die-cut stand-ups";
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalogue94,
+                    catalog95,
+                    catalog93S,
+                    catalog93;
+  description
+  "introductory game with comic strip-style thrills".
+#.....
+#----- TSR 3588
+
+base product TSR 3588 =
+
+  title             "War Against the Han";
+  leader            "";
+  author            "Steven Schend";
+  date              December 1993;
+  pages             80;
+  system            XXVC;
+  audience          DM;
+  product type      Rules Supplement;
+  style             Box;
+  price             $18.00;
+  contents          Booklet 2,
+                    Sheet "maps" 2,
+                    Sheet "die-cut stand-ups" 2;
+  requirements      ;
+  worlds            Buck Rogers;
+  references        catalogue93,
+                    catalogue94,
+                    catalog95,
+                    catalog93S,
+                    catalog93;
+  description
+  "join Buck Rogers in exciting battles".
+#.....
+
+#----- TSR 5165
+
+base product TSR 5165 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, January";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0316-3;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5166
+
+base product TSR 5166 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, February";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0317-1;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5167
+
+base product TSR 5167 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, March";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0318-X;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5168
+
+base product TSR 5168 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, April";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0346-5;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5169
+
+base product TSR 5169 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, May";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0347-3;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5170
+
+base product TSR 5170 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, June";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0348-1;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5171
+
+base product TSR 5171 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, July";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0349-X;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5172
+
+base product TSR 5172 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, August";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0350-3;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5173
+
+base product TSR 5173 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, September";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0351-1;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5174
+
+base product TSR 5174 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, October";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0352-X;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5175
+
+base product TSR 5175 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, November";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0353-8;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5176
+
+base product TSR 5176 =
+
+  title             "TSR 1995 New Product Monthly Assortment Program, December";
+  leader            "";
+  date              January 1995;
+  ISBN              0-7869-0354-6;
+  requirements      ;
+  references        catalog95;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5178
+
+base product TSR 5178 =
+
+  title             "TSR 1996 Core Product Assortment";
+  leader            "";
+  date              January 1996;
+  ISBN              0-7869-0550-6;
+  requirements      ;
+  references        catalog96;
+  description
+  "yearly assortment of the TSR core products".
+#.....
+#----- TSR 5179
+
+base product TSR 5179 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, January";
+  leader            "";
+  date              January 1996;
+  ISBN              0-7869-0551-4;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5180
+
+base product TSR 5180 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, February";
+  leader            "";
+  date              February 1996;
+  ISBN              0-7869-0552-2;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5181
+
+base product TSR 5181 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, March";
+  leader            "";
+  date              March 1996;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5182
+
+base product TSR 5182 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, April";
+  leader            "";
+  date              April 1996;
+  ISBN              0-7869-0554-9;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5183
+
+base product TSR 5183 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, May";
+  leader            "";
+  date              May 1996;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5184
+
+base product TSR 5184 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, June";
+  leader            "";
+  date              June 1996;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5185
+
+base product TSR 5185 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, July";
+  leader            "";
+  date              July 1996;
+  ISBN              0-7869-0619-7;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5186
+
+base product TSR 5186 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, August";
+  leader            "";
+  date              August 1996;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5187
+
+base product TSR 5187 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, September";
+  leader            "";
+  date              September 1996;
+  ISBN              0-7869-0621-9;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5188
+
+base product TSR 5188 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, October";
+  leader            "";
+  date              October 1996;
+  ISBN              0-7869-0622-7;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5189
+
+base product TSR 5189 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, November";
+  leader            "";
+  date              November 1996;
+  ISBN              0-7869-0623-5;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+#----- TSR 5190
+
+base product TSR 5190 =
+
+  title             "TSR 1996 New Product Monthly Assortment Program, December";
+  leader            "";
+  date              December 1996;
+  ISBN              0-7869-0624-3;
+  requirements      ;
+  references        catalog96;
+  description
+  "monthly assortment of all new TSR products".
+#.....
+
+#----- TSR 6002
+
+base product TSR 6002 =
+
+  title             "Chainmail";
+  leader            "";
+  date              1975;
+  price             $15.00;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 6051
+
+base product TSR 6051 =
+
+  title             "RPGA Blank Jigsaw Puzzle";
+  leader            "28-piece, 5.5'' x 8''";
+  price             $ 0.50;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 6052
+
+base product TSR 6052 =
+
+  title             "RPGA Blank Jigsaw Puzzle";
+  leader            "63-piece, 8.5'' x 11''";
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 6055
+
+base product TSR 6055 =
+
+  title             "RPGA Dice Bag";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+#.....
+#----- TSR 6056
+
+base product TSR 6056 =
+
+  title             "RPGA Dice Bag";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+#.....
+#----- TSR 6057
+
+base product TSR 6057 =
+
+  title             "RPGA Fantasy Note Pads";
+  leader            "";
+  price             $ 1.75;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 6058
+
+base product TSR 6058 =
+
+  title             "RPGA Slipcase";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "".
+#.....
+#----- TSR 6059
+
+base product TSR 6059 =
+
+  title             "RPGA Collector's Art Portfolio";
+  leader            "";
+  price             $ 7.25;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 6060
+
+base product TSR 6060 =
+
+  title             "To the Aid of Falx";
+  leader            "";
+  date              1982;
+  price             $ 5.00;
+  requirements      ;
+  references        net price list;
+  description
+  "";
+  synonyms          "R1".
+#.....
+#----- TSR 6061
+
+base product TSR 6061 =
+
+  title             "Investigation of Hydell";
+  leader            "The";
+  date              1982;
+  price             $ 5.00;
+  requirements      ;
+  references        net price list;
+  description
+  "";
+  synonyms          "R2".
+#.....
+#----- TSR 6062
+
+base product TSR 6062 =
+
+  title             "Egg of the Phoenix";
+  leader            "The";
+  date              1982;
+  price             $ 5.00;
+  requirements      ;
+  references        net price list;
+  description
+  "";
+  synonyms          "R3".
+#.....
+#----- TSR 6063
+
+base product TSR 6063 =
+
+  title             "Doc's Island";
+  leader            "";
+  date              1983;
+  price             $ 5.00;
+  requirements      ;
+  references        net price list;
+  description
+  "";
+  synonyms          "R4".
+#.....
+#----- TSR 6066
+
+base product TSR 6066 =
+
+  title             "Forgotten King";
+  leader            "";
+  date              1983;
+  price             $ 5.00;
+  requirements      ;
+  references        net price list;
+  description
+  "";
+  synonyms          "RPGA3".
+#.....
+#----- TSR 6067
+
+base product TSR 6067 =
+
+  title             "Elixir of Life";
+  leader            "The";
+  date              1983;
+  price             $ 5.00;
+  requirements      ;
+  references        net price list;
+  description
+  "";
+  synonyms          "RPGA4".
+#.....
+#----- TSR 6068
+
+base product TSR 6068 =
+
+  title             "RPGA Network Slipcase";
+  leader            "";
+  price             $ 7.50;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 6069
+
+base product TSR 6069 =
+
+  title             "RGPA Network Slipcases (set of 3)";
+  leader            "";
+  price             $20.00;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 6070
+
+base product TSR 6070 =
+
+  title             "RGPA Network Slipcases (set of 6)";
+  leader            "";
+  price             $40.00;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+
+#----- TSR 7009
+
+base product TSR 7009 =
+
+  title             "Gangbusters";
+  leader            "";
+  date              1993;
+  system            Gangbusters;
+  audience          DM;
+  product type      Board Game;
+  price             £12.50;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94;
+  description
+  "role play gang members or Federal Agents after gang members".
+#.....
+
+#----- TSR 7514
+
+base product TSR 7514 =
+
+  title             "Gamma World";
+  leader            "";
+  date              1993;
+  ISBN              1-56076-401-5;
+  system            Gamma World;
+  audience          DM;
+  product type      Campaign Setting;
+  price             $20.00;
+  requirements      ;
+  references        catalogue93,
+                    catalogue94;
+  description
+  "a world centuries after the complete destruction of civilization".
+#.....
+#----- TSR 7515
+
+base product TSR 7515 =
+
+  title             "Gamma Knights";
+  leader            "";
+  date              October 1992;
+  ISBN              1-56076-402-3;
+  system            Gamma World;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $20.00;
+  requirements      ;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description
+  "fearless adventurers with the ultimate weapon of the ancients".
+#.....
+#----- TSR 7516
+
+base product TSR 7516 =
+
+  title             "Mutant Master";
+  leader            "";
+  date              August 1992;
+  ISBN              1-56076-411-2;
+  system            Gamma World;
+  audience          DM;
+  product type      Adventure;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog92,
+                    catalogue94,
+                    catalog93;
+  description
+  "the cryptic alliance of mutants, the Iron Society";
+  synonyms          "GWQ1".
+#.....
+#----- TSR 7517
+
+base product TSR 7517 =
+
+  title             "Treasures of the Ancient";
+  leader            "";
+  author            "Henson, Dale";
+  date              March 1993;
+  ISBN              1-56076-577-1;
+  pages             96;
+  system            Gamma World;
+  audience          DM;
+  product type      Accessory;
+  style             Booklet;
+  price             $10.95;
+  contents          Booklet,
+                    Poster;
+  requirements      ;
+  references        catalogue93,
+                    catalog93W,
+                    catalog93,
+                    catalogue94;
+  description
+  "rediscover the world lost 300 years ago";
+  synonyms          "GWA1".
+#.....
+#----- TSR 7518
+
+base product TSR 7518 =
+
+  title             "Overlord of Bonparr";
+  leader            "";
+  author            "TSR Staff";
+  date              May 1993;
+  ISBN              1-56076-599-2;
+  pages             96;
+  system            Gamma World;
+  audience          DM;
+  product type      Accessory;
+  style             Box;
+  price             $15.00;
+  contents          Booklet 2,
+                    Map;
+  requirements      ;
+  references        catalog93W,
+                    catalog93,
+                    catalogue94;
+  description
+  "a detailed picture of the Overlord's domain";
+  synonyms          "GWA2".
+#.....
+#----- TSR 7519
+
+base product TSR 7519 =
+
+  title             "All Animals are Equal";
+  leader            "";
+  author            "TSR Staff";
+  date              August 1993;
+  ISBN              1-56076-638-7;
+  pages             64;
+  system            Gamma World;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog93S,
+                    catalog93,
+                    catalogue94;
+  description
+  "a lighthearted adventure of politics and intrigue";
+  synonyms          "GWQ2".
+#.....
+#----- TSR 7520
+
+base product TSR 7520 =
+
+  title             "Home Before the Sky Falls";
+  leader            "";
+  author            "Henson, Dale";
+  date              November 1993;
+  ISBN              1-56076-674-3;
+  pages             64;
+  system            Gamma World;
+  audience          DM;
+  product type      Adventure;
+  style             Booklet;
+  price             $ 9.95;
+  requirements      ;
+  references        catalogue93,
+                    catalog93S,
+                    catalog93,
+                    catalogue94;
+  description
+  "all-or-nothing fight for survival in a future world of bizarre mutations";
+  synonyms          "GWQ3".
+#.....
+
+#----- TSR 8007
+
+base product TSR 8007 =
+
+  title             "Hexagonal Mapping Booklet";
+  leader            "";
+  date              1981;
+  price             $ 6.00;
+  requirements      ;
+  references        net price list;
+  description
+  "".
+#.....
+#----- TSR 8026?
+
+base product TSR 8026? =
+
+  title             "Track of the Werewolf";
+  leader            "";
+  date              October 1994;
+  system            Terror Tracks;
+  audience          DM;
+  product type      Adventure;
+  price             £10.99;
+  requirements      ;
+  references        catalogue94;
+  description
+  "terrifying murder mystery, audio CD adventure".
+#.....
+#----- TSR 8027?
+
+base product TSR 8027? =
+
+  title             "Track of the Vampire";
+  leader            "";
+  date              October 1994;
+  system            Terror Tracks;
+  audience          DM;
+  product type      Adventure;
+  price             £10.99;
+  requirements      ;
+  references        catalogue94;
+  description
+  "most horrific storm of the late 1870's, audio CD adventure".
+#.....
+#----- TSR 8441
+
+base product TSR 8441 =
+
+  title             "Worlds of TSR";
+  leader            "The";
+  author            "Marlys Heeszel";
+  date              1994;
+  audience          All;
+  product type      Special Book;
+  style             Hardcover;
+  price             £14.99;
+  requirements      ;
+  references        catalogue96;
+  description
+  "fantasy art of TSR".
+#.....
+#----- TSR 8441P
+
+base product TSR 8441P =
+
+  title             "Worlds of TSR";
+  leader            "The";
+  author            "Marlys Heeszel";
+  date              July 1995;
+  ISBN              0-7869-0337-6;
+  pages             144;
+  audience          All;
+  product type      Special Book;
+  price             $18.99;
+  requirements      ;
+  references        catalog95,
+                    catalog96;
+  description
+  "fantasy art of TSR".
+#.....
+#----- TSR 8450
+
+base product TSR 8450 =
+
+  title             "Art of the Magic: The Gathering";
+  leader            "The";
+  author            "Peter Archer";
+  date              August 1998;
+  ISBN              0-7869-1178-6;
+  pages             144;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Special Book;
+  requirements      ;
+  references        catalog98;
+  description
+  "a collection of original artwork of the trading card game".
+#.....
+#----- TSR 06063
+
+base product TSR 06063 =
+
+  title             "Jungle Booster";
+  leader            "";
+  date              July 1999;
+  ISBN              1-57530-819-3;
+  system            Pokemon;
+  audience          All;
+  product type      Booster Pack;
+  price             $ 3.29;
+  requirements      ;
+  references        net;
+  description
+  "the exciting jungle expansion with 48 new cards".
+#.....
+#----- TSR 06066
+
+base product TSR 06066 =
+
+  title             "Water Blast Theme Deck";
+  leader            "";
+  date              July 1999;
+  ISBN              1-57530-822-3;
+  system            Pokemon;
+  audience          All;
+  product type      Board Game;
+  price             $ 9.99;
+  contents          Card "60 card deck",
+                    Misc "Pokémon coin",
+                    Counter "damage" 10,
+                    Book "rulebook";
+  requirements      ;
+  references        net;
+  description
+  "preconstructed deck with water Pokémon".
+#.....
+#----- TSR 06071
+
+base product TSR 06071 =
+
+  title             "Fossil Booster";
+  leader            "";
+  date              October 1999;
+  ISBN              1-57530-827-4;
+  system            Pokemon;
+  audience          All;
+  product type      Booster Pack;
+  price             $ 3.29;
+  requirements      ;
+  references        net;
+  description
+  "47 new Pokémon fossil cards".
+#.....
+#----- TSR 06073
+
+base product TSR 06073 =
+
+  title             "Body Guard Theme Deck";
+  leader            "";
+  date              October 1999;
+  system            Pokemon;
+  audience          All;
+  product type      Board Game;
+  price             $ 9.99;
+  contents          Card "60 card deck",
+                    Misc "Pokémon coin",
+                    Counter "damage" 10,
+                    Book "rulebook";
+  requirements      ;
+  references        net;
+  description
+  "preconstructed deck with tough Pokémon".
+#.....
+#----- TSR 06074
+
+base product TSR 06074 =
+
+  title             "Lock Down Theme Deck";
+  leader            "";
+  date              October 1999;
+  ISBN              1-57530-830-4;
+  system            Pokemon;
+  audience          All;
+  product type      Board Game;
+  price             $ 9.99;
+  contents          Card "60 card deck",
+                    Misc "Pokémon coin",
+                    Counter "damage" 10,
+                    Book "rulebook";
+  requirements      ;
+  references        net;
+  description
+  "preconstructed deck with attack at will".
+#.....
+#----- TSR 06082
+
+base product TSR 06082 =
+
+  title             "Starter Gift Box";
+  leader            "";
+  date              October 1999;
+  ISBN              1-57530-838-X;
+  system            Pokemon;
+  audience          All;
+  product type      Board Game;
+  price             $24.99;
+  contents          Card "30 card decks" 2,
+                    Card "holographic",
+                    Counter 10,
+                    Booklet "starter rules",
+                    Booklet "advanced rulebook",
+                    Map "playmat",
+                    Card "Jungle theme deck",
+                    Pack "Jungle booster",
+                    Misc "Pokémon coin";
+  requirements      ;
+  references        net;
+  description
+  "the Pokémon starter set".
+#.....
+#----- TSR 11511
+
+base product TSR 11511 =
+
+  title             "Interactive Encyclopedia";
+  leader            "";
+  author            "Salt Mine Creative";
+  date              October 1999;
+  system            Magic: The Gathering;
+  audience          All;
+  product type      Software;
+  worlds            Dominaria;
+  requirements      ;
+  references        net;
+  description
+  "reference and utility for the trading card game".
+#.....
+#----- TSR 11792
+
+base product TSR 11792 =
+
+  title             "Star Wars: Episode I Adventure Game";
+  leader            "";
+  author            "Slavicsek, Bill";
+  date              October 2000;
+  ISBN              0-7869-1792-X;
+  pages             96;
+  system            Star Wars;
+  audience          DM;
+  product type      Campaign Setting;
+  style             Box;
+  price             $14.95;
+  requirements      ;
+  worlds            Episode I;
+  references        net;
+  description
+  "create new adventures set in the mysterious city of Theed".
+#..........................................................................\
+#----- TSR 11793
+
+base product TSR 11793 =
+
+  title             "Star Wars Roleplaying Game";
+  leader            "";
+  author            "Slavicsek, Bill",
+                    "Collins, Andy";
+  date              November 2000;
+  ISBN              0-7869-1793-8;
+  pages             288;
+  system            Star Wars;
+  audience          All;
+  product type      Rulebook;
+  style             Hardcover;
+  price             $34.95;
+  requirements      ;
+  worlds            Episode I;
+  references        net;
+  description
+  "everything a player needs for the Star Wars game".
+#.....
+#----- TSR 11794
+
+base product TSR 11794 =
+
+  title             "The Secrets of Naboo";
+  leader            "";
+  author            "JD Wiker",
+                    "Steve Miller";
+  date              December 2000;
+  pages             96;
+  system            Star Wars;
+  audience          DM;
+  product type      Accessory;
+  style             Soft Cover;
+  price             $19.95;
+  requirements      ;
+  worlds            Episode I;
+  references        net;
+  description
+  "the secrets of Naboo revealed".
+#.....
+#----- TSR 11795
+
+base product TSR 11795 =
+
+  title             "Star Wars Character Record Sheets";
+  leader            "";
+  date              November 2000;
+  ISBN              0-7869-1795-4;
+  pages             32;
+  system            Star Wars;
+  audience          All;
+  product type      Accessory;
+  style             Soft Cover;
+  price             $ 9.95;
+  requirements      ;
+  worlds            Episode I;
+  references        net;
+  description
+  "character sheets for the Star Wars game".
+#.....
+
+#----- TSR 15000
+
+base product TSR 15000 =
+
+  title             "Fire & Shadow Booster";
+  leader            "";
+  date              March 2000;
+  ISBN              1-57530-937-8;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.79;
+  contents          Card 11;
+  requirements      ;
+  references        net;
+  description
+  "over 180 new cards for the Legend of the Five Rings".
+#.....
+#----- TSR 15002
+
+base product TSR 15002 =
+
+  title             "Fire & Shadow Theme Deck";
+  leader            "";
+  date              March 2000;
+  ISBN              1-57530-937-8;
+  system            Legend of the Five Rings;
+  audience          All;
+  product type      Board Game;
+  price             $ 8.99;
+  contents          Card "deck with 60",
+                    Book "rulebook";
+  requirements      ;
+  references        net;
+  description
+  "Fire & Shadow theme deck for the Legend of the Five Rings".
+#.....
+
+
+#----- TSR 91222
+
+base product TSR 91222 =
+
+  title             "Adventure Dice Set";
+  leader            "";
+  ISBN              0-7869-1222-7;
+  product type      Accessory;
+  price             $ 5.95;
+  requirements      ;
+  references        net;
+  description
+  "".
+#.....
+#----- TSR 91539
+
+base product TSR 91539 =
+
+  title             "Wrath of the Minotaur";
+  leader            "";
+  audience          DM;
+  product type      Adventure;
+  price             $29.70;
+  requirements      ;
+  references        net;
+  description
+  "display of 6".
+#.....
+
+#----- WTC 17731
+
+base product WTC 17731 =
+
+  title             "MLB Showdown 2002 Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              April 2002;
+  ISBN              0-7430-0551-1;
+  pages             0;
+  system            MLB Showdown 2002;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 2.99;
+  contents          Card "MLB Showdown" 9;
+  requirements      ;
+  worlds            Real;
+  description
+  "The \Product{MLB Showdown} sports card game is your ticket to the Major
+  Leagues, where you can be the manager of your own baseball team. First,
+  assemble and field your own all-star lineup. Then use real stats and
+  strategies to lead your squad to one nine-inning gem after another.
+
+  The \Product{MLB Showdown 2002} booster packs come with 9 MLB Showdown
+  cards.".
+#.....
+#----- WTC 17734
+
+base product WTC 17734 =
+
+  title             "MLB Showdown 2002 Two Player Starter Set";
+  leader            "";
+  subtitle          "";
+  date              April 2002;
+  ISBN              0-7430-0554-6;
+  pages             0;
+  system            MLB Showdown 2002;
+  audience          All;
+  product type      Cards;
+  style             Pack;
+  price             $ 8.99;
+  contents          Card "15-card team" 2,
+                    Dice "20-sided",
+                    Board "playmat with quick-play rules",
+                    Book "complete rulebook";
+  requirements      ;
+  worlds            Real;
+  description
+  "The \Product{MLB Showdown} sports card game is your ticket to the Major
+  Leagues, where you can be the manager of your own baseball team. First,
+  assemble and field your own all-star lineup. Then use real stats and
+  strategies to lead your squad to one nine-inning gem after another.
+
+  The \Product{MLB Showdown 2002 two-player Starter Set} comes equipped with
+  everything you and a friend need to start throwing heat and swinging for the
+  bleachers!
+
+  \list
+  {Two 15-card teams}
+  {One 20-sided die}
+  {Playmat with Quick-Play Rules}
+  {Complete Rulebook with Advanced and Expert Rules}".
+#.....
+#----- WTC 17930
+
+base product WTC 17930 =
+
+  title             "MLB Showdown 2004 Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              March 2004;
+  ISBN              0-7869-3485-9;
+  pages             0;
+  system            MLB Showdown;
+  audience          All;
+  product type      Booster Pack;
+  style             Pack;
+  price             $ 3.49;
+  requirements      ;
+  worlds            None;
+  description
+  "Make a heads-up play. Add these new player and strategy cards to your
+  deck---or build a whole new team. Then get ready for some big innings.
+
+  Each \Product{MLB Showdown 2004 Booster Pack} booster pack contains 8 random
+  player game cards and 3 random strategy game cards. It doesn't include
+  rules. You can get the rules and a playmat in an \Product{MLB Showdown
+  Starter Game}. Each player must have an MLB Showdown team to play.".
+#.....
+#----- WTC 17935
+
+base product WTC 17935 =
+
+  title             "MLB Showdown 2004 Starter Game";
+  leader            "";
+  subtitle          "";
+  date              March 2004;
+  ISBN              0-7869-3490-5;
+  pages             0;
+  system            MLB Showdown;
+  audience          All;
+  product type      Cards;
+  style             Box;
+  price             $ 9.99;
+  requirements      ;
+  worlds            None;
+  description
+  "The MLB Showdown 2-Player Starter Game comes loaded with everything you need
+  to get a game going in minutes! Each starter game contains:
+
+  \list
+  {Two random 15-player teams}
+  {Updated 2004 player game cards with special abilities}
+  {Two of four exclusive, holographic player game cards}
+  {Two 4-card strategy game card packs}
+  {One 20-sided die}
+  {Rulebook with player checklist}
+  {Full-color playmat with easy-to-learn rules}
+
+  Collect from the best starters, middle relievers, and closers, or the top
+  sluggers, RBI leaders, and speedsters in Major League Baseball.".
+#.....
+#----- WTC 17943
+
+base product WTC 17943 =
+
+  title             "Duel Masters Starter Set";
+  leader            "";
+  subtitle          "The Game Begins Here!";
+  date              March 2004;
+  ISBN              0-7869-3450-6;
+  pages             0;
+  system            Duel Master;
+  audience          All;
+  product type      Cards;
+  style             Box;
+  price             $ 9.99;
+  requirements      ;
+  worlds            None;
+  description
+  "The world of \Place{Shobu} is bursting with shield-bashing creatures and
+  mind-warping spells. Bust open a Starter Set. Tough it out like
+  \Place{Shobu}. Never give up, and rule the DUEL!
+
+  Look at all you get!
+
+  \list
+  {Two 20-card training decks that can be combined into one tournament deck.
+   Decks may contain duplicate cards.}
+  {1 Dreamweave Duel Masters mini-comic!}
+  {1 exclusive Duel Masters Rothus, the Traveler premium card!}
+  {1 quick-start guide illustrated by Shigenobu Matsumoto}
+  {1 rulebook}
+  {2 Duel Masters playmats}
+  {1 D-MAX membership offer}
+  {1 bonus pack of booster cards!}".
+#.....
+
+#----- WTC 96263
+
+base product WTC 96263 =
+
+  title             "MLB Showdown 2003 Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              March 2003;
+  ISBN              0-7430-0667-4;
+  pages             9;
+  system            MLB Showdown 2003;
+  audience          All;
+  product type      Booster Pack;
+  style             Cards;
+  price             $ 2.99;
+  contents          Card "random player" 7,
+                    Card "random strategy" 2;
+  requirements      ;
+  worlds            None;
+  description
+  "Break your game wide open with MLB Showdown booster packs. Each 9-card pack
+  includes sluggers to add pop to your lineup, aces to bring the heat to your
+  opponents, and strategies to show off your managerial genius.
+
+  Become a legitimate playoff contender today.
+
+  This booster pack contains 7 random player game cards and 2 random strategy
+  game cards. It doesn't include rules. You can get the rules and a playmat in
+  an MLB Showdown Starter Game. Each player must have an MLB Showdown team to
+  play.".
+#.....
+#----- WTC 96266
+
+base product WTC 96266 =
+
+  title             "MLB Showdown 2003 Starter Game";
+  leader            "";
+  subtitle          "";
+  date              March 2003;
+  ISBN              0-7430-0670-4;
+  system            MLB Showdown 2003;
+  audience          All;
+  product type      Cards;
+  style             Box;
+  price             $ 9.99;
+  requirements      ;
+  worlds            None;
+  description
+  "Take the field with your own team of real MLB stars. You're the manager. You
+  name your starting lineup. You call the shots.
+
+  This MLB Showdown 2003 sports card game Starter Game is ready to play with 2
+  teams, so grab a friend and throw out the first pitch!".
+#.....
+#----- WTC 96268
+
+base product WTC 96268 =
+
+  title             "MLB Showdown 2003 Draft Pack";
+  leader            "";
+  subtitle          "HOLD YOUR OWN DRAFT";
+  date              March 2003;
+  system            MLB Showdown 2003;
+  audience          All;
+  product type      Cards;
+  style             Box;
+  price             $ 9.99;
+  requirements      ;
+  worlds            None;
+  description
+  "With \Product{MLB Showdown} sports card game draft packs, you can draft a
+  new team every day. Draft packs come ready to play with an entire team of MLB
+  stars and enough strategy game cards to turn any game into a nailbiter. And
+  they're great for tournament play!
+
+  Each draft pack comes with:
+
+  \list
+  {15 random player game cards, including 1 premium holographic card}
+  {45 strategy game cards}
+  {All-new scorecard}
+  {Instructions on how to draft for tournament play}".
+#.....
+#----- WTC 96270
+
+base product WTC 96270 =
+
+  title             "MLB Showdown 2003 Trading Deadline Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              June 2003;
+  ISBN              0-7430-0674-7;
+  pages             9;
+  system            MLB Showdown 2003;
+  audience          All;
+  product type      Booster Pack;
+  style             Cards;
+  price             $ 2.99;
+  requirements      ;
+  worlds            None;
+  description
+  "\Product{The MLB Showdown 2003: Trading Deadline} expansion is here. Add hot
+  new rookies, new game-winning strategies, and traded players in their new
+  uniforms to your game. Then make your move. But act fast - before the Trading
+  Deadline expansion is gone.
+
+  This booster pack contains 7 random player game cards and 2 random strategy
+  game cards. It doesn't include rules. You can get the rules and a playmat in
+  an MLB Showdown Starter Game. Each player must have an \Product{MLB Showdown}
+  team to play.".
+#.....
+#----- WTC 96273
+
+base product WTC 96273 =
+
+  title             "MLB Showdown 2003 Pennant Run Booster Pack";
+  leader            "";
+  subtitle          "";
+  date              September 2003;
+  ISBN              0-7430-0677-1;
+  system            MLB Showdown 2003;
+  audience          All;
+  product type      Booster Pack;
+  style             Cards;
+  price             $ 2.99;
+  requirements      ;
+  worlds            None;
+  description
+  "With the Hall-of-Fame and Super Season sub-set cards in the MLB Showdown
+  2003 Pennant Run expansion set, you can add legendary players from the past
+  and cards featuring the best players in their best season. Acquire these
+  great sub-set cards and give your opponent a lesson in history.".
+#.....
+#----- WTC 96745
+
+base product WTC 96745 =
+
+  title             "Neopets Base Set Booster";
+  leader            "";
+  subtitle          "Something is Happening!";
+  date              September 2003;
+  ISBN              0-7869-3424-7;
+  pages             8;
+  system            Neopets;
+  audience          All;
+  product type      Booster Pack;
+  style             Cards;
+  price             $ 3.49;
+  requirements      ;
+  description
+  "Neopets are magically appearing on cards that you can collect and play
+  with. You'll also discover all sorts of Petpets, Potions, Neggs, Books,
+  Faerie tokens, Weapons, and Food from all over \Place{Neopia}. So gather your
+  favourite Neopets and challenge your friends to some real fun!
+
+  The Neopets trading card game allows you and a friend to enjoy the experience
+  of playing with your Neopets and collecting items for them to use in a
+  challenging game you can play anywhere!
+
+  The Two-Player Starter Set has everything you need to start collecting your
+  favourite Neopets and challenging your friends to exciting games.".
+#.....
+#----- WTC 96748
+
+base product WTC 96748 =
+
+  title             "Neopets TCG Base Set";
+  leader            "";
+  subtitle          "Something is Happening!";
+  date              September 2003;
+  ISBN              0-7869-3427-1;
+  system            Neopets;
+  audience          All;
+  product type      Cards;
+  style             Box;
+  price             $ 9.99;
+  requirements      ;
+  description
+  "Neopets are magically appearing on cards that you can collect and play
+  with. You'll also discover all sorts of Petpets, Potions, Neggs, Books,
+  Faerie tokens, Weapons, and Food from all over \Place{Neopia}. So gather your
+  favourite Neopets and challenge your friends to some real fun!
+
+  The \Product{Neopets trading card game} allows you and a friend to enjoy the
+  experience of playing with your Neopets and collecting items for them to use
+  in a challenging game you can play anywhere!
+
+  The Two-Player Starter Set has everything you need to start collecting your
+  favourite Neopets and challenging your friends to exciting games:".
+#.....
+#----- DMA 000015
+
+base product DMA 000015 =
+
+  title             "Finous Treasury";
+  leader            "The";
+  date              1981;
+  price             $ 3.00;
+  requirements      ;
+  references        net price list;
+  description
+  "A comic strip collection.".
+#.....
+#----- DMA 000034
+
+base product DMA 000034 =
+
+  title             "TSR Belt Buckle";
+  leader            "";
+  date              1981;
+  requirements      ;
+  references        complete product listing;
+  description
+  "A belt buckle with a TSR motif.";
+  synonyms          "RP1".
+#.....
+#----- DMA 000035
+
+base product DMA 000035 =
+
+  title             "RPGA Alignment Generators";
+  leader            "";
+  date              1981;
+  requirements      ;
+  references        complete product listing;
+  description
+  "Unknown.";
+  synonyms          "RP2".
+#.....
+#----- DMA 000036
+
+base product DMA 000036 =
+
+  title             "Fighting Wheel Game Aid";
+  leader            "";
+  date              1981;
+  requirements      ;
+  references        complete product listing;
+  description
+  "Unknown.";
+  synonyms          "RP3".
+#.....
+#----- DMA 000037
+
+base product DMA 000037 =
+
+  title             "Up the Garden Path";
+  leader            "";
+  date              1986;
+  requirements      ;
+  references        net price list;
+  description
+  "Unknown.";
+  synonyms          "ST1".
+#.....
+#----- DMA 000038
+
+base product DMA 000038 =
+
+  title             "Counter Tray and Lid";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "Unknown";
+  synonyms          "TSRGN01".
+#.....
+#----- DMA 000039
+
+base product DMA 000039 =
+
+  title             "Hex Grid Mapping Paper (2-sided)";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "Unknown";
+  synonyms          "TSRGN11".
+#.....
+#----- DMA 000040
+
+base product DMA 000040 =
+
+  title             "Hex Grid Mapping Paper (2-sided)";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "Unknown";
+  synonyms          "TSRGN12".
+#.....
+#----- DMA 000041
+
+base product DMA 000041 =
+
+  title             "Numbered Hex Grid Paper";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "Unknown";
+  synonyms          "TSRGN13".
+#.....
+#----- DMA 000042
+
+base product DMA 000042 =
+
+  title             "Large Hex Grid Mapping Paper";
+  leader            "";
+  requirements      ;
+  references        complete product listing;
+  description
+  "Unknown";
+  synonyms          "TSRGN14".
+#.....
+#----- DMA 000047
+
+base product DMA 000047 =
+
+  title             "Forbidden Sands of Anauroch (N.2)";
+  leader            "The";
+  author            "Zeminian, Alessandro",
+                    "Verardi, Andrea";
+  editor            "Zeminian, Alessandro",
+                    "Verardi, Andrea";
+  cover             "Isabella Dalla Vecchia",
+                    "Michele Rizzardi",
+                    "Turotti, Davide";
+  illustrations     "Sonia Bernabei",
+                    "Tatiana Mavaracchio",
+                    "Arrigoni, Chiara",
+                    "Turotti, Davide",
+                    "Romeo, Enrico",
+                    "Marcella Ricciardi";
+  management        "Margherita Monti" original translations,
+                    "Gervasoni, Andrea" art direction,
+                    "Capietti, Alberto" marketing direction;
+  date              2000;
+  pages             52;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Hardcover;
+  number            Number 2;
+  series            The Forbidden Sands of Anauroch;
+  price             $ 4.95;
+  contents          Book;
+  requirements      ;
+  worlds            Forgotten Realms;
+  description
+  "Long long time ago, when I was a young child in front of the fire, in the
+  cold starry, desert night... I remember being told about an ancient
+  prophecy.
+
+  It talked about our own people, the people of \Group{Ma'atar}, who in those
+  times where endangered by the shadow of \Monster{Phaerimm}, who settled along
+  the border of our land, hidden in the \Place{Spellguard Ruins}. It talked
+  about strangers that came from far away, whose destiny was tied to ours and
+  about how they fought against a terrible and forbidden menace.
+
+  The tribe will be decimated by the powerful forces of something that couldn't
+  be stopped and the leading people will die. Only one, the spirit of the
+  freedom of the tribe, will survive and will lead the people of
+  \Place{Anauroch} to new glory in the path of the Gods.
+
+  By maybe I'm wrong. All this was not a prophecy but a legend, and those
+  heroes became immortals by creating their own histories.
+
+  That's the story as it was told to me by the father of my father, and that
+  now I will tell you, and you will tell it to your children, and the children
+  or your children.".
+#.....
+#----- DMA 000052
+
+base product DMA 000052 =
+
+  title             "Living' La Vida Dorka";
+  leader            "";
+  author            "John Kovalic";
+  date              January 2002;
+  pages             152;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Dork Storm Press;
+  number            Volume 1;
+  series            Dork Tower;
+  price             Fr 31.00;
+  contents          Book;
+  requirements      ;
+  worlds            None;
+  description
+  "\large{Meet the Global Village Idiots}
+
+  From computer gaming and online flaming to do-coms and dot-bomgs,
+  \Product{Livin' La Vida Dorka} celebrates the techno-geek life and puts the
+  'pulse' back into 'obsessive compulsive'. Join \NPC{Matt}, \NPC{Igor},
+  \NPC{Ken} and \NPC{Carson the muskrat} in the comic strips collected in print
+  for the first time! Straight from the pages of Interactive Week, GameSpy.com,
+  Pyramid Online and Scrye, they're all '\Product{Livin' La Vida Dorak!}'.".
+#.....
+#----- DMA 000053
+
+base product DMA 000053 =
+
+  title             "Power Reserve Theme Deck";
+  leader            "";
+  date              July 1999;
+  system            Pokemon;
+  audience          All;
+  product type      Board Game;
+  requirements      ;
+  references        net;
+  description
+  "".
+#.....
+#----- DMA 000057
+
+base product DMA 000057 =
+
+  title             "Understanding Games";
+  leader            "";
+  subtitle          "The Game's The Thing";
+  author            "John Kovalic";
+  cover             "John Kovalic";
+  illustrations     "John Kovalic";
+  typography        "Jeff Mackintosh" interior design and layout;
+  date              June 2003;
+  ISBN              1-930964-47-1;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Dork Storm Press;
+  number            Volume V;
+  series            The Collected Dork Tower;
+  price             $ 15.95;
+  contents          Book;
+  requirements      ;
+  description
+  "Undestanding games collects critically acclaimed, fan-favorite strips from
+  John Kovalic's Dork Tower, along with the origins award-nominated Dork Tower
+  #18 comic book and the Dork Tower Lord of the Rings special! From Film Fandom
+  to the League of Extraordinary Gentlegamers, from the internet to inner
+  geeks. Dork Tower puts the 'fan' back into 'fanatical obsessive!'.
+
+  What's not to understand?".
+#.....
+#----- DMA 000058
+
+base product DMA 000058 =
+
+  title             "Lord of the Hirelings";
+  leader            "";
+  subtitle          "'Where's our treasure-moving thingie?' 'You mean \NPC{Nodwick}?' 'Yeah, that'";
+  author            "Williams, Aaron";
+  cover             "Williams, Aaron";
+  illustrations     "Williams, Aaron",
+                    "Toni DiTerlizzi";
+  date              May 2003;
+  ISBN              1-930964-80-3;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Dork Storm Press;
+  number            Book 1;
+  series            The Nodwick Chronicles;
+  contents          Book;
+  requirements      ;
+  description
+  "That pretty much sums up life for the legendary henchman, \NPC{Nodwick}. You
+  hold in your hands the first volume of his hilarious adventures with three of
+  the world's most unprofessional heroes. \emph{Thrill} to his being used as a
+  grappling hook! \emph{Marvel} as he helps to thwart evil and gets no credit!
+  \emph{Gasp} in awe that there's anything left of him for \NPC{Piffany the
+  Cleric} to duct tape back together!
+
+  This volume contains the first six issues of the uproariously funny (and
+  slightly sasistic) \Product{Nodwick} comic book by Aaron Williams. It's the
+  story of the little guy, the temp worker, the person on the payroll with the
+  title '\emph{sacrificial lamb}'. Read on, and know that while your job may
+  not be the best, there's little chance you'll be swallowed by a big, scaly
+  monster...
+
+  ...we \emph{hope}...".
+#.....
+#----- DMA 000059
+
+base product DMA 000059 =
+
+  title             "Dork Shadows";
+  leader            "";
+  subtitle          "The Collected Dork Tower Volume II";
+  author            "John Kovalic";
+  cover             "John Kovalic";
+  illustrations     "John Kovalic";
+  typography        "Williams, Aaron" interior design and layout;
+  date              November 2002;
+  ISBN              1-930964-41-2;
+  pages             162;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Dork Storm Press;
+  number            Volume II;
+  series            The Collected Dork Tower;
+  price             $ 15.95;
+  contents          Book;
+  requirements      ;
+  description
+  "\large{Give in to the Dork Side}
+
+  Lurking in the dork shadows, you'll find \NPC{Matt}, \NPC{Igor}, \NPC{Ken},
+  \NPC{Gilly the Perky Goth} and \NPC{Carson the Muskrat}. Whether you're a
+  goth, a gamer, an SF fan, a comics fanboy, a computer wonk or a mundane,
+  you'll recognize them all! Dork Tower is worldwide hit amongst geeks and
+  non-geeks alike! Make Dork Shadows the brightest spot in your comics
+  collection! Meet the characters from John Kovalic's Dork Tower in their
+  second sellout collection...and welcome to the world of Dorkness! ".
+#.....
+#----- DMA 000060
+
+base product DMA 000060 =
+
+  title             "Dork Covenant";
+  leader            "";
+  subtitle          "The Collected Dork Tower, Volume I";
+  author            "John Kovalic";
+  cover             "John Kovalic";
+  illustrations     "John Kovalic";
+  typography        "Williams, Aaron" interior design and layout;
+  date              July 2002;
+  ISBN              1-930964-41-2;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Paperback;
+  producer          Dork Storm Press;
+  number            Volume I;
+  series            The Collected Dork Tower;
+  price             $ 15.95;
+  contents          Book;
+  requirements      ;
+  description
+  "\large{It's all Geek to Me!}
+
+  Release your inner nerd with Dork Covenant, the first collection of the
+  hilarious, critically acclaimed fan-favorite Dork Tower comic book! From
+  dragon-filled dungeons to star treks, from comic book conventions to internet
+  naughtiness, Dork Tower is the comic hat put the 'cult' back into
+  sub-culture! So join \NPC{Matt}, \NPC{Igor}, \NPC{Ken}, \NPC{Gill the Perky
+  Goth} and \NPC{Carson the Muskrat} in their uproariously dorky adventures!".
+#.....
+#----- DMA 000079
+
+base product DMA 000079 =
+
+  title             "Froschk\umlaut{o}nig Fragmente";
+  leader            "Die";
+  subtitle          "Ein Abenteuer im Deutschland der 20er Jahren";
+  author            "Sch\umlaut{u}tte, Steffen",
+                    "Schiemichen, Wolfgang" zusaetzliche Texte,
+                    "Gebr\umlaut{u}der Grimm}" zusaetzliche Texte;
+  editor            "Gladys, Rainer";
+  cover             "Gerwin, Frank";
+  cartography       "",
+                    "";
+  illustrations     "Gerwin, Frank",
+                    "Sanders, Merian A.";
+  date              April 1993;
+  ISBN              3-89260-555-6;
+  pages             80;
+  system            Chaosium;
+  audience          DM;
+  product type      Adventure;
+  style             Soft Cover;
+  producer          Laurin;
+  price             $ SFr 24.80;
+  contents          Book;
+  requirements      ;
+  layout            Color Cover;
+  worlds            Call of Cthulhu;
+  description
+  "Es beginnt ganz allt\umlaut{a}glich: Eine Frau beauftragt einen Detektiv,
+  ihren Mann zu suchen. Doch schnell entwickelt sich aus einem Routine-Auftrag
+  ein Abenteuer, dass die harmolse Beschaulichkeit eines kleinen
+  St\umlaut{a}dtchens als Fassade entlarvt, hinter der ein finsteres Geheimnis
+  aus uralter Zeit lauert. Und auch die 'Kinder- und Hausm\umlaut{a}rchen' der
+  Gebr\umlaut{u}der Grimm erlangen pl\umlaut{o}tzlich eine neue und
+  beunrihigende Bedeutung.";
+  short description "".
+#.....
+#----- DMA 000073
+
+base product DMA 000073 =
+
+  title             "Homeland";
+  leader            "";
+  subtitle          "";
+  author            "Salvatore, R.A.",
+                    "Dabb, Andrew" script;
+  editor            "Powers, Mark";
+  illustrations     "Seeley, Tim" pencils,
+                    "Pepoy, Andrew" inks,
+                    "Galli, Marco" inks,
+                    "Fridolfs, Derek" inks,
+                    "Crisostomo, Dennis" inks,
+                    "LaPointe, Serge" inks,
+                    "Blond" colors,
+                    "Seeley, Steve" letters;
+  date              2006;
+  ISBN              1-932796-40-1;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Devil's Due;
+  number            Book I;
+  series            The Legend of Drizzt;
+  price             $ 14.95;
+  contents          Book;
+  requirements      ;
+  layout            Full Color;
+  worlds            Forgotten Realms;
+  description
+  "At long last! One of the most popular characters in fantasy fiction makes
+  his comic book debut! Travel back to strange and exotic
+  \Place{Menzoberranzan}, the vast city of the \Monster{Drow} and homeland to
+  \Place{Icewind Dale} hero \NPC{Drizzt Do'Urden}. The young prince of a royal
+  house, \NPC{Drizzt} grows to maturity in the vile world of his dark
+  kin. Possessing honor beyond the scope of his unprincipled society, young
+  \NPC{Drizzt} faces an inevitable dilemma: can he live in a world that rejects
+  integrity? \Product{Homeland} is R.A. Salvatore's first book in the
+  \Product{The Legend of Drizzt} trilogy and is set in the epic world of
+  \Place{Forgotten Realms}. It is now presented for the first time in a graphic
+  format that unveils the dark world of \Place{Menzoberranzan} and the
+  obsidian-skinned race of ruthless \Monster{dark elves}.";
+  short description "The famous Drizzt trilogy in comic form.".
+#.....
+#----- DMA 000074
+
+base product DMA 000074 =
+
+  title             "Exile";
+  leader            "";
+  subtitle          "";
+  author            "Salvatore, R.A.",
+                    "Dabb, Andrew" script;
+  editor            "Powers, Mark";
+  illustrations     "Seeley, Tim" pencils,
+                    "Lowe, John" inks,
+                    "Galli, Marco" inks,
+                    "Crisostomo, Dennis" inks,
+                    "Atkins, Robert Q." inks,
+                    "Hamscher, Cory" inks,
+                    "Grabes, Robert" inks,
+                    "LaPointe, Serge" inks,
+                    "Isaacs, Rebekah" inks,
+                    "Timmons, Johnny" inks,
+                    "Beadry, Shaun" inks,
+                    "McCaffrey, Alex" inks,
+                    "Blond" colors,
+                    "Crowley, Brian J." letters,
+                    "Seeley, Steve" letters;
+  date              2006;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Devil's Due;
+  number            Book II;
+  series            The Legend of Drizzt;
+  price             $ 14.95;
+  contents          Book;
+  requirements      ;
+  layout            Full Color;
+  worlds            Forgotten Realms;
+  description
+  "Fantasy's most popular character returns in the second chapter of
+  R.A. Salvatore's \Product{Legend of Drizzt} trilogy! Deep underground,
+  \NPC{Drizzt Do'Urden} has abandoned his people and their corrupt
+  society. Alone amon the \Monster{Drow}, this young warrior thirsts for
+  justice and friendship, rather than power and violence --- and knows his only
+  hope for finding them lays in the labyrinthine tunnels of the
+  \Place{Underdark}. But his self-imposed exile has now lated ten long years
+  --- and rather than finding a higher calling, \NPC{Drizzt} has discovered
+  only crushing loneliness and an unending series of hostile enemies.
+
+  Throughout the decade \NPC{Drizzt} has wandered the subterranean wilderness,
+  his ruthless family has remained at war. With her House's fortunes rapidly
+  waning, the evil \NPC{Matron Malice Do'Urden} has become obsessed with the
+  idea that her renegade son is the key to the family's return to power. To
+  hunt him down, \NPC{Malice} will dispatch a hunter who is capable not only of
+  killing \NPC{Drizzt} --- but of breaking his heart. In the eternal night of
+  the \Place{Underdark}, \NPC{Drizzt} will confront the ghosts of his past, the
+  horrors of the present, and his only hope for the future...";
+  short description "The famous Drizzt trilogy in comic form.".
+#.....
+#----- DMA 000075
+
+base product DMA 000075 =
+
+  title             "Sojourn";
+  leader            "";
+  subtitle          "";
+  author            "Salvatore, R.A.",
+                    "Dabb, Andrew" script;
+  editor            "Powers, Mark";
+  illustrations     "Seeley, Tim" pencils,
+                    "Lowe, John" inks,
+                    "Atkins, Robert Q." inks,
+                    "Rauch, John" inks,
+                    "Englert, Mark" inks,
+                    "Blond" colors,
+                    "Crowley, Brian J." letters;
+  date              2006;
+  ISBN              1-932796-57-6;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Devil's Due;
+  number            Book III;
+  series            The Legend of Drizzt;
+  price             $ 14.95;
+  contents          Book;
+  requirements      ;
+  layout            Full Color;
+  worlds            Forgotten Realms;
+  description
+  "He left behind everything and everyone he knew --- all in the pursuit of
+  justice. Like others of his race, \NPC{Drizzt Do'Urden} was raised in the
+  endless night of the subterranean \Place{Underdark}. But where other
+  \Monster{dark elves} seek power, \NPC{Drizzt} seeks justice. Those whom
+  they'd oppress, \NPC{Drizzt} wishes to befriend. Unwilling to submit to the
+  violence and wickedness of his people, the young warrior abandoned his
+  childhood home.
+
+  Journey to a new world. Realizing he'd never truly be beyond the reach of his
+  people as long as he remained underground, \NPC{Drizzt} determined to do what
+  no other of his kind had done: leave the shadows of the \Place{Underdark} for
+  the blazing sun of the surface.
+
+  An outcast in search of a home. Now, he has begun a sojourn through a world
+  utterly unlike his own. But acceptance among the surface-dwellers will not
+  come easily --- nor without sacrifice...";
+  short description "The famous Drizzt trilogy in comic form.".
+#.....
+#----- K&C 722
+
+base product K&C 722 =
+
+  title             "Bundle of Trouble: Volume Twenty-Two";
+  leader            "";
+  subtitle          "Knights of the Dinner Table";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Empty Room Studios";
+  illustrations     "Throm, Colin",
+                    "Scholes, Tom" colorist;
+  date              March 2007;
+  ISBN              1-59459-073-7;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          K&C;
+  series            Knights of the Dinner Table,
+                    Bundle of Trouble;
+  price             $11.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "Issues seventy-three through seventy-six of Knights of the Dinner Table crammed between two covers.";
+  short description "Issues seventy-three through seventy-six of Knights of the Dinner Table.".
+
+#.....
+#----- K&C 723
+
+base product K&C 723 =
+
+  title             "Bundle of Trouble: Volume Twenty-Three";
+  leader            "";
+  subtitle          "Issues Seventy-Seven through Eighty of Knights of the Dinner Tables";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Vrbanic, George";
+  date              March 2007;
+  ISBN              1-59459-074-5;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          K&C;
+  number            23;
+  series            Knights of the Dinner Table,
+                    Bundle of Trouble;
+  price             $11.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "Issues Seventy-Seven through Eighty of Knights of the Dinner Tables crammed between two covers.";
+  short description "Issues Seventy-Seven through Eighty of Knights of the Dinner Tables crammed between two covers.".
+
+#.....
+#----- K&C 720
+
+base product K&C 720 =
+
+  title             "Bundle of Trouble: Volume Twenty";
+  leader            "";
+  subtitle          "Knights of the Dinner Table";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Fraim, Brendon",
+                    "Fraim, Brian";
+  date              March 2007;
+  ISBN              1-59459-071-0;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          K&C;
+  number            20;
+  series            Knights of the Dinner Table;
+  price             $11.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "Issues sixty-five through sixty-eight of Knights of the Dinner Table crammed between two covers.";
+  short description "Issues sixty-five through sixty-eight of Knights of the Dinner Table.".
+
+#.....
+#----- K&C 721
+
+base product K&C 721 =
+
+  title             "Bundle of Trouble: Volume Twenty-One";
+  leader            "";
+  subtitle          "Knights of the Dinner Table";
+  author            "Blackburn, Jolly R.",
+                    "Jelke, Brian",
+                    "Johansson, Steve",
+                    "Kenzer, David S.";
+  cover             "Hall, Benjamin";
+  illustrations     "Hall, Marlena" colors;
+  date              March 2007;
+  ISBN              1-59459-072-9;
+  pages             96;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          K&C;
+  number            21;
+  series            Knights of the Dinner Table;
+  price             $11.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "Issues sixty-nine through seventy-two of Knights of the Dinner Table crammed between two covers.";
+  short description "Issues sixty-nine through seventy-two of Knights of the Dinner Table.".
+
+#.....
+#----- DSP 216
+
+base product DSP 216 =
+
+  title             "Dork Decade";
+  leader            "";
+  subtitle          "What A Long Strange Strip It's Been!";
+  author            "Kovalic, John";
+  cover             "Kovalic, John";
+  illustrations     "Kovalic";
+  date              February 2007;
+  ISBN              1-933288-52-3;
+  ISBN13            978-1-933288-52-9;
+  pages             144;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Dork Storm Press;
+  series            Dork Tower;
+  price             $15.99;
+  contents          Book "";
+  requirements      ;
+  layout            Full Color;
+  description
+  "Ten years ago, a comic strip called \Product{Dork Tower} made a quiet start in a magazine called \Product{Shadis}. Soon moving to other venues, comic books, and web sites, \Product{Dork Tower} became one of the longest-running, most critically-acclaimed and (most importantly) geekiest gaming comic strips out there. \Product[DSP 216]{Dork Decade} collects every comic strip from \Product{Shadis} and \Product{Dragon} magazines of the strip's first decade, chronologically and in color for the first time, along with notes, sketches and much more. Give in to the Dork size! HUZZAH!".
+
+#.....
+#----- DSP 1016
+
+base product DSP 1016 =
+
+  title             "Nodwick Goes Hollywood";
+  leader            "";
+  subtitle          "Nodwick Chronicles VI";
+  author            "Williams, Aaron";
+  cover             "Williams, Aaron";
+  illustrations     "Williams, Aaron";
+  date              June 2007;
+  ISBN              1-933288-38-8;
+  ISBN13            978-1-933288-38-3;
+  pages             160;
+  system            None;
+  audience          All;
+  product type      Comics;
+  style             Soft Cover;
+  producer          Do Gooder Press;
+  number            VI;
+  series            Nodwick Chronicles;
+  price             $15.99;
+  contents          Book "";
+  requirements      ;
+  layout            Color Cover;
+  description
+  "\Large{Frodo's Not the Only Short Guy Who Got Famous for Hauling Stuff}
+
+\NPC{Nodwick} has hit the big time in the movie 'Gamers 2: Dorkness Rising', and he's bringing all of you lucky folks along for the ride! Look for this epic film from Dead Gentlemen Productions in a theater or DVD case near you sooon!
+
+In the meaintime, join \NPC{Nodwick} and his adventuring companions as they have their final showdown with \NPC{Baphuma'al} for the fate of the world! Can our heroes manage to win through in spice of being... well, them?
+
+Witness the climax that's been 36 comic books in the making and see why \NPC{Nodwick} is Going Hollywood.";
+  short description "Nodwick Chronicles VI";
+  synonyms          "Nodwick Chronicles VI".
+
+#.....
+#----- TSR 1168
+
+base product TSR 1168 =
+
+  title             "Dungeons & Dragons Board Game";
+  leader            "";
+  author            "Staff, TSR";
+  date              August 1997;
+  ISBN              0-7869-0879-3;
+  system            Special;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  contents          Booklet "rule",
+                    Card "decks of 108 cards each" 2;
+  requirements      ;
+  references        internet;
+  description       "A board game for up to 6 players.".
+#.....
+#----- TSR 1169
+
+base product TSR 1169 =
+
+  title             "GOBLINZ!";
+  leader            "";
+  author            "Staff, TSR";
+  date              August 1997;
+  ISBN              0-7869-0878-5;
+  system            Special;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  contents          Board "game",
+                    Booklet "rules",
+                    Miniature "plastic dragon",
+                    Miniature "cardboard goblinz" 4;
+  requirements      ;
+  references        internet;
+  description       "A board game for up to 4 players.".
+#.....
+#----- TSR 1059
+
+base product TSR 1059 =
+
+  title             "Fantasy Forest Game";
+  leader            "";
+  date              1990;
+  system            Special;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  producer          TSR;
+  price             $19.95;
+  requirements      ;
+  references        complete product listing,
+                    catalog93;
+  description       "A fun-filled race through a magical forest.".
+#.....
+#----- TSR 1014
+
+base product TSR 1014 =
+
+  title             "Fantasy Forest Game";
+  leader            "";
+  date              1982;
+  producer          TSR;
+  requirements      ;
+  references        complete product listing;
+  description       "Unknown".
+#.....
+#----- TSR 1045
+
+base product TSR 1045 =
+
+  title             "Classic Dungeon! Game";
+  leader            "The";
+  date              1989;
+  ISBN              0-88038-733-5;
+  system            Special;
+  audience          All;
+  product type      Board Game;
+  style             Box;
+  producer          TSR;
+  price             $19.95;
+  contents          Miniature "plastic" 6,
+                    Board "gameboard",
+                    Booklet "rules",
+                    Card "game cards" 250,
+                    Misc "dice";
+  requirements      ;
+  references        catalogue93,
+                    catalogue94,
+                    catalog95,
+                    catalogue96,
+                    catalog93;
+  description       "An introduction board game.".
+#.....
+#----- TSR 1010
+
+base product TSR 1010 =
+
+  title             "Dungeon! Game";
+  leader            "";
+  producer          TSR;
+  price             $10.00;
+  requirements      ;
+  references        net price list;
+  description       "Unknown".
+#.....
+#----- TSR 1058
+
+base product TSR 1058 =
+
+  title             "Mage Stones";
+  leader            "";
+  date              1990;
+  audience          All;
+  product type      Board Game;
+  price             $17.95;
+  worlds            Dragonlance;
+  references        complete product listing,
+                    catalog93;
+  description
+  "A fast-paced strategy and positioning game.".
+
+
+#.....
+#----- TSR 1039
+
+base product TSR 1039 =
+
+  title             "Dragonlance Boardgame";
+  leader            "";
+  date              1988;
+  price             $24.95;
+  worlds            Dragonlance;
+  references        net price list;
+  description
+  "Unknown".
+
+
+#.....
+#----- DMA 000048
+
+base product DMA 000048 =
+
+  title             "Serpent's Eye";
+  leader            "The";
+  author            "Stark, Ed";
+  cover             "Szezudlo";
+  illustrations     "Gross, Dave",
+                    "Sergesketter, Chad",
+                    "Becker, Barbara",
+                    "Ken Lopez";
+  management        "Karen Boomgarden" special thanks,
+                    "Wise, David" special thanks,
+                    "Jim Ward" special thanks,
+                    "Robert Galica" special thanks;
+  date              1996;
+  pages             32;
+  system            AD&D revised;
+  audience          All;
+  product type      Comics;
+  style             Booklet;
+  price             $ 0.00;
+  contents          Booklet;
+  requirements      ;
+  worlds            Birthright;
+  description       "A stand-alone comic book set in the Birthright setting.".
+
+
+#.....

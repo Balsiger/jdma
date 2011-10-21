@@ -17,6 +17,7 @@ base product TSR 1015 =
   title             "World of Greyhawk Campaign Setting";
   leader            "";
   date              1983;
+  system            AD&D 1st;
   price             $15.00;
   worlds            Greyhawk;
   references        net price list;
@@ -106,7 +107,9 @@ base product TSR 2003A =
   title             "Greyhawk";
   leader            "";
   date              1975;
+  system            D&D 1st;
   price             $ 5.00;
+  worlds            Greyhawk;
   references        net price list;
   description
   "".
@@ -119,7 +122,9 @@ base product TSR 2003B =
 
   title             "Greyhawk (black and white)";
   leader            "";
+  system            D&D 1st;
   date              1975;
+  worlds            Greyhawk;
   price             $15.00;
   references        net price list;
   description
@@ -136,6 +141,7 @@ base product TSR 2023 =
   date              1988;
   ISBN              0-88038-649-5;
   price             $15.00;
+  system            AD&D 1st;
   worlds            Greyhawk;
   references        net price list,
                     catalog93;
@@ -179,6 +185,7 @@ base product TSR 9025 =
   leader            "";
   date              1980;
   price             $12.00;
+  system            AD&D 1st;
   worlds            Greyhawk;
   references        net price list;
   description
@@ -193,6 +200,7 @@ base product TSR 9065 =
   title             "Forgotten Temple of Tharzidun";
   leader            "The";
   date              1982;
+  system            AD&D 1st;
   price             $ 6.00;
   worlds            Greyhawk;
   references        net price list;
@@ -210,6 +218,7 @@ base product TSR 9072 =
   leader            "";
   date              1983;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Greyhawk;
   references        net price list;
   description
@@ -225,6 +234,7 @@ base product TSR 9073 =
   title             "Land Beyond the Magic Mirror";
   leader            "The";
   date              1983;
+  system            AD&D 1st;
   price             $ 6.00;
   worlds            Greyhawk;
   references        net price list;
@@ -243,6 +253,7 @@ base product TSR 9112 =
   leader            "";
   date              1984;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Greyhawk;
   references        net price list;
   description
@@ -282,6 +293,7 @@ base product TSR 9153 =
   title             "Isle of the Ape";
   leader            "";
   date              1985;
+  system            AD&D 1st;
   price             $ 8.00;
   worlds            Greyhawk;
   references        net price list;
@@ -300,6 +312,7 @@ base product TSR 9222 =
   leader            "";
   date              1988;
   price             $ 9.95;
+  system            AD&D 1st;
   worlds            Greyhawk;
   references        net price list;
   description
@@ -405,6 +418,7 @@ base product TSR 9270 =
   title             "Vale of the Mage";
   leader            "";
   date              1990;
+  system            AD&D 2nd;
   price             $ 8.95;
   worlds            Greyhawk;
   references        net price list;
@@ -506,6 +520,7 @@ base product TSR 9309 =
   title             "Vecna Lives";
   leader            "";
   date              1990;
+  system            AD&D 2nd;
   price             $ 9.95;
   worlds            Greyhawk;
   references        net price list;
@@ -522,6 +537,7 @@ base product TSR 9317 =
   title             "Five Shall be One";
   leader            "";
   date              April 1991;
+  system            AD&D 2nd;
   price             $ 9.95;
   worlds            Greyhawk;
   references        net price list,
@@ -540,6 +556,7 @@ base product TSR 9337 =
   leader            "";
   date              October 1991;
   price             $ 9.95;
+  system            AD&D 2nd;
   worlds            Greyhawk;
   references        net price list,
                     catalog91W;
@@ -669,22 +686,6 @@ base product TSR 9399 =
 
 #.....
 
-#----- TSR 9400
-
-base product TSR 9400 =
-
-  title             "Krynn Trail Map";
-  leader            "";
-  date              1989;
-  price             $ 3.95;
-  worlds            Dragonlance;
-  references        net price list;
-  description
-  "";
-  synonyms          "TM3".
-
-
-#.....
 #----- TSR 9405
 
 base product TSR 9405 =

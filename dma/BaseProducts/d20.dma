@@ -1188,58 +1188,109 @@ Now you can make it yours!".
 
 
 #.....
-#----- PZOMAL 1001
+#----- WTC 88644
 
-base product PZOMAL 1001 =
+base product WTC 88644 =
 
-  title             "Collected Book of Experimental Might";
-  leader            "The";
-  subtitle          "For the First Time in Print!";
-  author            "Cook, Monte",
-                    "Reynolds, Sean K" developer;
-  editor            "Cook, Sue Weinlein" editing and production,
-                    "Jacobs, James" editor-in-chief;
-  illustrations     "Wood, Sam",
-                    "Yanner, Kieran",
-                    "White, Peter" interior page design,
-                    "Pocza, Drew" graphic design assistant,
-                    "Davis, James" managing art director;
-  typography        "";
-  date              January 2009;
-  ISBN              1-60125-080-0;
-  ISBN13            978-1-60125-080-3;
-  pages             144;
-  system            D&D 3.5;
-  audience          DM;
-  product type      Rules Supplement;
+  title             "Call of Cthulhu Roleplaying Game";
+  leader            "";
+  author            "Monte Cook",
+                    "John Tynes",
+                    "Lynn Willis" original work,
+                    "Sandy Peterson" original work,
+                    "Cordell, Bruce R." additional design,
+                    "John D. Rateliff" additional design,
+                    "John Crowe" additional design,
+                    "Kenneth Hite" additional design,
+                    "Detwiler, Dennis" additional design,
+                    "Glancy, Adam Scott" additional design,
+                    "Michael Tice" additional design,
+                    "Rowe, Eric" additional design,
+                    "Shannon Appel" additional design,
+                    "Ballon, Bruce" additional design;
+  editor            "Campbell, Brian 'Chainsaw'",
+                    "John D. Rateliff",
+                    "Donovan, Dale A." coordination;
+  cover             "Koi, Ann",
+                    "Jason Soles";
+  cartography       "Todd Gamble";
+  illustrations     "Toren 'Macbin' Atkinson",
+                    "Paul Carrick",
+                    "Heather Hudson",
+                    "Koi, Ann",
+                    "Kevin 'the dog ate my homework' McCann",
+                    "Martin, David",
+                    "Raven Mimura",
+                    "Stephan Missal",
+                    "Pudd'n Head",
+                    "Rex, Adam",
+                    "Wayne Reynolds",
+                    "RIchard Sarinha",
+                    "Shy, Christopher";
+  typography        "Lokotz, Angelika";
+  management        "Thomas M. Reid" creative direction,
+                    "Perkins, Christopher" creative direction,
+                    "Slavicsek, Bill" R&D direction,
+                    "Mary Kirchhoff" publishing,
+                    "Valterra, Anthony" business management,
+                    "Stevens, Douglas" project management,
+                    "Justin Ziran" project management,
+                    "Martin Durham" project management,
+                    "Murin, Dawn" art direction,
+                    "Robert Campbell" graphic design,
+                    "Murin, Dawn" graphic design,
+                    "DeLong, Chas" production management;
+  date              March 2002;
+  ISBN              0-7869-2639-2;
+  pages             320;
+  system            d20;
+  audience          All;
+  product type      Campaign Setting;
   style             Hardcover;
-  producer          Malhavoc Press;
-  number            Collected;
-  series            Book of Exerpimental Might;
-  price             $29.99;
-  contents          Book "";
-  layout            Color Cover;
+  price             $ 39.95;
+  contents          Book;
+  requirements      ;
+  worlds            Call of Cthulhu;
   description
-  "What started out as just an experiment on Monte's home campaigns has become the hottest set of options designed to enhance the excitement of your favorite roleplaying game --- so popular it spawned a sequel! Now, for the first time, you can get these two books in one print volume as \Product{The Collected Book of Experimental Might}.
+  "\large{The old ones were, the old ones are, and the old ones shall be.}
 
-This collection of Monte's own house rules includes...
+  Ancient knowledge and dark secrets await those brave of foolish enough to
+  delve into the depths of the unknown. Discover terrifying, malevolent
+  creatures that defy the darkest recesses of imagination. Confront horrifying
+  truths long hidden away from the minds of the sane. The risks of
+  investigating such arcana reach way beyond death---the rewards exceed
+  explanation.
 
-\list
-{A spell progression system redefinging spell levels from 1 to 20}
-{New rules for fighting domains: areas of specialization like Two-Weapon Fighting, Mounted Combat, and Fighting Dirty, as well as techniques based on agility, speed, strength, and intellect --- the 15 domains provide new abilities to fighter types willing to devote themselves to a focused path}
-{A retooling of the feat system, with three new concepts --- double feats, oblation feats, and ueberfeats --- and dozens of new choices}
-{special benefits for choosing a feat as a fighter bonus feat, reinstating the fighter class as the king of feats}
-{New rules for healing and curative magic}
-{Powerful magical disciplines that allow wizards, clerics, druids, paladins, and rangers to have magic always active}
-{The runeblade, a base class that combines magic and martial skill without the need for spells}
-{Additional skills, feats, and combat rules}
-{Dozens of spells and magic items}
+  Inspired by the works of H.P. Lovecraft, the \Product{Call of Cthulhu
+  Roleplaying Game} is a self-contained d20 System game that provides
+  everything you need to explore the realm of horror.".
+#.....
+#----- WTC 88246
 
-Inherent within these two books is the idea that characters should be able to keep on adventuring longer than the rules currently allow and that every class can use some extra options for greater playability.
+base product WTC 88246 =
 
-\bold{Start your own experiment now!}
+  title             "d20 Dice";
+  leader            "";
+  subtitle          "";
+  date              May 2001;
+  ISBN              0-7869-2035-1;
+  pages             48;
+  system            d20;
+  audience          All;
+  product type      Accessory;
+  style             Box;
+  price             $ 6.95;
+  requirements      ;
+  description
+  "All the dice needed to play the Dungeons & Dragons roleplaying game in one
+  box.
 
-This book combines \Product{The Book of Experimental Might} and \Product{The Book of Experimental Might II: Bloody, Bold, and Resolute}.
-".
-
+  The \Product{d20 Dice} product contains a complete set of polyhedron dice
+  including a 4-sided die, a 6-sided die, an 8-sided die, a 10-sided die, a
+  12-sided die, and a 20-sided die. These dice are used when playing the
+  Dungeons & Dragons roleplaying game, the Star Wars Roleplaying Game, or any
+  d20 roleplaying game. Also included are Fast-Play Rules for the Dungeons &
+  Dragons roleplaying game and the Star Wars Roleplaying Game. These Fast-Play
+  Rules will help jumpstart any new gamer wanting to learn about roleplaying
+  games.".
 #.....

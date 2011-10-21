@@ -45,6 +45,7 @@ base product TSR 9150 =
   leader            "";
   date              1985;
   price             $ 6.00;
+  system            AD&D 1st;
   worlds            Lankhmar;
   references        net price list;
   description
@@ -86,6 +87,7 @@ base product TSR 9170 =
   date              1986;
   price             $ 8.00;
   worlds            Lankhmar;
+  system            AD&D 1st;
   references        net price list;
   description
   "";
@@ -113,29 +115,6 @@ base product TSR 9276 =
   description
   "characters are caught in a frenzied chase";
   synonyms          "LNA1".
-
-
-#.....
-#----- TSR 9278
-
-base product TSR 9278 =
-
-  title             "Otherlands";
-  leader            "";
-  date              1990;
-  ISBN              0-88038-829-3;
-  system            AD&D 2nd;
-  audience          DM;
-  product type      Accessory;
-  price             $ 9.95;
-  worlds            Dragonlance;
-  references        catalogue93,
-                    catalogue94,
-                    catalogue96,
-                    catalog93;
-  description
-  "tales and travels from beyond the shores";
-  synonyms          "DLR1".
 
 
 #.....
@@ -364,4 +343,33 @@ base product TSR 9481 =
   "Elad Edals is back, intermedia to high level".
 
 
+#.....
+#----- TSR 2137
+
+base product TSR 2137 =
+
+  title             "Lankhmar: City of Adventure";
+  leader            "The";
+  author            "Pryor, Anthony";
+  date              November 1993;
+  ISBN              1-56076-658-1;
+  pages             160;
+  system            AD&D 2nd;
+  audience          DM;
+  product type      Adventure;
+  style             Box;
+  producer          TSR;
+  price             $18.00;
+  contents          Book,
+                    Poster "map";
+  requirements      ;
+  worlds            Lankhmar;
+  references        catalogue93,
+                    catalogue94,
+                    catalogue96,
+                    catalog93S,
+                    catalog93,
+                    catalog95,
+                    catalog96;
+  description       "Updates the Lankhmar, City of Adventure sourcebook.".
 #.....

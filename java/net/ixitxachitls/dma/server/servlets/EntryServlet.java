@@ -602,7 +602,7 @@ public class EntryServlet extends PageServlet
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
       EasyMock.replay(m_request, m_response);
 
-      return new EntryServlet(new DMAData("path"))
+      return new EntryServlet(new DMAData.Test.Data())
         {
           private static final long serialVersionUID = 1L;
 
@@ -681,7 +681,7 @@ public class EntryServlet extends PageServlet
       EntryServlet servlet =
         createServlet("/baseentry/guru",
                       new BaseEntry("guru", new net.ixitxachitls.dma.data
-                                    .DMAData("path")), null, null,
+                                    .DMADatafiles("path")), null, null,
                       false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
@@ -897,10 +897,10 @@ public class EntryServlet extends PageServlet
 
       assertEquals("entry", "test",
                    servlet.getEntry(m_request, servlet.m_data,
-                                    "/just/some/entry/test").getName());
+                                    "/just/some/base entry/test").getName());
       assertEquals("entry", "test",
                    servlet.getEntry(m_request, servlet.m_data,
-                                    "/entry/test").getName());
+                                    "/base entry/test").getName());
       assertNull("entry", servlet.getEntry(m_request, servlet.m_data, "test"));
       assertNull("entry", servlet.getEntry(m_request, servlet.m_data, ""));
       assertNull("entry", servlet.getEntry(m_request, servlet.m_data, "test/"));
@@ -908,11 +908,11 @@ public class EntryServlet extends PageServlet
                                            "test/guru"));
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.getType("/entry/test"));
+                   servlet.getType("/base entry/test"));
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.getType("/just/some/entry/test"));
+                   servlet.getType("/just/some/base entry/test"));
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.getType("/entry/test"));
+                   servlet.getType("/base entry/test"));
       assertNull("type", servlet.getType(""));
 
       assertEquals("path", "id",

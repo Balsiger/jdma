@@ -239,29 +239,6 @@ base product TSR 2809 =
 
 
 #.....
-#----- TSR 2810
-
-base product TSR 2810 =
-
-  title             "Starrise at Corrival";
-  leader            "";
-  author            "Duane, Diane";
-  date              October 1998;
-  ISBN              0-7869-1179-4;
-  pages             352;
-  system            Alternity;
-  audience          All;
-  product type      Novel;
-  style             Hardcover;
-  price             $ 5.99;
-  requirements      ;
-  worlds            Generic;
-  references        net,
-                    catalog98;
-  description       "a scapegoat for a political mistake is disgraced and should be used as mo".
-
-
-#.....
 #----- TSR 2811
 
 base product TSR 2811 =
@@ -305,29 +282,6 @@ base product TSR 2813 =
   references        net,
                     catalog98;
   description       "adventure around the discovery of a relic from the last galactic war".
-
-
-#.....
-#----- TSR 2814
-
-base product TSR 2814 =
-
-  title             "On the Verge";
-  leader            "";
-  author            "Roland Green";
-  date              December 1998;
-  ISBN              0-7869-1191-3;
-  pages             320;
-  system            Alternity;
-  audience          All;
-  product type      Novel;
-  style             Hardcover;
-  price             $ 5.99;
-  requirements      ;
-  worlds            Star*Drive;
-  references        net,
-                    catalog93;
-  description       "the Concord Marines in desperate action on the frontier".
 
 
 #.....
@@ -854,4 +808,22 @@ base product DMA 000044 =
                     adventure \Product{Cauldron Station}.".
 
 
+#.....
+#----- DMA 000054
+
+base product DMA 000054 =
+
+  title             "Aegis";
+  leader            "";
+  author            "William W. Connors",
+                    "Steven Schend";
+  date              January 2000;
+  system            Alternity;
+  audience          DM;
+  product type      Accessory;
+  requirements      ;
+  worlds            Star*Drive;
+  references        net;
+  description
+  "".
 #.....

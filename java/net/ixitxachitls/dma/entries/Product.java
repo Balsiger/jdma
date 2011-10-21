@@ -277,7 +277,7 @@ public class Product extends Entry<BaseProduct>
   //----- owner ------------------------------------------------------------
 
   /** The owner of the copy. */
-  protected @Nullable BaseCharacter m_owner;;
+  protected @Nullable BaseCharacter m_owner;
 
   //........................................................................
   //----- status -----------------------------------------------------------
@@ -467,36 +467,23 @@ public class Product extends Entry<BaseProduct>
 //   }
 
 //   //........................................................................
-//   //------------------------------ getOwner --------------------------------
+  //------------------------------ getOwner --------------------------------
 
-//   /**
-//     *
-//     * Get the owner of the product.
-//     *
-//     * @return      the owner value
-//     *
-//     * @undefined   never (a value is always returned)
-//     *
-//     * @algorithm   simple accessor
-//     *
-//     * @derivation  possible for storage changes
-//     *
-//     * @example     Selection owner = product.getOwner();
-//     *
-//     * @bugs
-//     * @to_do
-//     *
-//     * @keywords    get . owner;
-//     *
-//     * @see         #setOwner
-//     *
-//     */
-//   public String getOwner()
-//   {
-//     return m_owner.toString();
-//   }
+  /**
+   * Get the name of the owner of the product.
+   *
+   * @return      the owner value
+   *
+   */
+  public @Nullable String getOwner()
+  {
+    if(m_owner == null)
+      return null;
 
-//   //........................................................................
+    return m_owner.getName();
+  }
+
+  //........................................................................
 //   //----------------------------- getStatus --------------------------------
 
 //   /**

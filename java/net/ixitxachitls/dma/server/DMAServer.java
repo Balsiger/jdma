@@ -32,6 +32,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -951,6 +952,10 @@ public class DMAServer extends WebServer
     Config.set("web.template.css.hilightcolor_Spell", "#c0c0fff");
 
     DMAServer server = new DMAServer(name, port, base, campaigns);
+    // temporary check for file names
+    if(!((DMADatafiles)server.m_baseData).checkNames(""))
+      return;
+
     server.start();
   }
 

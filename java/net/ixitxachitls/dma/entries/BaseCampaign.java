@@ -38,6 +38,7 @@ import javax.annotation.Nonnull;
 
 import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADatafiles;
 //import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
 // import net.ixitxachitls.dma.data.DMAFile;
 // import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
@@ -147,7 +148,7 @@ public class BaseCampaign extends BaseEntry
 
   /** All the campaigns for this world. */
   protected @Nonnull CampaignData m_campaignData =
-    new CampaignData(this, Files.concatenate(m_data.getPath(),
+    new CampaignData(this, Files.concatenate(((DMADatafiles)m_data).getPath(),
                                              Campaign.TYPE.getMultipleDir()),
                      m_data);
 
@@ -882,7 +883,7 @@ public class BaseCampaign extends BaseEntry
         new net.ixitxachitls.input.ParseReader
         (new java.io.StringReader(s_text), "test");
 
-      return (BaseCampaign)AbstractEntry.read(reader, new DMAData("path"));
+      return (BaseCampaign)AbstractEntry.read(reader, new DMAData.Test.Data());
     }
 
     //......................................................................

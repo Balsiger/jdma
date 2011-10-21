@@ -507,11 +507,11 @@ public abstract class AbstractType<T extends AbstractEntry>
       assertEquals("multiple dir", "BaseEntrys", type.getMultipleDir());
       assertEquals("string", "base entry", type.toString());
 
-      BaseEntry entry = type.create(new DMAData("path"));
+      BaseEntry entry = type.create(new DMAData.Test.Data());
       assertEquals("create", "base entry $undefined$ =\n\n.\n",
                    entry.toString());
 
-      entry = type.create("guru", new DMAData("path"));
+      entry = type.create("guru", new DMAData.Test.Data());
       assertEquals("create",
                    "#----- guru\n"
                    + "\n"

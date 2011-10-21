@@ -617,7 +617,8 @@ public class DMAFile //implements Storage<AbstractEntry>
     @org.junit.Test
     public void init()
     {
-      DMAFile file = new DMAFile("test.dma", "build/test", new DMAData("path"));
+      DMAFile file =
+        new DMAFile("test.dma", "build/test", new DMAData.Test.Data());
 
       assertEquals("name", "test.dma", file.getStorageName());
       assertEquals("lines", 0, file.getLines());
@@ -650,9 +651,9 @@ public class DMAFile //implements Storage<AbstractEntry>
       java.io.StringWriter writer = new java.io.StringWriter();
 
       // start the test
-      DMAFile file = new DMAFile("read.dma", "path", new DMAData("path"));
+      DMAFile file = new DMAFile("read.dma", "path", new DMAData.Test.Data());
 
-      assertTrue("read", file.read(new DMAData("path"), reader));
+      assertTrue("read", file.read(new DMAData.Test.Data(), reader));
       synchronized(file)
       {
         assertEquals("comment", "# A test file\n\n", file.m_comment.toString());
@@ -700,7 +701,8 @@ public class DMAFile //implements Storage<AbstractEntry>
       // add an entry
       writer = new java.io.StringWriter();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("guru", new DMAData("path"));
+        new net.ixitxachitls.dma.entries.BaseEntry("guru",
+                                                   new DMAData.Test.Data());
       file.add(entry);
 
       assertTrue("changed", file.isChanged());

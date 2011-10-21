@@ -62,7 +62,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-public class DMADatastore extends DMAData
+public class DMADatastore implements DMAData
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -184,6 +184,18 @@ public class DMADatastore extends DMAData
   }
 
   //........................................................................
+  //------------------------------ isChanged -------------------------------
+
+  /**
+   * Check if any of the data has been changed and needs saving.
+   *
+   * @return      true if data is changed from store, false if not
+   *
+   */
+  public boolean isChanged()
+  {
+    return false;
+  }
 
   //........................................................................
 
@@ -191,6 +203,23 @@ public class DMADatastore extends DMAData
 
   //----------------------------------------------------------- manipulators
 
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add an entry to the store.
+   *
+   * @param       inEntry the entry to add
+   *
+   * @return      true if added, false if there was an error
+   *
+   */
+  public boolean update(@Nonnull AbstractEntry inEntry)
+  {
+    m_store.put(convert(inEntry));
+    return true;
+  }
+
+  //........................................................................
   //--------------------------------- save ---------------------------------
 
   /**

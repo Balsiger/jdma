@@ -234,7 +234,7 @@ public class EntryListServlet extends PageServlet
       EasyMock.expect(m_request.isBodyOnly()).andReturn(true).anyTimes();
       EasyMock.expect(m_request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(m_request.getRequestURI())
-        .andReturn("/request/entry")
+        .andReturn("/request/base entry")
         .anyTimes();
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.getUser()).andStubReturn(null);
@@ -243,7 +243,7 @@ public class EntryListServlet extends PageServlet
       EasyMock.expect(m_request.getPageSize()).andStubReturn(50);
       EasyMock.replay(m_request, m_response);
 
-      return new EntryListServlet(new DMAData("path"))
+      return new EntryListServlet(new DMAData.Test.Data())
         {
           private static final long serialVersionUID = 1L;
 
@@ -272,14 +272,11 @@ public class EntryListServlet extends PageServlet
       EntryListServlet servlet =
         createServlet(com.google.common.collect.ImmutableList.<AbstractEntry>of
                       (new net.ixitxachitls.dma.entries.BaseEntry
-                       ("guru1", new net.ixitxachitls.dma.data
-                                     .DMAData("path")),
+                       ("guru1", new DMAData.Test.Data()),
                        new net.ixitxachitls.dma.entries.BaseEntry
-                       ("guru2", new net.ixitxachitls.dma.data
-                                     .DMAData("path")),
+                       ("guru2", new DMAData.Test.Data()),
                        new net.ixitxachitls.dma.entries.BaseEntry
-                       ("guru3", new net.ixitxachitls.dma.data
-                                     .DMAData("path"))),
+                       ("guru3", new DMAData.Test.Data())),
                       "/baseentry", 0, 42);
 
       assertNull("handle", servlet.handle(m_request, m_response));

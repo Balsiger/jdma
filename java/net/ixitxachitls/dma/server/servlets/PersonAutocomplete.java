@@ -187,7 +187,8 @@ public class PersonAutocomplete extends Autocomplete
         new java.util.HashMap<String, BaseProduct>();
 
       BaseProduct product =
-        new BaseProduct("Test", new net.ixitxachitls.dma.data.DMAData("path"));
+        new BaseProduct("Test",
+                        new net.ixitxachitls.dma.data.DMAData.Test.Data());
       net.ixitxachitls.dma.entries.Variable author =
         product.getVariable("author");
       author.setFromString(product,
@@ -235,7 +236,8 @@ public class PersonAutocomplete extends Autocomplete
         new java.util.HashMap<String, BaseProduct>();
 
       BaseProduct product =
-        new BaseProduct("Test", new net.ixitxachitls.dma.data.DMAData("path"));
+        new BaseProduct("Test",
+                        new net.ixitxachitls.dma.data.DMAData.Test.Data());
       net.ixitxachitls.dma.entries.Variable author =
         product.getVariable("author");
       author.setFromString(product,

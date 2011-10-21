@@ -32,8 +32,8 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-//import net.ixitxachitls.dma.Global;
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.UserData;
 //import net.ixitxachitls.dma.entries.Product;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
@@ -244,7 +244,7 @@ public class BaseCharacter extends BaseEntry
 
   /** All the products for this user. */
   protected @Nonnull UserData m_productData =
-    new UserData(this, Files.concatenate(m_data.getPath(),
+    new UserData(this, Files.concatenate(((DMADatafiles)m_data).getPath(),
                                          Product.TYPE.getMultipleDir()),
                  m_data);
 
@@ -662,8 +662,7 @@ public class BaseCharacter extends BaseEntry
   public void addProduct(@Nonnull Product inProduct)
   {
     inProduct.setOwner(this);
-    m_productData.addEntry(inProduct,
-                           m_productData.files(Product.TYPE).iterator().next());
+    m_productData.update(inProduct);
 
     // since whoever adds this might not be able to save our file, we do it here
     m_productData.save();
@@ -711,7 +710,8 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void init()
     {
-      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
+      BaseCharacter character =
+        new BaseCharacter("Me", new DMAData.Test.Data());
 
       assertEquals("id", "Me", character.getID());
       assertFalse("real name", character.m_realName.isDefined());
@@ -722,7 +722,7 @@ public class BaseCharacter extends BaseEntry
       assertFalse("token", character.m_token.isDefined());
       assertFalse("group", character.m_group.isDefined());
 
-      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
+      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................
@@ -732,7 +732,8 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void token()
     {
-      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
+      BaseCharacter character =
+        new BaseCharacter("Me", new DMAData.Test.Data());
 
       String token = character.createToken();
       String token2 = character.createToken();
@@ -748,7 +749,7 @@ public class BaseCharacter extends BaseEntry
       assertFalse("check", character.checkToken(token));
       assertFalse("check", character.checkToken(token2));
 
-      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
+      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................
@@ -758,7 +759,8 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void login()
     {
-      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
+      BaseCharacter character =
+        new BaseCharacter("Me", new DMAData.Test.Data());
       character.m_name = character.m_name.as("user");
       character.m_password = character.m_password.as("password");
 
@@ -779,7 +781,7 @@ public class BaseCharacter extends BaseEntry
       assertTrue("last action", character.m_lastAction.isDefined());
       assertTrue("token", character.m_token.isDefined());
 
-      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
+      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
       m_logger.addExpected("WARNING: login with unknown user 'name'");
       m_logger.addExpected("WARNING: login for 'user' with wrong password");
     }
@@ -808,7 +810,7 @@ public class BaseCharacter extends BaseEntry
                                                "test");
 
       BaseCharacter character = (BaseCharacter)
-        BaseCharacter.read(reader, new DMAData("path"));
+        BaseCharacter.read(reader, new DMAData.Test.Data());
 
       assertNotNull("base character should have been read", character);
       assertEquals("base character name does not match", "Me",
@@ -830,7 +832,7 @@ public class BaseCharacter extends BaseEntry
                    + "#.....\n",
                    character.toString());
 
-      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
+      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................
@@ -840,7 +842,8 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void group()
     {
-      BaseCharacter character = new BaseCharacter("Me", new DMAData("path"));
+      BaseCharacter character =
+        new BaseCharacter("Me", new DMAData.Test.Data());
 
       assertTrue("guest", character.hasAccess(Group.GUEST));
       assertFalse("user", character.hasAccess(Group.USER));
@@ -864,7 +867,7 @@ public class BaseCharacter extends BaseEntry
       assertTrue("dm", character.hasAccess(Group.DM));
       assertTrue("admin", character.hasAccess(Group.ADMIN));
 
-      m_logger.addExpected("WARNING: cannot find file 'path/Products/Me.dma'");
+      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................

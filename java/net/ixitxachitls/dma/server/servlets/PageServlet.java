@@ -747,9 +747,10 @@ public class PageServlet extends DMAServlet
 
       List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
       entries.add(new net.ixitxachitls.dma.entries.BaseCharacter
-                  ("first", new net.ixitxachitls.dma.data.DMAData("path")));
+                  ("first", new net.ixitxachitls.dma.data.DMAData.Test.Data()));
       entries.add(new net.ixitxachitls.dma.entries.BaseCharacter
-                  ("second", new net.ixitxachitls.dma.data.DMAData("path")));
+                  ("second", new net.ixitxachitls.dma.data.DMAData.Test
+                   .Data()));
 
       PageServlet servlet = new PageServlet();
       servlet.format(writer, entries, true,
@@ -821,9 +822,9 @@ public class PageServlet extends DMAServlet
                    + "</HTML>\n", content.toString());
 
       m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/first.dma'");
+                           + "'/Products/first.dma'");
       m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/second.dma'");
+                           + "'/Products/second.dma'");
     }
 
     //......................................................................

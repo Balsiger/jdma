@@ -966,6 +966,31 @@ base product TSR 8336P =
 
 
 #.....
+#----- TSR 8899
+
+base product TSR 8899 =
+
+  title             "1999 Dragonlance Calendar";
+  leader            "";
+  date              May 1998;
+  ISBN              0-7869-1193-X;
+  pages             24;
+  system            None;
+  audience          All;
+  product type      Calendar;
+  style             Booklet;
+  price             $12.99;
+  worlds            Dragonlance;
+  references        net,
+                    catalog98,
+                    Dragon 245,
+                    Dragon 246,
+                    Dragon 247;
+  description
+  "annual art calendar".
+
+
+#.....
 #----- TSR 8337
 
 base product TSR 8337 =
@@ -1181,6 +1206,40 @@ base product TSR 8342 =
   \Class{warrior}-woman, whose credo of 'the sword is truth' becomes her
   triumph and downfall.";
   synonyms          "WTC 86073".
+
+
+#.....
+#----- WTC 88602
+
+base product WTC 88602 =
+
+  title             "Dragons of a Vanished Moon";
+  leader            "";
+  subtitle          "";
+  author            "Weis, Margaret",
+                    "Hickman, Tracy";
+  date              June 2002;
+  ISBN              0-7896-2740-X;
+  pages             560;
+  system            None;
+  audience          All;
+  product type      Novel;
+  style             Hardcover;
+  number            Volume III;
+  series            War of Souls;
+  price             $ 27.95;
+  requirements      ;
+  worlds            Dragonlance;
+  description       "The flames of war devour \Place{Ansalon}. The army of dead souls marches
+                    toward conquest, led by the mystical warrior \NPC{Mina}, who serves the
+                    powerful \God{One God}.
+                    A small band of heroes, driven to desperate measures, leads the fight against
+                    overwhelming odds.
+                    Two unlikely protagonists emerge. One is a \Monster{dragon} overlord who will
+                    not easily relinquish her rule. The other is an irrepressible
+                    \Monster{kender} who has been on a strange and remarkable journey that will
+                    end in startling and unforeseen fashion.
+                    The stirring climax of the \Product{War of Souls}.".
 
 
 #.....
@@ -2405,7 +2464,7 @@ base product TSR 8372 =
   pages             256;
   system            None;
   audience          All;
-  product type      Accessory;
+  product type      Novel;
   price             $18.95;
   worlds            Dragonlance;
   references        catalog95,
@@ -3279,6 +3338,7 @@ base product TSR 8430 =
   leader            "";
   date              1988;
   worlds            Dragonlance;
+  product type      Novel;
   references        complete product listing;
   description
   "".
@@ -3293,6 +3353,7 @@ base product TSR 8432 =
   leader            "";
   date              1988;
   worlds            Dragonlance;
+  product type      Novel;
   references        complete product listing;
   description
   "".
@@ -3307,6 +3368,7 @@ base product TSR 8434 =
   leader            "";
   date              1990;
   worlds            Dragonlance;
+  product type      Novel;
   references        complete product listing;
   description
   "".
@@ -3321,6 +3383,7 @@ base product TSR 8445 =
   leader            "";
   date              1987;
   worlds            Dragonlance;
+  product type      Novel;
   references        complete product listing;
   description
   "".
@@ -4419,7 +4482,7 @@ base product TSR 21516 =
   ISBN              0-7869-1516-1;
   system            None;
   audience          All;
-  product type      Sourcebook;
+  product type      Novel;
   style             Paperback;
   price             $19.99;
   worlds            Dragonlance;
@@ -7279,7 +7342,7 @@ base product WTC 86571 =
   pages             256;
   system            None;
   audience          All;
-  product type      Sourcebook;
+  product type      Novel;
   style             Hardcover;
   price             $18.95;
   worlds            Dragonlance;
@@ -9213,19 +9276,15 @@ base product WTC 21882 =
   title             "Bertrem's Guide to the War of Souls";
   leader            "";
   subtitle          "Everyday life in \Place{Ansalon} during the \Event{War of Souls}";
-  author            "";
-  editor            "";
   cover             "Easley, Jeff";
   cartography       "Kauth, Dennis";
-  illustrations     "";
-  typography        "";
-  management        "";
   date              September 2001;
   ISBN              0-7869-1882-9;
   pages             306;
   system            None;
   audience          DM;
-  product type      Accessory;
+  product type      Novel;
+  worlds            Dragonlance;
   style             Booklet;
   producer          WTC;
   number            Volume One;
@@ -9241,4 +9300,67 @@ As the \Event{War of Souls} rages, vast armies and powerful wizards vie for cont
 \NPC{Bertrem} of the \Group{Order of Aesthetics}, keeper of the \Place{Great Library of Palanthas}, gathers accounts of everyday life in \Place{Ansalon} as it is forever changed by the \Event{War of Souls}.";
   short description "Accounts of the everyday life in \Place{Ansalon} during the \Event{War of Souls}.".
 
+#.....
+#----- TSR 11446
+
+base product TSR 11446 =
+
+  title             "Odyssey of Gilthanas";
+  leader            "The";
+  author            "Niles, Douglas",
+                    "Miller, Steve",
+                    "Stan";
+  date              July 1999;
+  ISBN              0-7869-1446-7;
+  system            None;
+  audience          All;
+  product type      Novel;
+  price             $ 6.99;
+  worlds            Dragonlance;
+  references        net;
+  description
+  "a novel and sourcebook about Dragonlance".
+
+
+#.....
+#----- WTC 17646
+
+base product WTC 17646 =
+
+  title             "Magic of Krynn";
+  leader            "The";
+  subtitle          "";
+  author            "Williams, Michael",
+                    "Siegel, Barbara",
+                    "Siegel, Scott",
+                    "Moore, Roger E.",
+                    "Smith, Warren B.",
+                    "O'Donohoe, Nick",
+                    "Knaak, Richard A.",
+                    "Weis, Margaret",
+                    "Berberick, Nancy Varian",
+                    "Kirchoff, Mary",
+                    "Hickman, Tracy";
+  editor            "Weis, Margaret",
+                    "Hickman, Tracy";
+  date              February 2005;
+  ISBN              0-7869-3593-6;
+  pages             368;
+  system            None;
+  audience          All;
+  worlds            Generic;
+  product type      Novel;
+  style             Paperback;
+  number            Volume One;
+  series            Tales;
+  price             $ 6.99;
+  requirements      ;
+  worlds            Dragonlance;
+  description       "The first book in a series of classic \Place{Dragonlance} tales, now with a
+                    new cover.
+                    This re-release of the second volume of \Place{Dragonlance} short stories
+                    ever published features a dramatic new cover treatment. It includes stories
+                    by some of the best-loved authors writing in the \Place{Dragonlance} world,
+                    including a novella by New York Times best-selling authors and
+                    \Place{Dragonlance} setting co-creators Margaret Weis and Tracy Hickman.".
 #.....

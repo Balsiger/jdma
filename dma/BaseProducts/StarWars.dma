@@ -402,7 +402,7 @@ base product WTC 88466 =
   style             Box;
   producer          WTC;
   price             $ 19.95;
-  worlds            Generic;
+  worlds            Star Wars;
   description
   "Miniatures are a hobby within the hobby of roleplaying games. Crafted in
   intricate detail from raw metal, miniatures are a convenient way for gamers
@@ -890,7 +890,7 @@ base product WTC 96572 =
   style             Cards;
   producer          WTC;
   price             $ 3.29;
-  worlds            Generic;
+  worlds            Star Wars;
   description
   "The \Product{Jedi Guardians} set pits the most powerful Jedi in the
   \Place{Republic} against some of the deadliest servants of the dark side.

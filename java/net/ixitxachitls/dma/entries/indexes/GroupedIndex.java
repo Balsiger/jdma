@@ -448,13 +448,11 @@ public abstract class GroupedIndex extends Index
       java.io.StringWriter content = new java.io.StringWriter();
       HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
 
-      index.write(writer,
-                  new DMAData.Test.Data(new net.ixitxachitls.dma.entries
-                                        .BaseCharacter("first",
-                                                       new DMAData("path")),
-                                        new net.ixitxachitls.dma.entries
-                                        .BaseCharacter("second",
-                                                       new DMAData("path"))),
+      index.write(writer, new DMAData.Test.Data
+                  (new net.ixitxachitls.dma.entries.BaseCharacter
+                   ("first", new DMAData.Test.Data()),
+                   new net.ixitxachitls.dma.entries.BaseCharacter
+                   ("second", new DMAData.Test.Data())),
                   "index-name", "", 50,
                   new Pair<Integer, Integer>(0, 10));
       writer.close();
@@ -489,9 +487,9 @@ public abstract class GroupedIndex extends Index
                    + "</HTML>\n", content.toString());
 
       m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/first.dma'");
+                           + "'/Products/first.dma'");
       m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/second.dma'");
+                           + "'/Products/second.dma'");
     }
 
     //......................................................................
@@ -533,12 +531,11 @@ public abstract class GroupedIndex extends Index
       HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
 
       index.write(writer,
-                  new DMAData.Test.Data(new net.ixitxachitls.dma.entries
-                                        .BaseCharacter("first",
-                                                       new DMAData("path")),
-                                        new net.ixitxachitls.dma.entries
-                                        .BaseCharacter("second",
-                                                       new DMAData("path"))),
+                  new DMAData.Test.Data
+                  (new net.ixitxachitls.dma.entries.BaseCharacter
+                   ("first", new DMAData.Test.Data()),
+                   new net.ixitxachitls.dma.entries.BaseCharacter
+                   ("second", new DMAData.Test.Data())),
                   "index-name", "first1", 50,
                   new Pair<Integer, Integer>(0, 10));
       writer.close();
@@ -573,9 +570,9 @@ public abstract class GroupedIndex extends Index
                    + "</HTML>\n", content.toString());
 
       m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/first.dma'");
+                           + "'/Products/first.dma'");
       m_logger.addExpected("WARNING: cannot find file "
-                           + "'path/Products/second.dma'");
+                           + "'/Products/second.dma'");
     }
 
     //......................................................................
