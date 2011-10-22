@@ -131,8 +131,18 @@ public class FileResource extends Resource
         new FileResource("css",
                          FileResource.class.getResource("/css"));
 
-      assertContentAnyOrder("resouces/css", resource.files(),
-                            ".svn", "gui.css", "jdma.css", "smoothness");
+      //on windows, the directory 'css' is copied to WEB-INF/classes
+      //without the '.svn' directory
+      if (System.getProperty("os.name").startsWith("Windows"))
+      {
+        assertContentAnyOrder("css", resource.files(),
+                              "gui.css", "jdma.css", "smoothness");
+      }
+      else
+      {
+        assertContentAnyOrder("css", resource.files(),
+                              ".svn", "gui.css", "jdma.css", "smoothness");
+      }
 
       // invalid
       resource = new FileResource("guru", null);
