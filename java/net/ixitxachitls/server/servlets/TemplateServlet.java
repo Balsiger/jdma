@@ -174,7 +174,7 @@ public class TemplateServlet extends FileServlet
         new BaseServlet.Test.MockServletOutputStream();
 
       EasyMock.expect(request.getPathInfo())
-        .andReturn("/resources/css/jdma.css");
+        .andReturn("/css/jdma.css");
       response.setHeader("Content-Type", "text/plain");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);

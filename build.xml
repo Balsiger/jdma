@@ -95,7 +95,6 @@
 
   <!-- classpath -->
   <path id="classpath">
-    <pathelement location="" />
     <pathelement location="${classes.dir}" />
     <pathelement location="${resources.dir}" />
     <!-- for testing -->

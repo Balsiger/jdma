@@ -128,8 +128,8 @@ public class FileResource extends Resource
     public void directory()
     {
       Resource resource =
-        new FileResource("resources/css",
-                         FileResource.class.getResource("/resources/css"));
+        new FileResource("css",
+                         FileResource.class.getResource("/css"));
 
       assertContentAnyOrder("resouces/css", resource.files(),
                             ".svn", "gui.css", "jdma.css", "smoothness");
@@ -152,11 +152,11 @@ public class FileResource extends Resource
     public void file() throws Exception
     {
       Resource resource =
-        new FileResource("/resources/css/jdma.css",
+        new FileResource("/css/jdma.css",
                          FileResource.class.getResource
-                         ("/resources/css/jdma.css"));
+                         ("/css/jdma.css"));
 
-      assertContentAnyOrder("resources/css/jdma.css", resource.files(),
+      assertContentAnyOrder("css/jdma.css", resource.files(),
                             "jdma.css");
 
       resource = new FileResource("guru", new URL("file:/guru"));
@@ -171,8 +171,8 @@ public class FileResource extends Resource
     public void write()
     {
       Resource resource =
-        new FileResource("/resources/css/jdma.css",
-                         FileResource.class.getResource("/resources/css"));
+        new FileResource("/css/jdma.css",
+                         FileResource.class.getResource("/css"));
 
       ByteArrayOutputStream output = new ByteArrayOutputStream();
 
@@ -194,7 +194,7 @@ public class FileResource extends Resource
     public void writeHTML()
     {
       Resource resource =
-        new FileResource("/resources/css/jdma.css",
+        new FileResource("/css/jdma.css",
                          FileResource.class.getResource("/resource/css"));
 
       ByteArrayOutputStream output = new ByteArrayOutputStream();

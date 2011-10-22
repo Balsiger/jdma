@@ -190,9 +190,9 @@ public class TemplateResource extends FileResource
     public void write()
     {
       Resource resource =
-        new TemplateResource("/resources/css/jdma.css",
+        new TemplateResource("/css/jdma.css",
                              TemplateResource.class
-                             .getResource("/resources/css/jdma.css"),
+                             .getResource("/css/jdma.css"),
                              "test/test/template");
 
       ByteArrayOutputStream output = new ByteArrayOutputStream();
