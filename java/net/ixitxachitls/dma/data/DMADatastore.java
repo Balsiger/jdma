@@ -40,6 +40,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -184,6 +185,23 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //----------------------------- getUserData ------------------------------
+
+  /**
+   * Get user specific data for the given user.
+   *
+   * @param       inUser the user for whom to get the data
+   *
+   * @return      the user specific data
+   *
+   */
+  public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser)
+  {
+    // TODO: this is wrong!
+    return this;
+  }
+
+  //........................................................................
   //------------------------------ isChanged -------------------------------
 
   /**
@@ -255,14 +273,17 @@ public class DMADatastore implements DMAData
    *
    * @param      <T>      the type of the entry to get
    *
-   * @return     the entry found, if any
+   * @return     the converted entry, if any
    *
    */
-  public @Nonnull <T extends AbstractEntry> T convert
-                     (@Nonnull String inID, @Nonnull AbstractType<T> inType,
-                      @Nonnull Entity inEntity)
+  public @Nullable <T extends AbstractEntry> T convert
+                      (@Nonnull String inID, @Nonnull AbstractType<T> inType,
+                       @Nonnull Entity inEntity)
   {
     T entry = inType.create(inID, this);
+    if(entry == null)
+      return null;
+
     for(Map.Entry<String, Object> property
           : inEntity.getProperties().entrySet())
       entry.set(fromPropertyName(property.getKey()),

@@ -35,6 +35,7 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.Entry;
@@ -123,6 +124,19 @@ public interface DMAData
   public @Nonnull DMAData getBaseData();
 
   //........................................................................
+  //----------------------------- getUserData ------------------------------
+
+  /**
+   * Get user specific data for the given user.
+   *
+   * @param       inUser the user for whom to get the data
+   *
+   * @return      the user specific data
+   *
+   */
+  public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser);
+
+  //........................................................................
 
   //------------------------------ isChanged -------------------------------
 
@@ -132,6 +146,7 @@ public interface DMAData
    * @return      true if data is changed from store, false if not
    *
    */
+  @Deprecated
   public boolean isChanged();
 
   //........................................................................

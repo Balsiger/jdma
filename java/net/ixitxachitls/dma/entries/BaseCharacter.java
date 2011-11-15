@@ -170,8 +170,6 @@ public class BaseCharacter extends BaseEntry
   public BaseCharacter(@Nonnull String inName, @Nonnull DMAData inData)
   {
     super(inName, TYPE, inData);
-
-    addProductFile(getName());
   }
 
   //........................................................................
@@ -243,10 +241,7 @@ public class BaseCharacter extends BaseEntry
   //----- products ---------------------------------------------------------
 
   /** All the products for this user. */
-  protected @Nonnull UserData m_productData =
-    new UserData(this, Files.concatenate(((DMADatafiles)m_data).getPath(),
-                                         Product.TYPE.getMultipleDir()),
-                 m_data);
+  protected @Nonnull DMAData m_productData = m_data.getUserData(this);
 
   //........................................................................
   //----- last login -------------------------------------------------------
@@ -555,40 +550,40 @@ public class BaseCharacter extends BaseEntry
   public @Nullable ValueHandle computeValue(@Nonnull String inKey,
                                             boolean inDM)
   {
-    if("products".equals(inKey))
-    {
-      List<AbstractEntry> products = new ArrayList<AbstractEntry>();
-      List<AbstractEntry> entries =
-        m_productData.getFile(m_productData.files(Product.TYPE).get(0))
-        .getEntries();
-      ListIterator<AbstractEntry> i = entries.listIterator();
-      while(i.hasNext())
-        i.next();
+    // if("products".equals(inKey))
+    // {
+    //   List<AbstractEntry> products = new ArrayList<AbstractEntry>();
+    //   List<AbstractEntry> entries =
+    //     m_productData.getFile(m_productData.files(Product.TYPE).get(0))
+    //     .getEntries();
+    //   ListIterator<AbstractEntry> i = entries.listIterator();
+    //   while(i.hasNext())
+    //     i.next();
 
-      while(i.hasPrevious() && products.size() <= MAX_PRODUCTS)
-        products.add(i.previous());
+    //   while(i.hasPrevious() && products.size() <= MAX_PRODUCTS)
+    //     products.add(i.previous());
 
-      List<Object> commands = new ArrayList<Object>();
-      boolean more = products.size() > MAX_PRODUCTS;
-      if(more)
-        products.remove(products.size() - 1);
+    //   List<Object> commands = new ArrayList<Object>();
+    //   boolean more = products.size() > MAX_PRODUCTS;
+    //   if(more)
+    //     products.remove(products.size() - 1);
 
-      for(AbstractEntry product : products)
-      {
-        commands.add(new Link(((Product)product).getFullTitle(),
-                              product.getPath()));
-        commands.add(", ");
-      }
+    //   for(AbstractEntry product : products)
+    //   {
+    //     commands.add(new Link(((Product)product).getFullTitle(),
+    //                           product.getPath()));
+    //     commands.add(", ");
+    //   }
 
-      if(more)
-        commands.add("... ");
+    //   if(more)
+    //     commands.add("... ");
 
-      commands.add("| ");
-      commands.add(new Link("view all", getPath() + "/products"));
+    //   commands.add("| ");
+    //   commands.add(new Link("view all", getPath() + "/products"));
 
-      return new FormattedValue(new Command(commands), null, "products", false,
-                                false, false, false, null, null);
-    }
+    //   return new FormattedValue(new Command(commands), null, "products", false,
+    //                             false, false, false, null, null);
+    // }
 
 
     return super.computeValue(inKey, inDM);
@@ -609,29 +604,9 @@ public class BaseCharacter extends BaseEntry
   protected boolean readEntry(@Nonnull ParseReader inReader)
   {
     if(super.readEntry(inReader))
-    {
-      addProductFile(getName());
       return true;
-    }
     else
       return false;
-  }
-
-  //........................................................................
-  //---------------------------- addProductFile ----------------------------
-
-  /**
-   * Add the file to products to this base character.
-   *
-   * @param     inName the name of the file to add (without extension)
-   *
-   */
-  private void addProductFile(@Nonnull String inName)
-  {
-    m_productData.addFile(inName + ".dma");
-    m_productData.read();
-    if(m_productData.isChanged())
-      m_productData.save();
   }
 
   //........................................................................
@@ -647,7 +622,8 @@ public class BaseCharacter extends BaseEntry
    */
   public boolean removeProduct(@Nonnull String inID)
   {
-    return m_productData.removeEntry(inID, Product.TYPE);
+    return false;
+    //return m_productData.removeEntry(inID, Product.TYPE);
   }
 
   //........................................................................
@@ -663,9 +639,6 @@ public class BaseCharacter extends BaseEntry
   {
     inProduct.setOwner(this);
     m_productData.update(inProduct);
-
-    // since whoever adds this might not be able to save our file, we do it here
-    m_productData.save();
   }
 
   //........................................................................

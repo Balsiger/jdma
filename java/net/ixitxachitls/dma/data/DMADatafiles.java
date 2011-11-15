@@ -218,6 +218,36 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //----------------------------- getUserData ------------------------------
+
+  /**
+   * Get user specific data for the given user.
+   *
+   * @param       inUser the user for whom to get the data
+   *
+   * @return      the user specific data
+   *
+   */
+  public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser)
+  {
+    DMADatafiles data =
+      new DMADatafiles(Files.concatenate(getPath(),
+                                         Product.TYPE.getMultipleDir()),
+                       inUser.getID() + ".dma");
+
+    data.read();
+
+    // Associate all products with the user
+    for(Product product : data.getEntries(Product.TYPE).values())
+      product.setOwner(inUser);
+
+    if(data.isChanged())
+      data.save();
+
+    return data;
+  }
+
+  //........................................................................
 
   //--------------------------------- files --------------------------------
 

@@ -3,5 +3,8 @@
 java -ea -Xmx256m net.ixitxachitls.dma.server.DMAServer -b TestBaseCampaigns.dma -c TestCampaigns.dma -u Test.dma --no-analytics
 
 # start the real server in parallel
-
 java -Xms128m -Xmx2056m -ea net.ixitxachitls.dma.server.DMAServer -p 1234 --no-analytics
+
+# import all data into local version
+java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma -t "base character"
+

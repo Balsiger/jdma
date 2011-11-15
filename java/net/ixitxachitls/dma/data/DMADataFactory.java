@@ -76,7 +76,7 @@ public final class DMADataFactory
 
   //-------------------------------------------------------------- accessors
 
-  //--------------------------- createBaseData ----------------------------
+  //----------------------------- getBaseData ------------------------------
 
   /**
    * Get the base data for all entries.
