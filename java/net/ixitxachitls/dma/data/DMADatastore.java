@@ -35,8 +35,11 @@ import javax.annotation.Nullable;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -141,7 +144,7 @@ public class DMADatastore implements DMAData
   //------------------------------- getEntry -------------------------------
 
   /**
-   * Get a type denoted by type and id.
+   * Get an entry denoted by type and id.
    *
    * @param      inID   the id of the entry to get
    * @param      inType the type of the entry to get
@@ -167,6 +170,135 @@ public class DMADatastore implements DMAData
 
       return null;
     }
+  }
+
+
+  //........................................................................
+  //---------------------------- getFirstEntry -----------------------------
+
+  /**
+   * Get the first entry of the given type.
+   *
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getFirstEntry(@Nonnull AbstractType<T> inType)
+  {
+    Query query = new Query(inType.toString());
+    query.addSort("__key__", Query.SortDirection.ASCENDING);
+    PreparedQuery preparedQuery = m_store.prepare(query);
+    List<Entity> entities =
+      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
+
+    if(entities.size() != 1)
+      return null;
+
+    return (T)convert(entities.get(0));
+  }
+
+
+  //........................................................................
+  //---------------------------- getLastEntry ------------------------------
+
+  /**
+   * Get the last entry of the given type.
+   *
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getLastEntry(@Nonnull AbstractType<T> inType)
+  {
+    Query query = new Query(inType.toString());
+    query.addSort("__key__", Query.SortDirection.DESCENDING);
+    PreparedQuery preparedQuery = m_store.prepare(query);
+    List<Entity> entities =
+      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
+
+    if(entities.size() != 1)
+      return null;
+
+    return (T)convert(entities.get(0));
+  }
+
+
+  //........................................................................
+  //---------------------------- getNextEntry ------------------------------
+
+  /**
+   * Get the next entry of the given type.
+   *
+   * @param      inID   the id of the entry for which we want the next
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getNextEntry(@Nonnull String inID,
+                                   @Nonnull AbstractType<T> inType)
+  {
+    Query query = new Query(inType.toString());
+    query
+      .addSort("__key__", Query.SortDirection.ASCENDING)
+      .addFilter("__key__", Query.FilterOperator.GREATER_THAN,
+                 KeyFactory.createKey(inType.toString(), inID));
+    PreparedQuery preparedQuery = m_store.prepare(query);
+    List<Entity> entities =
+      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
+
+    if(entities.size() != 1)
+      return null;
+
+    return (T)convert(entities.get(0));
+  }
+
+  //........................................................................
+  //-------------------------- getPreviousEntry ----------------------------
+
+  /**
+   * Get the previous entry of the given type.
+   *
+   * @param      inID   the id of the entry for which we want the previous
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getPreviousEntry(@Nonnull String inID,
+                                       @Nonnull AbstractType<T> inType)
+  {
+    Query query = new Query(inType.toString());
+    query
+      .addSort("__key__", Query.SortDirection.DESCENDING)
+      .addFilter("__key__", Query.FilterOperator.LESS_THAN,
+                 KeyFactory.createKey(inType.toString(), inID));
+    PreparedQuery preparedQuery = m_store.prepare(query);
+    List<Entity> entities =
+      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
+
+    if(entities.size() != 1)
+      return null;
+
+    return (T)convert(entities.get(0));
   }
 
 
@@ -312,13 +444,7 @@ public class DMADatastore implements DMAData
     if(type == null || id == null)
       return null;
 
-    AbstractEntry entry = type.create(id, this);
-    for(Map.Entry<String, Object> property
-          : inEntity.getProperties().entrySet())
-      entry.set(fromPropertyName(property.getKey()),
-                (String)property.getValue());
-
-    return entry;
+    return convert(id, type, inEntity);
   }
 
   //........................................................................
@@ -367,7 +493,7 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
-  //---------------------------- toPropertyName ----------------------------
+  //--------------------------- fromPropertyName ---------------------------
 
   /**
    * Convert the given name into a name that can be used as a property in the
@@ -396,7 +522,6 @@ public class DMADatastore implements DMAData
    */
   public @Nullable String extractID(@Nonnull Key inKey)
   {
-    System.out.println(inKey);
     return Strings.getPattern(inKey.toString(), "\\(\"(.*)\"\\)");
   }
 

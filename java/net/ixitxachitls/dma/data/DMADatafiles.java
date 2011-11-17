@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
@@ -34,9 +35,9 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.Campaign;
@@ -230,6 +231,8 @@ public class DMADatafiles implements DMAData
    */
   public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser)
   {
+    System.out.println("getting user data for " + inUser);
+
     DMADatafiles data =
       new DMADatafiles(Files.concatenate(getPath(),
                                          Product.TYPE.getMultipleDir()),
@@ -334,6 +337,110 @@ public class DMADatafiles implements DMAData
 
     return null;
   }
+
+  //........................................................................
+  //---------------------------- getFirstEntry -----------------------------
+
+  /**
+   * Get the first entry of the given type.
+   *
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getFirstEntry(@Nonnull AbstractType<T> inType)
+  {
+    if(getEntries(inType).isEmpty())
+      return null;
+
+    return getEntries(inType).get(getEntries(inType).firstKey());
+  }
+
+
+  //........................................................................
+  //---------------------------- getLastEntry ------------------------------
+
+  /**
+   * Get the last entry of the given type.
+   *
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getLastEntry(@Nonnull AbstractType<T> inType)
+  {
+    if(getEntries(inType).isEmpty())
+      return null;
+
+    return getEntries(inType).get(getEntries(inType).lastKey());
+  }
+
+  //........................................................................
+  //---------------------------- getNextEntry ------------------------------
+
+  /**
+   * Get the next entry of the given type.
+   *
+   * @param      inID   the id of the entry for which we want the next
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getNextEntry(@Nonnull String inID,
+                                   @Nonnull AbstractType<T> inType)
+  {
+    NavigableSet<String> keys = getEntries(inType).navigableKeySet();
+    String next = keys.higher(inID);
+
+    if(next == null)
+      return null;
+
+    return getEntry(next, inType);
+  }
+
+  //........................................................................
+  //-------------------------- getPreviousEntry ----------------------------
+
+  /**
+   * Get the previous entry of the given type.
+   *
+   * @param      inID   the id of the entry for which we want the previous
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value
+  public @Nullable <T extends AbstractEntry> T
+                      getPreviousEntry(@Nonnull String inID,
+                                       @Nonnull AbstractType<T> inType)
+  {
+    NavigableSet<String> keys = getEntries(inType).navigableKeySet();
+    String previous = keys.lower(inID);
+
+    if(previous == null)
+      return null;
+
+    return getEntry(previous, inType);
+  }
+
 
   //........................................................................
   //------------------------------- toString -------------------------------
@@ -568,15 +675,16 @@ public class DMADatafiles implements DMAData
 
   //------------------------------------------------- other member functions
 
-  //----------------------------- computeFile ------------------------------
+  //------------------------------ checkNames ------------------------------
 
   /**
-   * Compute the file this entry should be stored in.
-   * TODO: make this method simpler by moving code into entries.
+   * Check all the filesnames if they match the computed ones.  TODO: this can
+   * be removed once all the data is in the datastore and the importer exporter
+   * are used to backup/restore files.
    *
-   * @param       the file to streo the entry in
+   * @param  inPrefix the prefix to the path of the files
    *
-   * @return      the name of the file to store in
+   * @return true if all the names match, false if not
    *
    */
   public boolean checkNames(String inPrefix)
@@ -605,6 +713,19 @@ public class DMADatafiles implements DMAData
     return result;
   }
 
+  //........................................................................
+
+  //----------------------------- computeFile ------------------------------
+
+  /**
+   * Compute the file this entry should be stored in.
+   * TODO: make this method simpler by moving code into entries.
+   *
+   * @param       inEntry the entry for which to compute the file
+   *
+   * @return      the name of the file to store in
+   *
+   */
   public @Nonnull String computeFile(@Nonnull AbstractEntry inEntry)
   {
     AbstractType<? extends AbstractEntry> type = inEntry.getType();
@@ -727,14 +848,9 @@ public class DMADatafiles implements DMAData
     public void read()
     {
       DMADatafiles data =
-        new DMADatafiles("lib/test", "Test.dma");
+        new DMADatafiles("../lib/test", "Test.dma");
 
       assertTrue("read", data.read());
-
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'lib/test/Products/Myrddin.dma'");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'lib/test/Products/zzz.dma'");
     }
 
     //......................................................................

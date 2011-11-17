@@ -23,18 +23,14 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
 //import java.util.Iterator;
-  import java.util.List;
-import java.util.ListIterator;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.data.DMADatafiles;
-import net.ixitxachitls.dma.data.UserData;
 //import net.ixitxachitls.dma.entries.Product;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
@@ -44,9 +40,6 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Text;
 //import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.TypeIterator;
 import net.ixitxachitls.util.configuration.Config;
@@ -241,7 +234,7 @@ public class BaseCharacter extends BaseEntry
   //----- products ---------------------------------------------------------
 
   /** All the products for this user. */
-  protected @Nonnull DMAData m_productData = m_data.getUserData(this);
+  protected @Nullable DMAData m_productData = null;
 
   //........................................................................
   //----- last login -------------------------------------------------------
@@ -367,7 +360,7 @@ public class BaseCharacter extends BaseEntry
     */
   public List<Product> getProducts()
   {
-    return m_productData.getEntriesList(Product.TYPE);
+    return getProductData().getEntriesList(Product.TYPE);
   }
 
   //........................................................................
@@ -377,13 +370,16 @@ public class BaseCharacter extends BaseEntry
     *
     * Get all the products of this character.
     *
-    * @return      an iterator over all the products
+    * @return      all the product information of the user
     *
     * @undefined   never
     *
     */
   public DMAData getProductData()
   {
+    if(m_productData == null)
+      m_productData = m_data.getUserData(this);
+
     return m_productData;
   }
 
@@ -554,7 +550,7 @@ public class BaseCharacter extends BaseEntry
     // {
     //   List<AbstractEntry> products = new ArrayList<AbstractEntry>();
     //   List<AbstractEntry> entries =
-    //     m_productData.getFile(m_productData.files(Product.TYPE).get(0))
+    //     getProductData().getFile(getProductData().files(Product.TYPE).get(0))
     //     .getEntries();
     //   ListIterator<AbstractEntry> i = entries.listIterator();
     //   while(i.hasNext())
@@ -581,10 +577,9 @@ public class BaseCharacter extends BaseEntry
     //   commands.add("| ");
     //   commands.add(new Link("view all", getPath() + "/products"));
 
-    //   return new FormattedValue(new Command(commands), null, "products", false,
+    // return new FormattedValue(new Command(commands), null, "products", false,
     //                             false, false, false, null, null);
     // }
-
 
     return super.computeValue(inKey, inDM);
   }
@@ -603,10 +598,7 @@ public class BaseCharacter extends BaseEntry
    */
   protected boolean readEntry(@Nonnull ParseReader inReader)
   {
-    if(super.readEntry(inReader))
-      return true;
-    else
-      return false;
+    return super.readEntry(inReader);
   }
 
   //........................................................................
@@ -623,7 +615,7 @@ public class BaseCharacter extends BaseEntry
   public boolean removeProduct(@Nonnull String inID)
   {
     return false;
-    //return m_productData.removeEntry(inID, Product.TYPE);
+    //return getProductData().removeEntry(inID, Product.TYPE);
   }
 
   //........................................................................
@@ -638,7 +630,7 @@ public class BaseCharacter extends BaseEntry
   public void addProduct(@Nonnull Product inProduct)
   {
     inProduct.setOwner(this);
-    m_productData.update(inProduct);
+    getProductData().update(inProduct);
   }
 
   //........................................................................
@@ -694,8 +686,6 @@ public class BaseCharacter extends BaseEntry
       assertFalse("last action", character.m_lastAction.isDefined());
       assertFalse("token", character.m_token.isDefined());
       assertFalse("group", character.m_group.isDefined());
-
-      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................
@@ -721,8 +711,6 @@ public class BaseCharacter extends BaseEntry
       character.clearToken();
       assertFalse("check", character.checkToken(token));
       assertFalse("check", character.checkToken(token2));
-
-      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................
@@ -754,7 +742,6 @@ public class BaseCharacter extends BaseEntry
       assertTrue("last action", character.m_lastAction.isDefined());
       assertTrue("token", character.m_token.isDefined());
 
-      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
       m_logger.addExpected("WARNING: login with unknown user 'name'");
       m_logger.addExpected("WARNING: login for 'user' with wrong password");
     }
@@ -804,8 +791,6 @@ public class BaseCharacter extends BaseEntry
                    + "\n"
                    + "#.....\n",
                    character.toString());
-
-      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................
@@ -839,8 +824,6 @@ public class BaseCharacter extends BaseEntry
       assertTrue("player", character.hasAccess(Group.PLAYER));
       assertTrue("dm", character.hasAccess(Group.DM));
       assertTrue("admin", character.hasAccess(Group.ADMIN));
-
-      m_logger.addExpected("WARNING: cannot find file '/Products/Me.dma'");
     }
 
     //......................................................................

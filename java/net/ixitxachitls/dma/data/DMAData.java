@@ -23,12 +23,8 @@
 
 package net.ixitxachitls.dma.data;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.NavigableMap;
-import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,12 +32,6 @@ import javax.annotation.Nullable;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.BaseType;
-import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.util.Files;
-import net.ixitxachitls.util.logging.Log;
-import net.ixitxachitls.util.resources.Resource;
 
 //..........................................................................
 
@@ -98,7 +88,7 @@ public interface DMAData
   //------------------------------- getEntry -------------------------------
 
   /**
-   * Get a type denoted by type and id.
+   * Get an entry denoted by type and id.
    *
    * @param      inID   the id of the entry to get
    * @param      inType the type of the entry to get
@@ -111,6 +101,74 @@ public interface DMAData
   public @Nullable <T extends AbstractEntry> T
                       getEntry(@Nonnull String inID,
                                @Nonnull AbstractType<T> inType);
+
+  //........................................................................
+  //---------------------------- getFirstEntry -----------------------------
+
+  /**
+   * Get the first entry of a specific type.
+   *
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  public @Nullable <T extends AbstractEntry> T
+                      getFirstEntry(@Nonnull AbstractType<T> inType);
+
+  //........................................................................
+  //----------------------------- getLastEntry -----------------------------
+
+  /**
+   * Get the last entry of a specific type.
+   *
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  public @Nullable <T extends AbstractEntry> T
+                      getLastEntry(@Nonnull AbstractType<T> inType);
+
+  //........................................................................
+  //----------------------------- getNextEntry -----------------------------
+
+  /**
+   * Get the next entry of a specific type.
+   *
+   * @param      inID   the id of the entry after the desired one
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  public @Nullable <T extends AbstractEntry> T
+                      getNextEntry(@Nonnull String inID,
+                                   @Nonnull AbstractType<T> inType);
+
+  //........................................................................
+  //----------------------------- getPreviousEntry -----------------------------
+
+  /**
+   * Get the previous entry of a specific type.
+   *
+   * @param      inID   the id of the entry before the desired one
+   * @param      inType the type of the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  public @Nullable <T extends AbstractEntry> T
+                      getPreviousEntry(@Nonnull String inID,
+                                       @Nonnull AbstractType<T> inType);
 
   //........................................................................
   //----------------------------- getBaseData ------------------------------

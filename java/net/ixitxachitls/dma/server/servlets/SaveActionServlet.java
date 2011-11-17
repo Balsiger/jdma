@@ -654,8 +654,6 @@ public class SaveActionServlet extends ActionServlet
     public void collectChanges()
     {
       DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
-      net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", data);
 
       SaveActionServlet servlet = new SaveActionServlet(data);
       DMARequest request = EasyMock.createMock(DMARequest.class);

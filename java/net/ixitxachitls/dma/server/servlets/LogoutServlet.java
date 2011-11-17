@@ -166,8 +166,6 @@ public class LogoutServlet extends LoginServlet
       servlet.doPost(request, response);
       assertEquals("post", "", output.toString());
 
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'/Products/somebody.dma'");
       EasyMock.verify(request, response);
     }
 

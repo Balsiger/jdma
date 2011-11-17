@@ -485,11 +485,6 @@ public abstract class GroupedIndex extends Index
                    + "<div class=\"clear\"></div>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", content.toString());
-
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'/Products/first.dma'");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'/Products/second.dma'");
     }
 
     //......................................................................
@@ -568,11 +563,6 @@ public abstract class GroupedIndex extends Index
                    + "</a><div class=\"clear\"></div>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", content.toString());
-
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'/Products/first.dma'");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'/Products/second.dma'");
     }
 
     //......................................................................

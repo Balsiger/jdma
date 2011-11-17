@@ -820,11 +820,6 @@ public class PageServlet extends DMAServlet
                    + "<td class=\"action\"></td></tr></table>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", content.toString());
-
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'/Products/first.dma'");
-      m_logger.addExpected("WARNING: cannot find file "
-                           + "'/Products/second.dma'");
     }
 
     //......................................................................

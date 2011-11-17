@@ -26,8 +26,6 @@ package net.ixitxachitls.dma.server.servlets;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.NavigableSet;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -36,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
@@ -78,10 +77,22 @@ public class EntryServlet extends PageServlet
   /**
    * Create the servlet.
    *
+   */
+  public EntryServlet()
+  {
+    this(DMADataFactory.getBaseData());
+  }
+
+  //........................................................................
+  //-------------------------- EntryServlet ---------------------------
+
+  /**
+   * Create the servlet.
+   *
    * @param       inData     all the available data
    *
    */
-  public EntryServlet(@Nonnull DMAData inData)
+  public EntryServlet(DMAData inData)
   {
     m_data = inData;
   }
@@ -145,7 +156,7 @@ public class EntryServlet extends PageServlet
     if(type == null)
       return null;
 
-    return AbstractType.get(type);
+    return AbstractType.get(type.replace("%20", " "));
   }
 
   //........................................................................
@@ -184,100 +195,6 @@ public class EntryServlet extends PageServlet
       return inRequest.getUser().getID();
 
     return Strings.getPattern(inPath, "/([^/]*?)$");
-  }
-
-  //........................................................................
-  //------------------------------- getFirst -------------------------------
-
-  /**
-   * Get the first available entry.
-   *
-   * @param       inData the data to use
-   * @param     inType the type entry to get
-   *
-   * @return    the first entry available
-   *
-   */
-  public @Nonnull AbstractEntry getFirst
-    (@Nonnull DMAData inData,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
-  {
-    return
-      inData.getEntries(inType).get(inData.getEntries(inType).firstKey());
-  }
-
-  //........................................................................
-  //------------------------------ getPrevious -----------------------------
-
-  /**
-   * Get the first available entry.
-   *
-   * @param     inData the data to use
-   * @param     inID   the id of the current entry
-   * @param     inType the type entry to get
-   *
-   * @return    the first entry available
-   *
-   */
-  public @Nullable AbstractEntry getPrevious
-    (@Nonnull DMAData inData,
-     @Nonnull String inID,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
-  {
-    NavigableSet<String> keys = inData.getEntries(inType).navigableKeySet();
-    String previous = keys.lower(inID);
-
-    if(previous == null)
-      return null;
-
-    return inData.getEntry(previous, inType);
-  }
-
-  //........................................................................
-  //------------------------------- getNext --------------------------------
-
-  /**
-   * Get the first available entry.
-   *
-   * @param     inData the data to use
-   * @param     inID   the id of the current entry
-   * @param     inType the type entry to get
-   *
-   * @return    the first entry available
-   *
-   */
-  public @Nullable AbstractEntry getNext
-    (@Nonnull DMAData inData,
-     @Nonnull String inID,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
-  {
-    NavigableSet<String> keys = inData.getEntries(inType).navigableKeySet();
-    String next = keys.higher(inID);
-
-    if(next == null)
-      return null;
-
-
-    return inData.getEntry(next, inType);
-  }
-
-  //........................................................................
-  //------------------------------- getLast -------------------------------
-
-  /**
-   * Get the last available entry.
-   *
-   * @param     inData the data to use
-   * @param     inType the type entry to get
-   *
-   * @return    the first entry available
-   *
-   */
-  public @Nonnull AbstractEntry getLast
-    (@Nonnull DMAData inData,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
-  {
-    return inData.getEntries(inType).get(inData.getEntries(inType).lastKey());
   }
 
   //........................................................................
@@ -403,14 +320,15 @@ public class EntryServlet extends PageServlet
 
     HTMLDocument document = new HTMLDocument(title);
 
-    AbstractEntry first = getFirst(data, entry.getType());
+    AbstractEntry first = data.getFirstEntry(entry.getType());
     if(first == entry)
       first = null;
 
-    AbstractEntry previous = getPrevious(data, entry.getID(), entry.getType());
-    AbstractEntry next = getNext(data, entry.getID(), entry.getType());
+    AbstractEntry previous =
+      data.getPreviousEntry(entry.getID(), entry.getType());
+    AbstractEntry next = data.getNextEntry(entry.getID(), entry.getType());
 
-    AbstractEntry last = getLast(data, entry.getType());
+    AbstractEntry last = data.getLastEntry(entry.getType());
     if(last == entry)
       last = null;
 
@@ -443,7 +361,9 @@ public class EntryServlet extends PageServlet
 
     document.add(navigation);
 
-    boolean dm = entry.isDM(inRequest.getUser());
+    boolean dm = false;
+    if(inRequest.getUser() != null)
+      dm = entry.isDM(inRequest.getUser());
 
     if(dma && dm)
       document.add(new Divider("dma-formatted",
@@ -631,36 +551,6 @@ public class EntryServlet extends PageServlet
                                         String inPath)
           {
             m_paths.add(inPath);
-            return inEntry;
-          }
-
-          @Override
-          public AbstractEntry getFirst
-            (DMAData inData, AbstractType<? extends AbstractEntry> inType)
-          {
-            return inEntry;
-          }
-
-          @Override
-          public @Nullable AbstractEntry getPrevious
-            (DMAData inData, String inID,
-             AbstractType<? extends AbstractEntry> inType)
-          {
-            return null;
-          }
-
-          @Override
-          public AbstractEntry getNext
-            (DMAData inData, String inID,
-             AbstractType<? extends AbstractEntry> inType)
-          {
-            return null;
-          }
-
-          @Override
-          public AbstractEntry getLast
-            (DMAData inData, AbstractType<? extends AbstractEntry> inType)
-          {
             return inEntry;
           }
         };
@@ -921,45 +811,6 @@ public class EntryServlet extends PageServlet
     }
 
     //......................................................................
-    //----- navigation -----------------------------------------------------
-
-    /** The navigation Test. */
-    @org.junit.Test
-    public void navigation()
-    {
-      EasyMock.replay(m_request, m_response);
-      DMAData data = new DMAData.Test.Data();
-      AbstractType<net.ixitxachitls.dma.entries.BaseEntry> type =
-        net.ixitxachitls.dma.entries.BaseEntry.TYPE;
-      net.ixitxachitls.dma.entries.BaseEntry one =
-        new net.ixitxachitls.dma.entries.BaseEntry("first", data);
-      net.ixitxachitls.dma.entries.BaseEntry two =
-        new net.ixitxachitls.dma.entries.BaseEntry("further-1", data);
-      net.ixitxachitls.dma.entries.BaseEntry three =
-        new net.ixitxachitls.dma.entries.BaseEntry("further-2", data);
-      net.ixitxachitls.dma.entries.BaseEntry four =
-        new net.ixitxachitls.dma.entries.BaseEntry("further-3", data);
-      net.ixitxachitls.dma.entries.BaseEntry five =
-        new net.ixitxachitls.dma.entries.BaseEntry("last", data);
-
-      data = new DMAData.Test.Data(one, two, three, four, five);
-      EntryServlet servlet = new EntryServlet(data);
-
-      assertEquals("first", one, servlet.getFirst(data, type));
-      assertEquals("last", five, servlet.getLast(data, type));
-
-      assertEquals("next", two, servlet.getNext(data, "first", type));
-      assertEquals("next", three, servlet.getNext(data, "further-1", type));
-      assertEquals("next", four, servlet.getNext(data, "further-2", type));
-      assertEquals("next", five, servlet.getNext(data, "further-3", type));
-      assertNull("next", servlet.getNext(data, "last", type));
-
-      assertNull("next", servlet.getPrevious(data, "first", type));
-      assertEquals("next", one, servlet.getPrevious(data, "further-1", type));
-      assertEquals("next", two, servlet.getPrevious(data, "further-2", type));
-      assertEquals("next", three, servlet.getPrevious(data, "further-3", type));
-      assertEquals("next", four, servlet.getPrevious(data, "last", type));
-    }
 
     //......................................................................
   }

@@ -297,7 +297,7 @@ public class BaseProduct extends BaseEntry
   {
     /** No game system, e.g. for novels. */
     NONE("None", null),
-    /** Chainmail */
+    /** Chainmail. */
     CHAINMAIL("Chainmail", null),
     /** Dungeons & Dragons, original edition. */
     DnD_1ST("D&D 1st", "D&D 1st"),

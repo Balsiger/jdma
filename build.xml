@@ -22,7 +22,7 @@
   <property file="build.properties" />
 
   <!-- Google App Engine -->
-  <property name="gae.dir" location="../../appengine-java-sdk-1.5.4" />
+  <property name="gae.dir" location="../../appengine-java-sdk-1.6.0" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->

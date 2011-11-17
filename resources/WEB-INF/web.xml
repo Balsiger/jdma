@@ -4,14 +4,17 @@
     <servlet-name>config</servlet-name>
     <servlet-class>net.ixitxachitls.server.servlets.ConfigServlet</servlet-class>
   </servlet>
+
   <servlet>
     <servlet-name>login</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.LoginServlet</servlet-class>
   </servlet>
+
   <servlet>
     <servlet-name>logout</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.LogoutServlet</servlet-class>
   </servlet>
+
   <servlet>
     <servlet-name>css</servlet-name>
     <servlet-class>net.ixitxachitls.server.servlets.TemplateServlet</servlet-class>
@@ -32,6 +35,7 @@
       <param-value>web.template.css</param-value>
     </init-param>
   </servlet>
+
   <servlet>
     <servlet-name>html</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.StaticPageServlet</servlet-class>
@@ -40,6 +44,12 @@
       <param-value>/html</param-value>
     </init-param>
   </servlet>
+
+  <servlet>
+    <servlet-name>entry</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryServlet</servlet-class>
+  </servlet>
+
   <servlet>
     <display-name>Remote API Servlet</display-name>
     <servlet-name>RemoteApiServlet</servlet-name>
@@ -51,22 +61,32 @@
     <servlet-name>config</servlet-name>
     <url-pattern>/configuration</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>login</servlet-name>
     <url-pattern>/actions/login</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>logout</servlet-name>
     <url-pattern>/actions/logout</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>css</servlet-name>
     <url-pattern>/css/*</url-pattern>
   </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>html</servlet-name>
     <url-pattern>*.html</url-pattern>
   </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>entry</servlet-name>
+    <url-pattern>/_entry/*</url-pattern>
+  </servlet-mapping>
+
   <servlet-mapping>
     <servlet-name>RemoteApiServlet</servlet-name>
     <url-pattern>/remote_api</url-pattern>
@@ -76,8 +96,23 @@
     <filter-name>DMARequest</filter-name>
     <filter-class>net.ixitxachitls.dma.server.filters.DMAFilter</filter-class>
   </filter>
+
   <filter-mapping>
     <filter-name>DMARequest</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>Forwarding</filter-name>
+    <filter-class>net.ixitxachitls.dma.server.filters.ForwardingFilter</filter-class>
+    <init-param>
+      <param-name>/user/(.*)</param-name>
+      <param-value>/_entry/base character/$1</param-value>
+    </init-param>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>Forwarding</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
