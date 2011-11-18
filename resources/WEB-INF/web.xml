@@ -119,6 +119,10 @@
       <param-name>/user/(.*)</param-name>
       <param-value>/_entry/base character/$1</param-value>
     </init-param>
+    <init-param>
+      <param-name>/product/(.*)</param-name>
+      <param-value>/_entry/base product/$1</param-value>
+    </init-param>
   </filter>
 
   <filter-mapping>

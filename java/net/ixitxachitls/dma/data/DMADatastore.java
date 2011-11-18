@@ -421,8 +421,16 @@ public class DMADatastore implements DMAData
 
     for(Map.Entry<String, Object> property
           : inEntity.getProperties().entrySet())
-      entry.set(fromPropertyName(property.getKey()),
-                property.getValue().toString());
+    {
+      Object value = property.getValue();
+      String text;
+      if(value instanceof Text)
+        text = ((Text)value).getValue();
+      else
+        text = value.toString();
+
+      entry.set(fromPropertyName(property.getKey()), text);
+    }
 
     return entry;
   }
