@@ -40,15 +40,10 @@ import com.google.common.collect.Multimap;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMAData;
-// import net.ixitxachitls.dma.data.DMAFile;
-// import net.ixitxachitls.dma.data.Storage;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-// import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-// import net.ixitxachitls.dma.entries.BaseEntry;
-// import net.ixitxachitls.dma.entries.Campaign;
-// import net.ixitxachitls.dma.entries.Character;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
@@ -223,13 +218,10 @@ public class SaveActionServlet extends ActionServlet
 
   /**
    * Create the entry action servlet.
-   *
-   * @param       inData all the available data
-   *
    */
-  public SaveActionServlet(@Nonnull DMAData inData)
+  public SaveActionServlet()
   {
-    m_data = inData;
+    m_data = DMADataFactory.getBaseData();
   }
 
   //......................................................................
@@ -432,7 +424,7 @@ public class SaveActionServlet extends ActionServlet
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test", data);
 
-      SaveActionServlet servlet = new SaveActionServlet(data);
+      SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
@@ -476,7 +468,7 @@ public class SaveActionServlet extends ActionServlet
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test", data);
 
-      SaveActionServlet servlet = new SaveActionServlet(data);
+      SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
@@ -522,7 +514,7 @@ public class SaveActionServlet extends ActionServlet
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test", data);
 
-      SaveActionServlet servlet = new SaveActionServlet(data);
+      SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
@@ -567,7 +559,7 @@ public class SaveActionServlet extends ActionServlet
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test", data);
 
-      SaveActionServlet servlet = new SaveActionServlet(data);
+      SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
@@ -608,7 +600,7 @@ public class SaveActionServlet extends ActionServlet
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test", data);
 
-      SaveActionServlet servlet = new SaveActionServlet(data);
+      SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
@@ -655,7 +647,7 @@ public class SaveActionServlet extends ActionServlet
     {
       DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
 
-      SaveActionServlet servlet = new SaveActionServlet(data);
+      SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
 

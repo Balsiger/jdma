@@ -194,7 +194,11 @@ public class EntryServlet extends PageServlet
     if(inPath.endsWith("/base character/me"))
       return inRequest.getUser().getID();
 
-    return Strings.getPattern(inPath, "/([^/]*?)$");
+    String id = Strings.getPattern(inPath, "/([^/]*?)$");
+    if(id == null)
+      return null;
+
+    return id.replace("%20", " ");
   }
 
   //........................................................................

@@ -51,6 +51,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>save</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.SaveActionServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <display-name>Remote API Servlet</display-name>
     <servlet-name>RemoteApiServlet</servlet-name>
     <servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
@@ -85,6 +90,11 @@
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>save</servlet-name>
+    <url-pattern>/actions/save</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

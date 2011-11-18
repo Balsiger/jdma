@@ -48,7 +48,6 @@ import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
 import net.ixitxachitls.dma.server.servlets.LibraryServlet;
 import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
 import net.ixitxachitls.dma.server.servlets.ProductsAutocomplete;
-import net.ixitxachitls.dma.server.servlets.SaveActionServlet;
 import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.util.CommandLineParser;
@@ -555,9 +554,6 @@ public class DMAServer extends WebServer
 //       (new ServletHolder(new AdminServlet()), "/admin/*");
 
     // actions
-    context.addServlet
-      (new ServletHolder(new SaveActionServlet(m_baseData)), "/actions/save/*");
-
 //     context.addServlet
 //       (new ServletHolder(new SelectCharacterServlet(m_campaigns)),
 //        "/actions/select");

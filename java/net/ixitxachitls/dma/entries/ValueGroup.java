@@ -1301,6 +1301,7 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+
   //------------------------------ getValue --------------------------------
 
   /**
@@ -1685,7 +1686,8 @@ public abstract class ValueGroup implements Changeable
    */
   protected static void extractVariables(@Nonnull Class inClass)
   {
-    assert !s_variables.containsKey(inClass) : "already extracted";
+    if(s_variables.containsKey(inClass))
+      return;
 
     List<Variable> variables = new ArrayList<Variable>();
 
@@ -1724,9 +1726,16 @@ public abstract class ValueGroup implements Changeable
     // add all the variables of the parent class, if any
     Class superClass = inClass.getSuperclass();
 
-    if(superClass != null && s_variables.get(superClass) != null)
+    if(superClass != null)
+    {
+      // In case the super class was not yet extracted, we have to do that
+      // before trying to add the base variables.
+      if(s_variables.get(superClass) == null)
+        extractVariables(superClass);
+
       for(Variable v : s_variables.get(superClass))
         variables.add(v);
+    }
 
     s_variables.put(inClass, new Variables(variables));
   }

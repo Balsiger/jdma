@@ -40,11 +40,14 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Text;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -419,7 +422,7 @@ public class DMADatastore implements DMAData
     for(Map.Entry<String, Object> property
           : inEntity.getProperties().entrySet())
       entry.set(fromPropertyName(property.getKey()),
-                (String)property.getValue());
+                property.getValue().toString());
 
     return entry;
   }
@@ -464,12 +467,21 @@ public class DMADatastore implements DMAData
     for(Map.Entry<String, Value> value : inEntry.getAllValues().entrySet())
     {
       String valueText = value.getValue().toString();
-      if(valueText.length() >= 500)
-        Log.warning("value for " + value.getKey() + " for "
-                    + inEntry.getType() + " with id " + inEntry.getID()
-                    + " is longer than 500 characters and will be truncated!");
+      if(value.getValue() instanceof LongFormattedText
+         || value.getValue() instanceof ValueList)
+      {
+        entity.setProperty(toPropertyName(value.getKey()), new Text(valueText));
+      }
+      else
+      {
+        if(valueText.length() >= 500)
+          Log.warning("value for " + value.getKey() + " for "
+                      + inEntry.getType() + " with id " + inEntry.getID()
+                      + " is longer than 500 characters and will be "
+                      + "truncated!");
 
-      entity.setProperty(toPropertyName(value.getKey()), valueText);
+        entity.setProperty(toPropertyName(value.getKey()), valueText);
+      }
     }
 
     return entity;

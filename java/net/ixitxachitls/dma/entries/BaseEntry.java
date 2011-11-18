@@ -24,20 +24,13 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
-//import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-// import net.ixitxachitls.dma.Global;
 import net.ixitxachitls.dma.data.DMAData;
-// import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
-// import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
-// import net.ixitxachitls.dma.entries.indexes.Index;
-// import net.ixitxachitls.dma.entries.indexes.KeyIndex;
-// import net.ixitxachitls.dma.values.Modifiable;
-import net.ixitxachitls.dma.values.FormattedText;
+import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Range;
@@ -49,22 +42,9 @@ import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
-//import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Editable;
-// import net.ixitxachitls.output.commands.Hrule;
-// import net.ixitxachitls.output.commands.Icon;
-// import net.ixitxachitls.output.commands.Linebreak;
-// import net.ixitxachitls.output.commands.Link;
-// import net.ixitxachitls.output.commands.Script;
-// import net.ixitxachitls.output.commands.Super;
-//import net.ixitxachitls.output.commands.Textblock;
-//import net.ixitxachitls.util.MultiIterator;
-//import net.ixitxachitls.util.Strings;
-//import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.configuration.Config;
-//import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -312,7 +292,7 @@ public class BaseEntry extends AbstractEntry
 
   /** The descriptive text for this entry. */
   @Key("description")
-  protected FormattedText m_description = new FormattedText();
+  protected LongFormattedText m_description = new LongFormattedText();
 
   //........................................................................
   //----- short description ------------------------------------------------
@@ -881,9 +861,9 @@ public class BaseEntry extends AbstractEntry
   public void setDescription(@Nullable String inDescription)
   {
     if(inDescription == null)
-      m_description = new FormattedText();
+      m_description = new LongFormattedText();
     else
-      m_description = new FormattedText(inDescription);
+      m_description = new LongFormattedText(inDescription);
   }
 
   //........................................................................

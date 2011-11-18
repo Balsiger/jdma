@@ -164,6 +164,14 @@ public abstract class AbstractType<T extends AbstractEntry>
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
+  // Add some types that don't necessarily get add automatically and thus might
+  // not be properly converted from datastore.
+  static
+  {
+    s_all.add(net.ixitxachitls.dma.entries.BaseEntry.TYPE);
+    s_all.add(net.ixitxachitls.dma.entries.BaseProduct.TYPE);
+  }
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
