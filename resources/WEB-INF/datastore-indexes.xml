@@ -5,5 +5,9 @@
         <property name="__key__" direction="desc"/>
     </datastore-index>
 
+    <datastore-index kind="base product" ancestor="false" source="auto">
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+
 </datastore-indexes>
 
