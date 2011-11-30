@@ -323,9 +323,10 @@ public class HTMLDocument extends Document
                   new Link(net.ixitxachitls.output.commands.Link.NAME, null,
                            Config.get("resource:html/extension.html", "")));
     s_actions.put(ImageLink.NAME,
-                  new Link(ImageLink.NAME, null,
-                           Config.get("resource:html/extension.html", ""),
-                           true));
+                  new Pattern("<img src=\"$1\" alt=\"$2\" title=\"$2\" "
+                              + "class=\"image $4\" "
+                              + "onclick=\"util.link(event, '$3');\" "
+                              + "style=\"cursor: pointer\" />"));
     s_actions.put(Hat.NAME,
                   new Replace(new Replace.Replacement("u", "&ucirc;"),
                               new Replace.Replacement("U", "&Ucirc;"),

@@ -184,17 +184,19 @@ public class DMAFilter implements Filter
         EasyMock.createMock(HttpServletResponse.class);
       FilterChain chain = EasyMock.createMock(FilterChain.class);
 
-      EasyMock.expect(request.getInputStream()).andReturn(inputStream);
-      EasyMock.expect(request.getQueryString()).andReturn("").times(2);
-      EasyMock.expect(request.getServletPath()).andReturn("/");
-      EasyMock.expect(request.getCookies()).andReturn
+      EasyMock.expect(request.getInputStream()).andStubReturn(inputStream);
+      EasyMock.expect(request.getQueryString()).andStubReturn("");
+      EasyMock.expect(request.getCookies()).andStubReturn
         (new javax.servlet.http.Cookie [0]);
+      chain.doFilter(EasyMock.anyObject(DMARequest.class),
+                     EasyMock.anyObject(HttpServletResponse.class));
+      EasyMock.expect(request.getServletPath()).andStubReturn("/");
 
-      EasyMock.replay(request, response);
+      EasyMock.replay(request, response, chain);
 
       filter.doFilter(request, response, chain);
 
-      EasyMock.verify(request, response);
+      EasyMock.verify(request, response, chain);
     }
 
     //......................................................................

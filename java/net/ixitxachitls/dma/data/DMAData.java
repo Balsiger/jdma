@@ -53,6 +53,69 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 
 public interface DMAData
 {
+  //----------------------------------------------------------------- nested
+
+  /**
+   * A simple representation for a file associated with an entry.
+   */
+  public static class File
+  {
+    /**
+     * Create the file with all its data.
+     *
+     * @param inName the file name
+     * @param inType the mime type of the file
+     * @param inPath the url path to access the file
+     */
+    public File(@Nonnull String inName, @Nonnull String inType,
+                @Nonnull String inPath)
+    {
+      m_name = inName;
+      m_type = inType;
+      m_path = inPath;
+    }
+
+    /** The name of the file. */
+    private @Nonnull String m_name;
+
+    /** The mime type of the file. */
+    private @Nonnull String m_type;
+
+    /** The url to display the file. */
+    private @Nonnull String m_path;
+
+    /**
+     * Get the name of the file.
+     *
+     * @return the name of the file (without path)
+     */
+    public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Get the mime type of the file.
+     *
+     * @return the mime type
+     */
+    public @Nonnull String getType()
+    {
+      return m_type;
+    }
+    /**
+     * Get the path of the file.
+     *
+     * @return the path to access the file
+     */
+    public @Nonnull String getPath()
+    {
+      return m_path;
+    }
+  }
+
+  //........................................................................
+
   //-------------------------------------------------------------- accessors
 
   //------------------------------ getEntries ------------------------------
@@ -225,6 +288,19 @@ public interface DMAData
    *
    */
   public boolean update(@Nonnull AbstractEntry inEntry);
+
+  //........................................................................
+  //------------------------------- getFiles -------------------------------
+
+  /**
+   * Get the files for the given entry.
+   *
+   * @param    inEntry the entry for which to get files
+   *
+   * @return   a list of all the files found
+   *
+   */
+  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry);
 
   //........................................................................
 

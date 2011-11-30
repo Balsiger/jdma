@@ -32,6 +32,9 @@ import java.util.TreeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -41,6 +44,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -82,6 +87,8 @@ public class DMADatastore implements DMAData
   public DMADatastore()
   {
     m_store = DatastoreServiceFactory.getDatastoreService();
+    m_blobs = BlobstoreServiceFactory.getBlobstoreService();
+    m_image = ImagesServiceFactory.getImagesService();
   }
 
   //........................................................................
@@ -92,6 +99,12 @@ public class DMADatastore implements DMAData
 
   /** The access to the datastore. */
   private @Nonnull DatastoreService m_store;
+
+  /** The blob store service. */
+  private @Nonnull BlobstoreService m_blobs;
+
+  /** The image service to serve images. */
+  private @Nonnull ImagesService m_image;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -337,6 +350,40 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //------------------------------- getFiles -------------------------------
+
+  /**
+   * Get the files for the given entry.
+   *
+   * @param    inEntry the entry for which to get files
+   *
+   * @return   a list of all the files found
+   *
+   */
+  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
+  {
+    Query query =
+      new Query("file", KeyFactory.createKey(inEntry.getType().toString(),
+                                             inEntry.getID()));
+    query.addSort("__key__", Query.SortDirection.ASCENDING);
+    PreparedQuery preparedQuery = m_store.prepare(query);
+    List<File> files = new ArrayList<File>();
+    for(Entity entity : preparedQuery.asList
+          (FetchOptions.Builder.withLimit(100)))
+      files.add(new File((String)entity.getProperty("name"),
+                         (String)entity.getProperty("type"),
+                         m_image.getServingUrl
+                         (new BlobKey((String)entity.getProperty("path")))));
+
+    // add the files from any base entries
+    for(AbstractEntry entry : inEntry.getBaseEntries())
+      files.addAll(getFiles(entry));
+
+    return files;
+  }
+
+  //........................................................................
+
   //------------------------------ isChanged -------------------------------
 
   /**
@@ -356,7 +403,7 @@ public class DMADatastore implements DMAData
 
   //----------------------------------------------------------- manipulators
 
-  //--------------------------------- add ----------------------------------
+  //-------------------------------- update --------------------------------
 
   /**
    * Add an entry to the store.
@@ -392,6 +439,48 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //------------------------------- addFile --------------------------------
+
+  /**
+   * Add a file for the given entry.
+   *
+   * @param  inEntry the entry to add the file to
+   * @param  inName  the name of the file
+   * @param  inType  the type of the file
+   * @param  inKey   the key of the blob in the blobstore
+   *
+   */
+  public void addFile(@Nonnull AbstractEntry inEntry, @Nonnull String inName,
+                      @Nonnull String inType, @Nonnull BlobKey inKey)
+  {
+    // if a file with the same name is already there, we have to delete it first
+    Key key =
+      KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
+                                                inEntry.getID()),
+                           "file", inName);
+    Entity entity = null;
+
+    try
+    {
+      entity = m_store.get(key);
+      Log.important("replacing file " + inName + " for " + inEntry.getType()
+                    + " " + inEntry.getID() + " [" + inKey + "]");
+      m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
+      m_store.delete(key);
+    }
+    catch(com.google.appengine.api.datastore.EntityNotFoundException e)
+    {
+      entity = new Entity(key);
+    }
+
+    entity.setProperty("path", inKey.getKeyString());
+    entity.setProperty("name", inName);
+    entity.setProperty("type", inType);
+    m_store.put(entity);
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

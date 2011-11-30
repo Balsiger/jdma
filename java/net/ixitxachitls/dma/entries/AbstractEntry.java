@@ -43,7 +43,6 @@ import javax.annotation.Nullable;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMAFile;
-import net.ixitxachitls.dma.data.DMAFiles;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.data.Storage;
@@ -1791,20 +1790,28 @@ public class AbstractEntry extends ValueGroup
     {
       AbstractType<? extends AbstractEntry> type = getType();
 
-      String baseType = null;
-      String []baseNames = null;
-      if(this instanceof Entry)
-      {
-        baseType = ((Type)type).getBaseType().getMultipleDir();
-        List<String> names = getBaseNames();
-        baseNames = names.toArray(new String[names.size()]);
-      }
+      for(DMAData.File file : m_data.getFiles(this))
+        if("main".equals(file.getName()))
+          return new FormattedValue
+            (new ImageLink(file.getPath() + "=s300", "main", file.getPath(),
+                           "main"),
+             null, "image", false, false, false, false, "images", "");
 
-      return new FormattedValue
-        (new Image(DMAFiles.mainImage(getID(), type.getMultipleDir(),
-                                      baseType, baseNames) + "?w=300",
-                   "main"),
-         null, "image", false, false, false, false, "images", "");
+    //   String baseType = null;
+    //   String []baseNames = null;
+    //   if(this instanceof Entry)
+    //   {
+    //     baseType = ((Type)type).getBaseType().getMultipleDir();
+    //     List<String> names = getBaseNames();
+    //     baseNames = names.toArray(new String[names.size()]);
+    //   }
+
+    //   return new FormattedValue
+    //     (new Image(DMAFiles.mainImage(getID(), type.getMultipleDir(),
+    //                                   baseType, baseNames) + "?w=300",
+    //                "main"),
+    //      null, "image", false, false, false, false, "images", "");
+    //
     }
 
     if("clear".equals(inKey))
@@ -1828,15 +1835,17 @@ public class AbstractEntry extends ValueGroup
       }
 
       List<Command> commands = new ArrayList<Command>();
-      for(String file
-            : DMAFiles.otherFiles(getID(), type.getMultipleDir(), baseType,
-                                  baseNames))
-        if(Files.isImage(file))
-          commands.add(new Image(file, "other-image"));
-        else if(Files.isPDF(file))
-          commands.add(new ImageLink("/icons/pdf.png", file));
-        else
-          Log.warning("unknown file '" + file + "' ignored");
+      // for(String file
+      //       : DMAFiles.otherFiles(getID(), type.getMultipleDir(), baseType,
+      //                             baseNames))
+      for(DMAData.File file : m_data.getFiles(this))
+        //if(Files.isImage(file))
+        commands.add(new ImageLink(file.getPath() + "=s50", file.getName(),
+                                   file.getPath(), "file"));
+      //else if(Files.isPDF(file))
+      //    commands.add(new ImageLink("/icons/pdf.png", file));
+      //  else
+      //    Log.warning("unknown file '" + file + "' ignored");
 
       return new FormattedValue(new Divider("files", new Command(commands)),
                                 null, "files", false, false, false, false,
@@ -1899,6 +1908,7 @@ public class AbstractEntry extends ValueGroup
 
     if("as dma".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-dma.png",
+                                              getName(),
                                               "/" + getType().getLink() + "/"
                                               + getName() + ".dma",
                                               "doc-link"),
@@ -1907,6 +1917,7 @@ public class AbstractEntry extends ValueGroup
 
     if("as pdf".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
+                                              getName(),
                                               "/" + getType().getLink() + "/"
                                               + getName() + ".pdf",
                                               "doc-link"),
@@ -1915,6 +1926,7 @@ public class AbstractEntry extends ValueGroup
 
     if("as text".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-txt.png",
+                                              getName(),
                                               "/" + getType().getLink() + "/"
                                               + getName() + ".txt",
                                               "doc-link"),

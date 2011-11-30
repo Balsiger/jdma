@@ -202,33 +202,42 @@ public class Picture extends Action
       else
       {
         inDocument.add("href=\"");
-        inDocument.add(link.replaceAll("%", "%25"));
+        inDocument.add(link.replace("%", "%25"));
         inDocument.add("\" onclick=\"link(event, '"
-                       + link.replaceAll("%", "%25") + "');\">");
+                       + link.replace("%", "%25") + "');\">");
       }
     }
 
     if(overlays.length() > 0)
       inDocument.add("<div class='overlay'>");
 
+    String image = targetSrc;
+    if(!image.startsWith("http://"))
+      image = net.ixitxachitls.util.Files.concatenate
+        (m_subDir, Files.encodeName(targetSrc)).replaceAll("%", "%25");
+
     inDocument.add("<img src=\"");
-    inDocument.add(net.ixitxachitls.util.
-                   Files.concatenate(m_subDir, Files.encodeName(targetSrc))
-                   .replaceAll("%", "%25"));
+    inDocument.add(image);
     inDocument.add("\" alt=\"");
     inDocument.add(Files.file(target));
     inDocument.add("\" class=\"");
     inDocument.add(m_class);
     inDocument.add(style);
     inDocument.add("\"");
-    if((thumbnail || target.contains("w=") || target.contains("h=")) && !m_link)
-      inDocument.add(" onclick=\"util.link(event, '"
-                     + Files.concatenate(m_subDir,
-                                         Files.encodeName
-                                         (target.replaceAll
-                                          ("(\\?|&)(w|h)=\\d+(&|$)", "$1")))
-                     .replaceAll("%", "%25") + "');\" "
+    if((thumbnail || target.contains("w=") || target.contains("h=")
+        || target.contains("=s")) && !m_link)
+    {
+      String finalTarget = target.replace("\\", "\\\\")
+        .replaceAll("(\\?|&)(w=|h=)\\d+(&|$)", "$1")
+        .replaceAll("=s\\d+$", "");
+
+      if(!finalTarget.startsWith("http://"))
+        finalTarget = Files.concatenate(m_subDir, Files.encodeName(finalTarget))
+          .replace("%", "%25");
+
+      inDocument.add(" onclick=\"util.link(event, '" +  finalTarget + "');\" "
                      + "style=\"cursor: pointer\"");
+    }
     inDocument.add("/>");
 
     if(overlays.length() > 0)

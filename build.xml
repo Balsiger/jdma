@@ -357,6 +357,13 @@
       <fileset dir="${basedir}" defaultexcludes="no"
                includes="**/*.class, **/*~, **/#*#, **/.#*, **/default.log"/>
     </delete>
+    <!-- copy the base data back -->
+    <mkdir dir="${webinf.dir}/appengine-generated" />
+    <copy todir="${webinf.dir}/appengine-generated">
+      <fileset dir="${resources.dir}/WEB-INF/default">
+        <include name="*" />
+      </fileset>
+    </copy>
   </target>
 
   <!-- clean the distribution directory -->

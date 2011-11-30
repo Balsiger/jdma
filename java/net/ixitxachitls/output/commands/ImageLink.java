@@ -53,34 +53,18 @@ public class ImageLink extends BaseCommand
   /**
    * The constructor for the link command.
    *
-   * @param       inText the text to set the link to
-   * @param       inURL  the url to link to
+   * @param       inImage the url for the image
+   * @param       inName  the name of the image
+   * @param       inLink  the link to point to
+   * @param       inStyle the style to use for the image
    *
    */
-  public ImageLink(@Nonnull Object inText, @Nonnull Object inURL)
+  public ImageLink(@Nonnull Object inImage, @Nonnull Object inName,
+                   @Nonnull Object inLink, @Nonnull Object inStyle)
   {
     this();
 
-    withArguments(inText, inURL);
-  }
-
-  //........................................................................
-  //------------------------------ ImageLink -------------------------------
-
-  /**
-   * The constructor for the link command.
-   *
-   * @param       inText the text to set the link to
-   * @param       inURL  the url to link to
-   * @param       inID   the ID of the link for special formatting
-   *
-   */
-  public ImageLink(@Nonnull Object inText, @Nonnull Object inURL,
-                   @Nonnull Object inID)
-  {
-    this(inText, inURL);
-
-    withOptionals(inID);
+    withArguments(inImage, inName, inLink, inStyle);
   }
 
   //........................................................................
@@ -94,7 +78,7 @@ public class ImageLink extends BaseCommand
    */
   protected ImageLink()
   {
-    super(NAME, 1, 2);
+    super(NAME, 0, 4);
   }
 
   //........................................................................
@@ -129,11 +113,8 @@ public class ImageLink extends BaseCommand
     @org.junit.Test
     public void arguments()
     {
-      Command command = new ImageLink("text", "some url");
-      assertEquals("base", "\\imagelink{text}{some url}", command.toString());
-
-      command = new ImageLink("text", "some url", "id");
-      assertEquals("optional", "\\imagelink[id]{text}{some url}",
+      Command command = new ImageLink("text", "name", "some url", "style");
+      assertEquals("base", "\\imagelink{text}{name}{some url}{style}",
                    command.toString());
     }
 

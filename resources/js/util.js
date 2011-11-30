@@ -162,7 +162,9 @@ util.link = function(inEvent, inTarget, inFunction)
   // only link via ajax if its an html file
   var matched = inTarget.match(/\/.*\.(.*?)$/);
 
-  if(matched && matched[1] != 'html' && matched[1] != '')
+  window.console.log("match", inTarget.match(/^http:/), inTarget);
+  if((matched && matched[1] != 'html' && matched[1] != '') ||
+     inTarget.match(/^http:/))
   {
     location.href = inTarget;
 

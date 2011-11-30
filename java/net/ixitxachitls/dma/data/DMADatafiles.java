@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
@@ -43,6 +44,7 @@ import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Product;
+import net.ixitxachitls.dma.entries.Type;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
@@ -248,6 +250,20 @@ public class DMADatafiles implements DMAData
       data.save();
 
     return data;
+  }
+
+  //........................................................................
+  //------------------------------- getTypes -------------------------------
+
+  /**
+   * Get all the types for entries present in the store.
+   *
+   * @return      a set of all the entry types
+   *
+   */
+  public @Nonnull Set<AbstractType<? extends AbstractEntry>> getTypes()
+  {
+    return m_entries.keySet();
   }
 
   //........................................................................
@@ -621,7 +637,42 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------- getFiles -------------------------------
 
+  /**
+   * Get the files for the given entry.
+   *
+   * @param    inEntry the entry for which to get all files.
+   *
+   * @return   a list of all the files found
+   *
+   */
+  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
+  {
+    String baseType = null;
+    String []baseNames = null;
+    if(inEntry instanceof Entry)
+    {
+      baseType = ((Type)inEntry.getType()).getBaseType().getMultipleDir();
+      List<String> names = inEntry.getBaseNames();
+      baseNames = names.toArray(new String[names.size()]);
+    }
+
+    List<File> files = new ArrayList<File>();
+    files.add(new File("main", "image/png",
+                       DMAFiles.mainImage(inEntry.getID(),
+                                          inEntry.getType().getMultipleDir(),
+                                          baseType, baseNames)));
+    for(String file : DMAFiles.otherFiles(inEntry.getID(),
+                                          inEntry.getType().getMultipleDir(),
+                                          baseType, baseNames))
+      // TODO: this is actually not always the right type.
+      files.add(new File(Files.file(file), "image/png", file));
+
+    return files;
+  }
+
+  //........................................................................
 
   //--------------------------------- save ---------------------------------
 

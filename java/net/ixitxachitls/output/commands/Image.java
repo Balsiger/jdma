@@ -69,7 +69,7 @@ public class Image extends BaseCommand
   //--------------------------------- Image --------------------------------
 
   /**
-   * The constructor for the icon command.
+   * The constructor for the image command.
    *
    * @param       inName  the file name of the image (without extension)
    * @param       inStyle the style for formatting the image

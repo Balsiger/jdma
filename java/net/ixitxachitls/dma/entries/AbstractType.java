@@ -104,6 +104,10 @@ public abstract class AbstractType<T extends AbstractEntry>
 
     s_types.put(getName(), this);
     s_types.put(getLink(), this);
+    s_types.put(getMultiple(), this);
+    s_types.put(getMultipleLink(), this);
+    s_types.put(getName().replace(" ", ""), this);
+    s_types.put(getMultiple().replace(" ", ""), this);
     s_all.add(this);
   }
 

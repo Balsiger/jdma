@@ -23,8 +23,21 @@
 
 package net.ixitxachitls.dma.server;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.FileNameMap;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import javax.annotation.Nonnull;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -37,6 +50,8 @@ import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.util.CommandLineParser;
+import net.ixitxachitls.util.Encodings;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
 
@@ -50,8 +65,7 @@ import net.ixitxachitls.util.logging.Log;
  * Useage:
  *
  * java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma
- * -t "base character" -h jdmaixit.appspot.com -p 443
- * -u balsiger@ixitxachitls.net
+ * -h jdmaixit.appspot.com -p 443 -w 80 -u balsiger@ixitxachitls.net
  *
  * Adds base characters from the Ixitxachitls.dma file to the cloud store
  * (leave out host and port for local storage).
@@ -75,18 +89,50 @@ public final class Importer
   /**
    * Prevent instantiation.
    *
+   * @param   inHost     the host to connect to
+   * @param   inPort     the port to use for the remove api
+   * @param   inWebPort  the port to use for web access
+   * @param   inUserName the username to connect to the remote api
+   * @param   inPassword the password to connect to the remote api
+   *
+   * @throws IOException unable to install remove api
+   *
    */
-  private Importer()
+  public Importer(@Nonnull String inHost, int inPort, int inWebPort,
+                  @Nonnull String inUserName, @Nonnull String inPassword)
+    throws IOException
   {
-    // nothing to do
+    m_host = inHost;
+    m_webPort = inWebPort;
+
+    RemoteApiOptions options = new RemoteApiOptions()
+      .server(inHost, inPort)
+      .credentials(inUserName, inPassword);
+
+    m_installer = new RemoteApiInstaller();
+    m_installer.install(options);
   }
 
   //........................................................................
 
-
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The remove api installer. */
+  private @Nonnull RemoteApiInstaller m_installer;
+
+  /** A list of all files to import. */
+  private List<String> m_files = new ArrayList<String>();
+
+  /** The dma data parsed. */
+  private DMADatafiles m_data = new DMADatafiles("");
+
+  /** The hostname to connect to. */
+  private @Nonnull String m_host;
+
+  /** The port of the web application. */
+  private int m_webPort;
 
   //........................................................................
 
@@ -95,6 +141,166 @@ public final class Importer
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------ uninstall -------------------------------
+
+  /**
+   * Uninstall the remove api.
+   *
+   */
+  public void uninstall()
+  {
+    m_installer.uninstall();
+  }
+
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given file or directory for import.
+   *
+   * @param       inFile the file or directory to import
+   *
+   */
+  public void add(@Nonnull String inFile)
+  {
+    File file = new File(inFile);
+    if(file.isDirectory())
+    {
+      if("CVS".equals(file.getName()) || file.getName().startsWith("."))
+        return;
+
+      for(File entry : file.listFiles())
+      {
+        if(entry.getName().startsWith("."))
+          continue;
+
+        if(entry.getName().contains("_thumbnail."))
+          continue;
+
+        add(Files.concatenate(inFile, entry.getName()));
+      }
+    }
+    else
+      addFile(inFile);
+  }
+
+  //........................................................................
+  //------------------------------- addFile --------------------------------
+
+  /**
+   * Add the given file for importing.
+   *
+   * @param       inFile the file to import
+   *
+   */
+  public void addFile(@Nonnull String inFile)
+  {
+    Log.important("adding file " + inFile);
+
+    if(inFile.endsWith(".dma"))
+      m_data.addFile(inFile);
+    else
+      m_files.add(inFile);
+  }
+
+  //........................................................................
+  //--------------------------------- read ---------------------------------
+
+  /**
+   * Do the import of all the files.
+   *
+   * @throws IOException reading or writing failed
+   *
+   */
+  public void read() throws IOException
+  {
+    if(!m_data.read())
+    {
+      Log.error("cannot properly read data file");
+      return;
+    }
+
+    DatastoreService store = DatastoreServiceFactory.getDatastoreService();
+    DMADatastore dmaStore = new DMADatastore();
+
+    List<Entity> entities = new ArrayList<Entity>();
+
+    for(AbstractType<? extends AbstractEntry> type : m_data.getTypes())
+      for(AbstractEntry entry : m_data.getEntriesList(type))
+      {
+        entities.add(dmaStore.convert(entry));
+         Log.important("importing " + type + " " + entry.getName());
+      }
+
+    Log.important("storing entities in datastore");
+    store.put(entities);
+
+    Log.important("importing images");
+
+    FileNameMap types = URLConnection.getFileNameMap();
+
+    for(String image : m_files)
+    {
+      String []parts = image.split(File.separator);
+      if(parts.length < 3)
+      {
+        Log.warning("ignoring invalid file " + image + " "
+                    + Arrays.toString(parts));
+        continue;
+      }
+
+      String type = types.getContentTypeFor(image);
+      AbstractType entry = AbstractType.get(parts[parts.length - 3]);
+      String id = parts[parts.length - 2].replace("\\ ", " ");
+      String name = Files.file(parts[parts.length - 1]);
+
+      // check if this is the main image
+      if(id.equalsIgnoreCase(name) || name.contains(id)
+         || "cover".equalsIgnoreCase(name)
+         || "official".equalsIgnoreCase(name)
+         || "unoffical".equalsIgnoreCase(name)
+         || "main".equalsIgnoreCase(name))
+        name = "main";
+
+      Log.important("importing image " + name + " with type " + type
+                    + " and entry " + entry + " with id " + id);
+
+      URL url = new URL("http", m_host, m_webPort,
+                        "/__import"
+                        + "?type=" + Encodings.urlEncode(type)
+                        + "&name=" + Encodings.urlEncode(name)
+                        + "&entry=" + Encodings.urlEncode(entry.toString())
+                        + "&id=" + Encodings.urlEncode(id));
+      HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+      connection.setDoOutput(true);
+      connection.setRequestMethod("POST");
+      connection.connect();
+      OutputStream output = connection.getOutputStream();
+
+      FileInputStream input =
+        new FileInputStream(image.replace("\\ ", " "));
+      byte []buffer = new byte[1024 * 100];
+      for(int read = input.read(buffer); read > 0; read = input.read(buffer))
+        output.write(buffer, 0, read);
+
+      output.flush();
+
+      // Get the response
+      BufferedReader rd = new BufferedReader(new InputStreamReader
+                                             (connection.getInputStream()));
+      String line = rd.readLine();
+      if(!"OK".equals(line))
+        for(; line != null; line = rd.readLine())
+          Log.error(line);
+
+      input.close();
+      output.close();
+      rd.close();
+    }
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -125,63 +331,32 @@ public final class Importer
        ("h", "host", "The host to connect to.", "localhost"),
        new CommandLineParser.IntegerOption
        ("p", "port", "The port to connect to.", 8888),
+       new CommandLineParser.IntegerOption
+       ("w", "webport", "The web port to connect to.", 8888),
        new CommandLineParser.StringOption
        ("u", "username", "The username to connect with.",
-        "balsiger@ixitxachitls.net"),
-       new CommandLineParser.StringOption
-       ("t", "type", "The type of entries to import.", ""));
+        "balsiger@ixitxachitls.net"));
 
     String files = clp.parse(inArguments);
-
     String password = new String(System.console().readPassword
                                  ("password for " + clp.getString("username")
                                   + ": "));
 
-    RemoteApiOptions options = new RemoteApiOptions()
-      .server(clp.getString("host"), clp.getInteger("port"))
-      .credentials(clp.getString("username"), password);
-
-    RemoteApiInstaller installer = new RemoteApiInstaller();
-    installer.install(options);
-
-    // read the dma files
-    DMADatafiles data = new DMADatafiles("");
-    for(String file : files.split(",\\s*"))
-      data.addFile(file);
-
-    if(!data.read())
-    {
-      Log.error("cannot properly read data file");
-      return;
-    }
-
-    AbstractType<? extends AbstractEntry> type =
-      AbstractType.get(clp.getString("type"));
-
-    if(type == null)
-    {
-      Log.error("cannot find type for " + clp.getString("type"));
-      return;
-    }
+    Importer importer =
+      new Importer(clp.getString("host"), clp.getInteger("port"),
+                   clp.getInteger("webport"), clp.getString("username"),
+                   password);
 
     try
     {
-      DatastoreService store = DatastoreServiceFactory.getDatastoreService();
-      DMADatastore dmaStore = new DMADatastore();
+      for(String file : files.split("(?<!\\\\)\\s+"))
+        importer.add(file.replace("\\ ", " "));
 
-      List<Entity> entities = new ArrayList<Entity>();
-      for(AbstractEntry entry : data.getEntriesList(type))
-      {
-        entities.add(dmaStore.convert(entry));
-        Log.important("importing " + type + " " + entry.getName());
-      }
-
-      Log.important("storing entities in datastore");
-      store.put(entities);
+      importer.read();
     }
     finally
     {
-      installer.uninstall();
+      importer.uninstall();
     }
   }
 

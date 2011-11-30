@@ -103,38 +103,42 @@ public final class ServerUtils
   {
     Multimap<String, String> values = HashMultimap.create();
 
-    BufferedReader reader = null;
-    try
+    // don't parse post requests to special urls
+    if(!inRequest.getServletPath().startsWith("/__"))
     {
-      reader =
-        new BufferedReader(new InputStreamReader(inRequest.getInputStream()));
-
-      // parse all the key values pairs
-      for(String line = reader.readLine(); line != null;
-          line = reader.readLine())
-      {
-        String []matches = line.split("=", 2);
-
-        if(matches.length != 2)
-          Log.warning("invalid line of post request ignored: " + line);
-        else
-          values.put(matches[0], URLDecoder.decode(matches[1], "utf-8"));
-      }
-    }
-    catch(java.io.IOException e)
-    {
-      Log.warning("Could not extract post parameters!");
-    }
-    finally
-    {
+      BufferedReader reader = null;
       try
       {
-        if(reader != null)
-          reader.close();
+        reader =
+          new BufferedReader(new InputStreamReader(inRequest.getInputStream()));
+
+        // parse all the key values pairs
+        for(String line = reader.readLine(); line != null;
+            line = reader.readLine())
+        {
+          String []matches = line.split("=", 2);
+
+          if(matches.length != 2)
+            Log.warning("invalid line of post request ignored: " + line);
+          else
+            values.put(matches[0], URLDecoder.decode(matches[1], "utf-8"));
+        }
       }
       catch(java.io.IOException e)
       {
-        Log.warning("Could not close stream of post parameters");
+        Log.warning("Could not extract post parameters!");
+      }
+      finally
+      {
+        try
+        {
+          if(reader != null)
+            reader.close();
+        }
+        catch(java.io.IOException e)
+        {
+          Log.warning("Could not close stream of post parameters");
+        }
       }
     }
 
@@ -272,6 +276,7 @@ public final class ServerUtils
       EasyMock.expect(request.getQueryString())
         .andReturn("url_1=val_1&url_2&url_3=val_2&url_3=val_2a"
                    + "&both=val_5b&both=val_5c").times(2);
+      EasyMock.expect(request.getServletPath()).andStubReturn("/");
 
       EasyMock.replay(request);
 
