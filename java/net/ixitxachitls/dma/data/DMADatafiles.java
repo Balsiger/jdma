@@ -662,12 +662,15 @@ public class DMADatafiles implements DMAData
     files.add(new File("main", "image/png",
                        DMAFiles.mainImage(inEntry.getID(),
                                           inEntry.getType().getMultipleDir(),
+                                          baseType, baseNames),
+                       DMAFiles.mainImage(inEntry.getID(),
+                                          inEntry.getType().getMultipleDir(),
                                           baseType, baseNames)));
     for(String file : DMAFiles.otherFiles(inEntry.getID(),
                                           inEntry.getType().getMultipleDir(),
                                           baseType, baseNames))
       // TODO: this is actually not always the right type.
-      files.add(new File(Files.file(file), "image/png", file));
+      files.add(new File(Files.file(file), "image/png", file, file));
 
     return files;
   }

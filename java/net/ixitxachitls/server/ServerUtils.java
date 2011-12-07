@@ -38,6 +38,7 @@ import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -104,7 +105,8 @@ public final class ServerUtils
     Multimap<String, String> values = HashMultimap.create();
 
     // don't parse post requests to special urls
-    if(!inRequest.getServletPath().startsWith("/__"))
+    if(!inRequest.getServletPath().startsWith("/__")
+       && !inRequest.getServletPath().startsWith("/_ah/"))
     {
       BufferedReader reader = null;
       try
@@ -116,6 +118,34 @@ public final class ServerUtils
         for(String line = reader.readLine(); line != null;
             line = reader.readLine())
         {
+          System.out.println(line);
+          // ignore multipart boundary or empty lines
+          if(line.startsWith("--") || line.isEmpty())
+            continue;
+
+          // specially parse form data
+          String []form =
+            Strings.getPatterns(line,
+                                "(?i)"
+                                + "Content-Disposition: form-data; "
+                                + "name=\"(.*?)\"(?:;\\s+filename=\"(.*?)\")?");
+
+          if(form != null && form.length > 0)
+          {
+            if(form.length > 1 && form[1] != null)
+              values.put(form[0], form[1]);
+
+            for(line = reader.readLine(); line != null && line.isEmpty();
+                line = reader.readLine())
+              ;
+
+            System.out.println(line);
+            if(line != null)
+              values.put(form[0], line);
+
+            continue;
+          }
+
           String []matches = line.split("=", 2);
 
           if(matches.length != 2)

@@ -159,10 +159,17 @@ util.link = function(inEvent, inTarget, inFunction)
   if(inTarget == null)
     inTarget = location.pathname;
 
+  // don't link to targets starting with //
+  if(inTarget.match(/^\/\//))
+  {
+    location.href = inTarget.replace(/^\/\//, '/');
+
+    return false;
+  }
+
   // only link via ajax if its an html file
   var matched = inTarget.match(/\/.*\.(.*?)$/);
 
-  window.console.log("match", inTarget.match(/^http:/), inTarget);
   if((matched && matched[1] != 'html' && matched[1] != '') ||
      inTarget.match(/^http:/))
   {

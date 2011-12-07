@@ -24,25 +24,30 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
-import java.nio.ByteBuffer;
+import java.net.URLConnection;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.files.AppEngineFile;
-import com.google.appengine.api.files.FileService;
-import com.google.appengine.api.files.FileServiceFactory;
-import com.google.appengine.api.files.FileWriteChannel;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.server.ServerUtils;
+import net.ixitxachitls.server.servlets.BaseServlet;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -50,10 +55,13 @@ import net.ixitxachitls.util.logging.Log;
 //------------------------------------------------------------------- header
 
 /**
- * A servlet to upload files to the blob store.
+ * A small servlet to upload blobs. Real uploading of the data is done by the
+ * blobstore service, we only need to do the bookeeping here.
  *
+ * We can't make this a DMAServlet, as the blobstore redirects to us without
+ * going through the DMAFilter, thus we don't have the appropriate DMARequest.
  *
- * @file          BlobUploadServlet.java
+ * @file          BlobServlet.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
@@ -63,9 +71,22 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-public class BlobUploadServlet extends HttpServlet
+public class BlobUploadServlet extends BaseServlet
 {
   //--------------------------------------------------------- constructor(s)
+
+  //-------------------------- BlobUploadServlet ---------------------------
+
+  /**
+   * Create the servlet.
+   *
+   */
+  public  BlobUploadServlet()
+  {
+    // nothing to do here
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -73,6 +94,14 @@ public class BlobUploadServlet extends HttpServlet
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
+
+  /** The blob store service. */
+  private @Nonnull BlobstoreService m_blobs =
+    BlobstoreServiceFactory.getBlobstoreService();
+
+  /** The image service to serve images. */
+  private @Nonnull ImagesService m_image =
+    ImagesServiceFactory.getImagesService();
 
   //........................................................................
 
@@ -86,89 +115,179 @@ public class BlobUploadServlet extends HttpServlet
 
   //------------------------------------------------- other member functions
 
-  //-------------------------------- doPost --------------------------------
-
   /**
-   * Post information to the blob store.
+   * Handle requests to download blob.
    *
-   * @param       inRequest  the http request
-   * @param       inResponse the http response sent back
+   * @param inRequest  the http request
+   * @param inResponse the http response
    *
-   * @throws      ServletException can happen
-   * @throws      IOException this too...
+   * @return a special result in case of error or null if ok
+   *
+   * @throws IOException if problems reading the blob
    *
    */
-  public void doPost(@Nonnull HttpServletRequest inRequest,
-                     @Nonnull HttpServletResponse inResponse)
-    throws ServletException, IOException
+  public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
+                                        @Nonnull HttpServletResponse inResponse)
+    throws IOException
   {
-    // check username/pw
-    System.out.println("user: " + inRequest.getUserPrincipal());
+    Multimap<String, String> params = ServerUtils.extractParams(inRequest);
+    DMARequest request = new DMARequest(inRequest, params);
+    System.out.println("params: " + params);
 
-    DMARequest request = (DMARequest)inRequest;
+    if(!request.hasUser())
+      return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                           "you must be logged in to upload");
 
-    String type = request.getParam("type");
-    // fall back to png image
-    if(type == null)
-      type = "image/png";
+    inResponse.setHeader("Content-Type", "text/html");
+    inResponse.setHeader("Cache-Control", "max-age=0");
 
-    String name = request.getParam("name");
-    if(name == null)
-      name = "unknown";
+    HTMLWriter writer =
+      new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
 
-    PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
-
-    String id = request.getParam("id");
-    AbstractType<? extends AbstractEntry> entryType =
-      AbstractType.get(request.getParam("entry"));
-
-
-    if(id == null || entryType == null)
+    if(request.getParam("form") == null)
     {
-      Log.warning("ignoring file " + name + " without id or entry type");
-      writer.println("File ignored, not id or entry type given");
+      String id = request.getParam("id");
+      if(!params.containsKey("id"))
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST, "no id given");
+
+
+      AbstractType<? extends AbstractEntry> type =
+        AbstractType.get(request.getParam("type"));
+      if(type == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "invalid type " + request.getParam("type"));
+
+      DMADatastore store = (DMADatastore)DMADataFactory.getBaseData();
+      AbstractEntry entry = store.getEntry(id, type);
+
+      if(entry == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "could not find " + type + " " + id);
+
+
+      String file = request.getParam("file");
+      String name = request.getParam("name");
+      if(file != null && name == null)
+        name = Files.file(file);
+
+      if(name == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "no name given");
+
+      if(request.getParam("delete") != null)
+      {
+        store.removeFile(entry, name);
+
+        writer
+          .script("parent.window.edit.updateImage('file-" + name
+                  + "', '/icons/products-dummy.png', null, 'upload-" + name
+                  + "');");
+
+        writer.close();
+        return null;
+      }
+
+      if(file == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "no file name given");
+
+      String fileType = URLConnection.getFileNameMap().getContentTypeFor(file);
+
+      Map<String, BlobKey> blobs = m_blobs.getUploadedBlobs(inRequest);
+      BlobKey key = blobs.get("file");
+
+      if(key == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "No file uploaded");
+
+      store.addFile(entry, name, fileType, key);
+
+      Log.event(request.getUser().getName(), "upload",
+                "Uploaded " + fileType + " file " + file + " for " + type + " "
+              + id);
+
+
+      String url =  m_image.getServingUrl(key);
+      writer
+        .script("parent.window.edit.updateImage('file-" + name + "', '" + url
+                + "=s300', 'util.link(event, \"" + url + "\");', "
+                + "'upload-" + name + "');");
+        ;
+
+      writer.close();
     }
     else
     {
-      DMADatastore store = (DMADatastore)DMADataFactory.getBaseData();
-      AbstractEntry entry = store.getEntry(id, entryType);
+      // return the form to upload
+      if(request.getParam("id") == null || request.getParam("type") == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "invalid arguments given");
 
-      if(entry == null)
-      {
-        Log.warning("ignoring file " + name + " without matching " + entryType
-                    + " " + id);
-        writer.println("File ignored, no matching entry found");
-      }
-      else
-      {
-        Log.event("admin", "import", "Uploading blob " + name + " of type "
-                  + type + " for " + entryType + " with id " + id);
+      writer
+        .addCSSFile("jdma")
+        .addJSFile("jdma")
+        .begin("div").classes("file-upload")
 
-        FileService fileService = FileServiceFactory.getFileService();
-        AppEngineFile file = fileService.createNewBlobFile(type, name);
+        .begin("div")
+        .classes("sprite image-cancel")
+        .attribute("title", "Cancel")
+        .attribute("onclick",
+                   "parent.window.edit.updateImage('file-"
+                   + request.getParam("name") + "', null, "
+                   + "null, 'upload-" + request.getParam("name") + "');")
+        .end("div")
 
-        InputStream input = inRequest.getInputStream();
-        byte []buffer = new byte[1024 * 100];
-        FileWriteChannel channel = fileService.openWriteChannel(file, true);
+        .begin("form")
+        .attribute("action", m_blobs.createUploadUrl("/fileupload"))
+        .attribute("method", "post")
+        .attribute("enctype", "multipart/form-data")
+        .classes("upload")
 
-        for(int read = input.read(buffer); read > 0; read = input.read(buffer))
-          channel.write(ByteBuffer.wrap(buffer, 0, read));
+        .begin("input")
+        .attribute("type", "hidden")
+        .attribute("name", "id")
+        .attribute("value", request.getParam("id"))
+        .end("input")
 
-        // cleanup
-        channel.closeFinally();
-        input.close();
+        .begin("input")
+        .attribute("type", "hidden")
+        .attribute("name", "type")
+        .attribute("value", request.getParam("type"))
+        .end("input");
 
-        // A reference to the path to the datastore.
-        store.addFile(entry, name, type, fileService.getBlobKey(file));
+      if(request.getParam("name") != null)
+        writer
+          .begin("input")
+          .attribute("type", "hidden")
+          .attribute("name", "name")
+          .attribute("value", request.getParam("name"))
+          .end("input");
 
-        writer.println("OK");
-      }
+      writer
+        .begin("input")
+        .attribute("type", "file")
+        .attribute("name", "file")
+        .attribute("onchange", "this.parentNode.submit();")
+        .end("input");
+
+      if("main".equals(request.getParam("name")))
+        writer
+          .begin("input")
+          .attribute("type", "submit")
+          .attribute("name", "delete")
+          .attribute("value", "Remove")
+          .classes("submit")
+          .end("input");
+
+      writer
+        .end("form")
+        .end("div");
+
+      writer.close();
     }
 
-    writer.close();
+    return null;
   }
-
-  //........................................................................
 
   //........................................................................
 }

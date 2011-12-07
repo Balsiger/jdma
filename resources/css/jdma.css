@@ -308,6 +308,7 @@ IMG.main.image
   display:    inline-block;
   box-shadow: 1px 1px 3px #777;
   float:      left;
+  position:   relative;
 }
 
 DIV.desc
@@ -325,9 +326,17 @@ DIV.files
 {
   margin-top:  10px;
   padding-top: 2px;
+  min-height:  10px;
+  min-width:   10px;
 }
 
-DIV.files IMG
+DIV.file
+{
+  display: inline-block;
+  position: relative;
+}
+
+DIV.file IMG
 {
   border:     1px solid #ccc;
   max-width:  50px;
@@ -662,6 +671,40 @@ DIV.unparsed-rest
   font-style: italic;
 }
 
+IFRAME.upload
+{
+  background: white;
+  opacity: 0.8;
+  z-index: 2;
+  position: absolute;
+}
+
+IFRAME.upload-files
+{
+  display: inline-block;
+  border: 1px solid black;
+}
+
+DIV.file-upload
+{
+  text: black;
+  opacity: 1;
+}
+
+DIV.image-cancel
+{
+  background-position: -50px;
+  position:            absolute;
+  left:                5px;
+  bottom:              5px;
+}
+
+DIV.file DIV.remove
+{
+  position: absolute;
+  bottom:   5px;
+  right:    5px;
+}
 
 /******************************************************************************
  * actions

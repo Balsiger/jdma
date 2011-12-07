@@ -57,6 +57,16 @@
 
   <servlet>
     <servlet-name>blobimport</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.BlobImportServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>file</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.BlobServlet</servlet-class>
+  </servlet>
+
+  <servlet>
+    <servlet-name>fileupload</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.BlobUploadServlet</servlet-class>
   </servlet>
 
@@ -112,9 +122,22 @@
     <url-pattern>/__import</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>fileupload</servlet-name>
+    <url-pattern>/fileupload
+</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>file</servlet-name>
+    <url-pattern>/file/*</url-pattern>
+  </servlet-mapping>
+
   <!-- this does not work on the dev server; you have to remove this to be -->
   <!-- able to upload to the dev server. -->
+  <!--
   <security-constraint>
+    <web-resource-name>blobimport</web-resource-name>
     <web-resource-collection>
       <url-pattern>/__import</url-pattern>
     </web-resource-collection>
@@ -122,6 +145,7 @@
       <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
+  -->
 
   <filter>
     <filter-name>DMARequest</filter-name>

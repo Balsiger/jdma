@@ -1793,25 +1793,22 @@ public class AbstractEntry extends ValueGroup
       for(DMAData.File file : m_data.getFiles(this))
         if("main".equals(file.getName()))
           return new FormattedValue
-            (new ImageLink(file.getPath() + "=s300", "main", file.getPath(),
-                           "main"),
+            (new Editable(getID(), getEditType(),
+                          new ImageLink(file.getIcon() + "=s300", "main",
+                                        file.getPath(), "main")
+                          .withID("file-main"),
+                          "image", "main", "image", null),
              null, "image", false, false, false, false, "images", "");
 
-    //   String baseType = null;
-    //   String []baseNames = null;
-    //   if(this instanceof Entry)
-    //   {
-    //     baseType = ((Type)type).getBaseType().getMultipleDir();
-    //     List<String> names = getBaseNames();
-    //     baseNames = names.toArray(new String[names.size()]);
-    //   }
-
-    //   return new FormattedValue
-    //     (new Image(DMAFiles.mainImage(getID(), type.getMultipleDir(),
-    //                                   baseType, baseNames) + "?w=300",
-    //                "main"),
-    //      null, "image", false, false, false, false, "images", "");
-    //
+      return new FormattedValue
+        (new Editable(getID(), getEditType(),
+                      new ImageLink("/icons/" + type.getMultipleLink()
+                                    + "-dummy.png", "main",
+                                    "/icons/" + type.getMultipleLink()
+                                    + "-dummy.png", "main")
+                      .withID("file-main"),
+                      "image", "main", "image", null),
+         null, "image", false, false, false, false, "images", "");
     }
 
     if("clear".equals(inKey))
@@ -1835,21 +1832,37 @@ public class AbstractEntry extends ValueGroup
       }
 
       List<Command> commands = new ArrayList<Command>();
-      // for(String file
-      //       : DMAFiles.otherFiles(getID(), type.getMultipleDir(), baseType,
-      //                             baseNames))
+      boolean first = true;
       for(DMAData.File file : m_data.getFiles(this))
-        //if(Files.isImage(file))
-        commands.add(new ImageLink(file.getPath() + "=s50", file.getName(),
-                                   file.getPath(), "file"));
-      //else if(Files.isPDF(file))
-      //    commands.add(new ImageLink("/icons/pdf.png", file));
-      //  else
-      //    Log.warning("unknown file '" + file + "' ignored");
+      {
+        if(first && "main".equals(file.getName()))
+        {
+          first = false;
+          continue;
+        }
 
-      return new FormattedValue(new Divider("files", new Command(commands)),
-                                null, "files", false, false, false, false,
-                                "files", "");
+        String uri;
+        if(file.getType().startsWith("image/"))
+          uri = file.getIcon() + "=s50";
+        else if("application/pdf".equals(file.getType()))
+          uri = "/icons/pdf.png";
+        else
+        {
+          Log.warning("unknown file '" + file + "' ignored");
+          continue;
+        }
+
+        commands.add(new Divider("file", new ImageLink(uri, file.getName(),
+                                                       file.getPath(),
+                                                       "file")));
+      }
+
+      return new FormattedValue
+        (new Editable(getID(), getEditType(),
+                      new Divider("files", "files", new Command(commands)),
+                      "files", "files", "files", null),
+         null, "files", false, false, false, false,
+         "files", "");
     }
 
     if("file".equals(inKey))

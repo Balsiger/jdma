@@ -50,7 +50,8 @@ edit.makeEditable = function()
   if(!target.__edit)
     target.__edit = [];
 
-  target.__edit.push(this);
+  if(!target.__edit.contains(this))
+    target.__edit.push(this);
 
   $(target).dblclick(edit.edit);
   $(target).bind('contextmenu', edit.edit);
@@ -78,12 +79,16 @@ edit.edit = function(inEvent, inElement, inNoRelated)
   $(element).unbind('dblclick', edit.edit);
   $(element).unbind('contextmenu', edit.edit);
 
+  var savable = false;
   if(element.__edit)
     for(var i = 0; i < element.__edit.length; i++)
-      edit.editValue(element.__edit[i], element, inNoRelated);
+      savable |= edit.editValue(element.__edit[i], element, inNoRelated);
 
-  gui.addAction('save', 'Save', edit.save);
-  gui.addAction('cancel', 'Cancel', util.link);
+  if(savable)
+  {
+    gui.addAction('save', 'Save', edit.save);
+    gui.addAction('cancel', 'Cancel', util.link);
+  }
 
   return false;
 };
@@ -98,23 +103,13 @@ edit.edit = function(inEvent, inElement, inNoRelated)
  * @param       inTarget       the target container
  * @param       inNoRelated    true when not editing related values
  *
+ * @return      true if the edited value has to be saved
+ *
  */
 edit.editValue = function(inEditable, inTarget, inNoRelated)
 {
   var editable = edit.Base.create(inEditable);
-
-  $(inEditable).after(editable.getElement());
-  $(inEditable).hide();
-  inTarget.__edit = editable;
-
-  if(!inNoRelated && editable.related)
-  {
-    var related = editable.related.split(/,\s*/);
-    for(var i = 0; i < related.length; i++)
-      edit.edit(undefined, $('dmaeditable[key=' + related[i] + ']')[0], true);
-  }
-
-  editable.focus();
+  return editable.edit(inEditable, inTarget, inNoRelated);
 };
 
 //..........................................................................
@@ -225,6 +220,44 @@ edit.refresh = function()
 };
 
 //..........................................................................
+//------------------------------ updateImage -------------------------------
+
+/**
+ * Update an image with new data.
+ *
+ * @param  inID      the id of the image to modify
+ * @param  inSrc     the new source for the image
+ * @param  inOnclick the new on click handler
+ * @param  inEditID  the id fo the edit element
+ *
+ */
+edit.updateImage = function(inID, inSrc, inOnclick, inEditID)
+{
+  var edit = $('#' + inEditID);
+  var image = document.getElementById(inID);
+
+  if(!image)
+  {
+    edit.before($('<div class="file added"><img id="' + inID +
+                  '"></img></div>')), edit[0], edit[0].parentNode;
+    image = document.getElementById(inID);
+  }
+
+  if(inSrc == '*')
+    $(image).remove();
+  else if(inSrc)
+  {
+    image.src = inSrc;
+    image.onclick = inOnclick;
+  }
+
+  edit.remove();
+
+  // make editable again
+  $(image).parents('dmaeditable').each(edit.makeEditable);
+};
+
+//..........................................................................
 
 //--------------------------------------------------------------------- Base
 
@@ -309,6 +342,12 @@ edit.Base.create = function(inElement)
 
     case 'autokey':
       return new edit.AutocompleteKey(element, properties);
+
+    case 'image':
+      return new edit.Image(element, properties);
+
+    case 'files':
+      return new edit.Files(element, properties);
 
     case 'date':
       return new edit.Date(element, properties);
@@ -482,7 +521,6 @@ edit.Base.prototype._cancel = function()
   $(this.editable).each(edit.makeEditable);
 };
 
-
 //..........................................................................
 //-------------------------------------------------------------------- Field
 
@@ -550,6 +588,31 @@ edit.Field = function(inEditable, inProperties)
   form.setupValidation(this._element);
 };
 extend(edit.Field, edit.Base);
+
+/**
+ * Install the editing markup for the field.
+ *
+ * @param       inEditable     the field to edit
+ * @param       inTarget       the target container
+ * @param       inNoRelated    true when not editing related values
+ *
+ * @return      true if the edited value has to be saved
+ */
+edit.Field.prototype.edit = function(inEditable, inTarget, inNoRelated) {
+  $(inEditable).after(this.getElement());
+  $(inEditable).hide();
+  inTarget.__edit = editable;
+
+  if(!inNoRelated && this.related)
+  {
+    var related = this.related.split(/,\s*/);
+    for(var i = 0; i < related.length; i++)
+      edit.edit(undefined, $('dmaeditable[key=' + related[i] + ']')[0], true);
+  }
+
+  this.focus();
+  return true;
+};
 
 /**
  * Update the sate of decoration elements for editing.
@@ -1210,6 +1273,120 @@ edit.Date.prototype._createElement = function()
 edit.Date.prototype._getValue = function()
 {
   return this.month._getValue() + ' ' + this.year._getValue();
+};
+
+//..........................................................................
+//-------------------------------------------------------------------- Image
+
+/**
+ * Editing an image value.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.Image = function(inEditable, inProperties)
+{
+  edit.Base.call(this, inEditable, inProperties);
+};
+extend(edit.Image, edit.Base);
+
+
+/**
+ * Install the editing markup for the field.
+ *
+ * @param       inEditable     the field to edit
+ * @param       inTarget       the target container
+ * @param       inNoRelated    true when not editing related values
+ *
+ * @return      true if the edited value has to be saved
+ */
+edit.Image.prototype.edit = function(inEditable, inTarget, inNoRelated) {
+  var parent = inEditable.firstChild;
+  parent.style.position = 'relative';
+  var image = parent.firstChild;
+  var element = this.getElement();
+  element.css('height', image.clientHeight);
+  element.css('width', image.clientWidth);
+  $(parent).prepend(element);
+
+  return false;
+};
+
+/**
+  * Create the element associated with this editable.
+  *
+  * @return the html element created
+  */
+edit.Image.prototype._createElement = function()
+{
+  return $('<iframe src="/fileupload?id=' + this.properties.id +
+           '&type=' + this.properties.entry + '&name=main&form"' +
+           'class="upload" id="upload-main"></iframe>');
+};
+
+//..........................................................................
+//-------------------------------------------------------------------- Files
+
+/**
+ * Editing a files value.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.Files = function(inEditable, inProperties)
+{
+  edit.Base.call(this, inEditable, inProperties);
+};
+extend(edit.Files, edit.Base);
+
+
+/**
+ * Install the editing markup for the field.
+ *
+ * @param       inEditable     the field to edit
+ * @param       inTarget       the target container
+ * @param       inNoRelated    true when not editing related values
+ *
+ * @return      true if the edited value has to be saved
+ */
+edit.Files.prototype.edit = function(inEditable, inTarget, inNoRelated) {
+  var containers = $(inEditable).find("div.file");
+  var properties = this.properties;
+  $(containers).each(function(index, element)
+  {
+    var name = $(element.firstChild).attr('title');
+    element.firstChild.id = 'file-' + name;
+    $(element).append('<div id="file-edit-' + name +
+                      '" class="sprite remove" title="Remove" ' +
+                      'onclick="util.ajax(\'/fileupload?id=' +
+                      properties.id + '&type=' + properties.entry +
+                      '&name=' + name + '&delete\', null, ' +
+                      ' function() { edit.updateImage(\'file-' + name +
+                      '\', \'*\', null, \'file-edit-' + name +
+                      '\'); })"></div>');
+  });
+
+  var parent = inEditable.firstChild.firstChild;
+  var element = this.getElement();
+  element.css('height', 50);
+  element.css('width', 250);
+  $(parent).append(element);
+
+  return false;
+};
+
+/**
+  * Create the element associated with this editable.
+  *
+  * @return the html element created
+  */
+edit.Files.prototype._createElement = function()
+{
+  return $('<iframe src="/fileupload?id=' + this.properties.id +
+           '&type=' + this.properties.entry + '&name=files&form"' +
+           'class="upload-files" id="upload-files"></iframe>');
 };
 
 //..........................................................................

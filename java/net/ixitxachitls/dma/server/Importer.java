@@ -251,7 +251,8 @@ public final class Importer
       }
 
       String type = types.getContentTypeFor(image);
-      AbstractType entry = AbstractType.get(parts[parts.length - 3]);
+      AbstractType<? extends AbstractEntry> entry =
+        AbstractType.get(parts[parts.length - 3]);
       String id = parts[parts.length - 2].replace("\\ ", " ");
       String name = Files.file(parts[parts.length - 1]);
 
@@ -353,6 +354,10 @@ public final class Importer
         importer.add(file.replace("\\ ", " "));
 
       importer.read();
+    }
+    catch(Exception e)
+    {
+      Log.error(e.toString());
     }
     finally
     {

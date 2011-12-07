@@ -68,6 +68,25 @@ public class ImageLink extends BaseCommand
   }
 
   //........................................................................
+  //-------------------------------- withID --------------------------------
+
+  /**
+   * Add an id to the image link.
+   *
+   * @param       inID the id to add
+   *
+   * @return      the object for chaining
+   *
+   */
+  public ImageLink withID(@Nonnull String inID)
+  {
+    withOptionals(inID);
+
+    return this;
+  }
+
+  //........................................................................
+
   //------------------------------- ImageLink ------------------------------
 
   /**

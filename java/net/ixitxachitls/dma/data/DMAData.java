@@ -63,16 +63,19 @@ public interface DMAData
     /**
      * Create the file with all its data.
      *
-     * @param inName the file name
-     * @param inType the mime type of the file
-     * @param inPath the url path to access the file
+     * @param inName   the file name
+     * @param inType   the mime type of the file
+     * @param inPath   the url path to access the file
+     * @param inIcon   the icon or thumbnail to show for the file
+     *
      */
     public File(@Nonnull String inName, @Nonnull String inType,
-                @Nonnull String inPath)
+                @Nonnull String inPath, @Nonnull String inIcon)
     {
       m_name = inName;
       m_type = inType;
       m_path = inPath;
+      m_icon = inIcon;
     }
 
     /** The name of the file. */
@@ -83,6 +86,9 @@ public interface DMAData
 
     /** The url to display the file. */
     private @Nonnull String m_path;
+
+    /** The url to display a thumbnail of the file. */
+    private @Nonnull String m_icon;
 
     /**
      * Get the name of the file.
@@ -103,6 +109,7 @@ public interface DMAData
     {
       return m_type;
     }
+
     /**
      * Get the path of the file.
      *
@@ -111,6 +118,16 @@ public interface DMAData
     public @Nonnull String getPath()
     {
       return m_path;
+    }
+
+    /**
+     * Get the icon for the file.
+     *
+     * @return the icon for the file
+     */
+    public @Nonnull String getIcon()
+    {
+      return m_icon;
     }
   }
 

@@ -370,10 +370,26 @@ public class DMADatastore implements DMAData
     List<File> files = new ArrayList<File>();
     for(Entity entity : preparedQuery.asList
           (FetchOptions.Builder.withLimit(100)))
-      files.add(new File((String)entity.getProperty("name"),
-                         (String)entity.getProperty("type"),
-                         m_image.getServingUrl
-                         (new BlobKey((String)entity.getProperty("path")))));
+    {
+      String name = (String)entity.getProperty("name");
+      String type = (String)entity.getProperty("type");
+      String path = (String)entity.getProperty("path");
+      String icon = null;
+      if(type == null)
+        type = "image/png";
+
+      if(type.startsWith("image/"))
+        icon = m_image.getServingUrl(new BlobKey(path));
+      else if("application/pdf".equals(type))
+        icon = "/icons/pdf.png";
+      else
+      {
+        Log.warning("unknown file type " + type + " ignored for " + name);
+        continue;
+      }
+
+      files.add(new File(name, type, "//file/" + path, icon));
+    }
 
     // add the files from any base entries
     for(AbstractEntry entry : inEntry.getBaseEntries())
@@ -480,7 +496,37 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //----------------------------- removeFile -------------------------------
 
+  /**
+   * Remove a file from the given entry.
+   *
+   * @param  inEntry the entry to add the file to
+   * @param  inName  the name of the file
+   *
+   */
+  public void removeFile(@Nonnull AbstractEntry inEntry, @Nonnull String inName)
+  {
+    Key key =
+      KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
+                                                inEntry.getID()),
+                           "file", inName);
+    try
+    {
+      Entity entity = m_store.get(key);
+      m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
+      Log.important("deleting file " + inName + " for " + inEntry.getType()
+                    + " " + inEntry.getID());
+      m_store.delete(key);
+    }
+    catch(com.google.appengine.api.datastore.EntityNotFoundException e)
+    {
+      Log.warning("trying to delete noexistant file " + inName + " for "
+                  + inEntry.getType() + " " + inEntry.getID());
+    }
+  }
+
+  //........................................................................
 
   //........................................................................
 
