@@ -24,8 +24,9 @@
 package net.ixitxachitls.server;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.URLDecoder;
+import java.util.Arrays;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -104,21 +105,24 @@ public final class ServerUtils
   {
     Multimap<String, String> values = HashMultimap.create();
 
+    // read parameters from the parameter map
+    for(Map.Entry<String, String []> entry
+          : inRequest.getParameterMap().entrySet())
+      values.putAll(entry.getKey(), Arrays.asList(entry.getValue()));
+
     // don't parse post requests to special urls
-    if(!inRequest.getServletPath().startsWith("/__")
+    if(values.isEmpty() && !inRequest.getServletPath().startsWith("/__")
        && !inRequest.getServletPath().startsWith("/_ah/"))
     {
       BufferedReader reader = null;
       try
       {
-        reader =
-          new BufferedReader(new InputStreamReader(inRequest.getInputStream()));
+        reader = inRequest.getReader();
 
         // parse all the key values pairs
         for(String line = reader.readLine(); line != null;
             line = reader.readLine())
         {
-          System.out.println(line);
           // ignore multipart boundary or empty lines
           if(line.startsWith("--") || line.isEmpty())
             continue;
@@ -133,13 +137,15 @@ public final class ServerUtils
           if(form != null && form.length > 0)
           {
             if(form.length > 1 && form[1] != null)
+            {
               values.put(form[0], form[1]);
+              continue;
+            }
 
             for(line = reader.readLine(); line != null && line.isEmpty();
                 line = reader.readLine())
               ;
 
-            System.out.println(line);
             if(line != null)
               values.put(form[0], line);
 

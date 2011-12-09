@@ -130,9 +130,14 @@ public class BlobUploadServlet extends BaseServlet
                                         @Nonnull HttpServletResponse inResponse)
     throws IOException
   {
-    Multimap<String, String> params = ServerUtils.extractParams(inRequest);
-    DMARequest request = new DMARequest(inRequest, params);
-    System.out.println("params: " + params);
+    DMARequest request;
+    if(inRequest instanceof DMARequest)
+      request = (DMARequest)inRequest;
+    else
+    {
+      Multimap<String, String> params = ServerUtils.extractParams(inRequest);
+      request = new DMARequest(inRequest, params);
+    }
 
     if(!request.hasUser())
       return new TextError(HttpServletResponse.SC_BAD_REQUEST,
@@ -147,7 +152,7 @@ public class BlobUploadServlet extends BaseServlet
     if(request.getParam("form") == null)
     {
       String id = request.getParam("id");
-      if(!params.containsKey("id"))
+      if(id == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST, "no id given");
 
 
@@ -165,10 +170,11 @@ public class BlobUploadServlet extends BaseServlet
                              "could not find " + type + " " + id);
 
 
-      String file = request.getParam("file");
+      String file = request.getParam("filename");
       String name = request.getParam("name");
-      if(file != null && name == null)
-        name = Files.file(file);
+      String filename = name;
+      if(file != null)
+        filename = Files.file(file);
 
       if(name == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
@@ -176,22 +182,16 @@ public class BlobUploadServlet extends BaseServlet
 
       if(request.getParam("delete") != null)
       {
-        store.removeFile(entry, name);
+        store.removeFile(entry, filename);
 
         writer
-          .script("parent.window.edit.updateImage('file-" + name
+          .script("parent.window.edit.updateImage('file-" + filename
                   + "', '/icons/products-dummy.png', null, 'upload-" + name
                   + "');");
 
         writer.close();
         return null;
       }
-
-      if(file == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "no file name given");
-
-      String fileType = URLConnection.getFileNameMap().getContentTypeFor(file);
 
       Map<String, BlobKey> blobs = m_blobs.getUploadedBlobs(inRequest);
       BlobKey key = blobs.get("file");
@@ -200,7 +200,13 @@ public class BlobUploadServlet extends BaseServlet
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "No file uploaded");
 
-      store.addFile(entry, name, fileType, key);
+      if(file == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "no file name given");
+
+      String fileType = URLConnection.getFileNameMap().getContentTypeFor(file);
+
+      store.addFile(entry, filename, fileType, key);
 
       Log.event(request.getUser().getName(), "upload",
                 "Uploaded " + fileType + " file " + file + " for " + type + " "
@@ -209,7 +215,7 @@ public class BlobUploadServlet extends BaseServlet
 
       String url =  m_image.getServingUrl(key);
       writer
-        .script("parent.window.edit.updateImage('file-" + name + "', '" + url
+        .script("parent.window.edit.updateImage('file-" + filename + "', '" + url
                 + "=s300', 'util.link(event, \"" + url + "\");', "
                 + "'upload-" + name + "');");
         ;
@@ -223,7 +229,7 @@ public class BlobUploadServlet extends BaseServlet
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "invalid arguments given");
 
-      writer
+     writer
         .addCSSFile("jdma")
         .addJSFile("jdma")
         .begin("div").classes("file-upload")
@@ -244,6 +250,13 @@ public class BlobUploadServlet extends BaseServlet
         .classes("upload")
 
         .begin("input")
+        .attribute("type", "file")
+        .attribute("name", "file")
+        .attribute("onchange", "this.parentNode['filename'].value = this.value; "
+                   + "this.parentNode.submit();")
+        .end("input")
+
+        .begin("input")
         .attribute("type", "hidden")
         .attribute("name", "id")
         .attribute("value", request.getParam("id"))
@@ -253,6 +266,12 @@ public class BlobUploadServlet extends BaseServlet
         .attribute("type", "hidden")
         .attribute("name", "type")
         .attribute("value", request.getParam("type"))
+        .end("input")
+
+        .begin("input")
+        .attribute("type", "hidden")
+        .attribute("name", "filename")
+        .attribute("value", "")
         .end("input");
 
       if(request.getParam("name") != null)
@@ -262,13 +281,6 @@ public class BlobUploadServlet extends BaseServlet
           .attribute("name", "name")
           .attribute("value", request.getParam("name"))
           .end("input");
-
-      writer
-        .begin("input")
-        .attribute("type", "file")
-        .attribute("name", "file")
-        .attribute("onchange", "this.parentNode.submit();")
-        .end("input");
 
       if("main".equals(request.getParam("name")))
         writer
