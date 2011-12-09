@@ -449,6 +449,23 @@ public final class Files
   }
 
   //........................................................................
+  //---------------------------- mimeExtension -----------------------------
+
+  /**
+   * Compute the extension to use for a file of the given mime type.
+   *
+   * @param       inType the mime type to compute for
+   *
+   * @return      the computed extension
+   *
+   */
+  public static @Nonnull String mimeExtension(@Nonnull String inType)
+  {
+    return inType.substring(inType.lastIndexOf("/") + 1);
+  }
+
+  //........................................................................
+
 
   //------------------------------- isImage --------------------------------
 

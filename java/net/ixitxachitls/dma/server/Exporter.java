@@ -23,20 +23,29 @@
 
 package net.ixitxachitls.dma.server;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
 import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMADatastore;
-import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.util.CommandLineParser;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.ANSILogger;
 import net.ixitxachitls.util.logging.Log;
 
@@ -49,9 +58,8 @@ import net.ixitxachitls.util.logging.Log;
  *
  * Useage:
  *
- * java net.ixitxachitls.dma.server.Exporter file.dma
- * -t "base character" -h jdmaixit.appspot.com -p 443
- * -u balsiger@ixitxachitls.net
+ * java net.ixitxachitls.dma.server.Exporter
+ * -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net <dir>
  *
  * Exports base  characters from the datastore to file file.dma
  * (leave out host and port for local storage).
@@ -87,19 +95,15 @@ public final class Exporter
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //--------------------------------------------------------- main/debugging
@@ -127,11 +131,9 @@ public final class Exporter
        ("p", "port", "The port to connect to.", 8888),
        new CommandLineParser.StringOption
        ("u", "username", "The username to connect with.",
-        "balsiger@ixitxachitls.net"),
-       new CommandLineParser.StringOption
-       ("t", "type", "The type of entries to export.", ""));
+        "balsiger@ixitxachitls.net"));
 
-    String file = clp.parse(inArguments);
+    String dir = clp.parse(inArguments);
 
     String password =
       new String(System.console().readPassword("password for "
@@ -146,9 +148,7 @@ public final class Exporter
     installer.install(options);
 
     // read the dma files
-    DMADatafiles data = new DMADatafiles("./");
-    data.addFile(file);
-    DMAFile dmaFile = data.getFile(file);
+    DMADatafiles data = new DMADatafiles(dir + "/dma");
 
     // in order to actually have the proper types defined, we need to
     // reference them...
@@ -156,26 +156,73 @@ public final class Exporter
     AbstractType<? extends AbstractEntry> dummy =
       net.ixitxachitls.dma.entries.BaseCharacter.TYPE;
 
-    AbstractType<? extends AbstractEntry> type =
-      AbstractType.get(clp.getString("type"));
-
-    if(type == null)
-    {
-      Log.error("cannot find type for " + clp.getString("type"));
-      return;
-    }
-
     try
     {
       DatastoreService store = DatastoreServiceFactory.getDatastoreService();
+      ImagesService image = ImagesServiceFactory.getImagesService();
       DMADatastore dmaStore = new DMADatastore();
       Log.important("reading entities from datastore");
 
-      Query query = new Query(type.toString());
+      Query query = new Query();
       for(Entity entity : store.prepare(query).asIterable
             (FetchOptions.Builder.withChunkSize(100)))
       {
-        Log.important("converting entity " + entity.getKey());
+        // ignore internal entities
+        if(entity.getKind().startsWith("__"))
+          continue;
+
+        // write out blobs specially
+        if("file".equals(entity.getKind()))
+        {
+          String id = entity.getParent().getName();
+          String type = entity.getParent().getKind();
+          String name = (String)entity.getProperty("name");
+          String path = (String)entity.getProperty("path");
+          String extension =
+            Files.mimeExtension((String)entity.getProperty("type"));
+          File blobDir = new File(Files.concatenate(dir, "blobs", type, id));
+          if(!blobDir.exists())
+            blobDir.mkdirs();
+
+          String file = Files.concatenate(dir, "blobs", type, id,
+                                          name + "." + extension);
+
+          for(int i = 1; i <= 5; i++)
+          {
+            try
+            {
+              String url = image.getServingUrl(new BlobKey(path));
+
+              URLConnection connection = new URL(url).openConnection();
+
+              byte[] buffer = new byte[100 * 1024];
+
+              FileOutputStream output = new FileOutputStream(file);
+              InputStream input = connection.getInputStream();
+
+              for(int read = input.read(buffer); read > 0;
+                  read = input.read(buffer))
+                output.write(buffer, 0, read);
+
+              output.close();
+              input.close();
+
+              break;
+            }
+            catch(Exception e)
+            {
+              Log.error("Deadline exceeded when trying to download file " + file
+                        + " (retrying " + i + "): " + e);
+            }
+          }
+
+          Log.important("Wrote blob " + file);
+
+          continue;
+        }
+
+        Log.important("converting entity " + entity.getKind() + ": "
+                      + entity.getKey());
         AbstractEntry entry = dmaStore.convert(entity);
 
         if(entry == null)
@@ -184,11 +231,11 @@ public final class Exporter
           continue;
         }
 
-        dmaFile.add(entry);
+        data.add(entry, false);
       }
 
       if(!data.save())
-        Log.error("could not write file '" + file + "'");
+        Log.error("could not write data");
     }
     finally
     {

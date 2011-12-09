@@ -215,8 +215,8 @@ public class BlobUploadServlet extends BaseServlet
 
       String url =  m_image.getServingUrl(key);
       writer
-        .script("parent.window.edit.updateImage('file-" + filename + "', '" + url
-                + "=s300', 'util.link(event, \"" + url + "\");', "
+        .script("parent.window.edit.updateImage('file-" + filename + "', '"
+                + url + "=s300', 'util.link(event, \"" + url + "\");', "
                 + "'upload-" + name + "');");
         ;
 
@@ -252,7 +252,8 @@ public class BlobUploadServlet extends BaseServlet
         .begin("input")
         .attribute("type", "file")
         .attribute("name", "file")
-        .attribute("onchange", "this.parentNode['filename'].value = this.value; "
+        .attribute("onchange",
+                   "this.parentNode['filename'].value = this.value; "
                    + "this.parentNode.submit();")
         .end("input")
 

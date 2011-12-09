@@ -175,8 +175,8 @@ public class DMAFilter implements Filter
     {
       DMAFilter filter = new DMAFilter();
 
-      javax.servlet.ServletInputStream inputStream =
-        new MockServletInputStream("");
+      java.io.BufferedReader reader =
+        new java.io.BufferedReader(new java.io.StringReader(""));
 
       HttpServletRequest request =
         EasyMock.createMock(HttpServletRequest.class);
@@ -184,7 +184,9 @@ public class DMAFilter implements Filter
         EasyMock.createMock(HttpServletResponse.class);
       FilterChain chain = EasyMock.createMock(FilterChain.class);
 
-      EasyMock.expect(request.getInputStream()).andStubReturn(inputStream);
+      EasyMock.expect(request.getParameterMap()).andStubReturn
+        (new java.util.HashMap<String, String []>());
+      EasyMock.expect(request.getReader()).andStubReturn(reader);
       EasyMock.expect(request.getQueryString()).andStubReturn("");
       EasyMock.expect(request.getCookies()).andStubReturn
         (new javax.servlet.http.Cookie [0]);

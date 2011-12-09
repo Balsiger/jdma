@@ -233,8 +233,6 @@ public class DMADatafiles implements DMAData
    */
   public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser)
   {
-    System.out.println("getting user data for " + inUser);
-
     DMADatafiles data =
       new DMADatafiles(Files.concatenate(getPath(),
                                          Product.TYPE.getMultipleDir()),
@@ -572,7 +570,7 @@ public class DMADatafiles implements DMAData
     if(hasEntry(inEntry.getID(), inEntry.getType()))
       return save();
 
-    return add(inEntry);
+    return add(inEntry, true);
   }
 
   //........................................................................
@@ -582,20 +580,31 @@ public class DMADatafiles implements DMAData
    * Add the entry to the data.
    *
    * @param     inEntry the entry to add
+   * @param     inSave  whether to save or not
    *
-   * @return      true if added, false if there was an error
+   * @return    true if added, false if there was an error
    *
    */
-  protected boolean add(@Nonnull AbstractEntry inEntry)
+  public boolean add(@Nonnull AbstractEntry inEntry, boolean inSave)
   {
-    DMAFile file = getFile(computeFile(inEntry));
+    String name = computeFile(inEntry);
+    DMAFile file = getFile(name);
     if(file == null)
-      return false;
+    {
+      addFile(name);
+
+      file = getFile(name);
+      if(file == null)
+        return false;
+    }
 
     file.add(inEntry, true);
     addInternal(inEntry);
 
-    return save();
+    if(inSave)
+      return save();
+
+    return true;
   }
 
   //........................................................................

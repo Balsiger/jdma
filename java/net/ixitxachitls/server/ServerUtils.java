@@ -303,12 +303,14 @@ public final class ServerUtils
     {
       HttpServletRequest request =
         EasyMock.createMock(HttpServletRequest.class);
-      javax.servlet.ServletInputStream inputStream =
-        new MockServletInputStream("post_1=val_3\npost_2=\n"
-                                   + "post_3=val_4\npost_3=val_4a\n"
-                                   + "both=val_5a");
+      java.io.BufferedReader reader = new java.io.BufferedReader
+        (new java.io.StringReader("post_1=val_3\npost_2=\n"
+                                  + "post_3=val_4\npost_3=val_4a\n"
+                                  + "both=val_5a"));
 
-      EasyMock.expect(request.getInputStream()).andReturn(inputStream);
+      EasyMock.expect(request.getParameterMap()).andStubReturn
+        (new java.util.HashMap<String, String []>());
+      EasyMock.expect(request.getReader()).andStubReturn(reader);
       EasyMock.expect(request.getQueryString())
         .andReturn("url_1=val_1&url_2&url_3=val_2&url_3=val_2a"
                    + "&both=val_5b&both=val_5c").times(2);

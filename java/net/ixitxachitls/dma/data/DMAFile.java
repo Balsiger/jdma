@@ -425,9 +425,6 @@ public class DMAFile //implements Storage<AbstractEntry>
 
     if(renamed != null)
       Log.info("backed up file '" + m_name + "' to '" + renamed + "'");
-    else
-      Log.warning("could not backup file '" + Files.concatenate(m_path, m_name)
-                  + "' to " + s_backupPath);
 
     // now the path is clear to write the file
     // open the output file
@@ -435,7 +432,12 @@ public class DMAFile //implements Storage<AbstractEntry>
     boolean result = false;
     try
     {
-      writer = new FileWriter(Files.concatenate(m_path, m_name));
+      String name = Files.concatenate(m_path, m_name);
+      File dir = new File(Files.path(name));
+      if(!dir.exists())
+        dir.mkdirs();
+
+      writer = new FileWriter(name);
       result = write(writer);
       Log.event("*system*", "Save", "Written file " + m_name);
     }
