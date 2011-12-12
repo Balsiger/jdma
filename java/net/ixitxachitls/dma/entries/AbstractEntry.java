@@ -1820,17 +1820,6 @@ public class AbstractEntry extends ValueGroup
 
     if("files".equals(inKey))
     {
-      AbstractType<? extends AbstractEntry> type = getType();
-
-      String baseType = null;
-      String []baseNames = null;
-      if(this instanceof Entry)
-      {
-        baseType = ((Type)type).getBaseType().getMultipleDir();
-        List<String> names = getBaseNames();
-        baseNames = names.toArray(new String[names.size()]);
-      }
-
       List<Command> commands = new ArrayList<Command>();
       boolean first = true;
       for(DMAData.File file : m_data.getFiles(this))

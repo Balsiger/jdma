@@ -35,7 +35,6 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.output.html.HTMLWriter;
-import net.ixitxachitls.util.Pair;
 
 //..........................................................................
 
@@ -496,7 +495,7 @@ public abstract class Index implements Serializable, Comparable<Index>
    * @param      inName       the nameing part of the index url
    * @param      inPath       the sub path of the index
    * @param      inPageSize   the size of the page as number of elements
-   * @param      inPagination start and end entries to show
+   * @param      inStart      the index of the first element to use
    *
    * @return     the page with the entries to show instead, if any
    *
@@ -506,7 +505,7 @@ public abstract class Index implements Serializable, Comparable<Index>
                                          @Nonnull String inName,
                                          @Nonnull String inPath,
                                          int inPageSize,
-                                         Pair<Integer, Integer> inPagination);
+                                         int inStart);
 
   //........................................................................
 
@@ -538,8 +537,7 @@ public abstract class Index implements Serializable, Comparable<Index>
                               @Nonnull DMAData inData,
                               @Nonnull String inName,
                               @Nonnull String inPath,
-                              int inPageSize,
-                              Pair<Integer, Integer> inPagination)
+                              int inPageSize, int inStart)
           {
             return null;
           }

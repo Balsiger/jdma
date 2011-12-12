@@ -227,10 +227,10 @@ public final class Importer
     List<Entity> entities = new ArrayList<Entity>();
 
     for(AbstractType<? extends AbstractEntry> type : m_data.getTypes())
-      for(AbstractEntry entry : m_data.getEntriesList(type))
+      for(AbstractEntry entry : m_data.getEntries(type, 0, 0))
       {
         entities.add(dmaStore.convert(entry));
-         Log.important("importing " + type + " " + entry.getName());
+        Log.important("importing " + type + " " + entry.getName());
       }
 
     Log.important("storing entities in datastore");
@@ -242,7 +242,9 @@ public final class Importer
 
     for(String image : m_files)
     {
-      String []parts = image.split(File.separator);
+      // Windows requires special handling...
+      String []parts = image.split(File.separatorChar == '\\' ? "\\\\"
+                                   : File.separator);
       if(parts.length < 3)
       {
         Log.warning("ignoring invalid file " + image + " "
@@ -281,23 +283,37 @@ public final class Importer
 
       FileInputStream input =
         new FileInputStream(image.replace("\\ ", " "));
-      byte []buffer = new byte[1024 * 100];
-      for(int read = input.read(buffer); read > 0; read = input.read(buffer))
-        output.write(buffer, 0, read);
 
-      output.flush();
+      try
+      {
+        byte []buffer = new byte[1024 * 100];
+        for(int read = input.read(buffer); read > 0; read = input.read(buffer))
+          output.write(buffer, 0, read);
 
-      // Get the response
-      BufferedReader rd = new BufferedReader(new InputStreamReader
-                                             (connection.getInputStream()));
-      String line = rd.readLine();
-      if(!"OK".equals(line))
-        for(; line != null; line = rd.readLine())
-          Log.error(line);
+        output.flush();
 
-      input.close();
-      output.close();
-      rd.close();
+        // Get the response
+        BufferedReader rd = new BufferedReader(new InputStreamReader
+                                               (connection.getInputStream()));
+        try
+        {
+          String line = rd.readLine();
+          if(!"OK".equals(line))
+            for(; line != null; line = rd.readLine())
+              Log.error(line);
+
+          input.close();
+          output.close();
+        }
+        finally
+        {
+          rd.close();
+        }
+      }
+      finally
+      {
+        input.close();
+      }
     }
   }
 

@@ -50,7 +50,6 @@ import net.ixitxachitls.output.commands.Par;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.Pair;
 
 //..........................................................................
 
@@ -259,7 +258,8 @@ public abstract class GroupedIndex extends Index
   {
     String []groups = groups(inPath);
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
-    for(AbstractEntry entry : inData.getEntriesList(getType()))
+    // TODO: this is inefficient!
+    for(AbstractEntry entry : inData.getEntries(getType(), 0, 0))
       if(matches(groups, entry))
         entries.add(entry);
 
@@ -302,7 +302,7 @@ public abstract class GroupedIndex extends Index
    * @param      inName       the naming part of the index url
    * @param      inPath       the sub path of the index
    * @param      inPageSize   the size of the page as number of elements
-   * @param      inPagination start and end entries to show
+   * @param      inStart      the index of the first element to use
    *
    * @return     the page with the entries to show instead, if any
    *
@@ -312,7 +312,7 @@ public abstract class GroupedIndex extends Index
                                 @Nonnull String inName,
                                 @Nonnull String inPath,
                                 int inPageSize,
-                                Pair<Integer, Integer> inPagination)
+                                int inStart)
   {
     inWriter.title(getTitle());
 
@@ -453,8 +453,7 @@ public abstract class GroupedIndex extends Index
                    ("first", new DMAData.Test.Data()),
                    new net.ixitxachitls.dma.entries.BaseCharacter
                    ("second", new DMAData.Test.Data())),
-                  "index-name", "", 50,
-                  new Pair<Integer, Integer>(0, 10));
+                  "index-name", "", 10, 0);
       writer.close();
 
       assertEquals("content",
@@ -531,8 +530,7 @@ public abstract class GroupedIndex extends Index
                    ("first", new DMAData.Test.Data()),
                    new net.ixitxachitls.dma.entries.BaseCharacter
                    ("second", new DMAData.Test.Data())),
-                  "index-name", "first1", 50,
-                  new Pair<Integer, Integer>(0, 10));
+                  "index-name", "first1", 10, 0);
       writer.close();
 
       assertEquals("content",

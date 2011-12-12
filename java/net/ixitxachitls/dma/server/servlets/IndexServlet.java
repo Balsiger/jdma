@@ -169,13 +169,13 @@ public class IndexServlet extends PageServlet
 
     if(!index.listEntries(group))
       group = index.write(inWriter, m_data,
-                            inRequest.getOriginalPath(), group,
-                            inRequest.getPageSize(),
-                            inRequest.getPagination());
+                          inRequest.getOriginalPath(), group,
+                          inRequest.getPageSize(),
+                          inRequest.getStart());
 
     if(group != null)
       format(inWriter, index.getEntries(m_data, group), true,
-             title, new Title(titleCommand), inRequest.getPagination(),
+             title, new Title(titleCommand), inRequest.getStart(),
              inRequest.getPageSize());
 
     if(group != null)

@@ -41,7 +41,6 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -285,6 +284,35 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   //........................................................................
+  //------------------------------ getParam --------------------------------
+
+  /**
+   * Get the first value given for a key as an integer.
+   *
+   * @param       inName    the name of the parameter to get
+   * @param       inDefault the value to return if it is not present
+   *
+   * @return      the value of the parameter or null if not found
+   *
+   */
+  public @Nullable int getParam(@Nonnull String inName, int inDefault)
+  {
+    String value = getParam(inName);
+
+    try
+    {
+      if(value != null)
+        return Integer.parseInt(value);
+    }
+    catch(NumberFormatException e)
+    {
+      Log.warning("invalid integer parameter " + inName + " ignored: " + e);
+    }
+
+    return inDefault;
+  }
+
+  //........................................................................
   //------------------------------ getParams -------------------------------
 
   /**
@@ -299,47 +327,17 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   //........................................................................
-  //---------------------------- getPagination -----------------------------
+  //------------------------------ getStart --------------------------------
 
   /**
    * Get the start and end indexes for the page.
    *
-   * @return      the start and end index for pagination, starting with 0
+   * @return      the start index for pagination, starting with 0
    *
    */
-  public @Nonnull Pair<Integer, Integer> getPagination()
+  public @Nonnull int getStart()
   {
-    int start = 0;
-    int end = 0;
-
-    if(hasParam("start"))
-    {
-      try
-      {
-        start = Integer.parseInt(getParam("start"));
-      }
-      catch(NumberFormatException e)
-      {
-        Log.warning("invalid start parameter ignored: " + e);
-      }
-    }
-
-    if(hasParam("end"))
-    {
-      try
-      {
-        end = Integer.parseInt(getParam("end"));
-      }
-      catch(NumberFormatException e)
-      {
-        Log.warning("invalid end parameter ignored: " + e);
-      }
-    }
-
-    if(end == 0)
-      end = start + def_pageSize;
-
-    return new Pair<Integer, Integer>(start, end);
+    return getParam("start", 0);
   }
 
   //........................................................................
@@ -367,7 +365,7 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public int getPageSize()
   {
-    return def_pageSize;
+    return getParam("size", def_pageSize);
   }
 
   //........................................................................

@@ -360,7 +360,8 @@ public class BaseCharacter extends BaseEntry
     */
   public List<Product> getProducts()
   {
-    return getProductData().getEntriesList(Product.TYPE);
+    // TODO: this is very inefficient!
+    return getProductData().getEntries(Product.TYPE, 0, 0);
   }
 
   //........................................................................

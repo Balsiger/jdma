@@ -104,6 +104,51 @@
   </Match>
 
   <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.SaveActionServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.LibraryServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.IndexServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryListServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryPDFServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobUploadServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobImportServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+ <Match>
     <Class name="~net\.ixitxachitls\.dma\.server\.Exporter.*" />
     <Bug pattern="DLS_DEAD_LOCAL_STORE" />
   </Match>

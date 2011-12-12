@@ -182,37 +182,51 @@ public final class Exporter
             Files.mimeExtension((String)entity.getProperty("type"));
           File blobDir = new File(Files.concatenate(dir, "blobs", type, id));
           if(!blobDir.exists())
-            blobDir.mkdirs();
+            if(!blobDir.mkdirs())
+              Log.warning("could not create directory " + blobDir);
 
           String file = Files.concatenate(dir, "blobs", type, id,
                                           name + "." + extension);
 
           for(int i = 1; i <= 5; i++)
           {
+            FileOutputStream output = null;
+            InputStream input = null;
+
             try
             {
-              String url = image.getServingUrl(new BlobKey(path));
+              try
+              {
+                String url = image.getServingUrl(new BlobKey(path));
 
-              URLConnection connection = new URL(url).openConnection();
+                URLConnection connection = new URL(url).openConnection();
 
-              byte[] buffer = new byte[100 * 1024];
+                byte[] buffer = new byte[100 * 1024];
 
-              FileOutputStream output = new FileOutputStream(file);
-              InputStream input = connection.getInputStream();
+                output = new FileOutputStream(file);
+                input = connection.getInputStream();
 
-              for(int read = input.read(buffer); read > 0;
-                  read = input.read(buffer))
-                output.write(buffer, 0, read);
+                for(int read = input.read(buffer); read > 0;
+                    read = input.read(buffer))
+                  output.write(buffer, 0, read);
 
-              output.close();
-              input.close();
-
-              break;
+                break;
+              }
+              catch(java.io.IOException e)
+              {
+                Log.error("Deadline exceeded when trying to download file "
+                          + file + " (retrying " + i + "): " + e);
+              }
+              finally
+              {
+                if(input != null)
+                  input.close();
+              }
             }
-            catch(Exception e)
+            finally
             {
-              Log.error("Deadline exceeded when trying to download file " + file
-                        + " (retrying " + i + "): " + e);
+              if(output != null)
+                output.close();
             }
           }
 

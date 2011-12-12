@@ -51,6 +51,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>entries</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryListServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>save</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.SaveActionServlet</servlet-class>
   </servlet>
@@ -105,6 +110,11 @@
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>entries</servlet-name>
+    <url-pattern>/_entries/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -167,6 +177,10 @@
     <init-param>
       <param-name>/product/(.*)</param-name>
       <param-value>/_entry/base product/$1</param-value>
+    </init-param>
+    <init-param>
+      <param-name>/products/(.*)</param-name>
+      <param-value>/_entries/base product/$1</param-value>
     </init-param>
   </filter>
 

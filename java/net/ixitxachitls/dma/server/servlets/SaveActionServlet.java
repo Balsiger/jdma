@@ -176,7 +176,9 @@ public class SaveActionServlet extends ActionServlet
       Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
       if(m_multiple)
       {
-        for(AbstractEntry entry : m_data.getEntriesList(m_type))
+        // TODO: this is inefficient and might be changed my using the same
+        // procedure as used for indexes (or the indexes themselves).
+        for(AbstractEntry entry : m_data.getEntries(m_type, 0, 0))
           if(entry.matches(m_fullType, m_id))
             entries.add(entry);
       }

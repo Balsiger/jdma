@@ -34,12 +34,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -66,6 +66,17 @@ public class EntryListServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
 
+  //--------------------------- EntryListServlet ---------------------------
+
+  /**
+   * Create the servlet.
+   */
+  public EntryListServlet()
+  {
+    this(DMADataFactory.getBaseData());
+  }
+
+  //........................................................................
   //--------------------------- EntryListServlet ---------------------------
 
   /**
@@ -103,6 +114,8 @@ public class EntryListServlet extends PageServlet
    * @param       inRequest the original request
    * @param       inPath    the path used to access the entries
    * @param       inType    the type of entries to get
+   * @param       inStart   the index where to start to get entries
+   * @param       inSize    the maximal number of entries to return
    *
    * @return      a list of all entries in range
    *
@@ -110,10 +123,11 @@ public class EntryListServlet extends PageServlet
   @SuppressWarnings("unchecked") // need to cast
   public List<AbstractEntry>
     getEntries(@Nonnull DMARequest inRequest, @Nonnull String inPath,
-               @Nonnull AbstractType<? extends AbstractEntry> inType)
+               @Nonnull AbstractType<? extends AbstractEntry> inType,
+               int inStart, int inSize)
   {
     return (List<AbstractEntry>)getData(inRequest, inPath, m_data)
-      .getEntriesList(inType);
+      .getEntries(inType, inStart, inSize);
   }
 
   //........................................................................
@@ -140,12 +154,12 @@ public class EntryListServlet extends PageServlet
   {
     String typeName = "";
     if(inPath != null)
-      typeName = Strings.getPattern(inPath, "([^/]*)$");
+      typeName = Strings.getPattern(inPath, "([^/]*)/?$");
 
     AbstractType<? extends AbstractEntry> type = AbstractType.get(typeName);
     if(type == null)
     {
-      inWriter.add("No entries found for type '" + typeName + "'");
+      inWriter.add("unknown type '" + typeName + "' [" + inPath + "]");
 
       return;
     }
@@ -154,9 +168,12 @@ public class EntryListServlet extends PageServlet
     Log.info("serving dynamic list " + title);
 
     // TODO: extract dm from request
-    format(inWriter, getEntries(inRequest, inPath, type), true, title,
-           new Title(title),
-           inRequest.getPagination(), inRequest.getPageSize());
+    format(inWriter,
+           getEntries(inRequest, inPath, type,
+                      inRequest.getStart(),
+                      inRequest.getPageSize() + 1),
+           true, title, new Title(title), inRequest.getStart(),
+           inRequest.getPageSize());
 
     addNavigation(inWriter,
                   type.getMultipleLink(), "/" + type.getMultipleLink());
@@ -238,8 +255,7 @@ public class EntryListServlet extends PageServlet
         .anyTimes();
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.getUser()).andStubReturn(null);
-      EasyMock.expect(m_request.getPagination())
-        .andStubReturn(new Pair<Integer, Integer>(inStart, inEnd));
+      EasyMock.expect(m_request.getStart()).andStubReturn(inStart);
       EasyMock.expect(m_request.getPageSize()).andStubReturn(50);
       EasyMock.replay(m_request, m_response);
 
@@ -250,7 +266,8 @@ public class EntryListServlet extends PageServlet
           @Override
           public List<AbstractEntry>
             getEntries(DMARequest inRequest, String inPath,
-                       AbstractType<? extends AbstractEntry> inType)
+                       AbstractType<? extends AbstractEntry> inType,
+                       int inStart, int inSize)
           {
             return inEntries;
           }

@@ -875,7 +875,7 @@ public class BaseProduct extends BaseEntry
                                              @Nonnull String []inGroups)
                     {
                       for(BaseProduct product
-                            : inData.getEntriesList(BaseProduct.TYPE))
+                            : inData.getEntries(BaseProduct.TYPE, 0, 0))
                         product.collectPersons(ioCollected, null, null);
 
                       return ioCollected;
@@ -913,11 +913,11 @@ public class BaseProduct extends BaseEntry
                     {
                       if(inGroups.length == 0)
                         for(BaseProduct product
-                              : inData.getEntriesList(BaseProduct.TYPE))
+                              : inData.getEntries(BaseProduct.TYPE, 0, 0))
                           product.collectJobs(ioCollected, null, null);
                       else
                         for(BaseProduct product
-                              : inData.getEntriesList(BaseProduct.TYPE))
+                              : inData.getEntries(BaseProduct.TYPE, 0, 0))
                           product.collectPersons(ioCollected, inGroups[0],
                                                  null);
 
@@ -1075,7 +1075,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull String []inGroups)
         {
           if(inGroups.length == 0)
-            for(BaseProduct product : inData.getEntriesList(TYPE))
+            for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
               if(product.m_date.isDefined())
                 ioCollected.add("" + product.m_date.getYear());
               else
@@ -1084,7 +1084,7 @@ public class BaseProduct extends BaseEntry
             if(inGroups[0].equals(Value.UNDEFINED))
               ioCollected.add(Value.UNDEFINED);
             else
-              for(BaseProduct product : inData.getEntriesList(TYPE))
+              for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
                 if(inGroups[0].equals("" + product.m_date.getYear())
                    && product.m_date.getMonth() >= 0)
                   if(product.m_date.getMonth() == 0)
@@ -1168,7 +1168,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_pages.group());
 
           return ioCollected;
@@ -1208,7 +1208,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_system.toString(false));
 
           return ioCollected;
@@ -1255,7 +1255,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_audience.toString(false));
 
           return ioCollected;
@@ -1302,7 +1302,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_productType.toString(false));
 
           return ioCollected;
@@ -1347,7 +1347,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_style.toString(false));
 
           return ioCollected;
@@ -1392,7 +1392,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_producer.toString(false));
 
           return ioCollected;
@@ -1453,7 +1453,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_series.toString(false));
 
           return ioCollected;
@@ -1509,7 +1509,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_price.group());
 
           return ioCollected;
@@ -1557,7 +1557,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             for(Multiple content : product.m_contents)
               ioCollected.add(content.get(0).toString(false));
 
@@ -1628,7 +1628,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct product : inData.getEntriesList(TYPE))
+          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
             ioCollected.add(product.m_layout.toString(false));
 
           return ioCollected;
@@ -1668,7 +1668,7 @@ public class BaseProduct extends BaseEntry
                                  @Nonnull DMAData inData,
                                  @Nonnull String []inGroups)
         {
-          for(BaseProduct campaign : inData.getEntriesList(TYPE))
+          for(BaseProduct campaign : inData.getEntries(TYPE, 0, 0))
             for(Selection world : campaign.m_worlds)
               ioCollected.add(world.toString(false));
 
@@ -2220,7 +2220,7 @@ public class BaseProduct extends BaseEntry
     if("owners".equals(inKey))
     {
       List<Object> commands = new ArrayList<Object>();
-      for(BaseCharacter owner : m_data.getEntriesList(BaseCharacter.TYPE))
+      for(BaseCharacter owner : m_data.getEntries(BaseCharacter.TYPE, 0, 0))
         for(Product product : owner.getProducts())
         {
           if(product.isBasedOn(this))

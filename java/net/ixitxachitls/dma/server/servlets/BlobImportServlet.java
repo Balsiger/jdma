@@ -102,6 +102,13 @@ public class BlobImportServlet extends HttpServlet
                      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
+    if(!(inRequest instanceof DMARequest))
+    {
+      Log.error("expected a DMA request here, probably not filtered through "
+                + "DMAFilter");
+      return;
+    }
+
     DMARequest request = (DMARequest)inRequest;
 
     String type = request.getParam("type");
@@ -115,54 +122,60 @@ public class BlobImportServlet extends HttpServlet
 
     PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
 
-    String id = request.getParam("id");
-    AbstractType<? extends AbstractEntry> entryType =
-      AbstractType.get(request.getParam("entry"));
-
-
-    if(id == null || entryType == null)
+    try
     {
-      Log.warning("ignoring file " + name + " without id or entry type");
-      writer.println("File ignored, not id or entry type given");
-    }
-    else
-    {
-      DMADatastore store = (DMADatastore)DMADataFactory.getBaseData();
-      AbstractEntry entry = store.getEntry(id, entryType);
+      String id = request.getParam("id");
+      AbstractType<? extends AbstractEntry> entryType =
+        AbstractType.get(request.getParam("entry"));
 
-      if(entry == null)
+
+      if(id == null || entryType == null)
       {
-        Log.warning("ignoring file " + name + " without matching " + entryType
-                    + " " + id);
-        writer.println("File ignored, no matching entry found");
+        Log.warning("ignoring file " + name + " without id or entry type");
+        writer.println("File ignored, not id or entry type given");
       }
       else
       {
-        Log.event("admin", "import", "Importing blob " + name + " of type "
-                  + type + " for " + entryType + " with id " + id);
+        DMADatastore store = (DMADatastore)DMADataFactory.getBaseData();
+        AbstractEntry entry = store.getEntry(id, entryType);
 
-        FileService fileService = FileServiceFactory.getFileService();
-        AppEngineFile file = fileService.createNewBlobFile(type, name);
+        if(entry == null)
+        {
+          Log.warning("ignoring file " + name + " without matching " + entryType
+                      + " " + id);
+          writer.println("File ignored, no matching entry found");
+        }
+        else
+        {
+          Log.event("admin", "import", "Importing blob " + name + " of type "
+                    + type + " for " + entryType + " with id " + id);
 
-        InputStream input = inRequest.getInputStream();
-        byte []buffer = new byte[1024 * 100];
-        FileWriteChannel channel = fileService.openWriteChannel(file, true);
+          FileService fileService = FileServiceFactory.getFileService();
+          AppEngineFile file = fileService.createNewBlobFile(type, name);
 
-        for(int read = input.read(buffer); read > 0; read = input.read(buffer))
-          channel.write(ByteBuffer.wrap(buffer, 0, read));
+          InputStream input = inRequest.getInputStream();
+          byte []buffer = new byte[1024 * 100];
+          FileWriteChannel channel = fileService.openWriteChannel(file, true);
 
-        // cleanup
-        channel.closeFinally();
-        input.close();
+          for(int read = input.read(buffer); read > 0;
+              read = input.read(buffer))
+            channel.write(ByteBuffer.wrap(buffer, 0, read));
 
-        // Add a reference to the path to the datastore.
-        store.addFile(entry, name, type, fileService.getBlobKey(file));
+          // cleanup
+          channel.closeFinally();
+          input.close();
 
-        writer.println("OK");
+          // Add a reference to the path to the datastore.
+          store.addFile(entry, name, type, fileService.getBlobKey(file));
+
+          writer.println("OK");
+        }
       }
     }
-
-    writer.close();
+    finally
+    {
+      writer.close();
+    }
   }
 
   //........................................................................

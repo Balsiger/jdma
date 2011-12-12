@@ -45,7 +45,6 @@ import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLDocument;
 import net.ixitxachitls.output.html.HTMLWriter;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -379,7 +378,7 @@ public class PageServlet extends DMAServlet
    * @param       inDM           true for writing for DMs, false otherwise
    * @param       inTitle        the title of the page
    * @param       inTitleCommand the command to set the title
-   * @param       inPagination   the start and end entries to print
+   * @param       inStart        the start index of the entries to print
    * @param       inPageSize     the full size of the page
    *
    */
@@ -387,38 +386,34 @@ public class PageServlet extends DMAServlet
                         @Nonnull List<? extends AbstractEntry> inEntries,
                         boolean inDM, @Nonnull String inTitle,
                         @Nonnull Command inTitleCommand,
-                        @Nonnull Pair<Integer, Integer> inPagination,
-                        int inPageSize)
+                        int inStart, int inPageSize)
   {
     inWriter.title(inTitle);
-
-    int start = inPagination.first();
-    int end   = inPagination.second();
 
     HTMLDocument document = new HTMLDocument(inTitle);
 
     document.add(inTitleCommand);
 
     List<String> navigation = new ArrayList<String>();
-    if(start > 0)
-      if(start - inPageSize > 0)
+    if(inStart > 0)
+      if(inStart - inPageSize > 0)
         navigation.add("<a href=\"?start="
-                       + (start - inPageSize)
+                       + (inStart - inPageSize)
                        + "\"  onclick=\"return util.link(event, '?start="
-                       + (start - inPageSize) + "');\" "
+                       + (inStart - inPageSize) + "');\" "
                        + "class=\"paginate-previous\">"
                        + "&laquo; previous</a>");
       else
-        navigation.add("<a href=\"?\" "
+        navigation.add("<a href=\"\" "
                        + "onclick=\"return util.link(event, '?');\" "
                        + "class=\"paginate-previous\">"
                        + "&laquo; previous</a>");
 
-    if(inEntries.size() >= end)
+    if(inEntries.size() > inPageSize)
       navigation.add("<a href=\"?start="
-                     + (start + inPageSize) + "\" "
+                     + (inStart + inPageSize) + "\" "
                      + " onclick=\"return util.link(event, '?start="
-                     + (start + inPageSize) + "');\" "
+                     + (inStart + inPageSize) + "');\" "
                      + "class=\"paginate-next\">"
                      + "&raquo; next</a>");
 
@@ -429,7 +424,7 @@ public class PageServlet extends DMAServlet
     else
     {
       List<Object> cells = new ArrayList<Object>();
-      for(AbstractEntry entry : sublist(inEntries, start, end))
+      for(AbstractEntry entry : inEntries)
         cells.addAll(entry.printList(entry.getName(), inDM));
 
       document.add(new Table("entrylist",
@@ -439,42 +434,6 @@ public class PageServlet extends DMAServlet
     document.add(navigation);
 
     inWriter.add(document.toString());
-  }
-
-  //........................................................................
-
-  //------------------------------- sublist --------------------------------
-
-  /**
-   * Create a sublist using the given limits.
-   *
-   * @param       <T>     the type of elements in the list
-   * @param       inList  the list with the elements
-   * @param       inStart the start position (inclusive)
-   * @param       inEnd   the end position (exclusive)
-   *
-   * @return      a sublist for the given range
-   *
-   */
-  public @Nonnull <T> List<T> sublist(@Nonnull List<T> inList, int inStart,
-                                      int inEnd)
-  {
-    if(inList.isEmpty())
-      return inList;
-
-    int start = inStart;
-    int end = inEnd;
-
-    if(start < 0)
-      start = 0;
-
-    if(end > inList.size())
-      end = inList.size();
-
-    if(start > end || start > inList.size())
-      start = end;
-
-    return inList.subList(start, end);
   }
 
   //........................................................................
@@ -756,8 +715,7 @@ public class PageServlet extends DMAServlet
       servlet.format(writer, entries, true,
                      "title",
                      new net.ixitxachitls.output.commands.Title
-                     ("First1 - Second"),
-                     new Pair<Integer, Integer>(0, 50), 50);
+                     ("First1 - Second"), 0, 50);
 
       writer.close();
 

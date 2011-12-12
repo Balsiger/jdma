@@ -160,20 +160,22 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
-  //---------------------------- getEntriesList ----------------------------
+  //------------------------------ getEntries ------------------------------
 
   /**
    * Gets all the entries of a specific type.
    *
    * @param    <T> The type of entry to get
    * @param    inType the type of entries to get
+   * @param    inStart the starting number of entires to get (starts as 0)
+   * @param    inSize  the maximal number of entries to return
    *
    * @return   a map with id and type
    *
    */
   @SuppressWarnings("unchecked") // need to cast
   public @Nonnull <T extends AbstractEntry> List<T>
-                     getEntriesList(AbstractType<T> inType)
+                     getEntries(AbstractType<T> inType, int inStart, int inSize)
   {
     NavigableMap<String, AbstractEntry> entries = m_entries.get(inType);
 
@@ -183,7 +185,8 @@ public class DMADatafiles implements DMAData
       m_entries.put(inType, entries);
     }
 
-    return (List<T>)new ArrayList<AbstractEntry>(entries.values());
+    return sublist((List<T>)new ArrayList<AbstractEntry>(entries.values()),
+                   inStart, inStart + inSize);
   }
 
   //........................................................................
@@ -777,7 +780,6 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
-
   //----------------------------- computeFile ------------------------------
 
   /**
@@ -895,7 +897,41 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------- sublist --------------------------------
 
+  /**
+   * Create a sublist using the given limits.
+   *
+   * @param       <T>     the type of elements in the list
+   * @param       inList  the list with the elements
+   * @param       inStart the start position (inclusive)
+   * @param       inEnd   the end position (exclusive)
+   *
+   * @return      a sublist for the given range
+   *
+   */
+  public @Nonnull <T> List<T> sublist(@Nonnull List<T> inList, int inStart,
+                                      int inEnd)
+  {
+    if(inList.isEmpty())
+      return inList;
+
+    int start = inStart;
+    int end = inEnd;
+
+    if(start < 0)
+      start = 0;
+
+    if(end > inList.size())
+      end = inList.size();
+
+    if(start > end || start > inList.size())
+      start = end;
+
+    return inList.subList(start, end);
+  }
+
+  //........................................................................
 
   //........................................................................
 

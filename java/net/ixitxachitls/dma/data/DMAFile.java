@@ -435,7 +435,8 @@ public class DMAFile //implements Storage<AbstractEntry>
       String name = Files.concatenate(m_path, m_name);
       File dir = new File(Files.path(name));
       if(!dir.exists())
-        dir.mkdirs();
+        if(!dir.mkdirs())
+          Log.warning("Could not create directory " + dir);
 
       writer = new FileWriter(name);
       result = write(writer);

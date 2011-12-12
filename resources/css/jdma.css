@@ -416,8 +416,13 @@ TABLE.entrylist TR.title:hover
 TABLE.entrylist TR:hover
 {
   background-color: #800;
-  color: white;
+  color:            white;
   cursor:           pointer;
+}
+
+TABLE.entrylist TR:hover A
+{
+  color: #ccc;
 }
 
 TABLE.entrylist TD
@@ -431,6 +436,16 @@ TABLE.entrylist TD.title
   border-bottom: 1px solid black;
   margin-bottom: 4px;
   white-space:   nowrap;
+}
+
+TABLE.entrylist TD.short DIV
+{
+  margin-top: 0;
+}
+
+TABLE.entrylist TR:hover TD.short DIV
+{
+  color: #ccc;
 }
 
 A.paginate-next

@@ -150,19 +150,22 @@ public interface DMAData
     getEntries(AbstractType<T> inType);
 
   //........................................................................
-  //---------------------------- getEntriesList ----------------------------
+  //------------------------------ getEntries ------------------------------
 
   /**
    * Gets all the entries of a specific type.
    *
    * @param    <T> The type of entry to get
    * @param    inType the type of entries to get
+   * @param    inStart the starting number of entires to get (starts as 0)
+   * @param    inSize  the maximal number of entries to return
    *
    * @return   a map with id and type
    *
    */
   public @Nonnull <T extends AbstractEntry> List<T>
-                     getEntriesList(AbstractType<T> inType);
+                     getEntries(AbstractType<T> inType, int inStart,
+                                int inSize);
 
   //........................................................................
   //------------------------------- getEntry -------------------------------
@@ -233,7 +236,7 @@ public interface DMAData
                                    @Nonnull AbstractType<T> inType);
 
   //........................................................................
-  //----------------------------- getPreviousEntry -----------------------------
+  //--------------------------- getPreviousEntry ---------------------------
 
   /**
    * Get the previous entry of a specific type.

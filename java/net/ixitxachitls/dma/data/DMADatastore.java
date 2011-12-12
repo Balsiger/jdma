@@ -53,7 +53,6 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -134,24 +133,31 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
-  //---------------------------- getEntriesList ----------------------------
+  //----------------------------- getEntries -------------------------------
 
   /**
    * Gets all the entries of a specific type.
    *
-   * @param    <T> The type of entry to get
-   * @param    inType the type of entries to get
+   * @param    <T>     the type of entry to get
+   * @param    inType  the type of entries to get
+   * @param    inStart the starting number of entires to get (starts as 0)
+   * @param    inSize  the maximal number of entries to return
    *
-   * @return   a map with id and type
+   * @return   a list with all the entries
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nonnull <T extends AbstractEntry> List<T>
-                     getEntriesList(AbstractType<T> inType)
+  public @Nonnull <T extends AbstractEntry> List<T> getEntries
+                     (@Nonnull AbstractType<T> inType, int inStart, int inSize)
   {
     List<T> entries = new ArrayList<T>();
 
-
+    Query query = new Query(inType.toString());
+    FetchOptions options =
+      FetchOptions.Builder.withOffset(inStart).limit(inSize);
+    System.out.println("options: " + options + " " + inStart + ", " + inSize);
+    for(Entity entity : m_store.prepare(query).asIterable(options))
+      entries.add((T)convert(entity));
 
     return entries;
   }
@@ -584,8 +590,9 @@ public class DMADatastore implements DMAData
   public @Nullable AbstractEntry convert(@Nonnull Entity inEntity)
   {
     Key key = inEntity.getKey();
-    String id = extractID(key);
-    AbstractType<? extends AbstractEntry> type = extractType(key);
+    String id = key.getName();
+    AbstractType<? extends AbstractEntry> type =
+      AbstractType.get(key.getKind());
 
     if(type == null || id == null)
       return null;
@@ -665,40 +672,6 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
-  //------------------------------ extractID -------------------------------
-
-  /**
-   * Extract the id from the datastore key.
-   *
-   * @param       inKey the key of the entity
-   *
-   * @return      the id, if any
-   *
-   */
-  public @Nullable String extractID(@Nonnull Key inKey)
-  {
-    return Strings.getPattern(inKey.toString(), "\\(\"(.*)\"\\)");
-  }
-
-  //........................................................................
-  //----------------------------- extractType ------------------------------
-
-  /**
-   * Extract the type from the entity key.
-   *
-   * @param       inKey the key of the entity
-   *
-   * @return      the type, if any
-   *
-   */
-  public @Nullable AbstractType<? extends AbstractEntry> extractType
-                                  (@Nonnull Key inKey)
-  {
-    return AbstractType.get(Strings.getPattern(inKey.toString(), "(.*)\\("));
-  }
-
-  //........................................................................
-
 
   //........................................................................
 

@@ -184,7 +184,7 @@ public class ForwardingFilter implements Filter
     for(Map.Entry<String, String> entry : m_mappings.entrySet())
     {
       String forward = uri.replaceAll(entry.getKey(), entry.getValue());
-      if(forward != uri)
+      if(!forward.equals(uri))
         return forward;
     }
 
