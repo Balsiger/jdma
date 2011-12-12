@@ -45,7 +45,6 @@ import net.ixitxachitls.dma.server.servlets.EntryPDFServlet;
 import net.ixitxachitls.dma.server.servlets.EntryServlet;
 import net.ixitxachitls.dma.server.servlets.IndexServlet;
 import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
-import net.ixitxachitls.dma.server.servlets.LibraryServlet;
 import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
 import net.ixitxachitls.dma.server.servlets.ProductsAutocomplete;
 import net.ixitxachitls.server.WebServer;
@@ -357,9 +356,6 @@ public class DMAServer extends WebServer
        "/pdf/_entry/*");
     context.addServlet
       (new ServletHolder(new EntryListServlet(m_baseData)), "/_entries/*");
-
-    context.addServlet(new ServletHolder(new LibraryServlet(m_baseData)),
-                       "/library");
 
 //     // products
 //     for(BaseEntry entry : m_users)

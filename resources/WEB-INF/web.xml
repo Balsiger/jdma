@@ -56,6 +56,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>library</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.LibraryServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>save</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.SaveActionServlet</servlet-class>
   </servlet>
@@ -115,6 +120,11 @@
   <servlet-mapping>
     <servlet-name>entries</servlet-name>
     <url-pattern>/_entries/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>library</servlet-name>
+    <url-pattern>/library</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

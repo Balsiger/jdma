@@ -34,6 +34,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
@@ -65,6 +66,18 @@ public class LibraryServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
 
+  //---------------------------- LibraryServlet ----------------------------
+
+  /**
+   * Create the servlet.
+   *
+   */
+  public LibraryServlet()
+  {
+    this(DMADataFactory.getBaseData());
+  }
+
+  //........................................................................
   //---------------------------- LibraryServlet ----------------------------
 
   /**
