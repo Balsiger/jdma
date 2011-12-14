@@ -34,9 +34,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
@@ -2209,7 +2211,8 @@ public class BaseProduct extends BaseEntry
                                  computeValue("description", inDM)
                                  .format(this, inDM, true),
                                  computeValue("short description", inDM)
-                                 .format(this, inDM, true))),
+                                 .format(this, inDM, true),
+                                 computeIndexValues())),
          null, "desc", false, false, false, false, "desc", "");
 
     if("subtitle".equals(inKey))
@@ -2239,6 +2242,28 @@ public class BaseProduct extends BaseEntry
     }
 
     return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
+  //-------------------------- computeIndexValues --------------------------
+
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @return      a multi map of values per index name
+   *
+   */
+  public Multimap<String, String> computeIndexValues()
+  {
+    Multimap<String, String> values = super.computeIndexValues();
+
+    Set<String> persons = new HashSet<String>();
+    collectPersons(persons, null, null);
+
+    for(String person : persons)
+      values.put(Index.PERSONS, person);
+
+    return values;
   }
 
   //........................................................................

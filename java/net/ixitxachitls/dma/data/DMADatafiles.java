@@ -185,8 +185,37 @@ public class DMADatafiles implements DMAData
       m_entries.put(inType, entries);
     }
 
-    return sublist((List<T>)new ArrayList<AbstractEntry>(entries.values()),
-                   inStart, inStart + inSize);
+    if(inSize > 0)
+      return sublist((List<T>)new ArrayList<AbstractEntry>(entries.values()),
+                     inStart, inStart + inSize);
+
+    return (List<T>)new ArrayList<AbstractEntry>(entries.values());
+  }
+
+  //........................................................................
+  //--------------------------- getIndexEntries ----------------------------
+
+  /**
+   * Get the entries for the given index.
+   *
+   * @param    <T>      The type of the entries to get
+   * @param    inIndex  the name of the index to get
+   * @param    inType   the type of entries to return for the index (app engine
+   *                    can only do filter on queries with kind)
+   * @param    inStart  the 0 based index of the first entry to return
+   * @param    inSize   the maximal number of entries to return
+   * @param    inGroups the groups for selecting the index entries
+   *
+   * @return   the entries matching the given index
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value for generics
+  public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
+    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType, int inStart,
+     int inSize, @Nonnull String ... inGroups)
+  {
+    throw
+      new UnsupportedOperationException("has not been implemented for files");
   }
 
   //........................................................................
@@ -503,6 +532,7 @@ public class DMADatafiles implements DMAData
   {
     boolean result = true;
     for(DMAFile file : m_files)
+    {
       if(!file.wasRead())
       {
         result &= file.read(this);
@@ -510,6 +540,7 @@ public class DMADatafiles implements DMAData
         for(AbstractEntry entry : file.getEntries())
           addInternal(entry);
       }
+    }
 
     return result;
   }

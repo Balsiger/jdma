@@ -31,6 +31,9 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.output.commands.Editable;
@@ -62,6 +65,17 @@ public class IndexServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
 
+  //----------------------------- IndexServlet -----------------------------
+
+  /**
+   * Create the servlet for indexes.
+   */
+  public IndexServlet()
+  {
+    this(DMADataFactory.getBaseData());
+  }
+
+  //........................................................................
   //----------------------------- IndexServlet -----------------------------
 
   /**
@@ -124,12 +138,11 @@ public class IndexServlet extends PageServlet
     String []match =
       Strings.getPatterns(inPath,
                           "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
-    System.out.println(inPath + ": " + java.util.Arrays.toString(match));
+    AbstractType<? extends AbstractEntry> type = AbstractType.get(match[0]);
     String name = match[1];
     String group = match[2];
 
-
-    if(name == null || name.isEmpty())
+    if(name == null || name.isEmpty() || type == null)
     {
       inWriter.title("Not Found")
         .begin("h1").add("Unnamed index").end("h1")
@@ -138,6 +151,11 @@ public class IndexServlet extends PageServlet
 
       return;
     }
+
+    name = name.replace("%20", " ");
+
+    if(group != null)
+      group = group.replace("%20", " ");
 
     // determine the index to use
     Index index = ValueGroup.getIndex(name);
@@ -174,7 +192,9 @@ public class IndexServlet extends PageServlet
                           inRequest.getStart());
 
     if(group != null)
-      format(inWriter, index.getEntries(m_data, group), true,
+      format(inWriter,
+             m_data.getIndexEntries(name, type, inRequest.getStart(),
+                                    inRequest.getPageSize(), group), true,
              title, new Title(titleCommand), inRequest.getStart(),
              inRequest.getPageSize());
 

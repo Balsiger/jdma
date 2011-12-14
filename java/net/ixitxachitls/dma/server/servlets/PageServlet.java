@@ -46,6 +46,7 @@ import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLDocument;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -423,13 +424,20 @@ public class PageServlet extends DMAServlet
       document.add(new Color("error", "No entries found!"));
     else
     {
+      String format = "";
       List<Object> cells = new ArrayList<Object>();
       for(AbstractEntry entry : inEntries)
-        cells.addAll(entry.printList(entry.getName(), inDM));
+        if(entry != null)
+        {
+          if(format.isEmpty())
+            format = entry.getListFormat();
 
-      document.add(new Table("entrylist",
-                             inEntries.get(0).getListFormat(),
-                             new Command(cells)));
+          cells.addAll(entry.printList(entry.getName(), inDM));
+        }
+        else
+          Log.error("There were null entries in the index!");
+
+      document.add(new Table("entrylist", format, new Command(cells)));
     }
     document.add(navigation);
 

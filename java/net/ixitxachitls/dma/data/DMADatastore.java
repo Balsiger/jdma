@@ -47,9 +47,13 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Multimap;
+
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -105,6 +109,9 @@ public class DMADatastore implements DMAData
   /** The image service to serve images. */
   private @Nonnull ImagesService m_image;
 
+  /** The joiner to put together the string for nested indexes. */
+  private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
+
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
@@ -155,7 +162,6 @@ public class DMADatastore implements DMAData
     Query query = new Query(inType.toString());
     FetchOptions options =
       FetchOptions.Builder.withOffset(inStart).limit(inSize);
-    System.out.println("options: " + options + " " + inStart + ", " + inSize);
     for(Entity entity : m_store.prepare(query).asIterable(options))
       entries.add((T)convert(entity));
 
@@ -405,6 +411,42 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //--------------------------- getIndexEntries ----------------------------
+
+  /**
+   * Get the entries for the given index.
+   *
+   * @param    <T>      The type of the entries to get
+   * @param    inIndex  the name of the index to get
+   * @param    inType   the type of entries to return for the index (app engine
+   *                    can only do filter on queries with kind)
+   * @param    inStart  the 0 based index of the first entry to return
+   * @param    inSize   the maximal number of entries to return
+   * @param    inGroups the groups for selecting the index entries
+   *
+   * @return   the entries matching the given index
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast return value for generics
+  public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
+    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType, int inStart,
+     int inSize, @Nonnull String ... inGroups)
+  {
+    List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
+    String value = s_joinGroups.join(inGroups);
+
+    Query query = new Query(inType.toString());
+    FetchOptions options =
+      FetchOptions.Builder.withOffset(inStart).limit(inSize);
+    query.addFilter(toPropertyName(Index.PREFIX + inIndex),
+                    Query.FilterOperator.EQUAL, value);
+    for(Entity entity : m_store.prepare(query).asIterable(options))
+      entries.add(convert(entity));
+
+    return (List<T>)entries;
+  }
+
+  //........................................................................
 
   //------------------------------ isChanged -------------------------------
 
@@ -558,7 +600,11 @@ public class DMADatastore implements DMAData
   {
     T entry = inType.create(inID, this);
     if(entry == null)
+    {
+      Log.warning("cannot convert " + inType + " entity with id " + inID + ": "
+                  + inEntity);
       return null;
+    }
 
     for(Map.Entry<String, Object> property
           : inEntity.getProperties().entrySet())
@@ -633,6 +679,12 @@ public class DMADatastore implements DMAData
         entity.setProperty(toPropertyName(value.getKey()), valueText);
       }
     }
+
+    // save the index information to make it searchable afterwards
+    Multimap<String, String> indexes = inEntry.computeIndexValues();
+    for(String index : indexes.keySet())
+      entity.setProperty(toPropertyName("index-" + index),
+                         indexes.get(index));
 
     return entity;
   }

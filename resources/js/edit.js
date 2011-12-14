@@ -601,7 +601,7 @@ extend(edit.Field, edit.Base);
 edit.Field.prototype.edit = function(inEditable, inTarget, inNoRelated) {
   $(inEditable).after(this.getElement());
   $(inEditable).hide();
-  inTarget.__edit = editable;
+  inTarget.__edit = inEditable;
 
   if(!inNoRelated && this.related)
   {

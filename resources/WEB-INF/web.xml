@@ -56,6 +56,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>index</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.IndexServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>library</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.LibraryServlet</servlet-class>
   </servlet>
@@ -120,6 +125,11 @@
   <servlet-mapping>
     <servlet-name>entries</servlet-name>
     <url-pattern>/_entries/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>index</servlet-name>
+    <url-pattern>/_index/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -190,7 +200,11 @@
     </init-param>
     <init-param>
       <param-name>/products/(.*)</param-name>
-      <param-value>/_entries/base product/$1</param-value>
+      <param-value>/_index/base product/$1</param-value>
+    </init-param>
+    <init-param>
+      <param-name>/products</param-name>
+      <param-value>/_entries/base product</param-value>
     </init-param>
   </filter>
 

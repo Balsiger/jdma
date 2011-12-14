@@ -195,6 +195,12 @@ public abstract class Index implements Serializable, Comparable<Index>
 
   //-------------------------------------------------------------- variables
 
+  /** The prefix for index names. */
+  public static final @Nonnull String PREFIX = "index-";
+
+  /** The name of the person index. */
+  public static final @Nonnull String PERSONS = "persons";
+
   /** The index title. */
   private @Nonnull String m_title;
 

@@ -396,6 +396,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     if(isChanged())
       write();
 
+    m_read = true;
     return true;
   }
 

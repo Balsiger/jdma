@@ -39,6 +39,9 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 // import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADatafiles;
@@ -1073,6 +1076,20 @@ public class AbstractEntry extends ValueGroup
   public @Nullable DMAFile getFile()
   {
     return m_file;
+  }
+
+  //........................................................................
+  //------------------------- computeIndexValues ---------------------------
+
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @return      a multi map of values per index name
+   *
+   */
+  public Multimap<String, String> computeIndexValues()
+  {
+    return HashMultimap.create();
   }
 
   //........................................................................

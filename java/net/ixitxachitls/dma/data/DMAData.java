@@ -278,6 +278,27 @@ public interface DMAData
   public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser);
 
   //........................................................................
+  //--------------------------- getIndexEntries ----------------------------
+
+  /**
+   * Get the entries for the given index.
+   *
+   * @param    <T>      The type of the entries to get
+   * @param    inIndex  the name of the index to get
+   * @param    inType   the type of entries to return for the index (app engine
+   *                    can only do filter on queries with kind)
+   * @param    inStart  the 0 based index of the first entry to return
+   * @param    inSize   the maximal number of entries to return
+   * @param    inGroups the groups for selecting the index entries
+   *
+   * @return   the entries matching the given index
+   *
+   */
+  public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
+    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType, int inStart,
+     int inSize, @Nonnull String ... inGroups);
+
+  //........................................................................
 
   //------------------------------ isChanged -------------------------------
 
