@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -47,7 +49,6 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -108,9 +109,6 @@ public class DMADatastore implements DMAData
 
   /** The image service to serve images. */
   private @Nonnull ImagesService m_image;
-
-  /** The joiner to put together the string for nested indexes. */
-  private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -420,30 +418,69 @@ public class DMADatastore implements DMAData
    * @param    inIndex  the name of the index to get
    * @param    inType   the type of entries to return for the index (app engine
    *                    can only do filter on queries with kind)
+   * @param    inGroup  the group to get entries for
    * @param    inStart  the 0 based index of the first entry to return
    * @param    inSize   the maximal number of entries to return
-   * @param    inGroups the groups for selecting the index entries
    *
    * @return   the entries matching the given index
    *
    */
   @SuppressWarnings("unchecked") // need to cast return value for generics
   public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType, int inStart,
-     int inSize, @Nonnull String ... inGroups)
+                     (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+                      @Nonnull String inGroup, int inStart, int inSize)
   {
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
-    String value = s_joinGroups.join(inGroups);
 
     Query query = new Query(inType.toString());
     FetchOptions options =
-      FetchOptions.Builder.withOffset(inStart).limit(inSize);
+      FetchOptions.Builder.withOffset(inStart);
+    if(inSize > 0)
+      options.limit(inSize);
+
     query.addFilter(toPropertyName(Index.PREFIX + inIndex),
-                    Query.FilterOperator.EQUAL, value);
+                    Query.FilterOperator.EQUAL, inGroup);
     for(Entity entity : m_store.prepare(query).asIterable(options))
       entries.add(convert(entity));
 
     return (List<T>)entries;
+  }
+
+  //........................................................................
+  //---------------------------- getIndexNames -----------------------------
+
+  /**
+   * Get the names for the given index.
+   *
+   * @param       inIndex   the index to get it for
+   * @param       inType    the type of entries to look for (required for app
+   *                        engine)
+   *
+   * @return      a multi map with all the names
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast from property value
+  public @Nonnull SortedSet<String> getIndexNames
+    (@Nonnull String inIndex,
+     @Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    SortedSet<String> names = new TreeSet<String>();
+
+    Query query = new Query(inType.toString());
+    FetchOptions options = FetchOptions.Builder.withChunkSize(100);
+    for(Entity entity : m_store.prepare(query).asIterable(options))
+    {
+      List<String> values = (List<String>)
+        entity.getProperty(toPropertyName(Index.PREFIX + inIndex));
+
+      if(values == null)
+        continue;
+
+      for(String value : values)
+        names.add(value);
+    }
+
+    return names;
   }
 
   //........................................................................

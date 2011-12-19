@@ -167,9 +167,8 @@ edit.save = function()
     editable.save(values);
 
   // send the data to the server
-  window.console.log("saving", values);
-  util.ajax('/actions/save', values,
-            function(inResult) { eval(inResult); });
+  window.console.log("saving!", values);
+  util.ajax('/actions/save', values, null, true);
 
   // remove the move away code
   window.onbeforeunload = undefined;

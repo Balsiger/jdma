@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -351,7 +352,7 @@ public class PageServlet extends DMAServlet
                          + "\" class=\"navigation-link\" "
                          + "onclick=\"return util.link(event, \\'"
                          + inSections[i + 1] + "\\');\" >"
-                         + inSections[i] + "</a>");
+                         + inSections[i].toLowerCase(Locale.US) + "</a>");
         else
           builder.append(inSections[i]);
       }
@@ -377,23 +378,15 @@ public class PageServlet extends DMAServlet
    * @param       inWriter       the write to write to
    * @param       inEntries      the entries to be written
    * @param       inDM           true for writing for DMs, false otherwise
-   * @param       inTitle        the title of the page
-   * @param       inTitleCommand the command to set the title
    * @param       inStart        the start index of the entries to print
    * @param       inPageSize     the full size of the page
    *
    */
   protected void format(@Nonnull HTMLWriter inWriter,
                         @Nonnull List<? extends AbstractEntry> inEntries,
-                        boolean inDM, @Nonnull String inTitle,
-                        @Nonnull Command inTitleCommand,
-                        int inStart, int inPageSize)
+                        boolean inDM, int inStart, int inPageSize)
   {
-    inWriter.title(inTitle);
-
-    HTMLDocument document = new HTMLDocument(inTitle);
-
-    document.add(inTitleCommand);
+    HTMLDocument document = new HTMLDocument("");
 
     List<String> navigation = new ArrayList<String>();
     if(inStart > 0)
@@ -442,6 +435,60 @@ public class PageServlet extends DMAServlet
     document.add(navigation);
 
     inWriter.add(document.toString());
+  }
+
+  //........................................................................
+  //------------------------------ writeIcon -------------------------------
+
+  /**
+   * Write an icon to the current position in the writer.
+   *
+   * @param       inWriter   the html writer to output to
+   * @param       inIcon     the name of the image to use for the icon
+   *                         (/icons/ will be prefixed, .png appended)
+   * @param       inCaption  the caption below the icon
+   * @param       inURL      the url to link to when clicking the icon
+   *
+   */
+  protected static void writeIcon(@Nonnull HTMLWriter inWriter,
+                                  @Nonnull String inIcon,
+                                  @Nonnull String inCaption,
+                                  @Nonnull String inURL)
+  {
+    inWriter
+      .begin("div").classes("caption-container")
+      .begin("a").classes("icon-link").href(inURL)
+      .onClick("link(event, '" + inURL + "');")
+      .begin("img").src("/icons/" + inIcon + ".png").alt(inCaption)
+      .tooltip(inCaption)
+      .classes("icon highlight")
+      .end("img")
+      .begin("div").classes("caption").add(inCaption).end("div")
+      .end("a")
+      .end("div");
+  }
+
+  //........................................................................
+  //------------------------------ writeError ------------------------------
+
+  /**
+   * Write an error text to the output.
+   *
+   * @param    inWriter   the output to write to
+   * @param    inTitle    the title of the error
+   * @param    inMessage  the error message
+   *
+   */
+  protected static void writeError(@Nonnull HTMLWriter inWriter,
+                                   @Nonnull String inTitle,
+                                   @Nonnull String inMessage)
+  {
+    inWriter
+      .title(inTitle)
+      .begin("h1").add(inTitle).end("h1")
+      .add(inMessage);
+
+    Log.warning(inTitle + " - " + inMessage);
   }
 
   //........................................................................
@@ -720,10 +767,7 @@ public class PageServlet extends DMAServlet
                    .Data()));
 
       PageServlet servlet = new PageServlet();
-      servlet.format(writer, entries, true,
-                     "title",
-                     new net.ixitxachitls.output.commands.Title
-                     ("First1 - Second"), 0, 50);
+      servlet.format(writer, entries, true, 0, 50);
 
       writer.close();
 
@@ -733,13 +777,8 @@ public class PageServlet extends DMAServlet
                    + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
                    + "\">\n"
                    + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                   + "  <HEAD>\n"
-                   + "    <TITLE>title</TITLE>\n"
-                   + "  </HEAD>\n"
                    + "  <BODY>\n"
                    + "    \n"
-                   + "<h1>First1 - Second</h1>\n"
-                   + "\n"
                    + "<table class=\"entrylist\"><tr class=\"title\">"
                    + "<td class=\"title\"></td><td class=\"title\">Name</td>"
                    + "<td class=\"title\">Real Name</td>"

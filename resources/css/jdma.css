@@ -859,6 +859,16 @@ A.type-index
   text-overflow:    ellipsis;
 }
 
+DIV.index-group
+{
+  display: none;
+}
+
+DIV.index-nested
+{
+  background-color: #aaa;
+}
+
 DIV.index-overview:hover,
 A.type-index:hover
 {

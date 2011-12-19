@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
@@ -202,23 +203,45 @@ public class DMADatafiles implements DMAData
    * @param    inIndex  the name of the index to get
    * @param    inType   the type of entries to return for the index (app engine
    *                    can only do filter on queries with kind)
+   * @param    inGroup  the group to get entries for
    * @param    inStart  the 0 based index of the first entry to return
    * @param    inSize   the maximal number of entries to return
-   * @param    inGroups the groups for selecting the index entries
    *
    * @return   the entries matching the given index
    *
    */
   @SuppressWarnings("unchecked") // need to cast return value for generics
   public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType, int inStart,
-     int inSize, @Nonnull String ... inGroups)
+                     (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+                      @Nonnull String inGroup, int inStart, int inSize)
   {
     throw
       new UnsupportedOperationException("has not been implemented for files");
   }
 
   //........................................................................
+  //---------------------------- getIndexNames -----------------------------
+
+  /**
+   * Get the names for the given index.
+   *
+   * @param       inIndex   the index to get it for
+   * @param       inType    the type of entries to look for (required for app
+   *                        engine)
+   *
+   * @return      a list with all the names
+   *
+   */
+  public @Nonnull SortedSet<String> getIndexNames
+    (@Nonnull String inIndex,
+     @Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    throw
+      new UnsupportedOperationException("has not been implemented for files");
+  }
+
+  //........................................................................
+
   //------------------------------- hasEntry -------------------------------
 
   /**

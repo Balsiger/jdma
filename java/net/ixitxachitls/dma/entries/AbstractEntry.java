@@ -2104,7 +2104,7 @@ public class AbstractEntry extends ValueGroup
    */
   public boolean canEdit(@Nonnull String inKey, @Nonnull BaseCharacter inUser)
   {
-    return inUser.hasAccess(BaseCharacter.Group.ADMIN);
+    return inUser != null && inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
 
   //........................................................................

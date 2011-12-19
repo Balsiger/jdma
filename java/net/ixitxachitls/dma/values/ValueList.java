@@ -447,8 +447,8 @@ public class ValueList<T extends Value>
     if(inValues.isEmpty())
       return result;
 
-    define();
-    m_values.addAll(inValues);
+    result.define();
+    result.m_values.addAll(inValues);
 
     return result;
   }

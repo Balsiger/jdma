@@ -31,6 +31,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Joiner;
+
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -201,6 +203,16 @@ public abstract class Index implements Serializable, Comparable<Index>
   /** The name of the person index. */
   public static final @Nonnull String PERSONS = "persons";
 
+  /** The name of the data index. */
+  public static final @Nonnull String DATES = "dates";
+
+  /** The name of the audience index. */
+  public static final @Nonnull String AUDIENCES = "audiences";
+
+  /** The joiner to put together the string for nested indexes. */
+  private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
+
+
   /** The index title. */
   private @Nonnull String m_title;
 
@@ -222,6 +234,40 @@ public abstract class Index implements Serializable, Comparable<Index>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //---------------------------- groupsToString ----------------------------
+
+  /**
+   * Convert given groups into a string for storing.
+   *
+   * @param       inGroups the index group values
+   *
+   * @return      the converted string
+   *
+   */
+  public static @Nonnull String groupsToString(@Nonnull String ... inGroups)
+  {
+    return s_joinGroups.join(inGroups);
+  }
+
+  //........................................................................
+  //---------------------------- stringToGroups ----------------------------
+
+  /**
+   * Convert the given string back into an array of group names.
+   *
+   * @param       inText the text to convert
+   *
+   * @return      the individual groups
+   *
+   */
+  public static @Nonnull String [] stringToGroups(@Nonnull String inText)
+  {
+    return inText.split("::");
+  }
+
+  //........................................................................
+
 
   //------------------------------- getType --------------------------------
 
@@ -477,7 +523,7 @@ public abstract class Index implements Serializable, Comparable<Index>
    * @return      true if index is editable, false if not
    *
    */
-  public boolean isEditable(@Nonnull String inPath)
+  public boolean isEditable(@Nullable String inPath)
   {
     return m_editable;
   }

@@ -250,7 +250,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      true if read, false if not
    *
    */
-  public boolean wasRead()
+  public synchronized boolean wasRead()
   {
     return m_read;
   }

@@ -37,7 +37,6 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
@@ -167,13 +166,16 @@ public class EntryListServlet extends PageServlet
     String title = Encodings.toWordUpperCase(type.getMultipleLink());
     Log.info("serving dynamic list " + title);
 
+    inWriter
+      .title(title)
+      .begin("h1").add(title).end("h1");
+
     // TODO: extract dm from request
     format(inWriter,
            getEntries(inRequest, inPath, type,
                       inRequest.getStart(),
                       inRequest.getPageSize() + 1),
-           true, title, new Title(title), inRequest.getStart(),
-           inRequest.getPageSize());
+           true, inRequest.getStart(), inRequest.getPageSize());
 
     addNavigation(inWriter,
                   type.getMultipleLink(), "/" + type.getMultipleLink());
@@ -301,9 +303,10 @@ public class EntryListServlet extends PageServlet
                    "    <SCRIPT type=\"text/javascript\">\n"
                    + "      document.title = 'Entrys';\n"
                    + "    </SCRIPT>\n"
+                   + "    <H1>\n"
+                   + "      Entrys\n"
+                   + "    </H1>\n"
                    + "    \n"
-                   + "<h1>Entrys</h1>\n"
-                   + "\n"
                    + "<table class=\"entrylist\">"
                    + "<tr class=\"title\">"
                    + "<td class=\"title\"></td>"

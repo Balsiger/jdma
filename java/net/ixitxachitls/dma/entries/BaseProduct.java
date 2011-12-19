@@ -2145,40 +2145,40 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //------------------------------- matches --------------------------------
 
-  /**
-   * Check whether the entry matches the given key and value.
-   *
-   * @param       inKey   the key of the value to match
-   * @param       inValue the value to match with
-   *
-   * @return      true if it matches, false if not
-   *
-   */
-  public boolean matches(@Nonnull String inKey, @Nonnull String inValue)
-  {
-    if("jobs".equalsIgnoreCase(inKey))
-    {
-      Set<String> jobs = new HashSet<String>();
-      collectJobs(jobs, null, null);
-      for(String job : jobs)
-        if(inValue.equalsIgnoreCase(job))
-          return true;
+  // /**
+  //  * Check whether the entry matches the given key and value.
+  //  *
+  //  * @param       inKey   the key of the value to match
+  //  * @param       inValue the value to match with
+  //  *
+  //  * @return      true if it matches, false if not
+  //  *
+  //  */
+  // public boolean matches(@Nonnull String inKey, @Nonnull String inValue)
+  // {
+  //   if("jobs".equalsIgnoreCase(inKey))
+  //   {
+  //     Set<String> jobs = new HashSet<String>();
+  //     collectJobs(jobs, null, null);
+  //     for(String job : jobs)
+  //       if(inValue.equalsIgnoreCase(job))
+  //         return true;
 
-      return false;
-    }
-    else if ("persons".equalsIgnoreCase(inKey))
-    {
-      Set<String> persons = new HashSet<String>();
-      collectPersons(persons, null, null);
-      for(String person : persons)
-        if(inValue.equalsIgnoreCase(person))
-          return true;
+  //     return false;
+  //   }
+  //   else if ("persons".equalsIgnoreCase(inKey))
+  //   {
+  //     Set<String> persons = new HashSet<String>();
+  //     collectPersons(persons, null, null);
+  //     for(String person : persons)
+  //       if(inValue.equalsIgnoreCase(person))
+  //         return true;
 
-      return false;
-    }
-    else
-      return super.matches(inKey, inValue);
-  }
+  //     return false;
+  //   }
+  //   else
+  //     return super.matches(inKey, inValue);
+  // }
 
   //........................................................................
 
@@ -2257,11 +2257,28 @@ public class BaseProduct extends BaseEntry
   {
     Multimap<String, String> values = super.computeIndexValues();
 
+    // persons
     Set<String> persons = new HashSet<String>();
     collectPersons(persons, null, null);
 
     for(String person : persons)
       values.put(Index.PERSONS, person);
+
+    // date
+    if(m_date.isDefined())
+    {
+      String month = m_date.getMonthAsString();
+      if(month.isEmpty())
+        values.put(Index.DATES, Index.groupsToString("" + m_date.getYear()));
+      else
+        values.put(Index.DATES,
+                   Index.groupsToString("" + m_date.getYear(), month));
+    }
+    else
+      values.put(Index.DATES, Value.UNDEFINED);
+
+    // audience
+    values.put(Index.AUDIENCES, m_audience.toString());
 
     return values;
   }
@@ -2295,7 +2312,7 @@ public class BaseProduct extends BaseEntry
       }
       else if("persons".equalsIgnoreCase(parts[0]))
       {
-        renamePerson(parts[1], inText);
+        renamePerson(parts[1], inText.replace("\"", ""));
         return null;
       }
 
@@ -2405,7 +2422,7 @@ public class BaseProduct extends BaseEntry
       }
       else
         list.add(person);
-      }
+    }
 
     return inList.as(list);
   }

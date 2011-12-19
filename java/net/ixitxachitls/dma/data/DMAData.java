@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.data;
 
 import java.util.List;
 import java.util.NavigableMap;
+import java.util.SortedSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -285,18 +286,35 @@ public interface DMAData
    *
    * @param    <T>      The type of the entries to get
    * @param    inIndex  the name of the index to get
+   * @param    inGroup  the index group to show
    * @param    inType   the type of entries to return for the index (app engine
    *                    can only do filter on queries with kind)
    * @param    inStart  the 0 based index of the first entry to return
    * @param    inSize   the maximal number of entries to return
-   * @param    inGroups the groups for selecting the index entries
    *
    * @return   the entries matching the given index
    *
    */
   public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType, int inStart,
-     int inSize, @Nonnull String ... inGroups);
+                     (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+                      @Nonnull String inGroup, int inStart, int inSize);
+
+  //........................................................................
+  //---------------------------- getIndexNames -----------------------------
+
+  /**
+   * Get the names for the given index.
+   *
+   * @param       inIndex   the index to get it for
+   * @param       inType    the type of entries to look for (required for app
+   *                        engine)
+   *
+   * @return      a list with all the names
+   *
+   */
+  public @Nonnull SortedSet<String> getIndexNames
+    (@Nonnull String inIndex,
+     @Nonnull AbstractType<? extends AbstractEntry> inType);
 
   //........................................................................
 

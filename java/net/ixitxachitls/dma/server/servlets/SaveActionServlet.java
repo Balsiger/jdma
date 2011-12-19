@@ -109,7 +109,7 @@ public class SaveActionServlet extends ActionServlet
     protected @Nonnull DMAData m_data;
 
     /** The owner of the entry/entries changed. */
-    protected @Nonnull AbstractEntry m_owner;
+    protected @Nullable AbstractEntry m_owner;
 
     /** The name of the entry changed. */
     protected @Nullable String m_name;
@@ -135,7 +135,8 @@ public class SaveActionServlet extends ActionServlet
      */
     public @Nonnull String toString()
     {
-      return m_name + " [" + m_id + "]/" + m_type + " (" + m_owner.getName()
+      return m_name + " [" + m_id + "]/" + m_type + " ("
+        + (m_owner == null ? "no owner" : m_owner.getName())
         + "/" + m_file + (m_multiple ? ", single" : ", multiple") + "):"
         + m_values;
     }
@@ -176,11 +177,11 @@ public class SaveActionServlet extends ActionServlet
       Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
       if(m_multiple)
       {
-        // TODO: this is inefficient and might be changed my using the same
-        // procedure as used for indexes (or the indexes themselves).
-        for(AbstractEntry entry : m_data.getEntries(m_type, 0, 0))
-          if(entry.matches(m_fullType, m_id))
-            entries.add(entry);
+        assert m_values.size() == 1 : "Only expected a single value to change";
+        String []parts = m_values.keySet().iterator().next().split("/");
+        String index = parts[0];
+        String value = parts[1];
+        entries.addAll(m_data.getIndexEntries(index, m_type, value, 0, 0));
       }
       else
       {
@@ -322,7 +323,7 @@ public class SaveActionServlet extends ActionServlet
       + (saved.isEmpty() ? ""
          : "gui.info('The following entries were updated:<p>"
          + Strings.BR_JOINER.join(saved) + "'); "
-         + "util.link(null, " + path + ");")
+         + "util.link(null" + (path.isEmpty() ? "" : ", "  + path) + ");")
       + Strings.NEWLINE_JOINER.join(errors);
   }
 
