@@ -316,7 +316,7 @@ public class IndexServlet extends PageServlet
       writeIcon(inWriter,
                 inType.getMultipleLink() + "/" + inPath + "/" + inGroup,
                 title, inPath + "/" + inGroup);
-    else if(inIndex.isEditable(inGroup))
+    else if(inGroup != null && inIndex.isEditable(inGroup))
       inWriter
         .begin("dmaeditable")
         .id("*/" + inPath)

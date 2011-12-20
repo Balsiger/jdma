@@ -205,3 +205,44 @@ function doLogout()
 
 //..........................................................................
 
+//----- admin --------------------------------------------------------------
+
+var admin = {};
+
+admin.addEvent = function(inText, inSeconds)
+{
+  window.console.log("add event", inText, inSeconds, $('admin-events'));
+  $('#admin-events').append('<div class="event"><div class="date">' +
+                            util.niceDate(inSeconds)
+                            + '</div><div class="text">' +
+                            inText + '</div></div>');
+};
+
+admin.addLog = function(inType, inText, inSeconds)
+{
+  window.console.log("add log", inType, inText, inSeconds, $('admin-logs'));
+  $('#admin-logs').append('<div class="log ' + inType + '">' +
+                          '<div class="date">' + util.niceDate(inSeconds) +
+                          '</div><div class="text">' + inText + '</div>' +
+                          '</div></div>');
+};
+
+admin.show = function(inType)
+{
+  window.console.log(inType, $('#admin-logs div.COMPLETE'),
+                     $('#admin-logs div.' + inType));
+  $('#admin-logs div.COMPLETE').hide();
+  $('#admin-logs div.' + inType).show();
+};
+
+admin.resetIndexes = function(inType)
+{
+  if(!inType)
+    return;
+
+  util.ajax('/admin', { 'reset': inType }, null, true);
+};
+
+//..........................................................................
+
+

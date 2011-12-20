@@ -56,7 +56,7 @@ import net.ixitxachitls.output.html.HTMLWriter;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class Index implements Serializable, Comparable<Index>
+public class Index implements Serializable, Comparable<Index>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -203,15 +203,47 @@ public abstract class Index implements Serializable, Comparable<Index>
   /** The name of the person index. */
   public static final @Nonnull String PERSONS = "persons";
 
+  /** The name of the person index. */
+  public static final @Nonnull String JOBS = "jobs";
+
   /** The name of the data index. */
   public static final @Nonnull String DATES = "dates";
 
   /** The name of the audience index. */
   public static final @Nonnull String AUDIENCES = "audiences";
 
+  /** The name of the page index. */
+  public static final @Nonnull String PAGES = "pages";
+
+  /** The name of the systems index. */
+  public static final @Nonnull String SYSTEMS = "systems";
+
+  /** The name of the types index. */
+  public static final @Nonnull String TYPES = "types";
+
+  /** The name of the styles index. */
+  public static final @Nonnull String STYLES = "styles";
+
+  /** The name of the producers index. */
+  public static final @Nonnull String PRODUCERS = "producers";
+
+  /** The name of the series index. */
+  public static final @Nonnull String SERIES = "series";
+
+  /** The name of the prices index. */
+  public static final @Nonnull String PRICES = "prices";
+
+  /** The name of the parts index. */
+  public static final @Nonnull String PARTS = "parts";
+
+  /** The name of the layout index. */
+  public static final @Nonnull String LAYOUTS = "layouts";
+
+  /** The name of the world index. */
+  public static final @Nonnull String WORLDS = "worlds";
+
   /** The joiner to put together the string for nested indexes. */
   private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
-
 
   /** The index title. */
   private @Nonnull String m_title;
@@ -230,6 +262,9 @@ public abstract class Index implements Serializable, Comparable<Index>
 
   /** The access level required for this index. */
   //private @Nullable BaseCharacter.Group m_access = null;
+
+  /** Version for serialization. */
+  private static final long serialVersionUID = 1L;
 
   //........................................................................
 
@@ -267,7 +302,6 @@ public abstract class Index implements Serializable, Comparable<Index>
   }
 
   //........................................................................
-
 
   //------------------------------- getType --------------------------------
 
@@ -372,49 +406,6 @@ public abstract class Index implements Serializable, Comparable<Index>
 //   }
 
   //........................................................................
-  //---------------------------- getNavigation -----------------------------
-
-  /**
-   * Get the navigation information for the current index.
-   *
-   * @param       inName the index name
-   * @param       inPath the path to the index to print
-   *
-   * @return      an array if text/url pairs for the navigation
-   *
-   */
-  public abstract @Nonnull String [] getNavigation(@Nonnull String inName,
-                                                   @Nonnull String inPath);
-
-  //........................................................................
-  //------------------------------ getEntries ------------------------------
-
-  /**
-   * Get all the entries to be included in this index.
-   *
-   * @param    inData all the available data
-   * @param    inPath the sub path to the index
-   *
-   * @return   a list of all the entries to print
-   *
-   */
-  public abstract @Nonnull List<AbstractEntry>
-    getEntries(@Nonnull DMAData inData, @Nonnull String inPath);
-
-  //........................................................................
-  //------------------------------- getTitle -------------------------------
-
-  /**
-   * Get the title of the index for the given path.
-   *
-   * @param       inPath the sub path to the index
-   *
-   * @return      the title for the page
-   *
-   */
-  public abstract @Nonnull String getTitle(@Nonnull String inPath);
-
-  //........................................................................
 
   //------------------------------ hasImages -------------------------------
 
@@ -500,19 +491,6 @@ public abstract class Index implements Serializable, Comparable<Index>
   }
 
   //........................................................................
-  //----------------------------- listEntries ------------------------------
-
-  /**
-   * Check if we have to show entries or an index overview.
-   *
-   * @param     inPath the sub path of the index
-   *
-   * @return    true for printing entries, false for overview(s)
-   *
-   */
-  public abstract boolean listEntries(@Nonnull String inPath);
-
-  //........................................................................
   //------------------------------ isEditable ------------------------------
 
   /**
@@ -536,31 +514,6 @@ public abstract class Index implements Serializable, Comparable<Index>
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //-------------------------------- write ---------------------------------
-
-  /**
-   * Write the contents of the index to the given writer and request.
-   *
-   * @param      inWriter     the writer to output to
-   * @param      inData       the data to print
-   * @param      inName       the nameing part of the index url
-   * @param      inPath       the sub path of the index
-   * @param      inPageSize   the size of the page as number of elements
-   * @param      inStart      the index of the first element to use
-   *
-   * @return     the page with the entries to show instead, if any
-   *
-   */
-  public abstract @Nullable String write(@Nonnull HTMLWriter inWriter,
-                                         @Nonnull DMAData inData,
-                                         @Nonnull String inName,
-                                         @Nonnull String inPath,
-                                         int inPageSize,
-                                         int inStart);
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test

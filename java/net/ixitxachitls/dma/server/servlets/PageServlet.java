@@ -46,6 +46,7 @@ import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLDocument;
 import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -459,9 +460,10 @@ public class PageServlet extends DMAServlet
       .begin("div").classes("caption-container")
       .begin("a").classes("icon-link").href(inURL)
       .onClick("link(event, '" + inURL + "');")
-      .begin("img").src("/icons/" + inIcon + ".png").alt(inCaption)
-      .tooltip(inCaption)
-      .classes("icon highlight")
+      .begin("img")
+      .src("/icons/"
+           + Files.encodeName(inIcon.toLowerCase()) + ".png")
+      .alt(inCaption).tooltip(inCaption).classes("icon highlight")
       .end("img")
       .begin("div").classes("caption").add(inCaption).end("div")
       .end("a")

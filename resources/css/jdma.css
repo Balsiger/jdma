@@ -991,3 +991,66 @@ SPAN.ESTIMATION > SPAN.window
     color:        #004400;
     background:   #eeffee;
 }
+
+
+/******************************************************************************
+ * admin                                                                      *
+ *****************************************************************************/
+
+#admin-events DIV.event
+{
+  color: #000088;
+}
+
+#admin-events DIV.event, #admin-logs DIV.log
+{
+  clear:    both;
+  position: relative;
+}
+
+#admin-events DIV.event DIV.date, #admin-logs DIV.log DIV.date
+{
+  width: 10em;
+  float: left;
+}
+
+#admin-logs
+{
+}
+
+#admin-logs DIV.log.ERROR.WARNING.INFO
+{
+  color: #880000;
+}
+
+#admin-logs DIV.log.WARNING.INFO.IMPORTANT
+{
+  color: #888800;
+}
+
+#admin-logs DIV.log.INFO.IMPORTANT
+{
+  color: #008800;
+}
+
+#admin-log DIV.log.STATUS
+{
+  color: #008888;
+}
+
+#admin-log DIV.log.DEBUG.COMPLETE
+{
+  color:   grey;
+  display: none;
+}
+
+#admin-log DIV.log.COMPLETE
+{
+  color:   #CCCCCC;
+  display: none;
+}
+
+SELECT.admin-button
+{
+  float: right;
+}

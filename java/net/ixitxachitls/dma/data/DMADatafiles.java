@@ -790,6 +790,25 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------- rebuild --------------------------------
+
+  /**
+   * Rebuild the given types. This means mainly rebuilding the indexs. It is
+   * accomplished by reading all entries and writing them back.
+   *
+   * NOTE: this produces a lot of datastore traffic.
+   *
+   * @param      inType  the type to rebuild for
+   *
+   *
+   * @return     the numbert of enties updated
+   */
+  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    throw new UnsupportedOperationException("not implemented for files");
+  }
+
+  //........................................................................
 
   //........................................................................
 

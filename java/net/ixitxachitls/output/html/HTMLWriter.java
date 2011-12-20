@@ -244,7 +244,7 @@ public class HTMLWriter
   }
 
   //........................................................................
-  //--------------------------------- alt ----------------------------------
+  //--------------------------------- name ---------------------------------
 
   /**
    * Add a name attribute to a tag.
@@ -257,6 +257,22 @@ public class HTMLWriter
   public HTMLWriter name(@Nonnull String inText)
   {
     return attribute("name", inText);
+  }
+
+  //........................................................................
+  //-------------------------------- value ---------------------------------
+
+  /**
+   * Add a value attribute to a tag.
+   *
+   * @param       inText   the text for the value
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter value(@Nonnull String inText)
+  {
+    return attribute("value", inText);
   }
 
   //........................................................................
@@ -337,6 +353,22 @@ public class HTMLWriter
   public HTMLWriter onMouseOut(@Nonnull String inText)
   {
     return attribute("onmouseout", inText);
+  }
+
+  //........................................................................
+  //------------------------------- onChange -------------------------------
+
+  /**
+   * Add an on change attribute to the current tag.
+   *
+   * @param       inText   the text for the on change
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter onChange(@Nonnull String inText)
+  {
+    return attribute("onchange", inText);
   }
 
   //........................................................................
@@ -478,7 +510,7 @@ public class HTMLWriter
   }
 
   //........................................................................
-  //------------------------------ addCSSFile ------------------------------
+  //------------------------------ addJSFile -------------------------------
 
   /**
    * Add a javascript file to the head of the file.

@@ -37,7 +37,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -866,82 +865,10 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    // the index for all persons
     s_indexes.put("persons",
-                  new GroupedIndex("Persons", BaseProduct.TYPE, 1)
-                  {
-                    private static final long serialVersionUID = 1L;
-
-                    public Set<String> names(@Nonnull Set<String> ioCollected,
-                                             @Nonnull DMAData inData,
-                                             @Nonnull String []inGroups)
-                    {
-                      for(BaseProduct product
-                            : inData.getEntries(BaseProduct.TYPE, 0, 0))
-                        product.collectPersons(ioCollected, null, null);
-
-                      return ioCollected;
-                    }
-
-                    public boolean matches(@Nonnull String []inGroups,
-                                           @Nonnull AbstractEntry inProduct)
-                    {
-                      if(!(inProduct instanceof BaseProduct))
-                        return false;
-
-                      Set<String> names = new HashSet<String>();
-                      ((BaseProduct)inProduct)
-                        .collectPersons(names, null, null);
-                     for(String name : names)
-                        if(name.equalsIgnoreCase(inGroups[0]))
-                          return true;
-
-                      return false;
-                    }
-                    // CHECKSTYLE:OFF
-                  }.withEditable());
-    // CHECKSTYLE:ON
-
-
-    // the index for all jobs
+                  new Index("Persons", BaseProduct.TYPE).withEditable());
     s_indexes.put("jobs",
-                  new GroupedIndex("Jobs", BaseProduct.TYPE, 2)
-                  {
-                    private static final long serialVersionUID = 1L;
-
-                    public Set<String> names(@Nonnull Set<String> ioCollected,
-                                             @Nonnull DMAData inData,
-                                             @Nonnull String []inGroups)
-                    {
-                      if(inGroups.length == 0)
-                        for(BaseProduct product
-                              : inData.getEntries(BaseProduct.TYPE, 0, 0))
-                          product.collectJobs(ioCollected, null, null);
-                      else
-                        for(BaseProduct product
-                              : inData.getEntries(BaseProduct.TYPE, 0, 0))
-                          product.collectPersons(ioCollected, inGroups[0],
-                                                 null);
-
-                      return ioCollected;
-                    }
-
-                    public boolean matches(@Nonnull String []inGroups,
-                                           @Nonnull AbstractEntry inProduct)
-                    {
-                      if(!(inProduct instanceof BaseProduct))
-                        return false;
-
-                      String job = inGroups[0];
-                      String name = inGroups[1];
-
-                      Set<String> jobs = new HashSet<String>();
-                      ((BaseProduct)inProduct).collectJobs(jobs, name, job);
-                      return !jobs.isEmpty();
-                    }
-                    // CHECKSTYLE:OFF
-                  }.withEditable());
-        // CHECKSTYLE:ON
+                  new Index("Jobs", BaseProduct.TYPE).withEditable());
   }
 
   //........................................................................
@@ -1068,54 +995,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("dates", new GroupedIndex("Dates", TYPE, 2)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          if(inGroups.length == 0)
-            for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-              if(product.m_date.isDefined())
-                ioCollected.add("" + product.m_date.getYear());
-              else
-                ioCollected.add(Value.UNDEFINED);
-          else
-            if(inGroups[0].equals(Value.UNDEFINED))
-              ioCollected.add(Value.UNDEFINED);
-            else
-              for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-                if(inGroups[0].equals("" + product.m_date.getYear())
-                   && product.m_date.getMonth() >= 0)
-                  if(product.m_date.getMonth() == 0)
-                    ioCollected.add(Value.UNDEFINED);
-                  else
-                    ioCollected.add(product.m_date.getMonthAsString());
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String year = inGroups[0];
-          String month = inGroups[1];
-
-          if(year.equals("" + product.m_date.getYear())
-             || (Value.UNDEFINED.equals(year) && !product.m_date.isDefined()))
-            return product.m_date.getMonth() <= 0
-              || month.equals(product.m_date.getMonthAsString());
-
-          return false;
-        }
-      });
+    s_indexes.put("dates", new Index("Dates", TYPE));
   }
 
   //........................................................................
@@ -1162,30 +1042,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("pages", new GroupedIndex("Pages", TYPE, 1, s_pageGroup)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_pages.group());
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-          return inGroups[0].equalsIgnoreCase(product.m_pages.group());
-        }
-      });
+    s_indexes.put("pages", new Index("Pages", TYPE));
   }
 
   //........................................................................
@@ -1202,35 +1059,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("systems", new GroupedIndex("Systems", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_system.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String system = inGroups[0];
-
-          return system.equals(product.m_system.toString(false));
-        }
-        // CHECKSTYLE:OFF
-      }.withImages());
-    // CHECKSTYLE:ON
+    s_indexes.put("systems", new Index("Systems", TYPE).withImages());
   }
 
   //........................................................................
@@ -1249,35 +1078,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("audiences", new GroupedIndex("Audiences", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_audience.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String audience = inGroups[0];
-
-          return audience.equals(product.m_audience.toString(false));
-        }
-        // CHECKSTYLE:OFF
-      }.withImages());
-    // CHECKSTYLE:ON
+    s_indexes.put("audiences", new Index("Audiences", TYPE).withImages());
   }
 
   //........................................................................
@@ -1296,35 +1097,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("types", new GroupedIndex("Types", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_productType.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String type = inGroups[0];
-
-          return type.equals(product.m_productType.toString(false));
-        }
-        // CHECKSTYLE:OFF
-      }.withImages());
-    // CHECKSTYLE:ON
+    s_indexes.put("types", new Index("Types", TYPE).withImages());
   }
 
   //........................................................................
@@ -1341,35 +1114,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("styles", new GroupedIndex("Styles", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_style.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String style = inGroups[0];
-
-          return style.equals(product.m_style.toString(false));
-        }
-        // CHECKSTYLE:OFF
-      }.withImages());
-    // CHECKSTYLE:ON
+    s_indexes.put("styles", new Index("Styles", TYPE).withImages());
   }
 
   //........................................................................
@@ -1386,35 +1131,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("producers", new GroupedIndex("Producers", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_producer.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String producer = inGroups[0];
-
-          return producer.equals(product.m_producer.toString(false));
-        }
-        // CHECKSTYLE:OFF
-      }.withImages());
-    // CHECKSTYLE:ON
+    s_indexes.put("producers", new Index("Producers", TYPE).withImages());
   }
 
   //........................................................................
@@ -1447,33 +1164,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("series", new GroupedIndex("Series", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_series.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String series = inGroups[0];
-
-          return series.equals(product.m_series.toString(false));
-        }
-      });
+    s_indexes.put("series", new Index("Series", TYPE));
   }
 
   //........................................................................
@@ -1503,30 +1194,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("prices", new GroupedIndex("Prices", TYPE, 1, s_priceGrouping)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_price.group());
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-          return inGroups[0].equalsIgnoreCase(product.m_price.group());
-        }
-      });
+    s_indexes.put("prices", new Index("Prices", TYPE));
   }
 
   //........................................................................
@@ -1551,38 +1219,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("parts", new GroupedIndex("Parts", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            for(Multiple content : product.m_contents)
-              ioCollected.add(content.get(0).toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String part = inGroups[0];
-
-          for(Multiple content : product.m_contents)
-            if(part.equalsIgnoreCase(content.get(0).toString(false)))
-              return true;
-
-          return false;
-        }
-      });
+    s_indexes.put("parts", new Index("Parts", TYPE));
   }
 
   //........................................................................
@@ -1622,33 +1259,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("layouts", new GroupedIndex("Layouts", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct product : inData.getEntries(TYPE, 0, 0))
-            ioCollected.add(product.m_layout.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct product = (BaseProduct)inProduct;
-
-          String layout = inGroups[0];
-
-          return layout.equals(product.m_layout.toString(false));
-        }
-      });
+    s_indexes.put("layouts", new Index("Layouts", TYPE));
   }
 
   //........................................................................
@@ -1662,40 +1273,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("worlds", new GroupedIndex("Worlds", TYPE, 1)
-      {
-        private static final long serialVersionUID = 1L;
-
-        public Set<String> names(@Nonnull Set<String> ioCollected,
-                                 @Nonnull DMAData inData,
-                                 @Nonnull String []inGroups)
-        {
-          for(BaseProduct campaign : inData.getEntries(TYPE, 0, 0))
-            for(Selection world : campaign.m_worlds)
-              ioCollected.add(world.toString(false));
-
-          return ioCollected;
-        }
-
-        public boolean matches(@Nonnull String []inGroups,
-                               @Nonnull AbstractEntry inProduct)
-        {
-          if(!(inProduct instanceof BaseProduct))
-            return false;
-
-          BaseProduct campaign = (BaseProduct)inProduct;
-
-          String requestedWorld = inGroups[0];
-
-          for(Selection world : campaign.m_worlds)
-            if(requestedWorld.equals(world.toString(false)))
-              return true;
-
-          return false;
-        }
-        // CHECKSTYLE:OFF
-      }.withImages());
-    // CHECKSTYLE:ON
+    s_indexes.put("worlds", new Index("Worlds", TYPE).withImages());
   }
 
   //........................................................................
@@ -2264,6 +1842,13 @@ public class BaseProduct extends BaseEntry
     for(String person : persons)
       values.put(Index.PERSONS, person);
 
+    // jobs
+    Set<String> jobs = new HashSet<String>();
+    collectJobs(jobs, null, null);
+
+    for(String job : jobs)
+      values.put(Index.JOBS, job);
+
     // date
     if(m_date.isDefined())
     {
@@ -2279,6 +1864,38 @@ public class BaseProduct extends BaseEntry
 
     // audience
     values.put(Index.AUDIENCES, m_audience.toString());
+
+    // system
+    values.put(Index.SYSTEMS, m_system.toString());
+
+    // type
+    values.put(Index.TYPES, m_productType.toString());
+
+    // style
+    values.put(Index.STYLES, m_style.toString());
+
+    // style
+    values.put(Index.PRODUCERS, m_producer.toString());
+
+    // layout
+    values.put(Index.LAYOUTS, m_layout.toString());
+
+    // series
+    values.put(Index.SERIES, m_series.toString(false));
+
+    // page
+    values.put(Index.PAGES, s_pageGroup.group(m_pages));
+
+    // price
+    values.put(Index.PRICES, s_priceGrouping.group(m_price));
+
+    // parts
+    for(Multiple content : m_contents)
+      values.put(Index.PARTS, content.get(0).toString(false));
+
+    // worlds
+    for(Selection world : m_worlds)
+      values.put(Index.WORLDS, world.toString(false));
 
     return values;
   }

@@ -120,7 +120,9 @@ public final class Files
    * <PRE>
    *                :        -> %3A
    *                *        -> %2A
-   *                &amp;    -> &
+   *                '        -> %27
+   *                &        -> %26
+   *                &amp;    -> amp;
    *                &ucirc;  -> Ã»
    *                &Ucirc;  -> Ã
    *                &ocirc;  -> Ã´
@@ -136,11 +138,18 @@ public final class Files
    */
   public static @Nonnull String encodeName(@Nonnull String inName)
   {
-    return inName.replaceAll(":", "-3A-").replaceAll("\\*", "-2A-")
-      .replaceAll("&amp;", "&").replaceAll("&ucirc;", "Ã»")
-      .replaceAll("&Ucirc;", "Ã").replaceAll("&ocirc;", "Ã´")
-      .replaceAll("&Ocirc;", "Ã").replaceAll("&eacute;", "Ã©")
-      .replaceAll("&Eacute;", "Ã");
+    return inName
+      .replace(":", "-3A-")
+      .replace("*", "-2A-")
+      .replace("'", "-27-")
+      .replace("&", "-26-")
+      .replace("&ucirc;", "Ã»")
+      .replace("&Ucirc;", "Ã")
+      .replace("&ocirc;", "Ã´")
+      .replace("&Ocirc;", "Ã")
+      .replace("&eacute;", "Ã©")
+      .replace("&Eacute;", "Ã")
+      .replace("%20", " ");
   }
 
   //........................................................................
@@ -154,6 +163,8 @@ public final class Files
    * <PRE>
    *                :        <- %3A
    *                *        <- %2A
+   *                '        <- %27
+   *                &        <- %26
    *                &amp;    <- &
    *                &ucirc;  <- Ã»
    *                &Ucirc;  <- Ã
@@ -170,11 +181,17 @@ public final class Files
    */
   public static @Nonnull String decodeName(@Nonnull String inName)
   {
-    return inName.replaceAll("-3A-", ":").replaceAll("-2A-", "*")
-      .replaceAll("&", "&amp;").replaceAll("Ã»", "&ucirc;")
-      .replaceAll("Ã", "&Ucirc;").replaceAll("Ã´", "&ocirc;")
-      .replaceAll("Ã", "&Ocirc;").replaceAll("Ã©", "&eacute;")
-      .replaceAll("Ã", "&Eacute;");
+    return inName
+      .replace("-3A-", ":")
+      .replace("-2A-", "*")
+      .replace("-26-", "&")
+      .replace("-27-", "'")
+      .replace("Ã»", "&ucirc;")
+      .replace("Ã", "&Ucirc;")
+      .replace("Ã´", "&ocirc;")
+      .replace("Ã", "&Ocirc;")
+      .replace("Ã©", "&eacute;")
+      .replace("Ã", "&Eacute;");
   }
 
   //........................................................................
@@ -572,10 +589,10 @@ public final class Files
     @org.junit.Test
     public void encodeDecode()
     {
-      assertEquals("encode", "_ +-2A--3A-?!&^&~",
+      assertEquals("encode", "_ +-2A--3A-?!-26-^-26-amp;~",
                    Files.encodeName("_ +*:?!&^&amp;~"));
       assertEquals("decode", "_ +*:?!^&amp;~",
-                   Files.decodeName("_ +-2A--3A-?!^&~"));
+                   Files.decodeName("_ +-2A--3A-?!^&amp;~"));
 
       assertEquals("both", "_ +*:?!&amp;^~abcd",
                    Files.decodeName(Files.encodeName("_ +*:?!&amp;^~abcd")));

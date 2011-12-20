@@ -52,4 +52,8 @@
     <property name="web.template.css.lightcolor_Spell" value="#a0a0ff" />
     <property name="web.template.css.hilightcolor_Spell" value="#c0c0fff" />
   </system-properties>
+
+  <admin-console>
+    <page name="DMA" url="/admin" />
+  </admin-console>
 </appengine-web-app>

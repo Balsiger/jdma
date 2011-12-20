@@ -212,7 +212,6 @@ public abstract class GroupedIndex extends Index
    * @return    true for printing entries, false for overview(s)
    *
    */
-  @Override
   public boolean listEntries(@Nonnull String inPath)
   {
     return groups(inPath).length == m_levels;
@@ -252,7 +251,6 @@ public abstract class GroupedIndex extends Index
    * @return   a list of all the entries to print
    *
    */
-  @Override
   public @Nonnull List<AbstractEntry>
     getEntries(@Nonnull DMAData inData, @Nonnull String inPath)
   {

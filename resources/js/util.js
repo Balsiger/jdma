@@ -288,6 +288,102 @@ util.clearSelection = function()
 };
 
 //..........................................................................
+//-------------------------------- niceDate --------------------------------
+
+/**
+ * Format the given time in seconds ago from now as a nice date.
+ *
+ * @param       inSeconds the date in seconds from now back/forward
+ *
+ * @return      a string with a nicely formatted date
+ *
+ */
+util.niceDate = function(inSeconds)
+{
+  if(inSeconds >= 0)
+  {
+    if(inSeconds == 0)
+      return "Now";
+
+    if(inSeconds == 1)
+      return "1 second ago";
+
+    if(inSeconds < 60)
+      return inSeconds + " seconds ago";
+
+    var minutes = Math.round(inSeconds / 60);
+
+    if(minutes == 1)
+      return "1 minute ago";
+
+    if(minutes < 60)
+      return minutes + " minutes ago";
+
+    var hours =  Math.round(minutes / 60);
+
+    if(hours == 1)
+      return "1 hour ago";
+
+    if(hours < 12)
+      return hours  + " hours ago";
+
+    var current = new Date();
+    var date = new Date(current.getTime() - inSeconds * 1000);
+
+    if(hours < 7 * 24)
+    {
+      if(current.getDay() == date.getDay())
+        return "Today";
+
+      if((current.getDay() - 1) % 7 == date.getDay())
+        return "Yesterday";
+
+      return "last " + DAYS[date.getDay()];
+    }
+  }
+  else
+  {
+    if(inSeconds == -1)
+      return "in 1 second";
+
+    if(inSeconds > -60)
+      return "in " + -inSeconds + " seconds";
+
+    var minutes = -Math.round(inSeconds / 60);
+
+    if(minutes == 1)
+      return "in 1 minute";
+
+    if(minutes < 60)
+      return "in " + minutes + " minutes";
+
+    var hours =  Math.round(minutes / 60);
+
+    if(hours == 1)
+      return "in 1 hour";
+
+    if(hours < 12)
+      return "in " + hours  + " hours";
+
+    var current = new Date();
+    var date = new Date(current.getTime() - inSeconds * 1000);
+
+    if(hours < 7 * 24)
+    {
+      if((current.getDay() + 1) % 7 == date.getDay())
+        return "Tomorrow";
+
+      if(current.getDay() == date.getDay())
+        return "later Today";
+
+      return "next " + DAYS[date.getDay()];
+    }
+  }
+
+  return SHORT_MONTHS[date.getMonth()] + " " + date.getDate();
+};
+
+//..........................................................................
 
 //---------------------------- replaceMainImage ----------------------------
 

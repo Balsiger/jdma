@@ -612,6 +612,52 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //------------------------------- rebuild --------------------------------
+
+  /**
+   * Rebuild the given types. This means mainly rebuilding the indexs. It is
+   * accomplished by reading all entries and writing them back.
+   *
+   * NOTE: this produces a lot of datastore traffic.
+   *
+   * @param      inType  the type to rebuild for
+   *
+   * @return     the numbert of enties updated
+   *
+   */
+  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    List<Entity> entities = new ArrayList<Entity>();
+
+    Query query = new Query(inType.toString());
+    FetchOptions options = FetchOptions.Builder.withChunkSize(100);
+    for(Entity entity : m_store.prepare(query).asIterable(options))
+    {
+      Entity newEntity = convert(convert(entity));
+
+      for(Map.Entry<String, Object> property
+            : newEntity.getProperties().entrySet())
+        if(!property.getValue().equals(entity.getProperty(property.getKey())))
+        {
+          entities.add(convert(convert(entity)));
+          break;
+        }
+
+      for(Map.Entry<String, Object> property
+            : entity.getProperties().entrySet())
+        if(!property.getValue()
+           .equals(newEntity.getProperty(property.getKey())))
+        {
+          entities.add(convert(convert(entity)));
+          break;
+        }
+    }
+
+    m_store.put(entities);
+    return entities.size();
+  }
+
+  //........................................................................
 
   //........................................................................
 

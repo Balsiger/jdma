@@ -193,6 +193,21 @@ public final class Log
     /** This level prints all message, even those that are
         mainly used for debugging purposes. */
     DEBUG;
+
+    /**
+     * Create a string with all the types of the current and lower types.
+     *
+     * @return a space delimited string of types
+     */
+    public @Nonnull String types()
+    {
+      StringBuffer result = new StringBuffer(this.toString() + "--");
+      for(Type type : Type.values())
+        if(type.ordinal() >= this.ordinal())
+          result.append(" " + type.toString());
+
+      return result.toString();
+    }
   }
 
   /** The default and current message level. */

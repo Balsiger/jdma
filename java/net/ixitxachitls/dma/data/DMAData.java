@@ -362,6 +362,22 @@ public interface DMAData
   public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry);
 
   //........................................................................
+  //------------------------------- rebuild --------------------------------
+
+  /**
+   * Rebuild the given types. This means mainly rebuilding the indexs. It is
+   * accomplished by reading all entries and writing them back.
+   *
+   * NOTE: this produces a lot of datastore traffic.
+   *
+   * @param      inType  the type to rebuild for
+   *
+   * @return     the numbert of enties updated
+   *
+   */
+  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType);
+
+  //........................................................................
 
   //........................................................................
 
