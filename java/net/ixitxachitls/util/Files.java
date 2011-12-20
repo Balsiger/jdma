@@ -123,6 +123,7 @@ public final class Files
    *                '        -> %27
    *                ..       -> %2E.
    *                &        -> %26
+   *                space    -> _
    *                &amp;    -> amp;
    *                &ucirc;  -> Ã»
    *                &Ucirc;  -> Ã
@@ -151,7 +152,8 @@ public final class Files
       .replace("&Ocirc;", "Ã")
       .replace("&eacute;", "Ã©")
       .replace("&Eacute;", "Ã")
-      .replace("%20", " ");
+      .replace("%20", "_")
+      .replace(" ", "_");
   }
 
   //........................................................................
@@ -168,6 +170,7 @@ public final class Files
    *                '        <- %27
    *                &        <- %26
    *                .        <- %2E
+   *                space    <- _
    *                &amp;    <- &
    *                &ucirc;  <- Ã»
    *                &Ucirc;  <- Ã
@@ -195,7 +198,8 @@ public final class Files
       .replace("Ã´", "&ocirc;")
       .replace("Ã", "&Ocirc;")
       .replace("Ã©", "&eacute;")
-      .replace("Ã", "&Eacute;");
+      .replace("Ã", "&Eacute;")
+      .replace("_", " ");
   }
 
   //........................................................................

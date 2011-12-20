@@ -42,6 +42,7 @@ import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.util.Files;
 
 //..........................................................................
 
@@ -150,7 +151,7 @@ public class LibraryServlet extends PageServlet
         .begin("a").classes("type-image").href("/" + type.getMultipleLink())
         .onClick("util.link(event, '/" + type.getMultipleLink() + "');")
         .begin("img").classes("type", "highlight")
-        .src("/icons/types/" + type.getName() + ".png")
+        .src("/icons/types/" + Files.encodeName(type.getName()) + ".png")
         .alt(type.getMultiple()).end("img")
         .begin("div").classes("caption").add(type.getMultipleLink()).end("div")
         .end("a") // type-image
