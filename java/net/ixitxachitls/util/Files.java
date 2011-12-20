@@ -121,6 +121,7 @@ public final class Files
    *                :        -> %3A
    *                *        -> %2A
    *                '        -> %27
+   *                ..       -> %2E.
    *                &        -> %26
    *                &amp;    -> amp;
    *                &ucirc;  -> Ã»
@@ -143,6 +144,7 @@ public final class Files
       .replace("*", "-2A-")
       .replace("'", "-27-")
       .replace("&", "-26-")
+      .replace("..", "-2E-.")
       .replace("&ucirc;", "Ã»")
       .replace("&Ucirc;", "Ã")
       .replace("&ocirc;", "Ã´")
@@ -165,6 +167,7 @@ public final class Files
    *                *        <- %2A
    *                '        <- %27
    *                &        <- %26
+   *                .        <- %2E
    *                &amp;    <- &
    *                &ucirc;  <- Ã»
    *                &Ucirc;  <- Ã
@@ -186,6 +189,7 @@ public final class Files
       .replace("-2A-", "*")
       .replace("-26-", "&")
       .replace("-27-", "'")
+      .replace("-2E-", ".")
       .replace("Ã»", "&ucirc;")
       .replace("Ã", "&Ucirc;")
       .replace("Ã´", "&ocirc;")
