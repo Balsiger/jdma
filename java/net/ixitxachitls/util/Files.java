@@ -597,12 +597,12 @@ public final class Files
     @org.junit.Test
     public void encodeDecode()
     {
-      assertEquals("encode", "_ +-2A--3A-?!-26-^-26-amp;~",
+      assertEquals("encode", "__+-2A--3A-?!-26-^-26-amp;~",
                    Files.encodeName("_ +*:?!&^&amp;~"));
-      assertEquals("decode", "_ +*:?!^&amp;~",
+      assertEquals("decode", "  +*:?!^&amp;~",
                    Files.decodeName("_ +-2A--3A-?!^&amp;~"));
 
-      assertEquals("both", "_ +*:?!&amp;^~abcd",
+      assertEquals("both", "  +*:?!&amp;^~abcd",
                    Files.decodeName(Files.encodeName("_ +*:?!&amp;^~abcd")));
     }
 

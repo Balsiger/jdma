@@ -24,9 +24,11 @@
 package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -48,7 +50,10 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
-
+import com.google.appengine.api.memcache.Expiration;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -110,8 +115,21 @@ public class DMADatastore implements DMAData
   /** The image service to serve images. */
   private @Nonnull ImagesService m_image;
 
+  /** The cache for indexes. */
+  private static MemcacheService s_cache =
+    MemcacheServiceFactory.getMemcacheService();
+
+  /** Joiner to join keys together. */
+  private static final Joiner s_keyJoiner = Joiner.on(":");
+
+  /** Experiation time for the cache. */
+  private static Expiration s_expiration = Expiration.byDeltaSeconds(10 * 60);
+
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
+
+  /** The maximal number of entries to rebuild in one pass. */
+  private static final int s_maxRebuild = 1000;
 
   //........................................................................
 
@@ -185,6 +203,7 @@ public class DMADatastore implements DMAData
                                @Nonnull AbstractType<T> inType)
   {
     Key key = KeyFactory.createKey(inType.toString(), inID);
+
     try
     {
       return convert(inID, inType, m_store.get(key));
@@ -455,6 +474,15 @@ public class DMADatastore implements DMAData
    * @param       inIndex   the index to get it for
    * @param       inType    the type of entries to look for (required for app
    *                        engine)
+   * @param       inCached  true to use the cache if possible, false for not
+   * @param       inFilters pairs of property key and values to use for
+   *                        filtering;
+   *                        note that this filters on whole while entities and
+   *                        indexes are independent (e.g. filtering by name and
+   *                        job is not possible, as giving a job filter will
+   *                        return all persons from all entities that have that
+   *                        job, not necessarily that have that job for the
+   *                        name)
    *
    * @return      a multi map with all the names
    *
@@ -462,11 +490,28 @@ public class DMADatastore implements DMAData
   @SuppressWarnings("unchecked") // need to cast from property value
   public @Nonnull SortedSet<String> getIndexNames
     (@Nonnull String inIndex,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
+     @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
+     @Nonnull String ... inFilters)
   {
-    SortedSet<String> names = new TreeSet<String>();
+    SortedSet<String> names = null;
+    String key = inType + ":" + inIndex;
+    if(inFilters.length > 0)
+      key += ":" + s_keyJoiner.join(inFilters);
+
+    if(inCached)
+      names = (SortedSet<String>)s_cache.get(key);
+
+    if(names != null)
+      return names;
+
+    names = new TreeSet<String>();
 
     Query query = new Query(inType.toString());
+    for(int i = 0; i + 1 < inFilters.length; i += 2)
+    {
+      query.addFilter(inFilters[i], Query.FilterOperator.EQUAL,
+                      inFilters[i + 1]);
+    }
     FetchOptions options = FetchOptions.Builder.withChunkSize(100);
     for(Entity entity : m_store.prepare(query).asIterable(options))
     {
@@ -480,6 +525,7 @@ public class DMADatastore implements DMAData
         names.add(value);
     }
 
+    s_cache.put(key, names, s_expiration);
     return names;
   }
 
@@ -516,6 +562,8 @@ public class DMADatastore implements DMAData
    */
   public boolean update(@Nonnull AbstractEntry inEntry)
   {
+    Log.debug("Storing data for " + inEntry.getType() + " "
+              + inEntry.getName());
     m_store.put(convert(inEntry));
     return true;
   }
@@ -533,10 +581,7 @@ public class DMADatastore implements DMAData
    */
   public boolean save(@Nonnull AbstractEntry inEntry)
   {
-    Entity entity = convert(inEntry);
-    m_store.put(entity);
-
-    return true;
+    return update(inEntry);
   }
 
   //........................................................................
@@ -627,33 +672,60 @@ public class DMADatastore implements DMAData
    */
   public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
+    Log.debug("rebuilding data for " + inType);
     List<Entity> entities = new ArrayList<Entity>();
 
     Query query = new Query(inType.toString());
     FetchOptions options = FetchOptions.Builder.withChunkSize(100);
+    int ignored = 0;
     for(Entity entity : m_store.prepare(query).asIterable(options))
     {
       Entity newEntity = convert(convert(entity));
 
-      for(Map.Entry<String, Object> property
-            : newEntity.getProperties().entrySet())
-        if(!property.getValue().equals(entity.getProperty(property.getKey())))
+      Set<String> keys = new HashSet<String>();
+      keys.addAll(entity.getProperties().keySet());
+      keys.addAll(newEntity.getProperties().keySet());
+
+      boolean add = false;
+      for(String key : keys)
+      {
+        Object oldValue = entity.getProperty(key);
+        Object newValue = newEntity.getProperty(key);
+
+        if(oldValue == null)
         {
-          entities.add(convert(convert(entity)));
+          if(newValue == null)
+            continue;
+
+          add = true;
           break;
         }
 
-      for(Map.Entry<String, Object> property
-            : entity.getProperties().entrySet())
-        if(!property.getValue()
-           .equals(newEntity.getProperty(property.getKey())))
+        if(newValue == null)
         {
-          entities.add(convert(convert(entity)));
+          add = true;
           break;
         }
+
+        if(!oldValue.toString().equals(newValue.toString()))
+        {
+          add = true;
+          break;
+        }
+      }
+
+      if(add)
+      {
+        entities.add(convert(convert(entity)));
+        if(entities.size() >= s_maxRebuild)
+          break;
+      }
+      else
+        ignored++;
     }
 
     m_store.put(entities);
+    Log.debug("rebuild " + entities.size() + " entries, ignored " + ignored);
     return entities.size();
   }
 

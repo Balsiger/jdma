@@ -148,6 +148,16 @@
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AdminServlet" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.Autocomplete" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
  <Match>
     <Class name="~net\.ixitxachitls\.dma\.server\.Exporter.*" />
     <Bug pattern="DLS_DEAD_LOCAL_STORE" />

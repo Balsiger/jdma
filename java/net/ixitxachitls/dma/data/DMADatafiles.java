@@ -228,13 +228,17 @@ public class DMADatafiles implements DMAData
    * @param       inIndex   the index to get it for
    * @param       inType    the type of entries to look for (required for app
    *                        engine)
+   * @param       inCached  true to use the cache if possible, false for not
+   * @param       inFilters pairs of property key and values to use for
+   *                        filtering
    *
    * @return      a list with all the names
    *
    */
   public @Nonnull SortedSet<String> getIndexNames
     (@Nonnull String inIndex,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
+     @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
+     @Nonnull String ... inFilters)
   {
     throw
       new UnsupportedOperationException("has not been implemented for files");

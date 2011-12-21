@@ -242,6 +242,9 @@ public class Index implements Serializable, Comparable<Index>
   /** The name of the world index. */
   public static final @Nonnull String WORLDS = "worlds";
 
+  /** The name of the title index. */
+  public static final @Nonnull String TITLES = "titles";
+
   /** The joiner to put together the string for nested indexes. */
   private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
 
@@ -528,40 +531,7 @@ public class Index implements Serializable, Comparable<Index>
     public void init()
     {
       Index index = new Index("title",
-                              net.ixitxachitls.dma.entries.BaseCharacter.TYPE)
-        {
-          private static final long serialVersionUID = 1L;
-
-          public @Nonnull String [] getNavigation(@Nonnull String inName,
-                                                  @Nonnull String inPath)
-          {
-            return new String[0];
-          }
-
-          public String write(@Nonnull HTMLWriter inWriter,
-                              @Nonnull DMAData inData,
-                              @Nonnull String inName,
-                              @Nonnull String inPath,
-                              int inPageSize, int inStart)
-          {
-            return null;
-          }
-
-          public boolean listEntries(String inPath)
-          {
-            return false;
-          }
-
-          public List<AbstractEntry> getEntries(DMAData inData, String inPath)
-          {
-            return new ArrayList<AbstractEntry>();
-          }
-
-          public String getTitle(String inPath)
-          {
-            return inPath;
-          }
-        };
+                              net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseCharacter.TYPE,
                    index.getType());

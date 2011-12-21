@@ -211,7 +211,7 @@ public class IndexServlet extends PageServlet
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     // get all the index groups available
-    SortedSet<String> values = m_data.getIndexNames(inName, inType);
+    SortedSet<String> values = m_data.getIndexNames(inName, inType, false);
     if(values.isEmpty())
     {
       writeError(inWriter, "Not Found",

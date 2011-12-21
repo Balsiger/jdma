@@ -265,8 +265,9 @@ public class BaseEntry extends AbstractEntry
   protected ValueList<Multiple> m_references =
     new ValueList<Multiple>
     (new Multiple
-     (new Multiple.Element(new Reference(m_data)
-                           .withEditType("autokey(products)[product]"), false),
+     (new Multiple.Element
+      (new Reference(m_data).withEditType
+       ("autokey(base product/titles)[product]"), false),
       new Multiple.Element
       (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")
        .withEditType("pages[pages]"), true, ": ", null)));

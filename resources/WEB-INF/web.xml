@@ -91,6 +91,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>autocomplete</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.Autocomplete</servlet-class>
+  </servlet>
+
+  <servlet>
     <display-name>Remote API Servlet</display-name>
     <servlet-name>RemoteApiServlet</servlet-name>
     <servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
@@ -170,6 +175,11 @@
   <servlet-mapping>
     <servlet-name>admin</servlet-name>
     <url-pattern>/admin</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>autocomplete</servlet-name>
+    <url-pattern>/autocomplete/*</url-pattern>
   </servlet-mapping>
 
   <!-- this does not work on the dev server; you have to remove this to be -->

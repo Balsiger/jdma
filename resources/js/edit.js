@@ -1124,7 +1124,7 @@ edit.AutocompleteString._update = function()
       addition = $('dmaeditable[key=' + this.addition + ']');
 
     if(addition.length > 0)
-      source += '/' + addition.attr('value');
+      source += '/' + this.addition + '/' + addition.attr('value');
   }
 
   this._field.autocomplete({

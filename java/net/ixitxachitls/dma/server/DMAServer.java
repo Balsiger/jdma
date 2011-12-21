@@ -37,16 +37,12 @@ import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.server.servlets.EntryListServlet;
 import net.ixitxachitls.dma.server.servlets.EntryPDFServlet;
 import net.ixitxachitls.dma.server.servlets.EntryServlet;
 import net.ixitxachitls.dma.server.servlets.IndexServlet;
-import net.ixitxachitls.dma.server.servlets.JobAutocomplete;
-import net.ixitxachitls.dma.server.servlets.PersonAutocomplete;
-import net.ixitxachitls.dma.server.servlets.ProductsAutocomplete;
 import net.ixitxachitls.server.WebServer;
 import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.util.CommandLineParser;
@@ -565,20 +561,6 @@ public class DMAServer extends WebServer
 //     context.addServlet
 //       (new ServletHolder(new ReloadServlet(m_campaigns)),
 //        "/actions/reload");
-
-    // autocomplete requests
-    context.addServlet
-      (new ServletHolder
-       (new PersonAutocomplete(m_baseData.getEntries(BaseProduct.TYPE))),
-       "/autocomplete/persons/*");
-    context.addServlet
-      (new ServletHolder
-       (new JobAutocomplete(m_baseData.getEntries(BaseProduct.TYPE))),
-       "/autocomplete/jobs/*");
-    context.addServlet
-      (new ServletHolder
-       (new ProductsAutocomplete(m_baseData.getEntries(BaseProduct.TYPE))),
-       "/autocomplete/products/*");
 
 //     // ajax data requests
 //     context.addServlet

@@ -853,11 +853,11 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text().withFormatter(s_personFormatter)
-         .withEditType("autostring(persons/author)[name]"),
+         .withEditType("autostring(base product/persons)[name]"),
          false),
         new Multiple.Element
         (new Name().withFormatter(s_jobFormatter)
-         .withEditType("autoname(jobs/author|name)[job]")
+         .withEditType("autoname(base product/jobs)[job]")
          .withRelated("name"),
          true, " ", null) })
                             .withFormatter(s_nameFormatter))
@@ -881,12 +881,11 @@ public class BaseProduct extends BaseEntry
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
                              .withEditType
-                             ("autostring(persons/editor)[name]"),
+                             ("autostring(base product/persons)[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("autoname(jobs/category|name)"
-                                           + "[job]"),
+                             .withEditType("autoname(base product/jobs)[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
@@ -899,11 +898,13 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("autostring(persons/cover)[name]"),
+                             .withEditType
+                             ("autostring(base product/persons)[name]"),
                              false),
         new Multiple.Element(new Name().
                              withFormatter(s_jobFormatter)
-                             .withEditType("autoname(jobs/cover|name)[job]"),
+                             .withEditType
+                             ("autoname(base product/jobs)[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
@@ -916,13 +917,14 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("autostring(persons/cartographer)"
-                                           + "[name]"),
+                             .withEditType
+                             ("autostring(base product/persons)[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("autoname(jobs/cartographer|name)"
-                                           + "[job]"),
+                             .withEditType
+                             ("autoname(base product/jobs)"
+                              + "[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
@@ -935,13 +937,13 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("autostring(persons/illustrator)"
-                                           + "[name]"),
+                             .withEditType
+                             ("autostring(base product/persons)[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("autoname(jobs/illustrator|name)"
-                                           + "[job]"),
+                             .withEditType
+                             ("autoname(base product/jobs)[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
@@ -954,13 +956,13 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("autostring(persons/typographer)"
-                                           + "[name]"),
+                             .withEditType
+                             ("autostring(base product/persons)[name]"),
                              false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("autoname(jobs/typographer|name)"
-                                           + "[job]"),
+                             .withEditType
+                             ("autoname(base product/jobs)[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
@@ -973,12 +975,13 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new Text()
                              .withFormatter(s_personFormatter)
-                             .withEditType("autostring(persons/manager)"
-                                           + "[name]"), false),
+                             .withEditType
+                             ("autostring(base product/persons)"
+                              + "[name]"), false),
         new Multiple.Element(new Name()
                              .withFormatter(s_jobFormatter)
-                             .withEditType("autoname(jobs/manager|name)"
-                                           + "[job]"),
+                             .withEditType
+                             ("autoname(base product/jobs)[job]"),
                              true) }).withFormatter(s_nameFormatter))
     .withFormatter(s_listFormatter);
 
@@ -1234,15 +1237,15 @@ public class BaseProduct extends BaseEntry
   @Key("requirements")
   protected @Nonnull Multiple m_requirements =
     new Multiple(new Multiple.Element []
-      { new Multiple.Element(new ValueList<Reference>
-                             (new Reference(m_data)
-                              .withEditType("autokey(products|system)"
-                                            + "[required]")), true),
-        new Multiple.Element(new ValueList<Reference>
-                             (new Reference(m_data)
-                              .withEditType("autokey(products|system)"
-                                            + "[optional]")), true, " : ",
-                             null),
+      { new Multiple.Element
+        (new ValueList<Reference>
+         (new Reference(m_data).withEditType
+          ("autokey(base product/titles|system)[required]")), true),
+        new Multiple.Element
+        (new ValueList<Reference>
+         (new Reference(m_data).withEditType
+          ("autokey(base product/titles|system)[optional]")), true, " : ",
+         null),
       }).withFormatter(s_requirementsFormatter);
 
   //........................................................................
@@ -1559,44 +1562,28 @@ public class BaseProduct extends BaseEntry
    * set.
    *
    * @param    ioNames     the set to add to
-   * @param    inJob       the job to limit to
-   * @param    inPrefix    the prefix for the persons to collect (or null for
-   *                       none)
    *
    * @return   the set of persons given
    *
    */
   public @Nonnull Set<? super String>
-    collectPersons(@Nonnull Set<? super String> ioNames,
-                   @Nullable String inJob,
-                   @Nullable String inPrefix)
+    collectPersons(@Nonnull Set<? super String> ioNames)
   {
-    for(Map.Entry<String, ValueList<Multiple>> list
-          : categoryLists().entrySet())
+    for(ValueList<Multiple> list : categoryLists().values())
     {
-      String listName = list.getKey();
-      for(Multiple person : list.getValue())
+      for(Multiple person : list)
       {
         if(!person.isDefined() || !person.get(0).isDefined())
           continue;
 
         String name = ((Text)person.get(0)).get();
-
         if(name.isEmpty())
           continue;
 
-        if(inJob == null
-           || listName.equalsIgnoreCase(inJob)
-           || (person.get(1).isDefined()
-               && ((Name)person.get(1)).get().equalsIgnoreCase(inJob)))
-        {
-          if(name.indexOf('\\') >= 0)
-            name = ASCIIDocument.simpleConvert(name);
+        if(name.indexOf('\\') >= 0)
+          name = ASCIIDocument.simpleConvert(name);
 
-          if(inPrefix == null || inPrefix.isEmpty()
-             || name.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
-            ioNames.add(name);
-        }
+        ioNames.add(name);
       }
     }
 
@@ -1611,18 +1598,12 @@ public class BaseProduct extends BaseEntry
    * set.
    *
    * @param    ioJobs      the set to add to
-   * @param    inName      the name of the person for which to search jobs (or
-   *                       null for all)
-   * @param    inPrefix    the prefix for the jobs to collect (or null for
-   *                       none)
    *
    * @return   the set of jobs given
    *
    */
   public @Nonnull Set<? super String>
-    collectJobs(@Nonnull Set<? super String> ioJobs,
-                @Nullable String inName,
-                @Nullable String inPrefix)
+    collectJobs(@Nonnull Set<? super String> ioJobs)
   {
     for(Map.Entry<String, ValueList<Multiple>> list
           : categoryLists().entrySet())
@@ -1630,13 +1611,7 @@ public class BaseProduct extends BaseEntry
       String listName = list.getKey();
       for(Multiple person : list.getValue())
         {
-          if(inName != null
-             && !inName.equalsIgnoreCase(((Text)person.get(0)).get()))
-            continue;
-
-          if(inPrefix == null || inPrefix.isEmpty()
-             || listName.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
-            ioJobs.add(listName);
+          ioJobs.add(listName);
 
           if(!person.get(1).isDefined())
             continue;
@@ -1646,9 +1621,7 @@ public class BaseProduct extends BaseEntry
           if(job.indexOf('\\') >= 0)
             job = ASCIIDocument.simpleConvert(job);
 
-          if(inPrefix == null || inPrefix.isEmpty()
-             || job.regionMatches(true, 0, inPrefix, 0, inPrefix.length()))
-            ioJobs.add(job);
+          ioJobs.add(job);
         }
     }
 
@@ -1837,14 +1810,14 @@ public class BaseProduct extends BaseEntry
 
     // persons
     Set<String> persons = new HashSet<String>();
-    collectPersons(persons, null, null);
+    collectPersons(persons);
 
     for(String person : persons)
       values.put(Index.PERSONS, person);
 
     // jobs
     Set<String> jobs = new HashSet<String>();
-    collectJobs(jobs, null, null);
+    collectJobs(jobs);
 
     for(String job : jobs)
       values.put(Index.JOBS, job);
@@ -1896,6 +1869,9 @@ public class BaseProduct extends BaseEntry
     // worlds
     for(Selection world : m_worlds)
       values.put(Index.WORLDS, world.toString(false));
+
+    // titles for references
+    values.put(Index.TITLES, getFullTitle() + " (" + getName() + ")");
 
     return values;
   }
@@ -2961,7 +2937,7 @@ public class BaseProduct extends BaseEntry
         BaseProduct.read(reader, new DMAData.Test.Data());
 
       Set<String> persons = new java.util.TreeSet<String>();
-      entry.collectPersons(persons, null, null);
+      entry.collectPersons(persons);
       assertContent("persons", persons,
                     "Adam Rex",
                     "Anthony Valterra",
@@ -2991,10 +2967,6 @@ public class BaseProduct extends BaseEntry
                     "Sonya Percival",
                     "Vance Kovacs",
                     "Wayne England");
-
-      persons.clear();
-      entry.collectPersons(persons, null, "Ja");
-      assertContent("persons", persons, "Jason Carl");
     }
 
     //......................................................................
@@ -3010,7 +2982,7 @@ public class BaseProduct extends BaseEntry
         BaseProduct.read(reader, new DMAData.Test.Data());
 
       Set<String> jobs = new java.util.TreeSet<String>();
-      entry.collectJobs(jobs, null, null);
+      entry.collectJobs(jobs);
       assertContent("jobs", jobs,
                     "art direction",
                     "author",
@@ -3028,22 +3000,6 @@ public class BaseProduct extends BaseEntry
                     "typographer",
                     "vice-president RPG R&D",
                     "vice-president publishing");
-
-      jobs.clear();
-      entry.collectJobs(jobs, null, "cr");
-      assertContent("jobs", jobs, "creative direction");
-
-      jobs.clear();
-      entry.collectJobs(jobs, "Robert Raper", null);
-      assertContent("jobs", jobs, "art direction", "management");
-
-      jobs.clear();
-      entry.collectJobs(jobs, "Robert Raper", "a");
-      assertContent("jobs", jobs, "art direction");
-
-      jobs.clear();
-      entry.collectJobs(jobs, "Robert Raper", "arti");
-      assertContent("jobs", jobs);
     }
 
     //......................................................................

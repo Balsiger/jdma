@@ -23,19 +23,25 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.ImmutableList;
+
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.output.html.JsonWriter;
 
@@ -58,7 +64,7 @@ import net.ixitxachitls.output.html.JsonWriter;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class Autocomplete extends DMAServlet
+public class Autocomplete extends JSONServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -67,12 +73,10 @@ public abstract class Autocomplete extends DMAServlet
   /**
    * Create the autocomplete servlet.
    *
-   * @param  inProducts all the base products
-   *
    */
-  public Autocomplete(@Nonnull Map<String, BaseProduct> inProducts)
+  public Autocomplete()
   {
-    m_products = inProducts;
+    // nothing to do here
   }
 
   //........................................................................
@@ -81,55 +85,22 @@ public abstract class Autocomplete extends DMAServlet
 
   //-------------------------------------------------------------- variables
 
-  /** All the known base products. */
-  protected @Nonnull Map<String, BaseProduct> m_products;
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
+
+  /** The maximal number of results to return. */
+  private static final int s_max = 20;
+
+  /** All the avilable data. */
+  protected @Nonnull DMAData m_data = DMADataFactory.getBaseData();
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- handle --------------------------------
-
-  /**
-   * Handle the request.
-   *
-   * @param       inRequest  the original request
-   * @param       inResponse the original response
-   *
-   * @return      a special result if something went wrong
-   *
-   * @throws      ServletException general error when processing the page
-   * @throws      IOException      writing to the page failed
-   *
-   */
-  protected @Nullable SpecialResult handle
-    (@Nonnull DMARequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
-    throws ServletException, IOException
-  {
-    // Set the output header.
-    inResponse.setHeader("Content-Type", "application/json");
-    inResponse.setHeader("Cache-Control", "max-age=0");
-
-    String path = inRequest.getRequestURI();
-    JsonWriter writer =
-      new JsonWriter(new PrintWriter(inResponse.getOutputStream()));
-
-    writeJson(inRequest, path, writer);
-
-    writer.close();
-
-    return null;
-  }
-
-  //........................................................................
   //------------------------------ writeJson -------------------------------
 
   /**
@@ -140,11 +111,76 @@ public abstract class Autocomplete extends DMAServlet
    * @param       inWriter the writer to write to
    *
    */
-  protected abstract void writeJson(@Nonnull DMARequest inRequest,
-                                    @Nonnull String inPath,
-                                    @Nonnull JsonWriter inWriter);
+  @SuppressWarnings("unchecked") // need to cast from cache
+  protected void writeJson(@Nonnull DMARequest inRequest,
+                           @Nonnull String inPath,
+                           @Nonnull JsonWriter inWriter)
+  {
+    // compute the index involved
+    String []parts = inPath.replace("%20", " ").split("/");
+
+    if(parts.length > 3)
+    {
+      String term = inRequest.getParam("term");
+      AbstractType<? extends AbstractEntry> type =
+        AbstractType.get(parts[2]);
+
+      if(type != null && parts[3] != null)
+      {
+        SortedSet<String> names = new TreeSet<String>();
+        String []filters = new String[0];
+        if(parts.length > 4)
+          filters = Arrays.copyOfRange(parts, 4, parts.length);
+        for(String name : m_data.getIndexNames(parts[3], type, true, filters))
+        {
+          if(match(name, term))
+            names.add(name);
+
+          if(names.size() > s_max)
+            break;
+        }
+
+        inWriter.strings(names);
+        return;
+      }
+    }
+
+    inWriter.strings(ImmutableList.of("* Error computing autocomplete *"));
+  }
 
   //........................................................................
+  //-------------------------------- match ---------------------------------
+
+  /**
+   * Check if the given name matches the given autocomplete string.
+   *
+   * @param    inName the name to match against
+   * @param    inAuto the autocomplete value to match with
+   *
+   * @return   true if the values match, false if not
+   *
+   */
+  private boolean match(@Nonnull String inName, @Nullable String inAuto)
+  {
+    if(inAuto == null)
+      return true;
+
+    if(inName.regionMatches(true, 0, inAuto, 0, inAuto.length()))
+      return true;
+
+    String []nameParts = inName.split(" ");
+    String []autoParts = inAuto.split(" ");
+    for(int i = 0; i < autoParts.length; i++)
+      if(nameParts.length <= i || !nameParts[i].regionMatches
+         (true, 0, autoParts[i], 0, autoParts[i].length()))
+        return false;
+
+    return true;
+  }
+
+  //........................................................................
+
+
 
   //........................................................................
 
@@ -180,9 +216,7 @@ public abstract class Autocomplete extends DMAServlet
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 
-      Map<String, BaseProduct> products =
-        new java.util.HashMap<String, BaseProduct>();
-      Autocomplete servlet = new Autocomplete(products) {
+      Autocomplete servlet = new Autocomplete() {
           private static final long serialVersionUID = 1L;
           protected void writeJson(@Nonnull DMARequest inRequest,
                                    @Nonnull String inPath,
@@ -200,10 +234,6 @@ public abstract class Autocomplete extends DMAServlet
 
     //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

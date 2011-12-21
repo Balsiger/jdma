@@ -462,7 +462,7 @@ public class PageServlet extends DMAServlet
       .onClick("link(event, '" + inURL + "');")
       .begin("img")
       .src("/icons/"
-           + Files.encodeName(inIcon.toLowerCase()) + ".png")
+           + Files.encodeName(inIcon.toLowerCase(Locale.US)) + ".png")
       .alt(inCaption).tooltip(inCaption).classes("icon highlight")
       .end("img")
       .begin("div").classes("caption").add(inCaption).end("div")
