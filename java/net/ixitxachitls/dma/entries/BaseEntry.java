@@ -239,10 +239,6 @@ public class BaseEntry extends AbstractEntry
 
   //----- world ------------------------------------------------------------
 
-  /** The formatter for worlds. */
-  private final Formatter<Selection> s_worldFormatter =
-    new LinkFormatter<Selection>("/index/worlds/");
-
   /** The world. */
   @Key("worlds")
   protected ValueList<Selection> m_worlds = new ValueList<Selection>

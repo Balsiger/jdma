@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NavigableMap;
-import java.util.NavigableSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -191,6 +190,23 @@ public class DMADatafiles implements DMAData
                      inStart, inStart + inSize);
 
     return (List<T>)new ArrayList<AbstractEntry>(entries.values());
+  }
+
+  //........................................................................
+  //-------------------------------- getIDs --------------------------------
+
+  /**
+   * Get all the ids of a specific type, sorted and navigable.
+   *
+   * @param       inType the type of entries to get ids for
+   *
+   * @return      all the ids
+   *
+   */
+  public @Nonnull List<String> getIDs
+    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    throw new UnsupportedOperationException("not yet implemented");
   }
 
   //........................................................................
@@ -410,110 +426,6 @@ public class DMADatafiles implements DMAData
 
     return null;
   }
-
-  //........................................................................
-  //---------------------------- getFirstEntry -----------------------------
-
-  /**
-   * Get the first entry of the given type.
-   *
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getFirstEntry(@Nonnull AbstractType<T> inType)
-  {
-    if(getEntries(inType).isEmpty())
-      return null;
-
-    return getEntries(inType).get(getEntries(inType).firstKey());
-  }
-
-
-  //........................................................................
-  //---------------------------- getLastEntry ------------------------------
-
-  /**
-   * Get the last entry of the given type.
-   *
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getLastEntry(@Nonnull AbstractType<T> inType)
-  {
-    if(getEntries(inType).isEmpty())
-      return null;
-
-    return getEntries(inType).get(getEntries(inType).lastKey());
-  }
-
-  //........................................................................
-  //---------------------------- getNextEntry ------------------------------
-
-  /**
-   * Get the next entry of the given type.
-   *
-   * @param      inID   the id of the entry for which we want the next
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getNextEntry(@Nonnull String inID,
-                                   @Nonnull AbstractType<T> inType)
-  {
-    NavigableSet<String> keys = getEntries(inType).navigableKeySet();
-    String next = keys.higher(inID);
-
-    if(next == null)
-      return null;
-
-    return getEntry(next, inType);
-  }
-
-  //........................................................................
-  //-------------------------- getPreviousEntry ----------------------------
-
-  /**
-   * Get the previous entry of the given type.
-   *
-   * @param      inID   the id of the entry for which we want the previous
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getPreviousEntry(@Nonnull String inID,
-                                       @Nonnull AbstractType<T> inType)
-  {
-    NavigableSet<String> keys = getEntries(inType).navigableKeySet();
-    String previous = keys.lower(inID);
-
-    if(previous == null)
-      return null;
-
-    return getEntry(previous, inType);
-  }
-
 
   //........................................................................
   //------------------------------- toString -------------------------------

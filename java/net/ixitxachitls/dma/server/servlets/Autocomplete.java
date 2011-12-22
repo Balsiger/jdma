@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -42,7 +41,6 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.output.html.JsonWriter;
 
 //..........................................................................

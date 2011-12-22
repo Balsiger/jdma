@@ -169,6 +169,20 @@ public interface DMAData
                                 int inSize);
 
   //........................................................................
+  //-------------------------------- getIDs --------------------------------
+
+  /**
+   * Get all the ids of a specific type, sorted and navigable.
+   *
+   * @param       inType the type of entries to get ids for
+   *
+   * @return      all the ids
+   *
+   */
+  public abstract @Nonnull List<String> getIDs
+    (@Nonnull AbstractType<? extends AbstractEntry> inType);
+
+  //........................................................................
   //------------------------------- getEntry -------------------------------
 
   /**
@@ -185,74 +199,6 @@ public interface DMAData
   public @Nullable <T extends AbstractEntry> T
                       getEntry(@Nonnull String inID,
                                @Nonnull AbstractType<T> inType);
-
-  //........................................................................
-  //---------------------------- getFirstEntry -----------------------------
-
-  /**
-   * Get the first entry of a specific type.
-   *
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  public @Nullable <T extends AbstractEntry> T
-                      getFirstEntry(@Nonnull AbstractType<T> inType);
-
-  //........................................................................
-  //----------------------------- getLastEntry -----------------------------
-
-  /**
-   * Get the last entry of a specific type.
-   *
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  public @Nullable <T extends AbstractEntry> T
-                      getLastEntry(@Nonnull AbstractType<T> inType);
-
-  //........................................................................
-  //----------------------------- getNextEntry -----------------------------
-
-  /**
-   * Get the next entry of a specific type.
-   *
-   * @param      inID   the id of the entry after the desired one
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  public @Nullable <T extends AbstractEntry> T
-                      getNextEntry(@Nonnull String inID,
-                                   @Nonnull AbstractType<T> inType);
-
-  //........................................................................
-  //--------------------------- getPreviousEntry ---------------------------
-
-  /**
-   * Get the previous entry of a specific type.
-   *
-   * @param      inID   the id of the entry before the desired one
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  public @Nullable <T extends AbstractEntry> T
-                      getPreviousEntry(@Nonnull String inID,
-                                       @Nonnull AbstractType<T> inType);
 
   //........................................................................
   //----------------------------- getBaseData ------------------------------
@@ -406,8 +352,14 @@ public interface DMAData
         super("");
 
         for(AbstractEntry entry : inEntries)
+        {
           addInternal(entry);
+          m_ids.add(entry.getID());
+        }
       }
+
+      /** The ids of all the entries. */
+      private List<String> m_ids = new java.util.ArrayList<String>();
 
       /**
        * Save all the changed files.
@@ -459,6 +411,20 @@ public interface DMAData
       public boolean wasSaved()
       {
         return m_saved;
+      }
+
+      /**
+       * Get all the ids of a specific type, sorted and navigable.
+       *
+       * @param       inType the type of entries to get ids for
+       *
+       * @return      all the ids
+       *
+       */
+      public @Nonnull List<String> getIDs
+        (@Nonnull AbstractType<? extends AbstractEntry> inType)
+      {
+        return m_ids;
       }
 
       /** True if data has been saved, false if not. */

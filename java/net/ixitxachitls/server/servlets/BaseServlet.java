@@ -260,6 +260,56 @@ public abstract class BaseServlet extends HttpServlet
   }
 
   //........................................................................
+  //----- Redirect ---------------------------------------------------------
+
+  /** Special result for redirecting pages. */
+  @Immutable
+  public static class Redirect implements SpecialResult, Serializable
+  {
+    /**
+     * Create the special result.
+     *
+     * @param inDestination the destination to redirect to
+     *
+     */
+    public Redirect(@Nonnull String inDestination)
+    {
+      m_destination = inDestination;
+    }
+
+    /** The destination to redirect to. */
+    private @Nonnull String m_destination;
+
+    /**
+     * Send the error to the given response.
+     *
+     * @param inResponse the response to send back to.
+     *
+     * @throws IOException if something does wrong
+     *
+     */
+    public void send(@Nonnull HttpServletResponse inResponse)
+      throws IOException
+    {
+      inResponse.sendRedirect(m_destination);
+    }
+
+    /** The id for serialization. */
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Convert to a string for debugging.
+     *
+     * @return the string representation
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return "redirect to " + m_destination;
+    }
+  }
+
+  //........................................................................
 
   //........................................................................
 

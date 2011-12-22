@@ -222,133 +222,38 @@ public class DMADatastore implements DMAData
 
 
   //........................................................................
-  //---------------------------- getFirstEntry -----------------------------
+  //-------------------------------- getIDs --------------------------------
 
   /**
-   * Get the first entry of the given type.
+   * Get all the ids of a specific type, sorted and navigable.
    *
-   * @param      inType the type of the entry to get
+   * @param       inType the type of entries to get ids for
    *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
+   * @return      all the ids
    *
    */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getFirstEntry(@Nonnull AbstractType<T> inType)
+  @SuppressWarnings("unchecked") // need to cast cache value
+  public @Nonnull List<String> getIDs
+    (@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
+    List<String> ids = (List<String>)s_cache.get(inType.toString());
+
+    if(ids != null)
+      return ids;
+
     Query query = new Query(inType.toString());
-    query.addSort("__key__", Query.SortDirection.ASCENDING);
-    PreparedQuery preparedQuery = m_store.prepare(query);
-    List<Entity> entities =
-      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
+    String sort = inType.getSortField();
+    if(sort != null)
+      query.addSort(sort, Query.SortDirection.ASCENDING);
+    query.setKeysOnly();
+    FetchOptions options = FetchOptions.Builder.withChunkSize(100);
+    ids = new ArrayList<String>();
+    for(Entity entity : m_store.prepare(query).asIterable(options))
+      ids.add(entity.getKey().getName());
 
-    if(entities.size() != 1)
-      return null;
-
-    return (T)convert(entities.get(0));
+    s_cache.put(inType.toString(), ids, s_expiration);
+    return ids;
   }
-
-
-  //........................................................................
-  //---------------------------- getLastEntry ------------------------------
-
-  /**
-   * Get the last entry of the given type.
-   *
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getLastEntry(@Nonnull AbstractType<T> inType)
-  {
-    Query query = new Query(inType.toString());
-    query.addSort("__key__", Query.SortDirection.DESCENDING);
-    PreparedQuery preparedQuery = m_store.prepare(query);
-    List<Entity> entities =
-      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
-
-    if(entities.size() != 1)
-      return null;
-
-    return (T)convert(entities.get(0));
-  }
-
-
-  //........................................................................
-  //---------------------------- getNextEntry ------------------------------
-
-  /**
-   * Get the next entry of the given type.
-   *
-   * @param      inID   the id of the entry for which we want the next
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getNextEntry(@Nonnull String inID,
-                                   @Nonnull AbstractType<T> inType)
-  {
-    Query query = new Query(inType.toString());
-    query
-      .addSort("__key__", Query.SortDirection.ASCENDING)
-      .addFilter("__key__", Query.FilterOperator.GREATER_THAN,
-                 KeyFactory.createKey(inType.toString(), inID));
-    PreparedQuery preparedQuery = m_store.prepare(query);
-    List<Entity> entities =
-      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
-
-    if(entities.size() != 1)
-      return null;
-
-    return (T)convert(entities.get(0));
-  }
-
-  //........................................................................
-  //-------------------------- getPreviousEntry ----------------------------
-
-  /**
-   * Get the previous entry of the given type.
-   *
-   * @param      inID   the id of the entry for which we want the previous
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast return value
-  public @Nullable <T extends AbstractEntry> T
-                      getPreviousEntry(@Nonnull String inID,
-                                       @Nonnull AbstractType<T> inType)
-  {
-    Query query = new Query(inType.toString());
-    query
-      .addSort("__key__", Query.SortDirection.DESCENDING)
-      .addFilter("__key__", Query.FilterOperator.LESS_THAN,
-                 KeyFactory.createKey(inType.toString(), inID));
-    PreparedQuery preparedQuery = m_store.prepare(query);
-    List<Entity> entities =
-      preparedQuery.asList(FetchOptions.Builder.withLimit(1));
-
-    if(entities.size() != 1)
-      return null;
-
-    return (T)convert(entities.get(0));
-  }
-
 
   //........................................................................
   //----------------------------- getBaseData ------------------------------

@@ -130,10 +130,12 @@ public class EntryServlet extends PageServlet
                                           @Nonnull DMAData inData,
                                           @Nonnull String inPath)
   {
-    String id = getID(inRequest, inPath);
     AbstractType<? extends AbstractEntry> type = getType(inPath);
+    if(type == null)
+      return null;
 
-    if(type == null || id == null)
+    String id = getID(inRequest, inPath);
+    if(id == null)
       return null;
 
     return inData.getEntry(id, type);
@@ -325,45 +327,39 @@ public class EntryServlet extends PageServlet
     inWriter.title(title);
 
     HTMLDocument document = new HTMLDocument(title);
+    AbstractType<? extends AbstractEntry> type = entry.getType();
 
-    AbstractEntry first = data.getFirstEntry(entry.getType());
-    if(first == entry)
-      first = null;
-
-    AbstractEntry previous =
-      data.getPreviousEntry(entry.getID(), entry.getType());
-    AbstractEntry next = data.getNextEntry(entry.getID(), entry.getType());
-
-    AbstractEntry last = data.getLastEntry(entry.getType());
-    if(last == entry)
-      last = null;
+    List<String> ids = data.getIDs(type);
+    int current = ids.indexOf(entry.getID());
+    int last = ids.size() - 1;
+    String base = "/" + type.getLink() + "/";
 
     Command navigation =
       new Divider("entry-nav",
-                  new Command(new Link(new Divider("first sprite"
-                                                   + (first == null
-                                                      ? " disabled" : ""), ""),
-                                       first == null ? "" : getPath(first)),
-                              new Link(new Divider("previous sprite"
-                                                   + (previous == null
-                                                      ? " disabled" : ""), ""),
-                                       previous == null ? ""
-                                       : getPath(previous)),
-                              new Link(new Divider("index sprite", ""),
-                                       "/" + entry.getType().getMultipleLink()),
-                              new Link(new Divider("next sprite"
-                                                   + (next == null
-                                                      ? " disabled" : ""), ""),
-                                       next == null ? "" : getPath(next)),
-                              new Link(new Divider("last sprite"
-                                                   + (last == null
-                                                      ? " disabled" : ""), ""),
-                                       last == null ? "" : getPath(last)),
-                              new Link(new Divider("add sprite", ""),
-                                       "javascript:createEntry()"),
-                              new Link(new Divider("remove sprite", ""),
-                                       "javascript:removeEntry('"
-                                       + entry.getID() + "')")));
+                  new Command
+                  (new Link(new Divider("first sprite"
+                                        + (current <= 0
+                                           ? " disabled" : ""), ""),
+                            current <= 0 ? "" : base + ids.get(0)),
+                   new Link(new Divider("previous sprite"
+                                        + (current <= 0
+                                           ? " disabled" : ""), ""),
+                            current <= 0 ? "" : base + ids.get(current - 1)),
+                   new Link(new Divider("index sprite", ""),
+                            "/" + entry.getType().getMultipleLink()),
+                   new Link(new Divider("next sprite"
+                                        + (current >= last
+                                           ? " disabled" : ""), ""),
+                            current >= last ? "" : base + ids.get(current + 1)),
+                   new Link(new Divider("last sprite"
+                                        + (current >= last
+                                           ? " disabled" : ""), ""),
+                            current >= last ? "" : base + ids.get(last)),
+                   new Link(new Divider("add sprite", ""),
+                            "javascript:createEntry()"),
+                   new Link(new Divider("remove sprite", ""),
+                            "javascript:removeEntry('"
+                            + entry.getID() + "')")));
 
     document.add(navigation);
 

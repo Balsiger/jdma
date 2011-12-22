@@ -24,8 +24,6 @@
 package net.ixitxachitls.dma.entries.indexes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,10 +31,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.output.html.HTMLWriter;
 
 //..........................................................................
 
