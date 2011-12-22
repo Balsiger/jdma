@@ -197,9 +197,7 @@ public class EntryPDFServlet extends PDFServlet
     String title = entry.getType() + ": " + entry.getName();
 
     PDFDocument document = new PDFDocument(title);
-
-    boolean dm = entry.isDM(inRequest.getUser());
-    document.add(entry.printPage(dm));
+    document.add(entry.printPage(inRequest.getUser()));
 
     return document;
   }

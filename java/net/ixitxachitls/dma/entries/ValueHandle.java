@@ -204,7 +204,7 @@ public abstract class ValueHandle
       type = m_editType;
       choices = m_editChoices;
       related = "";
-      edit = value.toString();
+      edit = value(inEntry, inDM).toString();
     }
 
     // TODO: fix this (have to deal with attachments here)!

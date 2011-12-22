@@ -1688,8 +1688,12 @@ public class BaseProduct extends BaseEntry
    * @return      true for DM, false for not
    *
    */
-  public boolean isDM(@Nonnull BaseCharacter inUser)
+  @Override
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
+    if(inUser == null)
+      return false;
+
     return inUser.hasAccess(BaseCharacter.Group.USER);
   }
 

@@ -374,12 +374,12 @@ public class EntryServlet extends PageServlet
       if(txt)
       {
         ASCIIDocument doc = new ASCIIDocument(80);
-        doc.add(entry.printPage(dm));
+        doc.add(entry.printPage(inRequest.getUser()));
         document.add(new Divider("text-formatted",
                                  new Verbatim(doc.toString())));
       }
       else
-        document.add(entry.printPage(dm));
+        document.add(entry.printPage(inRequest.getUser()));
 
     document.add(navigation);
 

@@ -378,14 +378,15 @@ public class PageServlet extends DMAServlet
    *
    * @param       inWriter       the write to write to
    * @param       inEntries      the entries to be written
-   * @param       inDM           true for writing for DMs, false otherwise
+   * @param       inUser         the user for which to format, if any
    * @param       inStart        the start index of the entries to print
    * @param       inPageSize     the full size of the page
    *
    */
   protected void format(@Nonnull HTMLWriter inWriter,
                         @Nonnull List<? extends AbstractEntry> inEntries,
-                        boolean inDM, int inStart, int inPageSize)
+                        @Nullable BaseCharacter inUser,
+                        int inStart, int inPageSize)
   {
     HTMLDocument document = new HTMLDocument("");
 
@@ -426,7 +427,7 @@ public class PageServlet extends DMAServlet
           if(format.isEmpty())
             format = entry.getListFormat();
 
-          cells.addAll(entry.printList(entry.getName(), inDM));
+          cells.addAll(entry.printList(entry.getName(), inUser));
         }
         else
           Log.error("There were null entries in the index!");
@@ -760,16 +761,48 @@ public class PageServlet extends DMAServlet
     {
       java.io.StringWriter content = new java.io.StringWriter();
       HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
-
+      net.ixitxachitls.dma.data.DMAData.Test.Data data =
+        new net.ixitxachitls.dma.data.DMAData.Test.Data();
       List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
-      entries.add(new net.ixitxachitls.dma.entries.BaseCharacter
-                  ("first", new net.ixitxachitls.dma.data.DMAData.Test.Data()));
-      entries.add(new net.ixitxachitls.dma.entries.BaseCharacter
-                  ("second", new net.ixitxachitls.dma.data.DMAData.Test
-                   .Data()));
+      net.ixitxachitls.dma.entries.BaseCharacter first =
+        new net.ixitxachitls.dma.entries.BaseCharacter("first", data)
+        {
+          @Override
+          public boolean isDM(@Nullable BaseCharacter inUser)
+          {
+            return true;
+          }
+
+          @Override
+          public @Nonnull net.ixitxachitls.dma.entries.Variables
+            getVariables()
+          {
+            return super.getVariables
+              (net.ixitxachitls.dma.entries.BaseCharacter.class);
+          }
+        };
+      net.ixitxachitls.dma.entries.BaseCharacter second =
+        new net.ixitxachitls.dma.entries.BaseCharacter("second", data)
+        {
+          @Override
+          public boolean isDM(@Nullable BaseCharacter inUser)
+          {
+            return true;
+          }
+
+          @Override
+          public @Nonnull net.ixitxachitls.dma.entries.Variables
+            getVariables()
+          {
+            return super.getVariables
+              (net.ixitxachitls.dma.entries.BaseCharacter.class);
+          }
+        };
+      entries.add(first);
+      entries.add(second);
 
       PageServlet servlet = new PageServlet();
-      servlet.format(writer, entries, true, 0, 50);
+      servlet.format(writer, entries, first, 0, 50);
 
       writer.close();
 

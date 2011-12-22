@@ -1561,14 +1561,14 @@ public class AbstractEntry extends ValueGroup
   /**
    * Print the entry into a command for adding to a document.
    *
-   * @param       inDM true if setting for dm, false if not
+   * @param       inUser  the user printing, if any
    *
    * @return      the command representing this item in a list
    *
    */
-  public @Nonnull Object printPage(boolean inDM)
+  public @Nonnull Object printPage(@Nullable BaseCharacter inUser)
   {
-    return getPagePrint().print(this, inDM);
+    return getPagePrint().print(this, inUser);
   }
 
   //........................................................................
@@ -1577,17 +1577,18 @@ public class AbstractEntry extends ValueGroup
   /**
    * Print the entry into a command for adding to a document.
    *
-   * @param       inKey the key (name) for the entry to be printed (this is
-   *                    used when printing entries multiple times with synonym
-   *                    names)
-   * @param       inDM  true if setting for dm, false if not
+   * @param       inKey   the key (name) for the entry to be printed (this is
+   *                      used when printing entries multiple times with synonym
+   *                      names)
+   * @param       inUser  the user printing, if any
    *
    * @return      the command representing this item in a list
    *
    */
-  public @Nonnull List<Object> printList(@Nonnull String inKey, boolean inDM)
+  public @Nonnull List<Object> printList(@Nonnull String inKey,
+                                         @Nullable BaseCharacter inUser)
   {
-    return getListPrint().print(inKey, this, inDM);
+    return getListPrint().print(inKey, this, inUser);
   }
 
   //........................................................................
@@ -1810,22 +1811,20 @@ public class AbstractEntry extends ValueGroup
       for(DMAData.File file : m_data.getFiles(this))
         if("main".equals(file.getName()))
           return new FormattedValue
-            (new Editable(getID(), getEditType(),
-                          new ImageLink(file.getIcon() + "=s300", "main",
-                                        file.getPath(), "main")
-                          .withID("file-main"),
-                          "image", "main", "image", null),
-             null, "image", false, false, false, false, "images", "");
+            (new ImageLink(file.getIcon() + "=s300", "main",
+                           file.getPath(), "main")
+             .withID("file-main"),
+             "main", "image", false, true, false, false, "images", "")
+            .withEditType("image");
 
       return new FormattedValue
-        (new Editable(getID(), getEditType(),
-                      new ImageLink("/icons/" + type.getMultipleLink()
-                                    + "-dummy.png", "main",
-                                    "/icons/" + type.getMultipleLink()
-                                    + "-dummy.png", "main")
-                      .withID("file-main"),
-                      "image", "main", "image", null),
-         null, "image", false, false, false, false, "images", "");
+        (new ImageLink("/icons/" + type.getMultipleLink()
+                       + "-dummy.png", "main",
+                       "/icons/" + type.getMultipleLink()
+                       + "-dummy.png", "main")
+         .withID("file-main"),
+         "main", "image", false, true, false, false, "images", "")
+        .withEditType("image");
     }
 
     if("clear".equals(inKey))
@@ -1864,11 +1863,9 @@ public class AbstractEntry extends ValueGroup
       }
 
       return new FormattedValue
-        (new Editable(getID(), getEditType(),
-                      new Divider("files", "files", new Command(commands)),
-                      "files", "files", "files", null),
-         null, "files", false, false, false, false,
-         "files", "");
+        (new Divider("files", "files", new Command(commands)),
+         "files", "files", false, true, false, false,
+         "files", "").withEditType("files");
     }
 
     if("file".equals(inKey))
@@ -2085,7 +2082,7 @@ public class AbstractEntry extends ValueGroup
    * @return      true for DM, false for not
    *
    */
-  public boolean isDM(@Nonnull BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
     return false;
   }

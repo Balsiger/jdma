@@ -170,12 +170,11 @@ public class EntryListServlet extends PageServlet
       .title(title)
       .begin("h1").add(title).end("h1");
 
-    // TODO: extract dm from request
     format(inWriter,
            getEntries(inRequest, inPath, type,
                       inRequest.getStart(),
                       inRequest.getPageSize() + 1),
-           true, inRequest.getStart(), inRequest.getPageSize());
+           inRequest.getUser(), inRequest.getStart(), inRequest.getPageSize());
 
     addNavigation(inWriter,
                   type.getMultipleLink(), "/" + type.getMultipleLink());

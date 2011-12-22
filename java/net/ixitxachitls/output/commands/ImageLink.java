@@ -108,7 +108,7 @@ public class ImageLink extends BaseCommand
 
   /** Command for adding a link to another file or position to the text. */
   public static final String NAME =
-    Config.get("resource:commands/image.link", "imagelink");
+    Config.get("resource:commands/image.link", "imageLink");
 
   //........................................................................
 
@@ -133,7 +133,7 @@ public class ImageLink extends BaseCommand
     public void arguments()
     {
       Command command = new ImageLink("text", "name", "some url", "style");
-      assertEquals("base", "\\imagelink{text}{name}{some url}{style}",
+      assertEquals("base", "\\imageLink{text}{name}{some url}{style}",
                    command.toString());
     }
 

@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
@@ -91,12 +92,13 @@ public class Print extends AbstractPrint
    * Print the given entry into a command.
    *
    * @param       inEntry the entry to print
-   * @param       inDM    true if printing for a dm, false if not
+   * @param       inUser   the user for whcih to print, if any
    *
    * @return      the object that can be added to a document for printing
    *
    */
-  public @Nonnull Object print(@Nonnull AbstractEntry inEntry, boolean inDM)
+  public @Nonnull Object print(@Nonnull AbstractEntry inEntry,
+                               @Nullable BaseCharacter inUser)
   {
     // CHECKSTYLE:OFF (this works in Java 1.6)
     if(m_tokens == null)
@@ -107,7 +109,7 @@ public class Print extends AbstractPrint
       }
     // CHECKSTYLE:ON
 
-    return convert(m_tokens, inEntry, "**null**", inDM);
+    return convert(m_tokens, inEntry, "**null**", inUser);
   }
 
   //........................................................................
@@ -161,14 +163,31 @@ public class Print extends AbstractPrint
     @org.junit.Test
     public void print()
     {
+      net.ixitxachitls.dma.data.DMAData data =
+        new net.ixitxachitls.dma.data.DMAData.Test.Data();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry
-        ("test", new net.ixitxachitls.dma.data.DMAData.Test.Data());
+        new net.ixitxachitls.dma.entries.BaseEntry("test", data)
+        {
+          @Override
+          public boolean isDM(@Nullable BaseCharacter inUser)
+          {
+            return inUser != null;
+          }
+
+          @Override
+          public @Nonnull net.ixitxachitls.dma.entries.Variables
+            getVariables()
+          {
+            return
+              super.getVariables(net.ixitxachitls.dma.entries.BaseEntry.class);
+          }
+        };
 
       entry.setDescription("desc");
 
       Print print =
         new Print("start $first ${title} middle $description the end");
+      BaseCharacter user = new BaseCharacter("test", data);
 
       assertEquals("printing",
                    "[start , \\color{error}{ * first * },  , "
@@ -177,7 +196,7 @@ public class Print extends AbstractPrint
                    + "\\editable{test}{base entry}"
                    + "{\\baseCommand{desc}}{description}"
                    + "{\"desc\"}{formatted},  the end]",
-                   ((Command)print.print(entry, true)).getArguments()
+                   ((Command)print.print(entry, user)).getArguments()
                    .toString());
     }
 

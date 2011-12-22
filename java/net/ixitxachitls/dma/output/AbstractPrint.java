@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.output.commands.Color;
@@ -118,7 +119,7 @@ public class AbstractPrint
    * @param       inTokens    the tokens to parse
    * @param       inEntry     the entry with the values
    * @param       inNullValue the value to use for null tokens
-   * @param       inDM        if converting for a dm
+   * @param       inUser      the user for whome to convert, if any
    *
    * @return      the object for printing the parse values
    *
@@ -126,10 +127,11 @@ public class AbstractPrint
   public @Nonnull Object convert(@Nullable List<String> inTokens,
                                  @Nonnull AbstractEntry inEntry,
                                  @Nonnull String inNullValue,
-                                 boolean inDM)
+                                 @Nullable BaseCharacter inUser)
   {
     List<Object> result = new ArrayList<Object>();
 
+    boolean dm = inEntry.isDM(inUser);
     if(inTokens == null)
       result.add(inNullValue);
     else
@@ -145,7 +147,7 @@ public class AbstractPrint
         else
         {
           String name = token.substring(1);
-          ValueHandle handle = compute(inEntry, name, inDM);
+          ValueHandle handle = compute(inEntry, name, inEntry.isDM(inUser));
 
           switch(prefix)
           {
@@ -153,7 +155,8 @@ public class AbstractPrint
               // A simple, directly printed value
               if(handle != null)
               {
-                Object formatted = handle.format(inEntry, inDM, true);
+                Object formatted =
+                  handle.format(inEntry, dm, inUser != null);
                 if(formatted != null)
                   result.add(formatted);
               }
@@ -173,7 +176,7 @@ public class AbstractPrint
 
               Object value;
               if(handle != null)
-                value = handle.format(inEntry, inDM, true);
+                value = handle.format(inEntry, dm, inUser != null);
               else
                 value = new Color("error", " * unknown * ");
 

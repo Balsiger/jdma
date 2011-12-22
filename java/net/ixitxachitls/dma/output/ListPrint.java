@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 
 //..........................................................................
 
@@ -94,16 +95,17 @@ public class ListPrint extends AbstractPrint
   /**
    * Print the given entry into a command.
    *
-   * @param       inKey   the key really printed (e.g. for synonyms)
-   * @param       inEntry the entry to print
-   * @param       inDM    true if printing for a dm, false if not
+   * @param       inKey    the key really printed (e.g. for synonyms)
+   * @param       inEntry  the entry to print
+   * @param       inUser   the user for whcih to print, if any
    *
    * @return      the object that can be added to a document for printing
    *
    */
   @SuppressWarnings("unchecked") // need to case for generic array creation
   public @Nonnull List<Object> print
-    (@Nonnull String inKey, @Nonnull AbstractEntry inEntry, boolean inDM)
+    (@Nonnull String inKey, @Nonnull AbstractEntry inEntry,
+     @Nullable BaseCharacter inUser)
   {
     // CHECKSTYLE:OFF (this works in Java 1.6)
     if(m_tokens == null)
@@ -123,7 +125,7 @@ public class ListPrint extends AbstractPrint
 
     List<Object> result = new ArrayList<Object>();
     for(List<String> tokens : m_tokens)
-      result.add(convert(tokens, inEntry, inKey, inDM));
+      result.add(convert(tokens, inEntry, inKey, inUser));
 
     return result;
   }
@@ -180,7 +182,7 @@ public class ListPrint extends AbstractPrint
                    "[start, \\color{error}{ * first * }, "
                    + "\\title[entrytitle]"
                    + "{test}]",
-                   print.print("key", entry, true).toString());
+                   print.print("key", entry, null).toString());
     }
 
     //......................................................................

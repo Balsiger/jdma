@@ -40,6 +40,7 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.output.html.HTMLWriter;
@@ -165,7 +166,7 @@ public class IndexServlet extends PageServlet
              + group + "'");
 
     // write the title for the page
-    writeTitle(inWriter, index, name, type, group);
+    writeTitle(inWriter, index, name, type, group, inRequest.getUser());
 
     if(group == null)
       group = writeOverview(inWriter, index, name, type);
@@ -176,8 +177,9 @@ public class IndexServlet extends PageServlet
       format(inWriter,
              // we get one more entry to know if we have to add pagination
              m_data.getIndexEntries(name, type, group, inRequest.getStart(),
-                                    inRequest.getPageSize() + 1), true,
-             inRequest.getStart(), inRequest.getPageSize());
+                                    inRequest.getPageSize() + 1),
+             inRequest.getUser(), inRequest.getStart(),
+             inRequest.getPageSize());
       addNavigation(inWriter,
                     typeLink, "/" + typeLink,
                     name, "/" + typeLink + "/" + name,
@@ -296,13 +298,15 @@ public class IndexServlet extends PageServlet
    * @param    inPath    the base path to the index pages
    * @param    inType    the type of entries being printed
    * @param    inGroup   the group written
+   * @param    inUser    the user making the request
    *
    */
   protected static void writeTitle
     (@Nonnull HTMLWriter inWriter, @Nonnull Index inIndex,
      @Nonnull String inPath,
      @Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nullable String inGroup)
+     @Nullable String inGroup,
+     @Nullable BaseCharacter inUser)
   {
     String title = inIndex.getTitle();
     if(inGroup != null)
@@ -316,7 +320,7 @@ public class IndexServlet extends PageServlet
       writeIcon(inWriter,
                 inType.getMultipleLink() + "/" + inPath + "/" + inGroup,
                 title, inPath + "/" + inGroup);
-    else if(inGroup != null && inIndex.isEditable(inGroup))
+    else if(inGroup != null && inUser != null && inIndex.isEditable(inGroup))
       inWriter
         .begin("dmaeditable")
         .id("*/" + inPath)
