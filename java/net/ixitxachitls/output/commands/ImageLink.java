@@ -97,7 +97,7 @@ public class ImageLink extends BaseCommand
    */
   protected ImageLink()
   {
-    super(NAME, 0, 4);
+    super(NAME, 1, 4);
   }
 
   //........................................................................
