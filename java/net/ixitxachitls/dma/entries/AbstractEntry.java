@@ -1542,7 +1542,7 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //----------------------------- getListPrint -----------------------------
+  //----------------------------- getListFormat ----------------------------
 
   /**
    * Get the print for a list entry.
@@ -1572,7 +1572,7 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //------------------------------- printPage ------------------------------
+  //------------------------------- printList ------------------------------
 
   /**
    * Print the entry into a command for adding to a document.

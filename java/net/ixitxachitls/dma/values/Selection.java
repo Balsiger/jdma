@@ -129,7 +129,7 @@ public class Selection extends Value<Selection>
                                  // overriden in all derivations
   public Selection create()
   {
-    return new Selection(m_selections);
+    return super.create(new Selection(m_selections));
   }
 
   //........................................................................

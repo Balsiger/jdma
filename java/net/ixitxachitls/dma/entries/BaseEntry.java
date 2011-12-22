@@ -240,14 +240,15 @@ public class BaseEntry extends AbstractEntry
   //----- world ------------------------------------------------------------
 
   /** The formatter for worlds. */
-  private static final Formatter<Selection> s_worldFormatter =
+  private final Formatter<Selection> s_worldFormatter =
     new LinkFormatter<Selection>("/index/worlds/");
 
   /** The world. */
   @Key("worlds")
-  protected ValueList<Selection> m_worlds =
-    new ValueList<Selection>(new Selection(WORLDS)
-                             .withFormatter(s_worldFormatter));
+  protected ValueList<Selection> m_worlds = new ValueList<Selection>
+    (new Selection(WORLDS)
+     .withFormatter(new LinkFormatter<Selection>
+                    ("/" + getType().getMultipleLink() + "/worlds/")));
 
 //   static
 //   {
