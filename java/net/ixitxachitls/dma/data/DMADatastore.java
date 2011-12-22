@@ -176,6 +176,9 @@ public class DMADatastore implements DMAData
     List<T> entries = new ArrayList<T>();
 
     Query query = new Query(inType.toString());
+    String sort = inType.getSortField();
+    if(sort != null)
+      query.addSort(sort, Query.SortDirection.ASCENDING);
     FetchOptions options =
       FetchOptions.Builder.withOffset(inStart).limit(inSize);
     for(Entity entity : m_store.prepare(query).asIterable(options))

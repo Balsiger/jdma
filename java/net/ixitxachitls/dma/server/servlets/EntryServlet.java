@@ -45,6 +45,7 @@ import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Verbatim;
 import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -253,27 +254,28 @@ public class EntryServlet extends PageServlet
 
     boolean dma = false;
     boolean txt = false;
-    if(inPath.endsWith(".dma"))
+    String path = Files.decodeName(inPath);
+    if(path.endsWith(".dma"))
     {
       dma = true;
-      inPath = inPath.substring(0, inPath.length() - 4);
+      path = path.substring(0, path.length() - 4);
     }
-    else if(inPath.endsWith(".txt"))
+    else if(path.endsWith(".txt"))
     {
       txt = true;
-      inPath = inPath.substring(0, inPath.length() - 4);
+      path = path.substring(0, path.length() - 4);
     }
 
-    DMAData data = getData(inRequest, inPath, m_data);
-    AbstractEntry entry = getEntry(inRequest, data, inPath);
+    DMAData data = getData(inRequest, path, m_data);
+    AbstractEntry entry = getEntry(inRequest, data, path);
 
     if(entry == null)
     {
-      AbstractType<? extends AbstractEntry> type = getType(inPath);
+      AbstractType<? extends AbstractEntry> type = getType(path);
 
       if(type == null)
       {
-        Log.warning("could not extract entry from '" + inPath + "'");
+        Log.warning("could not extract entry from '" + path + "'");
         inWriter.title("Not Found")
           .begin("h1").add("Type not found").end("h1")
           .add("Could not find the type of the entry of this page.");
@@ -281,11 +283,11 @@ public class EntryServlet extends PageServlet
         return;
       }
 
-      String id = getID(inRequest, inPath);
+      String id = getID(inRequest, path);
 
       if(id == null || id.isEmpty())
       {
-        Log.warning("could not extract id from '" + inPath + "'");
+        Log.warning("could not extract id from '" + path + "'");
         inWriter.title("Not Found")
           .begin("h1").add("ID Not Found").end("h1")
           .add("Could not find the id of the entry of this page.");
@@ -298,7 +300,7 @@ public class EntryServlet extends PageServlet
         // create a new entry for filling out
         Log.info("creating " + type + " '" + id + "'");
 
-        entry = type.create(id, getData(inRequest, inPath, m_data));
+        entry = type.create(id, getData(inRequest, path, m_data));
         entry.setOwner(inRequest.getUser());
       }
 

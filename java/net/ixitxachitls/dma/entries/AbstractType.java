@@ -134,6 +134,24 @@ public abstract class AbstractType<T extends AbstractEntry>
   }
 
   //........................................................................
+  //------------------------------- withSort -------------------------------
+
+  /**
+   * Set the sort field to use for this type.
+   *
+   * @param       inSort  the field used to sort
+   *
+   * @return      the type for chaining
+   *
+   */
+  public @Nonnull AbstractType<T> withSort(@Nonnull String inSort)
+  {
+    m_sort = inSort;
+
+    return this;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -156,6 +174,9 @@ public abstract class AbstractType<T extends AbstractEntry>
 
   /** The link to use to reference multiple entries of this type. */
   private @Nonnull String m_multipleLink;
+
+  /** The field to be used for sorting. */
+  private @Nullable String m_sort = null;
 
   /** All the available types. */
   private static final Map<String, AbstractType<? extends AbstractEntry>>
@@ -362,6 +383,20 @@ public abstract class AbstractType<T extends AbstractEntry>
   public @Nonnull String toString()
   {
     return m_name;
+  }
+
+  //........................................................................
+  //----------------------------- getSortField -----------------------------
+
+  /**
+   * Get the name of the field to be used for sorting.
+   *
+   * @return      the field to use for sorting, if any
+   *
+   */
+  public @Nullable String getSortField()
+  {
+    return m_sort;
   }
 
   //........................................................................

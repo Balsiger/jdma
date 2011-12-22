@@ -797,7 +797,7 @@ public class BaseProduct extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseProduct> TYPE =
-    new BaseType<BaseProduct>(BaseProduct.class);
+    new BaseType<BaseProduct>(BaseProduct.class).withSort("title");
 
   //----- title ------------------------------------------------------------
 

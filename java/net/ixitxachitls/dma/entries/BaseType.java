@@ -100,7 +100,27 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
   public @Nonnull BaseType<T> withLink(@Nonnull String inLink,
                                        @Nonnull String inMultipleLink)
   {
-    return (BaseType<T>)super.withLink(inLink, inMultipleLink);
+    super.withLink(inLink, inMultipleLink);
+
+    return this;
+  }
+
+  //........................................................................
+  //------------------------------- withSort -------------------------------
+
+  /**
+   * Set the sort field to use for this type.
+   *
+   * @param       inSort  the field used to sort
+   *
+   * @return      the type for chaining
+   *
+   */
+  public @Nonnull BaseType<T> withSort(@Nonnull String inSort)
+  {
+    super.withSort(inSort);
+
+    return this;
   }
 
   //........................................................................
