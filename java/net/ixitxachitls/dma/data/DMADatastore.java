@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -54,15 +55,18 @@ import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Joiner;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -170,8 +174,9 @@ public class DMADatastore implements DMAData
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nonnull <T extends AbstractEntry> List<T> getEntries
-                     (@Nonnull AbstractType<T> inType, int inStart, int inSize)
+  public @Nonnull  <T extends AbstractEntry> List<T>
+                      getEntries(@Nonnull AbstractType<T> inType,
+                                 int inStart, int inSize)
   {
     List<T> entries = new ArrayList<T>();
 
@@ -186,6 +191,45 @@ public class DMADatastore implements DMAData
 
     return entries;
   }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get an entry denoted by type and id and their respective parents.
+   *
+   * @param      inID          the id of the entry to get
+   * @param      inType        the type of the entry to get
+   * @param      inParentID    the parent id
+   * @param      inParentType  the parent type
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  public @Nullable <T extends AbstractEntry> T getEntry
+    (@Nonnull String inID,
+     @Nonnull AbstractType<T> inType,
+     @Nonnull String inParentID,
+     @Nonnull AbstractType<? extends AbstractEntry> inParentType)
+  {
+    Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
+    Key key = KeyFactory.createKey(parent, inType.toString(), inID);
+
+    try
+    {
+      return convert(inID, inType, m_store.get(key));
+    }
+    catch(com.google.appengine.api.datastore.EntityNotFoundException e)
+    {
+      Log.warning("could not get entity for " + inType + " with id " + inID
+                  + " (" + key + ")");
+
+      return null;
+    }
+  }
+
 
   //........................................................................
   //------------------------------- getEntry -------------------------------
@@ -236,7 +280,7 @@ public class DMADatastore implements DMAData
   public @Nonnull List<String> getIDs
     (@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    List<String> ids = (List<String>)s_cache.get(inType.toString());
+    List<String> ids = (List<String>)s_cache.get("ids-" + inType.toString());
 
     if(ids != null)
       return ids;
@@ -251,8 +295,40 @@ public class DMADatastore implements DMAData
     for(Entity entity : m_store.prepare(query).asIterable(options))
       ids.add(entity.getKey().getName());
 
-    s_cache.put(inType.toString(), ids, s_expiration);
+    s_cache.put("ids-" + inType.toString(), ids, s_expiration);
     return ids;
+  }
+
+  //........................................................................
+  //---------------------------- getRecentEntries --------------------------
+
+  /**
+   * Get all the ids of a specific type, sorted and navigable.
+   *
+   * @param       <T>    the real type of entries to get
+   * @param       inType the type of entries to get ids for
+   *
+   * @return      all the ids
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast cache value
+  public @Nonnull  <T extends AbstractEntry> List<T>
+    getRecentEntries(@Nonnull AbstractType<T> inType)
+  {
+    List<Entity> entities = (List<Entity>)
+      s_cache.get("recent-" + inType.toString());
+
+    if(entities == null)
+    {
+      Query query = new Query(inType.toString());
+      query.addSort("change", Query.SortDirection.DESCENDING);
+      FetchOptions options = FetchOptions.Builder.withLimit(20);
+      entities = m_store.prepare(query).asList(options);
+
+      s_cache.put("recent-" + inType.toString(), entities, s_expiration);
+    }
+
+    return (List<T>)convert(entities);
   }
 
   //........................................................................
@@ -287,6 +363,32 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //------------------------------ getOwners -------------------------------
+
+  /**
+   * Get the owner of the given base product.
+   *
+   * @param    inID the id of the base product to own
+   *
+   * @return   a multi map from owner to ids
+   *
+   */
+  public Multimap<String, String> getOwners(String inID)
+  {
+    Query query = new Query(Product.TYPE.toString());
+    FetchOptions options = FetchOptions.Builder.withLimit(5);
+    query.addFilter(toPropertyName("base"), Query.FilterOperator.EQUAL, inID);
+    query.setKeysOnly();
+
+    Multimap<String, String> owners = HashMultimap.create();
+    for(Entity entity : m_store.prepare(query).asIterable(options))
+      owners.put(entity.getKey().getParent().getName(),
+                 entity.getKey().getName());
+
+    return owners;
+  }
+
+  //........................................................................
   //------------------------------- getFiles -------------------------------
 
   /**
@@ -301,7 +403,7 @@ public class DMADatastore implements DMAData
   {
     Query query =
       new Query("file", KeyFactory.createKey(inEntry.getType().toString(),
-                                             inEntry.getID()));
+                                             inEntry.getName()));
     query.addSort("__key__", Query.SortDirection.ASCENDING);
     PreparedQuery preparedQuery = m_store.prepare(query);
     List<File> files = new ArrayList<File>();
@@ -458,6 +560,38 @@ public class DMADatastore implements DMAData
 
   //----------------------------------------------------------- manipulators
 
+  //-------------------------------- remove --------------------------------
+
+  /**
+   * Remove the described entity from the datastore.
+   *
+   * @param       inID    the id of the entry to remove
+   * @param       inType  the type of the entry to remove
+   *
+   * @return      true if removed, false if not
+   *
+   */
+  public boolean remove
+    (@Nonnull String inID,
+     @Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    Key key = KeyFactory.createKey(inType.toString(), inID);
+
+    try
+    {
+      m_store.delete(key);
+      return true;
+    }
+    catch(IllegalArgumentException e)
+    {
+      Log.warning("could not remove entity for " + inType + " with id " + inID
+                  + " (" + key + ")");
+
+      return false;
+    }
+  }
+
+  //........................................................................
   //-------------------------------- update --------------------------------
 
   /**
@@ -510,7 +644,7 @@ public class DMADatastore implements DMAData
     // if a file with the same name is already there, we have to delete it first
     Key key =
       KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
-                                                inEntry.getID()),
+                                                inEntry.getName()),
                            "file", inName);
     Entity entity = null;
 
@@ -518,7 +652,7 @@ public class DMADatastore implements DMAData
     {
       entity = m_store.get(key);
       Log.important("replacing file " + inName + " for " + inEntry.getType()
-                    + " " + inEntry.getID() + " [" + inKey + "]");
+                    + " " + inEntry.getName() + " [" + inKey + "]");
       m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
       m_store.delete(key);
     }
@@ -547,20 +681,20 @@ public class DMADatastore implements DMAData
   {
     Key key =
       KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
-                                                inEntry.getID()),
+                                                inEntry.getName()),
                            "file", inName);
     try
     {
       Entity entity = m_store.get(key);
       m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
       Log.important("deleting file " + inName + " for " + inEntry.getType()
-                    + " " + inEntry.getID());
+                    + " " + inEntry.getName());
       m_store.delete(key);
     }
     catch(com.google.appengine.api.datastore.EntityNotFoundException e)
     {
       Log.warning("trying to delete noexistant file " + inName + " for "
-                  + inEntry.getType() + " " + inEntry.getID());
+                  + inEntry.getType() + " " + inEntry.getName());
     }
   }
 
@@ -657,6 +791,7 @@ public class DMADatastore implements DMAData
    * @return     the converted entry, if any
    *
    */
+  @SuppressWarnings("unchecked") // need to cast value gotten
   public @Nullable <T extends AbstractEntry> T convert
                       (@Nonnull String inID, @Nonnull AbstractType<T> inType,
                        @Nonnull Entity inEntity)
@@ -672,14 +807,21 @@ public class DMADatastore implements DMAData
     for(Map.Entry<String, Object> property
           : inEntity.getProperties().entrySet())
     {
+      String name = fromPropertyName(property.getKey());
       Object value = property.getValue();
       String text;
       if(value instanceof Text)
-        text = ((Text)value).getValue();
+        entry.set(name, ((Text)value).getValue());
+      else if(value instanceof ArrayList
+              && entry.getValue(name) instanceof ValueList)
+        entry.set(name,
+                  Strings.toString((ArrayList)value,
+                                   ((ValueList)entry.getValue(name))
+                                   .getDelimiter(),
+                                   Value.UNDEFINED));
       else
-        text = value.toString();
+        entry.set(fromPropertyName(property.getKey()), value.toString());
 
-      entry.set(fromPropertyName(property.getKey()), text);
     }
 
     return entry;
@@ -701,12 +843,33 @@ public class DMADatastore implements DMAData
     Key key = inEntity.getKey();
     String id = key.getName();
     AbstractType<? extends AbstractEntry> type =
-      AbstractType.get(key.getKind());
+      AbstractType.getTyped(key.getKind());
 
     if(type == null || id == null)
       return null;
 
     return convert(id, type, inEntity);
+  }
+
+  //........................................................................
+  //------------------------------- convert --------------------------------
+
+  /**
+   * Convert the given datastore entities into a dma entries.
+   *
+   * @param      inEntities the entities to convert
+   *
+   * @return     the entries found, if any
+   *
+   */
+  public @Nullable List<AbstractEntry> convert(@Nonnull List<Entity> inEntities)
+  {
+    List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
+
+    for(Entity entity : inEntities)
+      entries.add(convert(entity));
+
+    return entries;
   }
 
   //........................................................................
@@ -720,26 +883,42 @@ public class DMADatastore implements DMAData
    * @return     the entry found, if any
    *
    */
+  @SuppressWarnings("unchecked") // need to case to value list
   public @Nonnull Entity convert(@Nonnull AbstractEntry inEntry)
   {
-    Entity entity = new Entity(inEntry.getType().toString(), inEntry.getID());
+    Entity entity;
+    if(inEntry instanceof Product)
+      entity = new Entity(inEntry.getType().toString(), inEntry.getName(),
+                          KeyFactory.createKey(BaseCharacter.TYPE.toString(),
+                                               ((Product)inEntry).getOwner()));
+    else
+      entity = new Entity(inEntry.getType().toString(), inEntry.getName());
+
     for(Map.Entry<String, Value> value : inEntry.getAllValues().entrySet())
     {
-      String valueText = value.getValue().toString();
-      if(value.getValue() instanceof LongFormattedText
-         || value.getValue() instanceof ValueList)
+      if(value.getValue() instanceof ValueList)
       {
-        entity.setProperty(toPropertyName(value.getKey()), new Text(valueText));
+        List<String> values = new ArrayList<String>();
+        for(Value item : ((ValueList<Value>)value.getValue()))
+          values.add(item.toString());
+        entity.setProperty(toPropertyName(value.getKey()), values);
       }
       else
       {
-        if(valueText.length() >= 500)
-          Log.warning("value for " + value.getKey() + " for "
-                      + inEntry.getType() + " with id " + inEntry.getID()
-                      + " is longer than 500 characters and will be "
-                      + "truncated!");
+        String valueText = value.getValue().toString();
+        if(value.getValue() instanceof LongFormattedText)
+          entity.setProperty(toPropertyName(value.getKey()),
+                             new Text(valueText));
+        else
+        {
+          if(valueText.length() >= 500)
+            Log.warning("value for " + value.getKey() + " for "
+                        + inEntry.getType() + " with id " + inEntry.getName()
+                        + " is longer than 500 characters and will be "
+                        + "truncated!");
 
-        entity.setProperty(toPropertyName(value.getKey()), valueText);
+          entity.setProperty(toPropertyName(value.getKey()), valueText);
+        }
       }
     }
 
@@ -748,6 +927,9 @@ public class DMADatastore implements DMAData
     for(String index : indexes.keySet())
       entity.setProperty(toPropertyName("index-" + index),
                          indexes.get(index));
+
+    // save the time for recent changes
+    entity.setProperty(toPropertyName("change"), new Date());
 
     return entity;
   }

@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 // import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -59,9 +58,7 @@ import net.ixitxachitls.dma.values.Name;
 // import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
-// import net.ixitxachitls.dma.values.modifiers.BaseModifier;
-// import net.ixitxachitls.dma.values.modifiers.NumberModifier;
-// import net.ixitxachitls.dma.values.modifiers.ValueModifier;
+import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.input.ParseReader;
 // import net.ixitxachitls.output.Document;
 // import net.ixitxachitls.output.commands.Bold;
@@ -227,6 +224,12 @@ public class AbstractEntry extends ValueGroup
   {
     m_type = inType;
     m_data = inData;
+
+    // we have to init this here, as we need to have the type set
+    m_base = new ValueList<Name>
+      (new Name().withFormatter(new LinkFormatter<Name>
+                                ("/" + getType().getBaseType().getLink()
+                                 + "/")));
   }
 
   //........................................................................
@@ -313,9 +316,6 @@ public class AbstractEntry extends ValueGroup
   /** All the attachments, indexed by name. */
 //   protected Map<String, AbstractAttachment> m_attachments =
 //     new TreeMap<String, AbstractAttachment>();
-
-  /** The base names for this entry, if any. */
-  protected @Nullable List<String> m_baseNames = null;
 
   /** The base entries for this entry, in the same order as the names. */
   protected @Nullable List<BaseEntry> m_baseEntries = null;
@@ -408,6 +408,17 @@ public class AbstractEntry extends ValueGroup
     new Comment(s_maxTrailingComments, s_maxTrailingLines);
 
   //........................................................................
+  //----- base names -------------------------------------------------------
+
+  // Cannot use a static formatter here, as it depends on the
+  // real type; thus we also need to init this in the constructor after we have
+  // the type.
+  /** The base names. */
+  @Key("base")
+  protected @Nonnull ValueList<Name> m_base;
+
+  //........................................................................
+
   //----- storage ----------------------------------------------------------
 
   /** The file this entry will be written to. */
@@ -669,10 +680,11 @@ public class AbstractEntry extends ValueGroup
    */
   public List<String> getBaseNames()
   {
-    if(m_baseNames == null)
-      return new ArrayList<String>();
+    List<String> names = new ArrayList<String>();
+    for(Name name : m_base)
+      names.add(name.get());
 
-    return Collections.unmodifiableList(m_baseNames);
+    return names;
   }
 
   //........................................................................
@@ -684,10 +696,18 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested base entries
    *
    */
+  @Deprecated // this might be problematic with app engine
   public List<BaseEntry> getBaseEntries()
   {
-    if(m_baseNames == null)
-      return new ArrayList<BaseEntry>();
+    if(m_baseEntries == null)
+    {
+      m_baseEntries = new ArrayList<BaseEntry>();
+
+      // TODO: make this in a single datastore request
+      for(Name base : m_base)
+        m_baseEntries.add((BaseEntry)
+                          m_data.getEntry(base.get(), getType().getBaseType()));
+    }
 
     return m_baseEntries;
   }
@@ -717,6 +737,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested id
    *
    */
+  @Deprecated
   public @Nonnull String getID()
   {
     return getName();
@@ -849,12 +870,12 @@ public class AbstractEntry extends ValueGroup
    * @undefined   never
    *
    */
+  @Deprecated // now in m_base as a real value
   protected String getQuantifiers()
   {
-    if(m_baseNames != null && !m_baseNames.isEmpty()
-       && (m_baseNames.size() > 1 || !m_baseNames.get(0).equals(getName())))
-      return s_baseStart + Strings.toString(m_baseNames, ", ", "")
-        + s_baseEnd + " ";
+    // if(m_base.size() > 1 || !m_base.get(0).get().equals(getName()))
+    //   return s_baseStart + Strings.toString(m_base, ", ", "")
+    //     + s_baseEnd + " ";
 
     return "";
   }
@@ -1969,7 +1990,7 @@ public class AbstractEntry extends ValueGroup
       return new FormattedValue
         (new Divider(id, "", new Script
                      ("util.linkRow(document.getElementById('" + id + "'), "
-                      + "'/" + getType().getLink() + "/" + getName() + "');")),
+                      + "'" + getPath() + "');")),
          null, "listlink", false, false, false, false, "listlinks", "");
     }
 
@@ -2053,11 +2074,43 @@ public class AbstractEntry extends ValueGroup
    */
   public @Nonnull String getPath()
   {
-    return "/" + getType().getLink() + "/" + getID();
+    return "/" + getType().getLink() + "/" + getName();
   }
 
   //........................................................................
+  //---------------------------- getNavigation -----------------------------
 
+  /**
+   * Get the navigation information to this entry.
+   *
+   * @return      an array with pairs for caption and link per navigation entry
+   *
+   */
+  public @Nonnull String [] getNavigation()
+  {
+    return new String [] {
+      getType().getLink(), "/" + getType().getMultipleLink(),
+      getName(), "/" + getType().getLink() + "/" + getName(),
+    };
+  }
+
+  //........................................................................
+  //-------------------------- getListNavigation ---------------------------
+
+  /**
+   * Get the list navigation information to this entry.
+   *
+   * @return      an array with pairs for caption and link per navigation entry
+   *
+   */
+  public @Nonnull String [] getListNavigation()
+  {
+    return new String [] {
+      getType().getMultipleLink(), "/" + getType().getMultipleLink(),
+    };
+  }
+
+  //........................................................................
   //------------------------- getShortDescription --------------------------
 
   /**
@@ -2133,7 +2186,8 @@ public class AbstractEntry extends ValueGroup
     // base is also special
     if("base".equals(inKey))
     {
-      m_baseNames = null;
+      // TODO: this is very inefficient!
+      m_base = m_base.as(new ArrayList<Name>());
       m_baseEntries = null;
       if(!inText.startsWith(Value.UNDEFINED))
         for(String base : inText.split(",\\s*"))
@@ -2377,7 +2431,9 @@ public class AbstractEntry extends ValueGroup
     //----- create ---------------------------------------------------------
 
     // create the entry
-    AbstractType<? extends AbstractEntry> type = AbstractType.get(typeName);
+    AbstractType<? extends AbstractEntry> type =
+      AbstractType.getTyped(typeName);
+
     if(type == null)
     {
       Log.error("cannot get type for '" + typeName + "'");
@@ -2773,7 +2829,7 @@ public class AbstractEntry extends ValueGroup
   //------------------------------- addBase --------------------------------
 
   /**
-   * Add a base to this entry. The entry is ignored if name and entry are null.
+   * Add a base to this entry. The entry is ignored if name is null.
    *
    * @param       inName the name to add with (or null to use the name of the
    *                     given base entry, if any)
@@ -2782,25 +2838,22 @@ public class AbstractEntry extends ValueGroup
   @SuppressWarnings("unchecked") // need to cast to base entry
   protected void addBase(@Nonnull String inName)
   {
-    AbstractType<? extends AbstractEntry> baseType = getType();
+    AbstractType<? extends AbstractEntry> baseType = getType().getBaseType();
     if(baseType instanceof Type)
       baseType = ((Type)baseType).getBaseType();
     else
-      if(inName.equals(getName()))
+      if(inName.equals(getID()))
         return;
-
-    if(m_baseNames == null)
-    {
-      m_baseNames = new ArrayList<String>();
-      m_baseEntries = new ArrayList<BaseEntry>();
-    }
 
     BaseEntry entry =
       (BaseEntry)m_data.getBaseData().getEntry(inName, baseType);
     if(entry == null)
       Log.warning("base " + getType() + " '" + inName + "' not found");
 
-    m_baseNames.add(inName);
+    m_base = m_base.asAppended(m_base.newElement().as(inName));
+
+    if(m_baseEntries == null)
+      m_baseEntries = new ArrayList<BaseEntry>();
     m_baseEntries.add(entry);
   }
 

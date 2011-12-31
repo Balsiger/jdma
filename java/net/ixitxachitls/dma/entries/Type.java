@@ -150,6 +150,7 @@ public class Type<T extends Entry> extends AbstractType<T>
    * @return      the requested base type or null if already a base type
    *
    */
+  @Override
   public @Nullable BaseType<? extends BaseEntry> getBaseType()
   {
     return m_base;

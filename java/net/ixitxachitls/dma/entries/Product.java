@@ -76,12 +76,12 @@ public class Product extends Entry<BaseProduct>
   {
     /** The product is available in the library. */
     AVAILABLE("available"),
-      /** A highly desired product. */
-      DESIRED1("desired 1"),
-      /** A desired product. */
-      DESIRED2("desired 2"),
-      /** A marginally desired product. */
-      DESIRED3("desired 3");
+    /** A highly desired product. */
+    DESIRED1("desired 1"),
+    /** A desired product. */
+    DESIRED2("desired 2"),
+    /** A marginally desired product. */
+    DESIRED3("desired 3");
 
     /** The value's name. */
     private @Nonnull String m_name;
@@ -127,19 +127,19 @@ public class Product extends Entry<BaseProduct>
     /** The product is as good as new and has not been or only carefully
      * read. */
     MINT("mint"),
-      /** The product is in good shape but was read. */
-      GOOD("good"),
-      /** The product is used, but in good shape. Might have some pencil marks
-       * or the like. */
-      USED("used"),
-      /** The product is usable in play but might not look too nice. */
-      USABLE("usable"),
-      /** Some part of the product is missing. */
-      PARTIAL("partial"),
-      /** The product is not really usable. */
-      CRAP("crap"),
-      /** Nothing defined. */
-      none("none");
+    /** The product is in good shape but was read. */
+    GOOD("good"),
+    /** The product is used, but in good shape. Might have some pencil marks
+     * or the like. */
+    USED("used"),
+    /** The product is usable in play but might not look too nice. */
+    USABLE("usable"),
+    /** Some part of the product is missing. */
+    PARTIAL("partial"),
+    /** The product is not really usable. */
+    CRAP("crap"),
+    /** Nothing defined. */
+    none("none");
 
     /** The value's name. */
     private @Nonnull String m_name;
@@ -242,14 +242,18 @@ public class Product extends Entry<BaseProduct>
 
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint =
-    new Print("$title"
-              + "$clear $files\n"
+    new Print("$image "
+              + "${as pdf} ${as text} ${as dma} "
+              + "$title "
+              + "$clear "
+              + "$files "
+              + "\n"
               + "$par "
               + "%name "
               + "%base "
               + "%owner %edition %printing %status %condition"
               // admin
-              + "%file %errors"
+              + "%errors"
               );
 
   /** The printer for printing in a list. */
@@ -264,20 +268,25 @@ public class Product extends Entry<BaseProduct>
 
   /** The edition of the copy. */
   @Key("edition")
-  protected Name m_edition = new Name();
+  protected @Nonnull Name m_edition = new Name();
 
   //........................................................................
   //----- printing ---------------------------------------------------------
 
   /** The printing of the copy. */
   @Key("printing")
-  protected Name m_printing = new Name();
+  protected @Nonnull Name m_printing = new Name();
 
   //........................................................................
   //----- owner ------------------------------------------------------------
 
+  /** The formatter for the owner. */
+  protected static final Formatter<Name> s_ownerFormatter =
+    new LinkFormatter<Name>("/user/");
+
   /** The owner of the copy. */
-  protected @Nullable BaseCharacter m_owner;
+  @Key("owner")
+  protected @Nonnull Name m_owner = new Name().withFormatter(s_ownerFormatter);
 
   //........................................................................
   //----- status -----------------------------------------------------------
@@ -365,8 +374,55 @@ public class Product extends Entry<BaseProduct>
    */
   public @Nonnull String getPath()
   {
-    return "/user/" + m_owner.getID() + "/" + getType().getLink() + "/"
-      + getID();
+    return "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner.get() + "/"
+      + getType().getLink() + "/" + getName();
+  }
+
+  //........................................................................
+  //---------------------------- getNavigation -----------------------------
+
+  /**
+   * Get the navigation information to this entry.
+   *
+   * @return      an array with pairs for caption and link per navigation entry
+   *
+   */
+  public @Nonnull String [] getNavigation()
+  {
+    return new String [] {
+      BaseCharacter.TYPE.getLink(),
+      "/" + BaseCharacter.TYPE.getMultipleLink(),
+      m_owner.toString(),
+      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner,
+      getType().getLink(),
+      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+      + "/" + getType().getMultipleLink(),
+      getName(),
+      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+      + "/" + getType().getLink() + "/" + getName(),
+    };
+  }
+
+  //........................................................................
+  //-------------------------- getListNavigation ---------------------------
+
+  /**
+   * Get the list navigation information to this entry.
+   *
+   * @return      an array with pairs for caption and link per navigation entry
+   *
+   */
+  public @Nonnull String [] getListNavigation()
+  {
+    return new String [] {
+      BaseCharacter.TYPE.getLink(),
+      "/" + BaseCharacter.TYPE.getMultipleLink(),
+      m_owner.toString(),
+      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner,
+      getType().getMultipleLink(),
+      "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner
+      + "/" + getType().getMultipleLink(),
+    };
   }
 
   //........................................................................
@@ -380,10 +436,7 @@ public class Product extends Entry<BaseProduct>
    */
   public @Nonnull String getEditType()
   {
-    if(m_owner == null)
-      return super.getEditType();
-
-    return "/user/" + m_owner.getID() + "/" + super.getEditType();
+    return "/user/" + m_owner.get() + "/" + super.getEditType();
   }
 
   //........................................................................
@@ -399,9 +452,12 @@ public class Product extends Entry<BaseProduct>
    * @return      true for DM, false for not
    *
    */
-  public boolean isDM(@Nonnull BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
-    return inUser == m_owner;
+    if(inUser == null)
+      return false;
+
+    return inUser.getName().equals(m_owner.get());
   }
 
   //........................................................................
@@ -472,15 +528,15 @@ public class Product extends Entry<BaseProduct>
   /**
    * Get the name of the owner of the product.
    *
-   * @return      the owner value
+   * @return      the owner of the product, if any
    *
    */
   public @Nullable String getOwner()
   {
-    if(m_owner == null)
-      return null;
+    if(m_owner.isDefined())
+      return m_owner.get();
 
-    return m_owner.getName();
+    return null;
   }
 
   //........................................................................
@@ -849,7 +905,7 @@ public class Product extends Entry<BaseProduct>
       if(base != null)
         return new FormattedValue
           (new Command(new Link(new BaseCommand(base.getFullTitle()),
-                                "/product/" + getName()),
+                                "/product/" + base.getName()),
                        " (",
                        getName(),
                        ")"),
@@ -857,15 +913,14 @@ public class Product extends Entry<BaseProduct>
           .withEditType("name");
     }
 
+    // we compute the owner here, as we don't want to get all ids if we don't
+    // have to
     if("owner".equals(inKey) && m_owner != null)
     {
-      String users =
-        Strings.toString(m_data.getBaseData().getEntries(BaseCharacter.TYPE)
-                         .keySet(), "||", m_owner.getID());
-      return new FormattedValue(new Link(m_owner.getID(),
-                                         "/user/" + m_owner.getID()),
-                                m_owner.getID(), "owner", true, true, false,
-                                false, null, null)
+      String users = Strings.toString(m_data.getIDs(BaseCharacter.TYPE), "||",
+                                      m_owner.get());
+      return new FormattedValue(m_owner, m_owner.get(), "owner", true, true,
+                                false, false, null, null)
         .withEditType("selection").withEditChoices(users);
     }
 
@@ -891,7 +946,7 @@ public class Product extends Entry<BaseProduct>
     if("owner".equals(inKey))
     {
       // nothing to do if setting to current
-      if(m_owner != null && inText.equals(m_owner.getID()) || inText.isEmpty())
+      if(m_owner != null && inText.equals(m_owner.get()) || inText.isEmpty())
         return null;
 
       // determine the new owner
@@ -899,12 +954,11 @@ public class Product extends Entry<BaseProduct>
       if(owner == null)
         return inText;
 
-      // remove from old user
-      if(m_owner != null && !m_owner.removeProduct(getID()))
-        return inText;
+      // remove old entry
+      m_data.remove(this.getName(), this.getType());
 
       // add to new user
-      owner.addProduct(this);
+      m_owner = m_owner.as(inText);
 
       return null;
     }
@@ -983,7 +1037,7 @@ public class Product extends Entry<BaseProduct>
    */
   public boolean setOwner(@Nonnull BaseCharacter inOwner)
   {
-    m_owner = inOwner;
+    m_owner = m_owner.as(inOwner.getName());
     return true;
   }
 

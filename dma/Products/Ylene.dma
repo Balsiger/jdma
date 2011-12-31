@@ -1,34 +1,36 @@
-#--------------------------- DMA 000072 (prd-1) ----------------------------
+#----- DMA 000072
 
-
-#----- DMA 000072 (prd-1)
-
-product DMA 000072 =
+product WGMD =
 
   edition   1st;
   printing  1st;
   status    available;
   condition good;
-  id        WGMD.
+  owner     Ylene;
+  base      DMA 000072.
 
 #.....
 #----- PP 00268
 
-product PP 00268 =
+product KZLX =
 
   edition   1st;
   printing  1st;
   status    available;
   condition good;
-  id        KZLX.
+  owner     Ylene;
+  base      PP 00268.
+
 #.....
 #----- PP 00251
 
-product PP 00251 =
+product IEAZ =
 
   edition   1st;
   printing  1st;
   status    available;
   condition good;
-  id        IEAZ.
+  owner     Ylene;
+  base      PP 00251.
+
 #.....

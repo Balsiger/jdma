@@ -138,7 +138,54 @@ public class EntryServlet extends PageServlet
     if(id == null)
       return null;
 
+    AbstractType<? extends AbstractEntry> parentType = getParentType(inPath);
+    String parentID = getParentID(inPath);
+
+    if(parentType != null && parentID != null)
+      return inData.getEntry(id, type, parentID, parentType);
+
     return inData.getEntry(id, type);
+  }
+
+  //........................................................................
+  //---------------------------- getParentType -----------------------------
+
+  /**
+   * Get the parent type associated with the given request.
+   *
+   * @param       inPath the path to the page
+   *
+   * @return      the parent type for the request
+   *
+   */
+  public @Nullable AbstractType<? extends AbstractEntry>
+    getParentType(@Nonnull String inPath)
+  {
+    String []parts = inPath.split("/");
+    if(parts.length > 4)
+      return AbstractType.getTyped(parts[2].replace("%20", " "));
+
+    return null;
+  }
+
+  //........................................................................
+  //--------------------------- getParentID --------------------------------
+
+  /**
+   * Get the parent id associated with the given request.
+   *
+   * @param       inPath the path to the page
+   *
+   * @return      the id of the parent
+   *
+   */
+  public @Nullable String getParentID(@Nonnull String inPath)
+  {
+    String []parts = inPath.split("/");
+    if(parts.length > 4)
+      return parts[3].replace("%20", " ");
+
+    return null;
   }
 
   //........................................................................
@@ -159,7 +206,7 @@ public class EntryServlet extends PageServlet
     if(type == null)
       return null;
 
-    return AbstractType.get(type.replace("%20", " "));
+    return AbstractType.getTyped(type.replace("%20", " "));
   }
 
   //........................................................................
@@ -175,7 +222,7 @@ public class EntryServlet extends PageServlet
    */
   public @Nullable String getPath(@Nonnull AbstractEntry inEntry)
   {
-    return inEntry.getID();
+    return inEntry.getName();
   }
 
   //........................................................................
@@ -195,7 +242,7 @@ public class EntryServlet extends PageServlet
   {
     // handle /user/me specially
     if(inPath.endsWith("/base character/me"))
-      return inRequest.getUser().getID();
+      return inRequest.getUser().getName();
 
     String id = Strings.getPattern(inPath, "/([^/]*?)$");
     if(id == null)
@@ -330,7 +377,7 @@ public class EntryServlet extends PageServlet
     AbstractType<? extends AbstractEntry> type = entry.getType();
 
     List<String> ids = data.getIDs(type);
-    int current = ids.indexOf(entry.getID());
+    int current = ids.indexOf(entry.getName());
     int last = ids.size() - 1;
     String base = "/" + type.getLink() + "/";
 
@@ -359,7 +406,7 @@ public class EntryServlet extends PageServlet
                             "javascript:createEntry()"),
                    new Link(new Divider("remove sprite", ""),
                             "javascript:removeEntry('"
-                            + entry.getID() + "')")));
+                            + entry.getName() + "')")));
 
     document.add(navigation);
 
@@ -394,10 +441,7 @@ public class EntryServlet extends PageServlet
                       + ".mouseout(util.restoreMainImage)",
                       "});");
 
-    addNavigation(inWriter, entry.getType().getMultipleLink(),
-                  "/" + entry.getType().getMultipleLink(),
-                  entry.getName(),
-                  "/" + entry.getType().getLink() + "/" + entry.getName());
+    addNavigation(inWriter, entry.getNavigation());
 
   }
 
@@ -545,7 +589,7 @@ public class EntryServlet extends PageServlet
           @Override
           public @Nonnull String getPath(@Nonnull AbstractEntry inEntry)
           {
-            return "/somewhere/" + inEntry.getID();
+            return "/somewhere/" + inEntry.getName();
           }
 
           @Override
@@ -591,7 +635,7 @@ public class EntryServlet extends PageServlet
                    + "      $('#subnavigation').html(' &raquo; "
                    + "<a href=\"/entrys\" class=\"navigation-link\" "
                    + "onclick=\"return util.link(event, \\'/entrys\\');\" >"
-                   + "entrys</a> &raquo; <a href=\"/entry/guru\" "
+                   + "entry</a> &raquo; <a href=\"/entry/guru\" "
                    + "class=\"navigation-link\" "
                    + "onclick=\"return util.link(event, \\'/entry/guru\\');\" >"
                    + "guru</a>');\n"
@@ -719,7 +763,7 @@ public class EntryServlet extends PageServlet
                    + "      $('#subnavigation').html(' &raquo; "
                    + "<a href=\"/entrys\" class=\"navigation-link\" "
                    + "onclick=\"return util.link(event, \\'/entrys\\');\" >"
-                   + "entrys</a> &raquo; <a href=\"/entry/guru\" "
+                   + "entry</a> &raquo; <a href=\"/entry/guru\" "
                    + "class=\"navigation-link\" "
                    + "onclick=\"return util.link(event, \\'/entry/guru\\');\" >"
                    + "guru</a>');\n"

@@ -210,19 +210,27 @@
     <filter-name>Forwarding</filter-name>
     <filter-class>net.ixitxachitls.dma.server.filters.ForwardingFilter</filter-class>
     <init-param>
-      <param-name>/user/(.*)</param-name>
+      <param-name>^/user/([^/]+)/products$</param-name>
+      <param-value>/_entries/base character/$1/product</param-value>
+    </init-param>
+    <init-param>
+      <param-name>^/user/([^/]+)/product/([^/]+)$</param-name>
+      <param-value>/_entry/base character/$1/product/$2</param-value>
+    </init-param>
+    <init-param>
+      <param-name>^/user/([^/]+)$</param-name>
       <param-value>/_entry/base character/$1</param-value>
     </init-param>
     <init-param>
-      <param-name>/product/(.*)</param-name>
+      <param-name>^/product/([^/]+)$</param-name>
       <param-value>/_entry/base product/$1</param-value>
     </init-param>
     <init-param>
-      <param-name>/products/(.*)</param-name>
+      <param-name>^/products/([^/]+)$</param-name>
       <param-value>/_index/base product/$1</param-value>
     </init-param>
     <init-param>
-      <param-name>/products</param-name>
+      <param-name>^/products$</param-name>
       <param-value>/_entries/base product</param-value>
     </init-param>
   </filter>

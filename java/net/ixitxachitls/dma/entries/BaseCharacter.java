@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
-//import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -31,7 +31,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMAData;
-//import net.ixitxachitls.dma.entries.Product;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -40,6 +39,8 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Text;
 //import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Strings;
 //import net.ixitxachitls.util.TypeIterator;
 import net.ixitxachitls.util.configuration.Config;
@@ -184,9 +185,9 @@ public class BaseCharacter extends BaseEntry
               + "\n " // need to start a new line for ascii
               + "$par "
               + "%name "
-              + "%{real name} %email %password %products %{last login} "
+              + "%{real name} %email %password %{last login} "
               + "%{last action} %token %group %characters %products "
-              + "%file %errors");
+              + "%errors");
 
   /** The printer for printing in a list. */
   public static final ListPrint s_listPrint =
@@ -425,8 +426,11 @@ public class BaseCharacter extends BaseEntry
    * @return      true for DM, false for not
    *
    */
-  public boolean isDM(@Nonnull BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
+    if(inUser == null)
+      return false;
+
     return inUser.hasAccess(Group.ADMIN) || inUser == this;
   }
 
@@ -547,40 +551,30 @@ public class BaseCharacter extends BaseEntry
   public @Nullable ValueHandle computeValue(@Nonnull String inKey,
                                             boolean inDM)
   {
-    // if("products".equals(inKey))
-    // {
-    //   List<AbstractEntry> products = new ArrayList<AbstractEntry>();
-    //   List<AbstractEntry> entries =
-    //     getProductData().getFile(getProductData().files(Product.TYPE).get(0))
-    //     .getEntries();
-    //   ListIterator<AbstractEntry> i = entries.listIterator();
-    //   while(i.hasNext())
-    //     i.next();
+    if("products".equals(inKey))
+    {
+      List<Product> products = m_data.getRecentEntries(Product.TYPE);
 
-    //   while(i.hasPrevious() && products.size() <= MAX_PRODUCTS)
-    //     products.add(i.previous());
+      List<Object> commands = new ArrayList<Object>();
+      boolean more = products.size() > MAX_PRODUCTS;
+      for(int i = 0; i < MAX_PRODUCTS && i < products.size(); i++)
+      {
+        if(i > 0)
+          commands.add(", ");
 
-    //   List<Object> commands = new ArrayList<Object>();
-    //   boolean more = products.size() > MAX_PRODUCTS;
-    //   if(more)
-    //     products.remove(products.size() - 1);
+        Product product = products.get(i);
+        commands.add(new Link(product.getFullTitle(), product.getPath()));
+      }
 
-    //   for(AbstractEntry product : products)
-    //   {
-    //     commands.add(new Link(((Product)product).getFullTitle(),
-    //                           product.getPath()));
-    //     commands.add(", ");
-    //   }
+      if(more)
+        commands.add(" ... ");
 
-    //   if(more)
-    //     commands.add("... ");
+      commands.add("| ");
+      commands.add(new Link("view all", getPath() + "/products"));
 
-    //   commands.add("| ");
-    //   commands.add(new Link("view all", getPath() + "/products"));
-
-    // return new FormattedValue(new Command(commands), null, "products", false,
-    //                             false, false, false, null, null);
-    // }
+      return new FormattedValue(new Command(commands), null, "products", false,
+                                false, false, false, null, null);
+    }
 
     return super.computeValue(inKey, inDM);
   }
@@ -679,7 +673,7 @@ public class BaseCharacter extends BaseEntry
       BaseCharacter character =
         new BaseCharacter("Me", new DMAData.Test.Data());
 
-      assertEquals("id", "Me", character.getID());
+      assertEquals("id", "Me", character.getName());
       assertFalse("real name", character.m_realName.isDefined());
       assertFalse("email", character.m_email.isDefined());
       assertFalse("password", character.m_password.isDefined());

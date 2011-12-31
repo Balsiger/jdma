@@ -644,13 +644,13 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
    * @return      the requested id
    *
    */
-  public @Nonnull String getID()
-  {
-    if(!m_id.isDefined())
-      randomID();
+  // public @Nonnull String getID()
+  // {
+  //   if(!m_id.isDefined())
+  //     randomID();
 
-    return m_id.get();
-  }
+  //   return m_id.get();
+  // }
 
   //........................................................................
   //------------------------------- randomID -------------------------------

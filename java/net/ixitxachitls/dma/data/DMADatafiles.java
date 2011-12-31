@@ -46,6 +46,7 @@ import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.Type;
 import net.ixitxachitls.util.Files;
+import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
 
@@ -457,6 +458,24 @@ public class DMADatafiles implements DMAData
 
   //----------------------------------------------------------- manipulators
 
+  //-------------------------------- remove --------------------------------
+
+  /**
+   *
+   *
+   * @param       inID    the id of the entry to remove
+   * @param       inType  the type of the entry to remove
+   *
+   * @return      true if removed, false if not
+   *
+   */
+  public boolean remove(@Nonnull String inID,
+                        @Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
   //--------------------------------- read ---------------------------------
 
   /**
@@ -605,14 +624,19 @@ public class DMADatafiles implements DMAData
     {
       Entry entry = (Entry)inEntry;
       String id = entry.getID();
-      while(entries.containsKey(id))
-      {
-        entry.randomID();
-        String oldID = id;
-        id = entry.getID();
-        Log.warning("duplicate id detected for '" + oldID
-                    + "', setting new id to '" + id + "'");
-      }
+
+      if(Config.get("web.data.datastore", true) && entries.containsKey(id))
+        Log.warning("duplicate id detected for '" + id
+                    + ", ignoring as only importing (hopefully)");
+      else
+        while(entries.containsKey(id))
+        {
+          entry.randomID();
+          String oldID = id;
+          id = entry.getID();
+          Log.warning("duplicate id detected for '" + oldID
+                      + "', setting new id to '" + id + "'");
+        }
     }
 
     entries.put(inEntry.getID(), inEntry);

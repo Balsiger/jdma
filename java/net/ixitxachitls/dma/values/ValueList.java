@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -346,11 +347,11 @@ public class ValueList<T extends Value>
    * @undefined   never
    *
    */
-//   @SuppressWarnings("unchecked") // casting
-//   public T newElement()
-//   {
-//     return (T)m_type.create();
-//   }
+  @SuppressWarnings("unchecked") // casting
+  public T newElement()
+  {
+    return (T)m_type.create();
+  }
 
   //........................................................................
 
@@ -425,6 +426,20 @@ public class ValueList<T extends Value>
   }
 
   //........................................................................
+  //----------------------------- getDelimiter -----------------------------
+
+  /**
+   * Get the delimiter used between items.
+   *
+   * @return      the delimiter between items
+   *
+   */
+  public @Nonnull String getDelimiter()
+  {
+    return m_delimiter;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -454,6 +469,32 @@ public class ValueList<T extends Value>
   }
 
   //........................................................................
+  //---------------------------------- as ----------------------------------
+
+  /**
+   * Create a new list similar to this one but with different values.
+   *
+   * @param     inValues the values to create a new list from
+   *
+   * @return    the newly created value list
+   *
+   */
+  public @Nonnull ValueList<T> asAppended(@Nonnull T ... inValues)
+  {
+    if(inValues.length == 0)
+      return this;
+
+    ValueList<T> result = create();
+
+    result.define();
+    if(m_values != null)
+      result.m_values.addAll(m_values);
+    result.m_values.addAll(Arrays.asList(inValues));
+
+    return result;
+  }
+
+  //........................................................................
 
   //------------------------------- append --------------------------------
 
@@ -466,6 +507,7 @@ public class ValueList<T extends Value>
    * @return      true if added, false else
    *
    */
+  @Deprecated
   protected boolean append(@Nonnull T inValue)
   {
     if(!inValue.isDefined())
@@ -490,6 +532,7 @@ public class ValueList<T extends Value>
    * @return      true if added, false else
    *
    */
+  @Deprecated
   protected boolean insert(int inIndex, @Nonnull T inValue)
   {
     if(!inValue.isDefined())
@@ -512,13 +555,13 @@ public class ValueList<T extends Value>
    * @return      true if remove, false if not
    *
    */
+  @Deprecated
   protected boolean remove(@Nonnull T inValue)
   {
     return m_values.remove(inValue);
   }
 
   //........................................................................
-
   //-------------------------------- define --------------------------------
 
   /**
@@ -527,6 +570,7 @@ public class ValueList<T extends Value>
    * @return      true if newly defined, false if it already was
    *
    */
+  @Deprecated
   @SuppressWarnings("unchecked")
   protected boolean define()
   {
@@ -539,7 +583,6 @@ public class ValueList<T extends Value>
   }
 
   //........................................................................
-
   //------------------------------- complete -------------------------------
 
   /**
@@ -563,7 +606,6 @@ public class ValueList<T extends Value>
 //   }
 
   //........................................................................
-
   //-------------------------------- modify --------------------------------
 
   /**

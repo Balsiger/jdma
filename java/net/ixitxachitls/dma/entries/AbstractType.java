@@ -104,10 +104,16 @@ public abstract class AbstractType<T extends AbstractEntry>
 
     s_types.put(getName(), this);
     s_types.put(getLink(), this);
-    s_types.put(getMultiple(), this);
     s_types.put(getMultipleLink(), this);
+    s_types.put(getMultiple(), this);
     s_types.put(getName().replace(" ", ""), this);
     s_types.put(getMultiple().replace(" ", ""), this);
+
+    s_typedTypes.put(getName(), this);
+
+    s_linkedTypes.put(getLink(), this);
+    s_linkedTypes.put(getMultipleLink(), this);
+
     s_all.add(this);
   }
 
@@ -182,6 +188,14 @@ public abstract class AbstractType<T extends AbstractEntry>
   private static final Map<String, AbstractType<? extends AbstractEntry>>
     s_types = new ConcurrentHashMap<String, AbstractType<?>>();
 
+  /** All the availalbe types per full type spec. */
+  private static final Map<String, AbstractType<? extends AbstractEntry>>
+    s_typedTypes = new ConcurrentHashMap<String, AbstractType<?>>();
+
+  /** All the availalbe types per link. */
+  private static final Map<String, AbstractType<? extends AbstractEntry>>
+    s_linkedTypes = new ConcurrentHashMap<String, AbstractType<?>>();
+
   /** All the available types. */
   private static final Set<AbstractType<? extends AbstractEntry>> s_all
     = Collections.synchronizedSet(new HashSet<AbstractType<?>>());
@@ -194,6 +208,7 @@ public abstract class AbstractType<T extends AbstractEntry>
   static
   {
     s_all.add(net.ixitxachitls.dma.entries.BaseProduct.TYPE);
+    s_all.add(net.ixitxachitls.dma.entries.Product.TYPE);
   }
 
   //........................................................................
@@ -294,10 +309,59 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return    the type found, if any
    *
    */
+  @Deprecated
   public static @Nullable AbstractType<? extends AbstractEntry>
     get(@Nonnull String inName)
   {
     return s_types.get(inName);
+  }
+
+  //........................................................................
+  //--------------------------------- get ----------------------------------
+
+  /**
+   * Get the type for the given name.
+   *
+   * @param     inName the name of the type to get
+   *
+   * @return    the type found, if any
+   *
+   */
+  public static @Nullable AbstractType<? extends AbstractEntry>
+    getLinked(@Nonnull String inName)
+  {
+    return s_types.get(inName);
+  }
+
+  //........................................................................
+  //--------------------------------- get ----------------------------------
+
+  /**
+   * Get the type for the given name.
+   *
+   * @param     inName the name of the type to get
+   *
+   * @return    the type found, if any
+   *
+   */
+  public static @Nullable AbstractType<? extends AbstractEntry>
+    getTyped(@Nonnull String inName)
+  {
+    return s_typedTypes.get(inName);
+  }
+
+  //........................................................................
+  //----------------------------- getBaseType ------------------------------
+
+  /**
+   * Get the base type to this one.
+   *
+   * @return      the requested base type or null if already a base type
+   *
+   */
+  public @Nullable AbstractType<? extends AbstractEntry> getBaseType()
+  {
+    return this;
   }
 
   //........................................................................
@@ -447,6 +511,7 @@ public abstract class AbstractType<T extends AbstractEntry>
     {
       Log.error("cannot invoke data constructor for entry of type " + m_name
                 + " [" + m_class + "]: " + e  + " / " + e.getCause());
+      e.printStackTrace();
 
       return null;
     }

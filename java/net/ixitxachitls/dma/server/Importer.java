@@ -254,7 +254,7 @@ public final class Importer
 
       String type = types.getContentTypeFor(image);
       AbstractType<? extends AbstractEntry> entry =
-        AbstractType.get(parts[parts.length - 3]);
+        AbstractType.getTyped(parts[parts.length - 3]);
       String id = parts[parts.length - 2].replace("\\ ", " ");
       String name = Files.file(parts[parts.length - 1]);
 
@@ -299,8 +299,11 @@ public final class Importer
         {
           String line = rd.readLine();
           if(!"OK".equals(line))
+          {
+            Log.error("Server returned an error:");
             for(; line != null; line = rd.readLine())
               Log.error(line);
+          }
 
           input.close();
           output.close();
@@ -373,7 +376,8 @@ public final class Importer
     }
     catch(Exception e)
     {
-      Log.error(e.toString());
+      Log.error("Random error: " + e.toString());
+      e.printStackTrace();
     }
     finally
     {

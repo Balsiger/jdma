@@ -1778,20 +1778,19 @@ public class BaseProduct extends BaseEntry
     if("owners".equals(inKey))
     {
       List<Object> commands = new ArrayList<Object>();
-      for(BaseCharacter owner : m_data.getEntries(BaseCharacter.TYPE, 0, 0))
-        for(Product product : owner.getProducts())
-        {
-          if(product.isBasedOn(this))
-          {
-            if(!commands.isEmpty())
-              commands.add(", ");
+      for(Map.Entry<String, String> owner
+            : m_data.getOwners(this.getName()).entries())
+      {
+        if(!commands.isEmpty())
+          commands.add(", ");
 
-            commands.add(new Link(owner.getName(), product.getPath()));
-          }
-        }
+        commands.add(new Link(owner.getKey(), "/user/" + owner.getKey()
+                              + "/product/" + owner.getValue()));
+      }
 
       commands.add(" | ");
-      commands.add(new Link("add", "/user/me/product/" + getID() + "?create"));
+      commands.add(new Link("add",
+                            "/user/me/product/" + getName() + "?create"));
       return new FormattedValue(new Command(commands), null, "owners", false,
                                 false, false, false, null, null);
     }

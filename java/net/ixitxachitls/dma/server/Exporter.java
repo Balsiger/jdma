@@ -147,7 +147,7 @@ public final class Exporter
     RemoteApiInstaller installer = new RemoteApiInstaller();
     installer.install(options);
 
-    // read the dma files
+    // init the dma files
     DMADatafiles data = new DMADatafiles(dir + "/dma");
 
     // in order to actually have the proper types defined, we need to
