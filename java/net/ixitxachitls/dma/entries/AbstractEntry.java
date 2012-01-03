@@ -43,7 +43,6 @@ import com.google.common.collect.Multimap;
 
 // import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -66,7 +65,6 @@ import net.ixitxachitls.input.ParseReader;
 // import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Editable;
 import net.ixitxachitls.output.commands.Image;
 import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Linebreak;
@@ -2536,9 +2534,6 @@ public class AbstractEntry extends ValueGroup
     if(name != null)
       m_name = name;
 
-    if(!readQuantifiers(inReader))
-      return false;
-
     // determine if we read values at all
     boolean values = true;
 
@@ -2636,46 +2631,6 @@ public class AbstractEntry extends ValueGroup
                             + s_keyDelimiter);
       }
     }
-  }
-
-  //........................................................................
-  //--------------------------- readQuantifiers ----------------------------
-
-  /**
-   * Read additional quantifiers between the name and the '=' sign.
-   *
-   * @param       inReader   the reader to read from
-   *
-   * @return      true if reading was successfull, false else
-   *
-   */
-  protected boolean readQuantifiers(@Nonnull ParseReader inReader)
-  {
-    if(inReader.expect(s_baseStart))
-    {
-      // read the base name(s) for this entry or base entry
-      for(String name = inReader.read(s_baseEnd + ","); name.length() > 0;
-          name = inReader.read(s_baseEnd + ","))
-      {
-        addBase(name.trim());
-
-        if(!inReader.expect(","))
-          break;
-      }
-
-      if(!inReader.expect(s_baseEnd))
-      {
-        inReader.logWarning(inReader.getPosition(), "base name",
-                            "no end found");
-
-        return false;
-      }
-    }
-    else if(!isBase())
-      addBase(getName());
-
-
-    return true;
   }
 
   //........................................................................

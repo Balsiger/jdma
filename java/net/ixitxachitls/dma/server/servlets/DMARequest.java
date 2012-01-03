@@ -631,9 +631,6 @@ public class DMARequest extends HttpServletRequestWrapper
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
 
-      EasyMock.expect(mockRequest.getCookies()).andReturn
-        (new javax.servlet.http.Cookie [0]);
-
       EasyMock.replay(mockRequest);
 
       DMARequest request =

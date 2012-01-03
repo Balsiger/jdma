@@ -34,6 +34,8 @@ import java.util.TreeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Multimap;
+
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCampaign;
@@ -429,6 +431,65 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get an entry denoted by type and id and their respective parents.
+   *
+   * @param      inID          the id of the entry to get
+   * @param      inType        the type of the entry to get
+   * @param      inParentID    the parent id
+   * @param      inParentType  the parent type
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  public @Nullable <T extends AbstractEntry> T getEntry
+    (@Nonnull String inID, @Nonnull AbstractType<T> inType,
+     @Nonnull String inParentID,
+     @Nonnull AbstractType<? extends AbstractEntry> inParentType)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
+  //--------------------------- getRecentEntries ---------------------------
+
+  /**
+   * Get the recent ids of a specific type.
+   *
+   * @param       <T>    the real type of the entries to get
+   * @param       inType the type of entries to get ids for
+   *
+   * @return      the recent ids
+   *
+   */
+  public @Nonnull <T extends AbstractEntry>
+    List<T> getRecentEntries(@Nonnull AbstractType<T> inType)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
+  //------------------------------ getOwners -------------------------------
+
+  /**
+   * Get the owner of the given base product.
+   *
+   * @param    inID the id of the base product to own
+   *
+   * @return   a multi map from owner to ids
+   *
+   */
+  public Multimap<String, String> getOwners(String inID)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
+
   //------------------------------- toString -------------------------------
 
   /**
