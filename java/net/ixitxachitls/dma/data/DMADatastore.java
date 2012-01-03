@@ -227,19 +227,9 @@ public class DMADatastore implements DMAData
     Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
     Key key = KeyFactory.createKey(parent, inType.toString(), inID);
 
-    try
-    {
-      return convert(inID, inType, m_store.get(key));
-    }
-    catch(com.google.appengine.api.datastore.EntityNotFoundException e)
-    {
-      Log.warning("could not get entity for " + inType + " with id " + inID
-                  + " (" + key + ")");
 
-      return null;
-    }
+    return convert(inID, inType, getEntity(key));
   }
-
 
   //........................................................................
   //------------------------------- getEntry -------------------------------
@@ -262,19 +252,42 @@ public class DMADatastore implements DMAData
     Log.debug("getting " + inType + " with id " + inID);
     Key key = KeyFactory.createKey(inType.toString(), inID);
 
-    try
-    {
-      return convert(inID, inType, m_store.get(key));
-    }
-    catch(com.google.appengine.api.datastore.EntityNotFoundException e)
-    {
-      Log.warning("could not get entity for " + inType + " with id " + inID
-                  + " (" + key + ")");
-
-      return null;
-    }
+    return convert(inID, inType, getEntity(key));
   }
 
+
+  //........................................................................
+  //------------------------------- getEntity ------------------------------
+
+  /**
+   * Get an entity denoted with a key.
+   *
+   * @param       inKey the key of the entity to get
+   *
+   * @return      the entity found, if any
+   *
+   */
+  private @Nullable Entity getEntity(@Nonnull Key inKey)
+  {
+    Entity entity = (Entity)s_cache.get(inKey);
+
+    if(entity == null)
+    {
+      try
+      {
+        entity = m_store.get(inKey);
+        s_cache.put(inKey, entity, s_expiration);
+      }
+      catch(com.google.appengine.api.datastore.EntityNotFoundException e)
+      {
+        Log.warning("could not get entity for " + inKey);
+
+        return null;
+      }
+    }
+
+    return entity;
+  }
 
   //........................................................................
   //-------------------------------- getIDs --------------------------------
@@ -599,6 +612,8 @@ public class DMADatastore implements DMAData
     new Throwable().printStackTrace(System.out);
     Key key = KeyFactory.createKey(inType.toString(), inID);
 
+    s_cache.delete(key);
+
     try
     {
       m_store.delete(key);
@@ -628,7 +643,9 @@ public class DMADatastore implements DMAData
   {
     Log.debug("Storing data for " + inEntry.getType() + " "
               + inEntry.getName());
-    m_store.put(convert(inEntry));
+    Entity entity = convert(inEntry);
+    s_cache.put(entity.getKey(), entity, s_expiration);
+    m_store.put(entity);
     return true;
   }
 
