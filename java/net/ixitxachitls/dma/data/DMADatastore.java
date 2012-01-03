@@ -336,7 +336,8 @@ public class DMADatastore implements DMAData
     {
       Query query = new Query(inType.toString());
       query.addSort("change", Query.SortDirection.DESCENDING);
-      FetchOptions options = FetchOptions.Builder.withLimit(20);
+      FetchOptions options =
+        FetchOptions.Builder.withLimit(BaseCharacter.MAX_PRODUCTS + 1);
       entities = m_store.prepare(query).asList(options);
 
       s_cache.put("recent-" + inType.toString(), entities, s_expiration);
@@ -595,6 +596,7 @@ public class DMADatastore implements DMAData
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     Log.debug("removing " + inType + " with id " + inID);
+    new Throwable().printStackTrace(System.out);
     Key key = KeyFactory.createKey(inType.toString(), inID);
 
     try

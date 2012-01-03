@@ -205,7 +205,7 @@ public class BaseCharacter extends BaseEntry
   private static final int TOKEN_LENGTH = 20;
 
   /** The number of recent products to show. */
-  private static final int MAX_PRODUCTS =
+  public static final int MAX_PRODUCTS =
     Config.get("entries/basecharacter.products", 5);
 
   //----- real name --------------------------------------------------------

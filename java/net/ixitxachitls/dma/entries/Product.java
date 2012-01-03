@@ -929,43 +929,6 @@ public class Product extends Entry<BaseProduct>
 
   //........................................................................
 
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set the value for the given key.
-   *
-   * @param       inKey  the name of the key to set the value for
-   * @param       inText the text to set the value to
-   *
-   * @return      the part of the string that could not be parsed
-   *
-   */
-  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
-  {
-    // we have to treat the owner specially, as it is not a readable value
-    if("owner".equals(inKey))
-    {
-      // nothing to do if setting to current
-      if(m_owner != null && inText.equals(m_owner.get()) || inText.isEmpty())
-        return null;
-
-      // determine the new owner
-      BaseCharacter owner = m_data.getEntry(inText, BaseCharacter.TYPE);
-      if(owner == null)
-        return inText;
-
-      // remove old entry
-      m_data.remove(this.getName(), this.getType());
-
-      // add to new user
-      m_owner = m_owner.as(inText);
-
-      return null;
-    }
-
-    return super.set(inKey, inText);
-  }
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
