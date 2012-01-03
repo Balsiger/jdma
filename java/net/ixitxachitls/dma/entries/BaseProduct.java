@@ -784,7 +784,7 @@ public class BaseProduct extends BaseEntry
               + "%pages %series %number %volume "
               + "%price %contents %requirements"
               // admin
-              + "%references %file %errors"
+              + "%references %errors"
               );
 
   /** The printer for printing in a list. */

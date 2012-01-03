@@ -87,7 +87,6 @@ public class DMARequest extends HttpServletRequestWrapper
     m_base = DMADataFactory.getBaseData();
 //     m_campaigns = inCampaigns;
 
-    extractUser(inRequest);
 //     extractCampaign(inRequest);
 //     extractDM(inRequest);
 //     extractPlayer(inRequest);
@@ -110,6 +109,9 @@ public class DMARequest extends HttpServletRequestWrapper
 
   /** The campaign for the current request, if any. */
 //   private Campaign m_campaign = null;
+
+  /** Flag if the user has been extracted. */
+  private boolean m_extractedUser = false;
 
   /** The user doing the request, if any. */
   private @Nullable BaseCharacter m_user = null;
@@ -144,6 +146,7 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public boolean hasUser()
   {
+    extractUser();
     return m_user != null;
   }
 
@@ -158,6 +161,7 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public boolean hasUserOverride()
   {
+    extractUser();
     return m_userOverride != null;
   }
 
@@ -393,6 +397,8 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public @Nullable BaseCharacter getUser()
   {
+    extractUser();
+
     // only admin are allows to do that
     if(m_userOverride != null && hasUser()
        && m_user.hasAccess(BaseCharacter.Group.ADMIN))
@@ -412,6 +418,7 @@ public class DMARequest extends HttpServletRequestWrapper
    */
   public @Nullable BaseCharacter getRealUser()
   {
+    extractUser();
     return m_user;
   }
 
@@ -473,13 +480,16 @@ public class DMARequest extends HttpServletRequestWrapper
   /**
    * Extract the user from the request, if any.
    *
-   * @param       inRequest the request to process
-   *
    */
-  public void extractUser(@Nonnull HttpServletRequest inRequest)
+  public void extractUser()
   {
+    if(m_extractedUser)
+      return;
+
+    HttpServletRequest request = (HttpServletRequest)getRequest();
+
     // check for the user and token cookies
-    Cookie []cookies = inRequest.getCookies();
+    Cookie []cookies = request.getCookies();
 
     String user  = null;
     String token = null;
@@ -508,6 +518,8 @@ public class DMARequest extends HttpServletRequestWrapper
     String override = getParam("user");
     if(override != null)
       m_userOverride = m_base.getEntry(override, BaseCharacter.TYPE);
+
+    m_extractedUser = true;
   }
 
   //........................................................................

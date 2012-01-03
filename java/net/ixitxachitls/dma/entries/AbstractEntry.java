@@ -320,6 +320,9 @@ public class AbstractEntry extends ValueGroup
   /** The base entries for this entry, in the same order as the names. */
   protected @Nullable List<BaseEntry> m_baseEntries = null;
 
+  /** The files for this entry. */
+  private @Nullable List<DMAData.File> m_files = null;
+
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint = new Print("$title");
 
@@ -1100,6 +1103,24 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------------- getFiles -------------------------------
+
+  /**
+   * Get the files associated with this entry.
+   *
+   * @return      the associated files
+   *
+   */
+  public @Nonnull List<DMAData.File> getFiles()
+  {
+    if(m_files == null)
+      m_files = m_data.getFiles(this);
+
+    return m_files;
+  }
+
+  //........................................................................
+
   //------------------------- computeIndexValues ---------------------------
 
   /**
@@ -1829,7 +1850,7 @@ public class AbstractEntry extends ValueGroup
     {
       AbstractType<? extends AbstractEntry> type = getType();
 
-      for(DMAData.File file : m_data.getFiles(this))
+      for(DMAData.File file : getFiles())
         if("main".equals(file.getName()))
           return new FormattedValue
             (new ImageLink(file.getIcon() + "=s300", "main",
@@ -1859,7 +1880,7 @@ public class AbstractEntry extends ValueGroup
     {
       List<Command> commands = new ArrayList<Command>();
       boolean first = true;
-      for(DMAData.File file : m_data.getFiles(this))
+      for(DMAData.File file : getFiles())
       {
         if(first && "main".equals(file.getName()))
         {
@@ -1887,36 +1908,6 @@ public class AbstractEntry extends ValueGroup
         (new Divider("files", "files", new Command(commands)),
          "files", "files", false, true, false, false,
          "files", "").withEditType("files");
-    }
-
-    if("file".equals(inKey))
-    {
-      if(m_data instanceof DMADatafiles)
-        if(m_file == null)
-          return new FormattedValue
-            (new Editable(getID(), getEditType(), "<please select>", "file", "",
-                          "selection[file]", null,
-                          Strings.toString(((DMADatafiles)m_data)
-                                           .files(getType()), "||", ""), null),
-             null, "file", true, false, false, false, null, null);
-        else
-          return new FormattedValue
-            (new Command
-             (new Editable(getID(),
-                           getEditType(),
-                           m_file.getStorageName(),
-                           "file",
-                           m_file.getStorageName(),
-                           "selection[file]",
-                           null,
-                           Strings.toString(((DMADatafiles)m_file.getData())
-                                            .files(getType()), "||", ""),
-                           null),
-              " lines ",
-              m_startLine,
-              " to ",
-              m_endLine),
-             null, "file", true, false, false, false, null, null);
     }
 
     if("errors".equals(inKey))

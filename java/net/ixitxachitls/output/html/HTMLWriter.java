@@ -610,6 +610,30 @@ public class HTMLWriter
   //-------------------------------- script --------------------------------
 
   /**
+   * Add a script tag with contents to the head of the page.
+   *
+   * @param       inLines the lines of the script contents
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter headScript(@Nonnull String ... inLines)
+  {
+    ensureHead();
+    m_writer.println("    <SCRIPT type=\"text/javascript\">");
+
+    for(String line : inLines)
+      m_writer.println("      " + line);
+
+    m_writer.println("    </SCRIPT>");
+
+    return this;
+  }
+
+  //........................................................................
+  //-------------------------------- script --------------------------------
+
+  /**
    * Add a script tag with contents to the page.
    *
    * @param       inLines the lines of the script contents

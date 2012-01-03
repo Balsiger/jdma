@@ -377,6 +377,7 @@ public class EntryServlet extends PageServlet
     AbstractType<? extends AbstractEntry> type = entry.getType();
 
     List<String> ids = data.getIDs(type);
+
     int current = ids.indexOf(entry.getName());
     int last = ids.size() - 1;
     String base = "/" + type.getLink() + "/";

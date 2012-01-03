@@ -211,6 +211,21 @@ public class PageServlet extends DMAServlet
       // favicon
       .link("SHORTCUT ICON", "/icons/favicon.png")
       // header
+      .headScript("if(location.hostname != 'localhost')",
+                  "{",
+                  "  var _gaq = _gaq || [];",
+                  "  _gaq.push(['_setAccount', 'UA-1524401-1']);",
+                  "  _gaq.push(['_trackPageview']);",
+                  "  (function() {",
+                  "    var ga = document.createElement('script'); ga.type = "
+                  + "'text/javascript'; ga.async = true;",
+                  "    ga.src = ('https:' == document.location.protocol ? "
+                  + "'https://ssl' : 'http://www') + "
+                  + "'.google-analytics.com/ga.js';",
+                  "    var s = document.getElementsByTagName('script')[0]; "
+                  + "s.parentNode.insertBefore(ga, s);",
+                  "  })();",
+                  "}")
       .begin("div").id("header")
       .begin("div").id("header-right");
 
@@ -310,21 +325,7 @@ public class PageServlet extends DMAServlet
            + "<img src=\"/icons/valid-xhtml10.png\" alt=\"Valid XHTML 1.0!\" />"
            + "</a>")
       .begin("img").src("/icons/html5.png").alt("Uses HTML 5!")
-      .end("img")
-      .script("if(location.hostname != 'localhost')",
-              "{",
-              "  var gaJsHost = ((\"https:\" == document.location.protocol) ? "
-              + "\"https://ssl.\" : \"http://www.\");",
-              "  document.write(unescape(\"%3Cscript src='\" + gaJsHost + \""
-              + "google-analytics.com/ga.js' "
-              + "type='text/javascript'%3E%3C/script%3E\"));",
-              "}")
-      .script("if(location.hostname != 'localhost')",
-              "{",
-              "  var pageTracker = _gat._getTracker(\"UA-1524401-1\");",
-              "  pageTracker._initData();",
-              "  pageTracker._trackPageview();",
-              "}");
+      .end("img");
   }
 
   //........................................................................

@@ -129,6 +129,10 @@ public class DMADatastore implements DMAData
   /** Experiation time for the cache. */
   private static Expiration s_expiration = Expiration.byDeltaSeconds(10 * 60);
 
+  /** Long experiation time for the cache. */
+  private static Expiration s_longExpiration =
+    Expiration.byDeltaSeconds(6 * 60 * 60);
+
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
@@ -154,6 +158,7 @@ public class DMADatastore implements DMAData
   public @Nonnull <T extends AbstractEntry> NavigableMap<String, T>
     getEntries(AbstractType<T> inType)
   {
+    Log.debug("getting entries for " + inType);
     NavigableMap<String, T> entries = new TreeMap<String, T>();
 
     return entries;
@@ -178,6 +183,8 @@ public class DMADatastore implements DMAData
                       getEntries(@Nonnull AbstractType<T> inType,
                                  int inStart, int inSize)
   {
+    Log.debug("getting entries for " + inType + " from " + inStart
+              + " and size " + inSize);
     List<T> entries = new ArrayList<T>();
 
     Query query = new Query(inType.toString());
@@ -214,6 +221,9 @@ public class DMADatastore implements DMAData
      @Nonnull String inParentID,
      @Nonnull AbstractType<? extends AbstractEntry> inParentType)
   {
+    Log.debug("getting " + inType + " with id " + inID + " and parent "
+              + inParentType + " " + inParentID);
+
     Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
     Key key = KeyFactory.createKey(parent, inType.toString(), inID);
 
@@ -249,6 +259,7 @@ public class DMADatastore implements DMAData
                       getEntry(@Nonnull String inID,
                                @Nonnull AbstractType<T> inType)
   {
+    Log.debug("getting " + inType + " with id " + inID);
     Key key = KeyFactory.createKey(inType.toString(), inID);
 
     try
@@ -285,17 +296,19 @@ public class DMADatastore implements DMAData
     if(ids != null)
       return ids;
 
+    Log.debug("getting ids for " + inType);
+
     Query query = new Query(inType.toString());
     String sort = inType.getSortField();
     if(sort != null)
       query.addSort(sort, Query.SortDirection.ASCENDING);
     query.setKeysOnly();
-    FetchOptions options = FetchOptions.Builder.withChunkSize(100);
+    FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
     ids = new ArrayList<String>();
     for(Entity entity : m_store.prepare(query).asIterable(options))
       ids.add(entity.getKey().getName());
 
-    s_cache.put("ids-" + inType.toString(), ids, s_expiration);
+    s_cache.put("ids-" + inType.toString(), ids, s_longExpiration);
     return ids;
   }
 
@@ -315,6 +328,7 @@ public class DMADatastore implements DMAData
   public @Nonnull  <T extends AbstractEntry> List<T>
     getRecentEntries(@Nonnull AbstractType<T> inType)
   {
+    Log.debug("getting recent entries for " + inType);
     List<Entity> entities = (List<Entity>)
       s_cache.get("recent-" + inType.toString());
 
@@ -375,6 +389,8 @@ public class DMADatastore implements DMAData
    */
   public Multimap<String, String> getOwners(String inID)
   {
+    Log.debug("getting owners for " + inID);
+
     Query query = new Query(Product.TYPE.toString());
     FetchOptions options = FetchOptions.Builder.withLimit(5);
     query.addFilter(toPropertyName("base"), Query.FilterOperator.EQUAL, inID);
@@ -401,6 +417,7 @@ public class DMADatastore implements DMAData
    */
   public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
   {
+    Log.debug("getting files for " + inEntry.getName());
     Query query =
       new Query("file", KeyFactory.createKey(inEntry.getType().toString(),
                                              inEntry.getName()));
@@ -459,6 +476,7 @@ public class DMADatastore implements DMAData
                      (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
                       @Nonnull String inGroup, int inStart, int inSize)
   {
+    Log.debug("getting index entries for " + inIndex);
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
     Query query = new Query(inType.toString());
@@ -503,6 +521,7 @@ public class DMADatastore implements DMAData
      @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
      @Nonnull String ... inFilters)
   {
+    Log.debug("getting index names for " + inIndex);
     SortedSet<String> names = null;
     String key = inType + ":" + inIndex;
     if(inFilters.length > 0)
@@ -575,6 +594,7 @@ public class DMADatastore implements DMAData
     (@Nonnull String inID,
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
+    Log.debug("removing " + inType + " with id " + inID);
     Key key = KeyFactory.createKey(inType.toString(), inID);
 
     try
@@ -641,6 +661,7 @@ public class DMADatastore implements DMAData
   public void addFile(@Nonnull AbstractEntry inEntry, @Nonnull String inName,
                       @Nonnull String inType, @Nonnull BlobKey inKey)
   {
+    Log.debug("adding file for " + inEntry.getType() + " " + inEntry.getName());
     // if a file with the same name is already there, we have to delete it first
     Key key =
       KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
@@ -679,6 +700,7 @@ public class DMADatastore implements DMAData
    */
   public void removeFile(@Nonnull AbstractEntry inEntry, @Nonnull String inName)
   {
+    Log.debug("removing file " + inName + " for " + inEntry.getName());
     Key key =
       KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
                                                 inEntry.getName()),

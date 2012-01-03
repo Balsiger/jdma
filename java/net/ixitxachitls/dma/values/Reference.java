@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.values;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.data.DMAData;
@@ -108,6 +109,12 @@ public class Reference extends BaseText<Reference>
   /** All the available base data. */
   private @Nonnull DMAData m_data;
 
+  /** Flag if references was resolved or not. */
+  private boolean m_resolved = false;
+
+  /** The base product reference here. */
+  private @Nullable BaseProduct m_product = null;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -122,12 +129,11 @@ public class Reference extends BaseText<Reference>
    */
   protected @Nonnull Command doFormat()
   {
-    BaseProduct product = m_data.getEntry(get(), BaseProduct.TYPE);
-
-    if(product == null)
+    resolve();
+    if(m_product == null)
       return new Command(getEditValue());
 
-    return new Link(getEditValue(), "/product/" + product.getName());
+    return new Link(getEditValue(), "/product/" + m_product.getName());
   }
 
   //........................................................................
@@ -141,15 +147,33 @@ public class Reference extends BaseText<Reference>
    */
   public String getEditValue()
   {
-    BaseProduct product = m_data.getEntry(get(), BaseProduct.TYPE);
-
-    if(product == null)
+    resolve();
+    if(m_product == null)
       return super.getEditValue();
 
-    return product.getFullTitle() + " (" + get() + ")";
+    return m_product.getFullTitle() + " (" + get() + ")";
   }
 
   //........................................................................
+  //------------------------------- resolve --------------------------------
+
+  /**
+   * Resolve the referenced product and return it.
+   *
+   */
+  public void resolve()
+  {
+    if(m_resolved)
+      return;
+
+    if(m_product == null)
+      m_product = m_data.getEntry(get(), BaseProduct.TYPE);
+
+    m_resolved = true;
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
