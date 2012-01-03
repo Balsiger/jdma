@@ -187,15 +187,14 @@ public class SaveActionServlet extends ActionServlet
       {
         AbstractEntry entry = m_data.getEntry(m_id, m_type);
 
-        if(entry == null && m_file != null)
+        if(entry == null)
         {
           // create a new entry for filling out
           Log.event(m_owner.getID(), "create",
                     "creating " + m_type + " entry '" + m_name + "'");
 
           entry = m_type.create(m_name, m_data);
-          if(entry instanceof Entry)
-            entry.setOwner(m_owner);
+          entry.setOwner(m_owner);
         }
 
         if(entry == null)

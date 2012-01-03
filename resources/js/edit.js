@@ -712,6 +712,12 @@ edit.Name.prototype._createElement = function()
            (this.properties.validate || 'name') + '"/>');
 };
 
+edit.Name.prototype.isDefined = function()
+{
+  return this.getValue() != '';
+};
+
+
 //..........................................................................
 //------------------------------------------------------------------- String
 
@@ -994,11 +1000,23 @@ edit.List.prototype._getValue = function()
   for(var i = 0; i < this._entries.length; i++)
   {
     var value = this._entries[i].getValue();
-    if(value)
+    if(value && value != "\"\"")
       result.push(value);
   }
 
   return result.join(this.delimiter) || '$undefined$';
+};
+
+edit.List.prototype.isDefined = function()
+{
+  if(this._entries.length == 0)
+    return false;
+
+  for(var i = 0; i < this._entries.length; i++)
+    if(!this._entries[i].isDefined())
+      return false;
+
+  return true;
 };
 
 //..........................................................................
@@ -1058,6 +1076,15 @@ edit.Multiple.prototype._createElement = function()
   }
 
   return element;
+};
+
+edit.Multiple.prototype.isDefined = function()
+{
+  for(var i = 0; i < this.items.length; i++)
+    if(!this.items[i].isDefined())
+      return false;
+
+  return true;
 };
 
 /**
@@ -1324,6 +1351,32 @@ edit.Image.prototype._createElement = function()
            'class="upload" id="upload-main"></iframe>');
 };
 
+/**
+ * Get the value of the image.
+ *
+ * @return the fields value, ready for storing.
+ */
+edit.Image.prototype._getValue = function()
+{
+  return null;
+};
+
+edit.Image.prototype.isDefined = function()
+{
+  return false;
+};
+
+/**
+ * Save the editable and it's value to the given object
+ *
+ * @param inValues where to store the value(s)
+ *
+ */
+edit.Image.prototype.save = function(inValues)
+{
+  // don't save this value
+};
+
 //..........................................................................
 //-------------------------------------------------------------------- Files
 
@@ -1386,6 +1439,32 @@ edit.Files.prototype._createElement = function()
   return $('<iframe src="/fileupload?id=' + this.properties.id +
            '&type=' + this.properties.entry + '&name=files&form"' +
            'class="upload-files" id="upload-files"></iframe>');
+};
+
+/**
+ * Get the value of the image.
+ *
+ * @return the fields value, ready for storing.
+ */
+edit.Files.prototype._getValue = function()
+{
+  return null;
+};
+
+edit.Files.prototype.isDefined = function()
+{
+  return false;
+};
+
+/**
+ * Save the editable and it's value to the given object
+ *
+ * @param inValues where to store the value(s)
+ *
+ */
+edit.Files.prototype.save = function(inValues)
+{
+  // don't save this value
 };
 
 //..........................................................................

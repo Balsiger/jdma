@@ -344,7 +344,7 @@ public class EntryServlet extends PageServlet
         return;
       }
 
-      if(inRequest.hasParam("create"))
+      if(inRequest.hasParam("create") && inRequest.hasUser())
       {
         // create a new entry for filling out
         Log.info("creating " + type + " '" + id + "'");
@@ -357,14 +357,18 @@ public class EntryServlet extends PageServlet
       {
         // entry not found, but ask if we want to create a new entry
         Log.warning("could not find entry '" + id + "'.");
+
         inWriter.title("Not Found")
           .begin("h1").add("Entry Not Found").end("h1")
-          .add("Could not find " + type + " '" + id + "'.")
-          .script("if(confirm('The desired entry does not exist!\\n\\n"
-                  + "Do you want to create a new entry with id \\'" + id
-                  + "\\'?'))",
-                  "  location.href = location.href.replace(/\\?.*$/, '') "
-                  + "+ '?create';");
+          .add("Could not find " + type + " '" + id + "'.");
+
+        if(inRequest.hasUser())
+            inWriter
+              .script("if(confirm('The desired entry does not exist!\\n\\n"
+                      + "Do you want to create a new entry with id \\'" + id
+                      + "\\'?'))",
+                      "  location.href = location.href.replace(/\\?.*$/, '') "
+                      + "+ '?create';");
 
         return;
       }

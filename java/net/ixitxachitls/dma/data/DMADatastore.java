@@ -835,8 +835,11 @@ public class DMADatastore implements DMAData
   @SuppressWarnings("unchecked") // need to cast value gotten
   public @Nullable <T extends AbstractEntry> T convert
                       (@Nonnull String inID, @Nonnull AbstractType<T> inType,
-                       @Nonnull Entity inEntity)
+                       @Nullable Entity inEntity)
   {
+    if(inEntity == null)
+      return null;
+
     T entry = inType.create(inID, this);
     if(entry == null)
     {
@@ -966,8 +969,9 @@ public class DMADatastore implements DMAData
     // save the index information to make it searchable afterwards
     Multimap<String, String> indexes = inEntry.computeIndexValues();
     for(String index : indexes.keySet())
+      // must convert the contained set to a list to make it serializable
       entity.setProperty(toPropertyName("index-" + index),
-                         indexes.get(index));
+                         new ArrayList<String>(indexes.get(index)));
 
     // save the time for recent changes
     entity.setProperty(toPropertyName("change"), new Date());

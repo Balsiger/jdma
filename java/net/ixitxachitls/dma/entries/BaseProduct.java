@@ -1611,6 +1611,9 @@ public class BaseProduct extends BaseEntry
       String listName = list.getKey();
       for(Multiple person : list.getValue())
         {
+          if(!person.get(0).isDefined())
+            continue;
+
           ioJobs.add(listName);
 
           if(!person.get(1).isDefined())
@@ -1757,18 +1760,6 @@ public class BaseProduct extends BaseEntry
                      " ",
                      computeValue("_title", inDM).format(this, inDM, true)),
          null, "name", false, true, false, true, "names", "");
-
-    if("desc".equals(inKey))
-      return new FormattedValue
-        (new Divider("desc",
-                     new Command(computeValue("subtitle", inDM)
-                                 .format(this, inDM, true),
-                                 computeValue("description", inDM)
-                                 .format(this, inDM, true),
-                                 computeValue("short description", inDM)
-                                 .format(this, inDM, true),
-                                 computeIndexValues())),
-         null, "desc", false, false, false, false, "desc", "");
 
     if("subtitle".equals(inKey))
       return new FormattedValue
