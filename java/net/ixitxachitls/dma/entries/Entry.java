@@ -188,6 +188,9 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
   public static final Type<? extends Entry> TYPE =
     new Type<Entry>(Entry.class, BaseEntry.TYPE);
 
+  /** The name of a temporary entry. */
+  public static final String TEMPORARY = "TEMPORARY";
+
   static
   {
     TYPE.withLink("entry", "entries");
@@ -196,8 +199,8 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
   //----- id ---------------------------------------------------------------
 
   /** The reference id of the entry. */
-  @Key("id")
-  protected ID m_id = new ID();
+  // @Key("id")
+  // protected ID m_id = new ID();
 
   //........................................................................
 
@@ -661,7 +664,7 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
    */
   public void randomID()
   {
-    m_id = ID.random();
+    m_name = ID.random();
     changed(true);
   }
 
@@ -918,9 +921,10 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
    * @return      true if id set, false if an error occurred
    *
    */
+  @Deprecated
   public boolean setID(String inID)
   {
-    m_id = m_id.as(inID);
+    m_name = m_name.as(inID);
     changed();
 
     return true;

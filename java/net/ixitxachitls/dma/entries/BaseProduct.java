@@ -62,7 +62,6 @@ import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Subtitle;
 import net.ixitxachitls.util.Strings;

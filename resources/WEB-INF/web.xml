@@ -259,7 +259,7 @@
       <param-value>/_entry/base product/$1</param-value>
     </init-param>
     <init-param>
-      <param-name>^/products/([^/]+)$</param-name>
+      <param-name>^/products/(.*)$</param-name>
       <param-value>/_index/base product/$1</param-value>
     </init-param>
     <init-param>

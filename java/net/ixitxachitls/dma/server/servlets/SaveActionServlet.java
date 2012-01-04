@@ -117,6 +117,9 @@ public class SaveActionServlet extends ActionServlet
     /** The file for the entry/entries. */
     protected @Nullable String m_file;
 
+    /** Flag if creating a new value or not. */
+    protected boolean m_create = false;
+
     /** The full type of the entriy/entries changed. */
     protected @Nonnull String m_fullType;
 
@@ -152,6 +155,8 @@ public class SaveActionServlet extends ActionServlet
     {
       if("file".equals(inKey))
         m_file = inValue;
+      else if("create".equals(inKey))
+        m_create = true;
       else
       {
         if("name".equals(inKey))
@@ -187,14 +192,15 @@ public class SaveActionServlet extends ActionServlet
       {
         AbstractEntry entry = m_data.getEntry(m_id, m_type);
 
-        if(entry == null)
+        if(entry == null && m_create)
         {
           // create a new entry for filling out
-          Log.event(m_owner.getID(), "create",
+          Log.event(m_owner.getName(), "create",
                     "creating " + m_type + " entry '" + m_name + "'");
 
           entry = m_type.create(m_name, m_data);
-          entry.setOwner(m_owner);
+          if(entry != null)
+            entry.setOwner(m_owner);
         }
 
         if(entry == null)
@@ -528,7 +534,8 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
-        .andStubReturn(false);
+        .andStubReturn(true);
+      EasyMock.expect(user.getName()).andStubReturn("Merlin");
       EasyMock.expect(data.getEntry
                       ("guru", net.ixitxachitls.dma.entries.BaseEntry.TYPE))
         .andStubReturn(null);

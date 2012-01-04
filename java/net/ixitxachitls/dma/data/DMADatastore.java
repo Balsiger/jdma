@@ -61,6 +61,7 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
@@ -226,7 +227,6 @@ public class DMADatastore implements DMAData
 
     Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
     Key key = KeyFactory.createKey(parent, inType.toString(), inID);
-
 
     return convert(inID, inType, getEntity(key));
   }
@@ -643,7 +643,20 @@ public class DMADatastore implements DMAData
   {
     Log.debug("Storing data for " + inEntry.getType() + " "
               + inEntry.getName());
+
     Entity entity = convert(inEntry);
+    if(inEntry.getName().equals(Entry.TEMPORARY) && inEntry instanceof Entry)
+    {
+      // determine a new, real id to use; this should actually be in a
+      // transaction to be safe...
+      do
+      {
+        ((Entry)inEntry).randomID();
+        Log.debug("Creating a new random id " + inEntry.getName());
+        entity = convert(inEntry);
+      } while(getEntity(entity.getKey()) != null);
+    }
+
     s_cache.put(entity.getKey(), entity, s_expiration);
     m_store.put(entity);
     return true;

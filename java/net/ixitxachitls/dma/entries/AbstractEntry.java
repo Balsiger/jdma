@@ -51,6 +51,7 @@ import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 // import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.values.BaseNumber;
+import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Comment;
 // import net.ixitxachitls.dma.values.Modifiable;
 import net.ixitxachitls.dma.values.Name;
@@ -395,7 +396,7 @@ public class AbstractEntry extends ValueGroup
   @Note("Changing the name will not change any references to entries with "
         + "that name, thus leaving these references dangling. You will have "
         + "to update these manually.")
-  protected Name m_name = new Name();
+  protected BaseText<? extends BaseText> m_name = new Name();
 
   //........................................................................
   //----- comments ---------------------------------------------------------
@@ -1934,27 +1935,21 @@ public class AbstractEntry extends ValueGroup
 
     if("as dma".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-dma.png",
-                                              getName(),
-                                              "/" + getType().getLink() + "/"
-                                              + getName() + ".dma",
+                                              getName(), getName() + ".dma",
                                               "doc-link"),
                                 null, "as dma", true, false, false, false,
                                 "as dma", "");
 
     if("as pdf".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
-                                              getName(),
-                                              "/" + getType().getLink() + "/"
-                                              + getName() + ".pdf",
+                                              getName(), getName() + ".pdf",
                                               "doc-link"),
                                 null, "as pdf", true, false, false, false,
                                 "as pdf", "");
 
     if("as text".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-txt.png",
-                                              getName(),
-                                              "/" + getType().getLink() + "/"
-                                              + getName() + ".txt",
+                                              getName(), getName() + ".txt",
                                               "doc-link"),
                                 null, "as text", true, false, false, false,
                                 "as text", "");
@@ -2530,7 +2525,7 @@ public class AbstractEntry extends ValueGroup
     //......................................................................
     //----- name -----------------------------------------------------------
 
-    Name name = m_name.read(inReader);
+    BaseText<? extends BaseText> name = m_name.read(inReader);
     if(name != null)
       m_name = name;
 
@@ -2775,14 +2770,14 @@ public class AbstractEntry extends ValueGroup
   //------------------------------- addBase --------------------------------
 
   /**
-   * Add a base to this entry. The entry is ignored if name is null.
+   * Add a base to this entry.
    *
    * @param       inName the name to add with (or null to use the name of the
    *                     given base entry, if any)
    *
    */
   @SuppressWarnings("unchecked") // need to cast to base entry
-  protected void addBase(@Nonnull String inName)
+  public void addBase(@Nonnull String inName)
   {
     AbstractType<? extends AbstractEntry> baseType = getType().getBaseType();
     if(baseType instanceof Type)

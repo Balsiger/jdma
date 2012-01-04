@@ -166,6 +166,9 @@ edit.save = function()
   for(var i = 0, editable; editable = edit.all[i]; i++)
     editable.save(values);
 
+  if(location.search.match(/(\?|&)search($|&)/))
+    values.create = true;
+
   // send the data to the server
   window.console.log("saving!", values);
   util.ajax('/actions/save', values, null, true);

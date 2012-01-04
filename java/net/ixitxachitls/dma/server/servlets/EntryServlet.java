@@ -38,6 +38,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.output.ascii.ASCIIDocument;
 import net.ixitxachitls.output.commands.Command;
@@ -349,7 +350,14 @@ public class EntryServlet extends PageServlet
         // create a new entry for filling out
         Log.info("creating " + type + " '" + id + "'");
 
-        entry = type.create(id, getData(inRequest, path, m_data));
+        if(type.getBaseType() == type)
+          entry = type.create(id, getData(inRequest, path, m_data));
+        else
+        {
+          entry = type.create(Entry.TEMPORARY,
+                              getData(inRequest, path, m_data));
+          entry.addBase(id);
+        }
         entry.setOwner(inRequest.getUser());
       }
 
@@ -568,6 +576,7 @@ public class EntryServlet extends PageServlet
       EasyMock.expect(m_request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(m_request.getRequestURI()).andReturn(inPath);
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
+      EasyMock.expect(m_request.hasUser()).andStubReturn(true);
       EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
       if(inEntry == null && inType != null && inID != null)
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
