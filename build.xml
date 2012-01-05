@@ -172,6 +172,7 @@
     </tstamp>
     <mkdir dir="${build.dir}" />
     <mkdir dir="${war.dir}" />
+    <mkdir dir="${war.dir}/static" />
     <mkdir dir="${war.dir}/icons" />
     <mkdir dir="${classes.dir}" />
     <mkdir dir="${webinf.dir}" />
@@ -195,6 +196,13 @@
       </fileset>
       <fileset dir="${resources.dir}/WEB-INF">
         <include name="*.properties" />
+      </fileset>
+    </copy>
+    <!-- html files are rendered using the page renderer, thus we use html-->
+    <!-- for really static files. -->
+    <copy todir="${war.dir}/static" flatten="false">
+      <fileset dir="${resources.dir}/static">
+        <include name="*.htm" />
       </fileset>
     </copy>
     <copy file="${resources.dir}/icons/favicon.png"

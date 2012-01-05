@@ -162,12 +162,10 @@ edit.editAll = function()
 edit.save = function()
 {
   var values = { };
+  var create = location.search.match(/(\?|&)create($|&)/);
 
   for(var i = 0, editable; editable = edit.all[i]; i++)
-    editable.save(values);
-
-  if(location.search.match(/(\?|&)search($|&)/))
-    values.create = true;
+    editable.save(values, create);
 
   // send the data to the server
   window.console.log("saving!", values);
@@ -477,9 +475,10 @@ edit.Base._parseType = function(inType)
  * Save the editable and it's value to the given object
  *
  * @param inValues where to store the value(s)
+ * @param inCreate if creating a value
  *
  */
-edit.Base.prototype.save = function(inValues)
+edit.Base.prototype.save = function(inValues, inCreate)
 {
   var value;
   if(this.isDefined())
@@ -488,6 +487,8 @@ edit.Base.prototype.save = function(inValues)
     value = '$undefined$';
 
   inValues[this.entry + '::' + this.id + '::' + this.key] = value;
+  if(inCreate)
+    inValues[this.entry + '::' + this.id + '::create'] = true;
 };
 
 /**

@@ -53,6 +53,10 @@
     <property name="web.template.css.hilightcolor_Spell" value="#c0c0fff" />
   </system-properties>
 
+  <static-error-handlers>
+    <handler file="static/quota.htm" error-code="over_quota" />
+  </static-error-handlers>
+
   <admin-console>
     <page name="DMA" url="/admin" />
   </admin-console>
