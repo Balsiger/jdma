@@ -136,6 +136,8 @@ public abstract class AbstractType<T extends AbstractEntry>
     m_link = inLink;
     m_multipleLink = inMultipleLink;
 
+    s_types.put(getLink(), this);
+    s_types.put(getMultipleLink(), this);
     return this;
   }
 
@@ -208,6 +210,7 @@ public abstract class AbstractType<T extends AbstractEntry>
   static
   {
     s_all.add(net.ixitxachitls.dma.entries.BaseProduct.TYPE);
+    s_all.add(net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.Product.TYPE);
   }
 
@@ -317,7 +320,7 @@ public abstract class AbstractType<T extends AbstractEntry>
   }
 
   //........................................................................
-  //--------------------------------- get ----------------------------------
+  //------------------------------ getLinked -------------------------------
 
   /**
    * Get the type for the given name.
@@ -334,7 +337,7 @@ public abstract class AbstractType<T extends AbstractEntry>
   }
 
   //........................................................................
-  //--------------------------------- get ----------------------------------
+  //------------------------------- getTyped -------------------------------
 
   /**
    * Get the type for the given name.

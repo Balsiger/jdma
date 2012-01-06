@@ -332,11 +332,7 @@ public final class Strings
    * @param       inText the text to match in
    * @param       inPattern the pattern to match (with or without the (/))
    *
-   * @return      the texts that matched or null if nothing matched
-   *
-   * @undefined   never (may return null)
-   *
-   * @example     String []matched = Files.getPatterns("my text", "t.*t");
+   * @return      the texts that matched
    *
    */
   public static @Nonnull String []getPatterns(@Nonnull String inText,

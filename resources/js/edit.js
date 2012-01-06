@@ -168,7 +168,7 @@ edit.save = function()
     editable.save(values, create);
 
   // send the data to the server
-  window.console.log("saving!", values);
+  window.console.log('saving!', values);
   util.ajax('/actions/save', values, null, true);
 
   // remove the move away code
@@ -1085,10 +1085,10 @@ edit.Multiple.prototype._createElement = function()
 edit.Multiple.prototype.isDefined = function()
 {
   for(var i = 0; i < this.items.length; i++)
-    if(!this.items[i].isDefined())
-      return false;
+    if(this.items[i].isDefined())
+      return true;
 
-  return true;
+  return false;
 };
 
 /**
@@ -1098,14 +1098,17 @@ edit.Multiple.prototype.isDefined = function()
  */
 edit.Multiple.prototype._getValue = function()
 {
-  var result = "";
+  var result = '';
 
   for(var i = 0; i < this.items.length; i++)
   {
     var value = this.items[i].getValue();
 
-    if(value.length > 0 && value != "$undefined$")
-      result += this.delimiters[i] + value;
+    if(value.length > 0 && value != '$undefined$')
+      if(this.delimiters[i])
+        result += this.delimiters[i] + value;
+      else
+        result += ' ' + value;
   }
 
   return result + this.delimiters[i];
@@ -1408,7 +1411,7 @@ extend(edit.Files, edit.Base);
  * @return      true if the edited value has to be saved
  */
 edit.Files.prototype.edit = function(inEditable, inTarget, inNoRelated) {
-  var containers = $(inEditable).find("div.file");
+  var containers = $(inEditable).find('div.file');
   var properties = this.properties;
   $(containers).each(function(index, element)
   {

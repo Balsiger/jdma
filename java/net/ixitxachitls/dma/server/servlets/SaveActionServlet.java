@@ -78,41 +78,49 @@ public class SaveActionServlet extends ActionServlet
     /**
      * Create a change for one or multiple entries.
      *
-     * @param inID       entry id
-     * @param inType     entry type
-     * @param inFullType the full type of the entries
-     * @param inData     the data the entry is stored
-     * @param inOwner    the owner of the entry/entries
+     * @param inID          entry id
+     * @param inType        entry type
+     * @param inParentID    parent entry id
+     * @param inParentType  parent entry type
+     * @param inFullType    the full type of the entries
+     * @param inData        the data the entry is stored
+     * @param inOwner       the owner of the entry/entries
      *
      */
     public Changes(@Nonnull String inID,
                    @Nonnull AbstractType<? extends AbstractEntry> inType,
+                   @Nonnull String inParentID,
+                   @Nonnull AbstractType<? extends AbstractEntry> inParentType,
                    @Nonnull String inFullType,
                    @Nonnull DMAData inData,
                    @Nonnull AbstractEntry inOwner)
     {
-      m_id = inID;
-      m_name = m_id;
+      m_name = inID;
       m_type = inType;
+      m_parentID = inParentID;
+      m_parentType = inParentType;
       m_fullType = inFullType;
       m_data = inData;
       m_owner = inOwner;
     }
 
     /** The id of the entry/entries changed. */
-    protected @Nonnull String m_id;
+    protected @Nonnull String m_name;
 
     /** The type of entry/entries changed. */
     protected @Nonnull AbstractType<? extends AbstractEntry> m_type;
+
+    /** The parent id of the entry/entries changed. */
+    protected @Nullable String m_parentID;
+
+    /** The parent type of entry/entries changed. */
+    protected @Nullable AbstractType<? extends AbstractEntry> m_parentType;
 
     /** The data where the entry/entries is stored. */
     protected @Nonnull DMAData m_data;
 
     /** The owner of the entry/entries changed. */
     protected @Nullable AbstractEntry m_owner;
-
-    /** The name of the entry changed. */
-    protected @Nullable String m_name;
 
     /** The file for the entry/entries. */
     protected @Nullable String m_file;
@@ -138,7 +146,10 @@ public class SaveActionServlet extends ActionServlet
      */
     public @Nonnull String toString()
     {
-      return m_name + " [" + m_id + "]/" + m_type + " ("
+      String parent = "";
+      if(m_parentID != null || m_parentType != null)
+        parent = " [" + m_parentID + "/" + m_parentType + "]";
+      return m_name + "/" + m_type + parent + " ("
         + (m_owner == null ? "no owner" : m_owner.getName())
         + "/" + m_file + (m_multiple ? ", single" : ", multiple") + "):"
         + m_values;
@@ -158,12 +169,7 @@ public class SaveActionServlet extends ActionServlet
       else if("create".equals(inKey))
         m_create = true;
       else
-      {
-        if("name".equals(inKey))
-          m_name = inValue;
-
         m_values.put(inKey, inValue);
-      }
 
       if(inKey.indexOf("/") >= 0)
         m_multiple = true;
@@ -190,7 +196,11 @@ public class SaveActionServlet extends ActionServlet
       }
       else
       {
-        AbstractEntry entry = m_data.getEntry(m_id, m_type);
+        AbstractEntry entry;
+        if(m_parentID != null && m_parentType != null)
+          entry = m_data.getEntry(m_name, m_type, m_parentID, m_parentType);
+        else
+          entry = m_data.getEntry(m_name, m_type);
 
         if(entry == null && m_create)
         {
@@ -277,7 +287,7 @@ public class SaveActionServlet extends ActionServlet
           if(!entry.canEdit(keyValue.getKey(), inRequest.getUser()))
           {
             String error = "not allowed to edit " + keyValue.getKey() + " in "
-              + change.m_type + " " + entry.getID();
+              + change.m_type + " " + entry.getName();
             Log.warning(error);
             errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
             continue;
@@ -287,11 +297,11 @@ public class SaveActionServlet extends ActionServlet
           if(rest != null)
           {
             Log.warning("Could not fully parse " + keyValue.getKey()
-                        + " value for " + change.m_type + " " + change.m_id
+                        + " value for " + change.m_type + " " + change.m_name
                         + ": '" + rest + "'");
             errors.add("edit.unparsed("
                        + Encodings.toJSString(change.m_fullType) + ", "
-                       + Encodings.toJSString(change.m_id) + ", "
+                       + Encodings.toJSString(change.m_name) + ", "
                        + Encodings.toJSString(keyValue.getKey()) + ", "
                        + Encodings.toJSString(rest) + ");");
           }
@@ -360,12 +370,26 @@ public class SaveActionServlet extends ActionServlet
         continue;
 
       String fullType = parts[0];
-      String typeName = Strings.getPattern(fullType, "/([^/]+)$");
+      String []types =
+        Strings.getPatterns(fullType, "/(?:([^/]+)/([^/]+)/)?([^/]+)$");
+
+      String typeName = null;
+      String parentID = null;
+      AbstractType<? extends AbstractEntry> parentType = null;
+
+      if(types.length > 0)
+      {
+        typeName = types[2];
+        parentID = types[1];
+        if(types[0] != null)
+          parentType = AbstractType.getLinked(types[0]);
+      }
+
       AbstractType<? extends AbstractEntry> type = null;
       if(typeName != null)
-        type = AbstractType.get(typeName);
+        type = AbstractType.getLinked(typeName);
       else
-        type = AbstractType.get(fullType);
+        type = AbstractType.getLinked(fullType);
 
       String id = parts[1];
       String key = parts[2];
@@ -381,7 +405,7 @@ public class SaveActionServlet extends ActionServlet
       Changes change = changes.get(id + ":" + fullType);
       if(change == null)
       {
-        change = new Changes(id, type, fullType,
+        change = new Changes(id, type, parentID, parentType, fullType,
                              getData(inRequest, fullType, m_data),
                              inRequest.getUser());
         changes.put(id + ":" + fullType, change);
@@ -683,17 +707,17 @@ public class SaveActionServlet extends ActionServlet
       Collection<Changes> changes = servlet.preprocess(request, params, errors);
 
       java.util.Iterator<Changes> i = changes.iterator();
-      checkChanges(i.next(), "my-id", "name guru", null, "something/base entry",
+      checkChanges(i.next(), "my-id", null, "something/base entry",
                    data, user, "name", "name guru");
-      checkChanges(i.next(), "id", "id", "file", "/user/me/base entry", null,
+      checkChanges(i.next(), "id", "file", "/user/me/base entry", null,
                    user, "key", "value", "key2", "value2");
-      checkChanges(i.next(), "id2", "guru2", "file", "/base entry", data, user,
+      checkChanges(i.next(), "id2", "file", "/base entry", data, user,
                    "name", "guru2", "worlds", "wolrd");
-      checkChanges(i.next(), "id", "guru", null, "/base entry", data, user,
+      checkChanges(i.next(), "id", null, "/base entry", data, user,
                    "name", "guru", "description", "\"text\"");
-      checkChanges(i.next(), "*/Something", "*/Something", null, "/base entry",
+      checkChanges(i.next(), "*/Something", null, "/base entry",
                    data, user, "key", "value");
-      checkChanges(i.next(), "*/Person", "*/Person", null, "/base entry",
+      checkChanges(i.next(), "*/Person", null, "/base entry",
                    data, user, "key", "value");
       assertFalse(i.hasNext());
 
@@ -703,7 +727,6 @@ public class SaveActionServlet extends ActionServlet
     /** Check assertions for changes.
      *
      * @param inChanges   the changes to check
-     * @param inID        the expected id of the entry changed
      * @param inName      the expected name of the entry changed
      * @param inFile      the expected file for the entry changed
      * @param inFullType  the expected full type for the entry changed
@@ -712,11 +735,10 @@ public class SaveActionServlet extends ActionServlet
      * @param inKeyValues the expected key value pairs for the entry changed
      *
      */
-    private void checkChanges(Changes inChanges, String inID, String inName,
+    private void checkChanges(Changes inChanges, String inName,
                               String inFile, String inFullType, DMAData inData,
                               AbstractEntry inOwner, String ... inKeyValues)
     {
-      assertEquals("id", inID, inChanges.m_id);
       assertEquals("name", inName, inChanges.m_name);
       assertEquals("file", inFile, inChanges.m_file);
       assertEquals("full type", inFullType, inChanges.m_fullType);
