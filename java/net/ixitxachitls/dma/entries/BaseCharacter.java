@@ -517,6 +517,7 @@ public class BaseCharacter extends BaseEntry
   public void action()
   {
     m_lastAction = m_lastAction.as(Strings.today());
+    save();
   }
 
   //........................................................................

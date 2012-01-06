@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -620,7 +621,9 @@ public final class Strings
     */
   public static @Nonnull String today()
   {
-    return new SimpleDateFormat(DATE).format(new Date());
+    SimpleDateFormat formatter = new SimpleDateFormat(DATE);
+    formatter.setTimeZone(TimeZone.getTimeZone("Europe/Zurich"));
+    return formatter.format(new Date());
   }
 
   //........................................................................
