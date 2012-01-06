@@ -448,6 +448,7 @@ public class DMADatastore implements DMAData
       if(type == null)
         type = "image/png";
 
+      System.out.println(name + "/" + type + "/" + path);
       if(type.startsWith("image/"))
         icon = m_image.getServingUrl(new BlobKey(path));
       else if("application/pdf".equals(type))

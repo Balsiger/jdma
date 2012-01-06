@@ -127,6 +127,9 @@ public final class Exporter
       new CommandLineParser
       (new CommandLineParser.StringOption
        ("h", "host", "The host to connect to.", "localhost"),
+       new CommandLineParser.StringOption
+       ("t", "type", "The type of entries to export (or file for blobs)",
+        ""),
        new CommandLineParser.IntegerOption
        ("p", "port", "The port to connect to.", 8888),
        new CommandLineParser.StringOption
@@ -134,6 +137,12 @@ public final class Exporter
         "balsiger@ixitxachitls.net"));
 
     String dir = clp.parse(inArguments);
+
+    if(dir == null || dir.isEmpty())
+    {
+      System.err.println("Must have an output directory");
+      return;
+    }
 
     String password =
       new String(System.console().readPassword("password for "
@@ -150,12 +159,6 @@ public final class Exporter
     // init the dma files
     DMADatafiles data = new DMADatafiles(dir + "/dma");
 
-    // in order to actually have the proper types defined, we need to
-    // reference them...
-    // TODO: can we somehow get rid of that?
-    AbstractType<? extends AbstractEntry> dummy =
-      net.ixitxachitls.dma.entries.BaseCharacter.TYPE;
-
     try
     {
       DatastoreService store = DatastoreServiceFactory.getDatastoreService();
@@ -163,9 +166,14 @@ public final class Exporter
       DMADatastore dmaStore = new DMADatastore();
       Log.important("reading entities from datastore");
 
-      Query query = new Query();
+      Query query;
+      if(clp.getString("type").isEmpty())
+        query = new Query();
+      else
+        query = new Query(clp.getString("type"));
+
       for(Entity entity : store.prepare(query).asIterable
-            (FetchOptions.Builder.withChunkSize(100)))
+            (FetchOptions.Builder.withChunkSize(1000)))
       {
         // ignore internal entities
         if(entity.getKind().startsWith("__"))

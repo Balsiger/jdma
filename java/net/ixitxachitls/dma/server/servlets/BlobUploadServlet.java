@@ -173,7 +173,6 @@ public class BlobUploadServlet extends BaseServlet
       String file = request.getParam("filename");
       String name = request.getParam("name");
       String filename = name;
-      System.out.println(file + " : " + name + " : " + filename);
       if(file != null && !"main".equals(name))
         filename = Files.file(file);
 

@@ -1,0 +1,5 @@
+java net.ixitxachitls.dma.server.Exporter -t "base character" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-01-06
+java net.ixitxachitls.dma.server.Exporter -t "base product" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-01-06
+java net.ixitxachitls.dma.server.Exporter -t "product" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-01-06
+java net.ixitxachitls.dma.server.Exporter -t "file" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-01-06
+

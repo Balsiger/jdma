@@ -105,15 +105,15 @@ public final class ServerUtils
   {
     Multimap<String, String> values = HashMultimap.create();
 
-    // read parameters from the parameter map
-    for(Map.Entry<String, String []> entry
-          : inRequest.getParameterMap().entrySet())
-      values.putAll(entry.getKey(), Arrays.asList(entry.getValue()));
-
     // don't parse post requests to special urls
     if(values.isEmpty() && !inRequest.getServletPath().startsWith("/__")
        && !inRequest.getServletPath().startsWith("/_ah/"))
     {
+      // read parameters from the parameter map
+      for(Map.Entry<String, String []> entry
+            : inRequest.getParameterMap().entrySet())
+        values.putAll(entry.getKey(), Arrays.asList(entry.getValue()));
+
       BufferedReader reader = null;
       try
       {

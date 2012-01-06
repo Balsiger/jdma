@@ -320,7 +320,11 @@
 
   <target name="gae" depends="compile"
       description="Starts the development server.">
-    <dev_appserver war="${war.dir}" port="8888" />
+    <dev_appserver war="${war.dir}" port="8888">
+      <options>
+        <arg value="--jvm_flag=-Xmx512m"/>
+      </options>
+    </dev_appserver>
   </target>
 
   <target name="gae-update" depends="compile"
