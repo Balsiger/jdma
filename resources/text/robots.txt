@@ -1,5 +1,7 @@
 User-agent: *
 Disallow: /products/
+Disallow: /user/
+Disallow: /users/
 Disallow: *.dma
 Disallow: *.pdf
 Crawl-delay: 300
