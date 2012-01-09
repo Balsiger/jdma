@@ -158,23 +158,23 @@ public abstract class DMAServlet extends BaseServlet
       if(userID != null)
         user = inBaseData.getEntry(userID, BaseCharacter.TYPE);
 
-    if(user != null)
-      return user.getProductData();
+    // if(user != null)
+    //   return user.getProductData();
 
     // check if we need some campaign specific data
-    String campaignID =
-      Strings.getPattern(inPath,
-                         "^(?:/_entry|/_entries|)/(?:campaign|base campaign)/"
-                         + "([^/]*)/.+");
+    // String campaignID =
+    //   Strings.getPattern(inPath,
+    //                      "^(?:/_entry|/_entries|)/(?:campaign|base campaign)/"
+    //                      + "([^/]*)/.+");
 
-    if(campaignID != null)
-    {
-      BaseCampaign campaign =
-        inBaseData.getEntry(campaignID, BaseCampaign.TYPE);
+    // if(campaignID != null)
+    // {
+    //   BaseCampaign campaign =
+    //     inBaseData.getEntry(campaignID, BaseCampaign.TYPE);
 
-      if(campaign != null)
-        return campaign.getCampaignData();
-    }
+    //   if(campaign != null)
+    //     return campaign.getCampaignData();
+    // }
 
     return inBaseData;
   }

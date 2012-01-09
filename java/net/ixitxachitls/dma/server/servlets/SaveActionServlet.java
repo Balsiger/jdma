@@ -685,7 +685,6 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
-      EasyMock.expect(user.getProductData()).andStubReturn(null);
 
       EasyMock.replay(data, request, user);
 

@@ -841,13 +841,6 @@ public class DMADatafiles implements DMAData
 
           result = false;
         }
-
-        if(entry instanceof BaseCharacter)
-          ((DMADatafiles)((BaseCharacter)entry).getProductData())
-          .checkNames("Products/");
-        else if(entry instanceof BaseCampaign)
-          ((DMADatafiles)((BaseCampaign)entry).getCampaignData())
-          .checkNames("Campaigns/");
       }
 
     return result;

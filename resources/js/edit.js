@@ -967,6 +967,14 @@ edit.List.prototype._createLine = function(inValue, inPrevious)
   click(this._remove.bind(this, entry))
   ;
 
+  // add a special key-down handler for creating a new list entry.
+  line.keyup({ list: this, entry: entry } , function(event) {
+      if(event.which == 13 && event.shiftKey)
+      {
+        event.data.list._add(event.data.entry);
+      }
+    });
+
   return line;
 };
 
@@ -989,7 +997,7 @@ edit.List.prototype._remove = function(inEntry)
 edit.List.prototype._add = function(inEntry)
 {
   this._createLine("", inEntry).insertAfter(inEntry._line).
-    find('input').focus();
+    find('input')[0].focus();
 };
 
 /**
@@ -1353,7 +1361,8 @@ edit.Image.prototype.edit = function(inEditable, inTarget, inNoRelated) {
   */
 edit.Image.prototype._createElement = function()
 {
-  return $('<iframe src="/fileupload?id=' + this.properties.id +
+  return $('<iframe src="/fileupload?id=' +
+           encodeURIComponent(this.properties.id) +
            '&type=' + this.properties.entry + '&name=main&form"' +
            'class="upload" id="upload-main"></iframe>');
 };

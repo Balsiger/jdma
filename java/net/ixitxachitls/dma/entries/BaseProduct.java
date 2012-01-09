@@ -98,6 +98,7 @@ public class BaseProduct extends BaseEntry
         "WTC",
         "TSR",
         "Paizo",
+        "Armorcast",
         "Celtos",
         "Cloud Kingdom Games",
         "Dark Platypus Studio",

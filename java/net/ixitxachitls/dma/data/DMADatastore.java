@@ -360,6 +360,46 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //---------------------------- getRecentEntries --------------------------
+
+  /**
+   * Get all the ids of a specific type, sorted and navigable.
+   *
+   * @param       <T>    the real type of entries to get
+   * @param       inType the type of entries to get ids for
+   *
+   * @return      all the ids
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast cache value
+  public @Nonnull  <T extends AbstractEntry> List<T>
+    getRecentEntries(@Nonnull AbstractType<T> inType,
+                     @Nonnull String inParentID,
+                     @Nonnull AbstractType<? extends AbstractEntry>
+                     inParentType)
+  {
+    Log.debug("getting recent entries for " + inType + " with parent "
+              + inParentID + "/" + inParentType);
+    List<Entity> entities = (List<Entity>)
+      s_cache.get("recent-" + inType.toString());
+
+    if(entities == null)
+    {
+      Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
+      System.out.println("parent key: " + parent);
+      Query query = new Query(inType.toString(), parent);
+      query.addSort("change", Query.SortDirection.DESCENDING);
+      FetchOptions options =
+        FetchOptions.Builder.withLimit(BaseCharacter.MAX_PRODUCTS + 1);
+      entities = m_store.prepare(query).asList(options);
+
+      s_cache.put("recent-" + inType.toString(), entities, s_expiration);
+    }
+
+    return (List<T>)convert(entities);
+  }
+
+  //........................................................................
   //----------------------------- getBaseData ------------------------------
 
   /**
@@ -448,7 +488,6 @@ public class DMADatastore implements DMAData
       if(type == null)
         type = "image/png";
 
-      System.out.println(name + "/" + type + "/" + path);
       if(type.startsWith("image/"))
         icon = m_image.getServingUrl(new BlobKey(path));
       else if("application/pdf".equals(type))

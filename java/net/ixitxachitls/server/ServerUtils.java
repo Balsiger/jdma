@@ -106,7 +106,7 @@ public final class ServerUtils
     Multimap<String, String> values = HashMultimap.create();
 
     // don't parse post requests to special urls
-    if(values.isEmpty() && !inRequest.getServletPath().startsWith("/__")
+    if(!inRequest.getServletPath().startsWith("/__")
        && !inRequest.getServletPath().startsWith("/_ah/"))
     {
       // read parameters from the parameter map
@@ -114,66 +114,70 @@ public final class ServerUtils
             : inRequest.getParameterMap().entrySet())
         values.putAll(entry.getKey(), Arrays.asList(entry.getValue()));
 
-      BufferedReader reader = null;
-      try
+      if(values.isEmpty())
       {
-        reader = inRequest.getReader();
-
-        // parse all the key values pairs
-        for(String line = reader.readLine(); line != null;
-            line = reader.readLine())
+        BufferedReader reader = null;
+        try
         {
-          // ignore multipart boundary or empty lines
-          if(line.startsWith("--") || line.isEmpty())
-            continue;
+          reader = inRequest.getReader();
 
-          // specially parse form data
-          String []form =
-            Strings.getPatterns(line,
-                                "(?i)"
-                                + "Content-Disposition: form-data; "
-                                + "name=\"(.*?)\"(?:;\\s+filename=\"(.*?)\")?");
-
-          if(form != null && form.length > 0)
+          // parse all the key values pairs
+          for(String line = reader.readLine(); line != null;
+              line = reader.readLine())
           {
-            if(form.length > 1 && form[1] != null)
+            // ignore multipart boundary or empty lines
+            if(line.startsWith("--") || line.isEmpty())
+              continue;
+
+            // specially parse form data
+            String []form =
+              Strings.getPatterns(line,
+                                  "(?i)"
+                                  + "Content-Disposition: form-data; "
+                                  + "name=\"(.*?)\"(?:;\\s+"
+                                  + "filename=\"(.*?)\")?");
+
+            if(form != null && form.length > 0)
             {
-              values.put(form[0], form[1]);
+              if(form.length > 1 && form[1] != null)
+              {
+                values.put(form[0], form[1]);
+                continue;
+              }
+
+              for(line = reader.readLine(); line != null && line.isEmpty();
+                  line = reader.readLine())
+                ;
+
+              if(line != null)
+                values.put(form[0], line);
+
               continue;
             }
 
-            for(line = reader.readLine(); line != null && line.isEmpty();
-                line = reader.readLine())
-              ;
+            String []matches = line.split("=", 2);
 
-            if(line != null)
-              values.put(form[0], line);
-
-            continue;
+            if(matches.length != 2)
+              Log.warning("invalid line of post request ignored: " + line);
+            else
+              values.put(matches[0], URLDecoder.decode(matches[1], "utf-8"));
           }
-
-          String []matches = line.split("=", 2);
-
-          if(matches.length != 2)
-            Log.warning("invalid line of post request ignored: " + line);
-          else
-            values.put(matches[0], URLDecoder.decode(matches[1], "utf-8"));
-        }
-      }
-      catch(java.io.IOException e)
-      {
-        Log.warning("Could not extract post parameters!");
-      }
-      finally
-      {
-        try
-        {
-          if(reader != null)
-            reader.close();
         }
         catch(java.io.IOException e)
         {
-          Log.warning("Could not close stream of post parameters");
+          Log.warning("Could not extract post parameters!");
+        }
+        finally
+        {
+          try
+          {
+            if(reader != null)
+              reader.close();
+          }
+          catch(java.io.IOException e)
+          {
+            Log.warning("Could not close stream of post parameters");
+          }
         }
       }
     }

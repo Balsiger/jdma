@@ -213,6 +213,24 @@ public interface DMAData
     List<T> getRecentEntries(@Nonnull AbstractType<T> inType);
 
   //........................................................................
+  //--------------------------- getRecentEntries ---------------------------
+
+  /**
+   * Get the recent ids of a specific type.
+   *
+   * @param       <T>    the real type of the entries to get
+   * @param       inType the type of entries to get ids for
+   *
+   * @return      the recent ids
+   *
+   */
+  public abstract @Nonnull <T extends AbstractEntry>
+    List<T> getRecentEntries(@Nonnull AbstractType<T> inType,
+                             @Nonnull String inID,
+                             @Nonnull AbstractType<? extends AbstractEntry>
+                             inParentType);
+
+  //........................................................................
   //------------------------------- getEntry -------------------------------
 
   /**

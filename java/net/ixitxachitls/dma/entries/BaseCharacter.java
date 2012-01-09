@@ -350,42 +350,6 @@ public class BaseCharacter extends BaseEntry
   }
 
   //........................................................................
-  //----------------------------- getProducts ------------------------------
-
-  /**
-    *
-    * Get all the products of this character.
-    *
-    * @return      all the products
-    *
-    */
-  public List<Product> getProducts()
-  {
-    // TODO: this is very inefficient!
-    return getProductData().getEntries(Product.TYPE, 0, 0);
-  }
-
-  //........................................................................
-  //--------------------------- getProductData -----------------------------
-
-  /**
-    *
-    * Get all the products of this character.
-    *
-    * @return      all the product information of the user
-    *
-    * @undefined   never
-    *
-    */
-  public DMAData getProductData()
-  {
-    if(m_productData == null)
-      m_productData = m_data.getUserData(this);
-
-    return m_productData;
-  }
-
-  //........................................................................
   //------------------------------- getEMail -------------------------------
 
   /**
@@ -554,7 +518,9 @@ public class BaseCharacter extends BaseEntry
   {
     if("products".equals(inKey))
     {
-      List<Product> products = m_data.getRecentEntries(Product.TYPE);
+      List<Product> products =
+        m_data.getRecentEntries(Product.TYPE, this.getName(),
+                                BaseCharacter.TYPE);
 
       List<Object> commands = new ArrayList<Object>();
       boolean more = products.size() > MAX_PRODUCTS;
@@ -595,38 +561,6 @@ public class BaseCharacter extends BaseEntry
   protected boolean readEntry(@Nonnull ParseReader inReader)
   {
     return super.readEntry(inReader);
-  }
-
-  //........................................................................
-  //---------------------------- removeProduct -----------------------------
-
-  /**
-   * Remove the given product from the list of a user's products.
-   *
-   * @param       inID the id of the product to remove
-   *
-   * @return      true if removed, false if not
-   *
-   */
-  public boolean removeProduct(@Nonnull String inID)
-  {
-    return false;
-    //return getProductData().removeEntry(inID, Product.TYPE);
-  }
-
-  //........................................................................
-  //------------------------------ addProduct ------------------------------
-
-  /**
-   * Add the given product to this owner.
-   *
-   * @param       inProduct the product to add
-   *
-   */
-  public void addProduct(@Nonnull Product inProduct)
-  {
-    inProduct.setOwner(this);
-    getProductData().update(inProduct);
   }
 
   //........................................................................

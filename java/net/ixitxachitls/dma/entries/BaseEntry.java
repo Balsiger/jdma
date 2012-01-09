@@ -754,15 +754,6 @@ public class BaseEntry extends AbstractEntry
   @Override
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
-    if("desc".equals(inKey))
-      return new FormattedValue
-        (new Divider("desc",
-                     new Command(computeValue("description", inDM)
-                                 .format(this, inDM, true),
-                                 computeValue("short description", inDM)
-                                 .format(this, inDM, true))),
-         null, "desc", false, false, false, false, "desc", "");
-
     if("short description".equals(inKey))
       return new FormattedValue
         (new Divider("short-description",
