@@ -381,19 +381,19 @@ public class DMADatastore implements DMAData
     Log.debug("getting recent entries for " + inType + " with parent "
               + inParentID + "/" + inParentType);
     List<Entity> entities = (List<Entity>)
-      s_cache.get("recent-" + inType.toString());
+      s_cache.get("recent-" + inParentID + "-" + inType.toString());
 
     if(entities == null)
     {
       Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
-      System.out.println("parent key: " + parent);
       Query query = new Query(inType.toString(), parent);
       query.addSort("change", Query.SortDirection.DESCENDING);
       FetchOptions options =
         FetchOptions.Builder.withLimit(BaseCharacter.MAX_PRODUCTS + 1);
       entities = m_store.prepare(query).asList(options);
 
-      s_cache.put("recent-" + inType.toString(), entities, s_expiration);
+      s_cache.put("recent-" + inParentID + "-" + inType.toString(), entities,
+                  s_expiration);
     }
 
     return (List<T>)convert(entities);

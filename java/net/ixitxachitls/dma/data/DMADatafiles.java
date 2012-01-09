@@ -473,6 +473,28 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //---------------------------- getRecentEntries --------------------------
+
+  /**
+   * Get all the ids of a specific type, sorted and navigable.
+   *
+   * @param       <T>    the real type of entries to get
+   * @param       inType the type of entries to get ids for
+   *
+   * @return      all the ids
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast cache value
+  public @Nonnull  <T extends AbstractEntry> List<T>
+    getRecentEntries(@Nonnull AbstractType<T> inType,
+                     @Nonnull String inParentID,
+                     @Nonnull AbstractType<? extends AbstractEntry>
+                     inParentType)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
   //------------------------------ getOwners -------------------------------
 
   /**
