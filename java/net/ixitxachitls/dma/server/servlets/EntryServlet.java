@@ -392,7 +392,6 @@ public class EntryServlet extends PageServlet
 
     int current = ids.indexOf(entry.getName());
     int last = ids.size() - 1;
-    String base = "/" + type.getLink() + "/";
 
     Command navigation =
       new Divider("entry-nav",
@@ -400,21 +399,21 @@ public class EntryServlet extends PageServlet
                   (new Link(new Divider("first sprite"
                                         + (current <= 0
                                            ? " disabled" : ""), ""),
-                            current <= 0 ? "" : base + ids.get(0)),
+                            current <= 0 ? "" : ids.get(0)),
                    new Link(new Divider("previous sprite"
                                         + (current <= 0
                                            ? " disabled" : ""), ""),
-                            current <= 0 ? "" : base + ids.get(current - 1)),
+                            current <= 0 ? "" : ids.get(current - 1)),
                    new Link(new Divider("index sprite", ""),
                             "/" + entry.getType().getMultipleLink()),
                    new Link(new Divider("next sprite"
                                         + (current >= last
                                            ? " disabled" : ""), ""),
-                            current >= last ? "" : base + ids.get(current + 1)),
+                            current >= last ? "" : ids.get(current + 1)),
                    new Link(new Divider("last sprite"
                                         + (current >= last
                                            ? " disabled" : ""), ""),
-                            current >= last ? "" : base + ids.get(last)),
+                            current >= last ? "" : ids.get(last)),
                    new Link(new Divider("add sprite", ""),
                             "javascript:createEntry()"),
                    new Link(new Divider("remove sprite", ""),
