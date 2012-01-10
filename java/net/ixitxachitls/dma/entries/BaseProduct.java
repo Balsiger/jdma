@@ -761,7 +761,7 @@ public class BaseProduct extends BaseEntry
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base character. */
+  /** The printer for printing the whole base product. */
   public static final Print s_pagePrint =
     new Print("$image "
               + "${as pdf} ${as text} ${as dma} "

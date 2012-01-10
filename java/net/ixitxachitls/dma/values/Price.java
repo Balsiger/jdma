@@ -95,7 +95,7 @@ public class Price extends Decimal<Price>
   //-------------------------------- create --------------------------------
 
   /**
-   * Create a new list with the same type information as this one, but one
+   * Create a new price with the same type information as this one, but one
    * that is still undefined.
    *
    * @return      a similar list, but without any contents

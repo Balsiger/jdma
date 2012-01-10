@@ -202,7 +202,7 @@
     <module name="RegexpHeader">
       <property
          name="header"
-         value="^/\*+$\n^ \* Copyright \(c\) (\d\d\d\d-)?2011 .*$\n^ \* All rights reserved$"/>
+         value="^/\*+$\n^ \* Copyright \(c\) (\d\d\d\d-)?201(1|2) .*$\n^ \* All rights reserved$"/>
     </module>
 
     <module name="SuppressionCommentFilter"/>
