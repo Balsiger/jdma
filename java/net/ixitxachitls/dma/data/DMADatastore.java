@@ -365,8 +365,10 @@ public class DMADatastore implements DMAData
   /**
    * Get all the ids of a specific type, sorted and navigable.
    *
-   * @param       <T>    the real type of entries to get
-   * @param       inType the type of entries to get ids for
+   * @param       <T>          the real type of entries to get
+   * @param       inType       the type of entries to get ids for
+   * @param       inParentID   the id of the parent for recent entries
+   * @param       inParentType the type of the parent entries
    *
    * @return      all the ids
    *
@@ -397,37 +399,6 @@ public class DMADatastore implements DMAData
     }
 
     return (List<T>)convert(entities);
-  }
-
-  //........................................................................
-  //----------------------------- getBaseData ------------------------------
-
-  /**
-   * Get the base data for entries.
-   *
-   * @return      the repository with all the base data
-   *
-   */
-  public @Nonnull DMAData getBaseData()
-  {
-    return this;
-  }
-
-  //........................................................................
-  //----------------------------- getUserData ------------------------------
-
-  /**
-   * Get user specific data for the given user.
-   *
-   * @param       inUser the user for whom to get the data
-   *
-   * @return      the user specific data
-   *
-   */
-  public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser)
-  {
-    // TODO: this is wrong!
-    return this;
   }
 
   //........................................................................
@@ -893,7 +864,7 @@ public class DMADatastore implements DMAData
     if(inEntity == null)
       return null;
 
-    T entry = inType.create(inID, this);
+    T entry = inType.create(inID);
     if(entry == null)
     {
       Log.warning("cannot convert " + inType + " entity with id " + inID + ": "

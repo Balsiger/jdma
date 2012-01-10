@@ -29,7 +29,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
@@ -42,7 +41,6 @@ import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -129,12 +127,10 @@ public class BaseEntry extends AbstractEntry
   /**
    * The default constructor, with undefined values.
    *
-   * @param       inData all the avaialble data
-   *
    */
-  protected BaseEntry(@Nonnull DMAData inData)
+  protected BaseEntry()
   {
-    super(TYPE, inData);
+    super(TYPE);
   }
 
   //........................................................................
@@ -144,13 +140,11 @@ public class BaseEntry extends AbstractEntry
    * The default constructor, with undefined values.
    *
    * @param   inType the type of the entry
-   * @param   inData all the avaialble data
    *
    */
-  protected BaseEntry(@Nonnull AbstractType<? extends BaseEntry> inType,
-                      @Nonnull DMAData inData)
+  protected BaseEntry(@Nonnull AbstractType<? extends BaseEntry> inType)
   {
-    super(inType, inData);
+    super(inType);
   }
 
   //........................................................................
@@ -160,12 +154,11 @@ public class BaseEntry extends AbstractEntry
    * The complete constructor.
    *
    * @param       inName     the name of the entry
-   * @param       inData all the avaialble data
    *
    */
-  public BaseEntry(@Nonnull String inName, @Nonnull DMAData inData)
+  public BaseEntry(@Nonnull String inName)
   {
-    this(inName, TYPE, inData);
+    this(inName, TYPE);
   }
 
   //........................................................................
@@ -176,14 +169,12 @@ public class BaseEntry extends AbstractEntry
    *
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
-   * @param       inData all the avaialble data
    *
    */
   protected BaseEntry(@Nonnull String inName,
-                      @Nonnull AbstractType<? extends BaseEntry> inType,
-                      @Nonnull DMAData inData)
+                      @Nonnull AbstractType<? extends BaseEntry> inType)
   {
-    super(inName, inType, inData);
+    super(inName, inType);
   }
 
   //........................................................................
@@ -1190,9 +1181,7 @@ public class BaseEntry extends AbstractEntry
     {
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
-
-      BaseEntry entry = (BaseEntry)BaseEntry.read
-        (reader, new net.ixitxachitls.dma.data.DMAData.Test.Data());
+      BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
 
       //System.out.println(entry);
       m_logger.verify();

@@ -447,10 +447,8 @@ public abstract class GroupedIndex extends Index
       HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
 
       index.write(writer, new DMAData.Test.Data
-                  (new net.ixitxachitls.dma.entries.BaseCharacter
-                   ("first", new DMAData.Test.Data()),
-                   new net.ixitxachitls.dma.entries.BaseCharacter
-                   ("second", new DMAData.Test.Data())),
+                  (new net.ixitxachitls.dma.entries.BaseCharacter("first"),
+                   new net.ixitxachitls.dma.entries.BaseCharacter("second")),
                   "index-name", "", 10, 0);
       writer.close();
 
@@ -524,10 +522,8 @@ public abstract class GroupedIndex extends Index
 
       index.write(writer,
                   new DMAData.Test.Data
-                  (new net.ixitxachitls.dma.entries.BaseCharacter
-                   ("first", new DMAData.Test.Data()),
-                   new net.ixitxachitls.dma.entries.BaseCharacter
-                   ("second", new DMAData.Test.Data())),
+                  (new net.ixitxachitls.dma.entries.BaseCharacter("first"),
+                   new net.ixitxachitls.dma.entries.BaseCharacter("second")),
                   "index-name", "first1", 10, 0);
       writer.close();
 

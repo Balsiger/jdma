@@ -34,7 +34,6 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.BaseCharacter;
 
 //..........................................................................
 
@@ -220,13 +219,15 @@ public interface DMAData
    *
    * @param       <T>    the real type of the entries to get
    * @param       inType the type of entries to get ids for
+   * @param       inParentID   the id of the parent for recent entries
+   * @param       inParentType the type of the parent entries
    *
    * @return      the recent ids
    *
    */
   public abstract @Nonnull <T extends AbstractEntry>
     List<T> getRecentEntries(@Nonnull AbstractType<T> inType,
-                             @Nonnull String inID,
+                             @Nonnull String inParentID,
                              @Nonnull AbstractType<? extends AbstractEntry>
                              inParentType);
 
@@ -271,30 +272,6 @@ public interface DMAData
 
   //........................................................................
 
-  //----------------------------- getBaseData ------------------------------
-
-  /**
-   * Get the base data for entries.
-   *
-   * @return      the repository with all the base data
-   *
-   */
-  public @Nonnull DMAData getBaseData();
-
-  //........................................................................
-  //----------------------------- getUserData ------------------------------
-
-  /**
-   * Get user specific data for the given user.
-   *
-   * @param       inUser the user for whom to get the data
-   *
-   * @return      the user specific data
-   *
-   */
-  public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser);
-
-  //........................................................................
   //--------------------------- getIndexEntries ----------------------------
 
   /**

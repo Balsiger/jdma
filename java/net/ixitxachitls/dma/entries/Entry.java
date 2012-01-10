@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries;
 
 import javax.annotation.Nonnull;
 
-import net.ixitxachitls.dma.data.DMAData;
 // import net.ixitxachitls.dma.data.Storage;
 // import net.ixitxachitls.dma.entries.actions.Action;
 // import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
@@ -83,15 +82,13 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
    * @param       inName     the name of the entry
    * @param       inType     the type of the entry
    * @param       inBaseType the type of the base entry to this one
-   * @param       inData all the avaialble data
    *
    */
   protected Entry(@Nonnull String inName,
                   @Nonnull Type<? extends Entry> inType,
-                  @Nonnull BaseType<? extends BaseEntry> inBaseType,
-                  @Nonnull DMAData inData)
+                  @Nonnull BaseType<? extends BaseEntry> inBaseType)
   {
-    this(inName, inType, inBaseType, inData, new BaseEntry[0]);
+    this(inName, inType, inBaseType, new BaseEntry[0]);
   }
 
   //........................................................................
@@ -102,14 +99,12 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
    *
    * @param       inType     the type of the entry
    * @param       inBaseType the type of the base entry to this one
-   * @param       inData all the avaialble data
    *
    */
   protected Entry(@Nonnull Type<? extends Entry> inType,
-                  @Nonnull BaseType<? extends BaseEntry> inBaseType,
-                  @Nonnull DMAData inData)
+                  @Nonnull BaseType<? extends BaseEntry> inBaseType)
   {
-    super(inType, inData);
+    super(inType);
 
     m_baseType = inBaseType;
   }
@@ -156,15 +151,14 @@ public class Entry<B extends BaseEntry> extends AbstractEntry
    * @param       inType     the type of the entry
    * @param       inBaseType the type of the base entry to this one
    * @param       inBases    the base entries to use
-   * @param       inData     all the data available
    *
    */
   protected Entry(@Nonnull String inName,
                   @Nonnull Type<? extends Entry> inType,
                   @Nonnull BaseType<? extends BaseEntry> inBaseType,
-                  @Nonnull DMAData inData, @Nonnull BaseEntry ... inBases)
+                  @Nonnull BaseEntry ... inBases)
   {
-    super(inName, inType, inData);
+    super(inName, inType);
     // TODO: do I really need to support bases here?
     //super(inName, inType, inData, inBases);
 

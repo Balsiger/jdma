@@ -160,6 +160,7 @@ public class LoginServlet extends ActionServlet
     @org.junit.Before
     public void setUp()
     {
+      net.ixitxachitls.dma.data.DMADataFactory.clearBase();
       net.ixitxachitls.util.configuration
         .Config.set("web.data.datastore", false);
       net.ixitxachitls.util.configuration
@@ -170,7 +171,7 @@ public class LoginServlet extends ActionServlet
     @org.junit.After
     public void tearDown()
     {
-      DMADataFactory.clearBase();
+      net.ixitxachitls.dma.data.DMADataFactory.clearBase();
     }
 
     //----- noData ---------------------------------------------------------
@@ -267,7 +268,6 @@ public class LoginServlet extends ActionServlet
 
       EasyMock.expect(data.getEntry("somebody", BaseCharacter.TYPE))
         .andStubReturn(character);
-
 
       EasyMock.expect(request.getMethod()).andReturn("POST");
       EasyMock.expect(request.getQueryString())

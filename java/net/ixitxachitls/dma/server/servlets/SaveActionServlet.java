@@ -208,7 +208,7 @@ public class SaveActionServlet extends ActionServlet
           Log.event(m_owner.getName(), "create",
                     "creating " + m_type + " entry '" + m_name + "'");
 
-          entry = m_type.create(m_name, m_data);
+          entry = m_type.create(m_name);
           if(entry != null)
             entry.setOwner(m_owner);
         }
@@ -406,8 +406,7 @@ public class SaveActionServlet extends ActionServlet
       if(change == null)
       {
         change = new Changes(id, type, parentID, parentType, fullType,
-                             getData(inRequest, fullType, m_data),
-                             inRequest.getUser());
+                             m_data, inRequest.getUser());
         changes.put(id + ":" + fullType, change);
       }
 
@@ -433,6 +432,7 @@ public class SaveActionServlet extends ActionServlet
     @org.junit.Before
     public void setUp()
     {
+      net.ixitxachitls.dma.data.DMADataFactory.clearBase();
       net.ixitxachitls.util.configuration
         .Config.set("web.data.datastore", false);
       net.ixitxachitls.util.configuration
@@ -454,7 +454,7 @@ public class SaveActionServlet extends ActionServlet
     {
       DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", data);
+        new net.ixitxachitls.dma.entries.BaseEntry("test");
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -498,7 +498,7 @@ public class SaveActionServlet extends ActionServlet
     {
       DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", data);
+        new net.ixitxachitls.dma.entries.BaseEntry("test");
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -544,7 +544,7 @@ public class SaveActionServlet extends ActionServlet
     {
       DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", data);
+        new net.ixitxachitls.dma.entries.BaseEntry("test");
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -590,7 +590,7 @@ public class SaveActionServlet extends ActionServlet
     {
       DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", data);
+        new net.ixitxachitls.dma.entries.BaseEntry("test");
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -631,7 +631,7 @@ public class SaveActionServlet extends ActionServlet
     {
       DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", data);
+        new net.ixitxachitls.dma.entries.BaseEntry("test");
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -708,7 +708,7 @@ public class SaveActionServlet extends ActionServlet
       java.util.Iterator<Changes> i = changes.iterator();
       checkChanges(i.next(), "my-id", null, "something/base entry",
                    data, user, "name", "name guru");
-      checkChanges(i.next(), "id", "file", "/user/me/base entry", null,
+      checkChanges(i.next(), "id", "file", "/user/me/base entry", data,
                    user, "key", "value", "key2", "value2");
       checkChanges(i.next(), "id2", "file", "/base entry", data, user,
                    "name", "guru2", "worlds", "wolrd");

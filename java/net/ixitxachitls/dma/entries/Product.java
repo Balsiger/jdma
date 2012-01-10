@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.entries;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.ixitxachitls.dma.data.DMAData;
 // import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.entries.indexes.KeyIndex;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -187,12 +186,10 @@ public class Product extends Entry<BaseProduct>
   /**
    * This is the internal, default constructor.
    *
-   * @param       inData all the available data
-   *
    */
-  protected Product(@Nonnull DMAData inData)
+  protected Product()
   {
-    super(TYPE, BASE_TYPE, inData);
+    super(TYPE, BASE_TYPE);
   }
 
   //........................................................................
@@ -202,12 +199,11 @@ public class Product extends Entry<BaseProduct>
    * This is the normal constructor.
    *
    * @param       inName the name of the base product
-   * @param       inData all the available data
    *
    */
-  public Product(@Nonnull String inName, @Nonnull DMAData inData)
+  public Product(@Nonnull String inName)
   {
-    super(inName, TYPE, BASE_TYPE, inData);
+    super(inName, TYPE, BASE_TYPE);
   }
 
   //........................................................................

@@ -31,6 +31,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 //import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 //import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -142,12 +143,10 @@ public class BaseCharacter extends BaseEntry
    * The default internal constructor to create an undefined entry to be
    * filled by reading it from a file.
    *
-   * @param   inData all the avaialble data
-   *
    */
-  protected BaseCharacter(@Nonnull DMAData inData)
+  protected BaseCharacter()
   {
-    super(TYPE, inData);
+    super(TYPE);
   }
 
   //........................................................................
@@ -158,12 +157,11 @@ public class BaseCharacter extends BaseEntry
    * name.
    *
    * @param       inName the name of the base charcter to create
-   * @param       inData all the avaialble data
    *
    */
-  public BaseCharacter(@Nonnull String inName, @Nonnull DMAData inData)
+  public BaseCharacter(@Nonnull String inName)
   {
-    super(inName, TYPE, inData);
+    super(inName, TYPE);
   }
 
   //........................................................................
@@ -599,14 +597,28 @@ public class BaseCharacter extends BaseEntry
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    /** Setup before tests. */
+    @org.junit.Before
+    public void setUp()
+    {
+      Config.set("web.data.datastore", false);
+      Config.set("web.data.datafiles", false);
+    }
+
+    /** Cleanup after tests. */
+    @org.junit.After
+    public void tearDown()
+    {
+      DMADataFactory.clearBase();
+    }
+
     //----- init -----------------------------------------------------------
 
     /** The init Test. */
     @org.junit.Test
     public void init()
     {
-      BaseCharacter character =
-        new BaseCharacter("Me", new DMAData.Test.Data());
+      BaseCharacter character = new BaseCharacter("Me");
 
       assertEquals("id", "Me", character.getName());
       assertFalse("real name", character.m_realName.isDefined());
@@ -625,8 +637,7 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void token()
     {
-      BaseCharacter character =
-        new BaseCharacter("Me", new DMAData.Test.Data());
+      BaseCharacter character = new BaseCharacter("Me");
 
       String token = character.createToken();
       String token2 = character.createToken();
@@ -650,8 +661,7 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void login()
     {
-      BaseCharacter character =
-        new BaseCharacter("Me", new DMAData.Test.Data());
+      BaseCharacter character = new BaseCharacter("Me");
       character.m_name = character.m_name.as("user");
       character.m_password = character.m_password.as("password");
 
@@ -699,8 +709,7 @@ public class BaseCharacter extends BaseEntry
         new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
                                                "test");
 
-      BaseCharacter character = (BaseCharacter)
-        BaseCharacter.read(reader, new DMAData.Test.Data());
+      BaseCharacter character = (BaseCharacter)BaseCharacter.read(reader);
 
       assertNotNull("base character should have been read", character);
       assertEquals("base character name does not match", "Me",
@@ -730,8 +739,7 @@ public class BaseCharacter extends BaseEntry
     @org.junit.Test
     public void group()
     {
-      BaseCharacter character =
-        new BaseCharacter("Me", new DMAData.Test.Data());
+      BaseCharacter character = new BaseCharacter("Me");
 
       assertTrue("guest", character.hasAccess(Group.GUEST));
       assertFalse("user", character.hasAccess(Group.USER));

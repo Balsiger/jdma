@@ -2036,7 +2036,7 @@ public abstract class ValueGroup implements Changeable
 
     /** Simple test setup. */
     @org.junit.BeforeClass
-    public static void setUp()
+    public static void setUpClass()
     {
       extractVariables(TestGroup.class);
     }

@@ -36,7 +36,6 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.logging.Log;
 
@@ -480,18 +479,15 @@ public abstract class AbstractType<T extends AbstractEntry>
   /**
    * Create a entry of the type.
    *
-   * @param       inData all the available data
-   *
    * @return      an empty, undefined entry of the type.
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nullable T create(@Nonnull DMAData inData)
+  public @Nullable T create()
   {
     try
     {
-      return (T)m_class.getDeclaredConstructor(DMAData.class)
-        .newInstance(inData);
+      return (T)m_class.newInstance();
     }
     catch(java.lang.InstantiationException e)
     {
@@ -502,21 +498,6 @@ public abstract class AbstractType<T extends AbstractEntry>
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e + " / " + e.getCause());
-    }
-    catch(java.lang.NoSuchMethodException e)
-    {
-      Log.error("cannot find data constructor for entry of type " + m_name
-                + " [" + m_class + "]: " + e + " / " + e.getCause());
-
-      return null;
-    }
-    catch(java.lang.reflect.InvocationTargetException e)
-    {
-      Log.error("cannot invoke data constructor for entry of type " + m_name
-                + " [" + m_class + "]: " + e  + " / " + e.getCause());
-      e.printStackTrace();
-
-      return null;
     }
 
     return null;
@@ -529,19 +510,17 @@ public abstract class AbstractType<T extends AbstractEntry>
    * Create a entry of the type.
    *
    * @param       inID   the id of the entry to create
-   * @param       inData all the available data
    *
    * @return      an empty, undefined entry of the type.
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nullable T create(@Nonnull String inID, @Nonnull DMAData inData)
+  public @Nullable T create(@Nonnull String inID)
   {
     try
     {
       // create the object
-      return (T)m_class.getConstructor(String.class, DMAData.class)
-        .newInstance(inID, inData);
+      return (T)m_class.getConstructor(String.class).newInstance(inID);
     }
     catch(java.lang.NoSuchMethodException e)
     {
@@ -621,11 +600,11 @@ public abstract class AbstractType<T extends AbstractEntry>
       assertEquals("multiple dir", "BaseEntrys", type.getMultipleDir());
       assertEquals("string", "base entry", type.toString());
 
-      BaseEntry entry = type.create(new DMAData.Test.Data());
+      BaseEntry entry = type.create();
       assertEquals("create", "base entry $undefined$ =\n\n.\n",
                    entry.toString());
 
-      entry = type.create("guru", new DMAData.Test.Data());
+      entry = type.create("guru");
       assertEquals("create",
                    "#----- guru\n"
                    + "\n"

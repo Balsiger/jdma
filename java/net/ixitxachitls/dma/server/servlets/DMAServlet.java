@@ -34,11 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -125,58 +122,6 @@ public abstract class DMAServlet extends BaseServlet
 
     // normal user access
     return inRequest.hasUser() && inRequest.getUser().hasAccess(m_group);
-  }
-
-  //........................................................................
-
-  //------------------------------- getData --------------------------------
-
-  /**
-   * Get the data associated with the given request.
-   *
-   * @param       inRequest  the request for the page
-   * @param       inPath     the path to the page
-   * @param       inBaseData the available base data
-   *
-   * @return      the data to use
-   *
-   */
-  public @Nullable DMAData getData(@Nonnull DMARequest inRequest,
-                                   @Nonnull String inPath,
-                                   @Nonnull DMAData inBaseData)
-  {
-    // check if we need some user specific data
-    String userID =
-      Strings.getPattern(inPath,
-                         "^(?:/_entry|/_entries|)/(?:user|base character)/"
-                         + "([^/]*)/.+");
-
-    BaseCharacter user = null;
-    if("me".equals(userID))
-      user = inRequest.getUser();
-    else
-      if(userID != null)
-        user = inBaseData.getEntry(userID, BaseCharacter.TYPE);
-
-    // if(user != null)
-    //   return user.getProductData();
-
-    // check if we need some campaign specific data
-    // String campaignID =
-    //   Strings.getPattern(inPath,
-    //                      "^(?:/_entry|/_entries|)/(?:campaign|base campaign)/"
-    //                      + "([^/]*)/.+");
-
-    // if(campaignID != null)
-    // {
-    //   BaseCampaign campaign =
-    //     inBaseData.getEntry(campaignID, BaseCampaign.TYPE);
-
-    //   if(campaign != null)
-    //     return campaign.getCampaignData();
-    // }
-
-    return inBaseData;
   }
 
   //........................................................................

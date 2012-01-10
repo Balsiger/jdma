@@ -43,6 +43,7 @@ import com.google.common.collect.Multimap;
 
 // import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -215,14 +216,12 @@ public class AbstractEntry extends ValueGroup
    * The constructor with a type.
    *
    * @param  inType  the type of the entry
-   * @param inData all the avaialble data
    *
    */
-  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType,
-                          @Nonnull DMAData inData)
+  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     m_type = inType;
-    m_data = inData;
+    m_data = DMADataFactory.getBaseData();
 
     // we have to init this here, as we need to have the type set
     m_base = new ValueList<Name>
@@ -240,14 +239,12 @@ public class AbstractEntry extends ValueGroup
    *
    * @param       inName the name of the entry
    * @param       inType the type of the entry
-   * @param       inData all the avaialble data
    *
    */
   protected AbstractEntry(@Nonnull String inName,
-                          @Nonnull AbstractType<? extends AbstractEntry> inType,
-                          @Nonnull DMAData inData)
+                          @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    this(inType, inData);
+    this(inType);
 
     setName(inName);
     addBase(inName);
@@ -260,12 +257,10 @@ public class AbstractEntry extends ValueGroup
   /**
    * Simple constructor for reading entries. This one is only used in tests.
    *
-   * @param       inData all the avaialble data
-   *
    */
-  protected AbstractEntry(@Nonnull DMAData inData)
+  protected AbstractEntry()
   {
-    this(BaseEntry.TYPE, inData);
+    this(BaseEntry.TYPE);
   }
 
   //........................................................................
@@ -2193,6 +2188,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inName the new name
    *
    */
+  @SuppressWarnings("unchecked") // cast for name
   public void setName(@Nonnull String inName)
   {
     m_name = m_name.as(inName);
@@ -2347,14 +2343,12 @@ public class AbstractEntry extends ValueGroup
    * Read an entry from the reader.
    *
    * @param       inReader   the reader to read from
-   * @param       inData     all the available data
    *
    * @return      the entry read or null of no matching entry found.
    *
    */
   @SuppressWarnings("unchecked") // calling complete on base type
-  public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader,
-                                             @Nonnull DMAData inData)
+  public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader)
   {
     if(inReader.isAtEnd())
       return null;
@@ -2424,7 +2418,7 @@ public class AbstractEntry extends ValueGroup
       return null;
     }
 
-    AbstractEntry result = type.create(inData);
+    AbstractEntry result = type.create();
 
     //......................................................................
 
@@ -2485,6 +2479,7 @@ public class AbstractEntry extends ValueGroup
    * @return      true if read successfully, false else
    *
    */
+  @SuppressWarnings("unchecked") // cast for name
   protected boolean readEntry(@Nonnull ParseReader inReader)
   {
     if(inReader.isAtEnd())
@@ -2786,8 +2781,7 @@ public class AbstractEntry extends ValueGroup
       if(inName.equals(getID()))
         return;
 
-    BaseEntry entry =
-      (BaseEntry)m_data.getBaseData().getEntry(inName, baseType);
+    BaseEntry entry = (BaseEntry)m_data.getEntry(inName, baseType);
     if(entry == null)
       Log.warning("base " + getType() + " '" + inName + "' not found");
 
@@ -3214,7 +3208,7 @@ public class AbstractEntry extends ValueGroup
       AbstractEntry entry =
         new AbstractEntry("just a test",
                           new AbstractType.Test.TestType<AbstractEntry>
-                          (AbstractEntry.class), new DMAData.Test.Data());
+                          (AbstractEntry.class));
 
       // name
       assertEquals("name", "just a test", entry.getName());
@@ -3230,7 +3224,7 @@ public class AbstractEntry extends ValueGroup
 //       assertNull("type", entry.getType().getBaseType());
 
       assertEquals("create", "base entry $undefined$ =\n\n.\n",
-                   entry.getType().create(new DMAData.Test.Data()).toString());
+                   entry.getType().create().toString());
 
       // conversion to string
       assertEquals("converted",
@@ -3458,7 +3452,7 @@ public class AbstractEntry extends ValueGroup
                                                  + "\\= test = ."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
+      AbstractEntry entry = AbstractEntry.read(reader);
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "just a = test",
@@ -3485,7 +3479,7 @@ public class AbstractEntry extends ValueGroup
         new ParseReader(new java.io.StringReader("abstract entry test."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
+      AbstractEntry entry = AbstractEntry.read(reader);
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "test", entry.getName());
@@ -3511,7 +3505,7 @@ public class AbstractEntry extends ValueGroup
         new ParseReader(new java.io.StringReader("abstract entry."),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
+      AbstractEntry entry = AbstractEntry.read(reader);
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "", entry.getName());
@@ -3544,7 +3538,7 @@ public class AbstractEntry extends ValueGroup
                          + "# now the next entry\n"),
                         "test");
 
-      AbstractEntry entry = AbstractEntry.read(reader, new DMAData.Test.Data());
+      AbstractEntry entry = AbstractEntry.read(reader);
 
       assertNotNull("entry should have been read", entry);
       assertEquals("entry name does not match", "test",

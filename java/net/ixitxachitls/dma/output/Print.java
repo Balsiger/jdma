@@ -163,10 +163,8 @@ public class Print extends AbstractPrint
     @org.junit.Test
     public void print()
     {
-      net.ixitxachitls.dma.data.DMAData data =
-        new net.ixitxachitls.dma.data.DMAData.Test.Data();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test", data)
+        new net.ixitxachitls.dma.entries.BaseEntry("test")
         {
           @Override
           public boolean isDM(@Nullable BaseCharacter inUser)
@@ -187,7 +185,7 @@ public class Print extends AbstractPrint
 
       Print print =
         new Print("start $first ${title} middle $description the end");
-      BaseCharacter user = new BaseCharacter("test", data);
+      BaseCharacter user = new BaseCharacter("test");
 
       assertEquals("printing",
                    "[start , \\color{error}{ * first * },  , "

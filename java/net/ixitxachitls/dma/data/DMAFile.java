@@ -75,15 +75,12 @@ public class DMAFile //implements Storage<AbstractEntry>
    *
    * @param       inName      the filename of the file to read
    * @param       inPath      the path to the file
-   * @param       inBaseData  all the avaialble base data
    *
    */
-  public DMAFile(@Nonnull String inName, @Nonnull String inPath,
-                 @Nonnull DMAData inBaseData)
+  public DMAFile(@Nonnull String inName, @Nonnull String inPath)
   {
     m_name = inName;
     m_path = inPath;
-    m_data = inBaseData;
   }
 
   //........................................................................
@@ -173,51 +170,6 @@ public class DMAFile //implements Storage<AbstractEntry>
   }
 
   //........................................................................
-  //------------------------------- getData --------------------------------
-
-  /**
-   * Get the data repository this file belongs to.
-   *
-   * @return    the data repository
-   *
-   */
-  public @Nonnull DMAData getData()
-  {
-    return m_data;
-  }
-
-  //........................................................................
-
-  //----------------------------- getCampaign ------------------------------
-
-  /**
-   * Get the campaign storing the data for the file.
-   *
-   * @return      the campaign data
-   *
-   * @undefined   never
-   *
-   */
-//   public CampaignData getCampaign()
-//   {
-//     return m_campaign;
-//   }
-
-  //........................................................................
-  //----------------------------- getStorageID -----------------------------
-
-  /**
-   * Get the id of the storage or null if none (usually if not an value group).
-   *
-   * @return      the id of the storage or null
-   *
-   */
-//   public String getStorageID()
-//   {
-//     return null;
-//   }
-
-  //........................................................................
 
   //------------------------------ isChanged -------------------------------
 
@@ -299,12 +251,10 @@ public class DMAFile //implements Storage<AbstractEntry>
   /**
    * Read a dma file into the campaign.
    *
-   * @param       inBaseData all the available base data
-   *
    * @return      true if read without error, false else
    *
    */
-  public synchronized boolean read(@Nonnull DMAData inBaseData)
+  public synchronized boolean read()
   {
     try
     {
@@ -319,7 +269,7 @@ public class DMAFile //implements Storage<AbstractEntry>
         return false;
       }
 
-      return read(inBaseData, new BufferedReader(new FileReader(file)));
+      return read(new BufferedReader(new FileReader(file)));
     }
     catch(java.io.FileNotFoundException e)
     {
@@ -336,14 +286,12 @@ public class DMAFile //implements Storage<AbstractEntry>
   /**
    * Read a dma file into the campaign.
    *
-   * @param       inBaseData all the available base data
    * @param       inReader the reader to read from
    *
    * @return      true if read without error, false else
    *
    */
-  protected synchronized boolean read(@Nonnull DMAData inBaseData,
-                                      @Nonnull Reader inReader)
+  protected synchronized boolean read(@Nonnull Reader inReader)
   {
     ParseReader reader = new ParseReader(inReader, m_name);
 
@@ -361,7 +309,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     while(!reader.isAtEnd())
     {
       //ParseReader.Position start = reader.getPosition();
-      AbstractEntry entry = AbstractEntry.read(reader, inBaseData);
+      AbstractEntry entry = AbstractEntry.read(reader);
       //ParseReader.Position end = reader.getPosition();
 
       if(entry == null)
@@ -621,8 +569,7 @@ public class DMAFile //implements Storage<AbstractEntry>
     @org.junit.Test
     public void init()
     {
-      DMAFile file =
-        new DMAFile("test.dma", "build/test", new DMAData.Test.Data());
+      DMAFile file = new DMAFile("test.dma", "build/test");
 
       assertEquals("name", "test.dma", file.getStorageName());
       assertEquals("lines", 0, file.getLines());
@@ -655,9 +602,9 @@ public class DMAFile //implements Storage<AbstractEntry>
       java.io.StringWriter writer = new java.io.StringWriter();
 
       // start the test
-      DMAFile file = new DMAFile("read.dma", "path", new DMAData.Test.Data());
+      DMAFile file = new DMAFile("read.dma", "path");
 
-      assertTrue("read", file.read(new DMAData.Test.Data(), reader));
+      assertTrue("read", file.read(reader));
       synchronized(file)
       {
         assertEquals("comment", "# A test file\n\n", file.m_comment.toString());
@@ -705,8 +652,7 @@ public class DMAFile //implements Storage<AbstractEntry>
       // add an entry
       writer = new java.io.StringWriter();
       net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("guru",
-                                                   new DMAData.Test.Data());
+        new net.ixitxachitls.dma.entries.BaseEntry("guru");
       file.add(entry);
 
       assertTrue("changed", file.isChanged());

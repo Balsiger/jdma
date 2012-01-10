@@ -761,11 +761,9 @@ public class PageServlet extends DMAServlet
     {
       java.io.StringWriter content = new java.io.StringWriter();
       HTMLWriter writer = new HTMLWriter(new java.io.PrintWriter(content));
-      net.ixitxachitls.dma.data.DMAData.Test.Data data =
-        new net.ixitxachitls.dma.data.DMAData.Test.Data();
       List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
       net.ixitxachitls.dma.entries.BaseCharacter first =
-        new net.ixitxachitls.dma.entries.BaseCharacter("first", data)
+        new net.ixitxachitls.dma.entries.BaseCharacter("first")
         {
           @Override
           public boolean isDM(@Nullable BaseCharacter inUser)
@@ -782,7 +780,7 @@ public class PageServlet extends DMAServlet
           }
         };
       net.ixitxachitls.dma.entries.BaseCharacter second =
-        new net.ixitxachitls.dma.entries.BaseCharacter("second", data)
+        new net.ixitxachitls.dma.entries.BaseCharacter("second")
         {
           @Override
           public boolean isDM(@Nullable BaseCharacter inUser)

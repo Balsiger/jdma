@@ -316,8 +316,7 @@ public class EntryServlet extends PageServlet
       path = path.substring(0, path.length() - 4);
     }
 
-    DMAData data = getData(inRequest, path, m_data);
-    AbstractEntry entry = getEntry(inRequest, data, path);
+    AbstractEntry entry = getEntry(inRequest, m_data, path);
 
     if(entry == null)
     {
@@ -351,11 +350,10 @@ public class EntryServlet extends PageServlet
         Log.info("creating " + type + " '" + id + "'");
 
         if(type.getBaseType() == type)
-          entry = type.create(id, getData(inRequest, path, m_data));
+          entry = type.create(id);
         else
         {
-          entry = type.create(Entry.TEMPORARY,
-                              getData(inRequest, path, m_data));
+          entry = type.create(Entry.TEMPORARY);
           entry.addBase(id);
         }
         entry.setOwner(inRequest.getUser());
@@ -388,7 +386,7 @@ public class EntryServlet extends PageServlet
     HTMLDocument document = new HTMLDocument(title);
     AbstractType<? extends AbstractEntry> type = entry.getType();
 
-    List<String> ids = data.getIDs(type);
+    List<String> ids = m_data.getIDs(type);
 
     int current = ids.indexOf(entry.getName());
     int last = ids.size() - 1;
@@ -629,9 +627,7 @@ public class EntryServlet extends PageServlet
     {
       EntryServlet servlet =
         createServlet("/baseentry/guru",
-                      new BaseEntry("guru", new net.ixitxachitls.dma.data
-                                    .DMADatafiles("path")), null, null,
-                      false);
+                      new BaseEntry("guru"), null, null, false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -832,7 +828,7 @@ public class EntryServlet extends PageServlet
     {
       EntryServlet servlet = new EntryServlet
         (new DMAData.Test.Data(new net.ixitxachitls.dma.entries.BaseEntry
-                               ("test", new DMAData.Test.Data())));
+                               ("test")));
 
       EasyMock.replay(m_request, m_response);
 
@@ -866,7 +862,7 @@ public class EntryServlet extends PageServlet
 
       assertEquals("path", "id",
                    servlet.getPath(new net.ixitxachitls.dma.entries.BaseEntry
-                                   ("id", new DMAData.Test.Data())));
+                                   ("id")));
     }
 
     //......................................................................

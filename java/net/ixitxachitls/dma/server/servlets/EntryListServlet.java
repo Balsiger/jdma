@@ -125,8 +125,7 @@ public class EntryListServlet extends PageServlet
                @Nonnull AbstractType<? extends AbstractEntry> inType,
                int inStart, int inSize)
   {
-    return (List<AbstractEntry>)getData(inRequest, inPath, m_data)
-      .getEntries(inType, inStart, inSize);
+    return (List<AbstractEntry>)m_data.getEntries(inType, inStart, inSize);
   }
 
   //........................................................................
@@ -289,12 +288,9 @@ public class EntryListServlet extends PageServlet
     {
       EntryListServlet servlet =
         createServlet(com.google.common.collect.ImmutableList.<AbstractEntry>of
-                      (new net.ixitxachitls.dma.entries.BaseEntry
-                       ("guru1", new DMAData.Test.Data()),
-                       new net.ixitxachitls.dma.entries.BaseEntry
-                       ("guru2", new DMAData.Test.Data()),
-                       new net.ixitxachitls.dma.entries.BaseEntry
-                       ("guru3", new DMAData.Test.Data())),
+                      (new net.ixitxachitls.dma.entries.BaseEntry("guru1"),
+                       new net.ixitxachitls.dma.entries.BaseEntry("guru2"),
+                       new net.ixitxachitls.dma.entries.BaseEntry("guru3")),
                       "/baseentry", 0, 42);
 
       assertNull("handle", servlet.handle(m_request, m_response));

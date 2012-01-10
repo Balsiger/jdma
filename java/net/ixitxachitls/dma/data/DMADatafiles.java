@@ -38,7 +38,6 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.BaseCampaign;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseProduct;
@@ -480,6 +479,8 @@ public class DMADatafiles implements DMAData
    *
    * @param       <T>    the real type of entries to get
    * @param       inType the type of entries to get ids for
+   * @param       inParentID   the id of the parent for recent entries
+   * @param       inParentType the type of the parent entries
    *
    * @return      all the ids
    *
@@ -576,7 +577,7 @@ public class DMADatafiles implements DMAData
     {
       if(!file.wasRead())
       {
-        result &= file.read(this);
+        result &= file.read();
 
         for(AbstractEntry entry : file.getEntries())
           addInternal(entry);
@@ -603,7 +604,7 @@ public class DMADatafiles implements DMAData
       return false;
 
     m_names.add(inFile);
-    m_files.add(new DMAFile(inFile, m_path, this));
+    m_files.add(new DMAFile(inFile, m_path));
 
     return true;
   }

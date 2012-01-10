@@ -33,7 +33,6 @@ import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -79,12 +78,10 @@ public class Campaign extends Entry<BaseCampaign>
   /**
    * This is the internal default constructor.
    *
-   * @param       inData all the available data
-   *
    */
-  protected Campaign(@Nonnull DMAData inData)
+  protected Campaign()
   {
-    super(TYPE, BASE_TYPE, inData);
+    super(TYPE, BASE_TYPE);
   }
 
   //........................................................................
@@ -94,12 +91,11 @@ public class Campaign extends Entry<BaseCampaign>
    * This is the normal constructor.
    *
    * @param       inName  the name of the campaign
-   * @param       inData all the available data
    *
    */
-  public Campaign(String inName, @Nonnull DMAData inData)
+  public Campaign(String inName)
   {
-    super(inName, TYPE, BASE_TYPE, inData);
+    super(inName, TYPE, BASE_TYPE);
   }
 
   //........................................................................

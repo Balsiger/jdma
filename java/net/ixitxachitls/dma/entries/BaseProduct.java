@@ -36,7 +36,6 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -736,12 +735,10 @@ public class BaseProduct extends BaseEntry
   /**
    * This is the internal, default constructor.
    *
-   * @param       inData all the available data
-   *
    */
-  protected BaseProduct(@Nonnull DMAData inData)
+  protected BaseProduct()
   {
-    super(TYPE, inData);
+    super(TYPE);
   }
 
   //........................................................................
@@ -751,12 +748,11 @@ public class BaseProduct extends BaseEntry
    * This is the normal constructor.
    *
    * @param       inName the name of the base product
-   * @param       inData all the available data
    *
    */
-  public BaseProduct(@Nonnull String inName, @Nonnull DMAData inData)
+  public BaseProduct(@Nonnull String inName)
   {
-    super(inName, TYPE, inData);
+    super(inName, TYPE);
   }
 
   //........................................................................
@@ -2908,7 +2904,7 @@ public class BaseProduct extends BaseEntry
         + "\n"
         + "#.....\n";
 
-      AbstractEntry entry = BaseProduct.read(reader, new DMAData.Test.Data());
+      AbstractEntry entry = BaseProduct.read(reader);
 
       //System.out.println("read entry:\n'" + entry + "'");
 
@@ -2927,8 +2923,7 @@ public class BaseProduct extends BaseEntry
     {
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
-      BaseProduct entry = (BaseProduct)
-        BaseProduct.read(reader, new DMAData.Test.Data());
+      BaseProduct entry = (BaseProduct)BaseProduct.read(reader);
 
       Set<String> persons = new java.util.TreeSet<String>();
       entry.collectPersons(persons);
@@ -2972,8 +2967,7 @@ public class BaseProduct extends BaseEntry
     {
       ParseReader reader =
         new ParseReader(new java.io.StringReader(s_text), "test");
-      BaseProduct entry = (BaseProduct)
-        BaseProduct.read(reader, new DMAData.Test.Data());
+      BaseProduct entry = (BaseProduct)BaseProduct.read(reader);
 
       Set<String> jobs = new java.util.TreeSet<String>();
       entry.collectJobs(jobs);

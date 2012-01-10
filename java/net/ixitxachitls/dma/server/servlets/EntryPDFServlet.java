@@ -303,8 +303,7 @@ public class EntryPDFServlet extends PDFServlet
     public void simple() throws Exception
     {
       EntryPDFServlet servlet =
-        createServlet("/baseentry/guru",
-                      new BaseEntry("guru", new DMAData.Test.Data()));
+        createServlet("/baseentry/guru", new BaseEntry("guru"));
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content", "%PDF-1.4\n%",
@@ -364,7 +363,7 @@ public class EntryPDFServlet extends PDFServlet
 
       EntryPDFServlet servlet = new EntryPDFServlet
         (new DMAData.Test.Data(new net.ixitxachitls.dma.entries.BaseEntry
-                               ("test", new DMAData.Test.Data())));
+                               ("test")));
 
       assertEquals("entry", "test",
                    servlet.getEntry("/just/some/base entry/test").getName());
