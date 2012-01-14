@@ -250,6 +250,20 @@ public class Dice extends Value<Dice>
   }
 
   //........................................................................
+  //------------------------------- isRandom -------------------------------
+
+  /**
+   * Determine if this dice represents any random value or is basically static.
+   *
+   * @return   true if the die is random, false if not
+   *
+   */
+  public boolean isRandom()
+  {
+    return isDefined() && m_dice != 1 && m_dice != 0 && m_number != 0;
+  }
+
+  //........................................................................
 
   //------------------------------ doToString ------------------------------
 

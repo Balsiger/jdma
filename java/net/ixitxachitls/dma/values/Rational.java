@@ -28,10 +28,6 @@ import java.math.BigInteger;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Frac;
-
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -51,7 +47,7 @@ import net.ixitxachitls.output.commands.Frac;
 //__________________________________________________________________________
 
 @Immutable
-public class Rational extends Value<Rational>
+public class Rational extends BaseRational<Rational>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -108,38 +104,8 @@ public class Rational extends Value<Rational>
    */
   public Rational(long inLeader, long inNominator, long inDenominator)
   {
-    if(inDenominator == 0)
-      throw new IllegalArgumentException("denominator may not be zero");
-
-    m_leader      = inLeader;
-    m_nominator   = inNominator;
-    m_denominator = inDenominator;
-
-    computeNegative();
+    super(inLeader, inNominator, inDenominator);
   }
-
-  //........................................................................
-  //------------------------------- Rational -------------------------------
-
-  /**
-   * Construct the rational object with all values.
-   *
-   * @param       inLeader            the leader before the real fraction
-   * @param       inNominator         value above the line
-   * @param       inDenominator       value below the line
-   * @param       inRandomNominator   a random nominator value (as a dice)
-   * @param       inRandomDenominator a random denominator value (as a dice)
-   *
-   */
-  // Make a special, derived class for random rationals?
-  // public Rational(long inLeader, long inNominator, long inDenominator,
-  //                 Dice inRandomNominator, Dice inRandomDenominator)
-  // {
-  //   this(inLeader, inNominator, inDenominator);
-
-  //   m_randomNominator   = inRandomNominator;
-  //   m_randomDenominator = inRandomDenominator;
-  // }
 
   //........................................................................
 
@@ -154,7 +120,7 @@ public class Rational extends Value<Rational>
    */
   public @Nonnull Rational create()
   {
-    return new Rational();
+    return super.create(new Rational());
   }
 
   //........................................................................
@@ -162,44 +128,10 @@ public class Rational extends Value<Rational>
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The leading value, the whole fractions. */
-  protected long m_leader = 0;
-
-  /** The fractions nominator (above the line ;-)). */
-  protected long m_nominator = 0;
-
-  /** The fractions denominator (below the line ;-)). A value of 0 means that
-   * the Value is undefined. */
-  protected long m_denominator = 0;
-
-  /** The sign of the number (all stored values should be positive). */
-  protected boolean m_negative = false;
-
-  /** The fractions random nominator (above the line ;-)). */
-  // protected Dice m_randomNominator = null;
-
-  /** The fractions random denominator (below the line ;-)). */
-  // protected Dice m_randomDenominator = null;
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
-  //------------------------------ getLeader -------------------------------
-
-  /**
-   * Get the leader stored.
-   *
-   * @return      the leader stored
-   *
-   */
-  public long getLeader()
-  {
-    return m_leader;
-  }
-
-  //........................................................................
   //----------------------------- getNominator -----------------------------
 
   /**
@@ -211,27 +143,6 @@ public class Rational extends Value<Rational>
   public long getNominator()
   {
     return m_nominator;
-  }
-
-  //........................................................................
-  //-------------------------- getNominatorString --------------------------
-
-  /**
-   * Get the nominator as a String.
-   *
-   * @return      a String representation of the nominator
-   *
-   */
-  protected String getNominatorString()
-  {
-    // if(m_randomNominator == null)
-      return "" + m_nominator;
-
-    // if(m_nominator != 1)
-    //   return m_nominator + "*"
-    //     + "(" + m_randomNominator.toString() + ")";
-
-    // return "(" + m_randomNominator.toString() + ")";
   }
 
   //........................................................................
@@ -249,56 +160,7 @@ public class Rational extends Value<Rational>
   }
 
   //........................................................................
-  //------------------------- getDenominatorString -------------------------
 
-  /**
-   * Get the denominator as a String.
-   *
-   * @return      a String representation of the denominator
-   *
-   */
-  protected String getDenominatorString()
-  {
-    // if(m_randomDenominator == null)
-      return "" + m_denominator;
-
-    // if(m_denominator != 1)
-    //   return m_denominator + "*"
-    //     + "(" + m_randomDenominator.toString() + ")";
-
-    // return "(" + m_randomDenominator.toString() + ")";
-  }
-
-  //........................................................................
-
-  //------------------------------ isNegative ------------------------------
-
-  /**
-   * Check if the value is negative or not.
-   *
-   * @return      true if the value is negative, false if not
-   *
-   */
-  public boolean isNegative()
-  {
-    return m_negative;
-  }
-
-  //........................................................................
-  //----------------------------- hasFraction ------------------------------
-
-  /**
-   * Check if the rational has a fraction or not.
-   *
-   * @return      true if there is a fraction, false if not
-   *
-   */
-  public boolean hasFraction()
-  {
-    return m_nominator != 0;
-  }
-
-  //........................................................................
   //------------------------------ hasRandom -------------------------------
 
   /**
@@ -330,183 +192,12 @@ public class Rational extends Value<Rational>
     int nominator   = 1;
     int denominator = 1;
 
-    // if(m_randomNominator != null)
-    //   nominator = m_randomNominator.roll();
-
-    // if(m_randomDenominator != null)
-    //   denominator = m_randomDenominator.roll();
-
     if(m_negative)
       return -1 * (m_leader + ((double)m_nominator * nominator)
                    / ((double)m_denominator * denominator));
     else
       return m_leader + ((double)m_nominator * nominator)
         / ((double)m_denominator * denominator);
-  }
-
-  //........................................................................
-
-  //-------------------------------- getMin --------------------------------
-
-  /**
-   * Get the minimal possible value.
-   *
-   * @return      the minimal possible value
-   *
-   */
-  public Rational getMin()
-  {
-    // if(!hasRandom())
-      return this;
-
-    // return new Rational(m_leader,
-    //                     m_randomNominator != null
-    //                     ? m_randomNominator.getMin() : m_nominator,
-    //                     m_randomDenominator != null
-    //                     ? m_randomDenominator.getMax() : m_denominator)
-    //   .reduce();
-  }
-
-  //........................................................................
-  //-------------------------------- getMax --------------------------------
-
-  /**
-   * Get the maximal possible value.
-   *
-   * @return      the maximal possible value
-   *
-   */
-  public Rational getMax()
-  {
-    // if(!hasRandom())
-      return this;
-
-    // return new Rational(m_leader,
-    //                     m_randomNominator != null
-    //                     ? m_randomNominator.getMax() : m_nominator,
-    //                     m_randomDenominator != null
-    //                     ? m_randomDenominator.getMin() : m_denominator)
-    //   .reduce();
-  }
-
-  //........................................................................
-
-  //------------------------------ isDefined -------------------------------
-
-  /**
-   * Check if the value is defined or not.
-   *
-   * @return      true if the value is defined, false if not
-   *
-   */
-  public boolean isDefined()
-  {
-    return m_denominator != 0/* || m_randomDenominator != null
-                                || m_randomNominator != null*/;
-  }
-
-  //........................................................................
-  //-------------------------------- isOne ---------------------------------
-
-  /**
-   * Check if the value stored is equal to a singular value.
-   *
-   * @return      true if 1, false else
-   *
-   */
-  public boolean isOne()
-  {
-    // if(hasRandom())
-    //   return false;
-
-    return (m_leader == 1 && m_nominator == 0 || m_denominator == 0)
-      || m_leader == 0;
-  }
-
-  //........................................................................
-  //-------------------------------- isNull --------------------------------
-
-  /**
-   * Check if the value stored is equal to 0.
-   *
-   * @return      true if 0, false else
-   *
-   */
-  public boolean isNull()
-  {
-    // if(hasRandom())
-    //   return false;
-
-    return (m_leader == 0 && m_nominator == 0 || m_denominator == 0);
-  }
-
-  //........................................................................
-
-  //------------------------------ doToString ------------------------------
-
-  /**
-   * Convert the value to a string, depending on the given kind.
-   *
-   * @return      a String representation, depending on the kind given
-   *
-   */
-  @Override
-  protected @Nonnull String doToString()
-  {
-    if(!hasFraction())
-      return (m_negative ? "-" : "") +  m_leader;
-
-    // if(m_randomNominator != null && m_randomDenominator == null
-    //    && m_denominator == 1)
-    //   if(m_leader != 0)
-    //     return (m_negative ? "-" : "") +  m_leader + " "
-    //       + getNominatorString();
-    //   else
-    //     return (m_negative ? "-" : "") +  getNominatorString();
-
-    if(m_leader != 0)
-      return (m_negative ? "-" : "") + m_leader + " " + getNominatorString()
-        + "/" + getDenominatorString();
-    else
-      return (m_negative ? "-" : "") + getNominatorString() + "/"
-        + getDenominatorString();
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    if(!hasFraction())
-      return new Command((m_negative ? "-" : "") +  m_leader);
-
-    // if(m_randomNominator != null && m_randomDenominator == null
-    //    && m_denominator == 1)
-    //   if(m_leader != 0)
-    //     return new Command((m_negative ? "-" : "") +  m_leader + " "
-    //                        + getNominatorString());
-    //   else
-    //     return new Command((m_negative ? "-" : "") +  getNominatorString());
-
-    if(m_leader != 0)
-      return new Command(new Object []
-        {
-          m_negative ? "-" : "",
-          new Frac(m_leader, getNominatorString(), getDenominatorString()),
-        });
-    else
-      return new Command(new Object []
-        {
-          m_negative ? "-" : "",
-          new Frac(getNominatorString(), getDenominatorString()),
-        });
   }
 
   //........................................................................
@@ -524,40 +215,27 @@ public class Rational extends Value<Rational>
    */
   public int compare(long inValue)
   {
-    // if(!hasRandom())
-    // {
-      // reduce the fraction if possible
-      Rational rational = reduce();
+    Rational rational = reduce();
 
-      if(inValue > 0 && rational.m_negative)
-        return -1;
+    if(inValue > 0 && rational.m_negative)
+      return -1;
 
-      if(inValue < 0)
-        if(!rational.m_negative)
-          return +1;
-        else
-          inValue *= -1;
+    if(inValue < 0)
+      if(!rational.m_negative)
+        return +1;
+      else
+        inValue *= -1;
 
-      if(rational.m_leader < inValue)
-        return !rational.m_negative ? -1 : +1;
+    if(rational.m_leader < inValue)
+      return !rational.m_negative ? -1 : +1;
 
-      if(rational.m_leader > inValue)
-        return !m_negative ? +1 : -1;
+    if(rational.m_leader > inValue)
+      return !m_negative ? +1 : -1;
 
-      if(rational.m_nominator == 0)
+    if(rational.m_nominator == 0)
         return 0;
 
-      return !rational.m_negative ? +1 : -1;
-    // }
-
-    // if(getMin().compare(inValue) < 0)
-    //   return -1;
-
-    // if(getMax().compare(inValue) > 0)
-    //   return +1;
-
-  // throw new UnsupportedOperationException("cannot compare fixed value with "
-    //                                         + "a random range.");
+    return !rational.m_negative ? +1 : -1;
   }
 
   //........................................................................
@@ -574,41 +252,30 @@ public class Rational extends Value<Rational>
    */
   public int compare(@Nonnull Rational inValue)
   {
-    // if(!hasRandom() && !inValue.hasRandom())
-    // {
-      // reduce the fractions if possible
-      Rational first = reduce();
-      Rational second = inValue.reduce();
+    // reduce the fractions if possible
+    Rational first = reduce();
+    Rational second = inValue.reduce();
 
-      if(!second.m_negative && first.m_negative)
-        return -1;
+    if(!second.m_negative && first.m_negative)
+      return -1;
 
-      if(second.m_negative && !first.m_negative)
-        return +1;
-
-      if(first.m_leader < second.m_leader)
-        return !first.m_negative ? -1 : +1;
-
-      if(first.m_leader > second.m_leader)
-        return !first.m_negative ? +1 : -1;
-
-      if(first.m_nominator == second.m_nominator
-         && first.m_denominator == second.m_denominator)
-        return 0;
-
-      if(first.getValue() < second.getValue())
-        return -1;
-
+    if(second.m_negative && !first.m_negative)
       return +1;
-    // }
 
-    // if(getMin().compare(inValue.getMin()) < 0)
-    //   return -1;
+    if(first.m_leader < second.m_leader)
+      return !first.m_negative ? -1 : +1;
 
-    // if(getMax().compare(inValue.getMax()) > 0)
-    //   return +1;
+    if(first.m_leader > second.m_leader)
+      return !first.m_negative ? +1 : -1;
 
-  // throw new UnsupportedOperationException("cannot compare random rationals");
+    if(first.m_nominator == second.m_nominator
+       && first.m_denominator == second.m_denominator)
+      return 0;
+
+    if(first.getValue() < second.getValue())
+      return -1;
+
+    return +1;
   }
 
   //........................................................................
@@ -734,9 +401,6 @@ public class Rational extends Value<Rational>
     // nothing to do if not defined
     if(!isDefined())
       return this;
-
-    // if(hasRandom())
-    //   throw new UnsupportedOperationException("cannot reduce random values");
 
     // determine new leader
     Rational result = create();
@@ -1011,230 +675,10 @@ public class Rational extends Value<Rational>
 
   //........................................................................
 
-  //-------------------------------- doRead --------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
-  @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
-  {
-    ParseReader.Position pos = inReader.getPosition();
-
-    // read the first number
-    boolean ok    = true;
-    boolean dice  = false;
-    boolean slash = false;
-
-    try
-    {
-      // read the leader
-      m_leader = inReader.readInt();
-      pos = inReader.getPosition();
-
-      // no dice may follow now
-      dice = false;
-
-      // define the value
-      m_nominator   = 0;
-      m_denominator = 1;
-    }
-    catch(net.ixitxachitls.input.ReadException e)
-    {
-      // no integer found, require reading of a dice
-      dice = true;
-      ok   = false;
-    }
-
-    // try to read the second integer
-    try
-    {
-      m_nominator = inReader.readInt();
-
-      if(inReader.expect('*'))
-        dice = true;
-      else
-        slash = true;
-    }
-    catch(net.ixitxachitls.input.ReadException e)
-    {
-      // no second found, may the first be a nominator?
-      if(inReader.expect('*'))
-      {
-        m_nominator = m_leader;
-        m_leader    = 0;
-        dice        = true;
-      }
-      else
-        if(inReader.expect('/'))
-        {
-          inReader.put('/');
-
-          m_nominator = m_leader;
-          m_leader    = 0;
-        }
-    }
-
-    if(dice)
-    {
-      return false;
-      // m_randomNominator = readDice(inReader);
-
-      // if(m_randomNominator == null)
-      // {
-      //   inReader.seek(pos);
-
-      //   if(ok && m_leader == 0)
-      //   {
-      //   // we wrongly assumed that the first number was a nominator (because
-      //     // of the '*'), but it's really the leader
-      //     m_leader    = m_nominator;
-      //     m_nominator = 0;
-      //   }
-      //   else
-      //     m_nominator = 0;
-
-      //   return ok;
-      // }
-
-      // if(m_nominator == 0)
-      //   m_nominator = 1;
-
-      // if(m_denominator == 0)
-      //   m_denominator = 1;
-
-      // pos = inReader.getPosition();
-    }
-
-    if(!inReader.expect('/'))
-    {
-      if(slash)
-      {
-        inReader.seek(pos);
-
-        m_nominator = 0;
-      }
-
-      return true;
-    }
-
-    // try the denominator number
-    try
-    {
-      m_denominator = inReader.readInt();
-
-      pos = inReader.getPosition();
-
-      // we cannot read values of the form [y] x/0
-      if(m_denominator == 0)
-        return false;
-
-      // if(inReader.expect('*'))
-      //   dice = true;
-    }
-    catch(net.ixitxachitls.input.ReadException e)
-    {
-      // maybe just a dice?
-      m_denominator = 1;
-
-      dice = true;
-    }
-
-    if(dice)
-    {
-      // m_randomDenominator = readDice(inReader);
-
-      // if(m_randomDenominator == null)
-      // {
-        inReader.seek(pos);
-
-        if(slash)
-          m_nominator = 0;
-      // }
-    }
-
-    // if(!hasRandom())
-    // {
-      computeNegative();
-      // TODO: make this inplace
-      Rational reduced = reduce();
-      m_nominator = reduced.m_nominator;
-      m_denominator = reduced.m_denominator;
-      m_leader = reduced.m_leader;
-      m_negative = reduced.m_negative;
-    // }
-
-    return true;
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------- other member functions
 
-  //--------------------------- computeNegative ----------------------------
-
-  /**
-   * Compute the negative sign and adjust all the values.
-   *
-   */
-  protected void computeNegative()
-  {
-    // first without the leader
-    if(m_nominator < 0)
-    {
-      m_nominator *= -1;
-      m_negative   = true;
-    }
-    else
-      m_negative = false;
-
-    if(m_denominator < 0)
-    {
-      m_denominator *= -1;
-      m_negative   = !m_negative;
-    }
-
-    // now compute in the leader
-    // we have to deal with some special cases here. If the real fraction
-    // is positive, then its easy
-    if(m_negative)
-      if(m_leader < 0)
-        m_leader *= -1;
-      else
-      {
-        // now, the second negative actually means to subtract the fraction
-        // from the leader
-        m_nominator = m_leader * m_denominator - m_nominator;
-        m_leader    = 0;
-
-        if(m_nominator < 0)
-          m_nominator *= -1;
-        else
-          m_negative = false;
-
-        // TODO: make this inplace
-        Rational reduced = reduce();
-        m_nominator = reduced.m_nominator;
-        m_denominator = reduced.m_denominator;
-        m_leader = reduced.m_leader;
-        m_negative = reduced.m_negative;
-      }
-    else
-      if(m_leader < 0)
-      {
-        m_leader   *= -1;
-        m_negative  = true;
-      }
-  }
-
-  //........................................................................
   //------------------------------- readDice -------------------------------
 
   /**
@@ -1302,8 +746,6 @@ public class Rational extends Value<Rational>
       assertEquals("denominator", 2, rational.getDenominator());
       assertFalse("negative", rational.isNegative());
       assertEquals("format", "\\frac{1}{2}", rational.format(true).toString());
-      assertEquals("min", "1/2", rational.getMin().toString());
-      assertEquals("max", "1/2", rational.getMin().toString());
 
       // now with some rational
       rational = new Rational(1, 2, 3);
@@ -1393,49 +835,6 @@ public class Rational extends Value<Rational>
       assertTrue("negative", rational.isNegative());
       assertEquals("format", "-\\frac{1}{3}", rational.format(true).toString());
 
-      // now with some random rational
-    // rational = new Rational(0, 1, 1, new Dice(1, 2, 0), new Dice(2, 4, -2));
-
-      // assertEquals("not defined after setting", true,
-      //              rational.isDefined());
-      // assertEquals("output", "(1d2)/(2d4 -2)", rational.toString());
-      // assertEquals("format", "\\frac{(1d2)}{(2d4 -2)}",
-      //              rational.format(true).toString());
-      // assertEquals("min", "1/6", rational.getMin().toString());
-      // assertEquals("max", "2", rational.getMax().toString());
-
-      // how about some mixed
-      // rational = new Rational(0, 2, 1, null, new Dice(1, 4, 5));
-
-      // assertEquals("not defined after setting", true,
-      //              rational.isDefined());
-      // assertEquals("output", "2/(1d4 +5)", rational.toString());
-      // assertEquals("format", "\\frac{2}{(1d4 +5)}",
-      //              rational.format(true).toString());
-      // assertEquals("min", "2/9", rational.getMin().toString());
-      // assertEquals("max", "1/3", rational.getMax().toString());
-
-      // how about some mixed top
-      // rational = new Rational(0, 1, 3, new Dice(5, 6, 2), null);
-
-      // assertEquals("not defined after setting", true,
-      //              rational.isDefined());
-      // assertEquals("output", "(5d6 +2)/3", rational.toString());
-      // assertEquals("format", "\\frac{(5d6 +2)}{3}",
-      //              rational.format(true).toString());
-      // assertEquals("min", "2 1/3", rational.getMin().toString());
-      // assertEquals("max", "10 2/3", rational.getMax().toString());
-
-      // how about some dice only
-      // rational = new Rational(0, 1, 1, new Dice(5, 6, 2), null);
-
-      // assertEquals("not defined after setting", true,
-      //              rational.isDefined());
-      // assertEquals("output", "(5d6 +2)", rational.toString());
-      // assertEquals("format", "(5d6 +2)", rational.format(true).toString());
-      // assertEquals("min", "7", rational.getMin().toString());
-      // assertEquals("max", "32", rational.getMax().toString());
-
       Value.Test.createTest(rational);
     }
 
@@ -1464,33 +863,17 @@ public class Rational extends Value<Rational>
           "negatives 6", "-1 1/-3", "-1 1/3", null,
           "other", "2a", "2", "a",
           "other 2", "0 a", "0", "a",
-          "invalid", "1/0", null, "1/0",
-          "other 3", "1 2", "1", " 2",
+          "invalid", "1/0", "1", "/0",
+          "other 3", "1 2", "1", "2",
           "zero 3", "0 0/2", "0", null,
           "zero 4", "5 0/2", "5", null,
           "none", "a", null, "a",
           "invalid", "1/a", "1", "/a",
           "completely invalid", "a/b", null, "a/b",
-          "leader invalid", "1 3/a", "1", " 3/a",
+          "leader invalid", "1 3/a", "1", "3/a",
           "zero only", "0", "0", null,
           "single", "3", "3", null,
           "simple", "3/4", "3/4", null,
-          // "random", "(1d4)", "(1d4)", null,
-          // "complete random", "(2d5 -2)/(1d3 +2)", "(2d5 -2)/(1d3 +2)", null,
-          // "mixed top", "(1d6)/2", "(1d6)/2", null,
-          // "mixed bottom", "3/(5d3 +3)", "3/(5d3 +3)", null,
-          // "leader", "5 (2d6)", "5", "(2d6)",
-          // "all", "2 3*(5d6 -2)/2*(1d4 +1)", "2 3*(5d6 -2)/2*(1d4 +1)", null,
-          // "mixed top*", "2 * (1d6)/3", "2*(1d6)/3",  null,
-          // "mixed bottom*", "55/4*(1d6)", "55/4*(1d6)", null,
-          // "none", "a", null, "a",
-          // "none", "(5de)", null, "(5de)",
-          // "start", "1 (d3)", "1", "(d3)",
-          // "start 2", "1 (2d3", "1", "(2d3",
-          // "none 2", "(6d2 +3", null, "(6d2 +3",
-          // "none 3", "2 * ", "2",  " * ",
-          // "leader", "42 2 *", "42", " 2 *",
-          // "bottom", "1/2 *", "1/2", " *",
         };
 
       Value.Test.readTest(tests, new Rational());
@@ -1884,34 +1267,6 @@ public class Rational extends Value<Rational>
       assertEquals("equal special",   0,
                    new Rational(3, 5, 5).compare(new Rational(2, 4, 2)));
     }
-
-    //......................................................................
-    //----- value ----------------------------------------------------------
-
-    /** Testing of random values. */
-    // public void testValue()
-    // {
-    //   Rational rational = new Rational(0, 1, 1, new Dice(1, 2, 0),
-    //                                    new Dice(2, 4, -2));
-
-    //   for(int i = 0; i < 10; i++)
-    //   {
-    //     double value = rational.getValue();
-
-    //     assertTrue("low",  value >= 1.0 / 6);
-    //     assertTrue("high", value <= 2.0);
-    //   }
-
-    // rational = new Rational(5, 2, 3, new Dice(2, 8, -4), new Dice(1, 12, 0));
-
-    //   for(int i = 0; i < 10; i++)
-    //   {
-    //     double value = rational.getValue();
-
-    //     assertTrue("low",  value >= 5 + 2.0 / (3 * 12));
-    //     assertTrue("high", value <= 5 + 12.0);
-    //   }
-    // }
 
     //......................................................................
   }

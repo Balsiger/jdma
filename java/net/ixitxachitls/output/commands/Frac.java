@@ -82,7 +82,9 @@ public class Frac extends BaseCommand
   {
     this(inNominator, inDenominator);
 
-    withOptionals(inPrepend);
+    if(inPrepend != null && !inPrepend.toString().isEmpty()
+       && !"0".equals(inPrepend.toString()))
+      withOptionals(inPrepend);
   }
 
   //........................................................................
