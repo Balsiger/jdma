@@ -76,6 +76,35 @@ DIV.subtitletext, DIV.subtitletext A
 }
 
 /******************************************************************************
+ * special property classes
+ *****************************************************************************/
+
+/* alignments */
+.align-left    { text-align: left;    }
+.align-right   { text-align: right;   }
+.align-center  { text-align: center;  }
+.align-justify { text-align: justify; }
+
+/* font styles */
+.font-sansserif { font-family: Helvetica, Arial, sans-serif;    }
+.font-serif     { font-family: 'Times New Roman', Times, serif; }
+
+/* font sizes */
+.size-tiny     { font-size: xx-small;  }
+.size-footnote { font-size: x-small;   }
+.size-script   { font-size: smaller;   }
+.size-small    { font-size: small;     }
+.size-normal   { font-size: medium;    }
+.size-large    { font-size: larger;    }
+.size-larger   { font-size: larger;    }
+.size-largest  { font-size: x-large;   }
+.size-huge     { font-size: xx-large;  }
+.size-huger    { font-size: 500%;      }
+
+/* special colors */
+.color-light { color: #AAAAAA; }
+
+/******************************************************************************
  * header
  *****************************************************************************/
 
