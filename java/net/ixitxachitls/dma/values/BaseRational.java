@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.math.BigInteger;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -372,19 +374,136 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
 
   //----------------------------------------------------------- manipulators
 
+  //-------------------------------- reduce --------------------------------
+
+  /**
+   * Reduce the fraction, if possible. This is protected, as it only reduces
+   * the rational part and might not be able to reduce things of a derivation
+   * (e.g. Random Rational).
+   *
+   * We use the following special cases:
+   *
+   *   a -b/c   is defined as  (a*c - b)/c
+   *   -a -b/c  is defined as  -((a*c - b)/c)
+   *   -a b/c   is defined as  -((a*c + b)/c)
+   *
+   * @return      the reduced rational
+   *
+   */
+  @SuppressWarnings("unchecked") // have to cast this
+  protected @Nonnull T reduce()
+  {
+    // nothing to do if not defined
+    if(!isDefined())
+      return (T)this;
+
+    // determine new leader
+    T result = create();
+    result.m_denominator = m_denominator;
+    result.m_nominator = m_nominator + m_leader * m_denominator;
+    result.m_leader = result.m_nominator / result.m_denominator;
+    result.m_negative = m_negative;
+
+    result.m_nominator %= result.m_denominator;
+
+    int divisor =
+      BigInteger.valueOf(result.m_nominator)
+      .gcd(BigInteger.valueOf(result.m_denominator))
+      .intValue();
+
+    result.m_nominator   /= divisor;
+    result.m_denominator /= divisor;
+
+    return result;
+  }
+
+  //........................................................................
+  //--------------------------------- as ------------------------------------
+
+  /**
+   * Return a new value set the value to x y/z.
+   *
+   * @param       inLeader      the leading value (x)
+   * @param       inNominator   the nominator (y)
+   * @param       inDenominator the denominator (z)
+   *
+   * @return      the new rational with the given values
+   *
+   */
+  public T as(long inLeader, long inNominator, long inDenominator)
+  {
+    if(inDenominator == 0)
+      throw new IllegalArgumentException("denominator cannot be 0!");
+
+    T result = create();
+    result.m_leader      = inLeader;
+    result.m_nominator   = inNominator;
+    result.m_denominator = inDenominator;
+    result.computeNegative();
+
+    return result;
+  }
+
+  //........................................................................
+  //---------------------------------- as -----------------------------------
+
+  /**
+   * Return a new value as x.
+   *
+   * @param       inLeader      the leading value (x)
+   *
+   * @return      the new value created
+   *
+   */
+  public T as(long inLeader)
+  {
+    return as(inLeader, 0, 1);
+  }
+
+  //........................................................................
+  //---------------------------------- as ----------------------------------
+
+  /**
+   * Return a new value set the value to y/z.
+   *
+   * @param       inNominator   the nominator (y)
+   * @param       inDenominator the denominator (z)
+   *
+   * @return      the new value created
+   *
+   */
+  public T as(long inNominator, long inDenominator)
+  {
+    return as(0, inNominator, inDenominator);
+  }
+
+  //........................................................................
   //--------------------------- computeNegative ----------------------------
 
   /**
    * Compute the negative sign and adjust all the values.
    *
+   * This does the following:
+   *
+   *   x  y/ z     -> x     y/z
+   *   x -y/ z     -> x-1 z-y/z neg?
+   *   x  y/-z     -> x-1 z-y/z neg?
+   *   x -y/-z     -> x     y/z
+   *  -x  y/ z     -> x     y/z neg
+   *  -x -y/ z     -> x+1 z-y/z neg?
+   *  -x  y/-z     -> x+1 z-y/z neg?
+   *  -x -y/-z     -> x     y/z neg
+   *
    */
   protected void computeNegative()
   {
+    assert !m_negative : "cannot already have negative computed";
+
     // first without the leader
     if(m_nominator < 0)
     {
       m_nominator *= -1;
-      m_negative   = true;
+      m_negative = true;
     }
     else
       m_negative = false;
@@ -392,8 +511,10 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
     if(m_denominator < 0)
     {
       m_denominator *= -1;
-      m_negative   = !m_negative;
+      m_negative = !m_negative;
     }
+
+    // now we have y/z and neg set to the sign they really have
 
     // now compute in the leader
     // we have to deal with some special cases here. If the real fraction
@@ -415,7 +536,7 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
 
         if(this instanceof Rational)
         {
-          Rational reduced = ((Rational)this).reduce();
+          T reduced = reduce();
           m_nominator = reduced.m_nominator;
           m_denominator = reduced.m_denominator;
           m_leader = reduced.m_leader;
@@ -425,13 +546,12 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
     else
       if(m_leader < 0)
       {
-        m_leader   *= -1;
-        m_negative  = true;
+        m_leader *= -1;
+        m_negative = true;
       }
   }
 
   //........................................................................
-
   //--------------------------------- add ----------------------------------
 
   /**
@@ -439,43 +559,37 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to add
    *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      the sum of the values
    *
    */
-  // public void add(BaseRational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
+  @SuppressWarnings("unchecked") // have to cast reduced
+  public T add(@Nonnull T inValue)
+  {
+    long nominator1 = m_leader * m_denominator + m_nominator;
+    if(m_negative)
+      nominator1 *= -1;
 
-  //   if(hasRandom() || inValue.hasRandom())
-  //     throw new UnsupportedOperationException("cannot add random values");
+    long nominator2 = inValue.m_leader * inValue.m_denominator
+      + inValue.m_nominator;
+    if(inValue.m_negative)
+      nominator2 *= -1;
 
-  //   long nominator1 = m_leader * m_denominator + m_nominator;
-  //   if(m_negative)
-  //     nominator1 *= -1;
+    T result = create();
+    result.m_nominator = nominator1 * inValue.m_denominator
+      + nominator2 * m_denominator;
+    result.m_denominator = m_denominator * inValue.m_denominator;
+    result.m_leader = 0;
 
-  //   long nominator2 = inValue.m_leader * inValue.m_denominator
-  //     + inValue.m_nominator;
-  //   if(inValue.m_negative)
-  //     nominator2 *= -1;
+    if(result.m_nominator < 0)
+    {
+      result.m_nominator *= -1;
+      result.m_negative = true;
+    }
+    else
+      result.m_negative = false;
 
-  //   m_nominator = nominator1 * inValue.m_denominator
-  //     + nominator2 * m_denominator;
-
-  //   m_denominator *= inValue.m_denominator;
-
-  //   m_leader = 0;
-
-  //   if(m_nominator < 0)
-  //   {
-  //     m_nominator *= -1;
-  //     m_negative = true;
-  //   }
-  //   else
-  //     m_negative = false;
-
-  //   reduce();
-  // }
+    return (T)result.reduce();
+  }
 
   //........................................................................
   //--------------------------------- add ----------------------------------
@@ -485,13 +599,13 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to add
    *
-   * @undefined   undefined if one is undefined
+   * @return      a new value representing the addition
    *
    */
-  // public void add(long inValue)
-  // {
-  //   add(new BaseRational(inValue));
-  // }
+  public T add(long inValue)
+  {
+    return add(as(inValue));
+  }
 
   //........................................................................
   //------------------------------- subtract -------------------------------
@@ -501,43 +615,37 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to add
    *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      a new value representing the subtraction
    *
    */
-  // public void subtract(BaseRational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
+  @SuppressWarnings("unchecked") // have to cast reduced
+  public T subtract(@Nonnull T inValue)
+  {
+    long nominator1 = m_leader * m_denominator + m_nominator;
+    if(m_negative)
+      nominator1 *= -1;
 
-  //   if(hasRandom() || inValue.hasRandom())
-  //   throw new UnsupportedOperationException("cannot subtract random values");
+    long nominator2 = inValue.m_leader * inValue.m_denominator
+      + inValue.m_nominator;
+    if(inValue.m_negative)
+      nominator2 *= -1;
 
-  //   long nominator1 = m_leader * m_denominator + m_nominator;
-  //   if(m_negative)
-  //     nominator1 *= -1;
+    T result = create();
+    result.m_nominator = nominator1 * inValue.m_denominator
+      - nominator2 * m_denominator;
+    result.m_denominator = m_denominator * inValue.m_denominator;
+    result.m_leader = 0;
 
-  //   long nominator2 = inValue.m_leader * inValue.m_denominator
-  //     + inValue.m_nominator;
-  //   if(inValue.m_negative)
-  //     nominator2 *= -1;
+    if(result.m_nominator < 0)
+    {
+      result.m_nominator *= -1;
+      result.m_negative = true;
+    }
+    else
+      result.m_negative = false;
 
-  //   m_nominator = nominator1 * inValue.m_denominator
-  //     - nominator2 * m_denominator;
-
-  //   m_denominator *= inValue.m_denominator;
-
-  //   m_leader = 0;
-
-  //   if(m_nominator < 0)
-  //   {
-  //     m_nominator *= -1;
-  //     m_negative = true;
-  //   }
-  //   else
-  //     m_negative = false;
-
-  //   reduce();
-  // }
+    return (T)result.reduce();
+  }
 
   //........................................................................
   //------------------------------- subtract -------------------------------
@@ -547,13 +655,13 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to add
    *
-   * @undefined   undefined if one is undefined
+   * @return      a new value representing the subtraction
    *
    */
-  // public void subtract(long inValue)
-  // {
-  //   subtract(new BaseRational(inValue));
-  // }
+  public T subtract(long inValue)
+  {
+    return subtract(as(inValue));
+  }
 
   //........................................................................
   //-------------------------------- divide --------------------------------
@@ -563,26 +671,26 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to divide with
    *
-   * @undefined   undefined if one is undefined
+   * @return      a new value representing the division
    *
    */
-  // public void divide(long inValue)
-  // {
-  //   if(inValue == 0)
-  //     throw new IllegalArgumentException("cannot divide by zero!");
+  @SuppressWarnings("unchecked") // must cast reduced
+  public T divide(long inValue)
+  {
+    if(inValue == 0)
+      throw new IllegalArgumentException("cannot divide by zero!");
 
-  //   if(inValue == 1)
-  //     return;
+    if(inValue == 1)
+      return (T)this;
 
-  //   m_nominator   += m_leader * m_denominator;
-  //   m_denominator *= Math.abs(inValue);
-  //   m_leader       = 0;
+    T result = create();
+    result.m_nominator = m_nominator + m_leader * m_denominator;
+    result.m_denominator = m_denominator * Math.abs(inValue);
+    result.m_leader = 0;
+    result.m_negative = inValue < 0 ? !m_negative : m_negative;
 
-  //   if(inValue < 0)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-  // }
+    return (T)result.reduce();
+  }
 
   //........................................................................
   //-------------------------------- divide --------------------------------
@@ -592,31 +700,23 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to divide with
    *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      a new value representing the division
    *
    */
-  // public void divide(BaseRational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
+  @SuppressWarnings("unchecked") // must cast reduced
+  public T divide(@Nonnull T inValue)
+  {
+    T result = create();
+    result.m_nominator =
+      (m_leader * m_denominator + m_nominator) * inValue.m_denominator;
+    result.m_denominator =
+      (inValue.m_leader * inValue.m_denominator + inValue.m_nominator)
+      * m_denominator;
+    result.m_leader = 0;
+    result.m_negative = inValue.m_negative ? !m_negative : m_negative;
 
-  //   if(hasRandom() || inValue.hasRandom())
-  //     throw new UnsupportedOperationException("cannot divide random values");
-
-  //   m_nominator    =
-  //     (m_leader * m_denominator + m_nominator) * inValue.m_denominator;
-
-  //   m_denominator =
-  //     (inValue.m_leader * inValue.m_denominator + inValue.m_nominator)
-  //     * m_denominator;
-
-  //   m_leader       = 0;
-
-  //   if(inValue.m_negative)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-  // }
+    return (T)result.reduce();
+  }
 
   //........................................................................
   //------------------------------- multiply -------------------------------
@@ -626,26 +726,24 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to multiply with
    *
-   * @return      true if multiplied successfully, false if not
-   *
-   * @undefined   undefined if one is undefined
+   * @return      a new value representing the multiplication
    *
    */
-  // public boolean multiply(long inValue)
-  // {
-  //   if(inValue == 1)
-  //     return true;
+  @SuppressWarnings("unchecked") // have to cast this
+  public T multiply(long inValue)
+  {
+    if(inValue == 1)
+      return (T)this;
 
-  //   m_leader    *= Math.abs(inValue);
-  //   m_nominator *= Math.abs(inValue);
+    T result = create();
+    result.m_leader = m_leader * Math.abs(inValue);
+    result.m_nominator = m_nominator * Math.abs(inValue);
+    result.m_denominator = m_denominator;
+    result.m_negative = (inValue < 0 && !m_negative)
+      || (inValue >= 0 && m_negative);
 
-  //   if(inValue < 0)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-
-  //   return true;
-  // }
+    return (T)result.reduce();
+  }
 
   //........................................................................
   //------------------------------- multiply -------------------------------
@@ -655,31 +753,21 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    * @param       inValue the value to multiply with
    *
-   * @return      true if multiplied successfully, false if not
-   *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      the newly created, multiplied value
    *
    */
-  // public boolean multiply(BaseRational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
+  public T multiply(@Nonnull T inValue)
+  {
+    m_nominator    = (m_leader * m_denominator + m_nominator)
+      * (inValue.m_leader * inValue.m_denominator + inValue.m_nominator);
+    m_leader       = 0;
+    m_denominator *= inValue.m_denominator;
 
-  //   if(hasRandom() || inValue.hasRandom())
-  //  throw new UnsupportedOperationException("cannot multiply random values");
+    if(inValue.m_negative)
+      m_negative = !m_negative;
 
-  //   m_nominator    = (m_leader * m_denominator + m_nominator)
-  //     * (inValue.m_leader * inValue.m_denominator + inValue.m_nominator);
-  //   m_leader       = 0;
-  //   m_denominator *= inValue.m_denominator;
-
-  //   if(inValue.m_negative)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-
-  //   return true;
-  // }
+    return reduce();
+  }
 
   //........................................................................
 

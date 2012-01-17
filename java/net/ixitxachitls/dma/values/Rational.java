@@ -23,8 +23,6 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.math.BigInteger;
-
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
@@ -284,104 +282,6 @@ public class Rational extends BaseRational<Rational>
 
   //----------------------------------------------------------- manipulators
 
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set the value to x y/z.
-   *
-   * @param       inLeader      the leading value (x)
-   * @param       inNominator   the nominator (y)
-   * @param       inDenominator the denominator (z)
-   *
-   * @return      true if set, false if not (0 denominator)
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean set(long inLeader, long inNominator, long inDenominator)
-  // {
-  //   if(inDenominator == 0)
-  //     return false;
-
-  //   m_leader      = inLeader;
-  //   m_nominator   = inNominator;
-  //   m_denominator = inDenominator;
-
-  //   computeNegative();
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  // /**
-  //  * Set the value to x y/z.
-  //  *
-  //  * @param       inLeader      the leading value (x)
-  //  *
-  //  * @return      true if set, false if not (never)
-  //  *
-  //  * @undefined   never
-  //  *
-  //  */
-  // public boolean set(long inLeader)
-  // {
-  //   return set(inLeader, 0, 1);
-  // }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set the value to x y/z.
-   *
-   * @param       inNominator   the nominator (y)
-   * @param       inDenominator the denominator (z)
-   *
-   * @return      true if set, false if not (0 denominator)
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean set(long inNominator, long inDenominator)
-  // {
-  //   return set(0, inNominator, inDenominator);
-  // }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set the value to x y/z.
-   *
-   * @param       inLeader            the leading value
-   * @param       inNominator         the nominator
-   * @param       inDenominator       the denominator
-   * @param       inRandomNominator   a random nominator value (as a dice)
-   * @param       inRandomDenominator a random denominator value (as a dice)
-   *
-   * @return      true if set, false if not (0 denominator)
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean set(long inLeader, long inNominator, long inDenominator,
-  //                    Dice inRandomNominator, Dice inRandomDenominator)
-  // {
-  //   m_leader            = inLeader;
-  //   m_nominator         = inNominator;
-  //   m_denominator       = inDenominator;
-  //   m_randomNominator   = inRandomNominator;
-  //   m_randomDenominator = inRandomDenominator;
-
-  //   computeNegative();
-
-  //   return true;
-  // }
-
-  //........................................................................
-
   //-------------------------------- reduce --------------------------------
 
   /**
@@ -398,280 +298,8 @@ public class Rational extends BaseRational<Rational>
    */
   public @Nonnull Rational reduce()
   {
-    // nothing to do if not defined
-    if(!isDefined())
-      return this;
-
-    // determine new leader
-    Rational result = create();
-    result.m_denominator = m_denominator;
-    result.m_nominator   = m_nominator + m_leader * m_denominator;
-    result.m_leader      = result.m_nominator / result.m_denominator;
-    result.m_negative    = m_negative;
-
-    result.m_nominator %= result.m_denominator;
-
-    int divisor =
-      BigInteger.valueOf(result.m_nominator)
-      .gcd(BigInteger.valueOf(result.m_denominator))
-      .intValue();
-
-    result.m_nominator   /= divisor;
-    result.m_denominator /= divisor;
-
-    return result;
+    return super.reduce();
   }
-
-  //........................................................................
-
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add a value to the rational.
-   *
-   * @param       inValue the value to add
-   *
-   * @undefined   IllegalArgumentException if given value is null
-   *
-   */
-  // public void add(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //     throw new UnsupportedOperationException("cannot add random values");
-
-  //   long nominator1 = m_leader * m_denominator + m_nominator;
-  //   if(m_negative)
-  //     nominator1 *= -1;
-
-  //   long nominator2 = inValue.m_leader * inValue.m_denominator
-  //     + inValue.m_nominator;
-  //   if(inValue.m_negative)
-  //     nominator2 *= -1;
-
-  //   m_nominator = nominator1 * inValue.m_denominator
-  //     + nominator2 * m_denominator;
-
-  //   m_denominator *= inValue.m_denominator;
-
-  //   m_leader = 0;
-
-  //   if(m_nominator < 0)
-  //   {
-  //     m_nominator *= -1;
-  //     m_negative = true;
-  //   }
-  //   else
-  //     m_negative = false;
-
-  //   reduce();
-  // }
-
-  //........................................................................
-  //--------------------------------- add ----------------------------------
-
-  /**
-   * Add a value to the rational.
-   *
-   * @param       inValue the value to add
-   *
-   * @undefined   undefined if one is undefined
-   *
-   */
-  // public void add(long inValue)
-  // {
-  //   add(new Rational(inValue));
-  // }
-
-  //........................................................................
-  //------------------------------- subtract -------------------------------
-
-  /**
-   * Add a value to the rational.
-   *
-   * @param       inValue the value to add
-   *
-   * @undefined   IllegalArgumentException if given value is null
-   *
-   */
-  // public void subtract(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //   throw new UnsupportedOperationException("cannot subtract random values");
-
-  //   long nominator1 = m_leader * m_denominator + m_nominator;
-  //   if(m_negative)
-  //     nominator1 *= -1;
-
-  //   long nominator2 = inValue.m_leader * inValue.m_denominator
-  //     + inValue.m_nominator;
-  //   if(inValue.m_negative)
-  //     nominator2 *= -1;
-
-  //   m_nominator = nominator1 * inValue.m_denominator
-  //     - nominator2 * m_denominator;
-
-  //   m_denominator *= inValue.m_denominator;
-
-  //   m_leader = 0;
-
-  //   if(m_nominator < 0)
-  //   {
-  //     m_nominator *= -1;
-  //     m_negative = true;
-  //   }
-  //   else
-  //     m_negative = false;
-
-  //   reduce();
-  // }
-
-  //........................................................................
-  //------------------------------- subtract -------------------------------
-
-  /**
-   * Add a value to the rational.
-   *
-   * @param       inValue the value to add
-   *
-   * @undefined   undefined if one is undefined
-   *
-   */
-  // public void subtract(long inValue)
-  // {
-  //   subtract(new Rational(inValue));
-  // }
-
-  //........................................................................
-  //-------------------------------- divide --------------------------------
-
-  /**
-   * Divide a value to the rational.
-   *
-   * @param       inValue the value to divide with
-   *
-   * @undefined   undefined if one is undefined
-   *
-   */
-  // public void divide(long inValue)
-  // {
-  //   if(inValue == 0)
-  //     throw new IllegalArgumentException("cannot divide by zero!");
-
-  //   if(inValue == 1)
-  //     return;
-
-  //   m_nominator   += m_leader * m_denominator;
-  //   m_denominator *= Math.abs(inValue);
-  //   m_leader       = 0;
-
-  //   if(inValue < 0)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-  // }
-
-  //........................................................................
-  //-------------------------------- divide --------------------------------
-
-  /**
-   * Divide a value to the rational.
-   *
-   * @param       inValue the value to divide with
-   *
-   * @undefined   IllegalArgumentException if given value is null
-   *
-   */
-  // public void divide(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //     throw new UnsupportedOperationException("cannot divide random values");
-
-  //   m_nominator    =
-  //     (m_leader * m_denominator + m_nominator) * inValue.m_denominator;
-
-  //   m_denominator =
-  //     (inValue.m_leader * inValue.m_denominator + inValue.m_nominator)
-  //     * m_denominator;
-
-  //   m_leader       = 0;
-
-  //   if(inValue.m_negative)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-  // }
-
-  //........................................................................
-  //------------------------------- multiply -------------------------------
-
-  /**
-   * Multiply a value to the rational.
-   *
-   * @param       inValue the value to multiply with
-   *
-   * @return      true if multiplied successfully, false if not
-   *
-   * @undefined   undefined if one is undefined
-   *
-   */
-  // public boolean multiply(long inValue)
-  // {
-  //   if(inValue == 1)
-  //     return true;
-
-  //   m_leader    *= Math.abs(inValue);
-  //   m_nominator *= Math.abs(inValue);
-
-  //   if(inValue < 0)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //------------------------------- multiply -------------------------------
-
-  /**
-   * Multiply a value to the rational.
-   *
-   * @param       inValue the value to multiply with
-   *
-   * @return      true if multiplied successfully, false if not
-   *
-   * @undefined   IllegalArgumentException if given value is null
-   *
-   */
-  // public boolean multiply(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //  throw new UnsupportedOperationException("cannot multiply random values");
-
-  //   m_nominator    = (m_leader * m_denominator + m_nominator)
-  //     * (inValue.m_leader * inValue.m_denominator + inValue.m_nominator);
-  //   m_leader       = 0;
-  //   m_denominator *= inValue.m_denominator;
-
-  //   if(inValue.m_negative)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-
-  //   return true;
-  // }
 
   //........................................................................
 
@@ -720,7 +348,7 @@ public class Rational extends BaseRational<Rational>
 
     /** Test init. */
     @org.junit.Test
-    public void testInit()
+    public void init()
     {
       Rational rational = new Rational();
 
@@ -843,7 +471,7 @@ public class Rational extends BaseRational<Rational>
 
     /** Test reading. */
     @org.junit.Test
-    public void testRead()
+    public void read()
     {
       String []tests =
         {
@@ -886,7 +514,7 @@ public class Rational extends BaseRational<Rational>
 
     /** Test reduction. */
     @org.junit.Test
-    public void testReduce()
+    public void reduce()
     {
       Rational value = new Rational(4, 8).reduce();
       assertEquals("reduced", "1/2", value.toString());
@@ -917,175 +545,169 @@ public class Rational extends BaseRational<Rational>
     //----- add ------------------------------------------------------------
 
     /** Test additions. */
-    // public void testAdd()
-    // {
-    //   Rational first  = new Rational(1, 2, 9);
-    //   Rational second = new Rational(2, 1, 6);
+    @org.junit.Test
+    public void add()
+    {
+      Rational first  = new Rational(1, 2, 9);
+      Rational second = new Rational(2, 1, 6);
 
-    //   first.add(second);
-    //   assertEquals("add", "3 7/18", first.toString());
+      first = first.add(second);
+      assertEquals("add", "3 7/18", first.toString());
 
-    //   first.add(42);
-    //   assertEquals("add int", "45 7/18", first.toString());
+      first = first.add(42);
+      assertEquals("add int", "45 7/18", first.toString());
 
-    //   first.add(-20);
-    //   assertEquals("add int", "25 7/18", first.toString());
+      first = first.add(-20);
+      assertEquals("add int", "25 7/18", first.toString());
 
-    //   first.add(-30);
-    //   assertEquals("add int", "-4 11/18", first.toString());
+      first = first.add(-30);
+      assertEquals("add int", "-4 11/18", first.toString());
 
-    //   first.add(5);
-    //   assertEquals("add int", "7/18", first.toString());
+      first = first.add(5);
+      assertEquals("add int", "7/18", first.toString());
 
-    //   first.set(5);
-    //   second.set(-2, 5, 6);
+      first = first.as(5);
+      second = second.as(-2, 5, 6);
 
-    //   first.add(second);
-    //   assertEquals("add negative", "2 1/6", first.toString());
+      first = first.add(second);
+      assertEquals("add negative", "2 1/6", first.toString());
 
-    //   first.set(-2, 5, 6);
-    //   second.set(1, 1, 6);
+      first = first.as(-2, 5, 6);
+      second = second.as(1, 1, 6);
 
-    //   first.add(second);
-    //   assertEquals("add negative 2", "-1 2/3", first.toString());
-    // }
+      first = first.add(second);
+      assertEquals("add negative 2", "-1 2/3", first.toString());
+    }
 
     //......................................................................
     //----- subtract -------------------------------------------------------
 
     /** Test subtraction. */
-    // public void testSubtract()
-    // {
-    //   Rational first  = new Rational(1, 2, 9);
-    //   Rational second = new Rational(2, 1, 6);
+    @org.junit.Test
+    public void subtract()
+    {
+      Rational first  = new Rational(1, 2, 9);
+      Rational second = new Rational(2, 1, 6);
 
-    //   first.subtract(second);
-    //   assertEquals("subtract", "-17/18", first.toString());
+      first = first.subtract(second);
+      assertEquals("subtract", "-17/18", first.toString());
 
-    //   first.subtract(42);
-    //   assertEquals("subtract 2", "-42 17/18", first.toString());
+      first = first.subtract(42);
+      assertEquals("subtract 2", "-42 17/18", first.toString());
 
-    //   first = new Rational(5);
-    //   second = new Rational(2, 1, 2);
+      first = new Rational(5);
+      second = new Rational(2, 1, 2);
 
-    //   first.subtract(second);
-    //   assertEquals("subtract 3", "2 1/2", first.toString());
+      first = first.subtract(second);
+      assertEquals("subtract 3", "2 1/2", first.toString());
 
-    //   first = new Rational(10);
-    //   second = new Rational(2, 5, 6);
+      first = new Rational(10);
+      second = new Rational(2, 5, 6);
 
-    //   first.subtract(second);
-    //   assertEquals("subtract 4", "7 1/6", first.toString());
+      first = first.subtract(second);
+      assertEquals("subtract 4", "7 1/6", first.toString());
 
-    //   second.set(-2, 1, 6);
-    //   first.subtract(second);
-    //   assertEquals("subtract negative", "9 1/3", first.toString());
-    // }
+      first = second.as(-2, 1, 6);
+      first = first.subtract(second);
+      assertEquals("subtract negative", "-5", first.toString());
+    }
 
     //......................................................................
     //----- divide ---------------------------------------------------------
 
     /** Test divisions. */
-    // public void testDivide()
-    // {
-    //   Rational value  = new Rational(2, 2, 8);
+    @org.junit.Test
+    public void divide()
+    {
+      Rational value  = new Rational(2, 2, 8);
 
-    //   value.divide(1);
-    //   assertEquals("divide", "2 2/8",  value.toString());
+      value = value.divide(1);
+      assertEquals("divide", "2 2/8",  value.toString());
 
-    //   value.divide(5);
-    //   assertEquals("divide", "9/20",   value.toString());
+      value = value.divide(5);
+      assertEquals("divide", "9/20",   value.toString());
 
-    //   value.divide(3);
-    //   assertEquals("divide", "3/20",  value.toString());
+      value = value.divide(3);
+      assertEquals("divide", "3/20",  value.toString());
 
-    //   value.divide(-2);
-    //   assertEquals("divide", "-3/40",  value.toString());
+      value = value.divide(-2);
+      assertEquals("divide", "-3/40",  value.toString());
 
-    //   value.set(-5, 2, 3);
-    //   value.divide(-3);
-    //   assertEquals("divide", "1 8/9",  value.toString());
+      value = value.as(-5, 2, 3);
+      value = value.divide(-3);
+      assertEquals("divide", "1 8/9",  value.toString());
 
-    //   value.set(1, 2, 3);
-    //   value.divide(new Rational(4, 5, 6));
-    //   assertEquals("divide", "10/29", value.toString());
-    // }
+      value = value.as(1, 2, 3);
+      value = value.divide(new Rational(4, 5, 6));
+      assertEquals("divide", "10/29", value.toString());
+    }
 
     //......................................................................
     //----- multiply -------------------------------------------------------
 
     /** Test multiplication. */
-    // public void testMultiply()
-    // {
-    //   Rational value  = new Rational(2, 2, 8);
+    @org.junit.Test
+    public void multiply()
+    {
+      Rational value  = new Rational(2, 2, 8);
 
-    //   value.multiply(1);
-    //   assertEquals("multiply", "2 2/8",  value.toString());
+      value = value.multiply(1);
+      assertEquals("multiply", "2 2/8", value.toString());
 
-    //   value.multiply(5);
-    //   assertEquals("multiply", "11 1/4", value.toString());
+      value = value.multiply(5);
+      assertEquals("multiply", "11 1/4", value.toString());
 
-    //   value.multiply(4);
-    //   assertEquals("multiply", "45",      value.toString());
+      value = value.multiply(4);
+      assertEquals("multiply", "45", value.toString());
 
-    //   value.set(-2, 1, 2);
-    //   value.multiply(-3);
+      value = value.as(-2, 1, 2);
+      value = value.multiply(-3);
+      assertEquals("multiply", "7 1/2", value.toString());
 
-    //   assertEquals("multiply", "7 1/2",      value.toString());
+      value = value.multiply(-2);
+      assertEquals("multiply", "-15", value.toString());
 
-    //   value.multiply(-2);
-    //   assertEquals("multiply", "-15",      value.toString());
+      value = new Rational(2, 3, 5);
+      value = value.multiply(new Rational(3, 4, 6));
+      assertEquals("multiply", "9 8/15", value.toString());
 
-    //   value = new Rational(2, 3, 5);
-
-    //   value.multiply(new Rational(3, 4, 6));
-    //   assertEquals("multiply", "9 8/15", value.toString());
-
-    //   value.multiply(new Rational(1, 4));
-    //   assertEquals("multiply", "2 23/60", value.toString());
-    // }
+      value = value.multiply(new Rational(1, 4));
+      assertEquals("multiply", "2 23/60", value.toString());
+    }
 
     //......................................................................
-    //----- set ------------------------------------------------------------
+    //----- as -------------------------------------------------------------
 
     /** Test setting. */
-    // public void testSet()
-    // {
-    //   Rational rational = new Rational();
+    @org.junit.Test
+    public void as()
+    {
+      Rational rational = new Rational();
 
-    //    // undefined value
-    //   assertEquals("not undefined at start", false, rational.isDefined());
-    //   assertEquals("undefined value not correct", "$undefined$",
-    //                rational.toString());
+      // undefined value
+      assertEquals("not undefined at start", false, rational.isDefined());
+      assertEquals("undefined value not correct", "$undefined$",
+                   rational.toString());
 
-    //   assertTrue("set", rational.set(5, 6));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "5/6", rational.toString());
+      rational = rational.as(5, 6);
+      assertTrue("set", rational.isDefined());
+      assertEquals("set", "5/6", rational.toString());
 
-    //   assertTrue("set", rational.set(42, 5, 6));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "42 5/6", rational.toString());
+      rational = rational.as(42, 5, 6);
+      assertTrue("set", rational.isDefined());
+      assertEquals("set", "42 5/6", rational.toString());
 
-    //   assertFalse("set", rational.set(42, 5, 0));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "42 5/6", rational.toString());
-
-    //   assertTrue("set", rational.set(0, 0, 1));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "0", rational.toString());
-
-    //   // with dice
-    //   assertTrue("set",
-    //           rational.set(1, 2, 3, new Dice(1, 4, 0), new Dice(2, 8, 3)));
-    //   assertEquals("set", "1 2*(1d4)/3*(2d8 +3)", rational.toString());
-    // }
+      rational = rational.as(0, 0, 1);
+      assertTrue("set", rational.isDefined());
+      assertEquals("set", "0", rational.toString());
+    }
 
     //......................................................................
     //----- compare --------------------------------------------------------
 
     /** Test comparison with base types. */
     @org.junit.Test
-    public void testCompare()
+    public void compare()
     {
       assertEquals("lower",  -1, new Rational(5).compare(6));
       assertEquals("higher", +1, new Rational(5).compare(4));
@@ -1123,7 +745,7 @@ public class Rational extends BaseRational<Rational>
 
     /** Test comparison. */
     @org.junit.Test
-    public void testCompareRational()
+    public void compareRational()
     {
       assertEquals("lower",  -1, new Rational(5).compare(new Rational(6)));
       assertEquals("lower",  -1, new Rational(5).compare(new Rational(27, 5)));

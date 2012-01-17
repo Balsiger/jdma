@@ -350,76 +350,10 @@ public class RandomRational extends BaseRational<RandomRational>
 
   //----------------------------------------------------------- manipulators
 
-  //--------------------------------- set ----------------------------------
+  //--------------------------------- as -----------------------------------
 
   /**
-   * Set the value to x y/z.
-   *
-   * @param       inLeader      the leading value (x)
-   * @param       inNominator   the nominator (y)
-   * @param       inDenominator the denominator (z)
-   *
-   * @return      true if set, false if not (0 denominator)
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean set(long inLeader, long inNominator, long inDenominator)
-  // {
-  //   if(inDenominator == 0)
-  //     return false;
-
-  //   m_leader      = inLeader;
-  //   m_nominator   = inNominator;
-  //   m_denominator = inDenominator;
-
-  //   computeNegative();
-
-  //   return true;
-  // }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  // /**
-  //  * Set the value to x y/z.
-  //  *
-  //  * @param       inLeader      the leading value (x)
-  //  *
-  //  * @return      true if set, false if not (never)
-  //  *
-  //  * @undefined   never
-  //  *
-  //  */
-  // public boolean set(long inLeader)
-  // {
-  //   return set(inLeader, 0, 1);
-  // }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set the value to x y/z.
-   *
-   * @param       inNominator   the nominator (y)
-   * @param       inDenominator the denominator (z)
-   *
-   * @return      true if set, false if not (0 denominator)
-   *
-   * @undefined   never
-   *
-   */
-  // public boolean set(long inNominator, long inDenominator)
-  // {
-  //   return set(0, inNominator, inDenominator);
-  // }
-
-  //........................................................................
-  //--------------------------------- set ----------------------------------
-
-  /**
-   * Set the value to x y/z.
+   * Createa a new value set as x y/z.
    *
    * @param       inLeader            the leading value
    * @param       inNominator         the nominator
@@ -427,24 +361,20 @@ public class RandomRational extends BaseRational<RandomRational>
    * @param       inRandomNominator   a random nominator value (as a dice)
    * @param       inRandomDenominator a random denominator value (as a dice)
    *
-   * @return      true if set, false if not (0 denominator)
-   *
-   * @undefined   never
+   * @return      the new value created
    *
    */
-  // public boolean set(long inLeader, long inNominator, long inDenominator,
-  //                    Dice inRandomNominator, Dice inRandomDenominator)
-  // {
-  //   m_leader            = inLeader;
-  //   m_nominator         = inNominator;
-  //   m_denominator       = inDenominator;
-  //   m_randomNominator   = inRandomNominator;
-  //   m_randomDenominator = inRandomDenominator;
+  public @Nonnull RandomRational as(long inLeader, long inNominator,
+                                    long inDenominator,
+                                    @Nullable Dice inRandomNominator,
+                                    @Nullable Dice inRandomDenominator)
+  {
+    RandomRational result = as(inLeader, inNominator, inDenominator);
+    result.m_randomNominator   = inRandomNominator;
+    result.m_randomDenominator = inRandomDenominator;
 
-  //   computeNegative();
-
-  //   return true;
-  // }
+    return result;
+  }
 
   //........................................................................
 
@@ -455,43 +385,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to add
    *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      a new value representing the addition
    *
    */
-  // public void add(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //     throw new UnsupportedOperationException("cannot add random values");
-
-  //   long nominator1 = m_leader * m_denominator + m_nominator;
-  //   if(m_negative)
-  //     nominator1 *= -1;
-
-  //   long nominator2 = inValue.m_leader * inValue.m_denominator
-  //     + inValue.m_nominator;
-  //   if(inValue.m_negative)
-  //     nominator2 *= -1;
-
-  //   m_nominator = nominator1 * inValue.m_denominator
-  //     + nominator2 * m_denominator;
-
-  //   m_denominator *= inValue.m_denominator;
-
-  //   m_leader = 0;
-
-  //   if(m_nominator < 0)
-  //   {
-  //     m_nominator *= -1;
-  //     m_negative = true;
-  //   }
-  //   else
-  //     m_negative = false;
-
-  //   reduce();
-  // }
+  public @Nonnull RandomRational add(RandomRational inValue)
+  {
+    throw new UnsupportedOperationException("cannot add random rationals");
+  }
 
   //........................................................................
   //--------------------------------- add ----------------------------------
@@ -501,13 +401,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to add
    *
-   * @undefined   undefined if one is undefined
+   * @return      a new value representing the addition
    *
    */
-  // public void add(long inValue)
-  // {
-  //   add(new Rational(inValue));
-  // }
+  public @Nonnull RandomRational add(long inValue)
+  {
+    throw new UnsupportedOperationException("cannot add random rationals");
+  }
 
   //........................................................................
   //------------------------------- subtract -------------------------------
@@ -517,43 +417,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to add
    *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      a new value representing the subtraction
    *
    */
-  // public void subtract(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //   throw new UnsupportedOperationException("cannot subtract random values");
-
-  //   long nominator1 = m_leader * m_denominator + m_nominator;
-  //   if(m_negative)
-  //     nominator1 *= -1;
-
-  //   long nominator2 = inValue.m_leader * inValue.m_denominator
-  //     + inValue.m_nominator;
-  //   if(inValue.m_negative)
-  //     nominator2 *= -1;
-
-  //   m_nominator = nominator1 * inValue.m_denominator
-  //     - nominator2 * m_denominator;
-
-  //   m_denominator *= inValue.m_denominator;
-
-  //   m_leader = 0;
-
-  //   if(m_nominator < 0)
-  //   {
-  //     m_nominator *= -1;
-  //     m_negative = true;
-  //   }
-  //   else
-  //     m_negative = false;
-
-  //   reduce();
-  // }
+  public @Nonnull RandomRational subtract(@Nonnull RandomRational inValue)
+  {
+    throw new UnsupportedOperationException("cannot subtract random rationals");
+  }
 
   //........................................................................
   //------------------------------- subtract -------------------------------
@@ -563,13 +433,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to add
    *
-   * @undefined   undefined if one is undefined
+   * @return      a new value representing the subtraction
    *
    */
-  // public void subtract(long inValue)
-  // {
-  //   subtract(new Rational(inValue));
-  // }
+  public @Nonnull RandomRational subtract(long inValue)
+  {
+    throw new UnsupportedOperationException("cannot subtract random rationals");
+  }
 
   //........................................................................
   //-------------------------------- divide --------------------------------
@@ -579,26 +449,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to divide with
    *
-   * @undefined   undefined if one is undefined
+   * @return      a new value representing the divison
    *
    */
-  // public void divide(long inValue)
-  // {
-  //   if(inValue == 0)
-  //     throw new IllegalArgumentException("cannot divide by zero!");
-
-  //   if(inValue == 1)
-  //     return;
-
-  //   m_nominator   += m_leader * m_denominator;
-  //   m_denominator *= Math.abs(inValue);
-  //   m_leader       = 0;
-
-  //   if(inValue < 0)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-  // }
+  public @Nonnull RandomRational divide(long inValue)
+  {
+    throw new UnsupportedOperationException("cannot divide random rationals");
+  }
 
   //........................................................................
   //-------------------------------- divide --------------------------------
@@ -608,31 +465,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to divide with
    *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      a new value representing the divison
    *
    */
-  // public void divide(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //     throw new UnsupportedOperationException("cannot divide random values");
-
-  //   m_nominator    =
-  //     (m_leader * m_denominator + m_nominator) * inValue.m_denominator;
-
-  //   m_denominator =
-  //     (inValue.m_leader * inValue.m_denominator + inValue.m_nominator)
-  //     * m_denominator;
-
-  //   m_leader       = 0;
-
-  //   if(inValue.m_negative)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-  // }
+  public @Nonnull RandomRational divide(@Nonnull RandomRational inValue)
+  {
+    throw new UnsupportedOperationException("cannot divide random rationals");
+  }
 
   //........................................................................
   //------------------------------- multiply -------------------------------
@@ -642,26 +481,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to multiply with
    *
-   * @return      true if multiplied successfully, false if not
-   *
-   * @undefined   undefined if one is undefined
+   * @return      the multiplication of this with the given value
    *
    */
-  // public boolean multiply(long inValue)
-  // {
-  //   if(inValue == 1)
-  //     return true;
-
-  //   m_leader    *= Math.abs(inValue);
-  //   m_nominator *= Math.abs(inValue);
-
-  //   if(inValue < 0)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-
-  //   return true;
-  // }
+  public @Nonnull RandomRational multiply(long inValue)
+  {
+    throw new UnsupportedOperationException("cannot multiply random rationals");
+  }
 
   //........................................................................
   //------------------------------- multiply -------------------------------
@@ -671,31 +497,13 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    * @param       inValue the value to multiply with
    *
-   * @return      true if multiplied successfully, false if not
-   *
-   * @undefined   IllegalArgumentException if given value is null
+   * @return      a new value with the multiplication
    *
    */
-  // public boolean multiply(Rational inValue)
-  // {
-  //   if(inValue == null)
-  //     throw new IllegalArgumentException("must have a value here");
-
-  //   if(hasRandom() || inValue.hasRandom())
-  //  throw new UnsupportedOperationException("cannot multiply random values");
-
-  //   m_nominator    = (m_leader * m_denominator + m_nominator)
-  //     * (inValue.m_leader * inValue.m_denominator + inValue.m_nominator);
-  //   m_leader       = 0;
-  //   m_denominator *= inValue.m_denominator;
-
-  //   if(inValue.m_negative)
-  //     m_negative = !m_negative;
-
-  //   reduce();
-
-  //   return true;
-  // }
+  public @Nonnull RandomRational multiply(@Nonnull RandomRational inValue)
+  {
+    throw new UnsupportedOperationException("cannot multiply random rationals");
+  }
 
   //........................................................................
 
@@ -1229,39 +1037,35 @@ public class RandomRational extends BaseRational<RandomRational>
     // }
 
     //......................................................................
-    //----- set ------------------------------------------------------------
+    //----- as ------------------------------------------------------------
 
     /** Test setting. */
-    // public void testSet()
-    // {
-    //   Rational rational = new Rational();
+    @org.junit.Test
+    public void testAs()
+    {
+      RandomRational rational = new RandomRational();
 
-    //    // undefined value
-    //   assertEquals("not undefined at start", false, rational.isDefined());
-    //   assertEquals("undefined value not correct", "$undefined$",
-    //                rational.toString());
+       // undefined value
+      assertEquals("not undefined at start", false, rational.isDefined());
+      assertEquals("undefined value not correct", "$undefined$",
+                   rational.toString());
 
-    //   assertTrue("set", rational.set(5, 6));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "5/6", rational.toString());
+      rational = rational.as(5, 6);
+      assertTrue("set", rational.isDefined());
+      assertEquals("set", "5/6", rational.toString());
 
-    //   assertTrue("set", rational.set(42, 5, 6));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "42 5/6", rational.toString());
+      rational = rational.as(42, 5, 6);
+      assertTrue("set", rational.isDefined());
+      assertEquals("set", "42 5/6", rational.toString());
 
-    //   assertFalse("set", rational.set(42, 5, 0));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "42 5/6", rational.toString());
+      rational = rational.as(0, 0, 1);
+      assertTrue("set", rational.isDefined());
+      assertEquals("set", "0", rational.toString());
 
-    //   assertTrue("set", rational.set(0, 0, 1));
-    //   assertTrue("set", rational.isDefined());
-    //   assertEquals("set", "0", rational.toString());
-
-    //   // with dice
-    //   assertTrue("set",
-    //           rational.set(1, 2, 3, new Dice(1, 4, 0), new Dice(2, 8, 3)));
-    //   assertEquals("set", "1 2*(1d4)/3*(2d8 +3)", rational.toString());
-    // }
+      // with dice
+      rational = rational.as(1, 2, 3, new Dice(1, 4, 0), new Dice(2, 8, 3));
+      assertEquals("set", "1 2*1d4/3*2d8 +3", rational.toString());
+    }
 
     //......................................................................
     //----- value ----------------------------------------------------------
