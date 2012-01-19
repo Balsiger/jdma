@@ -489,7 +489,7 @@ public abstract class Value<T extends Value> implements
    * @return      a string denoting the group this value is in
    *
    */
-  public @Nonnull String doGroup()
+  protected @Nonnull String doGroup()
   {
     return this.toString(false);
   }

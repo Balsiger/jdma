@@ -117,7 +117,7 @@ public class Money extends Units<Money>
   //-------------------------------------------------------------- variables
 
   /** The unit definition. */
-  private static String s_definition =
+  private static @Nonnull String s_definition =
     Config.get("/rules/money.units",
                "1/1 : D&D = 10/1   : pp : "
                + "platinum|platinums|platinum piece|platinum pieces,"
@@ -128,7 +128,7 @@ public class Money extends Units<Money>
                + "copper|coppers|copper piece|copper pieces.");
 
   /** The set definition. */
-  private static Set []s_sets = parseDefinition(s_definition);
+  private static @Nonnull Set []s_sets = parseDefinition(s_definition);
 
   /** The type for the standard coins. */
   public enum Coin
@@ -170,7 +170,7 @@ public class Money extends Units<Money>
   }
 
   /** The grouping. */
-  protected static final Group<Money, Long, String> s_grouping =
+  protected static final @Nonnull Group<Money, Long, String> s_grouping =
     new Group<Money, Long, String>(new Group.Extractor<Money, Long>()
       {
         public Long extract(Money inValue)
@@ -306,7 +306,7 @@ public class Money extends Units<Money>
 
   //........................................................................
 
-  //-------------------------------- group ---------------------------------
+  //------------------------------- doGroup --------------------------------
 
   /**
    * Return the group this value belongs to.
@@ -314,7 +314,7 @@ public class Money extends Units<Money>
    * @return      a string denoting the group this value is in
    *
    */
-  public String group()
+  protected @Nonnull String doGroup()
   {
     return s_grouping.group(this);
   }
