@@ -1,0 +1,4284 @@
+#
+# File:         WTC 17752.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+#
+# Description:  These are the items from the Dungeon Master's Guide
+#
+# Worlds:       Generic
+#
+
+# base stuff for magical items ################################################
+
+# the following items are not yet completely defined
+
+#----- Special Materials
+
+#----- Mithral Shield
+
+base item with armor Mithral Shield =
+
+  value             1000 gp;
+  probability       Rare;
+  hardness          15;
+  substance         {~, this should be 1 in, but since all hp are summed up}
+                    mithral 1/2 in;
+  weight            [/2 "mithral"];
+  arcane failure    [-10% "mithral"];
+  check penalty     [+3 "mithral"];
+  player name       "Mithral Shield";
+  references        WTC 17752: 284;
+  description
+  "Mithral is a very rare silvery, glistening metal that is lighter than iron
+  but just as hard. When worked like steel, it becomes a wonderful material
+  from which to create armor and is occasionally used for other items as
+  well.";
+  synonyms          "Mithral Shield",
+                    "Shield, Mithral".
+
+#.....
+#----- Light Silver Weapon
+
+base item with weapon Light Silver Weapon =
+
+  value             20 gp;
+  probability       Uncommon;
+  hardness          8;
+  damage            -1;
+  hp                10;
+  player name       "Silver";
+  references        WTC 17752: 284-285;
+  description
+
+  "A complex process involving metallurgy and alchemy can bond silver to a
+  weapon made of steel so that it bypasses the damage reduction of creatures
+  such as lycanthropes.
+
+  On a successful attack with a silvered weapon, the wielder takes a -1 penalty
+  on the damage roll (with the usual minimum of 1 point of damage). The
+  alchemical silvering process can't be applied to nonmetal items, and it
+  doesn't work on rare metals such as adamantine, cold iron, and mithral.
+
+  Alchemical silver has 10 hit points per inch of thickness and hardness 8.";
+
+  synonyms          "Silver".
+
+#.....
+
+#----- Mithral Breastplate
+
+base item with armor, incomplete, wearable Mithral Breastplate =
+
+  probability       Common;
+  hardness          15;
+  player name       "Breastplate";
+  references        WTC 17752: 284;
+  synonyms          "Breastplate, Mithral".
+
+#.....
+#----- Mithral Shirt
+
+base item with armor, incomplete, wearable Mithral Shirt [Chain Shirt] =
+
+  AC bonus          +6 armor;
+  check penalty     0;
+  arcane failure    10%;
+  weight            10 lbs;
+  probability       Common;
+  hardness          15;
+  references        WTC 17752: 220/284;
+  description
+  "This extremely light chain shirt is made of very fine mithral links.";
+  synonyms          "Mithral Chain Shirt",
+                    "Chain Shirt, Mithral",
+                    "Shirt, Mitrhal".
+
+#.....
+#----- Heavy Mithral Shield
+
+base item with armor, incomplete, wearable Heavy Mithral Shield =
+
+  probability       Common;
+  hardness          15;
+  player name       "Heavy Steel Shield";
+  references        WTC 17752: 284;
+  synonyms          "Shield, Heavy Mithral",
+                    "Heavy Shield, Mithral".
+
+#.....
+
+#.....
+#----- Numbered Magical Armor
+
+#----- Mwk Armor
+
+base item with armor Mwk Armor =
+
+  check penalty     [+1 "mwk"];
+  value             150 gp;
+  probability       Uncommon;
+  hp                0;
+  appearances       Common "Good workmanship.",
+                    Common "Finely crafted.",
+                    Common "Well made.",
+                    Rare "Extraordinarily well made.";
+  player name       "";
+  references        "WTC 17524" 126;
+  description
+  "Just as with weapons, you can purchase or craft masterwork versions of armor
+  or shields. Such a well-made item functions like the normal version, except
+  that its armor check penalty is lessened by 1.
+
+  A masterwork suit of armor or shield costs an extra 150 gp over and above the
+  normal cost for that type or armor or shield.
+
+  The masterwork quality of a suite of armor never provides a bonus on attack
+  or damage rolls, even if the armor or shield is used as a weapon (such as
+  \Item{spiked armor} or a \Item{spiked shield}).
+
+  All magic armors and shields are automatically considered to be of masterwork
+  quality.
+
+  You can't add the masterwork quality to armor or a shield after it is
+  created; it must be created as a masterwork item.";
+  short description "A masterwork version.";
+  synonyms          "Masterwork";
+  categories        masterwork.
+
+#.....
+#----- Armor +1
+
+base item with armor Armor +1 [Mwk Armor] =
+
+  probability       Uncommon;
+  value             1150 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description
+  "Magical +1 armor.";
+  short description "+1 armor.";
+  synonyms          "+1";
+  categories        magic.
+
+#.....
+#----- Armor +2
+
+base item with armor Armor +2 [Mwk Armor] =
+
+  probability       Uncommon;
+  value             4150 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description
+  "Magical +1 armor.";
+  short description "+2 armor.";
+  synonyms          "+2";
+  categories        magic.
+
+#.....
+#----- Armor +3
+
+base item with armor Armor +3 [Mwk Armor] =
+
+  probability       Uncommon;
+  value             8150 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description
+  "Magical +3 armor.";
+  short description "+3 armor.";
+  synonyms          "+3";
+  categories        magic.
+
+#.....
+#----- Armor +4
+
+base item with armor Armor +4 [Mwk Armor] =
+
+  probability       Uncommon;
+  value             16150 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description
+  "Magical +4 armor.";
+  short description "+4 armor.";
+  synonyms          "+4";
+  categories        magic.
+
+#.....
+#----- Armor +5
+
+base item with armor Armor +5 [Mwk Armor] =
+
+  probability       Uncommon;
+  value             25150 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description
+  "Magical +5 armor.";
+  short description "+5 armor.";
+  synonyms          "+5";
+  categories        magic.
+
+#.....
+#----- Armor +6
+
+base item with armor Armor +6 [Mwk Armor] =
+
+  probability       Uncommon;
+  value             36150 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description
+  "Magical +6 armor.";
+  short description "+6 armor.";
+  synonyms          "+6";
+  categories        magic.
+
+#.....
+#----- Armor +7
+
+base item with armor Armor +7 [Mwk Armor] =
+
+  probability       Uncommon;
+  value             49000 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description
+  "Magical +6 armor.";
+  short description "+7 armor.";
+  synonyms          "+7";
+  categories        magic.
+
+#.....
+#----- Magic Defense +1
+
+base item with armor Magic Defense +1 =
+
+  AC bonus          +1 enhancement.
+
+#.....
+#----- Magic Defense +2
+
+base item with armor Magic Defense +2 =
+
+  AC bonus          +2 enhancement.
+
+#.....
+#----- Magic Defense +3
+
+base item with armor Magic Defense +3 =
+
+  AC bonus          +3 enhancement.
+
+#.....
+#----- Magic Defense +4
+
+base item with armor Magic Defense +4 =
+
+  AC bonus          +4 enhancement.
+
+#.....
+#----- Magic Defense +5
+
+base item with armor Magic Defense +5 =
+
+  AC bonus          +5 enhancement.
+
+#.....
+
+#----- Shadow Armor
+
+base item with incomplete, armor Shadow Armor =
+
+  value             3750 gp;
+  incomplete        "+5 competence bonus on Hide";
+  categories        shadow, magic;
+  synonyms          "shadow";
+  references        WTC 17752: 219;
+  description
+
+  "This armor is jet black and blurs the wearer whenever she tries to hide,
+  granting a +5 competence bonus on Hide checks.  (The armorâs armor check
+  penalty still applies normally.)".
+
+#.....
+#----- Silent Moves Armor
+
+base item with incomplete, armor Silent Moves Armor =
+
+  value             3750 gp;
+  incomplete        "+5 competence bonus on Move Silently";
+  categories        silent, move, magic;
+  synonyms          "silent moves";
+  references        WTC 17752: 219;
+  description
+
+  "This armor is well oiled and magically con- structed so that it not only
+  makes little sound, but it dampens sound around it. It provides a +5
+  competence bonus on its wearer's Move Silently checks. (The armor;s armor
+  check penalty still applies normally.)".
+
+#.....
+#----- Light Fortification
+
+base item with incomplete, armor Light Fortification =
+
+  incomplete        "+1 bonus, 25% to ignore critical hit or sneak";
+  categories        fortification, light, damage reduction, magic;
+  short description "25% change to ignore critital hit or sneak attacks.";
+  references        WTC 17752: 219;
+  description
+
+  "This suit of armor or shield produces a magical force that protects vital
+  areas of the wearer more effectively. When a critical hit or sneak attack is
+  scored on the wearer, there is a 25% chance that the critical hit or sneak
+  attack is negated and damage is instead rolled normally.".
+
+#.....
+#----- Moderate Fortification
+
+base item with incomplete, armor Moderate Fortification =
+
+  incomplete        "+3 bonus, 75% to ignore critical hit or sneak";
+  categories        fortification, moderate, damage reduction, magic;
+  short description "75% change to ignore critital hit or sneak attacks.";
+  references        WTC 17752: 219;
+  description
+
+  "This suit of armor or shield produces a magical force that protects vital
+  areas of the wearer more effectively. When a critical hit or sneak attack is
+  scored on the wearer, there is a 75% chance that the critical hit or sneak
+  attack is negated and damage is instead rolled normally.".
+
+#.....
+#----- Blurring
+
+base item with incomplete, armor Blurring =
+
+  incomplete        "+1 bonus, 20% miss chance";
+  categories        blur, blurring, magic;
+  appearances       common "This armor appears indistinct, as though its edges were smeared.";
+  short description "Gain concealment (20% miss) 3 times a day for 5 rounds.";
+  references        WTC 17752: 219;
+  description
+
+  "When you activiate this armor, your appearance becomes distorted and hazy as
+  if you were affected by a \SpellRef{blur} spell.
+
+  The blurring property functions three times per day, and the effect lasts for
+  5 rounds.".
+
+#.....
+#----- Invulnerability Armor
+
+base item with incomplete, armor Invulnerability Armor =
+
+  incomplete        "DR 5/magic";
+  categories        invulnerability, damage reduction, magic;
+  short description "Damage Reduction 5/magic.";
+  references        WTC 17752: 219;
+  description
+
+  "This suit of armor grants the wearer damage reduction of 5/magic.".
+
+#.....
+
+#----- Elven Chain
+
+base item with armor, wearable Elven Chain [Chainmail] =
+
+  armor type        Light Armor;
+  max dexterity     +4;
+  check penalty     +3;
+  arcane failure    20%;
+  speed             30 ft/20 ft;
+  value             4150 gp;
+  weight            20 lbs;
+  probability       Very Rare;
+  appearances       Common "A suprisingly light chainmail.";
+  references        WTC 17752: 220;
+  description
+  "This extremely light chainmail is made of very fine mithral links. Speed
+  while wearing elven chain is 30 feet for Medium creatures, or 20 feet for
+  Small. The armor has an arcane spell failure chance of 20%, a maximum
+  Dexterity bonus of +4, and an armor check penalty of -2. It is considered
+  light armor and weighs 20 pounds.";
+  short description "A extremly well made, very light chainmail.";
+  synonyms          "Chain, Elven";
+  categories        elf,
+                    armor.
+
+#.....
+#----- Demon Armor
+
+base item Demon Armor [Full Plate, Armor +4, Magic Defense +4] =
+
+  player name       "Full Plate";
+  categories        armor, demon, plate, full;
+  synonyms          "Armor, Demon";
+  value             52260 gp;
+  size              medium-size;
+  probability       very rare;
+  appearances       common    "The armor looks like the hide of a demon.";
+  worlds            generic;
+  references        WTC 17752: 220;
+  short description "Full Plate +4 with claw attacks (1d10 damage) and \SpellRef{Contagion} with For DC 14.";
+  description
+
+  "This plate armor is fashioned to make the wearer appear to be a demon. The
+  helmet is shaped to look like a horned demon head, and its wearer looks out
+  of the open, tooth-filled mouth.  This +4 full plate allows the wearer to
+  make claw attacks that deal 1d10 points of damage, strike as +1 weapons, and
+  afflict the target as if she had been struck by a \SpellRef{contagion} spell
+  (Fortitude DC 14 negates). Use of contagion requires a normal melee attack
+  with the claws. The “claws” are built into the armor’s vambraces and
+  gauntlets.  The armor bestows one negative level on any nonevil creature
+  wearing it. This negative level persists as long as the armor is worn and
+  disappears when the armor is removed.
+
+  The negative level never results in actual level loss, but it cannot be
+  overcome in any way (including restoration spells) while the armor is worn.".
+
+#.....
+
+#.....
+#----- Numbered Magical Weapons
+
+#----- Mwk Weapon
+
+base item with incomplete, weapon Mwk Weapon =
+
+  incomplete
+  "attack +1 enhancement";
+  value             300 gp;
+  probability       Uncommon;
+  appearances       Common "Good workmanship.",
+                    Common "Finely crafted.",
+                    Common "Well made.",
+                    Rare "Extraordinarily well made.";
+  player name       "";
+  references        "WTC 17524" 122;
+  description
+  "A masterwork weapon is a finely crafted version of a normal weapon. Wielding
+   it provides a +1 enhancement bonus on attack rolls.
+
+  You canât add the masterwork quality to a weapon after it is created; it must
+  be crafted as a masterwork weapon (see the Craft skill, page 70). The
+  masterwork quality adds 300 gp to the cost of a normal weapon (or 6 gp to the
+  cost of a single unit of ammunition, such as an arrow). For example, a
+  masterwork bastard sword costs 335 gp.
+
+  All magic weapons are automatically considered to be of masterwork
+  quality. The enhancement bonus granted by the masterwork quality doesnât
+  stack with the enhancement bonus provided by the weaponâs magic.
+
+  Even though some types of armor and shields (such as spiked shields) can be
+  used as weapons, you canât create a masterwork version of such an item that
+  confers an enhancement bonus on attack rolls. Instead, masterwork armor and
+  shields have lessened armor check penalties (see Masterwork Armor, page
+  126).";
+  short description "A masterwork version.";
+  synonyms          "Masterwork";
+  categories        masterwork.
+
+#.....
+#----- Mwk Ammunition
+
+base item with incomplete, weapon Mwk Ammunition =
+
+  incomplete
+  "attack +1 enhancement";
+  value             6 gp;
+  probability       Uncommon;
+  appearances       Common "Good workmanship.",
+                    Common "Finely crafted.",
+                    Common "Well made.",
+                    Rare "Extraordinarily well made.";
+  player name       "";
+  references        "WTC 17524" 122;
+  description
+  "A masterwork weapon is a finely crafted version of a normal weapon. Wielding
+   it provides a +1 enhancement bonus on attack rolls.
+
+  You canât add the masterwork quality to a weapon after it is created; it must
+  be crafted as a masterwork weapon (see the Craft skill, page 70).
+
+  All magic weapons are automatically considered to be of masterwork
+  quality. The enhancement bonus granted by the masterwork quality doesnât
+  stack with the enhancement bonus provided by the weaponâs magic.";
+  short description "A masterwork version.";
+  synonyms          "Masterwork";
+  categories        masterwork.
+
+#.....
+#----- Strength Rating +1
+
+base item with incomplete, weapon Strength Rating +1 =
+
+  incomplete        "gain +1 Str bonus, if any";
+  value             100 gp;
+  probability       Rare;
+  references        "WTC 17524" 119;
+  description
+
+  "A composite longbow can be made with a high strength rating (representing an
+  especially heavy pull) to take advantage of an above-average Strength score;
+  this feature allows you to add your Strength bonus to damage, up to the
+  maximum bonus indicated for the bow. Each point of Strength bonus granted by
+  the bow adds 100 gp to its cost.";
+  short description "A version with a heavy pull.";
+  synonyms          "Strength Rating";
+  categories        strength.
+
+#.....
+#----- Strength Rating +2
+
+base item with incomplete, weapon Strength Rating +2 [Strength Rating +1] =
+
+  incomplete        "gain +2 Str bonus, if any";
+  value             200 gp.
+
+#.....
+#----- Strength Rating +3
+
+base item with incomplete, weapon Strength Rating +3 [Strength Rating +2] =
+
+  incomplete        "gain +3 Str bonus, if any";
+  value             300 gp.
+
+#.....
+#----- Strength Rating +4
+
+base item with incomplete, weapon Strength Rating +4 [Strength Rating +3] =
+
+  incomplete        "gain +4 Str bonus, if any";
+  value             400 gp.
+
+#.....
+
+#----- Weapon +1
+
+base item with weapon Weapon +1 [Mwk Weapon] =
+
+  probability       Uncommon;
+  value             2300 gp;
+  player name       "";
+  references        WTC 17752: 222;
+  description       "".
+
+#.....
+#----- Weapon +2
+
+base item with weapon Weapon +2 [Mwk Weapon] =
+
+  probability       Uncommon;
+  value             8300 gp;
+  player name       "";
+  references        WTC 17752: 222;
+  description       "".
+#.....
+#----- Weapon +3
+
+base item with weapon Weapon +3 [Mwk Weapon] =
+
+  probability       Uncommon;
+  value             18300 gp;
+  player name       "";
+  references        WTC 17752: 222;
+  description       "".
+#.....
+#----- Weapon +4
+
+base item with weapon Weapon +4 [Mwk Weapon] =
+
+  probability       Uncommon;
+  value             32000 gp;
+  player name       "";
+  references        WTC 17752: 222;
+  description       "".
+#.....
+#----- Weapon +5
+
+base item with weapon Weapon +5 [Mwk Weapon] =
+
+  probability       Uncommon;
+  value             50000 gp;
+  player name       "";
+  references        WTC 17752: 222;
+  description       "".
+#.....
+#----- Ammunition +1
+
+base item with weapon Ammunition +1 [Mwk Ammunition] =
+
+  probability       Uncommon;
+  value             46 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description       "".
+
+#.....
+#----- Ammunition +2
+
+base item with weapon Ammunition +2 [Mwk Ammunition] =
+
+  probability       Uncommon;
+  value             166 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description       "".
+
+#.....
+#----- Ammunition +3
+
+base item with weapon Ammunition +3 [Mwk Ammunition] =
+
+  probability       Uncommon;
+  value             366 gp;
+  player name       "";
+  references        WTC 17752: 216-217;
+  description       "".
+
+#.....
+#----- Magic Attack +1
+
+base item with weapon Magic Attack +1 =
+
+  probability       Uncommon;
+  player name       "";
+  references        WTC 17752: 222;
+  description
+  "Magical +1 weapon.";
+  damage            +1;
+  short description "+1 weapon.";
+  synonyms          "+1";
+  categories        magic.
+
+#.....
+#----- Magic Attack +2
+
+base item with weapon Magic Attack +2 =
+
+  probability       Uncommon;
+  player name       "";
+  references        WTC 17752: 222;
+  description
+  "Magical +2 weapon.";
+  damage            +2;
+  short description "+2 weapon.";
+  synonyms          "+2";
+  categories        magic.
+
+#.....
+#----- Magic Attack +3
+
+base item with weapon Magic Attack +3 =
+
+  probability       Uncommon;
+  player name       "";
+  references        WTC 17752: 222;
+  description
+  "Magical +2 weapon.";
+  damage            +3;
+  short description "+3 weapon.";
+  synonyms          "+3";
+  categories        magic.
+
+#.....
+
+#----- Bane
+
+base item with incomplete, weapon Bane Weapon =
+
+  incomplete        "attack +2 against specific foe;
+                    additional damage only against specific foe";
+  damage            2d6;
+  categories        base, magic;
+  synonyms          "bane";
+  references        WTC 17752: 224;
+  description
+
+  "A bane weapon excels at attacking one type or subtype of creature. Against
+  its designated foe, its effective enhancement bonus is +2 better than its
+  normal enhancement bonus (so a +1 longsword is a +3 longsword against its
+  foe). It deals an extra 2d6 points of damage against the foe. Bows,
+  crossbows, and slings so crafted bestow the bane quality upon their
+  ammunition.".
+
+#.....
+#----- Disruption
+
+base item with incomplete, weapon Disruption Weapon =
+
+  incomplete        "Undead struck Will 14 or destroyed";
+  categories        base, magic;
+  synonyms          "disruption";
+  references        WTC 17752: 224;
+  description
+
+  "A weapon of disruption is the bane of all undead.  Any undead creature
+  struck in combat must succeed on a DC 14 Will save or be destroyed. A weapon
+  of disruption must be a bludgeoning weapon. (If you roll this property
+  randomly for a piercing or slashing weapon, reroll.)".
+
+#.....
+#----- Flaming
+
+base item with weapon Flaming =
+
+  player name       "";
+  categories        magic, fire;
+  probability       very rare;
+  worlds            generic;
+  references        WTC 17752: 224;
+  damage            +1d6 fire;
+  short description "+1d6 fire damage.";
+  description
+
+  "Upon command, a flaming weapon is sheathed in fire. The fire does not harm
+  the wielder. The effect remains until another command is given. A flaming
+  weapon deals an extra 1d6 points of fire damage on a successful hit. Bows,
+  crossbows, and slings so crafted bestow the fire energy upon their
+  ammunition.".
+
+#.....
+#----- Frost
+
+base item with weapon Frost =
+
+  player name       "";
+  categories        magic, cold;
+  probability       very rare;
+  worlds            generic;
+  references        WTC 17752: 224;
+  damage            +1d6 cold;
+  short description "+1d6 cold damage.";
+  description
+
+  "Upon command, a frost weapon is sheathed in icy cold.  The cold does not
+  harm the wielder. The effect remains until another command is given. A frost
+  weapon deals an extra 1d6 points of cold damage on a successful hit. Bows,
+  crossbows, and slings so crafted bestow the cold energy upon their
+  ammunition.".
+
+#.....
+#----- Keen
+
+base item with incomplete, weapon Keen  =
+
+  critical          [*2 keen];
+  categories        keen, magic;
+  synonyms          "keen";
+  references        WTC 17752: 225;
+  description
+
+  "This ability doubles the threat range of a weapon. For instance, if it is
+  placed on a longsword (which has a normal threat range of 19â20), the keen
+  longsword scores a threat on a 17â20.  Only piercing or slashing weapons can
+  be keen. (If you roll this property randomly for an inappropriate weapon,
+  reroll.)  This benefit doesnât stack with any other effect that expands the
+  threat range of a weapon (such as the keen edge spell or the Improved
+  Critical feat).".
+
+#.....
+#----- Ki Focus
+
+base item with incomplete, weapon Ki Focus  =
+
+  categories        ki, magic;
+  synonyms          "ki";
+  references        WTC 17752: 225;
+  description
+
+  "The magic weapon serves as a channel for the wielderâs ki, allowing her to
+  use her special kiattacks through the weapon as if they were unarmed
+  attacks. These attacks include the monkâs stunning attack, kistrike, and
+  quivering palm, as well as the Stunning Fist feat. Only melee weapons can
+  have the kifocus ability.".
+
+#.....
+#----- Icy Burst
+
+base item with incomplete, weapon Icy Burst [Frost] =
+
+  player name       "";
+  incomplete        "1d10 damage on critical hit, 2d10 for x3, 3d10 for x4";
+  categories        ice, cold, burst;
+  synonyms          "icy burst";
+  references        WTC 17752: 225;
+  description
+
+  "An icy burst weapon functions as a frost weapon that also explodes with
+  frost upon striking a successful critical hit. The frost does not harm the
+  wielder. In addition to the extra damage from the frost ability, an icy burst
+  weapon deals an extra 1d10 points of cold damage on a successful critical
+  hit. If the weaponâs critical multiplier is Ã3, add an extra 2d10 points of
+  cold damage instead, and if the multiplier is Ã4, add an extra 3d10
+  points. Bows, crossbows, and slings so crafted bestow the cold energy upon
+  their ammunition. Even if the frost ability is not active, the weapon still
+  deals its extra cold damage on a successful critical hit.".
+
+#.....
+#----- Returning
+
+base item with incomplete, weapon Returning  =
+
+  categories        returning, magic;
+  synonyms          "returning";
+  references        WTC 17752: 225;
+  description
+
+  "This special ability can only be placed on a weapon that can be thrown. A
+  returning weapon flies through the air back to the creature that threw it. It
+  returns to the thrower just before the creatureâs next turn (and is therefore
+  ready to use again in that turn).  Catching a returning weapon when it comes
+  back is a free action. If the character canât catch it, or if the character
+  has moved since throwing it, the weapon drops to the ground in the square
+  from which it was thrown.".
+
+#.....
+#----- Shock
+
+base item with incomplete, weapon Shock  =
+
+  damage            1d6 electrical;
+  categories        schocking, electricity, magic;
+  synonyms          "shocking";
+  references        WTC 17752: 225;
+  description
+
+  "Upon command, a shock weapon is sheathed in crackling electricity. The
+  electricity does not harm the wielder. The effect remains until another
+  command is given. A shock weapon deals an extra 1d6 points of electricity
+  damage on a successful hit.  Bows, crossbows, and slings so crafted bestow
+  the electricity energy upon their ammunition.".
+
+#.....
+#----- Spell Storing
+
+base item with incomplete, weapon Spell Storing =
+
+  categories        magic, spell, store;
+  synonyms          "spell storing";
+  references        WTC 17752: 225;
+  description
+
+  "A spell storing weapon allows a spellcaster to store a single targeted spell
+   of up to 3rd level in the weapon. (The spell must have a casting time of 1
+   standard action.) Any time the weapon strikes a creature and the creature
+   takes damage from it, the weapon can immediately cast the spell on that
+   creature as a free action if the wielder desires. (This special ability is
+   an exception to the general rule that casting a spell from an item takes
+   at least as long as casting that spell normally.) Inflict serious wounds,
+   contagion, blindness, andhold person are all common choices for the stored
+   spell. Once the spell has been cast from the weapon, a spellcaster can
+   cast any other targeted spell of up to 3rd level into it.  The weapon
+   magically imparts to the wielder the name of the spell currently stored
+   within it. A randomly rolled spell storing weapon has a 50% chance to have a
+   spell stored in it already.".
+
+#.....
+#----- Throwing
+
+base item with incomplete, weapon Throwing =
+
+  categories        throwing, magic;
+  synonyms          "throwing";
+  references        WTC 17752: 225;
+  short description "Give weapon a 10 ft range increment";
+  description
+
+  "This ability can only be placed on a melee weapon. A melee weapon crafted
+  with this ability gains a range increment of 10 feet and can be thrown by a
+  wielder proficient in its normal use.".
+
+#.....
+#----- Unholy
+
+base item with incomplete, weapon Unholy =
+
+  categories        unholy, magic;
+  synonyms          "unholy";
+  references        WTC 17752: 226;
+  short description "+2d6 damage vs. good creatures; evil aligned; negative level while used.";
+  description
+
+  "An unholy weapon is imbued with unholy power. This power makes the weapon
+  evil-aligned and thus bypasses the corresponding damage reduction. It deals
+  an extra 2d6 points of damage against all of good alignment. It bestows one
+  negative level on any good creature attempting to wield it. The negative
+  level remains as long as the weapon is in hand and disappears when the weapon
+  is no longer wielded. This negative level never results in actual level loss,
+  but it cannot be overcome in any way (including restoration spells) while the
+  weapon is wielded. Bows, crossbows, and slings so crafted bestow the unholy
+  power upon their ammunition.".
+
+#.....
+
+#.....
+#----- Magical Weapons
+
+#----- Javelin of Lightning
+
+base item with incomplete, weapon Javelin of Lightning =
+
+  reach             5 ft;
+  value             1500 gp;
+  probability       Rare;
+  player name       "Javelin";
+  references        WTC 17752: 126-127;
+  description
+  "This \Item{Javelin} becomes a 5d6 \SpellRef{Lightning Bolt} when thrown
+  (Reflex DC 14 half). It is consumed in the attack.";
+  short description "A javelin that turns into a \SpellRef[Wiz 5]{lightning bolt} when thrown.";
+  synonyms          "Lightning, Javelin of";
+  categories        magic,
+                    weapon.
+
+#.....
+#----- Dagger of Venom
+
+base item Dagger of Venom [Dagger, Mwk Weapon] =
+
+  player name       "Dagger";
+  categories        dagger, sword, poison, magic;
+  synonyms          "Venom, Dagger of";
+  value             8000 gp;
+  probability       rare;
+  appearances       common    "A black dagger with a serrated edge.";
+  worlds            generic;
+  references        WTC 17752: 226;
+  short description "Once per day when hitting also deliver \SpellRef[sor 10][14]{poison}.";
+  description
+
+  "This black +1 daggerhas a serrated edge. It allows the wielder to use a
+  \SpellRef[sor 10][14]{poison} effect (as the spell, save DC 14) upon a
+  creature struck by the blade once per day. The wielder can decide to use the
+  power after he has struck. Doing so is a free action, but the poison effect
+  must be invoked in the same round that the dagger strikes.".
+
+#.....
+#----- Assassin's Dagger
+
+base item Assassin's Dagger [Dagger, Weapon +2, Magic Attack +2] =
+
+  player name       "Dagger";
+  categories        assassin, fortitude;
+  synonyms          "Dagger, Assassin's";
+  value             18302 gp;
+  probability       very rare;
+  appearances       common    "A wicked looking, curved dagger.";
+  worlds            generic;
+  references        WTC 17752: 226;
+  short description "+2 Dagger with +1 for assassin's death attack For DC.";
+  description
+
+  "This wicked-looking, curved +2 daggerpro- vides a +1 bonus to the DC of a
+  Fortitude save forced by the death attack of an assassin.".
+
+#.....
+
+#.....
+
+#----- Poisons
+#----- Poison
+
+base item Poison Vial [Vial (glass)]=
+
+  categories        poison;
+  probability       very rare.
+
+#.....
+#----- Shadow Essence Poison
+
+base item Shadow Essence Poison [Poison Vial] =
+
+  categories        shadow, strength;
+  synonyms          "Poison, Shadow Essence";
+  value             250 gp;
+  worlds            generic;
+  references        WTC 17752: 297;
+  short description "Injury For DC 17, Str 1 drain/2d6 Str damage";
+  description
+
+  "Injury, Fortitude save DC 17; initial damage 1 point of Strength drain,
+   secondary damage 2d6 points of Strength damage.".
+
+#.....
+#----- Deathblade Poison
+
+base item Deathblade Poison [Poison Vial] =
+
+  categories        poison, constitution, damage, death;
+  synonyms          "Poison, Deathblade";
+  value             1800 gp;
+  worlds            Generic;
+  references        WTC 17752: 279;
+  short description "Injury For DC 20, Con 1d6 damage/Con 2d6 damage";
+  description
+
+  "Injury, Fortitude save DC 20; initial damage 1d6 points of Constitution damage, secondary damage 2d6 points of Constitution damage.".
+
+#.....
+#.....
+#----- Potions
+
+#----- Potion
+
+base item Potion =
+
+  weight            1/10 lb;
+  probability       Very Rare;
+  size              {~, from AC 13} Fine;
+  hardness          1;
+  hp                1;
+  appearances       Common "Some oily liquid in a metal vial.",
+                    Common "Some oily liquid in a ceramic vial.",
+                    Common "Some oily liquid in a glass vial.",
+                    Common "Some watery liquid in a ceramic vial.",
+                    Common "Some watery liquid in a glass vial.",
+                    Common "Some watery liquid in a metal vial.",
+                    Common "Some clear liquid in a ceramic vial",
+                    Common "Some clear liquid in a glass vial",
+                    Common "Some clear liquid in a metal vial",
+                    Common "Some dark liquid in a ceramic vial",
+                    Common "Some dark liquid in a glass vial",
+                    Common "Some dark liquid in a metal vial",
+                    Common "Some thick liquid in a ceramic vial",
+                    Common "Some thick liquid in a glass vial",
+                    Common "Some thick liquid in a metal vial";
+  break DC          12;
+  player name       "Potion";
+  worlds            Generic;
+  references        WTC 17752: 229;
+  description
+  "A typical potion or oil consists of 1 ounce of liquid held in a ceramic or
+  glass vial fitted with a tight stopper. The stoppered container usually is no
+  more than 1 wide and 2 inches high. The vial has AC 13, 1 hit point, hardness
+  1, and a break DC of 12. Vials hold 1 ounce of liquid. ";
+  categories        magic,
+                    potion,
+                    drinkable,
+                    container.
+
+#.....
+#----- Potion 1
+
+base item Potion 1 [Potion] =
+
+  value             50 gp.
+
+#.....
+#----- Potion 3
+
+base item Potion 3 [Potion] =
+
+  value             300 gp.
+
+#.....
+#----- Potion 5
+
+base item Potion 5 [Potion] =
+
+  value             750 gp.
+
+#.....
+
+#----- Potion of Aid
+
+base item Potion of Aid [Potion 3] =
+
+  description
+  "As \SpellRef[Clr 3]{Aid}.";
+  short description "As \SpellRef[Clr 3]{Aid}.".
+
+#.....
+#----- Potion of Alter Self
+
+base item Potion of Alter Self [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Alter Self}.";
+  short description "As \SpellRef[Wiz 3]{Alter Self}.".
+
+#.....
+#----- Potion of Barkskin
+
+base item Potion of Barkskin [Potion 3] =
+
+  description
+  "As \SpellRef[Clr 3]{Barkskin}.";
+  short description "As \SpellRef[Clr 3]{Barkskin}.".
+
+#.....
+#----- Potion of Bear's Endurance
+
+base item Potion of Bear's Endurance [Potion 3] =
+
+  description
+  "As \SpellRef[Clr 3]{Bear's Endurance}.";
+  short description "As \SpellRef[Clr 3]{Bear's Endurance}.".
+
+#.....
+#----- Potion of Blur
+
+base item Potion of Blur [Potion 3] =
+
+  description
+  "As \SpellRef[Clr 3]{Blur}.";
+  short description "As \SpellRef[Clr 3]{Blur}.".
+
+#.....
+#----- Potion of Bull's Strength
+
+base item Potion of Bull's Strength [Potion 3] =
+
+  description
+  "As \SpellRef[Clr 3]{Bull's Strength}.";
+  short description "As \SpellRef[Clr 3]{Bull's Strength}.".
+
+#.....
+#----- Potion of Cat's Grace
+
+base item Potion of Cat's Grace [Potion 3] =
+
+  description
+  "As \SpellRef[Clr 3]{Cat's Grace}.";
+  short description "As \SpellRef[Clr 3]{Cat's Grace}.".
+
+#.....
+#----- Potion of Clairaudience or Clairvoyance
+
+base item Potion of Clairaudience or Clairvoyance [Potion 5] =
+
+  description
+  "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.";
+  short description "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.".
+
+#.....
+#----- Potion of Cure Light Wounds
+
+base item Potion of Cure Light Wounds [Potion 1] =
+
+  description
+  "As \SpellRef[Clr 1]{Cure Light Wounds}.";
+  short description "As \SpellRef[Clr 1]{Cure Light Wounds}.".
+
+#.....
+#----- Potion of Cure Moderate Wounds
+
+base item Potion of Cure Moderate Wounds [Potion 3] =
+
+  description
+  "As \SpellRef[Clr 3]{Cure Moderate Wounds}.";
+  short description "As \SpellRef[Clr 3]{Cure Moderate Wounds}.".
+
+#.....
+#----- Potion of Cure Serious Wounds
+
+base item Potion of Cure Serious Wounds [Potion 5] =
+
+  description
+  "As \SpellRef[Clr 5]{Cure Serious Wounds}.";
+  short description "As \SpellRef[Clr 5]{Cure Serious Wounds}.".
+
+#.....
+#----- Potion of Darkvision
+
+base item Potion of Darkvision [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Darkvision}.";
+  short description "As \SpellRef[Wiz 3]{Darkvision}.".
+
+#.....
+#----- Potion of Detect Thoughts
+
+base item Potion of Detect Thoughts [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Detect Thoughts}.";
+  short description "As \SpellRef[Wiz 3]{Detect Thoughts}.".
+
+#.....
+#----- Potion of Fly
+
+base item Potion of Fly [Potion 5] =
+
+  description
+  "As \SpellRef[Wiz 5]{Fly}.";
+  short description "As \SpellRef[Wiz 5]{Fly}.".
+
+#.....
+#----- Potion of Ghoul Touch
+
+base item Potion of Ghoul Touch [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Ghoul Touch}.";
+  short description "As \SpellRef[Wiz 3]{Ghoul Touch}.".
+
+#.....
+#----- Potion of Haste
+
+base item Potion of Haste [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Haste}.";
+  short description "As \SpellRef[Wiz 3]{Haste}.".
+
+#.....
+#----- Potion of Hide from Animals
+
+base item Potion of Hide from Animals [Potion 1] =
+
+  description
+  "As \SpellRef[Drd 1]{Hide from Animals}.";
+  short description "As \SpellRef[Drd 1]{Hide from Animals}.".
+
+#.....
+#----- Potion of Inflict Serious Wounds
+
+base item Potion of Inflict Serious Wounds [Potion 5] =
+
+  description
+  "As \SpellRef[Clr 5]{Inflict Serious Wounds}.";
+  short description "As \SpellRef[Clr 5]{Inflict Serious Wounds}.".
+
+#.....
+#----- Potion of Invisibility
+
+base item Potion of Invisibility [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Invisibility}.";
+  short description "As \SpellRef[Wiz 3]{Invisibility}.".
+
+#.....
+#----- Potion of Jump
+
+base item Potion of Jump [Potion 1] =
+
+  description
+  "As \SpellRef[Wiz 1]{Jump}.";
+  short description "As \SpellRef[Wiz 1]{Jump}.".
+
+#.....
+#----- Potion of Levitate
+
+base item Potion of Levitate [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Levitate}.";
+  short description "As \SpellRef[Wiz 3]{Levitate}.".
+
+#.....
+#----- Potion of Lesser Restoration
+
+base item Potion of Lesser Restoration [Potion 5] =
+
+  description
+  "As \SpellRef[Clr 5]{Lesser Restoration}.";
+  short description "As \SpellRef[Clr 5]{Lesser Restoration}.".
+
+#.....
+#----- Potion of Neutralize Poison
+
+base item Potion of Neutralize Poison [Potion 5] =
+
+  description
+  "As \SpellRef[Drd 5]{Neutralize Poison}.";
+  short description "As \SpellRef[Drd 5]{Neutralize Poison}.".
+
+#.....
+#----- Potion of Nondetection
+
+base item Potion of Nondetection [Potion 5] =
+
+  description
+  "As \SpellRef[Wiz 3]{Nondetection}.";
+  short description "As \SpellRef[Wiz 3]{Nondetection}.".
+
+#.....
+#----- Potion of Protection from Energy
+
+base item Potion of Protection from Energy [Potion 5] =
+
+  description
+  "As \SpellRef[Wiz 5]{Protection from Energy}.";
+  short description "As \SpellRef[Wiz 5]{Protection from Energy}.".
+
+#.....
+#----- Potion of Resist Energy (fire) 10
+
+base item Potion of Resist Energy (fire) 10 [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Resist Energy}.";
+  short description "As \SpellRef[Wiz 3]{Resist Energy}.".
+
+#.....
+#----- Potion of Remove Disease
+
+base item Potion of Remove Disease [Potion 5] =
+
+  description
+  "As \SpellRef[Clr 5]{Remove Disease}.";
+  short description "As \SpellRef[Clr 5]{Remove Disease}.".
+
+#.....
+#----- Potion of Spider Climb
+
+base item Potion of Spider Climb [Potion 3] =
+
+  description
+  "As \SpellRef[Wiz 3]{Spider Climb}.";
+  short description "As \SpellRef[Wiz 3]{Spider Climb}.".
+#.....
+#----- Potion of Truth
+
+base item Potion of Truth [Potion 5] =
+
+  description
+  "As \SpellRef[Clr 3]{Zone of Truth}.";
+  short description "As \SpellRef[Clr 3]{Zone of Truth}.".
+
+#.....
+
+# special potions
+
+#----- Potion of Sneaking
+
+base item Potion of Sneaking [Potion] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Potion";
+  references        "WTC 11151" 192;
+  description
+  "This potion grants the drinker the ability to walk softly and dampens sound around her slightly, granting a +10 circumstance bonus to her \Skill{Move Silently} checks for 1 hour.";
+  short description "Move Silently +10 for 1 hour.".
+
+#.....
+
+#.....
+#----- Rings
+
+#----- Ring
+
+base item Ring =
+
+  weight            1/100 lb;
+  probability       Common;
+  size              Medium-size;
+  hardness          10;
+  hp                1;
+  appearances       Very Rare "A simple platinum ring.",
+                    Common "A simple gold ring.",
+                    Common "A simple silver ring.",
+                    Very Rare "A simple brass ring.";
+  substance         steel 1/15 in;
+  break DC          25;
+  player name       "Ring";
+  worlds            Generic;
+  references        WTC 17752: 229;
+  description
+  "Although exceptions exist that are crafted from glass or bone, the vast
+   majority of rings are forged from metal---usually precious metals such as
+   gold, silver, and platinum.";
+  categories        mundane.
+
+#.....
+
+#----- Ring of Counterspells
+
+base item Ring of Counterspells [Ring] =
+
+  value             4000 gp;
+  probability       Rare;
+  player name       "Ring";
+  references        WTC 17752: 230;
+  description
+  "This ring might seem to be a ring of spell storing upon first
+  examination. However, while it allows a single spell of 1st through 6th level
+  to be cast into it, that spell cannot be cast out of the ring again. Instead,
+  should that spell ever be cast upon the wearer, the spell is immediately
+  countered, as a counterspell action, requiring no action (or even knowledge)
+  on the wearer's part. Once so used, the spell cast within the ring is
+  gone. A new spell (or the same one as before) may be placed in it again.";
+  short description "The spell stored in this ring is automatically countered when cast upon the wearer, with no action required.";
+  synonyms          "Counterspells, Ring of";
+  categories        spell,
+                    counter,
+                    magic,
+                    ring.
+
+#.....
+#----- Ring of Feather Falling
+
+base item Ring of Feather Falling [Ring] =
+
+  value             2200 gp;
+  probability       Rare;
+  player name       "Ring";
+  references        WTC 17752: 232;
+  description
+
+  "This ring is crafted with a feather pattern all around its edge. It acts
+  exactly like a feather fallspell, activated im- mediately if the wearer falls
+  more than 5 feet.";
+
+  synonyms          "Feather Falling, Ring of";
+  categories        spell, feather,
+                    fall,
+                    magic,
+                    ring.
+
+#.....
+#----- Ring of Protection +1
+
+base item with Armor Ring of Protection +1 [Ring] =
+
+  AC bonus          +1 deflection;
+  value             2000 gp;
+  probability       Rare;
+  player name       "Ring";
+  references        WTC 17752: 232;
+  description
+  "This ring offers continual magical protection in the form of a deflection
+  bonus of +1 AC.";
+  short description "AC +1 deflection bonus";
+  synonyms          "Protection +1, Ring of";
+  categories        protection,
+                    ac.
+
+#.....
+#----- Ring of Protection +2
+
+base item Ring of Protection +2 [Ring] =
+
+  value             8000 gp;
+  probability       Rare;
+  player name       "Ring";
+  references        WTC 17752: 232;
+  description
+  "This ring offers continual magical protection in the form of a deflection
+  bonus of +2 AC.";
+  short description "AC +2 deflection bonus";
+  synonyms          "Protection +2, Ring of";
+  categories        protection,
+                    ac.
+
+#.....
+#----- Ring of Protection +3
+
+base item Ring of Protection +3 [Ring] =
+
+  value             18000 gp;
+  probability       Rare;
+  player name       "Ring";
+  references        WTC 17752: 232;
+  description
+  "This ring offers continual magical protection in the form of a deflection
+  bonus of +3 AC.";
+  short description "AC +3 deflection bonus";
+  synonyms          "Protection +3, Ring of";
+  categories        protection,
+                    ac.
+
+#.....
+#----- Ring of Wizardy I
+
+base item Ring of Wizardry I [Ring] =
+
+  player name       "Ring";
+  categories        ring, wizardry, wizard, spell;
+  synonyms          "Wizardy I, Ring of";
+  value             20000 gp;
+  weight            1/10 lbs;
+  size              {~} Tiny;
+  probability       very rare;
+  substance         steel 1/2 inch;
+  appearances       common    "An elaborately entwined platinum ring.";
+  worlds            generic;
+  references        WTC 17752: 233;
+  short description "Doubles first level arcane spells.";
+  description
+
+  "This special ring comes in four kinds (\Item{ring of wizardry I}, \Item{ring
+  of wizardry II}, \Item{ring of wizardry III}, and \Item{ring of wizardry
+  IV}), all of them useful only to arcane spellcasters. The wearerâs arcane
+  spells per day are doubled for one specific spell level. A ring of wizardry
+  I doubles 1st-level spells. Bonus spells from high ability scores or school
+  specialization are not doubled.".
+
+#.....
+
+#.....
+#----- Scrolls
+
+#----- Scroll
+
+base item Scroll =
+
+  weight            1 lb;
+  probability       Common;
+  size              Tiny;
+  hardness          0;
+  hp                1;
+  appearances       Common "A rolled up sheet of fine paper inside an ivory tube.",
+                    Common "A rolled up sheet of fine paper inside an jade tube.",
+                    Common "A rolled up sheet of fine paper inside an metal tube.",
+                    Common "A rolled up sheet of fine paper inside an leather tube.",
+                    Common "A rolled up sheet of fine paper inside an wood tube.",
+                    Rare "A rolled up sheet of fine paper.";
+  substance         paper 1/10 in;
+  break DC          8;
+  player name       "Scroll";
+  worlds            Generic;
+  references        WTC 17752: 237-238;
+  description
+  "A scroll is a heavy sheet of fine vellum or high-quality paper. An area the
+  size of a piece of modern-day notebook paper (about \frac[8]{1}{2} inches
+  wide and 11 inches long) is sufficient to hold one spell. The sheet is
+  reinforced at the top and bottom with stripes of leather slightly longer than
+  the sheet is wide. A scroll holding more than one spell has the same width
+  (about \frac[8]{1}{2} inches) but is an extra foot or so long for each extra
+  spell. Scrolls that hold three or more spells are usually fitted with
+  reinforcing rods at each end rather than simple stirps of leather. A scroll
+  as AC 9, 1 hit point, harness 0, and a break DC of 8.
+
+  To protect it from wrinkling or tearing, a scroll is rolled up from both ends
+  to form a double cylinder. (This also helps the user unroll the scroll
+  quickly.) The scroll is placed in a tube of ivory, jade, leather, metal, or
+  wood. Most scroll cases are inscribed with magic symbols (see \Spell{Arcane
+  Mark}). The symbols often hide magic traps such as \Spell{Glyph of Warding}
+  or \Spell{Fire Trap} spells.";
+  categories        mundane.
+
+
+#.....
+
+#----- Scroll of Bear's Endurance
+
+base item Scroll of Bear's Endurance [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Bear's Endurance}";
+  short description "A scroll with \SpellRef[Wiz 3]{Bear's Endurance}";
+  synonyms          "Bear's Endurance, Scroll".
+
+#.....
+#----- Scroll of Blade Barrier
+
+base item Scroll of Blade Barrier [Scroll] =
+
+  value             2275 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 13]{Blade Barrier}";
+  short description "A scroll with \SpellRef[Clr 13]{Blade Barrier}";
+  synonyms          "Blade Barrier, Scroll".
+
+#.....
+#----- Scroll of Burning Hands
+
+base item Scroll of Burning Hands [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Burning Hands}";
+  short description "A scroll with \SpellRef[Wiz 1]{Burning Hands}";
+  synonyms          "Burning Hands, Scroll".
+
+#.....
+#----- Scroll of Bull's Strength
+
+base item Scroll of Bull's Strength [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Bull's Strength}";
+  short description "A scroll with \SpellRef[Wiz 3]{Bull's Strength}";
+  synonyms          "Bull's Strength, Scroll".
+
+#.....
+#----- Scroll of Charm Person
+
+base item Scroll of Charm Person [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Charm Person}";
+  short description "A scroll with \SpellRef[Wiz 1]{Charm Person}";
+  synonyms          "Charm Person, Scroll".
+
+#.....
+#----- Scroll of Chain Lightning
+
+base item Scroll of Chain Lightning [Scroll] =
+
+  value             1650 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 11]{Chain Lightning}";
+  short description "A scroll with \SpellRef[Wiz 11]{Chain Lightning}";
+  synonyms          "Chain Lightning, Scroll".
+
+#.....
+#----- Scroll of Chill Metal
+
+base item Scroll of Chill Metal [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Chill Metal}";
+  short description "A scroll with \SpellRef[Clr 3]{Chill Metal}";
+  synonyms          "Chill Metal, Scroll".
+
+#.....
+#----- Scroll of Color Spray
+
+base item Scroll of Color Spray [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Color Spray}";
+  short description "A scroll with \SpellRef[Wiz 1]{Color Spray}";
+  synonyms          "Color Spray, Scroll".
+
+#.....
+#----- Scroll of Control Undead
+
+base item Scroll of Control Undead [Scroll] =
+
+  value             2275 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 13]{Control Undead}";
+  short description "A scroll with \SpellRef[Wiz 13]{Control Undead}";
+  synonyms          "Control Undead, Scroll".
+
+#.....
+#----- Scroll of Death Ward
+
+base item Scroll of Death Ward [Scroll] =
+
+  value             700 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 7]{Death Ward}";
+  short description "A scroll with \SpellRef[Clr 7]{Death Ward}";
+  synonyms          "Searing Light, Scroll".
+
+#.....
+#----- Scroll of Delay Poison
+
+base item Scroll of Delay Poison [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Delay Poison}";
+  short description "A scroll with \SpellRef[Clr 3]{Delay Poison}";
+  synonyms          "Delay Poison, Scroll".
+
+#.....
+#----- Scroll of Displacement
+
+base item Scroll of Dismissal [Scroll] =
+
+  value             700 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 7]{Dismissal}";
+  short description "A scroll with \SpellRef[Wiz 7]{Dismissal}";
+  synonyms          "Dismissal, Scroll".
+
+#.....
+#----- Scroll of Displacement
+
+base item Scroll of Displacement [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Displacement}";
+  short description "A scroll with \SpellRef[Wiz 5]{Displacement}";
+  synonyms          "Displacement, Scroll".
+
+#.....
+#----- Scroll of Endure Elements
+
+base item Scroll of Endure Elements [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 1]{Endure Elements}";
+  short description "A scroll with \SpellRef[Clr 1]{Endure Elements}";
+  synonyms          "Endure Elements, Scroll".
+
+#.....
+#----- Scroll of Haste
+
+base item Scroll of Haste [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Haste}";
+  short description "A scroll with \SpellRef[Wiz 5]{Haste}";
+  synonyms          "Haste, Scroll".
+
+#.....
+#----- Scroll of Heat Metal
+
+base item Scroll of Heat Metal [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Heat Metal}";
+  short description "A scroll with \SpellRef[Clr 3]{Heat Metal}";
+  synonyms          "Heat Metal, Scroll".
+
+#.....
+#----- Scroll of Flame Arrow
+
+base item Scroll of Fire Trap [Scroll] =
+
+  value             725 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 7]{Fire Trap}";
+  short description "A scroll with \SpellRef[Wiz 7]{Fire Trap}";
+  synonyms          "Fire Trap, Scroll".
+
+#.....
+#----- Scroll of Flame Arrow
+
+base item Scroll of Flame Arrow [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Flame Arrow}";
+  short description "A scroll with \SpellRef[Wiz 5]{Flame Arrow}";
+  synonyms          "Flame Arrow, Scroll".
+
+#.....
+#----- Scroll of Flame Strike
+
+base item Scroll of Flame Strike [Scroll] =
+
+  value             1125 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 9]{Flame Strike}";
+  short description "A scroll with \SpellRef[Wiz 9]{Flame Strike}";
+  synonyms          "Flame Strike, Scroll".
+
+#.....
+#----- Scroll of Glitterdust
+
+base item Scroll of Glitterdust [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Glitterdust}";
+  short description "A scroll with \SpellRef[Wiz 3]{Glitterdust}";
+  synonyms          "Glitterdust, Scroll".
+
+#.....
+#----- Scroll of Globe of Invulnerability
+
+base item Scroll of Globe of Invulnerability [Scroll] =
+
+  value             1650 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 11]{Globe of Invulnerability}";
+  short description "A scroll with \SpellRef[Wiz 11]{Globe of Invulnerability}";
+  synonyms          "Globe of Invulnerability, Scroll".
+
+#.....
+#----- Scroll of Greater Magic Weapon
+
+base item Scroll of Greater Magic Weapon [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Greater Magic Weapon}";
+  short description "A scroll with \SpellRef[Wiz 5]{Greater Magic Weapon}";
+  synonyms          "Greater Magic Weapon, Scroll".
+
+#.....
+#----- Scroll of Identify
+
+base item Scroll of Identify [Scroll] =
+
+  value             125 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Identify}";
+  short description "A scroll with \SpellRef[Wiz 1]{Identify}";
+  synonyms          "Identify, Scroll".
+
+#.....
+#----- Scroll of Inflict Critical Wounds
+
+base item Scroll of Inflict Critical Wounds [Scroll] =
+
+  value             3000 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 15]{Inflict Critical Wounds}";
+  short description "A scroll with \SpellRef[Clr 15]{Inflict Critical Wounds}";
+  synonyms          "Inflict Critical Wounds, Scroll".
+
+#.....
+#----- Scroll of Invisibility
+
+base item Scroll of Invisibility [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Invisibility}";
+  short description "A scroll with \SpellRef[Clr 3]{Invisibility}";
+  synonyms          "Invisibility, Scroll".
+
+#.....
+#----- Scroll of Invisibility Purge
+
+base item Scroll of Invisibility Purge [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Invisibility Purge}";
+  short description "A scroll with \SpellRef[Clr 5]{Invisibility Purge}";
+  synonyms          "Invisibility Purge, Scroll".
+
+#.....
+#----- Scroll of Jump
+
+base item Scroll of Jump [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Jump}";
+  short description "A scroll with \SpellRef[Wiz 1]{Jump}";
+  synonyms          "Jump, Scroll".
+
+#.....
+#----- Scroll of Knock
+
+base item Scroll of Knock [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Knock}";
+  short description "A scroll with \SpellRef[Wiz 3]{Knock}";
+  synonyms          "Knock, Scroll".
+
+#.....
+#----- Scroll of Locate Object
+
+base item Scroll of Locate Object [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Locate Object}";
+  short description "A scroll with \SpellRef[Wiz 3]{Locate Object}";
+  synonyms          "Locate Object, Scroll".
+
+#.....
+#----- Scroll of Lesser Restoration
+
+base item Scroll of Lesser Restoration [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Lesser Restoration}";
+  short description "A scroll with \SpellRef[Clr 3]{Lesser Restoration}";
+  synonyms          "Lesser Restoration, Scroll".
+
+#.....
+#----- Scroll of Mage Armor
+
+base item Scroll of Mage Armor [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Mage Armor}";
+  short description "A scroll with \SpellRef[Wiz 1]{Mage Armor}";
+  synonyms          "Mage Armor, Scroll".
+
+#.....
+#----- Scroll of Magic Circle Against Evil
+
+base item Scroll of Magic Circle Against Evil [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Magic Circle Against Evil}";
+  short description "A scroll with \SpellRef[Clr 5]{Magic Circle Against Evil}";
+  synonyms          "Magic Circle Against Evil, Scroll".
+
+#.....
+#----- Scroll of Melf's Acid Arrow
+
+base item Scroll of Melf's Acid Arrow [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Melf's Acid Arrow}";
+  short description "A scroll with \SpellRef[Wiz 3]{Melf's Acid Arrow}";
+  synonyms          "Melf's Acid Arrow, Scroll".
+
+#.....
+#----- Scroll of Minor Image
+
+base item Scroll of Minor Image [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Minor Image}";
+  short description "A scroll with \SpellRef[Wiz 3]{Minor Image}";
+  synonyms          "Minor Image, Scroll".
+
+#.....
+#----- Scroll of Neutralize Poison
+
+base item Scroll of Neutralize Poison [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Drd 5]{Neutralize Poison}";
+  short description "A scroll with \SpellRef[Drd 5]{Neutralize Poison}";
+  synonyms          "Neutralize Poison, Scroll".
+
+#.....
+#----- Scroll of Owl's Wisdom
+
+base item Scroll of Owl's Wisdom [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Owl's Wisdom}";
+  short description "A scroll with \SpellRef[Wiz 3]{Owl's Wisdom}";
+  synonyms          "Owl's Wisdom, Scroll".
+
+#.....
+#----- Scroll of Protection from Evil
+
+base item Scroll of Protection from Evil [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 1]{Protection from Evil}";
+  short description "A scroll with \SpellRef[Clr 1]{Protection from Evil}";
+  synonyms          "Protection from Evil, Scroll".
+
+#.....
+#----- Scroll of Ray of Enfeeblement
+
+base item Scroll of Ray of Enfeeblement [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Ray of Enfeeblement}";
+  short description "A scroll with \SpellRef[Wiz 1]{Ray of Enfeeblement}";
+  synonyms          "Ray of Enfeeblement, Scroll".
+
+#.....
+#----- Scroll of Remove Blindness & Deafness
+
+base item Scroll of Remove Blindness & Deafness [Scroll]=
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Remove Blindness & Deafness}";
+  short description "A scroll with \SpellRef[Clr 5]{Remove Blindness & Deafness}";
+  synonyms          "Remove Blindness & Deafness, Scroll".
+
+#.....
+#----- Scroll of Remove Curse
+
+base item Scroll of Remove Curse [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Remove Curse}";
+  short description "A scroll with \SpellRef[Clr 5]{Remove Curse}";
+  synonyms          "Remove Curse, Scroll".
+
+#.....
+#----- Scroll of Remove Disease
+
+base item Scroll of Remove Disease [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Remove Disease}";
+  short description "A scroll with \SpellRef[Clr 5]{RemoveDisease}";
+  synonyms          "Remove Disease, Scroll".
+
+#.....
+#----- Scroll of Remove Fear
+
+base item Scroll of Remove Fear [Scroll] =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 1]{Remove Fear}";
+  short description "A scroll with \SpellRef[Clr 1]{RemoveFear}";
+  synonyms          "Remove Fear, Scroll".
+
+#.....
+#----- Scroll of Remove Paralysis
+
+base item Scroll of Remove Paralysis [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Remove Paralysis}";
+  short description "A scroll with \SpellRef[Clr 3]{Remove Paralysis}";
+  synonyms          "Remove Paralysis, Scroll".
+
+#.....
+#----- Scroll of Restoration
+
+base item Scroll of Restoration [Scroll] =
+
+  value             800 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 7]{Restoration}";
+  short description "A scroll with \SpellRef[Clr 7]{Restoration}";
+  synonyms          "Restoration, Scroll".
+
+#.....
+#----- Scroll of Searing Light
+
+base item Scroll of Searing Light [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Searing Light}";
+  short description "A scroll with \SpellRef[Clr 5]{Searing Light}";
+  synonyms          "Searing Light, Scroll".
+
+#.....
+#----- Scroll of Spider Climb
+
+base item Scroll of Spider Climb [Scroll] =
+
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Spider Climb}";
+  short description "A scroll with \SpellRef[Wiz 3]{Spider Climb}";
+  synonyms          "Spider Climb, Scroll".
+
+#.....
+#----- Scroll of Stoneskin
+
+base item Scroll of Stoneskin [Scroll] =
+
+  value             950 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 7]{Stoneskin}";
+  short description "A scroll with \SpellRef[Wiz 7]{Stoneskin}";
+  synonyms          "Stoneskin, Scroll".
+
+#.....
+#----- Scroll of Suggestion
+
+base item Scroll of Suggestion [Scroll] =
+
+  value             375 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Suggestion}";
+  short description "A scroll with \SpellRef[Wiz 5]{Suggestion}";
+  synonyms          "Suggestion, Scroll".
+
+#.....
+#----- Scroll of Summon Monster V
+
+base item Scroll of Summon Monster V [Scroll] =
+
+  value             1125 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 9]{Summon Monster V}";
+  short description "A scroll with \SpellRef[Clr 9]{Summon Monster V}";
+  synonyms          "Summon Monster V, Scroll".
+
+#.....
+#----- Scroll of Teleport
+
+base item Scroll of Teleport [Scroll] =
+
+  value             1125 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 9]{Teleport}";
+  short description "A scroll with \SpellRef[Clr 9]{Teleport}";
+  synonyms          "Teleport, Scroll".
+
+#.....
+#----- Scroll of Wall of Stone
+
+base item Scroll of Wall of Stone [Scroll] =
+
+  value             1125 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 9]{Wall of Stone}.";
+  short description "A scroll with \SpellRef[Wiz 9]{Wall of Stone}.";
+  synonyms          "Wall of Stone, Scroll".
+
+#.....
+
+#.....
+#----- Rods
+
+#----- Rod
+
+base item Rod =
+
+  value             1 cp;
+  weight            5 lbs;
+  probability       Common;
+  size              Tiny;
+  hardness          10;
+  hp                1;
+  appearances       Very Rare "A polished, shiny rod.",
+                    Common "A simple rod.",
+                    Very Rare "A slightly rusted rod.";
+  substance         iron 1/3 in;
+  break DC          27;
+  player name       "Rod";
+  worlds            Generic;
+  references        WTC 17752: 233;
+  description
+  "Rods are scepterlike devices that have unique magical powers and do not
+  usually have charges. Anyone can use a rod.";
+  categories        mundane.
+
+#.....
+
+#----- Rod of Thunder and Lightning
+
+base item Rod of Thunder and Lightning [Rod, Light Mace, Magic Attack +2] =
+
+  player name       "";
+  categories        rod, thunder, lighning, magic;
+  synonyms          "Thunder and Lightning, Rod of";
+  value             33000 gp;
+  probability       very rare;
+  appearances       common    "An iron mace set with silver rivets.";
+  worlds            generic;
+  references        WTC 17752: 237;
+  short description "Light Mace +2 with Thunder once per day (+3 light mace stunnig unless For DC 16), Lightning once per day (+2d6 electricity, even if just touch attack hit), Thunderclap once per day (2d6 sonic, For DC 16 or deafened for 2d6 rounds), Lightning Stroke once per day (9d6 lightning bolt to 200 ft, Ref DC 16 for half), Thunder and Lightning once peer week (9d6 lightning bolt (rolls of 1 or 2 count as 3) and 2d6 sonic within 10 ft of burst, Ref DC 16 for half).";
+  description
+
+  "Constructed of iron set with silver rivets, this rod has the properties of a
+  +2 light mace. Its other magi- cal powers are as follows.
+
+  list {\bold{Thunder:} Once per day, the rod can strike as a +3 light mace,
+  and the opponent struck is stunned from the noise of the rodâs impact
+  (Fortitude DC 16 negates). Activating this power counts as a free action, and
+  it works if the wielder strikes an opponent within 1 round.}
+
+  {\bold{Lightning:} Once per day, when the wielder desires, a short spark of
+  electricity can leap forth when the rod strikes an opponent to deal the
+  normal damage for a +2 light mace (1d6+2) and an extra 2d6 points of
+  electricity damage. Even when the rod might not score a normal hit in combat,
+  if the roll was good enough to count as a successful melee touch attack hit,
+  then the 2d6 points of electricity damage still applies. The wielder
+  activates this power as a free action, and it works if he strikes an opponent
+  within 1 round.}
+
+  {\bold{Thunderclap:} Once per day as a standard action, the wielder can cause
+  the rod to give out a deafening noise, just as a shoutspell (Fortitude DC 16
+  partial, 2d6 points of sonic damage, target deafened for 2d6 rounds).}
+
+  {\bold{Lightning Stroke} Once per day as a standard action, the wielder can
+  cause the rod to shoot out a 5-foot-wide lightning bolt (9d6 points of
+  electricity damage, Reflex DC 16 half) to a range of 200 feet.}
+
+  \bold{Thunder and Lightning:} Once per week as a standard action, the wielder
+  of the rod can combine the thunderclap described above with a lightning bolt,
+  as in the lightning stroke. The thunderclap affects all within 10 feet of the
+  bolt. The lightning strokedeals 9d6 points of electricity damage (count rolls
+  of 1 or 2 as rolls of 3, for a range of 27 to 54 points), and the
+  thunderclap deals 2d6 points of sonic damage. A single DC 16 Reflex save
+  applies for both effects.".
+
+#.....
+
+#............................................................................
+#----- Staffs
+
+#----- Staff
+
+base item with multiuse Staff =
+
+  value             1 cp;
+  weight            5 lbs;
+  probability       Common;
+  size              Small;
+  hardness          5;
+  hp                10;
+  appearances       Very Rare "A fancy staff.",
+                    Common "A simple staff.",
+                    Very Rare "A shoddy staff.";
+  substance         wood 3 in;
+  break DC          24;
+  player name       "Staff";
+  worlds            Generic;
+  references        WTC 17752: 243;
+  description
+
+  "A staff is a long shaft of wood that stores several spells. Unlike wands
+  (see page 245), which can contain a wide variety of spells, each staff is of
+  a certain kind and holds specific spells. A staff has 50 charges when
+  created.
+
+  A staff uses the level of the weilder if it's higher than the staff's level.";
+
+  categories        magic, staff.
+
+#.....
+
+#----- Staff of Frost
+
+base item Staff of Frost [Staff] =
+
+  synonyms          "Frost, Staff of";
+  value             1125 gp;
+  appearances       common    "A rune-covered staff tipped on either end with a glistening diamond.";
+  worlds            generic;
+  references        WTC 17752: 244;
+  short description "Cast \SpellRef{ice storm} (1), \SpellRef{wall of ice} (1), or \SpellRef{cone of cold} (2).";
+  description
+
+  "Tipped on either end with a glistening diamond, this rune-covered staff
+  allows use of the following spells:
+
+  \list{\SpellRef{Ice storm} (1 charge)}
+  {\SpellRef{{Wall of ice} (1 charge)}
+  {\SpellRef{Cone of cold} (2 charge)}".
+
+#.....
+
+#.....
+
+#----- Wands
+
+#----- Wand
+
+base item with multiuse Wand =
+
+  count             50;
+  unit              charge;
+  weight            1/10 lb;
+  probability       Very Rare;
+  size              Diminutive;
+  hardness          5;
+  hp                5;
+  appearances       Very Rare "A simple ceramic wand.",
+                    Rare "A simple metal wand.",
+                    Rare "A simple glass wand.",
+                    Common "A simple wooden wand.",
+                    Common "A simple bone wand.";
+  substance         wood 1/4 in;
+  break DC          16;
+  player name       "Wand";
+  worlds            Generic;
+  references        WTC 17752: 245;
+  description
+  "A typical wand is 6 inches to 12 inches long and about 1/4 inch thick, and
+  often weighs no more than 1 ounce. Most wands are wood, but some are bone. A
+  rare few are metal, glass, or even ceramic, but these are quite
+  exotic. Occasionally, a wand has a gem or some device at its tip, and most
+  are decorated with carvings or runes. A typical wand has AC 7, 5 hit points,
+  hardness 5, and a break DC 16.";
+  categories        mundane.
+
+#.....
+#----- Wand 1-1
+
+base item Wand 1-1 =
+
+  value             25 gp.
+
+#.....
+#----- Wand 1-3
+
+base item Wand 1-3 =
+
+  value             45 gp.
+
+#.....
+#----- Wand 1-9
+
+base item Wand 1-9 =
+
+  value             135 gp.
+
+#.....
+#----- Wand 2-3
+
+base item Wand 2-3 =
+
+  value             90 gp.
+
+#.....
+#----- Wand 3-5
+
+base item Wand 3-5 =
+
+  value             225 gp.
+
+#.....
+#----- Wand 3-10
+
+base item Wand 3-10 =
+
+  value             450 gp.
+
+#.....
+#----- Wand 4-7
+
+base item Wand 4-7 =
+
+  value             420 gp.
+
+#.....
+
+#----- Wand of Cure Light Wounds
+
+base item with multiuse Wand of Cure Light Wounds [Wand 1-1] =
+
+  description
+  "A wand with the spell \SpellRef[Clr 1]{Cure Light Wounds}";
+  short description "A wand with \SpellRef[Clr 1]{Cure Light Wounds}";
+  synonyms          "Cure Light Wounds, Wand".
+
+#.....
+#----- Wand of Darkvision
+
+base item with multiuse Wand of Darkvision [Wand 2-3] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Darkvision}";
+  short description "A wand with \SpellRef[Wiz 3]{Darkvision}";
+  synonyms          "Darkvision, Wand".
+
+#.....
+#----- Wand of Dispel Magic
+
+base item with multiuse Wand of Dispel Magic [Wand 3-5] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 5]{Dispel Magic}";
+  short description "A wand with \SpellRef[Wiz 5]{Dispel Magic}";
+  synonyms          "Dispel Magic, Wand".
+
+#.....
+#----- Wand of Fly
+
+base item with multiuse Wand of Fly [Wand 3-5] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 5]{Fly}";
+  short description "A wand with \SpellRef[Wiz 5]{Fly}";
+  synonyms          "Fly, Wand".
+
+#.....
+#----- Wand of Hold Person
+
+base item with multiuse Wand of Hold Person [Wand 2-3] =
+
+  description
+  "A wand with the spell \SpellRef[Clr 3]{Hold Person}";
+  short description "A wand with \SpellRef[Clr 3]{Hold Person}";
+  synonyms          "Hold Person, Wand".
+
+#.....
+#----- Wand of Invisibility
+
+base item with multiuse Wand of Invisibility [Wand 2-3] =
+
+  description
+  "A wand with the spell \SpellRef[Clr 3]{Invisibility}";
+  short description "A wand with \SpellRef[Clr 3]{Invisibility}";
+  synonyms          "Invisibility, Wand".
+
+#.....
+#----- Wand of Lesser Restoration
+
+base item with multiuse Wand of Lesser Restoration [Wand 2-3] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Lesser Restoration}";
+  short description "A wand with \SpellRef[Wiz 3]{Lesser Restoration}";
+  synonyms          "Lesser Restoration, Wand".
+
+#.....
+#----- Wand of Lightning Bolt
+
+base item with multiuse Wand of Lightning Bolt [Wand 3-5] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 5]{Lightning Bolt}";
+  short description "A wand with \SpellRef[Wiz 5]{Lightning Bolt}";
+  synonyms          "Lightning Light, Wand".
+
+#.....
+#----- Wand of Lightning Bolt (10th)
+
+base item with multiuse Wand of Lightning Bolt (10th) [Wand 3-10] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 10]{Lightning Bolt}";
+  short description "A wand with \SpellRef[Wiz 10]{Lightning Bolt}";
+  synonyms          "Lightning Light, Wand".
+
+#.....
+#----- Wand of Magic Missile
+
+base item with multiuse Wand of Magic Missile [Wand 1-1] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Magic Missile}";
+  short description "A wand with \SpellRef[Wiz 1]{Magic Missile}";
+  synonyms          "Magic Missile, Wand".
+
+#.....
+#----- Wand of Magic Missile
+
+base item with multiuse Wand of Magic Missile (3rd) [Wand 1-3] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Magic Missile}";
+  short description "A wand with \SpellRef[Wiz 3]{Magic Missile}";
+  synonyms          "Magic Missile, Wand".
+
+#.....
+#----- Wand of Magic Missile
+
+base item with multiuse Wand of Magic Missile (9th) [Wand 1-9] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 9]{Magic Missile}";
+  short description "A wand with \SpellRef[Wiz 9]{Magic Missile}";
+  synonyms          "Magic Missile (9th), Wand".
+
+#.....
+#----- Wand of Neutralize Poison
+
+base item with multiuse Wand of Neutralize Poison [Wand 4-7] =
+
+  description
+  "A wand with the spell \SpellRef[Clr 7]{Neutralize Poison}";
+  short description "A wand with \SpellRef[Clr 7]{Neutralize Poison}";
+  synonyms          "Neutralize Poison, Wand".
+
+#.....
+#----- Wand of Searing Light
+
+base item with multiuse Wand of Searing Light [Wand 3-5] =
+
+  description
+  "A wand with the spell \SpellRef[Clr 5]{Searing Light}";
+  short description "A wand with \SpellRef[Clr 5]{Searing Light}";
+  synonyms          "Searing Light, Wand".
+
+#.....
+#----- Wand of Summon Monster III
+
+base item with multiuse Wand of Summon Monster III [Wand 3-5] =
+
+  description
+  "A wand with the spell \SpellRef[Clr 5]{Summon Monster III}";
+  short description "A wand with \SpellRef[Clr 5]{Summon Monster III}";
+  synonyms          "Summon Monster III, Wand".
+
+#.....
+#----- Wand of Web
+
+base item with multiuse Wand of Web [Wand 2-3] =
+
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Web}";
+  short description "A wand with \SpellRef[Wiz 3]{Web}";
+  synonyms          "Web, Wand".
+
+#.....
+
+#.....
+
+#----- Wondrous Items
+
+#----- Amulet of Natural Armor +1
+
+base item with armor Amulet of Natural Armor +1 =
+
+  AC bonus          +1 natural armor;
+  value             2000 gp;
+  weight            1/10 lb;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          5;
+  hp                1;
+  appearances       Common "An amulet made from bone.",
+                    Common "An amulet made from beast scales.";
+  substance         bone 1/2 in;
+  player name       "Amulet";
+  worlds            Generic;
+  references        WTC 17752: 246-247;
+  description
+  "This amulet, usually crafted from bone or beast scales, toughens the
+  wearer's body and flesh, giving him an enhancement bonus to his natural armor
+  bonus of +1.";
+  short description "Gives a +1 enhancement bonus to natural armor.";
+  synonyms          "Natural Armor +1, Amulet";
+  categories        magic,
+                    armor,
+                    amulet.
+
+#.....
+#----- Amulet of Natural Armor +2
+
+base item with armor Amulet of Natural Armor +2 =
+
+  AC bonus          +2 natural armor;
+  value             8000 gp;
+  weight            1/10 lb;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          5;
+  hp                1;
+  appearances       Common "An amulet made from bone.",
+                    Common "An amulet made from beast scales.";
+  substance         bone 1/2 in;
+  player name       "Amulet";
+  worlds            Generic;
+  references        WTC 17752: 246-247;
+  description
+  "This amulet, usually crafted from bone or beast scales, toughens the
+  wearer's body and flesh, giving him an enhancement bonus to his natural armor
+  bonus of +2.";
+  short description "Gives a +2 enhancement bonus to natural armor.";
+  synonyms          "Natural Armor +2, Amulet";
+  categories        magic,
+                    armor,
+                    amulet.
+
+#.....
+#----- Amulet of Health +2
+
+base item Amulet of Health +2 =
+
+  value             4000 gp;
+  weight            1/2 lb;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          10;
+  hp                12;
+  appearances       Common "A golden disk on a chain.";
+  substance         steel 1/2 in;
+  player name       "Amulet";
+  worlds            Generic;
+  references        WTC 17752: 246;
+  description
+  "This amulet is a golden disk on a chain. It usually bears the image of a
+  lion or other powerful animal. The amulet grants the wearer an enhancement
+  bonus to Constitution of +2.";
+  short description "Grants +2 enhancement bonus to Constitution.";
+  synonyms          "Health +2, Amulet of";
+  categories        amulet,
+                    magic,
+                    health,
+                    constitution.
+
+#.....
+#----- Bag of Holding I
+
+base item with container Bag of Holding I =
+
+  capacity          30 cu ft;
+  value             2500 gp;
+  weight            15 lbs;
+  probability       Very Rare;
+  size              Medium-size;
+  hardness          0;
+  hp                1;
+  appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
+  substance         cloth 1/2 in;
+  player name       "Sack";
+  worlds            Generic;
+  references        WTC 17752: 248;
+  description
+  "This appears to be a common cloth sack about 2 feet by 4 feet in size. The
+  \Item{bag of holding} opens into a nondimensional space: Its inside is larger
+  than its outside dimensions. Regardless of what is put into the bag (up to
+  250 lb.), it weights 15 lb.
+
+  If the bag is overloaded, or if sharp objects pierce it (from inside or
+  outside), the bag ruptures and is ruined. All contents are lost forever. If a
+  \Item{bag of holding} is turned inside out, its contents spill out, unharmed,
+  but the bag must be put right before it can be used again. If living
+  creatures are placed within the bag, they can survive for up to 10 minutes,
+  after which time they suffocate. Retrieving a specific item from a \Item{bag
+  of holding} is a move action---unless the bag contains more than an ordinary
+  backpack would hold, in which case retrieving a specific item is a full-round
+  action.
+
+  If a \Item{bag of holding} is placed within a \Item{portable hole}, a rift to
+  the \Place{Astral Plane} is torn in the space: Bag and hole alike are sucked
+  into the void and lost forever. If a \Item{portable hole} is placed within a
+  \Item{bag of holding}, it opens a gate to the \Place{Astral Plane}: The hole,
+  the bag, and any creatures within a 10-foot radius are drawn there,
+  destroying the \Item{portable hole} and \Item{bag of holding} in the
+  process.";
+  short description "This bag is larger inside than outside.";
+  synonyms          "Holding I, Bag of";
+  categories        bag,
+                    wondrous magical item,
+                    magical item,
+                    extradimensional.
+
+#.....
+#----- Bag of Holding II
+
+base item with container Bag of Holding II =
+
+  capacity          70 cu ft;
+  value             5000 gp;
+  weight            25 lbs;
+  probability       Very Rare;
+  size              Medium-size;
+  hardness          0;
+  hp                1;
+  appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
+  substance         cloth 1/2 in;
+  player name       "Sack";
+  worlds            Generic;
+  references        WTC 17752: 248;
+  description
+  "This appears to be a common cloth sack about 2 feet by 4 feet in size. The
+  \Item{bag of holding} opens into a nondimensional space: Its inside is larger
+  than its outside dimensions. Regardless of what is put into the bag (up to
+  500 lb.), it weights 25 lb.
+
+  If the bag is overloaded, or if sharp objects pierce it (from inside or
+  outside), the bag ruptures and is ruined. All contents are lost forever. If a
+  \Item{bag of holding} is turned inside out, its contents spill out, unharmed,
+  but the bag must be put right before it can be used again. If living
+  creatures are placed within the bag, they can survive for up to 10 minutes,
+  after which time they suffocate. Retrieving a specific item from a \Item{bag
+  of holding} is a move action---unless the bag contains more than an ordinary
+  backpack would hold, in which case retrieving a specific item is a full-round
+  action.
+
+  If a \Item{bag of holding} is placed within a \Item{portable hole}, a rift to
+  the \Place{Astral Plane} is torn in the space: Bag and hole alike are sucked
+  into the void and lost forever. If a \Item{portable hole} is placed within a
+  \Item{bag of holding}, it opens a gate to the \Place{Astral Plane}: The hole,
+  the bag, and any creatures within a 10-foot radius are drawn there,
+  destroying the \Item{portable hole} and \Item{bag of holding} in the
+  process.";
+  short description "This bag is larger inside than outside.";
+  synonyms          "Holding II, Bag of";
+  categories        bag,
+                    wondrous magical item,
+                    magical item,
+                    extradimensional.
+
+
+#.....
+#----- Bead of Force
+
+base item Bead of Force =
+
+  player name       "Black Pearl";
+  categories        sphere, magic, force, bead;
+  synonyms          "Force, Bead of";
+  value             3000 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         glass 1 inch;
+  appearances       common    "A small lusterless black pearl.";
+  worlds            generic;
+  references        WTC 17752: 248;
+  short description "Throw up to 60 ft explodes with a 5d6 force burst within 10 ft.";
+  description
+
+  "This small black sphere appears to be a lusterless pearl. You can throw it
+  up to 60 feet with no range penalties. Upon sharp impact, the bead explodes,
+  sending forth a burst that deals 5d6 points of force damage to all creatures
+  within a 10-foot radius.
+
+  The explosion completely consumes the bead, making this a one-use item.".
+
+#.....
+#----- Boccob's Blessed Book
+
+base item Boccob's Blessed Book =
+
+  value             12500 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              {~} Small;
+  hardness          10;
+  hp                24;
+  appearances       Common "A well-made tome of small size, bound with iron and overlaid with silver.";
+  substance         iron 1 in;
+  player name       "Book";
+  worlds            Generic;
+  references        WTC 17752: 249;
+  description
+  "This well-made tome is always of small size, typically no more than 12
+  inches tall, 8 inches wide, and 1 inch thick. All such books are durable,
+  waterproof, bound with iron overlaid with silver, and locked.  A wizard can
+  fill the 1,000 pages of a Boccob's blessed book with spells without paying
+  the 25 gp per page material cost. This book is never found as randomly
+  generated treasure with spells already inscribed in it.";
+  short description "A book with 1000 pages to record spells.";
+  synonyms          "Book, Boccob's Blessed";
+  categories        book,
+                    boccob,
+                    blessed.
+
+#.....
+#----- Boots of Elvenkind
+
+base item Boots of Elvenkind =
+
+  player name       "Soft Boots";
+  categories        magic, clothing, boots;
+  synonyms          "Elvenkind, Boots of", "";
+  value             2500 gp;
+  weight            1 lbs;
+  size              medium-size;
+  probability       rare;
+  substance         leather 1/2 inch;
+  appearances       common    "A pair of soft, brown leather boots.",
+                    uncommon  "A fine pair of soft, black leather boots.";
+  worlds            generic;
+  references        WTC 17752: 249;
+  short description "Move Silently +5 competence";
+  description
+
+  "These soft boots enable the wearer to move quietly in virtually any
+  surroundings, granting a +5 competence bonus on Move Silently checks.".
+
+#.....
+#----- Bracers of Armor +2
+
+base item Bracers of Armor +2 =
+
+  value             4000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              Small;
+  hardness          10;
+  hp                24;
+  appearances       Common "Metal wrist and arm guards.";
+  substance         iron 1 in;
+  player name       "Bracers";
+  worlds            Generic;
+  references        WTC 17752: 250;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +8,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +2 natural armor.";
+  synonyms          "Armor, Bracers of +2",
+                    "+2 Bracers of Armor";
+  categories        bracers,
+                    armor,
+                    magic,
+                    wondrous,
+                    clothing.
+
+
+#.....
+#----- Bracers of Armor +3
+
+base item Bracers of Armor +3 =
+
+  value             9000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              Small;
+  hardness          10;
+  hp                24;
+  appearances       Common "Metal wrist and arm guards.";
+  substance         iron 1 in;
+  player name       "Bracers";
+  worlds            Generic;
+  references        WTC 17752: 250;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +8,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +3 natural armor.";
+  synonyms          "Armor, Bracers of +3",
+                    "+3 Bracers of Armor";
+  categories        bracers,
+                    armor,
+                    magic,
+                    wondrous,
+                    clothing.
+
+
+#.....
+#----- Bracers of Armor +4
+
+base item Bracers of Armor +4 =
+
+  value             16000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              Small;
+  hardness          10;
+  hp                24;
+  appearances       Common "Metal wrist and arm guards.";
+  substance         iron 1 in;
+  player name       "Bracers";
+  worlds            Generic;
+  references        WTC 17752: 250;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +8,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +4 natural armor.";
+  synonyms          "Armor, Bracers of +4",
+                    "+4 Bracers of Armor";
+  categories        bracers,
+                    armor,
+                    magic,
+                    wondrous,
+                    clothing.
+
+
+#.....
+#----- Bracers of Armor +5
+
+base item Bracers of Armor +5 =
+
+  value             25000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              Small;
+  hardness          10;
+  hp                24;
+  appearances       Common "Metal wrist and arm guards.";
+  substance         iron 1 in;
+  player name       "Bracers";
+  worlds            Generic;
+  references        WTC 17752: 250;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +8,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +5 natural armor.";
+  synonyms          "Armor, Bracers of +5",
+                    "+5 Bracers of Armor";
+  categories        bracers,
+                    armor,
+                    magic,
+                    wondrous,
+                    clothing.
+
+
+#.....
+#----- Brooch of Shielding
+
+base item with multiuse Brooch of Shielding =
+
+  count             101;
+  unit              damage;
+  player name       "Brooch";
+  categories        magic, shield, brooch;
+  synonyms          "Shielding, Brooch of";
+  value             14 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       rare;
+  substance         steel 1/2 inch;
+  appearances       very rare "",
+                    rare      "",
+                    uncommon  "A golden brooch.",
+                    common    "A silver brooch";
+  worlds            generic;
+  references        WTC 17752: 250;
+  short description "A brooch to absorb \Spell{magic missile}s.";
+  description
+
+  "This appears to be a piece of silver or gold jewelry used to fasten a cloak
+  or cape. In addition to this mundane task, it can absorb \Spell{magic
+  missile}s of the sort generated by spell or spell-like ability. A brooch can
+  absorb up to 101 points of damage from magic missiles before it melts and
+  becomes useless.  ".
+
+#.....
+#----- Carpet of Flying
+
+base item Carpet of Flying 5x5 =
+
+  player name       "Carpet";
+  categories        carpet, fly, magic, furniture;
+  synonyms          "Flying Carpet";
+  value             20000 gp;
+  weight            8 lbs;
+  size              medium-size;
+  probability       very rare;
+  substance         cloth 1 inch;
+  appearances       common    "A elaborately stitched rug.";
+  worlds            generic;
+  references        WTC 17752: 252;
+  short description "A carpet that can fly.";
+  description
+
+  "This rug is able to fly through the air as if affected by an overland flight
+  spell of unlimited duration. The size, carrying capacity, and speed of the
+  different carpets of flyingare shown on the table below. Beautifully and
+  intricately made, each carpet has its own command word to activate it—if the
+  device is within voice range, the command word activates it, whether the
+  speaker is on the rug or not. The carpet is then controlled by spoken
+  directions.
+
+  The carpet can carry 200 lbs and has a speed of 40 ft. A carpet of flying can
+  carry up to double its capacity, but doing so reduces its speed to 30
+  feet. It has average maneuverability, but a carpet of flying can still hover".
+
+#.....
+#----- Cloak of Arachnida
+
+base item Cloak of Arachnida =
+
+  value             14000 gp;
+  weight            1 lb;
+  probability       Rare;
+  size              Small;
+  hardness          0;
+  hp                1;
+  appearances       Common "A black cloak embroidered with a weblike pattern.";
+  substance         cloth 1/2 in;
+  player name       "Cloak";
+  worlds            Generic;
+  references        "WT 17752" 252;
+  description
+  "This black garment, embroidered with a weblike pattern in silk, gives the
+  wearer the ability to climb as if a spider climb spell had been placed upon
+  her. In addition, the cloak grants her immunity to entrapment by webspells or
+  webs of any sort --- she can actually move in webs at half her normal speed.
+  Once per day, the wearer of this cloak can cast web. She also gains a +2 luck
+  bonus on all Fortitude saves against poison from spiders.";
+  short description "Gain \Spell{Spider Climb}, climb on webs, +2 luck bonus on Fort save vs. spider poison.";
+  synonyms          "Arachnida, Cloak of";
+  categories        magic,
+                    cloak,
+                    wearable,
+                    arachnida,
+                    spider.
+
+#.....
+#----- Cloak of Charisma +2
+
+base item Cloak of Charisma +2 =
+
+  value             4000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              {~} Small;
+  hardness          0;
+  hp                1;
+  appearances       Common "A lightweight, fashionable cloak with a highly decorative silver trim.";
+  substance         cloth 1/2 in;
+  player name       "Cloak";
+  worlds            Generic;
+  references        WTC 17752: 253;
+  description
+  "This lightweight and fashionable cloak has a highly decorative silver
+  trim. When in a character's possession, it adds a +2 enhancement bonus to her
+  Charisma score.";
+  short description "Gives a +2 enhancement bonus to Charisma.";
+  synonyms          "Charisma +2, Cloak";
+  categories        magic,
+                    wearable,
+                    clothing,
+                    charisma,
+                    abilities.
+
+#.....
+#----- Cloak of Charisma +4
+
+base item Cloak of Charisma +4 [Cloak of Charisma +2] =
+
+  value             12000 gp;
+  description
+  "This lightweight and fashionable cloak has a highly decorative silver
+  trim. When in a character's possession, it adds a +4 enhancement bonus to her
+  Charisma score.";
+  short description "Gives a +4 enhancement bonus to Charisma.";
+  synonyms          "Charisma +4, Cloak".
+
+#.....
+#----- Cloak of Elvenkind
+
+base item Cloak of Elvenkind =
+
+  value             2500 gp;
+  probability       Rare;
+  appearances       Common "An ordinary gray cloth cloak.";
+  player name       "Cloak";
+  worlds            Generic;
+  references        WTC 17752: 253;
+  description
+  "This cloak of neutral gray cloth is indistinguishable from an ordinary cloak
+  of the same color. However, when worn with the hood drawn up around the head,
+  it gives the wearer a +5 competence bonus on Hide checks.";
+  short description "Hide +5 competence bonus";
+  synonyms          "Elvenkind, Cloak of";
+  categories        magic,
+                    elf.
+
+#.....
+#----- Cloak of Resistance +1
+
+base item Cloak of Resistance +1 =
+
+  value             1000 gp;
+  weight            1 lb;
+  probability       Rare;
+  size              Tiny;
+  hardness          0;
+  hp                1;
+  substance         cloth 1/10 in;
+  player name       "Cloak";
+  worlds            Generic;
+  references        WTC 17752: 253;
+  description
+  "These garments offer magic protection in the form of a +1 to resistance
+   bonus on all saving throws (Fortitude, Reflex, and Will).";
+  short description "+1 resistance to Fort, Ref, Will";
+  synonyms          "Resistance +1, Cloak of".
+
+#.....
+#----- Cloak of Resistance +2
+
+base item Cloak of Resistance +2 =
+
+  value             4000 gp;
+  weight            1 lb;
+  probability       Rare;
+  size              Tiny;
+  hardness          0;
+  hp                1;
+  substance         cloth 1/10 in;
+  player name       "Cloak";
+  worlds            Generic;
+  references        WTC 17752: 253;
+  description
+  "These garments offer magic protection in the form of a +2 to resistance
+   bonus on all saving throws (Fortitude, Reflex, and Will).";
+  short description "+2 resistance to Fort, Ref, Will";
+  synonyms          "Resistance +2, Cloak of".
+
+#.....
+#----- Deep Red Ioun Stone
+
+base item with incomplete Deep Red Ioun Stone =
+
+  incomplete        "+2 Dex; Armor class 24";
+  player name       "Deep Red Stone";
+  categories        magic, ioun stone;
+  synonyms          "Ioun Stone, Deep Red";
+  value             8000 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         stone 1 inch;
+  hp                10;
+  hardness          5;
+  appearances       common    "A deep red stone.";
+  worlds            generic;
+  references        WTC 17752: 260-261;
+  short description "+2 Dex";
+  description
+
+  "These crystalline stones always float in the air and must be within 3 feet
+  of their owner to be of any use. When a character first acquires a stone, she
+  must hold it and then release it, whereupon it takes up a circling orbit 1d3
+  feet from her head.  Thereafter, a stone must be grasped or netted to
+  separate it from its owner. The owner may voluntarily seize and stow a stone
+  (to keep it safe while she is sleeping, for example), but she loses the bene-
+  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
+  hardness 5.".
+
+#.....
+#----- Dust of Disappearance
+
+base item Dust of Disappearance =
+
+  player name       "Metallic Dust";
+  synonyms          "", "";
+  value             1 gp;
+  weight            1 lbs;
+  size              medium-size;
+  probability       common;
+  substance         iron 2 inch;
+  appearances       common    "A silk packed of metallic dust.",
+                    common    "A hollow bone tube with metallic dust.";
+  worlds            generic;
+  references        WTC 17752: 255;
+  short description "Greater Invisibility for 2d6 rounds, cannot be seen with \Spell{see invisiblity} or \Spell{invisibility purge}.";
+  description
+
+  "This dust looks just like dust of appearance and is typically stored in the
+  same manner. A creature or object touched by it becomes invisible (as greater
+  invisibility).  Normal vision can’t see dusted creatures or objects, nor can
+  they be detected by magical means, including see invisibility or invisibility
+  purge. Dust of appearance, however, does reveal people and objects made
+  invisible by dust of disappearance. Other factors, such as sound and smell,
+  also allow possible detection.  The greater invisibility bestowed by the dust
+  lasts for 2d6 rounds.
+
+  The invisible creature doesn’t know when the duration will end.".
+
+#.....
+#----- Dusty Rose Ioun Stone
+
+base item Dusty Rose Ioun Stone =
+
+  player name       "Dusty Rose Stone";
+  categories        magic, stone, ioun stone;
+  synonyms          "Ioun Stone, Dusty Red";
+  value             5000 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         stone 1 inch;
+  appearances       common    "A dusty, rose colored stone.";
+  worlds            generic;
+  references        WTC 17752: 260-261;
+  short description "+1 insight to AC.";
+  description
+
+  "These crystalline stones always float in the air and must be within 3 feet
+  of their owner to be of any use. When a character first acquires a stone, she
+  must hold it and then release it, whereupon it takes up a circling orbit 1d3
+  feet from her head.  Thereafter, a stone must be grasped or netted to
+  separate it from its owner. The owner may voluntarily seize and stow a stone
+  (to keep it safe while she is sleeping, for example), but she loses the bene-
+  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
+  hardness 5.".
+
+#.....
+#----- Lavender and Green Ioun Stone
+
+base item with counted Lavender and Green Ioun Stone =
+
+  player name       "Lavender and Green Stone";
+  categories        magic, stone, ioun stone;
+  synonyms          "Ioun Stone, Lavender and Green";
+  value             40000 gp;
+  count             50;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         stone 1 inch;
+  appearances       common    "A lavender and green, ellipsoid stone.";
+  worlds            generic;
+  references        WTC 17752: 260-261;
+  short description "Absorbs up to 50 levels of up to 8th level spells.";
+  description
+
+  "These crystalline stones always float in the air and must be within 3 feet
+  of their owner to be of any use. When a character first acquires a stone, she
+  must hold it and then release it, whereupon it takes up a circling orbit 1d3
+  feet from her head.  Thereafter, a stone must be grasped or netted to
+  separate it from its owner. The owner may voluntarily seize and stow a stone
+  (to keep it safe while she is sleeping, for example), but she loses the bene-
+  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
+  hardness 5.".
+
+#.....
+#----- Eyes of the Eagle
+
+base item with incomplete Eyes of the Eagle =
+
+  incomplete        "+5 competence to Spot";
+  player name       "Crystal Lenses";
+  categories        crystal, eye, lense, spectacles;
+  synonyms          "Eagle, Eyes of the";
+  value             2500 gp;
+  weight            1/2 lbs;
+  size              {~} tiny;
+  probability       rare;
+  substance         crystal 1/4 inch;
+  appearances       common    "A pair of crystal lenses.";
+  worlds            generic;
+  references        WTC 17752: 256;
+  short description "A pair of eye lenses for +5 competence to Spot.";
+  description
+
+  "These items are made of special crystal and fit over the eyes of the
+  wearer. These lenses grant a +5 competence bonus on Spot checks. Wearing only
+  one of the pair causes a char- acter to become dizzy and, in effect, stunned
+  for 1 round. There- after, the wearer can use the single lens without being
+  stunned so long as she covers her other eye. Of course, she can remove the
+  single lens and see normally at any time, or wear both lenses to end or avoid
+  the dizziness.".
+
+#.....
+#----- Folding Boat
+
+base item Folding Boat =
+
+  player name       "Small Wooden Box";
+  categories        boat, magic, gear, water;
+  synonyms          "Boat, Folding";
+  value             12500 gp;
+  weight            1 lbs;
+  size              medium-size;
+  probability       common;
+  substance         wood 1 inch;
+  appearances       common    "A small wooden box.";
+  worlds            generic;
+  references        WTC 17752: 249;
+  short description "A small box that can transform into a boat or a ship.";
+  description
+
+  "A folding boat looks like a small wooden boxâabout 12 inches long, 6 inches
+  wide, and 6 inches deep. It can be used to store items like any other box. If
+  a command word is given, however, the box unfolds itself to form a boat 10
+  feet long, 4 feet wide, and 2 feet in depth. A second command word causes it
+  to unfold to a ship 24 feet long, 8 feet wide, and 6 feet deep. Any objects
+  formerly stored in the box now rest inside the boat or ship.
+
+  In its smaller form, the boat has one pair of oars, an anchor, a mast, and a
+  lateen sail. In its larger form, the boat has a deck, single rowing seats,
+  five sets of oars, a steering oar, an anchor, a deck cabin, and a mast with a
+  square sail. The boat can hold four people comfortably, while the ship
+  carries fifteen with ease.  A third word of command causes the boat or ship
+  to fold itself into a box once again. The words of command may be inscribed
+  visibly or invisibly on the box, or they may be written else-where â perhaps
+  on an item within the box.".
+
+#.....
+#----- Gloves of Arrow Snaring
+
+base item Gloves of Arrow Snaring =
+
+  player name       "Gloves";
+  categories        gloves, arrow, snare;
+  synonyms          "Arrow Snaring, Gloves of";
+  value             4000 gp;
+  weight            1 lbs;
+  size              tiny;
+  probability       rare;
+  substance         leather 1/2 inch;
+  appearances       common    "Fine, think leather gloves.";
+  references        WTC 17752: 257;
+  short description "Twice per day can snatch arrows as the Snatch Arrows feat (once per round while not flat footed catch arrow or range weapon, range weapon can immediately be thrown back).";
+  description
+
+  "Once snugly worn, these gloves seem to meld with the hands, becoming almost
+  invisible. Twice per day, the wearer can act as if he had the Snatch Arrows
+  feat, even if he does not meet the prerequisites for it. Both gloves must be
+  worn for the magic to be effective. At least one hand must be free to take
+  advantage of the magic.".
+
+#.....
+#----- Gloves of Dexterity +2
+
+base item Gloves of Dexterity +2 =
+
+  value             4000 gp;
+  weight            1 lb;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          0;
+  hp                1;
+  appearances       Common "A pair of thin, brown leather gloves.";
+  substance         cloth 1/4 in;
+  player name       "Gloves";
+  worlds            Generic;
+  references        WTC 17752: 257;
+  description
+  "These thin leather gloves are very flexible and allow for delicate
+  manipulation. They add to the wearer's Dexterity score in the form of an
+  enhancement bonus of +2. Both gloves must be worn for the magic to be
+  effective. ";
+  short description "Wearing gives +2 enhancement bonus to Dexterity.";
+  synonyms          "Dexterity +2, Gloves";
+  categories        magic,
+                    gloves,
+                    wearable,
+                    dexterity.
+
+#.....
+#----- Gloves of Swimming and Climbing
+
+base item Gloves of Swimming and Climbing =
+
+  player name       "Gloves";
+  categories        gloves, clothing, wear, hand, swim, climb;
+  synonyms          "Swimming and Climbing, Glove of";
+  value             6250 gp;
+  weight            1 lbs;
+  size              small;
+  probability       rare;
+  substance         leather 1/2 inch;
+  appearances       common    "A pair of lightweigt, brown leather gloves.";
+  worlds            generic;
+  references        WTC 17752: 257;
+  short description "+5 competence to Swim and Climb.";
+  description
+
+  "These apparently normal lightweight gloves grant a +5 competence bonus on
+  Swim checks and Climb checks. Both gloves must be worn for the magic to be
+  effective.".
+
+#.....
+#----- Headband of Intellect +4
+
+base item Headband of Intellect +4 =
+
+  value             16000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              {~} Small;
+  hardness          10;
+  hp                12;
+  appearances       Common "A light cord with a small gem.";
+  substance         iron 1/2 in;
+  player name       "Headband";
+  worlds            Generic;
+  references        WTC 17752: 258;
+  description
+  "This device is a light cord with a small gem set so that it rests upon the
+  forehead of the wearer. The head- band adds to the wearer's Intelligence
+  score in the form of an enhancement bonus of +4. This enhancement bonus does
+  not earn the wearer extra skill points when a new level is attained; use the
+  unenhanced Intelligence bonus to determine skill points. ";
+  short description "Gives an +4 enhancement bonus to Intelligence.";
+  synonyms          "Intellect +4, Headband of";
+  categories        intellect,
+                    head,
+                    magic,
+                    abilities.
+
+#.....
+#----- Heward's Handy Haversack
+
+base item with container, incomplete Heward's Handy Haversack =
+
+  capacity          1 cu ft;
+  state             solid;
+  incomplete
+  "does not correctly calculate weight, should always be 5
+                    lbs.";
+  value             2000 gp;
+  weight            5 lbs;
+  probability       Very Rare;
+  size              Small;
+  hardness          2;
+  hp                1;
+  appearances       Uncommon "A simple leather bag with straps to carry it.",
+                    Common "A leather backpack to stow your stuff.",
+                    Uncommon "A finely crafted backpack to stow your stuff.",
+                    Rare "A finely crafted backpack with golden buckles.";
+  substance         leather 1/4 in;
+  player name       "Backpack";
+  worlds            Generic;
+  references        WTC 17752: 259;
+  description
+  "A backpack of this sort appears to be well made, well used, and quite
+  ordinary. It is constructed of finely tanned leather, and the straps have
+  brass hardware and buckles. It has two wide pouches, each of which appears
+  large enough to hold about a quart of material. In fact, each is like a
+  \Item{bag of holding} and can actually hold material as much as 2 cubic feet
+  in volume or 20 pounds in weight. The large central portion can contain up to
+  8 cubic feet or 80 pounds of material. Even when so filled, the backpack
+  always weighs only 5 pounds.
+
+  While such storage is useful enough, the pack has an even greater power in
+  addition. When the wearer reaches into it for a specific item, that item is
+  always on top. Thus, no digging around and fumbling is ever necessary to find
+  what a haversack contains. Retrieving any specific item from a haversack is a
+  move action, but it does not provoke the attacks of opportunity that
+  retrieving a stored item usually does.";
+  short description "A combination of bag of holding and backpack";
+  synonyms          "Haversack, Heward's Handy";
+  categories        magic,
+                    bag,
+                    container,
+                    wondrous.
+
+
+#.....
+#----- Horn of Goodness or Evil
+
+base item Horn of Goodness or Evil =
+
+  player name       "Horn";
+  categories        horn, good, evil;
+  synonyms          "Goodness or Evil, Horn", "Goodness, Horn of", "Evil, Horn of", "Horn of Evil", "Horn of Goodness";
+  value             6500 gp;
+  weight            1 lbs;
+  size              small;
+  probability       rare;
+  substance         bone 1 inch;
+  appearances       common    "A horn.";
+  worlds            generic;
+  references        WTC 17752: 259-260;
+  short description "Once a day, create a magic circle against good/evail (depending on user's alignment) for 1 hour.";
+  description
+
+  "This trumpet adapts itself to its owner, so it produces either a good or an
+  evil effect depending on the ownerâs alignment. If the owner is neither good
+  nor evil, the horn has no power whatsoever. If he is good, then blowing the
+  horn has the effect of a magic circle against evil. If he is evil, then
+  blowing the horn has the effect of a magic circle against good. In either
+  case, this ward lasts for 1 hour. The horn can be blown once per day.".
+
+#.....
+#----- Keoghtom's Ointment
+
+base item with multiuse Keoghtom's Ointment =
+
+  count             5;
+  unit              application;
+  value             4000 gp;
+  weight            1/2 lb;
+  probability       Rare;
+  size              Diminutive;
+  hardness          0;
+  hp                1;
+  appearances       Common "A small jar containing a salve.";
+  substance         glass 1 in;
+  player name       "Salve";
+  worlds            Generic;
+  references        WTC 17752: 261;
+  description
+  "A jar of this unguent is 3 inches in diameter and 1 inch deep and contains
+  five applications. Placed upon a poisoned wound or swallowed, the ointment
+  detoxifies any poison (as \Spell{neutralize poison}). Applied to a diseased
+  area, it removes disease (as \Spell{remove disease}). Rubbed on a wound, the
+  ointment cures 1d8+5 points of damage (as \Spell{cure light wounds}).";
+  short description "A detoxifying, disease freeing or healing salve.";
+  synonyms          "Ointment, Keoghtom's";
+  categories        ointment,
+                    salve,
+                    healing.
+
+
+#.....
+#----- Gauntlets of Ogre Power
+
+base item Gauntlets of Ogre Power =
+
+  value             4000 gp;
+  weight            4 lbs;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          2;
+  hp                1;
+  appearances       Common "Tough leather gauntlets.";
+  substance         leather 2 in;
+  player name       "Gauntlets";
+  worlds            Generic;
+  references        "WTC 11752" 257;
+  description
+  "These gauntlets are made of tough leather with iron studs running across the
+  back of the hands and fingers. They grant the wearer great strength, adding a
+  +2 enhancement bonus to his Strength score. Both gauntlets must be worn for
+  the magic to be effective.";
+  short description "+2 enhancement bonus to Str when worn.";
+  synonyms          "Ogre Power, Gauntlets of";
+  categories        gauntlets,
+                    magic,
+                    wearable,
+                    clothing,
+                    power,
+                    strength.
+
+#.....
+#----- Goggles of Night
+
+base item Goggles of Night =
+
+  player name       "Goggles";
+  categories        goggles, night, eyes, sight, darkvision, vision;
+  synonyms          "Night, Googles of";
+  value             12000 gp;
+  weight            1 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         glass 1 inch;
+  appearances       common    "A pair of goggles made of dark crystal.";
+  worlds            generic;
+  references        WTC 17752: 258;
+  short description "Provides 60 ft darkvision.";
+  description
+
+  "The lenses of this item are made of dark crystal. Even though the lenses are
+  opaque, when placed over the eyes of the wearer they enable him to see
+  normally and also grant him 60-foot darkvision. Both lenses must be worn for
+  the magic to be effective.".
+
+#.....
+#----- Manual of Bodily Health +1
+
+base item Manual of Bodily Health +1 [Book] =
+
+  categories        book, manual, health, attribute;
+  synonyms          "Bodily Health +1, Manual of", "Health +1, Manual of Bodily";
+  value             27500 gp;
+  probability       very rare;
+  appearances       common    "A thick tome with tips on health and fitness.";
+  worlds            generic;
+  references        WTC 17752: 261;
+  short description "After reading 48 hours within 6 days gain +1 Con.";
+  description
+
+  "This thick tome contains tips on health and fitness, but entwined within the
+  words is a powerful magical effect. If anyone reads this book, which takes a
+  total of 48 hours over a minimum of six days, he gains an inherent bonus of
+  from +1 to his Constitution score. Once the book is read, the magic
+  disappears from the pages and it becomes a normal book.".
+
+#.....
+#----- Metamagic Rod (Extend)
+
+base item Metamagic Rod (Extend) [Rod] =
+
+  player name       "Rod";
+  categories        metamagic, rod, extend;
+  synonyms          "Rod, Metamagic (Extend)", "Extend, Metamagic Rod";
+  value             11000 gp;
+  weight            5 lbs;
+  size              small;
+  probability       very rare;
+  substance         iron 2 inch;
+  appearances       common    "A simple metal rod.";
+  worlds            generic;
+  references        WTC 17752: 236;
+  short description "Wielder can cast three spells of 6th level or lower per day extended.";
+  description
+
+  "Metamagic rods hold the essence of a metamagic feat but do not change the
+  spell slot of the altered spell. All the rods described here are
+  use-activated (but casting spells in a threatened area still draws an attack
+  of opportunity). A caster may only use one metamagic rod on any given spell,
+  but it is permissible to combine a rod with metamagic feats possessed by
+  the rod’s wielder. In this case, only the feats possessed by the wielder
+  adjust the spell slot of the spell being cast.
+
+  Possession of a metamagic rod does not confer the associated feat on the
+  owner, only the ability to use the given feat a specified number of times per
+  day. A sorcerer still must take a full-round action when using a metamagic
+  rod, just as if using a metamagic feat he possesses.
+
+  This rod can be used with spells of 6th level or lower. The wielder can cast
+  up to three spells per day that are extended as though using the Extend Spell
+  feat.".
+
+#.....
+#----- Pale Blue Ioun Stone
+
+base item with incomplete Pale Blue Ioun Stone =
+
+  incomplete        "+2 Str; Armor class 24";
+  player name       "Pale Blue Stone";
+  categories        magic, ioun stone;
+  synonyms          "Ioun Stone, Pale Blue";
+  value             8000 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         stone 1 inch;
+  hp                10;
+  hardness          5;
+  appearances       common    "A pale blue stone.";
+  worlds            generic;
+  references        WTC 17752: 260-261;
+  short description "";
+  description
+
+  "These crystalline stones always float in the air and must be within 3 feet
+  of their owner to be of any use. When a character first acquires a stone, she
+  must hold it and then release it, whereupon it takes up a circling orbit 1d3
+  feet from her head.  Thereafter, a stone must be grasped or netted to
+  separate it from its owner. The owner may voluntarily seize and stow a stone
+  (to keep it safe while she is sleeping, for example), but she loses the bene-
+  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
+  hardness 5.".
+
+#.....
+#----- Pearl of Power
+
+base item Pearl of Power =
+
+  player name       "Pearl";
+  categories        magic, gem, spells;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         crystal 1 inch;
+  appearances       common    "A shiny pearl.";
+  worlds            generic;
+  references        WTC 17752: 262;
+  short description "Restores a spell cast once per day.";
+  description
+
+  "This seemingly normal pearl of average size and luster is a potent aid to
+  all spellcasters who prepare spells (clerics, druids, rangers, paladins, and
+  wizards). Once per day on command, a pearl of power enables the possessor to
+  recall any one spell that she had prepared and then cast. The spell is then
+  prepared again, just as if it had not been cast.".
+
+#.....
+#----- Pearl of Power (1st)
+
+base item Pearl of Power (1st) [Pearl of Power] =
+
+  synonyms          "Power (1st), Pearl of";
+  value             1000 gp;
+  short description "1st level.";
+  description
+
+  "The spell must be of first level.".
+
+#.....
+#----- Pearl of Power (2nd)
+
+base item Pearl of Power (2nd) [Pearl of Power] =
+
+  synonyms          "Power (2nd), Pearl of";
+  value             4000 gp;
+  short description "2nd level.";
+  description
+
+  "The spell must be of second level.".
+
+#.....
+#----- Pearl of Power (3rd)
+
+base item Pearl of Power (3rd) [Pearl of Power] =
+
+  synonyms          "Power (3rd), Pearl of";
+  value             9000 gp;
+  short description "3rd level.";
+  description
+
+  "The spell must be of third level.".
+
+#.....
+#----- Pearl of Power (4th)
+
+base item Pearl of Power (4th) [Pearl of Power] =
+
+  synonyms          "Power (4th), Pearl of";
+  value             16000 gp;
+  short description "4th level.";
+  description
+
+  "The spell must be of fourth level.".
+
+#.....
+#----- Pearl of Power (5th)
+
+base item Pearl of Power (5th) [Pearl of Power] =
+
+  synonyms          "Power (5th), Pearl of";
+  value             25000 gp;
+  short description "5th level.";
+  description
+
+  "The spell must be of fifth level.".
+
+#.....
+#----- Pearl of Power (6th)
+
+base item Pearl of Power (6th) [Pearl of Power] =
+
+  synonyms          "Power (6th), Pearl of";
+  value             3600 gp;
+  short description "6th level.";
+  description
+
+  "The spell must be of sixth level.".
+
+#.....
+#----- Pearl of Power (7th)
+
+base item Pearl of Power (7th) [Pearl of Power] =
+
+  synonyms          "Power (7th), Pearl of";
+  value             49000 gp;
+  short description "7th level.";
+  description
+
+  "The spell must be of seventh level.".
+
+#.....
+#----- Pearl of Power (8th)
+
+base item Pearl of Power (8th) [Pearl of Power] =
+
+  synonyms          "Power (8th), Pearl of";
+  value             6400 gp;
+  short description "8th level.";
+  description
+
+  "The spell must be of eigth level.".
+
+#.....
+#----- Pearl of Power (9th)
+
+base item Pearl of Power (9th) [Pearl of Power] =
+
+  synonyms          "Power (9th), Pearl of";
+  value             81000 gp;
+  short description "9th level.";
+  description
+
+  "The spell must be of ninth level.".
+
+#.....
+#----- Pearl of Power (double)
+
+base item Pearl of Power (double) [Pearl of Power] =
+
+  synonyms          "Power (double), Pearl of";
+  value             70000 gp;
+  short description "2 x 6th level or lower.";
+  description
+
+  "Two spells of 6th level or lower.".
+
+#.....
+#----- Periapt of Wisdom +2
+
+base item Periapt of Wisdom +2 =
+
+  value             4000 gp;
+  weight            1/4 lb;
+  probability       Common;
+  size              {~} Tiny;
+  appearances       Common "A pearl on a light chain.";
+  player name       "Art Object";
+  worlds            Generic;
+  references        WTC 17752: 263-264;
+  description
+  "Although it appears to be a normal pearl on a light chain, a periapt of
+  wisdom actually increases the possessor's Wisdom score in the form of an
+  enhancement bonus of +2.  ";
+  short description "Wisdom +2 enhancement.";
+  synonyms          "Wisdom +2, Periapt of";
+  categories        magic,
+                    wisdom,
+                    ability.
+
+#.....
+#----- Periapt of Wisdom +2
+
+base item Periapt of Wisdom +4 =
+
+  value             16000 gp;
+  weight            1/4 lb;
+  probability       Common;
+  size              {~} Tiny;
+  appearances       Common "A pearl on a light chain.";
+  player name       "Art Object";
+  worlds            Generic;
+  references        WTC 17752: 263-264;
+  description
+  "Although it appears to be a normal pearl on a light chain, a periapt of
+  wisdom actually increases the possessor's Wisdom score in the form of an
+  enhancement bonus of +4.  ";
+  short description "Wisdom +4 enhancement.";
+  synonyms          "Wisdom +4, Periapt of";
+  categories        magic,
+                    wisdom,
+                    ability.
+
+#.....
+#----- Pipes of the Sewers
+
+base item Pipes of the Sewers =
+
+  player name       "Pipes";
+  categories        magic, instrument, pipes;
+  synonyms          "Sewers, Pipes of the";
+  value             1150 gp;
+  weight            3 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         wood 1 inch;
+  appearances       common    "Some ordinary wooden pipes.";
+  worlds            generic;
+  references        WTC 17752: 264-265;
+  short description "Attact 1d3 rat swarms if rats are within 400 ft (after 1 round per 50 ft), Perform (wind instruments) DC 10 (15 for second in day) to control telepathically or they attack piper.";
+  description
+
+  "These wooden pipes appear ordinary, but if the possessor learns the proper
+  tune, he can attract 1d3 rat swarms (see page 239 of the Monster Manual) if
+  rats are within 400 feet. For each 50-foot distance the rats have to travel,
+  there is a 1-round delay. The piper must continue playing until the rats
+  appear, and when they do so, the piper must make a DC 10 Perform (wind
+  instruments) check. Success means that they obey the piperâs telepathic
+  commands so long as he continues to play. Failure indicates that they turn on
+  the piper. If for any reason the piper ceases playing, the rats leave
+  immediately. If they are called again within a day, the Perform check DC is
+  15.
+
+  If the rats are under the control of another creature, add the HD of the
+  controller to the Perform check DC. Once control is assumed, another check
+  is required each round to maintain it if the other creature is actively
+  seeking to reassert its control.
+
+Faint conjuration; CL2nd; Craft Wondrous Item, charm
+animal, summon natureâs ally I, wild empathy ability; Price1,150
+gp; Weight3 lb.
+
+".
+
+#.....
+#----- Monk's Belt
+
+base item Monk's Belt =
+
+  player name       "Belt";
+  categories        belt, monk;
+  synonyms          "Belt, Monk's";
+  value             13000 gp;
+  weight            1 lbs;
+  size              {~} small;
+  probability       very rare;
+  substance         rope 1 inch;
+  appearances       common    "A simple rope belt.";
+  worlds            generic;
+  references        WTC 17752: 248;
+  short description "Gain AC and unarmed damage of a monk 5 levels higher.";
+  description
+
+  "This simple rope belt, when wrapped around a characterâs waist, confers
+  great ability in unarmed combat. The wearerâs AC and unarmed damage is
+  treated as a monk of five levels higher. If donned by a character with the
+  Stunning Fist feat, the belt lets her make one additional stunning attack per
+  day. If the character is not a monk, she gains the AC and unarmed damage of a
+  5th-level monk. This AC bonus functions just like the monkâs AC bonus.".
+
+#.....
+#----- Necklace of Fireballs
+
+base item Necklace of Fireballs =
+
+  player name       "Necklace";
+  categories        necklace, fireball, spell, magic;
+  synonyms          "Fireballs, Necklace of";
+  weight            1 lbs;
+  size              small;
+  probability       very rare;
+  substance         iron 1 inch;
+  appearances       common    "A golden chain with some golden spheres.";
+  worlds            generic;
+  references        WTC 17752: 263;
+  short description "A necklage with detachabel orbs, throw to 70 ft for fireball (Ref DC 14).";
+  description
+
+  "This device appears to be nothing but beads on a string, sometimes with the
+  ends tied together to form a necklace. (It does not count as an item worn
+  around the neck for the purpose of determining which of a characterâs worn
+  magic items is effective.) If a character holds it, however, all can see the
+  strand as it really isâa golden chain from which hang a number of golden
+  spheres. The spheres are detachable by the wearer (and only by the wearer),
+  who can easily hurl one of them up to 70 feet. When a sphere arrives at the
+  end of its trajectory, it detonates as a fireballspell (Reflex DC 14 half).
+  Spheres come in different strengths, ranging from those that deal 2d6 points
+  of fire damage to those that deal 10d6.
+
+  If the necklace is being worn or carried by a character who fails her saving
+  throw against a magical fire attack, the item must make a saving throw as
+  well (with a save bonus of +7). If the necklace fails to save, all its
+  remaining spheres detonate simultaneously, often with regrettable
+  consequences for the wearer.".
+
+#.....
+#----- Necklace of Fireballs I
+
+base item Necklace of Fireballs I [Necklace of Fireballs] =
+
+  value             1650 gp;
+  short description "1 x 5d6, 2 x 3d6.";
+  description
+
+  "Spheres for 1 x 5d6, 2 x 3d6.".
+#.....
+#----- Necklace of Fireballs II
+
+base item Necklace of Fireballs II [Necklace of Fireballs] =
+
+  value             2700 gp;
+  short description "1 x 6d6, 2 x 4d6.";
+  description
+
+  "Spheres for 1 x 6d6, 2 x 4d6.".
+#.....
+#----- Necklace of Fireballs III
+
+base item Necklace of Fireballs III [Necklace of Fireballs] =
+
+  value             4350 gp;
+  short description "1 x 7d6, 2 x 5d6, 4 x 3d6.";
+  description
+
+  "Spheres for 1 x 7d6, 2 x 5d6, 4 x 3d6.".
+#.....
+#----- Necklace of Fireballs IV
+
+base item Necklace of Fireballs IV [Necklace of Fireballs] =
+
+  value             5400 gp;
+  short description "1 x 8d6, 2 x 6d6, 2 x 4d6, 4 x 2d6.";
+  description
+
+  "Spheres for 1 x 8d6, 2 x 6d6, 2 x 4d6, 4 x 2d6.".
+#.....
+#----- Necklace of Fireballs V
+
+base item Necklace of Fireballs V [Necklace of Fireballs] =
+
+  value             5850 gp;
+  short description "1 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.";
+  description
+
+  "Spheres for 1 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.".
+#.....
+#----- Necklace of Fireballs VI
+
+base item Necklace of Fireballs VI [Necklace of Fireballs] =
+
+  value             8100 gp;
+  short description "1 x 10d6, 2 x 8d6, 2 x 6d6, 4 x 4d6.";
+  description
+
+  "Spheres for 1 x 10d6, 2 x 8d6, 2 x 6d6, 4 x 4d6.".
+#.....
+#----- Necklace of Fireballs VII
+
+base item Necklace of Fireballs VII [Necklace of Fireballs] =
+
+  value             8700 gp;
+  short description "1 x 10d6, 2 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.";
+  description
+
+  "Spheres for 1 x 10d6, 2 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.".
+#.....
+#----- Robe of Useful Items
+
+base item with wearable Robe of Useful Items =
+
+  slot              Body;
+  don               {~} 1 round/1 round;
+  remove            {~} 1 round;
+  value             7000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              Medium-size;
+  hardness          0;
+  hp                1;
+  appearances       Common "An unremarkable, unadorned robe.";
+  substance         cloth 1/2 in;
+  player name       "Robe";
+  worlds            Generic;
+  references        WTC 17752: 266;
+  description
+  "This appears to be an unremarkable robe, but a character who dons it notes
+  that it is adorned with small cloth patches of various shapes. Only the
+  wearer of the robe can see these patches, recognize them for what items they
+  become, and detach them. One patch can be detached each round. Detaching a
+  patch causes it to become an actual item, as indicated below. A newly created
+  \Item{robe of useful items} always has two each of the following patches:
+
+  \List
+  {\Item{Dagger}}
+  {\Item{Bullseye Lantern} (filled and lit)}
+  {\Item{Mirror} (a highly polished 2-foot-by-4-foot steel mirror}
+  {\Item{Pole} (10-foot length)}
+  {\Item{Hempen rope} (50-foot coil)}
+  {\Item{Sack}}
+
+  In addition, the robe has several other patches (see table).
+
+  Once removed, a patch cannot be replaced.";
+  short description "A simple robe with detachable patches containing useful items.";
+  synonyms          "Useful Items, Robe of";
+  categories        clothing,
+                    robe.
+
+
+#.....
+#----- Rope of Climbing
+
+base item with commodity, incomplete Rope of Climbing =
+
+  value             3000 gp;
+  weight            3 lbs;
+  probability       Common;
+  appearances       Common "60 feet of thin rope.";
+  player name       "Rope";
+  worlds            Generic;
+  references        WTC 17752: 266;
+  description
+  "A 60-foot-long \Item{rope of climbing} is not thicker than a wand, but it is
+  strong enough to support 3'000 pounds. Upon command, the rope snakes forward,
+  upward, downward, or in any other direction at 10 feet per round, attaching
+  itself securely wherever its owner desires. It can unfasten itself and return
+  in the same manner.
+
+  A \Item{rope of climbing} can be commanded to know or unknow itself. This
+  causes large knots to appear at 1-foot intervals along the rope. Knotting
+  shortens the rope to a 50-foot length until the knots are untied but lowers
+  the DC of \Skill{Climb} checks while using it by 10. A creatures must hold
+  one hend of the rope when its magic is invoced.";
+  short description "A rope that attaches itself to wherever desired.";
+  synonyms          "Climbin, Rope of";
+  categories        magic,
+                    gear,
+                    rope.
+
+#.....
+#----- Silversheen
+
+base item Silversheen =
+
+  player name       "Liquid";
+  categories        silver, alchemical, liquid;
+  value             250  gp;
+  weight            1 lbs;
+  size              {~} tiny;
+  probability       rare;
+  substance         glass 1/2 inch;
+  appearances       common    "A flask with a silvery liquid inside.";
+  worlds            generic;
+  references        WTC 17752: 266;
+  short description "Cover a weapon with a standard action to make if silver for 1 hour.";
+  description
+
+  "This substance can be applied to a weapon as a standard action. It will give
+  the weapon the properties of alchemical silver (see page 284) for 1 hour,
+  replacing the properties of any other special material it might have. For
+  example, a +1 holy adamantine longswordbecomes a +1 holy silver longswordfor
+  the duration of the effect. One vial will coat a single melee weapon or 20
+  units of ammunition.".
+
+#.....
+#----- Slippers of Spider Climbing
+
+base item Slippers of Spider Climbing =
+
+  value             4800 gp;
+  weight            1/2 lb;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          2;
+  hp                1;
+  appearances       Common "A set of brown leather slippers.";
+  substance         leather 1/4 in;
+  player name       "Slippers";
+  worlds            Generic;
+  references        WTC 17752: 266;
+  description
+  "When worn, a pair of these slippers enable movement on vertical surfaces or
+   even upside down along ceilings, leaving the wearer's hands free. Her
+   speed is 20 feet. Severely slippery surfaces --- icy, oiled, or greased
+   surfaces --- make these slippers useless. The slippers can be used for 10
+   minutes per day, split up as the wearer chooses. ";
+  short description "10 min/day, Climb 20 ft anywhere, leaving hands free; do not work on slippery surfaces.";
+  synonyms          "Spider Climbing, Slippers of";
+  categories        magic,
+                    boots,
+                    climb.
+
+#.....
+#----- Stone Salve
+
+base item Stone Salve =
+
+  player name       "Ointment";
+  categories        salve, stone, ointment, paste;
+  synonyms          "Salve, Stone";
+  value             4000 gp;
+  weight            1 lbs;
+  size              tiny;
+  probability       rare;
+  substance         glass 1 inch;
+  appearances       common    "A grey salve.";
+  worlds            generic;
+  references        WTC 17752: 267;
+  short description "Returns petrified creature or acts as \SpellRef{Stoneskin}.";
+  description
+
+  "This ointment has two uses. If an ounce of it is applied to the flesh of a
+  petrified creature, it returns the creature to flesh as the stone to
+  fleshspell. If an ounce of it is applied to the flesh of a nonpetrified
+  creature, it protects the creature as a \SpellRef{stoneskin} spell.".
+
+#.....
+#----- Wind Fan
+
+base item Wind Fan =
+
+  player name       "Fan";
+  categories        fan, wind, magic;
+  synonyms          "Fan, Wind";
+  value             5500 gp;
+  weight            1 lbs;
+  size              small;
+  probability       very rare;
+  substance         paper 1/4 inch;
+  appearances       common    "A fan made from wood and papyrus.";
+  worlds            generic;
+  references        WTC 17752: 268;
+  short description "Once per day create a \SpellRef{gust of wind}; can be used additional times with a 20% cumulative chance to destroying the fan.";
+  description
+
+  "A wind fan appears to be nothing more than a wood and papyrus or cloth
+  instrument with which to create a cooling breeze. By uttering the command
+  word, its possessor causes the fan to generate air movement duplicating a
+  \SpellRef{gust of wind} spell. The fan can be used once per day with no
+  risk. If it is used more frequently, there is a 20% cumulative chance per
+  usage during that day that the device tears into useless, nonmagical
+  tatters.".
+
+#.....
+#----- Winged Boots
+
+base item Winged Boots =
+
+  value             16000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              {~} Tiny;
+  hardness          2;
+  hp                1;
+  appearances       Common "A pair of ordinary brown boots.";
+  substance         leather 1/2 in;
+  player name       "Boots";
+  worlds            Generic;
+  references        WTC 17752: 250;
+  description
+  "These boots appear to be ordinary footgear. On command, the boots sprout
+  wings at the heel and let the wearer fly, without having to maintain
+  concentration, as if affected by a \SpellRef{fly} spell. He can fly three
+  times day for up to 5 minutes per flight.";
+  short description "Boots that sprout wings and let the wearer fly.";
+  synonyms          "Boots, Winged";
+  categories        magic,
+                    boots,
+                    wearable.
+
+#.....
+
+#.....

@@ -1,0 +1,171 @@
+#----- Amulet of Dark Blessing
+
+base item Amulet of Dark Blessing =
+
+  value             1200 gp;
+  weight            1/2 lb;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          10;
+  hp                1;
+  appearances       Common "A small amulet made from an iridescent black gemstone.";
+  substance         steel 1/4 in;
+  player name       "Amulet";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 129;
+  description
+  "Made from an iridescent black gemstone found in the Underdark, these amulets
+  are identical in function to the devices surface dwellers know as amulets
+  of Laeral’s tears. These drow devices bestow 24 temporary hit points on the
+  wearer. When those temporary hit points have been expended, the amulet
+  crumbles into worthless dust.";
+  short description "Bestow 24 temporary hp, crumbles to dust if expended.";
+  synonyms          "Dark Blessing, Amulet of";
+  categories        magic,
+                    amulet.
+
+#.....
+#----- Drow House Insignia
+
+base item with incomplete Drow House Insignia =
+
+  weight            1/10 lb;
+  probability       Very Rare;
+  size              Tiny;
+  hardness          10;
+  hp                12;
+  appearances       Common "A small metal token with a symbol on it.";
+  substance         steel 1/2 in;
+  player name       "Metal Amulet";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 129;
+  description
+  "This metal token is normally worn on a chain or in a pouch tied around the
+  neck, occupying the same space as a necklace. Each bears symbol of noble
+  house from a particular \Monster{drow} city and requires a secred command
+  word to activate. An insignia has asingle minar magical ability that can be
+  used once per day, usually a 1st, 2nd, or 3rd-level spell. Those belonging to
+  powerful \Monster{drow} often have multiple abilities of various power
+  levels. Typical spells for a house insignia are \Spell{blur}, \Spell{cat's
+  grace}, \Spell{cloak of dark power}, \Spell{comprehend languages},
+  \Spell{feather fall}, \Spell{jump}, \Spell{levigate}, \Spell{read magic},
+  \Spell{scatter spray}, \Spell{shield}, \Spell{spider climb}, \Spell{unseen
+  servant}, and \Spell{water breathing}.
+
+  Each insignia is sligthly different, even those from the same noble house, so
+  a person aware of the unique shape of a person's insignia can magically
+  locate that person.";
+  short description "A family token with minor magical abilities.";
+  synonyms          "House Insignia, Drow",
+                    "Insignia, Drow House";
+  categories        drow,
+                    magic,
+                    amulet,
+                    insignia.
+
+#.....
+#----- Drow House Insignia (Levitate)
+
+base item with incomplete Drow House Insignia (Levitate) =
+
+  value             360 gp;
+  probability       Common.
+
+#.....
+#----- Drow House Insignia (Blur)
+
+base item with incomplete Drow House Insignia (Blur) =
+
+  value             360 gp;
+  probability       Common.
+
+#.....
+#----- Fang Scarab
+
+base item Fang Scarab =
+
+  value             3500 gp;
+  weight            1/4 lb;
+  probability       Very Rare;
+  size              {~} Tiny;
+  hardness          10;
+  hp                24;
+  appearances       Common "A spiderweb medallion with a finely wrought silver and a fang-shaped crystal dangling in its center.";
+  substance         crystal 1 in;
+  player name       "Medallion";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 129-130;
+  description
+  "A fang-shaped crystal dangles from a loop of finely wrought silver chain in
+  the center of this spiderweb medallion. When the chain is used to wrap the
+  \Item{fang scarab} around a monstrous spider's waist (the juncture of its
+  cephalothorax and its abdomen), the creature can hear \God{Lolth}'s dark
+  whispers in its subconscious. This gives it an instinctive knowledge of what
+  the next moment will bring, which manifests as a +1 insight bonus on attack
+  rolls. (This ability does not function during \God{Lolth}'s silence.
+
+  Because the \Item{fang scarab} is designed for spiders, it's not useful to
+  mose adventurers. A nonspider can make a \Item{fang scarab} function with a
+  successful \Skill{Use Magic Device} check (DC 25), but doing so also fusses
+  it permanently to its user's neck, near the Adam's apple. Nothing short of
+  the wearer's death can then remove it.
+
+  Thought the \Item{fang scarab} grants its wearer the same attack bonus that
+  it would to a spider, it also initiates a metamorphosis that can change the
+  wearer into a half-spider abomination over time. When the scarab first
+  attaches itself, the wearer's canine teeth enlarge and coarse black hairs
+  appear on the back of his or her neck. No further changes occur until the
+  character attains levels in the \Class{fang of Lolth} prestige class (fully
+  detailed in \Product{Song & Silence: A Guidebook to Rogues and Bards}).";
+  short description "A medallion to improve spiders (+1 insight bonus to attacks).";
+  synonyms          "Scarab, Fang";
+  categories        magic,
+                    scarab.
+
+#.....
+#----- Lesser Ring of Silent Spells
+
+base item Lesser Ring of Silent Spells [Ring] =
+
+  categories        ring, spell, silent;
+  synonyms          "Silent Spells, Lesser Ring of";
+  value             9000 gp;
+  appearances       common    "A plain silver ring.";
+  worlds            Forgotten Realms;
+  references        WTC 88574;
+  short description "Once per day cast 3 3rd level or lower spells without verbal components.";
+  description
+
+  "Once per day, this plain silver ring can create a silence effect centered on
+  the wearer. While the silence remains in effect, the wearer can cast up to
+  three spells without verbal components as though using the Silent Spell feat,
+  except that such spells do not require higher spell slots. The ring affects
+  only spells of 3rd level or lower.".
+
+#.....
+#----- Greater Fire Elemental Gem
+
+base item Greater Fire Elemental Gem =
+
+  player name       "Gem";
+  categories        gem, elemental, summon, nature;
+  synonyms          "Elemental Gem, Fire, Greater", "Fire Elemental Gem, Greater";
+  value             6000 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         crystal 1 in;
+  appearances       common    "A small, red gem.",
+                    common    "A small, orange gem.";
+  worlds            generic;
+  references        WTC 88574: 130;
+  short description "When crushed summon greater fire elemental (as \SpellRef{summon nature's ally VII}).";
+  description
+
+  "This red or orange gem contains a conjuration spell attuned to the Elemental
+  Plane of Fire.  When the gem is crushed, smashed, or broken (a standard
+  action), a greater fire elemental appears as if summoned by a summon
+  monster spell. The elemental is under the control of the creature that broke
+  the gem.".
+
+#.....

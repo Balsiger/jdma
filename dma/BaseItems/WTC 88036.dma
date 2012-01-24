@@ -1,0 +1,48 @@
+# Complete Divine
+
+#----- Lesser Vigor
+
+base spell Lesser Vigor =
+
+  synonyms          "Vigor, Lesser";
+  school            Conjuration (Healing);
+  level             Cleric 1, Druid 1;
+  components        verbose, somatic;
+  casting time      1 standard action;
+  range             touch;
+  target            "Living creature touched";
+  duration          1 round/level + 10 rounds "(max 15 rounds)";
+  saving throw      Will negates (harmless);
+  spell resistance  Yes (harmless);
+  summary           "Living creature touched gains fast healing 1 for [[min(15, (10 + $level))]] rounds.";
+  references        WTC 88036: 186;
+  short description "Creature heals 1 hp/round (max 15 rounds).";
+  worlds            generic;
+  description
+
+  "With a touch of your hand, you boost the subject’s life energy, granting him
+  or her the fast healing ability for the duration of the spell. The subject
+  heals 1 hit point per round of such damage until the spell ends and is
+  automatically stabilized if he or she begins dying from hit point loss
+  during that time. Leessor vigor does not restore hit points lost from
+  starvation, thirst, or suffocation, nor does it allow a creature to regrow or
+  attach lost body parts.  The effects of multiple vigor spells do not stack;
+  only the highest-level effect applies. Applying a second vigor spell of equal
+  level extends the ﬁ rst spell’s duration by the full duration of the second
+  spell.  ".
+
+#.....
+
+#----- Wand of Lesser Vigor.
+
+base item with multiuse Wand of Lesser Vigor [Wand] =
+
+  value             15 gp;
+  probability       Common;
+  player name       "Wand";
+  description
+  "A wand with the spell \SpellRef[Clr 1]{Lesser Vigor}";
+  short description "A wand with \SpellRef[Clr 1]{Lesser Vigor}";
+  synonyms          "Lesser Vigor, Wand".
+
+#.....

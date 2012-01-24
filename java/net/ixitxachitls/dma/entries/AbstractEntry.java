@@ -1824,21 +1824,27 @@ public class AbstractEntry extends ValueGroup
     if("title".equals(inKey))
     {
       return new FormattedValue
-        (new Title(computeValue("name", inDM).format(this, inDM, false),
+        (new Title(computeValue("name", inDM).format(this, inDM, true),
                    "entrytitle"),
          null, "title", false, false, false, false, "titles", "");
     }
 
     if("desc".equals(inKey))
-      return new FormattedValue
-        (new Divider("desc",
-                     new Command(computeValue("subtitle", inDM)
-                                 .format(this, inDM, true),
-                                 computeValue("description", inDM)
-                                 .format(this, inDM, true),
-                                 computeValue("short description", inDM)
-                                 .format(this, inDM, true))),
-         null, "desc", false, false, false, false, "desc", "");
+    {
+      List<Object> commands = new ArrayList<Object>();
+      ValueHandle subtitle = computeValue("subtitle", inDM);
+      if(subtitle != null)
+        commands.add(subtitle.format(this, inDM, true));
+
+      commands.add(computeValue("description", inDM).format(this, inDM, true));
+      commands.add(computeValue("short description", inDM)
+                   .format(this, inDM, true));
+
+      return new FormattedValue(new Divider("desc",
+                                            new Command(commands.toArray())),
+                                null, "desc", false, false, false, false,
+                                "desc", "");
+    }
 
     if("image".equals(inKey))
     {

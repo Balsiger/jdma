@@ -1,0 +1,55 @@
+
+# the following items are not yet completely defined
+
+#----- Rod or Resurrection
+
+base item Rod of Resurrection =
+
+  value             15000 gp;
+  weight            5 lbs;
+  probability       Common;
+  size              Medium-size;
+  hardness          10;
+  hp                1;
+  appearances       Very Rare "A polished, shiny rod.",
+                    Common "A simple rod.",
+                    Very Rare "A slightly rusted rod.";
+  substance         iron 1/3 in;
+  break DC          27;
+  player name       "Rod";
+  worlds            Generic;
+  references        TSR 2100: 153;
+  description
+  "Rods are scepterlike devices that have unique magical powers and do not  usually have charges. Anyone can use a rod.
+
+  This rod enables a cleric to resurrect the dead --- even
+  \Monster[elf]{elven}, \Monster[dwarf]{dwarven}, \Monster{gnome}, or
+  \Monster{halfling}---as if he were of high enough level to cast the
+  \Spell{Resurrection} spell. No rest is required, as the rod bestows the life
+  giving effects.
+
+  The rod can be used once per day. The number of charges used to ressurect a
+  character depends on class and race. Total the number of charges indicated
+  for the character's class and race:
+
+  \table{1:L;1:L,,|;1:L;1:L}
+  {\bold{Class}}{\bold{Charges}}{\bold{Race}}{\bold{Charges}}
+  {Cleric}{1}{Dwarf}{3}
+  {Druid}{2}{Elf}{4}
+  {Fighter}{2}{Gnome}{3}
+  {Paladin}{1}{Half-elf}{2}
+  {Ranger}{2}{Halfling}{2}
+  {Wizard}{3}{Human}{1}
+  {Rogue}{3}{}{}
+  {Bard}{2}{}{}
+
+  The rod cannot be recharged.";
+  short description "Allows a priest to cast \Spell{Resurrection}.";
+  synonyms          "Ressurection, Rod of";
+  categories        rod,
+                    resurrect,
+                    divine,
+                    cleric.
+
+
+#.....

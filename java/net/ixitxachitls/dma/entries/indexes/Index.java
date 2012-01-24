@@ -241,6 +241,36 @@ public class Index implements Serializable, Comparable<Index>
   /** The name of the title index. */
   public static final @Nonnull String TITLES = "titles";
 
+  /** The name of the value index. */
+  public static final @Nonnull String VALUES = "values";
+
+  /** The name of the weight index. */
+  public static final @Nonnull String WEIGHTS = "weights";
+
+  /** The name of the probability index. */
+  public static final @Nonnull String PROBABILITIES = "probabilities";
+
+  /** The name of the size index. */
+  public static final @Nonnull String SIZES = "sizes";
+
+  /** The name of the hardness index. */
+  public static final @Nonnull String HARDNESSES = "hardnesses";
+
+  /** The name of the hit point index. */
+  public static final @Nonnull String HIT_POINTS = "hps";
+
+  /** The name of the substance index. */
+  public static final @Nonnull String SUBSTANCES = "substances";
+
+  /** The name of the thickness index. */
+  public static final @Nonnull String THICKNESSES = "thicknesses";
+
+  /** The name of the break DC index. */
+  public static final @Nonnull String BREAK_DCS = "breaks";
+
+  /** The name of the category index. */
+  public static final @Nonnull String CATEGORIES = "categories";
+
   /** The joiner to put together the string for nested indexes. */
   private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
 

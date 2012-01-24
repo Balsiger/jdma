@@ -537,6 +537,12 @@ TABLE.entrylist TD.short
   background-color: $color_Campaign;
 }
 
+.back-base-item, .back-item
+{
+  color:            white;
+  background-color: $color_Item;
+}
+
 /******************************************************************************
  * jQuery overrides
  *****************************************************************************/
@@ -575,6 +581,16 @@ DIV.clear-right
 SPAN.error, SPAN.error A { color: #AA0000; }
 SPAN.warning, SPAN.warning A { color: #FF8800; }
 DIV.snippet { color: #aaa; font-size: 80%; }
+
+/* inline table layouting */
+SPAN.table      { display: inline-table; }
+SPAN.table-row  { display: table-row;  }
+SPAN.table-cell
+{
+  display:       table-cell;
+  padding-right: 5px;
+  padding-left:  5px;
+}
 
 /******************************************************************************
  * edit

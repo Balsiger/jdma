@@ -1,0 +1,96 @@
+# the following items are not yet completely defined
+
+#----- Crystal Sphere
+
+base item Crystal Sphere =
+
+  value             500 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              Medium-size;
+  hardness          1;
+  hp                1;
+  appearances       Common "A clear, crystal sphere";
+  substance         glass 1 in;
+  player name       "Crystal Sphere";
+  worlds            Generic;
+  references        TSR 9248: 5;
+  description
+  "This sphere shatters if it has come within an arm's reach of an item of
+  Greater Art, e.g. an artifact.";
+  short description "This sphere show when an artifact is near.";
+  synonyms          "Sphere, Crystal";
+  categories        sphere,
+                    crystal,
+                    glass.
+
+#.....
+#----- Mace of Spellwarding
+
+base item with weapon Light Mace of Spellwarding =
+
+  damage            1d6;
+  weapon type       Bludgeoning;
+  critical          x2;
+  weapon style      Light Melee;
+  proficiency       Simple;
+  range increment   10 ft;
+  reach             5 ft;
+  value             {~} 45000 gp;
+  weight            4 lbs;
+  probability       Very Rare;
+  size              Tiny;
+  hardness          10;
+  hp                1;
+  appearances       Common "A light mace, wrought of one piece of blued, oiled steel.";
+  substance         steel 1/3 in;
+  player name       "Light Mace";
+  worlds            Forgotten Realms;
+  references        TSR 9248: 45;
+  description
+  "This +1 magical weapon appears as a finely made mace wrought of one piece of
+  blued, oiled steel. In battle, it functions normally. If it touches any item
+  or solid, nonliving surface that bears a dweomer, the mace will glow with a
+  magenta-hued radiance, the intensity of the light increasing with the
+  strength of dweomers contacted.
+
+  The force of any spell, magical item, or artifact discharge directed at the
+  bearer of a \Item{mace of spellwarding}, or activated so that its area of
+  effect includes the mace or its bearer, will be sucked into the \Item{mace},
+  instantly and harmlessly. This effect is audible and visible, and entirely
+  protects the bearer (even from such specifically aimed magics as \Spell{magic
+  missile}, \Spell{charm} magics, and the like). Absorption is involuntary, not
+  selectively controllable.
+
+  For each level of spell absorbed (treat item functions as the level of the
+  lowest equivalent spell), a mace of spellwarding gains an additional +1
+  bonus, lasting 6 minutes. Bonuses apply to both damage and attack rolls, and
+  are cumulative.  Upon exceeding a maximum of bonuses (which varies from mace
+  to mace; most were designed to handle no more than 12 spell levels), a
+  \Item{mace of spellwarding} expends its excess energy in a random
+  \Spell{teleport}.  It always travels to a safe place (i.e., neither high nor
+  low for human-sized wielders) somewhere on the same plane, but its
+  destination cannot be foreseen or influenced in any way.
+
+  If no one is holding or carrying the mace when it overloads, it will simply
+  vanish in a burst of magenta-and-white radiance. Anyone holding (or touching
+  a holder of) a \Item{mace of spellwarding} will be taken along on the
+  teleport (to a maximum of one creature per plus held by the mace at the time
+  of overload, including the extra pluses the weapon could not handle).
+
+  A \Item{mace of spellwarding} functions as a normal weapon only (exhibiting
+  no magical powers whatsoever) for one day after
+  \Spell[teleport]{teleporting}, and thereafter regains its +1 status and
+  ability to \Item{spellward} again.";
+  short description "The mace sucks up up to 12 spell levels of spells";
+  synonyms          "Spellwarding, Light Mace of",
+                    "Mace of Spellwarding, Light";
+  categories        mace,
+                    magical,
+                    bludgeoning,
+                    spell,
+                    spellwarding,
+                    light.
+
+
+#.....

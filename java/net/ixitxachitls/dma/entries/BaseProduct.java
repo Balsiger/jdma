@@ -862,9 +862,9 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("persons",
+    s_indexes.put(Index.PERSONS,
                   new Index("Persons", BaseProduct.TYPE).withEditable());
-    s_indexes.put("jobs",
+    s_indexes.put(Index.JOBS,
                   new Index("Jobs", BaseProduct.TYPE).withEditable());
   }
 
@@ -995,7 +995,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("dates", new Index("Dates", TYPE));
+    s_indexes.put(Index.DATES, new Index("Dates", TYPE));
   }
 
   //........................................................................
@@ -1042,7 +1042,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("pages", new Index("Pages", TYPE));
+    s_indexes.put(Index.PAGES, new Index("Pages", TYPE));
   }
 
   //........................................................................
@@ -1059,7 +1059,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("systems", new Index("Systems", TYPE).withImages());
+    s_indexes.put(Index.SYSTEMS, new Index("Systems", TYPE).withImages());
   }
 
   //........................................................................
@@ -1078,7 +1078,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("audiences", new Index("Audiences", TYPE).withImages());
+    s_indexes.put(Index.AUDIENCES, new Index("Audiences", TYPE).withImages());
   }
 
   //........................................................................
@@ -1097,7 +1097,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("types", new Index("Types", TYPE).withImages());
+    s_indexes.put(Index.TYPES, new Index("Types", TYPE).withImages());
   }
 
   //........................................................................
@@ -1114,7 +1114,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("styles", new Index("Styles", TYPE).withImages());
+    s_indexes.put(Index.STYLES, new Index("Styles", TYPE).withImages());
   }
 
   //........................................................................
@@ -1131,7 +1131,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("producers", new Index("Producers", TYPE).withImages());
+    s_indexes.put(Index.PRODUCERS, new Index("Producers", TYPE).withImages());
   }
 
   //........................................................................
@@ -1164,7 +1164,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("series", new Index("Series", TYPE));
+    s_indexes.put(Index.SERIES, new Index("Series", TYPE));
   }
 
   //........................................................................
@@ -1194,7 +1194,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("prices", new Index("Prices", TYPE));
+    s_indexes.put(Index.PRICES, new Index("Prices", TYPE));
   }
 
   //........................................................................
@@ -1219,7 +1219,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("parts", new Index("Parts", TYPE));
+    s_indexes.put(Index.PARTS, new Index("Parts", TYPE));
   }
 
   //........................................................................
@@ -1259,7 +1259,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("layouts", new Index("Layouts", TYPE));
+    s_indexes.put(Index.LAYOUTS, new Index("Layouts", TYPE));
   }
 
   //........................................................................
@@ -1273,7 +1273,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put("worlds", new Index("Worlds", TYPE).withImages());
+    s_indexes.put(Index.WORLDS, new Index("Worlds", TYPE).withImages());
   }
 
   //........................................................................

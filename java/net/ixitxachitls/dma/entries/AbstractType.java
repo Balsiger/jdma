@@ -208,8 +208,10 @@ public abstract class AbstractType<T extends AbstractEntry>
   // not be properly converted from datastore.
   static
   {
+    // adding base character here adds a null pointer, breaking things
+    // s_all.add(net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
+    s_all.add(net.ixitxachitls.dma.entries.BaseItem.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.BaseProduct.TYPE);
-    s_all.add(net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.Product.TYPE);
   }
 
@@ -375,9 +377,10 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return    the type found, if any
    *
    */
-  public static @Nullable Set<AbstractType<? extends AbstractEntry>>
-    getAll()
+  public static @Nullable
+    Set<AbstractType<? extends AbstractEntry>> getAll()
   {
+    System.out.println("all: " + s_all);
     return ImmutableSet.copyOf(s_all);
   }
 

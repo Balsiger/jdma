@@ -112,7 +112,7 @@ public class Reference extends BaseText<Reference>
   /** Flag if references was resolved or not. */
   private boolean m_resolved = false;
 
-  /** The base product reference here. */
+  /** The base product referenced here. */
   private @Nullable BaseProduct m_product = null;
 
   //........................................................................

@@ -1,0 +1,51 @@
+#----- Winter Blanket
+
+base item Winter Blanket =
+
+  value             5 sp;
+  weight            3 lbs;
+  probability       Common;
+  size              Small;
+  appearances       Rare "A half-rotten, patchy brown woolen blanket.",
+                    Uncommon "A rough, brown woolen blanket.",
+                    Common "A rough, brown woolen blanket.",
+                    Common "A fine, brown woolen blanket.",
+                    Uncommon "A fine, black woolen blanket.",
+                    Rare "A fine, red woolen blanket.",
+                    Rare "A fine, blue woolen blanket.",
+                    Rare "A fine, green woolen blanket.",
+                    Very Rare "A fine, golden embroidered, colored woolen blanket.";
+  substance         cloth 1/2 in;
+  worlds            Generic;
+  references        WTC 17524: 126;
+  description
+  "A thick, quilted, wool blanket made to keep you warm in cold weather.";
+  synonyms          "Blanket, Winter";
+  categories        gear.
+
+#.....
+#----- Bedroll
+
+base item Bedroll =
+
+  value             1 sp;
+  weight            5 lbs;
+  probability       Common;
+  size              Small;
+  appearances       Rare "A comfortable bedroll with a silk blanket.",
+                    Common "A simple bedroll with a thin cotton blanket.",
+                    Uncommon "A shabby bedroll with holes and a rag as a blanket.";
+  substance         cloth 1/2 in;
+  player name       "Bedroll";
+  worlds            Generic;
+  references        WTC 17524: 126;
+  description
+  "You never know where you're going to sleep, and a bedroll helps you get
+  better sleep in a hayloft or on the cold ground. A bedroll consists of
+  bedding and a blanket thin enough to be rolled up and tied. In an emergency,
+  it can double as a stretcher.";
+  synonyms          "Mat",
+                    "Sleeping Mat";
+  categories        gear.
+
+#.....

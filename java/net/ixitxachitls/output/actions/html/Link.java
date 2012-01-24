@@ -168,15 +168,14 @@ public class Link extends Action
     // remove % signs
     name = name.replaceAll("%", "%25");
 
-    if(!name.equals("index") && !name.matches(".*/index")
-       && !name.startsWith("http://") && !name.startsWith("/index/")
+    if(!name.startsWith("http://") && !Files.extension(name).isEmpty()
        && !"/".equals(name) && !name.startsWith("javascript:"))
     {
+      // encode names of images for app engine
       String dir = Files.path(name);
       name = dir + Files.encodeName(name.substring(dir.length()));
-
-      if(Files.extension(name).isEmpty())
-        name += m_extension;
+      // if(Files.extension(name).isEmpty())
+      //   name += m_extension;
     }
 
     // the replacement in the target remove all paths that may be available,

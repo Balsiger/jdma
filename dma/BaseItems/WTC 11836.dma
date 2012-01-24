@@ -1,0 +1,75 @@
+# The Forgotten Realms Campaign Setting
+
+#----- Bandoleer
+
+base item with container Bandoleer =
+
+  capacity          1 cu ft;
+  state             granular;
+  value             5 sp;
+  weight            1/2 lb;
+  probability       Uncommon;
+  size              {~} Small;
+  hardness          2;
+  hp                1;
+  appearances       Common "A leather belt with eight pouches.",
+                    Common "A leather belt with eight loops.";
+  substance         leather 1/2 in;
+  player name       "Bandoleer";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 95-96;
+  description
+  "This leather belt has loops or pouches for carrying small items (up to
+   dagger size). It is usually worn across the chest. It holds eight items.";
+  short description "";
+  categories        gear,
+                    container.
+
+#.....
+#----- Potion Belt
+
+base item with container Potion Belt =
+
+  capacity          1 cu ft;
+  value             1 gp;
+  weight            1 lb;
+  probability       Uncommon;
+  size              Small;
+  hardness          2;
+  hp                1;
+  appearances       Common "A belt for storing six potions.";
+  substance         leather 1/2 in;
+  player name       "Potion Belt";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 95-96;
+  description
+  "This sturdy leather belt similar to a \Item{bandoleer} has pockets shaped to
+  hold potion vials and is fitted with ties or flaps to keep the potions from
+  falling out. It holds six potions. Retrieving a potion from a potion belt is
+  a free action once per round.";
+  short description "Store six potions for fast access (free action).";
+  synonyms          "Belt, Potion";
+  categories        gear,
+                    container.
+
+#.....
+#----- Spectral Dagger
+
+base item Spectral Dagger [Dagger] =
+
+  categories        dagger, magic, spectral, chill, touch;
+  synonyms          "Dagger, Spectral";
+  value             20000 gp;
+  probability       very rare;
+  substance         bone 3 inch;
+  appearances       common    "A dagger hilt of bone with a missing blade.";
+  worlds            generic;
+  references        WTC 11836: 144;
+  short description "Deals no damage but \SpellRef{chill touch} (dc 11) with a touch attack.";
+  description
+
+  "Fashioned from a bone of a creature that died violently, this appears to be just a dagger hilt made of bone. When a creature grasps the hilt, a dagger 'blade' of light appears. (Treat the weapon as a dagger for proficiency, feats, and so on). The blade 'winks out' when the hilt leaves the wielder's hand.
+
+  The blade has no attack bonus and deals no damage, but any target struck is affected as by a \SpellRef{Chill Touch} spell (DC 11). Striking with the \Item{spectral dagger} is considered a touch attack. Creatures with multiple attacks may use the spectral blade in a full attack option to strike more than one per round just as if they wielded a normal dagger.".
+
+#.....

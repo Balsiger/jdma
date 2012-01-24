@@ -1,0 +1,59 @@
+# Magic of Faerun
+
+#----- Cli Lyre
+
+base item Cli Lyre =
+
+  player name       "Lyre";
+  categories        magic, instrument, bard;
+  synonyms          "Lyre, Cli", "Instrument of the Bards";
+  value             37600 gp;
+  probability       very rare;
+  worlds            Forgotten Realms;
+  references        WTC 11964: 161;
+  short description "+2 circumstance bonus on Perform [lyre], +5 to bardi music counterson, fascinate, suggession, 1/day \SpellRef{Break Enchantment}, \SpellRef{Dimension Door}, and \SpellRef{Shout}";
+  description
+
+  "This masterwork lyre (+2 circumstance bonus on Perform [lyre] checks)
+  bestows one negative level on any character who does not have at least 10
+  ranks in Perform (lyre). A character with 10 ranks in Perform (lyre) can use
+  the instrument to cast \SpellRef{Break Enchantment}, \SpellRef{Dimension
+  Door}, and \SpellRef{Shout} once per day. It gives a +5 competence bonus on a
+  bard's bardic music checks for countersong, \Spell{fascinate}, and
+  \Spell{suggestion}.".
+
+#.....
+#----- Corrosive Weapon +2
+
+base item with weapon Corrosive Weapon +2 =
+
+  value             6000 gp;
+  probability       very rare;
+  player name       "";
+  damage            1d6 acid;
+  worlds            Forgotten Realms;
+  references        WTC 11964: 138;
+  synonyms          "Corrosive";
+  categories        magic,
+                    weapon,
+                    acid;
+  description
+
+  "Upon command, a corrosive weapon becomes slick with a layer of acidic fluid
+  (the wielder takes no damage from this effect). Corrosive weapons deal +1d6
+  points of acid damage on a successful hit. Bows, crossbows and slings with
+  this ability bestow the acid energy upon their ammunition.".
+
+#.....
+#----- Venomous
+
+base item with incomplete, weapon Venomous =
+
+  categories        magic, poison, weapon enhancement, enhancement;
+  references        WTC 11964: 141;
+  short description "One a day deliver a \SpellRef{poison} DC 14 after struck.";
+  description
+
+  "Once per day, a venomous weapon can inflict a \SpellRef{Poison} spell (DC 14) upon a creature struck by the weapon (or projectile) once per day. The wielder can decide to use the power after he has struck. Doing so is a free action, but the \Spell{poison} spell must be inflicted on the same round that the weapon or projectile strikes.".
+
+#.....

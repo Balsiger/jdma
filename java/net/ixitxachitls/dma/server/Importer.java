@@ -262,7 +262,7 @@ public final class Importer
       if(id.equalsIgnoreCase(name) || name.contains(id)
          || "cover".equalsIgnoreCase(name)
          || "official".equalsIgnoreCase(name)
-         || "unoffical".equalsIgnoreCase(name)
+         || "unofficial".equalsIgnoreCase(name)
          || "main".equalsIgnoreCase(name))
         name = "main";
 

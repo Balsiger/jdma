@@ -1,0 +1,108 @@
+#----- Linen Purse ---------------------------------------------------------
+
+#----- Linen Purse
+
+base item with container Linen Purse =
+
+  capacity          5 cu in;
+  state             granular;
+  value             3 sp;
+  weight            1/10 lb;
+  probability       Common;
+  size              Small;
+  hardness          0;
+  hp                1;
+  appearances       Common "A simple linen purse";
+  substance         cloth 1/4 in;
+  player name       "Linen Purse";
+  worlds            Forgotten Realms;
+  references        TSR 9358: 84;
+  description
+  "All of our purses are durable and roomy.
+
+   Hidden pouches (5 gp) are optional, as is a wire mesh inner layer (7 gp) to
+   deter thieves. As a bonus, we will embroider (linen) or tool (leather) one
+   initial on your new purse at no extra charge. Additional letters, 1 sp
+   each.
+
+   The next time a cutpurse cuts your purse, think about one of our purses.
+   Any purse with wire mesh layer prevents successful purse cutting by thieves,
+   although a hand can still get inside one.";
+  short description "A linen purse.";
+  synonyms          "Linen Wallet",
+                    "Purse, Linen",
+                    "Wallet, Linen";
+  categories        gear,
+                    money,
+                    container.
+
+
+#.....
+#----- Leather Purse
+
+base item with container Leather Purse =
+
+  capacity          5 cu in;
+  state             granular;
+  value             2 gp;
+  weight            1/2 lb;
+  probability       Common;
+  size              Small;
+  hardness          0;
+  hp                1;
+  appearances       Common "A simple leather purse.";
+  substance         leather 1/4 in;
+  player name       "Leather Purse";
+  worlds            Forgotten Realms;
+  references        TSR 9358: 84;
+  description
+  "All of our purses are durable and roomy.
+
+   Hidden pouches (5 gp) are optional, as is a wire mesh inner layer (7 gp) to
+   deter thieves. As a bonus, we will embroider (linen) or tool (leather) one
+   initial on your new purse at no extra charge. Additional letters, 1 sp
+   each.
+
+   The next time a cutpurse cuts your purse, think about one of our purses.
+   Any purse with wire mesh layer prevents successful purse cutting by thieves,
+   although a hand can still get inside one.";
+  short description "A leather purse.";
+  synonyms          "Linen Wallet",
+                    "Purse, Linen",
+                    "Wallet, Linen";
+  categories        gear,
+                    money,
+                    container.
+
+
+#.....
+
+#----- Quilted Silk Box
+
+base item with container Quilted Silk Box =
+
+  capacity          1/4 cu ft;
+  state             granular;
+  value             5 gp;
+  weight            2 lbs;
+  probability       Uncommon;
+  size              Medium-size;
+  hardness          0;
+  hp                1;
+  appearances       Common "A finely made, quilted silk box.";
+  substance         cloth 2 in;
+  player name       "Quilted Silk Box";
+  worlds            Forgotten Realms;
+  references        TSR 9358: 97;
+  description
+  "For mementos, love letters, jewelry, potpourri---whatever you desire---we
+  offer various styles of imported boxes. This is one is made from quilted silk
+  lined with satin from \Place{Shou Lung}.";
+  short description "A quilted silk box.";
+  synonyms          "Box, Quilted Silk",
+                    "Silk Box, Quilted";
+  categories        container,
+                    ornamental.
+
+
+#.....

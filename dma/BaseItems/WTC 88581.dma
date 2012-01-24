@@ -1,0 +1,63 @@
+# FR: Underdark
+
+#----- Drow Knockout Poison
+
+base item with incomplete Drow Knockout Poison =
+
+  incomplete
+  "Poison Injur DC 13 Unconscious 1 min/Unconscious 2d4 hours";
+  value             75 gp;
+  probability       Very Rare;
+  appearances       Very Rare "Some thick liquid in a glass vial.",
+                    Very Rare "Some thick liquid in a metal vial.";
+  player name       "Vial with Liquid";
+  worlds            Forgotten Realms;
+  references        WTC 88581: 67-68;
+  description
+  "The \monster[Drow]{dark elves} are renowned for their
+  unconsciousness-inducing poison. They carefully guard the secret of their
+  venom, and it's difficult to find outside of \Monster{drow} realms and
+  outposts.";
+  short description "Poison, Injury DC 13 or Unconscious 1 min/Unconscious 2d4 hours";
+  synonyms          "Poison, Drow Knockout";
+  categories        potion,
+                    poison,
+                    liquid,
+                    vial.
+#----- Pincer Staff
+
+base item with weapon Pincer Staff =
+
+  damage            1d10;
+  weapon type       Bludgeoning;
+  critical          x3;
+  weapon style      Two-Handed Melee;
+  proficiency       Exotic;
+  range increment   {~} 10 ft;
+  reach             10 ft;
+  player name       "Pincer Staff";
+  categories        staff, wepaon;
+  synonyms          "Staff, Pincer";
+  value             20 gp;
+  weight            15 lbs;
+  size              medium-size;
+  probability       uncommon;
+  substance         iron 2 inch;
+  appearances       common    "A two-handed staff with a wicked, spiked pincer on top.";
+  worlds            Forgotten Realms;
+  references        WTC 88581: 64-65;
+  short description "10 ft reach, no adjacient, grapple without attack of opportunity, doing damage as long as hold maintained.";
+  description
+
+  "Kup-Toa fighters and whips often employ this two-handed exoctic weapon. It
+  has 10-ft reach and cannot be used against an adjacient opponent. If you hit
+  an opponent within one size category of yourself with a pincer staff, you may
+  attempt to start a grapple as a free action without provoking an attack of
+  opportunity. (For instance a Small wielder may use a pincer staff to grapple
+  a Tiny or a Medium opponent.) If you get a hold, the staff grabs the opponent
+  and deals its normal damage each round the hold is maintained.".
+
+#.....
+
+
+#.....

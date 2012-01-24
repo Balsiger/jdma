@@ -45,6 +45,7 @@ edit.all = [];
  */
 edit.makeEditable = function()
 {
+  window.console.log("making editable");
   var target = edit.findTarget(this);
 
   if(!target.__edit)

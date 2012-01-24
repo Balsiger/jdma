@@ -1,0 +1,237 @@
+# Magic Item Compendium
+
+#----- Daylight Pellet
+
+base item Daylight Pellet =
+
+  player name       "Ceramic Stone";
+  categories        magic, stone, pellet, light;
+  synonyms          "Pellet, Daylight";
+  value             150 gp;
+  weight            1/10 lbs;
+  size              medium-size;
+  probability       common;
+  substance         stone 1 inch;
+  appearances       common    "Within a thick black pouch, you see a handful of tiny ceramic beads. Thin veins of light shine through cracks in each bead.";
+  worlds            generic;
+  references        WTC 1076272: 156;
+  short description "A ceramic stone that creates \SpellRef[Clr 5]{daylight}.";
+  description
+
+  "A \Item{daylight pellet} can be thrown up to 50 feet; when it lands, it
+  shatters and creates illumination equivalent to a \SpellRef[Clr 5]{daylight}
+  spell, but with a duration of 10 rounds. These small stones are usually found
+  in pouches containing 3d4 pellets. Using a pellet destroys it.".
+
+#.....
+#----- Healing Belt
+
+base item with incomplete Healing Belt =
+
+  incomplete        "+2 on heal checks, 3 charges, heal charge +1 d8, renews at dawn";
+  player name       "Belt";
+  categories        belt, healing, magic;
+  synonyms          "Belt, Healing";
+  value             750 gp;
+  weight            1 lbs;
+  size              tiny;
+  probability       rare;
+  substance         leather 1/2 inch;
+  appearances       common    "This bread leather belt is studded with three moonstones.";
+  worlds            generic;
+  references        WTC 1076272: 110;
+  short description "+2 on heal checks, 3 charges, heal charge +1 d8, renews at dawn";
+  description
+
+  "While wearing a \Item{healing belt} you gain a +2 competence bonus on
+  \Skill{Heal} checks. This is a continous effect and requires no
+  activation.
+
+  In addition, the belt has 3 charges, which are renewed each day at
+  dawn. Spending 1 or more charges allows you to channel positive energy and
+  heal damage with a touch. (You can also use this ability to harm undead,
+  dealing them an equivalent amount of damage.)
+
+  \list
+  {\emph{1 charge}: Heals 2d8 points of damage}
+  {\emph{2 charges}: Heals 3d8 points of damage}
+  {\emph{3 charges}: Heals 4d8 points of damage}
+  ".
+
+#.....
+#----- Magic Bedroll
+
+base item Magic Bedroll =
+
+  player name       "Bedroll";
+  categories        magic, bed, sleep, gear;
+  synonyms          "Bedroll, Magic";
+  value             500 gp;
+  weight            6 lbs;
+  size              {~} Small;
+  probability       common;
+  substance         cloth 1 inch;
+  appearances       common    "This woolen sleeping bag is embroidered with stars and moons in silver and blue thread, and it smells of lavender.";
+  worlds            generic;
+  references        WTC 1076272: 163-164;
+  short description "Gives restful sleep (+1 hp/level/8 h) and \Spell{endure elements}";
+  description
+
+  "A \Item{Magic Bedroll} grants you a comfortable and peaceful night's
+  sleep. As long as you lie in it, you gain the benefits of an \Spell{Endure
+  Elements} spell. After sleeping for 8 hours in the bedroll, you recover 1 hit
+  point per character level in addition to the hit points you recover
+  normally. Getting in and out of a \Item{Magic Bedroll} is a full-round
+  action.".
+
+#.....
+#----- Reliquiary Holy Symbol
+
+base item Reliquiary Holy Symbol =
+
+  player name       "Holy Sybmol";
+  categories        holy, symbol, reliquiary;
+  synonyms          "Holy Symbol, Reliquiary";
+  value             1000 gp;
+  weight            1/2 lbs;
+  size              {~} tiny;
+  probability       very rare;
+  substance         wood 1 inch;
+  appearances       common    "This hollow holy symbol holds a pinch of dust and a fragment of bone.";
+  worlds            generic;
+  references        WTC 1076272: 120-121;
+  short description "";
+  description
+
+  "As the repository of a fragment of a long dead high priest of a particular
+  deity. A \Item{reliquiary holy symbol} functions just like any other holy
+  symbol. In addition, for each of the following prerequisites that you meet,
+  the holy symbol grants you one additional daily use of your turn or rebuke
+  undead ability.
+
+  \list
+  {At least 5 ranks in Knowledge (religion)}
+  {Improved Turning feat}
+  {At least one divine feat}
+
+  Each \Item{reliquiary holy} symbol is crafted for a specific deity and is
+  only useful to characters dedicated to that deity (or in the case of a
+  character who isn't devoted to a specific deity, whose alignment matches that
+  of the deity).".
+
+#.....
+#----- Armband of Maximized Healing
+
+base item Armband of Maximized Healing =
+
+  player name       "Armband";
+  categories        armband, maximized, healing;
+  synonyms          "Maximized Healing, Armband of", "Healing, Armband of Maximized";
+  value             7200 gp;
+  weight            1 lbs;
+  size              small;
+  probability       very rare;
+  substance         iron 1/2 inch;
+  appearances       common    "Numerous small diamonds adorn this silver armband like tiny constellations.";
+  worlds            generic;
+  references        WTC 1076272: 72;
+  short description "Activated as a swift (mental) action up to three times per day maximize the next healing spell (6th level or lower).";
+  description
+
+  "When you activate an \Item{armband of maximixed healing} as a Swift (mental) action, the next healing spell of 6th level or lower that you cast on your turn is automatically maximized (as the Maximize Spell feat, but with no adjustment to spell level or casting time).
+
+  An \Item{armband of maximized healing} functions three times per day.".
+
+#.....
+#----- Everfull Mug
+
+base item Everfull Mug =
+
+  player name       "Mug";
+  categories        mug, drink, full, ever;
+  synonyms          "Mug, Everfull";
+  value             200 gp;
+  weight            1 lbs;
+  size              small;
+  probability       rare;
+  substance         glass 2 inch;
+  appearances       common    "This common-looking brown clay mug has persistant stains just under the rim.";
+  worlds            generic;
+  references        WTC 1076272: 160;
+  short description "3 times per day fills with 12 ounces of water, cheap ale or watery wine.";
+  description
+
+  "Three times per day, when you recite the command word, this mug fills with 12 ounces of water, cheap ale, or watery wine (your choice).".
+
+#.....
+#----- Everlasting Rations
+
+base item Everlasting Rations =
+
+  player name       "Trail Ration";
+  categories        everlasting, ration, food;
+  synonyms          "Rations, Everlasting";
+  value             350 gp;
+  weight            2 lbs;
+  size              small;
+  probability       rare;
+  substance         cloth 1 inch;
+  appearances       common    "This nondescript, small leather pouch has a light blue slik drawstring.";
+  worlds            generic;
+  references        WTC 1076272: 160;
+  short description "Creates one ration per day at sunrise.";
+  description
+
+  "This pouch contains enough trail rations to feed a Medium creature for one day. Every morning at sunrise, the pouch magically creates another day's worth of rations.".
+
+#.....
+#----- Helm of Glorious Recovery
+
+base item Helm of Glorious Recovery =
+
+  player name       "Helm";
+  categories        helm, recovery, healing;
+  synonyms          "Glorious Recovery, Helm of", "Recovery, Helm of Glorious";
+  value             5600 gp;
+  weight            3 lbs;
+  size              small;
+  probability       very rare;
+  substance         iron 1 inch;
+  appearances       common    "This magnificient helm is chased with gold and silver, and set with three yellow topazes.";
+  worlds            generic;
+  references        WTC 1076272: 111;
+  short description "Once per day heal 4d8 +7 damage";
+  description
+
+  "Developed by a militant, lawful good sect for its paladins, these helmets are potent healing devices. Once per day, this helment can heal you of 4d8 +7 points of damage.".
+
+#.....
+#----- Transmuting
+
+base item with incomplete, weapon Transmuting =
+
+  categories        damage reduction, damage, magic;
+  synonyms          "transmuting";
+  references        WTC 1076272: 45;
+  appearances       common "This odd-looking weapon has both shard and blunt sections. Its pommel or grip is set with a diamond, a peice of jet, a sapphire, and a ruby. In addition, it is inlaid with with both adamantine and silver.";
+  short description "";
+  description
+
+  "Whe you score a successful hit with a transmuting weapon against a creature
+  that has damage reduction, that attack is resolved normally. At the start of
+  your next turn, however, the weapon transforms, taking on the properties
+  required to overcome that creature's damage reduction.
+
+  Once so changed, the weapon overcomes the designed type of damage reduction
+  for 10 rounds, or until you strike a creature that has a different type of
+  damage reduction. In this case, the weapon transforms in the same manner to
+  overcome that damage reduction instead. If the target has multiple types of
+  damage reduction, the weapon overcomes all of them. If the creature gains a
+  new type of damage reduction after initially being struck (from changing its
+  form, for example), the weapon must change againt before it can overcome the
+  new type.
+
+  A transmuting weapon does not gain any other benefit of the properties it
+  takes on, and it always deals normal damage.".
+
+#.....

@@ -1,0 +1,44 @@
+#
+# File:         TSR 11550.dma
+#
+# Author(s):    Peter 'Merlin' Balsiger
+# Responsible:  Peter 'Merlin' Balsiger
+#
+# Reviewer(s):
+#
+# Description:  These are the items from the Player's Handbook
+#
+# Worlds:       Generic
+# 
+# Keywords:     item; player; handbook 
+#
+# See_also:     Other item files
+#
+#----------------------------------------------------------------------- CVS
+
+#
+# $Source: /home/cvsroot/DnD/Information/BaseItems/TSR\04011550.dma,v $
+# 
+# $Revision: 1.3 $
+# 
+# $Locker:  $
+# $State: Exp $
+# $Log: TSR\04011550.dma,v $
+# Revision 1.3  2007/09/05 19:40:20  merlin
+# *** empty log message ***
+#
+# Revision 1.2  2003/09/20 18:55:06  merlin
+# changed probability to selection
+#
+# Revision 1.1  2003/03/02 21:21:48  merlin
+# first intermediate version
+#
+
+#..............................................................................
+#
+#
+
+#------ winter blanket -----------------------------------------------------
+# is now in WTC 17524 (new version)
+#------ torch --------------------------------------------------------------
+# is now in WTC 17524 (new version)

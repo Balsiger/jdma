@@ -307,15 +307,13 @@ public class BaseEntry extends AbstractEntry
   //........................................................................
   //----- categories -------------------------------------------------------
 
-  /** The formatter for a category (to prevent many objects being created). */
-  protected static final Formatter<Name> s_categoryFormatter =
-    new LinkFormatter<Name>("/index/categories/");
-
   /** The categories. */
   @Key("categories")
   @DM
-  protected ValueList<Name> m_categories =
-    new ValueList<Name>(new Name().withFormatter(s_categoryFormatter));
+  protected ValueList<Name> m_categories = new ValueList<Name>
+    (new Name().withFormatter
+     (new LinkFormatter<Name>("/" + getType().getMultipleLink()
+                              + "/categories/")));
 
 //   static
 //   {

@@ -1,0 +1,56 @@
+# Races of Faerun
+
+#----- Armor Lubricant
+
+base item with composite Armor Lubricant =
+
+  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  value             40 gp;
+  weight            0 lbs;
+  probability       Rare;
+  size              Diminutive;
+  hardness          100;
+  hp                1;
+  appearances       Common "An oily liquid.";
+  player name       "Oil";
+  worlds            Forgotten Realms;
+  references        WTC 88578: 158-159;
+  description
+  "This nonmagical oil reduces the friction that impedes movement in metallic
+  armor. Once application of armor lubricant reduces the armor check penalty by
+  1 (to a minimum of 0). Each application takes 1 minute to apply and lasts 1d4
+  hours. It is not possible to apply armor lubricant to armor currently being
+  worn. Armor lubricant provides no benefit to shields or to armor no made
+  primarily of metal.
+
+  Creating one application of armor lubricant requires a successful
+  \Skill{Alchemy} check (DC 15) and follows the rules outlines in the
+  discussion of Crafti skills in the \Product{Player's Handbook}.";
+  short description "Reduces armor check penalty by 1 for 1d4 hours.";
+  synonyms          "Lubricant, Armor";
+  categories        alchemical,
+                    gear.
+
+#.....
+#----- Foesplitter Axe
+
+base item Foesplitter Axe
+  [Battleaxe, Weapon +2, Magic Attack +1, Keen] =
+
+  player name       "Battleaxe";
+  categories        special;
+  synonyms          "Axe, Foesplitter";
+  probability       very rare;
+  value             7480 gp;
+  hardness          10;
+  hp                25;
+  appearances       common    "A sharp battleaxe with a steel haft.";
+  worlds            Forgotten Realms;
+  references        WTC 88578: 172;
+  short description "A +1 keen battleaxe";
+  description
+
+  "Crafted by the \Monster{shield dwarves} of the \Place{North}, a
+  \Item{Foesplitter Axe} is a \emph{+1 keen battleaxe} with a steel haft.".
+
+#.....

@@ -1,0 +1,21 @@
+# Libris Mortis
+
+#----- Nightstick
+
+base item Nightstick [Rod] =
+
+  player name       "Rod";
+  categories        rod, turn undead, cleric;
+  value             7500 gp;
+  probability       very rare;
+  appearances       common    "A black rod carved of darkly stained wood, inset with religous symbols of various deities.";
+  worlds            generic;
+  references        WTC 17924: 78;
+  short description "Gain 4 more uses of turn or rebuke undead per day.";
+  description
+
+  "This black rod carved of darkly stained wood is inset with religious symbols
+  of various deities. Anyone who possesses the rod and is able to turn or
+  rebuke undead gains four more uses of the ability per day.".
+
+#.....
