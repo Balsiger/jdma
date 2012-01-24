@@ -334,7 +334,7 @@ public class Dice extends Value<Dice>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -475,31 +475,31 @@ public class Dice extends Value<Dice>
    * @algorithm   cf. Player's Handbook 114/116
    *
    */
-  public void decrease()
-  {
-    // if only one dice, reduce the dice by two (if > 4)
-    if(m_number == 1)
-    {
-      if(m_dice > 4)
-        m_dice -= 2;
-      else
-        if(m_dice > 0)
-          m_dice -= 1;
-    }
-    else
-      // as double dice are still in the rules, treat the special
-      if(m_number == 2)
-        if(m_dice < 8)
-        {
-          m_dice = 2 * m_dice - 2;
-          m_number--;
-        }
-        else
-          m_dice -= 2;
-      // the following is no more covered by any rules
-      else
-        m_number--;
-  }
+  // protected void decrease()
+  // {
+  //   // if only one dice, reduce the dice by two (if > 4)
+  //   if(m_number == 1)
+  //   {
+  //     if(m_dice > 4)
+  //       m_dice -= 2;
+  //     else
+  //       if(m_dice > 0)
+  //         m_dice -= 1;
+  //   }
+  //   else
+  //     // as double dice are still in the rules, treat the special
+  //     if(m_number == 2)
+  //       if(m_dice < 8)
+  //       {
+  //         m_dice = 2 * m_dice - 2;
+  //         m_number--;
+  //       }
+  //       else
+  //         m_dice -= 2;
+  //     // the following is no more covered by any rules
+  //     else
+  //       m_number--;
+  // }
 
   //........................................................................
   //------------------------------- increase -------------------------------
@@ -519,35 +519,35 @@ public class Dice extends Value<Dice>
    * @algorithm   cf. Player's Handbook 114/116
    *
    */
-  public void increase()
-  {
-    // if only one dice, reduce the dice by two (if > 4)
-    if(m_dice < 4)
-      m_dice++;
-    else
-      if(m_dice < 6 || (m_dice < 8 && m_number == 1))
-        m_dice += 2;
-      else
-        if(m_dice < 12)
-          if(m_number == 1)
-          {
-            m_dice -= 2;
-            m_number++;
-          }
-          else
-            if(m_dice < 10)
-              m_number++;
-            else
-            {
-              m_number += 2;
-              m_dice -= 2;
-            }
-        else
-        {
-          m_dice   /= 2;
-          m_number *= 3;
-        }
-  }
+  // protected void increase()
+  // {
+  //   // if only one dice, reduce the dice by two (if > 4)
+  //   if(m_dice < 4)
+  //     m_dice++;
+  //   else
+  //     if(m_dice < 6 || (m_dice < 8 && m_number == 1))
+  //       m_dice += 2;
+  //     else
+  //       if(m_dice < 12)
+  //         if(m_number == 1)
+  //         {
+  //           m_dice -= 2;
+  //           m_number++;
+  //         }
+  //         else
+  //           if(m_dice < 10)
+  //             m_number++;
+  //           else
+  //           {
+  //             m_number += 2;
+  //             m_dice -= 2;
+  //           }
+  //       else
+  //       {
+  //         m_dice   /= 2;
+  //         m_number *= 3;
+  //       }
+  // }
 
   //........................................................................
 
@@ -643,53 +643,53 @@ public class Dice extends Value<Dice>
     //----- decrease -------------------------------------------------------
 
     /** Testing decreasing. */
-    @org.junit.Test
-    public void testDecrease()
-    {
-      int []values = { 1, 1,  1, 2,  1, 3,  1, 4,  1, 6,  1, 8,  1, 10,  1, 12,
-                       2, 4,  2, 6,  2, 8,  2, 10,
-                       3, 6,  1, 5,  2, 9
-                     };
+    // @org.junit.Test
+    // public void testDecrease()
+    // {
+    // int []values = { 1, 1,  1, 2,  1, 3,  1, 4,  1, 6,  1, 8,  1, 10,  1, 12,
+    //                    2, 4,  2, 6,  2, 8,  2, 10,
+    //                    3, 6,  1, 5,  2, 9
+    //                  };
 
-      String []results = { "0", "1", "1d2", "1d3", "1d4", "1d6", "1d8",
-                           "1d10", "1d6", "1d10", "2d6", "2d8",
-                           "2d6", "1d3", "2d7",
-                         };
+    //   String []results = { "0", "1", "1d2", "1d3", "1d4", "1d6", "1d8",
+    //                        "1d10", "1d6", "1d10", "2d6", "2d8",
+    //                        "2d6", "1d3", "2d7",
+    //                      };
 
-      for(int i = 0; i < results.length; i++)
-      {
-        Dice dice = new Dice(values[2 * i], values[2 * i + 1], 0);
+    //   for(int i = 0; i < results.length; i++)
+    //   {
+    //     Dice dice = new Dice(values[2 * i], values[2 * i + 1], 0);
 
-        dice.decrease();
-        assertEquals("Test " + i, results[i], dice.toString());
-      }
-    }
+    //     dice.decrease();
+    //     assertEquals("Test " + i, results[i], dice.toString());
+    //   }
+    // }
 
     //......................................................................
     //----- increase -------------------------------------------------------
 
     /** Testing increasing. */
-    @org.junit.Test
-    public void testIncrease()
-    {
-      int []values = { 1, 1,  1, 2,  1, 3,  1, 4,  1, 6,  1, 8,  1, 10,  1, 12,
-                       2, 4,  2, 6,  2, 8,  2, 10,
-                       3, 6,  1, 5,  2, 9
-                     };
+    // @org.junit.Test
+    // public void testIncrease()
+    // {
+    // int []values = { 1, 1,  1, 2,  1, 3,  1, 4,  1, 6,  1, 8,  1, 10,  1, 12,
+    //                    2, 4,  2, 6,  2, 8,  2, 10,
+    //                    3, 6,  1, 5,  2, 9
+    //                  };
 
-      String []results = { "1d2", "1d3", "1d4", "1d6", "1d8", "2d6", "2d8",
-                           "3d6", "2d6", "3d6", "3d8", "4d8",
-                           "4d6", "1d7", "3d9",
-                         };
+    //   String []results = { "1d2", "1d3", "1d4", "1d6", "1d8", "2d6", "2d8",
+    //                        "3d6", "2d6", "3d6", "3d8", "4d8",
+    //                        "4d6", "1d7", "3d9",
+    //                      };
 
-      for(int i = 0; i < results.length; i++)
-      {
-        Dice dice = new Dice(values[2 * i], values[2 * i + 1], 0);
+    //   for(int i = 0; i < results.length; i++)
+    //   {
+    //     Dice dice = new Dice(values[2 * i], values[2 * i + 1], 0);
 
-        dice.increase();
-        assertEquals("Test " + i, results[i], dice.toString());
-      }
-    }
+    //     dice.increase();
+    //     assertEquals("Test " + i, results[i], dice.toString());
+    //   }
+    // }
 
     //......................................................................
     //----- roll -----------------------------------------------------------

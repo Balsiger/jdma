@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 // import java.util.Collection;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 // import java.util.StringTokenizer;
-// import java.util.TreeMap;
+import java.util.TreeMap;
 // import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,10 +46,10 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMAFile;
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.data.Storage;
-// import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
 // import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 // import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.values.BaseNumber;
@@ -76,6 +77,7 @@ import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.output.commands.Window;
+import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.EmptyIterator;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
@@ -307,9 +309,9 @@ public class AbstractEntry extends ValueGroup
   /** Errors for this entry. */
   protected @Nullable List<BaseError> m_errors = null;
 
-  /** All the attachments, indexed by name. */
-//   protected Map<String, AbstractAttachment> m_attachments =
-//     new TreeMap<String, AbstractAttachment>();
+  /** All the extensions, indexed by name. */
+  protected Map<String, AbstractExtension> m_extensions =
+    new TreeMap<String, AbstractExtension>();
 
   /** The base entries for this entry, in the same order as the names. */
   protected @Nullable List<BaseEntry> m_baseEntries = null;
@@ -2491,37 +2493,37 @@ public class AbstractEntry extends ValueGroup
     if(inReader.isAtEnd())
       return false;
 
-    //----- attachments ----------------------------------------------------
+    //----- extension ------------------------------------------------------
 
-//     ArrayList<String> attachments = new ArrayList<String>();
+    ArrayList<String> extensions = new ArrayList<String>();
 
-//     // now check for attachments
-//     if(inReader.expect("with"))
-//     {
-//       try
-//       {
-//         while(true)
-//         {
-//           // handle the attachments
-//           String name = inReader.readWord();
+    // now check for extensions
+    if(inReader.expect("with"))
+    {
+      try
+      {
+        while(true)
+        {
+          // handle the extension
+          String name = inReader.readWord();
 
-//           if(inReader.expect(':'))
-//             // tag
-//             name += ':' + inReader.readWord();
+          // if(inReader.expect(':'))
+          //   // tag
+          //   name += ':' + inReader.readWord();
 
-//           attachments.add(name);
+          extensions.add(name);
 
-//           if(!inReader.expect(','))
-//             break;
-//         }
+          if(!inReader.expect(','))
+            break;
+        }
 
-//       }
-//       catch(net.ixitxachitls.input.ReadException e)
-//       {
-//         inReader.logWarning(inReader.getPosition(), "attachment.incomplete",
-//                             null);
-//       }
-//     }
+      }
+      catch(net.ixitxachitls.input.ReadException e)
+      {
+        inReader.logWarning(inReader.getPosition(), "extension.incomplete",
+                            null);
+      }
+    }
 
     //......................................................................
     //----- name -----------------------------------------------------------
@@ -2549,7 +2551,7 @@ public class AbstractEntry extends ValueGroup
 
     //......................................................................
 
-//     addAttachments(attachments);
+    addExtensions(extensions);
 
     // read the values (including the final delimiter)
     if(values)
@@ -2582,7 +2584,7 @@ public class AbstractEntry extends ValueGroup
         readVariable(inReader, variables.getVariable(key));
 
       //....................................................................
-      //----- attachments --------------------------------------------------
+      //----- extensionss --------------------------------------------------
 
 //       for(Iterator<AbstractAttachment> i = m_attachments.values().iterator();
 //           key == null && i.hasNext(); )
@@ -2631,141 +2633,146 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-  //---------------------------- addAttachment -----------------------------
+  //---------------------------- addExtension ------------------------------
 
   /**
-   * Add an attachment denoted by a String to the entry.
+   * Add an extension denoted by a String to the entry.
    *
-   * @param       inName the name of the attachment to add
+   * @param       inName the name of the extension to add
    *
-   * @return      the attachment added or null if none added (already there or
+   * @return      the extension added or null if none added (already there or
    *              not found)
    *
    */
-//   @SuppressWarnings("unchecked")
-//   protected AbstractAttachment addAttachment(String inName)
-//   {
-//     if(m_attachments.containsKey(inName))
-//       return null;
+  @SuppressWarnings("unchecked")
+  protected @Nullable AbstractExtension addExtension(@Nonnull String inName)
+  {
+    if(m_extensions.containsKey(inName))
+      return null;
 
-//     String []names = inName.split(":");
+    // TODO: clean up names if tags are not used anmore
+    String []names = inName.split(":");
 
-//     String name;
-//     if(names.length > 1)
-//       name = names[1];
-//     else
-//       name = names[0];
+    String name;
+    // if(names.length > 1)
+    //   name = names[1];
+    // else
+    //   name = names[0];
 
-//     if(isBase())
-//       name = "Base " + name;
+    if(isBase())
+      name = "Base " + inName;
+    else
+      name = inName;
 
-//     try
-//     {
-//       Class cls = Class.forName(Classes.toClassName
-//                                 (name,
-//                                "net.ixitxachitls.dma.entries.attachments"));
+    try
+    {
+      Class cls = Class.forName(Classes.toClassName
+                                (name,
+                                 "net.ixitxachitls.dma.entries.extensions"));
 
-//       // can't use the generic class type here, because generic class arrays
-//       // cannot be built
-//       AbstractAttachment attachment = null;
+      // can't use the generic class type here, because generic class arrays
+      // cannot be built
+      AbstractExtension extension = null;
 
-//     // find the constructor to use (getConstructor does not acceptably treat
-//       // derivations, unfortunately)
-//       Object []arguments = new Object[names.length + 1];
-//       arguments[0] = this;
+      // find the constructor to use (getConstructor does not acceptably treat
+      // derivations, unfortunately)
+      Object []arguments = new Object[names.length + 1];
+      arguments[0] = this;
 
-//       for(int i = 0; i < names.length; i++)
-//         arguments[i + 1] = names[i];
+      for(int i = 0; i < names.length; i++)
+        arguments[i + 1] = names[i];
 
-//       loop : for(Constructor constructor : cls.getConstructors())
-//       {
-//         Class<?> []types = constructor.getParameterTypes();
+      loop : for(Constructor constructor : cls.getConstructors())
+      {
+        Class<?> []types = constructor.getParameterTypes();
 
-//         // check if we have the right number of arguments
-//         if(types.length != arguments.length)
-//           continue;
+        // check if we have the right number of arguments
+        if(types.length != arguments.length)
+          continue;
 
-//         for(int i = 0; i < types.length; i++)
-//           if(!types[i].isAssignableFrom(arguments[i].getClass()))
-//             continue loop;
+        for(int i = 0; i < types.length; i++)
+          if(!types[i].isAssignableFrom(arguments[i].getClass()))
+            continue loop;
 
-//         attachment = (AbstractAttachment)constructor.newInstance(arguments);
+        extension = (AbstractExtension)constructor.newInstance(arguments);
+        break;
+      }
 
-//         break;
-//       }
+      if(extension == null)
+        return null;
 
-//       addAttachment(inName, attachment);
+      addExtension(inName, extension);
 
-//       return attachment;
-//     }
-//     catch(ClassNotFoundException e)
-//     {
-//       Log.warning("could not find class for attachment " + name
-//                   + ", attachment ignored");
-//     }
-//     catch(InstantiationException e)
-//     {
-//       Log.warning("could not instantiate class for attachment " + name
-//                   + ", attachment ignored");
-//     }
-//     catch(IllegalAccessException e)
-//     {
-//       Log.warning("could access constructor for attachment " + name
-//                   + ", attachment ignored");
-//     }
-//     catch(java.lang.reflect.InvocationTargetException e)
-//     {
-//       Log.warning("could not invoke constructor for attachment " + name
-//                   + ", attachment ignored (" + e.getCause() + ")");
-//     }
+      return extension;
+    }
+    catch(ClassNotFoundException e)
+    {
+      Log.warning("could not find class for attachment " + name
+                  + ", attachment ignored");
+    }
+    catch(InstantiationException e)
+    {
+      Log.warning("could not instantiate class for attachment " + name
+                  + ", attachment ignored");
+    }
+    catch(IllegalAccessException e)
+    {
+      Log.warning("could access constructor for attachment " + name
+                  + ", attachment ignored");
+    }
+    catch(java.lang.reflect.InvocationTargetException e)
+    {
+      Log.warning("could not invoke constructor for attachment " + name
+                  + ", attachment ignored (" + e.getCause() + ")");
+    }
 
-//     return null;
-//   }
-
-  //........................................................................
-  //---------------------------- addAttachment -----------------------------
-
-  /**
-   * Add the given attachment to the entry.
-   *
-   * @param       inName       the name of the attachment added
-   * @param       inAttachment the attachment to add
-   *
-   */
-//   public void addAttachment(String inName, AbstractAttachment inAttachment)
-//   {
-//     m_attachments.put(inName, inAttachment);
-//   }
+    return null;
+  }
 
   //........................................................................
-  //---------------------------- addAttachments ----------------------------
+  //---------------------------- addExtension ------------------------------
 
   /**
-   * Add a list of attachments.
+   * Add the given extension to the entry.
    *
-   * @param       inNames the names of the attachment to add
+   * @param       inName      the name of the extension added
+   * @param       inExtension the extension to add
    *
    */
-//   protected void addAttachments(java.util.List<String> inNames)
-//   {
-//     addAttachments(inNames.iterator());
-//   }
+  public void addExtension(@Nonnull String inName,
+                           @Nonnull AbstractExtension inExtension)
+  {
+    m_extensions.put(inName, inExtension);
+  }
 
   //........................................................................
-  //---------------------------- addAttachments ----------------------------
+  //---------------------------- addExtensions -----------------------------
 
   /**
-   * Add an attachment denoted by a String to the entry.
+   * Add a list of extensions.
    *
-   * @param       inNames the names of the attachment to add
+   * @param       inNames the names of the extensions to add
    *
    */
-//   protected void addAttachments(Iterator<String> inNames)
-//   {
-//     if(inNames != null)
-//       for(Iterator<String> i = inNames; i.hasNext(); )
-//         addAttachment(i.next());
-//   }
+  protected void addExtensions(@Nonnull List<String> inNames)
+  {
+    addExtensions(inNames.iterator());
+  }
+
+  //........................................................................
+  //---------------------------- addExtensions -----------------------------
+
+  /**
+   * Add the attachements given to the entry.
+   *
+   * @param       inNames the names of the extensions to add
+   *
+   */
+  protected void addExtensions(@Nonnull Iterator<String> inNames)
+  {
+    for(Iterator<String> i = inNames; i.hasNext(); )
+      addExtension(i.next());
+  }
 
   //........................................................................
   //------------------------------- addBase --------------------------------

@@ -49,3 +49,34 @@ base item Bedroll =
   categories        gear.
 
 #.....
+#----- Club
+
+base item with weapon Club =
+
+  damage            1d6;
+  weapon type       Bludgeoning;
+  critical          19-20/x2;
+  weapon style      One-Handed Melee;
+  proficiency       Simple;
+  range increment   10 ft;
+  reach             5 ft;
+  value             10 gp;
+  weight            3 lbs;
+  probability       Common;
+  size              Small;
+  hardness          5;
+  hp                12;
+  appearances       Rare "A ${weapon size} simple club made of polished wood.",
+                    Uncommon "A ${weapon size} simple wooden club with some iron fittings",
+                    Common "A ${weapon size} simple, wooden club",
+                    Rare "A ${weapon size} cracked club of wood";
+  substance         wood 2 in;
+  player name       "Club";
+  worlds            Generic;
+  references        WTC 17524: 115-116;
+  description
+  "A wooden club is so easy to find and fashion that is has no cost.";
+  synonyms          "Baton";
+  categories        mace.
+
+#.....

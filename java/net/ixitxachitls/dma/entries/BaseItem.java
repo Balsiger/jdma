@@ -709,7 +709,7 @@ public class BaseItem extends BaseEntry
   //----- weight -----------------------------------------------------------
 
   /** The formatter for weights. */
-  protected static Formatter<Weight> s_weightFormatter =
+  protected static final Formatter<Weight> s_weightFormatter =
     new LinkFormatter<Weight>("/items/weights/");
 
   /** The standard weight of the item. */
@@ -725,7 +725,7 @@ public class BaseItem extends BaseEntry
   //----- probability ------------------------------------------------------
 
   /** The formatter for probabilities. */
-  protected static Formatter<EnumSelection<Probability>>
+  protected static final Formatter<EnumSelection<Probability>>
     s_probabilityFormatter =
     new LinkFormatter<EnumSelection<Probability>>("/items/probabilities/");
 
@@ -1180,7 +1180,7 @@ public class BaseItem extends BaseEntry
               appearances.add(appearance);
           }
 
-        return Strings.toString(appearances, " ", null);
+        return Strings.toString(appearances, " ", "");
       }
 
     return null;
