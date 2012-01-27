@@ -133,7 +133,7 @@ public class EntryPDFServlet extends PDFServlet
     if(type == null)
       return null;
 
-    return AbstractType.get(type);
+    return AbstractType.getTyped(type);
   }
 
   //........................................................................

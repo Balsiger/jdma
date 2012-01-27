@@ -126,7 +126,7 @@ public class BlobImportServlet extends HttpServlet
     {
       String id = request.getParam("id");
       AbstractType<? extends AbstractEntry> entryType =
-        AbstractType.get(request.getParam("entry"));
+        AbstractType.getTyped(request.getParam("entry"));
 
 
       if(id == null || entryType == null)

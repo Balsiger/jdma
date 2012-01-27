@@ -131,7 +131,7 @@ public class AdminServlet extends BaseServlet
     String reset = request.getParam("reset");
     if(reset != null)
     {
-      AbstractType<? extends AbstractEntry> type = AbstractType.get(reset);
+      AbstractType<? extends AbstractEntry> type = AbstractType.getTyped(reset);
       if(type == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "Invalid type '" + reset + "'.");

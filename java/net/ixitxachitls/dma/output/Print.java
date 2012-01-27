@@ -29,8 +29,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
@@ -97,7 +98,7 @@ public class Print extends AbstractPrint
    * @return      the object that can be added to a document for printing
    *
    */
-  public @Nonnull Object print(@Nonnull AbstractEntry inEntry,
+  public @Nonnull Object print(@Nonnull ValueGroup inEntry,
                                @Nullable BaseCharacter inUser)
   {
     // CHECKSTYLE:OFF (this works in Java 1.6)
@@ -110,6 +111,25 @@ public class Print extends AbstractPrint
     // CHECKSTYLE:ON
 
     return convert(m_tokens, inEntry, "**null**", inUser);
+  }
+
+  //........................................................................
+  //---------------------------- printExtension ----------------------------
+
+  /**
+   * Print the extension information.
+   *
+   * @param     inExtension the extension to print
+   * @param     inUser      the user printing for
+   *
+   * @return    an object representing the desired print
+   *
+   */
+  protected @Nonnull Object
+    printExtension(@Nonnull AbstractExtension inExtension,
+                   @Nonnull BaseCharacter inUser)
+  {
+    return inExtension.printPage(inUser);
   }
 
   //........................................................................

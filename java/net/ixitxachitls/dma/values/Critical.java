@@ -31,6 +31,7 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
 
 //..........................................................................
 
@@ -199,17 +200,27 @@ public class Critical extends BaseNumber<Critical>
   protected @Nonnull Command doFormat()
   {
     if(m_number == 1)
-      return new Command("None");
+      if(m_indexBase != null)
+        return new Link("None", m_indexBase + "criticals/none");
+      else
+        return new Command("None");
 
     java.util.List<Object> commands = new ArrayList<Object>();
 
     if(m_threat.isDefined())
     {
-      commands.add(m_threat.toString());
+      Object command = m_threat;
+      if(m_indexBase != null)
+        command = new Link(command, m_indexBase + "threats/" + command);
+      commands.add(command);
       commands.add("/");
     }
 
-    commands.add("x" + m_number);
+    Object command = "x" + m_number;
+    if(m_indexBase != null)
+      command = new Link(command, m_indexBase + "criticals/" + command);
+
+    commands.add(command);
 
     return new Command(commands.toArray());
   }

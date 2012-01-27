@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -21,27 +21,23 @@
 
 //------------------------------------------------------------------ imports
 
-package net.ixitxachitls.dma.entries.extensions;
+package net.ixitxachitls.output.commands;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.Multimap;
-
-import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * This is the base class for all base extensions.
+ * The section command.
  *
- * @file          BaseExtension.java
+ * @file          Section.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
- * @param         <T> the type of the entry associated with this extension
  *
  */
 
@@ -49,63 +45,52 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 
 //__________________________________________________________________________
 
-public class BaseExtension<T extends BaseEntry> extends AbstractExtension<T>
+@Immutable
+public class Section extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
 
-  //---------------------------- BaseExtension ----------------------------
+  //--------------------------------- Section ---------------------------------
 
   /**
-   * Default constructor.
+   * The constructor for the section command.
    *
-   * @param       inEntry  the entry attached to
-   * @param       inName   the name of the extension
+   * @param       inName the name of the section
+   * @param       inText the text to set section
    *
    */
-  public BaseExtension(@Nonnull T inEntry, @Nonnull String inName)
+  public Section(@Nonnull Object inName, @Nonnull Object inText)
   {
-    super(inEntry, inName);
+    this();
+
+    withArguments(inName, inText);
   }
 
   //........................................................................
-  //---------------------------- BaseExtension ----------------------------
+  //--------------------------------- Section ---------------------------------
 
   /**
-   * Constructor with all the values.
-   *
-   * @param       inEntry  the entry attached to
-   * @param       inTag    the tag for this extension
-   * @param       inName   the name for this extension
+   * This is the internal constructor for a command.
    *
    */
-  // public BaseExtension(T inEntry, String inTag, String inName)
-  // {
-  //   super(inEntry, inTag, inName);
-  // }
+  protected Section()
+  {
+    super(NAME, 0, 2);
+  }
 
   //........................................................................
 
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** Command for section printing. */
+  public static final @Nonnull String NAME =
+    Config.get("resource:commands/section", "section");
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //------------------------- computeIndexValues ---------------------------
-
-  /**
-   * Get all the values for all the indexes.
-   *
-   * @param       ioValues a multi map of values per index name
-   *
-   */
-  @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
-  {
-    // nothing to do here
-  }
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -116,7 +101,7 @@ public class BaseExtension<T extends BaseEntry> extends AbstractExtension<T>
 
   //------------------------------------------------------------------- test
 
-  // no tests here
+  // no test
 
   //........................................................................
 }

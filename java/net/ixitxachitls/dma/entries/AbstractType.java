@@ -380,7 +380,6 @@ public abstract class AbstractType<T extends AbstractEntry>
   public static @Nullable
     Set<AbstractType<? extends AbstractEntry>> getAll()
   {
-    System.out.println("all: " + s_all);
     return ImmutableSet.copyOf(s_all);
   }
 

@@ -95,6 +95,7 @@ import net.ixitxachitls.output.commands.Right;
 import net.ixitxachitls.output.commands.SansSerif;
 import net.ixitxachitls.output.commands.Script;
 import net.ixitxachitls.output.commands.Scriptsize;
+import net.ixitxachitls.output.commands.Section;
 import net.ixitxachitls.output.commands.Serif;
 import net.ixitxachitls.output.commands.Small;
 import net.ixitxachitls.output.commands.Span;
@@ -457,6 +458,19 @@ public class HTMLDocument extends Document
                                + "</script>\n"));
      s_actions.put(Value.NAME,
                    new Pattern("<div class=\"value $1\">$2$3</div>"));
+     s_actions.put(Section.NAME,
+                   new Pattern("<div class=\"section\">"
+                               + "<div class=\"section-title\" "
+                               + "onclick=\"$(this).parent()"
+                               + ".toggleClass('rotated'); "
+                               + "if($(this).parent().hasClass('rotated')) "
+                               + "{ $(this).css('width', "
+                               + "$(this).parent().height() + 'px') }"
+                               + "else { $(this).css('width', 'auto') };\">"
+                               + "<span class=\"section-titletext\">$1</span>"
+                               + "</div>"
+                               + "<div class=\"section-text\">$2</div>"
+                               + "</div>"));
 
      s_actions.put("command", new Action());
      s_actions.put("baseCommand", new Action());

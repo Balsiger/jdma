@@ -111,7 +111,7 @@ public class LogoutServlet extends LoginServlet
     inResponse.addCookie(userCookie);
     inResponse.addCookie(tokenCookie);
 
-    Log.event(character.getID(), "logout", "user logged out");
+    Log.event(character.getName(), "logout", "user logged out");
 
     return "";
   }

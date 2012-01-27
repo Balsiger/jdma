@@ -670,6 +670,7 @@ public class BaseItem extends BaseEntry
               + "%base %synonyms %{player name} %worlds %categories"
               + "%value %weight %hp %size %substance %hardness %{break DC}"
               + "%probability "
+              + "#weapon "
               + "%appearances "
               + "%qualities %effects"
               // admin
@@ -692,7 +693,7 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for values. */
   protected static final Formatter<Money> s_valueFormatter =
-    new LinkFormatter<Money>("/items/values/");
+    new LinkFormatter<Money>(link(TYPE, Index.Path.VALUES));
 
   /** The total standard value of the base item. */
   @Key("value")
@@ -702,7 +703,7 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.VALUES, new Index("Values", TYPE));
+    addIndex(new Index(Index.Path.VALUES, "Values", TYPE));
   }
 
   //........................................................................
@@ -710,7 +711,7 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for weights. */
   protected static final Formatter<Weight> s_weightFormatter =
-    new LinkFormatter<Weight>("/items/weights/");
+    new LinkFormatter<Weight>(link(TYPE, Index.Path.WEIGHTS));
 
   /** The standard weight of the item. */
   @Key("weight")
@@ -718,7 +719,7 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.WEIGHTS, new Index("Weights", TYPE));
+    addIndex(new Index(Index.Path.WEIGHTS, "Weights", TYPE));
   }
 
   //........................................................................
@@ -726,8 +727,8 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for probabilities. */
   protected static final Formatter<EnumSelection<Probability>>
-    s_probabilityFormatter =
-    new LinkFormatter<EnumSelection<Probability>>("/items/probabilities/");
+    s_probabilityFormatter = new LinkFormatter<EnumSelection<Probability>>
+    (link(TYPE, Index.Path.PROBABILITIES));
 
   /** The probability that for random determination, an item of this kind will
    * be selected. The probability is measured to the total of all probabilities
@@ -739,7 +740,7 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.PROBABILITIES, new Index("Probabilities", TYPE));
+    addIndex(new Index(Index.Path.PROBABILITIES, "Probabilities", TYPE));
   }
 
   //........................................................................
@@ -747,7 +748,7 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for sizes. */
   protected static final Formatter<EnumSelection<Size>> s_sizeFormatter
-    = new LinkFormatter<EnumSelection<Size>>("/items/sizes/");
+    = new LinkFormatter<EnumSelection<Size>>(link(TYPE, Index.Path.SIZES));
 
   /** The size of items of this kind. */
   @Key("size")
@@ -756,7 +757,7 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.SIZES, new Index("Sizes", TYPE));
+    addIndex(new Index(Index.Path.SIZES, "Sizes", TYPE));
   }
 
   //........................................................................
@@ -764,7 +765,7 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for hardness. */
   protected static final Formatter<Number> s_hardnessFormatter =
-    new LinkFormatter<Number>("/items/hardnesses/");
+    new LinkFormatter<Number>(link(TYPE, Index.Path.HARDNESSES));
 
   /** The grouping for the hardness. */
   protected static final Group<Number, Long, String> s_hardnessGroup =
@@ -790,7 +791,7 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.HARDNESSES, new Index("Hardnesses", TYPE));
+    addIndex(new Index(Index.Path.HARDNESSES, "Hardnesses", TYPE));
   }
 
   //........................................................................
@@ -798,7 +799,7 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for hit points. */
   protected static final Formatter<Number> s_hpFormatter
-    = new LinkFormatter<Number>("/items/hps/");
+    = new LinkFormatter<Number>(link(TYPE, Index.Path.HPS));
 
   /** The groups for hit points. */
   protected static final Group<Number, Long, String> s_hpGroup =
@@ -826,7 +827,7 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.HIT_POINTS, new Index("Hitpoints", TYPE));
+    addIndex(new Index(Index.Path.HPS, "Hitpoints", TYPE));
   }
 
   //........................................................................
@@ -872,12 +873,12 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for substances. */
   protected static final Formatter<EnumSelection<Substance>>
-    s_substanceFormatter =
-    new LinkFormatter<EnumSelection<Substance>>("/items/substances/");
+    s_substanceFormatter = new LinkFormatter<EnumSelection<Substance>>
+    (link(TYPE, Index.Path.SUBSTANCES));
 
   /** The thickness formatter. */
   protected static final Formatter<Distance> s_thicknessFormatter =
-    new LinkFormatter<Distance>("/items/thicknesses/");
+    new LinkFormatter<Distance>(link(TYPE, Index.Path.THICKNESSES));
 
   /** The group for thicknesses. */
   protected static final Group<Distance, Long, String> s_thicknessGrouping =
@@ -910,8 +911,8 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.SUBSTANCES, new Index("Substances", TYPE));
-    s_indexes.put(Index.THICKNESSES, new Index("Thicknesses", TYPE));
+    addIndex(new Index(Index.Path.SUBSTANCES, "Substances", TYPE));
+    addIndex(new Index(Index.Path.THICKNESSES, "Thicknesses", TYPE));
   }
 
 
@@ -920,7 +921,7 @@ public class BaseItem extends BaseEntry
 
   /** The formatter for hit points. */
   protected static final Formatter<Number> s_breakFormatter =
-    new LinkFormatter<Number>("/items/breaks/");
+    new LinkFormatter<Number>(link(TYPE, Index.Path.BREAKS));
 
   /** The group for break values. */
   protected static final Group<Number, Long, String> s_breakGrouping =
@@ -947,7 +948,7 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.BREAK_DCS, new Index("Breadk DCs", TYPE));
+    addIndex(new Index(Index.Path.BREAKS, "Breadk DCs", TYPE));
   }
 
   //........................................................................
@@ -990,6 +991,10 @@ public class BaseItem extends BaseEntry
   {
     // set the possible values
     extractVariables(BaseItem.class);
+
+    // reference a static variable to get the extensions properly initialized
+    Print print =
+      net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint;
   }
 
   //........................................................................
@@ -998,8 +1003,8 @@ public class BaseItem extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.WORLDS, new Index("Worlds", TYPE));
-    s_indexes.put(Index.CATEGORIES, new Index("Categories", TYPE));
+    addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
+    addIndex(new Index(Index.Path.CATEGORIES, "Categories", TYPE));
   }
 
   //........................................................................
@@ -1254,19 +1259,23 @@ public class BaseItem extends BaseEntry
   {
     if("hp".equals(inKey) && !m_hp.isDefined() && m_substance.isDefined())
       return new FormattedValue(new Span("computed", getHP()),
-                                Value.UNDEFINED, "hp", true, true, false, false,
-                                "hps", null);
+                                Value.UNDEFINED, "hp")
+        .withDM(true)
+        .withEditable(true);
 
     if("hardness".equals(inKey) && !m_hardness.isDefined()
        && m_substance.isDefined())
       return new FormattedValue(new Span("computed", getHardness()),
-                                Value.UNDEFINED, "hardness", true, true, false,
-                                false, "hardnesses", null);
+                                Value.UNDEFINED, "hardness")
+        .withPlural("hardnesses")
+        .withDM(true)
+        .withEditable(true);
 
     if("player name".equals(inKey) && !m_playerName.isDefined())
       return new FormattedValue(new Span("computed", getPlayerName()),
-                                Value.UNDEFINED, "player name", true, true,
-                                false, false, "player names", null);
+                                Value.UNDEFINED, "player name")
+        .withDM(true)
+        .withEditable(true);
 
     return super.computeValue(inKey, inDM);
   }
@@ -1280,26 +1289,26 @@ public class BaseItem extends BaseEntry
    * @return      a multi map of values per index name
    *
    */
-  public Multimap<String, String> computeIndexValues()
+  public Multimap<Index.Path, String> computeIndexValues()
   {
-    Multimap<String, String> values = super.computeIndexValues();
+    Multimap<Index.Path, String> values = super.computeIndexValues();
 
-    values.put(Index.VALUES, m_value.group());
-    values.put(Index.WEIGHTS, m_weight.group());
-    values.put(Index.PROBABILITIES, m_probability.group());
-    values.put(Index.SIZES, m_size.group());
-    values.put(Index.HARDNESSES, m_hardness.group());
-    values.put(Index.HIT_POINTS, m_hp.group());
-    values.put(Index.SUBSTANCES, m_substance.get(0).group());
-    values.put(Index.THICKNESSES,
+    values.put(Index.Path.VALUES, m_value.group());
+    values.put(Index.Path.WEIGHTS, m_weight.group());
+    values.put(Index.Path.PROBABILITIES, m_probability.group());
+    values.put(Index.Path.SIZES, m_size.group());
+    values.put(Index.Path.HARDNESSES, m_hardness.group());
+    values.put(Index.Path.HPS, m_hp.group());
+    values.put(Index.Path.SUBSTANCES, m_substance.get(0).group());
+    values.put(Index.Path.THICKNESSES,
                s_thicknessGrouping.group((Distance)m_substance.get(1)));
-    values.put(Index.BREAK_DCS, m_break.group());
+    values.put(Index.Path.BREAKS, m_break.group());
 
     for(Selection world : m_worlds)
-      values.put(Index.WORLDS, world.toString());
+      values.put(Index.Path.WORLDS, world.toString());
 
     for(Name category : m_categories)
-      values.put(Index.CATEGORIES, category.toString());
+      values.put(Index.Path.CATEGORIES, category.toString());
 
     return values;
   }

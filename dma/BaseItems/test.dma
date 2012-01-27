@@ -53,7 +53,8 @@ base item Bedroll =
 
 base item with weapon Club =
 
-  damage            1d6;
+  damage            1d6 +5, 3d4 fire, +1 cold;
+  splash            99d8 sonic;
   weapon type       Bludgeoning;
   critical          19-20/x2;
   weapon style      One-Handed Melee;

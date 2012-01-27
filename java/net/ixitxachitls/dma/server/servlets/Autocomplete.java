@@ -121,7 +121,7 @@ public class Autocomplete extends JSONServlet
     {
       String term = inRequest.getParam("term");
       AbstractType<? extends AbstractEntry> type =
-        AbstractType.get(parts[2]);
+        AbstractType.getTyped(parts[2]);
 
       if(type != null && parts[3] != null)
       {

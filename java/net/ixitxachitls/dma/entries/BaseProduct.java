@@ -830,11 +830,11 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for a person. */
   protected static final Formatter<Text> s_personFormatter =
-    new LinkFormatter<Text>("/products/persons/");
+    new LinkFormatter<Text>(link(TYPE, Index.Path.PERSONS));
 
   /** The formatter for a job. */
   protected static final Formatter<Name> s_jobFormatter =
-    new LinkFormatter<Name>("/products/jobs/");
+    new LinkFormatter<Name>(link(TYPE, Index.Path.JOBS));
 
   /** The formatter for a complete person. */
   protected static final Formatter<Multiple> s_nameFormatter =
@@ -862,10 +862,10 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.PERSONS,
-                  new Index("Persons", BaseProduct.TYPE).withEditable());
-    s_indexes.put(Index.JOBS,
-                  new Index("Jobs", BaseProduct.TYPE).withEditable());
+    addIndex(new Index(Index.Path.PERSONS, "Persons", BaseProduct.TYPE)
+             .withEditable());
+    addIndex(new Index(Index.Path.JOBS, "Jobs", BaseProduct.TYPE)
+             .withEditable());
   }
 
   //........................................................................
@@ -987,7 +987,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the date. */
   protected static final Formatter<Date> s_dateFormatter =
-    new LinkFormatter<Date>("/products/dates/");
+    new LinkFormatter<Date>(link(TYPE, Index.Path.DATES));
 
   /** The date (month and year) the product was released. */
   @Key("date")
@@ -995,7 +995,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.DATES, new Index("Dates", TYPE));
+    addIndex(new Index(Index.Path.DATES, "Dates", TYPE));
   }
 
   //........................................................................
@@ -1017,7 +1017,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the pages. */
   protected static final Formatter<Number> s_pageFormatter =
-    new LinkFormatter<Number>("/products/pages/");
+    new LinkFormatter<Number>(link(TYPE, Index.Path.PAGES));
 
   /** The grouping for the pages. */
   protected static final Group<Number, Long, String> s_pageGroup =
@@ -1042,7 +1042,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.PAGES, new Index("Pages", TYPE));
+    addIndex(new Index(Index.Path.PAGES, "Pages", TYPE));
   }
 
   //........................................................................
@@ -1059,7 +1059,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.SYSTEMS, new Index("Systems", TYPE).withImages());
+    addIndex(new Index(Index.Path.SYSTEMS, "Systems", TYPE).withImages());
   }
 
   //........................................................................
@@ -1078,7 +1078,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.AUDIENCES, new Index("Audiences", TYPE).withImages());
+    addIndex(new Index(Index.Path.AUDIENCES, "Audiences", TYPE).withImages());
   }
 
   //........................................................................
@@ -1087,7 +1087,7 @@ public class BaseProduct extends BaseEntry
   /** The formatter for the type. */
   protected static final Formatter<EnumSelection<ProductType>>
     s_typeFormatter =
-    new LinkFormatter<EnumSelection<ProductType>>("/products/types/");
+    new LinkFormatter<EnumSelection<ProductType>>(link(TYPE, Index.Path.TYPES));
 
   /** The type of product. */
   @Key("product type")
@@ -1097,7 +1097,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.TYPES, new Index("Types", TYPE).withImages());
+    addIndex(new Index(Index.Path.TYPES, "Types", TYPE).withImages());
   }
 
   //........................................................................
@@ -1105,7 +1105,7 @@ public class BaseProduct extends BaseEntry
 
   /** The formatter for the style. */
   protected static final Formatter<EnumSelection<Style>> s_styleFormatter =
-    new LinkFormatter<EnumSelection<Style>>("/products/styles/");
+    new LinkFormatter<EnumSelection<Style>>(link(TYPE, Index.Path.STYLES));
 
   /** The style of the product, its general outlook. */
   @Key("style")
@@ -1114,7 +1114,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.STYLES, new Index("Styles", TYPE).withImages());
+    addIndex(new Index(Index.Path.STYLES, "Styles", TYPE).withImages());
   }
 
   //........................................................................
@@ -1131,7 +1131,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.PRODUCERS, new Index("Producers", TYPE).withImages());
+    addIndex(new Index(Index.Path.PRODUCERS, "Producers", TYPE).withImages());
   }
 
   //........................................................................
@@ -1164,7 +1164,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.SERIES, new Index("Series", TYPE));
+    addIndex(new Index(Index.Path.SERIES, "Series", TYPE));
   }
 
   //........................................................................
@@ -1194,7 +1194,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.PRICES, new Index("Prices", TYPE));
+    addIndex(new Index(Index.Path.PRICES, "Prices", TYPE));
   }
 
   //........................................................................
@@ -1219,7 +1219,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.PARTS, new Index("Parts", TYPE));
+    addIndex(new Index(Index.Path.PARTS, "Parts", TYPE));
   }
 
   //........................................................................
@@ -1259,7 +1259,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.LAYOUTS, new Index("Layouts", TYPE));
+    addIndex(new Index(Index.Path.LAYOUTS, "Layouts", TYPE));
   }
 
   //........................................................................
@@ -1273,7 +1273,7 @@ public class BaseProduct extends BaseEntry
 
   static
   {
-    s_indexes.put(Index.WORLDS, new Index("Worlds", TYPE).withImages());
+    addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE).withImages());
   }
 
   //........................................................................
@@ -1756,12 +1756,14 @@ public class BaseProduct extends BaseEntry
         (new Command(computeValue("_leader", inDM).format(this, inDM, true),
                      " ",
                      computeValue("_title", inDM).format(this, inDM, true)),
-         null, "name", false, true, false, true, "names", "");
+         null, "name")
+        .withEditable(true);
 
     if("subtitle".equals(inKey))
       return new FormattedValue
         (new Subtitle(new BaseCommand(m_subtitle.get())),
-         m_subtitle, "subtitle", false, true, false, false, "subtitles", "");
+         m_subtitle, "subtitle")
+        .withEditable(true);
 
     if("owners".equals(inKey))
     {
@@ -1779,8 +1781,8 @@ public class BaseProduct extends BaseEntry
       commands.add(" | ");
       commands.add(new Link("add",
                             "/user/me/product/" + getName() + "?create"));
-      return new FormattedValue(new Command(commands), null, "owners", false,
-                                false, false, false, null, null);
+      return new FormattedValue(new Command(commands), null, "owners")
+        .withPlural("owners");
     }
 
     return super.computeValue(inKey, inDM);
@@ -1795,74 +1797,75 @@ public class BaseProduct extends BaseEntry
    * @return      a multi map of values per index name
    *
    */
-  public Multimap<String, String> computeIndexValues()
+  public Multimap<Index.Path, String> computeIndexValues()
   {
-    Multimap<String, String> values = super.computeIndexValues();
+    Multimap<Index.Path, String> values = super.computeIndexValues();
 
     // persons
     Set<String> persons = new HashSet<String>();
     collectPersons(persons);
 
     for(String person : persons)
-      values.put(Index.PERSONS, person);
+      values.put(Index.Path.PERSONS, person);
 
     // jobs
     Set<String> jobs = new HashSet<String>();
     collectJobs(jobs);
 
     for(String job : jobs)
-      values.put(Index.JOBS, job);
+      values.put(Index.Path.JOBS, job);
 
     // date
     if(m_date.isDefined())
     {
       String month = m_date.getMonthAsString();
       if(month.isEmpty())
-        values.put(Index.DATES, Index.groupsToString("" + m_date.getYear()));
+        values.put(Index.Path.DATES,
+                   Index.groupsToString("" + m_date.getYear()));
       else
-        values.put(Index.DATES,
+        values.put(Index.Path.DATES,
                    Index.groupsToString("" + m_date.getYear(), month));
     }
     else
-      values.put(Index.DATES, Value.UNDEFINED);
+      values.put(Index.Path.DATES, Value.UNDEFINED);
 
     // audience
-    values.put(Index.AUDIENCES, m_audience.toString());
+    values.put(Index.Path.AUDIENCES, m_audience.toString());
 
     // system
-    values.put(Index.SYSTEMS, m_system.toString());
+    values.put(Index.Path.SYSTEMS, m_system.toString());
 
     // type
-    values.put(Index.TYPES, m_productType.toString());
+    values.put(Index.Path.TYPES, m_productType.toString());
 
     // style
-    values.put(Index.STYLES, m_style.toString());
+    values.put(Index.Path.STYLES, m_style.toString());
 
     // style
-    values.put(Index.PRODUCERS, m_producer.toString());
+    values.put(Index.Path.PRODUCERS, m_producer.toString());
 
     // layout
-    values.put(Index.LAYOUTS, m_layout.toString());
+    values.put(Index.Path.LAYOUTS, m_layout.toString());
 
     // series
-    values.put(Index.SERIES, m_series.toString(false));
+    values.put(Index.Path.SERIES, m_series.toString(false));
 
     // page
-    values.put(Index.PAGES, s_pageGroup.group(m_pages));
+    values.put(Index.Path.PAGES, s_pageGroup.group(m_pages));
 
     // price
-    values.put(Index.PRICES, s_priceGrouping.group(m_price));
+    values.put(Index.Path.PRICES, s_priceGrouping.group(m_price));
 
     // parts
     for(Multiple content : m_contents)
-      values.put(Index.PARTS, content.get(0).toString(false));
+      values.put(Index.Path.PARTS, content.get(0).toString(false));
 
     // worlds
     for(Selection world : m_worlds)
-      values.put(Index.WORLDS, world.toString(false));
+      values.put(Index.Path.WORLDS, world.toString(false));
 
     // titles for references
-    values.put(Index.TITLES, getFullTitle() + " (" + getName() + ")");
+    values.put(Index.Path.TITLES, getFullTitle() + " (" + getName() + ")");
 
     return values;
   }

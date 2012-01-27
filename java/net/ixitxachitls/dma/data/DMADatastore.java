@@ -132,7 +132,7 @@ public class DMADatastore implements DMAData
 
   /** Long experiation time for the cache. */
   private static Expiration s_longExpiration =
-    Expiration.byDeltaSeconds(6 * 60 * 60);
+    Expiration.byDeltaSeconds(24 * 60 * 60);
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -562,10 +562,9 @@ public class DMADatastore implements DMAData
 
     Query query = new Query(inType.toString());
     for(int i = 0; i + 1 < inFilters.length; i += 2)
-    {
       query.addFilter(inFilters[i], Query.FilterOperator.EQUAL,
                       inFilters[i + 1]);
-    }
+
     FetchOptions options = FetchOptions.Builder.withChunkSize(100);
     for(Entity entity : m_store.prepare(query).asIterable(options))
     {
@@ -579,7 +578,7 @@ public class DMADatastore implements DMAData
         names.add(value);
     }
 
-    s_cache.put(key, names, s_expiration);
+    s_cache.put(key, names, s_longExpiration);
     return names;
   }
 
@@ -872,24 +871,43 @@ public class DMADatastore implements DMAData
       return null;
     }
 
+    // setup the extensions
+    Object extensions = inEntity.getProperty("extensions");
+    if(extensions != null && extensions instanceof Iterable)
+      for(String extension : (Iterable<String>)extensions)
+        entry.addExtension(extension);
+
     for(Map.Entry<String, Object> property
           : inEntity.getProperties().entrySet())
     {
       String name = fromPropertyName(property.getKey());
+      if(name.startsWith(Index.PREFIX) || "change".equals(name)
+         || "extensions".equals(name))
+        continue;
+
       Object value = property.getValue();
+      if(value == null)
+      {
+        Log.warning("ignoring null value for " + name);
+        continue;
+      }
+
       String text;
+      String rest;
       if(value instanceof Text)
-        entry.set(name, ((Text)value).getValue());
+        rest = entry.set(name, ((Text)value).getValue());
       else if(value instanceof ArrayList
               && entry.getValue(name) instanceof ValueList)
-        entry.set(name,
+        rest = entry.set(name,
                   Strings.toString((ArrayList)value,
                                    ((ValueList)entry.getValue(name))
                                    .getDelimiter(),
                                    Value.UNDEFINED));
       else
-        entry.set(fromPropertyName(property.getKey()), value.toString());
+        rest = entry.set(name, value.toString());
 
+      if(rest != null)
+        Log.warning("could not fully set value for " + name + ": " + rest);
     }
 
     return entry;
@@ -991,14 +1009,18 @@ public class DMADatastore implements DMAData
     }
 
     // save the index information to make it searchable afterwards
-    Multimap<String, String> indexes = inEntry.computeIndexValues();
-    for(String index : indexes.keySet())
+    Multimap<Index.Path, String> indexes = inEntry.computeIndexValues();
+    for(Index.Path index : indexes.keySet())
       // must convert the contained set to a list to make it serializable
-      entity.setProperty(toPropertyName("index-" + index),
+      entity.setProperty(toPropertyName("index-" + index.getPath()),
                          new ArrayList<String>(indexes.get(index)));
 
     // save the time for recent changes
     entity.setProperty(toPropertyName("change"), new Date());
+
+    // save the extensions
+    entity.setProperty(toPropertyName("extensions"),
+                       inEntry.getExtensionNames());
 
     return entity;
   }

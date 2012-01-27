@@ -45,7 +45,11 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
+import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.output.ListPrint;
+import net.ixitxachitls.dma.output.Print;
 //import net.ixitxachitls.dma.values.Modifiable;
 //import net.ixitxachitls.dma.values.SimpleText;
 //import net.ixitxachitls.dma.values.Text;
@@ -56,7 +60,7 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 // import net.ixitxachitls.output.commands.Bold;
-//import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Editable;
 // import net.ixitxachitls.output.commands.ID;
@@ -68,7 +72,7 @@ import net.ixitxachitls.output.commands.BaseCommand;
 //import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
-// import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -1217,6 +1221,13 @@ public abstract class ValueGroup implements Changeable
   public static final String CURRENT =
     Config.get("configuration", "default");
 
+  /** The print for printing a whole page entry. */
+  public static final Print s_pagePrint = new Print("$title");
+
+  /** The print for printing an entry in a list. */
+  public static final ListPrint s_listPrint =
+    new ListPrint("1:L(icon);20:L(name)[Name]", "$label", null);
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -1301,7 +1312,6 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
-
   //------------------------------ getValue --------------------------------
 
   /**
@@ -1323,6 +1333,47 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //------------------------------- getType --------------------------------
+
+  /**
+   * Get the type of the entry.
+   *
+   * @return      the requested name
+   *
+   */
+  public abstract @Nonnull AbstractType<? extends AbstractEntry> getType();
+
+  //........................................................................
+  //----------------------------- getEditType ------------------------------
+
+  /**
+   * Get the type of the entry.
+   *
+   * @return      the requested name
+   *
+   */
+  public abstract @Nonnull String getEditType();
+
+  //........................................................................
+  //--------------------------------- link ---------------------------------
+
+  /**
+   * Create a link for the entry to the given index path.
+   *
+   * @param    inType the type to link for
+   * @param    inPath the path to the index
+   *
+   * @return   a string for linking to the path
+   *
+   */
+  protected static @Nonnull String link
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull Index.Path inPath)
+  {
+    return "/" + inType.getMultipleLink() + "/" + inPath.getPath() + "/";
+  }
+
+  //........................................................................
 
   //-------------------------------- isBase --------------------------------
 
@@ -1333,6 +1384,22 @@ public abstract class ValueGroup implements Changeable
    *
    */
   public boolean isBase()
+  {
+    return false;
+  }
+
+  //........................................................................
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
     return false;
   }
@@ -1437,7 +1504,84 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
+  //----------------------------- getPagePrint -----------------------------
 
+  /**
+   * Get the print for a full page.
+   *
+   * @return the print for page printing
+   *
+   */
+  protected @Nonnull Print getPagePrint()
+  {
+    return s_pagePrint;
+  }
+
+  //........................................................................
+  //----------------------------- getListPrint -----------------------------
+
+  /**
+   * Get the print for a list entry.
+   *
+   * @return the print for list entry
+   *
+   */
+  protected @Nonnull ListPrint getListPrint()
+  {
+    return s_listPrint;
+  }
+
+  //........................................................................
+  //----------------------------- getListFormat ----------------------------
+
+  /**
+   * Get the print for a list entry.
+   *
+   * @return the print for list entry
+   *
+   */
+  public @Nonnull String getListFormat()
+  {
+    return getListPrint().getFormat();
+  }
+
+  //........................................................................
+  //------------------------------- printPage ------------------------------
+
+  /**
+   * Print the entry into a command for adding to a document.
+   *
+   * @param       inUser  the user printing, if any
+   *
+   * @return      the command representing this item in a list
+   *
+   */
+  public @Nonnull Object printPage(@Nullable BaseCharacter inUser)
+  {
+    return getPagePrint().print(this, inUser);
+  }
+
+  //........................................................................
+  //------------------------------- printList ------------------------------
+
+  /**
+   * Print the entry into a command for adding to a document.
+   *
+   * @param       inKey   the key (name) for the entry to be printed (this is
+   *                      used when printing entries multiple times with synonym
+   *                      names)
+   * @param       inUser  the user printing, if any
+   *
+   * @return      the command representing this item in a list
+   *
+   */
+  public @Nonnull List<Object> printList(@Nonnull String inKey,
+                                         @Nullable BaseCharacter inUser)
+  {
+    return getListPrint().print(inKey, this, inUser);
+  }
+
+  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -1457,6 +1601,19 @@ public abstract class ValueGroup implements Changeable
 
     return getVariable(inKey);
   }
+
+  //........................................................................
+  //-------------------------- combineBaseValues ---------------------------
+
+  /**
+   * Combine specific values of all base entries into a single command.
+   *
+   * @param      inName the name of the value to obtain
+   *
+   * @return     the command for printing the value
+   *
+   */
+  public abstract @Nonnull Command combineBaseValues(@Nonnull String inName);
 
   //........................................................................
 
@@ -1676,19 +1833,20 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
-  //---------------------------- extractVariables ---------------------------
+  //------------------------ extractClassVariables -------------------------
 
   /**
-   * Extract all the keyed variables from the given class.
+   * Extract the variables from the given class.
    *
-   * @param       inClass the class to extract from
+   * @param     inClass the class from which to extract
+   *
+   * @return    all the extracted variables
    *
    */
-  protected static void extractVariables(@Nonnull Class inClass)
+  @SuppressWarnings("unchecked") // casting class for variable creation
+  protected static @Nonnull
+    List<Variable> extractClassVariables(@Nonnull Class inClass)
   {
-    if(s_variables.containsKey(inClass))
-      return;
-
     List<Variable> variables = new ArrayList<Variable>();
 
     // add all the annotated variables
@@ -1710,16 +1868,29 @@ public abstract class ValueGroup implements Changeable
         PrintUndefined printUndefined =
           field.getAnnotation(PrintUndefined.class);
 
-        variables.add(new Variable(key.value(), field,
-                                   noStore == null || !noStore.value(),
-                                   dm != null && dm.value(),
-                                   noEdit == null || !noEdit.value(),
-                                   player != null && player.value(),
-                                   playerEdit != null && playerEdit.value(),
-                                   plural == null ? null : plural.value(),
-                                   note == null ? null : note.value(),
-                                   printUndefined == null
-                                   ? false : printUndefined.value()));
+        // we have to use a variable class in the package of extensions to be
+        // able to access extension variables.
+        Variable variable;
+        if(AbstractExtension.class.isAssignableFrom(inClass))
+          variable =
+            new ExtensionVariable(inClass,
+                                  key.value(), field,
+                                  noStore == null || !noStore.value(),
+                                  printUndefined == null
+                                  ? false : printUndefined.value());
+        else
+          variable = new Variable(key.value(), field,
+                                  noStore == null || !noStore.value(),
+                                  printUndefined == null
+                                  ? false : printUndefined.value());
+        variables.add(variable
+                      .withDM(dm != null && dm.value())
+                      .withPlayerOnly(player != null && player.value())
+                      .withPlayerEditable(playerEdit != null
+                                          && playerEdit.value())
+                      .withPlural(plural == null ? null : plural.value())
+                      .withNote(note == null ? null : note.value())
+                      .withEditable(noEdit == null || !noEdit.value()));
       }
     }
 
@@ -1737,10 +1908,72 @@ public abstract class ValueGroup implements Changeable
         variables.add(v);
     }
 
-    s_variables.put(inClass, new Variables(variables));
+    return variables;
   }
 
   //........................................................................
+  //---------------------------- extractVariables ---------------------------
+
+  /**
+   * Extract all the keyed variables from the given class.
+   *
+   * @param       inClass the class to extract from
+   *
+   */
+  protected static void extractVariables(@Nonnull Class inClass)
+  {
+    if(s_variables.containsKey(inClass))
+      return;
+
+    s_variables.put(inClass, new Variables(extractClassVariables(inClass)));
+  }
+
+  //........................................................................
+  //---------------------------- extractVariables ---------------------------
+
+  /**
+   * Extract all the keyed variables from the given class.
+   *
+   * @param       inEntryClass     the entry class to extract for
+   * @param       inExtensionClass the extension class to extract from
+   *
+   */
+  protected static void extractVariables(@Nonnull Class inEntryClass,
+                                         @Nonnull Class inExtensionClass)
+  {
+    Variables variables = s_variables.get(inEntryClass);
+
+    if(variables == null)
+    {
+      Log.warning("cannot extract variables for " + inExtensionClass
+                  + " as the variables for " + inEntryClass
+                  + " were not found");
+      return;
+    }
+
+    List<Variable> vars = extractClassVariables(inExtensionClass);
+    variables.add(vars);
+
+    if(!s_variables.containsKey(inExtensionClass))
+      s_variables.put(inExtensionClass, new Variables(vars));
+  }
+
+  //........................................................................
+  //------------------------------- addIndex -------------------------------
+
+  /**
+   * Add an index for the given class.
+   *
+   * @param    inIndex the index to add
+   *
+   */
+  protected static void addIndex(@Nonnull Index inIndex)
+  {
+    s_indexes.put(inIndex.getPath(), inIndex);
+  }
+
+  //........................................................................
+
   //------------------------------- changed --------------------------------
 
   /**
@@ -2031,6 +2264,39 @@ public abstract class ValueGroup implements Changeable
       public String getName()
       {
         return "Test-Name";
+      }
+
+      /** Get the type of the group.
+       *
+       * @return the type
+       */
+      @SuppressWarnings("unchecked") // unchecked creation
+      @Override
+      public @Nonnull AbstractType<? extends AbstractEntry> getType()
+      {
+        return new BaseType(this.getClass());
+      }
+
+      /** Combine all base results.
+       *
+       * @param inName the name of the value
+       * @return the combined value
+       */
+      @Override
+      public @Nonnull Command combineBaseValues(@Nonnull String inName)
+      {
+        throw new UnsupportedOperationException("not implemented");
+      }
+
+      /**
+       * Get the type of the entry.
+       *
+       * @return      the requested name
+       */
+      @Override
+      public @Nonnull String getEditType()
+      {
+        return "dummy";
       }
     }
 

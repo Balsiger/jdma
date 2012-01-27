@@ -904,8 +904,9 @@ public class Product extends Entry<BaseProduct>
                                 "/product/" + base.getName()),
                        " (",
                        getName(),
-                       ")"),
-           getName(), "name", false, true, false, true, "names", "")
+                       ")"), getName(), "name")
+          .withPlayerEditable(true)
+          .withEditable(true)
           .withEditType("name");
     }
 
@@ -915,8 +916,9 @@ public class Product extends Entry<BaseProduct>
     {
       String users = Strings.toString(m_data.getIDs(BaseCharacter.TYPE), "||",
                                       m_owner.get());
-      return new FormattedValue(m_owner, m_owner.get(), "owner", true, true,
-                                false, false, null, null)
+      return new FormattedValue(m_owner, m_owner.get(), "owner")
+        .withDM(true)
+        .withEditable(true)
         .withEditType("selection").withEditChoices(users);
     }
 

@@ -154,7 +154,8 @@ public class EntryListServlet extends PageServlet
     if(inPath != null)
       typeName = Strings.getPattern(inPath, "([^/]*)/?$");
 
-    AbstractType<? extends AbstractEntry> type = AbstractType.get(typeName);
+    AbstractType<? extends AbstractEntry> type =
+      AbstractType.getTyped(typeName);
     if(type == null)
     {
       inWriter.add("unknown type '" + typeName + "' [" + inPath + "]");

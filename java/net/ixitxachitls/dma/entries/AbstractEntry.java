@@ -27,10 +27,12 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 // import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 // import java.util.StringTokenizer;
 import java.util.TreeMap;
 // import java.util.regex.Matcher;
@@ -47,8 +49,8 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
+import net.ixitxachitls.dma.entries.indexes.Index;
 // import net.ixitxachitls.dma.data.Storage;
 // import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
 // import net.ixitxachitls.dma.entries.indexes.Index;
@@ -310,21 +312,15 @@ public class AbstractEntry extends ValueGroup
   protected @Nullable List<BaseError> m_errors = null;
 
   /** All the extensions, indexed by name. */
-  protected Map<String, AbstractExtension> m_extensions =
-    new TreeMap<String, AbstractExtension>();
+  protected Map<String, AbstractExtension<? extends AbstractEntry>>
+    m_extensions =
+    new TreeMap<String, AbstractExtension<? extends AbstractEntry>>();
 
   /** The base entries for this entry, in the same order as the names. */
   protected @Nullable List<BaseEntry> m_baseEntries = null;
 
   /** The files for this entry. */
   private @Nullable List<DMAData.File> m_files = null;
-
-  /** The print for printing a whole page entry. */
-  public static final Print s_pagePrint = new Print("$title");
-
-  /** The print for printing an entry in a list. */
-  public static final ListPrint s_listPrint =
-    new ListPrint("1:L(icon);20:L(name)[Name]", "$label", null);
 
   /** The random generator. */
   protected static final @Nonnull Random s_random = new Random();
@@ -382,6 +378,12 @@ public class AbstractEntry extends ValueGroup
   /** The pattern for expressions. */
   protected static final @Nonnull Pattern s_expPattern =
     Pattern.compile("\\[\\[(.*?)\\]\\]");
+
+  /** All registered extension classes. */
+  protected static final @Nonnull
+    Set<Class<? extends AbstractExtension<? extends AbstractEntry>>>
+    s_extensions =
+    new HashSet<Class<? extends AbstractExtension<? extends AbstractEntry>>>();
 
   //........................................................................
 
@@ -751,6 +753,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested name
    *
    */
+  @Override
   public @Nonnull AbstractType<? extends AbstractEntry> getType()
   {
     return m_type;
@@ -765,82 +768,87 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested name
    *
    */
+  @Override
   public @Nonnull String getEditType()
   {
     return m_type.toString();
   }
 
   //........................................................................
-  //--------------------------- getAttachments -----------------------------
+  //-------------------------- getExtensionNames ---------------------------
 
   /**
-   * Get an iterator over all the attachments.
+   * Get an all the names of the extensions.
    *
-   * @return      the requested iterator
-   *
-   * @undefined   never
+   * @return      the requested names
    *
    */
-//   public Iterator<AbstractAttachment> getAttachments()
-//   {
-//     return m_attachments.values().iterator();
-//   }
+  public List<String> getExtensionNames()
+  {
+    return new ArrayList<String>(m_extensions.keySet());
+  }
 
   //........................................................................
-  //---------------------------- hasAttachment -----------------------------
+  //---------------------------- hasExtension -----------------------------
 
   /**
-   * Check if the entry has an attachment with the given class.
+   * Check if the entry has an extension with the given class.
    *
-   * @param       inAttachment the class of the attachment to look for
+   * @param       inExtension the class of the extension to look for
    *
-   * @return      true if an attachment of this name is present, false if not
+   * @return      true if an extension of this name is present, false if not
    *
-   * @undefined   IllegalArgumentException if no attachment given
+   * @undefined   IllegalArgumentException if no extension given
    *
    */
-//public boolean hasAttachment(Class<? extends AbstractAttachment> inAttachment)
-//   {
-//     if(inAttachment == null)
-//       throw new IllegalArgumentException("must have an attachment here");
+  public boolean hasExtension
+    (@Nonnull Class<? extends AbstractExtension> inExtension)
+  {
+    for(AbstractExtension extension : m_extensions.values())
+      if(inExtension.isAssignableFrom(extension.getClass()))
+         return true;
 
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//       if(inAttachment.isAssignableFrom(i.next().getClass()))
-//         return true;
-
-//     return false;
-//   }
+    return false;
+  }
 
   //........................................................................
-  //---------------------------- getAttachment -----------------------------
+  //----------------------------- getExtension -----------------------------
 
   /**
-   * Get the first attachment with the given class.
+   * Get the extension given by name.
    *
-   * @param       inAttachment the class of the attachment to look for
-   * @param       <T> the type of attachment to get
+   * @param   inName the name of the extension
    *
-   * @return      the attachment found or null if not found
-   *
-   * @undefined   IllegalArgumentException if no attachment given
+   * @return  the extension found, if any
    *
    */
-//   @SuppressWarnings("unchecked")
-// public <T extends AbstractAttachment> T getAttachment(Class<T> inAttachment)
-//   {
-//     if(inAttachment == null)
-//       throw new IllegalArgumentException("must have an attachment here");
+  public @Nullable AbstractExtension getExtension(@Nonnull String inName)
+  {
+    return m_extensions.get(inName);
+  }
 
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//     {
-//       AbstractAttachment attachment = i.next();
+  //........................................................................
+  //---------------------------- getExtension ------------------------------
 
-//       if(inAttachment.isAssignableFrom(attachment.getClass()))
-//         return (T)attachment;
-//     }
+  /**
+   * Get the extension with the given class.
+   *
+   * @param       inExtension the class of the attachment to look for
+   * @param       <T> the type of extension to get
+   *
+   * @return      the extension found or null if not found
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable <T extends AbstractExtension> T
+    getExtension(@Nonnull Class<T> inExtension)
+  {
+    for(AbstractExtension extension : m_extensions.values())
+      if(inExtension.isAssignableFrom(extension.getClass()))
+         return (T)extension;
 
-//     return null;
-//   }
+    return null;
+  }
 
   //........................................................................
   //------------------------------ getStorage ------------------------------
@@ -1125,9 +1133,14 @@ public class AbstractEntry extends ValueGroup
    * @return      a multi map of values per index name
    *
    */
-  public Multimap<String, String> computeIndexValues()
+  public @Nonnull Multimap<Index.Path, String> computeIndexValues()
   {
-    return HashMultimap.create();
+    Multimap<Index.Path, String> values = HashMultimap.create();
+    for(AbstractExtension<? extends AbstractEntry> extension
+          : m_extensions.values())
+      extension.computeIndexValues(values);
+
+    return values;
   }
 
   //........................................................................
@@ -1519,6 +1532,10 @@ public class AbstractEntry extends ValueGroup
       if(!var.isStored())
         continue;
 
+      if(var instanceof ExtensionVariable
+         && !hasExtension(((ExtensionVariable)var).getExtension()))
+        continue;
+
       Value value = var.get(this);
 
       // We don't store this if we don't have a value.
@@ -1549,85 +1566,6 @@ public class AbstractEntry extends ValueGroup
 //     return new Command(printCommand(inDM, true).asCommands(inDM, inValues)
 //                        .toArray());
 //   }
-
-  //........................................................................
-
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListFormat ----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  public @Nonnull String getListFormat()
-  {
-    return getListPrint().getFormat();
-  }
-
-  //........................................................................
-  //------------------------------- printPage ------------------------------
-
-  /**
-   * Print the entry into a command for adding to a document.
-   *
-   * @param       inUser  the user printing, if any
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  public @Nonnull Object printPage(@Nullable BaseCharacter inUser)
-  {
-    return getPagePrint().print(this, inUser);
-  }
-
-  //........................................................................
-  //------------------------------- printList ------------------------------
-
-  /**
-   * Print the entry into a command for adding to a document.
-   *
-   * @param       inKey   the key (name) for the entry to be printed (this is
-   *                      used when printing entries multiple times with synonym
-   *                      names)
-   * @param       inUser  the user printing, if any
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  public @Nonnull List<Object> printList(@Nonnull String inKey,
-                                         @Nullable BaseCharacter inUser)
-  {
-    return getListPrint().print(inKey, this, inUser);
-  }
 
   //........................................................................
 
@@ -1827,8 +1765,7 @@ public class AbstractEntry extends ValueGroup
     {
       return new FormattedValue
         (new Title(computeValue("name", inDM).format(this, inDM, true),
-                   "entrytitle"),
-         null, "title", false, false, false, false, "titles", "");
+                   "entrytitle"), null, "title");
     }
 
     if("desc".equals(inKey))
@@ -1844,8 +1781,7 @@ public class AbstractEntry extends ValueGroup
 
       return new FormattedValue(new Divider("desc",
                                             new Command(commands.toArray())),
-                                null, "desc", false, false, false, false,
-                                "desc", "");
+                                null, "desc");
     }
 
     if("image".equals(inKey))
@@ -1857,8 +1793,8 @@ public class AbstractEntry extends ValueGroup
           return new FormattedValue
             (new ImageLink(file.getIcon() + "=s300", "main",
                            file.getPath(), "main")
-             .withID("file-main"),
-             "main", "image", false, true, false, false, "images", "")
+             .withID("file-main"), "main", "image")
+            .withEditable(true)
             .withEditType("image");
 
       return new FormattedValue
@@ -1866,17 +1802,15 @@ public class AbstractEntry extends ValueGroup
                        + "-dummy.png", "main",
                        "/icons/" + type.getMultipleLink()
                        + "-dummy.png", "main")
-         .withID("file-main"),
-         "main", "image", false, true, false, false, "images", "")
+         .withID("file-main"), "main", "image")
+        .withEditable(true)
         .withEditType("image");
     }
 
     if("clear".equals(inKey))
       // we need a non empty string here, because when parsing trailing empty
       // arguments are ignored.
-      return new FormattedValue(new Divider("clear", " "), null,
-                                "clear", false, false, false, false, "clear",
-                                "");
+      return new FormattedValue(new Divider("clear", " "), null, "clear");
 
     if("files".equals(inKey))
     {
@@ -1907,9 +1841,10 @@ public class AbstractEntry extends ValueGroup
       }
 
       return new FormattedValue
-        (new Divider("files", "files", new Command(commands)),
-         "files", "files", false, true, false, false,
-         "files", "").withEditType("files");
+        (new Divider("files", "files", new Command(commands)), "files", "files")
+        .withPlural("files")
+        .withEditable(true)
+        .withEditType("files");
     }
 
     if("errors".equals(inKey))
@@ -1932,41 +1867,37 @@ public class AbstractEntry extends ValueGroup
       else
         value = null;
 
-      return new FormattedValue(value, null, "errors", true, false, false,
-                                false, "errors", "");
+      return new FormattedValue(value, null, "errors")
+        .withPlural("errors")
+        .withDM(true);
     }
 
     if("as dma".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-dma.png",
                                               getName(), getName() + ".dma",
-                                              "doc-link"),
-                                null, "as dma", true, false, false, false,
-                                "as dma", "");
+                                              "doc-link"), null, "as dma")
+        .withDM(true);
 
     if("as pdf".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
                                               getName(), getName() + ".pdf",
-                                              "doc-link"),
-                                null, "as pdf", true, false, false, false,
-                                "as pdf", "");
+                                              "doc-link"), null, "as pdf")
+        .withDM(true);
 
     if("as text".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-txt.png",
                                               getName(), getName() + ".txt",
-                                              "doc-link"),
-                                null, "as text", true, false, false, false,
-                                "as text", "");
+                                              "doc-link"), null, "as text")
+        .withDM(true);
 
     if("label".equals(inKey))
       return new FormattedValue
         (new Image(Files.concatenate
                    ("/icons/labels", getType().getClassName()) + ".png",
-                   "label"),
-         null, "label", false, false, false, false, "labels", "");
+                   "label"), null, "label");
 
     if("par".equals(inKey))
-      return new FormattedValue(new Par(), null, "par", false, false, false,
-                                false, "par", "");
+      return new FormattedValue(new Par(), null, "par");
 
     if("listlink".equals(inKey))
     {
@@ -1977,8 +1908,7 @@ public class AbstractEntry extends ValueGroup
       return new FormattedValue
         (new Divider(id, "", new Script
                      ("util.linkRow(document.getElementById('" + id + "'), "
-                      + "'" + getPath() + "');")),
-         null, "listlink", false, false, false, false, "listlinks", "");
+                      + "'" + getPath() + "');")), null, "listlink");
     }
 
     if("base".equals(inKey))
@@ -2001,9 +1931,10 @@ public class AbstractEntry extends ValueGroup
       }
 
       return new FormattedValue(new Command(entries),
-                                Strings.toString(values, ", ", ""), "base",
-                                true, true, false, false, null, null)
-      .withEditType("list(, )#name");
+                                Strings.toString(values, ", ", ""), "base")
+        .withDM(true)
+        .withEditable(true)
+        .withEditType("list(, )#name");
     }
 
     return super.computeValue(inKey, inDM);
@@ -2109,22 +2040,6 @@ public class AbstractEntry extends ValueGroup
   public @Nonnull String getShortDescription()
   {
     return "";
-  }
-
-  //........................................................................
-  //--------------------------------- isDM ---------------------------------
-
-  /**
-   * Check whether the given user is the DM for this entry.
-   *
-   * @param       inUser the user accessing
-   *
-   * @return      true for DM, false for not
-   *
-   */
-  public boolean isDM(@Nullable BaseCharacter inUser)
-  {
-    return false;
   }
 
   //........................................................................
@@ -2574,38 +2489,32 @@ public class AbstractEntry extends ValueGroup
     Variables variables = getVariables();
     while(!inReader.isAtEnd() && !inReader.expect(s_delimiter))
     {
-      String key = null;
-
-      //----- normal -------------------------------------------------------
-
-      key = inReader.expect(variables.getKeywords());
+      String key = inReader.expect(variables.getKeywords());
 
       if(key != null)
         readVariable(inReader, variables.getVariable(key));
+      else
+        for(AbstractExtension extension : m_extensions.values())
+        {
+          if(extension == null)
+            Log.warning("invalid extension ignored for " + getName());
+          else
+          {
+            Variables extensionVariables = extension.getVariables();
 
-      //....................................................................
-      //----- extensionss --------------------------------------------------
+            if(extensionVariables == null)
+              continue;
 
-//       for(Iterator<AbstractAttachment> i = m_attachments.values().iterator();
-//           key == null && i.hasNext(); )
-//       {
-//         AbstractAttachment attachment = i.next();
+            key = inReader.expect(extensionVariables.getKeywords());
 
-//         if(attachment == null)
-//           Log.warning("invalid attachment ignored for " + getName());
-
-//         values = attachment.getValues();
-
-//         if(values == null)
-//           continue;
-
-//         key = inReader.expect(values.getKeywords());
-
-//         if(key != null)
-//           attachment.readValue(inReader, values.getValue(key));
-//       }
-
-      //....................................................................
+            if(key != null)
+            {
+              extension.readVariable(inReader,
+                                     extensionVariables.getVariable(key));
+              break;
+            }
+          }
+        }
 
       if(key == null)
       {
@@ -2645,7 +2554,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked")
-  protected @Nullable AbstractExtension addExtension(@Nonnull String inName)
+  public @Nullable AbstractExtension addExtension(@Nonnull String inName)
   {
     if(m_extensions.containsKey(inName))
       return null;
@@ -2739,8 +2648,9 @@ public class AbstractEntry extends ValueGroup
    * @param       inExtension the extension to add
    *
    */
-  public void addExtension(@Nonnull String inName,
-                           @Nonnull AbstractExtension inExtension)
+  public void addExtension
+    (@Nonnull String inName,
+     @Nonnull AbstractExtension<? extends AbstractEntry> inExtension)
   {
     m_extensions.put(inName, inExtension);
   }

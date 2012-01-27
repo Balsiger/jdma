@@ -53,7 +53,7 @@ import net.ixitxachitls.input.ParseReader;
 //__________________________________________________________________________
 
 @Immutable
-public class Variable extends ValueHandle
+public class Variable extends ValueHandle<Variable>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -67,23 +67,13 @@ public class Variable extends ValueHandle
    *                               variable
    * @param       inStored         true if the value will be stored, false
    *                               if not
-   * @param       inDM             true if the value is for DMs
-   * @param       inEditable       true if the value is editable
-   * @param       inPlayer         true if the value is for players
-   * @param       inPlayerEditable true if the value is editable for a player
-   * @param       inPlural         the plural of the key
-   * @param       inNote           a note for editing, if any
    * @param       inPrintUndefined if printing the value when undefined
    *
    */
   public Variable(@Nonnull String inKey, @Nonnull Field inField,
-                  boolean inStored, boolean inDM, boolean inEditable,
-                  boolean inPlayer, boolean inPlayerEditable,
-                  @Nullable String inPlural, @Nullable String inNote,
-                  boolean inPrintUndefined)
+                  boolean inStored, boolean inPrintUndefined)
   {
-    super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
-          inNote);
+    super(inKey);
 
     m_field          = inField;
     m_store          = inStored;
@@ -233,6 +223,7 @@ public class Variable extends ValueHandle
    * @return      the String representation
    *
    */
+  @Override
   public @Nonnull String toString()
   {
     return "var " + m_key + " (" + (isEditable() ? "editable" : "not editable")
@@ -386,9 +377,8 @@ public class Variable extends ValueHandle
     public void init() throws Exception
     {
       Field field = Variable.Test.TestObject.class.getDeclaredField("m_value");
-      Variable variable =
-        new Variable("key", field, false, true, false, false, false, null,
-                     null, false);
+      Variable variable = new Variable("key", field, false, false)
+        .withEditable(true);
 
       assertEquals("key", "key", variable.getKey());
       assertEquals("value", "$undefined$",
@@ -419,9 +409,8 @@ public class Variable extends ValueHandle
     public void setting() throws Exception
     {
       Field field = Variable.Test.TestObject.class.getDeclaredField("m_value");
-      Variable variable =
-        new Variable("key", field, false, true, false, false, false, null,
-                     null, false);
+      Variable variable = new Variable("key", field, false, false)
+        .withEditable(true);
       TestObject test = new TestObject();
 
       variable.setFromString(test, "guru");

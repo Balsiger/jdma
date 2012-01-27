@@ -157,7 +157,7 @@ public class BlobUploadServlet extends BaseServlet
 
 
       AbstractType<? extends AbstractEntry> type =
-        AbstractType.get(request.getParam("type"));
+        AbstractType.getTyped(request.getParam("type"));
       if(type == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "invalid type " + request.getParam("type"));

@@ -30,8 +30,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 
 //..........................................................................
 
@@ -104,7 +105,7 @@ public class ListPrint extends AbstractPrint
    */
   @SuppressWarnings("unchecked") // need to case for generic array creation
   public @Nonnull List<Object> print
-    (@Nonnull String inKey, @Nonnull AbstractEntry inEntry,
+    (@Nonnull String inKey, @Nonnull ValueGroup inEntry,
      @Nullable BaseCharacter inUser)
   {
     // CHECKSTYLE:OFF (this works in Java 1.6)
@@ -128,6 +129,25 @@ public class ListPrint extends AbstractPrint
       result.add(convert(tokens, inEntry, inKey, inUser));
 
     return result;
+  }
+
+  //........................................................................
+  //---------------------------- printExtension ----------------------------
+
+  /**
+   * Print the extension information.
+   *
+   * @param     inExtension the extension to print
+   * @param     inUser      the user printing for
+   *
+   * @return    an object representing the desired print
+   *
+   */
+  protected @Nonnull Object
+    printExtension(@Nonnull AbstractExtension inExtension,
+                   @Nonnull BaseCharacter inUser)
+  {
+    return inExtension.printList("??guru??", inUser);
   }
 
   //........................................................................

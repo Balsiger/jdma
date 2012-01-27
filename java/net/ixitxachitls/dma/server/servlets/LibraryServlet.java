@@ -160,8 +160,7 @@ public class LibraryServlet extends PageServlet
       if(types.get(type) != null)
         for(Index index : types.get(type))
         {
-          String link = "/" + type.getMultipleLink() + "/"
-            + index.getTitle().toLowerCase(Locale.US);
+          String link = "/" + type.getMultipleLink() + "/" + index.getPath();
 
           inWriter
             .begin("a").classes("type-index").href(link)

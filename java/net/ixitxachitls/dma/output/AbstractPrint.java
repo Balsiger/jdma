@@ -33,10 +33,13 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.FormattedValue;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.ValueHandle;
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Section;
 import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
@@ -60,7 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class AbstractPrint
+public abstract class AbstractPrint
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -88,6 +91,24 @@ public class AbstractPrint
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //---------------------------- printExtension ----------------------------
+
+  /**
+   * Print the extension information.
+   *
+   * @param     inExtension the extension to print
+   * @param     inUser      the user printing for
+   *
+   * @return    an object representing the desired print
+   *
+   */
+  protected abstract @Nonnull Object
+    printExtension(@Nonnull AbstractExtension inExtension,
+                   @Nonnull BaseCharacter inUser);
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -125,7 +146,7 @@ public class AbstractPrint
    *
    */
   public @Nonnull Object convert(@Nullable List<String> inTokens,
-                                 @Nonnull AbstractEntry inEntry,
+                                 @Nonnull ValueGroup inEntry,
                                  @Nonnull String inNullValue,
                                  @Nullable BaseCharacter inUser)
   {
@@ -142,17 +163,17 @@ public class AbstractPrint
 
         char prefix = token.charAt(0);
 
-        if("$%".indexOf(prefix) < 0)
+        if("$%#".indexOf(prefix) < 0)
           result.add(token);
         else
         {
           String name = token.substring(1);
-          ValueHandle handle = compute(inEntry, name, inEntry.isDM(inUser));
 
           switch(prefix)
           {
             case '$':
               // A simple, directly printed value
+              ValueHandle handle = compute(inEntry, name, inEntry.isDM(inUser));
               if(handle != null)
               {
                 Object formatted =
@@ -167,6 +188,7 @@ public class AbstractPrint
 
             case '%':
               // A value as tabelarized data
+              handle = compute(inEntry, name, inEntry.isDM(inUser));
               Command label =
                 new Divider("value-label-container back-"
                             + inEntry.getType().getName().replaceAll("\\s+",
@@ -183,6 +205,21 @@ public class AbstractPrint
               if(value != null)
                 result.add(new Value(inEntry.getType().getClassName(),  label,
                                      new Divider("value-content", value)));
+
+              break;
+
+            case '#':
+
+              AbstractExtension extension = null;
+              if(inEntry instanceof AbstractEntry)
+                extension = ((AbstractEntry)inEntry).getExtension(name);
+
+              if(extension == null)
+                Log.warning("cannot find extension " + name
+                            + " for printing");
+              else
+                result.add(new Section(name + " extension",
+                                       printExtension(extension, inUser)));
 
               break;
 
@@ -214,15 +251,15 @@ public class AbstractPrint
    * @return      the computed value or null if not found
    *
    */
-  public @Nullable ValueHandle compute(@Nonnull AbstractEntry inEntry,
+  public @Nullable ValueHandle compute(@Nonnull ValueGroup inEntry,
                                        @Nonnull String inName, boolean inDM)
   {
     switch(inName.charAt(0))
     {
       case '+':
         return new FormattedValue
-          (inEntry.combineBaseValues(inName.substring(1)), null, inName, inDM,
-           false, false, false, null, null);
+          (inEntry.combineBaseValues(inName.substring(1)), null, inName)
+          .withDM(inDM);
 
       default:
         return inEntry.computeValue(inName, inDM);

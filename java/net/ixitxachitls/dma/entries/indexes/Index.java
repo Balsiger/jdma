@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.entries.indexes;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -61,13 +62,15 @@ public class Index implements Serializable, Comparable<Index>
   /**
    * Create the index.
    *
+   * @param         inPath      the path to the index
    * @param         inTitle     the index title
    * @param         inType      the type of entries served
    *
    */
-  public Index(@Nonnull String inTitle,
+  public Index(@Nonnull Path inPath, @Nonnull String inTitle,
                AbstractType<? extends AbstractEntry> inType)
   {
+    m_path = inPath;
     m_title = inTitle;
     m_type = inType;
   }
@@ -196,83 +199,26 @@ public class Index implements Serializable, Comparable<Index>
   /** The prefix for index names. */
   public static final @Nonnull String PREFIX = "index-";
 
-  /** The name of the person index. */
-  public static final @Nonnull String PERSONS = "persons";
+  /** The available index paths. */
+  public enum Path
+  {
+    PERSONS, JOBS, DATES, AUDIENCES, PAGES, SYSTEMS, TYPES, STYLES,
+    PRODUCERS, SERIES, PRICES, PARTS, LAYOUTS, WORLDS, TITLES, VALUES,
+    WEIGHTS, PROBABILITIES, SIZES, HARDNESSES, HPS, SUBSTANCES, THICKNESSES,
+    BREAKS, CATEGORIES, DAMAGES, DAMAGE_TYPES, CRITICALS, THREATS, WEAPON_TYPES,
+    WEAPON_STYLES, PROFICIENCIES, RANGES, REACHES;
 
-  /** The name of the person index. */
-  public static final @Nonnull String JOBS = "jobs";
-
-  /** The name of the data index. */
-  public static final @Nonnull String DATES = "dates";
-
-  /** The name of the audience index. */
-  public static final @Nonnull String AUDIENCES = "audiences";
-
-  /** The name of the page index. */
-  public static final @Nonnull String PAGES = "pages";
-
-  /** The name of the systems index. */
-  public static final @Nonnull String SYSTEMS = "systems";
-
-  /** The name of the types index. */
-  public static final @Nonnull String TYPES = "types";
-
-  /** The name of the styles index. */
-  public static final @Nonnull String STYLES = "styles";
-
-  /** The name of the producers index. */
-  public static final @Nonnull String PRODUCERS = "producers";
-
-  /** The name of the series index. */
-  public static final @Nonnull String SERIES = "series";
-
-  /** The name of the prices index. */
-  public static final @Nonnull String PRICES = "prices";
-
-  /** The name of the parts index. */
-  public static final @Nonnull String PARTS = "parts";
-
-  /** The name of the layout index. */
-  public static final @Nonnull String LAYOUTS = "layouts";
-
-  /** The name of the world index. */
-  public static final @Nonnull String WORLDS = "worlds";
-
-  /** The name of the title index. */
-  public static final @Nonnull String TITLES = "titles";
-
-  /** The name of the value index. */
-  public static final @Nonnull String VALUES = "values";
-
-  /** The name of the weight index. */
-  public static final @Nonnull String WEIGHTS = "weights";
-
-  /** The name of the probability index. */
-  public static final @Nonnull String PROBABILITIES = "probabilities";
-
-  /** The name of the size index. */
-  public static final @Nonnull String SIZES = "sizes";
-
-  /** The name of the hardness index. */
-  public static final @Nonnull String HARDNESSES = "hardnesses";
-
-  /** The name of the hit point index. */
-  public static final @Nonnull String HIT_POINTS = "hps";
-
-  /** The name of the substance index. */
-  public static final @Nonnull String SUBSTANCES = "substances";
-
-  /** The name of the thickness index. */
-  public static final @Nonnull String THICKNESSES = "thicknesses";
-
-  /** The name of the break DC index. */
-  public static final @Nonnull String BREAK_DCS = "breaks";
-
-  /** The name of the category index. */
-  public static final @Nonnull String CATEGORIES = "categories";
+    public @Nonnull String getPath()
+    {
+      return toString().toLowerCase(Locale.US).replace("_", "");
+    }
+  }
 
   /** The joiner to put together the string for nested indexes. */
   private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
+
+  /** The index path. */
+  private @Nonnull Path m_path;
 
   /** The index title. */
   private @Nonnull String m_title;
@@ -332,6 +278,20 @@ public class Index implements Serializable, Comparable<Index>
 
   //........................................................................
 
+  //------------------------------- getType --------------------------------
+
+  /**
+   * Get the type of entries in this index.
+   *
+   * @return the type of entries
+   *
+   */
+  public String getPath()
+  {
+    return m_path.getPath();
+  }
+
+  //........................................................................
   //------------------------------- getType --------------------------------
 
   /**
@@ -536,6 +496,24 @@ public class Index implements Serializable, Comparable<Index>
   }
 
   //........................................................................
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Conver the index to a string for debugging.
+   *
+   * @return      the string representation
+   *
+   */
+  public @Nonnull String toString()
+  {
+    return m_title + " (" + m_path + "/" + m_type
+      + (m_images ? " with images" : "")
+      + (m_editable ? " is editable" : "")
+      + (m_paginated ? " is paginated" : "")
+      + ")";
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -556,7 +534,7 @@ public class Index implements Serializable, Comparable<Index>
     @org.junit.Test
     public void init()
     {
-      Index index = new Index("title",
+      Index index = new Index(Path.TITLES, "title",
                               net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseCharacter.TYPE,

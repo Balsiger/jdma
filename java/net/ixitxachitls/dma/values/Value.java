@@ -29,6 +29,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Color;
@@ -105,6 +107,7 @@ public abstract class Value<T extends Value> implements
     inNew.m_editType = m_editType;
     inNew.m_choices = m_choices;
     inNew.m_related = m_related;
+    inNew.m_indexBase = m_indexBase;
 
     return inNew;
   }
@@ -233,6 +236,42 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
+  //---------------------------- withIndexBase -----------------------------
+
+  /**
+   * Set the base url for a value index.
+   *
+   * @param       inBase the base url
+   *
+   * @return      the value itself for chaining
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withIndexBase(@Nonnull String inBase)
+  {
+    m_indexBase = inBase;
+    return (T)this;
+  }
+
+  //........................................................................
+  //---------------------------- withIndexBase -----------------------------
+
+  /**
+   * Set the base url for a value index.
+   *
+   * @param       inType the type for the url
+   *
+   * @return      the value itself for chaining
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withIndexBase
+    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    return withIndexBase("/" + inType.getMultipleLink() + "/");
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -259,6 +298,9 @@ public abstract class Value<T extends Value> implements
 
   /** The related values for editing. */
   protected @Nullable String m_related = null;
+
+  /** The index base, if any. */
+  protected @Nullable String m_indexBase = null;
 
   //........................................................................
 

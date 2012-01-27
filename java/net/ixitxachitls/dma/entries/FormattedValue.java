@@ -45,7 +45,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
-public class FormattedValue extends ValueHandle
+public class FormattedValue extends ValueHandle<FormattedValue>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -57,22 +57,12 @@ public class FormattedValue extends ValueHandle
    * @param       inFormatted      the formatted value
    * @param       inValue          the comnputed value (without formatting)
    * @param       inKey            the key of the value
-   * @param       inDM             true if the value is for dms only
-   * @param       inEditable       true if the value is editable
-   * @param       inPlayer         true if the value is for players only
-   * @param       inPlayerEditable true if the value can be edited by players
-   * @param       inPlural         the plural value of the key
-   * @param       inNote           a note for editing
    *
    */
   public FormattedValue(@Nullable Object inFormatted, @Nullable Object inValue,
-                        @Nonnull String inKey,
-                        boolean inDM, boolean inEditable, boolean inPlayer,
-                        boolean inPlayerEditable, @Nullable String inPlural,
-                        @Nullable String inNote)
+                        @Nonnull String inKey)
   {
-    super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
-          inNote);
+    super(inKey);
 
     m_formatted = inFormatted;
 
@@ -152,9 +142,8 @@ public class FormattedValue extends ValueHandle
     @org.junit.Test
     public void value()
     {
-      ValueHandle formatted =
-        new FormattedValue("formatted", "value", "key", false, true, false,
-                           false, null, null);
+      ValueHandle formatted = new FormattedValue("formatted", "value", "key")
+        .withEditable(true);
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("guru");
 

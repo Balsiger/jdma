@@ -464,9 +464,7 @@ public class BaseCharacter extends BaseEntry
 
     // make sure the current file is stored now
     changed();
-
-    if(m_file != null)
-      m_file.write();
+    save();
   }
 
   //........................................................................
@@ -537,8 +535,7 @@ public class BaseCharacter extends BaseEntry
       commands.add("| ");
       commands.add(new Link("view all", getPath() + "/products"));
 
-      return new FormattedValue(new Command(commands), null, "products", false,
-                                false, false, false, null, null);
+      return new FormattedValue(new Command(commands), null, "products");
     }
 
     return super.computeValue(inKey, inDM);
@@ -658,6 +655,7 @@ public class BaseCharacter extends BaseEntry
     //----- login ----------------------------------------------------------
 
     /** The login Test. */
+    @SuppressWarnings("unchecked") // conversion of name
     @org.junit.Test
     public void login()
     {

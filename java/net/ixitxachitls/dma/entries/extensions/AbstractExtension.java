@@ -32,11 +32,17 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Multimap;
+
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.Variables;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.ArrayIterator;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -127,16 +133,16 @@ public abstract class AbstractExtension<T extends AbstractEntry>
 
   //-------------------------------------------------------------- accessors
 
-  //------------------------------ getValues -------------------------------
+  //----------------------------- getVariables ------------------------------
 
   /**
    * Get the values possible for this group. This version also handles tags,
    * if they are present.
    *
-   * @return      all the values
+   * @return      all the variables
    *
    */
-  public Variables getValues()
+  public Variables getVariables()
   {
     // if(m_tag == null)
       return super.getVariables();
@@ -170,6 +176,36 @@ public abstract class AbstractExtension<T extends AbstractEntry>
       throw new UnsupportedOperationException
         ("Cannot access field " + inField.getName() + ": " + e);
     }
+  }
+
+  //........................................................................
+  //------------------------------- getType --------------------------------
+
+  /**
+   * Get the type of the entry.
+   *
+   * @return      the requested name
+   *
+   */
+  @Override
+  public @Nonnull AbstractType<? extends AbstractEntry> getType()
+  {
+    return m_entry.getType();
+  }
+
+  //........................................................................
+  //----------------------------- getEditType ------------------------------
+
+  /**
+   * Get the type of the entry.
+   *
+   * @return      the requested name
+   *
+   */
+  @Override
+  public @Nonnull String getEditType()
+  {
+    return m_entry.getEditType();
   }
 
   //........................................................................
@@ -303,6 +339,53 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   public static @Nonnull Iterator<String> getAutoExtensions(Class inClass)
   {
     return new ArrayIterator<String>(s_autoExtensions.get(inClass));
+  }
+
+  //........................................................................
+
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  public boolean isDM(@Nullable BaseCharacter inUser)
+  {
+    return m_entry.isDM(inUser);
+  }
+
+  //........................................................................
+
+  //------------------------- computeIndexValues ---------------------------
+
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @param       ioValues a multi map of values per index name
+   *
+   */
+  public abstract void computeIndexValues
+    (@Nonnull Multimap<Index.Path, String> ioValues);
+
+  //........................................................................
+  //-------------------------- combineBaseValues ---------------------------
+
+  /**
+   * Combine specific values of all base entries into a single command.
+   *
+   * @param      inName the name of the value to obtain
+   *
+   * @return     the command for printing the value
+   *
+   */
+  @Override
+  public @Nonnull Command combineBaseValues(@Nonnull String inName)
+  {
+    return m_entry.combineBaseValues(inName);
   }
 
   //........................................................................

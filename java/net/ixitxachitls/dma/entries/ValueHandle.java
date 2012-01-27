@@ -41,6 +41,8 @@ import net.ixitxachitls.output.commands.Editable;
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
+ * @param         <T> the final, derived type
+ *
  */
 
 //..........................................................................
@@ -48,7 +50,7 @@ import net.ixitxachitls.output.commands.Editable;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class ValueHandle
+public abstract class ValueHandle<T extends ValueHandle>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -58,38 +60,128 @@ public abstract class ValueHandle
    * Create the value handle.
    *
    * @param       inKey            the key of the value
-   * @param       inDM             true if the value is for dms only
-   * @param       inEditable       true if the value is editable
-   * @param       inPlayer         true if the value is for players only
-   * @param       inPlayerEditable true if the value can be edited by players
-   * @param       inPlural         the plural value of the key
-   * @param       inNote           a special note for editing the value
    *
    */
-  public ValueHandle(@Nonnull String inKey, boolean inDM, boolean inEditable,
-                     boolean inPlayer, boolean inPlayerEditable,
-                     @Nullable String inPlural, @Nullable String inNote)
+  public ValueHandle(@Nonnull String inKey)
   {
-    if(inDM && inPlayer)
-      throw new IllegalArgumentException
-        ("can't have value for DM and player only");
-
     m_key = inKey;
-    m_dm = inDM;
-    m_editable = inEditable;
-    m_player = inPlayer;
-    m_playerEditable = inPlayerEditable;
-
-    if(inPlural != null && !inPlural.isEmpty())
-      m_plural = inPlural;
-    else
-      m_plural = m_key + "s";
-
-    m_note = inNote;
+    m_plural = m_key + "s";
   }
 
   //........................................................................
 
+  //-------------------------------- withNote ------------------------------
+
+  /**
+   * Sets a note for editing the value.
+   *
+   * @param    inText the text of the note
+   *
+   * @return   the value handle for chaining
+   *
+   */
+  public @Nonnull T withNote(@Nullable String inText)
+  {
+    m_note = inText;
+    return (T)this;
+  }
+
+  //........................................................................
+  //------------------------------- withPlural -----------------------------
+
+  /**
+   * Sets the plural of the key of the value.
+   *
+   * @param    inPlural the plural key for displaying
+   *
+   * @return   the value handle for chaining
+   *
+   */
+  public @Nonnull T withPlural(@Nullable String inPlural)
+  {
+    if(inPlural == null)
+      m_plural = m_key + "s";
+    else
+      m_plural = inPlural;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //-------------------------- withPlayerEditable --------------------------
+
+  /**
+   * Sets the value as editable by players.
+   *
+   * @param    inPlayer true for playe editable, false for not
+   *
+   * @return   the value handle for chaining
+   *
+   */
+  public @Nonnull T withPlayerEditable(boolean inPlayer)
+  {
+    m_playerEditable = inPlayer;
+    return (T)this;
+  }
+
+  //........................................................................
+  //---------------------------- withPlayerOnly ----------------------------
+
+  /**
+   * Sets the value as for players only.
+   *
+   * @param    inPlayer true for playe value, false for all
+   *
+   * @return   the value handle for chaining
+   *
+   */
+  public @Nonnull T withPlayerOnly(boolean inPlayer)
+  {
+    if(inPlayer && m_dm)
+      throw new IllegalArgumentException("cannot set player only and dm");
+
+    m_player = inPlayer;
+    return (T)this;
+  }
+
+  //........................................................................
+  //-------------------------------- withDM --------------------------------
+
+  /**
+   * Sets the value as for dms only.
+   *
+   * @param    inDM true for dm value, false for all
+   *
+   * @return   the value handle for chaining
+   *
+   */
+  public @Nonnull T withDM(boolean inDM)
+  {
+    if(inDM && m_player)
+      throw new IllegalArgumentException("cannot set player only and dm");
+
+    m_dm = inDM;
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withEditable -----------------------------
+
+  /**
+   * Sets the value as being editable.
+   *
+   * @param    inEditable true for an editable value, false if not
+   *
+   * @return   the value handle for chaining
+   *
+   */
+  public @Nonnull T withEditable(boolean inEditable)
+  {
+    m_editable = inEditable;
+    return (T)this;
+  }
+
+  //........................................................................
   //----------------------------- withEditType -----------------------------
 
   /**
@@ -135,16 +227,16 @@ public abstract class ValueHandle
   protected @Nonnull String m_key;
 
   /** A flag denoting if the value is for DMs only. */
-  protected boolean m_dm;
+  protected boolean m_dm = false;
 
   /** A flag denoting if the value can be edited. */
-  protected boolean m_editable;
+  protected boolean m_editable = false;
 
   /** A flag denoting if the value is for players only. */
-  protected boolean m_player;
+  protected boolean m_player = false;
 
   /** A flag denoting if the value is for editable by players. */
-  protected boolean m_playerEditable;
+  protected boolean m_playerEditable = false;
 
   /** A string with the plural of the key. */
   protected @Nonnull String m_plural;
@@ -217,7 +309,7 @@ public abstract class ValueHandle
 
     if(inEdit && m_editable && (inDM || m_playerEditable))
       return new Editable(inEntry.getID(),
-                          ((AbstractEntry)inEntry).getEditType(),
+                          inEntry.getEditType(),
                           formatted, m_key, edit, type, note,
                           choices, related);
 
@@ -363,22 +455,12 @@ public abstract class ValueHandle
        * Create the value handle.
        *
        * @param   inKey            the key of the value
-       * @param   inDM             true if the value is for dms only
-       * @param   inEditable       true if the value can be edited
-       * @param   inPlayer         true if the value is for players only
-       * @param   inPlayerEditable true if the value can be edited by players
-       * @param   inPlural         the plural value of the key
-       * @param   inNote           a note for editing, if any
        * @param   inValue          the value to return for value()
        *
        */
-      TestHandle(@Nonnull String inKey, boolean inDM, boolean inEditable,
-                 boolean inPlayer, boolean inPlayerEditable,
-                 @Nullable String inPlural, @Nullable String inNote,
-                 Object inValue)
+      TestHandle(@Nonnull String inKey, Object inValue)
       {
-        super(inKey, inDM, inEditable, inPlayer, inPlayerEditable, inPlural,
-              inNote);
+        super(inKey);
 
         m_value = inValue;
       }
@@ -405,16 +487,19 @@ public abstract class ValueHandle
     @org.junit.Test
     public void init()
     {
-      ValueHandle handle =
-        new TestHandle("test", true, true, false, false, null, null, null);
+      ValueHandle handle = new TestHandle("test", null)
+        .withDM(true)
+        .withEditable(true);
 
       assertEquals("plural", "tests", handle.getPluralKey());
       assertTrue("dm", handle.isDMOnly());
       assertFalse("player", handle.isPlayerOnly());
       assertFalse("editable", handle.isPlayerEditable());
 
-      handle =
-        new TestHandle("test", false, true, true, true, "more", null, null);
+      handle = new TestHandle("test", null)
+        .withPlayerEditable(true)
+        .withPlayerOnly(true)
+        .withEditable(true);
 
       assertEquals("plural", "more", handle.getPluralKey());
       assertFalse("dm", handle.isDMOnly());
@@ -431,16 +516,19 @@ public abstract class ValueHandle
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test id");
-      ValueHandle handle =
-        new TestHandle("test", true, true, false, false, null, null, "value");
+      ValueHandle handle = new TestHandle("test", "value")
+        .withDM(true)
+        .withEditable(true);
       assertNull("null", handle.format(entry, false, false));
 
-      handle = new TestHandle("test", false, true, true, false, null, null,
-                              "value");
+      handle = new TestHandle("test", "value")
+        .withPlayerOnly(true)
+        .withEditable(true);
       assertNull("player only for dm", handle.format(entry, true, false));
 
-      handle = new TestHandle("test", true, true, false, false, null, null,
-                              "value");
+      handle = new TestHandle("test", "value")
+        .withDM(true)
+        .withEditable(true);
       assertNull("dm only for player", handle.format(entry, false, false));
     }
 
@@ -453,17 +541,19 @@ public abstract class ValueHandle
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test id");
-      ValueHandle handle =
-        new TestHandle("test", true, true, false, false, null, null,
-                       "string value");
+      ValueHandle handle = new TestHandle("test", "string value")
+        .withDM(true)
+        .withEditable(true);
 
       assertEquals("string value",
                    "\\editable{test id}{base entry}{string value}{test}"
                    + "{string value}{string}",
                    handle.format(entry, true, true).toString());
 
-      handle = new TestHandle("test", true, true, false, false, null, null,
-                              new net.ixitxachitls.dma.values.Name("name"));
+      handle =
+        new TestHandle("test", new net.ixitxachitls.dma.values.Name("name"))
+        .withDM(true)
+        .withEditable(true);
 
       assertEquals("name value",
                    "\\editable{test id}{base entry}{name}{test}{name}{name}",
@@ -479,16 +569,20 @@ public abstract class ValueHandle
     {
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test id");
-      ValueHandle handle =
-        new TestHandle("test", true, true, false, false, null, null, "value");
+      ValueHandle handle = new TestHandle("test", "value")
+        .withDM(true)
+        .withEditable(true);
       assertEquals("string value", "value", handle.format(entry, true, false));
 
-      handle =
-        new TestHandle("test", false, true, true, false, null, null, "value");
+      handle = new TestHandle("test", "value")
+        .withPlayerOnly(true)
+        .withEditable(true);
       assertEquals("string value", "value", handle.format(entry, false, true));
 
-      handle = new TestHandle("test", false, true, true, false, null, null,
-                              new net.ixitxachitls.dma.values.Name("name"));
+      handle =
+        new TestHandle("test", new net.ixitxachitls.dma.values.Name("name"))
+        .withPlayerOnly(true)
+        .withEditable(true);
       assertEquals("name value", "name",
                    handle.format(entry, false, true).toString());
     }

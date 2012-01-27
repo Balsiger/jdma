@@ -747,8 +747,7 @@ public class BaseEntry extends AbstractEntry
       return new FormattedValue
         (new Divider("short-description",
                      computeValue("_short description", inDM)
-                     .format(this, inDM, true)),
-         null, "short-desc", false, false, false, false, "short-desc", "");
+                     .format(this, inDM, true)), null, "short-desc");
 
     return super.computeValue(inKey, inDM);
   }
