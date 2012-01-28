@@ -23,8 +23,6 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.util.Locale;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;

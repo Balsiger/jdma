@@ -81,3 +81,41 @@ base item with weapon Club =
   categories        mace.
 
 #.....
+#----- Gauntlet
+
+base item with weapon, wearable Gauntlet =
+
+  damage            1d3;
+  weapon type       Bludgeoning;
+  critical          x2;
+  weapon style      Light Melee;
+  proficiency       Simple;
+  range increment   10 ft;
+  reach             5 ft;
+  slot              Hand;
+  value             2 gp;
+  weight            1 lb;
+  probability       Rare;
+  size              Tiny;
+  hardness          10;
+  hp                1;
+  appearances       Very Rare "A shiny, ornamented metal gauntlet.",
+                    Uncommon "A polished metal gauntlet.",
+                    Common "A simple metal gauntlet.",
+                    Rare "A slightly dented metal gauntlet.",
+                    Very Rare "A slightly rusty metal gauntlet.";
+  substance         steel 1/15 in;
+  player name       "Gauntlet";
+  worlds            Generic;
+  references        WTC 17524: 117-119;
+  description
+  "This metal glove protects your hands and lets you deal lethal damage rather
+  than nonlethal damage with unarmed strikes.  A strike with a gauntlet is
+  otherwise considered an unarmed attack. The cost and weight given are for a
+  single gauntlet. Medium and heavy armors (except breastplate) come with
+  gauntlets.";
+  categories        clothing,
+                    armor,
+                    unarmed.
+
+#.....

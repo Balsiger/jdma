@@ -29,7 +29,6 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -503,7 +502,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   static
   {
-    //setAutoExtensions(BaseWeapon.class, "weapon", "wearable");
+    setAutoExtensions(BaseWeapon.class, "weapon", "wearable");
     extractVariables(BaseItem.class, BaseWeapon.class);
   }
 

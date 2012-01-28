@@ -204,12 +204,7 @@ public class Distance extends Units<Distance>
     if(m_set == m_sets[1])
       return this;
 
-    Distance result = new Distance();
-
-    result.m_set    = m_sets[1];
-    result.m_values = toSet(1, true).m_values;
-
-    return result;
+    return toSet(1, true);
   }
 
   //........................................................................
@@ -226,12 +221,7 @@ public class Distance extends Units<Distance>
     if(m_set == m_sets[0])
       return this;
 
-    Distance result = new Distance();
-
-    result.m_set     = m_sets[0];
-    result.m_values  = toSet(0, true).m_values;
-
-    return result;
+    return toSet(0, true);
   }
 
   //........................................................................

@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.Changeable;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.Variable;
 import net.ixitxachitls.dma.values.Value;
 
@@ -141,7 +142,26 @@ public class ExtensionVariable extends Variable
   }
 
   //........................................................................
+  //----------------------------- hasVariable ------------------------------
 
+  /**
+   * Checks if the given entry has this variable.
+   *
+   * @param       inEntry the entry to check
+   *
+   * @return      true if the variable is there, false if not
+   *
+   */
+  @Override
+  public boolean hasVariable(@Nonnull ValueGroup inEntry)
+  {
+    if(inEntry instanceof AbstractEntry)
+      return ((AbstractEntry)inEntry).hasExtension(m_extension);
+
+    return m_extension.isAssignableFrom(inEntry.getClass());
+  }
+
+  //........................................................................
 
   //------------------------------- toString -------------------------------
 

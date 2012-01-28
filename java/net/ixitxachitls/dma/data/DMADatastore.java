@@ -866,8 +866,8 @@ public class DMADatastore implements DMAData
     T entry = inType.create(inID);
     if(entry == null)
     {
-      Log.warning("cannot convert " + inType + " entity with id " + inID + ": "
-                  + inEntity);
+      Log.warning("cannot create conversion " + inType + " entity with id "
+                  + inID + ": " + inEntity);
       return null;
     }
 
@@ -906,7 +906,7 @@ public class DMADatastore implements DMAData
       else
         rest = entry.set(name, value.toString());
 
-      if(rest != null)
+      if(rest != null && !rest.isEmpty())
         Log.warning("could not fully set value for " + name + ": " + rest);
     }
 
@@ -932,7 +932,11 @@ public class DMADatastore implements DMAData
       AbstractType.getTyped(key.getKind());
 
     if(type == null || id == null)
+    {
+      Log.warning("cannot properly extract type or id: " + type + "/" + id
+                  + " - " + key);
       return null;
+    }
 
     return convert(id, type, inEntity);
   }

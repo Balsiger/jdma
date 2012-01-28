@@ -1462,13 +1462,13 @@ public class AbstractEntry extends ValueGroup
     result.append(m_type);
     result.append(' ');
 
-//     if(m_attachments.size() > 0)
-//     {
-//       result.append("with ");
-//       result.append(Strings.toString(m_attachments.keySet(), ", ",
-//                                      "incomplete"));
-//       result.append(" ");
-//     }
+    if(m_extensions.size() > 0)
+    {
+      result.append("with ");
+      result.append(Strings.toString(m_extensions.keySet(), ", ",
+                                     "incomplete"));
+      result.append(" ");
+    }
 
     result.append(m_name);
     result.append(' ');
@@ -1547,25 +1547,6 @@ public class AbstractEntry extends ValueGroup
 
     return values;
   }
-
-  //........................................................................
-
-  //------------------------------ asCommand -------------------------------
-
-  /**
-   * Get the commands used for printing this entry.
-   *
-   * @param       inDM      true if to get values for the DM, false else
-   * @param       inValues  comma seperated list of names to print for values
-   *
-   * @return      a command to print the entry as requested
-   *
-   */
-//   public Command asCommand(boolean inDM, String inValues)
-//   {
-//     return new Command(printCommand(inDM, true).asCommands(inDM, inValues)
-//                        .toArray());
-//   }
 
   //........................................................................
 

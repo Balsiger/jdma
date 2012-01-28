@@ -991,10 +991,6 @@ public class BaseItem extends BaseEntry
   {
     // set the possible values
     extractVariables(BaseItem.class);
-
-    // reference a static variable to get the extensions properly initialized
-    Print print =
-      net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint;
   }
 
   //........................................................................

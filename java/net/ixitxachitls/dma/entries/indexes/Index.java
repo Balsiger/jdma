@@ -202,12 +202,19 @@ public class Index implements Serializable, Comparable<Index>
   /** The available index paths. */
   public enum Path
   {
+    // CHECKSTYLE:OFF
     PERSONS, JOBS, DATES, AUDIENCES, PAGES, SYSTEMS, TYPES, STYLES,
     PRODUCERS, SERIES, PRICES, PARTS, LAYOUTS, WORLDS, TITLES, VALUES,
     WEIGHTS, PROBABILITIES, SIZES, HARDNESSES, HPS, SUBSTANCES, THICKNESSES,
     BREAKS, CATEGORIES, DAMAGES, DAMAGE_TYPES, CRITICALS, THREATS, WEAPON_TYPES,
-    WEAPON_STYLES, PROFICIENCIES, RANGES, REACHES;
+    WEAPON_STYLES, PROFICIENCIES, RANGES, REACHES, SLOTS, DONS, REMOVES;
+    // CHECKSTYLE:ON
 
+    /**
+     * Get the path to this index.
+     *
+     * @return the path to the index
+     */
     public @Nonnull String getPath()
     {
       return toString().toLowerCase(Locale.US).replace("_", "");

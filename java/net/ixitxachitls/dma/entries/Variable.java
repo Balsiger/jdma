@@ -178,6 +178,23 @@ public class Variable extends ValueHandle<Variable>
 
   //........................................................................
 
+  //----------------------------- hasVariable ------------------------------
+
+  /**
+   * Checks if the given entry has this variable. A base variable always is
+   * present in an entry.
+   *
+   * @param       inEntry the entry to check
+   *
+   * @return      true if the variable is there, false if not
+   *
+   */
+  public boolean hasVariable(@Nonnull ValueGroup inEntry)
+  {
+    return true;
+  }
+
+  //........................................................................
   //------------------------------- hasValue -------------------------------
 
   /**

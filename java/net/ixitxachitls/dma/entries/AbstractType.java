@@ -209,7 +209,7 @@ public abstract class AbstractType<T extends AbstractEntry>
   static
   {
     // adding base character here adds a null pointer, breaking things
-    // s_all.add(net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
+    //s_all.add(net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.BaseItem.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.BaseProduct.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.Product.TYPE);

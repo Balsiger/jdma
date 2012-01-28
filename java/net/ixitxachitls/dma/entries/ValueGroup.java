@@ -1747,6 +1747,9 @@ public abstract class ValueGroup implements Changeable
       if(!var.isStored())
         continue;
 
+      if(!var.hasVariable(this))
+        continue;
+
       Value value = var.get(this);
 
       // We don't store this if we don't have a value.

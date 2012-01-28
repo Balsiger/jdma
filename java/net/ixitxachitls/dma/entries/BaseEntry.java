@@ -343,6 +343,13 @@ public class BaseEntry extends AbstractEntry
   static
   {
     extractVariables(BaseEntry.class);
+
+    // reference a static variable to get the extensions properly initialized,
+    // to prevent a circual initialization, we can't do it in BaseItem.
+    net.ixitxachitls.dma.output.Print print =
+       net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint;
+    // print =
+    //    net.ixitxachitls.dma.entries.extensions.BaseWearable.s_pagePrint;
   }
 
   //........................................................................
