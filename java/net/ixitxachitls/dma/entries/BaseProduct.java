@@ -1269,11 +1269,12 @@ public class BaseProduct extends BaseEntry
     extractVariables(BaseProduct.class);
   }
 
-  //----- worlds index -----------------------------------------------------
+  //----- special indexes -------------------------------------------------
 
   static
   {
     addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE).withImages());
+    addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
   }
 
   //........................................................................

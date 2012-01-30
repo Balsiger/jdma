@@ -243,6 +243,11 @@ admin.resetIndexes = function(inType)
   util.ajax('/admin', { 'reset': inType }, null, true);
 };
 
+admin.clearCache = function()
+{
+  util.ajax('/admin', { 'cache': 'clear' }, null, true);
+}
+
 //..........................................................................
 
 

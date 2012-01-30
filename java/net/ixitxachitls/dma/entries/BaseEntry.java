@@ -29,6 +29,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Multimap;
+
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
@@ -43,6 +46,7 @@ import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.util.configuration.Config;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -145,6 +149,8 @@ public class BaseEntry extends AbstractEntry
   protected BaseEntry(@Nonnull AbstractType<? extends BaseEntry> inType)
   {
     super(inType);
+
+    ensureExtensions();
   }
 
   //........................................................................
@@ -175,6 +181,8 @@ public class BaseEntry extends AbstractEntry
                       @Nonnull AbstractType<? extends BaseEntry> inType)
   {
     super(inName, inType);
+
+    ensureExtensions();
   }
 
   //........................................................................
@@ -204,6 +212,9 @@ public class BaseEntry extends AbstractEntry
   /** The type of this entry. */
   public static final BaseType<BaseEntry> TYPE =
     new BaseType<BaseEntry>(BaseEntry.class, "Base Entries");
+
+  /** Flag if extensions are initialized. */
+  private static boolean s_extensionsInitialized = false;
 
   /** The basic formatter for base entries. */
 //   public static final Index.Formatter<AbstractEntry> FORMATTER =
@@ -343,13 +354,6 @@ public class BaseEntry extends AbstractEntry
   static
   {
     extractVariables(BaseEntry.class);
-
-    // reference a static variable to get the extensions properly initialized,
-    // to prevent a circual initialization, we can't do it in BaseItem.
-    net.ixitxachitls.dma.output.Print print =
-       net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint;
-    // print =
-    //    net.ixitxachitls.dma.entries.extensions.BaseWearable.s_pagePrint;
   }
 
   //........................................................................
@@ -599,22 +603,15 @@ public class BaseEntry extends AbstractEntry
    *
    * @param       inName the name of the base product reference
    *
-   * @return      the title of the base product, if found
+   * @return      the base product referenced, if found
    *
    */
-//   protected String resolveReference(@Nonnull String inName)
-//   {
-//     BaseEntry base =
-//       BaseCampaign.GLOBAL.getBaseEntry(inName, BaseProduct.TYPE);
-
-//     if(base == null)
-//       return inName;
-
-//     return base.getRefName();
-//   }
+  protected @Nullable BaseProduct resolveReference(@Nonnull String inName)
+  {
+    return m_data.getEntry(inName, BaseProduct.TYPE);
+  }
 
   //........................................................................
-
   //---------------------------- getDescription ----------------------------
 
   /**
@@ -657,15 +654,30 @@ public class BaseEntry extends AbstractEntry
    * @return      the references
    *
    */
-//   public String []getReferences()
-//   {
-//     ArrayList<String> result = new ArrayList<String>();
+  public @Nonnull List<String> getReferences()
+  {
+    List<String> result = new ArrayList<String>();
 
-//     for(Multiple value : m_references.getHigh())
-//       result.add(((Text)value.get(0).get()).get());
+    // TODO: must include base entries here!
+    for(Multiple reference : m_references)
+      if(reference.isDefined() && reference.get(0).isDefined())
+      {
+        String name = reference.get(0).toString();
+        BaseProduct product = resolveReference(name);
+        if(product == null)
+          result.add(name);
+        else
+        {
+          String title = product.getTitle();
+          if(name.equals(title))
+            result.add(title);
+          else
+            result.add(product.getTitle() + " (" + name + ")");
+        }
+      }
 
-//     return result.toArray(new String[0]);
-//   }
+    return result;
+  }
 
   //........................................................................
   //----------------------------- getCategories ----------------------------
@@ -777,6 +789,25 @@ public class BaseEntry extends AbstractEntry
                      .format(this, inDM, true)), null, "short-desc");
 
     return super.computeValue(inKey, inDM);
+  }
+
+  //-------------------------- computeIndexValues --------------------------
+
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @return      a multi map of values per index name
+   *
+   */
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    for(String reference : getReferences())
+      values.put(Index.Path.REFERENCES, reference);
+
+    return values;
   }
 
   //........................................................................
@@ -1162,6 +1193,30 @@ public class BaseEntry extends AbstractEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //--------------------------- ensureExtensions ---------------------------
+
+  /**
+   * Ensure that extensions are properly initialized.
+   *
+   */
+  private void ensureExtensions()
+  {
+    // Since we have to prevent initialization loops, we load up extensions
+    // here in a non-static context.
+    if(!s_extensionsInitialized)
+    {
+      s_extensionsInitialized = true;
+      net.ixitxachitls.dma.output.Print print =
+        net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint;
+
+      if(print == null)
+        Log.warning("could not properly ensure extensions");
+    }
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------------------------- test

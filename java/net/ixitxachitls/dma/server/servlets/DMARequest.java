@@ -516,7 +516,7 @@ public class DMARequest extends HttpServletRequestWrapper
     }
 
     String override = getParam("user");
-    if(override != null)
+    if(override != null && !override.isEmpty())
       m_userOverride = m_base.getEntry(override, BaseCharacter.TYPE);
 
     m_extractedUser = true;

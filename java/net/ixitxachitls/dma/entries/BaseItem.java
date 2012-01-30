@@ -995,12 +995,13 @@ public class BaseItem extends BaseEntry
 
   //........................................................................
 
-  //----- worlds index -----------------------------------------------------
+  //----- special indexes --------------------------------------------------
 
   static
   {
     addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
     addIndex(new Index(Index.Path.CATEGORIES, "Categories", TYPE));
+    addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
   }
 
   //........................................................................
@@ -1285,6 +1286,7 @@ public class BaseItem extends BaseEntry
    * @return      a multi map of values per index name
    *
    */
+  @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();

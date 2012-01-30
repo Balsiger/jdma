@@ -34,10 +34,13 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Encodings;
@@ -128,6 +131,18 @@ public class AdminServlet extends BaseServlet
 
     DMARequest request = (DMARequest)inRequest;
 
+    BaseCharacter user = request.getUser();
+    if(user == null || !user.hasAccess(BaseCharacter.Group.ADMIN))
+    {
+      if(user == null)
+        Log.warning("admin request with login");
+      else
+        Log.warning("admin request by non-admin " + user.getName());
+
+      return new TextError(HttpServletResponse.SC_FORBIDDEN,
+                           "action not allowed");
+    }
+
     String reset = request.getParam("reset");
     if(reset != null)
     {
@@ -141,6 +156,21 @@ public class AdminServlet extends BaseServlet
       PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
       writer.println("gui.info('The indexes for " + reset
                      + " have been rebuilt! " + size + " entries updated.');");
+      writer.close();
+      Log.event(user.getName(), "admin index reset",
+                "index " + reset + " was reset for " + size + " entries");
+      return null;
+    }
+
+    String cache = request.getParam("cache");
+    if(cache != null)
+    {
+      MemcacheServiceFactory.getMemcacheService().clearAll();
+      Log.event(user.getName(), "admin clear cache",
+                "All caches have been cleared");
+
+      PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
+      writer.println("gui.info('All the caches have been cleared');");
       writer.close();
       return null;
     }
@@ -169,6 +199,9 @@ public class AdminServlet extends BaseServlet
 
     writer
       .end("select")
+      .begin("h2").add("DMA Caches").end("h2")
+      .begin("a").onClick("admin.clearCache()").add("Clear all DMA caches")
+      .end("a")
       .begin("h2").add("Recent Events").end("h2")
       .begin("div").id("admin-events").end("div")
       .begin("select").classes("admin-button")
