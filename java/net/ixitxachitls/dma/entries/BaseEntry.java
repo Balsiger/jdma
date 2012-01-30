@@ -538,6 +538,26 @@ public class BaseEntry extends AbstractEntry
 //   }
 
   //........................................................................
+  //--------------------------- getReferenceIDs ----------------------------
+
+  /**
+   * Get the ids of the reference for this entry.
+   *
+   * @return      a list of the reference ids
+   *
+   */
+  public @Nonnull List<String> getReferenceIDs()
+  {
+    List<String> ids = new ArrayList<String>();
+    for(Multiple reference : m_references)
+      if(reference.isDefined())
+        ids.add(reference.get(0).toString());
+
+    return ids;
+  }
+
+  //........................................................................
+
   //----------------------------- getReference -----------------------------
 
   /**

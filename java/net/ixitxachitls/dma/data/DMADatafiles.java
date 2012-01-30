@@ -313,7 +313,7 @@ public class DMADatafiles implements DMAData
     DMADatafiles data =
       new DMADatafiles(Files.concatenate(getPath(),
                                          Product.TYPE.getMultipleDir()),
-                       inUser.getID() + ".dma");
+                       inUser.getName() + ".dma");
 
     data.read();
 
@@ -643,7 +643,7 @@ public class DMADatafiles implements DMAData
    */
   public boolean update(@Nonnull AbstractEntry inEntry)
   {
-    if(hasEntry(inEntry.getID(), inEntry.getType()))
+    if(hasEntry(inEntry.getName(), inEntry.getType()))
       return save();
 
     return add(inEntry, true);
@@ -707,7 +707,7 @@ public class DMADatafiles implements DMAData
     if(inEntry instanceof Entry)
     {
       Entry entry = (Entry)inEntry;
-      String id = entry.getID();
+      String id = entry.getName();
 
       if(Config.get("web.data.datastore", true) && entries.containsKey(id))
         Log.warning("duplicate id detected for '" + id
@@ -717,13 +717,13 @@ public class DMADatafiles implements DMAData
         {
           entry.randomID();
           String oldID = id;
-          id = entry.getID();
+          id = entry.getName();
           Log.warning("duplicate id detected for '" + oldID
                       + "', setting new id to '" + id + "'");
         }
     }
 
-    entries.put(inEntry.getID(), inEntry);
+    entries.put(inEntry.getName(), inEntry);
   }
 
   //........................................................................
@@ -750,13 +750,13 @@ public class DMADatafiles implements DMAData
 
     List<File> files = new ArrayList<File>();
     files.add(new File("main", "image/png",
-                       DMAFiles.mainImage(inEntry.getID(),
+                       DMAFiles.mainImage(inEntry.getName(),
                                           inEntry.getType().getMultipleDir(),
                                           baseType, baseNames),
-                       DMAFiles.mainImage(inEntry.getID(),
+                       DMAFiles.mainImage(inEntry.getName(),
                                           inEntry.getType().getMultipleDir(),
                                           baseType, baseNames)));
-    for(String file : DMAFiles.otherFiles(inEntry.getID(),
+    for(String file : DMAFiles.otherFiles(inEntry.getName(),
                                           inEntry.getType().getMultipleDir(),
                                           baseType, baseNames))
       // TODO: this is actually not always the right type.
@@ -858,7 +858,7 @@ public class DMADatafiles implements DMAData
       {
         if(!computeFile(entry).equals(inPrefix + file.getStorageName()))
         {
-          Log.error("file mismatch for " + entry.getID() + " : "
+          Log.error("file mismatch for " + entry.getName() + " : "
                     + computeFile(entry) + " <=> "
                     + inPrefix + file.getStorageName());
 
@@ -981,6 +981,15 @@ public class DMADatafiles implements DMAData
          || product.getSystem() == BaseProduct.System.D20_MODERN
          || product.getSystem() == BaseProduct.System.SWORD_SORCERY)
         return dir + "/d20.dma";
+    }
+
+    if(inEntry instanceof BaseEntry)
+    {
+      // use the first reference for the file name
+      BaseEntry entry = (BaseEntry)inEntry;
+      List<String> references = entry.getReferenceIDs();
+      if(!references.isEmpty())
+        return dir + "/" + references.get(0) + ".dma";
     }
 
     return dir + "/" + dir + ".dma";
