@@ -105,7 +105,7 @@ public class BaseLight extends BaseExtension<BaseItem>
   //----- bright light -----------------------------------------------------
 
   /** The formatter for light failure. */
-  protected static Formatter<Multiple> s_lightFormatter =
+  protected static final Formatter<Multiple> s_lightFormatter =
     new LinkFormatter<Multiple>("/items/lights/");
 
   /** The grouping for bright light. */
@@ -123,15 +123,15 @@ public class BaseLight extends BaseExtension<BaseItem>
       }, "$undefined$");
 
   /** The formatter to get a space (before). */
-  protected static Formatter<Distance> s_spaceFormatterD =
+  protected static final Formatter<Distance> s_spaceFormatterD =
     new DelimFormatter<Distance>(" ", null);
 
   /** The formatter for the space (before). */
-  protected static Formatter<Distance> s_spaceFormatter =
+  protected static final Formatter<Distance> s_spaceFormatter =
     new DelimFormatter<Distance>(" ", null);
 
   /** The formatter to get a space (after). */
-  protected static Formatter<Distance> s_spaceAfterFormatter =
+  protected static final Formatter<Distance> s_spaceAfterFormatter =
     new DelimFormatter<Distance>(null, " ");
 
   /** The light radius. */

@@ -29,7 +29,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -128,6 +130,21 @@ public class LogoutServlet extends LoginServlet
   /** The tests. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
+    /** Setup before tests. */
+    @org.junit.Before
+    public void setUp()
+    {
+      Config.set("web.data.datastore", false);
+      Config.set("web.data.datafiles", false);
+    }
+
+    /** Cleanup after tests. */
+    @org.junit.After
+    public void tearDown()
+    {
+      DMADataFactory.clearBase();
+    }
+
     //----- logout ---------------------------------------------------------
 
     /**
