@@ -128,7 +128,7 @@ public class DMADatastore implements DMAData
   private static final Joiner s_keyJoiner = Joiner.on(":");
 
   /** Experiation time for the cache. */
-  private static Expiration s_expiration = Expiration.byDeltaSeconds(10 * 60);
+  private static Expiration s_expiration = Expiration.byDeltaSeconds(60 * 60);
 
   /** Long experiation time for the cache. */
   private static Expiration s_longExpiration =
