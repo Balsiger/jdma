@@ -24,12 +24,10 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
-import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -550,24 +548,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
-  }
-
-  //........................................................................
-   //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    return super.computeValue(inKey, inDM);
   }
 
   //........................................................................

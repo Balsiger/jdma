@@ -1207,11 +1207,11 @@ public class BaseEntry extends AbstractEntry
     if(!s_extensionsInitialized)
     {
       s_extensionsInitialized = true;
-      net.ixitxachitls.dma.output.Print print =
-        net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint;
-
-      if(print == null)
-        Log.warning("could not properly ensure extensions");
+      if(net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint == null)
+        Log.warning("could not properly initialize base weapon extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseWearable.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base wearable extension");
     }
   }
 

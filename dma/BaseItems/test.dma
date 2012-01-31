@@ -93,6 +93,8 @@ base item with weapon, wearable Gauntlet =
   range increment   10 ft;
   reach             5 ft;
   slot              Hand;
+  don               4 rounds/2 rounds;
+  remove            1 round;
   value             2 gp;
   weight            1 lb;
   probability       Rare;

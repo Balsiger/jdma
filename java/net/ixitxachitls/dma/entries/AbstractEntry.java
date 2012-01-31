@@ -1503,8 +1503,6 @@ public class AbstractEntry extends ValueGroup
     boolean first = true;
 
     int width = getKeyWidth();
-//     for(AbstractAttachment attachment : m_attachments.values())
-//       first = attachment.formatValues(result, first, width);
 
     formatValues(result, first, width);
 
