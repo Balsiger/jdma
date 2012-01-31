@@ -270,13 +270,13 @@ public class Variables implements Iterable<Variable>
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
         new Variables(new Variable("1234", field, false, false)
-                      .withEditable(true),
+                      .withDM(true),
                       new Variable("123456", field, false, false)
-                      .withEditable(true),
+                      .withDM(true),
                       new Variable("123", field, false, false)
-                      .withEditable(true),
+                      .withDM(true),
                       new Variable("1", field, false, false)
-                      .withEditable(true));
+                      .withDM(true));
 
       assertEquals("width", 7, variables.getKeyWidth());
       assertEquals("string",
@@ -302,13 +302,13 @@ public class Variables implements Iterable<Variable>
         Variables.Test.class.getDeclaredField("m_field");
       Variables variables =
         new Variables(new Variable("1234", field, false, false)
-                      .withEditable(true),
+                      .withDM(true),
                       new Variable("123456", field, false, false)
-                      .withEditable(true),
+                      .withDM(true),
                       new Variable("123", field, false, false)
-                      .withEditable(true),
+                      .withDM(true),
                       new Variable("1", field, false, false)
-                      .withEditable(true));
+                      .withDM(true));
 
       assertEquals("variable", "1234", variables.getVariable("1234").getKey());
       assertNull("not found", variables.getVariable("guru"));

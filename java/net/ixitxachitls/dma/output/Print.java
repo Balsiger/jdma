@@ -210,7 +210,11 @@ public class Print extends AbstractPrint
       assertEquals("printing",
                    "[start , \\color{error}{ * first * },  , "
                    + "\\title[entrytitle]"
-                   + "{test},  middle , "
+                   + "{\\editable[Changing the name will not change "
+                   + "any references to entries with that name, thus leaving "
+                   + "these references dangling. You will have to update these "
+                   + "manually.]{test}{base entry}{test}{name}{test}{name}}"
+                   + ",  middle , "
                    + "\\editable{test}{base entry}"
                    + "{\\baseCommand{desc}}{description}"
                    + "{\"desc\"}{formatted},  the end]",

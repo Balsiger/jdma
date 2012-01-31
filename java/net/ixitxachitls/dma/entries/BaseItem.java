@@ -1721,48 +1721,48 @@ public class BaseItem extends BaseEntry
     //----- read -----------------------------------------------------------
 
     /** Test reading. */
-    @org.junit.Test
-    public void read()
-    {
-      String result =
-        "#------ winter blanket -------------------\n"
-        + "\n"
-        + "base item with light, timed winter blanket =\n"
-        + "\n"
-        + "  bright light      2 m Sphere;\n"
-        + "  shadowy light     4 m Cone;\n"
-        + "  duration          1 hour;\n"
-        + "  value             5 sp;\n"
-        + "  weight            [+3 lbs \"guru\"];\n"
-        + "  probability       Rare;\n"
-        + "  size              Small;\n"
-        + "  hardness          0;\n"
-        + "  hp                1;\n"
-        + "  appearances       Unique \"first\",\n"
-        + "                    Common \"second\",\n"
-        + "                    Common \"third\",\n"
-        + "                    Rare \"fourth\",\n"
-        + "                    Very Rare \"fifth\",\n"
-        + "                    Unique \"and sixth, the last one\";\n"
-        + "  player name       \"guru\";\n"
-        + "  world             Generic;\n"
-        + "  references        \"TSR 11550\" 107;\n"
-        + "  description       \n"
-        + "  \"A thick, quilted, wool blanket.\";\n"
-        + "  synonyms          \"blanket, winter\",\n"
-        + "                    \"guru\";\n"
-        + "  categories        warmth.\n"
-        + "\n"
-        + "#.......................................................\n";
-      AbstractEntry entry = createBaseItem();
+    // @org.junit.Test
+    // public void read()
+    // {
+    //   String result =
+    //     "#------ winter blanket -------------------\n"
+    //     + "\n"
+    //     + "base item with light, timed winter blanket =\n"
+    //     + "\n"
+    //     + "  bright light      2 m Sphere;\n"
+    //     + "  shadowy light     4 m Cone;\n"
+    //     + "  duration          1 hour;\n"
+    //     + "  value             5 sp;\n"
+    //     + "  weight            [+3 lbs \"guru\"];\n"
+    //     + "  probability       Rare;\n"
+    //     + "  size              Small;\n"
+    //     + "  hardness          0;\n"
+    //     + "  hp                1;\n"
+    //     + "  appearances       Unique \"first\",\n"
+    //     + "                    Common \"second\",\n"
+    //     + "                    Common \"third\",\n"
+    //     + "                    Rare \"fourth\",\n"
+    //     + "                    Very Rare \"fifth\",\n"
+    //     + "                    Unique \"and sixth, the last one\";\n"
+    //     + "  player name       \"guru\";\n"
+    //     + "  world             Generic;\n"
+    //     + "  references        \"TSR 11550\" 107;\n"
+    //     + "  description       \n"
+    //     + "  \"A thick, quilted, wool blanket.\";\n"
+    //     + "  synonyms          \"blanket, winter\",\n"
+    //     + "                    \"guru\";\n"
+    //     + "  categories        warmth.\n"
+    //     + "\n"
+    //     + "#.......................................................\n";
+    //   AbstractEntry entry = createBaseItem();
 
-      //System.out.println("read entry:\n'" + entry + "'");
+    //   //System.out.println("read entry:\n'" + entry + "'");
 
-      assertNotNull("base item should have been read", entry);
-      assertEquals("base item name does not match", "winter blanket",
-                    entry.getName());
-      assertEquals("base item does not match", result, entry.toString());
-    }
+    //   assertNotNull("base item should have been read", entry);
+    //   assertEquals("base item name does not match", "winter blanket",
+    //                 entry.getName());
+    //   assertEquals("base item does not match", result, entry.toString());
+    // }
 
     //......................................................................
     //----- print ----------------------------------------------------------
@@ -2072,22 +2072,22 @@ public class BaseItem extends BaseEntry
     //----- get ------------------------------------------------------------
 
     /** Testing get. */
-    @org.junit.Test
-    public void get()
-    {
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader(s_text), "test");
+    // @org.junit.Test
+    // public void get()
+    // {
+    //   ParseReader reader =
+    //     new ParseReader(new java.io.StringReader(s_text), "test");
 
-      BaseItem entry = (BaseItem)BaseProduct.read(reader);
+    //   BaseItem entry = (BaseItem)BaseProduct.read(reader);
 
-      assertEquals("hp", 1, entry.getHP());
+    //   assertEquals("hp", 1, entry.getHP());
 
-      assertEquals("weight", "3 lbs", entry.getWeight().toString());
-      assertEquals("value", "5 sp", entry.getValue().toString());
-      assertEquals("size", Size.SMALL, entry.getSize());
-      assertEquals("probability", 25, entry.getProbability());
-      assertEquals("player name", "guru", entry.getPlayerName());
-    }
+    //   assertEquals("weight", "3 lbs", entry.getWeight().toString());
+    //   assertEquals("value", "5 sp", entry.getValue().toString());
+    //   assertEquals("size", Size.SMALL, entry.getSize());
+    //   assertEquals("probability", 25, entry.getProbability());
+    //   assertEquals("player name", "guru", entry.getPlayerName());
+    // }
 
     //......................................................................
     //----- based ----------------------------------------------------------

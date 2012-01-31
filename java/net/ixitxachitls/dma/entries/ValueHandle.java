@@ -499,7 +499,8 @@ public abstract class ValueHandle<T extends ValueHandle>
       handle = new TestHandle("test", null)
         .withPlayerEditable(true)
         .withPlayerOnly(true)
-        .withEditable(true);
+        .withEditable(true)
+        .withPlural("more");
 
       assertEquals("plural", "more", handle.getPluralKey());
       assertFalse("dm", handle.isDMOnly());

@@ -204,13 +204,13 @@ public class TaggedVariables extends Variables
       Variables variables =
         new TaggedVariables("tag",
                             new Variable("1234", field, false, false)
-                            .withEditable(true),
+                            .withEditable(false).withDM(true),
                             new Variable("123456", field, false, false)
-                            .withEditable(true),
+                            .withEditable(false).withDM(true),
                             new Variable("123", field, false, false)
-                            .withEditable(true),
+                            .withEditable(false).withDM(true),
                             new Variable("1", field, false, false)
-                            .withEditable(true));
+                            .withEditable(false).withDM(true));
 
       assertEquals("width", 11, variables.getKeyWidth());
       assertEquals("string",

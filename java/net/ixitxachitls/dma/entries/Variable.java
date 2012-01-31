@@ -395,7 +395,7 @@ public class Variable extends ValueHandle<Variable>
     {
       Field field = Variable.Test.TestObject.class.getDeclaredField("m_value");
       Variable variable = new Variable("key", field, false, false)
-        .withEditable(true);
+        .withDM(true);
 
       assertEquals("key", "key", variable.getKey());
       assertEquals("value", "$undefined$",
