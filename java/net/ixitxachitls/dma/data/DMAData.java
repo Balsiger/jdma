@@ -271,7 +271,27 @@ public interface DMAData
      @Nonnull AbstractType<? extends AbstractEntry> inParentType);
 
   //........................................................................
+  //------------------------------- getEntry -------------------------------
 
+  /**
+   * Get the first entry denoted by a key value pair.
+   *
+   * @param      inType  the type of entry to get
+   * @param      inKey   the key to look for
+   * @param      inValue the value for the key to look for
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // casting return
+  public @Nullable <T extends AbstractEntry> T
+                      getEntry(@Nonnull AbstractType<T> inType,
+                               @Nonnull String inKey,
+                               @Nonnull String inValue);
+
+  //........................................................................
   //--------------------------- getIndexEntries ----------------------------
 
   /**

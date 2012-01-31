@@ -257,6 +257,49 @@ public class DMADatastore implements DMAData
 
 
   //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the entry denoted by a key value pair. This throws a
+   * TooManyResultsException if more thone one result is found.
+   *
+   * @param      inType  the type of entry to get
+   * @param      inKey   the key to look for
+   * @param      inValue the value for the key to look for
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked") // casting return
+  public @Nullable <T extends AbstractEntry> T
+                      getEntry(@Nonnull AbstractType<T> inType,
+                               @Nonnull String inKey,
+                               @Nonnull String inValue)
+  {
+    Log.debug("getting " + inType + " with " + inKey + " = " + inValue);
+
+    String key = "key:" + inKey + ":" + inValue;
+    Entity entity = (Entity)s_cache.get(key);
+
+    if(entity == null)
+    {
+      Query query = new Query(inType.toString());
+      query.addFilter(toPropertyName(inKey), Query.FilterOperator.EQUAL,
+                      inValue);
+      entity = m_store.prepare(query).asSingleEntity();
+
+      if(entity == null)
+        return null;
+
+      s_cache.put(key, entity, s_expiration);
+    }
+
+    return (T)convert(entity);
+  }
+
+  //........................................................................
   //------------------------------- getEntity ------------------------------
 
   /**
@@ -926,6 +969,9 @@ public class DMADatastore implements DMAData
    */
   public @Nullable AbstractEntry convert(@Nonnull Entity inEntity)
   {
+    if(inEntity == null)
+      return null;
+
     Key key = inEntity.getKey();
     String id = key.getName();
     AbstractType<? extends AbstractEntry> type =
