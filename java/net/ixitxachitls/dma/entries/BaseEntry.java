@@ -1212,6 +1212,8 @@ public class BaseEntry extends AbstractEntry
       if(net.ixitxachitls.dma.entries.extensions.BaseWearable.s_pagePrint
          == null)
         Log.warning("could not properly initialize base wearable extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseLight.s_pagePrint == null)
+        Log.warning("could not properly initialize base light extension");
     }
   }
 

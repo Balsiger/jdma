@@ -121,3 +121,32 @@ base item with weapon, wearable Gauntlet =
                     unarmed.
 
 #.....
+#----- Candle
+
+base item with light, timed Candle =
+
+  bright light      0 ft Sphere;
+  shadowy light     5 ft Sphere;
+  duration          1 hour;
+  value             1 cp;
+  weight            1/10 lb;
+  probability       Common;
+  size              Fine;
+  hardness          0;
+  hp                1;
+  appearances       Very Rare "A gilded, ornately decorated candle.",
+                    Rare "A red candle.",
+                    Rare "A blue candle.",
+                    Rare "A green candle.",
+                    Rare "A purple candle.",
+                    Uncommon "A yellow brown candle made from bees wax.",
+                    Common "A white candle.",
+                    Uncommon "A brown candle.";
+  player name       "Candle";
+  worlds            Generic;
+  references        WTC 17524: 126/165;
+  description
+  "A simple candle.";
+  categories        gear.
+
+#.....
