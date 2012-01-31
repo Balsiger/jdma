@@ -214,10 +214,7 @@ public abstract class AbstractPrint
               if(inEntry instanceof AbstractEntry)
                 extension = ((AbstractEntry)inEntry).getExtension(name);
 
-              if(extension == null)
-                Log.warning("cannot find extension " + name
-                            + " for printing");
-              else
+              if(extension != null)
                 result.add(new Section(name + " extension",
                                        printExtension(extension, inUser)));
 

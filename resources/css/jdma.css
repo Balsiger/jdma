@@ -1011,6 +1011,8 @@ DIV.section-title
   background: url('/icons/bar.png') repeat-x 0 10px;
   padding: 2px 10px;
   cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 DIV.section.rotated DIV.section-title
