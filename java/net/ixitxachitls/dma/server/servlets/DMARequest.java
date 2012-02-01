@@ -30,10 +30,11 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
@@ -41,6 +42,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -62,7 +64,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-@SuppressWarnings("deprecation") // from base class
+// from base class
 public class DMARequest extends HttpServletRequestWrapper
 {
   //--------------------------------------------------------- constructor(s)
@@ -478,7 +480,8 @@ public class DMARequest extends HttpServletRequestWrapper
   //----------------------------- extractUser ------------------------------
 
   /**
-   * Extract the user from the request, if any.
+   * Get the email address from the AppEngine UserService and
+   * lookup a matching BaseCharacter in the DMAData.
    *
    */
   public void extractUser()
@@ -486,34 +489,17 @@ public class DMARequest extends HttpServletRequestWrapper
     if(m_extractedUser)
       return;
 
-    HttpServletRequest request = (HttpServletRequest)getRequest();
-
-    // check for the user and token cookies
-    Cookie []cookies = request.getCookies();
-
-    String user  = null;
-    String token = null;
-
-    if(cookies != null)
-      for(Cookie cookie : cookies)
-      {
-        if(LoginServlet.COOKIE_USER.equals(cookie.getName()))
-          user = cookie.getValue();
-        else
-          if(LoginServlet.COOKIE_TOKEN.equals(cookie.getName()))
-            token = cookie.getValue();
-      }
-
-    if(user != null && token != null)
+    UserService userService = UserServiceFactory.getUserService();
+    if (userService.isUserLoggedIn())
     {
-      m_user = m_base.getEntry(user, BaseCharacter.TYPE);
-
-      if(m_user != null)
-        if(m_user.checkToken(token))
-          m_user.action();
-        else
-          m_user = null;
+      m_user = m_base
+          .getEntry(BaseCharacter.TYPE, "email", new Text(userService
+              .getCurrentUser().getEmail()).toString());
     }
+    if (m_user != null)
+      m_user.action();
+    else
+      m_user = null;
 
     String override = getParam("user");
     if(override != null && !override.isEmpty())
@@ -656,17 +642,10 @@ public class DMARequest extends HttpServletRequestWrapper
 
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
 
-      EasyMock.expect(mockRequest.getCookies()).andReturn
-        (new javax.servlet.http.Cookie []
-          {
-            new Cookie(LoginServlet.COOKIE_USER, "user"),
-            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
-          });
 
-      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
-        .andStubReturn(user);
+      EasyMock.expect(data.getEntry(BaseCharacter.TYPE, "email",
+                                    "\"test@test.net\"")).andStubReturn(user);
 
-      EasyMock.expect(user.checkToken("token")).andReturn(true);
       user.action();
 
       EasyMock.replay(mockRequest, data, user);
@@ -682,49 +661,13 @@ public class DMARequest extends HttpServletRequestWrapper
     }
 
     //.....................................................................
-    //----- invalid token -------------------------------------------------
-
-    /** The user Test. */
-    @org.junit.Test
-    public void invalidToken()
-    {
-      HttpServletRequest mockRequest =
-        EasyMock.createMock(HttpServletRequest.class);
-      DMAData data = DMADataFactory.getBaseData();
-
-      BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
-
-      EasyMock.expect(mockRequest.getCookies()).andReturn
-        (new javax.servlet.http.Cookie []
-          {
-            new Cookie(LoginServlet.COOKIE_USER, "user"),
-            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
-          });
-
-      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
-        .andStubReturn(user);
-
-      EasyMock.expect(user.checkToken("token")).andReturn(false);
-
-      EasyMock.replay(mockRequest, data, user);
-
-      DMARequest request =
-        new DMARequest(mockRequest,
-                       com.google.common.collect.HashMultimap.
-                       <String, String>create());
-
-      assertNull("user", request.getUser());
-
-      EasyMock.verify(mockRequest, data, user);
-    }
-
-    //......................................................................
     //----- user override --------------------------------------------------
 
     /** The user Test. */
     @org.junit.Test
     public void userOverride()
     {
+
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
       DMAData data = DMADataFactory.getBaseData();
@@ -732,19 +675,12 @@ public class DMARequest extends HttpServletRequestWrapper
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       BaseCharacter other = EasyMock.createMock(BaseCharacter.class);
 
-      EasyMock.expect(mockRequest.getCookies()).andReturn
-        (new javax.servlet.http.Cookie []
-          {
-            new Cookie(LoginServlet.COOKIE_USER, "user"),
-            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
-          });
 
-      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
-        .andStubReturn(user);
+      EasyMock.expect(data.getEntry(BaseCharacter.TYPE, "email",
+          "\"test@test.net\"")).andStubReturn(user);
       EasyMock.expect(data.getEntry("other", BaseCharacter.TYPE))
         .andStubReturn(other);
 
-      EasyMock.expect(user.checkToken("token")).andReturn(true);
       user.action();
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andReturn(true);
@@ -775,26 +711,16 @@ public class DMARequest extends HttpServletRequestWrapper
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       BaseCharacter other = EasyMock.createMock(BaseCharacter.class);
 
-      EasyMock.expect(mockRequest.getCookies()).andStubReturn
-        (new javax.servlet.http.Cookie []
-          {
-            new Cookie(LoginServlet.COOKIE_USER, "user"),
-            new Cookie(LoginServlet.COOKIE_TOKEN, "token"),
-          });
-
-      EasyMock.expect(data.getEntry("user", BaseCharacter.TYPE))
-        .andStubReturn(user);
+      EasyMock.expect(data.getEntry(BaseCharacter.TYPE, "email",
+          "\"test@test.net\"")).andStubReturn(user);
       EasyMock.expect(data.getEntry("other", BaseCharacter.TYPE))
         .andStubReturn(other);
 
-      EasyMock.expect(user.checkToken("token")).andStubReturn(true);
       user.action();
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andReturn(false);
 
       EasyMock.replay(mockRequest, data, user, other);
-
-      data.getEntry("user", BaseCharacter.TYPE);
 
       DMARequest request =
          new DMARequest(mockRequest,

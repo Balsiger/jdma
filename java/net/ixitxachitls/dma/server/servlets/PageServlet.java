@@ -36,6 +36,9 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -231,10 +234,14 @@ public class PageServlet extends DMAServlet
 
     BaseCharacter user = inRequest.getUser();
 
+    //Use UserService from AppEngine for creating Login/Logout Url's
+    UserService userService = UserServiceFactory.getUserService();
     if(user == null)
+    {
       inWriter
         .begin("a").id("login-icon").classes("sprite").tooltip("Login")
-        .onClick("login()").end("a");
+        .href(userService.createLoginURL(inRequest.getOriginalPath())).end("a");
+    }
     else
     {
       inWriter
@@ -246,11 +253,10 @@ public class PageServlet extends DMAServlet
       if(inRequest.hasUserOverride())
         inWriter.add(" (" + inRequest.getRealUser().getName() + ")");
 
-      inWriter
-        .end("a")
-        .add(" | ")
-        .begin("a").id("logout-icon").classes("sprite").tooltip("Logout")
-        .onClick("logout()").end("a");
+      inWriter.end("a").add(" | ").begin("a").id("logout-icon")
+          .classes("sprite").tooltip("Logout")
+          .href(userService.createLogoutURL(inRequest.getOriginalPath()))
+          .end("a");
     }
 
     inWriter
@@ -522,6 +528,7 @@ public class PageServlet extends DMAServlet
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
       EasyMock.expect(request.getUser()).andReturn(null);
+      EasyMock.expect(request.getOriginalPath()).andReturn("index.html");
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("/about.html");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
@@ -599,7 +606,8 @@ public class PageServlet extends DMAServlet
                    + "    <DIV id=\"header\">\n"
                    + "      <DIV id=\"header-right\">\n"
                    + "        <A id=\"login-icon\" class=\"sprite\" "
-                   + "title=\"Login\" onclick=\"login()\">\n"
+                   + "title=\"Login\" "
+                   + "href=\"/_ah/login?continue=index.html\">\n"
                    + "</A>\n"
                    + "        <A class=\"sprite library\" title=\"Library\" "
                    + "href=\"/library\" "
@@ -816,7 +824,6 @@ public class PageServlet extends DMAServlet
                    + "<td class=\"title\"></td><td class=\"title\">Name</td>"
                    + "<td class=\"title\">Real Name</td>"
                    + "<td class=\"title\">Group</td>"
-                   + "<td class=\"title\">Last Login</td>"
                    + "<td class=\"title\">Last Action</td>"
                    + "</tr><tr><td class=\"label\">"
                    + "<img src=\"/icons/labels/BaseCharacter.png\" "
@@ -835,7 +842,6 @@ public class PageServlet extends DMAServlet
                    + "entry=\"base character\" type=\"selection\" note=\"\" "
                    + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
                    + "</dmaeditable></td>"
-                   + "<td class=\"last\"></td>"
                    + "<td class=\"action\"></td></tr>"
                    + "<tr><td class=\"label\">"
                    + "<img src=\"/icons/labels/BaseCharacter.png\" "
@@ -854,7 +860,6 @@ public class PageServlet extends DMAServlet
                    + "entry=\"base character\" type=\"selection\" note=\"\" "
                    + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
                    + "</dmaeditable></td>"
-                   + "<td class=\"last\"></td>"
                    + "<td class=\"action\"></td></tr></table>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n", content.toString());

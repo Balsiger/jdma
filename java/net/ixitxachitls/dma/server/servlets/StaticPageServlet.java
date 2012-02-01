@@ -186,11 +186,14 @@ public class StaticPageServlet extends PageServlet
     @org.junit.Test
     public void headerFooter()
     {
+
+
       java.io.ByteArrayOutputStream output =
         new java.io.ByteArrayOutputStream();
       DMARequest request = EasyMock.createMock(DMARequest.class);
 
       EasyMock.expect(request.getUser()).andReturn(null);
+      EasyMock.expect(request.getOriginalPath()).andReturn("index.html");
 
       EasyMock.replay(request);
 
@@ -261,7 +264,8 @@ public class StaticPageServlet extends PageServlet
                    + "    <DIV id=\"header\">\n"
                    + "      <DIV id=\"header-right\">\n"
                    + "        <A id=\"login-icon\" class=\"sprite\" "
-                   + "title=\"Login\" onclick=\"login()\">\n"
+                   + "title=\"Login\" "
+                   + "href=\"/_ah/login?continue=index.html\">\n"
                    + "</A>\n"
                    + "        <A class=\"sprite library\" title=\"Library\" "
                    + "href=\"/library\" "

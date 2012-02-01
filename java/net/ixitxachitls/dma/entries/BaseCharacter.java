@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,7 +40,6 @@ import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -179,24 +177,17 @@ public class BaseCharacter extends BaseEntry
               + "\n " // need to start a new line for ascii
               + "$par "
               + "%name "
-              + "%{real name} %email %password %{last login} "
-              + "%{last action} %token %group %characters %products "
+              + "%{real name} %email "
+              + "%{last action} %group %characters %products "
               + "%errors");
 
   /** The printer for printing in a list. */
   public static final ListPrint s_listPrint =
     new ListPrint("1:L(label);20:L(name)[Name];20(name)[Real Name];"
-                  + "1:L(group)[Group];1:L(last)[Last Login];"
+                  + "1:L(group)[Group];"
                   + "1:L(action)[Last Action]",
                   "$label $listlink", null, "${real name}", "$group",
-                  "${last login}", "${last action}");
-
-  /** A random generator to create tokens. */
-  private static final @Nonnull Random s_random =
-    new Random(System.currentTimeMillis());
-
-  /** The length of a token. */
-  private static final int TOKEN_LENGTH = 20;
+                  "${last action}");
 
   /** The number of recent products to show. */
   public static final int MAX_PRODUCTS =
@@ -218,26 +209,10 @@ public class BaseCharacter extends BaseEntry
   protected @Nonnull Text m_email = new Text();
 
   //........................................................................
-  //----- password ---------------------------------------------------------
-
-  /** The files in the base campaign. */
-  @Key("password")
-  @DM
-  protected @Nonnull Text m_password = new Text();
-
-  //........................................................................
   //----- products ---------------------------------------------------------
 
   /** All the products for this user. */
   protected @Nullable DMAData m_productData = null;
-
-  //........................................................................
-  //----- last login -------------------------------------------------------
-
-  /** The files in the base campaign. */
-  @Key("last login")
-  @NoEdit
-  protected @Nonnull Text m_lastLogin = new Text();
 
   //........................................................................
   //----- last action ------------------------------------------------------
@@ -246,14 +221,6 @@ public class BaseCharacter extends BaseEntry
   @Key("last action")
   @NoEdit
   protected @Nonnull Text m_lastAction = new Text();
-
-  //........................................................................
-  //----- token ------------------------------------------------------------
-
-  /** The files in the base campaign. */
-  @Key("token")
-  @DM
-  protected @Nonnull Text m_token = new Text();
 
   //........................................................................
   //----- group ------------------------------------------------------------
@@ -303,29 +270,6 @@ public class BaseCharacter extends BaseEntry
 
   //........................................................................
 
-  //------------------------------ checkToken ------------------------------
-
-  /**
-    *
-    * Check that the given token is valid.
-    *
-    * @param       inToken the token to check for
-    *
-    * @return      true if the token is valid, false if not
-    *
-    */
-  public boolean checkToken(@Nullable String inToken)
-  {
-    if(inToken == null)
-      return false;
-
-    if(!m_token.isDefined())
-      return false;
-
-    return inToken.equals(m_token.get());
-  }
-
-  //........................................................................
   //------------------------------- getGroup -------------------------------
 
   /**
@@ -398,72 +342,6 @@ public class BaseCharacter extends BaseEntry
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- login ---------------------------------
-
-  /**
-    *
-    * Login the user into the system.
-    *
-    * @param       inUsername the name of the user to login
-    * @param       inPassword the password of the user
-    *
-    * @return      a string with the token to use or null if the password or
-    *              username is wrong
-    *
-    */
-  public @Nullable String login(@Nullable String inUsername,
-                                @Nullable String inPassword)
-  {
-    if(inUsername == null || inPassword == null)
-      return null;
-
-    if(!inUsername.equals(getName()))
-    {
-      Log.warning("login with unknown user '" + inUsername + "'");
-
-      return null;
-    }
-
-    if(!inPassword.equals(m_password.get()))
-    {
-      Log.warning("login for '" + inUsername + "' with wrong password");
-
-      return null;
-    }
-
-    String token = createToken();
-
-    Log.status("login by '" + inUsername + "' with token '" + token + "'");
-
-    m_token = m_token.as(token);
-    m_lastLogin = m_lastLogin.as(Strings.today());
-    action();
-
-    // make sure the current file is stored now
-    changed();
-    save();
-
-    return token;
-  }
-
-  //........................................................................
-  //------------------------------ clearToken ------------------------------
-
-  /**
-    *
-    * Clear the token file of the character.
-    *
-    */
-  public void clearToken()
-  {
-    m_token = m_token.create();
-
-    // make sure the current file is stored now
-    changed();
-    save();
-  }
-
-  //........................................................................
   //-------------------------------- action --------------------------------
 
   /**
@@ -474,21 +352,6 @@ public class BaseCharacter extends BaseEntry
   {
     m_lastAction = m_lastAction.as(Strings.today());
     save();
-  }
-
-  //........................................................................
-
-  //----------------------------- setPassword ------------------------------
-
-  /**
-   * Set the users password.
-   *
-   * @param       inPassword the new password
-   *
-   */
-  public void setPassword(@Nonnull String inPassword)
-  {
-    m_password = m_password.as(inPassword);
   }
 
   //........................................................................
@@ -560,29 +423,6 @@ public class BaseCharacter extends BaseEntry
 
   //------------------------------------------------- other member functions
 
-  //----------------------------- createToken ------------------------------
-
-  /**
-    *
-    * Create a random token.
-    *
-    * @return      a string with a unique token for a user.
-    *
-    * @undefined   never
-    *
-    */
-  protected String createToken()
-  {
-    char []token = new char[TOKEN_LENGTH];
-
-    for(int i = 0; i < TOKEN_LENGTH; i++)
-      token[i] = (char)(s_random.nextInt(26) + 'A');
-
-    return new String(token);
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -616,68 +456,8 @@ public class BaseCharacter extends BaseEntry
       assertEquals("id", "Me", character.getName());
       assertFalse("real name", character.m_realName.isDefined());
       assertFalse("email", character.m_email.isDefined());
-      assertFalse("password", character.m_password.isDefined());
-      assertFalse("last login", character.m_lastLogin.isDefined());
       assertFalse("last action", character.m_lastAction.isDefined());
-      assertFalse("token", character.m_token.isDefined());
       assertFalse("group", character.m_group.isDefined());
-    }
-
-    //......................................................................
-    //----- token ----------------------------------------------------------
-
-    /** The token Test. */
-    @org.junit.Test
-    public void token()
-    {
-      BaseCharacter character = new BaseCharacter("Me");
-
-      String token = character.createToken();
-      String token2 = character.createToken();
-      assertFalse("new", token.equals(token2));
-      assertFalse("check", character.checkToken(token));
-      assertFalse("check", character.checkToken(token2));
-
-      character.m_token = character.m_token.as(token);
-      assertTrue("check", character.checkToken(token));
-      assertFalse("check", character.checkToken(token2));
-
-      character.clearToken();
-      assertFalse("check", character.checkToken(token));
-      assertFalse("check", character.checkToken(token2));
-    }
-
-    //......................................................................
-    //----- login ----------------------------------------------------------
-
-    /** The login Test. */
-    @SuppressWarnings("unchecked") // conversion of name
-    @org.junit.Test
-    public void login()
-    {
-      BaseCharacter character = new BaseCharacter("Me");
-      character.m_name = character.m_name.as("user");
-      character.m_password = character.m_password.as("password");
-
-      assertEquals("name", "user", character.m_name.get());
-      assertEquals("password", "password", character.m_password.get());
-      assertFalse("last login", character.m_lastLogin.isDefined());
-      assertFalse("last action", character.m_lastAction.isDefined());
-      assertFalse("token", character.m_token.isDefined());
-
-      assertNull("empty login", character.login(null, null));
-      assertNull("wrong user", character.login("name", "password"));
-      assertNull("wrong password", character.login("user", "passwordd"));
-      assertTrue("good login", character.login("user", "password") != null);
-
-      assertEquals("name", "user", character.m_name.get());
-      assertEquals("password", "password", character.m_password.get());
-      assertTrue("last login", character.m_lastLogin.isDefined());
-      assertTrue("last action", character.m_lastAction.isDefined());
-      assertTrue("token", character.m_token.isDefined());
-
-      m_logger.addExpected("WARNING: login with unknown user 'name'");
-      m_logger.addExpected("WARNING: login for 'user' with wrong password");
     }
 
     //......................................................................
@@ -692,10 +472,7 @@ public class BaseCharacter extends BaseEntry
         + "\n"
         + "  real name     \"Roger Rabbit\";\n"
         + "  email         \"roger@acme.com <'Roger Rabbit'>\";\n"
-        + "  password      \"carrot\";\n"
-        + "  last login    \"yesterday\";\n"
         + "  last action   \"today\";\n"
-        + "  token         \"12345678901234567890\";\n"
         + "  group         user.\n"
         + "\n";
 
@@ -716,10 +493,7 @@ public class BaseCharacter extends BaseEntry
                    + "  real name         \"Roger Rabbit\";\n"
                    + "  email             "
                    + "\"roger@acme.com <'Roger Rabbit'>\";\n"
-                   + "  password          \"carrot\";\n"
-                   + "  last login        \"yesterday\";\n"
                    + "  last action       \"today\";\n"
-                   + "  token             \"12345678901234567890\";\n"
                    + "  group             User.\n"
                    + "\n"
                    + "#.....\n",
