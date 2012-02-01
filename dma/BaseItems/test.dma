@@ -286,3 +286,28 @@ base item with counted, incomplete, weapon Crossbow Bolts =
                     ammunition.
 
 #.....
+#----- Chain
+
+base item with commodity Chain =
+
+  length            10 ft;
+  value             30 gp;
+  weight            2 lbs;
+  probability       Rare;
+  size              Tiny;
+  hardness          10;
+  hp                5;
+  appearances       Rare "A length of oiled and polished chain.",
+                    Common "A length of sturdy chain.",
+                    Rare "A length of rusty chain.";
+  substance         iron 1 in;
+  break DC          26;
+  player name       "Chain";
+  worlds            Generic;
+  references        WTC 17524: 126;
+  description
+  "Chain has hardness 10 and 5 hit points. It can be burst with a DC 26
+  Strength check.";
+  categories        gear.
+
+#.....
