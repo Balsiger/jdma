@@ -311,3 +311,25 @@ base item with commodity Chain =
   categories        gear.
 
 #.....
+#----- Soap
+
+base item with multiuse Soap =
+
+  value             1 cp;
+  weight            1 lb;
+  count             50;
+  probability       Rare;
+  size              Diminutive;
+  hardness          0;
+  hp                1;
+  appearances       Very Rare "A block of perfumed soap.",
+                    Common "A block of simple soap.",
+                    Very Rare "A crumbling block of soap.";
+  player name       "Soap";
+  worlds            Generic;
+  references        WTC 17524: 128;
+  description
+  "A piece of soap used for cleaning.";
+  categories        hygiene.
+
+#.....

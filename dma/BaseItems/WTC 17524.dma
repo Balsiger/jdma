@@ -50,7 +50,7 @@ base item with weapon Club =
 
 base item with composite, incomplete, weapon Alchemist's Fire =
 
-  contains          Flask (ceramic)|Flask (glass);
+  contains          Ceramic Flask|Glass Flask;
   incomplete
   "1d6 fire damage on following round, full-round action to
                     extinguish fire (Reflex DC 15, +2 when rolling on ground)";
@@ -647,7 +647,7 @@ base item with commodity Fishing Net =
 #.....
 #----- Flask (ceramic)
 
-base item with container Flask (ceramic) =
+base item with container Ceramic Flask =
 
   capacity          1 pint;
   state             gaseous;
@@ -669,19 +669,18 @@ base item with container Flask (ceramic) =
                     Common "An unadorned ceramic flask with a tight stopper.",
                     Very Rare "A shabby, scratched ceramic flask with a stopper.";
   substance         glass 1/2 in;
-  player name       "Flask (ceramic)";
   worlds            Generic;
   references        WTC 17524: 128;
   description
   "This ceramic container is fitted with a tight stopper and holds 1 pint of
   liquid.";
-  synonyms          "Ceramic Flask";
+  synonyms          "Flask (Ceramic)";
   categories        gear.
 
 #.....
 #----- Flask (glass)
 
-base item with container Flask (glass) =
+base item with container Glass Flask =
 
   capacity          1 pint;
   state             gaseous;
@@ -703,19 +702,18 @@ base item with container Flask (glass) =
                     Common "An unadorned glass flask with a tight stopper.",
                     Very Rare "A shabby, scratched glass flask with a stopper.";
   substance         glass 1/2 in;
-  player name       "Flask (glass)";
   worlds            Generic;
   references        WTC 17524: 128;
   description
   "This glass container is fitted with a tight stopper and holds 1 pint of
   liquid.";
-  synonyms          "Glass Flask";
+  synonyms          "Flask (Glass)";
   categories        gear.
 
 #.....
 #----- Flask (metal)
 
-base item with container Flask (metal) =
+base item with container Metal Flask =
 
   capacity          1 pint;
   state             gaseous;
@@ -729,13 +727,12 @@ base item with container Flask (metal) =
                     Common "An unadorned metal flask with a tight stopper.",
                     Very Rare "A shabby, scratched metal flask with a stopper.";
   substance         steel 1/2 in;
-  player name       "Flask (metal)";
   worlds            Generic;
   references        WTC 17524: 128;
   description
   "This metal container is fitted with a tight stopper and holds 1 pint of
   liquid.";
-  synonyms          "Metal Flask";
+  synonyms          "Flask (Metal)";
   categories        gear.
 
 #.....
@@ -828,7 +825,7 @@ base item with weapon Hammer =
 #.....
 #----- Vial (ceramic)
 
-base item with container Vial (ceramic) =
+base item with container Ceramic Vial  =
 
   capacity          1 ounce;
   state             gaseous;
@@ -843,20 +840,19 @@ base item with container Vial (ceramic) =
                     Very Rare "A scratched ceramic vial with a tight stopper.";
   substance         glass 1/4 in;
   break DC          12;
-  player name       "Vial (ceramic)";
   worlds            Generic;
   references        WTC 17524: 127-128;
   description
   "This ceramic vial is fitted with a tight stopper and holds 1 ounce of
   liquid. The stoppered container usually is no more than 1 inch wide and 3
   inches high.";
-  synonyms          "Ceramic Vial";
+  synonyms          "Vial (Ceramic)";
   categories        gear.
 
 #.....
 #----- Vial (glass)
 
-base item with container Vial (glass) =
+base item with container Glass Vial =
 
   capacity          1 ounce;
   state             gaseous;
@@ -871,20 +867,19 @@ base item with container Vial (glass) =
                     Very Rare "A scratched glass vial with a tight stopper.";
   substance         glass 1/4 in;
   break DC          12;
-  player name       "Vial (glass)";
   worlds            Generic;
   references        WTC 17524: 127-128;
   description
   "This glass vial is fitted with a tight stopper and holds 1 ounce of
   liquid. The stoppered container usually is no more than 1 inch wide and 3
   inches high.";
-  synonyms          "Glass Vial";
+  synonyms          "Vial (Glass)";
   categories        gear, vial, drink.
 
 #.....
 #----- Vial (metal)
 
-base item with container Vial (metal) =
+base item with container Metal Vial =
 
   capacity          1 ounce;
   state             gaseous;
@@ -899,14 +894,13 @@ base item with container Vial (metal) =
                     Very Rare "A scratched metal vial with a tight stopper.";
   substance         steel 1/4 in;
   break DC          12;
-  player name       "Vial (metal)";
   worlds            Generic;
   references        WTC 17524: 127-128;
   description
   "This metal vial is fitted with a tight stopper and holds 1 ounce of
   liquid. The stoppered container usually is no more than 1 inch wide and 3
   inches high.";
-  synonyms          "Metal Vial";
+  synonyms          "Vial (Metal)";
   categories        gear.
 
 #.....
@@ -914,7 +908,7 @@ base item with container Vial (metal) =
 
 base item with composite Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             7 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -936,9 +930,9 @@ base item with composite Ink =
 #.....
 #----- Ink (blue)
 
-base item with composite Ink (blue) =
+base item with composite Blue Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             1 pp 4 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -953,15 +947,15 @@ base item with composite Ink (blue) =
   references        WTC 17524: 126/128;
   description
   "This is blue ink.";
-  synonyms          "Blue Ink";
+  synonyms          "Ink (Blue)";
   categories        scribe.
 
 #.....
 #----- Ink (red)
 
-base item with composite Ink (red) =
+base item with composite Red Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             1 pp 4 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -976,15 +970,15 @@ base item with composite Ink (red) =
   references        WTC 17524: 126/128;
   description
   "This is red ink.";
-  synonyms          "Red Ink";
+  synonyms          "Ink (Red)";
   categories        scribe.
 
 #.....
 #----- Ink (green)
 
-base item with composite Ink (green) =
+base item with composite Green Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             1 pp 4 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -999,15 +993,15 @@ base item with composite Ink (green) =
   references        WTC 17524: 126/128;
   description
   "This is green ink.";
-  synonyms          "Green Ink";
+  synonyms          "Ink (Green)";
   categories        scribe.
 
 #.....
 #----- Ink (brown)
 
-base item with composite Ink (brown) =
+base item with composite Brown Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             1 pp 4 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -1022,15 +1016,15 @@ base item with composite Ink (brown) =
   references        WTC 17524: 126/128;
   description
   "This is brown ink.";
-  synonyms          "Brown Ink";
+  synonyms          "Ink (Brown)";
   categories        scribe.
 
 #.....
 #----- Ink (orange)
 
-base item with composite Ink (orange) =
+base item with composite Orange Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             1 pp 4 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -1045,15 +1039,15 @@ base item with composite Ink (orange) =
   references        WTC 17524: 126/128;
   description
   "This is orange liquid.";
-  synonyms          "Orange Ink";
+  synonyms          "Ink (Orange)";
   categories        scribe.
 
 #.....
 #----- Ink (violet)
 
-base item with composite Ink (violet) =
+base item with composite Violet Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             1 pp 4 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -1068,15 +1062,15 @@ base item with composite Ink (violet) =
   references        WTC 17524: 126/128;
   description
   "This is violet ink.";
-  synonyms          "Violet Ink";
+  synonyms          "Ink (Violet)";
   categories        scribe.
 
 #.....
 #----- Ink (yellow)
 
-base item with composite Ink (yellow) =
+base item with composite Yellow Ink =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             1 pp 4 gp;
   weight            1/100 lb;
   probability       Rare;
@@ -1091,7 +1085,7 @@ base item with composite Ink (yellow) =
   references        WTC 17524: 126/128;
   description
   "This is yellow ink.";
-  synonyms          "Yellow Ink";
+  synonyms          "Ink (Yellow)";
   categories        scribe.
 
 #.....
@@ -1138,7 +1132,7 @@ base item with container Clay Jug =
   player name       "Clay Jug";
   worlds            Generic;
   references        WTC 17524: 126/128,
-                    "TSR 11550" 110;
+                    TSR 11550: 110;
   description
   "This basic ceramic jug is fitted with a stopper and holds 1 gallon of
   liquid.";
@@ -1494,7 +1488,7 @@ base item with container Clay Mug =
   player name       "Clay Mug";
   worlds            Generic;
   references        WTC 17524: 128,
-                    "TSR 11550" 110;
+                    TSR 11550: 110;
   description
   "A simple mug made from clay.";
   synonyms          "Clay Tankard",
@@ -1507,7 +1501,7 @@ base item with container Clay Mug =
 
 base item with composite, incomplete, weapon Oil =
 
-  contains          Flask (ceramic)|Flask (glass)|Flask (metal);
+  contains          Ceramic Flask|Glass Flask|Metal Flask;
   incomplete
   "1d6 fire damage on following round, full-round action to
                     extinguish fire (Reflex DC 15, +2 when rolling on ground), full round action to prepare a flask with a fuse,
@@ -1639,7 +1633,7 @@ base item with container Clay Pitcher =
   player name       "Clay Pitcher";
   worlds            Generic;
   references        WTC 17524: 128,
-                    "TSR 11550" 110;
+                    TSR 11550: 110;
   description
   "A simple pitcher made from clay.";
   synonyms          "Pitcher, Clay";
@@ -1712,7 +1706,7 @@ base item with container Iron Pot =
   player name       "Iron Pot";
   worlds            Generic;
   references        WTC 17524: 128,
-                    "TSR 11550" 110;
+                    TSR 11550: 110;
   description
   "An iron pot used for cooking.";
   synonyms          "Pot, Iron";
@@ -1739,7 +1733,7 @@ base item with container Belt Pouch =
   player name       "Belt Pouch";
   worlds            Generic;
   references        WTC 17524: 127/128,
-                    "TSR 11550" 110;
+                    TSR 11550: 110;
   description
   "This leather pouch straps to your belt. It's good for holding
   small items.";
@@ -1791,7 +1785,7 @@ base item with multiple Trail Ration =
   substance         paper 1 in;
   player name       "Trail Ration";
   worlds            Generic;
-  references        "WYC 17524" 127/128;
+  references        WYC 17524: 127/128;
   description
   "Trail rations are compact, dry, high-energy foods suitable for travel, such
   as jerky, dried fruit, hardtack, and nuts.";
@@ -1874,7 +1868,7 @@ base item with container Sack =
   player name       "Sack";
   worlds            Generic;
   references        WTC 17524: 127/128,
-                    "TSR 11550" 110;
+                    TSR 11550: 110;
   description
   "This item is made of burlap or a similar material and has a drawstring so it
   can be closed.";

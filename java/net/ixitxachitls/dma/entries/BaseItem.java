@@ -669,8 +669,8 @@ public class BaseItem extends BaseEntry
               + "%base %synonyms %{player name} %worlds %categories"
               + "%value %weight %hp %size %substance %hardness %{break DC}"
               + "%probability "
-              + "#counted #multiple #composite #wearable #container #weapon "
-              + "#light #timed #commodity"
+              + "#counted #multiple #multiuse #composite #wearable #container "
+              + "#weapon #light #timed #commodity"
               + "%appearances "
               + "%qualities %effects"
               // admin
