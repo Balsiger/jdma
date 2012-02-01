@@ -222,3 +222,67 @@ base item with container Backpack =
   categories        gear.
 
 #.....
+#----- Firewood
+
+base item with multiple Firewood =
+
+  unit              day;
+  value             1 cp;
+  weight            20 lbs;
+  probability       Common;
+  size              Small;
+  hardness          5;
+  hp                24;
+  appearances       Very Rare "A ${size} stack of very dry, aromating wood.",
+                    Common "A ${size} stack of dry wood.",
+                    Rare "A ${size} stack of damp wood.",
+                    Very Rare "A ${size} stack of wet wood.";
+  substance         wood 3 in;
+  player name       "Firewood";
+  worlds            Generic;
+  references        WTC 17524: 128;
+  description
+  "A daily ration of firewood.";
+  synonyms          "Wood",
+                    "Fuel";
+  categories        gear.
+
+#.....
+#----- Crossbow Bolts
+
+base item with counted, incomplete, weapon Crossbow Bolts =
+
+  count             10;
+  unit              piece;
+  incomplete
+  "projectile;
+                    missing bolt has 50% chance of being destroyed";
+  damage            1d4;
+  weapon type       Piercing or Slashing;
+  critical          19-20/x2;
+  weapon style      Light Melee;
+  proficiency       Improvised;
+  range increment   10 ft;
+  reach             5 ft;
+  value             1 gp;
+  weight            1 lb;
+  probability       Uncommon;
+  size              Tiny;
+  hardness          5;
+  hp                1;
+  appearances       Common "A wooden case with some crossbow bolts.";
+  substance         wood 1/4 in;
+  player name       "Crossbow Bolts";
+  worlds            Generic;
+  references        WTC 17524: 115/116/118;
+  description
+  "A crossbow bolt used as a melee weapon is treated as a light improvised
+  weapon (-4 penalty on attack rolls) and deals damage as a dagger of
+  its size (crit x2). Bolts come in a wooden case that holds 10 bolts (or 5,
+  for a repeating crossbow). A bolt that hits its target is destroyed; one that
+  misses has a 50% chance of being destroyed or lost.";
+  synonyms          "Bolts, Crossbow";
+  categories        crossbow,
+                    ammunition.
+
+#.....
