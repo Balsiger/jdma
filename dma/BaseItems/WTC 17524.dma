@@ -2181,7 +2181,7 @@ base item Whetstone =
 
 base item with composite, incomplete, weapon Acid =
 
-  contains          Flask (ceramic)|Flask (glass);
+  contains          Ceramic Flask|Glass Flask;
   damage            1d6 acid;
   splash            +1 acid;
   weapon type       Grenade;
@@ -2372,7 +2372,7 @@ base item with incomplete, timed, weapon Tanglefoot Bag =
 
   incomplete
   "act of throwing, how to get rid of it, effects when hit";
-  duration          (2d4) rounds;
+  duration          2d4 rounds;
   damage            0;
   splash            0;
   weapon type       Grenade;

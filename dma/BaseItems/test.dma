@@ -333,3 +333,31 @@ base item with multiuse Soap =
   categories        hygiene.
 
 #.....
+#----- Padded Armor
+
+base item with armor, wearable Padded Armor =
+
+  AC bonus          +1 armor;
+  armor type        Light Armor;
+  max dexterity     +8;
+  check penalty     0;
+  arcane failure    5%;
+  speed             30 ft/20 ft;
+  slot              Body;
+  don               1 minute/5 rounds;
+  remove            1 minute;
+  value             5 gp;
+  weight            10 lbs;
+  probability       Uncommon;
+  size              {~} Small;
+  appearances       Common "A suite of padded armor.",
+                    Very Rare "A battered suite of padded armor.";
+  player name       "Padded Armor";
+  worlds            Generic;
+  references        WTC 17524: 123/125;
+  description
+  "Padded armor features quilted layers of cloth and batting.  It gets hot
+  quickly and can become foul with sweat, grime, lice, and fleas.";
+  synonyms          "Padded".
+
+#.....

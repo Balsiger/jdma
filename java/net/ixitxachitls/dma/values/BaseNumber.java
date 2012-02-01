@@ -268,6 +268,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      the command for setting the value
    *
    */
+  @Override
   protected @Nonnull Command doFormat()
   {
     return new Command(toString());
@@ -282,6 +283,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      a String representation, depending on the kind given
    *
    */
+  @Override
   protected @Nonnull String doToString()
   {
     if(m_sign && m_number >= 0)
@@ -300,6 +302,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      true if the value is defined, false if not
    *
    */
+  @Override
   public boolean isDefined()
   {
     return m_defined;
