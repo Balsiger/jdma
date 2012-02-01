@@ -1889,7 +1889,8 @@ public class AbstractEntry extends ValueGroup
       return new FormattedValue
         (new Divider(id, "", new Script
                      ("util.linkRow(document.getElementById('" + id + "'), "
-                      + "'" + getPath() + "');")), null, "listlink");
+                      + Encodings.toJSString(getPath()) + ");")),
+         null, "listlink");
     }
 
     if("base".equals(inKey))

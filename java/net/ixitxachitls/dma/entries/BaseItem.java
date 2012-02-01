@@ -40,10 +40,8 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
-import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -671,7 +669,7 @@ public class BaseItem extends BaseEntry
               + "%base %synonyms %{player name} %worlds %categories"
               + "%value %weight %hp %size %substance %hardness %{break DC}"
               + "%probability "
-              + "#wearable #weapon #light #timed "
+              + "#composite #wearable #weapon #light #timed "
               + "%appearances "
               + "%qualities %effects"
               // admin

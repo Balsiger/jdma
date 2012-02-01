@@ -49,6 +49,7 @@ import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
 import net.ixitxachitls.output.html.HTMLDocument;
 import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -356,11 +357,14 @@ public class PageServlet extends DMAServlet
         builder.append(" &raquo; ");
 
         if(i + 1 < inSections.length)
-          builder.append("<a href=\"" + inSections[i + 1]
+          builder.append("<a href=\""
+                         + Encodings.encodeHTMLAttribute(inSections[i + 1])
                          + "\" class=\"navigation-link\" "
                          + "onclick=\"return util.link(event, \\'"
-                         + inSections[i + 1] + "\\');\" >"
-                         + inSections[i].toLowerCase(Locale.US) + "</a>");
+                         + Encodings.encodeHTMLAttribute(inSections[i + 1])
+                         + "\\');\" >"
+                         + Encodings.encodeHTMLAttribute
+                         (inSections[i].toLowerCase(Locale.US)) + "</a>");
         else
           builder.append(inSections[i]);
       }
