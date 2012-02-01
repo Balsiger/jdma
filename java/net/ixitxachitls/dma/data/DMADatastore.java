@@ -967,7 +967,7 @@ public class DMADatastore implements DMAData
    * @return     the entry found, if any
    *
    */
-  public @Nullable AbstractEntry convert(@Nonnull Entity inEntity)
+  public @Nullable AbstractEntry convert(@Nullable Entity inEntity)
   {
     if(inEntity == null)
       return null;

@@ -123,8 +123,9 @@ base item with weapon, wearable Gauntlet =
 #.....
 #----- Candle
 
-base item with light, timed Candle =
+base item with incomplete, light, timed Candle =
 
+  incomplete        "just a test";
   bright light      0 ft Sphere;
   shadowy light     5 ft Sphere;
   duration          1 hour;
