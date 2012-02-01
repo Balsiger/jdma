@@ -804,6 +804,12 @@ public class BaseEntry extends AbstractEntry
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
 
+    for(Selection world : m_worlds)
+      values.put(Index.Path.WORLDS, world.toString());
+
+    for(Name category : m_categories)
+      values.put(Index.Path.CATEGORIES, category.toString());
+
     for(String reference : getReferences())
       values.put(Index.Path.REFERENCES, reference);
 

@@ -1140,6 +1140,9 @@ public class AbstractEntry extends ValueGroup
           : m_extensions.values())
       extension.computeIndexValues(values);
 
+    for(String extension : m_extensions.keySet())
+      values.put(Index.Path.EXTENSIONS, extension);
+
     return values;
   }
 

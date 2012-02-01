@@ -1003,6 +1003,7 @@ public class BaseItem extends BaseEntry
     addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
     addIndex(new Index(Index.Path.CATEGORIES, "Categories", TYPE));
     addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
+    addIndex(new Index(Index.Path.EXTENSIONS, "Extensions", TYPE));
   }
 
   //........................................................................
@@ -1302,12 +1303,6 @@ public class BaseItem extends BaseEntry
     values.put(Index.Path.THICKNESSES,
                s_thicknessGrouping.group((Distance)m_substance.get(1)));
     values.put(Index.Path.BREAKS, m_break.group());
-
-    for(Selection world : m_worlds)
-      values.put(Index.Path.WORLDS, world.toString());
-
-    for(Name category : m_categories)
-      values.put(Index.Path.CATEGORIES, category.toString());
 
     return values;
   }
