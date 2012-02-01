@@ -662,6 +662,9 @@ public class PageServlet extends DMAServlet
                    + "alt=\"Valid XHTML 1.0!\" /></a>\n"
                    + "      <IMG src=\"/icons/html5.png\" "
                    + "alt=\"Uses HTML 5!\"/>\n"
+                   + "      <IMG src=\"http://code.google.com/appengine/"
+                   + "images/appengine-silver-120x30.gif\" "
+                   + "alt=\"Powered by Google App Engine\"/>\n"
                    + "    </DIV>\n"
                    + "  </BODY>\n"
                    + "</HTML>\n",
