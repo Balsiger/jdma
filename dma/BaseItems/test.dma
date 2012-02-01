@@ -194,3 +194,31 @@ base item with composite, incomplete, weapon Alchemist's Fire =
   categories        alchemical.
 
 #.....
+#----- Backpack
+
+base item with container Backpack =
+
+  capacity          1 cu ft;
+  state             solid;
+  value             2 gp;
+  weight            2 lbs;
+  probability       Common;
+  size              Small;
+  hardness          2;
+  hp                1;
+  appearances       Uncommon "A simple leather bag with straps to carry it.",
+                    Common "A leather backpack to stow your stuff.",
+                    Uncommon "A finely crafted backpack to stow your stuff.",
+                    Rare "A finely crafted backpack with golden buckles.";
+  substance         leather 1/4 in;
+  player name       "Backpack";
+  worlds            Generic;
+  references        WTC 17524: 126,
+                    TSR 11550: 110;
+  description
+  "A backpack is a leather pack carried on the back, typically with straps to
+  secure it.";
+  synonyms          "Rucksack";
+  categories        gear.
+
+#.....
