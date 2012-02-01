@@ -331,8 +331,10 @@ public class PageServlet extends DMAServlet
       .add("<a href=\"http://validator.w3.org/check?uri=referer\">"
            + "<img src=\"/icons/valid-xhtml10.png\" alt=\"Valid XHTML 1.0!\" />"
            + "</a>")
-      .begin("img").src("/icons/html5.png").alt("Uses HTML 5!")
-      .end("img");
+      .begin("img").src("/icons/html5.png").alt("Uses HTML 5!").end("img")
+      .begin("img").src("http://code.google.com/appengine/images/"
+                        + "appengine-silver-120x30.gif")
+      .alt("Powered by Google App Engine").end("img");
   }
 
   //........................................................................
