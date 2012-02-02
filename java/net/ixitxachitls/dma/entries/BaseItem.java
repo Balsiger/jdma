@@ -670,7 +670,7 @@ public class BaseItem extends BaseEntry
               + "%value %weight %hp %size %substance %hardness %{break DC}"
               + "%probability "
               + "#counted #multiple #multiuse #composite #wearable #container "
-              + "#weapon #light #timed #commodity"
+              + "#weapon #armor #light #timed #commodity"
               + "%appearances "
               + "%qualities %effects"
               // admin
