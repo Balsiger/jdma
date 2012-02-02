@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.values;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
 
@@ -45,6 +46,7 @@ import net.ixitxachitls.input.ParseReader;
 
 //__________________________________________________________________________
 
+@Immutable
 public class Percent extends BaseNumber<Percent>
 {
   //--------------------------------------------------------- constructor(s)
