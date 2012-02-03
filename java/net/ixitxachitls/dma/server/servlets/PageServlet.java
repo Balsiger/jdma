@@ -237,7 +237,7 @@ public class PageServlet extends DMAServlet
 
     //Use UserService from AppEngine for creating Login/Logout Url's
     UserService userService = UserServiceFactory.getUserService();
-    if(user == null)
+    if(!userService.isUserLoggedIn())
     {
       inWriter
         .begin("a").id("login-icon").classes("sprite").tooltip("Login")
@@ -245,11 +245,18 @@ public class PageServlet extends DMAServlet
     }
     else
     {
-      inWriter
-        .begin("a").classes("user")
-        .onClick("util.link(event, '/user/" + user.getName() + "')")
-        .href("/user/" + user.getName())
-        .add(user.getName());
+      if (user == null)
+      {
+        inWriter.script("$().ready(function(){ registration(); } );");
+      }
+      else
+      {
+        inWriter
+          .begin("a").classes("user")
+          .onClick("util.link(event, '/user/" + user.getName() + "')")
+          .href("/user/" + user.getName())
+          .add(user.getName());
+      }
 
       if(inRequest.hasUserOverride())
         inWriter.add(" (" + inRequest.getRealUser().getName() + ")");

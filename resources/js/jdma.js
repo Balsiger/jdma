@@ -30,40 +30,35 @@
  *
  */
 
-//--------------------------------- login ----------------------------------
+//--------------------------------- registration ----------------------------------
 
 /**
- * Create the login dialog and ask the user to lo in.
+ * Create the registration dialog and ask the user to register.
  *
  */
-function login()
+function registration()
 {
-  var loginDialog = $('<div id="login"/>')
-    .html('Please provide username and password to log in:'
+  var registrationDialog = $('<div id="registration"/>')
+    .html('Please provide username to register:'
           + '<p>'
           + '<label>Username'
           + '<input type="text" name="username" validate="non-empty" '
-          + 'validateButton="#login-button" size="30" maxlength="30">'
-          + '</label>'
-          + '<label>Password'
-          + '<input type="password" name="password" validate="non-empty" '
-          + 'validateButton="#login-button" size="30" maxlength="30">'
+          + 'validateButton="#registration-button" size="30" maxlength="30">'
           + '</label>'
           + '<p>'
-          + '<div id="login-error"/>')
+          + '<div id="registration-error"/>')
     .dialog({
-      title: 'DMA Login',
+      title: 'DMA Registration',
       modal: true,
       resizable: false,
       width: 300,
-      dialogClass: 'login-dialog dialog',
+      dialogClass: 'registration-dialog dialog',
       buttons: [
           {
-            id:  'login-button',
-            text: 'Login',
+            id:  'registration-button',
+            text: 'Registration',
             click: function() {
-              doLogin($('input[name="username"]', this)[0].value,
-                      $('input[name="password"]', this)[0].value);
+              doRegistration($('input[name="username"]', this).val());
             }
           },
           {
@@ -76,25 +71,13 @@ function login()
     });
 
   // submit on return if valid
-  loginDialog.keyup(function(event) {
-      if(event.keyCode == 13 && !$('#login-button').is(':disabled'))
-        $('#login-button').click();
+  registrationDialog.keyup(function(event) {
+      if(event.keyCode == 13 && !$('#registration-button').is(':disabled'))
+        $('#registration-button').click();
     });
 
 
-  form.setupValidation(loginDialog);
-}
-
-//..........................................................................
-//--------------------------------- logout ---------------------------------
-
-/**
- * Logout the user.
- *
- */
-function logout()
-{
-  doLogout();
+  form.setupValidation(registrationDialog);
 }
 
 //..........................................................................
@@ -162,45 +145,26 @@ function removeEntry(inID)
 
 //..........................................................................
 
-//-------------------------------- doLogin ---------------------------------
+//-------------------------------- doRegistration ---------------------------------
 
 /**
   *
-  * Try to login into the server. If the login is successful, the page is
+  * Try to register the a new user. If the registration is successful, the page is
   * reloaded, otherwise an error message will be shown.
   *
   * @param       inUsername the username
-  * @param       inPassword the password
   *
   */
-function doLogin(inUsername, inPassword)
+function doRegistration(inUsername)
 {
   var result =
-    util.ajax("/actions/login", { username: inUsername, password: inPassword });
+    util.ajax("/actions/registration", { username: inUsername });
 
   if(result != "")
-    $("#login-error").html(result);
+    $("#registration-error").html(result);
   else
-    // reload the page to show login
+    // reload the page to show registration
     util.reload();
-}
-
-//..........................................................................
-//------------------------------- doLogout ---------------------------------
-
-/**
-  *
-  * Logout the user from the server.
-  *
-  * @param       inUsername the username
-  * @param       inPassword the password
-  *
-  */
-function doLogout()
-{
-  var result = util.ajax("/actions/logout", {});
-
-  util.reload();
 }
 
 //..........................................................................

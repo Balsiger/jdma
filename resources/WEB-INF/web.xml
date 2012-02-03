@@ -40,6 +40,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>registration</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.RegistrationServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>css</servlet-name>
     <servlet-class>net.ixitxachitls.server.servlets.TemplateServlet</servlet-class>
     <init-param>
@@ -129,6 +134,11 @@
   <servlet-mapping>
     <servlet-name>config</servlet-name>
     <url-pattern>/configuration</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>registration</servlet-name>
+    <url-pattern>/actions/registration</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

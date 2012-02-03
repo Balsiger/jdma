@@ -158,6 +158,23 @@ public class BaseCharacter extends BaseEntry
     super(inName, TYPE);
   }
 
+  /**
+   * This is the constructor to create a base character with its
+   * name, email and group.
+   *
+   * @param       inName the name of the base character to create
+   * @param       inEmail the email address of the base character to create
+   * @param       inGroup the group the base character belongs to
+   *
+   */
+  public BaseCharacter(@Nonnull String inName,
+                       @Nonnull String inEmail, @Nonnull Group inGroup)
+  {
+    super(inName, TYPE);
+    m_email = new Text(inEmail);
+    m_group = new EnumSelection<BaseCharacter.Group>(inGroup);
+  }
+
   //........................................................................
 
   //........................................................................
