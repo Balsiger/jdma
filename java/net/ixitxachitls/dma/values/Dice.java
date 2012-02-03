@@ -336,8 +336,6 @@ public class Dice extends Value<Dice>
   @Override
   protected boolean doRead(@Nonnull ParseReader inReader)
   {
-    ParseReader.Position pos = inReader.getPosition();
-
     int number = 0;
     int dice = 0;
 
@@ -361,25 +359,17 @@ public class Dice extends Value<Dice>
     }
 
     if(number <= 0)
-    {
-      inReader.logWarning(pos, "read.value.low", "minimal 1");
       return false;
-    }
 
     try
     {
-      pos = inReader.getPosition();
       dice = inReader.readInt();
 
       if(dice <= 0)
-      {
-        inReader.logWarning(pos, "read.value.low", "minimal 1");
         return false;
-      }
     }
     catch(net.ixitxachitls.input.ReadException e)
     {
-      inReader.logWarning(inReader.getPosition(), "read.dice.dice", null);
       return false;
     }
 
@@ -398,6 +388,38 @@ public class Dice extends Value<Dice>
 
   //........................................................................
 
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the current and given value and return it. The current value is not
+   * changed.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the added values
+   *
+   */
+  @Override
+  public @Nonnull Dice add(@Nonnull Dice inValue)
+  {
+    if(!isDefined())
+      return inValue;
+
+    if(!inValue.isDefined())
+      return this;
+
+    if(m_dice != inValue.m_dice)
+      throw new UnsupportedOperationException("can only add same dice");
+
+    Dice result = create();
+    result.m_number = m_number + inValue.m_number;
+    result.m_dice = m_dice;
+    result.m_modifier = m_modifier + inValue.m_modifier;
+
+    return result;
+  }
+
+  //........................................................................
   //-------------------------------- addTo ---------------------------------
 
   /**
@@ -620,6 +642,7 @@ public class Dice extends Value<Dice>
           "empty", "", null, null,
           "delimiter 1", "1e5 +2", "+1", "e5 +2",
           "delimiter 2", "1ea", "+1", "ea",
+          "delimiter 3", "1min", "+1", "min",
           "too much", "1d6 +e", "1d6 +2147483647", "e",
           "too low 1", "-1d3 +3", null, "-1d3 +3",
           "too low 2", "1d-3 -2", null, "1d-3 -2",
@@ -627,16 +650,6 @@ public class Dice extends Value<Dice>
         };
 
       Value.Test.readTest(tests, new Dice());
-
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 1\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.>>>-1d3 \\+3\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 1\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.1d>>>-3 -2\\.\\.\\.");
-      m_logger.addExpectedPattern("WARNING:.*\\(minimal 1\\) "
-                                  + "on line 1 in document 'test'."
-                                  + "\\.\\.\\.>>>-1d-5 \\+2\\.\\.\\.");
     }
 
     //......................................................................

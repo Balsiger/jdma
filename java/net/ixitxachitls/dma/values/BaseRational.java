@@ -217,12 +217,27 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
   //-------------------------------- isOne ---------------------------------
 
   /**
-   * Check if the value stored is equal to a singular value.
+   * Check if the value stored is equal to 1.
    *
    * @return      true if 1, false else
    *
    */
   public boolean isOne()
+  {
+    return (m_leader == 1 && m_nominator == 0 || m_denominator == 0)
+      || (m_leader == 0 && m_nominator == m_denominator);
+  }
+
+  //........................................................................
+  //----------------------------- isSingular -------------------------------
+
+  /**
+   * Check if the value stored is equal to a singular value.
+   *
+   * @return      true if singlular, false else
+   *
+   */
+  public boolean isSingular()
   {
     return (m_leader == 1 && m_nominator == 0 || m_denominator == 0)
       || m_leader == 0;

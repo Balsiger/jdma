@@ -173,7 +173,7 @@ public class Units<T extends Units> extends Value<T>
     private @Nonnull String m_unit;
 
     /** The plural name of the unit. */
-    private @Nullable String m_units;
+    protected @Nullable String m_units;
 
     /** Other parsed name of the unit. */
     private @Nullable String []m_other;
@@ -256,7 +256,7 @@ public class Units<T extends Units> extends Value<T>
     }
 
     //......................................................................
-    //---------------------------- convertValue ----------------------------
+    //------------------------------ toString ------------------------------
 
     /**
      * Convert the given value with the unit into a String for printing.
@@ -271,7 +271,7 @@ public class Units<T extends Units> extends Value<T>
       if(inValue.isNull())
           return "0 " + m_unit;
 
-      if(inValue.isOne())
+      if(inValue.isSingular())
         return inValue.toString() + " " + m_unit;
       else
         return inValue.toString() + " " + m_units;
@@ -297,7 +297,7 @@ public class Units<T extends Units> extends Value<T>
         {
           inValue.format(false),
           " ",
-          inValue.isOne() ? m_unit : m_units,
+          inValue.isSingular() ? m_unit : m_units,
         }));
     }
 
@@ -485,7 +485,7 @@ public class Units<T extends Units> extends Value<T>
     private @Nonnull String m_name;
 
     /** All the possible units. */
-    private @Nonnull Unit []m_units;
+    protected @Nonnull Unit []m_units;
 
     /** The base unit. */
     private int m_base = -1;
@@ -747,39 +747,6 @@ public class Units<T extends Units> extends Value<T>
     }
 
     //......................................................................
-    //------------------------------- toString -----------------------------
-
-    /**
-     * Convert the given values to a string, depending on the given kind.
-     *
-     * @param       inValues the values to print with the set information
-     *
-     * @return      a String representation, depending on the kind given
-     *
-     */
-    protected @Nonnull String toString(Rational []inValues)
-    {
-      assert inValues.length == m_units.length
-        : "number of units and values don't match";
-
-      StringBuffer result = new StringBuffer();
-
-      for(int i = 0; i < m_units.length; i++)
-        if(inValues[i] != null && !inValues[i].isNull())
-        {
-          result.append(m_units[i].toString(inValues[i]));
-          result.append(" ");
-        }
-
-      String end = result.toString().trim();
-
-      if(end.length() == 0)
-        return "0 " + getBaseUnit();
-
-      return end;
-    }
-
-    //......................................................................
     //-------------------------------- format ------------------------------
 
     /**
@@ -810,69 +777,6 @@ public class Units<T extends Units> extends Value<T>
         return new Span("unit", "0 " + getBaseUnit());
 
       return new Command(commands.toArray());
-    }
-
-    //......................................................................
-    //------------------------------- read ---------------------------------
-
-    /**
-     * Read the value from the reader and replace the current one.
-     *
-     * @param       inReader     the reader to read from
-     * @param       inFirstValue the first value of the set (already read)
-     * @param       inFirstUnit  the unit of the first value read
-     *
-     * @return      true if read, false if not
-     *
-     */
-    public @Nonnull Rational []read(@Nonnull ParseReader inReader,
-                                    @Nonnull Rational inFirstValue,
-                                    int inFirstUnit)
-    {
-      // create the return array
-      Rational []result = new Rational[m_units.length];
-
-      // store the first value
-      if(inFirstUnit < 0 || inFirstUnit >= result.length)
-        throw new IllegalArgumentException("first unit not determined "
-                                           + "correctly");
-
-      result[inFirstUnit] = inFirstValue;
-
-      // now try to read as many values as possible
-      ParseReader.Position pos = inReader.getPosition();
-
-      while(true)
-      {
-        Rational read = new Rational().read(inReader);
-        if(read != null && read.getValue() >= 0)
-        {
-          // we read a value, no try to find the unit
-          int index = expectUnit(inReader);
-
-          if(index < 0)
-          {
-            inReader.seek(pos);
-
-            break;
-          }
-
-          if(result[index] == null)
-            result[index] = read;
-          else
-            result[index] = result[index].add(read);
-
-          pos = inReader.getPosition();
-        }
-        else
-        {
-          inReader.seek(pos);
-
-          break;
-        }
-      }
-
-      return result;
     }
 
     //......................................................................
@@ -1086,13 +990,65 @@ public class Units<T extends Units> extends Value<T>
       table.add(converted.m_set.format(converted.m_values));
     }
 
-    return new Window(m_set.format(m_values),
+    return new Window(formatUnits(),
                       new Table("#inline#1:L,,;100:L",
                                 table.toArray(new Object[table.size()])));
   }
 
   //........................................................................
-  //----------------------------- convertValue -----------------------------
+  //----------------------------- formatUnits ------------------------------
+
+  /**
+   * Format all the units for printing.
+   *
+   * @return      the command to print all unit values
+   *
+   */
+  protected @Nonnull Command formatUnits()
+  {
+    ArrayList<Object> commands = new ArrayList<Object>();
+
+    for(int i = 0; i < m_values.length; i++)
+    {
+      Command command = formatSingleUnit(i);
+      if(command == null)
+        continue;
+
+      if(commands.size() > 0)
+        commands.add(" ");
+
+      commands.add(command);
+    }
+
+    if(commands.size() == 0)
+      return new Span("unit", "0 " + getBaseUnit());
+
+    return new Command(commands);
+  }
+
+  //........................................................................
+  //--------------------------- formatSingleUnit ---------------------------
+
+  /**
+   * Format a single unit value, given by index.
+   *
+   * @param       inIndex the index of the unit value to format.
+   *
+   * @return      the command to format the value or null if there is no value
+   *
+   */
+  protected @Nullable Command formatSingleUnit(int inIndex)
+  {
+    assert inIndex >= 0 && inIndex <= m_values.length;
+
+    if(m_values[inIndex] == null || !m_values[inIndex].isDefined())
+      return null;
+
+    return m_set.m_units[inIndex].format(m_values[inIndex]);
+  }
+
+  //........................................................................
+  //------------------------------ doToString ------------------------------
 
   /**
    * Convert the value to a string, depending on the given kind.
@@ -1106,7 +1062,43 @@ public class Units<T extends Units> extends Value<T>
     if(m_set == null)
       return "$undefined$";
 
-    return m_set.toString(m_values);
+    StringBuilder result = new StringBuilder();
+
+    for(int i = 0; i < m_set.m_units.length; i++)
+    {
+      String single = singleUnitToString(i);
+      if(!single.isEmpty())
+        result.append(single + " ");
+    }
+
+    String end = result.toString().trim();
+
+    if(end.length() == 0)
+      return "0 " + m_set.getBaseUnit();
+
+    return end;
+  }
+
+  //........................................................................
+  //-------------------------- singleUnitToString --------------------------
+
+  /**
+   * Convert a single unit to a string.
+   *
+   * @param       inIndex the index of the unit to print
+   *
+   * @return      the converted string
+   *
+   */
+  protected @Nonnull String singleUnitToString(int inIndex)
+  {
+    if(inIndex < 0 || inIndex >= m_values.length)
+      throw new IllegalArgumentException("invalid index given");
+
+    if(m_values[inIndex] == null || m_values[inIndex].isNull())
+      return "";
+
+    return m_set.m_units[inIndex].toString(m_values[inIndex]);
   }
 
   //........................................................................
@@ -1487,36 +1479,83 @@ public class Units<T extends Units> extends Value<T>
    * @return      true if read, false if not
    *
    */
+  @Override
   public boolean doRead(@Nonnull ParseReader inReader)
   {
-    Rational read = new Rational().read(inReader);
-
-    if(read == null || read.getValue() < 0)
+    int i = readSingleUnit(inReader);
+    if(i < 0)
       return false;
 
-    // read the first value, i.e. determine what values to read
-    int i;
-    int index = -1;
-    for(i = 0; i < m_sets.length; i++)
-    {
-      index = m_sets[i].expectUnit(inReader);
-
-      if(index >= 0)
-        break;
-    }
-
-    // found no valid set
-    if(i >= m_sets.length)
-      return false;
-
-    // we use the set found
-    m_set = m_sets[i];
-    m_values = m_set.read(inReader, read, index);
+    while(readSingleUnit(inReader) >= 0)
+      ;
 
     return true;
   }
 
   //........................................................................
+  //---------------------------- readSingleUnit ----------------------------
+
+  /**
+   * Read a single unit.
+   *
+   * @param       inReader the reader to read from
+   *
+   * @return      the number of the unit read or -1 if none read
+   *
+   */
+  protected int readSingleUnit(@Nonnull ParseReader inReader)
+  {
+    ParseReader.Position pos = inReader.getPosition();
+    Rational read = new Rational().read(inReader);
+
+    if(read == null || read.getValue() < 0)
+    {
+      inReader.seek(pos);
+      return -1;
+    }
+
+    if(m_set == null)
+    {
+      // read the first value, i.e. determine what values to read
+      int i;
+      int index = -1;
+      for(i = 0; i < m_sets.length; i++)
+      {
+        index = m_sets[i].expectUnit(inReader);
+
+        if(index >= 0)
+          break;
+      }
+
+      // found no valid set
+      if(i >= m_sets.length)
+      {
+        inReader.seek(pos);
+        return -1;
+      }
+
+      // we use the set found
+      m_set = m_sets[i];
+      m_values = new Rational[m_set.m_units.length];
+      m_values[index] = read;
+
+      return index;
+    }
+
+    int index = m_set.expectUnit(inReader);
+    if(index >= 0)
+      if(m_values[index] == null)
+        m_values[index] = read;
+      else
+        m_values[index] = m_values[index].add(read);
+    else
+      inReader.seek(pos);
+
+    return index;
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
@@ -1937,16 +1976,6 @@ public class Units<T extends Units> extends Value<T>
                    + "sp/sp/silver/silvers/silver piece/silver pieces *1/10, "
                    + "cp/cp/copper/coppers/copper piece/copper pieces *1/100",
                    set.toString());
-
-      ParseReader reader =
-        new ParseReader(new java.io.StringReader("1 cp 5 sp 2/3gp 1/2pp 5cp"),
-                        "test");
-
-      Rational []values = set.read(reader, new Rational(0), 0);
-      assertEquals("read", "\\span{unit}{\\frac{1}{2} pp} "
-                   + "\\span{unit}{\\frac{2}{3} gp} \\span{unit}{5 sp} "
-                   + "\\span{unit}{6 cp}",
-                   set.format(values).toString());
 
       // now a String definition
       set = new Set("1/2    : Metric = 1000/1    : t : tons|ton,"

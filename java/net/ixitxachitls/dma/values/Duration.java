@@ -141,7 +141,7 @@ public class Duration extends Units<Duration>
                + "                    60/1 : minute|minutes : min|mins.");
 
   /** The sets of units for this value. */
-  private static @Nonnull Set []s_sets = parseDefinition(s_definition);
+  private static final @Nonnull Set []s_sets = parseDefinition(s_definition);
 
   /** The grouping for durations (time). */
   protected static final Group<Duration, Long, String> s_timeGrouping =

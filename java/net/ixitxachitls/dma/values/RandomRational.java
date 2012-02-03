@@ -900,8 +900,6 @@ public class RandomRational extends BaseRational<RandomRational>
         };
 
       Value.Test.readTest(tests, new RandomRational());
-
-      m_logger.addExpectedPattern("WARNING:.*5de>>>.*");
     }
 
     //......................................................................
