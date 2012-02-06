@@ -40,8 +40,8 @@
   </servlet>
 
   <servlet>
-    <servlet-name>registration</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.RegistrationServlet</servlet-class>
+    <servlet-name>register</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.RegisterServlet</servlet-class>
   </servlet>
 
   <servlet>
@@ -137,8 +137,8 @@
   </servlet-mapping>
 
   <servlet-mapping>
-    <servlet-name>registration</servlet-name>
-    <url-pattern>/actions/registration</url-pattern>
+    <servlet-name>register</servlet-name>
+    <url-pattern>/actions/register</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

@@ -30,35 +30,42 @@
  *
  */
 
-//--------------------------------- registration ----------------------------------
+//--------------------------------- register ----------------------------------
 
 /**
  * Create the registration dialog and ask the user to register.
  *
  */
-function registration()
+function register()
 {
-  var registrationDialog = $('<div id="registration"/>')
-    .html('Please provide username to register:'
+  var registrationDialog = $('<div id="register"/>')
+    .html('Please provide username and real name to register:'
           + '<p>'
           + '<label>Username'
           + '<input type="text" name="username" validate="non-empty" '
-          + 'validateButton="#registration-button" size="30" maxlength="30">'
+          + 'validateButton="#register-button" size="30" maxlength="30">'
           + '</label>'
           + '<p>'
-          + '<div id="registration-error"/>')
+          + '<p>'
+          + '<label>Real name'
+          + '<input type="text" name="realname" validate="non-empty" '
+          + 'validateButton="#register-button" size="30" maxlength="30">'
+          + '</label>'
+          + '<p>'
+          + '<div id="register-error"/>')
     .dialog({
       title: 'DMA Registration',
       modal: true,
       resizable: false,
       width: 300,
-      dialogClass: 'registration-dialog dialog',
+      dialogClass: 'register-dialog dialog',
       buttons: [
           {
-            id:  'registration-button',
+            id:  'register-button',
             text: 'Registration',
             click: function() {
-              doRegistration($('input[name="username"]', this).val());
+              doRegister($('input[name="username"]', this).val(),
+                         $('input[name="realname"]', this).val());
             }
           },
           {
@@ -72,8 +79,8 @@ function registration()
 
   // submit on return if valid
   registrationDialog.keyup(function(event) {
-      if(event.keyCode == 13 && !$('#registration-button').is(':disabled'))
-        $('#registration-button').click();
+      if(event.keyCode == 13 && !$('#register-button').is(':disabled'))
+        $('#register-button').click();
     });
 
 
@@ -149,19 +156,19 @@ function removeEntry(inID)
 
 /**
   *
-  * Try to register the a new user. If the registration is successful, the page is
+  * Try to register a new user. If the registration is successful, the page is
   * reloaded, otherwise an error message will be shown.
   *
   * @param       inUsername the username
   *
   */
-function doRegistration(inUsername)
+function doRegister(inUsername, inRealName)
 {
   var result =
-    util.ajax("/actions/registration", { username: inUsername });
+    util.ajax("/actions/register", { username: inUsername, realname: inRealName });
 
   if(result != "")
-    $("#registration-error").html(result);
+    $("#register-error").html(result);
   else
     // reload the page to show registration
     util.reload();

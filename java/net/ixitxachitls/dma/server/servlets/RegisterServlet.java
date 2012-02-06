@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -41,7 +41,7 @@ import net.ixitxachitls.util.logging.Log;
 /**
  * The servlet responsible for handling registration requests.
  *
- * @file          RegistrationServlet.java
+ * @file          RegisterServlet.java
  *
  * @author        fred@dobler.net (Fred Dobler)
  *
@@ -51,15 +51,15 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-public class RegistrationServlet extends ActionServlet
+public class RegisterServlet extends ActionServlet
 {
   //--------------------------------------------------------- constructor(s)
 
-  //----------------------------- RegistrationServlet ----------------------
+  //----------------------------- RegisterServlet ----------------------
   /**
     * Create the servlet.
     */
-  public RegistrationServlet()
+  public RegisterServlet()
   {
     //nothing to do
   }
@@ -69,12 +69,6 @@ public class RegistrationServlet extends ActionServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The name of the user cookie. */
-  public static final String COOKIE_USER = "USER";
-
-  /** The name of the token cookie. */
-  public static final String COOKIE_TOKEN = "TOKEN";
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -102,9 +96,13 @@ public class RegistrationServlet extends ActionServlet
                                      @Nonnull HttpServletResponse inResponse)
   {
     String username = inRequest.getParam("username");
+    String realname = inRequest.getParam("realname");
 
     if(username == null)
       return "No username given";
+
+    if(realname == null)
+      return "No real name given";
 
     UserService userService = UserServiceFactory.getUserService();
     if(!userService.isUserLoggedIn())
@@ -114,17 +112,19 @@ public class RegistrationServlet extends ActionServlet
 
     BaseCharacter user =
         DMADataFactory.getBaseData().getEntry(username, BaseCharacter.TYPE);
-    if (user != null)
+    if(user != null)
     {
       return "Username allready used, choose a new one.";
     }
 
-    //Save new guest BaseCharacter
+    //Save the new user with the default group GUEST.
     BaseCharacter baseCharacter = new BaseCharacter(username, userService
-        .getCurrentUser().getEmail(), Group.GUEST);
-    DMADataFactory.getBaseData().update(baseCharacter);
+        .getCurrentUser().getEmail());
+    baseCharacter.setRealName(realname);
+    baseCharacter.setGroup(Group.GUEST);
+    baseCharacter.save();
 
-    Log.event(username, "registration", "user registered");
+    Log.event(username, "register", "user registered");
 
     return "";
   }

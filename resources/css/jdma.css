@@ -268,10 +268,10 @@ INPUT.invalid
 }
 
 /******************************************************************************
- * login
+ * register
  *****************************************************************************/
 
-#login LABEL
+#register LABEL
 {
   padding-top: 5px;
   font-size:   75%;
@@ -280,7 +280,7 @@ INPUT.invalid
   text-align:  left;
 }
 
-#login LABEL INPUT
+#register LABEL INPUT
 {
   font-size:    120%;
   border-style: solid;
@@ -289,7 +289,7 @@ INPUT.invalid
   display:      block;
 }
 
-DIV.login LABEL
+DIV.register LABEL
 {
   font-size:  75%;
   color:      #888;
@@ -297,7 +297,7 @@ DIV.login LABEL
   text-align: left;
 }
 
-#login-error
+#register-error
 {
   color:      #800;
 }

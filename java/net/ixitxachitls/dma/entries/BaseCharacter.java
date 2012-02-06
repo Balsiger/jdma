@@ -160,19 +160,17 @@ public class BaseCharacter extends BaseEntry
 
   /**
    * This is the constructor to create a base character with its
-   * name, email and group.
+   * name and email.
    *
    * @param       inName the name of the base character to create
    * @param       inEmail the email address of the base character to create
-   * @param       inGroup the group the base character belongs to
    *
    */
   public BaseCharacter(@Nonnull String inName,
-                       @Nonnull String inEmail, @Nonnull Group inGroup)
+                       @Nonnull String inEmail)
   {
-    super(inName, TYPE);
+    this(inName);
     m_email = new Text(inEmail);
-    m_group = new EnumSelection<BaseCharacter.Group>(inGroup);
   }
 
   //........................................................................
@@ -432,6 +430,36 @@ public class BaseCharacter extends BaseEntry
   protected boolean readEntry(@Nonnull ParseReader inReader)
   {
     return super.readEntry(inReader);
+  }
+
+  //........................................................................
+  //------------------------------- setGroup -------------------------------
+
+  /**
+   * Set the group of the user.
+   *
+   * @param inSelected the selected group
+   *
+   */
+  public void setGroup(@Nonnull Group inSelected)
+  {
+    m_group = m_group.as(inSelected);
+    changed();
+  }
+
+  //........................................................................
+  //------------------------------- setRealName ----------------------------
+
+  /**
+   * Set the real name of the user.
+   *
+   * @param inRealName the real name of the user
+   *
+   */
+  public void setRealName(@Nonnull String inRealName)
+  {
+    m_realName = m_realName.as(inRealName);
+    changed();
   }
 
   //........................................................................

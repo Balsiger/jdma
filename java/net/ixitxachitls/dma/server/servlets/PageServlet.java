@@ -247,7 +247,7 @@ public class PageServlet extends DMAServlet
     {
       if (user == null)
       {
-        inWriter.script("$().ready(function(){ registration(); } );");
+        inWriter.script("$().ready(function(){ register(); } );");
       }
       else
       {
