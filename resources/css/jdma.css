@@ -766,6 +766,17 @@ DIV.file DIV.remove
   right:    5px;
 }
 
+DIV.edit-checkbox
+{
+  display: inline-block;
+  width: 110px;
+}
+
+DIV.edit-checkbox INPUT
+{
+  margin-right: 5px;
+}
+
 /******************************************************************************
  * actions
  *****************************************************************************/

@@ -29,7 +29,7 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.LongFormattedText;
 
 //..........................................................................
 
@@ -98,7 +98,7 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
 
   /** The incomplete radius. */
   @Key("incomplete")
-  protected @Nonnull Text m_incomplete = new Text();
+  protected @Nonnull LongFormattedText m_incomplete = new LongFormattedText();
 
   //........................................................................
 

@@ -326,6 +326,9 @@ edit.Base.create = function(inElement)
     case 'selection':
       return new edit.Selection(element, properties);
 
+    case 'multiselection':
+      return new edit.MultiSelection(element, properties);
+
     case 'formatted':
       return new edit.FormattedString(element, properties);
 
@@ -844,6 +847,82 @@ edit.Selection.prototype._createElement = function()
     }
 
   return element;
+};
+
+//..........................................................................
+//----------------------------------------------------------- MultiSelection
+
+/**
+ * An object representing an editable multi selection field.
+ *
+ * @param inEditable   the editable for this edit, if any
+ * @param inProperties an object with all the properties
+ *
+ */
+edit.MultiSelection = function(inEditable, inProperties)
+{
+  // this is used in the constructor
+  this._selections = inProperties.values;
+
+  edit.Field.call(this, inEditable, inProperties);
+
+  // selections are always defined when starting to edit, as per default always
+  // something will be selected
+  this._defined = true;
+};
+extend(edit.MultiSelection, edit.Field);
+
+/**
+  * Create the element associated with this editable.
+  *
+  * @return the html element created
+  */
+edit.MultiSelection.prototype._createElement = function()
+{
+  var element = $('<div class="edit-field" />');
+
+  if(this._selections)
+    for(var i = 0; i < this._selections.length; i++)
+    {
+      var parts = this._selections[i].split("::");
+
+      var text  = parts[0];
+      var value = parts[0];
+
+      if(parts.length > 1)
+        value = parts[1];
+
+      var checkbox = $('<div class="edit-checkbox">'
+                       + '<input type=checkbox name="' + value + '" value="'
+                       + value + '">' + text
+                       + '</div>');
+
+      element.append(checkbox);
+
+      if (this._value.match(new RegExp(value + "(,|$)")))
+        checkbox.find('input').attr('checked', 'checked');
+    }
+
+  return element;
+};
+
+/**
+ * Get the value of the field.
+ *
+ * @return the fields value, ready for storing.
+ */
+edit.MultiSelection.prototype._getValue = function()
+{
+  var values = '';
+  var checkboxes = this._element.find('input');
+  for(var i = 0; i < checkboxes.length; i++)
+    if(checkboxes[i].checked)
+      if(values)
+        values += ", " + checkboxes[i].value;
+      else
+        values = checkboxes[i].value;
+
+  return values;
 };
 
 //..........................................................................

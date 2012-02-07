@@ -666,7 +666,7 @@ public class BaseItem extends BaseEntry
               + "\n"
               + "$par "
               + "#incomplete "
-              + "%base %synonyms %{player name} %worlds %categories"
+              + "%base %extensions %synonyms %{player name} %worlds %categories"
               + "%value %weight %hp %size %substance %hardness %{break DC}"
               + "%probability "
               + "#counted #multiple #multiuse #composite #wearable #container "
@@ -679,11 +679,11 @@ public class BaseItem extends BaseEntry
 
   /** The printer for printing in a list. */
   public static final ListPrint s_listPrint =
-    new ListPrint("1:L(label);5:L(id)[ID];20(producttitle)[Title];"
-                  + "1:L(system)[System];1:L(worlds)[Worlds];"
-                  + "1:L(short)[Short Description]",
-                  "$label $listlink", null, "$name", "$system",
-                  "$worlds", "${short description}");
+    new ListPrint("1:L(label);10:L(name)[Name];"
+                  + "1:L(value)[Value];1:L(weight)[Weight];1:L(worlds)[Worlds];"
+                  + "1:L(short)[Short Description];5:L(extensions)[Extensions]",
+                  "$label $listlink", null, "$value", "$weight",
+                  "$worlds", "${short description}", "$extensions");
 
   /** The type of this entry. */
   public static final BaseType<BaseItem> TYPE =
@@ -1274,6 +1274,15 @@ public class BaseItem extends BaseEntry
                                 Value.UNDEFINED, "player name")
         .withDM(true)
         .withEditable(true);
+
+    if("extensions".equals(inKey))
+      return new FormattedValue(Strings.toString(m_extensions.keySet(), ", ",
+                                                 ""), null, "extensions")
+        .withEditable(true)
+        .withEditType("multiselection")
+        .withEditChoices("armor||commoditiy||composite||container||counted"
+                         + "||incomplete||light||multiple||multiuse||timed"
+                         + "||weapon||wearable");
 
     return super.computeValue(inKey, inDM);
   }

@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.entries;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.ArrayList;
 // import java.util.Collection;
 import java.util.HashMap;
@@ -2078,6 +2079,20 @@ public class AbstractEntry extends ValueGroup
           addBase(base);
 
       changed();
+      return null;
+    }
+
+    if("extensions".equals(inKey))
+    {
+      List<String> extensions = Arrays.asList(inText.split(",\\s+"));
+      for(Iterator<String> i = m_extensions.keySet().iterator(); i.hasNext(); )
+        if(!extensions.contains(i.next()))
+          i.remove();
+
+      for(String extension : extensions)
+        if(!m_extensions.containsKey(extension))
+          addExtension(extension);
+
       return null;
     }
 

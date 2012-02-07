@@ -1785,7 +1785,7 @@ base item with multiple Trail Ration =
   substance         paper 1 in;
   player name       "Trail Ration";
   worlds            Generic;
-  references        WYC 17524: 127/128;
+  references        WTC 17524: 127/128;
   description
   "Trail rations are compact, dry, high-energy foods suitable for travel, such
   as jerky, dried fruit, hardtack, and nuts.";
@@ -5981,7 +5981,7 @@ base item with container Saddlebags =
   player name       "Saddlebags";
   worlds            Generic;
   references        WTC 17524: 129,
-                    "WTC 11550" 110;
+                    TSR 11550: 110;
   description
   "A pair of saddle bags.";
   synonyms          "Bags, Saddle";
@@ -6192,7 +6192,7 @@ base item Cloak =
   substance         cloth 1/4 in;
   player name       "Cloak";
   worlds            Generic;
-  references        "WTC 17752" 252-253;
+  references        WTC 17752: 252-253;
   description
   "A simple cloak.";
   categories        clothing,
