@@ -186,8 +186,7 @@ public class StaticPageServlet extends PageServlet
     @org.junit.Test
     public void headerFooter()
     {
-
-
+      m_helper.setEnvIsLoggedIn(false);
       java.io.ByteArrayOutputStream output =
         new java.io.ByteArrayOutputStream();
       DMARequest request = EasyMock.createMock(DMARequest.class);

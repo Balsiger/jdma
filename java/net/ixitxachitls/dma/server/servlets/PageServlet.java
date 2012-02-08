@@ -532,6 +532,7 @@ public class PageServlet extends DMAServlet
     @org.junit.Test
     public void simple() throws Exception
     {
+      m_helper.setEnvIsLoggedIn(false);
       DMARequest request = EasyMock.createMock(DMARequest.class);
       HttpServletResponse response =
         EasyMock.createMock(HttpServletResponse.class);
