@@ -24,8 +24,8 @@
 package net.ixitxachitls.dma.entries;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 // import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,7 +79,6 @@ import net.ixitxachitls.output.commands.Par;
 import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Title;
-import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.EmptyIterator;
 import net.ixitxachitls.util.Encodings;
@@ -583,7 +582,6 @@ public class AbstractEntry extends ValueGroup
 
   /**
    * Get the variable for the given key along with the group it is found in.
-   * This method also looks in attachments.
    *
    * @param       inKey the name of the key to get the value for
    *
@@ -597,16 +595,6 @@ public class AbstractEntry extends ValueGroup
 
     if(result != null)
       return result;
-
-    // check the attachments for a value
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//     {
-//       AbstractAttachment att = i.next();
-//       Pair<ValueGroup, Variable> var = att.getVariable(inKey);
-
-//       if(var != null)
-//         return var;
-//     }
 
     return null;
   }
@@ -698,7 +686,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested base entries
    *
    */
-  @Deprecated // this might be problematic with app engine
+  @Override
   public List<BaseEntry> getBaseEntries()
   {
     if(m_baseEntries == null)
@@ -1160,30 +1148,15 @@ public class AbstractEntry extends ValueGroup
    */
   public @Nonnull Command combineBaseValues(@Nonnull String inName)
   {
-    List<Pair<BaseEntry, Value>> baseValues = getBaseValues(inName);
-
-    if(baseValues.isEmpty())
-      return new Command("");
-
-    List<Value> values = new ArrayList<Value>();
-    List<List<BaseEntry>> entries = new ArrayList<List<BaseEntry>>();
-    for(Pair<BaseEntry, Value> value : baseValues)
-      addBaseValue(values, entries, value.second(), value.first());
-
-    // Compute the command for printing.
-    List<Command> commands = new ArrayList<Command>();
-    Iterator<Value> i = values.iterator();
-    Iterator<List<BaseEntry>> j = entries.iterator();
-    while(i.hasNext() && j.hasNext())
+    List<Object> commands = new ArrayList<Object>();
+    for(BaseEntry base : getBaseEntries())
     {
-      Value value = i.next();
-      List<BaseEntry> entryList = j.next();
-      List<String> names = new ArrayList<String>();
-      for(BaseEntry entry : entryList)
-        names.add(entry.getName());
-
-      commands.add(new Window(value.format(), "from "
-                              + Strings.toString(names, ", ", "none")));
+      Value value = base.getValue(inName);
+      if(value != null && value.isDefined())
+      {
+        commands.add(new Divider("base", base.getName()));
+        commands.add(value.format());
+      }
     }
 
     return new Command(commands);
@@ -1758,6 +1731,8 @@ public class AbstractEntry extends ValueGroup
         commands.add(subtitle.format(this, inDM, true));
 
       commands.add(computeValue("description", inDM).format(this, inDM, true));
+      commands.add(new Divider("base-values",
+                               combineBaseValues("description")));
       commands.add(computeValue("short description", inDM)
                    .format(this, inDM, true));
 
@@ -2490,28 +2465,6 @@ public class AbstractEntry extends ValueGroup
 
       if(key != null)
         readVariable(inReader, variables.getVariable(key));
-      else
-        for(AbstractExtension extension : m_extensions.values())
-        {
-          if(extension == null)
-            Log.warning("invalid extension ignored for " + getName());
-          else
-          {
-            Variables extensionVariables = extension.getVariables();
-
-            if(extensionVariables == null)
-              continue;
-
-            key = inReader.expect(extensionVariables.getKeywords());
-
-            if(key != null)
-            {
-              extension.readVariable(inReader,
-                                     extensionVariables.getVariable(key));
-              break;
-            }
-          }
-        }
 
       if(key == null)
       {

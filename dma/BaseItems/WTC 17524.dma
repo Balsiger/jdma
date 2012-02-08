@@ -541,25 +541,18 @@ base item with incomplete, weapon Crowbar =
 
   incomplete
   "+2 to Strength checks for prying open doors and chests";
-  damage            1d6;
-  weapon type       Bludgeoning;
+  base              Club;
   critical          20/x2;
-  weapon style      One-Handed Melee;
   proficiency       Improvised;
-  range increment   10 ft;
-  reach             5 ft;
   value             2 gp;
   weight            5 lbs;
   probability       Uncommon;
   size              {~, from style} Small;
-  hardness          5;
-  hp                12;
   appearances       Rare "A well oiled, finely crafted crowbar.",
                     Common "A sturdy crowbar.",
                     Uncommon "A rusty bar of iron.";
   substance         iron 1 in;
   player name       "Crowbar";
-  worlds            Generic;
   references        WTC 17524: 128,
                     TSR 11550: 110;
   description
@@ -569,7 +562,6 @@ base item with incomplete, weapon Crowbar =
   purposes. If used in combat, treat a crowbar as a one-handed improvised
   weapon (see page 113 of the \Product[WTC 17524]{Player's Handbook}) that
   deals bludgeoning damage equal to that of a club of its size.";
-  synonyms          "Baton";
   categories        gear.
 
 #.....

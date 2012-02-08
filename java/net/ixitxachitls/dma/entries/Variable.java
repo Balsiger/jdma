@@ -32,6 +32,8 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.Span;
+import net.ixitxachitls.output.commands.Window;
 
 //..........................................................................
 
@@ -153,7 +155,21 @@ public class Variable extends ValueHandle<Variable>
    */
   public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
   {
-    return get(inEntry).format(!m_printUndefined);
+    Value value = get(inEntry);
+
+    // if the current value is not defined, use the first defined value from a
+    // base entry
+    if(!value.isDefined())
+      for(BaseEntry base : inEntry.getBaseEntries())
+      {
+        Value baseValue = get(base);
+        if(baseValue.isDefined())
+          return new Window(new Span("base-value",
+                                     baseValue.format(!m_printUndefined)),
+                            "From " + base.getName());
+      }
+
+    return value.format(!m_printUndefined);
   }
 
   //........................................................................

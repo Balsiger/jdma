@@ -37,6 +37,7 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.Variables;
@@ -339,6 +340,21 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   public static @Nonnull Iterator<String> getAutoExtensions(Class inClass)
   {
     return new ArrayIterator<String>(s_autoExtensions.get(inClass));
+  }
+
+  //........................................................................
+  //---------------------------- getBaseEntries ----------------------------
+
+  /**
+   * Get the base entries this abstract entry is based on, if any.
+   *
+   * @return      the requested base entries
+   *
+   */
+  @Override
+  public List<BaseEntry> getBaseEntries()
+  {
+    return m_entry.getBaseEntries();
   }
 
   //........................................................................

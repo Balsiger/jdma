@@ -1078,6 +1078,27 @@ SPAN.computed
     border-bottom-style: dotted;
 }
 
+SPAN.base-value
+{
+    border-bottom-color: #88FF88;
+    border-bottom-width: 1px;
+    border-bottom-style: dotted;
+}
+
+DIV.base-values
+{
+  border-top: 1px solid #aaa;
+  font-size: small;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+DIV.base-values DIV.base
+{
+  color: #aaa;
+  float: right;
+}
+
 SPAN.HOUSE_RULE > SPAN.window
 {
     margin-top:   -60px;

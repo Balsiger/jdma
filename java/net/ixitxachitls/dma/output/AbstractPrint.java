@@ -42,7 +42,6 @@ import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Section;
 import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -86,7 +85,7 @@ public abstract class AbstractPrint
 
   /** Tokenizer string to separate values to print. */
   private static final @Nonnull String s_delimiter =
-    "(\\$|#|%|\\?|&)(?:\\{(.*?)\\}|(\\w+))";
+    "((?:\\$|#|%|\\?|&)(?:\\+|&)?)(?:\\{(.*?)\\}|(\\w+))";
 
   //........................................................................
 
@@ -221,7 +220,7 @@ public abstract class AbstractPrint
               break;
 
             default:
-              Log.warning("invalid token '" + token.charAt(0) + " encountered");
+              throw new IllegalStateException("should not happen");
           }
         }
       }
@@ -253,10 +252,14 @@ public abstract class AbstractPrint
   {
     switch(inName.charAt(0))
     {
-      case '+':
+      case '&':
         return new FormattedValue
-          (inEntry.combineBaseValues(inName.substring(1)), null, inName)
+          (inEntry.combineBaseValues(inName.substring(1)),
+           inEntry.computeValue(inName, inDM), inName)
           .withDM(inDM);
+
+      case '+':
+        throw new UnsupportedOperationException("not yet implemented");
 
       default:
         return inEntry.computeValue(inName, inDM);

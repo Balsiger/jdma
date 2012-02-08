@@ -1267,35 +1267,6 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
-  //------------------------------- getValue -------------------------------
-
-//   /**
-//    * Get a value given as a field.
-//    *
-//    * @param       inField the field for which to get the value
-//    *
-//    * @return      the value the field has in this object, if any
-//    *
-//    * @undefined   returns null if the field is not found
-//    *
-//    */
-//   public Value getValue(Field inField)
-//   {
-//     if(inField == null)
-//       return null;
-
-//     try
-//     {
-//       return (Value)inField.get(this);
-//     }
-//     catch(java.lang.IllegalAccessException e)
-//     {
-//       throw new UnsupportedOperationException
-//         ("Cannot access field " + inField.getName() + ": " + e);
-//     }
-//   }
-
-  //........................................................................
   //----------------------------- getVariable -----------------------------
 
   /**
@@ -1603,6 +1574,21 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //---------------------------- getBaseEntries ----------------------------
+
+  /**
+   * Get the base entries this abstract entry is based on, if any.
+   *
+   * @return      the requested base entries
+   *
+   */
+  public List<BaseEntry> getBaseEntries()
+  {
+    return new ArrayList<BaseEntry>();
+  }
+
+  //........................................................................
+
   //-------------------------- combineBaseValues ---------------------------
 
   /**
