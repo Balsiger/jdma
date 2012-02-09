@@ -144,21 +144,6 @@ public interface DMAData
    *
    * @param    <T> The type of entry to get
    * @param    inType the type of entries to get
-   *
-   * @return   a map with id and type
-   *
-   */
-  public @Nonnull <T extends AbstractEntry> NavigableMap<String, T>
-    getEntries(AbstractType<T> inType);
-
-  //........................................................................
-  //------------------------------ getEntries ------------------------------
-
-  /**
-   * Gets all the entries of a specific type.
-   *
-   * @param    <T> The type of entry to get
-   * @param    inType the type of entries to get
    * @param    inStart the starting number of entires to get (starts as 0)
    * @param    inSize  the maximal number of entries to return
    *

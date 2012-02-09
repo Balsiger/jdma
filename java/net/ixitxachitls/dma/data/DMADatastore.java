@@ -144,28 +144,6 @@ public class DMADatastore implements DMAData
 
   //-------------------------------------------------------------- accessors
 
-  //------------------------------ getEntries ------------------------------
-
-  /**
-   * Gets all the entries of a specific type.
-   *
-   * @param    <T> The type of entry to get
-   * @param    inType the type of entries to get
-   *
-   * @return   a map with id and type
-   *
-   */
-  @SuppressWarnings("unchecked") // need to cast
-  public @Nonnull <T extends AbstractEntry> NavigableMap<String, T>
-    getEntries(AbstractType<T> inType)
-  {
-    Log.debug("getting entries for " + inType);
-    NavigableMap<String, T> entries = new TreeMap<String, T>();
-
-    return entries;
-  }
-
-  //........................................................................
   //----------------------------- getEntries -------------------------------
 
   /**
