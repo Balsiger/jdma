@@ -393,15 +393,18 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   /**
    * Combine specific values of all base entries into a single command.
    *
-   * @param      inName the name of the value to obtain
+   * @param      inName   the name of the value to obtain
+   * @param      inInline true to format inline, false to format with multi
+   *                      lines
    *
    * @return     the command for printing the value
    *
    */
   @Override
-  public @Nonnull Command combineBaseValues(@Nonnull String inName)
+  public @Nonnull Command combineBaseValues(@Nonnull String inName,
+                                            boolean inInline)
   {
-    return m_entry.combineBaseValues(inName);
+    return m_entry.combineBaseValues(inName, inInline);
   }
 
   //........................................................................

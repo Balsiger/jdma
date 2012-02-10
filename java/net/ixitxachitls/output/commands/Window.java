@@ -80,9 +80,27 @@ public class Window extends BaseCommand
   public Window(@Nonnull Object inText, @Nonnull Object inWindow,
                 @Nonnull Object inASCII)
   {
+    this(inText, inWindow, inASCII, "");
+  }
+
+  //........................................................................
+  //-------------------------------- Window --------------------------------
+
+  /**
+   * The constructor for the window command.
+   *
+   * @param       inText   the text to set the window around
+   * @param       inWindow the text in the window itself
+   * @param       inASCII  the text for ascii printing
+   * @param       inClass  the styling class to use for the window
+   *
+   */
+  public Window(@Nonnull Object inText, @Nonnull Object inWindow,
+                @Nonnull Object inASCII, @Nonnull Object inClass)
+  {
     this(inText, inWindow);
 
-    withOptionals(inASCII);
+    withOptionals(inASCII, inClass);
   }
 
   //........................................................................
@@ -94,7 +112,7 @@ public class Window extends BaseCommand
    */
   protected Window()
   {
-    super(NAME, 1, 2);
+    super(NAME, 2, 2);
   }
 
   //........................................................................

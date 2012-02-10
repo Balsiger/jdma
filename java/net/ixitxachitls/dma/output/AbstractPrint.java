@@ -254,7 +254,7 @@ public abstract class AbstractPrint
     {
       case '&':
         return new FormattedValue
-          (inEntry.combineBaseValues(inName.substring(1)),
+          (inEntry.combineBaseValues(inName.substring(1), true),
            inEntry.computeValue(inName, inDM), inName)
           .withDM(inDM);
 

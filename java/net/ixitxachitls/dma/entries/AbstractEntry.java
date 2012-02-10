@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.entries;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
-// import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,9 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-// import java.util.StringTokenizer;
 import java.util.TreeMap;
-// import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -45,30 +42,19 @@ import javax.annotation.Nullable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-// import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
-// import net.ixitxachitls.dma.data.Storage;
-// import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
-// import net.ixitxachitls.dma.entries.indexes.Index;
-// import net.ixitxachitls.dma.values.BaseNumber;
 import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Comment;
-// import net.ixitxachitls.dma.values.Modifiable;
 import net.ixitxachitls.dma.values.Name;
-// import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.input.ParseReader;
-// import net.ixitxachitls.output.Document;
-// import net.ixitxachitls.output.commands.Bold;
-// import net.ixitxachitls.output.commands.Center;
-// import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Image;
@@ -77,18 +63,15 @@ import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Par;
 import net.ixitxachitls.output.commands.Script;
-// import net.ixitxachitls.output.commands.Table;
+import net.ixitxachitls.output.commands.Span;
 import net.ixitxachitls.output.commands.Title;
+import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.EmptyIterator;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
-// import net.ixitxachitls.util.Extractor;
-// import net.ixitxachitls.util.Identificator;
 import net.ixitxachitls.util.Pair;
-// import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Strings;
-// import net.ixitxachitls.util.UniqueIdentificator;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
 import net.ixitxachitls.util.logging.Log;
@@ -1141,21 +1124,69 @@ public class AbstractEntry extends ValueGroup
   /**
    * Combine specific values of all base entries into a single command.
    *
-   * @param      inName the name of the value to obtain
+   * @param      inName   the name of the value to obtain
+   * @param      inInline true to format inline, false for multi line
    *
    * @return     the command for printing the value
    *
    */
-  public @Nonnull Command combineBaseValues(@Nonnull String inName)
+  public @Nonnull Command combineBaseValues(@Nonnull String inName,
+                                            boolean inInline)
   {
+    Value value = getValue(inName);
+    if(value == null)
+      return new Command("");
+
     List<Object> commands = new ArrayList<Object>();
-    for(BaseEntry base : getBaseEntries())
+
+    if(value.isArithmetic())
     {
-      Value value = base.getValue(inName);
-      if(value != null && value.isDefined())
+      for(BaseEntry base : getBaseEntries())
       {
-        commands.add(new Divider("base", base.getName()));
-        commands.add(value.format());
+        value = base.getValue(inName);
+        if(value == null)
+          continue;
+
+        Command command;
+        if(!value.isDefined())
+          command = base.combineBaseValues(inName, inInline);
+        else
+          command = new Window(new Span("base-value", value.format()),
+                               "From " + base.getName(),
+                               " [" + base.getName() + "]", "base");
+
+        if(!command.isEmpty())
+        {
+          if(!commands.isEmpty())
+            commands.add(" + ");
+
+          commands.add(command);
+        }
+      }
+    }
+    else
+    {
+      Multimap<Value, String> values = HashMultimap.create();
+      collectBaseValues(values, inName);
+
+      for(Value key : values.keySet())
+      {
+        String names = Strings.toString(values.get(key), ", ", "");
+
+        if(inInline)
+        {
+          if(!commands.isEmpty())
+            commands.add(", ");
+
+          commands.add(new Window(new Span("base-value", key.format()),
+                                  "From " + names,
+                                  " [" + names + "]", "base"));
+        }
+        else
+        {
+          commands.add(new Divider("base", names));
+          commands.add(key.format());
+        }
       }
     }
 
@@ -1163,6 +1194,30 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+
+  protected void collectBaseValues(@Nonnull Multimap<Value, String> ioValues,
+                                   @Nonnull String inName)
+  {
+    for(BaseEntry base : getBaseEntries())
+    {
+      Value value = base.getValue(inName);
+      if(value == null)
+        continue;
+
+      if(value.isDefined())
+      {
+        // if it's a list, we want to combine list values not complete lists
+        if(value instanceof ValueList)
+          for(Value sub : (ValueList<? extends Value>)value)
+            ioValues.put(sub, base.getName());
+        else
+          ioValues.put(value, base.getName());
+      }
+      else
+        base.collectBaseValues(ioValues, inName);
+    }
+  }
+
   //----------------------------- addBaseValue -----------------------------
 
   /**
@@ -1732,7 +1787,7 @@ public class AbstractEntry extends ValueGroup
 
       commands.add(computeValue("description", inDM).format(this, inDM, true));
       commands.add(new Divider("base-values",
-                               combineBaseValues("description")));
+                               combineBaseValues("description", false)));
       commands.add(computeValue("short description", inDM)
                    .format(this, inDM, true));
 

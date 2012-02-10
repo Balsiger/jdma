@@ -1594,12 +1594,14 @@ public abstract class ValueGroup implements Changeable
   /**
    * Combine specific values of all base entries into a single command.
    *
-   * @param      inName the name of the value to obtain
+   * @param      inName    the name of the value to obtain
+   * @param      inInline  true to render the values inline
    *
    * @return     the command for printing the value
    *
    */
-  public abstract @Nonnull Command combineBaseValues(@Nonnull String inName);
+  public abstract @Nonnull Command combineBaseValues(@Nonnull String inName,
+                                                     boolean inInline);
 
   //........................................................................
 
@@ -2269,10 +2271,12 @@ public abstract class ValueGroup implements Changeable
       /** Combine all base results.
        *
        * @param inName the name of the value
+       * @param inInline true to format the value inline
        * @return the combined value
        */
       @Override
-      public @Nonnull Command combineBaseValues(@Nonnull String inName)
+      public @Nonnull Command combineBaseValues(@Nonnull String inName,
+                                                boolean inInline)
       {
         throw new UnsupportedOperationException("not implemented");
       }

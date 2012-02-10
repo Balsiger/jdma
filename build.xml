@@ -132,7 +132,7 @@
     <!-- java annotations -->
     <pathelement location="${lib.dir}/jsr305.jar" />
     <!-- guava -->
-    <pathelement location="${lib.dir}/guava-r08.jar" />
+    <pathelement location="${lib.dir}/guava-11.0.1.jar" />
     <!-- somehow required probably because checkstyle does not handle -->
     <!-- build.sysclasspath... -->
     <pathelement location="${lib.build.dir}/checkstyle-all-5.1.jar"  />
@@ -326,7 +326,7 @@
       </options>
     </dev_appserver>
   </target>
-  
+
   <target name="gae-debug" depends="compile"
       description="Starts the development server.">
     <dev_appserver war="${war.dir}" port="8888">

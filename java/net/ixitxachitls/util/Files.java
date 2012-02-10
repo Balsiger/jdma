@@ -392,16 +392,29 @@ public final class Files
       return false;
     }
 
-    try
-    {
-      com.google.common.io.Files.deleteRecursively(inDirectory);
-    }
-    catch(java.io.IOException e)
-    {
-      Log.warning("could not delete directory: " + e);
+    return delete(inDirectory);
+  }
 
+  //........................................................................
+  //-------------------------------- delete --------------------------------
+
+  /**
+   * Delete the given file, if it's a directory including all its contents.
+   *
+   * @param   inFile the file to delete
+   *
+   * @return  ture if everything was deleted, false if not
+   *
+   */
+  private static boolean delete(@Nonnull File inFile)
+  {
+    if(inFile.isDirectory())
+      for(File file : inFile.listFiles())
+        if(!delete(file))
+          return false;
+
+    if(!inFile.delete())
       return false;
-    }
 
     return true;
   }

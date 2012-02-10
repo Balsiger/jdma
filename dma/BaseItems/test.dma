@@ -416,3 +416,35 @@ base item with incomplete, timed, weapon Tanglefoot Bag =
   categories        alchemical.
 
 #.....
+
+base item Derived =
+  base  Base 1, Base 2, Base 3, Base 4, Base 5;
+  hp    10.
+
+base item Base 1 =
+  value 100 gp;
+  hp    1;
+  worlds Forgotten Realms.
+
+base item Base 2 =
+  value 100 gp;
+  hp    20;
+  worlds Generic.
+
+base item Base 3 =
+  value 300 gp;
+  hp   30;
+  worlds Forgotten Realms.
+
+base item Base 5 =
+  worlds Generic, Forgotten Realms.
+
+base item Base 4 =
+  base Base Base 1, Base Base 2.
+
+base item Base Base 1 =
+  value 50 gp.
+
+base item Base Base 2 =
+  value 25 gp;
+  worlds Generic, Eberron.

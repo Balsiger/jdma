@@ -599,6 +599,20 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
+  //----------------------------- isArithmetic -----------------------------
+
+  /**
+   * Checks whether the value is arithmetic and thus can be computed with.
+   *
+   * @return      true if the value is arithemtic
+   *
+   */
+  public boolean isArithmetic()
+  {
+    return true;
+  }
+
+  //........................................................................
 
   //........................................................................
 

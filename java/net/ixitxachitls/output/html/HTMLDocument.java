@@ -375,7 +375,7 @@ public class HTMLDocument extends Document
                                + "css('visibility', 'hidden');\" "
                                + "class=\"windowed\">$1</span>"
                                + "<span id=\"window$count\" "
-                               + "class=\"window\">"
+                               + "class=\"window[[ %2]]\">"
                                + "$2</span>"));
      s_actions.put(net.ixitxachitls.output.commands.Frac.NAME, new Frac());
      s_actions.put(Highlight.NAME,

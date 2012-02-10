@@ -160,14 +160,7 @@ public class Variable extends ValueHandle<Variable>
     // if the current value is not defined, use the first defined value from a
     // base entry
     if(!value.isDefined())
-      for(BaseEntry base : inEntry.getBaseEntries())
-      {
-        Value baseValue = get(base);
-        if(baseValue.isDefined())
-          return new Window(new Span("base-value",
-                                     baseValue.format(!m_printUndefined)),
-                            "From " + base.getName());
-      }
+      return inEntry.combineBaseValues(m_key, true);
 
     return value.format(!m_printUndefined);
   }

@@ -223,6 +223,21 @@ public class Selection extends Value<Selection>
   }
 
   //........................................................................
+  //----------------------------- isArithmetic -----------------------------
+
+  /**
+   * Checks whether the value is arithmetic and thus can be computed with.
+   *
+   * @return      true if the value is arithemtic
+   *
+   */
+  @Override
+  public boolean isArithmetic()
+  {
+    return false;
+  }
+
+  //........................................................................
 
   //----------------------------- getChoices -------------------------------
 
