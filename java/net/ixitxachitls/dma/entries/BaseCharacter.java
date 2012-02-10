@@ -560,7 +560,7 @@ public class BaseCharacter extends BaseEntry
       assertFalse("dm", character.hasAccess(Group.DM));
       assertFalse("admin", character.hasAccess(Group.ADMIN));
 
-      character.m_group = character.m_group.as(Group.USER);
+      character.setGroup(Group.USER);
 
       assertTrue("guest", character.hasAccess(Group.GUEST));
       assertTrue("user", character.hasAccess(Group.USER));
@@ -568,7 +568,7 @@ public class BaseCharacter extends BaseEntry
       assertFalse("dm", character.hasAccess(Group.DM));
       assertFalse("admin", character.hasAccess(Group.ADMIN));
 
-      character.m_group = character.m_group.as(Group.ADMIN);
+      character.setGroup(Group.ADMIN);
 
       assertTrue("guest", character.hasAccess(Group.GUEST));
       assertTrue("user", character.hasAccess(Group.USER));

@@ -32,10 +32,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
-import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.appengine.tools.development.testing.
-                                                  LocalUserServiceTestConfig;
-
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -74,9 +70,6 @@ public class TestCase extends org.junit.Assert
 
   /** The name of the test logger. */
   private static final String s_logger = "test";
-
-  /** The AppEngine TestHelper for the UserService. */
-  protected LocalServiceTestHelper m_helper;
 
   //........................................................................
 
@@ -294,12 +287,6 @@ public class TestCase extends org.junit.Assert
     Log.add(s_logger, m_logger);
     Log.setLevel(Log.Type.DEBUG);
 
-    m_helper = new LocalServiceTestHelper(new LocalUserServiceTestConfig());
-    m_helper.setEnvIsAdmin(false);
-    m_helper.setEnvIsLoggedIn(true);
-    m_helper.setEnvEmail("test@test.net");
-    m_helper.setEnvAuthDomain("test");
-    m_helper.setUp();
   }
 
   //........................................................................
@@ -318,8 +305,6 @@ public class TestCase extends org.junit.Assert
     Log.remove(s_logger);
     m_logger = null;
 
-    m_helper.tearDown();
-    m_helper = null;
   }
 
   //........................................................................

@@ -34,6 +34,9 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.appengine.tools.development.testing.
+       LocalUserServiceTestConfig;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -226,6 +229,30 @@ public final class ServerUtils
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+
+    /** The AppEngine TestHelper for the UserService. */
+    protected LocalServiceTestHelper m_localServiceTestHelper;
+
+    @Override public void setUpTest()
+    {
+      super.setUpTest();
+      m_localServiceTestHelper = new LocalServiceTestHelper(
+                                     new LocalUserServiceTestConfig());
+      m_localServiceTestHelper.setEnvIsAdmin(false);
+      m_localServiceTestHelper.setEnvIsLoggedIn(true);
+      m_localServiceTestHelper.setEnvEmail("test@test.net");
+      m_localServiceTestHelper.setEnvAuthDomain("test");
+      m_localServiceTestHelper.setUp();
+    }
+
+    @Override public void tearDown()
+    {
+      super.tearDown();
+
+      m_localServiceTestHelper.tearDown();
+      m_localServiceTestHelper = null;
+    }
+
     //--------------------------------------------------------------- nested
 
     /** A simple mock servlet stream implementation. */

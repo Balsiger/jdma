@@ -178,7 +178,7 @@ public class StaticPageServlet extends PageServlet
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
     //----- headerFooter --------------------------------------------------
 
@@ -186,7 +186,7 @@ public class StaticPageServlet extends PageServlet
     @org.junit.Test
     public void headerFooter()
     {
-      m_helper.setEnvIsLoggedIn(false);
+      m_localServiceTestHelper.setEnvIsLoggedIn(false);
       java.io.ByteArrayOutputStream output =
         new java.io.ByteArrayOutputStream();
       DMARequest request = EasyMock.createMock(DMARequest.class);

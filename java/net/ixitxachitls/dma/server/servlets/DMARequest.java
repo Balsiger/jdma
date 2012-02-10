@@ -591,7 +591,7 @@ public class DMARequest extends HttpServletRequestWrapper
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
     /** Setup before tests. */
     @org.junit.Before
