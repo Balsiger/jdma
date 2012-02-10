@@ -636,6 +636,8 @@ public class DMARequest extends HttpServletRequestWrapper
     @org.junit.Test
     public void user()
     {
+      m_localServiceTestHelper.setEnvIsLoggedIn(true);
+
       HttpServletRequest mockRequest =
         EasyMock.createMock(HttpServletRequest.class);
       DMAData data = DMADataFactory.getBaseData();

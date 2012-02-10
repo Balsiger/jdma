@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -237,26 +237,24 @@ public class PageServlet extends DMAServlet
 
     //Use UserService from AppEngine for creating Login/Logout Url's
     UserService userService = UserServiceFactory.getUserService();
-    if(!userService.isUserLoggedIn())
+    if(user == null)
     {
       inWriter
         .begin("a").id("login-icon").classes("sprite").tooltip("Login")
         .href(userService.createLoginURL(inRequest.getOriginalPath())).end("a");
-    }
-    else
-    {
-      if (user == null)
+
+      if(userService.isUserLoggedIn())
       {
         inWriter.script("$().ready(function(){ register(); } );");
       }
-      else
-      {
-        inWriter
-          .begin("a").classes("user")
-          .onClick("util.link(event, '/user/" + user.getName() + "')")
-          .href("/user/" + user.getName())
-          .add(user.getName());
-      }
+    }
+    else
+    {
+      inWriter
+        .begin("a").classes("user")
+        .onClick("util.link(event, '/user/" + user.getName() + "')")
+        .href("/user/" + user.getName())
+        .add(user.getName());
 
       if(inRequest.hasUserOverride())
         inWriter.add(" (" + inRequest.getRealUser().getName() + ")");
