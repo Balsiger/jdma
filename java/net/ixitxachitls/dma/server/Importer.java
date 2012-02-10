@@ -94,16 +94,19 @@ public final class Importer
    * @param   inWebPort  the port to use for web access
    * @param   inUserName the username to connect to the remote api
    * @param   inPassword the password to connect to the remote api
+   * @param   inMain     if true, treal all images imported as main images
    *
    * @throws IOException unable to install remove api
    *
    */
   public Importer(@Nonnull String inHost, int inPort, int inWebPort,
-                  @Nonnull String inUserName, @Nonnull String inPassword)
+                  @Nonnull String inUserName, @Nonnull String inPassword,
+                  boolean inMain)
     throws IOException
   {
     m_host = inHost;
     m_webPort = inWebPort;
+    m_mainImages = inMain;
 
     RemoteApiOptions options = new RemoteApiOptions()
       .server(inHost, inPort)
@@ -133,6 +136,9 @@ public final class Importer
 
   /** The port of the web application. */
   private int m_webPort;
+
+  /** If true, all images read as treated as main images. */
+  private boolean m_mainImages;
 
   //........................................................................
 
@@ -259,7 +265,7 @@ public final class Importer
       String name = Files.file(parts[parts.length - 1]);
 
       // check if this is the main image
-      if(id.equalsIgnoreCase(name) || name.contains(id)
+      if(m_mainImages || id.equalsIgnoreCase(name) || name.contains(id)
          || "cover".equalsIgnoreCase(name)
          || "official".equalsIgnoreCase(name)
          || "unofficial".equalsIgnoreCase(name)
@@ -353,6 +359,8 @@ public final class Importer
        ("p", "port", "The port to connect to.", 8888),
        new CommandLineParser.IntegerOption
        ("w", "webport", "The web port to connect to.", 8888),
+       new CommandLineParser.Flag
+       ("m", "main", "Treat all images as main images."),
        new CommandLineParser.StringOption
        ("u", "username", "The username to connect with.",
         "balsiger@ixitxachitls.net"));
@@ -365,7 +373,7 @@ public final class Importer
     Importer importer =
       new Importer(clp.getString("host"), clp.getInteger("port"),
                    clp.getInteger("webport"), clp.getString("username"),
-                   password);
+                   password, clp.hasValue("main"));
 
     try
     {

@@ -173,6 +173,31 @@ base item with container Basket =
                     goods.
 
 #.....
+#----- Bedroll
+
+base item Bedroll =
+
+  value             1 sp;
+  weight            5 lbs;
+  probability       Common;
+  size              Small;
+  appearances       Rare "A comfortable bedroll with a silk blanket.",
+                    Common "A simple bedroll with a thin cotton blanket.",
+                    Uncommon "A shabby bedroll with holes and a rag as a blanket.";
+  substance         cloth 1/2 in;
+  player name       "Bedroll";
+  worlds            Generic;
+  references        WTC 17524: 126;
+  description
+  "You never know where you're going to sleep, and a bedroll helps you get
+  better sleep in a hayloft or on the cold ground. A bedroll consists of
+  bedding and a blanket thin enough to be rolled up and tied. In an emergency,
+  it can double as a stretcher.";
+  synonyms          "Mat",
+                    "Sleeping Mat";
+  categories        gear.
+
+#.....
 #----- Bell
 
 base item Bell =

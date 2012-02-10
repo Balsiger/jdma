@@ -1505,14 +1505,15 @@ edit.Files.prototype.edit = function(inEditable, inTarget, inNoRelated) {
   $(containers).each(function(index, element)
   {
     var name = $(element.firstChild).attr('title');
-    element.firstChild.id = 'file-' + name;
-    $(element).append('<div id="file-edit-' + name +
+    element.firstChild.id = 'file-' + escape(name);
+    $(element).append('<div id="file-edit-' + escape(name) +
                       '" class="sprite remove" title="Remove" ' +
                       'onclick="util.ajax(\'/fileupload?id=' +
-                      properties.id + '&type=' + properties.entry +
-                      '&name=' + name + '&delete\', null, ' +
-                      ' function() { edit.updateImage(\'file-' + name +
-                      '\', \'*\', null, \'file-edit-' + name +
+                      escape(properties.id) + '&type='
+                      + properties.entry + '&name=' + escape(name)
+                      + '&delete\', null, ' +
+                      ' function() { edit.updateImage(\'file-' + escape(name) +
+                      '\', \'*\', null, \'file-edit-' + escape(name) +
                       '\'); })"></div>');
   });
 
