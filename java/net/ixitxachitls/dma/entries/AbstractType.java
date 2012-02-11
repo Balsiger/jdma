@@ -212,6 +212,7 @@ public abstract class AbstractType<T extends AbstractEntry>
     //s_all.add(net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.BaseItem.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.BaseProduct.TYPE);
+    s_all.add(net.ixitxachitls.dma.entries.BaseCampaign.TYPE);
     s_all.add(net.ixitxachitls.dma.entries.Product.TYPE);
   }
 

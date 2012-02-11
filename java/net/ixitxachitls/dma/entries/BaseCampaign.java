@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -36,7 +36,6 @@ package net.ixitxachitls.dma.entries;
 import javax.annotation.Nonnull;
 //import javax.annotation.Nullable;
 
-import net.ixitxachitls.dma.data.CampaignData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatafiles;
 //import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
@@ -104,8 +103,6 @@ public class BaseCampaign extends BaseEntry
   public BaseCampaign(@Nonnull String inName)
   {
     super(inName, TYPE);
-
-    addCampaignFile(getName());
   }
 
   //........................................................................
@@ -127,7 +124,7 @@ public class BaseCampaign extends BaseEntry
               + "%synonyms "
               + "%campaigns "
               // admin
-              + "%file %errors"
+              + "%errors"
               );
 
   /** The printer for printing in a list. */
@@ -145,13 +142,13 @@ public class BaseCampaign extends BaseEntry
   //----- campaigns --------------------------------------------------------
 
   /** All the campaigns for this world. */
-  protected @Nonnull CampaignData m_campaignData =
-    new CampaignData(this, Files.concatenate(((DMADatafiles)m_data).getPath(),
-                                             Campaign.TYPE.getMultipleDir()),
-                     m_data);
+  // protected @Nonnull CampaignData m_campaignData =
+  //   new CampaignData(this, Files.concatenate(((DMADatafiles)m_data).getPath(),
+  //                                            Campaign.TYPE.getMultipleDir()),
+  //                    m_data);
 
   /** Flag if campaign data has been read. */
-  protected boolean m_campaignDataRead = false;
+  // protected boolean m_campaignDataRead = false;
 
   //........................................................................
 
@@ -174,19 +171,19 @@ public class BaseCampaign extends BaseEntry
    * @return      the campaign data
    *
    */
-  public CampaignData getCampaignData()
-  {
-    if(!m_campaignDataRead)
-    {
-      m_campaignData.read();
-      if(m_campaignData.isChanged())
-        m_campaignData.save();
+  // public CampaignData getCampaignData()
+  // {
+  //   if(!m_campaignDataRead)
+  //   {
+  //     m_campaignData.read();
+  //     if(m_campaignData.isChanged())
+  //       m_campaignData.save();
 
-      m_campaignDataRead = true;
-    }
+  //     m_campaignDataRead = true;
+  //   }
 
-    return m_campaignData;
-  }
+  //   return m_campaignData;
+  // }
 
   //........................................................................
 
@@ -630,16 +627,16 @@ public class BaseCampaign extends BaseEntry
    * @return      true if read successfully, false else
    *
    */
-  protected boolean readEntry(@Nonnull ParseReader inReader)
-  {
-    if(super.readEntry(inReader))
-    {
-      addCampaignFile(getName());
-      return true;
-    }
-    else
-      return false;
-  }
+  // protected boolean readEntry(@Nonnull ParseReader inReader)
+  // {
+  //   if(super.readEntry(inReader))
+  //   {
+  //     addCampaignFile(getName());
+  //     return true;
+  //   }
+  //   else
+  //     return false;
+  // }
 
   //........................................................................
   //---------------------------- addCampaignFile ---------------------------
@@ -650,10 +647,10 @@ public class BaseCampaign extends BaseEntry
    * @param     inName the name of the file to add (without extension)
    *
    */
-  private void addCampaignFile(@Nonnull String inName)
-  {
-    m_campaignData.addFile(inName + ".dma");
-  }
+  // private void addCampaignFile(@Nonnull String inName)
+  // {
+  //   m_campaignData.addFile(inName + ".dma");
+  // }
 
   //........................................................................
 

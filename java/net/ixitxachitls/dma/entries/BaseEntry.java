@@ -216,29 +216,6 @@ public class BaseEntry extends AbstractEntry
   /** Flag if extensions are initialized. */
   private static boolean s_extensionsInitialized = false;
 
-  /** The basic formatter for base entries. */
-//   public static final Index.Formatter<AbstractEntry> FORMATTER =
-//     new Index.Formatter<AbstractEntry>()
-//     {
-//       public List<Object> format(String inKey, AbstractEntry inEntry)
-//       {
-//         List<Object> list = Index.FORMATTER.format(inKey, inEntry);
-
-//         if(!(inEntry instanceof BaseEntry))
-//           return list;
-
-//         BaseEntry entry = (BaseEntry)inEntry;
-
-//         list.add(entry.m_world.format(false));
-
-//         return list;
-//       }
-//     };
-
-//   /** The basic format for base products. */
-//   public static final String FORMAT =
-//     Index.FORMAT + ";1:L(world)[World]";
-
   //----- world ------------------------------------------------------------
 
   /** The world. */
@@ -473,7 +450,6 @@ public class BaseEntry extends AbstractEntry
   }
 
   //........................................................................
-
 
   //------------------------------- getWorlds ------------------------------
 

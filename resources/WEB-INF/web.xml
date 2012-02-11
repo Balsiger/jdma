@@ -254,6 +254,10 @@
       <param-value>/_entry/base item/$1</param-value>
     </init-param>
     <init-param>
+      <param-name>^/campaign/([^/]+)$</param-name>
+      <param-value>/_entry/base campaign/$1</param-value>
+    </init-param>
+    <init-param>
       <param-name>^/products/(.*)$</param-name>
       <param-value>/_index/base product/$1</param-value>
     </init-param>
@@ -272,6 +276,10 @@
     <init-param>
       <param-name>^/items$</param-name>
       <param-value>/_entries/base item</param-value>
+    </init-param>
+    <init-param>
+      <param-name>^/campaigns$</param-name>
+      <param-value>/_entries/base campaign</param-value>
     </init-param>
   </filter>
 
