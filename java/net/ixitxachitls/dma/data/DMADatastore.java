@@ -495,7 +495,8 @@ public class DMADatastore implements DMAData
 
     // add the files from any base entries
     for(AbstractEntry entry : inEntry.getBaseEntries())
-      files.addAll(getFiles(entry));
+      if(entry != null)
+        files.addAll(getFiles(entry));
 
     return files;
   }

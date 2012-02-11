@@ -448,3 +448,45 @@ base item Base Base 1 =
 base item Base Base 2 =
   value 25 gp;
   worlds Generic, Eberron.
+
+
+#----- Mwk Armor
+
+base item with armor Mwk Armor =
+
+  check penalty     +1;
+  value             150 gp;
+  probability       Uncommon;
+  hp                0;
+  appearances       Common "Good workmanship.",
+                    Common "Finely crafted.",
+                    Common "Well made.",
+                    Rare "Extraordinarily well made.";
+  player name       "";
+  references        WTC 17524: 126;
+  description
+  "Just as with weapons, you can purchase or craft masterwork versions of armor
+  or shields. Such a well-made item functions like the normal version, except
+  that its armor check penalty is lessened by 1.
+
+  A masterwork suit of armor or shield costs an extra 150 gp over and above the
+  normal cost for that type or armor or shield.
+
+  The masterwork quality of a suite of armor never provides a bonus on attack
+  or damage rolls, even if the armor or shield is used as a weapon (such as
+  \Item{spiked armor} or a \Item{spiked shield}).
+
+  All magic armors and shields are automatically considered to be of masterwork
+  quality.
+
+  You can't add the masterwork quality to armor or a shield after it is
+  created; it must be created as a masterwork item.";
+  short description "A masterwork version.";
+  synonyms          "Masterwork";
+  categories        masterwork.
+
+#.....
+
+base item with armor Test =
+  base Chainmail, Mwk Armor.
+

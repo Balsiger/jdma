@@ -666,11 +666,12 @@ public class AbstractEntry extends ValueGroup
   /**
    * Get the base entries this abstract entry is based on, if any.
    *
-   * @return      the requested base entries
+   * @return      the requested base entries; note that an entry can be null
+   *              if it is not found
    *
    */
   @Override
-  public List<BaseEntry> getBaseEntries()
+  public @Nonnull List<BaseEntry> getBaseEntries()
   {
     if(m_baseEntries == null)
     {
@@ -1143,6 +1144,9 @@ public class AbstractEntry extends ValueGroup
     {
       for(BaseEntry base : getBaseEntries())
       {
+        if(base == null)
+          continue;
+
         value = base.getValue(inName);
         if(value == null)
           continue;
@@ -1200,6 +1204,9 @@ public class AbstractEntry extends ValueGroup
   {
     for(BaseEntry base : getBaseEntries())
     {
+      if(base == null)
+        continue;
+
       Value value = base.getValue(inName);
       if(value == null)
         continue;
