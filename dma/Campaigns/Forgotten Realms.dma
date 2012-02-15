@@ -4,7 +4,7 @@
 
 campaign City of the Spider Queen =
 
-  base Forgotten Realms;
+  base  FR;
   dm    Merlin.
 
 #.....

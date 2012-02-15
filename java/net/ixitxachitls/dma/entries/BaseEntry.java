@@ -1213,6 +1213,31 @@ public class BaseEntry extends AbstractEntry
         Log.warning("could not properly initialize base wearable extension");
       if(net.ixitxachitls.dma.entries.extensions.BaseLight.s_pagePrint == null)
         Log.warning("could not properly initialize base light extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseTimed.s_pagePrint == null)
+        Log.warning("could not properly initialize base timed extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseArmor.s_pagePrint == null)
+        Log.warning("could not properly initialize base armor extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseCommodity.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base commodity extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseComposite.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base commodity extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseContainer.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base container extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseCounted.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base counted extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseIncomplete.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base incomplete extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseMultiple.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base multiple extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseMultiuse.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base multiuse extension");
     }
   }
 

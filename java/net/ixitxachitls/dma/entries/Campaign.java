@@ -25,29 +25,24 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-// import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-// import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-// import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Span;
-// import net.ixitxachitls.util.Filter;
-// import net.ixitxachitls.util.FilteredIterator;
-// import net.ixitxachitls.util.Identificator;
-// import net.ixitxachitls.util.Strings;
-// import net.ixitxachitls.util.UniqueIdentificator;
-// import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.output.commands.BaseCommand;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -111,14 +106,18 @@ public class Campaign extends Entry<BaseCampaign>
 
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint =
-    new Print("$title"
-              + "$clear $files\n"
-              + "$par "
+    new Print("$image "
+              + "${as pdf} ${as text} ${as dma} "
+              + "$title "
+              + "$clear "
+              + "$files "
+              + "\n"
+              + "$par"
               + "%name "
               + "%base "
               + "%dm "
               // admin
-              + "%file %errors"
+              + "%errors"
               );
 
   /** The printer for printing in a list. */
@@ -143,19 +142,11 @@ public class Campaign extends Entry<BaseCampaign>
 
   /** The formatter for the dm. */
   protected static final Formatter<Name> s_dmFormatter =
-    new LinkFormatter<Name>("/index/dms/");
+    new LinkFormatter<Name>("/user/");
 
   /** The dm for this campaign. */
   @Key("dm")
   protected Name m_dm = new Name().withFormatter(s_dmFormatter);
-
-  static
-  {
-    // s_indexes.add(new KeyIndex<KeyIndex>("Campaign", "DMs", "dms", "dm",
-    //                                     true, FORMATTER, FORMAT, false, null)
-    //               .withAccess(BaseCharacter.Group.DM)
-    //               .withDataSource(Index.DataSource.campaign));
-  }
 
   //........................................................................
 
@@ -179,10 +170,14 @@ public class Campaign extends Entry<BaseCampaign>
   @Override
   public @Nonnull EntryKey<Campaign> getKey()
   {
-    throw new UnsupportedOperationException("not yet implemented");
-    // return new EntryKey<Product>(getName(), Product.TYPE,
-    //                     new EntryKey<BaseCharacter>(getOwner(),
-    //                                                 BaseCharacter.TYPE));
+    List<String> names = getBaseNames();
+    if(names.size() != 1)
+      Log.warning("expected exactly one base for a campaign, but got " + names);
+
+    return
+      new EntryKey<Campaign>(getName(), Campaign.TYPE,
+                             new EntryKey<BaseCampaign>(names.get(0),
+                                                        BaseCampaign.TYPE));
   }
 
   //........................................................................
@@ -456,6 +451,41 @@ public class Campaign extends Entry<BaseCampaign>
   //      ((Iterator<AbstractEntry>)(Iterator)m_entries.iterator(), inFilter),
   //      inIdentificator);
   // }
+
+  //........................................................................
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("name".equals(inKey) && m_baseEntries != null
+       && m_baseEntries.size() > 0)
+    {
+      BaseEntry base = m_baseEntries.get(0);
+
+      if(base != null)
+        return new FormattedValue
+          (new Command(getName(),
+                       " (",
+                       new Link(new BaseCommand(base.getName()),
+                                base.getPath()),
+                       ")"), getName(), "name")
+          .withPlayerEditable(true)
+          .withEditable(true)
+          .withEditType("name");
+    }
+
+    return super.computeValue(inKey, inDM);
+  }
 
   //........................................................................
 

@@ -304,14 +304,16 @@ public class DMADatastore implements DMAData
   /**
    * Get all the ids of a specific type, sorted and navigable.
    *
-   * @param       inType the type of entries to get ids for
+   * @param       inType   the type of entries to get ids for
+   * @param       inParent the key of the parent, if any
    *
    * @return      all the ids
    *
    */
   @SuppressWarnings("unchecked") // need to cast cache value
   public @Nonnull List<String> getIDs
-    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
     List<String> ids = (List<String>)s_cache.get("ids-" + inType.toString());
 
@@ -320,7 +322,11 @@ public class DMADatastore implements DMAData
 
     Log.debug("getting ids for " + inType);
 
-    Query query = new Query(inType.toString());
+    Query query;
+    if(inParent == null)
+      query = new Query(inType.toString());
+    else
+      query = new Query(inType.toString(), convert(inParent));
     String sort = inType.getSortField();
     if(sort != null)
       query.addSort(sort, Query.SortDirection.ASCENDING);
@@ -872,7 +878,6 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
-
   //------------------------------- convert --------------------------------
 
   /**
@@ -1011,14 +1016,7 @@ public class DMADatastore implements DMAData
   @SuppressWarnings("unchecked") // need to case to value list
   public @Nonnull Entity convert(@Nonnull AbstractEntry inEntry)
   {
-    Entity entity;
-    if(inEntry instanceof Product)
-      entity = new Entity(inEntry.getType().toString(), inEntry.getName(),
-                          KeyFactory.createKey(BaseCharacter.TYPE.toString(),
-                                               ((Product)inEntry).getOwner()));
-    else
-      entity = new Entity(inEntry.getType().toString(), inEntry.getName());
-
+    Entity entity = new Entity(convert(inEntry.getKey()));
     for(Map.Entry<String, Value> value : inEntry.getAllValues().entrySet())
     {
       if(value.getValue() instanceof ValueList)

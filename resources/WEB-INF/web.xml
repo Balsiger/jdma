@@ -257,6 +257,9 @@
         ^/campaign/([^/]+)$
         /_entry/base campaign/$1
 
+        ^/campaign/([^/]+)/([^/]+)$
+        /_entry/base campaign/$1/campaign/$2
+
         ^/products/(.*)$
         /_index/base product/$1
 

@@ -1,16 +1,16 @@
 # file: BaseCampaigns.dma
 
-#----- Forgotten Realms
+#----- FR
 
 #  files             "BaseProducts/Alternity.dma", "BaseProducts/Catalogs.dma", "BaseProducts/d20.dma", "BaseProducts/DnD/Al-Qadim.dma", "BaseProducts/DnD/Birthright.dma", "BaseProducts/DnD/DarkSun.dma", "BaseProducts/DnD/Dragonlance.dma", "BaseProducts/DnD/Eberron.dma", "BaseProducts/DnD/ForgottenRealms.dma", "BaseProducts/DnD/Generic.dma", "BaseProducts/DnD/Greyhawk.dma", "BaseProducts/DnD/Lankhmar.dma", "BaseProducts/DnD/Mystara.dma", "BaseProducts/DnD/PlaneScape.dma", "BaseProducts/DnD/Ravenloft.dma", "BaseProducts/DnD/Spelljammer.dma", "BaseProducts/Magazines/Dragon.dma", "BaseProducts/Magazines/Dungeon.dma", "BaseProducts/Magazines/Polyhedron.dma", "BaseProducts/MarvelSuperHeroes.dma", "BaseProducts/Miniatures.dma", "BaseProducts/Misc.dma", "BaseProducts/Novels/Al-Qadim.dma", "BaseProducts/Novels/Birthright.dma", "BaseProducts/Novels/DarkSun.dma", "BaseProducts/Novels/Dragonlance.dma", "BaseProducts/Novels/Eberron.dma", "BaseProducts/Novels/ForgottenRealms.dma", "BaseProducts/Novels/Generic.dma", "BaseProducts/Novels/Greyhawk.dma", "BaseProducts/Novels/Lankhmar.dma", "BaseProducts/Novels/Misc.dma", "BaseProducts/Novels/Mystara.dma", "BaseProducts/Novels/Planescape.dma", "BaseProducts/Novels/Ravenloft.dma", "BaseProducts/Novels/Spelljammer.dma", "BaseProducts/StarWars.dma", "BaseProducts/WheelOfTime.dma", "BaseQualities/DMA.dma", "BaseQualities/Dragon 321.dma", "BaseQualities/WTC 17524.dma", "BaseQualities/WTC 17752.dma", "BaseQualities/WTC 17755.dma", "BaseQualities/WTC 88647.dma", "BaseQualities/WTC 88574.dma", "BaseQualities/WTC 11836.dma", "BaseFeats/WTC 17524.dma", "BaseFeats/WTC 17755.dma", "BaseFeats/WTC 88574.dma", "BaseFeats/WTC 88647.dma", "BaseFeats/WTC 17752.dma", "BaseSpells/WTC 17524.dma", "BaseSpells/WTC 11836.dma", "BaseSpells/WTC 88574.dma", "BaseSpells/WTC 8859872.dma", "BaseSpells/WTC 11964.dma", "BaseItems/TSR 9358.dma", "BaseItems/WTC 17524.dma", "BaseItems/WTC 11836.dma", "BaseItems/WTC 17752.dma", "BaseItems/WTC 88578.dma", "BaseItems/TSR 9248.dma", "BaseItems/TSR 2100.dma", "BalseItems/WTC 88574.dma", "BaseEncounters/WTC 88574.dma", "BaseItems/WTC 88581.dma", "BaseItems/WTC 11964.dma", "BaseItems/WTC 1076272.dma", "BaseItems/WTC 17924.dma", "BaseItems/WTC 8859872.dma", "BaseMonsters/WTC 17755.dma";
 
-base campaign Forgotten Realms =
+base campaign FR =
 
   worlds            Generic, Forgotten Realms;
   description
   "All the campaigns set in the world of the Forgotten Realms";
   short description "The Forgotten Realms campaigns.";
-  synonyms          "FR",
+  synonyms          "Forgotten Realms",
                     "Fearun",
                     "Faer\hat{u}n".
 

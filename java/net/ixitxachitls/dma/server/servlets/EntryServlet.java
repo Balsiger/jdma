@@ -218,7 +218,7 @@ public class EntryServlet extends PageServlet
     HTMLDocument document = new HTMLDocument(title);
     AbstractType<? extends AbstractEntry> type = entry.getType();
 
-    List<String> ids = DMADataFactory.get().getIDs(type);
+    List<String> ids = DMADataFactory.get().getIDs(type, null);
 
     int current = ids.indexOf(entry.getName());
     int last = ids.size() - 1;

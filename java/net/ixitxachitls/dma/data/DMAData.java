@@ -177,12 +177,14 @@ public interface DMAData
    * Get all the ids of a specific type, sorted and navigable.
    *
    * @param       inType the type of entries to get ids for
+   * @param       inParent the key of the parent, if any
    *
    * @return      all the ids
    *
    */
   public abstract @Nonnull List<String> getIDs
-    (@Nonnull AbstractType<? extends AbstractEntry> inType);
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent);
 
   //........................................................................
   //--------------------------- getRecentEntries ---------------------------
@@ -467,13 +469,15 @@ public interface DMAData
        * Get all the ids of a specific type, sorted and navigable.
        *
        * @param       inType the type of entries to get ids for
+       * @param       inParent the key of the parent, if any
        *
        * @return      all the ids
        *
        */
       @Override
       public @Nonnull List<String> getIDs
-        (@Nonnull AbstractType<? extends AbstractEntry> inType)
+        (@Nonnull AbstractType<? extends AbstractEntry> inType,
+         @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
       {
         return m_ids;
       }

@@ -913,7 +913,7 @@ public class Product extends Entry<BaseProduct>
       if(base != null)
         return new FormattedValue
           (new Command(new Link(new BaseCommand(base.getFullTitle()),
-                                "/product/" + base.getName()),
+                                base.getPath()),
                        " (",
                        getName(),
                        ")"), getName(), "name")
@@ -927,7 +927,7 @@ public class Product extends Entry<BaseProduct>
     if("owner".equals(inKey) && m_owner != null)
     {
       String users = Strings.toString(DMADataFactory.get()
-                                      .getIDs(BaseCharacter.TYPE), "||",
+                                      .getIDs(BaseCharacter.TYPE, null), "||",
                                       m_owner.get());
       return new FormattedValue(m_owner, m_owner.get(), "owner")
         .withDM(true)

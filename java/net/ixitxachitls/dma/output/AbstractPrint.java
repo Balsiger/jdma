@@ -188,6 +188,11 @@ public abstract class AbstractPrint
             case '%':
               // A value as tabelarized data
               handle = compute(inEntry, name, inEntry.isDM(inUser));
+
+              // treat special names for uppercase
+              if("dm".equals(name))
+                name = "DM";
+
               Command label =
                 new Divider("value-label-container back-"
                             + inEntry.getType().getName().replaceAll("\\s+",

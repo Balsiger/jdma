@@ -36,10 +36,10 @@ import net.ixitxachitls.dma.values.ID;
 // import net.ixitxachitls.dma.values.ValueList;
 // import net.ixitxachitls.input.ParseReader;
 // import net.ixitxachitls.output.commands.Bold;
-// import net.ixitxachitls.output.commands.Command;
+//import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Large;
-// import net.ixitxachitls.output.commands.Link;
+//import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Span;
 // import net.ixitxachitls.output.commands.Super;
@@ -905,26 +905,6 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   // }
 
   // //........................................................................
-  //-------------------------------- setID ---------------------------------
-
-  /**
-   * Set the id of the entry. Does not check if the id is unique.
-   *
-   * @param       inID the new id to set
-   *
-   * @return      true if id set, false if an error occurred
-   *
-   */
-  @Deprecated
-  public boolean setID(String inID)
-  {
-    m_name = m_name.as(inID);
-    changed();
-
-    return true;
-  }
-
-  //........................................................................
   // //---------------------------- addToCampaign -----------------------------
 
   // /**
