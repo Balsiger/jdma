@@ -115,7 +115,7 @@ public class DMAServer extends WebServer
 
     // determine which base files to read
     Config.set("web.data.datastore", false);
-    m_baseData = DMADataFactory.getBaseData();
+    m_baseData = DMADataFactory.get();
 
 //     java.util.Date start = new java.util.Date();
 
@@ -343,7 +343,7 @@ public class DMAServer extends WebServer
 
     // base entries
     context.addServlet
-      (new ServletHolder(new EntryServlet(m_baseData)
+      (new ServletHolder(new EntryServlet()
                          .withAccess(BaseCharacter.Group.USER)),
         "/_entry/*");
     context.addServlet
@@ -351,7 +351,7 @@ public class DMAServer extends WebServer
                          .withAccess(BaseCharacter.Group.USER)),
        "/pdf/_entry/*");
     context.addServlet
-      (new ServletHolder(new EntryListServlet(m_baseData)), "/_entries/*");
+      (new ServletHolder(new EntryListServlet()), "/_entries/*");
 
 //     // products
 //     for(BaseEntry entry : m_users)
@@ -428,8 +428,7 @@ public class DMAServer extends WebServer
 //       (new ServletHolder(new UserOverviewServlet(m_campaigns)), "/overview");
 
     // indexes
-    context.addServlet(new ServletHolder(new IndexServlet(m_baseData)),
-                       "/_index/*");
+    context.addServlet(new ServletHolder(new IndexServlet()), "/_index/*");
 //     for(Iterator<Index<? extends Index>> i = ValueGroup.getIndexes();
 //         i.hasNext(); )
 //     {

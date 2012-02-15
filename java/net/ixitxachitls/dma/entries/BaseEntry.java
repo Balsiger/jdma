@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
@@ -242,7 +243,7 @@ public class BaseEntry extends AbstractEntry
     new ValueList<Multiple>
     (new Multiple
      (new Multiple.Element
-      (new Reference(m_data).withEditType
+      (new Reference().withEditType
        ("autokey(base product/titles)[product]"), false),
       new Multiple.Element
       (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")
@@ -336,6 +337,22 @@ public class BaseEntry extends AbstractEntry
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //-------------------------------- getKey --------------------------------
+
+  /**
+   * Get the key uniqueliy identifying this entry.
+   *
+   * @return   the key
+   *
+   */
+  @Override
+  public @Nonnull EntryKey<? extends BaseEntry> getKey()
+  {
+    return new EntryKey(getName(), getType());
+  }
+
+  //........................................................................
 
   //-------------------------------- isBase --------------------------------
 
@@ -584,7 +601,7 @@ public class BaseEntry extends AbstractEntry
    */
   protected @Nullable BaseProduct resolveReference(@Nonnull String inName)
   {
-    return m_data.getEntry(inName, BaseProduct.TYPE);
+    return DMADataFactory.get().getEntry(createKey(inName, BaseProduct.TYPE));
   }
 
   //........................................................................

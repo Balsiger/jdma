@@ -2,10 +2,9 @@
 
 #----- City of the Spider Queen (FR)
 
-campaign City of the Spider Queen [Forgotten Realms] =
+campaign City of the Spider Queen =
 
-  files "Forgotten Realms.dma", "Encounters/WTC 88574.dma";
-  dm    Merlin;
-  id    DYPX.
+  base Forgotten Realms;
+  dm    Merlin.
 
 #.....

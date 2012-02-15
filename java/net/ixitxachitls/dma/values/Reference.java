@@ -27,7 +27,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
@@ -57,14 +58,11 @@ public class Reference extends BaseText<Reference>
   //------------------------------ Reference -------------------------------
 
   /**
-   * Construct the text object with an undefined value.
-   *
-   * @param       inData           all the available data to satisfy references
+   * Construct the text object.
    *
    */
-  public Reference(@Nonnull DMAData inData)
+  public Reference()
   {
-    m_data = inData;
   }
 
   //........................................................................
@@ -74,10 +72,9 @@ public class Reference extends BaseText<Reference>
    * Construct the text object.
    *
    * @param       inText           the text to store
-   * @param       inData           all the available data to satisfy references
    *
    */
-  public Reference(@Nonnull String inText, @Nonnull DMAData inData)
+  public Reference(@Nonnull String inText)
   {
     super(inText);
   }
@@ -97,7 +94,7 @@ public class Reference extends BaseText<Reference>
                                  // derivations
   public @Nonnull Reference create()
   {
-    return super.create(new Reference(m_data));
+    return super.create(new Reference());
   }
 
   //........................................................................
@@ -105,9 +102,6 @@ public class Reference extends BaseText<Reference>
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** All the available base data. */
-  private @Nonnull DMAData m_data;
 
   /** Flag if references was resolved or not. */
   private boolean m_resolved = false;
@@ -158,7 +152,7 @@ public class Reference extends BaseText<Reference>
   //------------------------------- resolve --------------------------------
 
   /**
-   * Resolve the referenced product and return it.
+   * Resolve the referenced base product.
    *
    */
   public void resolve()
@@ -167,7 +161,8 @@ public class Reference extends BaseText<Reference>
       return;
 
     if(m_product == null)
-      m_product = m_data.getEntry(get(), BaseProduct.TYPE);
+      m_product = DMADataFactory.get()
+        .getEntry(AbstractEntry.createKey(get(), BaseProduct.TYPE));
 
     m_resolved = true;
   }

@@ -70,7 +70,7 @@ import net.ixitxachitls.dma.values.ID;
 
 //__________________________________________________________________________
 
-public class Entry<B extends BaseEntry> extends AbstractEntry
+public abstract class Entry<B extends BaseEntry> extends AbstractEntry
 {
   //--------------------------------------------------------- constructor(s)
 

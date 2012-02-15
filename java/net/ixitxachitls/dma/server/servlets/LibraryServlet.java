@@ -31,8 +31,6 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 
-import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
@@ -73,21 +71,6 @@ public class LibraryServlet extends PageServlet
    */
   public LibraryServlet()
   {
-    this(DMADataFactory.getBaseData());
-  }
-
-  //........................................................................
-  //---------------------------- LibraryServlet ----------------------------
-
-  /**
-   * Create the servlet.
-   *
-   * @param       inData all the available data
-   *
-   */
-  public LibraryServlet(@Nonnull DMAData inData)
-  {
-    m_data = inData;
   }
 
   //........................................................................
@@ -96,20 +79,15 @@ public class LibraryServlet extends PageServlet
 
   //-------------------------------------------------------------- variables
 
-  /** All the available data. */
-  private @Nonnull DMAData m_data;
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions

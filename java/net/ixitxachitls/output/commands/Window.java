@@ -154,7 +154,7 @@ public class Window extends BaseCommand
       assertEquals("setup", "\\window{text}{window}", command.toString());
 
       command = new Window("text", "window", "ascii");
-      assertEquals("setup", "\\window[ascii]{text}{window}",
+      assertEquals("setup", "\\window[ascii][]{text}{window}",
                    command.toString());
     }
 

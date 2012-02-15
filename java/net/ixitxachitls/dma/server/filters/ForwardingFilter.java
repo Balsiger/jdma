@@ -24,8 +24,7 @@
 package net.ixitxachitls.dma.server.filters;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -41,6 +40,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.logging.Log;
 
@@ -90,12 +91,11 @@ public class ForwardingFilter implements Filter
   {
     m_config = inConfig;
 
-    for(Enumeration<String> params = m_config.getInitParameterNames();
-        params.hasMoreElements(); )
-    {
-      String name = params.nextElement();
-      m_mappings.put(name, m_config.getInitParameter(name));
-    }
+    String []rewrites =
+      m_config.getInitParameter("forwards").split("\\s*\n+\\s*");
+
+    for(int i = 0; i < rewrites.length; i += 2)
+      m_mappings.put(rewrites[i], rewrites[i + 1]);
   }
 
   //........................................................................
@@ -121,7 +121,7 @@ public class ForwardingFilter implements Filter
 
   /** The filter mappings. */
   private @Nonnull Map<String, String> m_mappings =
-    new HashMap<String, String>();
+    new LinkedHashMap<String, String>();
 
   //........................................................................
 
@@ -181,11 +181,21 @@ public class ForwardingFilter implements Filter
   public @Nullable String computeForward(@Nonnull HttpServletRequest inRequest)
   {
     String uri = inRequest.getRequestURI();
+
     for(Map.Entry<String, String> entry : m_mappings.entrySet())
     {
       String forward = uri.replaceAll(entry.getKey(), entry.getValue());
       if(!forward.equals(uri))
+      {
+        if(forward.contains("@user") && inRequest instanceof DMARequest)
+        {
+          BaseCharacter user = ((DMARequest)inRequest).getUser();
+          if(user != null)
+            forward = forward.replaceAll("@user", user.getName());
+        }
+
         return forward;
+      }
     }
 
     return null;
@@ -228,15 +238,12 @@ public class ForwardingFilter implements Filter
         EasyMock.createMock(javax.servlet.RequestDispatcher.class);
 
       EasyMock.expect(config.getServletContext()).andStubReturn(context);
-      java.util.Vector<String> names = new java.util.Vector<String>();
-      names.add("/guru/(.*)-hello");
-      names.add("/guru/(.*).pdf");
-      EasyMock.expect(config.getInitParameterNames())
-        .andStubReturn(names.elements());
-      EasyMock.expect(config.getInitParameter("/guru/(.*)-hello"))
-        .andStubReturn("/something/$1");
-      EasyMock.expect(config.getInitParameter("/guru/(.*).pdf"))
-        .andStubReturn("/pdf/$1");
+      String names = "/guru/(.*)-hello\n"
+        + "/something/$1\n\n"
+        + "/guru/(.*).pdf\n"
+        + "/pdf/$1\n\n";
+      EasyMock.expect(config.getInitParameter("forwards"))
+        .andStubReturn(names);
       EasyMock.expect(request.getRequestURI())
         .andReturn("/guru/something.there");
       EasyMock.expect(request.getRequestURI())

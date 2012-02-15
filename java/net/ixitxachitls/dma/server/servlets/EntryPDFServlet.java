@@ -112,7 +112,7 @@ public class EntryPDFServlet extends PDFServlet
     if(type == null || id == null)
       return null;
 
-    return m_data.getEntry(id, type);
+    return m_data.getEntry(AbstractEntry.createKey(id, type));
   }
 
   //........................................................................

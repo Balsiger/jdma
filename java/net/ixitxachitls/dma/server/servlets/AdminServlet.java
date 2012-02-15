@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -75,7 +74,6 @@ public class AdminServlet extends BaseServlet
    */
   public AdminServlet()
   {
-    m_data = DMADataFactory.getBaseData();
   }
 
   //........................................................................
@@ -86,9 +84,6 @@ public class AdminServlet extends BaseServlet
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  /** All the avilable data. */
-  protected @Nonnull DMAData m_data;
 
   //........................................................................
 
@@ -151,7 +146,7 @@ public class AdminServlet extends BaseServlet
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "Invalid type '" + reset + "'.");
 
-      int size = m_data.rebuild(type);
+      int size = DMADataFactory.get().rebuild(type);
 
       PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
       writer.println("gui.info('The indexes for " + reset

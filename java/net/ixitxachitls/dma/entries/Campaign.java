@@ -38,8 +38,6 @@ import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 // import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 // import net.ixitxachitls.output.commands.Divider;
@@ -141,13 +139,6 @@ public class Campaign extends Entry<BaseCampaign>
   /** The number of lines read. */
   private int m_lines = 0;
 
-  //----- files -----------------------------------------------------------
-
-  /** The files in the campaign. */
-  @Key("files")
-  protected ValueList<Text> m_files = new ValueList<Text>(", ", new Text());
-
-  //........................................................................
   //----- dm ---------------------------------------------------------------
 
   /** The formatter for the dm. */
@@ -177,6 +168,24 @@ public class Campaign extends Entry<BaseCampaign>
 
   //-------------------------------------------------------------- accessors
 
+  //-------------------------------- getKey --------------------------------
+
+  /**
+   * Get the key uniqueliy identifying this entry.
+   *
+   * @return   the key
+   *
+   */
+  @Override
+  public @Nonnull EntryKey<Campaign> getKey()
+  {
+    throw new UnsupportedOperationException("not yet implemented");
+    // return new EntryKey<Product>(getName(), Product.TYPE,
+    //                     new EntryKey<BaseCharacter>(getOwner(),
+    //                                                 BaseCharacter.TYPE));
+  }
+
+  //........................................................................
   //------------------------------ getDMName -------------------------------
 
   /**

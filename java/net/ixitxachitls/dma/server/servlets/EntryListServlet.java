@@ -33,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -72,21 +71,6 @@ public class EntryListServlet extends PageServlet
    */
   public EntryListServlet()
   {
-    this(DMADataFactory.getBaseData());
-  }
-
-  //........................................................................
-  //--------------------------- EntryListServlet ---------------------------
-
-  /**
-   * Create the servlet.
-   *
-   * @param inData   all the avaialble data
-   *
-   */
-  public EntryListServlet(@Nonnull DMAData inData)
-  {
-    m_data = inData;
   }
 
   //........................................................................
@@ -94,9 +78,6 @@ public class EntryListServlet extends PageServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** All the avilable data. */
-  protected @Nonnull DMAData m_data;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -125,7 +106,8 @@ public class EntryListServlet extends PageServlet
                @Nonnull AbstractType<? extends AbstractEntry> inType,
                int inStart, int inSize)
   {
-    return (List<AbstractEntry>)m_data.getEntries(inType, inStart, inSize);
+    return (List<AbstractEntry>)DMADataFactory.get()
+      .getEntries(inType, inStart, inSize);
   }
 
   //........................................................................
@@ -260,7 +242,7 @@ public class EntryListServlet extends PageServlet
       EasyMock.expect(m_request.getPageSize()).andStubReturn(50);
       EasyMock.replay(m_request, m_response);
 
-      return new EntryListServlet(new DMAData.Test.Data())
+      return new EntryListServlet()
         {
           private static final long serialVersionUID = 1L;
 

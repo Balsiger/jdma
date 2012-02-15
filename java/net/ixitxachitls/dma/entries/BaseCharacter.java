@@ -388,9 +388,9 @@ public class BaseCharacter extends BaseEntry
   {
     if("products".equals(inKey))
     {
-      List<Product> products =
-        m_data.getRecentEntries(Product.TYPE, this.getName(),
-                                BaseCharacter.TYPE);
+      List<Product> products = DMADataFactory.get()
+        .getRecentEntries(Product.TYPE, this.getName(),
+                          BaseCharacter.TYPE);
 
       List<Object> commands = new ArrayList<Object>();
       boolean more = products.size() > MAX_PRODUCTS;
@@ -475,21 +475,6 @@ public class BaseCharacter extends BaseEntry
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    /** Setup before tests. */
-    @org.junit.Before
-    public void setUp()
-    {
-      Config.set("web.data.datastore", false);
-      Config.set("web.data.datafiles", false);
-    }
-
-    /** Cleanup after tests. */
-    @org.junit.After
-    public void tearDown()
-    {
-      DMADataFactory.clearBase();
-    }
-
     //----- init -----------------------------------------------------------
 
     /** The init Test. */

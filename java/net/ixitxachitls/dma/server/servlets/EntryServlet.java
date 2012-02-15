@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -33,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -47,7 +45,6 @@ import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Verbatim;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Files;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -82,21 +79,7 @@ public class EntryServlet extends PageServlet
    */
   public EntryServlet()
   {
-    this(DMADataFactory.getBaseData());
-  }
-
-  //........................................................................
-  //-------------------------- EntryServlet ---------------------------
-
-  /**
-   * Create the servlet.
-   *
-   * @param       inData     all the available data
-   *
-   */
-  public EntryServlet(DMAData inData)
-  {
-    m_data = inData;
+    // nothing to do
   }
 
   //........................................................................
@@ -105,9 +88,6 @@ public class EntryServlet extends PageServlet
 
   //-------------------------------------------------------------- variables
 
-  /** All the available entries. */
-  protected @Nonnull DMAData m_data;
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
@@ -115,144 +95,6 @@ public class EntryServlet extends PageServlet
 
   //-------------------------------------------------------------- accessors
 
-  //------------------------------- getEntry -------------------------------
-
-  /**
-   * Get the abstract entry associated with the given request.
-   *
-   * @param       inRequest the original request for the page
-   * @param       inData    the data to use
-   * @param       inPath    the path to the page
-   *
-   * @return      the entry or null if it could not be found
-   *
-   */
-  public @Nullable AbstractEntry getEntry(@Nonnull DMARequest inRequest,
-                                          @Nonnull DMAData inData,
-                                          @Nonnull String inPath)
-  {
-    AbstractType<? extends AbstractEntry> type = getType(inPath);
-    if(type == null)
-      return null;
-
-    String id = getID(inRequest, inPath);
-    if(id == null)
-      return null;
-
-    AbstractType<? extends AbstractEntry> parentType = getParentType(inPath);
-    String parentID = getParentID(inPath);
-
-    if(parentType != null && parentID != null)
-      return inData.getEntry(id, type, parentID, parentType);
-
-    return inData.getEntry(id, type);
-  }
-
-  //........................................................................
-  //---------------------------- getParentType -----------------------------
-
-  /**
-   * Get the parent type associated with the given request.
-   *
-   * @param       inPath the path to the page
-   *
-   * @return      the parent type for the request
-   *
-   */
-  public @Nullable AbstractType<? extends AbstractEntry>
-    getParentType(@Nonnull String inPath)
-  {
-    String []parts = inPath.split("/");
-    if(parts.length > 4)
-      return AbstractType.getTyped(parts[2].replace("%20", " "));
-
-    return null;
-  }
-
-  //........................................................................
-  //--------------------------- getParentID --------------------------------
-
-  /**
-   * Get the parent id associated with the given request.
-   *
-   * @param       inPath the path to the page
-   *
-   * @return      the id of the parent
-   *
-   */
-  public @Nullable String getParentID(@Nonnull String inPath)
-  {
-    String []parts = inPath.split("/");
-    if(parts.length > 4)
-      return parts[3].replace("%20", " ");
-
-    return null;
-  }
-
-  //........................................................................
-  //------------------------------- getType --------------------------------
-
-  /**
-   * Get the type associated with the given request.
-   *
-   * @param       inPath the path to the page
-   *
-   * @return      the type for the request
-   *
-   */
-  public @Nullable AbstractType<? extends AbstractEntry>
-    getType(@Nonnull String inPath)
-  {
-    String type = Strings.getPattern(inPath, ".*/([^/]*?)/");
-    if(type == null)
-      return null;
-
-    return AbstractType.getTyped(type.replace("%20", " "));
-  }
-
-  //........................................................................
-  //------------------------------- getPath --------------------------------
-
-  /**
-   * Get the path to the given entry.
-   *
-   * @param       inEntry the entry to get the path for
-   *
-   * @return      the path to the entry
-   *
-   */
-  public @Nullable String getPath(@Nonnull AbstractEntry inEntry)
-  {
-    return inEntry.getName();
-  }
-
-  //........................................................................
-  //-------------------------------- getID ---------------------------------
-
-  /**
-   * Get the id associated with the given request.
-   *
-   * @param       inRequest the original request for the page
-   * @param       inPath    the path to the page
-   *
-   * @return      the id of the entry
-   *
-   */
-  public @Nullable String getID(@Nonnull DMARequest inRequest,
-                                @Nonnull String inPath)
-  {
-    // handle /user/me specially
-    if(inPath.endsWith("/base character/me"))
-      return inRequest.getUser().getName();
-
-    String id = Strings.getPattern(inPath, "/([^/]*?)$");
-    if(id == null)
-      return null;
-
-    return id.replace("%20", " ");
-  }
-
-  //........................................................................
   //--------------------------- getLastModified ----------------------------
 
   /**
@@ -316,33 +158,23 @@ public class EntryServlet extends PageServlet
       path = path.substring(0, path.length() - 4);
     }
 
-    AbstractEntry entry = getEntry(inRequest, m_data, path);
+    AbstractEntry entry = getEntry(path);
 
     if(entry == null)
     {
-      AbstractType<? extends AbstractEntry> type = getType(path);
-
-      if(type == null)
+      AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(path);
+      if(key == null)
       {
         Log.warning("could not extract entry from '" + path + "'");
         inWriter.title("Not Found")
-          .begin("h1").add("Type not found").end("h1")
-          .add("Could not find the type of the entry of this page.");
+          .begin("h1").add("Could Not Extract Entry").end("h1")
+          .add("Could not find the type and/or id of the entry for this page.");
 
         return;
       }
 
-      String id = getID(inRequest, path);
-
-      if(id == null || id.isEmpty())
-      {
-        Log.warning("could not extract id from '" + path + "'");
-        inWriter.title("Not Found")
-          .begin("h1").add("ID Not Found").end("h1")
-          .add("Could not find the id of the entry of this page.");
-
-        return;
-      }
+      AbstractType<? extends AbstractEntry> type = key.getType();
+      String id = key.getID();
 
       if(inRequest.hasParam("create") && inRequest.hasUser())
       {
@@ -386,7 +218,7 @@ public class EntryServlet extends PageServlet
     HTMLDocument document = new HTMLDocument(title);
     AbstractType<? extends AbstractEntry> type = entry.getType();
 
-    List<String> ids = m_data.getIDs(type);
+    List<String> ids = DMADataFactory.get().getIDs(type);
 
     int current = ids.indexOf(entry.getName());
     int last = ids.size() - 1;
@@ -477,9 +309,6 @@ public class EntryServlet extends PageServlet
     private net.ixitxachitls.server.ServerUtils.Test.MockServletOutputStream
       m_output = null;
 
-    /** Paths encountered while testing. */
-    private final List<String> m_paths = new ArrayList<String>();
-
     /** Expected text for the dummy navigation. */
     private static final String s_navigation = "<div class=\"entry-nav\">"
       + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
@@ -529,7 +358,6 @@ public class EntryServlet extends PageServlet
       m_response = EasyMock.createMock(HttpServletResponse.class);;
       m_output =
         new net.ixitxachitls.server.ServerUtils.Test.MockServletOutputStream();
-      m_paths.clear();
     }
 
     //......................................................................
@@ -579,35 +407,13 @@ public class EntryServlet extends PageServlet
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
       EasyMock.replay(m_request, m_response);
 
-      return new EntryServlet(new DMAData.Test.Data())
+      return new EntryServlet()
         {
           private static final long serialVersionUID = 1L;
 
           @Override
-          public String getID(DMARequest inRequest, String inPath)
+          public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
           {
-            m_paths.add(inPath);
-            return inID;
-          }
-
-          @Override
-          public AbstractType<? extends AbstractEntry> getType(String inPath)
-          {
-            m_paths.add(inPath);
-            return inType;
-          }
-
-          @Override
-          public @Nonnull String getPath(@Nonnull AbstractEntry inEntry)
-          {
-            return "/somewhere/" + inEntry.getName();
-          }
-
-          @Override
-          public AbstractEntry getEntry(DMARequest inRequest, DMAData inData,
-                                        String inPath)
-          {
-            m_paths.add(inPath);
             return inEntry;
           }
         };
@@ -650,7 +456,6 @@ public class EntryServlet extends PageServlet
                    + "guru</a>');\n"
                    + "    </SCRIPT>\n",
                    m_output.toString());
-      assertContent("paths", m_paths, "/baseentry/guru");
     }
 
     //......................................................................
@@ -664,8 +469,7 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void noPath() throws Exception
     {
-      EntryServlet servlet = createServlet(null, null, null, null,
-                                                   false);
+      EntryServlet servlet = createServlet(null, null, null, null, false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -677,7 +481,6 @@ public class EntryServlet extends PageServlet
                    + "    </H1>\n"
                    + "    The page referenced does not exist!\n",
                    m_output.toString());
-      assertContent("paths", m_paths);
 
       m_logger.addExpected("WARNING: no path given for request");
     }
@@ -702,11 +505,11 @@ public class EntryServlet extends PageServlet
                    + "      document.title = 'Not Found';\n"
                    + "    </SCRIPT>\n"
                    + "    <H1>\n"
-                   + "      Type not found\n"
+                   + "      Could Not Extract Entry\n"
                    + "    </H1>\n"
-                   + "    Could not find the type of the entry of this page.\n",
+                   + "    Could not find the type and/or id of the entry "
+                   + "for this page.\n",
                    m_output.toString());
-      assertContent("paths", m_paths, "/baseentry/guru", "/baseentry/guru");
 
       m_logger.addExpected("WARNING: could not extract entry from "
                            + "'/baseentry/guru'");
@@ -732,14 +535,13 @@ public class EntryServlet extends PageServlet
                    + "      document.title = 'Not Found';\n"
                    + "    </SCRIPT>\n"
                    + "    <H1>\n"
-                   + "      ID Not Found\n"
+                   + "      Could Not Extract Entry\n"
                    + "    </H1>\n"
-                   + "    Could not find the id of the entry of this page.\n",
+                   + "    Could not find the type and/or id of the entry "
+                   + "for this page.\n",
                    m_output.toString());
-      assertContent("paths", m_paths,
-                    "/baseentry/guru", "/baseentry/guru", "/baseentry/guru");
 
-      m_logger.addExpected("WARNING: could not extract id from "
+      m_logger.addExpected("WARNING: could not extract entry from "
                            + "'/baseentry/guru'");
     }
 
@@ -755,7 +557,7 @@ public class EntryServlet extends PageServlet
     public void create() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/baseentry/guru", null, BaseEntry.TYPE, "guru", true);
+        createServlet("/base entry/guru", null, BaseEntry.TYPE, "guru", true);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -778,8 +580,6 @@ public class EntryServlet extends PageServlet
                    + "guru</a>');\n"
                    + "    </SCRIPT>\n",
                    m_output.toString());
-      assertContent("paths", m_paths,
-                    "/baseentry/guru", "/baseentry/guru", "/baseentry/guru");
     }
 
     //......................................................................
@@ -794,7 +594,7 @@ public class EntryServlet extends PageServlet
     public void noCreate() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/baseentry/guru", null, BaseEntry.TYPE, "guru", false);
+        createServlet("/base entry/guru", null, BaseEntry.TYPE, "guru", false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
@@ -813,8 +613,6 @@ public class EntryServlet extends PageServlet
                    + "    </H1>\n"
                    + "    Could not find base entry 'guru'.\n",
                    m_output.toString());
-      assertContent("paths", m_paths,
-                    "/baseentry/guru", "/baseentry/guru", "/baseentry/guru");
 
       m_logger.addExpected("WARNING: could not find entry 'guru'.");
     }
@@ -826,46 +624,37 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void path()
     {
-      EntryServlet servlet = new EntryServlet
-        (new DMAData.Test.Data(new net.ixitxachitls.dma.entries.BaseEntry
-                               ("test")));
+      addEntry(new net.ixitxachitls.dma.entries.BaseEntry("test"));
+      EntryServlet servlet = new EntryServlet();
 
       EasyMock.replay(m_request, m_response);
 
-      assertEquals("simple", "id", servlet.getID(m_request,
-                                                 "/just/some/path/id"));
-      assertEquals("simple", "id", servlet.getID(m_request, "/id"));
+      assertEquals("simple", "id",
+                   servlet.extractKey("/just/some/base entry/id").getID());
+
+      assertNull("simple", servlet.extractKey("guru/id"));
       assertEquals("simple", "id.txt-some",
-                   servlet.getID(m_request, "/just/some/path/id.txt-some"));
-      assertNull("simple", servlet.getID(m_request, "id"));
-      assertEquals("simple", "", servlet.getID(m_request, "/just/some/path/"));
+                   servlet.extractKey("/just/some/base entry/id.txt-some")
+                   .getID());
+      assertNull("simple", servlet.extractKey("id"));
 
       assertEquals("entry", "test",
-                   servlet.getEntry(m_request, servlet.m_data,
-                                    "/just/some/base entry/test").getName());
+                   servlet.getEntry("/just/some/base entry/test").getName());
       assertEquals("entry", "test",
-                   servlet.getEntry(m_request, servlet.m_data,
-                                    "/base entry/test").getName());
-      assertNull("entry", servlet.getEntry(m_request, servlet.m_data, "test"));
-      assertNull("entry", servlet.getEntry(m_request, servlet.m_data, ""));
-      assertNull("entry", servlet.getEntry(m_request, servlet.m_data, "test/"));
-      assertNull("entry", servlet.getEntry(m_request, servlet.m_data,
-                                           "test/guru"));
+                   servlet.getEntry("/base entry/test").getName());
+      assertNull("entry", servlet.getEntry("test"));
+      assertNull("entry", servlet.getEntry(""));
+      assertNull("entry", servlet.getEntry("test/"));
+      assertNull("entry", servlet.getEntry("test/guru"));
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.getType("/base entry/test"));
+                   servlet.extractKey("/base entry/test").getType());
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.getType("/just/some/base entry/test"));
+                   servlet.extractKey("/just/some/base entry/test").getType());
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.getType("/base entry/test"));
-      assertNull("type", servlet.getType(""));
-
-      assertEquals("path", "id",
-                   servlet.getPath(new net.ixitxachitls.dma.entries.BaseEntry
-                                   ("id")));
+                   servlet.extractKey("/base entry/test").getType());
+      assertNull("type", servlet.extractKey(""));
     }
-
-    //......................................................................
 
     //......................................................................
   }

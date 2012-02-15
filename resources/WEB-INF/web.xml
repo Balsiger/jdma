@@ -234,52 +234,47 @@
     <filter-name>Forwarding</filter-name>
     <filter-class>net.ixitxachitls.dma.server.filters.ForwardingFilter</filter-class>
     <init-param>
-      <param-name>^/user/([^/]+)/products$</param-name>
-      <param-value>/_entries/base character/$1/product</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/user/([^/]+)/product/([^/]+)$</param-name>
-      <param-value>/_entry/base character/$1/product/$2</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/user/([^/]+)$</param-name>
-      <param-value>/_entry/base character/$1</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/product/([^/]+)$</param-name>
-      <param-value>/_entry/base product/$1</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/item/([^/]+)$</param-name>
-      <param-value>/_entry/base item/$1</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/campaign/([^/]+)$</param-name>
-      <param-value>/_entry/base campaign/$1</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/products/(.*)$</param-name>
-      <param-value>/_index/base product/$1</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/items/(.*)$</param-name>
-      <param-value>/_index/base item/$1</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/users$</param-name>
-      <param-value>/_entries/base character</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/products$</param-name>
-      <param-value>/_entries/base product</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/items$</param-name>
-      <param-value>/_entries/base item</param-value>
-    </init-param>
-    <init-param>
-      <param-name>^/campaigns$</param-name>
-      <param-value>/_entries/base campaign</param-value>
+      <param-name>forwards</param-name>
+      <param-value>
+        ^/user/me$
+        /_entry/base character/@user
+
+        ^/user/([^/]+)/products$
+        /_entries/base character/$1/product
+
+        ^/user/([^/]+)/product/([^/]+)$
+        /_entry/base character/$1/product/$2
+
+        ^/user/([^/]+)$
+        /_entry/base character/$1
+
+        ^/product/([^/]+)$
+        /_entry/base product/$1
+
+        ^/item/([^/]+)$
+        /_entry/base item/$1
+
+        ^/campaign/([^/]+)$
+        /_entry/base campaign/$1
+
+        ^/products/(.*)$
+        /_index/base product/$1
+
+        ^/items/(.*)$
+        /_index/base item/$1
+
+        ^/users$
+        /_entries/base character
+
+        ^/products$
+        /_entries/base product
+
+        ^/items$
+        /_entries/base item
+
+        ^/campaigns$
+        /_entries/base campaign
+      </param-value>
     </init-param>
   </filter>
 

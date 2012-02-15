@@ -32,6 +32,10 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 
+import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -287,6 +291,8 @@ public class TestCase extends org.junit.Assert
     Log.add(s_logger, m_logger);
     Log.setLevel(Log.Type.DEBUG);
 
+    Config.set("web.data.datastore", false);
+    Config.set("web.data.datafiles", false);
   }
 
   //........................................................................
@@ -305,6 +311,21 @@ public class TestCase extends org.junit.Assert
     Log.remove(s_logger);
     m_logger = null;
 
+    DMADataFactory.clear();
+  }
+
+  //........................................................................
+  //------------------------------- addEntry -------------------------------
+
+  /**
+   * Add the given entry to the data mock.
+   *
+   * @param       inEntry the entry to add
+   *
+   */
+  public void addEntry(@Nonnull AbstractEntry inEntry)
+  {
+    ((DMAData.Test.Data)DMADataFactory.get()).add(inEntry);
   }
 
   //........................................................................

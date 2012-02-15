@@ -34,6 +34,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.logging.Log;
@@ -122,6 +125,87 @@ public abstract class DMAServlet extends BaseServlet
 
     // normal user access
     return inRequest.hasUser() && inRequest.getUser().hasAccess(m_group);
+  }
+
+  //........................................................................
+
+  //------------------------------ extractKey ------------------------------
+
+  /**
+   * Extract the key to an entry from the given path. A path is assumed to have
+   * the form (/<type>/<id>/)+, e.g. a list of types and ids, where the
+   * rightmost is the id and type of the final entry and the earlier pairs are
+   * its parents.
+   *
+   * @param    inPath a path denoting an entry
+   *
+   * @return   the entry key for the path, if any
+   *
+   */
+  protected @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> extractKey
+                                               (@Nonnull String inPath)
+  {
+    String []paths = inPath.split("/");
+    if(paths == null || paths.length == 0)
+      return null;
+
+    return extractKey(paths, paths.length - 1);
+  }
+
+  //........................................................................
+  //------------------------------ extractKey ------------------------------
+
+  /**
+   * Extract the key from the given paths array nd index.
+   *
+   * @param    inPaths the paths pieces
+   * @param    inIndex the index to start from with computation (descaending)
+   *
+   * @return   the key for the path part or null if not found
+   *
+   */
+  @SuppressWarnings("unchecked") // creating wildard type
+  private @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> extractKey
+                                            (@Nonnull String []inPaths,
+                                            int inIndex)
+  {
+    if(inPaths.length <= inIndex || inIndex < 1)
+      return null;
+
+    String id = inPaths[inIndex--].replace("%20", " ");
+    AbstractType<? extends AbstractEntry> type =
+      AbstractType.getTyped(inPaths[inIndex].replace("%20", " "));
+
+    if(type == null)
+      return null;
+
+    AbstractEntry.EntryKey<? extends AbstractEntry> parent =
+      extractKey(inPaths, inIndex - 1);
+
+    if(parent == null)
+      return new AbstractEntry.EntryKey(id, type);
+
+    return new AbstractEntry.EntryKey(id, type, parent);
+  }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the abstract entry associated with the given request.
+   *
+   * @param       inPath    the path to the page
+   *
+   * @return      the entry or null if it could not be found
+   *
+   */
+  public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
+  {
+    AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(inPath);
+    if(key == null)
+      return null;
+
+    return DMADataFactory.get().getEntry(key);
   }
 
   //........................................................................
@@ -242,7 +326,51 @@ public abstract class DMAServlet extends BaseServlet
     }
 
     //......................................................................
-  }
+    //----- extractKey -----------------------------------------------------
+
+    /** The extractKey Test. */
+    @org.junit.Test
+    public void extractKey()
+    {
+      DMAServlet servlet = new DMAServlet() {
+          private static final long serialVersionUID = 1L;
+
+          @Override
+          protected @Nullable SpecialResult handle
+            (@Nonnull DMARequest inRequest,
+             @Nonnull HttpServletResponse inResponse)
+          {
+            return null;
+          }
+        };
+
+      String [] tests =
+      {
+        "empty", "", null,
+        "empty", "/", null,
+        "invalid", "/guru", null,
+        "invalid triling", "/guru/", null,
+        "simple", "/base product/guru", "base product/guru",
+        "simple invalid", "guru/id", null,
+        "parent", "/base product/Merlin/product/XYZ",
+        "product/XYZ (base product/Merlin)",
+        "double parent", "/base product/FR/product/cotsq/product/Longsword",
+        "product/Longsword (product/cotsq (base product/FR))",
+        "leading", "/_entry/base product/guru", "base product/guru",
+        "multi leading", "/a/b/c/d/base product/guru", "base product/guru",
+      };
+
+      for(int i = 0; i < tests.length; i += 3)
+      {
+        AbstractEntry.EntryKey key = servlet.extractKey(tests[i + 1]);
+        assertEquals(tests[i], tests[i + 2],
+                     key == null ? null : key.toString());
+      }
+    }
+
+    //......................................................................
+
+ }
 
   //........................................................................
 }

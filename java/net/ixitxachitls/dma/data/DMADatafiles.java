@@ -401,44 +401,9 @@ public class DMADatafiles implements DMAData
   //------------------------------- getEntry -------------------------------
 
   /**
-   * Get a type denoted by type and id.
-   *
-   * @param      inID   the id of the entry to get
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  public @Nullable <T extends AbstractEntry> T
-                      getEntry(@Nonnull String inID,
-                               @Nonnull AbstractType<T> inType)
-  {
-    NavigableMap<String, T> entries = getEntries(inType);
-    T entry = entries.get(inID);
-
-    if(entry != null || !(inType instanceof BaseType))
-      return entry;
-
-    // could not find the entry by id, try synonyms
-    for(T synEntry : entries.values())
-      if(((BaseEntry)synEntry).hasSynonym(inID))
-        return synEntry;
-
-    return null;
-  }
-
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
-
-  /**
    * Get an entry denoted by type and id and their respective parents.
    *
-   * @param      inID          the id of the entry to get
-   * @param      inType        the type of the entry to get
-   * @param      inParentID    the parent id
-   * @param      inParentType  the parent type
+   * @param      inKey  the key to the entry to get
    *
    * @param      <T>    the type of the entry to get
    *
@@ -446,11 +411,20 @@ public class DMADatafiles implements DMAData
    *
    */
   public @Nullable <T extends AbstractEntry> T getEntry
-    (@Nonnull String inID, @Nonnull AbstractType<T> inType,
-     @Nonnull String inParentID,
-     @Nonnull AbstractType<? extends AbstractEntry> inParentType)
+                      (@Nonnull AbstractEntry.EntryKey<T> inKey)
   {
-    throw new UnsupportedOperationException("not implemented");
+    NavigableMap<String, T> entries = getEntries(inKey.getType());
+    T entry = entries.get(inKey.getID());
+
+    if(entry != null || !(inKey.getType() instanceof BaseType))
+      return entry;
+
+    // could not find the entry by id, try synonyms
+    for(T synEntry : entries.values())
+      if(((BaseEntry)synEntry).hasSynonym(inKey.getID()))
+        return synEntry;
+
+    return null;
   }
 
   //........................................................................
@@ -474,7 +448,12 @@ public class DMADatafiles implements DMAData
                                @Nonnull String inKey,
                                @Nonnull String inValue)
   {
-    throw new UnsupportedOperationException("not implemented");
+    NavigableMap<String, T> entries = getEntries(inType);
+    for(T entry : entries.values())
+      if(entry.getValue(inKey).toString().equals(inValue))
+        return entry;
+
+    return null;
   }
 
   //........................................................................

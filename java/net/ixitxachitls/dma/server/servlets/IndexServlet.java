@@ -36,7 +36,6 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -77,21 +76,6 @@ public class IndexServlet extends PageServlet
    */
   public IndexServlet()
   {
-    this(DMADataFactory.getBaseData());
-  }
-
-  //........................................................................
-  //----------------------------- IndexServlet -----------------------------
-
-  /**
-   * Create the servlet for indexes.
-   *
-   * @param       inData      all the available data
-   *
-   */
-  public IndexServlet(@Nonnull DMAData inData)
-  {
-    m_data = inData;
   }
 
   //........................................................................
@@ -102,9 +86,6 @@ public class IndexServlet extends PageServlet
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  /** All the avilable data. */
-  protected @Nonnull DMAData m_data;
 
   //........................................................................
 
@@ -177,8 +158,9 @@ public class IndexServlet extends PageServlet
       String typeLink = type.getMultipleLink();
       format(inWriter,
              // we get one more entry to know if we have to add pagination
-             m_data.getIndexEntries(name, type, group, inRequest.getStart(),
-                                    inRequest.getPageSize() + 1),
+             DMADataFactory.get().getIndexEntries(name, type, group,
+                                                  inRequest.getStart(),
+                                                  inRequest.getPageSize() + 1),
              inRequest.getUser(), inRequest.getStart(),
              inRequest.getPageSize());
       addNavigation(inWriter,
@@ -214,7 +196,8 @@ public class IndexServlet extends PageServlet
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     // get all the index groups available
-    SortedSet<String> values = m_data.getIndexNames(inName, inType, false);
+    SortedSet<String> values =
+      DMADataFactory.get().getIndexNames(inName, inType, false);
     if(values.isEmpty())
     {
       writeError(inWriter, "Not Found",

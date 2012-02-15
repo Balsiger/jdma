@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -1236,11 +1237,11 @@ public class BaseProduct extends BaseEntry
     new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new ValueList<Reference>
-         (new Reference(m_data).withEditType
+         (new Reference().withEditType
           ("autokey(base product/titles|system)[required]")), true),
         new Multiple.Element
         (new ValueList<Reference>
-         (new Reference(m_data).withEditType
+         (new Reference().withEditType
           ("autokey(base product/titles|system)[optional]")), true, " : ",
          null),
       }).withFormatter(s_requirementsFormatter);
@@ -1770,7 +1771,7 @@ public class BaseProduct extends BaseEntry
     {
       List<Object> commands = new ArrayList<Object>();
       for(Map.Entry<String, String> owner
-            : m_data.getOwners(this.getName()).entries())
+            : DMADataFactory.get().getOwners(this.getName()).entries())
       {
         if(!commands.isEmpty())
           commands.add(", ");

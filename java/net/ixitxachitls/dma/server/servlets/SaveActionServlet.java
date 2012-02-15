@@ -196,11 +196,9 @@ public class SaveActionServlet extends ActionServlet
       }
       else
       {
-        AbstractEntry entry;
-        if(m_parentID != null && m_parentType != null)
-          entry = m_data.getEntry(m_name, m_type, m_parentID, m_parentType);
-        else
-          entry = m_data.getEntry(m_name, m_type);
+        AbstractEntry entry =
+          m_data.getEntry(AbstractEntry.createKey(m_name, m_type,
+                                                  m_parentID, m_parentType));
 
         if(entry == null && m_create)
         {
@@ -239,7 +237,7 @@ public class SaveActionServlet extends ActionServlet
    */
   public SaveActionServlet()
   {
-    m_data = DMADataFactory.getBaseData();
+    // nothing to do
   }
 
   //......................................................................
@@ -247,9 +245,6 @@ public class SaveActionServlet extends ActionServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** All the available data. */
-  protected @Nonnull DMAData m_data;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -406,7 +401,7 @@ public class SaveActionServlet extends ActionServlet
       if(change == null)
       {
         change = new Changes(id, type, parentID, parentType, fullType,
-                             m_data, inRequest.getUser());
+                             DMADataFactory.get(), inRequest.getUser());
         changes.put(id + ":" + fullType, change);
       }
 
@@ -428,33 +423,15 @@ public class SaveActionServlet extends ActionServlet
     /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    /** Setup before tests. */
-    @org.junit.Before
-    public void setUp()
-    {
-      net.ixitxachitls.dma.data.DMADataFactory.clearBase();
-      net.ixitxachitls.util.configuration
-        .Config.set("web.data.datastore", false);
-      net.ixitxachitls.util.configuration
-        .Config.set("web.data.datafiles", false);
-    }
-
-    /** Cleanup after tests. */
-    @org.junit.After
-    public void tearDown()
-    {
-      net.ixitxachitls.dma.data.DMADataFactory.clearBase();
-    }
-
     //----- save -----------------------------------------------------------
 
     /** The save Test. */
     @org.junit.Test
     public void save()
     {
-      DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test");
+      addEntry(entry);
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -470,12 +447,9 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(true);
-      EasyMock.expect(data.getEntry
-                      ("test", net.ixitxachitls.dma.entries.BaseEntry.TYPE))
-        .andStubReturn(entry);
-      EasyMock.expect(data.update(entry)).andReturn(true);
+      EasyMock.expect(DMADataFactory.get().update(entry)).andReturn(true);
 
-      EasyMock.replay(data, request, response, user);
+      EasyMock.replay(request, response, user);
 
       assertEquals("name", "test", entry.getName());
 
@@ -486,7 +460,7 @@ public class SaveActionServlet extends ActionServlet
 
       assertEquals("name", "guru", entry.getName());
 
-      EasyMock.verify(data, request, response, user);
+      EasyMock.verify(request, response, user);
     }
 
     //......................................................................
@@ -496,9 +470,9 @@ public class SaveActionServlet extends ActionServlet
     @org.junit.Test
     public void noAccess()
     {
-      DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test");
+      addEntry(entry);
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -513,11 +487,7 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(false);
-      EasyMock.expect(data.getEntry
-                      ("test", net.ixitxachitls.dma.entries.BaseEntry.TYPE))
-        .andStubReturn(entry);
-
-      EasyMock.replay(data, request, response, user);
+      EasyMock.replay(request, response, user);
 
       assertEquals("name", "test", entry.getName());
 
@@ -532,7 +502,7 @@ public class SaveActionServlet extends ActionServlet
 
       m_logger.addExpected("WARNING: not allowed to edit name in base entry "
                            + "test");
-      EasyMock.verify(data, request, response, user);
+      EasyMock.verify(request, response, user);
     }
 
     //......................................................................
@@ -542,9 +512,9 @@ public class SaveActionServlet extends ActionServlet
     @org.junit.Test
     public void invalidID()
     {
-      DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test");
+      addEntry(entry);
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -560,11 +530,8 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(true);
       EasyMock.expect(user.getName()).andStubReturn("Merlin");
-      EasyMock.expect(data.getEntry
-                      ("guru", net.ixitxachitls.dma.entries.BaseEntry.TYPE))
-        .andStubReturn(null);
 
-      EasyMock.replay(data, request, response, user);
+      EasyMock.replay(request, response, user);
 
       assertEquals("name", "test", entry.getName());
 
@@ -578,7 +545,7 @@ public class SaveActionServlet extends ActionServlet
 
       m_logger.addExpected("WARNING: could not find base entry guru for "
                            + "saving");
-      EasyMock.verify(data, request, response, user);
+      EasyMock.verify(request, response, user);
     }
 
     //......................................................................
@@ -588,9 +555,9 @@ public class SaveActionServlet extends ActionServlet
     @org.junit.Test
     public void invalidType()
     {
-      DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test");
+      addEntry(entry);
 
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
@@ -606,7 +573,7 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(false);
 
-      EasyMock.replay(data, request, response, user);
+      EasyMock.replay(request, response, user);
 
       assertEquals("name", "test", entry.getName());
 
@@ -619,7 +586,7 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", "test", entry.getName());
 
       m_logger.addExpected("WARNING: invalid type 'guru' ignored");
-      EasyMock.verify(data, request, response, user);
+      EasyMock.verify(request, response, user);
     }
 
     //......................................................................
@@ -629,7 +596,6 @@ public class SaveActionServlet extends ActionServlet
     @org.junit.Test
     public void invalidKey()
     {
-      DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
       net.ixitxachitls.dma.entries.BaseEntry entry =
         new net.ixitxachitls.dma.entries.BaseEntry("test");
 
@@ -647,12 +613,9 @@ public class SaveActionServlet extends ActionServlet
       EasyMock.expect(request.getParams()).andStubReturn(params);
       EasyMock.expect(user.hasAccess(BaseCharacter.Group.ADMIN))
         .andStubReturn(true);
-      EasyMock.expect(data.getEntry
-                      ("test", net.ixitxachitls.dma.entries.BaseEntry.TYPE))
-        .andStubReturn(entry);
-      EasyMock.expect(data.update(entry)).andReturn(true);
+      EasyMock.expect(DMADataFactory.get().update(entry)).andReturn(true);
 
-      EasyMock.replay(data, request, response, user);
+      EasyMock.replay(request, response, user);
 
       assertEquals("name", "test", entry.getName());
 
@@ -668,7 +631,7 @@ public class SaveActionServlet extends ActionServlet
 
       m_logger.addExpected("WARNING: Could not fully parse guru value for "
                            + "base entry test: 'guru'");
-      EasyMock.verify(data, request, response, user);
+      EasyMock.verify(request, response, user);
     }
 
     //......................................................................
@@ -678,15 +641,13 @@ public class SaveActionServlet extends ActionServlet
     @org.junit.Test
     public void collectChanges()
     {
-      DMAData data = net.ixitxachitls.dma.data.DMADataFactory.getBaseData();
-
       SaveActionServlet servlet = new SaveActionServlet();
       DMARequest request = EasyMock.createMock(DMARequest.class);
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
 
-      EasyMock.replay(data, request, user);
+      EasyMock.replay(request, user);
 
       Multimap<String, String> params =
         com.google.common.collect.ImmutableSetMultimap.<String, String>builder()
@@ -705,6 +666,7 @@ public class SaveActionServlet extends ActionServlet
       List<String> errors = new ArrayList<String>();
       Collection<Changes> changes = servlet.preprocess(request, params, errors);
 
+      DMAData data = DMADataFactory.get();
       java.util.Iterator<Changes> i = changes.iterator();
       checkChanges(i.next(), "my-id", null, "something/base entry",
                    data, user, "name", "name guru");
@@ -720,7 +682,7 @@ public class SaveActionServlet extends ActionServlet
                    data, user, "key", "value");
       assertFalse(i.hasNext());
 
-      EasyMock.verify(data, request, user);
+      EasyMock.verify(request, user);
     }
 
     /** Check assertions for changes.
@@ -741,7 +703,7 @@ public class SaveActionServlet extends ActionServlet
       assertEquals("name", inName, inChanges.m_name);
       assertEquals("file", inFile, inChanges.m_file);
       assertEquals("full type", inFullType, inChanges.m_fullType);
-      assertEquals("data", inData, inChanges.m_data);
+      assertEquals("data", inData, DMADataFactory.get());
       assertEquals("owner", inOwner, inChanges.m_owner);
 
       assertEquals("number of values", inChanges.m_values.keySet().size(),

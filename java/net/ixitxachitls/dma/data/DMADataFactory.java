@@ -25,8 +25,6 @@ package net.ixitxachitls.dma.data;
 
 import javax.annotation.Nonnull;
 
-import org.easymock.EasyMock;
-
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -76,7 +74,7 @@ public final class DMADataFactory
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getBaseData ------------------------------
+  //--------------------------------- gets ---------------------------------
 
   /**
    * Get the base data for all entries.
@@ -84,7 +82,9 @@ public final class DMADataFactory
    * @return      the repository with all the base data
    *
    */
-  public static synchronized @Nonnull DMAData getBaseData()
+  // public static DMAData getBaseData() { return get(); }
+  // public static void clearBase() { clear(); }
+  public static synchronized @Nonnull DMAData get()
   {
     if(s_base == null)
     {
@@ -113,7 +113,8 @@ public final class DMADataFactory
           s_base = data;
         }
         else
-          s_base = EasyMock.createMock(DMAData.class);
+          s_base = new DMAData.Test.Data();
+            //EasyMock.createMock(DMAData.class);
     }
 
     return s_base;
@@ -125,14 +126,14 @@ public final class DMADataFactory
 
   //----------------------------------------------------------- manipulators
 
-  //------------------------------ clearBase -------------------------------
+  //-------------------------------- clear ---------------------------------
 
   /**
    * Clear the currently used base to get a new one next time. Mostly used for
    * testing.
    *
    */
-  public static synchronized void clearBase()
+  public static synchronized void clear()
   {
     s_base = null;
   }

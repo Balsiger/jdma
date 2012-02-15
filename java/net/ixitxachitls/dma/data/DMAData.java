@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.data;
 
 import java.util.List;
-import java.util.NavigableMap;
 import java.util.SortedSet;
 
 import javax.annotation.Nonnull;
@@ -56,6 +55,8 @@ import net.ixitxachitls.dma.entries.AbstractType;
 public interface DMAData
 {
   //----------------------------------------------------------------- nested
+
+  //----- File -------------------------------------------------------------
 
   /**
    * A simple representation for a file associated with an entry.
@@ -132,6 +133,8 @@ public interface DMAData
       return m_icon;
     }
   }
+
+  //........................................................................
 
   //........................................................................
 
@@ -220,30 +223,9 @@ public interface DMAData
   //------------------------------- getEntry -------------------------------
 
   /**
-   * Get an entry denoted by type and id.
-   *
-   * @param      inID   the id of the entry to get
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  public @Nullable <T extends AbstractEntry> T
-                      getEntry(@Nonnull String inID,
-                               @Nonnull AbstractType<T> inType);
-
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
-
-  /**
    * Get an entry denoted by type and id and their respective parents.
    *
-   * @param      inID          the id of the entry to get
-   * @param      inType        the type of the entry to get
-   * @param      inParentID    the parent id
-   * @param      inParentType  the parent type
+   * @param      inKey  the key to the entry to get
    *
    * @param      <T>    the type of the entry to get
    *
@@ -251,9 +233,7 @@ public interface DMAData
    *
    */
   public abstract @Nullable <T extends AbstractEntry> T getEntry
-    (@Nonnull String inID, @Nonnull AbstractType<T> inType,
-     @Nonnull String inParentID,
-     @Nonnull AbstractType<? extends AbstractEntry> inParentType);
+                               (@Nonnull AbstractEntry.EntryKey<T> inKey);
 
   //........................................................................
   //------------------------------- getEntry -------------------------------
@@ -436,6 +416,7 @@ public interface DMAData
        *         error.
        *
        */
+      @Override
       public boolean save()
       {
         m_saved = true;
@@ -451,6 +432,7 @@ public interface DMAData
        * @return      true if updated, false if there was an error
        *
        */
+      @Override
       public boolean update(@Nonnull AbstractEntry inEntry)
       {
         addInternal(inEntry);
@@ -465,7 +447,7 @@ public interface DMAData
        * @return      true if added, false if there was an error
        *
        */
-      protected boolean add(@Nonnull AbstractEntry inEntry)
+      public boolean add(@Nonnull AbstractEntry inEntry)
       {
         addInternal(inEntry);
         return save();
@@ -489,6 +471,7 @@ public interface DMAData
        * @return      all the ids
        *
        */
+      @Override
       public @Nonnull List<String> getIDs
         (@Nonnull AbstractType<? extends AbstractEntry> inType)
       {

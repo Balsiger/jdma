@@ -28,10 +28,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableMap;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
@@ -184,10 +182,7 @@ public class DMADatastore implements DMAData
   /**
    * Get an entry denoted by type and id and their respective parents.
    *
-   * @param      inID          the id of the entry to get
-   * @param      inType        the type of the entry to get
-   * @param      inParentID    the parent id
-   * @param      inParentType  the parent type
+   * @param      inKey  the key to the entry to get
    *
    * @param      <T>    the type of the entry to get
    *
@@ -195,18 +190,11 @@ public class DMADatastore implements DMAData
    *
    */
   public @Nullable <T extends AbstractEntry> T getEntry
-    (@Nonnull String inID,
-     @Nonnull AbstractType<T> inType,
-     @Nonnull String inParentID,
-     @Nonnull AbstractType<? extends AbstractEntry> inParentType)
+                      (@Nonnull AbstractEntry.EntryKey<T> inKey)
   {
-    Log.debug("getting " + inType + " with id " + inID + " and parent "
-              + inParentType + " " + inParentID);
+    Log.debug("getting " + inKey);
 
-    Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
-    Key key = KeyFactory.createKey(parent, inType.toString(), inID);
-
-    return convert(inID, inType, getEntity(key));
+    return convert(inKey.getID(), inKey.getType(), getEntity(convert(inKey)));
   }
 
   //........................................................................
@@ -862,6 +850,28 @@ public class DMADatastore implements DMAData
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //------------------------------- convert --------------------------------
+
+  /**
+   * Convert the given entry key into a corresponding entity key.
+   *
+   * @param       inKey the key to convert
+   *
+   * @return      the converted key
+   *
+   */
+  public @Nonnull Key convert(@Nonnull AbstractEntry.EntryKey inKey)
+  {
+    AbstractEntry.EntryKey parent = inKey.getParent();
+    if(parent != null)
+      return KeyFactory.createKey(convert(parent), inKey.getType().toString(),
+                                  inKey.getID());
+    else
+      return KeyFactory.createKey(inKey.getType().toString(), inKey.getID());
+  }
+
+  //........................................................................
 
   //------------------------------- convert --------------------------------
 

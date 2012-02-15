@@ -37,7 +37,6 @@ import com.google.common.collect.ImmutableList;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -89,9 +88,6 @@ public class Autocomplete extends JSONServlet
   /** The maximal number of results to return. */
   private static final int s_max = 20;
 
-  /** All the avilable data. */
-  protected @Nonnull DMAData m_data = DMADataFactory.getBaseData();
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -129,7 +125,8 @@ public class Autocomplete extends JSONServlet
         String []filters = new String[0];
         if(parts.length > 4)
           filters = Arrays.copyOfRange(parts, 4, parts.length);
-        for(String name : m_data.getIndexNames(parts[3], type, true, filters))
+        for(String name : DMADataFactory.get()
+              .getIndexNames(parts[3], type, true, filters))
         {
           if(match(name, term))
             names.add(name);

@@ -192,6 +192,133 @@ public class AbstractEntry extends ValueGroup
 //   }
 
   //........................................................................
+  //----- EntryKey ---------------------------------------------------------
+
+  /**
+   * The key for an entry for storage.
+   *
+   * @param     <T> the type of the entry represented by this key
+   */
+  public static class EntryKey<T extends AbstractEntry>
+  {
+    /**
+     * Create a key with a parent key.
+     *
+     * @param inID   the id of the entry
+     * @param inType the type of the entry
+     *
+     */
+    public EntryKey(@Nonnull String inID, @Nonnull AbstractType<T> inType)
+    {
+      m_id = inID;
+      m_type = inType;
+    }
+
+    /**
+     * Create a key with a parent key.
+     *
+     * @param inID     the id of the entry
+     * @param inType   the type of the entry
+     * @param inParent the parent key for the entry
+     *
+     */
+    public EntryKey(@Nonnull String inID, @Nonnull AbstractType<T> inType,
+                    @Nonnull EntryKey<? extends AbstractEntry> inParent)
+    {
+      this(inID, inType);
+
+      m_parent = inParent;
+    }
+
+    /** The entry key. */
+    private @Nonnull AbstractType<T> m_type;
+
+    /** The entry id. */
+    private @Nonnull String m_id;
+
+    /** The parent key, if any. */
+    private @Nullable EntryKey m_parent;
+
+    /**
+     * Get the id of the entry represented by this key.
+     *
+     * @return the entry id
+     */
+    public @Nonnull String getID()
+    {
+      return m_id;
+    }
+
+    /**
+     * Get the type for the entry represented by the key.
+     *
+     * @return the type
+     *
+     */
+    public @Nonnull AbstractType<T> getType()
+    {
+      return m_type;
+    }
+
+    /**
+     * Get the parent key for this one, if any.
+     *
+     * @return the parent key or null if there is no parent
+     *
+     */
+    public @Nullable EntryKey getParent()
+    {
+      return m_parent;
+    }
+
+    /**
+     * Convert the key to a string for debugging.
+     *
+     * @return the converted string
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return m_type + "/" + m_id
+        + (m_parent != null ? " (" + m_parent + ")" : "");
+    }
+
+    /**
+     * Determine if this key is equal to the given object.
+     *
+     * @param inOther the object to compare for
+     *
+     * @return true if they are equal, false if not
+     */
+    public boolean equals(Object inOther)
+    {
+      if(this == inOther)
+        return true;
+
+      if(inOther == null)
+        return false;
+
+      if(!(inOther instanceof EntryKey))
+        return false;
+
+      EntryKey other = (EntryKey)inOther;
+      return m_id.equals(other.m_id) && m_type.equals(other.m_type)
+        && ((m_parent == null && other.m_parent == null)
+            || (m_parent != null && m_parent.equals(other.m_parent)));
+    }
+
+    /**
+     * Compute the hash code for the key.
+     *
+     * @return the hash value
+     */
+    public int hashCode()
+    {
+      return toString().hashCode();
+    }
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -208,7 +335,6 @@ public class AbstractEntry extends ValueGroup
   protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     m_type = inType;
-    m_data = DMADataFactory.getBaseData();
 
     // we have to init this here, as we need to have the type set
     m_base = new ValueList<Name>
@@ -284,9 +410,6 @@ public class AbstractEntry extends ValueGroup
 
    /** The entry type. */
   protected @Nonnull AbstractType<? extends AbstractEntry> m_type;
-
-  /** All the data available. */
-  protected @Nonnull DMAData m_data;
 
   /** Flag if this entry has been changed but not saved. */
   protected boolean m_changed = false;
@@ -679,8 +802,9 @@ public class AbstractEntry extends ValueGroup
 
       // TODO: make this in a single datastore request
       for(Name base : m_base)
-        m_baseEntries.add((BaseEntry)
-                          m_data.getEntry(base.get(), getType().getBaseType()));
+        m_baseEntries.add((BaseEntry)DMADataFactory.get()
+                          .getEntry(createKey(base.get(),
+                                              getType().getBaseType())));
     }
 
     return m_baseEntries;
@@ -730,6 +854,20 @@ public class AbstractEntry extends ValueGroup
   public @Nonnull AbstractType<? extends AbstractEntry> getType()
   {
     return m_type;
+  }
+
+  //........................................................................
+  //-------------------------------- getKey --------------------------------
+
+  /**
+   * Get the key uniqueliy identifying this entry.
+   *
+   * @return   the key
+   *
+   */
+  public @Nonnull EntryKey<? extends AbstractEntry> getKey()
+  {
+    throw new UnsupportedOperationException("must be derived");
   }
 
   //........................................................................
@@ -1091,7 +1229,7 @@ public class AbstractEntry extends ValueGroup
   public @Nonnull List<DMAData.File> getFiles()
   {
     if(m_files == null)
-      m_files = m_data.getFiles(this);
+      m_files = DMADataFactory.get().getFiles(this);
 
     return m_files;
   }
@@ -1198,7 +1336,15 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //---------------------------- collectValues -----------------------------
 
+  /**
+   * Collect base values for combining them.
+   *
+   * @param ioValues the values collected
+   * @param inName   the name of the values to collect
+   *
+   */
   protected void collectBaseValues(@Nonnull Multimap<Value, String> ioValues,
                                    @Nonnull String inName)
   {
@@ -1225,6 +1371,7 @@ public class AbstractEntry extends ValueGroup
     }
   }
 
+  //........................................................................
   //----------------------------- addBaseValue -----------------------------
 
   /**
@@ -2080,6 +2227,56 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------------ createKey -------------------------------
+
+  /**
+   * Create a key for the given values.
+   *
+   * @param       inID   the id of the entry to create the key for
+   * @param       inType the type of the id
+   *
+   * @param       <T> the type of entries to create for
+   *
+   * @return      the created key
+   *
+   */
+  public static @Nonnull <T extends AbstractEntry> EntryKey<T>
+    createKey(@Nonnull String inID, @Nonnull AbstractType<T> inType)
+  {
+    return new EntryKey<T>(inID, inType);
+  }
+
+  //........................................................................
+  //------------------------------ createKey -------------------------------
+
+  /**
+   * Create a key for the given values. If parent id or type are null, no parent
+   * will be used.
+   *
+   * @param       inID         the id of the entry to create the key for
+   * @param       inType       the type of the id
+   * @param       inParentID   the id of parent entry, if any
+   * @param       inParentType the type of the parent entry, if any
+   *
+   * @param       <T> the type of entries to create for
+   *
+   * @return      the created key
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public static @Nonnull <T extends AbstractEntry> EntryKey<T>
+    createKey(@Nonnull String inID, @Nonnull AbstractType<T> inType,
+              @Nullable String inParentID,
+              @Nullable AbstractType<? extends AbstractEntry> inParentType)
+  {
+    if(inParentID == null || inParentType == null)
+      return createKey(inID, inType);
+
+    return new EntryKey<T>(inID, inType,
+                           new EntryKey(inParentID, inParentType));
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -2716,7 +2913,8 @@ public class AbstractEntry extends ValueGroup
       if(inName.equals(getID()))
         return;
 
-    BaseEntry entry = (BaseEntry)m_data.getEntry(inName, baseType);
+    BaseEntry entry = (BaseEntry)DMADataFactory.get()
+      .getEntry(createKey(inName, baseType));
     if(entry == null)
       Log.warning("base " + getType() + " '" + inName + "' not found");
 
@@ -2923,7 +3121,7 @@ public class AbstractEntry extends ValueGroup
     if(!m_changed)
       return false;
 
-    return m_data.update(this);
+    return DMADataFactory.get().update(this);
   }
 
   //........................................................................
@@ -3143,7 +3341,13 @@ public class AbstractEntry extends ValueGroup
       AbstractEntry entry =
         new AbstractEntry("just a test",
                           new AbstractType.Test.TestType<AbstractEntry>
-                          (AbstractEntry.class));
+                          (AbstractEntry.class)) {
+          @Override
+          public @Nonnull EntryKey<? extends AbstractEntry> getKey()
+          {
+            return new EntryKey<BaseEntry>("guru", BaseEntry.TYPE);
+          }
+        };
 
       // name
       assertEquals("name", "just a test", entry.getName());

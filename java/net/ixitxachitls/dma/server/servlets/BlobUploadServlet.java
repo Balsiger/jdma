@@ -162,7 +162,7 @@ public class BlobUploadServlet extends BaseServlet
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "invalid type " + request.getParam("type"));
 
-      DMADatastore store = (DMADatastore)DMADataFactory.getBaseData();
+      DMADatastore store = (DMADatastore)DMADataFactory.get();
       AbstractEntry entry = store.getEntry(id, type);
 
       if(entry == null)

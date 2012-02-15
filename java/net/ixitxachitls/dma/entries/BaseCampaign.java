@@ -23,39 +23,10 @@
 
 package net.ixitxachitls.dma.entries;
 
-// import java.util.ArrayList;
-// import java.util.Collections;
-// import java.util.HashMap;
-// import java.util.Iterator;
-// import java.util.List;
-// import java.util.Map;
-// import java.util.Set;
-// import java.util.SortedSet;
-// import java.util.TreeSet;
-
 import javax.annotation.Nonnull;
-//import javax.annotation.Nullable;
 
-import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.data.DMADatafiles;
-//import net.ixitxachitls.dma.entries.indexes.GroupedIndex;
-// import net.ixitxachitls.dma.data.DMAFile;
-// import net.ixitxachitls.dma.entries.indexes.ExtractorIndex;
-// import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-//import net.ixitxachitls.dma.values.Selection;
-// import net.ixitxachitls.dma.values.Text;
-// import net.ixitxachitls.dma.values.ValueList;
-// import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-// import net.ixitxachitls.dma.values.formatters.ValueFormatter;
-import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.Files;
-import net.ixitxachitls.util.configuration.Config;
-// import net.ixitxachitls.util.FilteredIterator;
-// import net.ixitxachitls.util.Identificator;
-// import net.ixitxachitls.util.UniqueIdentificator;
-// import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -143,7 +114,7 @@ public class BaseCampaign extends BaseEntry
 
   /** All the campaigns for this world. */
   // protected @Nonnull CampaignData m_campaignData =
-  //   new CampaignData(this, Files.concatenate(((DMADatafiles)m_data).getPath(),
+  // new CampaignData(this, Files.concatenate(((DMADatafiles)m_data).getPath(),
   //                                            Campaign.TYPE.getMultipleDir()),
   //                    m_data);
 
@@ -852,21 +823,6 @@ public class BaseCampaign extends BaseEntry
   /** The test. @hidden */
   public static class Test extends ValueGroup.Test
   {
-    /** Setup before tests. */
-    @org.junit.Before
-    public void setUp()
-    {
-      Config.set("web.data.datastore", false);
-      Config.set("web.data.datafiles", false);
-    }
-
-    /** Cleanup after tests. */
-    @org.junit.After
-    public void tearDown()
-    {
-      DMADataFactory.clearBase();
-    }
-
     // TODO: fix tests
     //----- text -----------------------------------------------------------
 

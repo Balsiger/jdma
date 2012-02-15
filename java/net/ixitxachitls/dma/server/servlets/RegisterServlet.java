@@ -30,6 +30,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseCharacter.Group;
 import net.ixitxachitls.util.logging.Log;
@@ -110,8 +111,8 @@ public class RegisterServlet extends ActionServlet
       return "You must login to register";
     }
 
-    BaseCharacter user =
-        DMADataFactory.getBaseData().getEntry(username, BaseCharacter.TYPE);
+    BaseCharacter user = DMADataFactory.get().getEntry
+      (AbstractEntry.createKey(username, BaseCharacter.TYPE));
     if(user != null)
     {
       return "Username allready used, choose a new one.";
@@ -142,26 +143,7 @@ public class RegisterServlet extends ActionServlet
   /** The tests. */
   public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
-    /** Setup before tests. */
-    @org.junit.Before
-    public void setUp()
-    {
-      net.ixitxachitls.dma.data.DMADataFactory.clearBase();
-      net.ixitxachitls.util.configuration
-        .Config.set("web.data.datastore", false);
-      net.ixitxachitls.util.configuration
-        .Config.set("web.data.datafiles", false);
-    }
-
-    /** Cleanup after tests. */
-    @org.junit.After
-    public void tearDown()
-    {
-      net.ixitxachitls.dma.data.DMADataFactory.clearBase();
-    }
-
-    //----- noData ---------------------------------------------------------
-
   }
+
   //........................................................................
 }

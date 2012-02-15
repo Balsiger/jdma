@@ -32,8 +32,6 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Span;
-import net.ixitxachitls.output.commands.Window;
 
 //..........................................................................
 
