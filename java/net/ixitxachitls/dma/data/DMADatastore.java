@@ -266,6 +266,51 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //------------------------------ getEntries ------------------------------
+
+  /**
+   * Get the entry denoted by a key value pair. This throws a
+   * TooManyResultsException if more thone one result is found.
+   *
+   * @param      inType  the type of entry to get
+   * @param      inKey   the key to look for
+   * @param      inValue the value for the key to look for
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entries found
+   *
+   */
+  @SuppressWarnings("unchecked") // casting return
+  public @Nullable <T extends AbstractEntry> List<T>
+                      getEntries(@Nonnull AbstractType<T> inType,
+                                 @Nonnull String inKey,
+                                 @Nonnull String inValue)
+  {
+    Log.debug("getting multiple " + inType + " with " + inKey + " = "
+              + inValue);
+
+    String key = "list-key:" + inKey + ":" + inValue;
+    List<Entity> entities = (List<Entity>)s_cache.get(key);
+
+    if(entities == null)
+    {
+      Query query = new Query(inType.toString());
+      query.addFilter(toPropertyName(inKey), Query.FilterOperator.EQUAL,
+                      inValue);
+      FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+
+      entities = new ArrayList<Entity>();
+      for(Entity entity : m_store.prepare(query).asIterable(options))
+        entities.add(entity);
+
+      s_cache.put(key, entities, s_expiration);
+    }
+
+    return (List<T>)convert(entities);
+  }
+
+  //........................................................................
   //------------------------------- getEntity ------------------------------
 
   /**

@@ -125,6 +125,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>main</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.MainPageServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <display-name>Remote API Servlet</display-name>
     <servlet-name>RemoteApiServlet</servlet-name>
     <servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
@@ -206,6 +211,11 @@
     <url-pattern>/autocomplete/*</url-pattern>
   </servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>main</servlet-name>
+    <url-pattern>/main</url-pattern>
+  </servlet-mapping>
+
   <!-- this does not work on the dev server; you have to remove this to be -->
   <!-- able to upload to the dev server. -->
   <!--
@@ -238,6 +248,9 @@
       <param-value>
         ^/user/me$
         /_entry/base character/@user
+
+        user:^/$
+        /main
 
         ^/user/([^/]+)/products$
         /_entries/base character/$1/product
@@ -286,52 +299,4 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-<!--
-
-  <servlet>
-    <servlet-name>icons</servlet-name>
-    <servlet-class>net.ixitxachitls.server.servlets.FileServlet</servlet-class>
-    <init-param>
-      <param-name>type</param-name>
-      <param-value>image/png</param-value>
-    </init-param>
-    <init-param>
-      <param-name>root</param-name>
-      <param-value>/icons</param-value>
-    </init-param>
-    <init-param>
-      <param-name>cache</param-name>
-      <param-value>true</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>icons</servlet-name>
-    <url-pattern>/icons/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
-    <servlet-name>js</servlet-name>
-    <servlet-class>net.ixitxachitls.server.servlets.FileServlet</servlet-class>
-    <init-param>
-      <param-name>type</param-name>
-      <param-value>text/javascript</param-value>
-    </init-param>
-    <init-param>
-      <param-name>root</param-name>
-      <param-value>/js</param-value>
-    </init-param>
-    <init-param>
-      <param-name>cache</param-name>
-      <param-value>true</param-value>
-    </init-param>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>js</servlet-name>
-    <url-pattern>/js/*</url-pattern>
-  </servlet-mapping>
-
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
--->
 </web-app>

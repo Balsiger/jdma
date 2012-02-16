@@ -30,7 +30,7 @@
  *
  */
 
-//--------------------------------- register ----------------------------------
+//------------------------------- register ---------------------------------
 
 /**
  * Create the registration dialog and ask the user to register.
@@ -151,8 +151,7 @@ function removeEntry(inID)
 }
 
 //..........................................................................
-
-//-------------------------------- doRegistration ---------------------------------
+//----------------------------- doRegistration -----------------------------
 
 /**
   *
@@ -165,7 +164,8 @@ function removeEntry(inID)
 function doRegister(inUsername, inRealName)
 {
   var result =
-    util.ajax("/actions/register", { username: inUsername, realname: inRealName });
+    util.ajax("/actions/register",
+              { username: inUsername, realname: inRealName });
 
   if(result != "")
     $("#register-error").html(result);

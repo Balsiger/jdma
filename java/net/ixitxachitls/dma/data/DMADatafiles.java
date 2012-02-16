@@ -195,6 +195,31 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------ getEntries ------------------------------
+
+  /**
+   * Get the entry denoted by a key value pair. This throws a
+   * TooManyResultsException if more thone one result is found.
+   *
+   * @param      inType  the type of entry to get
+   * @param      inKey   the key to look for
+   * @param      inValue the value for the key to look for
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entries found
+   *
+   */
+  @SuppressWarnings("unchecked") // casting return
+  public @Nullable <T extends AbstractEntry> List<T>
+                      getEntries(@Nonnull AbstractType<T> inType,
+                                 @Nonnull String inKey,
+                                 @Nonnull String inValue)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
   //-------------------------------- getIDs --------------------------------
 
   /**

@@ -181,15 +181,31 @@ public class ForwardingFilter implements Filter
   public @Nullable String computeForward(@Nonnull HttpServletRequest inRequest)
   {
     String uri = inRequest.getRequestURI();
+    BaseCharacter user = null;
+    if(inRequest instanceof DMARequest)
+    {
+      user = ((DMARequest)inRequest).getUser();
+      inRequest.setAttribute(DMARequest.ORIGINAL_PATH,
+                             inRequest.getRequestURI());
+    }
 
     for(Map.Entry<String, String> entry : m_mappings.entrySet())
     {
-      String forward = uri.replaceAll(entry.getKey(), entry.getValue());
+      String pattern = entry.getKey();
+      String replacement = entry.getValue();
+
+      if(pattern.startsWith("user:"))
+      {
+        if(user == null || !user.hasAccess(BaseCharacter.Group.USER))
+          continue;
+        pattern = pattern.substring(5);
+      }
+
+      String forward = uri.replaceAll(pattern, replacement);
       if(!forward.equals(uri))
       {
-        if(forward.contains("@user") && inRequest instanceof DMARequest)
+        if(forward.contains("@user"))
         {
-          BaseCharacter user = ((DMARequest)inRequest).getUser();
           if(user != null)
             forward = forward.replaceAll("@user", user.getName());
         }

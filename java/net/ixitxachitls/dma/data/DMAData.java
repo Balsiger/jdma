@@ -259,6 +259,28 @@ public interface DMAData
                                @Nonnull String inValue);
 
   //........................................................................
+  //------------------------------ getEntries ------------------------------
+
+  /**
+   * Get the entry denoted by a key value pair. This throws a
+   * TooManyResultsException if more thone one result is found.
+   *
+   * @param      inType  the type of entry to get
+   * @param      inKey   the key to look for
+   * @param      inValue the value for the key to look for
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entries found
+   *
+   */
+  @SuppressWarnings("unchecked") // casting return
+  public abstract @Nullable <T extends AbstractEntry> List<T>
+                               getEntries(@Nonnull AbstractType<T> inType,
+                                          @Nonnull String inKey,
+                                          @Nonnull String inValue);
+
+  //........................................................................
   //--------------------------- getIndexEntries ----------------------------
 
   /**
