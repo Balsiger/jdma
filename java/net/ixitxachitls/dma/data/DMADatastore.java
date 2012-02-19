@@ -147,24 +147,32 @@ public class DMADatastore implements DMAData
   /**
    * Gets all the entries of a specific type.
    *
-   * @param    <T>     the type of entry to get
-   * @param    inType  the type of entries to get
-   * @param    inStart the starting number of entires to get (starts as 0)
-   * @param    inSize  the maximal number of entries to return
+   * @param    <T>      the type of entry to get
+   * @param    inType   the type of entries to get
+   * @param    inParent the key of the parent, if any
+   * @param    inStart  the starting number of entires to get (starts as 0)
+   * @param    inSize   the maximal number of entries to return
    *
    * @return   a list with all the entries
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // need to cast
   public @Nonnull  <T extends AbstractEntry> List<T>
                       getEntries(@Nonnull AbstractType<T> inType,
+                                 @Nullable AbstractEntry.EntryKey
+                                 <? extends AbstractEntry> inParent,
                                  int inStart, int inSize)
   {
     Log.debug("getting entries for " + inType + " from " + inStart
               + " and size " + inSize);
     List<T> entries = new ArrayList<T>();
 
-    Query query = new Query(inType.toString());
+    Query query;
+    if(inParent == null)
+      query = new Query(inType.toString());
+    else
+      query = new Query(inType.toString(), convert(inParent));
     String sort = inType.getSortField();
     if(sort != null)
       query.addSort(sort, Query.SortDirection.ASCENDING);
@@ -196,31 +204,6 @@ public class DMADatastore implements DMAData
 
     return convert(inKey.getID(), inKey.getType(), getEntity(convert(inKey)));
   }
-
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
-
-  /**
-   * Get an entry denoted by type and id.
-   *
-   * @param      inID   the id of the entry to get
-   * @param      inType the type of the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  public @Nullable <T extends AbstractEntry> T
-                      getEntry(@Nonnull String inID,
-                               @Nonnull AbstractType<T> inType)
-  {
-    Log.debug("getting " + inType + " with id " + inID);
-    Key key = KeyFactory.createKey(inType.toString(), inID);
-
-    return convert(inID, inType, getEntity(key));
-  }
-
 
   //........................................................................
   //------------------------------- getEntry -------------------------------
@@ -926,6 +909,31 @@ public class DMADatastore implements DMAData
   //------------------------------- convert --------------------------------
 
   /**
+   * Convert the given entry key into a corresponding entity key.
+   *
+   * @param       inKey the key to convert
+   *
+   * @return      the converted key
+   *
+   */
+  @SuppressWarnings("unchecked") // not using proper types
+  public @Nonnull AbstractEntry.EntryKey convert(@Nonnull Key inKey)
+  {
+    Key parent = inKey.getParent();
+
+    if(parent != null)
+      return new AbstractEntry.EntryKey(inKey.getName(),
+                                        AbstractType.getTyped(inKey.getKind()),
+                                        convert(parent));
+
+    return new AbstractEntry.EntryKey(inKey.getName(),
+                                      AbstractType.getTyped(inKey.getKind()));
+  }
+
+  //........................................................................
+  //------------------------------- convert --------------------------------
+
+  /**
    * Convert the given datastore entity into a dma entry.
    *
    * @param      inID   the id of the entry to get
@@ -991,6 +999,9 @@ public class DMADatastore implements DMAData
       if(rest != null && !rest.isEmpty())
         Log.warning("could not fully set value for " + name + ": " + rest);
     }
+
+    // update any key related value
+    entry.updateKey(convert(inEntity.getKey()));
 
     return entry;
   }

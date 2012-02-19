@@ -544,6 +544,31 @@ TABLE.entrylist TD.short
 }
 
 /******************************************************************************
+ * overlays
+ *****************************************************************************/
+
+DIV.overlay
+{
+  position: relative;
+}
+
+IMG.overlay
+{
+  position: absolute;
+}
+
+IMG.overlay.right-bottom
+{
+  bottom: 0;
+  right: 0;
+}
+
+IMG.overlay.left-top
+{
+  left: 0;
+}
+
+/******************************************************************************
  * jQuery overrides
  *****************************************************************************/
 
@@ -1186,4 +1211,16 @@ SPAN.ESTIMATION > SPAN.window
 SELECT.admin-button
 {
   float: right;
+}
+
+/******************************************************************************
+ * main page
+ *****************************************************************************/
+
+DIV.campaign
+{
+  display:     inline-block;
+  width:       300px;
+  font-weight: bold;
+  font-size:   large;
 }

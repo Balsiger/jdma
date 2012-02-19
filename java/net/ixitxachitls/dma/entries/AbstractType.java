@@ -198,24 +198,11 @@ public abstract class AbstractType<T extends AbstractEntry>
     s_linkedTypes = new ConcurrentHashMap<String, AbstractType<?>>();
 
   /** All the available types. */
-  private static final Set<AbstractType<? extends AbstractEntry>> s_all
+  public static final Set<AbstractType<? extends AbstractEntry>> s_all
     = Collections.synchronizedSet(new HashSet<AbstractType<?>>());
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
-
-  // Add some types that don't necessarily get add automatically and thus might
-  // not be properly converted from datastore.
-  static
-  {
-    // adding base character here adds a null pointer, breaking things
-    //s_all.add(net.ixitxachitls.dma.entries.BaseCharacter.TYPE);
-    s_all.add(net.ixitxachitls.dma.entries.BaseItem.TYPE);
-    s_all.add(net.ixitxachitls.dma.entries.BaseProduct.TYPE);
-    s_all.add(net.ixitxachitls.dma.entries.BaseCampaign.TYPE);
-    s_all.add(net.ixitxachitls.dma.entries.Product.TYPE);
-    s_all.add(net.ixitxachitls.dma.entries.Campaign.TYPE);
-  }
 
   //........................................................................
 

@@ -33,6 +33,7 @@ import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -115,7 +116,7 @@ public class Campaign extends Entry<BaseCampaign>
               + "$par"
               + "%name "
               + "%base "
-              + "%dm "
+              + "%dm %characters "
               // admin
               + "%errors"
               );
@@ -484,7 +485,41 @@ public class Campaign extends Entry<BaseCampaign>
           .withEditType("name");
     }
 
+    if("characters".equals(inKey))
+    {
+      List<String> characters =
+        DMADataFactory.get().getIDs(Character.TYPE, getKey());
+
+      List<Object> commands = new ArrayList<Object>();
+      for(String character : characters)
+      {
+        if(!commands.isEmpty())
+          commands.add(", ");
+
+        commands.add(new Link(character, getPath() + "/"
+                              + Character.TYPE.getLink() + "/" + character));
+      }
+
+      return new FormattedValue(new Command(commands), null, "characters")
+        .withPlural("characters");
+    }
+
     return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
+  //------------------------------- getPath --------------------------------
+
+  /**
+   * Get the path to this entry.
+   *
+   * @return      the path to read this entry
+   *
+   */
+  public @Nonnull String getPath()
+  {
+    return "/" + BaseCampaign.TYPE.getLink() + "/" + m_base.get(0).get()
+      + "/" + getName();
   }
 
   //........................................................................

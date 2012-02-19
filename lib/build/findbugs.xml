@@ -163,5 +163,10 @@
     <Bug pattern="DLS_DEAD_LOCAL_STORE" />
   </Match>
 
+ <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryListServlet\$Test\$.*" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
 </FindBugsFilter>
 

@@ -233,7 +233,7 @@ public final class Importer
     List<Entity> entities = new ArrayList<Entity>();
 
     for(AbstractType<? extends AbstractEntry> type : m_data.getTypes())
-      for(AbstractEntry entry : m_data.getEntries(type, 0, 0))
+      for(AbstractEntry entry : m_data.getEntries(type, null, 0, 0))
       {
         entities.add(dmaStore.convert(entry));
         Log.important("importing " + type + " " + entry.getName());

@@ -167,17 +167,20 @@ public class DMADatafiles implements DMAData
   /**
    * Gets all the entries of a specific type.
    *
-   * @param    <T> The type of entry to get
-   * @param    inType the type of entries to get
-   * @param    inStart the starting number of entires to get (starts as 0)
-   * @param    inSize  the maximal number of entries to return
+   * @param    <T>      The type of entry to get
+   * @param    inType   the type of entries to get
+   * @param    inParent the parent type key for the entries, if any
+   * @param    inStart  the starting number of entires to get (starts as 0)
+   * @param    inSize   the maximal number of entries to return
    *
    * @return   a map with id and type
    *
    */
   @SuppressWarnings("unchecked") // need to cast
   public @Nonnull <T extends AbstractEntry> List<T>
-                     getEntries(AbstractType<T> inType, int inStart, int inSize)
+                     getEntries(AbstractType<T> inType,
+                                AbstractEntry.EntryKey<? extends AbstractEntry>
+                                inParent, int inStart, int inSize)
   {
     NavigableMap<String, AbstractEntry> entries = m_entries.get(inType);
 

@@ -99,6 +99,26 @@ public class DMARequest extends HttpServletRequestWrapper
 
   //-------------------------------------------------------------- variables
 
+  static
+  {
+    // We have to setup the types here, as we otherwise end up with them
+    // not being properly initialized.
+    if(net.ixitxachitls.dma.entries.BaseCharacter.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.Character.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.BaseItem.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.BaseProduct.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.Product.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.BaseCampaign.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.Campaign.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+  }
+
   /** The URL and post parameters. */
   private @Nonnull Multimap<String, String> m_params;
 

@@ -1017,20 +1017,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //----------------------------- getCampaign ------------------------------
-
-  /**
-   * Get the campaign this storage is in.
-   *
-   * @return      the Campaign for this storage
-   *
-   */
-//   public CampaignData getCampaign()
-//   {
-//     return m_storage.getCampaign();
-//   }
-
-  //........................................................................
   //----------------------------- getBaseValue -----------------------------
 
   /**
@@ -1232,6 +1218,24 @@ public class AbstractEntry extends ValueGroup
       m_files = DMADataFactory.get().getFiles(this);
 
     return m_files;
+  }
+
+  //........................................................................
+  //----------------------------- getMainFile ------------------------------
+
+  /**
+   * Get the main file associated with this entry.
+   *
+   * @return      the associated main file
+   *
+   */
+  public @Nullable DMAData.File getMainFile()
+  {
+    for(DMAData.File file : getFiles())
+      if("main".equals(file.getName()))
+        return file;
+
+    return null;
   }
 
   //........................................................................
@@ -2382,6 +2386,21 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------------ updateKey -------------------------------
+
+  /**
+   * Update the any values that are related to the key with new data.
+   *
+   * @param       inKey the new key of the entry
+   *
+   */
+  public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
+  {
+    // nothing to do here
+  }
+
+  //........................................................................
+
   //------------------------------- setOwner -------------------------------
 
   /**

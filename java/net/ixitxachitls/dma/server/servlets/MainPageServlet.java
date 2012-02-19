@@ -38,18 +38,23 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 // import javax.servlet.http.HttpServletRequest;
 // import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Campaign;
+import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Encounter;
 // import net.ixitxachitls.dma.entries.Entry;
-// import net.ixitxachitls.dma.output.HTMLDocument;
+import net.ixitxachitls.dma.output.html.HTMLDocument;
 // import net.ixitxachitls.output.commands.Command;
-// import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Icon;
+import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Script;
-// import net.ixitxachitls.output.commands.Subtitle;
+import net.ixitxachitls.output.commands.Subtitle;
 // import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLWriter;
 // import net.ixitxachitls.util.Encodings;
@@ -147,10 +152,26 @@ public class MainPageServlet extends PageServlet
     String title = "Overview for " + user.getName();
     inWriter.title(title);
 
+    HTMLDocument document = new HTMLDocument(title);
+
     // first the characters of the user
     // we don't have these yet, though
-    inWriter.begin("h2").add("Campaigns Playing").end("h2");
-    inWriter.add("not yet implemented!");
+    document.add(new Subtitle("Campaigns Playing"));
+
+    Multimap<Campaign, Character> characters = TreeMultimap.create();
+    for(Character character : DMADataFactory.get().getEntries
+          (Character.TYPE, "base", user.getName()))
+      characters.put(character.getCampaign(), character);
+
+    for(Campaign campaign : characters.keySet())
+    {
+      document.add(new Divider("campaign",
+                               new Link(campaign.getName(),
+                                        campaign.getPath())));
+
+      for(Character character : characters.get(campaign))
+        document.add(character.getIcon(false));
+    }
 
     // the campaigns the user is the dm for
     List<Campaign> campaigns =
@@ -158,14 +179,21 @@ public class MainPageServlet extends PageServlet
 
     if(!campaigns.isEmpty())
     {
-      inWriter.begin("h2").add("Campaigns DMing").end("h2");
+      document.add(new Subtitle("Campaigns DMing"));
       for(Campaign campaign : campaigns)
-        inWriter
-          .begin("div").classes("campaign")
-          .begin("a").href(campaign.getPath()).add(campaign.getName())
-          .end("a")
-          .end("div");
+      {
+        document.add(new Divider("campaign",
+                                 new Link(campaign.getName(),
+                                          campaign.getPath())));
+
+        // and all the characters there
+        for(Character character : DMADataFactory.get()
+              .getEntries(Character.TYPE, campaign.getKey(), 0, 20))
+          document.add(character.getIcon(true));
+      }
     }
+
+    inWriter.add(document.toString());
   }
 
   //-------------------------------- handle --------------------------------

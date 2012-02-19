@@ -107,7 +107,7 @@ public class EntryListServlet extends PageServlet
                int inStart, int inSize)
   {
     return (List<AbstractEntry>)DMADataFactory.get()
-      .getEntries(inType, inStart, inSize);
+      .getEntries(inType, null, inStart, inSize);
   }
 
   //........................................................................

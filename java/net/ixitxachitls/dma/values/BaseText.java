@@ -114,7 +114,7 @@ public class BaseText<T extends BaseText> extends Value<T>
   /** The delimiters for ending the text. */
   protected static final @Nonnull String s_nameDelimiters =
     Config.get("resource:values/name.delimiter.simple",
-               "\":,.;=[]{}|()");
+               "\":,.;=[]{}|()/");
 
   /** The delimiters for ending the text after a space. */
   protected static final @Nonnull String s_nameSpaceDelimiters =
@@ -124,7 +124,7 @@ public class BaseText<T extends BaseText> extends Value<T>
   /** The pattern for the delimiters (escaped). */
   protected static final @Nonnull String s_nameDelimPattern =
     Config.get("resource:values/name.delimiter.simple.pattern",
-               "\":,.;=\\[\\]\\{\\}\\|\\(\\)");
+               "\":,.;=\\[\\]\\{\\}\\|\\(\\)\\/");
 
   //........................................................................
 

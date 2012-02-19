@@ -944,6 +944,26 @@ public class Product extends Entry<BaseProduct>
 
   //----------------------------------------------------------- manipulators
 
+  //------------------------------ updateKey -------------------------------
+
+  /**
+   * Update the any values that are related to the key with new data.
+   *
+   * @param       inKey the new key of the entry
+   *
+   */
+  @Override
+  public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
+  {
+    EntryKey parent = inKey.getParent();
+    if(parent == null)
+      return;
+
+    m_owner = m_owner.as(parent.getID());
+  }
+
+  //........................................................................
+
 //   //----------------------------- setEdition ------------------------------
 
 //   /**

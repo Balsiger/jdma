@@ -145,17 +145,20 @@ public interface DMAData
   /**
    * Gets all the entries of a specific type.
    *
-   * @param    <T> The type of entry to get
-   * @param    inType the type of entries to get
-   * @param    inStart the starting number of entires to get (starts as 0)
-   * @param    inSize  the maximal number of entries to return
+   * @param    <T>      The type of entry to get
+   * @param    inType   the type of entries to get
+   * @param    inParent the key of the parent, if any
+   * @param    inStart  the starting number of entires to get (starts as 0)
+   * @param    inSize   the maximal number of entries to return
    *
    * @return   a map with id and type
    *
    */
   public @Nonnull <T extends AbstractEntry> List<T>
-                     getEntries(AbstractType<T> inType, int inStart,
-                                int inSize);
+                     getEntries(@Nonnull AbstractType<T> inType,
+                                @Nullable AbstractEntry.EntryKey
+                                <? extends AbstractEntry> inParent,
+                                int inStart, int inSize);
 
   //........................................................................
   //------------------------------ getOwners -------------------------------
