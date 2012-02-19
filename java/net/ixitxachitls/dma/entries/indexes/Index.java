@@ -445,6 +445,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      < 0 if this is lower, > if this is bigger, 0 if equal
    *
    */
+  @Override
   public int compareTo(@Nullable Index inOther)
   {
     if(inOther == null)
@@ -464,6 +465,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      true if equal, false else
    *
    */
+  @Override
   public boolean equals(Object inOther)
   {
     if(inOther == null)
@@ -484,7 +486,8 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return m_title.hashCode();
   }
@@ -514,7 +517,8 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the string representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return m_title + " (" + m_path + "/" + m_type
       + (m_images ? " with images" : "")

@@ -116,7 +116,8 @@ public class Rational extends BaseRational<Rational>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull Rational create()
+  @Override
+public @Nonnull Rational create()
   {
     return super.create(new Rational());
   }
@@ -182,7 +183,8 @@ public class Rational extends BaseRational<Rational>
    * @return      the internal value as a floating point number
    *
    */
-  public double getValue()
+  @Override
+public double getValue()
   {
     if(m_denominator == 0)
       return m_leader;
@@ -211,6 +213,7 @@ public class Rational extends BaseRational<Rational>
    *              value > 0, if it is above it and 0 if it is equal
    *
    */
+  @Override
   public int compare(long inValue)
   {
     Rational rational = reduce();
@@ -296,7 +299,8 @@ public class Rational extends BaseRational<Rational>
    * @return      the reduced rational
    *
    */
-  public @Nonnull Rational reduce()
+  @Override
+public @Nonnull Rational reduce()
   {
     return super.reduce();
   }

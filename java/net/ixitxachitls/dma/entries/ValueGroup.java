@@ -1971,6 +1971,7 @@ public abstract class ValueGroup implements Changeable
     * Set the state of the file to changed.
     *
     */
+  @Override
   public void changed()
   {
     changed(true);
@@ -2234,7 +2235,8 @@ public abstract class ValueGroup implements Changeable
        *
        * @param inState the new state
        */
-      public void changed(boolean inState)
+      @Override
+	  public void changed(boolean inState)
       {
         m_changed = inState;
       }
@@ -2243,7 +2245,8 @@ public abstract class ValueGroup implements Changeable
        *
        * @return the id
        */
-      public String getID()
+      @Override
+	  public String getID()
       {
         return "Test-ID";
       }
@@ -2252,7 +2255,8 @@ public abstract class ValueGroup implements Changeable
        *
        * @return the name
        */
-      public String getName()
+      @Override
+	  public String getName()
       {
         return "Test-Name";
       }

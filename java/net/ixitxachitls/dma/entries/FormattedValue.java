@@ -99,7 +99,8 @@ public class FormattedValue extends ValueHandle<FormattedValue>
    * @return   the value found or null if not found or not accessible
    *
    */
-  public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
+  @Override
+public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     return m_value;
   }
@@ -116,7 +117,8 @@ public class FormattedValue extends ValueHandle<FormattedValue>
    * @return   the value found or null if not found or not accessible
    *
    */
-  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
+  @Override
+public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     return m_formatted;
   }

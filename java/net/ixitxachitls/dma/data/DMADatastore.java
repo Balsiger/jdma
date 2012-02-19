@@ -197,7 +197,8 @@ public class DMADatastore implements DMAData
    * @return     the entry found, if any
    *
    */
-  public @Nullable <T extends AbstractEntry> T getEntry
+  @Override
+public @Nullable <T extends AbstractEntry> T getEntry
                       (@Nonnull AbstractEntry.EntryKey<T> inKey)
   {
     Log.debug("getting " + inKey);
@@ -221,7 +222,8 @@ public class DMADatastore implements DMAData
    * @return     the entry found, if any
    *
    */
-  @SuppressWarnings("unchecked") // casting return
+  @Override
+@SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> T
                       getEntry(@Nonnull AbstractType<T> inType,
                                @Nonnull String inKey,
@@ -264,7 +266,8 @@ public class DMADatastore implements DMAData
    * @return     the entries found
    *
    */
-  @SuppressWarnings("unchecked") // casting return
+  @Override
+@SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> List<T>
                       getEntries(@Nonnull AbstractType<T> inType,
                                  @Nonnull String inKey,
@@ -338,6 +341,7 @@ public class DMADatastore implements DMAData
    * @return      all the ids
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // need to cast cache value
   public @Nonnull List<String> getIDs
     (@Nonnull AbstractType<? extends AbstractEntry> inType,
@@ -380,7 +384,8 @@ public class DMADatastore implements DMAData
    * @return      all the ids
    *
    */
-  @SuppressWarnings("unchecked") // need to cast cache value
+  @Override
+@SuppressWarnings("unchecked") // need to cast cache value
   public @Nonnull  <T extends AbstractEntry> List<T>
     getRecentEntries(@Nonnull AbstractType<T> inType)
   {
@@ -416,7 +421,8 @@ public class DMADatastore implements DMAData
    * @return      all the ids
    *
    */
-  @SuppressWarnings("unchecked") // need to cast cache value
+  @Override
+@SuppressWarnings("unchecked") // need to cast cache value
   public @Nonnull  <T extends AbstractEntry> List<T>
     getRecentEntries(@Nonnull AbstractType<T> inType,
                      @Nonnull String inParentID,
@@ -455,7 +461,8 @@ public class DMADatastore implements DMAData
    * @return   a multi map from owner to ids
    *
    */
-  public Multimap<String, String> getOwners(String inID)
+  @Override
+public Multimap<String, String> getOwners(String inID)
   {
     Log.debug("getting owners for " + inID);
 
@@ -483,7 +490,8 @@ public class DMADatastore implements DMAData
    * @return   a list of all the files found
    *
    */
-  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
+  @Override
+public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
   {
     Log.debug("getting files for " + inEntry.getName());
     Query query =
@@ -540,7 +548,8 @@ public class DMADatastore implements DMAData
    * @return   the entries matching the given index
    *
    */
-  @SuppressWarnings("unchecked") // need to cast return value for generics
+  @Override
+@SuppressWarnings("unchecked") // need to cast return value for generics
   public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
                      (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
                       @Nonnull String inGroup, int inStart, int inSize)
@@ -584,7 +593,8 @@ public class DMADatastore implements DMAData
    * @return      a multi map with all the names
    *
    */
-  @SuppressWarnings("unchecked") // need to cast from property value
+  @Override
+@SuppressWarnings("unchecked") // need to cast from property value
   public @Nonnull SortedSet<String> getIndexNames
     (@Nonnull String inIndex,
      @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
@@ -636,7 +646,8 @@ public class DMADatastore implements DMAData
    * @return      true if data is changed from store, false if not
    *
    */
-  public boolean isChanged()
+  @Override
+public boolean isChanged()
   {
     return false;
   }
@@ -658,7 +669,8 @@ public class DMADatastore implements DMAData
    * @return      true if removed, false if not
    *
    */
-  public boolean remove
+  @Override
+public boolean remove
     (@Nonnull String inID,
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
@@ -693,7 +705,8 @@ public class DMADatastore implements DMAData
    * @return      true if added, false if there was an error
    *
    */
-  public boolean update(@Nonnull AbstractEntry inEntry)
+  @Override
+public boolean update(@Nonnull AbstractEntry inEntry)
   {
     Log.debug("Storing data for " + inEntry.getType() + " "
               + inEntry.getName());
@@ -820,7 +833,8 @@ public class DMADatastore implements DMAData
    * @return     the numbert of enties updated
    *
    */
-  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  @Override
+public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     Log.debug("rebuilding data for " + inType);
     List<Entity> entities = new ArrayList<Entity>();

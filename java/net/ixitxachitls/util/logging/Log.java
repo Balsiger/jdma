@@ -120,7 +120,8 @@ public final class Log
      *
      * @return string representation of the message.
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return getType() + ": " + getText() + " (" + getDate() + ")";
     }
@@ -1060,7 +1061,8 @@ public final class Log
        * @param inType the debugging level to print to
        *
        */
-      public void print(@Nullable String inText, @Nonnull Type inType)
+      @Override
+	public void print(@Nullable String inText, @Nonnull Type inType)
       {
         StackTraceElement []stack = new Throwable().getStackTrace();
 
@@ -1093,7 +1095,8 @@ public final class Log
        * @param inType   the debugging level to print to
        *
        */
-      public void print(@Nonnull Object inObject, @Nonnull Type inType)
+      @Override
+	public void print(@Nonnull Object inObject, @Nonnull Type inType)
       {
          print(inObject.toString(), inType);
       }

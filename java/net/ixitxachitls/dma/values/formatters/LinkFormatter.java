@@ -111,7 +111,8 @@ public class LinkFormatter<K extends Value> implements Formatter<K>
    * @return      the formatted command
    *
    */
-  public Command format(@Nonnull K inValue)
+  @Override
+public Command format(@Nonnull K inValue)
   {
     if(m_style != null)
       return new Link(inValue.format(false, true), m_base + inValue.group(),

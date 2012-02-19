@@ -95,7 +95,8 @@ public class ConfigServlet extends BaseServlet
    * @throws      IOException      writing to the page failed
    *
    */
-  protected @Nullable SpecialResult handle
+  @Override
+protected @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException

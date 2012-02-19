@@ -90,7 +90,8 @@ public class ArrayIterator<T> implements Iterator<T>
    * @return      true if there is another value, false if not
    *
    */
-  public boolean hasNext()
+  @Override
+public boolean hasNext()
   {
     return m_index < m_values.length;
   }
@@ -109,7 +110,8 @@ public class ArrayIterator<T> implements Iterator<T>
    * @return      the next Object
    *
    */
-  public @Nullable T next()
+  @Override
+public @Nullable T next()
   {
     if(m_index >= m_values.length)
       throw new java.util.NoSuchElementException("no more values");
@@ -127,7 +129,8 @@ public class ArrayIterator<T> implements Iterator<T>
    * UnsupportedOperationException.
    *
    */
-  public void remove()
+  @Override
+public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
                                             + "support the removal of "

@@ -126,7 +126,8 @@ public class BlobUploadServlet extends BaseServlet
    * @throws IOException if problems reading the blob
    *
    */
-  public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
+  @Override
+public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
                                         @Nonnull HttpServletResponse inResponse)
     throws IOException
   {

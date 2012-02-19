@@ -101,7 +101,8 @@ public class Price extends Decimal<Price>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull Price create()
+  @Override
+public @Nonnull Price create()
   {
     return super.create(new Price(m_min, m_max));
   }
@@ -143,7 +144,8 @@ public class Price extends Decimal<Price>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return m_currency + super.doToString();
   }
@@ -164,7 +166,8 @@ public class Price extends Decimal<Price>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 

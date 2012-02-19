@@ -201,7 +201,8 @@ public class Multiple extends Value<Multiple>
      * @return      a String representation, depending on the kind given
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       if(!m_value.isDefined() && isOptional())
         return "";
@@ -273,7 +274,8 @@ public class Multiple extends Value<Multiple>
    * @return      a similar text, but without any contents
    *
    */
-  public @Nonnull Multiple create()
+  @Override
+public @Nonnull Multiple create()
   {
     Element []elements = new Element[m_elements.length];
 
@@ -372,7 +374,8 @@ public class Multiple extends Value<Multiple>
    * @return      the requested values
    *
    */
-  public @Nullable Iterator<Element> iterator()
+  @Override
+public @Nullable Iterator<Element> iterator()
   {
     return new ArrayIterator<Element>(m_elements);
   }
@@ -401,7 +404,8 @@ public class Multiple extends Value<Multiple>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     for(int i = 0; i < m_elements.length; i++)
       if(!m_elements[i].isOptional() && !m_elements[i].m_value.isDefined())
@@ -435,7 +439,8 @@ public class Multiple extends Value<Multiple>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -474,7 +479,8 @@ public class Multiple extends Value<Multiple>
    * @return      the command that can be printed
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 
@@ -507,7 +513,8 @@ public class Multiple extends Value<Multiple>
    * @return      the possible value to select from or null for no selection
    *
    */
-  public @Nonnull String getChoices()
+  @Override
+public @Nonnull String getChoices()
   {
     ArrayList<String> list = new ArrayList<String>();
 
@@ -573,7 +580,8 @@ public class Multiple extends Value<Multiple>
    * @return      true if read, false if not
    *
    */
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+protected boolean doRead(@Nonnull ParseReader inReader)
   {
     for(int i = 0; i < m_elements.length; i++)
     {
@@ -622,6 +630,7 @@ public class Multiple extends Value<Multiple>
    * @return      the additiona of the value
    *
    */
+  @Override
   @SuppressWarnings("unchecked")
   public @Nonnull Multiple add(@Nonnull Multiple inValue)
   {
@@ -707,7 +716,8 @@ public class Multiple extends Value<Multiple>
     //----- read -----------------------------------------------------------
 
     /** Testing reading. */
-    @org.junit.Test
+    @Override
+	@org.junit.Test
     public void read()
     {
       String []tests =

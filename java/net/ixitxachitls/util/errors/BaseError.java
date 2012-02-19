@@ -149,7 +149,8 @@ public class BaseError
    * @return      true if equal, false else
    *
    */
-  public boolean equals(Object inOther)
+  @Override
+public boolean equals(Object inOther)
   {
     if(inOther == null)
       return false;
@@ -169,7 +170,8 @@ public class BaseError
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return m_message.hashCode();
   }
@@ -238,7 +240,8 @@ public class BaseError
    * @return      a String representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return m_message;
   }

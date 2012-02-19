@@ -238,7 +238,8 @@ public class ANSILogger extends ASCIILogger
    * @undefined   never
    *
    */
-  protected @Nonnull WrapBuffer getWrapBuffer(int inWidth)
+  @Override
+protected @Nonnull WrapBuffer getWrapBuffer(int inWidth)
   {
     return new WrapBuffer(inWidth, s_ignore);
   }
@@ -279,7 +280,8 @@ public class ANSILogger extends ASCIILogger
    * @param       inType the level of detail to print for
    *
    */
-  public void print(@Nonnull String inText, @Nonnull Log.Type inType)
+  @Override
+public void print(@Nonnull String inText, @Nonnull Log.Type inType)
   {
     // set the text to write to together
     String text;

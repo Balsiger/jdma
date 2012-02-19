@@ -123,6 +123,7 @@ public abstract class Value<T extends Value> implements
    * @return      a copy of the current value
    *
    */
+  @Override
   @SuppressWarnings("unchecked")
   public @Nonnull T clone()
   {
@@ -314,7 +315,8 @@ public abstract class Value<T extends Value> implements
    * @return      a String representation for human reading
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return toString(true);
   }
@@ -377,6 +379,7 @@ public abstract class Value<T extends Value> implements
    *              object given
    *
    */
+  @Override
   public int compareTo(@Nonnull Object inOther)
   {
     return toString().compareTo(inOther.toString());
@@ -393,6 +396,7 @@ public abstract class Value<T extends Value> implements
    * @return      true if equal, false else
    *
    */
+  @Override
   public boolean equals(Object inOther)
   {
     if(this == inOther)
@@ -416,7 +420,8 @@ public abstract class Value<T extends Value> implements
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return toString().hashCode();
   }
@@ -940,7 +945,8 @@ public abstract class Value<T extends Value> implements
 
       private boolean m_defined = false;
 
-      protected boolean doRead(@Nonnull ParseReader inReader)
+      @Override
+	protected boolean doRead(@Nonnull ParseReader inReader)
       {
         m_defined = inReader.expect("guru");
         return m_defined;
@@ -951,22 +957,26 @@ public abstract class Value<T extends Value> implements
         m_defined = false;
       }
 
-      public @Nonnull Command doFormat()
+      @Override
+	public @Nonnull Command doFormat()
       {
         return new Command("guru");
       }
 
-      public boolean isDefined()
+      @Override
+	public boolean isDefined()
       {
         return m_defined;
       }
 
-      public @Nonnull String doToString()
+      @Override
+	public @Nonnull String doToString()
       {
         return "guru";
       }
 
-      public TestValue create()
+      @Override
+	public TestValue create()
       {
         TestValue copy = this.clone();
         copy.reset();

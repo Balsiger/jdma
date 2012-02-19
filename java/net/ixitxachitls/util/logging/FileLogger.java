@@ -194,7 +194,8 @@ public class FileLogger extends ASCIILogger
    * @param       inType the level of detail to print for
    *
    */
-  public void print(@Nonnull String inText, @Nonnull Log.Type inType)
+  @Override
+public void print(@Nonnull String inText, @Nonnull Log.Type inType)
   {
     // don't print status messages to file logs
     if(inType == Log.Type.STATUS)
@@ -340,7 +341,8 @@ public class FileLogger extends ASCIILogger
 
       java.io.File []files = dir.listFiles(new java.io.FilenameFilter()
         {
-          public boolean accept(java.io.File inDir, String inName)
+          @Override
+		  public boolean accept(java.io.File inDir, String inName)
           {
             if(inName == null)
               return false;

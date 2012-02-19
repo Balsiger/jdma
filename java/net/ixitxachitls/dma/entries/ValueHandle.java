@@ -469,13 +469,15 @@ public abstract class ValueHandle<T extends ValueHandle>
       private Object m_value;
 
       /** {@inheritDoc} */
-      public Object value(ValueGroup inEntry, boolean inDM)
+      @Override
+	public Object value(ValueGroup inEntry, boolean inDM)
       {
         return m_value;
       }
 
       /** {@inheritDoc} */
-      public Object formatted(ValueGroup inEntry, boolean inDM)
+      @Override
+	public Object formatted(ValueGroup inEntry, boolean inDM)
       {
         return m_value;
       }

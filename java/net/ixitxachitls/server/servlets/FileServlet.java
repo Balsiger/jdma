@@ -306,7 +306,8 @@ public class FileServlet extends BaseServlet
    * @throws      IOException     if writing failed
    *
    */
-  protected synchronized @Nullable SpecialResult handle
+  @Override
+protected synchronized @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws IOException, ServletException
@@ -437,7 +438,8 @@ public class FileServlet extends BaseServlet
    * @param inConfig the intial configuration (from web.xml)
    *
    */
-  public void init(@Nonnull ServletConfig inConfig)
+  @Override
+public void init(@Nonnull ServletConfig inConfig)
   {
     // root
     String param = inConfig.getInitParameter("root");

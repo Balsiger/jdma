@@ -133,7 +133,8 @@ public class PageServlet extends DMAServlet
    * @throws      IOException      writing to the page failed
    *
    */
-  protected @Nullable SpecialResult handle
+  @Override
+protected @Nullable SpecialResult handle
     (@Nonnull DMARequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -551,7 +552,8 @@ public class PageServlet extends DMAServlet
 
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
-          protected void writeBody(@Nonnull HTMLWriter inWriter,
+          @Override
+		protected void writeBody(@Nonnull HTMLWriter inWriter,
                                    @Nullable String inPath,
                                    @Nonnull DMARequest inRequest)
           {
@@ -712,7 +714,8 @@ public class PageServlet extends DMAServlet
 
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
-          protected void writeBody(@Nonnull HTMLWriter inWriter,
+          @Override
+		protected void writeBody(@Nonnull HTMLWriter inWriter,
                                    @Nullable String inPath,
                                    @Nonnull DMARequest inRequest)
           {

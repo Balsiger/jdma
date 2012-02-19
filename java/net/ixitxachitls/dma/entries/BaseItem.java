@@ -165,7 +165,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -175,7 +176,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -185,7 +187,8 @@ public class BaseItem extends BaseEntry
      * @return the short name of the value
      *
      */
-    public String getShort()
+    @Override
+	public String getShort()
     {
       return m_short;
     }
@@ -339,7 +342,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -349,7 +353,8 @@ public class BaseItem extends BaseEntry
      * @return the short name of the value
      *
      */
-    public String getShort()
+    @Override
+	public String getShort()
     {
       return m_short;
     }
@@ -390,7 +395,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -400,7 +406,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -518,7 +525,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -548,7 +556,8 @@ public class BaseItem extends BaseEntry
      * @return the converted string
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
         return m_name;
     }
@@ -587,7 +596,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -597,7 +607,8 @@ public class BaseItem extends BaseEntry
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -771,7 +782,8 @@ public class BaseItem extends BaseEntry
   protected static final Group<Number, Long, String> s_hardnessGroup =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
-        public Long extract(Number inValue)
+        @Override
+		public Long extract(Number inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a number here");
@@ -805,7 +817,8 @@ public class BaseItem extends BaseEntry
   protected static final Group<Number, Long, String> s_hpGroup =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
-      public Long extract(Number inValue)
+      @Override
+	public Long extract(Number inValue)
       {
         if(inValue == null)
           throw new IllegalArgumentException("must have a number here");
@@ -838,7 +851,8 @@ public class BaseItem extends BaseEntry
     s_appearancesFormatter =
     new Formatter<ValueList<Multiple>>()
   {
-    public @Nonnull Command format(@Nonnull ValueList<Multiple> inList)
+    @Override
+	public @Nonnull Command format(@Nonnull ValueList<Multiple> inList)
     {
       ArrayList<Command> elements = new ArrayList<Command>();
 
@@ -884,7 +898,8 @@ public class BaseItem extends BaseEntry
   protected static final Group<Distance, Long, String> s_thicknessGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
-        public @Nonnull Long extract(@Nonnull Distance inValue)
+        @Override
+		public @Nonnull Long extract(@Nonnull Distance inValue)
         {
           return (long)(inValue.getAsFeet().getValue() * 240);
         }
@@ -927,7 +942,8 @@ public class BaseItem extends BaseEntry
   protected static final Group<Number, Long, String> s_breakGrouping =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
-      public Long extract(Number inValue)
+      @Override
+	public Long extract(Number inValue)
       {
         if(inValue == null)
           throw new IllegalArgumentException("must have a number here");
@@ -1221,7 +1237,8 @@ public class BaseItem extends BaseEntry
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -1235,7 +1252,8 @@ public class BaseItem extends BaseEntry
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

@@ -720,7 +720,8 @@ public final class Strings
   {
     Collections.sort(inList, new Comparator<String>()
                      {
-                       public int compare(String inFirst, String inSecond)
+                       @Override
+					   public int compare(String inFirst, String inSecond)
                        {
                          if(inFirst == null)
                            throw new IllegalArgumentException

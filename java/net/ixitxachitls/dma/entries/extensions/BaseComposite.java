@@ -139,7 +139,8 @@ public class BaseComposite extends BaseExtension<BaseItem>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -153,7 +154,8 @@ public class BaseComposite extends BaseExtension<BaseItem>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

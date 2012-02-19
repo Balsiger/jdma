@@ -107,7 +107,8 @@ public class Decimal<T extends Decimal> extends BaseNumber<T>
    * @return      a similar list, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // this only works if derivations override this
+  @Override
+@SuppressWarnings("unchecked") // this only works if derivations override this
   public @Nonnull T create()
   {
     return (T)new Decimal(m_min, m_max, m_precision);
@@ -157,7 +158,8 @@ public class Decimal<T extends Decimal> extends BaseNumber<T>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return format(m_number, m_precision);
   }
@@ -178,7 +180,8 @@ public class Decimal<T extends Decimal> extends BaseNumber<T>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -272,6 +275,7 @@ public class Decimal<T extends Decimal> extends BaseNumber<T>
    * Check that the current value is valid.
    *
    */
+  @Override
   protected void check()
   {
     if(m_number > m_max)

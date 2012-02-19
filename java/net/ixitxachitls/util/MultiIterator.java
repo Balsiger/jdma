@@ -96,7 +96,8 @@ public class MultiIterator<T> implements Iterator<T>
    * @return      true if there is another value, false if not
    *
    */
-  public boolean hasNext()
+  @Override
+public boolean hasNext()
   {
     if(m_index >= m_iterators.length)
       return false;
@@ -122,7 +123,8 @@ public class MultiIterator<T> implements Iterator<T>
    * @return      the next Object
    *
    */
-  public T next()
+  @Override
+public T next()
   {
     if(!hasNext())
       throw new java.util.NoSuchElementException("no more values");
@@ -138,7 +140,8 @@ public class MultiIterator<T> implements Iterator<T>
    * iterator, an UnnsuportedOperationException is thrown.
    *
    */
-  public void remove()
+  @Override
+public void remove()
   {
     m_iterators[m_index].remove();
   }

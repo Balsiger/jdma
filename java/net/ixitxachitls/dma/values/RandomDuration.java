@@ -107,7 +107,8 @@ public class RandomDuration extends Duration
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull RandomDuration create()
+  @Override
+public @Nonnull RandomDuration create()
   {
     return (RandomDuration)super.create(new RandomDuration());
   }
@@ -201,7 +202,8 @@ public class RandomDuration extends Duration
    * @return      the command to format the value or null if there is no value
    *
    */
-  protected @Nullable Command formatSingleUnit(int inIndex)
+  @Override
+protected @Nullable Command formatSingleUnit(int inIndex)
   {
     assert inIndex >= 0 && inIndex <= m_dices.length;
 

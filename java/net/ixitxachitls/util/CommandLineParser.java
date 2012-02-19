@@ -154,7 +154,8 @@ public class CommandLineParser
      * @return the string representation of the option
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       if(m_long != null)
         return m_long;
@@ -230,7 +231,8 @@ public class CommandLineParser
      * @return the string representation of the option
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       if(m_present)
         return s_longStart + super.toString();
@@ -250,7 +252,8 @@ public class CommandLineParser
      * @return the index of the next argument to read
      *
      */
-    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    @Override
+	public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       m_present = true;
 
@@ -267,7 +270,8 @@ public class CommandLineParser
      * @return true if a value is present (default or given), false if not
      *
      */
-    public synchronized boolean hasValue()
+    @Override
+	public synchronized boolean hasValue()
     {
       return m_present;
     }
@@ -322,7 +326,8 @@ public class CommandLineParser
      * @return      the index of the next value to parse
      *
      */
-    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    @Override
+	public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
       {
@@ -353,7 +358,8 @@ public class CommandLineParser
      * @return      true if it has a value, false if not
      *
      */
-    public boolean hasValue()
+    @Override
+	public boolean hasValue()
     {
       return m_value != null;
     }
@@ -388,7 +394,8 @@ public class CommandLineParser
      * @undefined   never
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -446,7 +453,8 @@ public class CommandLineParser
      * @return      the index of the next argument to parse
      *
      */
-    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    @Override
+	public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
         m_value = inArguments[inIndex];
@@ -465,7 +473,8 @@ public class CommandLineParser
      * @return      true if it has a value, false if not
      *
      */
-    public boolean hasValue()
+    @Override
+	public boolean hasValue()
     {
       return m_value != null;
     }
@@ -493,7 +502,8 @@ public class CommandLineParser
      * @return      a string representation of the option
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -554,7 +564,8 @@ public class CommandLineParser
      * @return      the index of the next argument to parse
      *
      */
-    public synchronized int parse(String []inArguments, int inIndex)
+    @Override
+	public synchronized int parse(String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
         m_values = inArguments[inIndex].split("\\s*,\\s*");
@@ -573,7 +584,8 @@ public class CommandLineParser
      * @return      true if it has a value, false if not
      *
      */
-    public boolean hasValue()
+    @Override
+	public boolean hasValue()
     {
       return m_values != null;
     }
@@ -604,7 +616,8 @@ public class CommandLineParser
      * @return      a string representation of the option
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + s_commaJoiner.join(m_values);
@@ -661,7 +674,8 @@ public class CommandLineParser
      * @return      the index of the next argument to parse
      *
      */
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
@@ -681,7 +695,8 @@ public class CommandLineParser
      * @return      true if it has a value, false if not
      *
      */
-    public synchronized boolean hasValue()
+    @Override
+	public synchronized boolean hasValue()
     {
       return m_value != null;
     }
@@ -714,7 +729,8 @@ public class CommandLineParser
      * @undefined   never
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -804,7 +820,8 @@ public class CommandLineParser
    * @return      the String representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     List<String> result = new ArrayList<String>();
     for(Option option : m_longs.values())

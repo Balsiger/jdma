@@ -113,7 +113,8 @@ public class StaticPageServlet extends PageServlet
    * @param     inRequest the request for the page
    *
    */
-  @OverridingMethodsMustInvokeSuper
+  @Override
+@OverridingMethodsMustInvokeSuper
   public void writeBody(@Nonnull HTMLWriter inWriter,
                         @Nullable String inPath,
                         @Nonnull DMARequest inRequest)
@@ -160,7 +161,8 @@ public class StaticPageServlet extends PageServlet
    * @param inConfig the intial configuration (from web.xml)
    *
    */
-  public void init(@Nonnull ServletConfig inConfig)
+  @Override
+public void init(@Nonnull ServletConfig inConfig)
   {
     // root
     String param = inConfig.getInitParameter("root");

@@ -95,7 +95,8 @@ public class Text extends BaseText<Text>
    * @return      a similar text, but without any contents
    *
    */
-  public @Nonnull Text create()
+  @Override
+public @Nonnull Text create()
   {
     return super.create(new Text());
   }
@@ -133,7 +134,8 @@ public class Text extends BaseText<Text>
    * @return      a string denoting the group this value is in
    *
    */
-  public @Nonnull String doGroup()
+  @Override
+public @Nonnull String doGroup()
   {
     return m_text;
   }
@@ -147,7 +149,8 @@ public class Text extends BaseText<Text>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return s_stringDelimiter
       + m_text.replaceAll("([" + s_stringDelimiter + "])", "\\\\$1")
@@ -163,7 +166,8 @@ public class Text extends BaseText<Text>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new BaseCommand(m_text.replaceAll("[\n\f ]+", " "));
   }
@@ -187,7 +191,8 @@ public class Text extends BaseText<Text>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text = null;

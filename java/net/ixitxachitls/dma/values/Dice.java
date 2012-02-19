@@ -102,7 +102,8 @@ public class Dice extends Value<Dice>
    * @return      a similar list, but without any contents
    *
    */
-  public Dice create()
+  @Override
+public Dice create()
   {
     return super.create(new Dice());
   }
@@ -158,7 +159,8 @@ public class Dice extends Value<Dice>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_dice > 0 || m_number > 0;
   }

@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -114,7 +113,8 @@ public class Critical extends BaseNumber<Critical>
    * @return      a similar list, but without any contents
    *
    */
-  public Critical create()
+  @Override
+public Critical create()
   {
     return super.create(new Critical());
   }
@@ -197,7 +197,8 @@ public class Critical extends BaseNumber<Critical>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     if(m_number == 1)
       if(m_indexBase != null)
@@ -332,7 +333,8 @@ public class Critical extends BaseNumber<Critical>
    * @return      true if read, false if not
    *
    */
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+protected boolean doRead(@Nonnull ParseReader inReader)
   {
     if(inReader.expect("none"))
     {

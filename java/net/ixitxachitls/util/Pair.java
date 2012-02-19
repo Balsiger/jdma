@@ -120,7 +120,8 @@ public class Pair<T1, T2>
    * @return      the value converted into a string
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return "<" + m_first + ", " + m_second + ">";
   }

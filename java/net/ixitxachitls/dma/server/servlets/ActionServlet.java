@@ -92,7 +92,8 @@ public abstract class ActionServlet extends DMAServlet
    * @throws      ServletException  a general problem with handling the request
    *                                happens
    */
-  public void doGet(@Nonnull HttpServletRequest inRequest,
+  @Override
+public void doGet(@Nonnull HttpServletRequest inRequest,
                     @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
@@ -120,7 +121,8 @@ public abstract class ActionServlet extends DMAServlet
    *                                happens
    *
    */
-  protected @Nullable SpecialResult handle
+  @Override
+protected @Nullable SpecialResult handle
     (@Nonnull DMARequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -246,7 +248,8 @@ public abstract class ActionServlet extends DMAServlet
 
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
-          protected String doAction(@Nonnull DMARequest inRequest,
+          @Override
+		protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";
@@ -284,7 +287,8 @@ public abstract class ActionServlet extends DMAServlet
 
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
-          protected String doAction(@Nonnull DMARequest inRequest,
+          @Override
+		protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";
@@ -313,7 +317,8 @@ public abstract class ActionServlet extends DMAServlet
 
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
-          protected String doAction(@Nonnull DMARequest inRequest,
+          @Override
+		protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";
@@ -335,7 +340,8 @@ public abstract class ActionServlet extends DMAServlet
       ActionServlet servlet = new ActionServlet()
         {
           private static final long serialVersionUID = 1L;
-          protected String doAction(@Nonnull DMARequest inRequest,
+          @Override
+		protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";

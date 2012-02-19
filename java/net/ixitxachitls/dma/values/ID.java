@@ -89,7 +89,8 @@ public class ID extends BaseText<ID>
    * @return      a similar text, but without any contents
    *
    */
-  public @Nonnull ID create()
+  @Override
+public @Nonnull ID create()
   {
     return super.create(new ID());
   }
@@ -118,7 +119,8 @@ public class ID extends BaseText<ID>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new Command(m_text);
   }
@@ -143,6 +145,7 @@ public class ID extends BaseText<ID>
    * @return      a new value with the given value set
    *
    */
+  @Override
   public ID as(@Nonnull String inText)
   {
     throw new UnsupportedOperationException("cannot set an id");
@@ -159,6 +162,7 @@ public class ID extends BaseText<ID>
    * @return      the additional of the current and the given value
    *
    */
+  @Override
   public @Nonnull ID add(@Nonnull ID inValue)
   {
     throw new UnsupportedOperationException("cannot add to id");
@@ -199,7 +203,8 @@ public class ID extends BaseText<ID>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
     char []read = new char[s_digits];

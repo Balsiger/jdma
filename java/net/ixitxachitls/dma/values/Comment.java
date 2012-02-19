@@ -106,7 +106,8 @@ public class Comment extends Value<Comment>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull Comment create()
+  @Override
+public @Nonnull Comment create()
   {
     return new Comment(m_maxComments, m_maxLines);
   }
@@ -142,7 +143,8 @@ public class Comment extends Value<Comment>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_lines != null;
   }
@@ -171,7 +173,8 @@ public class Comment extends Value<Comment>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new Command(m_lines);
   }
@@ -185,7 +188,8 @@ public class Comment extends Value<Comment>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return m_lines;
   }
@@ -288,7 +292,8 @@ public class Comment extends Value<Comment>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     if(m_maxComments == 0)
       return false;

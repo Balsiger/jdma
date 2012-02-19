@@ -95,7 +95,8 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @return      a similar text, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // this only works if it is overriden in all
+  @Override
+@SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
   public @Nonnull T create()
   {
@@ -153,7 +154,8 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new BaseCommand(m_text);
   }
@@ -167,7 +169,8 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return m_text.replaceAll("([" + s_nameDelimPattern + "])", "\\\\$1");
   }
@@ -182,7 +185,8 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_text != null;
   }
@@ -245,6 +249,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @return      the additional of the current and the given value
    *
    */
+  @Override
   public @Nonnull T add(@Nonnull T inValue)
   {
     String text = "";
@@ -274,7 +279,8 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text =

@@ -95,7 +95,8 @@ public class DelimFormatter<K extends Value> implements Formatter<K>
    * @return      the formatted command
    *
    */
-  public Command format(@Nonnull K inValue)
+  @Override
+public Command format(@Nonnull K inValue)
   {
     if(m_prefix == null && m_postfix == null)
       return inValue.format(false, true);

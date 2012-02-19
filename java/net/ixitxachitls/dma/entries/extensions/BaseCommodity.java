@@ -108,7 +108,8 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   protected static final Group<Area, Long, String> s_areaGrouping =
     new Group<Area, Long, String>(new Group.Extractor<Area, Long>()
       {
-        public Long extract(@Nonnull Area inValue)
+        @Override
+		public Long extract(@Nonnull Area inValue)
         {
           return (long)inValue.getAsFeet().getValue() * 144;
         }
@@ -138,7 +139,8 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   protected static final Group<Distance, Long, String> s_lengthGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
-        public Long extract(Distance inValue)
+        @Override
+		public Long extract(Distance inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a value here");
@@ -181,7 +183,8 @@ public class BaseCommodity extends BaseExtension<BaseItem>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -195,7 +198,8 @@ public class BaseCommodity extends BaseExtension<BaseItem>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

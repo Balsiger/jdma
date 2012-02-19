@@ -108,7 +108,7 @@ public class Command implements PublicCloneable
    * @return      a copy of the current value
    *
    */
-  @SuppressWarnings("unchecked")
+  @Override
   public Command clone()
   {
     try
@@ -191,7 +191,8 @@ public class Command implements PublicCloneable
    * @return      true if equal, false else
    *
    */
-  public boolean equals(Object inOther)
+  @Override
+public boolean equals(Object inOther)
   {
     if(this == inOther)
       return true;
@@ -214,7 +215,8 @@ public class Command implements PublicCloneable
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return m_arguments.hashCode();
   }
@@ -229,7 +231,8 @@ public class Command implements PublicCloneable
    * @return      a human readable conversion of the object
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     StringBuilder result = new StringBuilder();
 

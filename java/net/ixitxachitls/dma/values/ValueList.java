@@ -194,7 +194,8 @@ public class ValueList<T extends Value>
    * @return      a similar list, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // casting result
+  @Override
+@SuppressWarnings("unchecked") // casting result
   public @Nonnull ValueList<T> create()
   {
     // the value is added to the list if it is defined !
@@ -311,7 +312,8 @@ public class ValueList<T extends Value>
    * @return      the requested values
    *
    */
-  public Iterator<T> iterator()
+  @Override
+public Iterator<T> iterator()
   {
     if(m_values == null)
       return new EmptyIterator<T>();
@@ -363,7 +365,8 @@ public class ValueList<T extends Value>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     // we know this is defined
     return m_joiner.join(m_values);
@@ -379,7 +382,8 @@ public class ValueList<T extends Value>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_values != null;
   }
@@ -393,7 +397,8 @@ public class ValueList<T extends Value>
    * @return      the command that can be printed
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 
@@ -420,7 +425,8 @@ public class ValueList<T extends Value>
    * @return      the values to edit
    *
    */
-  public @Nullable String getChoices()
+  @Override
+public @Nullable String getChoices()
   {
     return m_type.getChoices();
   }
@@ -690,7 +696,8 @@ public class ValueList<T extends Value>
    * @return      the result of the subtraction
    *
    */
-  @SuppressWarnings("unchecked") // comparing values of the raw type
+  @Override
+@SuppressWarnings("unchecked") // comparing values of the raw type
   public @Nonnull ValueList<T> subtract(@Nonnull ValueList<T> inValue)
   {
     ValueList<T> result = create();
@@ -715,7 +722,8 @@ public class ValueList<T extends Value>
    * @return      true if read, false if not
    *
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public boolean doRead(ParseReader inReader)
   {
     if(inReader == null)

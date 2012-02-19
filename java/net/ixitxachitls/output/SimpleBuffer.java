@@ -81,7 +81,8 @@ public class SimpleBuffer implements Buffer
    * @return      the new buffer
    *
    */
-  public @Nonnull Buffer newBuffer()
+  @Override
+public @Nonnull Buffer newBuffer()
   {
     return new SimpleBuffer();
   }
@@ -97,7 +98,8 @@ public class SimpleBuffer implements Buffer
    * @return      the new buffer
    *
    */
-  public @Nonnull Buffer newBuffer(int inWidth)
+  @Override
+public @Nonnull Buffer newBuffer(int inWidth)
   {
     return newBuffer();
   }
@@ -112,7 +114,8 @@ public class SimpleBuffer implements Buffer
    * @return      a String with the complete contents of the buffer
    *
    */
-  public @Nonnull String getContents()
+  @Override
+public @Nonnull String getContents()
   {
     return m_buffer.toString();
   }
@@ -127,7 +130,8 @@ public class SimpleBuffer implements Buffer
    * @return      a String representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return m_buffer.toString();
   }
@@ -146,6 +150,7 @@ public class SimpleBuffer implements Buffer
    * @param       inObject the object to add
    *
    */
+  @Override
   public void append(@Nonnull Object inObject)
   {
     m_buffer.append(inObject.toString());
@@ -160,6 +165,7 @@ public class SimpleBuffer implements Buffer
    * with a newline, nothing is done, otherwise a newline is added.
    *
    */
+  @Override
   public void endLine()
   {
     // the line in the buffer is already ended, if it is empty; in that case we

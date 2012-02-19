@@ -83,7 +83,8 @@ public class DMAFilter implements Filter
     * @param       inConfig the filter configuration
     *
     */
-  public void init(FilterConfig inConfig)
+  @Override
+public void init(FilterConfig inConfig)
   {
     // nothing to do
   }
@@ -96,7 +97,8 @@ public class DMAFilter implements Filter
     * Destroy the filter.
     *
     */
-  public void destroy()
+  @Override
+public void destroy()
   {
     // nothing to do
   }
@@ -126,7 +128,8 @@ public class DMAFilter implements Filter
     * @throws      ServletException general failure when creating response
     *
     */
-  public void doFilter(@Nonnull ServletRequest inRequest,
+  @Override
+public void doFilter(@Nonnull ServletRequest inRequest,
                        @Nonnull ServletResponse inResponse,
                        @Nonnull FilterChain inChain)
     throws ServletException, IOException

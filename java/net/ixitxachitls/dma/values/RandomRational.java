@@ -141,7 +141,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull RandomRational create()
+  @Override
+public @Nonnull RandomRational create()
   {
     return super.create(new RandomRational());
   }
@@ -214,7 +215,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      the internal value as a floating point number
    *
    */
-  public double getValue()
+  @Override
+public double getValue()
   {
     if(m_denominator == 0)
       return m_leader;
@@ -305,7 +307,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      true if 1, false else
    *
    */
-  public boolean isOne()
+  @Override
+public boolean isOne()
   {
     if(m_randomNominator != null || m_randomDenominator != null)
       return false;
@@ -322,7 +325,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      true if 0, false else
    *
    */
-  public boolean isNull()
+  @Override
+public boolean isNull()
   {
     if(m_randomNominator != null || m_randomDenominator != null)
       return false;
@@ -339,7 +343,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return    true if it's a real fraction, false if notj
    *
    */
-  public boolean isRealFraction()
+  @Override
+public boolean isRealFraction()
   {
     return super.isRealFraction() || m_randomDenominator != null;
   }
@@ -388,6 +393,7 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a new value representing the addition
    *
    */
+  @Override
   public @Nonnull RandomRational add(RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot add random rationals");
@@ -404,6 +410,7 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a new value representing the addition
    *
    */
+  @Override
   public @Nonnull RandomRational add(long inValue)
   {
     throw new UnsupportedOperationException("cannot add random rationals");
@@ -420,7 +427,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a new value representing the subtraction
    *
    */
-  public @Nonnull RandomRational subtract(@Nonnull RandomRational inValue)
+  @Override
+public @Nonnull RandomRational subtract(@Nonnull RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot subtract random rationals");
   }
@@ -436,7 +444,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a new value representing the subtraction
    *
    */
-  public @Nonnull RandomRational subtract(long inValue)
+  @Override
+public @Nonnull RandomRational subtract(long inValue)
   {
     throw new UnsupportedOperationException("cannot subtract random rationals");
   }
@@ -452,7 +461,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a new value representing the divison
    *
    */
-  public @Nonnull RandomRational divide(long inValue)
+  @Override
+public @Nonnull RandomRational divide(long inValue)
   {
     throw new UnsupportedOperationException("cannot divide random rationals");
   }
@@ -468,7 +478,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a new value representing the divison
    *
    */
-  public @Nonnull RandomRational divide(@Nonnull RandomRational inValue)
+  @Override
+public @Nonnull RandomRational divide(@Nonnull RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot divide random rationals");
   }
@@ -484,7 +495,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      the multiplication of this with the given value
    *
    */
-  public @Nonnull RandomRational multiply(long inValue)
+  @Override
+public @Nonnull RandomRational multiply(long inValue)
   {
     throw new UnsupportedOperationException("cannot multiply random rationals");
   }
@@ -500,7 +512,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      a new value with the multiplication
    *
    */
-  public @Nonnull RandomRational multiply(@Nonnull RandomRational inValue)
+  @Override
+public @Nonnull RandomRational multiply(@Nonnull RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot multiply random rationals");
   }
@@ -552,7 +565,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      true if read, false if not
    *
    */
-  protected boolean readNominator(@Nonnull ParseReader inReader)
+  @Override
+protected boolean readNominator(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -587,7 +601,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * @return      true if read, false if not
    *
    */
-  protected boolean readDenominator(@Nonnull ParseReader inReader)
+  @Override
+protected boolean readDenominator(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -662,7 +677,8 @@ public class RandomRational extends BaseRational<RandomRational>
    * Reset the nominator value.
    *
    */
-  protected void resetNominator()
+  @Override
+protected void resetNominator()
   {
     super.resetNominator();
     m_randomNominator = null;

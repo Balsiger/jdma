@@ -193,7 +193,8 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
    * @undefined   never
    *
    */
-  protected Map<String, Action> getKnownActions()
+  @Override
+protected Map<String, Action> getKnownActions()
   {
     return s_actions;
   }

@@ -284,7 +284,8 @@ public class ASCIIDocument extends Document
    * @return      a hash map with all the known converters
    *
    */
-  protected @Nonnull Map<String, Action> getKnownActions()
+  @Override
+protected @Nonnull Map<String, Action> getKnownActions()
   {
     return s_actions;
   }
@@ -298,7 +299,8 @@ public class ASCIIDocument extends Document
    * @return      the width in characters
    *
    */
-  public int getWidth()
+  @Override
+public int getWidth()
   {
     return m_width;
   }
@@ -344,7 +346,8 @@ public class ASCIIDocument extends Document
    * @param       inAlignment the new alignment
    *
    */
-  public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
+  @Override
+public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
   {
     ((WrapBuffer)m_buffer).setAlignment(inAlignment);
   }

@@ -102,7 +102,8 @@ public class BaseCounted extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -122,7 +123,8 @@ public class BaseCounted extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -228,7 +230,8 @@ public class BaseCounted extends BaseExtension<BaseItem>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -242,7 +245,8 @@ public class BaseCounted extends BaseExtension<BaseItem>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

@@ -93,7 +93,8 @@ public class RegisterServlet extends ActionServlet
    * @return      the javascript code to send back to the client
    *
    */
-  protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
+  @Override
+protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
                                      @Nonnull HttpServletResponse inResponse)
   {
     String username = inRequest.getParam("username");

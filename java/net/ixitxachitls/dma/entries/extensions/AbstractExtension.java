@@ -143,7 +143,8 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      all the variables
    *
    */
-  public Variables getVariables()
+  @Override
+public Variables getVariables()
   {
     // if(m_tag == null)
       return super.getVariables();
@@ -301,7 +302,8 @@ public abstract class AbstractExtension<T extends AbstractEntry>
     * @return      the name
     *
     */
-  public @Nonnull String getName()
+  @Override
+public @Nonnull String getName()
   {
     return m_name;
   }
@@ -316,7 +318,8 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      the id
    *
    */
-  @Deprecated
+  @Override
+@Deprecated
   public String getID()
   {
     //   if(m_tag == null)
@@ -369,7 +372,8 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      true for DM, false for not
    *
    */
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  @Override
+public boolean isDM(@Nullable BaseCharacter inUser)
   {
     return m_entry.isDM(inUser);
   }
@@ -481,6 +485,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *                        false for unchanged (clean)
    *
    */
+  @Override
   public void changed(boolean inChanged)
   {
     m_entry.changed(inChanged);

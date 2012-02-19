@@ -303,7 +303,8 @@ public class WrapBuffer implements Buffer
    * @return      the new buffer
    *
    */
-  public @Nonnull Buffer newBuffer()
+  @Override
+public @Nonnull Buffer newBuffer()
   {
     return new WrapBuffer(m_width, m_ignore);
   }
@@ -319,7 +320,8 @@ public class WrapBuffer implements Buffer
    * @return      the new buffer
    *
    */
-  public @Nonnull Buffer newBuffer(int inWidth)
+  @Override
+public @Nonnull Buffer newBuffer(int inWidth)
   {
     return new WrapBuffer(inWidth, m_ignore);
   }
@@ -334,7 +336,8 @@ public class WrapBuffer implements Buffer
    * @return      a String with the complete contents of the buffer
    *
    */
-  public @Nonnull String getContents()
+  @Override
+public @Nonnull String getContents()
   {
     StringBuilder result = new StringBuilder();
 
@@ -381,6 +384,7 @@ public class WrapBuffer implements Buffer
    * @param       inObject the object to add
    *
    */
+  @Override
   public void append(@Nullable Object inObject)
   {
     if(inObject == null)
@@ -803,7 +807,8 @@ public class WrapBuffer implements Buffer
    * with a newline, nothing is done, otherwise a newline is added.
    *
    */
-  public void endLine()
+  @Override
+public void endLine()
   {
     // the line in the buffer is already ended, if it is empty; in that case we
     // don't need to end it again
@@ -821,7 +826,8 @@ public class WrapBuffer implements Buffer
    * @return      the String representing the buffer
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     StringBuilder result = new StringBuilder("buffer has width " + m_width
                                              + " and alignment " + m_alignment

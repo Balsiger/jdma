@@ -105,7 +105,8 @@ public class ResourceError extends BaseError
    * @return      true if equal, false else
    *
    */
-  public boolean equals(Object inOther)
+  @Override
+public boolean equals(Object inOther)
   {
     return super.equals(inOther);
   }
@@ -119,7 +120,8 @@ public class ResourceError extends BaseError
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return super.hashCode();
   }

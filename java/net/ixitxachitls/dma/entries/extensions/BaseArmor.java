@@ -94,7 +94,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -104,7 +105,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }
@@ -200,7 +202,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
   protected static final Group<Number, Long, String> s_maxDexGrouping =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
-        public Long extract(@Nonnull Number inValue)
+        @Override
+		public Long extract(@Nonnull Number inValue)
         {
           return inValue.get();
         }
@@ -235,7 +238,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Number, Long, String>
     (new Group.Extractor<Number, Long>()
       {
-        public Long extract(@Nonnull Number inValue)
+        @Override
+		public Long extract(@Nonnull Number inValue)
         {
           return inValue.get();
         }
@@ -270,7 +274,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Percent, Long, String>
     (new Group.Extractor<Percent, Long>()
       {
-        public Long extract(@Nonnull Percent inValue)
+        @Override
+		public Long extract(@Nonnull Percent inValue)
         {
           return inValue.get();
         }
@@ -301,7 +306,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
 protected static final Group<Distance, Long, String> s_speedGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
-        public Long extract(@Nonnull Distance inValue)
+        @Override
+		public Long extract(@Nonnull Distance inValue)
         {
           return inValue.getAsFeet().getLeader();
         }
@@ -349,7 +355,8 @@ protected static final Group<Distance, Long, String> s_speedGrouping =
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -363,7 +370,8 @@ protected static final Group<Distance, Long, String> s_speedGrouping =
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

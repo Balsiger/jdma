@@ -44,7 +44,6 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -144,7 +143,8 @@ public class SaveActionServlet extends ActionServlet
      * @return the converted string
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       String parent = "";
       if(m_parentID != null || m_parentType != null)
@@ -268,7 +268,8 @@ public class SaveActionServlet extends ActionServlet
    * @return      the javascript code to send back to the client
    *
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
                                      @Nonnull HttpServletResponse inResponse)
   {

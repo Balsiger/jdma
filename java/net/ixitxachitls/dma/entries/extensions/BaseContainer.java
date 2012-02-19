@@ -94,7 +94,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -104,7 +105,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }
@@ -166,7 +168,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_liquidLiterGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
-        public Long extract(@Nonnull Volume inValue)
+        @Override
+		public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsLiters().getValue() * 100;
         }
@@ -180,7 +183,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_liquidFeetGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
-        public Long extract(@Nonnull Volume inValue)
+        @Override
+		public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsGallons().getValue() * 16;
         }
@@ -195,7 +199,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_solidFeetGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
-        public Long extract(@Nonnull Volume inValue)
+        @Override
+		public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsFeet().getValue() * 1728;
         }
@@ -209,7 +214,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_solidMeterGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
-        public Long extract(@Nonnull Volume inValue)
+        @Override
+		public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsLiters().getValue() * 1000;
         }
@@ -223,7 +229,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Grouping<Volume, String> s_capacityGrouping =
     new Grouping<Volume, String>()
     {
-      public String group(@Nonnull Volume inValue)
+      @Override
+	public String group(@Nonnull Volume inValue)
       {
         Volume volume = inValue;
 
@@ -290,7 +297,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -304,7 +312,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

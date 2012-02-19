@@ -195,7 +195,8 @@ public class Units<T extends Units> extends Value<T>
      * @return      true if equal, false if not
      *
      */
-    public boolean equals(@Nullable Object inOther)
+    @Override
+	public boolean equals(@Nullable Object inOther)
     {
       if(inOther == null || !(inOther instanceof Unit))
         return false;
@@ -226,7 +227,8 @@ public class Units<T extends Units> extends Value<T>
      * @return      the hashcode
      *
      */
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
       return m_unit.hashCode();
     }
@@ -310,7 +312,8 @@ public class Units<T extends Units> extends Value<T>
      * @return      the human readable String conversion
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       StringBuilder other = new StringBuilder();
       if(m_other != null)
@@ -510,7 +513,8 @@ public class Units<T extends Units> extends Value<T>
      * @return      true if equal, false if not
      *
      */
-    public boolean equals(@Nullable Object inOther)
+    @Override
+	public boolean equals(@Nullable Object inOther)
     {
       if(inOther == null)
         return false;
@@ -547,7 +551,8 @@ public class Units<T extends Units> extends Value<T>
      * @return      the hashcode
      *
      */
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
       return m_name.hashCode();
     }
@@ -689,7 +694,8 @@ public class Units<T extends Units> extends Value<T>
      * @return      the human readable String conversion
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       StringBuffer result = new StringBuffer(m_name);
 
@@ -877,7 +883,8 @@ public class Units<T extends Units> extends Value<T>
    * @undefined   never
    *
    */
-  @SuppressWarnings("unchecked") // this only works if this method is
+  @Override
+@SuppressWarnings("unchecked") // this only works if this method is
                                  // overridden in all derivations
   public T create()
   {
@@ -1162,6 +1169,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      0 if equal, < 0 if less than the other, > 0 if bigger
    *
    */
+  @Override
   public int compareTo(@Nonnull Object inOther)
   {
     if(this == inOther)
@@ -1232,6 +1240,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      a new object with the addition of the given
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // have to cast this on return
   public @Nonnull T add(@Nonnull T inOther)
   {
@@ -1292,7 +1301,8 @@ public class Units<T extends Units> extends Value<T>
    * @return      a new object with the subtraction result
    *
    */
-  @SuppressWarnings("unchecked") // need to cast
+  @Override
+@SuppressWarnings("unchecked") // need to cast
   public @Nonnull T subtract(@Nonnull T inOther)
   {
     // check the equality of types
@@ -1350,7 +1360,8 @@ public class Units<T extends Units> extends Value<T>
    * @return      a new value with the result of the multiplication
    *
    */
-  @SuppressWarnings("unchecked") // need to cast this
+  @Override
+@SuppressWarnings("unchecked") // need to cast this
   public T multiply(long inValue)
   {
     if(m_values == null)

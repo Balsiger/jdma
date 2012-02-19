@@ -124,7 +124,8 @@ public class Modifier extends Value<Modifier>
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -215,7 +216,8 @@ public class Modifier extends Value<Modifier>
    * @return      a similar list, but without any contents
    *
    */
-  public Modifier create()
+  @Override
+public Modifier create()
   {
     return super.create(new Modifier());
   }
@@ -373,7 +375,8 @@ public class Modifier extends Value<Modifier>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_defined;
   }
@@ -388,7 +391,8 @@ public class Modifier extends Value<Modifier>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     List<Object> commands = new ArrayList<Object>();
 
@@ -423,7 +427,8 @@ public class Modifier extends Value<Modifier>
    *
 
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -475,7 +480,8 @@ public class Modifier extends Value<Modifier>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     try
     {

@@ -132,7 +132,8 @@ public class PDFDocument extends ITextDocument
    * @return      true if stored, false if not
    *
    */
-  public boolean save(@Nonnull String inFileName)
+  @Override
+public boolean save(@Nonnull String inFileName)
   {
     FileOutputStream output = null;
     try

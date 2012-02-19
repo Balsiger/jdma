@@ -102,7 +102,8 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    * @return      a similar list, but without any contents
    *
    */
-  public abstract @Nonnull T create();
+  @Override
+public abstract @Nonnull T create();
 
   //........................................................................
 
@@ -577,6 +578,7 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    * @return      the sum of the values
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // have to cast reduced
   public T add(@Nonnull T inValue)
   {
@@ -633,7 +635,8 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    * @return      a new value representing the subtraction
    *
    */
-  @SuppressWarnings("unchecked") // have to cast reduced
+  @Override
+@SuppressWarnings("unchecked") // have to cast reduced
   public T subtract(@Nonnull T inValue)
   {
     long nominator1 = m_leader * m_denominator + m_nominator;
@@ -718,7 +721,8 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    * @return      a new value representing the division
    *
    */
-  @SuppressWarnings("unchecked") // must cast reduced
+  @Override
+@SuppressWarnings("unchecked") // must cast reduced
   public T divide(@Nonnull T inValue)
   {
     T result = create();
@@ -744,7 +748,8 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    * @return      a new value representing the multiplication
    *
    */
-  @SuppressWarnings("unchecked") // have to cast this
+  @Override
+@SuppressWarnings("unchecked") // have to cast this
   public T multiply(long inValue)
   {
     if(inValue == 1)
@@ -771,7 +776,8 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    * @return      the newly created, multiplied value
    *
    */
-  public T multiply(@Nonnull T inValue)
+  @Override
+public T multiply(@Nonnull T inValue)
   {
     m_nominator    = (m_leader * m_denominator + m_nominator)
       * (inValue.m_leader * inValue.m_denominator + inValue.m_nominator);

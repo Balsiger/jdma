@@ -228,7 +228,8 @@ public abstract class DMAServlet extends BaseServlet
    * @throws      IOException      writing to the page failed
    *
    */
-  protected @Nullable SpecialResult handle
+  @Override
+protected @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -310,7 +311,8 @@ public abstract class DMAServlet extends BaseServlet
         new java.util.concurrent.atomic.AtomicBoolean(false);
       DMAServlet servlet = new DMAServlet() {
           private static final long serialVersionUID = 1L;
-          protected SpecialResult handle
+          @Override
+		protected SpecialResult handle
             (@Nonnull DMARequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {

@@ -100,7 +100,8 @@ public class Date extends Value<Date>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull Date create()
+  @Override
+public @Nonnull Date create()
   {
     return super.create(new Date());
   }
@@ -184,7 +185,8 @@ public class Date extends Value<Date>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_year > 0;
   }
@@ -214,7 +216,8 @@ public class Date extends Value<Date>
    * @return      the command for setting the value
    *
    */
-  protected Command doFormat()
+  @Override
+protected Command doFormat()
   {
     return new Command(toString());
   }
@@ -228,7 +231,8 @@ public class Date extends Value<Date>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected String doToString()
+  @Override
+protected String doToString()
   {
     if(m_month > 0)
       return getMonthAsString() + ' ' + m_year;
@@ -249,6 +253,7 @@ public class Date extends Value<Date>
    *              object given
    *
    */
+  @Override
   public int compareTo(@Nonnull Object inOther)
   {
     if(!(inOther instanceof Date))
@@ -288,7 +293,8 @@ public class Date extends Value<Date>
     * @return      true if read, false if not
     *
     */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     m_month = inReader.expectCase(MONTH_STRINGS, true) + 1;
 

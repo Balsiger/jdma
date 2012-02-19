@@ -122,7 +122,8 @@ public class Number extends BaseNumber<Number>
    * @return      a similar list, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // this method has to be overriden in
+  @Override
+@SuppressWarnings("unchecked") // this method has to be overriden in
                                  // derivation for this to work
   public Number create()
   {

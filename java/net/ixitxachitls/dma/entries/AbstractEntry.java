@@ -277,7 +277,8 @@ public class AbstractEntry extends ValueGroup
      * @return the converted string
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_type + "/" + m_id
         + (m_parent != null ? " (" + m_parent + ")" : "");
@@ -290,7 +291,8 @@ public class AbstractEntry extends ValueGroup
      *
      * @return true if they are equal, false if not
      */
-    public boolean equals(Object inOther)
+    @Override
+	public boolean equals(Object inOther)
     {
       if(this == inOther)
         return true;
@@ -312,7 +314,8 @@ public class AbstractEntry extends ValueGroup
      *
      * @return the hash value
      */
-    public int hashCode()
+    @Override
+	public int hashCode()
     {
       return toString().hashCode();
     }
@@ -695,7 +698,8 @@ public class AbstractEntry extends ValueGroup
    *              if not found)
    *
    */
-  public @Nullable Variable getVariable(@Nonnull String inKey)
+  @Override
+public @Nullable Variable getVariable(@Nonnull String inKey)
   {
     Variable result = super.getVariable(inKey);
 
@@ -714,7 +718,8 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested name
    *
    */
-  public @Nonnull String getName()
+  @Override
+public @Nonnull String getName()
   {
     if(m_name.isDefined())
       return m_name.get();
@@ -835,7 +840,8 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested id
    *
    */
-  @Deprecated
+  @Override
+@Deprecated
   public @Nonnull String getID()
   {
     return getName();
@@ -1273,6 +1279,7 @@ public class AbstractEntry extends ValueGroup
    * @return     the command for printing the value
    *
    */
+  @Override
   public @Nonnull Command combineBaseValues(@Nonnull String inName,
                                             boolean inInline)
   {
@@ -1390,27 +1397,27 @@ public class AbstractEntry extends ValueGroup
    * @param       inEntry   the entry containing the value
    *
    */
-  private void addBaseValue(@Nonnull List<Value> ioValues,
-                            @Nonnull List<List<BaseEntry>> ioEntries,
-                            @Nonnull Value inValue, @Nonnull BaseEntry inEntry)
-  {
-    if(inValue instanceof ValueList)
-      for(Value value : (ValueList<? extends Value>)inValue)
-        addBaseValue(ioValues, ioEntries, value, inEntry);
-    else
-    {
-      int pos = ioValues.indexOf(inValue);
-      if(pos < 0)
-      {
-        ioValues.add(inValue);
-        List<BaseEntry> entries = new ArrayList<BaseEntry>();
-        entries.add(inEntry);
-        ioEntries.add(entries);
-      }
-      else
-        ioEntries.get(pos).add(inEntry);
-    }
-  }
+//  private void addBaseValue(@Nonnull List<Value> ioValues,
+//                            @Nonnull List<List<BaseEntry>> ioEntries,
+//                            @Nonnull Value inValue, @Nonnull BaseEntry inEntry)
+//  {
+//    if(inValue instanceof ValueList)
+//      for(Value value : (ValueList<? extends Value>)inValue)
+//        addBaseValue(ioValues, ioEntries, value, inEntry);
+//    else
+//    {
+//      int pos = ioValues.indexOf(inValue);
+//      if(pos < 0)
+//      {
+//        ioValues.add(inValue);
+//        List<BaseEntry> entries = new ArrayList<BaseEntry>();
+//        entries.add(inEntry);
+//        ioEntries.add(entries);
+//      }
+//      else
+//        ioEntries.get(pos).add(inEntry);
+//    }
+//  }
 
   //........................................................................
   //---------------------------- getBaseValues -----------------------------
@@ -1561,7 +1568,8 @@ public class AbstractEntry extends ValueGroup
    * @return      true if equal, false else
    *
    */
-  public boolean equals(Object inOther)
+  @Override
+public boolean equals(Object inOther)
   {
     if(this == inOther)
       return true;
@@ -1584,6 +1592,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the hash code
    *
    */
+  @Override
   public int hashCode()
   {
     return getID().hashCode();
@@ -1601,6 +1610,7 @@ public class AbstractEntry extends ValueGroup
    *              object given
    *
    */
+  @Override
   public int compareTo(@Nonnull AbstractEntry inOther)
   {
     return getID().compareTo(inOther.getID());
@@ -1641,7 +1651,8 @@ public class AbstractEntry extends ValueGroup
    * @return      the String representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -2297,7 +2308,8 @@ public class AbstractEntry extends ValueGroup
    * @return      the part of the string that could not be parsed
    *
    */
-  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  @Override
+public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
   {
     // we have to treat the name specially, as it is not a readable value
     if("name".equals(inKey))
@@ -3118,6 +3130,7 @@ public class AbstractEntry extends ValueGroup
    *                        for unchanged (clean)
    *
    */
+  @Override
   public void changed(boolean inChanged)
   {
     m_changed = inChanged;
@@ -3603,7 +3616,8 @@ public class AbstractEntry extends ValueGroup
 
     /** Testing reading. */
     //@org.junit.Test
-    public void read()
+    @Override
+	public void read()
     {
       ParseReader reader =
         new ParseReader(new java.io.StringReader("    abstract entry just a "

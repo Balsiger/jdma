@@ -89,7 +89,8 @@ public class JarResource extends Resource
    * @return    a list of filenames inside this resource.
    *
    */
-  public @Nonnull List<String> files()
+  @Override
+public @Nonnull List<String> files()
   {
     List<String> result = new ArrayList<String>();
 

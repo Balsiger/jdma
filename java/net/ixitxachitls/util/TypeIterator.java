@@ -97,7 +97,8 @@ public class TypeIterator<O, T extends O> implements Iterator<T>
    * @return      true if there is another value, false if not
    *
    */
-  @SuppressWarnings("unchecked") // need to cast below
+  @Override
+@SuppressWarnings("unchecked") // need to cast below
   public boolean hasNext()
   {
     if(!m_iterator.hasNext())
@@ -132,7 +133,8 @@ public class TypeIterator<O, T extends O> implements Iterator<T>
    * @return      the next Object
    *
    */
-  public @Nonnull T next()
+  @Override
+public @Nonnull T next()
   {
     if(!hasNext())
       throw new java.util.NoSuchElementException("already at end!");
@@ -157,7 +159,8 @@ public class TypeIterator<O, T extends O> implements Iterator<T>
    * UnsupportedOperationException.
    *
    */
-  public void remove()
+  @Override
+public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
                                             + "support the removal of "

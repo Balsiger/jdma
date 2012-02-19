@@ -104,7 +104,8 @@ public class BaseWearable extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -114,7 +115,8 @@ public class BaseWearable extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }
@@ -241,7 +243,8 @@ public class BaseWearable extends BaseExtension<BaseItem>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -255,7 +258,8 @@ public class BaseWearable extends BaseExtension<BaseItem>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

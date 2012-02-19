@@ -134,7 +134,8 @@ public abstract class BaseFilter implements Filter
      *
      * @throws IOException when writing fails
      */
-    public void send(@Nonnull HttpServletResponse inResponse) throws IOException
+    @Override
+	public void send(@Nonnull HttpServletResponse inResponse) throws IOException
     {
       inResponse.addHeader("Content-Type", "text/html");
 
@@ -180,7 +181,8 @@ public abstract class BaseFilter implements Filter
     * @param       inConfig the filter configuration
     *
     */
-  public void init(@Nonnull FilterConfig inConfig)
+  @Override
+public void init(@Nonnull FilterConfig inConfig)
   {
   // m_users = (BaseCampaign)inConfig.getServletContext().getAttribute("users");
     // m_campaigns =
@@ -195,7 +197,8 @@ public abstract class BaseFilter implements Filter
     * Destroy the filter.
     *
     */
-  public void destroy()
+  @Override
+public void destroy()
   {
     // nothing to do
   }
@@ -235,7 +238,8 @@ public abstract class BaseFilter implements Filter
     * @throws      ServletException general failure when creating response
     *
     */
-  public void doFilter(@Nonnull ServletRequest inRequest,
+  @Override
+public void doFilter(@Nonnull ServletRequest inRequest,
                        @Nonnull ServletResponse inResponse,
                        @Nonnull FilterChain inChain)
     throws ServletException, IOException

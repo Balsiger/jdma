@@ -67,7 +67,8 @@ public class NullPointerCheck extends Check
     * @return      an array with all the tokens to consider
     *
     */
-  public int[] getDefaultTokens()
+  @Override
+public int[] getDefaultTokens()
   {
     return new int [] { TokenTypes.METHOD_DEF, };
   }
@@ -89,7 +90,8 @@ public class NullPointerCheck extends Check
     * @param       inAST the node in the tree to check
     *
     */
-  public void visitToken(DetailAST inAST)
+  @Override
+public void visitToken(DetailAST inAST)
   {
     if(inAST == null)
       throw new IllegalArgumentException("must have a node here");

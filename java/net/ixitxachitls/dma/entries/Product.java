@@ -95,7 +95,8 @@ public class Product extends Entry<BaseProduct>
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -105,7 +106,8 @@ public class Product extends Entry<BaseProduct>
      * @return a human readable string representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }
@@ -153,7 +155,8 @@ public class Product extends Entry<BaseProduct>
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -163,7 +166,8 @@ public class Product extends Entry<BaseProduct>
      * @return a human readable string representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }
@@ -334,7 +338,8 @@ public class Product extends Entry<BaseProduct>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -348,7 +353,8 @@ public class Product extends Entry<BaseProduct>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -362,7 +368,8 @@ public class Product extends Entry<BaseProduct>
    * @return      the path to read this entry
    *
    */
-  public @Nonnull String getPath()
+  @Override
+public @Nonnull String getPath()
   {
     return "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner.get() + "/"
       + getType().getLink() + "/" + getName();
@@ -377,7 +384,8 @@ public class Product extends Entry<BaseProduct>
    * @return      an array with pairs for caption and link per navigation entry
    *
    */
-  public @Nonnull String [] getNavigation()
+  @Override
+public @Nonnull String [] getNavigation()
   {
     return new String [] {
       BaseCharacter.TYPE.getLink(),
@@ -402,7 +410,8 @@ public class Product extends Entry<BaseProduct>
    * @return      an array with pairs for caption and link per navigation entry
    *
    */
-  public @Nonnull String [] getListNavigation()
+  @Override
+public @Nonnull String [] getListNavigation()
   {
     return new String [] {
       BaseCharacter.TYPE.getLink(),
@@ -424,7 +433,8 @@ public class Product extends Entry<BaseProduct>
    * @return      the requested name
    *
    */
-  public @Nonnull String getEditType()
+  @Override
+public @Nonnull String getEditType()
   {
     return "/user/" + m_owner.get() + "/" + super.getEditType();
   }
@@ -442,7 +452,8 @@ public class Product extends Entry<BaseProduct>
    * @return      true for DM, false for not
    *
    */
-  public boolean isDM(@Nullable BaseCharacter inUser)
+  @Override
+public boolean isDM(@Nullable BaseCharacter inUser)
   {
     if(inUser == null)
       return false;
@@ -1012,7 +1023,8 @@ public class Product extends Entry<BaseProduct>
    * @param       inOwner the owning entry
    *
    */
-  public void setOwner(@Nonnull AbstractEntry inOwner)
+  @Override
+public void setOwner(@Nonnull AbstractEntry inOwner)
   {
     if(inOwner instanceof BaseCharacter)
       setOwner((BaseCharacter)inOwner);

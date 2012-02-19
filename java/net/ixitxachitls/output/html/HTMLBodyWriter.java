@@ -92,7 +92,8 @@ public class HTMLBodyWriter extends HTMLWriter
    * @return      this writer for chaining
    *
    */
-  public HTMLWriter title(String inTitle)
+  @Override
+public HTMLWriter title(String inTitle)
   {
     return script("document.title = '" + inTitle + "';");
   }
@@ -104,7 +105,8 @@ public class HTMLBodyWriter extends HTMLWriter
    * Ensure that we are in the head of the document.
    *
    */
-  protected void ensureHead()
+  @Override
+protected void ensureHead()
   {
     throw
       new UnsupportedOperationException("cannot have head in body only HTML");
@@ -117,6 +119,7 @@ public class HTMLBodyWriter extends HTMLWriter
    * Close the writer.
    *
    */
+  @Override
   public void close()
   {
     maybeCloseTag();

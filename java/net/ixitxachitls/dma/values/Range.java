@@ -108,7 +108,8 @@ public class Range extends BaseNumber<Range>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull Range create()
+  @Override
+public @Nonnull Range create()
   {
     return new Range(m_min, m_max);
   }
@@ -163,7 +164,8 @@ public class Range extends BaseNumber<Range>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     if(m_number != m_end)
       return new Command(m_number + "-" + m_end);
@@ -180,7 +182,8 @@ public class Range extends BaseNumber<Range>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected String doToString()
+  @Override
+protected String doToString()
   {
     if(m_number != m_end)
       return super.doToString() + "-" + m_end;
@@ -198,7 +201,8 @@ public class Range extends BaseNumber<Range>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_defined;
   }
@@ -245,7 +249,8 @@ public class Range extends BaseNumber<Range>
    * @return      true if read, false if not
    *
    */
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+protected boolean doRead(@Nonnull ParseReader inReader)
   {
     if(!super.doRead(inReader))
       return false;
@@ -297,6 +302,7 @@ public class Range extends BaseNumber<Range>
    * Check that the current value is valid.
    *
    */
+  @Override
   protected void check()
   {
     super.check();

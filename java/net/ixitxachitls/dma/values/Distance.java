@@ -93,7 +93,8 @@ public class Distance extends Units<Distance>
    * @return      a similar list, but without any contents
    *
    */
-  public Distance create()
+  @Override
+public Distance create()
   {
     return super.create(new Distance());
   }
@@ -234,7 +235,8 @@ public class Distance extends Units<Distance>
    * @return      a string denoting the group this value is in
    *
    */
-  public String doGroup()
+  @Override
+public String doGroup()
   {
     Rational distance = getAsFeet();
 

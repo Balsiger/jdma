@@ -384,6 +384,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      < 0 if this is lower, > if this is bigger, 0 if equal
    *
    */
+  @Override
   public int compareTo(@Nullable AbstractType<? extends AbstractEntry> inOther)
   {
     if(inOther == null)
@@ -403,6 +404,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      true if equal, false else
    *
    */
+  @Override
   public boolean equals(Object inOther)
   {
     if(inOther == null)
@@ -423,7 +425,8 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return m_name.hashCode();
   }
@@ -437,7 +440,8 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the converted String
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return m_name;
   }

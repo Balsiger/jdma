@@ -97,7 +97,8 @@ public class CampaignData extends DMADatafiles
    * @return      the repository with all the base data
    *
    */
-  public @Nonnull DMAData getBaseData()
+  @Override
+public @Nonnull DMAData getBaseData()
   {
     return m_base;
   }
@@ -117,7 +118,8 @@ public class CampaignData extends DMADatafiles
    *         errors
    *
    */
-  public boolean read()
+  @Override
+public boolean read()
   {
     boolean result = super.read();
 

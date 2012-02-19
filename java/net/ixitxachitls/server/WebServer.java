@@ -280,21 +280,35 @@ public class WebServer
     public static class DummyLogger
       implements org.eclipse.jetty.util.log.Logger
     {
-      public boolean isDebugEnabled() { return false; };
-      public void setDebugEnabled(boolean inEnabled) { };
-      public void ignore(Throwable inError) { };
-      public void debug(String inMsg, Object ... inArgs) { };
-      public void debug(String inMsg, Throwable inError) { };
-      public void debug(Throwable inError) { };
-      public void info(String inMsg, Object ... inArgs) { };
-      public void info(String inMsg, Throwable inError) { };
-      public void info(Throwable inError) { };
-      public void warn(String inMsg, Object ... inArgs) { };
-      public void warn(String inMsg, Throwable inError) { };
-      public void warn(Throwable inMsg) { };
-      public org.eclipse.jetty.util.log.Logger getLogger(String inName)
+      @Override
+	public boolean isDebugEnabled() { return false; };
+      @Override
+	public void setDebugEnabled(boolean inEnabled) { };
+      @Override
+	public void ignore(Throwable inError) { };
+      @Override
+	public void debug(String inMsg, Object ... inArgs) { };
+      @Override
+	public void debug(String inMsg, Throwable inError) { };
+      @Override
+	public void debug(Throwable inError) { };
+      @Override
+	public void info(String inMsg, Object ... inArgs) { };
+      @Override
+	public void info(String inMsg, Throwable inError) { };
+      @Override
+	public void info(Throwable inError) { };
+      @Override
+	public void warn(String inMsg, Object ... inArgs) { };
+      @Override
+	public void warn(String inMsg, Throwable inError) { };
+      @Override
+	public void warn(Throwable inMsg) { };
+      @Override
+	public org.eclipse.jetty.util.log.Logger getLogger(String inName)
       { return this; };
-      public String getName() { return "dummy"; };
+      @Override
+	public String getName() { return "dummy"; };
     }
     // CHECKSTYLE:ON
 
@@ -352,7 +366,8 @@ public class WebServer
 
       final WebServer server = new WebServer("localhost", 12345)
         {
-          public void init()
+          @Override
+		public void init()
           {
             while(!done.get())
               ;
@@ -363,7 +378,8 @@ public class WebServer
 
       Thread thread = new Thread()
         {
-          public void run()
+          @Override
+		public void run()
           {
             server.start();
           }

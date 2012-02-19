@@ -278,7 +278,8 @@ public final class ServerUtils
        * @return The character read.
        *
        */
-      public int read()
+      @Override
+	public int read()
       {
         return m_contents.read();
       }
@@ -304,7 +305,8 @@ public final class ServerUtils
        * @param inCharacter the character to write
        *
        */
-      public void write(int inCharacter)
+      @Override
+	public void write(int inCharacter)
       {
         m_contents.write(inCharacter);
       }
@@ -315,7 +317,8 @@ public final class ServerUtils
        * @return the contents printed so far.
        *
        */
-      public String toString()
+      @Override
+	public String toString()
       {
         return m_contents.toString();
       }

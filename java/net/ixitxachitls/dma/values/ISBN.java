@@ -144,7 +144,8 @@ public class ISBN extends Value<ISBN>
    * @return      a similar list, but without any contents
    *
    */
-  public ISBN create()
+  @Override
+public ISBN create()
   {
     return new ISBN();
   }
@@ -179,7 +180,8 @@ public class ISBN extends Value<ISBN>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_group != null && m_publisher != null && m_title != null
       && m_check >= 0;
@@ -210,7 +212,8 @@ public class ISBN extends Value<ISBN>
    * @return      the command for setting the value
    *
    */
-  protected Command doFormat()
+  @Override
+protected Command doFormat()
   {
     return new Command(toString());
   }
@@ -224,7 +227,8 @@ public class ISBN extends Value<ISBN>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return m_group + '-' + m_publisher + '-' + m_title + '-'
       + (m_check > 9 ? 'X' : (char)(m_check + '0'));
@@ -320,7 +324,8 @@ public class ISBN extends Value<ISBN>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos;
 

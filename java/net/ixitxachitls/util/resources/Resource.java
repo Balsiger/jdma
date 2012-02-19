@@ -120,7 +120,8 @@ public abstract class Resource
    * @return      the string representation
    *
    */
-  public String toString()
+  @Override
+public String toString()
   {
     if(m_url != null)
       return m_url.toString();

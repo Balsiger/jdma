@@ -90,7 +90,8 @@ public class Reference extends BaseText<Reference>
    * @return      a similar text, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // this only works if it is overriden in all
+  @Override
+@SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
   public @Nonnull Reference create()
   {
@@ -121,7 +122,8 @@ public class Reference extends BaseText<Reference>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     resolve();
     if(m_product == null)
@@ -139,7 +141,8 @@ public class Reference extends BaseText<Reference>
    * @return      the value for editing
    *
    */
-  public String getEditValue()
+  @Override
+public String getEditValue()
   {
     resolve();
     if(m_product == null)

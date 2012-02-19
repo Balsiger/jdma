@@ -112,7 +112,8 @@ public class BaseLight extends BaseExtension<BaseItem>
   protected static final Group<Multiple, Long, String> s_brightGrouping =
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
-        public Long extract(@Nonnull Multiple inValue)
+        @Override
+		public Long extract(@Nonnull Multiple inValue)
         {
           return (long)((Distance)inValue.get(0)).getAsFeet().getValue();
         }
@@ -159,7 +160,8 @@ public class BaseLight extends BaseExtension<BaseItem>
   protected static final Group<Multiple, Long, String> s_shadowyGrouping =
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
-        public Long extract(@Nonnull Multiple inValue)
+        @Override
+		public Long extract(@Nonnull Multiple inValue)
         {
           return (long)((Distance)inValue.get(0)).getAsFeet().getValue();
         }
@@ -199,7 +201,8 @@ public class BaseLight extends BaseExtension<BaseItem>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -213,7 +216,8 @@ public class BaseLight extends BaseExtension<BaseItem>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

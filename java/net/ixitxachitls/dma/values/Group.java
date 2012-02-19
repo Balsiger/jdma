@@ -144,7 +144,8 @@ public class Group<T extends Value, S extends Comparable<S>, U>
    * @return      the group this value belongs to
    *
    */
-  public @Nonnull U group(@Nonnull T inValue)
+  @Override
+public @Nonnull U group(@Nonnull T inValue)
   {
     if(!inValue.isDefined())
       return m_undefined;
@@ -168,6 +169,7 @@ public class Group<T extends Value, S extends Comparable<S>, U>
    * @return      a human readable representation of the grouping
    *
    */
+  @Override
   public @Nonnull String toString()
   {
     return Arrays.toString(m_groups);
@@ -185,6 +187,7 @@ public class Group<T extends Value, S extends Comparable<S>, U>
    * @return <0 if first is smaller, 0 if equal, >0 if first is bigger
    *
    */
+  @Override
   public int compare(@Nullable U inFirst, @Nullable U inSecond)
   {
     return ordinal(inFirst) - ordinal(inSecond);
@@ -244,7 +247,8 @@ public class Group<T extends Value, S extends Comparable<S>, U>
         Group<Name, String, String> group = new Group<Name, String, String>
           (new Extractor<Name, String>()
           {
-            public String extract(@Nonnull Name inValue)
+            @Override
+			public String extract(@Nonnull Name inValue)
             {
               return inValue.get();
             }

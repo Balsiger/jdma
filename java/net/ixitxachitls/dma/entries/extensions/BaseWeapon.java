@@ -112,7 +112,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -122,7 +123,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -191,7 +193,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -202,7 +205,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -267,7 +271,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -277,7 +282,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -440,7 +446,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   protected static final Group<Distance, Long, String> s_rangeGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
     {
-      public Long extract(Distance inValue)
+      @Override
+	public Long extract(Distance inValue)
       {
         if(inValue == null)
           throw new IllegalArgumentException("must have a value here");
@@ -474,7 +481,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   protected static final Group<Distance, Long, String> s_reachGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
-        public Long extract(Distance inValue)
+        @Override
+		public Long extract(Distance inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a value here");
@@ -531,7 +539,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -545,7 +554,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

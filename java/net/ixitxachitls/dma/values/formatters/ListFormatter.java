@@ -113,7 +113,8 @@ public class ListFormatter<K extends ValueList<? extends Value>>
    * @return      the formatted command
    *
    */
-  public @Nonnull Command format(@Nonnull K inValue)
+  @Override
+public @Nonnull Command format(@Nonnull K inValue)
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 

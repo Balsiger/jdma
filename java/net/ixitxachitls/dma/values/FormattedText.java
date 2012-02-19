@@ -95,7 +95,8 @@ public class FormattedText extends BaseText<FormattedText>
    * @return      a similar text, but without any contents
    *
    */
-  public @Nonnull FormattedText create()
+  @Override
+public @Nonnull FormattedText create()
   {
     return super.create(new FormattedText());
   }
@@ -132,7 +133,8 @@ public class FormattedText extends BaseText<FormattedText>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return s_stringDelimiter
       + m_text.replaceAll("([" + s_stringDelimiter + "])", "\\\\$1")
@@ -148,7 +150,8 @@ public class FormattedText extends BaseText<FormattedText>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new BaseCommand(m_text.replaceAll("\\s*(?:\n\n|\r\r)\\s*",
                                              "\\\\par ")
@@ -174,7 +177,8 @@ public class FormattedText extends BaseText<FormattedText>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text = null;

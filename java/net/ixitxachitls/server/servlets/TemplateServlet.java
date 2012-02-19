@@ -115,7 +115,8 @@ public class TemplateServlet extends FileServlet
    * @return      the requested resource
    *
    */
-  protected @Nonnull Resource getResource(String inPath)
+  @Override
+protected @Nonnull Resource getResource(String inPath)
   {
     return TemplateResource.get(inPath, m_prefix);
   }
@@ -134,7 +135,8 @@ public class TemplateServlet extends FileServlet
    * @param inConfig the intial configuration (from web.xml)
    *
    */
-  public void init(@Nonnull ServletConfig inConfig)
+  @Override
+public void init(@Nonnull ServletConfig inConfig)
   {
     super.init(inConfig);
 

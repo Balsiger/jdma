@@ -85,7 +85,8 @@ public class Name extends BaseText<Name>
    * @return      a similar text, but without any contents
    *
    */
-  public @Nonnull Name create()
+  @Override
+public @Nonnull Name create()
   {
     return super.create(new Name());
   }
@@ -107,7 +108,8 @@ public class Name extends BaseText<Name>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new Command(m_text);
   }

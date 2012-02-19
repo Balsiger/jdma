@@ -176,7 +176,8 @@ public class DMADatafiles implements DMAData
    * @return   a map with id and type
    *
    */
-  @SuppressWarnings("unchecked") // need to cast
+  @Override
+@SuppressWarnings("unchecked") // need to cast
   public @Nonnull <T extends AbstractEntry> List<T>
                      getEntries(AbstractType<T> inType,
                                 AbstractEntry.EntryKey<? extends AbstractEntry>
@@ -213,7 +214,8 @@ public class DMADatafiles implements DMAData
    * @return     the entries found
    *
    */
-  @SuppressWarnings("unchecked") // casting return
+  @Override
+@SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> List<T>
                       getEntries(@Nonnull AbstractType<T> inType,
                                  @Nonnull String inKey,
@@ -259,7 +261,8 @@ public class DMADatafiles implements DMAData
    * @return   the entries matching the given index
    *
    */
-  @SuppressWarnings("unchecked") // need to cast return value for generics
+  @Override
+@SuppressWarnings("unchecked") // need to cast return value for generics
   public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
                      (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
                       @Nonnull String inGroup, int inStart, int inSize)
@@ -284,7 +287,8 @@ public class DMADatafiles implements DMAData
    * @return      a list with all the names
    *
    */
-  public @Nonnull SortedSet<String> getIndexNames
+  @Override
+public @Nonnull SortedSet<String> getIndexNames
     (@Nonnull String inIndex,
      @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
      @Nonnull String ... inFilters)
@@ -419,7 +423,8 @@ public class DMADatafiles implements DMAData
    * @return      true if data is changed from store, false if not
    *
    */
-  public boolean isChanged()
+  @Override
+public boolean isChanged()
   {
     for(DMAFile file : m_files)
       if(file.isChanged())
@@ -441,7 +446,8 @@ public class DMADatafiles implements DMAData
    * @return     the entry found, if any
    *
    */
-  public @Nullable <T extends AbstractEntry> T getEntry
+  @Override
+public @Nullable <T extends AbstractEntry> T getEntry
                       (@Nonnull AbstractEntry.EntryKey<T> inKey)
   {
     NavigableMap<String, T> entries = getEntries(inKey.getType());
@@ -473,7 +479,8 @@ public class DMADatafiles implements DMAData
    * @return     the entry found, if any
    *
    */
-  @SuppressWarnings("unchecked") // casting return
+  @Override
+@SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> T
                       getEntry(@Nonnull AbstractType<T> inType,
                                @Nonnull String inKey,
@@ -499,7 +506,8 @@ public class DMADatafiles implements DMAData
    * @return      the recent ids
    *
    */
-  public @Nonnull <T extends AbstractEntry>
+  @Override
+public @Nonnull <T extends AbstractEntry>
     List<T> getRecentEntries(@Nonnull AbstractType<T> inType)
   {
     throw new UnsupportedOperationException("not implemented");
@@ -519,7 +527,8 @@ public class DMADatafiles implements DMAData
    * @return      all the ids
    *
    */
-  @SuppressWarnings("unchecked") // need to cast cache value
+  @Override
+@SuppressWarnings("unchecked") // need to cast cache value
   public @Nonnull  <T extends AbstractEntry> List<T>
     getRecentEntries(@Nonnull AbstractType<T> inType,
                      @Nonnull String inParentID,
@@ -540,7 +549,8 @@ public class DMADatafiles implements DMAData
    * @return   a multi map from owner to ids
    *
    */
-  public Multimap<String, String> getOwners(String inID)
+  @Override
+public Multimap<String, String> getOwners(String inID)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -555,7 +565,8 @@ public class DMADatafiles implements DMAData
    * @return      the string representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     StringBuilder result =
       new StringBuilder("path " + m_path + ", files " + m_names);
@@ -587,7 +598,8 @@ public class DMADatafiles implements DMAData
    * @return      true if removed, false if not
    *
    */
-  public boolean remove(@Nonnull String inID,
+  @Override
+public boolean remove(@Nonnull String inID,
                         @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     throw new UnsupportedOperationException("not implemented");
@@ -675,7 +687,8 @@ public class DMADatafiles implements DMAData
    * @return      true if updated, false if there was an error
    *
    */
-  public boolean update(@Nonnull AbstractEntry inEntry)
+  @Override
+public boolean update(@Nonnull AbstractEntry inEntry)
   {
     if(hasEntry(inEntry.getName(), inEntry.getType()))
       return save();
@@ -771,7 +784,8 @@ public class DMADatafiles implements DMAData
    * @return   a list of all the files found
    *
    */
-  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
+  @Override
+public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
   {
     String baseType = null;
     String []baseNames = null;
@@ -861,7 +875,8 @@ public class DMADatafiles implements DMAData
    *
    * @return     the numbert of enties updated
    */
-  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  @Override
+public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     throw new UnsupportedOperationException("not implemented for files");
   }

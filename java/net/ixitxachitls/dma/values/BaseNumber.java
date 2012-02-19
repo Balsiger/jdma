@@ -149,6 +149,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      a similar list, but without any contents
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // this method has to be overriden in
                                  // derivation for this to work
   public T create()
@@ -181,7 +182,8 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
   public static final @Nonnull Grouping<BaseNumber, String> s_grouping =
     new Group<BaseNumber, Long, String>(new Group.Extractor<BaseNumber, Long>()
       {
-        public @Nonnull Long extract(@Nonnull BaseNumber inValue)
+        @Override
+		public @Nonnull Long extract(@Nonnull BaseNumber inValue)
         {
           return inValue.m_number;
         }
@@ -207,6 +209,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *              object given
    *
    */
+  @Override
   public int compareTo(@Nonnull Object inOther)
   {
     if(inOther instanceof BaseNumber)
@@ -355,6 +358,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      the addition of both values
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // have to cast
   public @Nonnull T add(@Nonnull T inValue)
   {
@@ -379,6 +383,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      the subtraction of both values
    *
    */
+  @Override
   public T subtract(@Nonnull T inValue)
   {
     T result = create();
@@ -401,7 +406,8 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      the multiplied value
    *
    */
-  @SuppressWarnings("unchecked") // casting
+  @Override
+@SuppressWarnings("unchecked") // casting
   public T multiply(long inValue)
   {
     if(!m_defined)
@@ -481,7 +487,8 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    * @return      true if read, false if not
    *
    */
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+protected boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 

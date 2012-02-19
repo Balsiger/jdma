@@ -141,7 +141,8 @@ public class TemplateResource extends FileResource
    * @return      true if writing ok, false if not
    *
    */
-  public boolean write(@Nonnull OutputStream inOutput)
+  @Override
+public boolean write(@Nonnull OutputStream inOutput)
   {
     if(m_content == null)
     {

@@ -125,7 +125,8 @@ public class Selection extends Value<Selection>
    * @return      a similar list, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // this onlly works if this method is
+  @Override
+@SuppressWarnings("unchecked") // this onlly works if this method is
                                  // overriden in all derivations
   public Selection create()
   {
@@ -185,7 +186,8 @@ public class Selection extends Value<Selection>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new Command(toString());
   }
@@ -199,7 +201,8 @@ public class Selection extends Value<Selection>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     if(m_selected >= 0)
       return m_selections[m_selected];
@@ -217,7 +220,8 @@ public class Selection extends Value<Selection>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_selected >= 0;
   }
@@ -248,7 +252,8 @@ public class Selection extends Value<Selection>
    * @return      the possible value to select from or null for no selection
    *
    */
-  public @Nonnull String getChoices()
+  @Override
+public @Nonnull String getChoices()
   {
     return Strings.toString(m_selections, "||", "");
   }
@@ -421,7 +426,8 @@ public class Selection extends Value<Selection>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     m_selected = inReader.expectCase(m_selections, true);
 

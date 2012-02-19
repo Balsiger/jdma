@@ -87,7 +87,8 @@ public class SingleIterator<T> implements Iterator<T>
    * @undefined   never
    *
    */
-  public boolean hasNext()
+  @Override
+public boolean hasNext()
   {
     return m_element != null;
   }
@@ -101,7 +102,8 @@ public class SingleIterator<T> implements Iterator<T>
    * @return      the next element in the iterator
    *
    */
-  public @Nonnull T next()
+  @Override
+public @Nonnull T next()
   {
     if(m_element == null)
       throw new java.util.NoSuchElementException("no more elements");
@@ -126,7 +128,8 @@ public class SingleIterator<T> implements Iterator<T>
    * @undefined   UnsupportedOperationException if removing is not supported
    *
    */
-  public void remove()
+  @Override
+public void remove()
   {
     throw new UnsupportedOperationException("removes are not allowed");
   }

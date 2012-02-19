@@ -97,7 +97,8 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    * @return      the type for chaining
    *
    */
-  public @Nonnull BaseType<T> withLink(@Nonnull String inLink,
+  @Override
+public @Nonnull BaseType<T> withLink(@Nonnull String inLink,
                                        @Nonnull String inMultipleLink)
   {
     super.withLink(inLink, inMultipleLink);
@@ -116,7 +117,8 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    * @return      the type for chaining
    *
    */
-  public @Nonnull BaseType<T> withSort(@Nonnull String inSort)
+  @Override
+public @Nonnull BaseType<T> withSort(@Nonnull String inSort)
   {
     super.withSort(inSort);
 

@@ -119,7 +119,8 @@ public class Weight extends Units<Weight>
    * @return      a similar list, but without any contents
    *
    */
-  public Weight create()
+  @Override
+public Weight create()
   {
     return super.create(new Weight());
   }
@@ -148,7 +149,8 @@ public class Weight extends Units<Weight>
   protected static final @Nonnull Group<Weight, Long, String> s_grouping =
     new Group<Weight, Long, String>(new Group.Extractor<Weight, Long>()
       {
-        public Long extract(Weight inValue)
+        @Override
+		public Long extract(Weight inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a  value here");
@@ -353,7 +355,8 @@ public class Weight extends Units<Weight>
    * @return      a string denoting the group this value is in
    *
    */
-  protected @Nonnull String doGroup()
+  @Override
+protected @Nonnull String doGroup()
   {
     return s_grouping.group(this);
   }

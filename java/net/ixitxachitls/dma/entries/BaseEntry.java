@@ -362,7 +362,8 @@ public class BaseEntry extends AbstractEntry
    * @return      true if this is a base entry, false else
    *
    */
-  public boolean isBase()
+  @Override
+public boolean isBase()
   {
     return true;
   }
@@ -490,7 +491,8 @@ public class BaseEntry extends AbstractEntry
    * @return      the selection containing the selected world
    *
    */
-  public @Nonnull String getShortDescription()
+  @Override
+public @Nonnull String getShortDescription()
   {
     return m_short.get();
   }
@@ -1281,7 +1283,8 @@ public class BaseEntry extends AbstractEntry
     //----- read -----------------------------------------------------------
 
      /** Testing reading. */
-    @org.junit.Test
+    @Override
+	@org.junit.Test
     public void read()
     {
       ParseReader reader =

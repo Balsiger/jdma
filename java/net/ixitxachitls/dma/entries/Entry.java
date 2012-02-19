@@ -694,7 +694,8 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    * @return      true if this is a base entry, false else
    *
    */
-  public boolean isBase()
+  @Override
+public boolean isBase()
   {
     return false;
   }

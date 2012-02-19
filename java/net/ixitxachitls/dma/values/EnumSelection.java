@@ -154,7 +154,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull EnumSelection<T> create()
+  @Override
+public @Nonnull EnumSelection<T> create()
   {
     return super.create(new EnumSelection<T>(m_enum, m_selections,
                                              m_simpleSelections,
@@ -226,7 +227,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      the possible value to select from
    *
    */
-  public @Nonnull String getChoices()
+  @Override
+public @Nonnull String getChoices()
   {
     return Strings.toString(m_selections, "||", "");
   }
@@ -241,7 +243,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new Command(m_selected);
   }
@@ -255,7 +258,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      a String representation
    *
    */
-  public @Nonnull String doToString()
+  @Override
+public @Nonnull String doToString()
   {
     if(m_selected instanceof Named)
       return ((Named)m_selected).getName();
@@ -273,7 +277,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_selected != null;
   }
@@ -367,7 +372,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     int selected;
     if(m_multiSelections != null)
@@ -395,7 +401,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      the maximum value (usually one of the values)
    *
    */
-  public @Nonnull EnumSelection<T> max(@Nonnull EnumSelection<T> inValue)
+  @Override
+public @Nonnull EnumSelection<T> max(@Nonnull EnumSelection<T> inValue)
   {
     EnumSelection<T> result = create();
 
@@ -419,7 +426,8 @@ public class EnumSelection<T extends Enum<T>>
    * @return      the minimal value (usually one of the values)
    *
    */
-  public @Nonnull EnumSelection<T> min(@Nonnull EnumSelection<T> inValue)
+  @Override
+public @Nonnull EnumSelection<T> min(@Nonnull EnumSelection<T> inValue)
   {
     EnumSelection<T> result = create();
 

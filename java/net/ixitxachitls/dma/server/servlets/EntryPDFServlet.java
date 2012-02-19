@@ -104,7 +104,8 @@ public class EntryPDFServlet extends PDFServlet
    * @return      the entry or null if it could not be found
    *
    */
-  public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
+  @Override
+public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
   {
     String id = Strings.getPattern(inPath, "/([^/]*?)(\\.pdf)?$");
     AbstractType<? extends AbstractEntry> type = getType(inPath);
@@ -168,7 +169,8 @@ public class EntryPDFServlet extends PDFServlet
    * @return    the PDF document to return with all its contents
    *
    */
-  protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
+  @Override
+protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
   {
     String path = inRequest.getRequestURI();
     if(path == null)

@@ -185,7 +185,8 @@ public class ITextDocument extends net.ixitxachitls.output.pdf.ITextDocument
    * @return      a hash map with all the known converters
    *
    */
-  protected @Nonnull Map<String, Action> getKnownActions()
+  @Override
+protected @Nonnull Map<String, Action> getKnownActions()
   {
     return s_actions;
   }

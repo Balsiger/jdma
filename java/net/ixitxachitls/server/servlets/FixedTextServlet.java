@@ -127,7 +127,8 @@ public class FixedTextServlet extends BaseServlet
    * @throws      IOException writing to page failed
    *
    */
-  protected SpecialResult handle(@Nonnull HttpServletRequest inRequest,
+  @Override
+protected SpecialResult handle(@Nonnull HttpServletRequest inRequest,
                                  @Nonnull HttpServletResponse inResponse)
     throws IOException
   {

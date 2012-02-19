@@ -76,7 +76,8 @@ public class EmptyIterator<T> implements Iterator<T>
    * @return      always false
    *
    */
-  public boolean hasNext()
+  @Override
+public boolean hasNext()
   {
     return false;
   }
@@ -90,7 +91,8 @@ public class EmptyIterator<T> implements Iterator<T>
    * @return      always throws exception
    *
    */
-  public T next()
+  @Override
+public T next()
   {
     throw new java.util.NoSuchElementException("no more elements");
   }
@@ -111,7 +113,8 @@ public class EmptyIterator<T> implements Iterator<T>
    *              (always thrown)
    *
    */
-  public void remove()
+  @Override
+public void remove()
   {
     throw new UnsupportedOperationException("removes are not allowed");
   }

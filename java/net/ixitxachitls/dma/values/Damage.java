@@ -104,7 +104,8 @@ public class Damage extends Value<Damage>
      * @return the name of the value
      *
      */
-    public String getName()
+    @Override
+	public String getName()
     {
       return m_name;
     }
@@ -114,7 +115,8 @@ public class Damage extends Value<Damage>
      * @return the name of the value
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -148,7 +150,8 @@ public class Damage extends Value<Damage>
    * @return      a similar list, but without any contents
    *
    */
-  public @Nonnull Damage create()
+  @Override
+public @Nonnull Damage create()
   {
     return super.create(new Damage());
   }
@@ -358,7 +361,8 @@ public class Damage extends Value<Damage>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_base.isDefined();
   }

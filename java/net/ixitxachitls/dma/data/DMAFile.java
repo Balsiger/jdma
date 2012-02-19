@@ -231,7 +231,8 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      the object as a human readable string
    *
    */
-  public String toString()
+  @Override
+public String toString()
   {
     return m_path + "/" + m_name + ": " + m_entries
       + " (" + m_lines + " lines, "

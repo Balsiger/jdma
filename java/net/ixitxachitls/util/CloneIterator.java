@@ -87,7 +87,8 @@ public class CloneIterator<T extends PublicCloneable> implements Iterator<T>
    * @return      true if there is another value, false if not
    *
    */
-  public boolean hasNext()
+  @Override
+public boolean hasNext()
   {
     return m_values.hasNext();
   }
@@ -106,7 +107,8 @@ public class CloneIterator<T extends PublicCloneable> implements Iterator<T>
    * @return      the next Object
    *
    */
-  @SuppressWarnings("unchecked")
+  @Override
+@SuppressWarnings("unchecked")
   public T next()
   {
     // the following produces an unchecked cast. It would be possible to
@@ -129,7 +131,8 @@ public class CloneIterator<T extends PublicCloneable> implements Iterator<T>
    * UnsupportedOperationException.
    *
    */
-  public void remove()
+  @Override
+public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
                                             + "support removal of entries");
@@ -171,7 +174,8 @@ public class CloneIterator<T extends PublicCloneable> implements Iterator<T>
        * @return the cloned object
        *
        */
-      public Object clone()
+      @Override
+	  public Object clone()
       {
         return new Value(m_name + "(cloned)");
       }
@@ -181,7 +185,8 @@ public class CloneIterator<T extends PublicCloneable> implements Iterator<T>
        *
        * @return the converted string
        */
-      public String toString()
+      @Override
+	  public String toString()
       {
         return m_name;
       }

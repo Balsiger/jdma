@@ -105,7 +105,8 @@ public class Autocomplete extends JSONServlet
    * @param       inWriter the writer to write to
    *
    */
-  @SuppressWarnings("unchecked") // need to cast from cache
+  @Override
+@SuppressWarnings("unchecked") // need to cast from cache
   protected void writeJson(@Nonnull DMARequest inRequest,
                            @Nonnull String inPath,
                            @Nonnull JsonWriter inWriter)
@@ -213,7 +214,8 @@ public class Autocomplete extends JSONServlet
 
       Autocomplete servlet = new Autocomplete() {
           private static final long serialVersionUID = 1L;
-          protected void writeJson(@Nonnull DMARequest inRequest,
+          @Override
+		protected void writeJson(@Nonnull DMARequest inRequest,
                                    @Nonnull String inPath,
                                    @Nonnull JsonWriter inWriter)
           {

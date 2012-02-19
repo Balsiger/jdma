@@ -134,7 +134,8 @@ public class Variable extends ValueHandle<Variable>
    * @return      the current value
    *
    */
-  public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
+  @Override
+public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     return get(inEntry);
   }
@@ -151,7 +152,8 @@ public class Variable extends ValueHandle<Variable>
    * @return      the current value
    *
    */
-  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
+  @Override
+public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     Value value = get(inEntry);
 
@@ -384,7 +386,8 @@ public class Variable extends ValueHandle<Variable>
       protected Value m_value = new Value.Test.TestValue();
 
       /** Change method for testing. */
-      public void changed()
+      @Override
+	  public void changed()
       {
         m_changed = true;
       }

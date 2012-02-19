@@ -173,7 +173,8 @@ public class BaseCampaign extends BaseEntry
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -187,7 +188,8 @@ public class BaseCampaign extends BaseEntry
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -240,7 +242,8 @@ public class BaseCampaign extends BaseEntry
    * @return      true for DM, false for not
    *
    */
-  public boolean isDM(@Nonnull BaseCharacter inUser)
+  @Override
+public boolean isDM(@Nonnull BaseCharacter inUser)
   {
     return inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
@@ -899,7 +902,8 @@ public class BaseCampaign extends BaseEntry
     //----- read -----------------------------------------------------------
 
     /** Test reading. */
-    @org.junit.Test
+    @Override
+	@org.junit.Test
     public void read()
     {
       // String result =

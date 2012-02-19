@@ -90,6 +90,7 @@ public class PrefixRedirectFilter extends RedirectFilter
    * @return   the path to redirect to
    *
    */
+  @Override
   public @Nonnull String computeRedirect(@Nonnull HttpServletRequest inRequest)
   {
     return Files.concatenate(m_prefix, inRequest.getRequestURI());

@@ -204,7 +204,8 @@ public class Campaign extends Entry<BaseCampaign>
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -218,7 +219,8 @@ public class Campaign extends Entry<BaseCampaign>
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -516,7 +518,8 @@ public class Campaign extends Entry<BaseCampaign>
    * @return      the path to read this entry
    *
    */
-  public @Nonnull String getPath()
+  @Override
+public @Nonnull String getPath()
   {
     return "/" + BaseCampaign.TYPE.getLink() + "/" + m_base.get(0).get()
       + "/" + getName();

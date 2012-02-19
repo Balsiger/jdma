@@ -180,7 +180,8 @@ public class Document
      * @return      a hash map with all the known converters
      *
      */
-    protected Map<String, Action> getKnownActions()
+    @Override
+	protected Map<String, Action> getKnownActions()
     {
       return Document.this.getKnownActions();
     }
@@ -194,7 +195,8 @@ public class Document
      * @return      the buffer of this document
      *
      */
-    protected Buffer getBuffer()
+    @Override
+	protected Buffer getBuffer()
     {
       return m_buffer;
     }
@@ -208,7 +210,8 @@ public class Document
      * @return      the counter value
      *
      */
-    public int getCounter()
+    @Override
+	public int getCounter()
     {
       return Document.this.getCounter();
     }
@@ -223,7 +226,8 @@ public class Document
      * @return      true if its a DM document, false if not
      *
      */
-    public boolean isDM()
+    @Override
+	public boolean isDM()
     {
       return Document.this.isDM();
     }
@@ -238,7 +242,8 @@ public class Document
      * @param       inAlignment the new alignment
      *
      */
-    public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
+    @Override
+	public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
     {
       assert m_buffer instanceof WrapBuffer
         : "setAlignment() can only be called using a wrapping buffer";
@@ -253,7 +258,8 @@ public class Document
      * End the current line of necessary (ie not yet ended).
      *
      */
-    public void endLine()
+    @Override
+	public void endLine()
     {
       assert m_buffer instanceof WrapBuffer
         : "endLine() can only be called using a wrapping buffer";
@@ -307,7 +313,8 @@ public class Document
      * @param       inError the error to add
      *
      */
-    public void addError(@Nonnull BaseError inError)
+    @Override
+	public void addError(@Nonnull BaseError inError)
     {
       Document.this.addError(inError);
     }
@@ -322,7 +329,8 @@ public class Document
      * @param       inDocument the document to add
      *
      */
-    public void addDocument(@Nonnull Document inDocument)
+    @Override
+	public void addDocument(@Nonnull Document inDocument)
     {
       Document.this.addDocument(inDocument);
     }
@@ -967,7 +975,8 @@ public class Document
    * @return      The complete contents of the document.
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     String page = getBuffer().getContents();
 

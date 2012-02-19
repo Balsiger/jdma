@@ -110,7 +110,8 @@ public class EventLogger extends FileLogger
     * @param       inType the level of detail to print for
     *
     */
-  public void print(@Nonnull String inText, @Nonnull Log.Type inType)
+  @Override
+public void print(@Nonnull String inText, @Nonnull Log.Type inType)
   {
     // don't print status messages to file logs
     if(inType != Log.Type.EVENT)

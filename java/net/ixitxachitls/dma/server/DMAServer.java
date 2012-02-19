@@ -273,7 +273,8 @@ public class DMAServer extends WebServer
    * Setup all the standard servlets to use in this server.
    *
    */
-  @OverridingMethodsMustInvokeSuper
+  @Override
+@OverridingMethodsMustInvokeSuper
   protected void setupServlets()
   {
     super.setupServlets();
@@ -731,7 +732,8 @@ public class DMAServer extends WebServer
    * up. This means this can take some time.
    *
    */
-  @OverridingMethodsMustInvokeSuper
+  @Override
+@OverridingMethodsMustInvokeSuper
   public void init()
   {
   }

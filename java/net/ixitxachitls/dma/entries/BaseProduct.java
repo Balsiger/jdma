@@ -216,7 +216,8 @@ public class BaseProduct extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -227,7 +228,8 @@ public class BaseProduct extends BaseEntry
      * @return the converted string
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
         return m_name;
     }
@@ -273,7 +275,8 @@ public class BaseProduct extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -284,7 +287,8 @@ public class BaseProduct extends BaseEntry
      * @return the converted string
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
         return m_name;
     }
@@ -418,7 +422,8 @@ public class BaseProduct extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -440,7 +445,8 @@ public class BaseProduct extends BaseEntry
      * @return the converted string
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }
@@ -555,7 +561,8 @@ public class BaseProduct extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -577,7 +584,8 @@ public class BaseProduct extends BaseEntry
      * @return the converted string
      *
      */
-    public String toString()
+    @Override
+	public String toString()
     {
       return m_name;
     }
@@ -647,7 +655,8 @@ public class BaseProduct extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -669,7 +678,8 @@ public class BaseProduct extends BaseEntry
      * @return the converted string
      *
      */
-    public @Nullable String toString()
+    @Override
+	public @Nullable String toString()
     {
         return m_name;
     }
@@ -708,7 +718,8 @@ public class BaseProduct extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    @Override
+	public @Nonnull String getName()
     {
       return m_name;
     }
@@ -719,7 +730,8 @@ public class BaseProduct extends BaseEntry
      * @return the converted string
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }
@@ -1024,7 +1036,8 @@ public class BaseProduct extends BaseEntry
   protected static final Group<Number, Long, String> s_pageGroup =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
-        public Long extract(@Nonnull Number inValue)
+        @Override
+		public Long extract(@Nonnull Number inValue)
         {
           return inValue.get();
         }
@@ -1179,7 +1192,8 @@ public class BaseProduct extends BaseEntry
   protected static final Group<Price, Long, String> s_priceGrouping =
     new Group<Price, Long, String>(new Group.Extractor<Price, Long>()
       {
-        public Long extract(@Nonnull Price inValue)
+        @Override
+		public Long extract(@Nonnull Price inValue)
         {
           return inValue.get();
         }
@@ -1292,7 +1306,8 @@ public class BaseProduct extends BaseEntry
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  @Override
+protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -1306,7 +1321,8 @@ public class BaseProduct extends BaseEntry
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  @Override
+protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -1541,7 +1557,8 @@ public class BaseProduct extends BaseEntry
    * @return      the requested name
    *
    */
-  public @Nonnull String getRefName()
+  @Override
+public @Nonnull String getRefName()
   {
     if(!m_title.isDefined())
       return super.getRefName();
@@ -1799,6 +1816,7 @@ public class BaseProduct extends BaseEntry
    * @return      a multi map of values per index name
    *
    */
+  @Override
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
@@ -1889,7 +1907,8 @@ public class BaseProduct extends BaseEntry
    * @return      the part of the string that could not be parsed
    *
    */
-  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  @Override
+public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
   {
     String []parts = Strings.getPatterns(inKey, "(.*?)/(.*)");
 
@@ -2813,7 +2832,8 @@ public class BaseProduct extends BaseEntry
     //----- read -----------------------------------------------------------
 
     /** Testing reading. */
-    @org.junit.Test
+    @Override
+	@org.junit.Test
     public void read()
     {
       ParseReader reader =

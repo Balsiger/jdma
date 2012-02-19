@@ -141,7 +141,8 @@ public class ISBN13 extends Value<ISBN13>
    * @return      a similar list, but without any contents
    *
    */
-  public ISBN13 create()
+  @Override
+public ISBN13 create()
   {
     return new ISBN13();
   }
@@ -179,7 +180,8 @@ public class ISBN13 extends Value<ISBN13>
    * @return      true if the value is defined, false if not
    *
    */
-  public boolean isDefined()
+  @Override
+public boolean isDefined()
   {
     return m_g13 != null && m_group != null && m_publisher != null
       && m_title != null && m_check >= 0;
@@ -210,7 +212,8 @@ public class ISBN13 extends Value<ISBN13>
    * @return      the command for setting the value
    *
    */
-  protected @Nonnull Command doFormat()
+  @Override
+protected @Nonnull Command doFormat()
   {
     return new Command(toString());
   }
@@ -224,7 +227,8 @@ public class ISBN13 extends Value<ISBN13>
    * @return      a String representation, depending on the kind given
    *
    */
-  protected @Nonnull String doToString()
+  @Override
+protected @Nonnull String doToString()
   {
     return m_g13 + "-" + m_group + '-' + m_publisher + '-' + m_title + '-'
       + (char)(m_check + '0');
@@ -333,7 +337,8 @@ public class ISBN13 extends Value<ISBN13>
     * @return      true if read, false if not
     *
     */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  @Override
+public boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos;
 

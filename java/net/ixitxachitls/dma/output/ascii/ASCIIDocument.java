@@ -173,7 +173,8 @@ public class ASCIIDocument extends net.ixitxachitls.output.ascii.ASCIIDocument
    * @return      a hash map with all the known converters
    *
    */
-  protected @Nonnull HashMap<String, Action> getKnownActions()
+  @Override
+protected @Nonnull HashMap<String, Action> getKnownActions()
   {
     return s_actions;
   }

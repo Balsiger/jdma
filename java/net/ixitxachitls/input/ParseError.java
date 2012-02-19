@@ -231,7 +231,8 @@ public class ParseError extends BaseError
    * @return      a string or command representing the error
    *
    */
-  public Object format()
+  @Override
+public Object format()
   {
     return new Command(new Color("error", m_errorNumber + ": " + m_error
                                  + (m_parseMessage != null
@@ -260,7 +261,8 @@ public class ParseError extends BaseError
    * @return      the string representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return m_errorNumber + ": " + m_error
       + (m_parseMessage != null ? " (" + m_parseMessage + ")" : "")
@@ -282,7 +284,8 @@ public class ParseError extends BaseError
    * @return      true if equal, false else
    *
    */
-  public boolean equals(Object inOther)
+  @Override
+public boolean equals(Object inOther)
   {
     if(inOther == null)
       return false;
@@ -299,7 +302,8 @@ public class ParseError extends BaseError
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return toString().hashCode();
   }

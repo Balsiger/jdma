@@ -87,7 +87,8 @@ public class ConversionIterator<N, O extends N> implements Iterator<N>
    * @undefined   never
    *
    */
-  public boolean hasNext()
+  @Override
+public boolean hasNext()
   {
     return m_iterator.hasNext();
   }
@@ -103,7 +104,8 @@ public class ConversionIterator<N, O extends N> implements Iterator<N>
    * @undefined   exception if no more elements
    *
    */
-  public N next()
+  @Override
+public N next()
   {
     return m_iterator.next();
   }
@@ -125,7 +127,8 @@ public class ConversionIterator<N, O extends N> implements Iterator<N>
    * @undefined   always exception
    *
    */
-  public void remove()
+  @Override
+public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
                                             + "support the removal of "

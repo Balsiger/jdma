@@ -511,7 +511,8 @@ public class ITextDocument extends Document
    * @return      a hash map with all the known converters
    *
    */
-  protected @Nonnull Map<String, Action> getKnownActions()
+  @Override
+protected @Nonnull Map<String, Action> getKnownActions()
   {
     return s_actions;
   }
@@ -531,6 +532,7 @@ public class ITextDocument extends Document
    * @param       inText the text to add
    *
    */
+  @Override
   public void add(@Nonnull String inText)
   {
     super.add(inText.replaceAll("\\\\", "*backslash*"));
@@ -550,7 +552,8 @@ public class ITextDocument extends Document
    * @return      The complete contents of the document.
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       + "<!DOCTYPE ITEXT SYSTEM \"http://itext.sourceforge.net/itext.dtd\">\n"

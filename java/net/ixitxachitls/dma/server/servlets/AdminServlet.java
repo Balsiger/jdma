@@ -107,7 +107,8 @@ public class AdminServlet extends BaseServlet
    * @throws      IOException      writing to the page failed
    *
    */
-  @OverridingMethodsMustInvokeSuper
+  @Override
+@OverridingMethodsMustInvokeSuper
   protected @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)

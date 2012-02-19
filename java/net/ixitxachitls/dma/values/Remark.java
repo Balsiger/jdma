@@ -126,7 +126,8 @@ public class Remark
      * @return      the String representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_key;
     }
@@ -217,7 +218,8 @@ public class Remark
    * @return      the String representation
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     return s_start + m_type.toString()
       + (m_comment == null ? "" : s_comment + m_comment) + s_end;

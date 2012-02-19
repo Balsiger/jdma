@@ -177,7 +177,8 @@ public abstract class AsyncExecutor<T> extends Thread
    * Process all queued messages or wait for more.
    *
    */
-  public void run()
+  @Override
+public void run()
   {
     try
     {
@@ -222,7 +223,8 @@ public abstract class AsyncExecutor<T> extends Thread
 
       AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 4)
         {
-          public void execute(String inValue)
+          @Override
+		public void execute(String inValue)
           {
             while(!m_done)
               ;
@@ -273,7 +275,8 @@ public abstract class AsyncExecutor<T> extends Thread
 
       AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 2)
         {
-          public void execute(String inValue)
+          @Override
+		public void execute(String inValue)
           {
             while(!m_done)
               ;

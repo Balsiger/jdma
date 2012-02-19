@@ -95,7 +95,8 @@ public interface Buffer
      * @return      the String representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_name;
     }

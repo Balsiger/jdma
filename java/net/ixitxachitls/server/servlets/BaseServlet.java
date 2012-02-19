@@ -87,7 +87,8 @@ public abstract class BaseServlet extends HttpServlet
      * @return the string representation
      *
      */
-    public @Nonnull String toString();
+    @Override
+	public @Nonnull String toString();
   }
 
   //........................................................................
@@ -127,7 +128,8 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      *
      */
-    public void send(@Nonnull HttpServletResponse inResponse)
+    @Override
+	public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.sendError(m_code, m_message);
@@ -139,7 +141,8 @@ public abstract class BaseServlet extends HttpServlet
      * @return the string representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_code + ": " + m_message;
     }
@@ -182,7 +185,8 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      *
      */
-    public void send(@Nonnull HttpServletResponse inResponse)
+    @Override
+	public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.addHeader("Content-Type", "text/html");
@@ -211,7 +215,8 @@ public abstract class BaseServlet extends HttpServlet
      * @return the string representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return m_code + ": " + m_title + "(" + m_message + ")";
     }
@@ -238,7 +243,8 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      *
      */
-    public void send(@Nonnull HttpServletResponse inResponse)
+    @Override
+	public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED, "");
@@ -253,7 +259,8 @@ public abstract class BaseServlet extends HttpServlet
      * @return the string representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return "not-modified";
     }
@@ -288,7 +295,8 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      *
      */
-    public void send(@Nonnull HttpServletResponse inResponse)
+    @Override
+	public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.sendRedirect(m_destination);
@@ -303,7 +311,8 @@ public abstract class BaseServlet extends HttpServlet
      * @return the string representation
      *
      */
-    public @Nonnull String toString()
+    @Override
+	public @Nonnull String toString()
     {
       return "redirect to " + m_destination;
     }
@@ -366,7 +375,8 @@ public abstract class BaseServlet extends HttpServlet
    * @throws      IOException      writing to the page failed
    *
    */
-  public void doGet(@Nonnull HttpServletRequest inRequest,
+  @Override
+public void doGet(@Nonnull HttpServletRequest inRequest,
                     @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
@@ -391,7 +401,8 @@ public abstract class BaseServlet extends HttpServlet
    * @throws      IOException      writing to the page failed
    *
    */
-  public void doPost(@Nonnull HttpServletRequest inRequest,
+  @Override
+public void doPost(@Nonnull HttpServletRequest inRequest,
                      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
@@ -479,7 +490,8 @@ public abstract class BaseServlet extends HttpServlet
 
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
-          protected SpecialResult handle
+          @Override
+		protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {
@@ -517,7 +529,8 @@ public abstract class BaseServlet extends HttpServlet
 
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
-          protected SpecialResult handle
+          @Override
+		protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {
@@ -559,7 +572,8 @@ public abstract class BaseServlet extends HttpServlet
 
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
-          protected SpecialResult handle
+          @Override
+		protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {
@@ -595,7 +609,8 @@ public abstract class BaseServlet extends HttpServlet
         new java.util.concurrent.atomic.AtomicBoolean(false);
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
-          protected SpecialResult handle
+          @Override
+		protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {

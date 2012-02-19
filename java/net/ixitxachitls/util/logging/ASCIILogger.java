@@ -215,7 +215,8 @@ public class ASCIILogger implements Logger
    * @param       inType the level of detail to print for
    *
    */
-  public void print(@Nonnull String inText, Log.Type inType)
+  @Override
+public void print(@Nonnull String inText, Log.Type inType)
   {
     // set the text to write to together
     String text = format(inText,  inType, m_format) + '\n';
@@ -241,7 +242,8 @@ public class ASCIILogger implements Logger
    * @param       inType   the type of object printed (logging level)
    *
    */
-  public void print(@Nonnull Object inObject, Log.Type inType)
+  @Override
+public void print(@Nonnull Object inObject, Log.Type inType)
   {
     print(inObject.toString(), inType);
   }
@@ -404,7 +406,8 @@ public class ASCIILogger implements Logger
        * @param inText the bytes to write
        *
        */
-      public void write(byte []inText)
+      @Override
+	public void write(byte []inText)
       {
         m_buffer.append(new String(inText));
       }
@@ -415,13 +418,15 @@ public class ASCIILogger implements Logger
        * @param inChar the character to write
        *
        */
-      public void write(int inChar)
+      @Override
+	public void write(int inChar)
       {
         m_buffer.append((char)inChar);
       }
 
       /** Flush the buffer. */
-      public void flush()
+      @Override
+	public void flush()
       {
         // nothing necessary
       }

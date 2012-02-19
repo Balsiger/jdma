@@ -344,7 +344,8 @@ public class BaseCommand extends Command
    * @return      all arguments (as Commands or Objects)
    *
    */
-  public @Nonnull List<Object> getArguments()
+  @Override
+public @Nonnull List<Object> getArguments()
   {
     return Collections.unmodifiableList(m_arguments);
   }
@@ -359,7 +360,8 @@ public class BaseCommand extends Command
    * @return      true if the command is empty, false if not
    *
    */
-  public boolean isEmpty()
+  @Override
+public boolean isEmpty()
   {
     if(!super.isEmpty())
       return false;
@@ -387,7 +389,8 @@ public class BaseCommand extends Command
    * @return      true if equal, false else
    *
    */
-  public boolean equals(Object inOther)
+  @Override
+public boolean equals(Object inOther)
   {
     if(this == inOther)
       return true;
@@ -415,7 +418,8 @@ public class BaseCommand extends Command
    * @return      the hash code
    *
    */
-  public int hashCode()
+  @Override
+public int hashCode()
   {
     return super.hashCode() + m_optionals.hashCode() + m_name.hashCode();
   }
@@ -430,7 +434,8 @@ public class BaseCommand extends Command
    * @return      a human readable conversion of the object
    *
    */
-  public @Nonnull String toString()
+  @Override
+public @Nonnull String toString()
   {
     StringBuilder result = new StringBuilder();
 

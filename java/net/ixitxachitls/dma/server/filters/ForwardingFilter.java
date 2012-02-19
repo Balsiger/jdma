@@ -87,7 +87,8 @@ public class ForwardingFilter implements Filter
    * @param       inConfig the filter configuration
    *
    */
-  public void init(@Nonnull FilterConfig inConfig)
+  @Override
+public void init(@Nonnull FilterConfig inConfig)
   {
     m_config = inConfig;
 
@@ -105,7 +106,8 @@ public class ForwardingFilter implements Filter
    * Destroy the filter.
    *
    */
-  public void destroy()
+  @Override
+public void destroy()
   {
     // nothing to do
   }
@@ -143,7 +145,8 @@ public class ForwardingFilter implements Filter
     * @throws      ServletException general failure when creating response
     *
     */
-  public void doFilter(@Nonnull ServletRequest inRequest,
+  @Override
+public void doFilter(@Nonnull ServletRequest inRequest,
                        @Nonnull ServletResponse inResponse,
                        @Nonnull FilterChain inChain)
     throws ServletException, IOException

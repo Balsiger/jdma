@@ -93,7 +93,8 @@ public class TaggedVariables extends Variables
    * @return      the tag
    *
    */
-  public @Nonnull String getPrefix()
+  @Override
+public @Nonnull String getPrefix()
   {
     return m_tag + ":";
   }
@@ -109,7 +110,8 @@ public class TaggedVariables extends Variables
    * @return      the specific variable
    *
    */
-  public @Nullable Variable getVariable(@Nonnull String inKey)
+  @Override
+public @Nullable Variable getVariable(@Nonnull String inKey)
   {
     Variable var = super.getVariable(inKey);
     if(var != null)
@@ -128,6 +130,7 @@ public class TaggedVariables extends Variables
    * @return      the String representation
    *
    */
+  @Override
   public @Nonnull String toString()
   {
     return super.toString() + " [tag " + m_tag + "]";
@@ -147,6 +150,7 @@ public class TaggedVariables extends Variables
    * @param       inVariable the variable to add
    *
    */
+  @Override
   protected void add(@Nonnull Variable inVariable)
   {
     super.add(m_tag + ":" + inVariable.getKey(), inVariable);
