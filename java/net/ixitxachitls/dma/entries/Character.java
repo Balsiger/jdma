@@ -638,7 +638,8 @@ public class Character extends CampaignEntry<BaseCharacter>
                              new Pair<String, Object>("right-bottom",
                                                       "character/"
                                                       + m_state.getSelected()),
-                             new Pair<String, Object>("left-top", "dm"));
+                             new Pair<String, Object>("left-top",
+                                                      "character/dm"));
     else
       return new OverlayIcon(src, getName(), getPath(), true,
                              new Pair<String, Object>("right-bottom",

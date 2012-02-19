@@ -8,3 +8,84 @@ campaign City of the Spider Queen =
   dm    Merlin.
 
 #.....
+
+#----- Andrinor (fr-72)
+
+character Andrinor =
+
+  base        Salamix;
+  state       adventuring;
+  campaign    FR/City of the Spider Queen;
+  level       13.
+
+#.....
+#----- Eskarina Weatherwax (fr-130)
+
+character Eskarina Weatherwax =
+
+  base        Ylene;
+  state       adventuring;
+  campaign    FR/City of the Spider Queen;
+  level       13.
+
+#.....
+#----- Fletcher of the Green Fields (fr-181)
+
+character Fletcher of the Green Fields =
+
+  base        Nadia;
+  state       adventuring;
+  campaign    FR/City of the Spider Queen;
+  level       13.
+
+#.....
+#----- Beluane 'Brighteyes' Alkath (fr-187)
+
+character Beluane 'Brighteyes' Alkath =
+
+  base        Mythos;
+  state       adventuring;
+  level       8;
+  campaign    FR/City of the Spider Queen.
+
+#.....
+#----- Cyrus (fr-229)
+
+character Cyrus  =
+
+  base        Flexi;
+  state       retired;
+  level       9;
+  campaign    FR/City of the Spider Queen.
+
+#.....
+#----- Leleanne (fr-271)
+
+character Leleanne =
+
+  base        Mythos;
+  state       adventuring;
+  level       13;
+  campaign    FR/City of the Spider Queen.
+
+#.....
+#----- Norian Samulkin (fr-304)
+
+character Norian Samulkin =
+
+  base        Thomas;
+  state       adventuring;
+  level       13;
+  campaign    FR/City of the Spider Queen.
+
+#.....
+#----- Peltar Trannyth (fr-1444)
+
+character Peltar Trannyth =
+
+  base        Flexi;
+  state       adventuring;
+  level       13;
+  campaign    FR/City of the Spider Queen.
+
+#.....
