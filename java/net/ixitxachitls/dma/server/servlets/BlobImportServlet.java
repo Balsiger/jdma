@@ -138,6 +138,7 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
       else
       {
         DMADatastore store = (DMADatastore)DMADataFactory.get();
+        @SuppressWarnings("unchecked")
         AbstractEntry entry =
           store.getEntry(new AbstractEntry.EntryKey(id, entryType));
 

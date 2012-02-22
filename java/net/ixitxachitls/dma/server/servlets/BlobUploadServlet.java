@@ -164,6 +164,7 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
                              "invalid type " + request.getParam("type"));
 
       DMADatastore store = (DMADatastore)DMADataFactory.get();
+      @SuppressWarnings("unchecked")
       AbstractEntry entry =
         store.getEntry(new AbstractEntry.EntryKey(id, type));
 

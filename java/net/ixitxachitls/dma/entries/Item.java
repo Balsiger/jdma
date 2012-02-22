@@ -42,7 +42,7 @@ import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
 // import net.ixitxachitls.dma.values.Multiple;
 // import net.ixitxachitls.dma.values.Name;
-// import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.dma.values.Number;
 // import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Text;
 // import net.ixitxachitls.dma.values.Value;

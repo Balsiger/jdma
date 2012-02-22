@@ -87,7 +87,7 @@ public class SaveActionServlet extends ActionServlet
     }
 
     /** The key of the entry/entries changed. */
-    protected @Nonnull AbstractEntry.EntryKey<? extends AbstractEntry> m_key;
+    protected @Nonnull AbstractEntry.EntryKey m_key;
 
     /** The owner of the entry/entries changed. */
     protected @Nullable AbstractEntry m_owner;
@@ -147,6 +147,7 @@ public class SaveActionServlet extends ActionServlet
      * @return a set with all the entries affected by this change
      *
      */
+    @SuppressWarnings("unchecked")
     public @Nonnull Set<AbstractEntry> entries(@Nonnull List<String> ioErrors)
     {
       Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
