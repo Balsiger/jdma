@@ -152,26 +152,23 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
 
     if(request.getParam("form") == null)
     {
-      String id = request.getParam("id");
-      if(id == null)
-        return new TextError(HttpServletResponse.SC_BAD_REQUEST, "no id given");
-
-
-      AbstractType<? extends AbstractEntry> type =
-        AbstractType.getTyped(request.getParam("type"));
-      if(type == null)
+      String keyName = request.getParam("key");
+      if(keyName == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "invalid type " + request.getParam("type"));
+                             "no key given");
+
+      AbstractEntry.EntryKey key = DMAServlet.extractKey(keyName);
+      if(keyName == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "invalid key given");
 
       DMADatastore store = (DMADatastore)DMADataFactory.get();
       @SuppressWarnings("unchecked")
-      AbstractEntry entry =
-        store.getEntry(new AbstractEntry.EntryKey(id, type));
+      AbstractEntry entry = store.getEntry(key);
 
       if(entry == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "could not find " + type + " " + id);
-
+                             "could not find " + keyName);
 
       String file = request.getParam("filename");
       String name = request.getParam("name");
@@ -197,9 +194,9 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
       }
 
       Map<String, BlobKey> blobs = m_blobs.getUploadedBlobs(inRequest);
-      BlobKey key = blobs.get("file");
+      BlobKey blobKey = blobs.get("file");
 
-      if(key == null)
+      if(blobKey == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "No file uploaded");
 
@@ -209,14 +206,13 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
 
       String fileType = URLConnection.getFileNameMap().getContentTypeFor(file);
 
-      store.addFile(entry, filename, fileType, key);
+      store.addFile(entry, filename, fileType, blobKey);
 
       Log.event(request.getUser().getName(), "upload",
-                "Uploaded " + fileType + " file " + file + " for " + type + " "
-              + id);
+                "Uploaded " + fileType + " file " + file + " for " + key);
 
 
-      String url =  m_image.getServingUrl(key);
+      String url =  m_image.getServingUrl(blobKey);
       writer
         .script("parent.window.edit.updateImage('file-" + filename + "', '"
                 + url + "=s300', 'util.link(event, \"" + url + "\");', "
@@ -228,7 +224,7 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
     else
     {
       // return the form to upload
-      if(request.getParam("id") == null || request.getParam("type") == null)
+      if(request.getParam("key") == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "invalid arguments given");
 
@@ -262,14 +258,8 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
 
         .begin("input")
         .attribute("type", "hidden")
-        .attribute("name", "id")
-        .attribute("value", request.getParam("id"))
-        .end("input")
-
-        .begin("input")
-        .attribute("type", "hidden")
-        .attribute("name", "type")
-        .attribute("value", request.getParam("type"))
+        .attribute("name", "key")
+        .attribute("value", request.getParam("key"))
         .end("input")
 
         .begin("input")

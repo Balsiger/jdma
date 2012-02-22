@@ -142,8 +142,8 @@ public abstract class DMAServlet extends BaseServlet
    * @return   the entry key for the path, if any
    *
    */
-  protected @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> extractKey
-                                               (@Nonnull String inPath)
+  protected static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
+    extractKey (@Nonnull String inPath)
   {
     String []paths = inPath.split("/");
     if(paths == null || paths.length == 0)
@@ -165,9 +165,8 @@ public abstract class DMAServlet extends BaseServlet
    *
    */
   @SuppressWarnings("unchecked") // creating wildard type
-  private @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> extractKey
-                                            (@Nonnull String []inPaths,
-                                            int inIndex)
+  private static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
+    extractKey(@Nonnull String []inPaths, int inIndex)
   {
     if(inPaths.length <= inIndex || inIndex < 1)
       return null;
