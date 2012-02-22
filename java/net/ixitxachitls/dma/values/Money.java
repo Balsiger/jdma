@@ -106,7 +106,7 @@ public class Money extends Units<Money>
    *
    */
   @Override
-public Money create()
+  public Money create()
   {
     return super.create(new Money());
   }
@@ -175,7 +175,7 @@ public Money create()
     new Group<Money, Long, String>(new Group.Extractor<Money, Long>()
       {
         @Override
-		public Long extract(Money inValue)
+        public Long extract(Money inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a value here");
@@ -317,7 +317,7 @@ public Money create()
    *
    */
   @Override
-protected @Nonnull String doGroup()
+  protected @Nonnull String doGroup()
   {
     return s_grouping.group(this);
   }

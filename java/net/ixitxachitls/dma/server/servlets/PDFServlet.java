@@ -100,7 +100,7 @@ public abstract class PDFServlet extends DMAServlet
    *
    */
   @Override
-protected @Nullable SpecialResult handle
+  protected @Nullable SpecialResult handle
     (@Nonnull DMARequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -159,7 +159,7 @@ protected @Nullable SpecialResult handle
       PDFServlet servlet = new PDFServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected PDFDocument createDocument(@Nonnull DMARequest inRequest)
+          protected PDFDocument createDocument(@Nonnull DMARequest inRequest)
           {
             PDFDocument test = new PDFDocument("test");
             test.setAlignment(net.ixitxachitls.output.Buffer.Alignment.left);

@@ -233,7 +233,8 @@ public final class ServerUtils
     /** The AppEngine TestHelper for the UserService. */
     protected LocalServiceTestHelper m_localServiceTestHelper;
 
-    @Override public void setUpTest()
+    @Override
+    public void setUpTest()
     {
       super.setUpTest();
       m_localServiceTestHelper = new LocalServiceTestHelper(
@@ -245,7 +246,8 @@ public final class ServerUtils
       m_localServiceTestHelper.setUp();
     }
 
-    @Override public void tearDown()
+    @Override
+    public void tearDown()
     {
       super.tearDown();
 
@@ -279,7 +281,7 @@ public final class ServerUtils
        *
        */
       @Override
-	public int read()
+      public int read()
       {
         return m_contents.read();
       }
@@ -306,7 +308,7 @@ public final class ServerUtils
        *
        */
       @Override
-	public void write(int inCharacter)
+      public void write(int inCharacter)
       {
         m_contents.write(inCharacter);
       }
@@ -318,7 +320,7 @@ public final class ServerUtils
        *
        */
       @Override
-	public String toString()
+      public String toString()
       {
         return m_contents.toString();
       }

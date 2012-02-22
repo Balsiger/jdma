@@ -166,7 +166,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -177,7 +177,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -188,7 +188,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -343,7 +343,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -354,7 +354,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -396,7 +396,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -407,7 +407,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -526,7 +526,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -557,7 +557,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
         return m_name;
     }
@@ -597,7 +597,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -608,7 +608,7 @@ public class BaseItem extends BaseEntry
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -783,7 +783,7 @@ public class BaseItem extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         @Override
-		public Long extract(Number inValue)
+        public Long extract(Number inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a number here");
@@ -818,7 +818,7 @@ public class BaseItem extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
       @Override
-	public Long extract(Number inValue)
+      public Long extract(Number inValue)
       {
         if(inValue == null)
           throw new IllegalArgumentException("must have a number here");
@@ -852,7 +852,7 @@ public class BaseItem extends BaseEntry
     new Formatter<ValueList<Multiple>>()
   {
     @Override
-	public @Nonnull Command format(@Nonnull ValueList<Multiple> inList)
+    public @Nonnull Command format(@Nonnull ValueList<Multiple> inList)
     {
       ArrayList<Command> elements = new ArrayList<Command>();
 
@@ -899,7 +899,7 @@ public class BaseItem extends BaseEntry
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         @Override
-		public @Nonnull Long extract(@Nonnull Distance inValue)
+        public @Nonnull Long extract(@Nonnull Distance inValue)
         {
           return (long)(inValue.getAsFeet().getValue() * 240);
         }
@@ -943,7 +943,7 @@ public class BaseItem extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
       @Override
-	public Long extract(Number inValue)
+      public Long extract(Number inValue)
       {
         if(inValue == null)
           throw new IllegalArgumentException("must have a number here");
@@ -1238,7 +1238,7 @@ public class BaseItem extends BaseEntry
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -1253,7 +1253,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

@@ -88,7 +88,7 @@ public class CloneIterator<T extends PublicCloneable> implements Iterator<T>
    *
    */
   @Override
-public boolean hasNext()
+  public boolean hasNext()
   {
     return m_values.hasNext();
   }
@@ -108,7 +108,7 @@ public boolean hasNext()
    *
    */
   @Override
-@SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
   public T next()
   {
     // the following produces an unchecked cast. It would be possible to
@@ -132,7 +132,7 @@ public boolean hasNext()
    *
    */
   @Override
-public void remove()
+  public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
                                             + "support removal of entries");
@@ -175,7 +175,7 @@ public void remove()
        *
        */
       @Override
-	  public Object clone()
+      public Object clone()
       {
         return new Value(m_name + "(cloned)");
       }
@@ -186,7 +186,7 @@ public void remove()
        * @return the converted string
        */
       @Override
-	  public String toString()
+      public String toString()
       {
         return m_name;
       }

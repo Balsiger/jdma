@@ -39,10 +39,8 @@ import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
@@ -77,46 +75,19 @@ public class SaveActionServlet extends ActionServlet
     /**
      * Create a change for one or multiple entries.
      *
-     * @param inID          entry id
-     * @param inType        entry type
-     * @param inParentID    parent entry id
-     * @param inParentType  parent entry type
-     * @param inFullType    the full type of the entries
-     * @param inData        the data the entry is stored
+     * @param inKey         the key to the entry
      * @param inOwner       the owner of the entry/entries
      *
      */
-    public Changes(@Nonnull String inID,
-                   @Nonnull AbstractType<? extends AbstractEntry> inType,
-                   @Nonnull String inParentID,
-                   @Nonnull AbstractType<? extends AbstractEntry> inParentType,
-                   @Nonnull String inFullType,
-                   @Nonnull DMAData inData,
+    public Changes(@Nonnull AbstractEntry.EntryKey inKey,
                    @Nonnull AbstractEntry inOwner)
     {
-      m_name = inID;
-      m_type = inType;
-      m_parentID = inParentID;
-      m_parentType = inParentType;
-      m_fullType = inFullType;
-      m_data = inData;
+      m_key = inKey;
       m_owner = inOwner;
     }
 
-    /** The id of the entry/entries changed. */
-    protected @Nonnull String m_name;
-
-    /** The type of entry/entries changed. */
-    protected @Nonnull AbstractType<? extends AbstractEntry> m_type;
-
-    /** The parent id of the entry/entries changed. */
-    protected @Nullable String m_parentID;
-
-    /** The parent type of entry/entries changed. */
-    protected @Nullable AbstractType<? extends AbstractEntry> m_parentType;
-
-    /** The data where the entry/entries is stored. */
-    protected @Nonnull DMAData m_data;
+    /** The key of the entry/entries changed. */
+    protected @Nonnull AbstractEntry.EntryKey<? extends AbstractEntry> m_key;
 
     /** The owner of the entry/entries changed. */
     protected @Nullable AbstractEntry m_owner;
@@ -126,9 +97,6 @@ public class SaveActionServlet extends ActionServlet
 
     /** Flag if creating a new value or not. */
     protected boolean m_create = false;
-
-    /** The full type of the entriy/entries changed. */
-    protected @Nonnull String m_fullType;
 
     /** A flag if multiple entries are affected by the change. */
     protected boolean m_multiple = false;
@@ -144,13 +112,9 @@ public class SaveActionServlet extends ActionServlet
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
-      String parent = "";
-      if(m_parentID != null || m_parentType != null)
-        parent = " [" + m_parentID + "/" + m_parentType + "]";
-      return m_name + "/" + m_type + parent + " ("
-        + (m_owner == null ? "no owner" : m_owner.getName())
+      return m_key + " (" + (m_owner == null ? "no owner" : m_owner.getName())
         + "/" + m_file + (m_multiple ? ", single" : ", multiple") + "):"
         + m_values;
     }
@@ -171,7 +135,7 @@ public class SaveActionServlet extends ActionServlet
       else
         m_values.put(inKey, inValue);
 
-      if(inKey.indexOf("/") >= 0)
+      if(inKey.indexOf("=") >= 0)
         m_multiple = true;
     }
 
@@ -192,29 +156,30 @@ public class SaveActionServlet extends ActionServlet
         String []parts = m_values.keySet().iterator().next().split("/");
         String index = parts[0];
         String value = parts[1];
-        entries.addAll(m_data.getIndexEntries(index, m_type, value, 0, 0));
+        entries.addAll(DMADataFactory.get().getIndexEntries(index,
+                                                            m_key.getType(),
+                                                            m_key.getParent(),
+                                                            value, 0, 0));
       }
       else
       {
-        AbstractEntry entry =
-          m_data.getEntry(AbstractEntry.createKey(m_name, m_type,
-                                                  m_parentID, m_parentType));
+        AbstractEntry entry = DMADataFactory.get().getEntry(m_key);
 
         if(entry == null && m_create)
         {
           // create a new entry for filling out
           Log.event(m_owner.getName(), "create",
-                    "creating " + m_type + " entry '" + m_name + "'");
+                    "creating " + m_key.getType() + " entry '" + m_key.getID()
+                    + "'");
 
-          entry = m_type.create(m_name);
+          entry = m_key.getType().create(m_key.getID());
           if(entry != null)
-            entry.setOwner(m_owner);
+            entry.updateKey(m_key);
         }
 
         if(entry == null)
         {
-          String error = "could not find " + m_type + " " + m_name
-            + " for saving";
+          String error = "could not find " + m_key + " for saving";
           Log.warning(error);
           ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
         }
@@ -269,7 +234,7 @@ public class SaveActionServlet extends ActionServlet
    *
    */
   @Override
-@SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked")
   protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
                                      @Nonnull HttpServletResponse inResponse)
   {
@@ -283,7 +248,7 @@ public class SaveActionServlet extends ActionServlet
           if(!entry.canEdit(keyValue.getKey(), inRequest.getUser()))
           {
             String error = "not allowed to edit " + keyValue.getKey() + " in "
-              + change.m_type + " " + entry.getName();
+              + change.m_key;
             Log.warning(error);
             errors.add("gui.alert(" + Encodings.toJSString(error) + ");");
             continue;
@@ -293,13 +258,13 @@ public class SaveActionServlet extends ActionServlet
           if(rest != null)
           {
             Log.warning("Could not fully parse " + keyValue.getKey()
-                        + " value for " + change.m_type + " " + change.m_name
-                        + ": '" + rest + "'");
-            errors.add("edit.unparsed("
-                       + Encodings.toJSString(change.m_fullType) + ", "
-                       + Encodings.toJSString(change.m_name) + ", "
-                       + Encodings.toJSString(keyValue.getKey()) + ", "
-                       + Encodings.toJSString(rest) + ");");
+                        + " value for " + change.m_key + ": '" + rest + "'");
+            errors.add
+              ("edit.unparsed("
+               + Encodings.toJSString(change.m_key.getType().toString()) + ", "
+               + Encodings.toJSString(change.m_key.getID()) + ", "
+               + Encodings.toJSString(keyValue.getKey()) + ", "
+               + Encodings.toJSString(rest) + ");");
           }
           else
             entries.add(entry);
@@ -356,57 +321,36 @@ public class SaveActionServlet extends ActionServlet
      @Nonnull Multimap<String, String> inParams,
      @Nonnull List<String> ioErrors)
   {
-    Map<String, Changes> changes = new HashMap<String, Changes>();
+    Map<AbstractEntry.EntryKey<? extends AbstractEntry>, Changes> changes =
+      new HashMap<AbstractEntry.EntryKey<? extends AbstractEntry>, Changes>();
     for(Map.Entry<String, String> param : inParams.entries())
     {
       String []parts = param.getKey().split("::");
 
       // not a real key value pair
-      if(parts.length != 3)
+      if(parts.length != 2)
         continue;
 
-      String fullType = parts[0];
-      String []types =
-        Strings.getPatterns(fullType, "/(?:([^/]+)/([^/]+)/)?([^/]+)$");
+      String keyName = parts[0];
+      String valueName = parts[1];
 
-      String typeName = null;
-      String parentID = null;
-      AbstractType<? extends AbstractEntry> parentType = null;
-
-      if(types.length > 0)
+      AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(keyName);
+      if(key == null)
       {
-        typeName = types[2];
-        parentID = types[1];
-        if(types[0] != null)
-          parentType = AbstractType.getLinked(types[0]);
-      }
-
-      AbstractType<? extends AbstractEntry> type = null;
-      if(typeName != null)
-        type = AbstractType.getLinked(typeName);
-      else
-        type = AbstractType.getLinked(fullType);
-
-      String id = parts[1];
-      String key = parts[2];
-
-      if(type == null)
-      {
-        String error = "invalid type '" + fullType + "' ignored";
+        String error = "invalid entry '" + keyName + "' ignored";
         Log.warning(error);
         ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
         continue;
       }
 
-      Changes change = changes.get(id + ":" + fullType);
+      Changes change = changes.get(key);
       if(change == null)
       {
-        change = new Changes(id, type, parentID, parentType, fullType,
-                             DMADataFactory.get(), inRequest.getUser());
-        changes.put(id + ":" + fullType, change);
+        change = new Changes(key, inRequest.getUser());
+        changes.put(key, change);
       }
 
-      change.set(key, param.getValue());
+      change.set(valueName, param.getValue());
     }
 
     return changes.values();
@@ -441,7 +385,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("/base entry::test::name", "guru");
+        ("/base entry/test::name", "guru");
 
       EasyMock.expect(user.getName()).andStubReturn("user");
       EasyMock.expect(request.getUser()).andStubReturn(user);
@@ -482,7 +426,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("/base entry::test::name", "guru");
+        ("/base entry/test::name", "guru");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -494,15 +438,15 @@ public class SaveActionServlet extends ActionServlet
 
       assertEquals("result",
                    "gui.alert('Parse error for values');"
-                   + "gui.alert('not allowed to edit name in base entry "
-                   + "test');\n"
+                   + "gui.alert('not allowed to edit name in "
+                   + "/base entry/test');\n"
                    + "gui.alert('No values to save');",
                    servlet.doAction(request, response));
 
       assertEquals("name", "test", entry.getName());
 
-      m_logger.addExpected("WARNING: not allowed to edit name in base entry "
-                           + "test");
+      m_logger.addExpected("WARNING: not allowed to edit name in "
+                           + "/base entry/test");
       EasyMock.verify(request, response, user);
     }
 
@@ -524,7 +468,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("/base entry::guru::name", "guru");
+        ("/base entry/guru::name", "guru");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -538,13 +482,14 @@ public class SaveActionServlet extends ActionServlet
 
       assertEquals("result",
                    "gui.alert('Parse error for values');"
-                   + "gui.alert('could not find base entry guru for saving');\n"
+                   + "gui.alert('could not find /base entry/guru for "
+                   + "saving');\n"
                    + "gui.alert('No values to save');",
                    servlet.doAction(request, response));
 
       assertEquals("name", "test", entry.getName());
 
-      m_logger.addExpected("WARNING: could not find base entry guru for "
+      m_logger.addExpected("WARNING: could not find /base entry/guru for "
                            + "saving");
       EasyMock.verify(request, response, user);
     }
@@ -567,7 +512,7 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("guru::test::name", "guru");
+        ("guru/test::name", "guru");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -580,13 +525,13 @@ public class SaveActionServlet extends ActionServlet
 
       assertEquals("result",
                    "gui.alert('Parse error for values');"
-                   + "gui.alert('invalid type \\'guru\\' ignored');\n"
+                   + "gui.alert('invalid entry \\'guru/test\\' ignored');\n"
                    + "gui.alert('No values to save');",
                    servlet.doAction(request, response));
 
       assertEquals("name", "test", entry.getName());
 
-      m_logger.addExpected("WARNING: invalid type 'guru' ignored");
+      m_logger.addExpected("WARNING: invalid entry 'guru/test' ignored");
       EasyMock.verify(request, response, user);
     }
 
@@ -607,8 +552,8 @@ public class SaveActionServlet extends ActionServlet
       BaseCharacter user = EasyMock.createMock(BaseCharacter.class);
       com.google.common.collect.Multimap<String, String> params =
         com.google.common.collect.ImmutableMultimap.of
-        ("/base entry::test::guru", "guru",
-         "/base entry::test::description", "\"test\"");
+        ("/base entry/test::guru", "guru",
+         "/base entry/test::description", "\"test\"");
 
       EasyMock.expect(request.getUser()).andStubReturn(user);
       EasyMock.expect(request.getParams()).andStubReturn(params);
@@ -625,13 +570,13 @@ public class SaveActionServlet extends ActionServlet
                    + "gui.info('The following entries were updated:"
                    + "<p>base entry test'); "
                    + "util.link(null, '/entry/test');"
-                   + "edit.unparsed('/base entry', 'test', 'guru', 'guru');",
+                   + "edit.unparsed('base entry', 'test', 'guru', 'guru');",
                    servlet.doAction(request, response));
 
       assertEquals("name", "test", entry.getName());
 
       m_logger.addExpected("WARNING: Could not fully parse guru value for "
-                           + "base entry test: 'guru'");
+                           + "/base entry/test: 'guru'");
       EasyMock.verify(request, response, user);
     }
 
@@ -652,35 +597,31 @@ public class SaveActionServlet extends ActionServlet
 
       Multimap<String, String> params =
         com.google.common.collect.ImmutableSetMultimap.<String, String>builder()
-        .put("/base entry::id::name", "guru")
-        .put("/base entry::id::description", "\"text\"")
-        .put("/base entry::id2::name", "guru2")
-        .put("/base entry::id2::file", "file")
-        .put("/base entry::id2::worlds", "wolrd")
-        .put("something/base entry::my-id::name", "name guru")
-        .put("/user/me/base entry::id::key", "value")
-        .put("/user/me/base entry::id::file", "file")
-        .put("/user/me/base entry::id::key2", "value2")
-        .put("/base entry::*/Person::key", "value")
-        .put("/base entry::*/Something::key", "value")
+        .put("/base entry/id::name", "guru")
+        .put("/base entry/id::description", "\"text\"")
+        .put("/base entry/id2::name", "guru2")
+        .put("/base entry/id2::file", "file")
+        .put("/base entry/id2::worlds", "wolrd")
+        .put("something/base entry/my-id::name", "name guru")
+        .put("/character/me/base entry/id::key", "value")
+        .put("/character/me/base entry/id::file", "file")
+        .put("/character/me/base entry/id::key2", "value2")
+        .put("/base entry/*=Person::key", "value")
+        .put("/base entry/*=Something::key", "value")
         .build();
       List<String> errors = new ArrayList<String>();
       Collection<Changes> changes = servlet.preprocess(request, params, errors);
 
-      DMAData data = DMADataFactory.get();
       java.util.Iterator<Changes> i = changes.iterator();
-      checkChanges(i.next(), "my-id", null, "something/base entry",
-                   data, user, "name", "name guru");
-      checkChanges(i.next(), "id", "file", "/user/me/base entry", data,
-                   user, "key", "value", "key2", "value2");
-      checkChanges(i.next(), "id2", "file", "/base entry", data, user,
-                   "name", "guru2", "worlds", "wolrd");
-      checkChanges(i.next(), "id", null, "/base entry", data, user,
+      checkChanges(i.next(), "/base entry/*=Something", null, "key", "value");
+      checkChanges(i.next(), "/base entry/id", null,
                    "name", "guru", "description", "\"text\"");
-      checkChanges(i.next(), "*/Something", null, "/base entry",
-                   data, user, "key", "value");
-      checkChanges(i.next(), "*/Person", null, "/base entry",
-                   data, user, "key", "value");
+      checkChanges(i.next(), "/base entry/id2", "file",
+                   "name", "guru2", "worlds", "wolrd");
+      checkChanges(i.next(), "/character/me/base entry/id", "file",
+                   "key", "value", "key2", "value2");
+      checkChanges(i.next(), "/base entry/my-id", null, "name", "name guru");
+      checkChanges(i.next(), "/base entry/*=Person", null, "key", "value");
       assertFalse(i.hasNext());
 
       EasyMock.verify(request, user);
@@ -689,23 +630,16 @@ public class SaveActionServlet extends ActionServlet
     /** Check assertions for changes.
      *
      * @param inChanges   the changes to check
-     * @param inName      the expected name of the entry changed
+     * @param inKey       the expected key of the entry changed
      * @param inFile      the expected file for the entry changed
-     * @param inFullType  the expected full type for the entry changed
-     * @param inData      the expected data object for the entry changed
-     * @param inOwner     the expected owner for the entry changed
      * @param inKeyValues the expected key value pairs for the entry changed
      *
      */
-    private void checkChanges(Changes inChanges, String inName,
-                              String inFile, String inFullType, DMAData inData,
-                              AbstractEntry inOwner, String ... inKeyValues)
+    private void checkChanges(Changes inChanges, String inKey, String inFile,
+                              String ... inKeyValues)
     {
-      assertEquals("name", inName, inChanges.m_name);
       assertEquals("file", inFile, inChanges.m_file);
-      assertEquals("full type", inFullType, inChanges.m_fullType);
-      assertEquals("data", inData, DMADataFactory.get());
-      assertEquals("owner", inOwner, inChanges.m_owner);
+      assertEquals("key", inKey, inChanges.m_key.toString());
 
       assertEquals("number of values", inChanges.m_values.keySet().size(),
                    inKeyValues.length / 2);

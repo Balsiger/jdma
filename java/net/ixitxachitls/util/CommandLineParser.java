@@ -155,7 +155,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       if(m_long != null)
         return m_long;
@@ -232,7 +232,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       if(m_present)
         return s_longStart + super.toString();
@@ -253,7 +253,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       m_present = true;
 
@@ -271,7 +271,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public synchronized boolean hasValue()
+    public synchronized boolean hasValue()
     {
       return m_present;
     }
@@ -327,7 +327,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
       {
@@ -359,7 +359,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public boolean hasValue()
+    public boolean hasValue()
     {
       return m_value != null;
     }
@@ -395,7 +395,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -454,7 +454,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
         m_value = inArguments[inIndex];
@@ -474,7 +474,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public boolean hasValue()
+    public boolean hasValue()
     {
       return m_value != null;
     }
@@ -503,7 +503,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -565,7 +565,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public synchronized int parse(String []inArguments, int inIndex)
+    public synchronized int parse(String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
         m_values = inArguments[inIndex].split("\\s*,\\s*");
@@ -585,7 +585,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public boolean hasValue()
+    public boolean hasValue()
     {
       return m_values != null;
     }
@@ -617,7 +617,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + s_commaJoiner.join(m_values);
@@ -675,7 +675,7 @@ public class CommandLineParser
      *
      */
     @Override
-	@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public synchronized int parse(@Nonnull String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
@@ -696,7 +696,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public synchronized boolean hasValue()
+    public synchronized boolean hasValue()
     {
       return m_value != null;
     }
@@ -730,7 +730,7 @@ public class CommandLineParser
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -821,7 +821,7 @@ public class CommandLineParser
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     List<String> result = new ArrayList<String>();
     for(Option option : m_longs.values())

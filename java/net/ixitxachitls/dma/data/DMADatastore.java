@@ -198,7 +198,7 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-public @Nullable <T extends AbstractEntry> T getEntry
+  public @Nullable <T extends AbstractEntry> T getEntry
                       (@Nonnull AbstractEntry.EntryKey<T> inKey)
   {
     Log.debug("getting " + inKey);
@@ -223,7 +223,7 @@ public @Nullable <T extends AbstractEntry> T getEntry
    *
    */
   @Override
-@SuppressWarnings("unchecked") // casting return
+  @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> T
                       getEntry(@Nonnull AbstractType<T> inType,
                                @Nonnull String inKey,
@@ -307,7 +307,7 @@ public @Nullable <T extends AbstractEntry> T getEntry
    * @return      the entity found, if any
    *
    */
-  private @Nullable Entity getEntity(@Nonnull Key inKey)
+  public @Nullable Entity getEntity(@Nonnull Key inKey)
   {
     Entity entity = (Entity)s_cache.get(inKey);
 
@@ -541,6 +541,7 @@ public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
    * @param    inIndex  the name of the index to get
    * @param    inType   the type of entries to return for the index (app engine
    *                    can only do filter on queries with kind)
+   * @param    inParent the parent key, if any
    * @param    inGroup  the group to get entries for
    * @param    inStart  the 0 based index of the first entry to return
    * @param    inSize   the maximal number of entries to return
@@ -549,15 +550,20 @@ public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
    *
    */
   @Override
-@SuppressWarnings("unchecked") // need to cast return value for generics
+  @SuppressWarnings("unchecked") // need to cast return value for generics
   public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-                     (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
-                      @Nonnull String inGroup, int inStart, int inSize)
+    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
+     @Nonnull String inGroup, int inStart, int inSize)
   {
     Log.debug("getting index entries for " + inIndex);
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
-    Query query = new Query(inType.toString());
+    Query query;
+    if(inParent == null)
+      query = new Query(inType.toString());
+    else
+      query = new Query(inType.toString(), convert(inParent));
     FetchOptions options =
       FetchOptions.Builder.withOffset(inStart);
     if(inSize > 0)
@@ -706,7 +712,7 @@ public boolean remove
    *
    */
   @Override
-public boolean update(@Nonnull AbstractEntry inEntry)
+  public boolean update(@Nonnull AbstractEntry inEntry)
   {
     Log.debug("Storing data for " + inEntry.getType() + " "
               + inEntry.getName());

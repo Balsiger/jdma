@@ -363,7 +363,7 @@ public class BaseEntry extends AbstractEntry
    *
    */
   @Override
-public boolean isBase()
+  public boolean isBase()
   {
     return true;
   }
@@ -492,7 +492,7 @@ public boolean isBase()
    *
    */
   @Override
-public @Nonnull String getShortDescription()
+  public @Nonnull String getShortDescription()
   {
     return m_short.get();
   }
@@ -1284,7 +1284,7 @@ public @Nonnull String getShortDescription()
 
      /** Testing reading. */
     @Override
-	@org.junit.Test
+    @org.junit.Test
     public void read()
     {
       ParseReader reader =

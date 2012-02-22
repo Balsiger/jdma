@@ -178,7 +178,7 @@ public abstract class AsyncExecutor<T> extends Thread
    *
    */
   @Override
-public void run()
+  public void run()
   {
     try
     {
@@ -224,7 +224,7 @@ public void run()
       AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 4)
         {
           @Override
-		public void execute(String inValue)
+          public void execute(String inValue)
           {
             while(!m_done)
               ;
@@ -276,7 +276,7 @@ public void run()
       AsyncExecutor<String> executor = new AsyncExecutor<String>(0, 0, 2)
         {
           @Override
-		public void execute(String inValue)
+          public void execute(String inValue)
           {
             while(!m_done)
               ;

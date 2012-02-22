@@ -79,7 +79,7 @@ public class Analytics
      *
      */
     @Override
-	public void execute(String inURL)
+    public void execute(String inURL)
     {
       try
       {

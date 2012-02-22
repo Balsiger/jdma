@@ -407,7 +407,7 @@ public void print(@Nonnull Object inObject, Log.Type inType)
        *
        */
       @Override
-	public void write(byte []inText)
+      public void write(byte []inText)
       {
         m_buffer.append(new String(inText));
       }
@@ -419,14 +419,14 @@ public void print(@Nonnull Object inObject, Log.Type inType)
        *
        */
       @Override
-	public void write(int inChar)
+      public void write(int inChar)
       {
         m_buffer.append((char)inChar);
       }
 
       /** Flush the buffer. */
       @Override
-	public void flush()
+      public void flush()
       {
         // nothing necessary
       }

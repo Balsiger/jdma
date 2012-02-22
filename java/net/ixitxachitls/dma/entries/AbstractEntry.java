@@ -278,10 +278,9 @@ public class AbstractEntry extends ValueGroup
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
-      return m_type + "/" + m_id
-        + (m_parent != null ? " (" + m_parent + ")" : "");
+      return (m_parent != null ? m_parent : "") + "/" + m_type + "/" + m_id;
     }
 
     /**
@@ -292,7 +291,7 @@ public class AbstractEntry extends ValueGroup
      * @return true if they are equal, false if not
      */
     @Override
-	public boolean equals(Object inOther)
+    public boolean equals(Object inOther)
     {
       if(this == inOther)
         return true;
@@ -315,7 +314,7 @@ public class AbstractEntry extends ValueGroup
      * @return the hash value
      */
     @Override
-	public int hashCode()
+    public int hashCode()
     {
       return toString().hashCode();
     }
@@ -521,10 +520,11 @@ public class AbstractEntry extends ValueGroup
   //----- base names -------------------------------------------------------
 
   // Cannot use a static formatter here, as it depends on the
-  // real type; thus we also need to init this in the constructor after we have
+  // real type; thus we need to init this in the constructor after we have
   // the type.
   /** The base names. */
   @Key("base")
+  @PrintUndefined
   protected @Nonnull ValueList<Name> m_base;
 
   //........................................................................
@@ -661,6 +661,22 @@ public class AbstractEntry extends ValueGroup
 
   //-------------------------------------------------------------- accessors
 
+  //-------------------------------- getKey --------------------------------
+
+  /**
+   * Get the key uniqueliy identifying this entry.
+   *
+   * @return   the key for the entry
+   *
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public @Nonnull EntryKey<? extends AbstractEntry> getKey()
+  {
+    return new EntryKey(getName(), getType());
+  }
+
+  //........................................................................
   //----------------------------- getKeyWidth ------------------------------
 
   /**
@@ -699,7 +715,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-public @Nullable Variable getVariable(@Nonnull String inKey)
+  public @Nullable Variable getVariable(@Nonnull String inKey)
   {
     Variable result = super.getVariable(inKey);
 
@@ -719,7 +735,7 @@ public @Nullable Variable getVariable(@Nonnull String inKey)
    *
    */
   @Override
-public @Nonnull String getName()
+  public @Nonnull String getName()
   {
     if(m_name.isDefined())
       return m_name.get();
@@ -841,7 +857,7 @@ public @Nonnull String getName()
    *
    */
   @Override
-@Deprecated
+  @Deprecated
   public @Nonnull String getID()
   {
     return getName();
@@ -860,20 +876,6 @@ public @Nonnull String getName()
   public @Nonnull AbstractType<? extends AbstractEntry> getType()
   {
     return m_type;
-  }
-
-  //........................................................................
-  //-------------------------------- getKey --------------------------------
-
-  /**
-   * Get the key uniqueliy identifying this entry.
-   *
-   * @return   the key
-   *
-   */
-  public @Nonnull EntryKey<? extends AbstractEntry> getKey()
-  {
-    throw new UnsupportedOperationException("must be derived");
   }
 
   //........................................................................
@@ -1399,7 +1401,7 @@ public @Nonnull String getName()
    */
 //  private void addBaseValue(@Nonnull List<Value> ioValues,
 //                            @Nonnull List<List<BaseEntry>> ioEntries,
-//                            @Nonnull Value inValue, @Nonnull BaseEntry inEntry)
+//                          @Nonnull Value inValue, @Nonnull BaseEntry inEntry)
 //  {
 //    if(inValue instanceof ValueList)
 //      for(Value value : (ValueList<? extends Value>)inValue)
@@ -1569,7 +1571,7 @@ public @Nonnull String getName()
    *
    */
   @Override
-public boolean equals(Object inOther)
+  public boolean equals(Object inOther)
   {
     if(this == inOther)
       return true;
@@ -1652,7 +1654,7 @@ public boolean equals(Object inOther)
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -2060,10 +2062,12 @@ public @Nonnull String toString()
         .withDM(true);
 
     if("as pdf".equals(inKey))
+    {
       return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
                                               getName(), getName() + ".pdf",
                                               "doc-link"), null, "as pdf")
         .withDM(true);
+    }
 
     if("as text".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-txt.png",
@@ -2309,7 +2313,7 @@ public @Nonnull String toString()
    *
    */
   @Override
-public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
   {
     // we have to treat the name specially, as it is not a readable value
     if("name".equals(inKey))
@@ -2856,23 +2860,23 @@ public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
     }
     catch(ClassNotFoundException e)
     {
-      Log.warning("could not find class for attachment " + name
-                  + ", attachment ignored");
+      Log.warning("could not find class for extension " + name
+                  + ", extension ignored");
     }
     catch(InstantiationException e)
     {
-      Log.warning("could not instantiate class for attachment " + name
-                  + ", attachment ignored");
+      Log.warning("could not instantiate class for extension " + name
+                  + ", extension ignored");
     }
     catch(IllegalAccessException e)
     {
-      Log.warning("could access constructor for attachment " + name
-                  + ", attachment ignored");
+      Log.warning("could access constructor for extension " + name
+                  + ", extension ignored");
     }
     catch(java.lang.reflect.InvocationTargetException e)
     {
-      Log.warning("could not invoke constructor for attachment " + name
-                  + ", attachment ignored (" + e.getCause() + ")");
+      Log.warning("could not invoke constructor for extension " + name
+                  + ", extension ignored (" + e.getCause() + ")");
     }
 
     return null;
@@ -3374,10 +3378,11 @@ public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
         new AbstractEntry("just a test",
                           new AbstractType.Test.TestType<AbstractEntry>
                           (AbstractEntry.class)) {
+          @SuppressWarnings("unchecked")
           @Override
-          public @Nonnull EntryKey<? extends AbstractEntry> getKey()
+          public @Nonnull EntryKey<AbstractEntry> getKey()
           {
-            return new EntryKey<BaseEntry>("guru", BaseEntry.TYPE);
+            return new EntryKey("guru", BaseEntry.TYPE);
           }
         };
 
@@ -3617,7 +3622,7 @@ public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
     /** Testing reading. */
     //@org.junit.Test
     @Override
-	public void read()
+    public void read()
     {
       ParseReader reader =
         new ParseReader(new java.io.StringReader("    abstract entry just a "

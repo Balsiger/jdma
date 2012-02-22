@@ -249,8 +249,8 @@
         ^/user/me$
         /_entry/base character/@user
 
-        user:^/$
-        /main
+        ^/$
+        user:/main
 
         ^/user/([^/]+)/products$
         /_entries/base character/$1/product
@@ -264,7 +264,13 @@
         ^/campaign/([^/]+)/([^/]+)/character/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/character/$3
 
-        ^/user/([^/]+)$
+        ^/campaign/([^/]+)/([^/]+)/items
+        /_entries/base campaign/$1/campaign/$2/item
+
+        ^/campaign/([^/]+)/([^/]+)/item/([^/]+)$
+        /_entry/base campaign/$1/campaign/$2/item/$3
+
+       ^/user/([^/]+)$
         /_entry/base character/$1
 
         ^/product/([^/]+)$

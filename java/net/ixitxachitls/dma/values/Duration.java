@@ -109,7 +109,7 @@ public class Duration extends Units<Duration>
    *
    */
   @Override
-public @Nonnull Duration create()
+  public @Nonnull Duration create()
   {
     return super.create(new Duration());
   }
@@ -149,7 +149,7 @@ public @Nonnull Duration create()
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
         @Override
-		public Long extract(@Nonnull Duration inValue)
+        public Long extract(@Nonnull Duration inValue)
         {
           return (long)inValue.getAsSeconds().getValue();
         }
@@ -167,7 +167,7 @@ public @Nonnull Duration create()
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
         @Override
-		public Long extract(@Nonnull Duration inValue)
+        public Long extract(@Nonnull Duration inValue)
         {
           return (long)inValue.getAsRounds().getValue() * 10000;
         }
@@ -304,7 +304,7 @@ public @Nonnull Duration create()
    *
    */
   @Override
-public @Nonnull String doGroup()
+  public @Nonnull String doGroup()
   {
     if(isMetric())
       return s_timeGrouping.group(this);

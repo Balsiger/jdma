@@ -98,7 +98,7 @@ public class FilteredIterator<T> implements Iterator<T>
    *
    */
     @Override
-	public boolean hasNext()
+    public boolean hasNext()
     {
       if(m_next != null)
         return true;
@@ -130,7 +130,7 @@ public class FilteredIterator<T> implements Iterator<T>
    *
    */
   @Override
-public @Nullable T next()
+  public @Nullable T next()
   {
     if(!hasNext())
       throw new java.util.NoSuchElementException("already at end!");
@@ -157,7 +157,7 @@ public @Nullable T next()
    *
    */
   @Override
-public void remove()
+  public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
                                             + "support the removal of "
@@ -190,7 +190,7 @@ public void remove()
         new FilteredIterator<String>(list.iterator(), new Filter<String>()
           {
             @Override
-			public boolean accept(@Nullable String inEntry)
+            public boolean accept(@Nullable String inEntry)
             {
               if(inEntry == null)
                 return false;

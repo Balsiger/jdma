@@ -1345,6 +1345,20 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //-------------------------------- getKey --------------------------------
+
+  /**
+   * Get the key uniqueliy identifying this entry.
+   *
+   * @return   the key for the entry
+   *
+   */
+  public @Nonnull AbstractEntry.EntryKey<? extends AbstractEntry> getKey()
+  {
+    throw new UnsupportedOperationException("must be derived");
+  }
+
+  //........................................................................
 
   //-------------------------------- isBase --------------------------------
 
@@ -2236,7 +2250,7 @@ public abstract class ValueGroup implements Changeable
        * @param inState the new state
        */
       @Override
-	  public void changed(boolean inState)
+      public void changed(boolean inState)
       {
         m_changed = inState;
       }
@@ -2246,7 +2260,7 @@ public abstract class ValueGroup implements Changeable
        * @return the id
        */
       @Override
-	  public String getID()
+      public String getID()
       {
         return "Test-ID";
       }
@@ -2256,7 +2270,7 @@ public abstract class ValueGroup implements Changeable
        * @return the name
        */
       @Override
-	  public String getName()
+      public String getName()
       {
         return "Test-Name";
       }

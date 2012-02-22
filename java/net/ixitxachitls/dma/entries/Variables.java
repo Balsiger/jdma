@@ -140,7 +140,7 @@ public class Variables implements Iterable<Variable>
    *
    */
   @Override
-public Iterator<Variable> iterator()
+  public Iterator<Variable> iterator()
   {
     return m_variables.values().iterator();
   }
@@ -184,7 +184,7 @@ public Iterator<Variable> iterator()
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     return Strings.toString(m_variables.entrySet().iterator(), ", ", "<empty>");
   }

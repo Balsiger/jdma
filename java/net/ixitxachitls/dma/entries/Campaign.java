@@ -63,7 +63,6 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 public class Campaign extends Entry<BaseCampaign>
-                      //implements CampaignData, Iterable<Entry>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -482,7 +481,6 @@ protected @Nonnull ListPrint getListPrint()
                        new Link(new BaseCommand(base.getName()),
                                 base.getPath()),
                        ")"), getName(), "name")
-          .withPlayerEditable(true)
           .withEditable(true)
           .withEditType("name");
     }
@@ -519,10 +517,26 @@ protected @Nonnull ListPrint getListPrint()
    *
    */
   @Override
-public @Nonnull String getPath()
+  public @Nonnull String getPath()
   {
     return "/" + BaseCampaign.TYPE.getLink() + "/" + m_base.get(0).get()
       + "/" + getName();
+  }
+
+  //........................................................................
+  //----------------------------- getEditType ------------------------------
+
+  /**
+   * Get the path to this entry.
+   *
+   * @return      the path to read this entry
+   *
+   */
+  @Override
+  public @Nonnull String getEditType()
+  {
+    return "/" + BaseCampaign.TYPE + "/" + m_base.get(0).get()
+      + "/" + Campaign.TYPE + "/" + getName();
   }
 
   //........................................................................

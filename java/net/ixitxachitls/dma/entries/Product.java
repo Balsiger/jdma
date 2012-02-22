@@ -96,7 +96,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -107,7 +107,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -156,7 +156,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -167,7 +167,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -339,7 +339,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -354,7 +354,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -369,7 +369,7 @@ protected @Nonnull ListPrint getListPrint()
    *
    */
   @Override
-public @Nonnull String getPath()
+  public @Nonnull String getPath()
   {
     return "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner.get() + "/"
       + getType().getLink() + "/" + getName();
@@ -385,7 +385,7 @@ public @Nonnull String getPath()
    *
    */
   @Override
-public @Nonnull String [] getNavigation()
+  public @Nonnull String [] getNavigation()
   {
     return new String [] {
       BaseCharacter.TYPE.getLink(),
@@ -411,7 +411,7 @@ public @Nonnull String [] getNavigation()
    *
    */
   @Override
-public @Nonnull String [] getListNavigation()
+  public @Nonnull String [] getListNavigation()
   {
     return new String [] {
       BaseCharacter.TYPE.getLink(),
@@ -434,7 +434,7 @@ public @Nonnull String [] getListNavigation()
    *
    */
   @Override
-public @Nonnull String getEditType()
+  public @Nonnull String getEditType()
   {
     return "/user/" + m_owner.get() + "/" + super.getEditType();
   }
@@ -453,7 +453,7 @@ public @Nonnull String getEditType()
    *
    */
   @Override
-public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
     if(inUser == null)
       return false;
@@ -1024,7 +1024,7 @@ public boolean isDM(@Nullable BaseCharacter inUser)
    *
    */
   @Override
-public void setOwner(@Nonnull AbstractEntry inOwner)
+  public void setOwner(@Nonnull AbstractEntry inOwner)
   {
     if(inOwner instanceof BaseCharacter)
       setOwner((BaseCharacter)inOwner);

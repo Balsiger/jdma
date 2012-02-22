@@ -214,9 +214,9 @@ protected @Nonnull Object
                    + "{\\editable[Changing the name will not change "
                    + "any references to entries with that name, thus leaving "
                    + "these references dangling. You will have to update these "
-                   + "manually.]{test}{base entry}{test}{name}{test}{name}}"
+                   + "manually.]{/base entry/test}{test}{name}{test}{name}}"
                    + ",  middle , "
-                   + "\\editable{test}{base entry}"
+                   + "\\editable{/base entry/test}"
                    + "{\\baseCommand{desc}}{description}"
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, user)).getArguments()

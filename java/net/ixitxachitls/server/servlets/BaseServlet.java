@@ -88,7 +88,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public @Nonnull String toString();
+    public @Nonnull String toString();
   }
 
   //........................................................................
@@ -129,7 +129,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public void send(@Nonnull HttpServletResponse inResponse)
+    public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.sendError(m_code, m_message);
@@ -142,7 +142,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_code + ": " + m_message;
     }
@@ -186,7 +186,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public void send(@Nonnull HttpServletResponse inResponse)
+    public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.addHeader("Content-Type", "text/html");
@@ -216,7 +216,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_code + ": " + m_title + "(" + m_message + ")";
     }
@@ -244,7 +244,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public void send(@Nonnull HttpServletResponse inResponse)
+    public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED, "");
@@ -260,7 +260,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return "not-modified";
     }
@@ -296,7 +296,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public void send(@Nonnull HttpServletResponse inResponse)
+    public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.sendRedirect(m_destination);
@@ -312,7 +312,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return "redirect to " + m_destination;
     }
@@ -376,7 +376,7 @@ public abstract class BaseServlet extends HttpServlet
    *
    */
   @Override
-public void doGet(@Nonnull HttpServletRequest inRequest,
+  public void doGet(@Nonnull HttpServletRequest inRequest,
                     @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
@@ -402,7 +402,7 @@ public void doGet(@Nonnull HttpServletRequest inRequest,
    *
    */
   @Override
-public void doPost(@Nonnull HttpServletRequest inRequest,
+  public void doPost(@Nonnull HttpServletRequest inRequest,
                      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
@@ -491,7 +491,7 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected SpecialResult handle
+          protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {
@@ -530,7 +530,7 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected SpecialResult handle
+          protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {
@@ -573,7 +573,7 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected SpecialResult handle
+          protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {
@@ -610,7 +610,7 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected SpecialResult handle
+          protected SpecialResult handle
             (@Nonnull HttpServletRequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {

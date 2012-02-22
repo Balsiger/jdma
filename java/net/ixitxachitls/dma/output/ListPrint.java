@@ -144,7 +144,7 @@ public class ListPrint extends AbstractPrint
    *
    */
   @Override
-protected @Nonnull Object
+  protected @Nonnull Object
     printExtension(@Nonnull AbstractExtension inExtension,
                    @Nonnull BaseCharacter inUser)
   {

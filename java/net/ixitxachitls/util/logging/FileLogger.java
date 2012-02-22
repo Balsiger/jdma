@@ -342,7 +342,7 @@ public void print(@Nonnull String inText, @Nonnull Log.Type inType)
       java.io.File []files = dir.listFiles(new java.io.FilenameFilter()
         {
           @Override
-		  public boolean accept(java.io.File inDir, String inName)
+          public boolean accept(java.io.File inDir, String inName)
           {
             if(inName == null)
               return false;

@@ -168,5 +168,12 @@
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
+ <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.DMARequest" />
+    <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
+  </Match>
+
+
+
 </FindBugsFilter>
 

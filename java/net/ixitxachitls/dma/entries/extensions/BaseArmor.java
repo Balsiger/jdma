@@ -95,7 +95,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -106,7 +106,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -203,7 +203,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         @Override
-		public Long extract(@Nonnull Number inValue)
+        public Long extract(@Nonnull Number inValue)
         {
           return inValue.get();
         }
@@ -239,7 +239,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     (new Group.Extractor<Number, Long>()
       {
         @Override
-		public Long extract(@Nonnull Number inValue)
+        public Long extract(@Nonnull Number inValue)
         {
           return inValue.get();
         }
@@ -275,7 +275,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     (new Group.Extractor<Percent, Long>()
       {
         @Override
-		public Long extract(@Nonnull Percent inValue)
+        public Long extract(@Nonnull Percent inValue)
         {
           return inValue.get();
         }
@@ -307,7 +307,7 @@ protected static final Group<Distance, Long, String> s_speedGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         @Override
-		public Long extract(@Nonnull Distance inValue)
+        public Long extract(@Nonnull Distance inValue)
         {
           return inValue.getAsFeet().getLeader();
         }
@@ -356,7 +356,7 @@ protected static final Group<Distance, Long, String> s_speedGrouping =
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -371,7 +371,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

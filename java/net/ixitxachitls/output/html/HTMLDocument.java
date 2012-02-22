@@ -443,14 +443,13 @@ public class HTMLDocument extends Document
      s_actions.put(Newpage.NAME, null);
      s_actions.put(Grouped.NAME, new Pattern("$1##$2##$3##"));
      s_actions.put(Editable.NAME,
-                   new Pattern("<dmaeditable key=\"$4\" "
-                               + "value=\"$html((@5))\" "
-                               + "id=\"$1\" class=\"editable\" "
-                               + "entry=\"$2\" "
-                               + "type=\"$6\"[[ note=\"%1\"]]"
+                   new Pattern("<dmaeditable name=\"$3\" "
+                               + "value=\"$html((@4))\" "
+                               + "key=\"$1\" class=\"editable\" "
+                               + "type=\"$5\"[[ note=\"%1\"]]"
                                + "[[ values=\"$html((%2))\"]]"
                                + "[[ related=\"%3\"]]>"
-                               + "<span>$3</span>"
+                               + "<span>$2</span>"
                                + "</dmaeditable>", false));
      s_actions.put(Script.NAME,
                    new Pattern("\n<script [[id=\"%1\" ]]"

@@ -105,7 +105,7 @@ public class Character extends CampaignEntry<BaseCharacter>
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -116,7 +116,7 @@ public class Character extends CampaignEntry<BaseCharacter>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -444,7 +444,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -459,7 +459,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -775,21 +775,6 @@ protected @Nonnull ListPrint getListPrint()
 
   //   return document;
   // }
-
-  //........................................................................
-  //------------------------------- getPath --------------------------------
-
-  /**
-   * Get the path to this entry.
-   *
-   * @return      the path to read this entry
-   *
-   */
-  @Override
-  public @Nonnull String getPath()
-  {
-    return getCampaign().getPath() + super.getPath();
-  }
 
   //........................................................................
 

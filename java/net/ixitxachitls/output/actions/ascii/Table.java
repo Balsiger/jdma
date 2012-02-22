@@ -292,7 +292,7 @@ public class Table extends Action
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_width + ":" + m_alignment + ", '" + m_leader + "', '"
         + m_trailer + "' (" + m_name + ")";
@@ -499,7 +499,7 @@ public class Table extends Action
    *
    */
   @Override
-public void execute(@Nonnull Document inDocument,
+  public void execute(@Nonnull Document inDocument,
                       @Nullable List<? extends Object> inOptionals,
                       @Nullable List<? extends Object> inArguments)
   {

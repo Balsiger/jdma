@@ -181,18 +181,16 @@ edit.save = function()
 
 /** Show that some part of an input field could not be parsed.
  *
- * @param  inEntry the entry type of the error
- * @param  inID    the id of the entry with the error
- * @param  inKey   the name of the key that could not be parsed
+ * @param  inKey   the key for the entry
+ * @param  inName  the name of the value that could not be parsed
  * @param  inText  the text that could not be parsed
  *
  */
-edit.unparsed = function(inEntry, inID, inKey, inText)
+edit.unparsed = function(inKey, inName, inText)
 {
   gui.delayed(function() {
       var container =
-      $('dmaeditable[key=' + inKey+ '][entry=' + inEntry + '][id=' +
-        inID + ']').parent();
+      $('dmaeditable[name=' + inName+ '][key=' + inKey + ']').parent();
       container.addClass('unparsed');
       container.append('<div class="unparsed-rest">' + inText + '</div>');
     }, 100);
@@ -273,9 +271,8 @@ edit.Base = function(inEditable, inProperties)
 {
   this.properties = inProperties;
   this.editable = inEditable;
-  this.id = this.properties.id,
-  this.entry = this.properties.entry;
-  this.key = this.properties.key;
+  this.key = this.properties.key,
+  this.name = this.properties.name;
   this.type = this.properties.type;
   this.label = this.properties.label;
   this.note = this.properties.note;
@@ -411,10 +408,9 @@ edit.Base.prototype.getValue = function()
 edit.Base._parse = function(inEditable)
 {
   var properties = {
-    id: inEditable.getAttribute('id'),
-    entry: inEditable.getAttribute('entry'),
-    value: inEditable.getAttribute('value'),
     key: inEditable.getAttribute('key'),
+    value: inEditable.getAttribute('value'),
+    name: inEditable.getAttribute('name'),
     script: inEditable.getAttribute('script'),
     values: inEditable.getAttribute('vaues'),
     note: inEditable.getAttribute('note'),
@@ -490,9 +486,9 @@ edit.Base.prototype.save = function(inValues, inCreate)
   else
     value = '$undefined$';
 
-  inValues[this.entry + '::' + this.id + '::' + this.key] = value;
+  inValues[this.key + '::' + this.name] = value;
   if(inCreate)
-    inValues[this.entry + '::' + this.id + '::create'] = true;
+    inValues[this.key + '::create'] = true;
 };
 
 /**
@@ -550,8 +546,8 @@ edit.Field = function(inEditable, inProperties)
 
   this._field.addClass('edit ' + this.type).
     attr('value', this._value).
-    attr('name', this.key).
-    attr('id', 'field-' + this.key).
+    attr('name', this.name).
+    attr('id', 'field-' + this.name).
     data('editable', this);
 
   // add a container around the field for all the additional values
@@ -614,7 +610,7 @@ edit.Field.prototype.edit = function(inEditable, inTarget, inNoRelated) {
   {
     var related = this.related.split(/,\s*/);
     for(var i = 0; i < related.length; i++)
-      edit.edit(undefined, $('dmaeditable[key=' + related[i] + ']')[0], true);
+      edit.edit(undefined, $('dmaeditable[name=' + related[i] + ']')[0], true);
   }
 
   this.focus();
@@ -999,11 +995,10 @@ edit.List.prototype._createLine = function(inValue, inPrevious)
 
   var type = edit.Base._parseType(this.subtype);
   var entry = edit.Base.create({
-    id: this.id,
-    entry: this.entry,
+    key: this.key,
     type: type.type,
     value: inValue,
-    key: this.key,
+    name: this.name,
     script: null,
     values: this.properties.values,
     note: null,
@@ -1147,11 +1142,10 @@ edit.Multiple.prototype._createElement = function()
   {
     var type = edit.Base._parseType(this.subtypes[i]);
     var item = edit.Base.create({
-      id: this.id,
-      entry: this.entry,
+      key: this.key,
       type: type.type,
       value: this._value.length > i ? this._value[i] : "",
-      key: this.key,
+      name: this.name,
       script: null,
       value: i < this.subvalues.length ? this.subvalues[i] : "",
       values: this.properties.values,
@@ -1243,7 +1237,7 @@ edit.AutocompleteString._update = function()
 
     // Last but not least, take the editable itself
     if(addition.length == 0)
-      addition = $('dmaeditable[key=' + this.addition + ']');
+      addition = $('dmaeditable[name=' + this.addition + ']');
 
     if(addition.length > 0)
       source += '/' + this.addition + '/' + addition.attr('value');
@@ -1340,11 +1334,10 @@ edit.Date.prototype._createElement = function()
 
   var monthProperties =
   {
-    id: this.id,
-    entry: this.entry,
+    key: this.key,
     type: 'selection',
     value: values.length > 1 ? values[0] : '',
-    key: this.key,
+    name: this.name,
     script: null,
     values: ['', 'January', 'February', 'March', 'April', 'May', 'June',
              'July', 'August', 'September', 'October', 'November',
@@ -1364,11 +1357,10 @@ edit.Date.prototype._createElement = function()
 
   var yearProperties =
   {
-    id: this.id,
-    entry: this.entry,
+    key: this.key,
     type: 'selection',
     value: values.length > 1 ? values[1] : values[0],
-    key: this.key,
+    name: this.name,
     script: null,
     values: years,
     note: null,
@@ -1441,9 +1433,8 @@ edit.Image.prototype.edit = function(inEditable, inTarget, inNoRelated) {
   */
 edit.Image.prototype._createElement = function()
 {
-  return $('<iframe src="/fileupload?id=' +
-           encodeURIComponent(this.properties.id) +
-           '&type=' + this.properties.entry + '&name=main&form"' +
+  return $('<iframe src="/fileupload?key=' +
+           encodeURIComponent(this.properties.key) + '&name=main&form"' +
            'class="upload" id="upload-main"></iframe>');
 };
 
@@ -1508,9 +1499,8 @@ edit.Files.prototype.edit = function(inEditable, inTarget, inNoRelated) {
     element.firstChild.id = 'file-' + escape(name);
     $(element).append('<div id="file-edit-' + escape(name) +
                       '" class="sprite remove" title="Remove" ' +
-                      'onclick="util.ajax(\'/fileupload?id=' +
-                      escape(properties.id) + '&type='
-                      + properties.entry + '&name=' + escape(name)
+                      'onclick="util.ajax(\'/fileupload?key=' +
+                      escape(properties.key) + '&name=' + escape(name)
                       + '&delete\', null, ' +
                       ' function() { edit.updateImage(\'file-' + escape(name) +
                       '\', \'*\', null, \'file-edit-' + escape(name) +
@@ -1533,8 +1523,8 @@ edit.Files.prototype.edit = function(inEditable, inTarget, inNoRelated) {
   */
 edit.Files.prototype._createElement = function()
 {
-  return $('<iframe src="/fileupload?id=' + this.properties.id +
-           '&type=' + this.properties.entry + '&name=files&form"' +
+  return $('<iframe src="/fileupload?key=' + escape(this.properties.key) +
+           '&name=files&form"' +
            'class="upload-files" id="upload-files"></iframe>');
 };
 

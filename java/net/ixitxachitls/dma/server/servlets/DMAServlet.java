@@ -229,7 +229,7 @@ public abstract class DMAServlet extends BaseServlet
    *
    */
   @Override
-protected @Nullable SpecialResult handle
+  protected @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -312,7 +312,7 @@ protected @Nullable SpecialResult handle
       DMAServlet servlet = new DMAServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected SpecialResult handle
+          protected SpecialResult handle
             (@Nonnull DMARequest inRequest,
              @Nonnull HttpServletResponse inResponse)
           {
@@ -352,14 +352,14 @@ protected @Nullable SpecialResult handle
         "empty", "/", null,
         "invalid", "/guru", null,
         "invalid triling", "/guru/", null,
-        "simple", "/base product/guru", "base product/guru",
+        "simple", "/base product/guru", "/base product/guru",
         "simple invalid", "guru/id", null,
         "parent", "/base product/Merlin/product/XYZ",
-        "product/XYZ (base product/Merlin)",
+        "/base product/Merlin/product/XYZ",
         "double parent", "/base product/FR/product/cotsq/product/Longsword",
-        "product/Longsword (product/cotsq (base product/FR))",
-        "leading", "/_entry/base product/guru", "base product/guru",
-        "multi leading", "/a/b/c/d/base product/guru", "base product/guru",
+        "/base product/FR/product/cotsq/product/Longsword",
+        "leading", "/_entry/base product/guru", "/base product/guru",
+        "multi leading", "/a/b/c/d/base product/guru", "/base product/guru",
       };
 
       for(int i = 0; i < tests.length; i += 3)

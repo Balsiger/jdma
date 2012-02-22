@@ -145,7 +145,7 @@ public class Group<T extends Value, S extends Comparable<S>, U>
    *
    */
   @Override
-public @Nonnull U group(@Nonnull T inValue)
+  public @Nonnull U group(@Nonnull T inValue)
   {
     if(!inValue.isDefined())
       return m_undefined;
@@ -248,7 +248,7 @@ public @Nonnull U group(@Nonnull T inValue)
           (new Extractor<Name, String>()
           {
             @Override
-			public String extract(@Nonnull Name inValue)
+            public String extract(@Nonnull Name inValue)
             {
               return inValue.get();
             }

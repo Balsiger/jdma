@@ -217,7 +217,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -229,7 +229,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
         return m_name;
     }
@@ -276,7 +276,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -288,7 +288,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
         return m_name;
     }
@@ -423,7 +423,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -446,7 +446,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -562,7 +562,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -585,7 +585,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -656,7 +656,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -679,7 +679,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nullable String toString()
+    public @Nullable String toString()
     {
         return m_name;
     }
@@ -719,7 +719,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -731,7 +731,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -1037,7 +1037,7 @@ public class BaseProduct extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         @Override
-		public Long extract(@Nonnull Number inValue)
+        public Long extract(@Nonnull Number inValue)
         {
           return inValue.get();
         }
@@ -1193,7 +1193,7 @@ public class BaseProduct extends BaseEntry
     new Group<Price, Long, String>(new Group.Extractor<Price, Long>()
       {
         @Override
-		public Long extract(@Nonnull Price inValue)
+        public Long extract(@Nonnull Price inValue)
         {
           return inValue.get();
         }
@@ -1307,7 +1307,7 @@ public class BaseProduct extends BaseEntry
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -1322,7 +1322,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -1558,7 +1558,7 @@ protected @Nonnull ListPrint getListPrint()
    *
    */
   @Override
-public @Nonnull String getRefName()
+  public @Nonnull String getRefName()
   {
     if(!m_title.isDefined())
       return super.getRefName();
@@ -1908,7 +1908,7 @@ public @Nonnull String getRefName()
    *
    */
   @Override
-public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
   {
     String []parts = Strings.getPatterns(inKey, "(.*?)/(.*)");
 
@@ -2833,7 +2833,7 @@ public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
 
     /** Testing reading. */
     @Override
-	@org.junit.Test
+    @org.junit.Test
     public void read()
     {
       ParseReader reader =

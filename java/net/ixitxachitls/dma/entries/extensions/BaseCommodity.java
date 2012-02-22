@@ -109,7 +109,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
     new Group<Area, Long, String>(new Group.Extractor<Area, Long>()
       {
         @Override
-		public Long extract(@Nonnull Area inValue)
+        public Long extract(@Nonnull Area inValue)
         {
           return (long)inValue.getAsFeet().getValue() * 144;
         }
@@ -140,7 +140,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         @Override
-		public Long extract(Distance inValue)
+        public Long extract(Distance inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a value here");
@@ -184,7 +184,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -199,7 +199,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

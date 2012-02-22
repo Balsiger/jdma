@@ -202,7 +202,7 @@ public class Multiple extends Value<Multiple>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       if(!m_value.isDefined() && isOptional())
         return "";
@@ -581,7 +581,7 @@ public @Nonnull String getChoices()
    *
    */
   @Override
-protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(@Nonnull ParseReader inReader)
   {
     for(int i = 0; i < m_elements.length; i++)
     {
@@ -717,7 +717,7 @@ protected boolean doRead(@Nonnull ParseReader inReader)
 
     /** Testing reading. */
     @Override
-	@org.junit.Test
+    @org.junit.Test
     public void read()
     {
       String []tests =

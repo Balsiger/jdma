@@ -179,7 +179,7 @@ public class ParseReader
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return "(pos = " + m_position + ", line = " + m_line + ", back = '"
         + m_buffer + "')";
@@ -1702,7 +1702,7 @@ public class ParseReader
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     Position pos = getPosition();
 

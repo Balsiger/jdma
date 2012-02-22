@@ -96,6 +96,9 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 
   //----- campaign ---------------------------------------------------------
 
+  /** The cached campaign object. */
+  private @Nullable Campaign m_cachedCampaign;
+
   /** The state value. */
   @Key("campaign")
   protected Multiple m_campaign =
@@ -116,6 +119,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return   the key
    *
    */
+  @SuppressWarnings("unchecked")
   @Override
   public @Nonnull EntryKey<Character> getKey()
   {
@@ -125,8 +129,23 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
       throw new IllegalStateException("expected campaign '" + m_campaign
                                       + "' not found");
 
-    return new EntryKey<Character>(getName(), Character.TYPE,
+    return new EntryKey<Character>(getName(), (Type<Character>)getType(),
                                    campaign.getKey());
+  }
+
+  //........................................................................
+  //------------------------------- getPath --------------------------------
+
+  /**
+   * Get the path to this entry.
+   *
+   * @return      the path to read this entry
+   *
+   */
+  @Override
+  public @Nonnull String getPath()
+  {
+    return getCampaign().getPath() + super.getPath();
   }
 
   //........................................................................
@@ -140,14 +159,56 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    */
   public @Nullable Campaign getCampaign()
   {
-    if(!m_campaign.isDefined())
-      return null;
+    if(m_cachedCampaign == null)
+    {
+      if(!m_campaign.isDefined())
+        return null;
 
-    return DMADataFactory.get().getEntry
-      (new AbstractEntry.EntryKey<Campaign>
-       (m_campaign.get(1).toString(), Campaign.TYPE,
-        new AbstractEntry.EntryKey<BaseCampaign>(m_campaign.get(0).toString(),
-                                                 BaseCampaign.TYPE)));
+      m_cachedCampaign = DMADataFactory.get().getEntry
+        (new AbstractEntry.EntryKey<Campaign>
+         (m_campaign.get(1).toString(), Campaign.TYPE,
+          new AbstractEntry.EntryKey<BaseCampaign>(m_campaign.get(0).toString(),
+                                                   BaseCampaign.TYPE)));
+    }
+
+    return m_cachedCampaign;
+  }
+
+  //........................................................................
+  //----------------------------- getEditType ------------------------------
+
+  /**
+   * Get the type of the entry.
+   *
+   * @return      the requested name
+   *
+   */
+  @Override
+  public @Nonnull String getEditType()
+  {
+    return getCampaign().getEditType() + "/" + super.getEditType();
+  }
+
+  //........................................................................
+
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry. Everybody is a DM
+   * for a base product.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  @Override
+  public boolean isDM(@Nullable BaseCharacter inUser)
+  {
+    if(inUser == null)
+      return false;
+
+    return inUser.getName().equals(getCampaign().getDMName());
   }
 
   //........................................................................
@@ -180,6 +241,31 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------ updateKey -------------------------------
+
+  /**
+   * Update the any values that are related to the key with new data.
+   *
+   * @param       inKey the new key of the entry
+   *
+   */
+  @Override
+  public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
+  {
+    EntryKey parent = inKey.getParent();
+    if(parent == null)
+      return;
+
+    EntryKey parentParent = parent.getParent();
+    if(parentParent == null)
+      return;
+
+    m_campaign = m_campaign.as(new Name(parentParent.getID()),
+                               new Name(parent.getID()));
+  }
+
+  //........................................................................
 
   //........................................................................
 

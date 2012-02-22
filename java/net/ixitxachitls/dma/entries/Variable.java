@@ -135,7 +135,7 @@ public class Variable extends ValueHandle<Variable>
    *
    */
   @Override
-public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
+  public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     return get(inEntry);
   }
@@ -153,7 +153,7 @@ public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
    *
    */
   @Override
-public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
+  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     Value value = get(inEntry);
 
@@ -387,7 +387,7 @@ public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
 
       /** Change method for testing. */
       @Override
-	  public void changed()
+      public void changed()
       {
         m_changed = true;
       }

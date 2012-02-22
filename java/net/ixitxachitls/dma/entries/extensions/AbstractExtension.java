@@ -196,6 +196,22 @@ public Variables getVariables()
   }
 
   //........................................................................
+  //-------------------------------- getKey --------------------------------
+
+  /**
+   * Get the key uniqueliy identifying this entry.
+   *
+   * @return   the key for the entry
+   *
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public @Nonnull AbstractEntry.EntryKey<? extends AbstractEntry> getKey()
+  {
+    return m_entry.getKey();
+  }
+
+  //........................................................................
   //----------------------------- getEditType ------------------------------
 
   /**

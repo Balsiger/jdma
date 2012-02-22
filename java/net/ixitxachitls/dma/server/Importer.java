@@ -49,6 +49,7 @@ import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
@@ -129,7 +130,7 @@ public final class Importer
   private List<String> m_files = new ArrayList<String>();
 
   /** The dma data parsed. */
-  private DMADatafiles m_data = new DMADatafiles("");
+  private DMADatafiles m_data = new DMADatafiles("./");
 
   /** The hostname to connect to. */
   private @Nonnull String m_host;
@@ -235,11 +236,26 @@ public final class Importer
     for(AbstractType<? extends AbstractEntry> type : m_data.getTypes())
       for(AbstractEntry entry : m_data.getEntries(type, null, 0, 0))
       {
-        entities.add(dmaStore.convert(entry));
+        Entity entity;
+        if(entry instanceof Entry
+           && (entry.getName() == null || entry.getName().isEmpty()))
+        {
+          do
+          {
+            ((Entry)entry).randomID();
+            Log.debug("Creating a new random id " + entry.getName());
+            entity = dmaStore.convert(entry);
+          } while(dmaStore.getEntity(entity.getKey()) != null);
+        }
+        else
+          entity = dmaStore.convert(entry);
+
+        entities.add(entity);
         Log.important("importing " + type + " " + entry.getName());
       }
 
     Log.important("storing entities in datastore");
+    m_data.save();
     store.put(entities);
 
     Log.important("importing images");

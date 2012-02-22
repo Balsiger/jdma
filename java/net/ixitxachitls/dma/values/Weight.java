@@ -120,7 +120,7 @@ public class Weight extends Units<Weight>
    *
    */
   @Override
-public Weight create()
+  public Weight create()
   {
     return super.create(new Weight());
   }
@@ -150,7 +150,7 @@ public Weight create()
     new Group<Weight, Long, String>(new Group.Extractor<Weight, Long>()
       {
         @Override
-		public Long extract(Weight inValue)
+        public Long extract(Weight inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a  value here");
@@ -356,7 +356,7 @@ public Weight create()
    *
    */
   @Override
-protected @Nonnull String doGroup()
+  protected @Nonnull String doGroup()
   {
     return s_grouping.group(this);
   }

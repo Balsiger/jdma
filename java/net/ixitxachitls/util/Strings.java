@@ -721,7 +721,7 @@ public final class Strings
     Collections.sort(inList, new Comparator<String>()
                      {
                        @Override
-					   public int compare(String inFirst, String inSecond)
+                       public int compare(String inFirst, String inSecond)
                        {
                          if(inFirst == null)
                            throw new IllegalArgumentException

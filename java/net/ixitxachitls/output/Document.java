@@ -181,7 +181,7 @@ public class Document
      *
      */
     @Override
-	protected Map<String, Action> getKnownActions()
+    protected Map<String, Action> getKnownActions()
     {
       return Document.this.getKnownActions();
     }
@@ -196,7 +196,7 @@ public class Document
      *
      */
     @Override
-	protected Buffer getBuffer()
+    protected Buffer getBuffer()
     {
       return m_buffer;
     }
@@ -211,7 +211,7 @@ public class Document
      *
      */
     @Override
-	public int getCounter()
+    public int getCounter()
     {
       return Document.this.getCounter();
     }
@@ -227,7 +227,7 @@ public class Document
      *
      */
     @Override
-	public boolean isDM()
+    public boolean isDM()
     {
       return Document.this.isDM();
     }
@@ -243,7 +243,7 @@ public class Document
      *
      */
     @Override
-	public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
+    public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
     {
       assert m_buffer instanceof WrapBuffer
         : "setAlignment() can only be called using a wrapping buffer";
@@ -259,7 +259,7 @@ public class Document
      *
      */
     @Override
-	public void endLine()
+    public void endLine()
     {
       assert m_buffer instanceof WrapBuffer
         : "endLine() can only be called using a wrapping buffer";
@@ -314,7 +314,7 @@ public class Document
      *
      */
     @Override
-	public void addError(@Nonnull BaseError inError)
+    public void addError(@Nonnull BaseError inError)
     {
       Document.this.addError(inError);
     }
@@ -330,7 +330,7 @@ public class Document
      *
      */
     @Override
-	public void addDocument(@Nonnull Document inDocument)
+    public void addDocument(@Nonnull Document inDocument)
     {
       Document.this.addDocument(inDocument);
     }

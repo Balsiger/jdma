@@ -108,15 +108,17 @@ public class DMARequest extends HttpServletRequestWrapper
     if(net.ixitxachitls.dma.entries.Character.TYPE == null)
       Log.warning("could not properly initialize base character type");
     if(net.ixitxachitls.dma.entries.BaseItem.TYPE == null)
-      Log.warning("could not properly initialize base character type");
+      Log.warning("could not properly initialize base item type");
+    if(net.ixitxachitls.dma.entries.Item.TYPE == null)
+      Log.warning("could not properly initialize item type");
     if(net.ixitxachitls.dma.entries.BaseProduct.TYPE == null)
-      Log.warning("could not properly initialize base character type");
+      Log.warning("could not properly initialize base product type");
     if(net.ixitxachitls.dma.entries.Product.TYPE == null)
-      Log.warning("could not properly initialize base character type");
+      Log.warning("could not properly initialize product type");
     if(net.ixitxachitls.dma.entries.BaseCampaign.TYPE == null)
-      Log.warning("could not properly initialize base character type");
+      Log.warning("could not properly initialize base campaign type");
     if(net.ixitxachitls.dma.entries.Campaign.TYPE == null)
-      Log.warning("could not properly initialize base character type");
+      Log.warning("could not properly initialize campaign type");
   }
 
   /** The URL and post parameters. */

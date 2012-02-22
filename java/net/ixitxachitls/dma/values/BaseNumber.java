@@ -183,7 +183,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
     new Group<BaseNumber, Long, String>(new Group.Extractor<BaseNumber, Long>()
       {
         @Override
-		public @Nonnull Long extract(@Nonnull BaseNumber inValue)
+        public @Nonnull Long extract(@Nonnull BaseNumber inValue)
         {
           return inValue.m_number;
         }
@@ -407,7 +407,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // casting
+  @SuppressWarnings("unchecked") // casting
   public T multiply(long inValue)
   {
     if(!m_defined)
@@ -488,7 +488,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @Override
-protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 

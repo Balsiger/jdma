@@ -80,6 +80,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the value handle for chaining
    *
    */
+  @SuppressWarnings("unchecked")
   public @Nonnull T withNote(@Nullable String inText)
   {
     m_note = inText;
@@ -97,6 +98,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the value handle for chaining
    *
    */
+  @SuppressWarnings("unchecked")
   public @Nonnull T withPlural(@Nullable String inPlural)
   {
     if(inPlural == null)
@@ -118,6 +120,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the value handle for chaining
    *
    */
+  @SuppressWarnings("unchecked")
   public @Nonnull T withPlayerEditable(boolean inPlayer)
   {
     m_playerEditable = inPlayer;
@@ -135,6 +138,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the value handle for chaining
    *
    */
+  @SuppressWarnings("unchecked")
   public @Nonnull T withPlayerOnly(boolean inPlayer)
   {
     if(inPlayer && m_dm)
@@ -155,6 +159,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the value handle for chaining
    *
    */
+  @SuppressWarnings("unchecked")
   public @Nonnull T withDM(boolean inDM)
   {
     if(inDM && m_player)
@@ -175,6 +180,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the value handle for chaining
    *
    */
+  @SuppressWarnings("unchecked")
   public @Nonnull T withEditable(boolean inEditable)
   {
     m_editable = inEditable;
@@ -308,9 +314,7 @@ public abstract class ValueHandle<T extends ValueHandle>
       note = "";
 
     if(inEdit && m_editable && (inDM || m_playerEditable))
-      return new Editable(inEntry.getID(),
-                          inEntry.getEditType(),
-                          formatted, m_key, edit, type, note,
+      return new Editable(inEntry.getKey(), formatted, m_key, edit, type, note,
                           choices, related);
 
     return formatted;
@@ -470,14 +474,14 @@ public abstract class ValueHandle<T extends ValueHandle>
 
       /** {@inheritDoc} */
       @Override
-	public Object value(ValueGroup inEntry, boolean inDM)
+      public Object value(ValueGroup inEntry, boolean inDM)
       {
         return m_value;
       }
 
       /** {@inheritDoc} */
       @Override
-	public Object formatted(ValueGroup inEntry, boolean inDM)
+      public Object formatted(ValueGroup inEntry, boolean inDM)
       {
         return m_value;
       }
@@ -549,7 +553,7 @@ public abstract class ValueHandle<T extends ValueHandle>
         .withEditable(true);
 
       assertEquals("string value",
-                   "\\editable{test id}{base entry}{string value}{test}"
+                   "\\editable{/base entry/test id}{string value}{test}"
                    + "{string value}{string}",
                    handle.format(entry, true, true).toString());
 
@@ -559,7 +563,7 @@ public abstract class ValueHandle<T extends ValueHandle>
         .withEditable(true);
 
       assertEquals("name value",
-                   "\\editable{test id}{base entry}{name}{test}{name}{name}",
+                   "\\editable{/base entry/test id}{name}{test}{name}{name}",
                    handle.format(entry, true, true).toString());
     }
 

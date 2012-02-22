@@ -102,7 +102,7 @@ public abstract class JSONServlet extends DMAServlet
    *
    */
   @Override
-protected @Nullable SpecialResult handle
+  protected @Nullable SpecialResult handle
     (@Nonnull DMARequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -176,7 +176,7 @@ protected @Nullable SpecialResult handle
       JSONServlet servlet = new JSONServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected void writeJson(@Nonnull DMARequest inRequest,
+          protected void writeJson(@Nonnull DMARequest inRequest,
                                    @Nonnull String inPath,
                                    @Nonnull JsonWriter inWriter)
           {

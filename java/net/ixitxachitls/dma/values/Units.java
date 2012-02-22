@@ -196,7 +196,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-	public boolean equals(@Nullable Object inOther)
+    public boolean equals(@Nullable Object inOther)
     {
       if(inOther == null || !(inOther instanceof Unit))
         return false;
@@ -228,7 +228,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-	public int hashCode()
+    public int hashCode()
     {
       return m_unit.hashCode();
     }
@@ -313,7 +313,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       StringBuilder other = new StringBuilder();
       if(m_other != null)
@@ -514,7 +514,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-	public boolean equals(@Nullable Object inOther)
+    public boolean equals(@Nullable Object inOther)
     {
       if(inOther == null)
         return false;
@@ -552,7 +552,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-	public int hashCode()
+    public int hashCode()
     {
       return m_name.hashCode();
     }
@@ -695,7 +695,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       StringBuffer result = new StringBuffer(m_name);
 
@@ -884,7 +884,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // this only works if this method is
+  @SuppressWarnings("unchecked") // this only works if this method is
                                  // overridden in all derivations
   public T create()
   {
@@ -1302,7 +1302,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // need to cast
+  @SuppressWarnings("unchecked") // need to cast
   public @Nonnull T subtract(@Nonnull T inOther)
   {
     // check the equality of types
@@ -1361,7 +1361,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // need to cast this
+  @SuppressWarnings("unchecked") // need to cast this
   public T multiply(long inValue)
   {
     if(m_values == null)

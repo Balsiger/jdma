@@ -99,7 +99,7 @@ public class BaseCharacter extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -110,7 +110,7 @@ public class BaseCharacter extends BaseEntry
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -267,7 +267,7 @@ public class BaseCharacter extends BaseEntry
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -282,7 +282,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -348,7 +348,7 @@ protected @Nonnull ListPrint getListPrint()
    *
    */
   @Override
-public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
     if(inUser == null)
       return false;
@@ -433,7 +433,7 @@ public boolean isDM(@Nullable BaseCharacter inUser)
    *
    */
   @Override
-protected boolean readEntry(@Nonnull ParseReader inReader)
+  protected boolean readEntry(@Nonnull ParseReader inReader)
   {
     return super.readEntry(inReader);
   }

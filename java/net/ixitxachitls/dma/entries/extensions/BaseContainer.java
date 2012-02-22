@@ -95,7 +95,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -106,7 +106,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public @Nonnull String toString()
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -169,7 +169,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-		public Long extract(@Nonnull Volume inValue)
+        public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsLiters().getValue() * 100;
         }
@@ -184,7 +184,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-		public Long extract(@Nonnull Volume inValue)
+        public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsGallons().getValue() * 16;
         }
@@ -200,7 +200,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-		public Long extract(@Nonnull Volume inValue)
+        public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsFeet().getValue() * 1728;
         }
@@ -215,7 +215,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-		public Long extract(@Nonnull Volume inValue)
+        public Long extract(@Nonnull Volume inValue)
         {
           return (long)inValue.getAsLiters().getValue() * 1000;
         }
@@ -230,7 +230,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Grouping<Volume, String>()
     {
       @Override
-	public String group(@Nonnull Volume inValue)
+      public String group(@Nonnull Volume inValue)
       {
         Volume volume = inValue;
 
@@ -298,7 +298,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -313,7 +313,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

@@ -93,7 +93,7 @@ public abstract class ActionServlet extends DMAServlet
    *                                happens
    */
   @Override
-public void doGet(@Nonnull HttpServletRequest inRequest,
+  public void doGet(@Nonnull HttpServletRequest inRequest,
                     @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
@@ -122,7 +122,7 @@ public void doGet(@Nonnull HttpServletRequest inRequest,
    *
    */
   @Override
-protected @Nullable SpecialResult handle
+  protected @Nullable SpecialResult handle
     (@Nonnull DMARequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -249,7 +249,7 @@ protected @Nullable SpecialResult handle
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected String doAction(@Nonnull DMARequest inRequest,
+          protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";
@@ -288,7 +288,7 @@ protected @Nullable SpecialResult handle
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected String doAction(@Nonnull DMARequest inRequest,
+          protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";
@@ -318,7 +318,7 @@ protected @Nullable SpecialResult handle
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected String doAction(@Nonnull DMARequest inRequest,
+          protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";
@@ -341,7 +341,7 @@ protected @Nullable SpecialResult handle
         {
           private static final long serialVersionUID = 1L;
           @Override
-		protected String doAction(@Nonnull DMARequest inRequest,
+          protected String doAction(@Nonnull DMARequest inRequest,
                                     @Nonnull HttpServletResponse inResponse)
           {
             return "done";

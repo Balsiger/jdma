@@ -174,7 +174,7 @@ public class BaseCampaign extends BaseEntry
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -189,7 +189,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -243,7 +243,7 @@ protected @Nonnull ListPrint getListPrint()
    *
    */
   @Override
-public boolean isDM(@Nonnull BaseCharacter inUser)
+  public boolean isDM(@Nonnull BaseCharacter inUser)
   {
     return inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
@@ -903,7 +903,7 @@ public boolean isDM(@Nonnull BaseCharacter inUser)
 
     /** Test reading. */
     @Override
-	@org.junit.Test
+    @org.junit.Test
     public void read()
     {
       // String result =

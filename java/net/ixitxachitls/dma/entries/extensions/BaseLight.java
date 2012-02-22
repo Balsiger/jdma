@@ -113,7 +113,7 @@ public class BaseLight extends BaseExtension<BaseItem>
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
         @Override
-		public Long extract(@Nonnull Multiple inValue)
+        public Long extract(@Nonnull Multiple inValue)
         {
           return (long)((Distance)inValue.get(0)).getAsFeet().getValue();
         }
@@ -161,7 +161,7 @@ public class BaseLight extends BaseExtension<BaseItem>
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
         @Override
-		public Long extract(@Nonnull Multiple inValue)
+        public Long extract(@Nonnull Multiple inValue)
         {
           return (long)((Distance)inValue.get(0)).getAsFeet().getValue();
         }
@@ -202,7 +202,7 @@ public class BaseLight extends BaseExtension<BaseItem>
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -217,7 +217,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

@@ -113,7 +113,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -124,7 +124,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -194,7 +194,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -206,7 +206,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -272,7 +272,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -283,7 +283,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -447,7 +447,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
     {
       @Override
-	public Long extract(Distance inValue)
+      public Long extract(Distance inValue)
       {
         if(inValue == null)
           throw new IllegalArgumentException("must have a value here");
@@ -482,7 +482,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         @Override
-		public Long extract(Distance inValue)
+        public Long extract(Distance inValue)
         {
           if(inValue == null)
             throw new IllegalArgumentException("must have a value here");
@@ -540,7 +540,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -555,7 +555,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }

@@ -254,6 +254,7 @@ public class DMADatafiles implements DMAData
    * @param    inIndex  the name of the index to get
    * @param    inType   the type of entries to return for the index (app engine
    *                    can only do filter on queries with kind)
+   * @param    inParent the parent key, if any
    * @param    inGroup  the group to get entries for
    * @param    inStart  the 0 based index of the first entry to return
    * @param    inSize   the maximal number of entries to return
@@ -262,10 +263,11 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-@SuppressWarnings("unchecked") // need to cast return value for generics
+  @SuppressWarnings("unchecked") // need to cast return value for generics
   public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-                     (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
-                      @Nonnull String inGroup, int inStart, int inSize)
+    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
+     @Nonnull String inGroup, int inStart, int inSize)
   {
     throw
       new UnsupportedOperationException("has not been implemented for files");

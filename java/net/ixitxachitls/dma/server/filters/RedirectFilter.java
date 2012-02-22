@@ -83,7 +83,7 @@ public abstract class RedirectFilter implements Filter
    *
    */
   @Override
-public void init(@Nonnull FilterConfig inConfig)
+  public void init(@Nonnull FilterConfig inConfig)
   {
     m_config = inConfig;
   }
@@ -96,7 +96,7 @@ public void init(@Nonnull FilterConfig inConfig)
    *
    */
   @Override
-public void destroy()
+  public void destroy()
   {
     // nothing to do
   }
@@ -131,7 +131,7 @@ public void destroy()
     *
     */
   @Override
-public void doFilter(@Nonnull ServletRequest inRequest,
+  public void doFilter(@Nonnull ServletRequest inRequest,
                        @Nonnull ServletResponse inResponse,
                        @Nonnull FilterChain inChain)
     throws ServletException, IOException
@@ -190,7 +190,7 @@ public void doFilter(@Nonnull ServletRequest inRequest,
     {
       RedirectFilter filter = new RedirectFilter() {
         @Override
-		public @Nonnull String
+        public @Nonnull String
             computeRedirect(@Nonnull HttpServletRequest inRequest)
           {
             return "redirect";

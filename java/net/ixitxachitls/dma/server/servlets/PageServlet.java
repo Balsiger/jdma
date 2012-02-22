@@ -134,7 +134,7 @@ public class PageServlet extends DMAServlet
    *
    */
   @Override
-protected @Nullable SpecialResult handle
+  protected @Nullable SpecialResult handle
     (@Nonnull DMARequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
@@ -553,7 +553,7 @@ protected @Nullable SpecialResult handle
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected void writeBody(@Nonnull HTMLWriter inWriter,
+          protected void writeBody(@Nonnull HTMLWriter inWriter,
                                    @Nullable String inPath,
                                    @Nonnull DMARequest inRequest)
           {
@@ -715,7 +715,7 @@ protected @Nullable SpecialResult handle
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-		protected void writeBody(@Nonnull HTMLWriter inWriter,
+          protected void writeBody(@Nonnull HTMLWriter inWriter,
                                    @Nullable String inPath,
                                    @Nonnull DMARequest inRequest)
           {
@@ -858,13 +858,13 @@ protected @Nullable SpecialResult handle
                    + "util.linkRow(document.getElementById"
                    + "('linkrow-user-first'), '/user/first');</script>\n"
                    + "</div></td><td class=\"name\">first</td>"
-                   + "<td class=\"name\"><dmaeditable key=\"real name\" "
-                   + "value=\"$undefined$\" id=\"first\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"string\"><span></span>"
+                   + "<td class=\"name\"><dmaeditable name=\"real name\" "
+                   + "value=\"$undefined$\" key=\"/base character/first\" "
+                   + "class=\"editable\" type=\"string\"><span></span>"
                    + "</dmaeditable></td>"
-                   + "<td class=\"group\"><dmaeditable key=\"group\" "
-                   + "value=\"$undefined$\" id=\"first\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"selection\" note=\"\" "
+                   + "<td class=\"group\"><dmaeditable name=\"group\" "
+                   + "value=\"$undefined$\" key=\"/base character/first\" "
+                   + "class=\"editable\" type=\"selection\" note=\"\" "
                    + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
                    + "</dmaeditable></td>"
                    + "<td class=\"action\"></td></tr>"
@@ -876,13 +876,13 @@ protected @Nullable SpecialResult handle
                    + "util.linkRow(document.getElementById"
                    + "('linkrow-user-second'), '/user/second');</script>\n"
                    + "</div></td><td class=\"name\">second</td>"
-                   + "<td class=\"name\"><dmaeditable key=\"real name\" "
-                   + "value=\"$undefined$\" id=\"second\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"string\"><span></span>"
+                   + "<td class=\"name\"><dmaeditable name=\"real name\" "
+                   + "value=\"$undefined$\" key=\"/base character/second\" "
+                   + "class=\"editable\" type=\"string\"><span></span>"
                    + "</dmaeditable></td>"
-                   + "<td class=\"group\"><dmaeditable key=\"group\" "
-                   + "value=\"$undefined$\" id=\"second\" class=\"editable\" "
-                   + "entry=\"base character\" type=\"selection\" note=\"\" "
+                   + "<td class=\"group\"><dmaeditable name=\"group\" "
+                   + "value=\"$undefined$\" key=\"/base character/second\" "
+                   + "class=\"editable\" type=\"selection\" note=\"\" "
                    + "values=\"Guest||User||Player||DM||Admin\"><span></span>"
                    + "</dmaeditable></td>"
                    + "<td class=\"action\"></td></tr></table>\n"

@@ -105,7 +105,7 @@ public class Damage extends Value<Damage>
      *
      */
     @Override
-	public String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -116,7 +116,7 @@ public class Damage extends Value<Damage>
      *
      */
     @Override
-	public String toString()
+    public String toString()
     {
       return m_name;
     }

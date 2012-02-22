@@ -125,7 +125,7 @@ public class Modifier extends Value<Modifier>
      *
      */
     @Override
-	public @Nonnull String getName()
+    public @Nonnull String getName()
     {
       return m_name;
     }
@@ -217,7 +217,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
-public Modifier create()
+  public Modifier create()
   {
     return super.create(new Modifier());
   }
@@ -376,7 +376,7 @@ public Modifier create()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_defined;
   }

@@ -159,7 +159,7 @@ public class IndexServlet extends PageServlet
       String typeLink = type.getMultipleLink();
       format(inWriter,
              // we get one more entry to know if we have to add pagination
-             DMADataFactory.get().getIndexEntries(name, type, group,
+             DMADataFactory.get().getIndexEntries(name, type, null, group,
                                                   inRequest.getStart(),
                                                   inRequest.getPageSize() + 1),
              inRequest.getUser(), inRequest.getStart(),
@@ -308,7 +308,7 @@ public class IndexServlet extends PageServlet
     else if(inGroup != null && inUser != null && inIndex.isEditable(inGroup))
       inWriter
         .begin("dmaeditable")
-        .id("*/" + inPath)
+        .id("*=" + inPath)
         .classes("editable")
         .attribute("entry", inType.toString())
         .attribute("value", Encodings.encodeHTMLAttribute(inGroup))

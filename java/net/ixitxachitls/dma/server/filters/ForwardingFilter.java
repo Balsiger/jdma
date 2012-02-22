@@ -184,33 +184,37 @@ public void doFilter(@Nonnull ServletRequest inRequest,
   public @Nullable String computeForward(@Nonnull HttpServletRequest inRequest)
   {
     String uri = inRequest.getRequestURI();
-    BaseCharacter user = null;
+
     if(inRequest instanceof DMARequest)
     {
-      user = ((DMARequest)inRequest).getUser();
       inRequest.setAttribute(DMARequest.ORIGINAL_PATH,
                              inRequest.getRequestURI());
     }
 
+    BaseCharacter user = null;
     for(Map.Entry<String, String> entry : m_mappings.entrySet())
     {
       String pattern = entry.getKey();
       String replacement = entry.getValue();
 
-      if(pattern.startsWith("user:"))
-      {
-        if(user == null || !user.hasAccess(BaseCharacter.Group.USER))
-          continue;
-        pattern = pattern.substring(5);
-      }
-
       String forward = uri.replaceAll(pattern, replacement);
       if(!forward.equals(uri))
       {
-        if(forward.contains("@user"))
+        if((forward.contains("@user") || forward.startsWith("user:"))
+           && inRequest instanceof DMARequest)
         {
-          if(user != null)
-            forward = forward.replaceAll("@user", user.getName());
+          user = ((DMARequest)inRequest).getUser();
+
+          if(user == null)
+            continue;
+
+          if(forward.contains("@user"))
+            forward = forward.replace("@user", user.getName());
+          else if(forward.startsWith("user:"))
+            if(!user.hasAccess(BaseCharacter.Group.USER))
+              continue;
+            else
+              forward = forward.substring(5);
         }
 
         return forward;
@@ -265,11 +269,13 @@ public void doFilter(@Nonnull ServletRequest inRequest,
         .andStubReturn(names);
       EasyMock.expect(request.getRequestURI())
         .andReturn("/guru/something.there");
+
       EasyMock.expect(request.getRequestURI())
         .andReturn("/guru/special-hello");
       EasyMock.expect(context.getRequestDispatcher("/something/special"))
         .andReturn(dispatcher);
       dispatcher.forward(request, response);
+
       EasyMock.expect(request.getRequestURI())
         .andReturn("/guru/file.pdf");
       EasyMock.expect(context.getRequestDispatcher("/pdf/file"))

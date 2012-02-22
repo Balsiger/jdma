@@ -160,7 +160,8 @@ public class EntryListServlet extends PageServlet
     format(inWriter, entries, inRequest.getUser(), inRequest.getStart(),
            inRequest.getPageSize());
 
-    addNavigation(inWriter, entries.get(0).getListNavigation());
+    if(!entries.isEmpty())
+      addNavigation(inWriter, entries.get(0).getListNavigation());
   }
 
   //........................................................................
