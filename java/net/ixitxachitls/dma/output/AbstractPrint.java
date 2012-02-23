@@ -190,8 +190,7 @@ public abstract class AbstractPrint
               handle = compute(inEntry, name, inEntry.isDM(inUser));
 
               // treat special names for uppercase
-              if("dm".equals(name))
-                name = "DM";
+              name = name.replaceAll("\\bdm\\b", "DM");
 
               Command label =
                 new Divider("value-label-container back-"

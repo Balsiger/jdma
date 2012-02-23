@@ -125,33 +125,29 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
 
     try
     {
-      String id = request.getParam("id");
-      AbstractType<? extends AbstractEntry> entryType =
-        AbstractType.getTyped(request.getParam("entry"));
+      String keyName = request.getParam("key");
+      AbstractEntry.EntryKey key = DMAServlet.extractKey(keyName);
 
-
-      if(id == null || entryType == null)
+      if(key == null)
       {
-        Log.warning("ignoring file " + name + " without id or entry type");
-        writer.println("File ignored, not id or entry type given");
+        Log.warning("ignoring file " + name + " for key " + key);
+        writer.println("File ignored, not proper key given");
       }
       else
       {
         DMADatastore store = (DMADatastore)DMADataFactory.get();
         @SuppressWarnings("unchecked")
-        AbstractEntry entry =
-          store.getEntry(new AbstractEntry.EntryKey(id, entryType));
+        AbstractEntry entry = store.getEntry(key);
 
         if(entry == null)
         {
-          Log.warning("ignoring file " + name + " without matching " + entryType
-                      + " " + id);
+          Log.warning("ignoring file " + name + " without matching " + keyName);
           writer.println("File ignored, no matching entry found");
         }
         else
         {
           Log.event("admin", "import", "Importing blob " + name + " of type "
-                    + type + " for " + entryType + " with id " + id);
+                    + type + " for " + keyName);
 
           FileService fileService = FileServiceFactory.getFileService();
           AppEngineFile file = fileService.createNewBlobFile(type, name);

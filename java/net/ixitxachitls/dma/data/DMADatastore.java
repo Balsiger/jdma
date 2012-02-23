@@ -494,9 +494,7 @@ public Multimap<String, String> getOwners(String inID)
 public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
   {
     Log.debug("getting files for " + inEntry.getName());
-    Query query =
-      new Query("file", KeyFactory.createKey(inEntry.getType().toString(),
-                                             inEntry.getName()));
+    Query query = new Query("file", convert(inEntry.getKey()));
     query.addSort("__key__", Query.SortDirection.ASCENDING);
     PreparedQuery preparedQuery = m_store.prepare(query);
     List<File> files = new ArrayList<File>();
@@ -676,12 +674,11 @@ public boolean isChanged()
    *
    */
   @Override
-public boolean remove
+  public boolean remove
     (@Nonnull String inID,
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     Log.debug("removing " + inType + " with id " + inID);
-    new Throwable().printStackTrace(System.out);
     Key key = KeyFactory.createKey(inType.toString(), inID);
 
     s_cache.delete(key);
@@ -769,9 +766,7 @@ public boolean remove
     Log.debug("adding file for " + inEntry.getType() + " " + inEntry.getName());
     // if a file with the same name is already there, we have to delete it first
     Key key =
-      KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
-                                                inEntry.getName()),
-                           "file", inName);
+      KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
     Entity entity = null;
 
     try

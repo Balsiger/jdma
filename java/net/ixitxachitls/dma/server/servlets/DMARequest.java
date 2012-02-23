@@ -101,24 +101,7 @@ public class DMARequest extends HttpServletRequestWrapper
 
   static
   {
-    // We have to setup the types here, as we otherwise end up with them
-    // not being properly initialized.
-    if(net.ixitxachitls.dma.entries.BaseCharacter.TYPE == null)
-      Log.warning("could not properly initialize base character type");
-    if(net.ixitxachitls.dma.entries.Character.TYPE == null)
-      Log.warning("could not properly initialize base character type");
-    if(net.ixitxachitls.dma.entries.BaseItem.TYPE == null)
-      Log.warning("could not properly initialize base item type");
-    if(net.ixitxachitls.dma.entries.Item.TYPE == null)
-      Log.warning("could not properly initialize item type");
-    if(net.ixitxachitls.dma.entries.BaseProduct.TYPE == null)
-      Log.warning("could not properly initialize base product type");
-    if(net.ixitxachitls.dma.entries.Product.TYPE == null)
-      Log.warning("could not properly initialize product type");
-    if(net.ixitxachitls.dma.entries.BaseCampaign.TYPE == null)
-      Log.warning("could not properly initialize base campaign type");
-    if(net.ixitxachitls.dma.entries.Campaign.TYPE == null)
-      Log.warning("could not properly initialize campaign type");
+    ensureTypes();
   }
 
   /** The URL and post parameters. */
@@ -604,6 +587,37 @@ public class DMARequest extends HttpServletRequestWrapper
 //   }
 
   //........................................................................
+
+  //----------------------------- ensureTypes ------------------------------
+
+  /**
+   * Make sure all the types are properly loaded.
+   *
+   */
+  public static void ensureTypes()
+  {
+    // We have to setup the types here, as we otherwise end up with them
+    // not being properly initialized.
+    if(net.ixitxachitls.dma.entries.BaseCharacter.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.Character.TYPE == null)
+      Log.warning("could not properly initialize base character type");
+    if(net.ixitxachitls.dma.entries.BaseItem.TYPE == null)
+      Log.warning("could not properly initialize base item type");
+    if(net.ixitxachitls.dma.entries.Item.TYPE == null)
+      Log.warning("could not properly initialize item type");
+    if(net.ixitxachitls.dma.entries.BaseProduct.TYPE == null)
+      Log.warning("could not properly initialize base product type");
+    if(net.ixitxachitls.dma.entries.Product.TYPE == null)
+      Log.warning("could not properly initialize product type");
+    if(net.ixitxachitls.dma.entries.BaseCampaign.TYPE == null)
+      Log.warning("could not properly initialize base campaign type");
+    if(net.ixitxachitls.dma.entries.Campaign.TYPE == null)
+      Log.warning("could not properly initialize campaign type");
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

@@ -142,8 +142,8 @@ public abstract class DMAServlet extends BaseServlet
    * @return   the entry key for the path, if any
    *
    */
-  protected static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
-    extractKey (@Nonnull String inPath)
+  public static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
+    extractKey(@Nonnull String inPath)
   {
     String []paths = inPath.split("/");
     if(paths == null || paths.length == 0)

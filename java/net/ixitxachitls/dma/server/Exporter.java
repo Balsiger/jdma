@@ -29,11 +29,14 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import javax.annotation.Nonnull;
+
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
@@ -94,6 +97,12 @@ public final class Exporter
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  static
+  {
+    net.ixitxachitls.dma.server.servlets.DMARequest.ensureTypes();
+  }
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -158,13 +167,6 @@ public final class Exporter
     // init the dma files
     DMADatafiles data = new DMADatafiles(dir + "/dma");
 
-    // reference the base character type, as it migth not be initialized
-    // otherwise
-    AbstractType<? extends AbstractEntry> dummy =
-      net.ixitxachitls.dma.entries.BaseCharacter.TYPE;
-    if(dummy == null)
-      Log.error("could not initialize base character type");
-
     try
     {
       DatastoreService store = DatastoreServiceFactory.getDatastoreService();
@@ -188,19 +190,18 @@ public final class Exporter
         // write out blobs specially
         if("file".equals(entity.getKind()))
         {
-          String id = entity.getParent().getName();
-          String type = entity.getParent().getKind();
+          String filePath = extractFilePath(entity.getParent());
           String name = (String)entity.getProperty("name");
           String path = (String)entity.getProperty("path");
           String extension =
             Files.mimeExtension((String)entity.getProperty("type"));
-          File blobDir = new File(Files.concatenate(dir, "blobs", type, id));
+          File blobDir = new File(Files.concatenate(dir, "blobs", filePath));
           if(!blobDir.exists())
             if(!blobDir.mkdirs())
               Log.warning("could not create directory " + blobDir);
 
-          String file = Files.concatenate(dir, "blobs", type, id,
-                                          name + "." + extension);
+          String file =
+            Files.concatenate(dir, "blobs", filePath, name + "." + extension);
 
           for(int i = 1; i <= 5; i++)
           {
@@ -272,6 +273,31 @@ public final class Exporter
   }
 
   //........................................................................
+  //--------------------------- extractFilePath ----------------------------
+
+  /**
+   * Extract the path for the file from the given file entity, without the file
+   * name.
+   *
+   * @param    inKey the key of the file's parent
+   *
+   * @return   the full path for the file, withouth filename
+   *
+   */
+  protected static @Nonnull String extractFilePath(@Nonnull Key inKey)
+  {
+    String id = inKey.getName();
+    String type = inKey.getKind();
+
+    Key parent = inKey.getParent();
+    if(parent != null)
+      return Files.concatenate(extractFilePath(parent), type, id);
+
+    return Files.concatenate(type, id);
+  }
+
+  //........................................................................
+
 
   //........................................................................
 }

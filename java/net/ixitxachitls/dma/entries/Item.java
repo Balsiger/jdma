@@ -890,7 +890,7 @@ public class Item extends CampaignEntry<BaseItem>
           name = new Command(new Link(baseName, base.getPath()),
                              hasPlayerName ? " [" + playerName + "]" : "");
         else
-          name = playerName;
+          name = computeValue("player name", inDM).format(this, inDM, false);
 
         return new FormattedValue
           (new Command(name, " (", getName(), ")"), getName(), "name")

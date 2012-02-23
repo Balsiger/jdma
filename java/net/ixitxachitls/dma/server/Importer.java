@@ -39,6 +39,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.base.Joiner;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -50,6 +51,7 @@ import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
@@ -140,6 +142,9 @@ public final class Importer
 
   /** If true, all images read as treated as main images. */
   private boolean m_mainImages;
+
+  /** Joiner for paths. */
+  public static final Joiner PATH_JOINER = Joiner.on('/').skipNulls();
 
   //........................................................................
 
@@ -275,28 +280,28 @@ public final class Importer
       }
 
       String type = types.getContentTypeFor(image);
-      AbstractType<? extends AbstractEntry> entry =
-        AbstractType.getTyped(parts[parts.length - 3]);
-      String id = parts[parts.length - 2].replace("\\ ", " ");
       String name = Files.file(parts[parts.length - 1]);
+      parts[parts.length - 1] = null;
+      AbstractEntry.EntryKey key =
+        DMAServlet.extractKey(PATH_JOINER.join(parts));
 
       // check if this is the main image
-      if(m_mainImages || id.equalsIgnoreCase(name) || name.contains(id)
+      if(m_mainImages || key.getID().equalsIgnoreCase(name)
+         || name.contains(key.getID())
          || "cover".equalsIgnoreCase(name)
          || "official".equalsIgnoreCase(name)
          || "unofficial".equalsIgnoreCase(name)
          || "main".equalsIgnoreCase(name))
         name = "main";
 
-      Log.important("importing image " + name + " with type " + type
-                    + " and entry " + entry + " with id " + id);
+      Log.important("importing image " + name + " with type " + type + " for "
+                    + key);
 
       URL url = new URL("http", m_host, m_webPort,
                         "/__import"
                         + "?type=" + Encodings.urlEncode(type)
                         + "&name=" + Encodings.urlEncode(name)
-                        + "&entry=" + Encodings.urlEncode(entry.toString())
-                        + "&id=" + Encodings.urlEncode(id));
+                        + "&key=" + Encodings.urlEncode(key.toString()));
       HttpURLConnection connection = (HttpURLConnection)url.openConnection();
       connection.setDoOutput(true);
       connection.setRequestMethod("POST");
