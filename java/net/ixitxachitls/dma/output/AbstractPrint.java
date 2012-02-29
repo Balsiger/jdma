@@ -45,7 +45,6 @@ import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Pair;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 

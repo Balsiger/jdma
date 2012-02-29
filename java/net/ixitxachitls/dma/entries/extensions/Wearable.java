@@ -24,14 +24,10 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.Nonnull;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 

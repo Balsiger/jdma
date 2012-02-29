@@ -26,9 +26,9 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.Nonnull;
 
 import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Text;
 
 //..........................................................................
 

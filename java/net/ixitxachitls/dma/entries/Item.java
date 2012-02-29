@@ -1273,10 +1273,7 @@ public class Item extends CampaignEntry<BaseItem>
           appearances.add(appearance);
       }
 
-      String appearance = Strings.toString(appearances, " ", null);
-
-      if(appearance != null)
-        m_appearance = m_appearance.as(appearance);
+      m_appearance = m_appearance.as(Strings.toString(appearances, " ", ""));
     }
 
 //     //......................................................................

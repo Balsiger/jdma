@@ -42,7 +42,6 @@ import com.google.appengine.api.files.FileWriteChannel;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -130,7 +129,7 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
 
       if(key == null)
       {
-        Log.warning("ignoring file " + name + " for key " + key);
+        Log.warning("ignoring file " + name + " for key " + keyName);
         writer.println("File ignored, not proper key given");
       }
       else

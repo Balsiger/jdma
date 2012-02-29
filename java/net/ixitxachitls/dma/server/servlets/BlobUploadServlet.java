@@ -43,7 +43,6 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.server.servlets.BaseServlet;
@@ -158,7 +157,7 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
                              "no key given");
 
       AbstractEntry.EntryKey key = DMAServlet.extractKey(keyName);
-      if(keyName == null)
+      if(key == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "invalid key given");
 

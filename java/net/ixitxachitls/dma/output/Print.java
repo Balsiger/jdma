@@ -126,7 +126,7 @@ public class Print extends AbstractPrint
    *
    */
   @Override
-protected @Nonnull Object
+  protected @Nonnull Object
     printExtension(@Nonnull AbstractExtension inExtension,
                    @Nonnull BaseCharacter inUser)
   {
@@ -209,7 +209,7 @@ protected @Nonnull Object
       BaseCharacter user = new BaseCharacter("test");
 
       assertEquals("printing",
-                   "[start , \\color{error}{ * first * },  , "
+                   "[start , ,  , "
                    + "\\title[entrytitle]"
                    + "{\\editable[Changing the name will not change "
                    + "any references to entries with that name, thus leaving "

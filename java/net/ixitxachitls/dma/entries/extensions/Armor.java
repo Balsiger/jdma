@@ -23,13 +23,10 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;

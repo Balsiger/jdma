@@ -46,7 +46,6 @@ import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 import net.ixitxachitls.dma.data.DMADatafiles;
 import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.ANSILogger;

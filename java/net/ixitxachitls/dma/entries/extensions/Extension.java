@@ -23,15 +23,10 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.indexes.Index;
 
