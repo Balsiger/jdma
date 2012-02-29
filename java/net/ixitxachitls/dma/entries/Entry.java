@@ -927,10 +927,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
         for(AbstractExtension extension : base.m_extensions.values())
           for(String name
                 : AbstractExtension.getAutoExtensions(extension.getClass()))
-          {
-            System.out.println("adding extension " + name);
             addExtension(name);
-          }
       }
     }
 
@@ -1207,6 +1204,10 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
         randomID();
       } while(DMADataFactory.get().getEntry(getKey()) != null);
     }
+
+    // for(AbstractExtension extension : m_extensions.values())
+    //   if(extension instanceof Extension)
+    //     ((Extension)extension).complete();
   }
 
   //........................................................................

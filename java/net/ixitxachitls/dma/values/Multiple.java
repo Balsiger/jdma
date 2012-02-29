@@ -426,7 +426,11 @@ public boolean isDefined()
   @Override
   public boolean isArithmetic()
   {
-    return false;
+    for(Element element : m_elements)
+      if(!element.get().isArithmetic())
+        return false;
+
+    return true;
   }
 
   //........................................................................

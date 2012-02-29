@@ -145,6 +145,21 @@ public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------- complete -------------------------------
+
+  /**
+   * Complete the entry and make sure that all values are filled.
+   *
+   */
+  // @OverridingMethodsMustInvokeSuper
+  // public void complete()
+  // {
+  //   // nothing to do here
+  // }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions
