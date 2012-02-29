@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,7 +46,11 @@ import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.util.Encodings;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -347,6 +352,7 @@ public class BaseEntry extends AbstractEntry
    *
    */
   @Override
+  @SuppressWarnings("unchecked")
   public @Nonnull EntryKey<? extends BaseEntry> getKey()
   {
     return new EntryKey(getName(), getType());
@@ -683,23 +689,23 @@ public class BaseEntry extends AbstractEntry
    * @return      the categories
    *
    */
-//   public String []getCategories()
-//   {
-//     ArrayList<String> result = new ArrayList<String>();
+  public List<String> getCategories()
+  {
+    List<String> result = new ArrayList<String>();
 
-//     for(Text text : m_categories)
-//       result.add(Encodings.toWordUpperCase(text.get()));
+    for(Name text : m_categories)
+      result.add(Encodings.toWordUpperCase(text.get()));
 
-//     // add the attachments, if any
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//       result.add(Encodings.toWordUpperCase(i.next().getName()));
+    // add the extensions, if any
+    for(String extension : m_extensions.keySet())
+      result.add(Encodings.toWordUpperCase(extension));
 
-//     // product specification
-//     if(this instanceof BaseProduct)
-//       result.add(((BaseProduct)this).getProductType().toString());
+    // product specification
+    if(this instanceof BaseProduct)
+      result.add(((BaseProduct)this).getProductType().toString());
 
-//     return result.toArray(new String[0]);
-//   }
+    return result;
+  }
 
   //........................................................................
   //---------------------------- getProbability ----------------------------
@@ -765,6 +771,8 @@ public class BaseEntry extends AbstractEntry
 
   //........................................................................
 
+  //----------------------------- computeValue -----------------------------
+
   /**
    * Get a value for printing.
    *
@@ -783,9 +791,31 @@ public class BaseEntry extends AbstractEntry
                      computeValue("_short description", inDM)
                      .format(this, inDM, true)), null, "short-desc");
 
+    if("categories".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      List<String> categories = getCategories();
+      for(String category : categories)
+      {
+        if(!commands.isEmpty())
+          commands.add(", ");
+
+        commands.add(new Link(category,
+                              link(getType(),
+                                   Index.Path.CATEGORIES)
+                              + category.toLowerCase(Locale.US)));
+      }
+
+      return new FormattedValue
+        (new Command(commands), Strings.toString(categories, ", ", ""),
+         "categories")
+        .withEditable(true);
+    }
+
     return super.computeValue(inKey, inDM);
   }
 
+  //........................................................................
   //-------------------------- computeIndexValues --------------------------
 
   /**
@@ -802,8 +832,8 @@ public class BaseEntry extends AbstractEntry
     for(Selection world : m_worlds)
       values.put(Index.Path.WORLDS, world.toString());
 
-    for(Name category : m_categories)
-      values.put(Index.Path.CATEGORIES, category.toString());
+    for(String category : getCategories())
+      values.put(Index.Path.CATEGORIES, category);
 
     for(String reference : getReferences())
       values.put(Index.Path.REFERENCES, reference);

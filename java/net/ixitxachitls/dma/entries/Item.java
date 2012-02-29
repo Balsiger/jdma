@@ -23,12 +23,13 @@
 
 package net.ixitxachitls.dma.entries;
 
-//import java.util.ArrayList;
+import java.util.ArrayList;
 //import java.util.Iterator;
-//import java.util.List;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 //import org.easymock.EasyMock;
 
@@ -68,7 +69,7 @@ import net.ixitxachitls.output.commands.Link;
 // import net.ixitxachitls.output.commands.Textblock;
 // import net.ixitxachitls.output.commands.Title;
 // import net.ixitxachitls.util.Encodings;
-// import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -173,8 +174,13 @@ public class Item extends CampaignEntry<BaseItem>
               + "$files "
               + "\n"
               + "$par "
-              + "%name %{player name} %base %campaign "
-              + "%weight %value %hp %{max hp} %hardness %appearance "
+              + "#incomplete "
+              + "%name %extensions %{player name} %base %campaign "
+              + "%categories "
+              + "%weight %value %>size %hp %substance %hardness %{break DC} "
+              + "%appearance "
+              + "#counted #multiple #multiuse #composite #wearable #container "
+              + "#weapon #armor #light #timed #commodity"
               + "%{player notes} %{dm notes} "
               // admin
               + "%errors"
@@ -194,27 +200,12 @@ public class Item extends CampaignEntry<BaseItem>
   protected @Nonnull Number m_hp = new Number(0, 10000);
 
   //........................................................................
-  //----- max hp -----------------------------------------------------------
-
-  /** The maximum number of hit points the item has. */
-  @Key("max hp")
-  protected @Nonnull Number m_maxHP =
-    new Number(0, 100000).withEditType("number[max]");
-
-  //........................................................................
   //----- value ------------------------------------------------------------
 
   /** The total value of the item. */
   @Key("value")
   @DM
   protected @Nonnull Money m_value = new Money();
-
-  //........................................................................
-  //----- hardness ---------------------------------------------------------
-
-  /** The hardness of the item. */
-  @Key("hardness")
-  protected @Nonnull Number m_hardness = new Number(0, 100);
 
   //........................................................................
   //----- short description ------------------------------------------------
@@ -434,6 +425,24 @@ public class Item extends CampaignEntry<BaseItem>
   // {
   //   return m_weight.getLow();
   // }
+
+  //........................................................................
+  //----------------------------- getGoldValue -----------------------------
+
+  /**
+   * Get the value of the item in gold piece and their fraction (e.g. silver is
+   * 0.1).
+   *
+   * @return      the value
+   *
+   */
+  public double getGoldValue()
+  {
+    if(m_value.isDefined())
+      return m_value.getAsGold().getValue();
+
+    return ((Money)totalBaseValues("value")).getAsGold().getValue();
+  }
 
   //........................................................................
   //------------------------------- getValue -------------------------------
@@ -899,6 +908,16 @@ public class Item extends CampaignEntry<BaseItem>
       }
     }
 
+    if("hp".equals(inKey))
+      return
+        new FormattedValue(new Command
+                           (computeValue("_hp", inDM).format(this, inDM, false),
+                            " (max ",
+                            combineBaseValues("hp", inDM, true),
+                            ")"),
+                           m_hp, "hp")
+        .withEditable(true);
+
     return super.computeValue(inKey, inDM);
   }
 
@@ -1217,102 +1236,48 @@ public class Item extends CampaignEntry<BaseItem>
    * Complete the entry and make sure that all values are filled. We do only
    * the value and the appearance here and let the base class handle the rest.
    *
-   * @undefined   never
-   *
    */
-//   public void complete()
-//   {
-//     if(!m_complete)
-//     {
-//       // let the super class handle all the base values
-//       super.complete();
+  @OverridingMethodsMustInvokeSuper
+  public void complete()
+  {
+    super.complete();
 
-//       if(m_baseEntries == null)
-//         return;
+    if(!m_hp.isDefined())
+    {
+      changed();
+      m_hp = m_hp.as(((Number)totalBaseValues("hp")).get());
+    }
 
-//       //----- base values ------------------------------------------------
+    // appearane
+    if(!m_appearance.isDefined())
+    {
+      changed();
 
-//       for(BaseEntry base : m_baseEntries)
-//         if(base != null)
-//         m_maxHP.addModifier(new NumberModifier(NumberModifier.Operation.ADD,
-//                                                (int)((BaseItem)base).getHP(),
-//                                                  NumberModifier.Type.GENERAL,
-//                                                  base.getName()));
+      // correct the random value with the computation from the value in
+      // relation to the base value
+      double itemValue = getGoldValue();
+      double baseValue = m_value.isDefined() ? itemValue
+        : ((Money)totalBaseValues("value")).getAsGold().getValue();
 
+      // We have to try to get the value from our bases.
+      List<String> appearances = new ArrayList<String>();
+      for(BaseEntry base : getBaseEntries())
+      {
+        if(base == null)
+          continue;
 
-//       //----- value --------------------------------------------------------
+        String appearance =
+          ((BaseItem)base).getRandomAppearance(itemValue / baseValue);
 
-//       // TODO: Only do this for certain items... Maybe with an attachment?
-// //       // do we have to determine a value ?
-// //       if(!m_value.isComplete() && !m_value.hasInitializer())
-// //       {
-// //         // determine if we have to increase or decrease the value
-// //         int random = s_random.nextInt(100);
+        if(appearance != null)
+          appearances.add(appearance);
+      }
 
-// //         if(random <= BaseItem.Probability.RANGE_LOW)
-// //           m_value.addStatic(new NumberModifier(BaseModifier.Operation
-// //                                            .SUBTRACT_PERCENT, random * 5,
-// //                                                BaseModifier.Type.GENERAL,
-// //                                                "random"));
-// //         else
-// //           if(random >= BaseItem.Probability.RANGE_HIGH)
-// //             // increase the value
-// //             m_value.addStatic
-// //               (new NumberModifier(BaseModifier.Operation.ADD_PERCENT,
-// //                                   (100 - random) * 5,
-// //                                   BaseModifier.Type.GENERAL, "random"));
+      String appearance = Strings.toString(appearances, " ", null);
 
-// //         // we changed the item
-// //         changed();
-// //      }
-
-//       //....................................................................
-
-//       //.....................................................................
-//     }
-
-//     //----- appearance ----------------------------------------------------
-
-//     // how about the description, do we have to set something there?
-//     if(!m_appearance.isDefined() || m_appearance.hasInitializer())
-//     {
-//       Text old = m_appearance.clone();
-
-//       // even if this one has an initializer we want to determine the
-//       // description randomly; we just have to add the initializer afterwards
-//       // as well.
-
-//       // correct the random value with the computation from the value in
-//       // relation to the base value
-//       double itemValue = m_value.getLow().getAsGold().getValue();
-//       double baseValue = 0.0;
-
-//       for(BaseEntry base : m_baseEntries)
-//         if(base != null)
-//           baseValue += ((BaseItem)base).m_value.getAsGold().getValue();
-
-//       // We have to try to get the value from our bases.
-//       List<String> appearances = new ArrayList<String>();
-
-//       for(BaseEntry base : m_baseEntries)
-//         if(base != null)
-//         {
-//           String appearance =
-//             ((BaseItem)base).getRandomAppearance(itemValue / baseValue);
-
-//           if(appearance != null)
-//             appearances.add(appearance);
-//         }
-
-//       String appearance = Strings.toString(appearances, " ", null);
-
-//       if(appearance != null)
-//         m_appearance.set(appearance);
-
-//       if(m_appearance.hasInitializer())
-//         // complete the value!
-//         m_appearance.complete(old, false);
-//     }
+      if(appearance != null)
+        m_appearance = m_appearance.as(appearance);
+    }
 
 //     //......................................................................
 //     //----- qualities ------------------------------------------------------
@@ -1384,7 +1349,7 @@ public class Item extends CampaignEntry<BaseItem>
 //     // matcher.appendTail(replaced);
 
 //     // m_description.set(replaced.toString());
-//   }
+  }
 
   //........................................................................
   //----------------------------- modifyValue ------------------------------

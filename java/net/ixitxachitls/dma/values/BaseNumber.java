@@ -464,7 +464,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @SuppressWarnings("unchecked")
-  protected T as(long inValue)
+  public T as(long inValue)
   {
     if(inValue > m_max || inValue < m_min)
       return (T)this;

@@ -123,7 +123,7 @@ public class Number extends BaseNumber<Number>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // this method has to be overriden in
+  @SuppressWarnings("unchecked") // this method has to be overriden in
                                  // derivation for this to work
   public Number create()
   {

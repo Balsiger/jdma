@@ -241,21 +241,10 @@ public final class Importer
     for(AbstractType<? extends AbstractEntry> type : m_data.getTypes())
       for(AbstractEntry entry : m_data.getEntries(type, null, 0, 0))
       {
-        Entity entity;
-        if(entry instanceof Entry
-           && (entry.getName() == null || entry.getName().isEmpty()))
-        {
-          do
-          {
-            ((Entry)entry).randomID();
-            Log.debug("Creating a new random id " + entry.getName());
-            entity = dmaStore.convert(entry);
-          } while(dmaStore.getEntity(entity.getKey()) != null);
-        }
-        else
-          entity = dmaStore.convert(entry);
+        if(entry instanceof Entry)
+          ((Entry)entry).complete();
 
-        entities.add(entity);
+        entities.add(dmaStore.convert(entry));
         Log.important("importing " + type + " " + entry.getName());
       }
 

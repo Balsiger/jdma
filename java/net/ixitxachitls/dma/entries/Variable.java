@@ -157,10 +157,10 @@ public class Variable extends ValueHandle<Variable>
   {
     Value value = get(inEntry);
 
-    // if the current value is not defined, use the first defined value from a
-    // base entry
+    // if the current value is not defined, use the combine value from the base
+    // entries
     if(!value.isDefined())
-      return inEntry.combineBaseValues(m_key, true);
+      return inEntry.combineBaseValues(m_key, inDM, true);
 
     return value.format(!m_printUndefined);
   }

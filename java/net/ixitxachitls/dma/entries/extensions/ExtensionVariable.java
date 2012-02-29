@@ -108,13 +108,16 @@ public class ExtensionVariable extends Variable
   public @Nullable Value get(@Nonnull Object inEntry)
   {
     AbstractExtension extension = null;
+
     if(inEntry instanceof AbstractExtension)
       extension = (AbstractExtension)inEntry;
     else if(inEntry instanceof AbstractEntry)
       extension = ((AbstractEntry)inEntry).getExtension(m_extension);
 
+    // if we don't find the extension in question, it also does not help to
+    // call super
     if(extension == null)
-      return super.get(inEntry);
+      return null; //return super.get(inEntry);
 
     try
     {

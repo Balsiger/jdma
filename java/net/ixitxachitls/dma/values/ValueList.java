@@ -313,7 +313,7 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-public Iterator<T> iterator()
+  public Iterator<T> iterator()
   {
     if(m_values == null)
       return new EmptyIterator<T>();

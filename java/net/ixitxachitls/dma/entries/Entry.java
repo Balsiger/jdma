@@ -12,7 +12,7 @@
  * Dungeon Master Assistant is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU General Public License for more details.x1
  *
  * You should have received a copy of the GNU General Public License
  * along with Dungeon Master Assistant; if not, write to the Free Software
@@ -23,34 +23,23 @@
 
 package net.ixitxachitls.dma.entries;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.TreeSet;
 
-// import net.ixitxachitls.dma.data.Storage;
-// import net.ixitxachitls.dma.entries.actions.Action;
-// import net.ixitxachitls.dma.entries.attachments.AbstractAttachment;
-// import net.ixitxachitls.dma.entries.indexes.Index;
-// import net.ixitxachitls.dma.values.Selection;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.ID;
-// import net.ixitxachitls.dma.values.Text;
-// import net.ixitxachitls.dma.values.Value;
-// import net.ixitxachitls.dma.values.ValueList;
-// import net.ixitxachitls.input.ParseReader;
-// import net.ixitxachitls.output.commands.Bold;
-//import net.ixitxachitls.output.commands.Command;
-// import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Large;
-//import net.ixitxachitls.output.commands.Link;
-// import net.ixitxachitls.output.commands.Script;
-// import net.ixitxachitls.output.commands.Span;
-// import net.ixitxachitls.output.commands.Super;
-// import net.ixitxachitls.output.commands.Title;
-// import net.ixitxachitls.util.Extractor;
-// import net.ixitxachitls.util.Files;
-// import net.ixitxachitls.util.Pair;
-// import net.ixitxachitls.util.Encodings;
-// import net.ixitxachitls.util.Strings;
-// import net.ixitxachitls.util.configuration.Config;
-// import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -206,6 +195,50 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("categories".equals(inKey))
+    {
+      Set<String> categories = new TreeSet<String>();
+      for(BaseEntry base : getBaseEntries())
+        if(base != null)
+          categories.addAll(base.getCategories());
+
+      List<Object> commands = new ArrayList<Object>();
+      for(String category : categories)
+      {
+        if(!commands.isEmpty())
+          commands.add(", ");
+
+        commands.add(new Link(category,
+                              link(getType(),
+                                   Index.Path.CATEGORIES)
+                              + category.toLowerCase(Locale.US)));
+      }
+
+      return new FormattedValue
+        (new Command(commands), Strings.toString(categories, ", ", ""),
+         "categories")
+        .withEditable(true);
+    }
+
+    return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
 
   // //------------------------------- getBase --------------------------------
 
@@ -695,7 +728,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    *
    */
   @Override
-public boolean isBase()
+  public boolean isBase()
   {
     return false;
   }
@@ -866,6 +899,45 @@ public boolean isBase()
   // //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //--------------------------------- set ----------------------------------
+
+  /**
+   * Set the value for the given key.
+   *
+   * @param       inKey  the name of the key to set the value for
+   * @param       inText the text to set the value to
+   *
+   * @return      the part of the string that could not be parsed
+   *
+   */
+  @Override
+  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  {
+    String rest = super.set(inKey, inText);
+
+    if("base".equals(inKey))
+    {
+      // setup extensions from base entries
+      for(BaseEntry base : getBaseEntries())
+      {
+        if(base == null)
+          continue;
+
+        for(AbstractExtension extension : base.m_extensions.values())
+          for(String name
+                : AbstractExtension.getAutoExtensions(extension.getClass()))
+          {
+            System.out.println("adding extension " + name);
+            addExtension(name);
+          }
+      }
+    }
+
+    return rest;
+  }
+
+  //........................................................................
 
   // //----------------------------- setBaseName ------------------------------
 
@@ -1089,43 +1161,55 @@ public boolean isBase()
 
   // //........................................................................
 
-  // //------------------------------- complete -------------------------------
+  //----------------------------- getExtension -----------------------------
 
-  // /**
-  //  * Complete the entry and make sure that all values are filled.
-  //  *
-  //  * @undefined   never
-  //  *
-  //  */
-  // @SuppressWarnings("unchecked") // Need to case BaseEntry to B
-  // public void complete()
+  /**
+   * Get the extension given by name.
+   *
+   * @param   inName the name of the extension
+   *
+   * @return  the extension found, if any
+   *
+   */
+  // @Override
+  // public @Nullable AbstractExtension getExtension(@Nonnull String inName)
   // {
-  //   // setup the default comments
-  //   if(!m_leadingComment.isDefined())
-  //  m_leadingComment.set("\n#----- " + getName() + " (" + getID() + ")\n\n");
+  //   AbstractExtension extension = m_extensions.get(inName);
+  //   if(extension != null)
+  //     return extension;
 
-  //   if(m_baseEntries == null)
+  //   for(BaseEntry base : getBaseEntries())
   //   {
-  //     B base =
-  //       (B)BaseCampaign.GLOBAL.getBaseEntry
-  //         (Encodings.toWordUpperCase(getName()), getType().getBaseType());
-
-  //     if(base == null)
-  //       Log.warning("could not find base(s) for '" + getName() + "'");
-  //     else
-  //     {
-  //       m_baseEntries = new ArrayList<BaseEntry>();
-  //       m_baseNames = new ArrayList<String>();
-
-  //       m_baseEntries.add(base);
-  //       m_baseNames.add(getName());
-  //     }
+  //     extension = base.getExtension(inName);
+  //     if(extension != null)
+  //       return extension;
   //   }
 
-  //   super.complete();
+  //   return null;
   // }
 
-  // //........................................................................
+  //........................................................................
+  //------------------------------- complete -------------------------------
+
+  /**
+   * Complete the entry and make sure that all values are filled.
+   *
+   */
+  @OverridingMethodsMustInvokeSuper
+  public void complete()
+  {
+    if(!m_name.isDefined())
+    {
+      changed();
+
+      do
+      {
+        randomID();
+      } while(DMADataFactory.get().getEntry(getKey()) != null);
+    }
+  }
+
+  //........................................................................
   // //-------------------------------- check ---------------------------------
 
   // /**

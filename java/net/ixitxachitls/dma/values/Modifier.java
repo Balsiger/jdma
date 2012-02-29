@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
@@ -237,6 +238,9 @@ public class Modifier extends Value<Modifier>
   /** The flag if defined or not. */
   private boolean m_defined = false;
 
+  /** A next modifier, if any. */
+  private @Nullable Modifier m_next;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -251,7 +255,10 @@ public class Modifier extends Value<Modifier>
    */
   public int getValue()
   {
-    return m_value;
+    if(m_next == null)
+      return m_value;
+
+    return m_value + m_next.getValue();
   }
 
   //........................................................................
@@ -392,7 +399,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     List<Object> commands = new ArrayList<Object>();
 
@@ -409,12 +416,17 @@ protected @Nonnull Command doFormat()
       desc.add("this modifier stacks with similar ones");
     else
     {
-      desc.add(" this modifier does ");
+      desc.add("this modifier does ");
       desc.add(new Emph("not"));
       desc.add(" stack with similar ones");
     }
 
-    return new Window(new Command(commands), new Command(desc));
+    Command command = new Window(new Command(commands), new Command(desc));
+
+    if(m_next == null || !m_next.isDefined())
+      return command;
+
+    return new Command(command, " &nbsp;", m_next.format());
   }
 
   //........................................................................
@@ -428,7 +440,7 @@ protected @Nonnull Command doFormat()
 
    */
   @Override
-protected @Nonnull String doToString()
+  protected @Nonnull String doToString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -437,6 +449,12 @@ protected @Nonnull String doToString()
 
     result.append(m_value);
     result.append(" " + m_type);
+
+    if(m_next != null)
+    {
+      result.append(" ");
+      result.append(m_next.toString());
+    }
 
     return result.toString();
   }
@@ -460,11 +478,31 @@ protected @Nonnull String doToString()
    */
   public @Nonnull Modifier as(int inValue, @Nonnull Type inType)
   {
+    return as(inValue, inType, null);
+  }
+
+  //........................................................................
+  //---------------------------------- as ----------------------------------
+
+  /**
+   * Create a new the value with similar setup but new value.
+   *
+   * @param       inValue the new value of the modifier
+   * @param       inType  the type of the modifier
+   * @param       inNext  the next modifier for this chain
+   *
+   * @return      the new value
+   *
+   */
+  public @Nonnull Modifier as(int inValue, @Nonnull Type inType,
+                              @Nullable Modifier inNext)
+  {
     Modifier modifier = create();
 
     modifier.m_value   = inValue;
     modifier.m_type    = inType;
     modifier.m_defined = true;
+    modifier.m_next    = inNext;
 
     return modifier;
   }
@@ -501,6 +539,37 @@ public boolean doRead(@Nonnull ParseReader inReader)
     }
 
     return true;
+  }
+
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the current and given value and return it. The current value is not
+   * changed.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the added values
+   *
+   */
+  @Override
+  public @Nonnull Modifier add(@Nonnull Modifier inValue)
+  {
+    int value = m_value;
+    if(m_type == inValue.m_type)
+      if(m_type.stacks())
+        return as(m_value + inValue.m_value, m_type, m_next);
+      else
+        return as(Math.max(value, inValue.m_value), m_type, m_next);
+
+    Modifier result = as(m_value, m_type);
+    if(m_next == null)
+      result.m_next = inValue;
+    else
+      result.m_next = m_next.add(inValue);
+
+    return result;
   }
 
   //........................................................................

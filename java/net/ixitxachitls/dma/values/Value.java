@@ -382,7 +382,17 @@ public @Nonnull String toString()
   @Override
   public int compareTo(@Nonnull Object inOther)
   {
-    return toString().compareTo(inOther.toString());
+    int compared = toString().compareTo(inOther.toString());
+    if(compared != 0 || !(inOther instanceof Value))
+      return compared;
+
+    if(m_remark == null && ((Value)inOther).m_remark != null)
+      return +1;
+
+    if(m_remark != null && ((Value)inOther).m_remark == null)
+      return -1;
+
+    return 0;
   }
 
   //........................................................................

@@ -32,15 +32,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-// TODO: clean up commented out code
-// import java.util.Iterator;
-// import java.util.LinkedList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-// import java.util.regex.Pattern;
-// import java.util.regex.Matcher;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,26 +45,11 @@ import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-//import net.ixitxachitls.dma.values.Modifiable;
-//import net.ixitxachitls.dma.values.SimpleText;
-//import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
-//import net.ixitxachitls.dma.values.ValueList;
-//import net.ixitxachitls.dma.values.modifiers.BaseModifier;
-//import net.ixitxachitls.dma.values.modifiers.ValueModifier;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
-// import net.ixitxachitls.output.commands.Bold;
 import net.ixitxachitls.output.commands.Command;
-// import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Editable;
-// import net.ixitxachitls.output.commands.ID;
-// import net.ixitxachitls.output.commands.Icon;
-// import net.ixitxachitls.output.commands.OverviewFiles;
-// import net.ixitxachitls.output.commands.Table;
-// import net.ixitxachitls.output.commands.TempGroup;
-// import net.ixitxachitls.output.commands.Window;
-//import net.ixitxachitls.util.Encodings;
+import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -1609,13 +1589,43 @@ public abstract class ValueGroup implements Changeable
    * Combine specific values of all base entries into a single command.
    *
    * @param      inName    the name of the value to obtain
+   * @param      inDM      true if formatting for the dm
    * @param      inInline  true to render the values inline
    *
    * @return     the command for printing the value
    *
    */
   public abstract @Nonnull Command combineBaseValues(@Nonnull String inName,
+                                                     boolean inDM,
                                                      boolean inInline);
+
+  //........................................................................
+  //--------------------------- maximalBaseValue ---------------------------
+
+  /**
+   * Compute the maximal base value.
+   *
+   * @param       inName the name of the value to add up
+   *
+   * @return      the maximal base value found
+   *
+   */
+  public abstract @Nullable Pair<Value, BaseEntry>
+    maximalBaseValue(@Nonnull String inName);
+
+  //........................................................................
+  //--------------------------- minimalBaseValue ---------------------------
+
+  /**
+   * Compute the minimal base value.
+   *
+   * @param       inName the name of the value to add up
+   *
+   * @return      the minimal base value found
+   *
+   */
+  public abstract @Nullable Pair<Value, BaseEntry>
+    minimalBaseValue(@Nonnull String inName);
 
   //........................................................................
 
@@ -2289,12 +2299,38 @@ public abstract class ValueGroup implements Changeable
       /** Combine all base results.
        *
        * @param inName the name of the value
+       * @param inDM true if formatting for the dm
        * @param inInline true to format the value inline
        * @return the combined value
        */
       @Override
       public @Nonnull Command combineBaseValues(@Nonnull String inName,
+                                                boolean inDM,
                                                 boolean inInline)
+      {
+        throw new UnsupportedOperationException("not implemented");
+      }
+
+      /**
+       * Compute the maximal base value.
+       *
+       * @param       inName the name of the value to add up
+       * @return      the maximal base value found
+       */
+      public @Nullable Pair<Value, BaseEntry>
+        maximalBaseValue(@Nonnull String inName)
+      {
+        throw new UnsupportedOperationException("not implemented");
+      }
+
+      /**
+       * Compute the minimal base value.
+       *
+       * @param       inName the name of the value to add up
+       * @return      the minimal base value found
+       */
+      public @Nullable Pair<Value, BaseEntry>
+        minimalBaseValue(@Nonnull String inName)
       {
         throw new UnsupportedOperationException("not implemented");
       }

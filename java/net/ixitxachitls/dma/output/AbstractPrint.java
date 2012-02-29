@@ -32,6 +32,7 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.ValueHandle;
@@ -41,7 +42,10 @@ import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Section;
 import net.ixitxachitls.output.commands.Value;
+import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Encodings;
+import net.ixitxachitls.util.Pair;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -85,7 +89,7 @@ public abstract class AbstractPrint
 
   /** Tokenizer string to separate values to print. */
   private static final @Nonnull String s_delimiter =
-    "((?:\\$|#|%|\\?|&)(?:\\+|&)?)(?:\\{(.*?)\\}|(\\w+))";
+    "((?:\\$|#|%|\\?|&)(?:\\+|&|>|<)?)(?:\\{(.*?)\\}|(\\w+))";
 
   //........................................................................
 
@@ -190,7 +194,9 @@ public abstract class AbstractPrint
               handle = compute(inEntry, name, inEntry.isDM(inUser));
 
               // treat special names for uppercase
-              name = name.replaceAll("\\bdm\\b", "DM");
+              name = name.replaceAll("\\bdm\\b", "DM")
+                .replaceAll("^>", "")
+                .replaceAll("^<", "");
 
               Command label =
                 new Divider("value-label-container back-"
@@ -254,16 +260,40 @@ public abstract class AbstractPrint
   public @Nullable ValueHandle compute(@Nonnull ValueGroup inEntry,
                                        @Nonnull String inName, boolean inDM)
   {
+    String name = inName.substring(1);
     switch(inName.charAt(0))
     {
       case '&':
         return new FormattedValue
-          (inEntry.combineBaseValues(inName.substring(1), true),
-           inEntry.computeValue(inName, inDM), inName)
+          (inEntry.combineBaseValues(name, inDM, true),
+           inEntry.computeValue(name, inDM), name)
           .withDM(inDM);
 
       case '+':
         throw new UnsupportedOperationException("not yet implemented");
+
+      case '>':
+        if(!(inEntry instanceof AbstractEntry))
+          return null;
+
+        Pair<net.ixitxachitls.dma.values.Value, BaseEntry> max =
+          inEntry.maximalBaseValue(name);
+        if (max == null)
+          return null;
+
+        return new FormattedValue(new Window(max.first().format(),
+                                             max.second().getName(),
+                                             "", "base"), max, name);
+
+      case '<':
+        Pair<net.ixitxachitls.dma.values.Value, BaseEntry> min =
+          inEntry.minimalBaseValue(name);
+        if (min == null)
+          return null;
+
+        return new FormattedValue(new Window(min.first().format(),
+                                             min.second().getName(),
+                                             "", "base"), min, name);
 
       default:
         return inEntry.computeValue(inName, inDM);

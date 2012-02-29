@@ -24,6 +24,8 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,12 +41,14 @@ import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.Variables;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.util.ArrayIterator;
+import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -127,8 +131,9 @@ public abstract class AbstractExtension<T extends AbstractEntry>
     Config.get("resource:html/dir.extensions", "extensions");
 
   /** All the possible auto extensions for each class (if any). */
-  protected static final Map<Class, String []> s_autoExtensions =
-    new HashMap<Class, String []>();
+  protected static final Map<Class<? extends AbstractExtension>, String []>
+    s_autoExtensions =
+    new HashMap<Class<? extends AbstractExtension>, String []>();
 
   //........................................................................
 
@@ -144,7 +149,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-public Variables getVariables()
+  public Variables getVariables()
   {
     // if(m_tag == null)
       return super.getVariables();
@@ -319,7 +324,7 @@ public Variables getVariables()
     *
     */
   @Override
-public @Nonnull String getName()
+  public @Nonnull String getName()
   {
     return m_name;
   }
@@ -335,7 +340,7 @@ public @Nonnull String getName()
    *
    */
   @Override
-@Deprecated
+  @Deprecated
   public String getID()
   {
     //   if(m_tag == null)
@@ -356,9 +361,14 @@ public @Nonnull String getName()
    * @return      an iterator with all the names of the extensions
    *
    */
-  public static @Nonnull Iterator<String> getAutoExtensions(Class inClass)
+  public static @Nonnull List<String>
+    getAutoExtensions(Class<? extends AbstractExtension> inClass)
   {
-    return new ArrayIterator<String>(s_autoExtensions.get(inClass));
+    String []names = s_autoExtensions.get(inClass);
+    if(names == null)
+      return new ArrayList<String>();
+
+    return Arrays.asList(names);
   }
 
   //........................................................................
@@ -413,7 +423,8 @@ public boolean isDM(@Nullable BaseCharacter inUser)
   /**
    * Combine specific values of all base entries into a single command.
    *
-   * @param      inName   the name of the value to obtain
+   * @param      inName   the name of the value to
+   * @param      inDM     true if formatting for the DM
    * @param      inInline true to format inline, false to format with multi
    *                      lines
    *
@@ -422,9 +433,68 @@ public boolean isDM(@Nullable BaseCharacter inUser)
    */
   @Override
   public @Nonnull Command combineBaseValues(@Nonnull String inName,
+                                            boolean inDM,
                                             boolean inInline)
   {
-    return m_entry.combineBaseValues(inName, inInline);
+    return m_entry.combineBaseValues(inName, inDM, inInline);
+  }
+
+  //........................................................................
+  //--------------------------- maximalBaseValue ---------------------------
+
+  /**
+   * Compute the maximal base value.
+   *
+   * @param       inName the name of the value to add up
+   *
+   * @return      the maximal base value found
+   *
+   */
+  @Override
+  public @Nullable Pair<Value, BaseEntry>
+    maximalBaseValue(@Nonnull String inName)
+  {
+    return m_entry.maximalBaseValue(inName);
+  }
+
+  //........................................................................
+  //--------------------------- minimalBaseValue ---------------------------
+
+  /**
+   * Compute the minimal base value.
+   *
+   * @param       inName the name of the value to add up
+   *
+   * @return      the minimal base value found
+   *
+   */
+  @Override
+  public @Nullable Pair<Value, BaseEntry>
+    minimalBaseValue(@Nonnull String inName)
+  {
+    return m_entry.minimalBaseValue(inName);
+  }
+
+  //........................................................................
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    ValueHandle value = super.computeValue(inKey, inDM);
+    if(value != null)
+      return value;
+
+    return new FormattedValue(combineBaseValues(inKey, inDM, true), "", inKey);
   }
 
   //........................................................................
@@ -545,7 +615,8 @@ public boolean isDM(@Nullable BaseCharacter inUser)
    *
    */
   protected static void setAutoExtensions
-    (@Nonnull Class inClass, @Nonnull String ... inAbstractExtensions)
+    (@Nonnull Class<? extends AbstractExtension> inClass,
+     @Nonnull String ... inAbstractExtensions)
   {
     if(inAbstractExtensions.length == 0)
       throw new IllegalArgumentException("must have extensions here");

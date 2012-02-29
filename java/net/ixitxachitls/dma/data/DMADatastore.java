@@ -719,12 +719,7 @@ public boolean isChanged()
     {
       // determine a new, real id to use; this should actually be in a
       // transaction to be safe...
-      do
-      {
-        ((Entry)inEntry).randomID();
-        Log.debug("Creating a new random id " + inEntry.getName());
-        entity = convert(inEntry);
-      } while(getEntity(entity.getKey()) != null);
+      ((Entry)inEntry).complete();
     }
 
     s_cache.put(entity.getKey(), entity, s_expiration);

@@ -157,7 +157,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /** The printer for printing the whole base item. */
   public static final Print s_pagePrint =
     new Print("%{AC bonus} %{armor type} %{max dexterity} %{check penalty} "
-              + "%{arcane failure}");
+              + "%{arcane failure} %speed");
 
   //----- ac bonus ---------------------------------------------------------
 

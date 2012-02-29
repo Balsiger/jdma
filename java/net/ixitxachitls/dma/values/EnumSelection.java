@@ -295,8 +295,9 @@ public boolean isDefined()
    *              object given
    *
    */
+  @Override
   @SuppressWarnings("unchecked")
-  public int compareTo(@Nonnull Value inOther)
+  public int compareTo(@Nonnull Object inOther)
   {
     if(!(inOther instanceof EnumSelection))
       return super.compareTo(inOther);
@@ -313,7 +314,17 @@ public boolean isDefined()
     if(other.m_selected == null)
       return +1;
 
-    return m_selected.compareTo(other.m_selected);
+    int compared = m_selected.compareTo(other.m_selected);
+    if(compared != 0)
+      return compared;
+
+    if(m_remark == null && other.m_remark != null)
+      return +1;
+
+    if(m_remark != null && other.m_remark == null)
+      return -1;
+
+    return 0;
   }
 
   //........................................................................
@@ -402,7 +413,7 @@ public boolean doRead(@Nonnull ParseReader inReader)
    *
    */
   @Override
-public @Nonnull EnumSelection<T> max(@Nonnull EnumSelection<T> inValue)
+  public @Nonnull EnumSelection<T> max(@Nonnull EnumSelection<T> inValue)
   {
     EnumSelection<T> result = create();
 
@@ -427,7 +438,7 @@ public @Nonnull EnumSelection<T> max(@Nonnull EnumSelection<T> inValue)
    *
    */
   @Override
-public @Nonnull EnumSelection<T> min(@Nonnull EnumSelection<T> inValue)
+  public @Nonnull EnumSelection<T> min(@Nonnull EnumSelection<T> inValue)
   {
     EnumSelection<T> result = create();
 
