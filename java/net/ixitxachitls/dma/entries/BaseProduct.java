@@ -1570,6 +1570,26 @@ public class BaseProduct extends BaseEntry
   }
 
   //........................................................................
+  //----------------------------- getCategories ----------------------------
+
+  /**
+   * Get the categories of the entry.
+   *
+   * @return      the categories
+   *
+   */
+  @Override
+  public List<String> getCategories()
+  {
+    List<String> result = super.getCategories();
+
+    if(getProductType() != null)
+      result.add(getProductType().toString());
+
+    return result;
+  }
+
+  //........................................................................
 
   //---------------------------- collectPersons ----------------------------
 
@@ -1776,7 +1796,8 @@ public class BaseProduct extends BaseEntry
                      " ",
                      computeValue("_title", inDM).format(this, inDM, true)),
          null, "name")
-        .withEditable(true);
+        .withEditable(false); // the leader and title are editable, but the
+                              // wrapper is not
 
     if("subtitle".equals(inKey))
       return new FormattedValue

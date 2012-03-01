@@ -700,10 +700,6 @@ public class BaseEntry extends AbstractEntry
     for(String extension : m_extensions.keySet())
       result.add(Encodings.toWordUpperCase(extension));
 
-    // product specification
-    if(this instanceof BaseProduct)
-      result.add(((BaseProduct)this).getProductType().toString());
-
     return result;
   }
 

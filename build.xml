@@ -20,6 +20,7 @@
   <!-- local valules -->
   <property file="build.properties.${os.name}" />
   <property file="build.properties" />
+  <property name="version" value="allip" />
 
   <!-- Google App Engine -->
   <property name="gae.dir" location="../../appengine-java-sdk-1.6.3" />
@@ -198,7 +199,7 @@
         <include name="*.properties" />
       </fileset>
     </copy>
-    <!-- html files are rendered using the page renderer, thus we use html-->
+    <!-- html files are rendered using the page renderer, thus we use htm-->
     <!-- for really static files. -->
     <copy todir="${war.dir}/static" flatten="false">
       <fileset dir="${resources.dir}/static">
@@ -339,6 +340,23 @@
 
   <target name="gae-update" depends="compile"
           description="Uploads the application to App Engine.">
+    <replace file="${war.dir}/WEB-INF/appengine-web.xml"
+             token="&lt;application&gt;jdmaixit-dev&lt;/application&gt;"
+             value="&lt;application&gt;jdmaixit&lt;/application&gt;" />
+    <replaceregexp file="${war.dir}/WEB-INF/appengine-web.xml"
+             match="&lt;version&gt;.*&lt;/version&gt;"
+             replace="&lt;version&gt;${version}&lt;/version&gt;" />
+    <appcfg action="update" war="${war.dir}" />
+  </target>
+
+  <target name="gae-update-dev" depends="compile"
+          description="Uploads the application to App Engine.">
+    <replace file="${war.dir}/WEB-INF/appengine-web.xml"
+             token="&lt;application&gt;jdmaixit&lt;/application&gt;"
+             value="&lt;application&gt;jdmaixit-dev&lt;/application&gt;" />
+    <replaceregexp file="${war.dir}/WEB-INF/appengine-web.xml"
+             match="&lt;version&gt;.*&lt;/version&gt;"
+             replace="&lt;version&gt;${version}&lt;/version&gt;" />
     <appcfg action="update" war="${war.dir}" />
   </target>
 
