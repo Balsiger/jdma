@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.server.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -192,16 +193,22 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
         return null;
       }
 
-      Map<String, BlobKey> blobs = m_blobs.getUploadedBlobs(inRequest);
-      BlobKey blobKey = blobs.get("file");
+      Map<String, List<BlobKey>> blobs = m_blobs.getUploads(inRequest);
+      List<BlobKey> blobKeys = blobs.get("file");
 
-      if(blobKey == null)
+      if(blobKeys == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "No file uploaded");
 
       if(file == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "no file name given");
+
+      if(blobKeys.size() > 1)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "expected a single blob key only");
+
+      BlobKey blobKey = blobKeys.get(0);
 
       String fileType = URLConnection.getFileNameMap().getContentTypeFor(file);
 

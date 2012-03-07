@@ -651,7 +651,8 @@ public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
    *
    */
   @Override
-public boolean isChanged()
+  @Deprecated
+  public boolean isChanged()
   {
     return false;
   }

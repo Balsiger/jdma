@@ -24,51 +24,20 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
-//import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-//import org.easymock.EasyMock;
-
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-// import net.ixitxachitls.dma.entries.actions.Action;
-// import net.ixitxachitls.dma.entries.actions.Move;
-// import net.ixitxachitls.dma.entries.attachments.Contents;
-// import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
-// import net.ixitxachitls.dma.values.Multiple;
-// import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
-// import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Text;
-// import net.ixitxachitls.dma.values.Value;
-// import net.ixitxachitls.dma.values.ValueList;
-// import net.ixitxachitls.dma.values.Weight;
-// import net.ixitxachitls.input.ParseReader;
-// import net.ixitxachitls.output.commands.Bold;
-// import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
-// import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Editable;
-// import net.ixitxachitls.output.commands.Emph;
-// import net.ixitxachitls.output.commands.Hrule;
-// import net.ixitxachitls.output.commands.Indent;
-// import net.ixitxachitls.output.commands.Left;
-// import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Link;
-// import net.ixitxachitls.output.commands.Par;
-// import net.ixitxachitls.output.commands.Scriptsize;
-// import net.ixitxachitls.output.commands.Small;
-// import net.ixitxachitls.output.commands.Super;
-// import net.ixitxachitls.output.commands.Table;
-// import net.ixitxachitls.output.commands.Textblock;
-// import net.ixitxachitls.output.commands.Title;
-// import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 
 //..........................................................................
@@ -170,6 +139,7 @@ public class Item extends CampaignEntry<BaseItem>
     new Print("$image "
               + "${as pdf} ${as text} ${as dma} "
               + "$title "
+              + "$desc "
               + "$clear "
               + "$files "
               + "\n"
@@ -182,8 +152,9 @@ public class Item extends CampaignEntry<BaseItem>
               + "#counted #multiple #multiuse #composite #wearable #container "
               + "#weapon #armor #light #timed #commodity"
               + "%{player notes} %{dm notes} "
+              + "%qualities %effects"
               // admin
-              + "%errors"
+              + "%references %errors"
               );
 
   /** The printer for printing in a list. */
@@ -441,7 +412,8 @@ public class Item extends CampaignEntry<BaseItem>
     if(m_value.isDefined())
       return m_value.getAsGold().getValue();
 
-    return ((Money)totalBaseValues("value")).getAsGold().getValue();
+    return
+      new Combination<Money>(this, "value").total().getAsGold().getValue();
   }
 
   //........................................................................
@@ -882,30 +854,44 @@ public class Item extends CampaignEntry<BaseItem>
   @Override
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
-    if("name".equals(inKey) && m_baseEntries != null
-       && m_baseEntries.size() > 0)
+    if("name".equals(inKey))
     {
-      BaseItem base = (BaseItem)m_baseEntries.get(0);
-
-      if(base != null)
+      String name = null;
+      for(BaseEntry base : getBaseEntries())
       {
+        if(base == null)
+          continue;
+
         String baseName = base.getName();
-        String playerName = m_playerName.get();
-        boolean hasPlayerName =
-          m_playerName.isDefined() && !baseName.equals(playerName);
+        List<String> synonyms = base.getSynonyms();
+        if(!synonyms.isEmpty())
+          baseName = synonyms.get(0);
 
-        Object name;
-        if(inDM)
-          name = new Command(new Link(baseName, base.getPath()),
-                             hasPlayerName ? " [" + playerName + "]" : "");
+        if(name == null)
+          name = baseName;
         else
-          name = computeValue("player name", inDM).format(this, inDM, false);
-
-        return new FormattedValue
-          (new Command(name, " (", getName(), ")"), getName(), "name")
-          .withEditable(true)
-          .withEditType("name");
+          name += " " + baseName;
       }
+
+      if(name == null)
+        name = getName();
+
+      String playerName = m_playerName.get();
+      boolean hasPlayerName =
+        m_playerName.isDefined() && !name.equals(playerName);
+
+      Object nameCommand;
+      if(inDM)
+        nameCommand = new Command(name,
+                                  hasPlayerName ? " [" + playerName + "]" : "");
+      else
+        nameCommand =
+          computeValue("player name", inDM).format(this, inDM, false);
+
+      return new FormattedValue
+        (new Command(nameCommand, " (", getName(), ")"), getName(), "name")
+        .withEditable(true)
+        .withEditType("name");
     }
 
     if("hp".equals(inKey))
@@ -913,7 +899,8 @@ public class Item extends CampaignEntry<BaseItem>
         new FormattedValue(new Command
                            (computeValue("_hp", inDM).format(this, inDM, false),
                             " (max ",
-                            combineBaseValues("hp", inDM, true),
+                            new Combination(this, "hp")
+                            .withIgnoreTop().format(inDM),
                             ")"),
                            m_hp, "hp")
         .withEditable(true);
@@ -1245,7 +1232,9 @@ public class Item extends CampaignEntry<BaseItem>
     if(!m_hp.isDefined())
     {
       changed();
-      m_hp = m_hp.as(((Number)totalBaseValues("hp")).get());
+      Number total = new Combination<Number>(this, "hp").total();
+      if(total != null)
+        m_hp = m_hp.as(total.get());
     }
 
     // appearane
@@ -1255,9 +1244,10 @@ public class Item extends CampaignEntry<BaseItem>
 
       // correct the random value with the computation from the value in
       // relation to the base value
+      Money total = new Combination<Money>(this, "value").total();
       double itemValue = getGoldValue();
-      double baseValue = m_value.isDefined() ? itemValue
-        : ((Money)totalBaseValues("value")).getAsGold().getValue();
+      double baseValue = m_value.isDefined() || total == null ? itemValue
+        : total.getAsGold().getValue();
 
       // We have to try to get the value from our bases.
       List<String> appearances = new ArrayList<String>();

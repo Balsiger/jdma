@@ -45,9 +45,8 @@ import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.Variables;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -417,64 +416,6 @@ public boolean isDM(@Nullable BaseCharacter inUser)
     (@Nonnull Multimap<Index.Path, String> ioValues);
 
   //........................................................................
-  //-------------------------- combineBaseValues ---------------------------
-
-  /**
-   * Combine specific values of all base entries into a single command.
-   *
-   * @param      inName   the name of the value to
-   * @param      inDM     true if formatting for the DM
-   * @param      inInline true to format inline, false to format with multi
-   *                      lines
-   *
-   * @return     the command for printing the value
-   *
-   */
-  @Override
-  public @Nonnull Command combineBaseValues(@Nonnull String inName,
-                                            boolean inDM,
-                                            boolean inInline)
-  {
-    return m_entry.combineBaseValues(inName, inDM, inInline);
-  }
-
-  //........................................................................
-  //--------------------------- maximalBaseValue ---------------------------
-
-  /**
-   * Compute the maximal base value.
-   *
-   * @param       inName the name of the value to add up
-   *
-   * @return      the maximal base value found
-   *
-   */
-  @Override
-  public @Nullable Pair<Value, BaseEntry>
-    maximalBaseValue(@Nonnull String inName)
-  {
-    return m_entry.maximalBaseValue(inName);
-  }
-
-  //........................................................................
-  //--------------------------- minimalBaseValue ---------------------------
-
-  /**
-   * Compute the minimal base value.
-   *
-   * @param       inName the name of the value to add up
-   *
-   * @return      the minimal base value found
-   *
-   */
-  @Override
-  public @Nullable Pair<Value, BaseEntry>
-    minimalBaseValue(@Nonnull String inName)
-  {
-    return m_entry.minimalBaseValue(inName);
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -493,7 +434,15 @@ public boolean isDM(@Nullable BaseCharacter inUser)
     if(value != null)
       return value;
 
-    return new FormattedValue(combineBaseValues(inKey, inDM, true), "", inKey);
+    // The value is not defined for this extension, but might be defined in a
+    // base.
+    String key;
+    if(inKey.startsWith("_"))
+      key = inKey.substring(1);
+    else
+      key = inKey;
+
+    return new FormattedValue(new Combination(this, key).format(inDM), "", key);
   }
 
   //........................................................................

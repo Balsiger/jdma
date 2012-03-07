@@ -1048,7 +1048,8 @@ public class Units<T extends Units> extends Value<T>
   {
     assert inIndex >= 0 && inIndex <= m_values.length;
 
-    if(m_values[inIndex] == null || !m_values[inIndex].isDefined())
+    if(m_values[inIndex] == null || !m_values[inIndex].isDefined()
+       || m_values[inIndex].isNull())
       return null;
 
     return m_set.m_units[inIndex].format(m_values[inIndex]);
@@ -1261,7 +1262,8 @@ public class Units<T extends Units> extends Value<T>
     // if we don't have a set right now, we use the one given
     result.m_set = (m_set == null ? inOther.m_set : m_set);
     result.m_values =
-      m_values == null ? new Rational [result.m_set.m_units.length] : m_values;
+      m_values == null ? new Rational [result.m_set.m_units.length]
+      : Arrays.copyOf(m_values, m_values.length);
 
     // first the easy one, the same sets
     if(result.m_set == inOther.m_set)

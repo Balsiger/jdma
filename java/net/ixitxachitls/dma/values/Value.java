@@ -285,6 +285,9 @@ public abstract class Value<T extends Value> implements
   /** The hint for this value. */
   protected @Nullable Remark m_remark = null;
 
+  /** The expression for value computation, if any. */
+  protected @Nullable Expression m_expression = null;
+
   /** The formatter for the value. */
   protected @Nullable Formatter<T> m_formatter = null;
 
@@ -316,7 +319,7 @@ public abstract class Value<T extends Value> implements
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     return toString(true);
   }
@@ -327,7 +330,7 @@ public @Nonnull String toString()
   /**
    * Convert the value into a String that can be shown to a user.
    *
-   * @param       inAll true if printing all bvalues, false just for humans
+   * @param       inAll true if printing all values, false just for humans
    *
    * @return      a String representation for human reading
    *
@@ -335,10 +338,13 @@ public @Nonnull String toString()
   public @Nonnull String toString(boolean inAll)
   {
     if(!isDefined())
-      return UNDEFINED;
+      if(hasExpression())
+        return m_expression.toString();
+      else
+        return UNDEFINED;
 
     return (!inAll || m_remark == null ? "" : m_remark.toString())
-      + doToString();
+      + (m_expression == null ? "" : m_expression + " ") + doToString();
   }
 
   //........................................................................
@@ -488,15 +494,23 @@ public int hashCode()
     Command command = null;
 
     if(!isDefined())
-      if(inIgnoreUndefined)
-        command = new Command(new Object[0]);
+      if(hasExpression())
+        return new Command(m_expression);
       else
-        command = new Color("error", UNDEFINED);
+        if(inIgnoreUndefined)
+          command = new Command(new Object[0]);
+        else
+          command = new Color("error", UNDEFINED);
     else
+    {
       if(!inIgnoreFormatter && m_formatter != null)
         command = m_formatter.format((T)this);
       else
         command = doFormat();
+
+      if(hasExpression())
+        command = new Command(m_expression, " ", command);
+    }
 
     if(m_remark != null)
       command = m_remark.format(command);
@@ -625,6 +639,34 @@ public int hashCode()
   public boolean isArithmetic()
   {
     return true;
+  }
+
+  //........................................................................
+  //---------------------------- hasExpression -----------------------------
+
+  /**
+   * Check if the value has an expression.
+   *
+   * @return      true if there is an expression, false if not
+   *
+   */
+  public boolean hasExpression()
+  {
+    return m_expression != null;
+  }
+
+  //........................................................................
+  //---------------------------- getExpression -----------------------------
+
+  /**
+   * Get the expression for this value.
+   *
+   * @return      the expression
+   *
+   */
+  public @Nullable Expression getExpression()
+  {
+    return m_expression;
   }
 
   //........................................................................
@@ -769,16 +811,20 @@ public int hashCode()
     if(inReader.expect(UNDEFINED))
       return result;
 
+    result.m_remark = Remark.read(inReader);
+    result.m_expression = Expression.read(inReader);
+
     // store the current position
     ParseReader.Position pos = inReader.getPosition();
-
-    result.m_remark = Remark.read(inReader);
 
     // could we read the value?
     if(!result.doRead(inReader))
     {
       // restore position
       inReader.seek(pos);
+
+      if(result.hasExpression())
+        return result;
 
       return null;
     }
@@ -1009,7 +1055,7 @@ public int hashCode()
         "invalid", "hello", null, "hello",
         "remark", "{*} guru", "{*}guru", null,
         "invalid remark", "{* guru", null, "{* guru",
-        "invalid value", "{*} hello", null, "{*} hello",
+        "invalid value", "{*} hello", null, " hello",
         "valid with rest", "  guru   hello", "guru", "   hello",
       };
 

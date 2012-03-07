@@ -217,7 +217,8 @@ public class Print extends AbstractPrint
                    + "manually.]{/base entry/test}{test}{name}{test}{name}}"
                    + ",  middle , "
                    + "\\editable{/base entry/test}"
-                   + "{\\baseCommand{desc}}{description}"
+                   + "{\\divider{base-title}{\\span{base-text}{test}}"
+                   + "\\baseCommand{desc}}{description}"
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, user)).getArguments()
                    .toString());

@@ -86,7 +86,7 @@ public class Name extends BaseText<Name>
    *
    */
   @Override
-public @Nonnull Name create()
+  public @Nonnull Name create()
   {
     return super.create(new Name());
   }
@@ -109,7 +109,7 @@ public @Nonnull Name create()
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     return new Command(m_text);
   }
@@ -204,6 +204,11 @@ protected @Nonnull Command doFormat()
           "space delimiters",
           "some-text-to-read -here",
           "some-text-to-read", "-here",
+
+          "+", "+1 armor", "+1 armor", null,
+          "space +", "  +1 armor", "+1 armor", null,
+          "-", "-2 armor", "-2 armor", null,
+          "space -", "  -2 armor", "-2 armor", null,
 
           "hint 1", "{*} some text", "{*}some text", null,
           "hint 2", "{~}some text", "{~}some text", null,

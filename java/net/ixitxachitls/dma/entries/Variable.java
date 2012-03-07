@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
 
@@ -160,7 +161,10 @@ public class Variable extends ValueHandle<Variable>
     // if the current value is not defined, use the combine value from the base
     // entries
     if(!value.isDefined())
-      return inEntry.combineBaseValues(m_key, inDM, true);
+      return new Combination<Value>(inEntry, m_key).format(inDM);
+
+    if(m_bases)
+      return new Combination<Value>(inEntry, m_key).format(inDM);
 
     return value.format(!m_printUndefined);
   }

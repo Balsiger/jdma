@@ -48,7 +48,6 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -161,6 +160,15 @@ public abstract class ValueGroup implements Changeable
   public @interface Note {
     /** A note for editing the value. */
     String value();
+  }
+
+  /** The annotation for a value that always includes base values. */
+  @Target(ElementType.FIELD)
+  @Retention(RetentionPolicy.RUNTIME)
+  @Documented
+  public @interface WithBases {
+    /** A note for editing the value. */
+    boolean value() default true;
   }
 
   //........................................................................
@@ -1257,7 +1265,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the value for the key
    *
    */
-  protected @Nullable Variable getVariable(@Nonnull String inKey)
+  public @Nullable Variable getVariable(@Nonnull String inKey)
   {
     return getVariables().getVariable(inKey);
   }
@@ -1583,52 +1591,6 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
-  //-------------------------- combineBaseValues ---------------------------
-
-  /**
-   * Combine specific values of all base entries into a single command.
-   *
-   * @param      inName    the name of the value to obtain
-   * @param      inDM      true if formatting for the dm
-   * @param      inInline  true to render the values inline
-   *
-   * @return     the command for printing the value
-   *
-   */
-  public abstract @Nonnull Command combineBaseValues(@Nonnull String inName,
-                                                     boolean inDM,
-                                                     boolean inInline);
-
-  //........................................................................
-  //--------------------------- maximalBaseValue ---------------------------
-
-  /**
-   * Compute the maximal base value.
-   *
-   * @param       inName the name of the value to add up
-   *
-   * @return      the maximal base value found
-   *
-   */
-  public abstract @Nullable Pair<Value, BaseEntry>
-    maximalBaseValue(@Nonnull String inName);
-
-  //........................................................................
-  //--------------------------- minimalBaseValue ---------------------------
-
-  /**
-   * Compute the minimal base value.
-   *
-   * @param       inName the name of the value to add up
-   *
-   * @return      the minimal base value found
-   *
-   */
-  public abstract @Nullable Pair<Value, BaseEntry>
-    minimalBaseValue(@Nonnull String inName);
-
-  //........................................................................
-
   //------------------------------- getCommand -----------------------------
 
 //   /**
@@ -1765,7 +1727,7 @@ public abstract class ValueGroup implements Changeable
       Value value = var.get(this);
 
       // We don't store this if we don't have a value.
-      if(value == null || !value.isDefined())
+      if(value == null || (!value.isDefined() && !value.hasExpression()))
         continue;
 
       // add the delimiter
@@ -1882,6 +1844,7 @@ public abstract class ValueGroup implements Changeable
         Note note = field.getAnnotation(Note.class);
         PrintUndefined printUndefined =
           field.getAnnotation(PrintUndefined.class);
+        WithBases withBases = field.getAnnotation(WithBases.class);
 
         // we have to use a variable class in the package of extensions to be
         // able to access extension variables.
@@ -1905,7 +1868,9 @@ public abstract class ValueGroup implements Changeable
                                           && playerEdit.value())
                       .withPlural(plural == null ? null : plural.value())
                       .withNote(note == null ? null : note.value())
-                      .withEditable(noEdit == null || !noEdit.value()));
+                      .withEditable(noEdit == null || !noEdit.value())
+                      .withBases(withBases == null
+                                 ? false : withBases.value()));
       }
     }
 
@@ -2303,13 +2268,13 @@ public abstract class ValueGroup implements Changeable
        * @param inInline true to format the value inline
        * @return the combined value
        */
-      @Override
-      public @Nonnull Command combineBaseValues(@Nonnull String inName,
-                                                boolean inDM,
-                                                boolean inInline)
-      {
-        throw new UnsupportedOperationException("not implemented");
-      }
+      // @Override
+      // public @Nonnull Command combineBaseValues(@Nonnull String inName,
+      //                                           boolean inDM,
+      //                                           boolean inInline)
+      // {
+      //   throw new UnsupportedOperationException("not implemented");
+      // }
 
       /**
        * Compute the maximal base value.

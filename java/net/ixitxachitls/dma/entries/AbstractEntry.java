@@ -49,6 +49,7 @@ import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.BaseText;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Comment;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
@@ -63,14 +64,11 @@ import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.Par;
 import net.ixitxachitls.output.commands.Script;
-import net.ixitxachitls.output.commands.Span;
 import net.ixitxachitls.output.commands.Title;
-import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.EmptyIterator;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
@@ -1247,446 +1245,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //--------------------------- totalBaseValues ----------------------------
-
-  /**
-   * Add up all base values and return the total.
-   *
-   * @param       inName the name of the value to add up
-   *
-   * @return      the total sum of all base values or null if no base or no
-   *              value with the given name
-   *
-   */
-  public @Nullable Value totalBaseValues(@Nonnull String inName)
-  {
-    Value total = null;
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
-
-      Value value = base.getValue(inName);
-
-      if(value == null)
-        continue;
-
-      if(!value.isDefined())
-        value = base.totalBaseValues(inName);
-
-      if(value == null)
-        continue;
-
-      if(total == null)
-        total = value;
-      else
-        total = total.add(value);
-    }
-
-    return total;
-  }
-
-  //........................................................................
-  //--------------------------- maximalBaseValue ---------------------------
-
-  /**
-   * Compute the maximal base value.
-   *
-   * @param       inName the name of the value to add up
-   *
-   * @return      the maximal base value found
-   *
-   */
-  @Override
-  public @Nullable Pair<Value, BaseEntry>
-    maximalBaseValue(@Nonnull String inName)
-  {
-    Value max = null;
-    BaseEntry entry = null;
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
-
-      Value value = base.getValue(inName);
-
-      if(value == null)
-        continue;
-
-      if(!value.isDefined())
-      {
-        Pair<Value, BaseEntry> based = base.maximalBaseValue(inName);
-        if(based != null)
-        {
-          value = based.first();
-          base = based.second();
-        }
-        else
-          value = null;
-      }
-
-      if(value == null)
-        continue;
-
-      if(max == null)
-      {
-        max = value;
-        entry = base;
-      }
-      else
-      {
-        if(value.compareTo(max) > 0)
-        {
-          max = value;
-          entry = base;
-        }
-      }
-    }
-
-    if(max != null)
-      return new Pair<Value, BaseEntry>(max, entry);
-
-    return null;
-  }
-
-  //........................................................................
-  //--------------------------- minimalBaseValue ---------------------------
-
-  /**
-   * Compute the minimal base value.
-   *
-   * @param       inName the name of the value to add up
-   *
-   * @return      the minimal base value found
-   *
-   */
-  @Override
-  public @Nullable Pair<Value, BaseEntry>
-    minimalBaseValue(@Nonnull String inName)
-  {
-    Value min = null;
-    BaseEntry entry = null;
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
-
-      Value value = base.getValue(inName);
-
-      if(value == null)
-        continue;
-
-      if(!value.isDefined())
-      {
-        Pair<Value, BaseEntry> based = base.minimalBaseValue(inName);
-        if(based != null)
-        {
-          value = based.first();
-          base = based.second();
-        }
-        else
-          value = null;
-      }
-
-      if(value == null)
-        continue;
-
-      if(min == null)
-      {
-        min = value;
-        entry = base;
-      }
-      else
-      {
-        if(value.compareTo(min) < 0)
-        {
-          min = value;
-          entry = base;
-        }
-      }
-    }
-
-    if(min != null)
-      return new Pair<Value, BaseEntry>(min, entry);
-
-    return null;
-  }
-
-  //........................................................................
-  //--------------------------- baseValueSummary ---------------------------
-
-  /**
-   * Compute a command with the summary description of base values.
-   *
-   * @param       inName the name of the value to create the summary for
-   *
-   * @return      the command with the summary
-   *
-   */
-  public @Nonnull Command baseValueSummary(@Nonnull String inName)
-  {
-    List<Object> commands = new ArrayList<Object>();
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
-
-      Value value = base.getValue(inName);
-
-      if(value == null)
-        continue;
-
-      if(!value.isDefined())
-        commands.add(base.baseValueSummary(inName));
-      else
-        commands.add(new Command(value.format(), " from ", base.getName(),
-                                 new Linebreak()));
-    }
-
-    return new Command(commands);
-  }
-
-  //........................................................................
-  //-------------------------- combineBaseValues ---------------------------
-
-  /**
-   * Combine specific values of all base entries into a single command.
-   *
-   * @param      inName   the name of the value to obtain
-   * @param      inDM     whether to combine for the dm
-   * @param      inInline true to format inline, false for multi line
-   *
-   * @return     the command for printing the value
-   *
-   */
-  @Override
-  public @Nonnull Command combineBaseValues(@Nonnull String inName,
-                                            boolean inDM,
-                                            boolean inInline)
-  {
-    List<BaseEntry> bases = getBaseEntries();
-    List<Object> commands = new ArrayList<Object>();
-
-    Value value = null;
-    for(BaseEntry base : bases)
-      if(base != null)
-      {
-        value = base.getValue(inName);
-        if(value != null)
-          break;
-      }
-
-    if(value == null)
-      return new Command("");
-
-    if(value.isArithmetic())
-    {
-      Value total = totalBaseValues(inName);
-      if(total == null)
-        return new Command("");
-
-      if(inDM)
-        return new Window(total.format(), baseValueSummary(inName), "", "base");
-
-      return total.format();
-    }
-    else
-    {
-      Multimap<Value, String> values = HashMultimap.create();
-      collectBaseValues(values, inName);
-
-      for(Value key : values.keySet())
-      {
-        String names = Strings.toString(values.get(key), ", ", "");
-
-        if(inInline)
-        {
-          if(!commands.isEmpty())
-            commands.add(", ");
-
-          if(inDM)
-            commands.add(new Window(new Span("base-value", key.format()),
-                                    "From " + names,
-                                    " [" + names + "]", "base"));
-          else
-            commands.add(key.format());
-        }
-        else
-        {
-          if(inDM)
-            commands.add(new Window(key.format(), names, " [" + names + "]",
-                                    "base"));
-          else
-            commands.add(key.format());
-        }
-      }
-
-      return new Command(commands);
-    }
-  }
-
-  //........................................................................
-  //-------------------------- collectBaseValues ---------------------------
-
-  /**
-   * Collect base values for combining them.
-   *
-   * @param ioValues the values collected
-   * @param inName   the name of the values to collect
-   *
-   */
-  protected void collectBaseValues(@Nonnull Multimap<Value, String> ioValues,
-                                   @Nonnull String inName)
-  {
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
-
-      Value value = base.getValue(inName);
-      if(value == null)
-        continue;
-
-      if(value.isDefined())
-      {
-        // if it's a list, we want to combine list values not complete lists
-        if(value instanceof ValueList)
-          for(Value sub : (ValueList<? extends Value>)value)
-            ioValues.put(sub, base.getName());
-        else
-          ioValues.put(value, base.getName());
-      }
-      else
-        base.collectBaseValues(ioValues, inName);
-    }
-  }
-
-  //........................................................................
-  //----------------------------- addBaseValue -----------------------------
-
-  /**
-   * Add the given value to the list of entries currently process for base
-   * entry computation. This will add only unique values to the lists and
-   * groups entries together for the same values. Additionally, a ValueList
-   * will be added by it's element.
-   *
-   * @param       ioValues  all the values encountered
-   * @param       ioEntries all the entries encountered per value
-   * @param       inValue   the value to add
-   * @param       inEntry   the entry containing the value
-   *
-   */
-//  private void addBaseValue(@Nonnull List<Value> ioValues,
-//                            @Nonnull List<List<BaseEntry>> ioEntries,
-//                          @Nonnull Value inValue, @Nonnull BaseEntry inEntry)
-//  {
-//    if(inValue instanceof ValueList)
-//      for(Value value : (ValueList<? extends Value>)inValue)
-//        addBaseValue(ioValues, ioEntries, value, inEntry);
-//    else
-//    {
-//      int pos = ioValues.indexOf(inValue);
-//      if(pos < 0)
-//      {
-//        ioValues.add(inValue);
-//        List<BaseEntry> entries = new ArrayList<BaseEntry>();
-//        entries.add(inEntry);
-//        ioEntries.add(entries);
-//      }
-//      else
-//        ioEntries.get(pos).add(inEntry);
-//    }
-//  }
-
-  //........................................................................
-  //---------------------------- getBaseValues -----------------------------
-
-  /**
-   * Get a list of all base values for a given name.
-   *
-   * @param       inName the name of the value to get
-   *
-   * @return      a list with all the values and where they were found
-   *
-   */
-  public @Nonnull List<Pair<BaseEntry, Value>> getBaseValues
-    (@Nonnull String inName)
-  {
-    List<Pair<BaseEntry, Value>> values =
-      new ArrayList<Pair<BaseEntry, Value>>();
-
-    if(m_baseEntries != null)
-      for(BaseEntry base : m_baseEntries)
-      {
-        values.addAll(base.getBaseValues(inName));
-        Value value = base.getValue(inName);
-        if(value != null && value.isDefined())
-          values.add(new Pair<BaseEntry, Value>(base, value));
-      }
-
-    return values;
-  }
-
-  //........................................................................
-  //----------------------- getFirstDefinedBaseValue -----------------------
-
-  /**
-   * Get the first defined value from any of the bases.
-   *
-   * @param       inName the name of the value to get
-   *
-   * @return      the requested value or null if not found or undefined
-   *
-   */
-  public @Nullable Value getFirstDefinedBaseValue(@Nonnull String inName)
-  {
-    if(m_baseEntries == null)
-      return null;
-
-    List<Pair<BaseEntry, Value>> values = getBaseValues(inName);
-    for(Pair<BaseEntry, Value> value : values)
-      if(value.second().isDefined())
-        return value.second();
-
-    return null;
-  }
-
-  //........................................................................
-  //----------------------------- getBaseValues ----------------------------
-
-  /**
-   * Get a value from any of the bases.
-   *
-   * @param       inExtractor the extractor to get the values
-   * @param       inOrdinal   the extractor to get a value for sorting
-   *
-   * @return      the requested value or null if not found or undefined
-   *
-   */
-//   @SuppressWarnings("unchecked") // having to cast base entry to given T
-//   protected <T extends BaseEntry, S, V>
-//   S getBaseValues(Extractor<T, V> inExtractor, Combiner<S, V> inCombiner,
-//                   S ioResult)
-//   {
-//     assert inCombiner != null : "must have a combiner here";
-//     assert ioResult   != null : "must have a value for result";
-
-//     if(m_baseEntries != null)
-//       for(BaseEntry base : m_baseEntries)
-//       {
-//         if(base == null)
-//           continue;
-
-//         V temp = inExtractor.get((T)base);
-
-//         if(temp != null)
-//           inCombiner.combine(ioResult, temp);
-//       }
-
-//     return ioResult;
-//   }
-
-  //........................................................................
 
   //------------------------------ hasErrors -------------------------------
 
@@ -1916,7 +1474,7 @@ public class AbstractEntry extends ValueGroup
       Value value = var.get(this);
 
       // We don't store this if we don't have a value.
-      if(value == null || !value.isDefined())
+      if(value == null || (!value.isDefined() && !value.hasExpression()))
         continue;
 
       values.put(var.getKey(), value);
@@ -2134,8 +1692,6 @@ public class AbstractEntry extends ValueGroup
         commands.add(subtitle.format(this, inDM, true));
 
       commands.add(computeValue("description", inDM).format(this, inDM, true));
-      commands.add(new Divider("base-values",
-                               combineBaseValues("description", inDM, false)));
       commands.add(computeValue("short description", inDM)
                    .format(this, inDM, true));
 
@@ -2300,11 +1856,24 @@ public class AbstractEntry extends ValueGroup
         .withEditType("list(, )#name");
     }
 
+    if("short description".equals(inKey))
+      return new FormattedValue
+        (new Divider("short-description",
+                     computeValue("_short description", inDM)
+                     .format(this, inDM, true)), null, "short-desc");
+
     ValueHandle value = super.computeValue(inKey, inDM);
     if(value != null)
       return value;
 
-    return new FormattedValue(combineBaseValues(inKey, inDM, false), "", inKey);
+    // The value is not defined here, but might be in a base.
+    String key;
+    if(inKey.startsWith("_"))
+      key = inKey.substring(1);
+    else
+      key = inKey;
+
+    return new FormattedValue(new Combination(this, key).format(inDM), "", key);
   }
 
   //........................................................................

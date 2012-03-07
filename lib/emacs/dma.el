@@ -6,8 +6,8 @@
 ;;
 ;; add the paths from where to load emacs lisp progras
 ;;
-(setq load-path (cons "~/jDMA/lib/emacs" load-path))
-(setq load-path (cons "~/private/jDMA/lib/emacs" load-path))
+(setq load-path (cons "~/jDMA/svn/lib/emacs" load-path))
+(setq load-path (cons "~/private/jDMA/svn/lib/emacs" load-path))
 
 ;;
 ;; Show the linenumber

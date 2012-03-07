@@ -5400,11 +5400,13 @@ base item with armor, incomplete, wearable Buckler =
   probability       Uncommon;
   size              {~} Small;
   hp                5;
+  hardness          10;
   appearances       Common "A buckler.",
                     Very Rare "A battered buckler.";
   player name       "Buckler";
   worlds            Generic;
   references        WTC 17524: 123/124;
+  short description "A small metal shield to be strapped to your forearm.";
   description
   "This small metal shield is worn strapped to your forearm.  You can use a bow
   or crossbow without penalty while carrying it. You can also use your shield
@@ -5450,7 +5452,7 @@ base item with armor, incomplete, wearable Light Wooden Shield =
   wood and heat metal).
 
   \emph{Shield Bash Attacks:} You can bash an opponent with a heavy shield,
-  using it as an off-hand weapon. See Table 7â5: Weapons for the damage dealt
+  using it as an off-hand weapon. See Table 7-5: Weapons for the damage dealt
   by a shield bash. Used this way, a heavy shield is a martial bludgeoning
   weapon. For the purpose of penalties on attack rolls, treat a heavy shield as
   a one-handed weapon. If you use your shield as a weapon, you lose its AC

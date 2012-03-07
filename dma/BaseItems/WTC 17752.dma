@@ -10,6 +10,66 @@
 
 # base stuff for magical items ################################################
 
+#----- Mwk Armor
+
+base item with armor Mwk Armor =
+
+  synonyms          "Masterwork Armor", "Armor, Masterwork";
+  check penalty     +1;
+  value             150 gp;
+  probability       Uncommon;
+  appearances       Common "Good workmanship.",
+                    Common "Finely crafted.",
+                    Common "Well made.",
+                    Rare "Extraordinarily well made.";
+  player name       "";
+  references        WTC 17524: 126;
+  description
+  "Just as with weapons, you can purchase or craft masterwork versions of armor
+  or shields. Such a well-made item functions like the normal version, except
+  that its armor check penalty is lessened by 1.
+
+  A masterwork suit of armor or shield costs an extra 150 gp over and above the
+  normal cost for that type of armor or shield.
+
+  The masterwork quality of a suite of armor never provides a bonus on attack
+  or damage rolls, even if the armor or shield is used as a weapon (such as
+  \Item{spiked armor} or a \Item{spiked shield}).
+
+  All magic armors and shields are automatically considered to be of masterwork
+  quality.
+
+  You can't add the masterwork quality to armor or a shield after it is
+  created; it must be created as a masterwork item.";
+  short description "A masterwork version.";
+  synonyms          "Masterwork";
+  categories        masterwork.
+
+#.....
+#----- +1 Armor
+
+base item with armor +1 Armor =
+
+  synonyms          "+1", "Armor +1";
+  AC bonus          +1 enhancement;
+  base              Mwk Armor;
+  probability       Uncommon;
+  player name       "";
+  hardness          2;
+  hp                10;
+  value             [magic armor(1)];
+  references        WTC 17752: 216-217;
+  description       "Magical +1 armor.";
+  short description "+1 armor.";
+  categories        magic.
+
+#.....
+
+#--- end here ---#
+
+
+
+
 # the following items are not yet completely defined
 
 #----- Special Materials
@@ -110,57 +170,6 @@ base item with armor, incomplete, wearable Heavy Mithral Shield =
 #.....
 #----- Numbered Magical Armor
 
-#----- Mwk Armor
-
-base item with armor Mwk Armor =
-
-  check penalty     [+1 "mwk"];
-  value             150 gp;
-  probability       Uncommon;
-  hp                0;
-  appearances       Common "Good workmanship.",
-                    Common "Finely crafted.",
-                    Common "Well made.",
-                    Rare "Extraordinarily well made.";
-  player name       "";
-  references        "WTC 17524" 126;
-  description
-  "Just as with weapons, you can purchase or craft masterwork versions of armor
-  or shields. Such a well-made item functions like the normal version, except
-  that its armor check penalty is lessened by 1.
-
-  A masterwork suit of armor or shield costs an extra 150 gp over and above the
-  normal cost for that type or armor or shield.
-
-  The masterwork quality of a suite of armor never provides a bonus on attack
-  or damage rolls, even if the armor or shield is used as a weapon (such as
-  \Item{spiked armor} or a \Item{spiked shield}).
-
-  All magic armors and shields are automatically considered to be of masterwork
-  quality.
-
-  You can't add the masterwork quality to armor or a shield after it is
-  created; it must be created as a masterwork item.";
-  short description "A masterwork version.";
-  synonyms          "Masterwork";
-  categories        masterwork.
-
-#.....
-#----- Armor +1
-
-base item with armor Armor +1 [Mwk Armor] =
-
-  probability       Uncommon;
-  value             1150 gp;
-  player name       "";
-  references        WTC 17752: 216-217;
-  description
-  "Magical +1 armor.";
-  short description "+1 armor.";
-  synonyms          "+1";
-  categories        magic.
-
-#.....
 #----- Armor +2
 
 base item with armor Armor +2 [Mwk Armor] =

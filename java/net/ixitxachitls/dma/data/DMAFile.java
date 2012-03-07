@@ -309,6 +309,10 @@ public String toString()
     // read all the entries
     while(!reader.isAtEnd())
     {
+      // end reading early on magic comment
+      if(reader.expect("#--- end here ---"))
+        break;
+
       //ParseReader.Position start = reader.getPosition();
       AbstractEntry entry = AbstractEntry.read(reader);
       //ParseReader.Position end = reader.getPosition();

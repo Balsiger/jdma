@@ -248,7 +248,7 @@ public class Modifier extends Value<Modifier>
   //------------------------------- getValue -------------------------------
 
   /**
-   * Get the value of the condition stored.
+   * Get the value of the modifier stored.
    *
    * @return      the requested value
    *
@@ -401,6 +401,21 @@ public class Modifier extends Value<Modifier>
   @Override
   protected @Nonnull Command doFormat()
   {
+    int value = getValue();
+    return new Command(value >= 0 ? "+" : "", value, " (", formatList(), ")");
+  }
+
+  //........................................................................
+  //------------------------------ formatList ------------------------------
+
+  /**
+   * Format all the modifiers into a string list.
+   *
+   * @return  the command for printing the list
+   *
+   */
+  private @Nonnull Command formatList()
+  {
     List<Object> commands = new ArrayList<Object>();
 
     if(m_value >= 0)
@@ -426,7 +441,7 @@ public class Modifier extends Value<Modifier>
     if(m_next == null || !m_next.isDefined())
       return command;
 
-    return new Command(command, " &nbsp;", m_next.format());
+    return new Command(command, " &nbsp;", m_next.formatList());
   }
 
   //........................................................................
@@ -603,7 +618,8 @@ public boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("output", "+2 dodge", value.toString());
       assertEquals("print",
-                   "\\window{+2 dodge}{this modifier stacks with similar ones}",
+                   "+2 (\\window{+2 dodge}"
+                   + "{this modifier stacks with similar ones})",
                    value.format(true).toString());
 
       value = new Modifier(0);
@@ -611,8 +627,8 @@ public boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("output", "+0 general", value.toString());
       assertEquals("output",
-                   "\\window{+0 general}"
-                   + "{this modifier stacks with similar ones}",
+                   "+0 (\\window{+0 general}"
+                   + "{this modifier stacks with similar ones})",
                    value.format(true).toString());
 
       // now with some value
@@ -621,7 +637,8 @@ public boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("output", "-5 armor", value.toString());
       assertEquals("output",
-                   "\\window{-5 armor}{this modifier stacks with similar ones}",
+                   "-5 (\\window{-5 armor}"
+                   + "{this modifier stacks with similar ones})",
                    value.format(true).toString());
 
       Value.Test.createTest(value);

@@ -864,14 +864,22 @@ public class ParseReader
   {
     StringBuilder result = new StringBuilder();
 
+    boolean empty = true;
     for(int c = peek(), old = -1; c != -1; old = c, c = peek())
       if((inDelimiters.indexOf((char)c) >= 0 && (char)old != '\\')
          || (inSpaceDelimiters != null
              && inSpaceDelimiters.indexOf((char)c) >= 0
-             && Character.isSpaceChar((char)old)))
+             && Character.isSpaceChar((char)old)
+             && !empty))
         return result.toString();
       else
-        result.append((char)read());
+      {
+        char character = (char)read();
+        if(empty && !Character.isWhitespace(character))
+          empty = false;
+
+        result.append(character);
+      }
 
     return result.toString();
   }

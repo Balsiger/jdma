@@ -216,11 +216,31 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return      this object for chaining
    *
    */
-  public @Nonnull ValueHandle withEditChoices(@Nonnull String inChoices)
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withEditChoices(@Nonnull String inChoices)
   {
     m_editChoices = inChoices;
 
-    return this;
+    return (T)this;
+  }
+
+  //........................................................................
+  //------------------------------- withBases ------------------------------
+
+  /**
+   * Set the value to always include base values.
+   *
+   * @param       inBases true to include base values, false for not
+   *
+   * @return      this object for chaining
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withBases(@Nonnull boolean inBases)
+  {
+    m_bases = inBases;
+
+    return (T)this;
   }
 
   //........................................................................
@@ -243,6 +263,9 @@ public abstract class ValueHandle<T extends ValueHandle>
 
   /** A flag denoting if the value is for editable by players. */
   protected boolean m_playerEditable = false;
+
+  /** A flag denoting if the value always includes base values. */
+  protected boolean m_bases = false;
 
   /** A string with the plural of the key. */
   protected @Nonnull String m_plural;
@@ -426,7 +449,7 @@ public abstract class ValueHandle<T extends ValueHandle>
   //------------------------------ isEditable ------------------------------
 
   /**
-   * Check if the value] is editable or not.
+   * Check if the value is editable or not.
    *
    * @return      true if it is editable, false if not
    *
@@ -434,6 +457,20 @@ public abstract class ValueHandle<T extends ValueHandle>
   public boolean isEditable()
   {
     return m_editable;
+  }
+
+  //........................................................................
+  //------------------------------ isWithBases -----------------------------
+
+  /**
+   * Check if the value should include bases or not.
+   *
+   * @return      true if it includes base values, false if not
+   *
+   */
+  public boolean isWithBases()
+  {
+    return m_bases;
   }
 
   //........................................................................

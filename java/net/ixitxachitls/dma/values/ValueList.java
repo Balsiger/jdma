@@ -398,7 +398,7 @@ public boolean isDefined()
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 

@@ -32,11 +32,11 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
@@ -44,7 +44,6 @@ import net.ixitxachitls.output.commands.Section;
 import net.ixitxachitls.output.commands.Value;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.Pair;
 
 //..........................................................................
 
@@ -263,36 +262,26 @@ public abstract class AbstractPrint
     switch(inName.charAt(0))
     {
       case '&':
-        return new FormattedValue
-          (inEntry.combineBaseValues(name, inDM, true),
-           inEntry.computeValue(name, inDM), name)
-          .withDM(inDM);
-
       case '+':
         throw new UnsupportedOperationException("not yet implemented");
 
       case '>':
-        if(!(inEntry instanceof AbstractEntry))
+        Combination combination = new Combination(inEntry, name);
+        if(combination.max() == null)
           return null;
 
-        Pair<net.ixitxachitls.dma.values.Value, BaseEntry> max =
-          inEntry.maximalBaseValue(name);
-        if (max == null)
-          return null;
-
-        return new FormattedValue(new Window(max.first().format(),
-                                             max.second().getName(),
-                                             "", "base"), max, name);
+        return new FormattedValue(new Window(combination.max().format(),
+                                             combination.summary(), "", "base"),
+                                  "", name);
 
       case '<':
-        Pair<net.ixitxachitls.dma.values.Value, BaseEntry> min =
-          inEntry.minimalBaseValue(name);
-        if (min == null)
+        combination = new Combination(inEntry, name);
+        if(combination.min() == null)
           return null;
 
-        return new FormattedValue(new Window(min.first().format(),
-                                             min.second().getName(),
-                                             "", "base"), min, name);
+        return new FormattedValue(new Window(combination.min().format(),
+                                             combination.summary(), "", "base"),
+                                  "", name);
 
       default:
         return inEntry.computeValue(inName, inDM);

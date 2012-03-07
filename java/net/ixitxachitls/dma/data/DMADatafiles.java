@@ -426,7 +426,8 @@ public @Nonnull SortedSet<String> getIndexNames
    *
    */
   @Override
-public boolean isChanged()
+  @Deprecated
+  public boolean isChanged()
   {
     for(DMAFile file : m_files)
       if(file.isChanged())

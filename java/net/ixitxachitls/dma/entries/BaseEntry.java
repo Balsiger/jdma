@@ -47,7 +47,6 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
@@ -254,27 +253,12 @@ public class BaseEntry extends AbstractEntry
       (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")
        .withEditType("pages[pages]"), true, ": ", null)));
 
-  static
-  {
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("General", "References", "references",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(!(inEntry instanceof BaseEntry))
-//                          return null;
-
-//                        return ((BaseEntry)inEntry).getReferences();
-//                      }
-//                    }, true, false));
-  }
-
   //........................................................................
   //----- description ------------------------------------------------------
 
   /** The descriptive text for this entry. */
   @Key("description")
+  @WithBases
   protected LongFormattedText m_description = new LongFormattedText();
 
   //........................................................................
@@ -781,12 +765,6 @@ public class BaseEntry extends AbstractEntry
   @Override
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
-    if("short description".equals(inKey))
-      return new FormattedValue
-        (new Divider("short-description",
-                     computeValue("_short description", inDM)
-                     .format(this, inDM, true)), null, "short-desc");
-
     if("categories".equals(inKey))
     {
       List<Object> commands = new ArrayList<Object>();
