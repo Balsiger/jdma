@@ -10,6 +10,8 @@
 
 # base stuff for magical items ################################################
 
+#----- Armor
+
 #----- Mwk Armor
 
 base item with armor Mwk Armor =
@@ -46,11 +48,11 @@ base item with armor Mwk Armor =
   categories        masterwork.
 
 #.....
-#----- +1 Armor
+#----- Armor +1
 
-base item with armor +1 Armor =
+base item with armor Armor +1 =
 
-  synonyms          "+1", "Armor +1";
+  synonyms          "+1";
   AC bonus          +1 enhancement;
   base              Mwk Armor;
   probability       Uncommon;
@@ -60,12 +62,981 @@ base item with armor +1 Armor =
   value             [magic armor(1)];
   references        WTC 17752: 216-217;
   description       "Magical +1 armor.";
-  short description "+1 armor.";
+  short description "Armor +1.";
   categories        magic.
 
 #.....
 
-#--- end here ---#
+#.....
+#----- Weapons
+
+#----- Mwk Weapon
+
+base item with incomplete, weapon Mwk Weapon =
+
+  incomplete
+  "attack +1 enhancement";
+  value             300 gp;
+  probability       Uncommon;
+  appearances       Common "Good workmanship.",
+                    Common "Finely crafted.",
+                    Common "Well made.",
+                    Rare "Extraordinarily well made.";
+  player name       "";
+  references        WTC 17524: 122;
+  description
+  "A masterwork weapon is a finely crafted version of a normal weapon. Wielding
+   it provides a +1 enhancement bonus on attack rolls.
+
+  You can't add the masterwork quality to a weapon after it is created; it must
+  be crafted as a masterwork weapon (see the Craft skill, page 70). The
+  masterwork quality adds 300 gp to the cost of a normal weapon. For example, a
+  masterwork bastard sword costs 335 gp.
+
+  All magic weapons are automatically considered to be of masterwork
+  quality. The enhancement bonus granted by the masterwork quality doesn't
+  stack with the enhancement bonus provided by the weapon's magic.
+
+  Even though some types of armor and shields (such as spiked shields) can be
+  used as weapons, you can't create a masterwork version of such an item that
+  confers an enhancement bonus on attack rolls. Instead, masterwork armor and
+  shields have lessened armor check penalties (see Masterwork Armor, page
+  126).";
+  short description "A masterwork version.";
+  synonyms          "Masterwork";
+  categories        masterwork.
+
+#.....
+#----- Weapon +1
+
+base item with weapon, incomplete Weapon +1 =
+  base Mwk Weapon;
+  incomplete        "+1 enhancement to attack";
+  probability       Uncommon;
+  value             [magic weapon(1)];
+  damage            +1;
+  hardness          1;
+  hp                1;
+  player name       "";
+  references        WTC 17752: 222;
+  short description "+1";
+  synonyms          "+1";
+  description       "A weapon with a +1 enhancement bonus to attacks.".
+
+#.....
+#----- Weapon +2
+
+base item with weapon, incomplete Weapon +2 =
+  base Mwk Weapon;
+  incomplete        "+2 enhancement to attack";
+  probability       Uncommon;
+  value             [magic weapon(2)];
+  damage            +2;
+  hardness          2;
+  hp                2;
+  player name       "";
+  references        WTC 17752: 222;
+  short description "+2";
+  synonyms          "+2";
+  description       "A weapon with a +2 enhancement bonus to attacks.".
+
+#.....
+#----- Weapon +3
+
+base item with weapon, incomplete Weapon +3 =
+  base Mwk Weapon;
+  incomplete        "+3 enhancement to attack";
+  probability       Uncommon;
+  value             [magic weapon(3)];
+  damage            +3;
+  hardness          3;
+  hp                3;
+  player name       "";
+  references        WTC 17752: 222;
+  short description "+3";
+  synonyms          "+3";
+  description       "A weapon with a +3 enhancement bonus to attacks.".
+
+#.....
+#----- Weapon +4
+
+base item with weapon, incomplete Weapon +4 =
+  base Mwk Weapon;
+  incomplete        "+4 enhancement to attack";
+  probability       Uncommon;
+  value             [magic weapon(4)];
+  damage            +4;
+  hardness          4;
+  hp                4;
+  player name       "";
+  references        WTC 17752: 222;
+  short description "+4";
+  synonyms          "+4";
+  description       "A weapon with a +4 enhancement bonus to attacks.".
+
+#.....
+#----- Weapon +5
+
+base item with weapon, incomplete Weapon +5 =
+  base Mwk Weapon;
+  incomplete        "+5 enhancement to attack";
+  probability       Uncommon;
+  value             [magic weapon(5)];
+  damage            +5;
+  hardness          5;
+  hp                5;
+  player name       "";
+  references        WTC 17752: 222;
+  short description "+5";
+  synonyms          "+5";
+  description       "A weapon with a +5 enhancement bonus to attacks.".
+
+#.....
+
+#.....
+#----- Potions
+
+#----- Potion
+
+base item Potion =
+
+  weight            1/10 lb;
+  probability       Very Rare;
+  size              {~, from AC 13} Fine;
+  hardness          1;
+  hp                1;
+  appearances       Common "Some oily liquid in a metal vial.",
+                    Common "Some oily liquid in a ceramic vial.",
+                    Common "Some oily liquid in a glass vial.",
+                    Common "Some watery liquid in a ceramic vial.",
+                    Common "Some watery liquid in a glass vial.",
+                    Common "Some watery liquid in a metal vial.",
+                    Common "Some clear liquid in a ceramic vial",
+                    Common "Some clear liquid in a glass vial",
+                    Common "Some clear liquid in a metal vial",
+                    Common "Some dark liquid in a ceramic vial",
+                    Common "Some dark liquid in a glass vial",
+                    Common "Some dark liquid in a metal vial",
+                    Common "Some thick liquid in a ceramic vial",
+                    Common "Some thick liquid in a glass vial",
+                    Common "Some thick liquid in a metal vial";
+  break DC          12;
+  player name       "Potion";
+  worlds            Generic;
+  references        WTC 17752: 229;
+  description
+  "A typical potion or oil consists of 1 ounce of liquid held in a ceramic or
+  glass vial fitted with a tight stopper. The stoppered container usually is no
+  more than 1 wide and 2 inches high. The vial has AC 13, 1 hit point, hardness
+  1, and a break DC of 12. Vials hold 1 ounce of liquid. ";
+  categories        magic,
+                    potion,
+                    drinkable,
+                    container.
+
+#.....
+#----- Potion 1
+
+base item with incomplete Potion 1 =
+
+  incomplete "Base potions on spells and compute value automatically from spell level and material compoents/XP";
+  base Potion;
+  value             50 gp.
+
+#.....
+#----- Potion 3
+
+base item with incomplete Potion 3 =
+
+  incomplete "Base potions on spells and compute value automatically from spell level and material compoents/XP";
+  base Potion;
+  value             300 gp.
+
+#.....
+#----- Potion 5
+
+base item with incomplete Potion 5 =
+
+  incomplete "Base potions on spells and compute value automatically from spell level and material compoents/XP";
+  base Potion;
+  value             750 gp.
+
+#.....
+
+#----- Potion of Aid
+
+base item Potion of Aid =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Clr 3]{Aid}.";
+  short description "As \SpellRef[Clr 3]{Aid}.".
+
+#.....
+#----- Potion of Alter Self
+
+base item Potion of Alter Self =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Alter Self}.";
+  short description "As \SpellRef[Wiz 3]{Alter Self}.".
+
+#.....
+#----- Potion of Barkskin
+
+base item Potion of Barkskin =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Clr 3]{Barkskin}.";
+  short description "As \SpellRef[Clr 3]{Barkskin}.".
+
+#.....
+#----- Potion of Bear's Endurance
+
+base item Potion of Bear's Endurance =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Clr 3]{Bear's Endurance}.";
+  short description "As \SpellRef[Clr 3]{Bear's Endurance}.".
+
+#.....
+#----- Potion of Blur
+
+base item Potion of Blur =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Clr 3]{Blur}.";
+  short description "As \SpellRef[Clr 3]{Blur}.".
+
+#.....
+#----- Potion of Bull's Strength
+
+base item Potion of Bull's Strength =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Clr 3]{Bull's Strength}.";
+  short description "As \SpellRef[Clr 3]{Bull's Strength}.".
+
+#.....
+#----- Potion of Cat's Grace
+
+base item Potion of Cat's Grace =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Clr 3]{Cat's Grace}.";
+  short description "As \SpellRef[Clr 3]{Cat's Grace}.".
+
+#.....
+#----- Potion of Clairaudience or Clairvoyance
+
+base item Potion of Clairaudience or Clairvoyance =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.";
+  short description "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.".
+
+#.....
+#----- Potion of Cure Light Wounds
+
+base item Potion of Cure Light Wounds =
+
+  base Potion 1;
+  description
+  "As \SpellRef[Clr 1]{Cure Light Wounds}.";
+  short description "As \SpellRef[Clr 1]{Cure Light Wounds}.".
+
+#.....
+#----- Potion of Cure Moderate Wounds
+
+base item Potion of Cure Moderate Wounds =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Clr 3]{Cure Moderate Wounds}.";
+  short description "As \SpellRef[Clr 3]{Cure Moderate Wounds}.".
+
+#.....
+#----- Potion of Cure Serious Wounds
+
+base item Potion of Cure Serious Wounds =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Clr 5]{Cure Serious Wounds}.";
+  short description "As \SpellRef[Clr 5]{Cure Serious Wounds}.".
+
+#.....
+#----- Potion of Darkvision
+
+base item Potion of Darkvision =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Darkvision}.";
+  short description "As \SpellRef[Wiz 3]{Darkvision}.".
+
+#.....
+#----- Potion of Detect Thoughts
+
+base item Potion of Detect Thoughts =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Detect Thoughts}.";
+  short description "As \SpellRef[Wiz 3]{Detect Thoughts}.".
+
+#.....
+#----- Potion of Fly
+
+base item Potion of Fly =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Wiz 5]{Fly}.";
+  short description "As \SpellRef[Wiz 5]{Fly}.".
+
+#.....
+#----- Potion of Ghoul Touch
+
+base item Potion of Ghoul Touch =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Ghoul Touch}.";
+  short description "As \SpellRef[Wiz 3]{Ghoul Touch}.".
+
+#.....
+#----- Potion of Haste
+
+base item Potion of Haste =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Haste}.";
+  short description "As \SpellRef[Wiz 3]{Haste}.".
+
+#.....
+#----- Potion of Hide from Animals
+
+base item Potion of Hide from Animals =
+
+  base Potion 1;
+  description
+  "As \SpellRef[Drd 1]{Hide from Animals}.";
+  short description "As \SpellRef[Drd 1]{Hide from Animals}.".
+
+#.....
+#----- Potion of Inflict Serious Wounds
+
+base item Potion of Inflict Serious Wounds =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Clr 5]{Inflict Serious Wounds}.";
+  short description "As \SpellRef[Clr 5]{Inflict Serious Wounds}.".
+
+#.....
+#----- Potion of Invisibility
+
+base item Potion of Invisibility =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Invisibility}.";
+  short description "As \SpellRef[Wiz 3]{Invisibility}.".
+
+#.....
+#----- Potion of Jump
+
+base item Potion of Jump =
+
+  base Potion 1;
+  description
+  "As \SpellRef[Wiz 1]{Jump}.";
+  short description "As \SpellRef[Wiz 1]{Jump}.".
+
+#.....
+#----- Potion of Levitate
+
+base item Potion of Levitate =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Levitate}.";
+  short description "As \SpellRef[Wiz 3]{Levitate}.".
+
+#.....
+#----- Potion of Lesser Restoration
+
+base item Potion of Lesser Restoration =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Clr 5]{Lesser Restoration}.";
+  short description "As \SpellRef[Clr 5]{Lesser Restoration}.".
+
+#.....
+#----- Potion of Neutralize Poison
+
+base item Potion of Neutralize Poison =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Drd 5]{Neutralize Poison}.";
+  short description "As \SpellRef[Drd 5]{Neutralize Poison}.".
+
+#.....
+#----- Potion of Nondetection
+
+base item Potion of Nondetection =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Wiz 3]{Nondetection}.";
+  short description "As \SpellRef[Wiz 3]{Nondetection}.".
+
+#.....
+#----- Potion of Protection from Energy
+
+base item Potion of Protection from Energy =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Wiz 5]{Protection from Energy}.";
+  short description "As \SpellRef[Wiz 5]{Protection from Energy}.".
+
+#.....
+#----- Potion of Resist Energy (fire) 10
+
+base item Potion of Resist Fire =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Resist Energy} (fire, 10).";
+  short description "As \SpellRef[Wiz 3]{Resist Energy} (fire, 10).".
+
+#.....
+#----- Potion of Remove Disease
+
+base item Potion of Remove Disease =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Clr 5]{Remove Disease}.";
+  short description "As \SpellRef[Clr 5]{Remove Disease}.".
+
+#.....
+#----- Potion of Spider Climb
+
+base item Potion of Spider Climb =
+
+  base Potion 3;
+  description
+  "As \SpellRef[Wiz 3]{Spider Climb}.";
+  short description "As \SpellRef[Wiz 3]{Spider Climb}.".
+#.....
+#----- Potion of Truth
+
+base item Potion of Truth =
+
+  base Potion 5;
+  description
+  "As \SpellRef[Clr 3]{Zone of Truth}.";
+  short description "As \SpellRef[Clr 3]{Zone of Truth}.".
+
+#.....
+
+#.....
+#----- Rings
+
+#----- Ring
+
+base item with wearable Ring =
+
+  weight            1/100 lb;
+  probability       Common;
+  size              Medium-size;
+  hardness          10;
+  hp                2;
+  appearances       Very Rare "A simple platinum ring.",
+                    Common "A simple gold ring.",
+                    Common "A simple silver ring.",
+                    Very Rare "A simple brass ring.";
+  substance         steel 1/15 in;
+  break DC          25;
+  slot              finger;
+  player name       "Ring";
+  worlds            Generic;
+  references        WTC 17752: 229;
+  description
+  "Although exceptions exist that are crafted from glass or bone, the vast
+   majority of rings are forged from metal---usually precious metals such as
+   gold, silver, and platinum.";
+  short description "A ring.";
+  categories        mundane, jewelry, ring.
+
+#.....
+#----- Ring of Protection +1
+
+base item with armor Ring of Protection +1 =
+
+  base              Ring;
+  AC bonus          +1 deflection;
+  value             2000 gp;
+  probability       Rare;
+  references        WTC 17752: 232;
+  description
+  "This ring offers continual magical protection in the form of a deflection
+  bonus of +1 AC.";
+  short description "AC +1 deflection bonus.";
+  synonyms          "Protection +1, Ring of";
+  categories        protection, ac, magic, armor, deflection.
+
+#.....
+#----- Ring of Shocking Grasp
+
+base item Ring of Shocking Grasp =
+
+  base              Ring;
+  value             5000 gp;
+  short description "1d8+6 electrical on touch attack, 3/day";
+  description       "Three times per day deliver a shocking attack for 1d8+6 eletrical datam on a successful touch attack.";
+  categories        attack, electrical, shock.
+
+#.....
+#----- Wondrous Items
+
+#----- Bag of Holding I
+
+base item with container Bag of Holding I =
+
+  capacity          30 cu ft;
+  value             2500 gp;
+  weight            15 lbs;
+  probability       Very Rare;
+  size              Medium-size;
+  appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
+  substance         cloth 1/2 in;
+  player name       "Sack";
+  worlds            Generic;
+  references        WTC 17752: 248;
+  description
+  "This appears to be a common cloth sack about 2 feet by 4 feet in size. The
+  \Item{bag of holding} opens into a nondimensional space: Its inside is larger
+  than its outside dimensions. Regardless of what is put into the bag (up to
+  250 lb.), it weights 15 lb.
+
+  If the bag is overloaded, or if sharp objects pierce it (from inside or
+  outside), the bag ruptures and is ruined. All contents are lost forever. If a
+  \Item{bag of holding} is turned inside out, its contents spill out, unharmed,
+  but the bag must be put right before it can be used again. If living
+  creatures are placed within the bag, they can survive for up to 10 minutes,
+  after which time they suffocate. Retrieving a specific item from a \Item{bag
+  of holding} is a move action---unless the bag contains more than an ordinary
+  backpack would hold, in which case retrieving a specific item is a full-round
+  action.
+
+  If a \Item{bag of holding} is placed within a \Item{portable hole}, a rift to
+  the \Place{Astral Plane} is torn in the space: Bag and hole alike are sucked
+  into the void and lost forever. If a \Item{portable hole} is placed within a
+  \Item{bag of holding}, it opens a gate to the \Place{Astral Plane}: The hole,
+  the bag, and any creatures within a 10-foot radius are drawn there,
+  destroying the \Item{portable hole} and \Item{bag of holding} in the
+  process.";
+  short description "This bag is larger inside than outside.";
+  synonyms          "Holding I, Bag of";
+  categories        bag,
+                    wondrous magical item,
+                    magical item,
+                    extradimensional.
+
+#.....
+#----- Bag of Holding II
+
+base item with container Bag of Holding II =
+
+  capacity          70 cu ft;
+  value             5000 gp;
+  weight            25 lbs;
+  probability       Very Rare;
+  size              Medium-size;
+  appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
+  substance         cloth 1/2 in;
+  player name       "Sack";
+  worlds            Generic;
+  references        WTC 17752: 248;
+  description
+  "This appears to be a common cloth sack about 2 feet by 4 feet in size. The
+  \Item{bag of holding} opens into a nondimensional space: Its inside is larger
+  than its outside dimensions. Regardless of what is put into the bag (up to
+  500 lb.), it weights 25 lb.
+
+  If the bag is overloaded, or if sharp objects pierce it (from inside or
+  outside), the bag ruptures and is ruined. All contents are lost forever. If a
+  \Item{bag of holding} is turned inside out, its contents spill out, unharmed,
+  but the bag must be put right before it can be used again. If living
+  creatures are placed within the bag, they can survive for up to 10 minutes,
+  after which time they suffocate. Retrieving a specific item from a \Item{bag
+  of holding} is a move action---unless the bag contains more than an ordinary
+  backpack would hold, in which case retrieving a specific item is a full-round
+  action.
+
+  If a \Item{bag of holding} is placed within a \Item{portable hole}, a rift to
+  the \Place{Astral Plane} is torn in the space: Bag and hole alike are sucked
+  into the void and lost forever. If a \Item{portable hole} is placed within a
+  \Item{bag of holding}, it opens a gate to the \Place{Astral Plane}: The hole,
+  the bag, and any creatures within a 10-foot radius are drawn there,
+  destroying the \Item{portable hole} and \Item{bag of holding} in the
+  process.";
+  short description "This bag is larger inside than outside.";
+  synonyms          "Holding II, Bag of";
+  categories        bag,
+                    wondrous magical item,
+                    magical item,
+                    extradimensional.
+
+#.....
+#----- Brooch of Shielding
+
+base item with multiuse, wearable Brooch of Shielding =
+
+  count             101;
+  slot              neck;
+  unit              damage;
+  player name       "Brooch";
+  categories        magic, shield, brooch;
+  synonyms          "Shielding, Brooch of";
+  value             14 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       rare;
+  substance         steel 1/2 inch;
+  appearances       very rare "",
+                    rare      "",
+                    uncommon  "A golden brooch.",
+                    common    "A silver brooch";
+  worlds            generic;
+  references        WTC 17752: 250;
+  short description "A brooch to absorb \Spell{magic missile}s.";
+  description
+
+  "This appears to be a piece of silver or gold jewelry used to fasten a cloak
+  or cape. In addition to this mundane task, it can absorb \Spell{magic
+  missile}s of the sort generated by spell or spell-like ability. A brooch can
+  absorb up to 101 points of damage from magic missiles before it melts and
+  becomes useless.  ".
+
+#.....
+#----- Cloak of Resistance +1
+
+base item Cloak of Resistance +1 =
+
+  base              Cloak;
+  value             1000 gp;
+  probability       Rare;
+  substance         cloth 1/10 in;
+  player name       "Cloak";
+  worlds            Generic;
+  references        WTC 17752: 253;
+  description
+  "These garments offer magic protection in the form of a +1 to resistance
+   bonus on all saving throws (Fortitude, Reflex, and Will).";
+  short description "+1 resistance to Fort, Ref, Will";
+  synonyms          "Resistance +1, Cloak of".
+
+#.....
+#----- Deep Red Ioun Stone
+
+base item with incomplete Deep Red Ioun Stone =
+
+  incomplete        "+2 Dex; Armor class 24";
+  player name       "Deep Red Stone";
+  categories        magic, ioun stone;
+  synonyms          "Ioun Stone, Deep Red";
+  value             8000 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         stone 1 inch;
+  hp                10;
+  hardness          5;
+  appearances       common    "A deep red stone.";
+  worlds            generic;
+  references        WTC 17752: 260-261;
+  short description "+2 Dex";
+  description
+
+  "These crystalline stones always float in the air and must be within 3 feet
+  of their owner to be of any use. When a character first acquires a stone, she
+  must hold it and then release it, whereupon it takes up a circling orbit 1d3
+  feet from her head.  Thereafter, a stone must be grasped or netted to
+  separate it from its owner. The owner may voluntarily seize and stow a stone
+  (to keep it safe while she is sleeping, for example), but she loses the bene-
+  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
+  hardness 5.".
+
+#.....
+#----- Heward's Handy Haversack
+
+base item with container, incomplete Heward's Handy Haversack =
+
+  capacity          1 cu ft;
+  state             solid;
+  value             2000 gp;
+  weight            5 lbs;
+  probability       Very Rare;
+  size              Small;
+  hardness          2;
+  hp                1;
+  appearances       Uncommon "A simple leather bag with straps to carry it.",
+                    Common "A leather backpack to stow your stuff.",
+                    Uncommon "A finely crafted backpack to stow your stuff.",
+                    Rare "A finely crafted backpack with golden buckles.";
+  substance         leather 1/4 in;
+  player name       "Backpack";
+  worlds            Generic;
+  references        WTC 17752: 259;
+  description
+  "A backpack of this sort appears to be well made, well used, and quite
+  ordinary. It is constructed of finely tanned leather, and the straps have
+  brass hardware and buckles. It has two wide pouches, each of which appears
+  large enough to hold about a quart of material. In fact, each is like a
+  \Item{bag of holding} and can actually hold material as much as 2 cubic feet
+  in volume or 20 pounds in weight. The large central portion can contain up to
+  8 cubic feet or 80 pounds of material. Even when so filled, the backpack
+  always weighs only 5 pounds.
+
+  While such storage is useful enough, the pack has an even greater power in
+  addition. When the wearer reaches into it for a specific item, that item is
+  always on top. Thus, no digging around and fumbling is ever necessary to find
+  what a haversack contains. Retrieving any specific item from a haversack is a
+  move action, but it does not provoke the attacks of opportunity that
+  retrieving a stored item usually does.";
+  short description "A combination of bag of holding and backpack";
+  synonyms          "Haversack, Heward's Handy";
+  categories        magic,
+                    bag,
+                    container,
+                    wondrous.
+
+#.....
+#----- Necklace of Fireballs
+
+base item with incomplete Necklace of Fireballs =
+
+  incomplete        "compute short description automatically, add effects";
+  player name       "Necklace";
+  categories        necklace, fireball, spell, magic;
+  synonyms          "Fireballs, Necklace of";
+  weight            1 lbs;
+  size              small;
+  probability       very rare;
+  substance         iron 1 inch;
+  appearances       common    "A golden chain with some golden spheres.";
+  worlds            generic;
+  references        WTC 17752: 263;
+  short description "A necklage with detachable orbs, throw to 70 ft for fireball (Ref DC 14).";
+  description
+
+  "This device appears to be nothing but beads on a string, sometimes with the
+  ends tied together to form a necklace. (It does not count as an item worn
+  around the neck for the purpose of determining which of a character's worn
+  magic items is effective.) If a character holds it, however, all can see the
+  strand as it really is'a golden chain from which hang a number of golden
+  spheres. The spheres are detachable by the wearer (and only by the wearer),
+  who can easily hurl one of them up to 70 feet. When a sphere arrives at the
+  end of its trajectory, it detonates as a \Spell{fireball} spell (Reflex DC 14
+  half).  Spheres come in different strengths, ranging from those that deal 2d6
+  points of fire damage to those that deal 10d6.
+
+  If the necklace is being worn or carried by a character who fails her saving
+  throw against a magical fire attack, the item must make a saving throw as
+  well (with a save bonus of +7). If the necklace fails to save, all its
+  remaining spheres detonate simultaneously, often with regrettable
+  consequences for the wearer.".
+
+#.....
+#----- Necklace of Fireballs I
+
+base item Necklace of Fireballs I =
+
+  base              Necklace of Fireballs;
+  value             1650 gp;
+  short description "1 x 5d6, 2 x 3d6.";
+  description
+
+  "Spheres for 1 x 5d6, 2 x 3d6.".
+
+#.....
+#----- Necklace of Fireballs II
+
+base item Necklace of Fireballs II =
+
+  base              Necklace of Fireballs;
+  value             2700 gp;
+  short description "1 x 6d6, 2 x 4d6.";
+  description
+
+  "Spheres for 1 x 6d6,Inc 2 x 4d6.".
+
+#.....
+#----- Necklace of Fireballs III
+
+base item Necklace of Fireballs III =
+
+  base              Necklace of Fireballs;
+  value             4350 gp;
+  short description "1 x 7d6, 2 x 5d6, 4 x 3d6.";
+  description
+
+  "Spheres for 1 x 7d6, 2 x 5d6, 4 x 3d6.".
+#.....
+#----- Necklace of Fireballs IV
+
+base item Necklace of Fireballs IV =
+
+  base              Necklace of Fireballs;
+  value             5400 gp;
+  short description "1 x 8d6, 2 x 6d6, 2 x 4d6, 4 x 2d6.";
+  description
+
+  "Spheres for 1 x 8d6, 2 x 6d6, 2 x 4d6, 4 x 2d6.".
+#.....
+#----- Necklace of Fireballs V
+
+base item Necklace of Fireballs V =
+
+  base              Necklace of Fireballs;
+  value             5850 gp;
+  short description "1 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.";
+  description
+
+  "Spheres for 1 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.".
+#.....
+#----- Necklace of Fireballs VI
+
+base item Necklace of Fireballs VI =
+
+  base              Necklace of Fireballs;
+  value             8100 gp;
+  short description "1 x 10d6, 2 x 8d6, 2 x 6d6, 4 x 4d6.";
+  description
+
+  "Spheres for 1 x 10d6, 2 x 8d6, 2 x 6d6, 4 x 4d6.".
+#.....
+#----- Necklace of Fireballs VII
+
+base item Necklace of Fireballs VII =
+
+  base              Necklace of Fireballs;
+  value             8700 gp;
+  short description "1 x 10d6, 2 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.";
+  description
+
+  "Spheres for 1 x 10d6, 2 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.".
+#.....
+#----- Pale Blue Ioun Stone
+
+base item with incomplete Pale Blue Ioun Stone =
+
+  incomplete        "+2 Str; Armor class 24";
+  player name       "Pale Blue Stone";
+  categories        magic, ioun stone;
+  synonyms          "Ioun Stone, Pale Blue";
+  value             8000 gp;
+  weight            1/10 lbs;
+  size              tiny;
+  probability       very rare;
+  substance         stone 1 inch;
+  hp                10;
+  hardness          5;
+  appearances       common    "A pale blue stone.";
+  worlds            generic;
+  references        WTC 17752: 260-261;
+  short description "";
+  description
+
+  "These crystalline stones always float in the air and must be within 3 feet
+  of their owner to be of any use. When a character first acquires a stone, she
+  must hold it and then release it, whereupon it takes up a circling orbit 1d3
+  feet from her head.  Thereafter, a stone must be grasped or netted to
+  separate it from its owner. The owner may voluntarily seize and stow a stone
+  (to keep it safe while she is sleeping, for example), but she loses the bene-
+  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
+  hardness 5.".
+
+#.....
+#----- Rope of Climbing
+
+base item with commodity, incomplete Rope of Climbing =
+
+  value             3000 gp;
+  weight            3 lbs;
+  probability       Common;
+  appearances       Common "60 feet of thin rope.";
+  player name       "Rope";
+  worlds            Generic;
+  references        WTC 17752: 266;
+  description
+  "A 60-foot-long \Item{rope of climbing} is not thicker than a wand, but it is
+  strong enough to support 3'000 pounds. Upon command, the rope snakes forward,
+  upward, downward, or in any other direction at 10 feet per round, attaching
+  itself securely wherever its owner desires. It can unfasten itself and return
+  in the same manner.
+
+  A \Item{rope of climbing} can be commanded to know or unknow itself. This
+  causes large knots to appear at 1-foot intervals along the rope. Knotting
+  shortens the rope to a 50-foot length until the knots are untied but lowers
+  the DC of \Skill{Climb} checks while using it by 10. A creatures must hold
+  one hend of the rope when its magic is invoced.";
+  short description "A rope that attaches itself to wherever desired.";
+  synonyms          "Climbin, Rope of";
+  categories        magic,
+                    gear,
+                    rope.
+
+#.....
+#----- Slippers of Spider Climbing
+
+base item with incomplete, wearable Slippers of Spider Climbing =
+
+  incomplete        "climb speed, timed per day";
+  value             4800 gp;
+  weight            1/2 lb;
+  probability       Rare;
+  size              {~} Tiny;
+  hardness          2;
+  hp                1;
+  slot              Feet;
+  appearances       Common "A set of brown leather slippers.";
+  substance         leather 1/4 in;
+  player name       "Slippers";
+  worlds            Generic;
+  references        WTC 17752: 266;
+  description
+  "When worn, a pair of these slippers enable movement on vertical surfaces or
+   even upside down along ceilings, leaving the wearer's hands free. Her
+   speed is 20 feet. Severely slippery surfaces --- icy, oiled, or greased
+   surfaces --- make these slippers useless. The slippers can be used for 10
+   minutes per day, split up as the wearer chooses.";
+  short description "10 min/day, Climb 20 ft anywhere, leaving hands free; do not work on slippery surfaces.";
+  synonyms          "Spider Climbing, Slippers of";
+  categories        magic,
+                    boots,
+                    climb.
+
+#.....
+
+#.....
+
+--- end here ---
 
 
 
@@ -454,44 +1425,6 @@ base item Demon Armor [Full Plate, Armor +4, Magic Defense +4] =
 #.....
 #----- Numbered Magical Weapons
 
-#----- Mwk Weapon
-
-base item with incomplete, weapon Mwk Weapon =
-
-  incomplete
-  "attack +1 enhancement";
-  value             300 gp;
-  probability       Uncommon;
-  appearances       Common "Good workmanship.",
-                    Common "Finely crafted.",
-                    Common "Well made.",
-                    Rare "Extraordinarily well made.";
-  player name       "";
-  references        "WTC 17524" 122;
-  description
-  "A masterwork weapon is a finely crafted version of a normal weapon. Wielding
-   it provides a +1 enhancement bonus on attack rolls.
-
-  You canât add the masterwork quality to a weapon after it is created; it must
-  be crafted as a masterwork weapon (see the Craft skill, page 70). The
-  masterwork quality adds 300 gp to the cost of a normal weapon (or 6 gp to the
-  cost of a single unit of ammunition, such as an arrow). For example, a
-  masterwork bastard sword costs 335 gp.
-
-  All magic weapons are automatically considered to be of masterwork
-  quality. The enhancement bonus granted by the masterwork quality doesnât
-  stack with the enhancement bonus provided by the weaponâs magic.
-
-  Even though some types of armor and shields (such as spiked shields) can be
-  used as weapons, you canât create a masterwork version of such an item that
-  confers an enhancement bonus on attack rolls. Instead, masterwork armor and
-  shields have lessened armor check penalties (see Masterwork Armor, page
-  126).";
-  short description "A masterwork version.";
-  synonyms          "Masterwork";
-  categories        masterwork.
-
-#.....
 #----- Mwk Ammunition
 
 base item with incomplete, weapon Mwk Ammunition =
@@ -566,17 +1499,6 @@ base item with incomplete, weapon Strength Rating +4 [Strength Rating +3] =
 
 #.....
 
-#----- Weapon +1
-
-base item with weapon Weapon +1 [Mwk Weapon] =
-
-  probability       Uncommon;
-  value             2300 gp;
-  player name       "";
-  references        WTC 17752: 222;
-  description       "".
-
-#.....
 #----- Weapon +2
 
 base item with weapon Weapon +2 [Mwk Weapon] =
@@ -1033,327 +1955,7 @@ base item Deathblade Poison [Poison Vial] =
 #.....
 #----- Potions
 
-#----- Potion
 
-base item Potion =
-
-  weight            1/10 lb;
-  probability       Very Rare;
-  size              {~, from AC 13} Fine;
-  hardness          1;
-  hp                1;
-  appearances       Common "Some oily liquid in a metal vial.",
-                    Common "Some oily liquid in a ceramic vial.",
-                    Common "Some oily liquid in a glass vial.",
-                    Common "Some watery liquid in a ceramic vial.",
-                    Common "Some watery liquid in a glass vial.",
-                    Common "Some watery liquid in a metal vial.",
-                    Common "Some clear liquid in a ceramic vial",
-                    Common "Some clear liquid in a glass vial",
-                    Common "Some clear liquid in a metal vial",
-                    Common "Some dark liquid in a ceramic vial",
-                    Common "Some dark liquid in a glass vial",
-                    Common "Some dark liquid in a metal vial",
-                    Common "Some thick liquid in a ceramic vial",
-                    Common "Some thick liquid in a glass vial",
-                    Common "Some thick liquid in a metal vial";
-  break DC          12;
-  player name       "Potion";
-  worlds            Generic;
-  references        WTC 17752: 229;
-  description
-  "A typical potion or oil consists of 1 ounce of liquid held in a ceramic or
-  glass vial fitted with a tight stopper. The stoppered container usually is no
-  more than 1 wide and 2 inches high. The vial has AC 13, 1 hit point, hardness
-  1, and a break DC of 12. Vials hold 1 ounce of liquid. ";
-  categories        magic,
-                    potion,
-                    drinkable,
-                    container.
-
-#.....
-#----- Potion 1
-
-base item Potion 1 [Potion] =
-
-  value             50 gp.
-
-#.....
-#----- Potion 3
-
-base item Potion 3 [Potion] =
-
-  value             300 gp.
-
-#.....
-#----- Potion 5
-
-base item Potion 5 [Potion] =
-
-  value             750 gp.
-
-#.....
-
-#----- Potion of Aid
-
-base item Potion of Aid [Potion 3] =
-
-  description
-  "As \SpellRef[Clr 3]{Aid}.";
-  short description "As \SpellRef[Clr 3]{Aid}.".
-
-#.....
-#----- Potion of Alter Self
-
-base item Potion of Alter Self [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Alter Self}.";
-  short description "As \SpellRef[Wiz 3]{Alter Self}.".
-
-#.....
-#----- Potion of Barkskin
-
-base item Potion of Barkskin [Potion 3] =
-
-  description
-  "As \SpellRef[Clr 3]{Barkskin}.";
-  short description "As \SpellRef[Clr 3]{Barkskin}.".
-
-#.....
-#----- Potion of Bear's Endurance
-
-base item Potion of Bear's Endurance [Potion 3] =
-
-  description
-  "As \SpellRef[Clr 3]{Bear's Endurance}.";
-  short description "As \SpellRef[Clr 3]{Bear's Endurance}.".
-
-#.....
-#----- Potion of Blur
-
-base item Potion of Blur [Potion 3] =
-
-  description
-  "As \SpellRef[Clr 3]{Blur}.";
-  short description "As \SpellRef[Clr 3]{Blur}.".
-
-#.....
-#----- Potion of Bull's Strength
-
-base item Potion of Bull's Strength [Potion 3] =
-
-  description
-  "As \SpellRef[Clr 3]{Bull's Strength}.";
-  short description "As \SpellRef[Clr 3]{Bull's Strength}.".
-
-#.....
-#----- Potion of Cat's Grace
-
-base item Potion of Cat's Grace [Potion 3] =
-
-  description
-  "As \SpellRef[Clr 3]{Cat's Grace}.";
-  short description "As \SpellRef[Clr 3]{Cat's Grace}.".
-
-#.....
-#----- Potion of Clairaudience or Clairvoyance
-
-base item Potion of Clairaudience or Clairvoyance [Potion 5] =
-
-  description
-  "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.";
-  short description "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.".
-
-#.....
-#----- Potion of Cure Light Wounds
-
-base item Potion of Cure Light Wounds [Potion 1] =
-
-  description
-  "As \SpellRef[Clr 1]{Cure Light Wounds}.";
-  short description "As \SpellRef[Clr 1]{Cure Light Wounds}.".
-
-#.....
-#----- Potion of Cure Moderate Wounds
-
-base item Potion of Cure Moderate Wounds [Potion 3] =
-
-  description
-  "As \SpellRef[Clr 3]{Cure Moderate Wounds}.";
-  short description "As \SpellRef[Clr 3]{Cure Moderate Wounds}.".
-
-#.....
-#----- Potion of Cure Serious Wounds
-
-base item Potion of Cure Serious Wounds [Potion 5] =
-
-  description
-  "As \SpellRef[Clr 5]{Cure Serious Wounds}.";
-  short description "As \SpellRef[Clr 5]{Cure Serious Wounds}.".
-
-#.....
-#----- Potion of Darkvision
-
-base item Potion of Darkvision [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Darkvision}.";
-  short description "As \SpellRef[Wiz 3]{Darkvision}.".
-
-#.....
-#----- Potion of Detect Thoughts
-
-base item Potion of Detect Thoughts [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Detect Thoughts}.";
-  short description "As \SpellRef[Wiz 3]{Detect Thoughts}.".
-
-#.....
-#----- Potion of Fly
-
-base item Potion of Fly [Potion 5] =
-
-  description
-  "As \SpellRef[Wiz 5]{Fly}.";
-  short description "As \SpellRef[Wiz 5]{Fly}.".
-
-#.....
-#----- Potion of Ghoul Touch
-
-base item Potion of Ghoul Touch [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Ghoul Touch}.";
-  short description "As \SpellRef[Wiz 3]{Ghoul Touch}.".
-
-#.....
-#----- Potion of Haste
-
-base item Potion of Haste [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Haste}.";
-  short description "As \SpellRef[Wiz 3]{Haste}.".
-
-#.....
-#----- Potion of Hide from Animals
-
-base item Potion of Hide from Animals [Potion 1] =
-
-  description
-  "As \SpellRef[Drd 1]{Hide from Animals}.";
-  short description "As \SpellRef[Drd 1]{Hide from Animals}.".
-
-#.....
-#----- Potion of Inflict Serious Wounds
-
-base item Potion of Inflict Serious Wounds [Potion 5] =
-
-  description
-  "As \SpellRef[Clr 5]{Inflict Serious Wounds}.";
-  short description "As \SpellRef[Clr 5]{Inflict Serious Wounds}.".
-
-#.....
-#----- Potion of Invisibility
-
-base item Potion of Invisibility [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Invisibility}.";
-  short description "As \SpellRef[Wiz 3]{Invisibility}.".
-
-#.....
-#----- Potion of Jump
-
-base item Potion of Jump [Potion 1] =
-
-  description
-  "As \SpellRef[Wiz 1]{Jump}.";
-  short description "As \SpellRef[Wiz 1]{Jump}.".
-
-#.....
-#----- Potion of Levitate
-
-base item Potion of Levitate [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Levitate}.";
-  short description "As \SpellRef[Wiz 3]{Levitate}.".
-
-#.....
-#----- Potion of Lesser Restoration
-
-base item Potion of Lesser Restoration [Potion 5] =
-
-  description
-  "As \SpellRef[Clr 5]{Lesser Restoration}.";
-  short description "As \SpellRef[Clr 5]{Lesser Restoration}.".
-
-#.....
-#----- Potion of Neutralize Poison
-
-base item Potion of Neutralize Poison [Potion 5] =
-
-  description
-  "As \SpellRef[Drd 5]{Neutralize Poison}.";
-  short description "As \SpellRef[Drd 5]{Neutralize Poison}.".
-
-#.....
-#----- Potion of Nondetection
-
-base item Potion of Nondetection [Potion 5] =
-
-  description
-  "As \SpellRef[Wiz 3]{Nondetection}.";
-  short description "As \SpellRef[Wiz 3]{Nondetection}.".
-
-#.....
-#----- Potion of Protection from Energy
-
-base item Potion of Protection from Energy [Potion 5] =
-
-  description
-  "As \SpellRef[Wiz 5]{Protection from Energy}.";
-  short description "As \SpellRef[Wiz 5]{Protection from Energy}.".
-
-#.....
-#----- Potion of Resist Energy (fire) 10
-
-base item Potion of Resist Energy (fire) 10 [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Resist Energy}.";
-  short description "As \SpellRef[Wiz 3]{Resist Energy}.".
-
-#.....
-#----- Potion of Remove Disease
-
-base item Potion of Remove Disease [Potion 5] =
-
-  description
-  "As \SpellRef[Clr 5]{Remove Disease}.";
-  short description "As \SpellRef[Clr 5]{Remove Disease}.".
-
-#.....
-#----- Potion of Spider Climb
-
-base item Potion of Spider Climb [Potion 3] =
-
-  description
-  "As \SpellRef[Wiz 3]{Spider Climb}.";
-  short description "As \SpellRef[Wiz 3]{Spider Climb}.".
-#.....
-#----- Potion of Truth
-
-base item Potion of Truth [Potion 5] =
-
-  description
-  "As \SpellRef[Clr 3]{Zone of Truth}.";
-  short description "As \SpellRef[Clr 3]{Zone of Truth}.".
-
-#.....
 
 # special potions
 
@@ -1374,31 +1976,6 @@ base item Potion of Sneaking [Potion] =
 #.....
 #----- Rings
 
-#----- Ring
-
-base item Ring =
-
-  weight            1/100 lb;
-  probability       Common;
-  size              Medium-size;
-  hardness          10;
-  hp                1;
-  appearances       Very Rare "A simple platinum ring.",
-                    Common "A simple gold ring.",
-                    Common "A simple silver ring.",
-                    Very Rare "A simple brass ring.";
-  substance         steel 1/15 in;
-  break DC          25;
-  player name       "Ring";
-  worlds            Generic;
-  references        WTC 17752: 229;
-  description
-  "Although exceptions exist that are crafted from glass or bone, the vast
-   majority of rings are forged from metal---usually precious metals such as
-   gold, silver, and platinum.";
-  categories        mundane.
-
-#.....
 
 #----- Ring of Counterspells
 
@@ -1443,24 +2020,6 @@ base item Ring of Feather Falling [Ring] =
                     fall,
                     magic,
                     ring.
-
-#.....
-#----- Ring of Protection +1
-
-base item with Armor Ring of Protection +1 [Ring] =
-
-  AC bonus          +1 deflection;
-  value             2000 gp;
-  probability       Rare;
-  player name       "Ring";
-  references        WTC 17752: 232;
-  description
-  "This ring offers continual magical protection in the form of a deflection
-  bonus of +1 AC.";
-  short description "AC +1 deflection bonus";
-  synonyms          "Protection +1, Ring of";
-  categories        protection,
-                    ac.
 
 #.....
 #----- Ring of Protection +2
@@ -2699,101 +3258,6 @@ base item Amulet of Health +2 =
                     constitution.
 
 #.....
-#----- Bag of Holding I
-
-base item with container Bag of Holding I =
-
-  capacity          30 cu ft;
-  value             2500 gp;
-  weight            15 lbs;
-  probability       Very Rare;
-  size              Medium-size;
-  hardness          0;
-  hp                1;
-  appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
-  substance         cloth 1/2 in;
-  player name       "Sack";
-  worlds            Generic;
-  references        WTC 17752: 248;
-  description
-  "This appears to be a common cloth sack about 2 feet by 4 feet in size. The
-  \Item{bag of holding} opens into a nondimensional space: Its inside is larger
-  than its outside dimensions. Regardless of what is put into the bag (up to
-  250 lb.), it weights 15 lb.
-
-  If the bag is overloaded, or if sharp objects pierce it (from inside or
-  outside), the bag ruptures and is ruined. All contents are lost forever. If a
-  \Item{bag of holding} is turned inside out, its contents spill out, unharmed,
-  but the bag must be put right before it can be used again. If living
-  creatures are placed within the bag, they can survive for up to 10 minutes,
-  after which time they suffocate. Retrieving a specific item from a \Item{bag
-  of holding} is a move action---unless the bag contains more than an ordinary
-  backpack would hold, in which case retrieving a specific item is a full-round
-  action.
-
-  If a \Item{bag of holding} is placed within a \Item{portable hole}, a rift to
-  the \Place{Astral Plane} is torn in the space: Bag and hole alike are sucked
-  into the void and lost forever. If a \Item{portable hole} is placed within a
-  \Item{bag of holding}, it opens a gate to the \Place{Astral Plane}: The hole,
-  the bag, and any creatures within a 10-foot radius are drawn there,
-  destroying the \Item{portable hole} and \Item{bag of holding} in the
-  process.";
-  short description "This bag is larger inside than outside.";
-  synonyms          "Holding I, Bag of";
-  categories        bag,
-                    wondrous magical item,
-                    magical item,
-                    extradimensional.
-
-#.....
-#----- Bag of Holding II
-
-base item with container Bag of Holding II =
-
-  capacity          70 cu ft;
-  value             5000 gp;
-  weight            25 lbs;
-  probability       Very Rare;
-  size              Medium-size;
-  hardness          0;
-  hp                1;
-  appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
-  substance         cloth 1/2 in;
-  player name       "Sack";
-  worlds            Generic;
-  references        WTC 17752: 248;
-  description
-  "This appears to be a common cloth sack about 2 feet by 4 feet in size. The
-  \Item{bag of holding} opens into a nondimensional space: Its inside is larger
-  than its outside dimensions. Regardless of what is put into the bag (up to
-  500 lb.), it weights 25 lb.
-
-  If the bag is overloaded, or if sharp objects pierce it (from inside or
-  outside), the bag ruptures and is ruined. All contents are lost forever. If a
-  \Item{bag of holding} is turned inside out, its contents spill out, unharmed,
-  but the bag must be put right before it can be used again. If living
-  creatures are placed within the bag, they can survive for up to 10 minutes,
-  after which time they suffocate. Retrieving a specific item from a \Item{bag
-  of holding} is a move action---unless the bag contains more than an ordinary
-  backpack would hold, in which case retrieving a specific item is a full-round
-  action.
-
-  If a \Item{bag of holding} is placed within a \Item{portable hole}, a rift to
-  the \Place{Astral Plane} is torn in the space: Bag and hole alike are sucked
-  into the void and lost forever. If a \Item{portable hole} is placed within a
-  \Item{bag of holding}, it opens a gate to the \Place{Astral Plane}: The hole,
-  the bag, and any creatures within a 10-foot radius are drawn there,
-  destroying the \Item{portable hole} and \Item{bag of holding} in the
-  process.";
-  short description "This bag is larger inside than outside.";
-  synonyms          "Holding II, Bag of";
-  categories        bag,
-                    wondrous magical item,
-                    magical item,
-                    extradimensional.
-
-
-#.....
 #----- Bead of Force
 
 base item Bead of Force =
@@ -2996,36 +3460,6 @@ base item Bracers of Armor +5 =
 
 
 #.....
-#----- Brooch of Shielding
-
-base item with multiuse Brooch of Shielding =
-
-  count             101;
-  unit              damage;
-  player name       "Brooch";
-  categories        magic, shield, brooch;
-  synonyms          "Shielding, Brooch of";
-  value             14 gp;
-  weight            1/10 lbs;
-  size              tiny;
-  probability       rare;
-  substance         steel 1/2 inch;
-  appearances       very rare "",
-                    rare      "",
-                    uncommon  "A golden brooch.",
-                    common    "A silver brooch";
-  worlds            generic;
-  references        WTC 17752: 250;
-  short description "A brooch to absorb \Spell{magic missile}s.";
-  description
-
-  "This appears to be a piece of silver or gold jewelry used to fasten a cloak
-  or cape. In addition to this mundane task, it can absorb \Spell{magic
-  missile}s of the sort generated by spell or spell-like ability. A brooch can
-  absorb up to 101 points of damage from magic missiles before it melts and
-  becomes useless.  ".
-
-#.....
 #----- Carpet of Flying
 
 base item Carpet of Flying 5x5 =
@@ -3149,27 +3583,6 @@ base item Cloak of Elvenkind =
                     elf.
 
 #.....
-#----- Cloak of Resistance +1
-
-base item Cloak of Resistance +1 =
-
-  value             1000 gp;
-  weight            1 lb;
-  probability       Rare;
-  size              Tiny;
-  hardness          0;
-  hp                1;
-  substance         cloth 1/10 in;
-  player name       "Cloak";
-  worlds            Generic;
-  references        WTC 17752: 253;
-  description
-  "These garments offer magic protection in the form of a +1 to resistance
-   bonus on all saving throws (Fortitude, Reflex, and Will).";
-  short description "+1 resistance to Fort, Ref, Will";
-  synonyms          "Resistance +1, Cloak of".
-
-#.....
 #----- Cloak of Resistance +2
 
 base item Cloak of Resistance +2 =
@@ -3189,37 +3602,6 @@ base item Cloak of Resistance +2 =
    bonus on all saving throws (Fortitude, Reflex, and Will).";
   short description "+2 resistance to Fort, Ref, Will";
   synonyms          "Resistance +2, Cloak of".
-
-#.....
-#----- Deep Red Ioun Stone
-
-base item with incomplete Deep Red Ioun Stone =
-
-  incomplete        "+2 Dex; Armor class 24";
-  player name       "Deep Red Stone";
-  categories        magic, ioun stone;
-  synonyms          "Ioun Stone, Deep Red";
-  value             8000 gp;
-  weight            1/10 lbs;
-  size              tiny;
-  probability       very rare;
-  substance         stone 1 inch;
-  hp                10;
-  hardness          5;
-  appearances       common    "A deep red stone.";
-  worlds            generic;
-  references        WTC 17752: 260-261;
-  short description "+2 Dex";
-  description
-
-  "These crystalline stones always float in the air and must be within 3 feet
-  of their owner to be of any use. When a character first acquires a stone, she
-  must hold it and then release it, whereupon it takes up a circling orbit 1d3
-  feet from her head.  Thereafter, a stone must be grasped or netted to
-  separate it from its owner. The owner may voluntarily seize and stow a stone
-  (to keep it safe while she is sleeping, for example), but she loses the bene-
-  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
-  hardness 5.".
 
 #.....
 #----- Dust of Disappearance
@@ -3476,54 +3858,6 @@ base item Headband of Intellect +4 =
                     abilities.
 
 #.....
-#----- Heward's Handy Haversack
-
-base item with container, incomplete Heward's Handy Haversack =
-
-  capacity          1 cu ft;
-  state             solid;
-  incomplete
-  "does not correctly calculate weight, should always be 5
-                    lbs.";
-  value             2000 gp;
-  weight            5 lbs;
-  probability       Very Rare;
-  size              Small;
-  hardness          2;
-  hp                1;
-  appearances       Uncommon "A simple leather bag with straps to carry it.",
-                    Common "A leather backpack to stow your stuff.",
-                    Uncommon "A finely crafted backpack to stow your stuff.",
-                    Rare "A finely crafted backpack with golden buckles.";
-  substance         leather 1/4 in;
-  player name       "Backpack";
-  worlds            Generic;
-  references        WTC 17752: 259;
-  description
-  "A backpack of this sort appears to be well made, well used, and quite
-  ordinary. It is constructed of finely tanned leather, and the straps have
-  brass hardware and buckles. It has two wide pouches, each of which appears
-  large enough to hold about a quart of material. In fact, each is like a
-  \Item{bag of holding} and can actually hold material as much as 2 cubic feet
-  in volume or 20 pounds in weight. The large central portion can contain up to
-  8 cubic feet or 80 pounds of material. Even when so filled, the backpack
-  always weighs only 5 pounds.
-
-  While such storage is useful enough, the pack has an even greater power in
-  addition. When the wearer reaches into it for a specific item, that item is
-  always on top. Thus, no digging around and fumbling is ever necessary to find
-  what a haversack contains. Retrieving any specific item from a haversack is a
-  move action, but it does not provoke the attacks of opportunity that
-  retrieving a stored item usually does.";
-  short description "A combination of bag of holding and backpack";
-  synonyms          "Haversack, Heward's Handy";
-  categories        magic,
-                    bag,
-                    container,
-                    wondrous.
-
-
-#.....
 #----- Horn of Goodness or Evil
 
 base item Horn of Goodness or Evil =
@@ -3690,37 +4024,6 @@ base item Metamagic Rod (Extend) [Rod] =
   This rod can be used with spells of 6th level or lower. The wielder can cast
   up to three spells per day that are extended as though using the Extend Spell
   feat.".
-
-#.....
-#----- Pale Blue Ioun Stone
-
-base item with incomplete Pale Blue Ioun Stone =
-
-  incomplete        "+2 Str; Armor class 24";
-  player name       "Pale Blue Stone";
-  categories        magic, ioun stone;
-  synonyms          "Ioun Stone, Pale Blue";
-  value             8000 gp;
-  weight            1/10 lbs;
-  size              tiny;
-  probability       very rare;
-  substance         stone 1 inch;
-  hp                10;
-  hardness          5;
-  appearances       common    "A pale blue stone.";
-  worlds            generic;
-  references        WTC 17752: 260-261;
-  short description "";
-  description
-
-  "These crystalline stones always float in the air and must be within 3 feet
-  of their owner to be of any use. When a character first acquires a stone, she
-  must hold it and then release it, whereupon it takes up a circling orbit 1d3
-  feet from her head.  Thereafter, a stone must be grasped or netted to
-  separate it from its owner. The owner may voluntarily seize and stow a stone
-  (to keep it safe while she is sleeping, for example), but she loses the bene-
-  fits of the stone during that time. Ioun stones have AC 24, 10 hit points, and
-  hardness 5.".
 
 #.....
 #----- Pearl of Power
@@ -3979,111 +4282,6 @@ base item Monk's Belt =
   5th-level monk. This AC bonus functions just like the monkâs AC bonus.".
 
 #.....
-#----- Necklace of Fireballs
-
-base item Necklace of Fireballs =
-
-  player name       "Necklace";
-  categories        necklace, fireball, spell, magic;
-  synonyms          "Fireballs, Necklace of";
-  weight            1 lbs;
-  size              small;
-  probability       very rare;
-  substance         iron 1 inch;
-  appearances       common    "A golden chain with some golden spheres.";
-  worlds            generic;
-  references        WTC 17752: 263;
-  short description "A necklage with detachabel orbs, throw to 70 ft for fireball (Ref DC 14).";
-  description
-
-  "This device appears to be nothing but beads on a string, sometimes with the
-  ends tied together to form a necklace. (It does not count as an item worn
-  around the neck for the purpose of determining which of a characterâs worn
-  magic items is effective.) If a character holds it, however, all can see the
-  strand as it really isâa golden chain from which hang a number of golden
-  spheres. The spheres are detachable by the wearer (and only by the wearer),
-  who can easily hurl one of them up to 70 feet. When a sphere arrives at the
-  end of its trajectory, it detonates as a fireballspell (Reflex DC 14 half).
-  Spheres come in different strengths, ranging from those that deal 2d6 points
-  of fire damage to those that deal 10d6.
-
-  If the necklace is being worn or carried by a character who fails her saving
-  throw against a magical fire attack, the item must make a saving throw as
-  well (with a save bonus of +7). If the necklace fails to save, all its
-  remaining spheres detonate simultaneously, often with regrettable
-  consequences for the wearer.".
-
-#.....
-#----- Necklace of Fireballs I
-
-base item Necklace of Fireballs I [Necklace of Fireballs] =
-
-  value             1650 gp;
-  short description "1 x 5d6, 2 x 3d6.";
-  description
-
-  "Spheres for 1 x 5d6, 2 x 3d6.".
-#.....
-#----- Necklace of Fireballs II
-
-base item Necklace of Fireballs II [Necklace of Fireballs] =
-
-  value             2700 gp;
-  short description "1 x 6d6, 2 x 4d6.";
-  description
-
-  "Spheres for 1 x 6d6, 2 x 4d6.".
-#.....
-#----- Necklace of Fireballs III
-
-base item Necklace of Fireballs III [Necklace of Fireballs] =
-
-  value             4350 gp;
-  short description "1 x 7d6, 2 x 5d6, 4 x 3d6.";
-  description
-
-  "Spheres for 1 x 7d6, 2 x 5d6, 4 x 3d6.".
-#.....
-#----- Necklace of Fireballs IV
-
-base item Necklace of Fireballs IV [Necklace of Fireballs] =
-
-  value             5400 gp;
-  short description "1 x 8d6, 2 x 6d6, 2 x 4d6, 4 x 2d6.";
-  description
-
-  "Spheres for 1 x 8d6, 2 x 6d6, 2 x 4d6, 4 x 2d6.".
-#.....
-#----- Necklace of Fireballs V
-
-base item Necklace of Fireballs V [Necklace of Fireballs] =
-
-  value             5850 gp;
-  short description "1 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.";
-  description
-
-  "Spheres for 1 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.".
-#.....
-#----- Necklace of Fireballs VI
-
-base item Necklace of Fireballs VI [Necklace of Fireballs] =
-
-  value             8100 gp;
-  short description "1 x 10d6, 2 x 8d6, 2 x 6d6, 4 x 4d6.";
-  description
-
-  "Spheres for 1 x 10d6, 2 x 8d6, 2 x 6d6, 4 x 4d6.".
-#.....
-#----- Necklace of Fireballs VII
-
-base item Necklace of Fireballs VII [Necklace of Fireballs] =
-
-  value             8700 gp;
-  short description "1 x 10d6, 2 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.";
-  description
-
-  "Spheres for 1 x 10d6, 2 x 9d6, 2 x 7d6, 2 x 5d6, 2 x 3d6.".
-#.....
 #----- Robe of Useful Items
 
 base item with wearable Robe of Useful Items =
@@ -4128,36 +4326,6 @@ base item with wearable Robe of Useful Items =
 
 
 #.....
-#----- Rope of Climbing
-
-base item with commodity, incomplete Rope of Climbing =
-
-  value             3000 gp;
-  weight            3 lbs;
-  probability       Common;
-  appearances       Common "60 feet of thin rope.";
-  player name       "Rope";
-  worlds            Generic;
-  references        WTC 17752: 266;
-  description
-  "A 60-foot-long \Item{rope of climbing} is not thicker than a wand, but it is
-  strong enough to support 3'000 pounds. Upon command, the rope snakes forward,
-  upward, downward, or in any other direction at 10 feet per round, attaching
-  itself securely wherever its owner desires. It can unfasten itself and return
-  in the same manner.
-
-  A \Item{rope of climbing} can be commanded to know or unknow itself. This
-  causes large knots to appear at 1-foot intervals along the rope. Knotting
-  shortens the rope to a 50-foot length until the knots are untied but lowers
-  the DC of \Skill{Climb} checks while using it by 10. A creatures must hold
-  one hend of the rope when its magic is invoced.";
-  short description "A rope that attaches itself to wherever desired.";
-  synonyms          "Climbin, Rope of";
-  categories        magic,
-                    gear,
-                    rope.
-
-#.....
 #----- Silversheen
 
 base item Silversheen =
@@ -4181,34 +4349,6 @@ base item Silversheen =
   example, a +1 holy adamantine longswordbecomes a +1 holy silver longswordfor
   the duration of the effect. One vial will coat a single melee weapon or 20
   units of ammunition.".
-
-#.....
-#----- Slippers of Spider Climbing
-
-base item Slippers of Spider Climbing =
-
-  value             4800 gp;
-  weight            1/2 lb;
-  probability       Rare;
-  size              {~} Tiny;
-  hardness          2;
-  hp                1;
-  appearances       Common "A set of brown leather slippers.";
-  substance         leather 1/4 in;
-  player name       "Slippers";
-  worlds            Generic;
-  references        WTC 17752: 266;
-  description
-  "When worn, a pair of these slippers enable movement on vertical surfaces or
-   even upside down along ceilings, leaving the wearer's hands free. Her
-   speed is 20 feet. Severely slippery surfaces --- icy, oiled, or greased
-   surfaces --- make these slippers useless. The slippers can be used for 10
-   minutes per day, split up as the wearer chooses. ";
-  short description "10 min/day, Climb 20 ft anywhere, leaving hands free; do not work on slippery surfaces.";
-  synonyms          "Spider Climbing, Slippers of";
-  categories        magic,
-                    boots,
-                    climb.
 
 #.....
 #----- Stone Salve

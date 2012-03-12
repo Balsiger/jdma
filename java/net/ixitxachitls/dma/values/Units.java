@@ -1369,6 +1369,9 @@ public class Units<T extends Units> extends Value<T>
     if(m_values == null)
       return (T)this;
 
+    if(inValue == 1)
+      return (T)this;
+
     T result = create();
     result.m_values = new Rational[m_values.length];
     result.m_set = m_set;
@@ -1421,6 +1424,9 @@ public class Units<T extends Units> extends Value<T>
   public T divide(long inValue)
   {
     if(!isDefined())
+      return (T)this;
+
+    if(inValue == 1)
       return (T)this;
 
     T result = create();

@@ -96,100 +96,48 @@ public class AbstractEntry extends ValueGroup
 {
   //----------------------------------------------------------------- nested
 
-    //------------------------------- allows -------------------------------
-
-    /**
-      * Check if this type allows access by the given access level.
-      *
-      * @param       inLevel the level to check for
-      *
-      * @return      true if allowed, false if not
-      *
-      * @undefined   never
-      *
-      */
-//     public boolean allows(BaseCharacter.Group inLevel)
-//     {
-//       if(m_access == null)
-//         return true;
-
-//       return m_access.allows(inLevel);
-//     }
-
-    //......................................................................
-
-    //---------------------------- withAccess ------------------------------
-
-    /**
-     * Set the access level of this type.
-     *
-     * @param       inAccess the access level
-     *
-     * @return      this object
-     *
-     */
-    // TODO: clean up comments
-//     protected Type withAccess(BaseCharacter.Group inAccess)
-//     {
-//       m_access = inAccess;
-
-//       return this;
-//     }
-
-    //......................................................................
-
-  //----- Combiner ---------------------------------------------------------
+  //------------------------------- allows -------------------------------
 
   /**
-   * A simple combiner to combine an old value with a new one and return
-   * the desired result.
+   * Check if this type allows access by the given access level.
+   *
+   * @param       inLevel the level to check for
+   *
+   * @return      true if allowed, false if not
+   *
+   * @undefined   never
+   *
    */
-//   protected interface Combiner<T, S>
-//   {
-//     public T combine(T inOld, S inNew);
-//   }
+  //     public boolean allows(BaseCharacter.Group inLevel)
+  //     {
+  //       if(m_access == null)
+  //         return true;
 
-  //........................................................................
-  //----- UniqueEntryIdentificator -----------------------------------------
+  //       return m_access.allows(inLevel);
+  //     }
 
-//   /**
-//    * A class for uniquely identifying an entry in a repository.
-//    */
-//   public static class UniqueEntryIdentificator<T extends AbstractEntry>
-//     implements UniqueIdentificator<T>
-//   {
-//     public String id(@Nonnull T inEntry)
-//     {
-//       return inEntry.getID();
-//     }
-//   }
+  //......................................................................
 
-  //........................................................................
-  //----- EntryIdentificator -----------------------------------------------
+  //---------------------------- withAccess ------------------------------
 
   /**
-   * A class for identifying an entry.
+   * Set the access level of this type.
+   *
+   * @param       inAccess the access level
+   *
+   * @return      this object
+   *
    */
-//   public static class EntryIdentificator<T extends BaseEntry>
-//     implements Identificator<T>
-//   {
-//     public @Nonnull List<String> id(@Nonnull T inEntry)
-//     {
-//       String []synonyms = inEntry.getSynonyms();
+  // TODO: clean up comments
+  //     protected Type withAccess(BaseCharacter.Group inAccess)
+  //     {
+  //       m_access = inAccess;
 
-//       String []result = new String[synonyms.length + 1];
+  //       return this;
+  //     }
 
-//       result[0] = inEntry.getID();
+  //......................................................................
 
-//       int i = 1;
-//       for(String synonym : synonyms)
-//         result[i++] = synonym;
-
-//       return result;
-//     }
-//   }
-
-  //........................................................................
   //----- EntryKey ---------------------------------------------------------
 
   /**
@@ -807,6 +755,28 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //-------------------------- ensureBaseEntries ---------------------------
+
+  /**
+   * Make sure that all base entries are available.
+   *
+   * @return      true if all are available, false if not
+   *
+   */
+  public boolean ensureBaseEntries()
+  {
+    for(BaseEntry base : getBaseEntries())
+      if(base == null)
+      {
+        m_baseEntries = null;
+        return false;
+      }
+
+    return true;
+  }
+
+  //........................................................................
+
   //------------------------------ getRefName ------------------------------
 
   /**
@@ -1862,6 +1832,15 @@ public class AbstractEntry extends ValueGroup
                      computeValue("_short description", inDM)
                      .format(this, inDM, true)), null, "short-desc");
 
+    if("extensions".equals(inKey))
+      return new FormattedValue(Strings.toString(m_extensions.keySet(), ", ",
+                                                 ""), null, "extensions")
+        .withEditable(true)
+        .withEditType("multiselection")
+        .withEditChoices("armor||commoditiy||composite||container||counted"
+                         + "||incomplete||light||multiple||multiuse||timed"
+                         + "||weapon||wearable");
+
     ValueHandle value = super.computeValue(inKey, inDM);
     if(value != null)
       return value;
@@ -2046,6 +2025,30 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //----------------------------- adjustValue ------------------------------
+
+  /**
+   * Adjust the value for the given name for any special properites.
+   *
+   * @param       inName        the name of the value to adjust
+   * @param       ioCombination the combinstaion to adjust
+   * @param       <V>           the real type of the value combined
+   *
+   */
+  @Override
+  public <V extends Value> void
+            adjustCombination(@Nonnull String inName,
+                              Combination<V> ioCombination)
+  {
+    // now ask all the extensions if they want to contribute something
+    for(AbstractExtension<? extends AbstractEntry> extension
+          : m_extensions.values())
+      extension.adjustCombination(inName, ioCombination);
+
+    super.adjustCombination(inName, ioCombination);
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -2081,6 +2084,18 @@ public class AbstractEntry extends ValueGroup
       if(!inText.startsWith(Value.UNDEFINED))
         for(String base : inText.split(",\\s*"))
           addBase(base);
+
+      // setup extensions from base entries
+      for(BaseEntry base : getBaseEntries())
+      {
+        if(base == null)
+          continue;
+
+        for(AbstractExtension extension : base.m_extensions.values())
+          for(String name
+                : AbstractExtension.getAutoExtensions(extension.getClass()))
+            addExtension(name);
+      }
 
       changed();
       return null;
@@ -2627,6 +2642,7 @@ public class AbstractEntry extends ValueGroup
     {
       Log.warning("could not invoke constructor for extension " + name
                   + ", extension ignored (" + e.getCause() + ")");
+      e.printStackTrace(System.out);
     }
 
     return null;

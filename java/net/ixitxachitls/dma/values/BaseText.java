@@ -120,7 +120,7 @@ public class BaseText<T extends BaseText> extends Value<T>
   /** The delimiters for ending the text after a space. */
   protected static final @Nonnull String s_nameSpaceDelimiters =
     Config.get("resource:values/name.delimiter.simple.space",
-               "-+*%$#@~!");
+               "-*%$#@~!");
 
   /** The pattern for the delimiters (escaped). */
   protected static final @Nonnull String s_nameDelimPattern =

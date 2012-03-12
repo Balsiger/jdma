@@ -45,6 +45,7 @@ import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
@@ -1576,6 +1577,25 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //----------------------------- adjustValue ------------------------------
+
+  /**
+   * Adjust the value for the given name for any special properites.
+   *
+   * @param       inName        the name of the value to adjust
+   * @param       ioCombination the combinstaion to adjust
+   * @param       <V>           the real type of the values combined
+   *
+   */
+  public <V extends Value> void
+            adjustCombination(@Nonnull String inName,
+                              Combination<V> ioCombination)
+  {
+    // nothing to do
+  }
+
+  //........................................................................
+
   //---------------------------- getBaseEntries ----------------------------
 
   /**

@@ -34,7 +34,6 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.ID;
 import net.ixitxachitls.output.commands.Command;
@@ -691,7 +690,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    */
   public void randomID()
   {
-    m_name = ID.random();
+    setName(ID.random().get());
     changed(true);
   }
 
@@ -915,21 +914,6 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
   {
     String rest = super.set(inKey, inText);
-
-    if("base".equals(inKey))
-    {
-      // setup extensions from base entries
-      for(BaseEntry base : getBaseEntries())
-      {
-        if(base == null)
-          continue;
-
-        for(AbstractExtension extension : base.m_extensions.values())
-          for(String name
-                : AbstractExtension.getAutoExtensions(extension.getClass()))
-            addExtension(name);
-      }
-    }
 
     return rest;
   }

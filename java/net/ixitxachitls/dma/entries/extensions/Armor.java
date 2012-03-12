@@ -100,7 +100,7 @@ public class Armor extends Extension<Item>
 
   static
   {
-    extractVariables(Armor.class);
+    extractVariables(Item.class, Armor.class);
   }
 
   //........................................................................

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -82,8 +82,6 @@ public final class DMADataFactory
    * @return      the repository with all the base data
    *
    */
-  // public static DMAData getBaseData() { return get(); }
-  // public static void clearBase() { clear(); }
   public static synchronized @Nonnull DMAData get()
   {
     if(s_base == null)
@@ -143,19 +141,5 @@ public final class DMADataFactory
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The test. */
-  // public static class Test extends net.ixitxachitls.util.test.TestCase
-  // {
-  // }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
-
   //........................................................................
 }

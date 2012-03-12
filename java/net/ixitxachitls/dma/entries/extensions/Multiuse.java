@@ -19,26 +19,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
+
 //------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.Nonnull;
 
-import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Text;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * This is the timed extension for all the entries.
+ * This is the multiuse extension for all the entries.
  *
- * @file          Incomplete.java
+ * @file          Multiuse.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
@@ -48,36 +45,36 @@ import net.ixitxachitls.dma.values.Text;
 
 //__________________________________________________________________________
 
-public class Incomplete extends Extension<Entry<?>>
+public class Multiuse extends Counted
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Incomplete -----------------------------
+  //------------------------------- Multiuse ------------------------------
 
   /**
-   * Default constructor.
-   *
-   * @param       inEntry the entry attached to
-   * @param       inName the name of the extension
-   *
-   */
-  public Incomplete(@Nonnull Entry inEntry, @Nonnull String inName)
+    * Default constructor.
+    *
+    * @param       inEntry the entry attached to
+    * @param       inName  the name of the extension
+    *
+    */
+  public Multiuse(@Nonnull Item inEntry, @Nonnull String inName)
   {
     super(inEntry, inName);
   }
 
   //........................................................................
-  //------------------------------- Incomplete -----------------------------
+  //------------------------------- Multiuse ------------------------------
 
   /**
-   * Default constructor.
-   *
-   * @param       inEntry the entry attached to
-   * @param       inTag   the tag name for this instance
-   * @param       inName  the name of the extension
-   *
-   */
-  // public Incomplete(Entry inEntry, String inTag, String inName)
+    * Default constructor.
+    *
+    * @param       inEntry the entry attached to
+    * @param       inTag   the tag name for this instance
+    * @param       inName  the name of the extension
+    *
+    */
+  // public Multiuse(Item inEntry, String inTag, String inName)
   // {
   //   super(inEntry, inTag, inName);
   // }
@@ -88,66 +85,85 @@ public class Incomplete extends Extension<Entry<?>>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%incomplete");
-
-  //----- incomplete -------------------------------------------------------
-
-  /** The time that is left for the item. */
-  @Key("incomplete")
-  @DM
-  @WithBases
-  protected @Nonnull Text m_incomplete = new Text();
-
-  //........................................................................
-
   static
   {
-    extractVariables(Item.class, Incomplete.class);
+    extractVariables(Item.class, Multiuse.class);
   }
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------- complete -------------------------------
+
+  /**
+   * Complete the extension and make sure that all values are filled.
+   *
+   */
+  // public void complete()
+  // {
+  //   // Adjust the value accordig to the count.
+  //   if(m_count.isDefined())
+  //     m_entry.addValueModifier
+  //       (new NumberModifier(NumberModifier.Operation.MULTIPLY,
+  //                           (int)m_count.get(),
+  //                           NumberModifier.Type.GENERAL, "multiple count"));
+
+  //   super.complete();
+  // }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //----------------------------- modifyValue ------------------------------
+
+  /**
+    *
+    * Modify the given value with information from the current extension.
+    *
+    * @param       inType    the type of value to modify
+    * @param       inEntry   the entry to modify in
+    * @param       inValue   the value to modify, return in this object
+    * @param       inDynamic a flag denoting if dynamic modifiers should be
+    *                        returned
+    *
+    * @return      the newly computed value (or null if no value to use)
+    *
+    * @undefined   never
+    *
+    * @algorithm   nothing done here
+    *
+    * @derivation  necessary if real modifications are desired
+    *
+    * @example     see Item
+    *
+    * @bugs
+    * @to_do
+    *
+    * @keywords    modify . value
+    *
+    */
+//   public Modifier modifyValue(PropertyKey inType, AbstractEntry inEntry,
+//                               Value inValue, boolean inDynamic)
+//   {
+//     if(inValue == null || !inValue.isDefined())
+//       return null;
+
+//     if(m_count.isDefined() && inDynamic
+//        && inType == PropertyKey.getKey("value"))
+//       return new Modifier(Modifier.Type.MULTIPLY, (int)m_count.get());
+
+//     return super.modifyValue(inType, inEntry, inValue, inDynamic);
+//   }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------------------------- test

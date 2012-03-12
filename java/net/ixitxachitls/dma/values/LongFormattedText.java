@@ -85,7 +85,7 @@ public class LongFormattedText extends FormattedText
    *
    */
   @Override
-public @Nonnull LongFormattedText create()
+  public @Nonnull LongFormattedText create()
   {
     return (LongFormattedText)super.create(new LongFormattedText());
   }

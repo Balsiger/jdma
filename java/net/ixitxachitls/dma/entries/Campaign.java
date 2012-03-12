@@ -115,7 +115,7 @@ public class Campaign extends Entry<BaseCampaign>
               + "$par"
               + "%name "
               + "%base "
-              + "%dm %characters "
+              + "%dm %characters %items"
               // admin
               + "%errors"
               );
@@ -195,6 +195,24 @@ public class Campaign extends Entry<BaseCampaign>
   }
 
   //........................................................................
+  //------------------------------- getItem --------------------------------
+
+  /**
+   * Get the item denoted with the given name from the campaign.
+   *
+   * @param       inName the name of the item to get
+   *
+   * @return      the item found or null if not found
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable Item getItem(@Nonnull String inName)
+  {
+    return (Item)DMADataFactory.get().getEntry
+      (new AbstractEntry.EntryKey(inName, Item.TYPE, getKey()));
+  }
+
+  //........................................................................
   //----------------------------- getPagePrint -----------------------------
 
   /**
@@ -204,7 +222,7 @@ public class Campaign extends Entry<BaseCampaign>
    *
    */
   @Override
-protected @Nonnull Print getPagePrint()
+  protected @Nonnull Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -219,7 +237,7 @@ protected @Nonnull Print getPagePrint()
    *
    */
   @Override
-protected @Nonnull ListPrint getListPrint()
+  protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -502,6 +520,36 @@ protected @Nonnull ListPrint getListPrint()
 
       return new FormattedValue(new Command(commands), null, "characters")
         .withPlural("characters");
+    }
+
+    if("items".equals(inKey))
+    {
+      List<Item> items =
+        DMADataFactory.get().getEntries(Item.TYPE, getKey(), 0, 100);
+      List<Character> characters =
+        DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
+
+      List<Object> commands = new ArrayList<Object>();
+
+    itemLoop:
+      for(Item item : items)
+      {
+        for(Character character : characters)
+          if(character.possesses(item.getName()))
+            continue itemLoop;
+
+        if(!commands.isEmpty())
+          commands.add(", ");
+
+        commands.add(new Link(item.getNameCommand(inDM), getPath() + "/"
+                              + Item.TYPE.getLink() + "/" + item.getName()));
+      }
+
+      if(items.size() >= 100)
+        commands.add(", ...");
+
+      return new FormattedValue(new Command(commands), null, "items")
+        .withPlural("items");
     }
 
     return super.computeValue(inKey, inDM);

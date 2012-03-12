@@ -96,7 +96,7 @@ public class Text extends BaseText<Text>
    *
    */
   @Override
-public @Nonnull Text create()
+  public @Nonnull Text create()
   {
     return super.create(new Text());
   }

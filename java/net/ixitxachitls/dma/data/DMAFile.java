@@ -310,7 +310,7 @@ public String toString()
     while(!reader.isAtEnd())
     {
       // end reading early on magic comment
-      if(reader.expect("#--- end here ---"))
+      if(reader.expect("--- end here ---"))
         break;
 
       //ParseReader.Position start = reader.getPosition();

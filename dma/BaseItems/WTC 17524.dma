@@ -193,8 +193,7 @@ base item Bedroll =
   better sleep in a hayloft or on the cold ground. A bedroll consists of
   bedding and a blanket thin enough to be rolled up and tied. In an emergency,
   it can double as a stretcher.";
-  synonyms          "Mat",
-                    "Sleeping Mat";
+  synonyms          "Mat, Sleeping", "Mat", "Sleeping Mat";
   categories        gear.
 
 #.....
@@ -6197,23 +6196,22 @@ base item Art Object =
 
 #----- Cloak
 
-base item Cloak =
+base item with wearable Cloak =
 
-  value             0 gp;
   weight            1 lb;
   probability       Rare;
   size              Small;
-  hardness          0;
-  hp                1;
   appearances       Very Rare "An elaborately stitched cloak.",
                     Common "A simple cloak.",
                     Very Rare "A ragged cloak.";
   substance         cloth 1/4 in;
+  slot              shoulders;
   player name       "Cloak";
   worlds            Generic;
   references        WTC 17752: 252-253;
   description
   "A simple cloak.";
+  short description "A cloak.";
   categories        clothing,
                     mundane.
 

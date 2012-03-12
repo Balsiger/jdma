@@ -25,20 +25,19 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.Nonnull;
 
-import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Expression;
+import net.ixitxachitls.dma.values.Value;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * This is the timed extension for all the entries.
+ * This is the multiple extension for all the entries.
  *
- * @file          Incomplete.java
+ * @file          Multiple.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
@@ -48,11 +47,11 @@ import net.ixitxachitls.dma.values.Text;
 
 //__________________________________________________________________________
 
-public class Incomplete extends Extension<Entry<?>>
+public class Multiple extends Counted
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Incomplete -----------------------------
+  //------------------------------- Multiple ------------------------------
 
   /**
    * Default constructor.
@@ -61,13 +60,13 @@ public class Incomplete extends Extension<Entry<?>>
    * @param       inName the name of the extension
    *
    */
-  public Incomplete(@Nonnull Entry inEntry, @Nonnull String inName)
+  public Multiple(@Nonnull Item inEntry, @Nonnull String inName)
   {
     super(inEntry, inName);
   }
 
   //........................................................................
-  //------------------------------- Incomplete -----------------------------
+  //------------------------------- Multiple ------------------------------
 
   /**
    * Default constructor.
@@ -77,7 +76,7 @@ public class Incomplete extends Extension<Entry<?>>
    * @param       inName  the name of the extension
    *
    */
-  // public Incomplete(Entry inEntry, String inTag, String inName)
+  // public Multiple(Item inEntry, String inTag, String inName)
   // {
   //   super(inEntry, inTag, inName);
   // }
@@ -88,63 +87,42 @@ public class Incomplete extends Extension<Entry<?>>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%incomplete");
-
-  //----- incomplete -------------------------------------------------------
-
-  /** The time that is left for the item. */
-  @Key("incomplete")
-  @DM
-  @WithBases
-  protected @Nonnull Text m_incomplete = new Text();
-
-  //........................................................................
-
   static
   {
-    extractVariables(Item.class, Incomplete.class);
+    extractVariables(Item.class, Multiple.class);
   }
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
+  //-------------------------- adjustCombination ---------------------------
 
   /**
-   * Get the print for a full page.
+   * Adjust the value for the given name for any special properites.
    *
-   * @return the print for page printing
+   * @param       inName        the name of the value to adjust
+   * @param       ioCombination the combinstaion to adjust
+   * @param       <V>           the real type of value being adjusted
    *
    */
   @Override
-  protected @Nonnull Print getPagePrint()
+  public <V extends Value> void
+            adjustCombination(@Nonnull String inName,
+                              Combination<V> ioCombination)
   {
-    return s_pagePrint;
-  }
+    if("value".equals(inName) || "weight".equals(inName))
+      ioCombination.add(new Expression.Factor(m_count.get(), 1), this);
 
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
+    super.adjustCombination(inName, ioCombination);
+ }
 
   //........................................................................
 
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
   //........................................................................
 
   //------------------------------------------------- other member functions

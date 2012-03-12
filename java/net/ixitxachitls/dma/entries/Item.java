@@ -150,7 +150,7 @@ public class Item extends CampaignEntry<BaseItem>
               + "%weight %value %>size %hp %substance %hardness %{break DC} "
               + "%appearance "
               + "#counted #multiple #multiuse #composite #wearable #container "
-              + "#weapon #armor #light #timed #commodity"
+              + "#weapon #armor #light #timed #commodity #contents "
               + "%{player notes} %{dm notes} "
               + "%qualities %effects"
               // admin
@@ -412,8 +412,12 @@ public class Item extends CampaignEntry<BaseItem>
     if(m_value.isDefined())
       return m_value.getAsGold().getValue();
 
-    return
-      new Combination<Money>(this, "value").total().getAsGold().getValue();
+    Money total = new Combination<Money>(this, "value").total();
+
+    if(total == null)
+      return 0;
+
+    return total.getAsGold().getValue();
   }
 
   //........................................................................
@@ -425,10 +429,10 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the value
    *
    */
-  // public Money getValue()
-  // {
-  //   return m_value.getLow();
-  // }
+  public Money getValue()
+  {
+    return new Combination<Money>(this, "value").total();
+  }
 
   //........................................................................
   //------------------------------- getName --------------------------------
@@ -856,40 +860,9 @@ public class Item extends CampaignEntry<BaseItem>
   {
     if("name".equals(inKey))
     {
-      String name = null;
-      for(BaseEntry base : getBaseEntries())
-      {
-        if(base == null)
-          continue;
-
-        String baseName = base.getName();
-        List<String> synonyms = base.getSynonyms();
-        if(!synonyms.isEmpty())
-          baseName = synonyms.get(0);
-
-        if(name == null)
-          name = baseName;
-        else
-          name += " " + baseName;
-      }
-
-      if(name == null)
-        name = getName();
-
-      String playerName = m_playerName.get();
-      boolean hasPlayerName =
-        m_playerName.isDefined() && !name.equals(playerName);
-
-      Object nameCommand;
-      if(inDM)
-        nameCommand = new Command(name,
-                                  hasPlayerName ? " [" + playerName + "]" : "");
-      else
-        nameCommand =
-          computeValue("player name", inDM).format(this, inDM, false);
-
       return new FormattedValue
-        (new Command(nameCommand, " (", getName(), ")"), getName(), "name")
+        (new Command(getNameCommand(inDM), " (", getName(), ")"), getName(),
+         "name")
         .withEditable(true)
         .withEditType("name");
     }
@@ -909,6 +882,53 @@ public class Item extends CampaignEntry<BaseItem>
   }
 
   //........................................................................
+  //---------------------------- getNameCommand ----------------------------
+
+  /**
+   * Get a command to format the name of the item.
+   *
+   * @param    inDM true if formatting for the dm, false if not
+   *
+   * @return   the command to format the name
+   *
+   */
+  public @Nonnull Object getNameCommand(boolean inDM)
+  {
+    if(!inDM)
+      return computeValue("player name", inDM).format(this, inDM, false);
+
+    String name = null;
+    for(BaseEntry base : getBaseEntries())
+    {
+      if(base == null)
+        continue;
+
+      String baseName = base.getName();
+      List<String> synonyms = base.getSynonyms();
+      if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
+        baseName = synonyms.get(0);
+
+      if(name == null)
+        name = baseName;
+      else
+        name += " " + baseName;
+    }
+
+    if(name == null)
+      name = getName();
+
+    String playerName = m_playerName.get();
+    boolean hasPlayerName =
+      m_playerName.isDefined() && !name.equals(playerName);
+
+    if(hasPlayerName)
+      name += " [" + playerName + "]";
+
+    return name;
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
@@ -1231,10 +1251,12 @@ public class Item extends CampaignEntry<BaseItem>
 
     if(!m_hp.isDefined())
     {
-      changed();
       Number total = new Combination<Number>(this, "hp").total();
       if(total != null)
+      {
         m_hp = m_hp.as(total.get());
+        changed();
+      }
     }
 
     // appearane

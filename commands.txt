@@ -8,3 +8,5 @@ java -Xms128m -Xmx2056m -ea net.ixitxachitls.dma.server.DMAServer -p 1234 --no-a
 # import all data into local version
 java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma -t "base character"
 
+# import items
+java net.ixitxachitls.dma.server.Importer "dma/Characters/Characters.dma" "dma/Items/City\ of\ the\ Spider\ Queen.dma" "dma/BaseItems/WTC\ 17752.dma" "dma/BaseItems/WTC\ 17524.dma" "dma/BaseItems/WTC\ 1076272.dma"

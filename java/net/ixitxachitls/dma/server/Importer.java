@@ -35,6 +35,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -237,10 +238,17 @@ public final class Importer
     DMADatastore dmaStore = new DMADatastore();
 
     List<Entity> entities = new ArrayList<Entity>();
+    List<AbstractEntry> errors = new ArrayList<AbstractEntry>();
 
     for(AbstractType<? extends AbstractEntry> type : m_data.getTypes())
       for(AbstractEntry entry : m_data.getEntries(type, null, 0, 0))
       {
+        if(!entry.ensureBaseEntries())
+        {
+          errors.add(entry);
+          continue;
+        }
+
         if(entry instanceof Entry)
           ((Entry)entry).complete();
 
@@ -249,8 +257,43 @@ public final class Importer
       }
 
     Log.important("storing entities in datastore");
-    m_data.save();
     store.put(entities);
+
+    int last = 0;
+    while(last != errors.size())
+    {
+      last = errors.size();
+      for(Iterator<AbstractEntry> i = errors.iterator(); i.hasNext(); )
+      {
+        AbstractEntry entry = i.next();
+        if(!entry.ensureBaseEntries())
+          continue;
+
+        if(entry instanceof Entry)
+          ((Entry)entry).complete();
+
+        entities.add(dmaStore.convert(entry));
+        Log.important("importing after error " + entry.getName());
+
+        i.remove();
+      }
+
+      Log.important("storing entities in datastore");
+      store.put(entities);
+    }
+
+    if(!errors.isEmpty())
+    {
+      List<String> names = new ArrayList<String>();
+
+      for(AbstractEntry entry : errors)
+        names.add(entry.getName());
+
+      System.out.println("errors");
+      Log.error("Could not properly read all entries: " + names);
+    }
+
+    m_data.save();
 
     Log.important("importing images");
 

@@ -25,20 +25,19 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.Nonnull;
 
-import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.Number;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * This is the timed extension for all the entries.
+ * This is the commodity extension for all the entries.
  *
- * @file          Incomplete.java
+ * @file          Commodity.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
@@ -48,36 +47,36 @@ import net.ixitxachitls.dma.values.Text;
 
 //__________________________________________________________________________
 
-public class Incomplete extends Extension<Entry<?>>
+public class Commodity extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
 
-  //------------------------------- Incomplete -----------------------------
+  //------------------------------- Commodity ------------------------------
 
   /**
    * Default constructor.
    *
-   * @param       inEntry the entry attached to
+   * @param       inEntry the item attached to
    * @param       inName the name of the extension
    *
    */
-  public Incomplete(@Nonnull Entry inEntry, @Nonnull String inName)
+  public Commodity(@Nonnull Item inEntry, @Nonnull String inName)
   {
     super(inEntry, inName);
   }
 
   //........................................................................
-  //------------------------------- Incomplete -----------------------------
+  //------------------------------- Commodity ------------------------------
 
   /**
    * Default constructor.
    *
-   * @param       inEntry the entry attached to
+   * @param       inEntry the item attached to
    * @param       inTag   the tag name for this instance
    * @param       inName  the name of the extension
    *
    */
-  // public Incomplete(Entry inEntry, String inTag, String inName)
+  // public Commodity(Item inEntry, String inTag, String inName)
   // {
   //   super(inEntry, inTag, inName);
   // }
@@ -90,21 +89,19 @@ public class Incomplete extends Extension<Entry<?>>
 
   /** The printer for printing the whole base item. */
   public static final Print s_pagePrint =
-    new Print("%incomplete");
+    new Print("%amount %area %length");
 
-  //----- incomplete -------------------------------------------------------
+  //----- amount -----------------------------------------------------------
 
-  /** The time that is left for the item. */
-  @Key("incomplete")
-  @DM
-  @WithBases
-  protected @Nonnull Text m_incomplete = new Text();
+  /** The amount of units of this commodity. */
+  @Key("amount")
+  protected Number m_amount = new Number(1, 10000);
 
   //........................................................................
 
   static
   {
-    extractVariables(Item.class, Incomplete.class);
+    extractVariables(Item.class, Commodity.class);
   }
 
   //........................................................................
@@ -141,6 +138,45 @@ public class Incomplete extends Extension<Entry<?>>
   }
 
   //........................................................................
+  //--------------------------- addPrintCommands ---------------------------
+
+  /**
+   * Add the commands for printing this extension to the given print command.
+   *
+   * @param       ioCommands the commands to add to
+   * @param       inDM       flag if setting for DM or not
+   * @param       inEditable flag if values editable or not
+   *
+   * @undefined   IllegalArgumentException if given commands are null
+   *
+   */
+  // public void addPrintCommands(@MayBeNull PrintCommand ioCommands,
+  //                              boolean inDM, boolean inEditable)
+  // {
+  //   if(ioCommands == null)
+  //     return;
+
+  //   super.addPrintCommands(ioCommands, inDM, inEditable);
+
+  //   BaseCommodity base = getBases(BaseCommodity.class).get(0);
+
+  //   if(base == null)
+  //     ioCommands.addExtensionValue(m_amount, "amount", "commodity",
+  //                                   inEditable);
+  //   else
+  //     ioCommands.addValue(createHighlightedValueLabel("amount", "commodity"),
+  //                         new Command(new Object []
+  //                           {
+  //                             createValueCommand(m_amount, "amount",
+  //                                                inEditable),
+  //                             " x ",
+  //                             base.m_area.isDefined()
+  //                             ? base.m_area.format(false)
+  //                             : base.m_length.format(false),
+  //                           }));
+  // }
+
+  //........................................................................
 
   //........................................................................
 
@@ -148,11 +184,5 @@ public class Incomplete extends Extension<Entry<?>>
   //........................................................................
 
   //------------------------------------------------- other member functions
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  // no tests, see BaseItem for tests
-
   //........................................................................
 }

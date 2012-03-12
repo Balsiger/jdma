@@ -1073,6 +1073,36 @@ public class BaseItem extends BaseEntry
   }
 
   //........................................................................
+  //------------------------------ getValue --------------------------------
+
+  /**
+   * Get the value for the given key.
+   *
+   * @param       inKey the name of the key to get the value for
+   *
+   * @return      the value for the key
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable Value getValue(@Nonnull String inKey)
+  {
+    if("hp".equals(inKey))
+    {
+      Value hp = super.getValue(inKey);
+      if(hp.isDefined() || !m_substance.isDefined())
+        return hp;
+
+      return m_hp.as((int)Math.round(((EnumSelection<Substance>)
+                                      m_substance.get(0)).getSelected().hp()
+                                     * ((Distance)m_substance.get(1))
+                                     .getAsFeet().getValue()
+                                     * 12));
+    }
+
+    return super.getValue(inKey);
+  }
+
+  //........................................................................
 
   //------------------------------- getWeight ------------------------------
 
@@ -1292,15 +1322,6 @@ public class BaseItem extends BaseEntry
                                 Value.UNDEFINED, "player name")
         .withDM(true)
         .withEditable(true);
-
-    if("extensions".equals(inKey))
-      return new FormattedValue(Strings.toString(m_extensions.keySet(), ", ",
-                                                 ""), null, "extensions")
-        .withEditable(true)
-        .withEditType("multiselection")
-        .withEditChoices("armor||commoditiy||composite||container||counted"
-                         + "||incomplete||light||multiple||multiuse||timed"
-                         + "||weapon||wearable");
 
     return super.computeValue(inKey, inDM);
   }

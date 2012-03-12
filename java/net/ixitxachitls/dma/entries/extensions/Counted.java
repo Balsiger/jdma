@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
+
 //------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.entries.extensions;
@@ -28,15 +29,16 @@ import javax.annotation.Nonnull;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Number;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * This is the weapon extension for all the entries.
+ * This is the counted extension for all the entries.
  *
- * @file          Weapon.java
+ * @file          Counted.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
@@ -46,36 +48,36 @@ import net.ixitxachitls.dma.output.Print;
 
 //__________________________________________________________________________
 
-public class Weapon extends Extension<Item>
+public class Counted extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------------- Weapon -------------------------------
+  //------------------------------- Counted ------------------------------
 
   /**
    * Default constructor.
    *
-   * @param       inEntry the entry this extension is attached to
-   * @param       inName  the name of the extension
+   * @param       inEntry the entry attached to
+   * @param       inName the name of the extension
    *
    */
-  public Weapon(@Nonnull Item inEntry, @Nonnull String inName)
+  public Counted(@Nonnull Item inEntry, @Nonnull String inName)
   {
     super(inEntry, inName);
   }
 
   //........................................................................
-  //--------------------------------- Weapon -------------------------------
+  //------------------------------- Counted ------------------------------
 
   /**
    * Default constructor.
    *
-   * @param       inEntry the entry this extension is attached to
+   * @param       inEntry the entry attached to
    * @param       inTag   the tag name for this instance
    * @param       inName  the name of the extension
    *
    */
-  // public Weapon(Item inEntry, String inTag, String inName)
+  // public Counted(Item inEntry, String inTag, String inName)
   // {
   //   super(inEntry, inTag, inName);
   // }
@@ -88,12 +90,19 @@ public class Weapon extends Extension<Item>
 
   /** The printer for printing the whole base item. */
   public static final Print s_pagePrint =
-    new Print("%damage %splash %critical %{weapon type} %{weapon style} "
-              + "%proficiency %range %reach");
+    new Print("%count %unit");
+
+  //----- count ------------------------------------------------------------
+
+  /** The amount of units of this counted. */
+  @Key("count")
+  protected Number m_count = new Number(0, 10000);
+
+  //........................................................................
 
   static
   {
-    extractVariables(Item.class, Weapon.class);
+    extractVariables(Item.class, Counted.class);
   }
 
   //........................................................................
@@ -130,53 +139,40 @@ public class Weapon extends Extension<Item>
   }
 
   //........................................................................
-  //---------------------------- addListCommands ---------------------------
+  //--------------------------- addListCommands ----------------------------
 
   /**
-   * Add the commands for printing this extension to a list.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
     *
-   * @undefined   IllegalArgumentException if given commands are null
-   *
-   */
- // public void addListCommands(@MayBeNull ListCommand ioCommands, boolean inDM)
+    * Add the commands for printing this extension to a list.
+    *
+    * @param       ioCommands the commands to add to
+    * @param       inDM   true if printing for dm, false else
+    *
+    */
+  //public void addListCommands(@MayBeNull ListCommand ioCommands, boolean inDM)
   // {
   //   if(ioCommands == null)
   //     return;
 
-  //   super.addListCommands(ioCommands, inDM);
+  //   ioCommands.add(ListCommand.Type.COUNTED,
+  //                  new Command(new Object []
+  //     {
+  //       new Bold(new Color("subtitle", m_entry.getPlayerName())),
+  //       new Super(new Scriptsize("(" + m_entry.getID() + ")")),
+  //     }));
 
-  //   List<BaseWeapon> bases = getBases(BaseWeapon.class);
+  //   List<BaseCounted> bases = getBases(BaseCounted.class);
 
-  //   if(bases.size() > 0)
-  //   {
-  //     BaseWeapon base = bases.get(0);
-  //     // damage + critical, type, style
-  //     ioCommands.add
-  //       (ListCommand.Type.WEAPON,
-  //        new Command(new Object []
-  //          {
-  //            new Bold(new Color("subtitle", m_entry.getPlayerName())),
-  //            new Super(new Scriptsize("(" + m_entry.getID() + ")")),
-  //          }));
-  //     ioCommands.add(ListCommand.Type.WEAPON,
-  //                    new Command(new Object []
-  //                      {
-  //                        base.m_damage,
-  //                        " (",
-  //                        base.m_critical,
-  //                        ") ",
-  //                      }));
-  //     ioCommands.add(ListCommand.Type.WEAPON, base.m_type);
-  //     ioCommands.add(ListCommand.Type.WEAPON, base.m_style);
-  //     ioCommands.add(ListCommand.Type.WEAPON, base.m_range);
-  //     ioCommands.add(ListCommand.Type.WEAPON, base.m_reach);
-  //   }
+  // if(bases == null || bases.size() == 0 || !bases.get(0).m_count.isDefined())
+  //     ioCommands.add(ListCommand.Type.COUNTED,
+  //                    new Count(m_count.get(), m_count.get(), ""));
+  //   else
+  //     ioCommands.add(ListCommand.Type.COUNTED,
+  //                  new Count(m_count.get(), bases.get(0).m_count.get(), ""));
   // }
 
   //........................................................................
+
   //-------------------------- addSummaryCommand ---------------------------
 
   /**
@@ -189,40 +185,31 @@ public class Weapon extends Extension<Item>
   // public void addSummaryCommands(List<Object> ioCommands, boolean inDM)
   // {
   //   ioCommands.add(", ");
+  //   ioCommands.add(m_count.format(false));
+  //   ioCommands.add(" ");
 
-  //   BaseWeapon base = getBases(BaseWeapon.class).get(0);
-
-  //   if(base == null)
-  //     ioCommands.add(new Color("error", "base weapon not found"));
-  //   else
+  //   if(getBases(BaseCounted.class).size() > 0)
   //   {
-  //     ioCommands.add(base.m_proficiency.format(false));
-  //     ioCommands.add(" ");
-  //     ioCommands.add(base.m_type.format(false));
-  //     ioCommands.add(" ");
-  //     ioCommands.add(base.m_damage.format(false));
-  //     ioCommands.add(" (");
-  //     ioCommands.add(base.m_critical);
-  //     ioCommands.add(")");
+  //     BaseCounted base = getBases(BaseCounted.class).get(0);
 
-  //     if(base.m_splash.isDefined())
+  //     if(base != null)
   //     {
-  //       ioCommands.add(", splash ");
-  //       ioCommands.add(base.m_splash.format(false));
-  //     }
+  //       BaseCounted.Unit unit = base.m_unit.getSelected();
 
-  //     if(base.m_range.isDefined())
-  //     {
-  //       ioCommands.add(", range ");
-  //       ioCommands.add(base.m_range.format(false));
-  //     }
-
-  //     if(base.m_reach.isDefined())
-  //     {
-  //       ioCommands.add(", reach ");
-  //       ioCommands.add(base.m_reach.format(false));
+  //       if(unit != null)
+  //       {
+  //         if(m_count.get() == 1)
+  //           ioCommands.add(unit.getName());
+  //         else
+  //           ioCommands.add(unit.getMultiple());
+  //       }
   //     }
   //   }
+  //   else
+  //     if(m_count.get() == 1)
+  //       ioCommands.add("time");
+  //     else
+  //       ioCommands.add("times");
   // }
 
   //........................................................................
@@ -236,57 +223,17 @@ public class Weapon extends Extension<Item>
   /**
    * Complete the entry and make sure that all values are filled.
    *
-   * @undefined   never
-   *
    */
   // public void complete()
   // {
-   // check the size compared to the real size (cf. Player's Handbook p. 113)
-  //   // (but ignore grenades...)
-  //   if(getBases(BaseWeapon.class).size() == 0)
-  //     return;
-  //   BaseWeapon base = getBases(BaseWeapon.class).get(0);
-
-  //   if(base == null || m_entry == null)
-  //     return;
-
-  //   BaseWeapon.WeaponType type  = base.m_type.getSelected();
-  //   BaseWeapon.Style      style = base.m_style.getSelected();
-
-  //   if(type != BaseWeapon.WeaponType.GRENADE)
+  //   // take over the base value for the count
+  //   if(!m_count.isDefined() && getBases(BaseCounted.class).size() > 0)
   //   {
-  //     BaseItem.Size weaponSize =
-  //       m_entry.getExtension(Wearable.class).getUserSize();
-  //     BaseItem.Size itemSize   = m_entry.getSize();
+  //     BaseCounted base = getBases(BaseCounted.class).get(0);
 
-  //     if(weaponSize == null)
-  //       m_entry.getExtension(Wearable.class).complete();
-
-  //     weaponSize = m_entry.getExtension(Wearable.class).getUserSize();
-
-  //     if(itemSize != null && style != null && weaponSize != null
-  //        && weaponSize.isBigger(BaseItem.Size.DIMINUTIVE)
-  //        && style.isMelee()
-  //        && itemSize != weaponSize.add(style.getSizeDifference()))
-  //     {
-  //       CheckError error =
-  //         new CheckError("weapon.size",
-  //                        m_entry.getName() + " (" + m_entry.getID() + ")"
-  //                        + " is too "
-  //                        + (itemSize.isBigger(weaponSize.add
-  //                                             (style.getSizeDifference()))
-  //                         ? "large" : "small") + " compared to object size; "
-  //                        + "should be a "
-  //                        + weaponSize.add(style.getSizeDifference())
-  //                        + " object but is " + itemSize);
-
-  //       Log.warning(error);
-
-  //       m_entry.addError(error);
-  //     }
+  //     if(base != null)
+  //       m_count.set(base.m_count.get());
   //   }
-
-  //   super.complete();
   // }
 
   //........................................................................
@@ -329,34 +276,12 @@ public class Weapon extends Extension<Item>
 //     if(inValue == null || !inValue.isDefined())
 //       return null;
 
-//     if(inType == BaseWeapon.DAMAGE)
-//     {
-//       if(inEntry != null && inEntry instanceof Item)
-//       {
-//         Pair<ValueGroup, Variable> pair =
-//           inEntry.getVariable(Item.USER_SIZE.toString());
-
-//         if(pair.first() != null && pair.second() != null)
-//         {
-//           BaseItem.Size size =
-//             ((EnumSelection<BaseItem.Size>)
-//              pair.second().get(pair.first())).getSelected();
-
-//           // nothing to do for medium sized weapons
-//           if(size == BaseItem.Size.MEDIUM)
-//             return null;
-
-//           // larger than medium
-//           if(size.isBigger(BaseItem.Size.MEDIUM))
-//             return new Modifier(Modifier.Type.MULTIPLY,
-//                                 size.difference(BaseItem.Size.MEDIUM) + 1);
-//           else
-//             // smaller than medium
-//             return new Modifier(Modifier.Type.DIVIDE,
-//                                 BaseItem.Size.MEDIUM.difference(size) + 1);
-//         }
-//       }
-//     }
+//     if(m_count.isDefined() && inDynamic && inType == BaseCounted.UNIT)
+//       if(m_count.get() != 1)
+//         return
+//           new Modifier(Modifier.Type.FIXED,
+//                        new Selection(Global.COUNT_UNITS_PLURAL,
+//                                      ((Selection)inValue).getSelected()));
 
 //     return super.modifyValue(inType, inEntry, inValue, inDynamic);
 //   }

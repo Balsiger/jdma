@@ -23,23 +23,25 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-// import net.ixitxachitls.dma.data.Storage;
-// import net.ixitxachitls.dma.entries.attachments.Contents;
-// import net.ixitxachitls.dma.output.PDFDocument;
-// import net.ixitxachitls.dma.values.EntryValue;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.OverlayIcon;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Pair;
@@ -173,7 +175,7 @@ public class Character extends CampaignEntry<BaseCharacter>
               + "\n"
               + "$par "
               + "%name %base %campaign "
-              + "%level %state %wealth %possessions "
+              + "%level %state %wealth %items "
               // admin
               + "%errors"
               );
@@ -192,12 +194,11 @@ public class Character extends CampaignEntry<BaseCharacter>
     new EnumSelection<State>(State.class);
 
   //........................................................................
-  //----- possessions ------------------------------------------------------
+  //----- items ------------------------------------------------------------
 
   /** The possessions value. */
-  // @Key("possessions")
-  // protected ValueList<EntryValue<Item>> m_possessions =
-  //   new ValueList<EntryValue<Item>>(new EntryValue<Item>(), null);
+  @Key("items")
+  protected ValueList<Name> m_items = new ValueList<Name>(new Name());
 
   //........................................................................
   //----- level ------------------------------------------------------------
@@ -246,6 +247,40 @@ public class Character extends CampaignEntry<BaseCharacter>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //------------------------------ possesses -------------------------------
+
+  /**
+   * Checks if the character has the item in possession.
+   *
+   * @param       inItem the name of the item to check
+   *
+   * @return      true if the character possesses the item, false if not
+   *
+   */
+  public boolean possesses(@Nonnull String inItem)
+  {
+    for(Name name : m_items)
+    {
+      if(inItem.equals(name.get()))
+        return true;
+
+      Item item = getCampaign().getItem(name.get());
+      if(item == null)
+        continue;
+
+      Contents contents = (Contents)item.getExtension("contents");
+      if(contents == null)
+        continue;
+
+      if(contents.contains(inItem))
+        return true;
+    }
+
+    return false;
+  }
+
+  //........................................................................
 
   //---------------------------- getPossessions ----------------------------
 
@@ -515,6 +550,27 @@ public class Character extends CampaignEntry<BaseCharacter>
                                   + " gp for level " + m_level);
 
       return new FormattedValue(wealth, null, "wealth");
+    }
+
+    if("items".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+
+      for(Name name : m_items)
+      {
+        if(!commands.isEmpty())
+          commands.add(", ");
+
+        Item item = getCampaign().getItem(name.get());
+        String url = getCampaign().getPath() + "/item/" + name;
+        if(item != null)
+          commands.add(new Link(item.getNameCommand(inDM), url));
+        else
+          commands.add(new Link(name, url));
+      }
+
+      return new FormattedValue(new Command(commands), m_items, "items")
+        .withPlural("items");
     }
 
     return super.computeValue(inKey, inDM);

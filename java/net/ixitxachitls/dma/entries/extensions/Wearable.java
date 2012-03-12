@@ -102,7 +102,7 @@ public class Wearable extends Extension<Item>
 
   static
   {
-    extractVariables(Wearable.class);
+    extractVariables(Item.class, Wearable.class);
   }
 
   //........................................................................

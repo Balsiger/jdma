@@ -273,6 +273,25 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
+  //---------------------------- withExpression ----------------------------
+
+  /**
+   * Set the expression for the value.
+   *
+   * @param       inExpression the expression to set
+   *
+   * @return      the value itself for chaining
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withExpression(@Nonnull Expression inExpression)
+  {
+    m_expression = inExpression;
+
+    return (T)this;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -753,8 +772,23 @@ public int hashCode()
    */
   public @Nonnull T multiply(long inValue)
   {
-    throw new UnsupportedOperationException("multiplication for "
-                                            + getClass());
+    throw new UnsupportedOperationException("multiplication for " + getClass());
+  }
+
+  //........................................................................
+  //-------------------------------- divide --------------------------------
+
+  /**
+   * Divide the value with the given value.
+   *
+   * @param       inValue the divising
+   *
+   * @return      the divided value.
+   *
+   */
+  public @Nonnull T divide(long inValue)
+  {
+    throw new UnsupportedOperationException("division for " + getClass());
   }
 
   //........................................................................

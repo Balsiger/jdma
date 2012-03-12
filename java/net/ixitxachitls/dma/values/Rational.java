@@ -184,7 +184,7 @@ public @Nonnull Rational create()
    *
    */
   @Override
-public double getValue()
+  public double getValue()
   {
     if(m_denominator == 0)
       return m_leader;

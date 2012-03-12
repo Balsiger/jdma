@@ -1,0 +1,795 @@
+# file: dma/Items/City of the Spider Queen.dma
+
+#----- IMEO
+
+item IMEO =
+
+  appearance   "A battered suite of studded leather armor.";
+  campaign     FR / City of the Spider Queen;
+  base         Studded Leather Armor.
+
+#.....
+#----- JRXI
+
+item JRXI =
+
+  hp           5;
+  appearance   "A buckler. Good workmanship.";
+  player name  "Buckler +1";
+  campaign     FR / City of the Spider Queen;
+  base         Buckler,
+               Armor +1.
+
+#.....
+#----- GHSL
+
+item GHSL =
+
+  hp           1;
+  appearance   "A simple cloak.";
+  player name  "Cloak of Resistance +1";
+  campaign     FR / City of the Spider Queen;
+  base         Cloak of Resistance +1.
+
+#.....
+#----- DFST
+
+item DFST =
+
+  hp           1;
+  appearance   "A simple gold ring.";
+  player name  "Ring of Protection +1";
+  campaign     FR / City of the Spider Queen;
+  base         Ring of Protection +1.
+
+#.....
+#----- WJCI
+
+item with incomplete WJCI =
+
+  hp           30;
+  appearance   "A golden chain with some golden spheres.";
+  dm notes     "Spheres left: 2 x 5d6, 2 x 3d6";
+  campaign     FR / City of the Spider Queen;
+  base         Necklace of Fireballs V;
+  incomplete   "Need a way to store what powers are still available".
+
+#.....
+#----- PQFP
+
+item PQFP =
+
+  hp           3;
+  appearance   "This bread leather belt is studded with three moonstones.";
+  player name  "Healing Belt";
+  campaign     FR / City of the Spider Queen;
+  base         Healing Belt.
+
+#.....
+#----- HOZL
+item HOZL =
+
+  hp           1;
+  appearance   "A sap.";
+  campaign     FR / City of the Spider Queen;
+  base         Sap.
+
+#.....
+#----- GPFG
+
+item GPFG =
+
+  hp           13;
+  appearance   "A sturdy morningstar. Finely crafted.";
+  player notes "magisch";
+  player name  "Morningstar +1";
+  campaign     FR / City of the Spider Queen;
+  base         Morningstar,
+               Weapon +1.
+
+#.....
+#----- RSRI
+
+item RSRI =
+
+  hp           1;
+  appearance   "A set of brown leather slippers.";
+  player name  "Slippers of Spider Climbing";
+  campaign     FR / City of the Spider Queen;
+  base         Slippers of Spider Climbing.
+
+#.....
+#----- MFJO
+
+item MFJO =
+
+  hp           4;
+  appearance   "A short sword. Finely crafted.";
+  player name  "Short Sword +3";
+  campaign     FR / City of the Spider Queen;
+  base         Short Sword,
+               Weapon +3.
+
+#.....
+#----- AGRC
+
+item AGRC =
+
+  hp           1;
+  appearance   "A simple dagger.";
+  campaign     FR / City of the Spider Queen;
+  base         Dagger.
+
+#.....
+#----- PVDB
+
+item PVDB =
+
+  hp           2;
+  appearance   "A simple dagger. Finely crafted.";
+  player name  "Dagger +1";
+  campaign     FR / City of the Spider Queen;
+  base         Dagger,
+               Weapon +1.
+
+#.....
+#----- MTFT
+
+item MTFT =
+
+  hp           1;
+  appearance   "A simple dagger.";
+  campaign     FR / City of the Spider Queen;
+  base         Dagger.
+
+#.....
+#----- EJAH
+
+item EJAH =
+
+  hp           1;
+  appearance   "A shortbow.";
+  campaign     FR / City of the Spider Queen;
+  base         Shortbow.
+
+#.....
+#----- ROHK
+
+item ROHK =
+
+  hp           1;
+  appearance   "A crude waterskin.";
+  campaign     FR / City of the Spider Queen;
+  base         Waterskin.
+
+#.....
+#----- ZTJH
+
+item ZTJH =
+
+  hp           1;
+  appearance   "A rough, brown woolen blanket.";
+  campaign     FR / City of the Spider Queen;
+  base         Winter Blanket.
+
+#.....
+#----- FTXK
+
+item FTXK =
+
+  hp           1;
+  appearance   "A simple bedroll with a thin cotton blanket.";
+  campaign     FR / City of the Spider Queen;
+  base         Bedroll.
+
+#.....
+#----- UUZJ
+
+item with multiple UUZJ =
+
+  hp           1;
+  appearance   "A fine cloth enwrapped package of dry, high-energy foods (jerky, dried fruit, hardtack, and nuts).";
+  campaign     FR / City of the Spider Queen;
+  base         Trail Ration;
+  count        80.
+
+#.....
+#----- EKDC
+
+item EKDC =
+
+  hp           1;
+  appearance   "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
+  campaign     FR / City of the Spider Queen;
+  base         Explorer's Outfit.
+
+
+#.....
+#----- RQJP
+
+item RQJP =
+
+  hp           1;
+  appearance   "A simple dagger.";
+  campaign     FR / City of the Spider Queen;
+  base         Dagger.
+#.....
+#----- VTVG
+
+item with contents VTVG =
+
+  hp           1;
+  appearance   "A common cloth sack, about 2 feet by 4 feet in size.";
+  player name  "Bag of Holding";
+  campaign     FR / City of the Spider Queen;
+  base         Bag of Holding II;
+  contents     ROHK,
+               RQJP,
+               EKDC,
+               UUZJ,
+               FTXK,
+               ZTJH.
+
+#.....
+#----- DQKW
+
+item DQKW =
+
+  hp           2;
+  appearance   "This nondescript, small leather pouch has a light blue slik drawstring.";
+  player name  "Everlasting Rations";
+  campaign     FR / City of the Spider Queen;
+  base         Everlasting Rations.
+
+#.....
+#----- OUQM
+
+item OUQM =
+
+  hp           2;
+  appearance   "This common-looking brown clay mug has persistant stains just under the rim.";
+  player name  "Everfull Mug";
+  campaign     FR / City of the Spider Queen;
+  base         Everfull Mug.
+
+#.....
+#----- QKBB
+
+item QKBB =
+
+  hp           2;
+  appearance   "This woolen sleeping bag is embroidered with stars and moons in silver and blue thread, and it smells of lavender.";
+  player name  "Magic Bedroll";
+  campaign     FR / City of the Spider Queen;
+  base         Magic Bedroll.
+
+#.....
+#----- HRBE
+
+item HRBE =
+
+  hp           1;
+  appearance   "Some oily liquid in a glass vial.";
+  player name  "Potion of Invisibility";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Invisibility.
+
+#.....
+#----- ZTJQ
+
+item ZTJQ =
+
+  hp           1;
+  appearance   "A leather quiver with some arrows.";
+  campaign     FR / City of the Spider Queen;
+  base         Arrows.
+
+#.....
+#----- UFXY
+
+item UFXY =
+
+  hp           1;
+  appearance   "A leather quiver with some arrows.";
+  campaign     FR / City of the Spider Queen;
+  base         Arrows.
+
+#.....
+#----- CWHH
+
+item CWHH =
+
+  hp           1;
+  appearance   "A leather quiver with some arrows.";
+  campaign     FR / City of the Spider Queen;
+  base         Arrows.
+
+#.....
+#----- OPZK
+
+item OPZK =
+
+  hp           1;
+  appearance   "A set with a wool coat, linen shirt, wool cap, heavy cloak, thick pants, and boots.";
+  campaign     FR / City of the Spider Queen;
+  base         Cold Weather Outfit.
+
+#.....
+#----- ARNN
+
+item ARNN =
+
+  appearance   "60 feet of thin rope.";
+  player name  "Rope of Climbing";
+  campaign     FR / City of the Spider Queen;
+  base         Rope of Climbing.
+
+#.....
+#----- FKHL
+
+item FKHL =
+
+  hp           10;
+  appearance   "A deep red stone.";
+  player name  "Deep Red Ioun Stone";
+  campaign     FR / City of the Spider Queen;
+  base         Deep Red Ioun Stone.
+
+#.....
+#----- LDGG
+
+item LDGG =
+
+  hp           10;
+  appearance   "A pale blue stone.";
+  player name  "Pale Blue Ioun Stone";
+  campaign     FR / City of the Spider Queen;
+  base         Pale Blue Ioun Stone.
+
+#.....
+#----- HOKP
+
+item with multiuse HOKP =
+
+  hp           15;
+  appearance   "A silver brooch";
+  player notes "Shields against magic missiles";
+  player name  "Brooch of Shielding";
+  campaign     FR / City of the Spider Queen;
+  base         Brooch of Shielding;
+  count        96.
+
+#.....
+#----- YGJK
+
+item YGJK =
+
+  hp           30;
+  appearance   "A sturdy crowbar.";
+  campaign     FR / City of the Spider Queen;
+  base         Crowbar.
+
+#.....
+#----- ASIV
+
+item ASIV =
+
+  hp           4;
+  appearance   "Some length of silk rope.";
+  campaign     FR / City of the Spider Queen;
+  base         Silk Rope.
+
+#.....
+#----- SQXE
+
+item SQXE =
+
+  hp           2;
+  appearance   "Some length of hemp rope.";
+  campaign     FR / City of the Spider Queen;
+  base         Hemp Rope.
+
+#.....
+#----- PQDL
+
+item PQDL =
+
+  hp           1;
+  appearance   "A simple torch.";
+  campaign     FR / City of the Spider Queen;
+  base         Torch.
+
+#.....
+#----- RWSH
+
+item RWSH =
+
+  hp           1;
+  appearance   "A brown candle.";
+  campaign     FR / City of the Spider Queen;
+  base         Candle.
+
+#.....
+#----- BKBX
+
+item BKBX =
+
+  appearance   "A bag with cosmetics, hair dye, and small physical props.";
+  campaign     FR / City of the Spider Queen;
+  base         Disguise Kit.
+
+#.....
+#----- NSYX
+
+item NSYX =
+
+  hp           1;
+  appearance   "A simple waterskin.";
+  campaign     FR / City of the Spider Queen;
+  base         Waterskin.
+
+#.....
+#----- UELW
+
+item UELW =
+
+  hp           1;
+  appearance   "Some clear liquid in a ceramic vial";
+  player name  "Potion of Bull's Strength";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Bull's Strength.
+
+#.....
+#----- GUJF
+
+item GUJF =
+
+  hp           1;
+  appearance   "Some oily liquid in a glass vial.";
+  player name  "Potion of Cat's Grace";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cat's Grace.
+
+#.....
+#----- NSZW
+
+item NSZW =
+
+  hp           1;
+  appearance   "Some watery liquid in a metal vial.";
+  player name  "Potion of Hide from Animals";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Hide from Animals.
+
+#.....
+#----- UCUS
+
+item UCUS =
+
+  hp           1;
+  appearance   "Some dark liquid in a ceramic vial";
+  player name  "Potion of Hide from Animals";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Hide from Animals.
+
+#.....
+#----- JKGM
+
+item JKGM =
+
+  hp           1;
+  appearance   "Some oily liquid in a glass vial.";
+  player name  "Potion of Cat's Grace";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cat's Grace.
+
+#.....
+#----- ELPL
+
+item ELPL =
+
+  hp           1;
+  appearance   "Some dark liquid in a metal vial";
+  player name  "Potion of Cat's Grace";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cat's Grace.
+
+#.....
+#----- XOZY
+
+item XOZY =
+
+  hp           1;
+  appearance   "Some clear liquid in a glass vial";
+  player name  "Potion of Neutralize Poison";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Neutralize Poison.
+
+#.....
+#----- LYBQ
+
+item LYBQ =
+
+  hp           1;
+  appearance   "Some dark liquid in a ceramic vial";
+  player name  "Potion of Cure Serious Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Serious Wounds.
+
+#.....
+#----- QIUA
+
+item QIUA =
+
+  hp           2;
+  value        1 gp;
+  appearance   "A simple brass ring.";
+  campaign     FR / City of the Spider Queen;
+  base         Ring.
+
+#.....
+#----- QRKG
+
+item QRKG =
+
+  hp           2;
+  value        1 gp;
+  appearance   "A simple brass ring.";
+  campaign     FR / City of the Spider Queen;
+  base         Ring.
+
+#.....
+#----- ZOQV
+
+item ZOQV =
+
+  hp           24;
+  value        160 gp;
+  appearance   "A shining stone.";
+  player notes "From the Challange of Champions";
+  campaign     FR / City of the Spider Queen;
+  base         Gem.
+
+#.....
+#----- SOHR
+
+item SOHR =
+
+  hp           2;
+  value        10 gp;
+  appearance   "A simple brass ring.";
+  player notes "From the Challenge of Champions II";
+  campaign     FR / City of the Spider Queen;
+  base         Ring.
+
+#.....
+#----- YSGW
+
+item YSGW =
+
+  hp           30;
+  appearance   "A piece of flint and a piece of steel.";
+  campaign     FR / City of the Spider Queen;
+  base         Flint and Steel.
+
+#.....
+#----- BSWZ
+
+item BSWZ =
+
+  hp           24;
+  appearance   "A bag full of caltrops.";
+  campaign     FR / City of the Spider Queen;
+  base         Caltrops.
+
+#.....
+#----- QFAI
+
+item QFAI =
+
+  hp           1;
+  appearance   "A kit containing skeleton keys, long metal picks and priest, a long-nodes clamp, a small hand saw, and a small wedge and hammer.";
+  campaign     FR / City of the Spider Queen;
+  base         Thieves' Tools.
+
+#.....
+#----- FBMM
+
+item FBMM =
+
+  hp           2;
+  appearance   "A simple gold ring.";
+  player notes "Delibvers a shocking attack.";
+  player name  "Ring of Shocking Grasp";
+  campaign     FR / City of the Spider Queen;
+  base         Ring of Shocking Grasp.
+
+#.....
+#----- QWSI
+
+item QWSI =
+
+  hp           1;
+  appearance   "Some oily liquid in a glass vial.";
+  player name  "Potion of Cure Light Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Light Wounds.
+
+#.....
+#----- PDPM
+
+item with multiple PDPM =
+
+  hp           24;
+  appearance   "A platinum piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Platinum Piece;
+  count        101.
+
+#.....
+#----- VKHG
+
+item with counted VKHG =
+
+  hp           24;
+  appearance   "A gold piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Gold Piece;
+  count        48.
+
+#.....
+#----- WDDW
+
+item with counted WDDW =
+
+  hp           24;
+  appearance   "A silver piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Silver Piece;
+  count        135.
+
+#.....
+#----- ZECW
+
+item with counted ZECW =
+
+  hp           24;
+  appearance   "A copper piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Copper Piece;
+  count        360.
+
+#.....
+#----- PVRB
+
+item PVRB =
+
+  hp           1;
+  appearance   "A black tabard with a white skull motive.";
+  player name  "Black Tabard";
+  campaign     FR / City of the Spider Queen;
+  base         Cloak.
+
+#.....
+#----- SWIM
+
+item with multiple SWIM =
+
+  hp           1;
+  appearance   "Inside the flask is some sticky, adhesive substance.";
+  campaign     FR / City of the Spider Queen;
+  base         Alchemist's Fire;
+  count        5.
+
+#.....
+#----- EJOJ
+
+item EJOJ =
+
+  hp           24;
+  value        10 gp;
+  appearance   "A simple holy badge.";
+  player name  "Holy Badge";
+  campaign     FR / City of the Spider Queen;
+  base         Art Object.
+
+#.....
+#----- TLNB
+
+item TLNB =
+
+  hp           1;
+  appearance   "A simple dagger.";
+  campaign     FR / City of the Spider Queen;
+  base         Dagger.
+
+#.....
+#----- WRVB
+
+item WRVB =
+
+  hp           1;
+  appearance   "Some thick liquid in a metal vial";
+  player name  "Potion of Blur";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Blur.
+
+#.....
+#----- XPJW
+
+item with multiple XPJW =
+
+  hp           1;
+  appearance   "A leather bag full of goo.";
+  campaign     FR / City of the Spider Queen;
+  base         Tanglefoot Bag;
+  count        2.
+
+#.....
+#----- SODS
+
+item with contents SODS =
+
+  hp           1;
+  appearance   "A finely crafted backpack to stow your stuff.";
+  player name  "Heward's Handy Haversack";
+  campaign     FR / City of the Spider Queen;
+  base         Heward's Handy Haversack;
+  contents     DQKW,
+               OUQM,
+               QKBB,
+               PQDL,
+               RWSH,
+               BKBX,
+               NSYX,
+               HRBE,
+               YGJK,
+               ASIV,
+               SQXE,
+               CWHH,
+               UFXY,
+               ZTJQ,
+               OPZK,
+               ARNN,
+               FKHL,
+               LDGG,
+               HOKP,
+               UELW,
+               GUJF,
+               NSZW,
+               UCUS,
+               JKGM,
+               ELPL,
+               XOZY,
+               LYBQ,
+               QIUA,
+               QRKG,
+               ZOQV,
+               SOHR,
+               YSGW,
+               PDPM,
+               QWSI,
+               FBMM,
+               QFAI,
+               BSWZ,
+               VKHG,
+               WDDW,
+               ZECW,
+               PVRB,
+               SWIM,
+               EJOJ,
+               TLNB,
+               WRVB,
+               XPJW.
+
+#.....
+#----- TDJH
+
+item TDJH =
+
+  hp           1;
+  appearance   "A leather quiver with some arrows.";
+  campaign     FR / City of the Spider Queen;
+  base         Arrows.
+
+#.....
