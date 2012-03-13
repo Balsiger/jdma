@@ -203,11 +203,11 @@ public @Nonnull RandomDuration create()
    *
    */
   @Override
-protected @Nullable Command formatSingleUnit(int inIndex)
+  protected @Nullable Command formatSingleUnit(int inIndex)
   {
-    assert inIndex >= 0 && inIndex <= m_dices.length;
+    assert inIndex >= 0 && inIndex <= m_values.length;
 
-    if(m_dices[inIndex] == null)
+    if(m_dices == null || m_dices[inIndex] == null)
       return super.formatSingleUnit(inIndex);
 
     if(m_values[inIndex].isOne())

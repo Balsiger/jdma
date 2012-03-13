@@ -24,21 +24,27 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Duration;
+import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
-  * This is the light extension for all the entries.
+ * This is the timed extension for all the entries.
  *
- * @file          Light.java
+ * @file          Timed.java
  *
- * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
+ * @author        balsiger@ixitxachitlslnet (Peter 'Merlin' Balsiger)
  *
  */
 
@@ -46,26 +52,26 @@ import net.ixitxachitls.dma.output.Print;
 
 //__________________________________________________________________________
 
-public class Light extends Extension<Item>
+public class Timed extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
 
-  //--------------------------------- Light --------------------------------
+  //--------------------------------- Timed -------------------------------
 
   /**
    * Default constructor.
    *
    * @param       inEntry the entry attached to
-   * @param       inName the name of the extension
+   * @param       inName  the name of the extension
    *
    */
-  public Light(@Nonnull Item inEntry, @Nonnull String inName)
+  public Timed(@Nonnull Item inEntry, @Nonnull String inName)
   {
     super(inEntry, inName);
   }
 
   //........................................................................
-  //--------------------------------- Light --------------------------------
+  //--------------------------------- Timed -------------------------------
 
   /**
    * Default constructor.
@@ -74,8 +80,10 @@ public class Light extends Extension<Item>
    * @param       inTag   the tag name for this instance
    * @param       inName  the name of the extension
    *
+   * @undefined   never
+   *
    */
-  // public Light(Item inEntry, String inTag, String inName)
+  // public Timed(Item inEntry, String inTag, String inName)
   // {
   //   super(inEntry, inTag, inName);
   // }
@@ -88,11 +96,19 @@ public class Light extends Extension<Item>
 
   /** The printer for printing the whole base item. */
   public static final Print s_pagePrint =
-    new Print("%{bright light} %{shadowy light}");
+    new Print("%duration");
+
+  //----- duration ---------------------------------------------------------
+
+  /** The time that is left for the item. */
+  @Key("duration")
+  protected Duration m_duration = new Duration();
+
+  //........................................................................
 
   static
   {
-    extractVariables(Item.class, Light.class);
+    extractVariables(Item.class, Timed.class);
   }
 
   //........................................................................
@@ -129,6 +145,36 @@ public class Light extends Extension<Item>
   }
 
   //........................................................................
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("duration".equals(inKey))
+      return
+        new FormattedValue(new Command
+                           (computeValue("_duration", inDM)
+                            .format(this, inDM, false),
+                            " (max ",
+                            new Combination(this, "duration")
+                            .withIgnoreTop().format(inDM),
+                            ")"),
+                           m_duration, "duration")
+        .withEditable(true);
+
+    return super.computeValue(inKey, inDM);
+  }
+
+  //........................................................................
   //---------------------------- addListCommands ---------------------------
 
   /**
@@ -145,26 +191,57 @@ public class Light extends Extension<Item>
   //   if(ioCommands == null)
   //     return;
 
-  //   super.addListCommands(ioCommands, inDM);
+  //   ArrayList<Object> commands = new ArrayList<Object>();
 
-  //   BaseLight base = getBases(BaseLight.class).get(0);
+  //   BaseTimed base = getBases(BaseTimed.class).get(0);
 
-  //   if(base == null)
-  //     return;
-
-  //   // damage + critical, type, style
-  //   ioCommands.add(ListCommand.Type.LIGHT,
+  //   ioCommands.add(ListCommand.Type.TIMED,
   //                  new Command(new Object []
   //     {
   //       new Bold(new Color("subtitle", m_entry.getPlayerName())),
   //       new Super(new Scriptsize("(" + m_entry.getID() + ")")),
   //     }));
-  //   ioCommands.add(ListCommand.Type.LIGHT,
-  //                  base.m_brightLight.get(0).get() + " "
-  //                  + base.m_brightLight.get(1).get());
-  //   ioCommands.add(ListCommand.Type.LIGHT,
-  //                  base.m_shadowyLight.get(0).get() + " "
-  //                  + base.m_shadowyLight.get(1).get());
+
+  //   if(base == null || !base.m_duration.isDefined())
+  //     ioCommands.add(ListCommand.Type.TIMED, m_duration.format(true));
+  //   else
+  //     ioCommands.add(ListCommand.Type.TIMED,
+  //                    new Command(new Object []
+  //                      {
+  //                        m_duration.format(true),
+  //                        new Scriptsize(new Command(new Object []
+  //                          {
+  //                            " of ",
+  //                            base.m_duration.format(true),
+  //                          })),
+  //                      }));
+  // }
+
+  //........................................................................
+
+  //--------------------------- addPrintCommands ---------------------------
+
+  /**
+   * Add the commands for printing this extension to the given print command.
+   *
+   * @param       ioCommands the commands to add to
+   * @param       inDM       flag if setting for DM or not
+   * @param       inEditable flag if values editable or not
+   *
+   * @undefined   IllegalArgumentException if given commands are null
+   *
+   */
+  // public void addPrintCommands(@MayBeNull PrintCommand ioCommands,
+  //                              boolean inDM, boolean inEditable)
+  // {
+  //   if(ioCommands == null)
+  //     return;
+
+  //   super.addPrintCommands(ioCommands, inDM, inEditable);
+
+  //   if(inDM)
+  //     ioCommands.addExtensionValue(m_duration, "duration", "timed",
+  //                                   inDM && inEditable);
   // }
 
   //........................................................................
@@ -172,6 +249,27 @@ public class Light extends Extension<Item>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------- complete -------------------------------
+
+  /**
+   * Complete the entry and make sure that all values are filled.
+   *
+   */
+  // public void complete()
+  // {
+  //   // take over the base value for the count
+  //   if(!m_duration.isDefined())
+  //   {
+  //     BaseTimed base = getBases(BaseTimed.class).get(0);
+
+  //     if(base != null)
+  //       m_duration.add(base.m_duration);
+  //   }
+  // }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions
