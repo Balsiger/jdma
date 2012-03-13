@@ -331,22 +331,40 @@ public class AbstractEntry extends ValueGroup
    * The complete constructor, with name and type. It is only used in
    * derivations, where the type has to be set.
    *
-   * @param       inName the name of the entry
-   * @param       inType the type of the entry
-   *
-   * @undefined   never
+   * @param       inType  the type of the entry
+   * @param       inBases the name of the base entries
    *
    */
-//   protected AbstractEntry(String inName, Type inType, BaseEntry ... inBases)
-//   {
-//     m_name.set(inName);
+  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType,
+                          @Nonnull String ... inBases)
+  {
+    this(inType);
 
-//     m_type = inType;
+    for(String base : inBases)
+      addBase(base);
+  }
 
-//     if(inBases != null)
-//       for(BaseEntry base : inBases)
-//         addBase(base, null);
-//   }
+  //........................................................................
+  //---------------------------- AbstractEntry -----------------------------
+
+  /**
+   * The complete constructor, with name and type. It is only used in
+   * derivations, where the type has to be set.
+   *
+   * @param       inName  the name of the entry
+   * @param       inType  the type of the entry
+   * @param       inBases the name of the base entries
+   *
+   */
+  protected AbstractEntry(@Nonnull String inName,
+                          @Nonnull AbstractType<? extends AbstractEntry> inType,
+                          @Nonnull String ... inBases)
+  {
+    this(inName, inType);
+
+    for(String base : inBases)
+      addBase(base);
+  }
 
   //........................................................................
 
@@ -2086,16 +2104,7 @@ public class AbstractEntry extends ValueGroup
           addBase(base);
 
       // setup extensions from base entries
-      for(BaseEntry base : getBaseEntries())
-      {
-        if(base == null)
-          continue;
-
-        for(AbstractExtension extension : base.m_extensions.values())
-          for(String name
-                : AbstractExtension.getAutoExtensions(extension.getClass()))
-            addExtension(name);
-      }
+      setupExtensionsFromBases();
 
       changed();
       return null;
@@ -2288,6 +2297,27 @@ public class AbstractEntry extends ValueGroup
 
 //     return true;
 //   }
+
+  //........................................................................
+  //----------------------- setupExtensionsFromBases -----------------------
+
+  /**
+   * Setup all auto extensions from base entries.
+   *
+   */
+  private void setupExtensionsFromBases()
+  {
+    for(BaseEntry base : getBaseEntries())
+    {
+      if(base == null)
+        continue;
+
+      for(AbstractExtension extension : base.m_extensions.values())
+        for(String name
+              : AbstractExtension.getAutoExtensions(extension.getClass()))
+          addExtension(name);
+    }
+  }
 
   //........................................................................
 
@@ -2502,6 +2532,9 @@ public class AbstractEntry extends ValueGroup
     // read the values (including the final delimiter)
     if(values)
       readValues(inReader);
+
+    // add the automatic extensions from base
+    setupExtensionsFromBases();
 
     return true;
   }

@@ -89,6 +89,32 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   }
 
   //........................................................................
+  //---------------------------- CampaignEntry -----------------------------
+
+  /**
+   * This constructs the item with random values from the given
+   * base item.
+   *
+   * @param       inType     the type of the entry
+   * @param       inBaseType the type of the base entry to this one
+   * @param       inCampaign     the campaign this entry is in
+   * @param       inBases        the base items to take values from
+   *
+   */
+  public CampaignEntry(@Nonnull Type<? extends Entry> inType,
+                       @Nonnull BaseType<? extends BaseEntry> inBaseType,
+                       @Nonnull Campaign inCampaign,
+                       @Nonnull String ... inBases)
+  {
+    super(inType, inBaseType, inBases);
+
+    EntryKey key = inCampaign.getKey();
+    m_campaign =
+      m_campaign.as(((Name)m_campaign.get(0)).as(key.getParent().getID()),
+                    ((Name)m_campaign.get(1)).as(key.getID()));
+  }
+
+  //........................................................................
 
   //........................................................................
 

@@ -147,6 +147,7 @@ public class Combination<V extends Value>
    */
   public @Nonnull Collection<V> values()
   {
+    combine();
     return Collections.unmodifiableCollection(m_values.keys());
   }
 

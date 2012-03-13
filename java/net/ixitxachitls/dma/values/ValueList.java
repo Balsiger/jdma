@@ -195,7 +195,7 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // casting result
+  @SuppressWarnings("unchecked") // casting result
   public @Nonnull ValueList<T> create()
   {
     // the value is added to the list if it is defined !

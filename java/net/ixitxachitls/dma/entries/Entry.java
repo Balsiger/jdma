@@ -34,6 +34,8 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
+import net.ixitxachitls.dma.entries.extensions.Extension;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.ID;
 import net.ixitxachitls.output.commands.Command;
@@ -76,7 +78,9 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
                   @Nonnull Type<? extends Entry> inType,
                   @Nonnull BaseType<? extends BaseEntry> inBaseType)
   {
-    this(inName, inType, inBaseType, new BaseEntry[0]);
+    super(inName, inType);
+
+    m_baseType = inBaseType;
   }
 
   //........................................................................
@@ -114,22 +118,6 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   // }
 
   // //........................................................................
-  // //-------------------------------- Entry ---------------------------------
-
-  // /**
-  //  * The constructor with a name only.
-  //  *
-  //  * @param       inName     the name of the entry
-  //  *
-  //  * @undefined   never
-  //  *
-  //  */
-  // public Entry(String inName, BaseEntry ... inBases)
-  // {
-  //   this(inName, TYPE, BASE_TYPE, inBases);
-  // }
-
-  // //........................................................................
   //-------------------------------- Entry ---------------------------------
 
   /**
@@ -144,11 +132,29 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   protected Entry(@Nonnull String inName,
                   @Nonnull Type<? extends Entry> inType,
                   @Nonnull BaseType<? extends BaseEntry> inBaseType,
-                  @Nonnull BaseEntry ... inBases)
+                  @Nonnull String ... inBases)
   {
-    super(inName, inType);
-    // TODO: do I really need to support bases here?
-    //super(inName, inType, inData, inBases);
+    super(inName, inType, inBases);
+
+    m_baseType = inBaseType;
+  }
+
+  //........................................................................
+  //-------------------------------- Entry ---------------------------------
+
+  /**
+   * The complete constructor.
+   *
+   * @param       inType     the type of the entry
+   * @param       inBaseType the type of the base entry to this one
+   * @param       inBases    the names of base entries to use
+   *
+   */
+  protected Entry(@Nonnull Type<? extends Entry> inType,
+                  @Nonnull BaseType<? extends BaseEntry> inBaseType,
+                  @Nonnull String ... inBases)
+  {
+    super(inType, inBases);
 
     m_baseType = inBaseType;
   }
@@ -1189,9 +1195,9 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
       } while(DMADataFactory.get().getEntry(getKey()) != null);
     }
 
-    // for(AbstractExtension extension : m_extensions.values())
-    //   if(extension instanceof Extension)
-    //     ((Extension)extension).complete();
+    for(AbstractExtension extension : m_extensions.values())
+      if(extension instanceof Extension)
+        ((Extension)extension).complete();
   }
 
   //........................................................................

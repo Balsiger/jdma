@@ -252,6 +252,7 @@ public final class Importer
         if(entry instanceof Entry)
           ((Entry)entry).complete();
 
+        System.out.println(entry);
         entities.add(dmaStore.convert(entry));
         Log.important("importing " + type + " " + entry.getName());
       }

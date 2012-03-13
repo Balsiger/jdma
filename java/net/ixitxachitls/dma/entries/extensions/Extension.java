@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.google.common.collect.Multimap;
 
@@ -147,11 +148,11 @@ public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
    * Complete the entry and make sure that all values are filled.
    *
    */
-  // @OverridingMethodsMustInvokeSuper
-  // public void complete()
-  // {
-  //   // nothing to do here
-  // }
+  @OverridingMethodsMustInvokeSuper
+  public void complete()
+  {
+    // nothing to do here
+  }
 
   //........................................................................
 

@@ -93,15 +93,16 @@ public class Item extends CampaignEntry<BaseItem>
    * This constructs the item with random values from the given
    * base item.
    *
-   * @param       inBases the base items to take values from
+   * @param       inCampaign  the campaign this entry is in
+   * @param       inBases     the base items to take values from
    *
    * @undefined   never
    *
    */
-  // public Item(BaseItem ... inBases)
-  // {
-  //   super(inBases[0].getName(), TYPE, BASE_TYPE, inBases);
-  // }
+  public Item(@Nonnull Campaign inCampaign, @Nonnull String ... inBases)
+  {
+    super(TYPE, BASE_TYPE, inCampaign, inBases);
+  }
 
   //........................................................................
   //------------------------------- Item --------------------------------
