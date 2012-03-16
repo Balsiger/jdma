@@ -175,7 +175,7 @@ public class Character extends CampaignEntry<BaseCharacter>
               + "\n"
               + "$par "
               + "%name %base %campaign "
-              + "%level %state %wealth %items "
+              + "%level %state %wealth %weight %items "
               // admin
               + "%errors"
               );
@@ -383,19 +383,20 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      the gp value of all items
    *
    */
-  public double totalWealth()
+  public @Nonnull Money totalWealth()
   {
     Money total = new Money();
 
-    // for(Entry entry : getPossessions(true))
-    // {
-    //   if(!(entry instanceof Item))
-    //     continue;
+    for(Name name : m_items)
+    {
+      Item item = getCampaign().getItem(name.get());
+      if(item == null)
+        continue;
 
-    //   total.add(((Item)entry).getValue());
-    // }
+      total = total.add(item.getValue());
+    }
 
-    return total.getAsGold().getValue();
+    return total;
   }
 
   //........................................................................
@@ -407,19 +408,20 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      the lb value of all items
    *
    */
-  public double totalWeight()
+  public @Nonnull Weight totalWeight()
   {
     Weight total = new Weight();
 
-    // for(Entry entry : getPossessions(true))
-    // {
-    //   if(!(entry instanceof Item))
-    //     continue;
+    for(Name name : m_items)
+    {
+      Item item = getCampaign().getItem(name.get());
+      if(item == null)
+        continue;
 
-    //   total.add(((Item)entry).getWeight());
-    // }
+      total = total.add(item.getWeight());
+    }
 
-    return total.getAsPounds().getValue();
+    return total;
   }
 
   //........................................................................
@@ -515,41 +517,41 @@ public class Character extends CampaignEntry<BaseCharacter>
   @Override
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
-    if("level".equals(inKey) && inDM)
+    if("wealth".equals(inKey) && inDM)
     {
-      double current = totalWealth();
+      Money wealth = totalWealth();
+      double current = wealth.getAsGold().getValue();
       int low = wealthPerLevel((int)m_level.get() - 1);
       int high = wealthPerLevel((int)m_level.get() + 1);
       int goal = wealthPerLevel((int)m_level.get());
 
-      Object wealth =
-        computeValue("_level", inDM).format(this, inDM, true);
+      Object command = (int)wealth.getAsGold().getValue() + " gp";
 
       if(current <= low)
-        wealth = new Window(new Color("error", wealth),
+        command = new Window(new Color("error", command),
                             "Total wealth is way too low, should be "
                             + Strings.format(goal) + " gp for level "
                             + m_level);
       else
         if(current <= (goal + low) / 2.0)
-          wealth = new Window(new Color("warning", wealth),
+          command = new Window(new Color("warning", command),
                               "Total wealth is a little too low, should be "
                               + Strings.format(goal) + " gp for level "
                               + m_level);
         else
           if(current >= high)
-            wealth = new Window(new Color("error", wealth),
+            command = new Window(new Color("error", command),
                                 "Total wealth is a way too high, should be "
                                 + Strings.format(goal) + " gp for level "
                                 + m_level);
           else
             if(current >= (goal + high) / 2.0)
-              wealth = new Window(new Color("warning", wealth),
+              command = new Window(new Color("warning", command),
                                   "Total wealth is a little too high, "
                                   + "should be " + Strings.format(goal)
                                   + " gp for level " + m_level);
 
-      return new FormattedValue(wealth, null, "wealth");
+      return new FormattedValue(command, null, "wealth");
     }
 
     if("items".equals(inKey))
@@ -572,6 +574,9 @@ public class Character extends CampaignEntry<BaseCharacter>
       return new FormattedValue(new Command(commands), m_items, "items")
         .withPlural("items");
     }
+
+    if("weight".equals(inKey))
+      return new FormattedValue(totalWeight().format(), "", "weight");
 
     return super.computeValue(inKey, inDM);
   }

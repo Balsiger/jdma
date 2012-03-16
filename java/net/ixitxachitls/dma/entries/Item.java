@@ -37,6 +37,7 @@ import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 
@@ -393,10 +394,10 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the weight
    *
    */
-  // public Weight getWeight()
-  // {
-  //   return m_weight.getLow();
-  // }
+  public @Nonnull Weight getWeight()
+  {
+    return new Combination<Weight>(this, "weight").total();
+  }
 
   //........................................................................
   //----------------------------- getGoldValue -----------------------------
@@ -430,7 +431,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the value
    *
    */
-  public Money getValue()
+  public @Nonnull Money getValue()
   {
     return new Combination<Money>(this, "value").total();
   }
@@ -929,7 +930,6 @@ public class Item extends CampaignEntry<BaseItem>
   }
 
   //........................................................................
-
 
   //........................................................................
 

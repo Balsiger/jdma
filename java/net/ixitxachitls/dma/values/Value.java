@@ -830,6 +830,26 @@ public int hashCode()
   //--------------------------------- read ---------------------------------
 
   /**
+   * Read the value from the given string.
+   *
+   * @param       inText the text to read from
+   *
+   * @return      the value read, if any
+   *
+   */
+  public @Nullable T read(@Nonnull String inText)
+  {
+    StringReader string = new StringReader(inText);
+    ParseReader reader  = new ParseReader(string, "set");
+
+    return read(reader);
+  }
+
+  //........................................................................
+
+  //--------------------------------- read ---------------------------------
+
+  /**
    * Try to read the value from the given stream.
    *
    * @param       inReader       the reader to read from

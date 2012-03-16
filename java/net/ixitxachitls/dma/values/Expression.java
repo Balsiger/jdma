@@ -30,6 +30,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -94,6 +95,8 @@ public abstract class Expression implements Comparable<Expression>
      */
     public MagicArmor(int inPlus)
     {
+      super(1);
+
       m_plus = inPlus;
     }
 
@@ -136,20 +139,24 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
      *
-     * @return      the compute, adjusted value
+     * @return      the computed, adjusted value, if any
      *
      */
-    public @Nonnull Value compute(@Nonnull Value inValue,
-                                  @Nonnull Shared ioShared)
+    public @Nullable Value compute(@Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
     {
-      if(!(inValue instanceof Money))
-        return inValue;
-
       // (m + p)^2 - m^2 = 2mp + p^2
       int factor = 2 * ioShared.m_magicArmor * m_plus + m_plus * m_plus;
       ioShared.m_magicArmor += m_plus;
 
-      return ((Money)inValue).add(new Money(0, 0, factor * 1000, 0));
+      Money value = new Money(0, 0, factor * 1000, 0);
+      if(inValue == null)
+        return value;
+
+      if(!(inValue instanceof Money))
+        return inValue;
+
+      return ((Money)inValue).add(value);
     }
 
     //......................................................................
@@ -169,6 +176,8 @@ public abstract class Expression implements Comparable<Expression>
      */
     public Factor(long inMultiply, long inDivide)
     {
+      super(2);
+
       m_multiply = inMultiply;
       m_divide = inDivide;
     }
@@ -220,13 +229,283 @@ public abstract class Expression implements Comparable<Expression>
      * @return      the compute, adjusted value
      *
      */
-    public @Nonnull Value compute(@Nonnull Value inValue,
-                                  @Nonnull Shared ioShared)
+    public @Nullable Value compute(@Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
     {
+      if(inValue == null)
+        return null;
+
       return inValue.multiply(m_multiply).divide(m_divide);
     }
 
     //......................................................................
+  }
+
+  //........................................................................
+  //----- Equal -----------------------------------------------------------
+
+  /** An expression representing equal to a value. */
+  public static class Equal extends Expression
+  {
+    /**
+     * Create the equal expression.
+     *
+     * @param inValue the value to set to
+     *
+     */
+    public Equal(@Nonnull String inValue)
+    {
+      super(10);
+
+      m_value = inValue;
+    }
+
+    /** The value to set to. */
+    private @Nonnull String m_value;
+
+    /** Pattern for a equal. */
+    private static final Pattern s_pattern = Pattern.compile("\\s*=\\s*(.*)");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      return "[= " + m_value + "]";
+    }
+
+    /**
+     * Parse a magic weapon from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed magic weapon or null if not properly parsed
+     */
+    protected static @Nullable Equal parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        return new Equal(matcher.group(1));
+
+      return null;
+    }
+
+    /**
+     * Compute the value for the expression.
+     *
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    public @Nullable Value compute(@Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      if(inValue == null)
+        return null;
+
+      return inValue.read(m_value);
+    }
+  }
+
+  //........................................................................
+  //----- Wand -------------------------------------------------------------
+
+  /** An expression representing a wand with spell and caster levels. */
+  public static class Wand extends Expression
+  {
+    /**
+     * Create the wand expression.
+     *
+     * @param inSpellLevel the level of the spell stored in the wand
+     *
+     */
+    public Wand(int inSpellLevel)
+    {
+      this(inSpellLevel, inSpellLevel > 1 ? inSpellLevel * 2 - 1 : 1);
+    }
+
+    /**
+     * Create the wand expression.
+     *
+     * @param inSpellLevel  the level of the spell
+     * @param inCasterLevel the level of the caster
+     */
+    public Wand(int inSpellLevel, int inCasterLevel)
+    {
+      super(1);
+
+      if(inCasterLevel < 1
+         || (inSpellLevel > 0 && inCasterLevel < inSpellLevel * 2 - 1))
+        throw new IllegalArgumentException("caster level too low");
+
+      m_spellLevel = inSpellLevel;
+      m_casterLevel = inCasterLevel;
+    }
+
+    /** The spell level of the wand. */
+    private int m_spellLevel;
+
+    /** The dividing factor. */
+    private int m_casterLevel;
+
+    /** Pattern for a wand (spell level only). */
+    private static final Pattern s_pattern =
+      Pattern.compile("wand\\((\\d+)(?:,\\s*(\\d+))?\\)");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      if(m_casterLevel == m_spellLevel * 2 - 1)
+        return "[wand(" + m_spellLevel + ")]";
+
+      return "[wand(" + m_spellLevel + ", " + m_casterLevel + ")]";
+    }
+
+    /**
+     * Parse a magic weapon from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed magic weapon or null if not properly parsed
+     */
+    protected static @Nullable Wand parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        if(matcher.group(2) != null)
+          return new Wand(Integer.parseInt(matcher.group(1)),
+                          Integer.parseInt(matcher.group(2)));
+        else
+          return new Wand(Integer.parseInt(matcher.group(1)));
+
+      return null;
+    }
+
+    /**
+     * Compute the value for the expression.
+     * NOTE: this does not include any costs for the spell components and/or XP.
+     *
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public @Nullable Value compute(@Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      Money value;
+      if(m_spellLevel == 0)
+        value = new Money(0, 75 * m_casterLevel, 0, 0).simplify();
+      else
+        value = new Money(0, 0, 15 * m_spellLevel * m_casterLevel, 0);
+
+      if(inValue == null)
+        return value;
+
+      return inValue.add(value);
+    }
+  }
+
+  //........................................................................
+  //----- Potion -----------------------------------------------------------
+
+  /** An expression representing a potion with spell levels. */
+  public static class Potion extends Expression
+  {
+    /**
+     * Create the potion expression.
+     *
+     * @param inSpellLevel the level of the spell
+     */
+    public Potion(int inSpellLevel)
+    {
+      this(inSpellLevel, inSpellLevel > 1 ? inSpellLevel * 2 - 1 : 1);
+    }
+
+    /**
+     * Create the potion expression.
+     *
+     * @param inSpellLevel  the level of the spell
+     * @param inCasterLevel the level of the caster
+     */
+    public Potion(int inSpellLevel, int inCasterLevel)
+    {
+      super(1);
+
+      if(inCasterLevel < 1
+         || (inSpellLevel > 0 && inCasterLevel < inSpellLevel * 2 - 1))
+        throw new IllegalArgumentException("caster level too low");
+
+      m_spellLevel = inSpellLevel;
+      m_casterLevel = inCasterLevel;
+    }
+
+    /** The spell level of the wand. */
+    private int m_spellLevel;
+
+    /** The dividing factor. */
+    private int m_casterLevel;
+
+    /** Pattern for a wand (spell level only). */
+    private static final Pattern s_pattern =
+      Pattern.compile("potion\\((\\d+)(?:,\\s*(\\d+))?\\)");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      if(m_casterLevel == m_spellLevel * 2 - 1)
+        return "[potion(" + m_spellLevel + ")]";
+
+      return "[potion(" + m_spellLevel + ", " + m_casterLevel + ")]";
+    }
+
+    /**
+     * Parse a potion from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed magic weapon or null if not properly parsed
+     */
+    protected static @Nullable Potion parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        if(matcher.group(2) != null)
+          return new Potion(Integer.parseInt(matcher.group(1)),
+                          Integer.parseInt(matcher.group(2)));
+        else
+          return new Potion(Integer.parseInt(matcher.group(1)));
+
+      return null;
+    }
+
+    /**
+     * Compute the value for the expression.
+     * NOTE: this does not include any costs for the spell components and/or XP.
+     *
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public @Nullable Value compute(@Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      Money value;
+      if(m_spellLevel == 0)
+        value = new Money(0, 0, 25 * m_casterLevel, 0);
+      else
+        value = new Money(0, 0, 50 * m_spellLevel * m_casterLevel, 0);
+
+      if(inValue == null)
+        return value;
+
+      return inValue.add(value);
+    }
   }
 
   //........................................................................
@@ -242,6 +521,8 @@ public abstract class Expression implements Comparable<Expression>
      */
     public MagicWeapon(int inPlus)
     {
+      super(1);
+
       m_plus = inPlus;
     }
 
@@ -274,8 +555,6 @@ public abstract class Expression implements Comparable<Expression>
       return null;
     }
 
-    //------------------------------ compute -------------------------------
-
     /**
      * Compute the value for the expression.  We compute the value here in
      * relation to previously computed magic armor values and only adding the
@@ -287,20 +566,23 @@ public abstract class Expression implements Comparable<Expression>
      * @return      the compute, adjusted value
      *
      */
-    public @Nonnull Value compute(@Nonnull Value inValue,
-                                  @Nonnull Shared ioShared)
+    public @Nullable Value compute(@Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
     {
-      if(!(inValue instanceof Money))
-        return inValue;
-
       // 2 * (m + p)^2 - m^2 = 4mp + 2 * p^2
       int factor = 4 * ioShared.m_magicArmor * m_plus + 2 * m_plus * m_plus;
       ioShared.m_magicWeapon += m_plus;
 
-      return ((Money)inValue).add(new Money(0, 0, factor * 1000, 0));
-    }
+      Money value = new Money(0, 0, factor * 1000, 0);
 
-    //......................................................................
+      if(inValue == null)
+        return value;
+
+      if(!(inValue instanceof Money))
+        return inValue;
+
+      return ((Money)inValue).add(value);
+    }
   }
 
   //........................................................................
@@ -314,10 +596,12 @@ public abstract class Expression implements Comparable<Expression>
   /**
    * Create the expression.
    *
+   * @param inPriority the priority of the expression for sorting
+   *
    */
-  public Expression()
+  public Expression(int inPriority)
   {
-    // nothing to do
+    m_priority = inPriority;
   }
 
   //........................................................................
@@ -331,6 +615,9 @@ public abstract class Expression implements Comparable<Expression>
 
   /** The remark end. */
   private static final char s_end = ']';
+
+  /** The priority of the expression. */
+  private int m_priority;
 
   //........................................................................
 
@@ -356,7 +643,20 @@ public abstract class Expression implements Comparable<Expression>
     if(result != null)
       return result;
 
-    return result;
+    result = Wand.parse(inText);
+    if(result != null)
+      return result;
+
+    result = Potion.parse(inText);
+    if(result != null)
+      return result;
+
+    result = Equal.parse(inText);
+    if(result != null)
+      return result;
+
+    Log.warning("could not parse expression for: '" + inText + "'");
+    return null;
   }
 
   //........................................................................
@@ -374,6 +674,10 @@ public abstract class Expression implements Comparable<Expression>
   {
     if(inOther == null)
       return +1;
+
+    int diff = m_priority - inOther.m_priority;
+    if(diff != 0)
+      return diff;
 
     return toString().compareTo(inOther.toString());
   }
@@ -440,7 +744,7 @@ public abstract class Expression implements Comparable<Expression>
   //--------------------------------- read ---------------------------------
 
   /**
-   * Read a remark from the given reader.
+   * Read an expression from the given reader.
    *
    * @param       inReader   the reader to read from
    *
@@ -486,8 +790,8 @@ public abstract class Expression implements Comparable<Expression>
    * @return      the compute, adjusted value
    *
    */
-  public abstract @Nonnull Value compute(@Nonnull Value inValue,
-                                         @Nonnull Shared ioShared);
+  public abstract @Nullable Value compute(@Nonnull Value inValue,
+                                          @Nonnull Shared ioShared);
 
   //........................................................................
 

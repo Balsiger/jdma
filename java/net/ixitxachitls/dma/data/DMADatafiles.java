@@ -754,26 +754,33 @@ public boolean update(@Nonnull AbstractEntry inEntry)
       m_entries.put(inEntry.getType(), entries);
     }
 
+    String name = inEntry.getName();
     if(inEntry instanceof Entry)
     {
       Entry entry = (Entry)inEntry;
-      String id = entry.getName();
 
-      if(Config.get("web.data.datastore", true) && entries.containsKey(id))
-        Log.warning("duplicate id detected for '" + id
-                    + ", ignoring as only importing (hopefully)");
+      if(Config.get("web.data.datastore", true) && entries.containsKey(name))
+      {
+        int i;
+        for(i = 1; entries.containsKey("TEMPORARY-" + i); i++)
+          ;
+
+        name = "TEMPORARY-" + i;
+        Log.warning("duplicate id detected for '" + name
+                    + "', ignoring as only importing (hopefully)");
+      }
       else
-        while(entries.containsKey(id))
+        while(entries.containsKey(name))
         {
           entry.randomID();
-          String oldID = id;
-          id = entry.getName();
+          String oldID = name;
+          name = entry.getName();
           Log.warning("duplicate id detected for '" + oldID
-                      + "', setting new id to '" + id + "'");
+                      + "', setting new id to '" + name + "'");
         }
     }
 
-    entries.put(inEntry.getName(), inEntry);
+    entries.put(name, inEntry);
   }
 
   //........................................................................

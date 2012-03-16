@@ -2,7 +2,7 @@
 
 #----- IMEO
 
-item IMEO =
+item with armor, wearable IMEO =
 
   appearance   "A battered suite of studded leather armor.";
   campaign     FR / City of the Spider Queen;
@@ -11,7 +11,7 @@ item IMEO =
 #.....
 #----- JRXI
 
-item JRXI =
+item with armor, incomplete, wearable JRXI =
 
   hp           5;
   appearance   "A buckler. Good workmanship.";
@@ -23,7 +23,7 @@ item JRXI =
 #.....
 #----- GHSL
 
-item GHSL =
+item with wearable GHSL =
 
   hp           1;
   appearance   "A simple cloak.";
@@ -34,7 +34,7 @@ item GHSL =
 #.....
 #----- DFST
 
-item DFST =
+item with armor, wearable DFST =
 
   hp           1;
   appearance   "A simple gold ring.";
@@ -57,7 +57,7 @@ item with incomplete WJCI =
 #.....
 #----- PQFP
 
-item PQFP =
+item with incomplete, wearable PQFP =
 
   hp           3;
   appearance   "This bread leather belt is studded with three moonstones.";
@@ -67,7 +67,7 @@ item PQFP =
 
 #.....
 #----- HOZL
-item HOZL =
+item with weapon, wearable HOZL =
 
   hp           1;
   appearance   "A sap.";
@@ -77,7 +77,7 @@ item HOZL =
 #.....
 #----- GPFG
 
-item GPFG =
+item with incomplete, weapon, wearable GPFG =
 
   hp           13;
   appearance   "A sturdy morningstar. Finely crafted.";
@@ -90,7 +90,7 @@ item GPFG =
 #.....
 #----- RSRI
 
-item RSRI =
+item with incomplete, wearable RSRI =
 
   hp           1;
   appearance   "A set of brown leather slippers.";
@@ -101,7 +101,7 @@ item RSRI =
 #.....
 #----- MFJO
 
-item MFJO =
+item with incomplete, weapon, wearable MFJO =
 
   hp           4;
   appearance   "A short sword. Finely crafted.";
@@ -113,7 +113,7 @@ item MFJO =
 #.....
 #----- AGRC
 
-item AGRC =
+item with incomplete, weapon, wearable AGRC =
 
   hp           1;
   appearance   "A simple dagger.";
@@ -123,7 +123,7 @@ item AGRC =
 #.....
 #----- PVDB
 
-item PVDB =
+item with incomplete, weapon, wearable PVDB =
 
   hp           2;
   appearance   "A simple dagger. Finely crafted.";
@@ -135,7 +135,7 @@ item PVDB =
 #.....
 #----- MTFT
 
-item MTFT =
+item with incomplete, weapon, wearable MTFT =
 
   hp           1;
   appearance   "A simple dagger.";
@@ -145,7 +145,7 @@ item MTFT =
 #.....
 #----- EJAH
 
-item EJAH =
+item with incomplete, weapon, wearable EJAH =
 
   hp           1;
   appearance   "A shortbow.";
@@ -155,7 +155,7 @@ item EJAH =
 #.....
 #----- ROHK
 
-item ROHK =
+item with contents, incomplete ROHK =
 
   hp           1;
   appearance   "A crude waterskin.";
@@ -196,7 +196,7 @@ item with multiple UUZJ =
 #.....
 #----- EKDC
 
-item EKDC =
+item with incomplete EKDC =
 
   hp           1;
   appearance   "A set with sturdy boots, leather breeches, a belt, a shirt, gloves, and a cloak.";
@@ -207,7 +207,7 @@ item EKDC =
 #.....
 #----- RQJP
 
-item RQJP =
+item with incomplete, weapon, wearable RQJP =
 
   hp           1;
   appearance   "A simple dagger.";
@@ -233,7 +233,7 @@ item with contents VTVG =
 #.....
 #----- DQKW
 
-item DQKW =
+item with incomplete DQKW =
 
   hp           2;
   appearance   "This nondescript, small leather pouch has a light blue slik drawstring.";
@@ -244,7 +244,7 @@ item DQKW =
 #.....
 #----- OUQM
 
-item OUQM =
+item with incomplete OUQM =
 
   hp           2;
   appearance   "This common-looking brown clay mug has persistant stains just under the rim.";
@@ -255,7 +255,7 @@ item OUQM =
 #.....
 #----- QKBB
 
-item QKBB =
+item with incomplete QKBB =
 
   hp           2;
   appearance   "This woolen sleeping bag is embroidered with stars and moons in silver and blue thread, and it smells of lavender.";
@@ -266,7 +266,7 @@ item QKBB =
 #.....
 #----- HRBE
 
-item HRBE =
+item with incomplete HRBE =
 
   hp           1;
   appearance   "Some oily liquid in a glass vial.";
@@ -277,37 +277,40 @@ item HRBE =
 #.....
 #----- ZTJQ
 
-item ZTJQ =
+item with incomplete, multiuse, weapon, wearable ZTJQ =
 
   hp           1;
   appearance   "A leather quiver with some arrows.";
   campaign     FR / City of the Spider Queen;
-  base         Arrows.
+  base         Arrows;
+  count        20.
 
 #.....
 #----- UFXY
 
-item UFXY =
+item with incomplete, multiuse, weapon, wearable UFXY =
 
   hp           1;
   appearance   "A leather quiver with some arrows.";
   campaign     FR / City of the Spider Queen;
-  base         Arrows.
+  base         Arrows;
+  count        20.
 
 #.....
 #----- CWHH
 
-item CWHH =
+item with incomplete, multiuse, weapon, wearable CWHH =
 
   hp           1;
   appearance   "A leather quiver with some arrows.";
   campaign     FR / City of the Spider Queen;
-  base         Arrows.
+  base         Arrows;
+  count        20.
 
 #.....
 #----- OPZK
 
-item OPZK =
+item with incomplete OPZK =
 
   hp           1;
   appearance   "A set with a wool coat, linen shirt, wool cap, heavy cloak, thick pants, and boots.";
@@ -317,7 +320,7 @@ item OPZK =
 #.....
 #----- ARNN
 
-item ARNN =
+item with commodity, incomplete ARNN =
 
   appearance   "60 feet of thin rope.";
   player name  "Rope of Climbing";
@@ -327,7 +330,7 @@ item ARNN =
 #.....
 #----- FKHL
 
-item FKHL =
+item with incomplete FKHL =
 
   hp           10;
   appearance   "A deep red stone.";
@@ -338,7 +341,7 @@ item FKHL =
 #.....
 #----- LDGG
 
-item LDGG =
+item with incomplete LDGG =
 
   hp           10;
   appearance   "A pale blue stone.";
@@ -349,7 +352,7 @@ item LDGG =
 #.....
 #----- HOKP
 
-item with multiuse HOKP =
+item with multiuse, wearable HOKP =
 
   hp           15;
   appearance   "A silver brooch";
@@ -362,7 +365,7 @@ item with multiuse HOKP =
 #.....
 #----- YGJK
 
-item YGJK =
+item with incomplete, weapon, wearable YGJK =
 
   hp           30;
   appearance   "A sturdy crowbar.";
@@ -372,7 +375,7 @@ item YGJK =
 #.....
 #----- ASIV
 
-item ASIV =
+item with commodity, incomplete ASIV =
 
   hp           4;
   appearance   "Some length of silk rope.";
@@ -382,7 +385,7 @@ item ASIV =
 #.....
 #----- SQXE
 
-item SQXE =
+item with commodity SQXE =
 
   hp           2;
   appearance   "Some length of hemp rope.";
@@ -392,7 +395,7 @@ item SQXE =
 #.....
 #----- PQDL
 
-item PQDL =
+item with light, timed, weapon, wearable PQDL =
 
   hp           1;
   appearance   "A simple torch.";
@@ -402,7 +405,7 @@ item PQDL =
 #.....
 #----- RWSH
 
-item RWSH =
+item with light, timed RWSH =
 
   hp           1;
   appearance   "A brown candle.";
@@ -412,16 +415,17 @@ item RWSH =
 #.....
 #----- BKBX
 
-item BKBX =
+item with incomplete, multiuse BKBX =
 
   appearance   "A bag with cosmetics, hair dye, and small physical props.";
   campaign     FR / City of the Spider Queen;
-  base         Disguise Kit.
+  base         Disguise Kit;
+  count        10.
 
 #.....
 #----- NSYX
 
-item NSYX =
+item with contents, incomplete NSYX =
 
   hp           1;
   appearance   "A simple waterskin.";
@@ -431,7 +435,7 @@ item NSYX =
 #.....
 #----- UELW
 
-item UELW =
+item with incomplete UELW =
 
   hp           1;
   appearance   "Some clear liquid in a ceramic vial";
@@ -442,7 +446,7 @@ item UELW =
 #.....
 #----- GUJF
 
-item GUJF =
+item with incomplete GUJF =
 
   hp           1;
   appearance   "Some oily liquid in a glass vial.";
@@ -453,7 +457,7 @@ item GUJF =
 #.....
 #----- NSZW
 
-item NSZW =
+item with incomplete NSZW =
 
   hp           1;
   appearance   "Some watery liquid in a metal vial.";
@@ -464,7 +468,7 @@ item NSZW =
 #.....
 #----- UCUS
 
-item UCUS =
+item with incomplete UCUS =
 
   hp           1;
   appearance   "Some dark liquid in a ceramic vial";
@@ -475,7 +479,7 @@ item UCUS =
 #.....
 #----- JKGM
 
-item JKGM =
+item with incomplete JKGM =
 
   hp           1;
   appearance   "Some oily liquid in a glass vial.";
@@ -486,7 +490,7 @@ item JKGM =
 #.....
 #----- ELPL
 
-item ELPL =
+item with incomplete ELPL =
 
   hp           1;
   appearance   "Some dark liquid in a metal vial";
@@ -497,7 +501,7 @@ item ELPL =
 #.....
 #----- XOZY
 
-item XOZY =
+item with incomplete XOZY =
 
   hp           1;
   appearance   "Some clear liquid in a glass vial";
@@ -508,7 +512,7 @@ item XOZY =
 #.....
 #----- LYBQ
 
-item LYBQ =
+item with incomplete LYBQ =
 
   hp           1;
   appearance   "Some dark liquid in a ceramic vial";
@@ -519,7 +523,7 @@ item LYBQ =
 #.....
 #----- QIUA
 
-item QIUA =
+item with wearable QIUA =
 
   hp           2;
   value        1 gp;
@@ -530,7 +534,7 @@ item QIUA =
 #.....
 #----- QRKG
 
-item QRKG =
+item with wearable QRKG =
 
   hp           2;
   value        1 gp;
@@ -553,7 +557,7 @@ item ZOQV =
 #.....
 #----- SOHR
 
-item SOHR =
+item with wearable SOHR =
 
   hp           2;
   value        10 gp;
@@ -565,7 +569,7 @@ item SOHR =
 #.....
 #----- YSGW
 
-item YSGW =
+item with incomplete YSGW =
 
   hp           30;
   appearance   "A piece of flint and a piece of steel.";
@@ -575,7 +579,7 @@ item YSGW =
 #.....
 #----- BSWZ
 
-item BSWZ =
+item with incomplete BSWZ =
 
   hp           24;
   appearance   "A bag full of caltrops.";
@@ -585,7 +589,7 @@ item BSWZ =
 #.....
 #----- QFAI
 
-item QFAI =
+item with incomplete QFAI =
 
   hp           1;
   appearance   "A kit containing skeleton keys, long metal picks and priest, a long-nodes clamp, a small hand saw, and a small wedge and hammer.";
@@ -595,7 +599,7 @@ item QFAI =
 #.....
 #----- FBMM
 
-item FBMM =
+item with wearable FBMM =
 
   hp           2;
   appearance   "A simple gold ring.";
@@ -607,7 +611,7 @@ item FBMM =
 #.....
 #----- QWSI
 
-item QWSI =
+item with incomplete QWSI =
 
   hp           1;
   appearance   "Some oily liquid in a glass vial.";
@@ -629,7 +633,7 @@ item with multiple PDPM =
 #.....
 #----- VKHG
 
-item with counted VKHG =
+item with counted, multiple VKHG =
 
   hp           24;
   appearance   "A gold piece.";
@@ -640,7 +644,7 @@ item with counted VKHG =
 #.....
 #----- WDDW
 
-item with counted WDDW =
+item with counted, multiple WDDW =
 
   hp           24;
   appearance   "A silver piece.";
@@ -651,7 +655,7 @@ item with counted WDDW =
 #.....
 #----- ZECW
 
-item with counted ZECW =
+item with counted, multiple ZECW =
 
   hp           24;
   appearance   "A copper piece.";
@@ -662,7 +666,7 @@ item with counted ZECW =
 #.....
 #----- PVRB
 
-item PVRB =
+item with wearable PVRB =
 
   hp           1;
   appearance   "A black tabard with a white skull motive.";
@@ -673,13 +677,14 @@ item PVRB =
 #.....
 #----- SWIM
 
-item with multiple SWIM =
+item with composite, incomplete, multiple, weapon, wearable SWIM =
 
   hp           1;
   appearance   "Inside the flask is some sticky, adhesive substance.";
   campaign     FR / City of the Spider Queen;
   base         Alchemist's Fire;
-  count        5.
+  count        5;
+  include      RMYT.
 
 #.....
 #----- EJOJ
@@ -696,7 +701,7 @@ item EJOJ =
 #.....
 #----- TLNB
 
-item TLNB =
+item with incomplete, weapon, wearable TLNB =
 
   hp           1;
   appearance   "A simple dagger.";
@@ -706,7 +711,7 @@ item TLNB =
 #.....
 #----- WRVB
 
-item WRVB =
+item with incomplete WRVB =
 
   hp           1;
   appearance   "Some thick liquid in a metal vial";
@@ -717,7 +722,7 @@ item WRVB =
 #.....
 #----- XPJW
 
-item with multiple XPJW =
+item with incomplete, multiple, timed, weapon, wearable XPJW =
 
   hp           1;
   appearance   "A leather bag full of goo.";
@@ -728,7 +733,7 @@ item with multiple XPJW =
 #.....
 #----- SODS
 
-item with contents SODS =
+item with contents, incomplete SODS =
 
   hp           1;
   appearance   "A finely crafted backpack to stow your stuff.";
@@ -785,11 +790,523 @@ item with contents SODS =
 #.....
 #----- TDJH
 
-item TDJH =
+item with incomplete, multiuse, weapon, wearable TDJH =
 
   hp           1;
   appearance   "A leather quiver with some arrows.";
   campaign     FR / City of the Spider Queen;
-  base         Arrows.
+  base         Arrows;
+  count        20.
+
+#.....
+#----- XKIR
+
+item with wearable XKIR =
+
+  hp           1;
+  appearance   "A simple cloak.";
+  player name  "Cloak of Resistance +2";
+  campaign     FR / City of the Spider Queen;
+  base         Cloak of Resistance +2.
+
+#.....
+#----- VMKO
+
+item with armor, wearable VMKO =
+
+  hp           24;
+  appearance   "Metal wrist and arm guards.";
+  player name  "Bracers of Armor +2";
+  campaign     FR / City of the Spider Queen;
+  base         Bracers of Armor +2.
+
+#.....
+#----- GRND
+
+item with incomplete, wearable GRND =
+
+  hp           3;
+  appearance   "This bread leather belt is studded with three moonstones.";
+  player name  "Healing Belt";
+  campaign     FR / City of the Spider Queen;
+  base         Healing Belt.
+
+#.....
+#----- AXME
+
+item with incomplete, weapon, wearable AXME =
+
+  hp           1;
+  appearance   "A simple quarterstaff.";
+  campaign     FR / City of the Spider Queen;
+  base         Quarterstaff.
+
+#.....
+#----- KTSS
+
+item with incomplete, weapon, wearable KTSS =
+
+  hp           1;
+  appearance   "A simple dagger.";
+  campaign     FR / City of the Spider Queen;
+  base         Dagger.
+
+#.....
+#----- WSLS
+
+item with counted, incomplete, weapon, wearable WSLS =
+
+  hp           1;
+  appearance   "A wooden case with some crossbow bolts.";
+  campaign     FR / City of the Spider Queen;
+  base         Crossbow Bolts;
+  count        10.
+
+#.....
+#----- TYQX
+
+item with incomplete TYQX =
+
+  hp           2;
+  appearance   "This nondescript, small leather pouch has a light blue slik drawstring.";
+  player name  "Everlasting Rations";
+  campaign     FR / City of the Spider Queen;
+  base         Everlasting Rations.
+
+#.....
+#----- XXNV
+
+item with incomplete XXNV =
+
+  hp           2;
+  appearance   "This common-looking brown clay mug has persistant stains just under the rim.";
+  player name  "Everfull Mug";
+  campaign     FR / City of the Spider Queen;
+  base         Everfull Mug.
+
+#.....
+#----- VCQM
+
+item with incomplete VCQM =
+
+  hp           2;
+  appearance   "This woolen sleeping bag is embroidered with stars and moons in silver and blue thread, and it smells of lavender.";
+  player name  "Magic Bedroll";
+  campaign     FR / City of the Spider Queen;
+  base         Magic Bedroll.
+
+#.....
+#----- GKSP
+
+item with incomplete GKSP =
+
+  hp           1;
+  appearance   "Some clear liquid in a glass vial";
+  player name  "Potion of Cure Serious Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Serious Wounds.
+
+#.....
+#----- RLOI
+
+item with incomplete RLOI =
+
+  hp           1;
+  appearance   "A set with a wool coat, linen shirt, wool cap, heavy cloak, thick pants, and boots.";
+  campaign     FR / City of the Spider Queen;
+  base         Cold Weather Outfit.
+
+#.....
+#----- CJIQ
+
+item with commodity CJIQ =
+
+  hp           1;
+  appearance   "A piece of white canvas.";
+  campaign     FR / City of the Spider Queen;
+  base         Canvas;
+  amount       2.
+
+#.....
+#----- THNH
+
+item with multiple THNH =
+
+  hp           1;
+  appearance   "A simple sheet of paper.";
+  campaign     FR / City of the Spider Queen;
+  base         Paper;
+  count        4.
+
+#.....
+#----- EKSM
+
+item with multiple EKSM =
+
+  hp           1;
+  appearance   "A simple sheet of parchment.";
+  campaign     FR / City of the Spider Queen;
+  base         Parchment;
+  count        2.
+
+#.....
+#----- DIFG
+
+item with incomplete, multiuse DIFG =
+
+  appearance   "A wooden box full of herbs, salves, bandages and other useful materials.";
+  campaign     FR / City of the Spider Queen;
+  base         Healer's Kit;
+  count        10.
+
+#.....
+#----- VMCC
+
+item with multiple VMCC =
+
+  hp           1;
+  appearance   "A fine cloth enwrapped package of dry, high-energy foods (jerky, dried fruit, hardtack, and nuts).";
+  campaign     FR / City of the Spider Queen;
+  base         Trail Ration;
+  count        22.
+
+#.....
+#----- HGMH
+
+item with counted, incomplete HGMH =
+
+  hp           1;
+  value        1923 gp;
+  appearance   "A simple, leather bound spellbook.";
+  player notes "Spells 0th: \Spell{Detect Magic}, \Spell{Ghost Sound}, \Spell{Obscuring Mist}, \Spell{Read Magic}, 1st: \Spell{Burning Hands}, \Spell{Hold Portal}, \Spell{Magic Missile}, \Spell{Sleep}, 2nd: \Spell{Invisibility}, \Spell{Misdirection}, \Spell{Web}, 3rd: \Spell{Phaontom Steed}, \Spell{Haste}, 4th: \Spell{Arcane Eye}, \Spell{Detect Scrying}, \Spell{Remove Curse}, \Spell{Scrying}";
+  dm notes     "Old Meg's Spellbook from the sourroundings of Eveningstar (Cormyr)";
+  campaign     FR / City of the Spider Queen;
+  base         Wizard's Spellbook;
+  count        4.
+
+#.....
+#----- ORKA
+
+item with counted, incomplete ORKA =
+
+  hp           1;
+  value        463 gp;
+  appearance   "A simple, leather bound spellbook.";
+  campaign     FR / City of the Spider Queen;
+  base         Wizard's Spellbook;
+  count        68.
+
+#.....
+#----- UMYJ
+
+item with counted, incomplete UMYJ =
+
+  hp           1;
+  value        261 gp;
+  appearance   "A simple, leather bound spellbook.";
+  player notes "Spells 0th: \Spell{Light}, 1st: \Spell{Detect Good} (Clr), \Spell{Feather Fall}, \Spell{Grease}, \Spell{Magic Missile}, \Spell{Nystul's Magic Aura}, 2nd: \Spell{Detect Thoughts}, \Spell{Magic Mouth}, \Spell{Mirror Image}, \Spell{Web}, 3rd: \Spell{Blink}, \Spell{Clairaudience/Clairvoyance}, \Spell{Fireball}, \Spell{Slow}";
+  dm notes     "Lazarr's Spellbook from the Haunted Halls of Eveningstar (Cormyr)";
+  campaign     FR / City of the Spider Queen;
+  base         Wizard's Spellbook;
+  count        74.
+
+#.....
+#----- QDIH
+
+item with light, timed QDIH =
+
+  hp           1;
+  appearance   "A white candle.";
+  campaign     FR / City of the Spider Queen;
+  base         Candle.
+
+#.....
+#----- GLWY
+
+item with light, multiple, timed, weapon, wearable GLWY =
+
+  hp           1;
+  appearance   "A simple torch.";
+  campaign     FR / City of the Spider Queen;
+  base         Torch;
+  count        7.
+
+#.....
+#----- EKCZ
+
+item EKCZ =
+
+  hp           1;
+  appearance   "A fine, brown woolen blanket.";
+  campaign     FR / City of the Spider Queen;
+  base         Winter Blanket.
+
+#.....
+#----- BGDH
+
+item with incomplete BGDH =
+
+  hp           24;
+  appearance   "A bag full of caltrops.";
+  campaign     FR / City of the Spider Queen;
+  base         Caltrops.
+
+#.....
+#----- ZFJS
+
+item ZFJS =
+
+  hp           1;
+  appearance   "A simple, wooden inkpen.";
+  campaign     FR / City of the Spider Queen;
+  base         Inkpen.
+
+#.....
+#----- UZQE
+
+item UZQE =
+
+  hp           1;
+  appearance   "A comfortable bedroll with a silk blanket.";
+  player name  "";
+  campaign     FR / City of the Spider Queen;
+  base         Bedroll.
+
+#.....
+#----- LDOV
+
+item with contents, light, timed LDOV =
+
+  hp           1;
+  appearance   "A bullseye lantern with a single shutter.";
+  campaign     FR / City of the Spider Queen;
+  base         Bullseye Lantern.
+
+#.....
+#----- INWH
+
+item with composite INWH =
+
+  hp           1;
+  appearance   "Some black liquid.";
+  campaign     FR / City of the Spider Queen;
+  base         Ink;
+  include      KAXJ.
+
+#.....
+#----- NFMT
+
+item with composite NFMT =
+
+  hp           1;
+  appearance   "Some black liquid.";
+  campaign     FR / City of the Spider Queen;
+  base         Ink;
+  include      APLO.
+
+#.....
+#----- GWOG
+
+item with wearable GWOG =
+
+  hp           1;
+  appearance   "A black tabard with a white skull motive.";
+  player name  "Black Tabard";
+  campaign     FR / City of the Spider Queen;
+  base         Cloak.
+
+#.....
+#----- VVAR
+
+item with wearable VVAR =
+
+  hp           1;
+  appearance   "A black tabard with a white skull motive.";
+  player name  "Black Tabard";
+  campaign     FR / City of the Spider Queen;
+  base         Cloak.
+
+#.....
+#----- XQMF
+
+item with contents, incomplete XQMF =
+
+  hp           1;
+  appearance   "A leather backpack to stow your stuff.";
+  player name  "Heward's Handy Haversack";
+  campaign     FR / City of the Spider Queen;
+  base         Heward's Handy Haversack;
+  contents     TYQX,
+               XXNV,
+               VCQM,
+               GKSP,
+               RLOI,
+               CJIG,
+               THNH,
+               EKSM,
+               DIFG,
+               VMCC,
+               HGMH,
+               ORKA,
+               UMYJ,
+               QDIH,
+               GLWY,
+               EKCZ,
+               BGDH,
+               ZFJS,
+               UZQE,
+               LDOV,
+               INWH,
+               NFMT,
+               GWOG,
+               VVAR.
+
+#.....
+#----- SZHH
+
+item with multiuse SZHH =
+
+  hp           5;
+  appearance   "A simple bone wand.";
+  player name  "Wand of Darkvision";
+  campaign     FR / City of the Spider Queen;
+  base         Wand of Darkvision;
+  count        50.
+
+#.....
+#----- QBHZ
+
+item QBHZ =
+
+  hp           24;
+  value        10 gp;
+  appearance   "A simple holy badge of Kelemvor.";
+  player name  "Holy Badge";
+  campaign     FR / City of the Spider Queen;
+  base         Art Object.
+
+#.....
+#----- PXLX
+
+item PXLX =
+
+  hp           24;
+  value        100 gp;
+  appearance   "A shining stone.";
+  player name  "Pearl";
+  campaign     FR / City of the Spider Queen;
+  base         Gem.
+
+#.....
+#----- EXAJ
+
+item EXAJ =
+
+  hp           1;
+  appearance   "A simple rod.";
+  player name  "Rod of Cancellation";
+  campaign     FR / City of the Spider Queen;
+  base         Rod of Cancellation.
+
+#.....
+#----- RVFU
+
+item with multiuse RVFU =
+
+  hp           5;
+  appearance   "A simple metal wand.";
+  player name  "Wand of Fireball";
+  campaign     FR / City of the Spider Queen;
+  base         Wand of Fireball;
+  count        50.
+
+#.....
+#----- JFMX
+
+item with multiuse JFMX =
+
+  hp           5;
+  appearance   "A simple wooden wand.";
+  player name  "Wand of Magic Missile 3";
+  campaign     FR / City of the Spider Queen;
+  base         Wand of Magic Missile 3;
+  count        50.
+
+#.....
+#----- BAYA
+
+item with multiuse BAYA =
+
+  hp           5;
+  appearance   "A simple bone wand.";
+  player notes "etwas mit Gift";
+  player name  "Wand of Neutralize Poison";
+  campaign     FR / City of the Spider Queen;
+  base         Wand of Neutralize Poison;
+  count        50.
+
+#.....
+#----- CGCY
+
+item CGCY =
+
+  appearance   "";
+  player name  "";
+  campaign     FR / City of the Spider Queen.
+
+#.....
+#----- DMUR
+
+item with wearable DMUR =
+
+  hp           2;
+  appearance   "An elaborately entwined platinum ring.";
+  player name  "Ring of Wizardry I";
+  campaign     FR / City of the Spider Queen;
+  base         Ring of Wizardry I.
+
+#.....
+#----- PSSN
+
+item PSSN =
+
+  hp           1;
+  appearance   "A piece of white chalk.";
+  campaign     FR / City of the Spider Queen;
+  base         Chalk.
+
+#.....
+#----- MWWS
+
+item with multiuse MWWS =
+
+  hp           1;
+  appearance   "A small jar containing a salve.";
+  player name  "Heilsalbe";
+  campaign     FR / City of the Spider Queen;
+  base         Keoghtom's Ointment;
+  count        5.
+
+#.....
+
+#----- KAMO
+
+item with contents KAMO =
+
+  hp           1;
+  appearance   "A simple belt pouch.";
+  campaign     FR / City of the Spider Queen;
+  base         Belt Pouch;
+  contents     SZHH,
+               QBHZ,
+               PXLX,
+               EXAJ,
+               RVFU,
+               JFMX,
+               BAYA,
+               CGCY,
+               DMUR,
+               PSSN,
+               MWWS.
 
 #.....

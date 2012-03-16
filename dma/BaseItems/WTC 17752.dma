@@ -8,8 +8,6 @@
 # Worlds:       Generic
 #
 
-# base stuff for magical items ################################################
-
 #----- Armor
 
 #----- Mwk Armor
@@ -194,6 +192,7 @@ base item with weapon, incomplete Weapon +5 =
 #.....
 
 #.....
+
 #----- Potions
 
 #----- Potion
@@ -235,39 +234,13 @@ base item Potion =
                     container.
 
 #.....
-#----- Potion 1
-
-base item with incomplete Potion 1 =
-
-  incomplete "Base potions on spells and compute value automatically from spell level and material compoents/XP";
-  base Potion;
-  value             50 gp.
-
-#.....
-#----- Potion 3
-
-base item with incomplete Potion 3 =
-
-  incomplete "Base potions on spells and compute value automatically from spell level and material compoents/XP";
-  base Potion;
-  value             300 gp.
-
-#.....
-#----- Potion 5
-
-base item with incomplete Potion 5 =
-
-  incomplete "Base potions on spells and compute value automatically from spell level and material compoents/XP";
-  base Potion;
-  value             750 gp.
-
-#.....
 
 #----- Potion of Aid
 
 base item Potion of Aid =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Clr 3]{Aid}.";
   short description "As \SpellRef[Clr 3]{Aid}.".
@@ -277,7 +250,8 @@ base item Potion of Aid =
 
 base item Potion of Alter Self =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Alter Self}.";
   short description "As \SpellRef[Wiz 3]{Alter Self}.".
@@ -287,7 +261,8 @@ base item Potion of Alter Self =
 
 base item Potion of Barkskin =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Clr 3]{Barkskin}.";
   short description "As \SpellRef[Clr 3]{Barkskin}.".
@@ -297,7 +272,8 @@ base item Potion of Barkskin =
 
 base item Potion of Bear's Endurance =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Clr 3]{Bear's Endurance}.";
   short description "As \SpellRef[Clr 3]{Bear's Endurance}.".
@@ -307,7 +283,8 @@ base item Potion of Bear's Endurance =
 
 base item Potion of Blur =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Clr 3]{Blur}.";
   short description "As \SpellRef[Clr 3]{Blur}.".
@@ -317,7 +294,8 @@ base item Potion of Blur =
 
 base item Potion of Bull's Strength =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Clr 3]{Bull's Strength}.";
   short description "As \SpellRef[Clr 3]{Bull's Strength}.".
@@ -327,7 +305,8 @@ base item Potion of Bull's Strength =
 
 base item Potion of Cat's Grace =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Clr 3]{Cat's Grace}.";
   short description "As \SpellRef[Clr 3]{Cat's Grace}.".
@@ -337,7 +316,8 @@ base item Potion of Cat's Grace =
 
 base item Potion of Clairaudience or Clairvoyance =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.";
   short description "As \SpellRef[Clr 5]{Clairaudience or Clairvoyance}.".
@@ -347,7 +327,8 @@ base item Potion of Clairaudience or Clairvoyance =
 
 base item Potion of Cure Light Wounds =
 
-  base Potion 1;
+  base Potion;
+  value [potion(1)];
   description
   "As \SpellRef[Clr 1]{Cure Light Wounds}.";
   short description "As \SpellRef[Clr 1]{Cure Light Wounds}.".
@@ -357,7 +338,8 @@ base item Potion of Cure Light Wounds =
 
 base item Potion of Cure Moderate Wounds =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Clr 3]{Cure Moderate Wounds}.";
   short description "As \SpellRef[Clr 3]{Cure Moderate Wounds}.".
@@ -367,7 +349,8 @@ base item Potion of Cure Moderate Wounds =
 
 base item Potion of Cure Serious Wounds =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Clr 5]{Cure Serious Wounds}.";
   short description "As \SpellRef[Clr 5]{Cure Serious Wounds}.".
@@ -377,7 +360,8 @@ base item Potion of Cure Serious Wounds =
 
 base item Potion of Darkvision =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Darkvision}.";
   short description "As \SpellRef[Wiz 3]{Darkvision}.".
@@ -387,7 +371,8 @@ base item Potion of Darkvision =
 
 base item Potion of Detect Thoughts =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Detect Thoughts}.";
   short description "As \SpellRef[Wiz 3]{Detect Thoughts}.".
@@ -397,7 +382,8 @@ base item Potion of Detect Thoughts =
 
 base item Potion of Fly =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Wiz 5]{Fly}.";
   short description "As \SpellRef[Wiz 5]{Fly}.".
@@ -407,7 +393,8 @@ base item Potion of Fly =
 
 base item Potion of Ghoul Touch =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Ghoul Touch}.";
   short description "As \SpellRef[Wiz 3]{Ghoul Touch}.".
@@ -417,7 +404,8 @@ base item Potion of Ghoul Touch =
 
 base item Potion of Haste =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Haste}.";
   short description "As \SpellRef[Wiz 3]{Haste}.".
@@ -427,7 +415,8 @@ base item Potion of Haste =
 
 base item Potion of Hide from Animals =
 
-  base Potion 1;
+  base Potion;
+  value [potion(1)];
   description
   "As \SpellRef[Drd 1]{Hide from Animals}.";
   short description "As \SpellRef[Drd 1]{Hide from Animals}.".
@@ -437,7 +426,8 @@ base item Potion of Hide from Animals =
 
 base item Potion of Inflict Serious Wounds =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Clr 5]{Inflict Serious Wounds}.";
   short description "As \SpellRef[Clr 5]{Inflict Serious Wounds}.".
@@ -447,7 +437,8 @@ base item Potion of Inflict Serious Wounds =
 
 base item Potion of Invisibility =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Invisibility}.";
   short description "As \SpellRef[Wiz 3]{Invisibility}.".
@@ -457,7 +448,8 @@ base item Potion of Invisibility =
 
 base item Potion of Jump =
 
-  base Potion 1;
+  base Potion;
+  value [potion(1)];
   description
   "As \SpellRef[Wiz 1]{Jump}.";
   short description "As \SpellRef[Wiz 1]{Jump}.".
@@ -467,7 +459,8 @@ base item Potion of Jump =
 
 base item Potion of Levitate =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Levitate}.";
   short description "As \SpellRef[Wiz 3]{Levitate}.".
@@ -477,7 +470,8 @@ base item Potion of Levitate =
 
 base item Potion of Lesser Restoration =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Clr 5]{Lesser Restoration}.";
   short description "As \SpellRef[Clr 5]{Lesser Restoration}.".
@@ -487,7 +481,8 @@ base item Potion of Lesser Restoration =
 
 base item Potion of Neutralize Poison =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Drd 5]{Neutralize Poison}.";
   short description "As \SpellRef[Drd 5]{Neutralize Poison}.".
@@ -497,7 +492,8 @@ base item Potion of Neutralize Poison =
 
 base item Potion of Nondetection =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Wiz 3]{Nondetection}.";
   short description "As \SpellRef[Wiz 3]{Nondetection}.".
@@ -507,7 +503,8 @@ base item Potion of Nondetection =
 
 base item Potion of Protection from Energy =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Wiz 5]{Protection from Energy}.";
   short description "As \SpellRef[Wiz 5]{Protection from Energy}.".
@@ -517,7 +514,8 @@ base item Potion of Protection from Energy =
 
 base item Potion of Resist Fire =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Resist Energy} (fire, 10).";
   short description "As \SpellRef[Wiz 3]{Resist Energy} (fire, 10).".
@@ -527,7 +525,8 @@ base item Potion of Resist Fire =
 
 base item Potion of Remove Disease =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Clr 5]{Remove Disease}.";
   short description "As \SpellRef[Clr 5]{Remove Disease}.".
@@ -537,7 +536,8 @@ base item Potion of Remove Disease =
 
 base item Potion of Spider Climb =
 
-  base Potion 3;
+  base Potion;
+  value [potion(2)];
   description
   "As \SpellRef[Wiz 3]{Spider Climb}.";
   short description "As \SpellRef[Wiz 3]{Spider Climb}.".
@@ -546,7 +546,8 @@ base item Potion of Spider Climb =
 
 base item Potion of Truth =
 
-  base Potion 5;
+  base Potion;
+  value [potion(3)];
   description
   "As \SpellRef[Clr 3]{Zone of Truth}.";
   short description "As \SpellRef[Clr 3]{Zone of Truth}.".
@@ -583,6 +584,52 @@ base item with wearable Ring =
   categories        mundane, jewelry, ring.
 
 #.....
+
+#----- Ring of Counterspells
+
+base item Ring of Counterspells =
+
+  base              Ring;
+  value             4000 gp;
+  probability       Rare;
+  references        WTC 17752: 230;
+  description
+  "This ring might seem to be a ring of spell storing upon first
+  examination. However, while it allows a single spell of 1st through 6th level
+  to be cast into it, that spell cannot be cast out of the ring again. Instead,
+  should that spell ever be cast upon the wearer, the spell is immediately
+  countered, as a counterspell action, requiring no action (or even knowledge)
+  on the wearer's part. Once so used, the spell cast within the ring is
+  gone. A new spell (or the same one as before) may be placed in it again.";
+  short description "The spell stored in this ring is automatically countered when cast upon the wearer, with no action required.";
+  synonyms          "Counterspells, Ring of";
+  categories        spell,
+                    counter,
+                    magic,
+                    ring.
+
+#.....
+#----- Ring of Feather Falling
+
+base item Ring of Feather Falling =
+
+  base              Ring;
+  value             2200 gp;
+  probability       Rare;
+  references        WTC 17752: 232;
+  description
+
+  "This ring is crafted with a feather pattern all around its edge. It acts
+  exactly like a feather fallspell, activated im- mediately if the wearer falls
+  more than 5 feet.";
+
+  synonyms          "Feather Falling, Ring of";
+  categories        spell, feather,
+                    fall,
+                    magic,
+                    ring.
+
+#.....
 #----- Ring of Protection +1
 
 base item with armor Ring of Protection +1 =
@@ -600,6 +647,41 @@ base item with armor Ring of Protection +1 =
   categories        protection, ac, magic, armor, deflection.
 
 #.....
+#----- Ring of Protection +2
+
+base item Ring of Protection +2 =
+
+  base              Ring;
+  value             8000 gp;
+  probability       Rare;
+  player name       "Ring";
+  references        WTC 17752: 232;
+  description
+  "This ring offers continual magical protection in the form of a deflection
+  bonus of +2 AC.";
+  short description "AC +2 deflection bonus";
+  synonyms          "Protection +2, Ring of";
+  categories        protection,
+                    ac.
+
+#.....
+#----- Ring of Protection +3
+
+base item Ring of Protection +3 =
+
+  base              Ring;
+  value             18000 gp;
+  probability       Rare;
+  references        WTC 17752: 232;
+  description
+  "This ring offers continual magical protection in the form of a deflection
+  bonus of +3 AC.";
+  short description "AC +3 deflection bonus";
+  synonyms          "Protection +3, Ring of";
+  categories        protection,
+                    ac.
+
+#.....
 #----- Ring of Shocking Grasp
 
 base item Ring of Shocking Grasp =
@@ -609,6 +691,366 @@ base item Ring of Shocking Grasp =
   short description "1d8+6 electrical on touch attack, 3/day";
   description       "Three times per day deliver a shocking attack for 1d8+6 eletrical datam on a successful touch attack.";
   categories        attack, electrical, shock.
+
+#.....
+#----- Ring of Wizardy I
+
+base item Ring of Wizardry I =
+
+  base              Ring;
+  categories        ring, wizardry, wizard, spell;
+  synonyms          "Wizardy I, Ring of";
+  value             20000 gp;
+  weight            1/10 lbs;
+  size              {~} Tiny;
+  probability       very rare;
+  appearances       common    "An elaborately entwined platinum ring.";
+  worlds            generic;
+  references        WTC 17752: 233;
+  short description "Doubles first level arcane spells.";
+  description
+
+  "This special ring comes in four kinds (\Item{ring of wizardry I}, \Item{ring
+  of wizardry II}, \Item{ring of wizardry III}, and \Item{ring of wizardry
+  IV}), all of them useful only to arcane spellcasters. The wearerâs arcane
+  spells per day are doubled for one specific spell level. A ring of wizardry
+  I doubles 1st-level spells. Bonus spells from high ability scores or school
+  specialization are not doubled.".
+
+#.....
+
+#.....
+#----- Rods
+
+#----- Rod
+
+base item Rod =
+
+  value             1 cp;
+  weight            5 lbs;
+  probability       Common;
+  size              Tiny;
+  hardness          10;
+  hp                1;
+  appearances       Very Rare "A polished, shiny rod.",
+                    Common "A simple rod.",
+                    Very Rare "A slightly rusted rod.";
+  substance         iron 1/3 in;
+  break DC          27;
+  player name       "Rod";
+  worlds            Generic;
+  references        WTC 17752: 233;
+  description
+  "Rods are scepterlike devices that have unique magical powers and do not
+  usually have charges. Anyone can use a rod.";
+  categories        mundane.
+
+#.....
+
+#----- Rod of Cancellation
+
+base item Rod of Cancellation =
+
+  base Rod;
+  value 11000 gp;
+  probability very rare;
+  worlds generic;
+  references WTC 17752: 234;
+  short description "Touched magical item Will DC 23 or be draing of magical properties.";
+  description "This dreaded rod is a bane to magic items, for its touch drains an item of all magical properties. The item touched must make a DC 23 Will save to prevent the rod from draining it. If a creature is holding it at the time, then the item can use the holder’s Will save bonus in place of its own if the holder’s is better. In such cases, contact is made by making a melee touch attack roll. Upon draining an item, the rod itself becomes brittle and cannot be used again. Drained items are only restorable by wish or miracle. (If a sphere of annihilation and a rod of cancellation negate each other, nothing can restore either of them.)";
+  synonyms "Cancellation, Rod of";
+  categories cancel, magic.
+
+#.....
+#----- Rod of Thunder and Lightning
+
+base item Rod of Thunder and Lightning =
+
+  base              Rod, Light Mace, Weapon +2;
+  categories        rod, thunder, lighning, magic;
+  synonyms          "Thunder and Lightning, Rod of";
+  value             33000 gp;
+  probability       very rare;
+  appearances       common    "An iron mace set with silver rivets.";
+  worlds            generic;
+  references        WTC 17752: 237;
+  short description "Light Mace +2 with Thunder once per day (+3 light mace stunnig unless For DC 16), Lightning once per day (+2d6 electricity, even if just touch attack hit), Thunderclap once per day (2d6 sonic, For DC 16 or deafened for 2d6 rounds), Lightning Stroke once per day (9d6 lightning bolt to 200 ft, Ref DC 16 for half), Thunder and Lightning once peer week (9d6 lightning bolt (rolls of 1 or 2 count as 3) and 2d6 sonic within 10 ft of burst, Ref DC 16 for half).";
+  description
+
+  "Constructed of iron set with silver rivets, this rod has the properties of a
+  +2 light mace. Its other magi- cal powers are as follows.
+
+  list {\bold{Thunder:} Once per day, the rod can strike as a +3 light mace,
+  and the opponent struck is stunned from the noise of the rodâs impact
+  (Fortitude DC 16 negates). Activating this power counts as a free action, and
+  it works if the wielder strikes an opponent within 1 round.}
+
+  {\bold{Lightning:} Once per day, when the wielder desires, a short spark of
+  electricity can leap forth when the rod strikes an opponent to deal the
+  normal damage for a +2 light mace (1d6+2) and an extra 2d6 points of
+  electricity damage. Even when the rod might not score a normal hit in combat,
+  if the roll was good enough to count as a successful melee touch attack hit,
+  then the 2d6 points of electricity damage still applies. The wielder
+  activates this power as a free action, and it works if he strikes an opponent
+  within 1 round.}
+
+  {\bold{Thunderclap:} Once per day as a standard action, the wielder can cause
+  the rod to give out a deafening noise, just as a shoutspell (Fortitude DC 16
+  partial, 2d6 points of sonic damage, target deafened for 2d6 rounds).}
+
+  {\bold{Lightning Stroke} Once per day as a standard action, the wielder can
+  cause the rod to shoot out a 5-foot-wide lightning bolt (9d6 points of
+  electricity damage, Reflex DC 16 half) to a range of 200 feet.}
+
+  \bold{Thunder and Lightning:} Once per week as a standard action, the wielder
+  of the rod can combine the thunderclap described above with a lightning bolt,
+  as in the lightning stroke. The thunderclap affects all within 10 feet of the
+  bolt. The lightning strokedeals 9d6 points of electricity damage (count rolls
+  of 1 or 2 as rolls of 3, for a range of 27 to 54 points), and the
+  thunderclap deals 2d6 points of sonic damage. A single DC 16 Reflex save
+  applies for both effects.".
+
+#.....
+
+#.....
+#----- Wands
+
+#----- Wand
+
+base item with multiuse Wand =
+
+  count             50;
+  unit              charge;
+  weight            1/10 lb;
+  probability       Very Rare;
+  size              Diminutive;
+  hardness          5;
+  hp                5;
+  appearances       Very Rare "A simple ceramic wand.",
+                    Rare "A simple metal wand.",
+                    Rare "A simple glass wand.",
+                    Common "A simple wooden wand.",
+                    Common "A simple bone wand.";
+  substance         wood 1/4 in;
+  break DC          16;
+  player name       "Wand";
+  worlds            Generic;
+  references        WTC 17752: 245;
+  description
+  "A typical wand is 6 inches to 12 inches long and about 1/4 inch thick, and
+  often weighs no more than 1 ounce. Most wands are wood, but some are bone. A
+  rare few are metal, glass, or even ceramic, but these are quite
+  exotic. Occasionally, a wand has a gem or some device at its tip, and most
+  are decorated with carvings or runes. A typical wand has AC 7, 5 hit points,
+  hardness 5, and a break DC 16.";
+  categories        mundane.
+
+#.....
+
+#----- Wand of Cure Light Wounds
+
+base item with multiuse Wand of Cure Light Wounds =
+
+  base Wand;
+  value [wand(1)];
+  description
+  "A wand with the spell \SpellRef[Clr 1]{Cure Light Wounds}";
+  short description "A wand with \SpellRef[Clr 1]{Cure Light Wounds}";
+  synonyms          "Cure Light Wounds, Wand".
+
+#.....
+#----- Wand of Darkvision
+
+base item with multiuse Wand of Darkvision =
+
+  base Wand;
+  value [wand(2)];
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Darkvision}";
+  short description "A wand with \SpellRef[Wiz 3]{Darkvision}";
+  synonyms          "Darkvision, Wand".
+
+#.....
+#----- Wand of Dispel Magic
+
+base item with multiuse Wand of Dispel Magic =
+
+  base Wand;
+  value [wand(3)];
+  description
+  "A wand with the spell \SpellRef[Wiz 5]{Dispel Magic}";
+  short description "A wand with \SpellRef[Wiz 5]{Dispel Magic}";
+  synonyms          "Dispel Magic, Wand".
+
+#.....
+#----- Wand of Fireball 5
+
+base item with multiuse Wand of Fireball =
+
+  base Wand;
+  value [wand(3)];
+  description
+  "A wand with the spell \SpellRef[Wiz 5]{Fireball}";
+  short description "A wand with \SpellRef[Wiz 5]{Fireball}";
+  synonyms          "Fireball, Wand".
+
+#.....
+#----- Wand of Fly
+
+base item with multiuse Wand of Fly =
+
+  base Wand;
+  value [wand(3)];
+  description
+  "A wand with the spell \SpellRef[Wiz 5]{Fly}";
+  short description "A wand with \SpellRef[Wiz 5]{Fly}";
+  synonyms          "Fly, Wand".
+
+#.....
+#----- Wand of Hold Person
+
+base item with multiuse Wand of Hold Person =
+
+  base Wand;
+  value [wand(2)];
+  description
+  "A wand with the spell \SpellRef[Clr 3]{Hold Person}";
+  short description "A wand with \SpellRef[Clr 3]{Hold Person}";
+  synonyms          "Hold Person, Wand".
+
+#.....
+#----- Wand of Invisibility
+
+base item with multiuse Wand of Invisibility =
+
+  base Wand;
+  value [wand(2)];
+  description
+  "A wand with the spell \SpellRef[Clr 3]{Invisibility}";
+  short description "A wand with \SpellRef[Clr 3]{Invisibility}";
+  synonyms          "Invisibility, Wand".
+
+#.....
+#----- Wand of Lesser Restoration
+
+base item with multiuse Wand of Lesser Restoration =
+
+  base Wand;
+  value [wand(2)];
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Lesser Restoration}";
+  short description "A wand with \SpellRef[Wiz 3]{Lesser Restoration}";
+  synonyms          "Lesser Restoration, Wand".
+
+#.....
+#----- Wand of Lightning Bolt
+
+base item with multiuse Wand of Lightning Bolt =
+
+  base Wand;
+  value [wand(3)];
+  description
+  "A wand with the spell \SpellRef[Wiz 5]{Lightning Bolt}";
+  short description "A wand with \SpellRef[Wiz 5]{Lightning Bolt}";
+  synonyms          "Lightning Light, Wand".
+
+#.....
+#----- Wand of Lightning Bolt (10th)
+
+base item with multiuse Wand of Lightning Bolt 10 =
+
+  base Wand;
+  value [wand(3, 10)];
+  description
+  "A wand with the spell \SpellRef[Wiz 10]{Lightning Bolt}";
+  short description "A wand with \SpellRef[Wiz 10]{Lightning Bolt}";
+  synonyms          "Lightning Light, Wand".
+
+#.....
+#----- Wand of Magic Missile
+
+base item with multiuse Wand of Magic Missile =
+
+  base Wand;
+  value [wand(1)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Magic Missile}";
+  short description "A wand with \SpellRef[Wiz 1]{Magic Missile}";
+  synonyms          "Magic Missile, Wand".
+
+#.....
+#----- Wand of Magic Missile 3
+
+base item with multiuse Wand of Magic Missile 3 =
+
+  base Wand;
+  value [wand(1, 3)];
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Magic Missile}";
+  short description "A wand with \SpellRef[Wiz 3]{Magic Missile}";
+  synonyms          "Magic Missile, Wand".
+
+#.....
+#----- Wand of Magic Missile 9
+
+base item with multiuse Wand of Magic Missile 9 =
+
+  base Wand;
+  value [wand(1, 9)];
+  description
+  "A wand with the spell \SpellRef[Wiz 9]{Magic Missile}";
+  short description "A wand with \SpellRef[Wiz 9]{Magic Missile}";
+  synonyms          "Magic Missile (9th), Wand".
+
+#.....
+#----- Wand of Neutralize Poison
+
+base item with multiuse Wand of Neutralize Poison =
+
+  base Wand;
+  value [wand(4)];
+  description
+  "A wand with the spell \SpellRef[Clr 7]{Neutralize Poison}";
+  short description "A wand with \SpellRef[Clr 7]{Neutralize Poison}";
+  synonyms          "Neutralize Poison, Wand".
+
+#.....
+#----- Wand of Searing Light
+
+base item with multiuse Wand of Searing Light =
+
+  base Wand;
+  value [wand(3)];
+  description
+  "A wand with the spell \SpellRef[Clr 5]{Searing Light}";
+  short description "A wand with \SpellRef[Clr 5]{Searing Light}";
+  synonyms          "Searing Light, Wand".
+
+#.....
+#----- Wand of Summon Monster III
+
+base item with multiuse Wand of Summon Monster III =
+
+  base Wand;
+  value [wand(3)];
+  description
+  "A wand with the spell \SpellRef[Clr 5]{Summon Monster III}";
+  short description "A wand with \SpellRef[Clr 5]{Summon Monster III}";
+  synonyms          "Summon Monster III, Wand".
+
+#.....
+#----- Wand of Web
+
+base item with multiuse Wand of Web =
+
+  base Wand;
+  value [wand(2)];
+  description
+  "A wand with the spell \SpellRef[Wiz 3]{Web}";
+  short description "A wand with \SpellRef[Wiz 3]{Web}";
+  synonyms          "Web, Wand".
+
+#.....
 
 #.....
 #----- Wondrous Items
@@ -703,6 +1145,157 @@ base item with container Bag of Holding II =
                     extradimensional.
 
 #.....
+#----- Bracers of Armor +1
+
+base item with armor Bracers of Armor +1 =
+
+  AC bonus          +1 armor;
+  value             1000 gp;
+  weight            1 lb;
+  probability       Very Rare;
+  size              Small;
+  hardness          10;
+  hp                24;
+  appearances       Common "Metal wrist and arm guards.";
+  substance         iron 1 in;
+  player name       "Bracers";
+  worlds            Generic;
+  references        WTC 17752: 250;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +1,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +1 armor.";
+  synonyms          "Armor, Bracers of +1",
+                    "+1 Bracers of Armor";
+  categories        bracers,
+                    armor,
+                    magic,
+                    wondrous,
+                    clothing.
+
+
+#.....
+#----- Bracers of Armor +2
+
+base item with armor Bracers of Armor +2 =
+
+  base              Bracers of Armor +1;
+  AC bonus          +2 armor;
+  value             4000 gp;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +2,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +2 armor.";
+  synonyms          "Armor, Bracers of +2",
+                    "+2 Bracers of Armor".
+#.....
+#----- Bracers of Armor +3
+
+base item with armor Bracers of Armor +3 =
+
+  AC bonus          +3 armor;
+  base              Bracers of Armor +1;
+  value             9000 gp;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +3,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +3 armor.";
+  synonyms          "Armor, Bracers of +3",
+                    "+3 Bracers of Armor".
+
+#.....
+#----- Bracers of Armor +4
+
+base item with armor Bracers of Armor +4 =
+
+  AC bonus          +4 armor;
+  base              Bracers of Armor +1;
+  value             16000 gp;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +4,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +4 armor.";
+  synonyms          "Armor, Bracers of +4",
+                    "+4 Bracers of Armor".
+
+
+#.....
+#----- Bracers of Armor +5
+
+base item with armor Bracers of Armor +5 =
+
+  AC bonus          +5 armor;
+  base              Bracers of Armor +1;
+  value             25000 gp;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +5,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +5 armor.";
+  synonyms          "Armor, Bracers of +5",
+                    "+5 Bracers of Armor".
+
+#.....
+#----- Bracers of Armor +6
+
+base item with armor Bracers of Armor +6 =
+
+  AC bonus          +6 armor;
+  base              Bracers of Armor +1;
+  value             36000 gp;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +6,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +6 armor.";
+  synonyms          "Armor, Bracers of +6",
+                    "+6 Bracers of Armor".
+
+#.....
+#----- Bracers of Armor +7
+
+base item with armor Bracers of Armor +7 =
+
+  AC bonus          +7 armor;
+  base              Bracers of Armor +1;
+  value             49000 gp;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +7,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +7 armor.";
+  synonyms          "Armor, Bracers of +7",
+                    "+7 Bracers of Armor".
+
+#.....
+#----- Bracers of Armor +8
+
+base item with armor Bracers of Armor +8 =
+
+  AC bonus          +8 armor;
+  base              Bracers of Armor +1;
+  value             64000 gp;
+  description
+  "These items appear to be wrist or arm guards. They surround the wearer with
+  an invisible but tangible field of force, granting him an armor bonus of +8,
+  just as though he were wearing armor. Both bracers must be worn for the magic
+  to be effective.";
+  short description "Bracers providing +8 armor.";
+  synonyms          "Armor, Bracers of +8",
+                    "+8 Bracers of Armor".
+
+#.....
 #----- Brooch of Shielding
 
 base item with multiuse, wearable Brooch of Shielding =
@@ -741,7 +1334,6 @@ base item Cloak of Resistance +1 =
   base              Cloak;
   value             1000 gp;
   probability       Rare;
-  substance         cloth 1/10 in;
   player name       "Cloak";
   worlds            Generic;
   references        WTC 17752: 253;
@@ -750,6 +1342,22 @@ base item Cloak of Resistance +1 =
    bonus on all saving throws (Fortitude, Reflex, and Will).";
   short description "+1 resistance to Fort, Ref, Will";
   synonyms          "Resistance +1, Cloak of".
+
+#.....
+#----- Cloak of Resistance +2
+
+base item Cloak of Resistance +2 =
+
+  base              Cloak;
+  value             4000 gp;
+  probability       Rare;
+  worlds            Generic;
+  references        WTC 17752: 253;
+  description
+  "These garments offer magic protection in the form of a +2 to resistance
+   bonus on all saving throws (Fortitude, Reflex, and Will).";
+  short description "+2 resistance to Fort, Ref, Will";
+  synonyms          "Resistance +2, Cloak of".
 
 #.....
 #----- Deep Red Ioun Stone
@@ -790,7 +1398,7 @@ base item with container, incomplete Heward's Handy Haversack =
   capacity          1 cu ft;
   state             solid;
   value             2000 gp;
-  weight            5 lbs;
+  weight            [= 5 lbs];
   probability       Very Rare;
   size              Small;
   hardness          2;
@@ -825,6 +1433,36 @@ base item with container, incomplete Heward's Handy Haversack =
                     bag,
                     container,
                     wondrous.
+
+#.....
+#----- Keoghtom's Ointment
+
+base item with multiuse Keoghtom's Ointment =
+
+  count             5;
+  unit              application;
+  value             4000 gp;
+  weight            1/2 lb;
+  probability       Rare;
+  size              Diminutive;
+  hardness          0;
+  hp                1;
+  appearances       Common "A small jar containing a salve.";
+  substance         glass 1 in;
+  player name       "Salve";
+  worlds            Generic;
+  references        WTC 17752: 261;
+  description
+  "A jar of this unguent is 3 inches in diameter and 1 inch deep and contains
+  five applications. Placed upon a poisoned wound or swallowed, the ointment
+  detoxifies any poison (as \Spell{neutralize poison}). Applied to a diseased
+  area, it removes disease (as \Spell{remove disease}). Rubbed on a wound, the
+  ointment cures 1d8+5 points of damage (as \Spell{cure light wounds}).";
+  short description "A detoxifying, disease freeing or healing salve.";
+  synonyms          "Ointment, Keoghtom's";
+  categories        ointment,
+                    salve,
+                    healing.
 
 #.....
 #----- Necklace of Fireballs
@@ -1913,6 +2551,7 @@ base item Assassin's Dagger [Dagger, Weapon +2, Magic Attack +2] =
 #.....
 
 #----- Poisons
+
 #----- Poison
 
 base item Poison Vial [Vial (glass)]=
@@ -1921,6 +2560,7 @@ base item Poison Vial [Vial (glass)]=
   probability       very rare.
 
 #.....
+
 #----- Shadow Essence Poison
 
 base item Shadow Essence Poison [Poison Vial] =
@@ -1952,10 +2592,10 @@ base item Deathblade Poison [Poison Vial] =
   "Injury, Fortitude save DC 20; initial damage 1d6 points of Constitution damage, secondary damage 2d6 points of Constitution damage.".
 
 #.....
+
 #.....
+
 #----- Potions
-
-
 
 # special potions
 
@@ -1970,116 +2610,6 @@ base item Potion of Sneaking [Potion] =
   description
   "This potion grants the drinker the ability to walk softly and dampens sound around her slightly, granting a +10 circumstance bonus to her \Skill{Move Silently} checks for 1 hour.";
   short description "Move Silently +10 for 1 hour.".
-
-#.....
-
-#.....
-#----- Rings
-
-
-#----- Ring of Counterspells
-
-base item Ring of Counterspells [Ring] =
-
-  value             4000 gp;
-  probability       Rare;
-  player name       "Ring";
-  references        WTC 17752: 230;
-  description
-  "This ring might seem to be a ring of spell storing upon first
-  examination. However, while it allows a single spell of 1st through 6th level
-  to be cast into it, that spell cannot be cast out of the ring again. Instead,
-  should that spell ever be cast upon the wearer, the spell is immediately
-  countered, as a counterspell action, requiring no action (or even knowledge)
-  on the wearer's part. Once so used, the spell cast within the ring is
-  gone. A new spell (or the same one as before) may be placed in it again.";
-  short description "The spell stored in this ring is automatically countered when cast upon the wearer, with no action required.";
-  synonyms          "Counterspells, Ring of";
-  categories        spell,
-                    counter,
-                    magic,
-                    ring.
-
-#.....
-#----- Ring of Feather Falling
-
-base item Ring of Feather Falling [Ring] =
-
-  value             2200 gp;
-  probability       Rare;
-  player name       "Ring";
-  references        WTC 17752: 232;
-  description
-
-  "This ring is crafted with a feather pattern all around its edge. It acts
-  exactly like a feather fallspell, activated im- mediately if the wearer falls
-  more than 5 feet.";
-
-  synonyms          "Feather Falling, Ring of";
-  categories        spell, feather,
-                    fall,
-                    magic,
-                    ring.
-
-#.....
-#----- Ring of Protection +2
-
-base item Ring of Protection +2 [Ring] =
-
-  value             8000 gp;
-  probability       Rare;
-  player name       "Ring";
-  references        WTC 17752: 232;
-  description
-  "This ring offers continual magical protection in the form of a deflection
-  bonus of +2 AC.";
-  short description "AC +2 deflection bonus";
-  synonyms          "Protection +2, Ring of";
-  categories        protection,
-                    ac.
-
-#.....
-#----- Ring of Protection +3
-
-base item Ring of Protection +3 [Ring] =
-
-  value             18000 gp;
-  probability       Rare;
-  player name       "Ring";
-  references        WTC 17752: 232;
-  description
-  "This ring offers continual magical protection in the form of a deflection
-  bonus of +3 AC.";
-  short description "AC +3 deflection bonus";
-  synonyms          "Protection +3, Ring of";
-  categories        protection,
-                    ac.
-
-#.....
-#----- Ring of Wizardy I
-
-base item Ring of Wizardry I [Ring] =
-
-  player name       "Ring";
-  categories        ring, wizardry, wizard, spell;
-  synonyms          "Wizardy I, Ring of";
-  value             20000 gp;
-  weight            1/10 lbs;
-  size              {~} Tiny;
-  probability       very rare;
-  substance         steel 1/2 inch;
-  appearances       common    "An elaborately entwined platinum ring.";
-  worlds            generic;
-  references        WTC 17752: 233;
-  short description "Doubles first level arcane spells.";
-  description
-
-  "This special ring comes in four kinds (\Item{ring of wizardry I}, \Item{ring
-  of wizardry II}, \Item{ring of wizardry III}, and \Item{ring of wizardry
-  IV}), all of them useful only to arcane spellcasters. The wearerâs arcane
-  spells per day are doubled for one specific spell level. A ring of wizardry
-  I doubles 1st-level spells. Bonus spells from high ability scores or school
-  specialization are not doubled.".
 
 #.....
 
@@ -2793,84 +3323,6 @@ base item Scroll of Wall of Stone [Scroll] =
 #.....
 
 #.....
-#----- Rods
-
-#----- Rod
-
-base item Rod =
-
-  value             1 cp;
-  weight            5 lbs;
-  probability       Common;
-  size              Tiny;
-  hardness          10;
-  hp                1;
-  appearances       Very Rare "A polished, shiny rod.",
-                    Common "A simple rod.",
-                    Very Rare "A slightly rusted rod.";
-  substance         iron 1/3 in;
-  break DC          27;
-  player name       "Rod";
-  worlds            Generic;
-  references        WTC 17752: 233;
-  description
-  "Rods are scepterlike devices that have unique magical powers and do not
-  usually have charges. Anyone can use a rod.";
-  categories        mundane.
-
-#.....
-
-#----- Rod of Thunder and Lightning
-
-base item Rod of Thunder and Lightning [Rod, Light Mace, Magic Attack +2] =
-
-  player name       "";
-  categories        rod, thunder, lighning, magic;
-  synonyms          "Thunder and Lightning, Rod of";
-  value             33000 gp;
-  probability       very rare;
-  appearances       common    "An iron mace set with silver rivets.";
-  worlds            generic;
-  references        WTC 17752: 237;
-  short description "Light Mace +2 with Thunder once per day (+3 light mace stunnig unless For DC 16), Lightning once per day (+2d6 electricity, even if just touch attack hit), Thunderclap once per day (2d6 sonic, For DC 16 or deafened for 2d6 rounds), Lightning Stroke once per day (9d6 lightning bolt to 200 ft, Ref DC 16 for half), Thunder and Lightning once peer week (9d6 lightning bolt (rolls of 1 or 2 count as 3) and 2d6 sonic within 10 ft of burst, Ref DC 16 for half).";
-  description
-
-  "Constructed of iron set with silver rivets, this rod has the properties of a
-  +2 light mace. Its other magi- cal powers are as follows.
-
-  list {\bold{Thunder:} Once per day, the rod can strike as a +3 light mace,
-  and the opponent struck is stunned from the noise of the rodâs impact
-  (Fortitude DC 16 negates). Activating this power counts as a free action, and
-  it works if the wielder strikes an opponent within 1 round.}
-
-  {\bold{Lightning:} Once per day, when the wielder desires, a short spark of
-  electricity can leap forth when the rod strikes an opponent to deal the
-  normal damage for a +2 light mace (1d6+2) and an extra 2d6 points of
-  electricity damage. Even when the rod might not score a normal hit in combat,
-  if the roll was good enough to count as a successful melee touch attack hit,
-  then the 2d6 points of electricity damage still applies. The wielder
-  activates this power as a free action, and it works if he strikes an opponent
-  within 1 round.}
-
-  {\bold{Thunderclap:} Once per day as a standard action, the wielder can cause
-  the rod to give out a deafening noise, just as a shoutspell (Fortitude DC 16
-  partial, 2d6 points of sonic damage, target deafened for 2d6 rounds).}
-
-  {\bold{Lightning Stroke} Once per day as a standard action, the wielder can
-  cause the rod to shoot out a 5-foot-wide lightning bolt (9d6 points of
-  electricity damage, Reflex DC 16 half) to a range of 200 feet.}
-
-  \bold{Thunder and Lightning:} Once per week as a standard action, the wielder
-  of the rod can combine the thunderclap described above with a lightning bolt,
-  as in the lightning stroke. The thunderclap affects all within 10 feet of the
-  bolt. The lightning strokedeals 9d6 points of electricity damage (count rolls
-  of 1 or 2 as rolls of 3, for a range of 27 to 54 points), and the
-  thunderclap deals 2d6 points of sonic damage. A single DC 16 Reflex save
-  applies for both effects.".
-
-#.....
-
-#............................................................................
 #----- Staffs
 
 #----- Staff
@@ -2926,253 +3378,6 @@ base item Staff of Frost [Staff] =
 #.....
 
 #.....
-
-#----- Wands
-
-#----- Wand
-
-base item with multiuse Wand =
-
-  count             50;
-  unit              charge;
-  weight            1/10 lb;
-  probability       Very Rare;
-  size              Diminutive;
-  hardness          5;
-  hp                5;
-  appearances       Very Rare "A simple ceramic wand.",
-                    Rare "A simple metal wand.",
-                    Rare "A simple glass wand.",
-                    Common "A simple wooden wand.",
-                    Common "A simple bone wand.";
-  substance         wood 1/4 in;
-  break DC          16;
-  player name       "Wand";
-  worlds            Generic;
-  references        WTC 17752: 245;
-  description
-  "A typical wand is 6 inches to 12 inches long and about 1/4 inch thick, and
-  often weighs no more than 1 ounce. Most wands are wood, but some are bone. A
-  rare few are metal, glass, or even ceramic, but these are quite
-  exotic. Occasionally, a wand has a gem or some device at its tip, and most
-  are decorated with carvings or runes. A typical wand has AC 7, 5 hit points,
-  hardness 5, and a break DC 16.";
-  categories        mundane.
-
-#.....
-#----- Wand 1-1
-
-base item Wand 1-1 =
-
-  value             25 gp.
-
-#.....
-#----- Wand 1-3
-
-base item Wand 1-3 =
-
-  value             45 gp.
-
-#.....
-#----- Wand 1-9
-
-base item Wand 1-9 =
-
-  value             135 gp.
-
-#.....
-#----- Wand 2-3
-
-base item Wand 2-3 =
-
-  value             90 gp.
-
-#.....
-#----- Wand 3-5
-
-base item Wand 3-5 =
-
-  value             225 gp.
-
-#.....
-#----- Wand 3-10
-
-base item Wand 3-10 =
-
-  value             450 gp.
-
-#.....
-#----- Wand 4-7
-
-base item Wand 4-7 =
-
-  value             420 gp.
-
-#.....
-
-#----- Wand of Cure Light Wounds
-
-base item with multiuse Wand of Cure Light Wounds [Wand 1-1] =
-
-  description
-  "A wand with the spell \SpellRef[Clr 1]{Cure Light Wounds}";
-  short description "A wand with \SpellRef[Clr 1]{Cure Light Wounds}";
-  synonyms          "Cure Light Wounds, Wand".
-
-#.....
-#----- Wand of Darkvision
-
-base item with multiuse Wand of Darkvision [Wand 2-3] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 3]{Darkvision}";
-  short description "A wand with \SpellRef[Wiz 3]{Darkvision}";
-  synonyms          "Darkvision, Wand".
-
-#.....
-#----- Wand of Dispel Magic
-
-base item with multiuse Wand of Dispel Magic [Wand 3-5] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 5]{Dispel Magic}";
-  short description "A wand with \SpellRef[Wiz 5]{Dispel Magic}";
-  synonyms          "Dispel Magic, Wand".
-
-#.....
-#----- Wand of Fly
-
-base item with multiuse Wand of Fly [Wand 3-5] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 5]{Fly}";
-  short description "A wand with \SpellRef[Wiz 5]{Fly}";
-  synonyms          "Fly, Wand".
-
-#.....
-#----- Wand of Hold Person
-
-base item with multiuse Wand of Hold Person [Wand 2-3] =
-
-  description
-  "A wand with the spell \SpellRef[Clr 3]{Hold Person}";
-  short description "A wand with \SpellRef[Clr 3]{Hold Person}";
-  synonyms          "Hold Person, Wand".
-
-#.....
-#----- Wand of Invisibility
-
-base item with multiuse Wand of Invisibility [Wand 2-3] =
-
-  description
-  "A wand with the spell \SpellRef[Clr 3]{Invisibility}";
-  short description "A wand with \SpellRef[Clr 3]{Invisibility}";
-  synonyms          "Invisibility, Wand".
-
-#.....
-#----- Wand of Lesser Restoration
-
-base item with multiuse Wand of Lesser Restoration [Wand 2-3] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 3]{Lesser Restoration}";
-  short description "A wand with \SpellRef[Wiz 3]{Lesser Restoration}";
-  synonyms          "Lesser Restoration, Wand".
-
-#.....
-#----- Wand of Lightning Bolt
-
-base item with multiuse Wand of Lightning Bolt [Wand 3-5] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 5]{Lightning Bolt}";
-  short description "A wand with \SpellRef[Wiz 5]{Lightning Bolt}";
-  synonyms          "Lightning Light, Wand".
-
-#.....
-#----- Wand of Lightning Bolt (10th)
-
-base item with multiuse Wand of Lightning Bolt (10th) [Wand 3-10] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 10]{Lightning Bolt}";
-  short description "A wand with \SpellRef[Wiz 10]{Lightning Bolt}";
-  synonyms          "Lightning Light, Wand".
-
-#.....
-#----- Wand of Magic Missile
-
-base item with multiuse Wand of Magic Missile [Wand 1-1] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 1]{Magic Missile}";
-  short description "A wand with \SpellRef[Wiz 1]{Magic Missile}";
-  synonyms          "Magic Missile, Wand".
-
-#.....
-#----- Wand of Magic Missile
-
-base item with multiuse Wand of Magic Missile (3rd) [Wand 1-3] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 3]{Magic Missile}";
-  short description "A wand with \SpellRef[Wiz 3]{Magic Missile}";
-  synonyms          "Magic Missile, Wand".
-
-#.....
-#----- Wand of Magic Missile
-
-base item with multiuse Wand of Magic Missile (9th) [Wand 1-9] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 9]{Magic Missile}";
-  short description "A wand with \SpellRef[Wiz 9]{Magic Missile}";
-  synonyms          "Magic Missile (9th), Wand".
-
-#.....
-#----- Wand of Neutralize Poison
-
-base item with multiuse Wand of Neutralize Poison [Wand 4-7] =
-
-  description
-  "A wand with the spell \SpellRef[Clr 7]{Neutralize Poison}";
-  short description "A wand with \SpellRef[Clr 7]{Neutralize Poison}";
-  synonyms          "Neutralize Poison, Wand".
-
-#.....
-#----- Wand of Searing Light
-
-base item with multiuse Wand of Searing Light [Wand 3-5] =
-
-  description
-  "A wand with the spell \SpellRef[Clr 5]{Searing Light}";
-  short description "A wand with \SpellRef[Clr 5]{Searing Light}";
-  synonyms          "Searing Light, Wand".
-
-#.....
-#----- Wand of Summon Monster III
-
-base item with multiuse Wand of Summon Monster III [Wand 3-5] =
-
-  description
-  "A wand with the spell \SpellRef[Clr 5]{Summon Monster III}";
-  short description "A wand with \SpellRef[Clr 5]{Summon Monster III}";
-  synonyms          "Summon Monster III, Wand".
-
-#.....
-#----- Wand of Web
-
-base item with multiuse Wand of Web [Wand 2-3] =
-
-  description
-  "A wand with the spell \SpellRef[Wiz 3]{Web}";
-  short description "A wand with \SpellRef[Wiz 3]{Web}";
-  synonyms          "Web, Wand".
-
-#.....
-
-#.....
-
 #----- Wondrous Items
 
 #----- Amulet of Natural Armor +1
@@ -3336,130 +3541,6 @@ base item Boots of Elvenkind =
   surroundings, granting a +5 competence bonus on Move Silently checks.".
 
 #.....
-#----- Bracers of Armor +2
-
-base item Bracers of Armor +2 =
-
-  value             4000 gp;
-  weight            1 lb;
-  probability       Very Rare;
-  size              Small;
-  hardness          10;
-  hp                24;
-  appearances       Common "Metal wrist and arm guards.";
-  substance         iron 1 in;
-  player name       "Bracers";
-  worlds            Generic;
-  references        WTC 17752: 250;
-  description
-  "These items appear to be wrist or arm guards. They surround the wearer with
-  an invisible but tangible field of force, granting him an armor bonus of +8,
-  just as though he were wearing armor. Both bracers must be worn for the magic
-  to be effective.";
-  short description "Bracers providing +2 natural armor.";
-  synonyms          "Armor, Bracers of +2",
-                    "+2 Bracers of Armor";
-  categories        bracers,
-                    armor,
-                    magic,
-                    wondrous,
-                    clothing.
-
-
-#.....
-#----- Bracers of Armor +3
-
-base item Bracers of Armor +3 =
-
-  value             9000 gp;
-  weight            1 lb;
-  probability       Very Rare;
-  size              Small;
-  hardness          10;
-  hp                24;
-  appearances       Common "Metal wrist and arm guards.";
-  substance         iron 1 in;
-  player name       "Bracers";
-  worlds            Generic;
-  references        WTC 17752: 250;
-  description
-  "These items appear to be wrist or arm guards. They surround the wearer with
-  an invisible but tangible field of force, granting him an armor bonus of +8,
-  just as though he were wearing armor. Both bracers must be worn for the magic
-  to be effective.";
-  short description "Bracers providing +3 natural armor.";
-  synonyms          "Armor, Bracers of +3",
-                    "+3 Bracers of Armor";
-  categories        bracers,
-                    armor,
-                    magic,
-                    wondrous,
-                    clothing.
-
-
-#.....
-#----- Bracers of Armor +4
-
-base item Bracers of Armor +4 =
-
-  value             16000 gp;
-  weight            1 lb;
-  probability       Very Rare;
-  size              Small;
-  hardness          10;
-  hp                24;
-  appearances       Common "Metal wrist and arm guards.";
-  substance         iron 1 in;
-  player name       "Bracers";
-  worlds            Generic;
-  references        WTC 17752: 250;
-  description
-  "These items appear to be wrist or arm guards. They surround the wearer with
-  an invisible but tangible field of force, granting him an armor bonus of +8,
-  just as though he were wearing armor. Both bracers must be worn for the magic
-  to be effective.";
-  short description "Bracers providing +4 natural armor.";
-  synonyms          "Armor, Bracers of +4",
-                    "+4 Bracers of Armor";
-  categories        bracers,
-                    armor,
-                    magic,
-                    wondrous,
-                    clothing.
-
-
-#.....
-#----- Bracers of Armor +5
-
-base item Bracers of Armor +5 =
-
-  value             25000 gp;
-  weight            1 lb;
-  probability       Very Rare;
-  size              Small;
-  hardness          10;
-  hp                24;
-  appearances       Common "Metal wrist and arm guards.";
-  substance         iron 1 in;
-  player name       "Bracers";
-  worlds            Generic;
-  references        WTC 17752: 250;
-  description
-  "These items appear to be wrist or arm guards. They surround the wearer with
-  an invisible but tangible field of force, granting him an armor bonus of +8,
-  just as though he were wearing armor. Both bracers must be worn for the magic
-  to be effective.";
-  short description "Bracers providing +5 natural armor.";
-  synonyms          "Armor, Bracers of +5",
-                    "+5 Bracers of Armor";
-  categories        bracers,
-                    armor,
-                    magic,
-                    wondrous,
-                    clothing.
-
-
-#.....
 #----- Carpet of Flying
 
 base item Carpet of Flying 5x5 =
@@ -3581,27 +3662,6 @@ base item Cloak of Elvenkind =
   synonyms          "Elvenkind, Cloak of";
   categories        magic,
                     elf.
-
-#.....
-#----- Cloak of Resistance +2
-
-base item Cloak of Resistance +2 =
-
-  value             4000 gp;
-  weight            1 lb;
-  probability       Rare;
-  size              Tiny;
-  hardness          0;
-  hp                1;
-  substance         cloth 1/10 in;
-  player name       "Cloak";
-  worlds            Generic;
-  references        WTC 17752: 253;
-  description
-  "These garments offer magic protection in the form of a +2 to resistance
-   bonus on all saving throws (Fortitude, Reflex, and Will).";
-  short description "+2 resistance to Fort, Ref, Will";
-  synonyms          "Resistance +2, Cloak of".
 
 #.....
 #----- Dust of Disappearance
@@ -3882,37 +3942,6 @@ base item Horn of Goodness or Evil =
   horn has the effect of a magic circle against evil. If he is evil, then
   blowing the horn has the effect of a magic circle against good. In either
   case, this ward lasts for 1 hour. The horn can be blown once per day.".
-
-#.....
-#----- Keoghtom's Ointment
-
-base item with multiuse Keoghtom's Ointment =
-
-  count             5;
-  unit              application;
-  value             4000 gp;
-  weight            1/2 lb;
-  probability       Rare;
-  size              Diminutive;
-  hardness          0;
-  hp                1;
-  appearances       Common "A small jar containing a salve.";
-  substance         glass 1 in;
-  player name       "Salve";
-  worlds            Generic;
-  references        WTC 17752: 261;
-  description
-  "A jar of this unguent is 3 inches in diameter and 1 inch deep and contains
-  five applications. Placed upon a poisoned wound or swallowed, the ointment
-  detoxifies any poison (as \Spell{neutralize poison}). Applied to a diseased
-  area, it removes disease (as \Spell{remove disease}). Rubbed on a wound, the
-  ointment cures 1d8+5 points of damage (as \Spell{cure light wounds}).";
-  short description "A detoxifying, disease freeing or healing salve.";
-  synonyms          "Ointment, Keoghtom's";
-  categories        ointment,
-                    salve,
-                    healing.
-
 
 #.....
 #----- Gauntlets of Ogre Power

@@ -39,6 +39,7 @@ import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
 
@@ -307,6 +308,30 @@ public class Contents extends Extension<Item>
 
         if(total == null)
           total = value;
+        else
+          total = total.add(value);
+      }
+
+      if(total != null)
+        ioCombination.add((V)total, this);
+    }
+
+    if("weight".equals(inName))
+    {
+      // add the value of all contained objects
+      Weight total = null;
+      for(Name name : m_contents)
+      {
+        Item item = m_entry.getCampaign().getItem(name.get());
+        if(item == null)
+          continue;
+
+        Weight value = item.getWeight();
+        if(value == null)
+          continue;
+
+        if(total == null)
+            total = value;
         else
           total = total.add(value);
       }

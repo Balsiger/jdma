@@ -1185,7 +1185,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   @OverridingMethodsMustInvokeSuper
   public void complete()
   {
-    if(!m_name.isDefined())
+    if(!m_name.isDefined() || m_name.get().isEmpty())
     {
       changed();
 

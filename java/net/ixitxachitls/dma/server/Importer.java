@@ -252,7 +252,6 @@ public final class Importer
         if(entry instanceof Entry)
           ((Entry)entry).complete();
 
-        System.out.println(entry);
         entities.add(dmaStore.convert(entry));
         Log.important("importing " + type + " " + entry.getName());
       }
@@ -290,7 +289,6 @@ public final class Importer
       for(AbstractEntry entry : errors)
         names.add(entry.getName());
 
-      System.out.println("errors");
       Log.error("Could not properly read all entries: " + names);
     }
 

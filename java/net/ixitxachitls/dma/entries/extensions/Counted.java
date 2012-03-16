@@ -29,6 +29,7 @@ import javax.annotation.Nonnull;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Number;
 
 //..........................................................................
@@ -224,17 +225,19 @@ public class Counted extends Extension<Item>
    * Complete the entry and make sure that all values are filled.
    *
    */
-  // public void complete()
-  // {
-  //   // take over the base value for the count
-  //   if(!m_count.isDefined() && getBases(BaseCounted.class).size() > 0)
-  //   {
-  //     BaseCounted base = getBases(BaseCounted.class).get(0);
-
-  //     if(base != null)
-  //       m_count.set(base.m_count.get());
-  //   }
-  // }
+  @Override
+  public void complete()
+  {
+    if(!m_count.isDefined())
+    {
+      Number total = new Combination<Number>(this, "count").total();
+      if(total != null)
+      {
+        m_count = m_count.as(total.get());
+        changed();
+      }
+    }
+  }
 
   //........................................................................
 

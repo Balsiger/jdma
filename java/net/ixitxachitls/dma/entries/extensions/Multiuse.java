@@ -19,7 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
 //------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.entries.extensions;
@@ -27,6 +26,9 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.Nonnull;
 
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Expression;
+import net.ixitxachitls.dma.values.Value;
 
 //..........................................................................
 
@@ -96,71 +98,32 @@ public class Multiuse extends Counted
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
-  //------------------------------- complete -------------------------------
-
-  /**
-   * Complete the extension and make sure that all values are filled.
-   *
-   */
-  // public void complete()
-  // {
-  //   // Adjust the value accordig to the count.
-  //   if(m_count.isDefined())
-  //     m_entry.addValueModifier
-  //       (new NumberModifier(NumberModifier.Operation.MULTIPLY,
-  //                           (int)m_count.get(),
-  //                           NumberModifier.Type.GENERAL, "multiple count"));
-
-  //   super.complete();
-  // }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------- other member functions
 
-  //----------------------------- modifyValue ------------------------------
+  //-------------------------- adjustCombination ---------------------------
 
   /**
-    *
-    * Modify the given value with information from the current extension.
-    *
-    * @param       inType    the type of value to modify
-    * @param       inEntry   the entry to modify in
-    * @param       inValue   the value to modify, return in this object
-    * @param       inDynamic a flag denoting if dynamic modifiers should be
-    *                        returned
-    *
-    * @return      the newly computed value (or null if no value to use)
-    *
-    * @undefined   never
-    *
-    * @algorithm   nothing done here
-    *
-    * @derivation  necessary if real modifications are desired
-    *
-    * @example     see Item
-    *
-    * @bugs
-    * @to_do
-    *
-    * @keywords    modify . value
-    *
-    */
-//   public Modifier modifyValue(PropertyKey inType, AbstractEntry inEntry,
-//                               Value inValue, boolean inDynamic)
-//   {
-//     if(inValue == null || !inValue.isDefined())
-//       return null;
+   * Adjust the value for the given name for any special properites.
+   *
+   * @param       inName        the name of the value to adjust
+   * @param       ioCombination the combinstaion to adjust
+   * @param       <V>           the real type of value being adjusted
+   *
+   */
+  @Override
+  public <V extends Value> void
+            adjustCombination(@Nonnull String inName,
+                              Combination<V> ioCombination)
+  {
+    if("value".equals(inName))
+      ioCombination.add(new Expression.Factor(m_count.get(), 1), this);
 
-//     if(m_count.isDefined() && inDynamic
-//        && inType == PropertyKey.getKey("value"))
-//       return new Modifier(Modifier.Type.MULTIPLY, (int)m_count.get());
+    super.adjustCombination(inName, ioCombination);
+  }
 
-//     return super.modifyValue(inType, inEntry, inValue, inDynamic);
-//   }
+  //........................................................................
 
   //........................................................................
 
