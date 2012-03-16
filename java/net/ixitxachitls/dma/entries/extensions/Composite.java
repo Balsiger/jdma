@@ -28,13 +28,19 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Link;
 
 //..........................................................................
 
@@ -149,25 +155,29 @@ public class Composite extends Extension<Item>
   }
 
   //........................................................................
-  //---------------------------- getSubEntries -----------------------------
+  //----------------------------- getIncludes ------------------------------
 
   /**
-   * Get all the sub entries present in this extension.
+   * Get all the items included in this extension.
    *
-   * @return      the list with all the entries or null if none
-   *
-   * @undefined   never (may return null)
+   * @return      the list with all the entries
    *
    */
-  // public List<Entry> getSubEntries()
-  // {
-  //   List<Entry> list = new ArrayList<Entry>();
+  public @Nonnull List<Item> getIncludes()
+  {
+    List<Item> list = new ArrayList<Item>();
 
-  //   for(Iterator<EntryValue<Item>> i = m_includes.iterator(); i.hasNext(); )
-  //     list.add(i.next().get());
+    for(Name name : m_includes)
+    {
+      Item item = m_entry.getCampaign().getItem(name.get());
+      if(item == null)
+        continue;
 
-  //   return list;
-  // }
+      list.add(item);
+    }
+
+    return list;
+  }
 
   //........................................................................
   //---------------------------- addListCommands ---------------------------
@@ -208,29 +218,45 @@ public class Composite extends Extension<Item>
 
   //........................................................................
 
-  //--------------------------- addPrintCommands ---------------------------
+  //........................................................................
+  //----------------------------- computeValue -----------------------------
 
   /**
-   * Add the commands for printing this extension to the given print command.
+   * Get a value for printing.
    *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   * @param       inEditable flag if values editable or not
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
    *
-   * @undefined   IllegalArgumentException if given commands are null
+   * @return    a value handle ready for printing
    *
    */
-  // public void addPrintCommands(@MayBeNull PrintCommand ioCommands,
-  //                              boolean inDM, boolean inEditable)
-  // {
-  //   if(ioCommands == null)
-  //     return;
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("include".equals(inKey))
+    {
+      // we have to add the links here as we can't do it at construction time
+      // as the campaign might not yet be available
+      List<Object> commands = new ArrayList<Object>();
 
-  //   super.addPrintCommands(ioCommands, inDM, inEditable);
+      for(Name name : m_includes)
+      {
+        if(!commands.isEmpty())
+          commands.add(", ");
 
-  //   ioCommands.addExtensionValue(m_includes, "include", "composite",
-  //                                 inDM && inEditable);
-  // }
+        Item item = m_entry.getCampaign().getItem(name.get());
+        String url = m_entry.getCampaign().getPath() + "/item/" + name;
+        if(item != null)
+          commands.add(new Link(item.getNameCommand(inDM), url));
+        else
+          commands.add(new Link(name, url));
+      }
+
+      return new FormattedValue(new Command(commands), m_includes, "include");
+    }
+
+    return super.computeValue(inKey, inDM);
+  }
 
   //........................................................................
 
@@ -277,39 +303,38 @@ public class Composite extends Extension<Item>
   }
 
   //........................................................................
-  //-------------------------------- store ---------------------------------
-
-  /**
-   * Store this entry in the given storage container.
-   *
-   * @param       inStorage   the storage that stores this entry
-   *
-   * @return      true if stored, false if not
-   *
-   */
-  // public boolean store(Storage<? extends AbstractEntry> inStorage)
-  // {
-  //   // add all the items to the campaign as well
-  //   if(m_includes.isDefined())
-  //     for(Value value : m_includes)
-  //     {
-  //       AbstractEntry entry = ((EntryValue)value).get();
-
-  //       entry.store(inStorage);
-
-  //       if(entry.isChanged())
-  //         changed();
-  //     }
-
-  //   return true;
-  // }
-
-  //........................................................................
 
   //........................................................................
 
   //------------------------------------------------- other member functions
 
+  //-------------------------- adjustCombination ---------------------------
+
+  /**
+   * Adjust the value for the given name for any special properites.
+   *
+   * @param       inName        the name of the value to adjust
+   * @param       ioCombination the combinstaion to adjust
+   * @param       <V>           the real type of values combined
+   *
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public <V extends Value> void
+            adjustCombination(@Nonnull String inName,
+                              Combination<V> ioCombination)
+  {
+    if("value".equals(inName) || "weight".equals(inName))
+    {
+      V total = sum(inName, getIncludes());
+      if(total != null)
+        ioCombination.add(total, this);
+    }
+
+    super.adjustCombination(inName, ioCombination);
+  }
+
+  //........................................................................
   //----------------------------- modifyValue ------------------------------
 
   /**

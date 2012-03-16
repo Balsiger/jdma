@@ -684,7 +684,7 @@ item with composite, incomplete, multiple, weapon, wearable SWIM =
   campaign     FR / City of the Spider Queen;
   base         Alchemist's Fire;
   count        5;
-  include      RMYT.
+  include      UWIO.
 
 #.....
 #----- EJOJ
@@ -1091,7 +1091,7 @@ item with composite INWH =
   appearance   "Some black liquid.";
   campaign     FR / City of the Spider Queen;
   base         Ink;
-  include      KAXJ.
+  include      CIFA.
 
 #.....
 #----- NFMT
@@ -1102,7 +1102,7 @@ item with composite NFMT =
   appearance   "Some black liquid.";
   campaign     FR / City of the Spider Queen;
   base         Ink;
-  include      APLO.
+  include      AJWB.
 
 #.....
 #----- GWOG
@@ -1288,6 +1288,125 @@ item with multiuse MWWS =
   count        5.
 
 #.....
+#----- TZLM
+
+item TZLM =
+
+  hp           1;
+  appearance   "Some clear liquid in a ceramic vial";
+  player name  "Potion of Protection from Energy (Fire)";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Protection from Fire.
+
+#.....
+#----- BCCW
+
+item with wearable BCCW =
+
+  hp           2;
+  appearance   "A simple silver ring.";
+  campaign     FR / City of the Spider Queen;
+  base         Ring.
+
+#.....
+#----- UZOA
+
+item with incomplete, weapon, wearable UZOA =
+
+  hp           1;
+  appearance   "Inside the flask is a clear liquid.";
+  player name  "Holy Water";
+  campaign     FR / City of the Spider Queen;
+  base         Holy Water.
+
+#.....
+#----- TIAY
+
+item with composite, incomplete, weapon, wearable TIAY =
+
+  hp           1;
+  appearance   "A flask of oil.";
+  campaign     FR / City of the Spider Queen;
+  base         Oil;
+  include      VNVY.
+
+#.....
+#----- VNVY
+
+item with contents VNVY =
+
+  hp           1;
+  appearance   "An unadorned glass flask with a tight stopper.";
+  campaign     FR / City of the Spider Queen;
+  base         Glass Flask.
+
+#.....
+#----- POQK
+
+item POQK =
+
+  hp           1;
+  appearance   "Some clear liquid in a ceramic vial";
+  player name  "Potion of Jump";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Jump.
+
+#.....
+#----- QNGI
+
+item QNGI =
+
+  hp           1;
+  appearance   "Some clear liquid in a glass vial";
+  player name  "Potion of Jump";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Jump.
+
+#.....
+#----- UJAE
+
+item UJAE =
+
+  hp           1;
+  appearance   "Some watery liquid in a glass vial.";
+  player name  "Potion of Spider Climb";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Spider Climb.
+
+#.....
+#----- JTKX
+
+item JTKX =
+
+  hp           1;
+  appearance   "Some oily liquid in a metal vial.";
+  player name  "Potion of Spider Climb";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Spider Climb.
+
+#.....
+#----- YBPE
+
+item YBPE =
+
+  hp           1;
+  appearance   "Some oily liquid in a metal vial.";
+  player name  "Potion of Cure Moderate Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Moderate Wounds.
+
+#.....
+#----- VKUQ
+
+item VKUQ =
+
+  hp           1;
+  appearance   "Some clear liquid in a ceramic vial";
+  player name  "Potion of Cure Moderate Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Moderate Wounds.
+
+#.....
 
 #----- KAMO
 
@@ -1298,6 +1417,16 @@ item with contents KAMO =
   campaign     FR / City of the Spider Queen;
   base         Belt Pouch;
   contents     SZHH,
+               TZLM,
+               BCCW,
+               UZOA,
+               TIAY,
+               POQK,
+               QNGI,
+               UJAE,
+               JTKX,
+               YBPE,
+               VKUQ,
                QBHZ,
                PXLX,
                EXAJ,
@@ -1308,5 +1437,36 @@ item with contents KAMO =
                DMUR,
                PSSN,
                MWWS.
+
+#.....
+
+#----- CIFA
+
+item with contents CIFA =
+
+  hp           1;
+  appearance   "A ceramic vial with a tight stopper.";
+  campaign     FR / City of the Spider Queen;
+  base         Ceramic Vial.
+
+#.....
+#----- AJWB
+
+item with contents AJWB =
+
+  hp           1;
+  appearance   "A glass vial with a tight stopper.";
+  campaign     FR / City of the Spider Queen;
+  base         Glass Vial.
+
+#.....
+#----- UWIO
+
+item with contents UWIO =
+
+  hp           1;
+  appearance   "A orange tinted glass flask with a tight stopper.";
+  campaign     FR / City of the Spider Queen;
+  base         Glass Flask.
 
 #.....

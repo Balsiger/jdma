@@ -491,7 +491,7 @@ public Multimap<String, String> getOwners(String inID)
    *
    */
   @Override
-public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
+  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
   {
     Log.debug("getting files for " + inEntry.getName());
     Query query = new Query("file", convert(inEntry.getKey()));
@@ -831,7 +831,7 @@ public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
    *
    */
   @Override
-public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     Log.debug("rebuilding data for " + inType);
     List<Entity> entities = new ArrayList<Entity>();

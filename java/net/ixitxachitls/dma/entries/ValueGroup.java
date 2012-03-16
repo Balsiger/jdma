@@ -2145,6 +2145,44 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
+  //--------------------------------- sum ----------------------------------
+
+  /**
+   * Sum up all the values with the given key from all the given entries.
+   *
+   * @param   inKey     the key of the value to sum
+   * @param   inEntries the entries to sum over
+   * @param   <T>       the type of value being summed
+   *
+   * @return  the sum of all the value or null if no values found
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast for type
+  public @Nullable <T extends Value>
+                      T sum(@Nonnull String inKey,
+                            @Nonnull List<? extends ValueGroup> inEntries)
+  {
+    T total = null;
+    System.out.println("entires: " + inEntries);
+    for(ValueGroup entry : inEntries)
+    {
+      T value = new Combination<T>(entry, inKey).total();
+      System.out.println(inKey + ": " + value + " (" + entry.getName() + ")");
+      if(value == null || !value.isDefined())
+        continue;
+
+      if(total == null)
+        total = value;
+      else
+        total = (T)total.add(value);
+    }
+
+    return total;
+  }
+
+  //........................................................................
+
+
   //........................................................................
 
   //------------------------------------------------------------------- test

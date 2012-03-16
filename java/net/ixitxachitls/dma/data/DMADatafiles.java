@@ -397,6 +397,29 @@ public @Nonnull SortedSet<String> getIndexNames
   };
 
   //........................................................................
+  //----------------------------- getFilename ------------------------------
+
+  /**
+   * Get the name of the file the given entry is stored.
+   *
+   * @param       inEntry the entry to look up
+   *
+   * @return      the name of the file the entry is stored in, if any
+   *
+   */
+  public @Nullable String getFilename(@Nonnull AbstractEntry inEntry)
+  {
+    for(DMAFile file : m_files)
+    {
+      if(file.getEntries().contains(inEntry))
+        return file.getStorageName();
+    }
+
+    return null;
+  }
+
+  //........................................................................
+
   //------------------------------- getFile --------------------------------
 
   /**
@@ -691,7 +714,7 @@ public boolean remove(@Nonnull String inID,
    *
    */
   @Override
-public boolean update(@Nonnull AbstractEntry inEntry)
+  public boolean update(@Nonnull AbstractEntry inEntry)
   {
     if(hasEntry(inEntry.getName(), inEntry.getType()))
       return save();
@@ -713,13 +736,31 @@ public boolean update(@Nonnull AbstractEntry inEntry)
    */
   public boolean add(@Nonnull AbstractEntry inEntry, boolean inSave)
   {
-    String name = computeFile(inEntry);
-    DMAFile file = getFile(name);
+    return add(inEntry, computeFile(inEntry), inSave);
+  }
+
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the entry to the data.
+   *
+   * @param     inEntry the entry to add
+   * @param     inFile  the name of the file to store in
+   * @param     inSave  whether to save or not
+   *
+   * @return    true if added, false if there was an error
+   *
+   */
+  public boolean add(@Nonnull AbstractEntry inEntry, @Nonnull String inFile,
+                     boolean inSave)
+  {
+    DMAFile file = getFile(inFile);
     if(file == null)
     {
-      addFile(name);
+      addFile(inFile);
 
-      file = getFile(name);
+      file = getFile(inFile);
       if(file == null)
         return false;
     }

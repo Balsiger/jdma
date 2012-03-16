@@ -52,6 +52,8 @@ import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.extensions.Composite;
 import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Encodings;
@@ -250,7 +252,7 @@ public final class Importer
         }
 
         if(entry instanceof Entry)
-          ((Entry)entry).complete();
+          complete((Entry)entry);
 
         entities.add(dmaStore.convert(entry));
         Log.important("importing " + type + " " + entry.getName());
@@ -270,7 +272,7 @@ public final class Importer
           continue;
 
         if(entry instanceof Entry)
-          ((Entry)entry).complete();
+          complete((Entry)entry);
 
         entities.add(dmaStore.convert(entry));
         Log.important("importing after error " + entry.getName());
@@ -383,6 +385,41 @@ public final class Importer
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //------------------------------- complete -------------------------------
+
+  /**
+   * Complete the entry and do all necessary housekeeping.
+   *
+   * @param   inEntry the entry to complete
+   *
+   */
+  private void complete(@Nonnull Entry inEntry)
+  {
+    inEntry.complete();
+
+    // if the entry has a composite, we could have added some new items, which
+    // we must properly store
+    if(inEntry instanceof Item)
+    {
+      Composite composite = (Composite)inEntry.getExtension("composite");
+      if(composite != null)
+      {
+        String file = m_data.getFilename(inEntry);
+
+        if(file == null)
+          Log.error("cannot properly store composites because "
+                    + inEntry.getName() + " is not found in any file!");
+        else
+          for(Item item : composite.getIncludes())
+            if(!m_data.hasEntry(item.getName(), Item.TYPE))
+              m_data.add(item, file, false);
+      }
+    }
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

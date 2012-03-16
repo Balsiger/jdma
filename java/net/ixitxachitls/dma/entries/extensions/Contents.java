@@ -276,74 +276,6 @@ public class Contents extends Extension<Item>
   // }
 
   //........................................................................
-  //-------------------------- adjustCombination ---------------------------
-
-  /**
-   * Adjust the value for the given name for any special properites.
-   *
-   * @param       inName        the name of the value to adjust
-   * @param       ioCombination the combinstaion to adjust
-   * @param       <V>           the real type of values combined
-   *
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  public <V extends Value> void
-            adjustCombination(@Nonnull String inName,
-                              Combination<V> ioCombination)
-  {
-    if("value".equals(inName))
-    {
-      // add the value of all contained objects
-      Money total = null;
-      for(Name name : m_contents)
-      {
-        Item item = m_entry.getCampaign().getItem(name.get());
-        if(item == null)
-          continue;
-
-        Money value = item.getValue();
-        if(value == null)
-          continue;
-
-        if(total == null)
-          total = value;
-        else
-          total = total.add(value);
-      }
-
-      if(total != null)
-        ioCombination.add((V)total, this);
-    }
-
-    if("weight".equals(inName))
-    {
-      // add the value of all contained objects
-      Weight total = null;
-      for(Name name : m_contents)
-      {
-        Item item = m_entry.getCampaign().getItem(name.get());
-        if(item == null)
-          continue;
-
-        Weight value = item.getWeight();
-        if(value == null)
-          continue;
-
-        if(total == null)
-            total = value;
-        else
-          total = total.add(value);
-      }
-
-      if(total != null)
-        ioCombination.add((V)total, this);
-    }
-
-    super.adjustCombination(inName, ioCombination);
- }
-
-  //........................................................................
 
   //----------------------------- computeValue -----------------------------
 
@@ -639,6 +571,74 @@ public class Contents extends Extension<Item>
 
   //------------------------------------------------- other member functions
 
+  //-------------------------- adjustCombination ---------------------------
+
+  /**
+   * Adjust the value for the given name for any special properites.
+   *
+   * @param       inName        the name of the value to adjust
+   * @param       ioCombination the combinstaion to adjust
+   * @param       <V>           the real type of values combined
+   *
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public <V extends Value> void
+            adjustCombination(@Nonnull String inName,
+                              Combination<V> ioCombination)
+  {
+    if("value".equals(inName))
+    {
+      // add the value of all contained objects
+      Money total = null;
+      for(Name name : m_contents)
+      {
+        Item item = m_entry.getCampaign().getItem(name.get());
+        if(item == null)
+          continue;
+
+        Money value = item.getValue();
+        if(value == null)
+          continue;
+
+        if(total == null)
+          total = value;
+        else
+          total = total.add(value);
+      }
+
+      if(total != null)
+        ioCombination.add((V)total, this);
+    }
+
+    if("weight".equals(inName))
+    {
+      // add the value of all contained objects
+      Weight total = null;
+      for(Name name : m_contents)
+      {
+        Item item = m_entry.getCampaign().getItem(name.get());
+        if(item == null)
+          continue;
+
+        Weight value = item.getWeight();
+        if(value == null)
+          continue;
+
+        if(total == null)
+            total = value;
+        else
+          total = total.add(value);
+      }
+
+      if(total != null)
+        ioCombination.add((V)total, this);
+    }
+
+    super.adjustCombination(inName, ioCombination);
+ }
+
+  //........................................................................
   //----------------------------- modifyValue ------------------------------
 
   /**
@@ -674,54 +674,6 @@ public class Contents extends Extension<Item>
 //   {
 //     if(inDynamic)
 //     {
-//       if(inType == PropertyKey.getKey("weight") && inValue != null)
-//       {
-//         // add the weight of all the contents
-//         Weight weight = new Weight();
-
-//         for(Iterator i = m_contents.mutableIterator(); i.hasNext(); )
-//           weight.add((Weight)
-//                    ((Item)((EntryValue)i.next()).get()).getValue("weight"));
-
-//         // adjust the weight for the size of the intended user (this was
-//       // already adjusted in the item itself but only to get the half weight
-//       // (as is necessary for weapons). According to PHP p. 129 we need a 1/4
-//         // though
-//         if(inEntry != null && inEntry instanceof Item
-//            && inValue instanceof Weight)
-//         {
-//           Pair<ValueGroup, Variable> pair =
-//             inEntry.getVariable(Item.USER_SIZE.toString());
-
-//           if(pair.first() != null && pair.second() != null)
-//           {
-//             BaseItem.Size size =
-//               ((EnumSelection<BaseItem.Size>)
-//                pair.second().get(pair.first())).getSelected();
-
-//             if(size != BaseItem.Size.MEDIUM)
-//             {
-//               Weight adjust = (Weight)(inValue.clone());
-
-//               if(size.isBigger(BaseItem.Size.MEDIUM))
-//               {
-//                 adjust.multiply
-//                   ((int)Math.pow(2, size.difference(BaseItem.Size.MEDIUM)));
-//                 weight.add(adjust);
-//               }
-//               else
-//               {
-//                 adjust.divide
-//                   ((int)Math.pow(2, BaseItem.Size.MEDIUM.difference(size)));
-//                 weight.subtract(adjust);
-//               }
-//             }
-//           }
-//         }
-
-//         return new Modifier(Modifier.Type.ADD, weight);
-//       }
-
 //       if(inType == BaseContainer.CAPACITY)
 //       {
 //         if(inEntry instanceof Item)

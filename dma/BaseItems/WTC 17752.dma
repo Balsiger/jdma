@@ -501,13 +501,14 @@ base item Potion of Nondetection =
 #.....
 #----- Potion of Protection from Energy
 
-base item Potion of Protection from Energy =
+base item Potion of Protection from Fire =
 
   base Potion;
   value [potion(3)];
+  synonyms "Potion of Proection from Energy (Fire)";
   description
-  "As \SpellRef[Wiz 5]{Protection from Energy}.";
-  short description "As \SpellRef[Wiz 5]{Protection from Energy}.".
+  "As \SpellRef[Wiz 5]{Protection from Energy (Fire)}.";
+  short description "As \SpellRef[Wiz 5]{Protection from Energy (Fire)}.".
 
 #.....
 #----- Potion of Resist Energy (fire) 10
