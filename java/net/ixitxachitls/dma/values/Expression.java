@@ -23,11 +23,14 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableMap;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.logging.Log;
@@ -308,39 +311,22 @@ public abstract class Expression implements Comparable<Expression>
   }
 
   //........................................................................
-  //----- Wand -------------------------------------------------------------
+  //----- MagicItem --------------------------------------------------------
 
-  /** An expression representing a wand with spell and caster levels. */
-  public static class Wand extends Expression
+  /** An expression representing a magic item with spell levels. */
+  public static class MagicItem extends Expression
   {
-    /**
-     * Create the wand expression.
-     *
-     * @param inSpellLevel the level of the spell stored in the wand
-     *
-     */
-    public Wand(int inSpellLevel)
-    {
-      this(inSpellLevel, inSpellLevel > 1 ? inSpellLevel * 2 - 1 : 1);
-    }
-
-    /**
-     * Create the wand expression.
-     *
-     * @param inSpellLevel  the level of the spell
-     * @param inCasterLevel the level of the caster
-     */
-    public Wand(int inSpellLevel, int inCasterLevel)
+    /** Create the magic item expression. */
+    public MagicItem()
     {
       super(1);
-
-      if(inCasterLevel < 1
-         || (inSpellLevel > 0 && inCasterLevel < inSpellLevel * 2 - 1))
-        throw new IllegalArgumentException("caster level too low");
-
-      m_spellLevel = inSpellLevel;
-      m_casterLevel = inCasterLevel;
     }
+
+    /** The name of the magic item category. */
+    private @Nonnull String m_name;
+
+    /** The base price for the item. */
+    private @Nonnull int m_basePrice;
 
     /** The spell level of the wand. */
     private int m_spellLevel;
@@ -348,42 +334,88 @@ public abstract class Expression implements Comparable<Expression>
     /** The dividing factor. */
     private int m_casterLevel;
 
+    /** The material costs. */
+    private int m_material = 0;
+
+    /** The XP cost. */
+    private int m_xp = 0;
+
     /** Pattern for a wand (spell level only). */
-    private static final Pattern s_pattern =
-      Pattern.compile("wand\\((\\d+)(?:,\\s*(\\d+))?\\)");
+    private static final Pattern s_pattern = Pattern.compile
+      ("(\\w+)\\((\\d+)(?:,\\s*(\\d+)(?:,\\s*(\\d+)(?:,\\s*(\\d+))?)?)?\\)");
+
+    /** The magic item names and base prices. */
+    private static Map<String, Integer> s_prices =
+      new ImmutableMap.Builder<String, Integer>()
+      .put("wand", 15)
+      .put("potion", 50)
+      .put("scroll", 25)
+      .build();
 
     @Override
     public @Nonnull String toString()
     {
-      if(m_casterLevel == m_spellLevel * 2 - 1)
-        return "[wand(" + m_spellLevel + ")]";
-
-      return "[wand(" + m_spellLevel + ", " + m_casterLevel + ")]";
+      if(m_xp == 0)
+        if(m_material == 0)
+          if(m_casterLevel == m_spellLevel * 2 - 1)
+            return "[" + m_name + "(" + m_spellLevel + ")]";
+          else
+            return
+              "[" + m_name + "(" + m_spellLevel + ", " + m_casterLevel + ")]";
+        else
+          return "[" + m_name + "(" + m_spellLevel + ", " + m_casterLevel + ", "
+            + m_material + ")]";
+      else
+        return "[" + m_name + "(" + m_spellLevel + ", " + m_casterLevel + ", "
+          + m_material + ", " + m_xp + ")]";
     }
 
     /**
-     * Parse a magic weapon from the given text.
+     * Parse a magic item from the given text.
      *
      * @param  inText the text to parse from
      *
      * @return the parsed magic weapon or null if not properly parsed
      */
-    protected static @Nullable Wand parse(@Nonnull String inText)
+    protected static @Nullable MagicItem parse(@Nonnull String inText)
     {
       Matcher matcher = s_pattern.matcher(inText);
-      if(matcher.find())
-        if(matcher.group(2) != null)
-          return new Wand(Integer.parseInt(matcher.group(1)),
-                          Integer.parseInt(matcher.group(2)));
-        else
-          return new Wand(Integer.parseInt(matcher.group(1)));
+      if(!matcher.find())
+        return null;
 
-      return null;
+      MagicItem item = new MagicItem();
+      item.m_name = matcher.group(1);
+      if(!s_prices.containsKey(item.m_name))
+        Log.warning("invalid magic item " + item.m_name);
+      else
+        item.m_basePrice = s_prices.get(item.m_name);
+
+      item.m_spellLevel = Integer.parseInt(matcher.group(2));
+
+      if(matcher.group(5) != null)
+        item.m_xp = Integer.parseInt(matcher.group(5));
+
+      if(matcher.group(4) != null)
+        item.m_material = Integer.parseInt(matcher.group(4));
+
+      if(matcher.group(3) != null)
+      {
+        item.m_casterLevel = Integer.parseInt(matcher.group(3));
+
+        if(item.m_casterLevel < item.m_spellLevel * 2 - 1)
+        {
+          Log.warning("invalid caster level for magic item: " + item);
+        }
+      }
+      else
+        item.m_casterLevel =
+          item.m_spellLevel > 1 ? item.m_spellLevel * 2 - 1 : 1;
+
+      return item;
     }
 
     /**
      * Compute the value for the expression.
-     * NOTE: this does not include any costs for the spell components and/or XP.
      *
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
@@ -395,112 +427,18 @@ public abstract class Expression implements Comparable<Expression>
     public @Nullable Value compute(@Nullable Value inValue,
                                    @Nonnull Shared ioShared)
     {
-      Money value;
+      int gold = m_material + 5 * m_xp;
+      int silver = 0;
+
       if(m_spellLevel == 0)
-        value = new Money(0, 75 * m_casterLevel, 0, 0).simplify();
-      else
-        value = new Money(0, 0, 15 * m_spellLevel * m_casterLevel, 0);
-
-      if(inValue == null)
-        return value;
-
-      return inValue.add(value);
-    }
-  }
-
-  //........................................................................
-  //----- Potion -----------------------------------------------------------
-
-  /** An expression representing a potion with spell levels. */
-  public static class Potion extends Expression
-  {
-    /**
-     * Create the potion expression.
-     *
-     * @param inSpellLevel the level of the spell
-     */
-    public Potion(int inSpellLevel)
-    {
-      this(inSpellLevel, inSpellLevel > 1 ? inSpellLevel * 2 - 1 : 1);
-    }
-
-    /**
-     * Create the potion expression.
-     *
-     * @param inSpellLevel  the level of the spell
-     * @param inCasterLevel the level of the caster
-     */
-    public Potion(int inSpellLevel, int inCasterLevel)
-    {
-      super(1);
-
-      if(inCasterLevel < 1
-         || (inSpellLevel > 0 && inCasterLevel < inSpellLevel * 2 - 1))
-        throw new IllegalArgumentException("caster level too low");
-
-      m_spellLevel = inSpellLevel;
-      m_casterLevel = inCasterLevel;
-    }
-
-    /** The spell level of the wand. */
-    private int m_spellLevel;
-
-    /** The dividing factor. */
-    private int m_casterLevel;
-
-    /** Pattern for a wand (spell level only). */
-    private static final Pattern s_pattern =
-      Pattern.compile("potion\\((\\d+)(?:,\\s*(\\d+))?\\)");
-
-    @Override
-    public @Nonnull String toString()
-    {
-      if(m_casterLevel == m_spellLevel * 2 - 1)
-        return "[potion(" + m_spellLevel + ")]";
-
-      return "[potion(" + m_spellLevel + ", " + m_casterLevel + ")]";
-    }
-
-    /**
-     * Parse a potion from the given text.
-     *
-     * @param  inText the text to parse from
-     *
-     * @return the parsed magic weapon or null if not properly parsed
-     */
-    protected static @Nullable Potion parse(@Nonnull String inText)
-    {
-      Matcher matcher = s_pattern.matcher(inText);
-      if(matcher.find())
-        if(matcher.group(2) != null)
-          return new Potion(Integer.parseInt(matcher.group(1)),
-                          Integer.parseInt(matcher.group(2)));
+        if((m_basePrice * m_casterLevel) % 2 == 0)
+          gold = (m_basePrice * m_casterLevel) / 2;
         else
-          return new Potion(Integer.parseInt(matcher.group(1)));
-
-      return null;
-    }
-
-    /**
-     * Compute the value for the expression.
-     * NOTE: this does not include any costs for the spell components and/or XP.
-     *
-     * @param       inValue   the value to compute from
-     * @param       ioShared  shared data for all expressions
-     *
-     * @return      the compute, adjusted value
-     *
-     */
-    @SuppressWarnings("unchecked")
-    public @Nullable Value compute(@Nullable Value inValue,
-                                   @Nonnull Shared ioShared)
-    {
-      Money value;
-      if(m_spellLevel == 0)
-        value = new Money(0, 0, 25 * m_casterLevel, 0);
+          silver = (m_basePrice * m_casterLevel * 10) / 2;
       else
-        value = new Money(0, 0, 50 * m_spellLevel * m_casterLevel, 0);
+        gold = m_basePrice * m_spellLevel * m_casterLevel;
 
+      Money value = new Money(0, silver, gold, 0);
       if(inValue == null)
         return value;
 
@@ -643,11 +581,7 @@ public abstract class Expression implements Comparable<Expression>
     if(result != null)
       return result;
 
-    result = Wand.parse(inText);
-    if(result != null)
-      return result;
-
-    result = Potion.parse(inText);
+    result = MagicItem.parse(inText);
     if(result != null)
       return result;
 

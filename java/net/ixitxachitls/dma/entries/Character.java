@@ -24,13 +24,14 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -248,10 +249,38 @@ public class Character extends CampaignEntry<BaseCharacter>
 
   //-------------------------------------------------------------- accessors
 
+  //---------------------------- containedItems ----------------------------
+
+  /**
+   * Get all the items contained in this contents.
+   *
+   * @return      a list with all the items
+   *
+   */
+  public @Nonnull Map<String, Item> containedItems()
+  {
+    Map<String, Item> items = new HashMap<String, Item>();
+    for(Name name : m_items)
+    {
+      Item item = getCampaign().getItem(name.get());
+      if(item == null)
+        continue;
+
+      items.put(name.get(), item);
+      items.putAll(item.containedItems());
+    }
+
+    return items;
+  }
+
+  //........................................................................
   //------------------------------ possesses -------------------------------
 
   /**
    * Checks if the character has the item in possession.
+   *
+   * NOTE: this is an expensive operation, as it has to read all the items
+   * recursively of a character.
    *
    * @param       inItem the name of the item to check
    *
@@ -260,24 +289,8 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   public boolean possesses(@Nonnull String inItem)
   {
-    for(Name name : m_items)
-    {
-      if(inItem.equals(name.get()))
-        return true;
-
-      Item item = getCampaign().getItem(name.get());
-      if(item == null)
-        continue;
-
-      Contents contents = (Contents)item.getExtension("contents");
-      if(contents == null)
-        continue;
-
-      if(contents.contains(inItem))
-        return true;
-    }
-
-    return false;
+    System.out.println(getName() + " possessing " + inItem);
+    return containedItems().containsKey(inItem);
   }
 
   //........................................................................

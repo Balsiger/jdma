@@ -44,6 +44,7 @@ import net.ixitxachitls.dma.entries.BaseProduct;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.Type;
 import net.ixitxachitls.util.Files;
@@ -991,6 +992,9 @@ public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
 
     if(inEntry instanceof Campaign)
       return dir + "/" + inEntry.getBaseNames().get(0) + ".dma";
+
+    if(inEntry instanceof Item)
+      return dir + "/" + ((Item)inEntry).getCampaign().getName() + ".dma";
 
     if(inEntry instanceof BaseCharacter)
       return dir + "/Ixitxachitls.dma";

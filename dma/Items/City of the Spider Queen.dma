@@ -1136,12 +1136,11 @@ item with contents, incomplete XQMF =
   player name  "Heward's Handy Haversack";
   campaign     FR / City of the Spider Queen;
   base         Heward's Handy Haversack;
-  contents     TYQX,
+  contents     TYQX, CJIQ,
                XXNV,
                VCQM,
                GKSP,
                RLOI,
-               CJIG,
                THNH,
                EKSM,
                DIFG,
@@ -1407,7 +1406,359 @@ item VKUQ =
   base         Potion of Cure Moderate Wounds.
 
 #.....
+#----- GQVF
 
+item GQVF =
+
+  hp           1;
+  appearance   "Some oily liquid in a ceramic vial.";
+  player name  "Potion fo Cure Serious Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Serious Wounds.
+
+#.....
+#----- TIBX
+
+item TIBX =
+
+  hp           1;
+  appearance   "Some oily liquid in a metal vial.";
+  player name  "Potion of Cure Light Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Light Wounds.
+
+#.....
+#----- AVWD
+
+item AVWD =
+
+  hp           1;
+  appearance   "Some dark liquid in a ceramic vial";
+  player name  "Potion of Cure Light Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Light Wounds.
+
+#.....
+#----- SLJF
+
+item SLJF =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an leather tube.";
+  player name  "Scroll of Greater Magic Weapon";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Greater Magic Weapon.
+
+#.....
+#----- QMDM
+
+item QMDM =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an jade tube.";
+  player name  "Scroll of Locate Object";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Locate Object.
+
+#.....
+#----- BJLA
+
+item BJLA =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an leather tube.";
+  player name  "Scroll of Knock";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Knock.
+
+#.....
+#----- NDXN
+
+item NDXN =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an wood tube.";
+  player name  "Scroll of Burning Hands";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Burning Hands.
+
+#.....
+#----- IEAZ
+
+item IEAZ =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an leather tube.";
+  player name  "Scroll of Displacement";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Displacement.
+
+#.....
+#----- DVCO
+
+item DVCO =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an jade tube.";
+  player name  "Scroll of Minor Image";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Minor Image.
+
+#.....
+#----- PQDY
+
+item PQDY =
+
+  appearance   "";
+  player name  "Scroll of Mage Armor";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Mage Armor.
+
+#.....
+#----- RUNF
+
+item RUNF =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an jade tube.";
+  player name  "Scroll of Ray of Enfeeblement";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Ray of Enfeeblement.
+
+#.....
+#----- YHCN
+
+item YHCN =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an metal tube.";
+  player name  "Scroll of Spider Climb";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Spider Climb.
+
+#.....
+#----- YTGP
+
+item YTGP =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an wood tube.";
+  player name  "Scroll of Invisibility";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Invisibility.
+
+#.....
+#----- YCOY
+
+item YCOY =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an leather tube.";
+  player name  "Scroll of Invisibility";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Invisibility.
+
+#.....
+#----- DQRT
+
+item DQRT =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an wood tube.";
+  player name  "Scroll of Melf's Acid Arrow";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Melf's Acid Arrow.
+
+#.....
+#----- TWAJ
+
+item TWAJ =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an jade tube.";
+  player name  "Scroll of Flame Arrow";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Flame Arrow.
+
+#.....
+#----- GTRT
+
+item GTRT =
+
+  appearance   "";
+  player name  "Scroll of Mage Armor";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Mage Armor.
+
+#.....
+#----- QVJR
+
+item QVJR =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an ivory tube.";
+  player name  "Scroll of Ray of Enfeeblement";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Ray of Enfeeblement.
+
+#.....
+#----- GUIY
+
+item with multiple GUIY =
+
+  hp           24;
+  value        100 gp;
+  appearance   "A shingin stone";
+  player name  "Gem";
+  campaign     FR / City of the Spider Queen;
+  base         Gem;
+  count        4.
+
+#.....
+#----- KKYQ
+
+item with multiple KKYQ =
+
+  hp           24;
+  appearance   "A platinum piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Platinum Piece;
+  count        45.
+
+#.....
+#----- AYUF
+
+item with multiple AYUF =
+
+  hp           24;
+  appearance   "A gold piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Gold Piece;
+  count        161.
+
+#.....
+#----- QXFL
+
+item with multiple QXFL =
+
+  hp           24;
+  appearance   "A silver piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Silver Piece;
+  count        2.
+
+#.....
+#----- HOXC
+
+item with multiple HOXC =
+
+  hp           24;
+  appearance   "A copper piece.";
+  campaign     FR / City of the Spider Queen;
+  base         Copper Piece;
+  count        6.
+
+#.....
+#----- JENG
+
+item JENG =
+
+  hp           1;
+  appearance   "Some watery liquid in a glass vial.";
+  player name  "Potion of Cure Serious Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Serious Wounds.
+
+#.....
+#----- AIPU
+
+item AIPU =
+
+  hp           1;
+  appearance   "Some clear liquid in a metal vial";
+  player name  "Potion of Cure Serious Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Cure Serious Wounds.
+
+#.....
+#----- OEZG
+
+item OEZG =
+
+  hp           1;
+  appearance   "Some dark liquid in a ceramic vial";
+  player name  "Potion of Lesser Restoration";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Lesser Restoration.
+
+#.....
+#----- TPJZ
+
+item TPJZ =
+
+  hp           1;
+  appearance   "Some thick liquid in a ceramic vial";
+  player name  "Potion of Bear's Endurance";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Bear's Endurance.
+
+#.....
+#----- GDBY
+
+item GDBY =
+
+  hp           1;
+  appearance   "Some watery liquid in a glass vial.";
+  player name  "Potion of Claraudience or Clairvoyance";
+  campaign     FR / City of the Spider Queen;
+  base         Potion of Clairaudience or Clairvoyance.
+
+#.....
+#----- RHRS
+
+item RHRS =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an ivory tube.";
+  player name  "Scroll of Summon Monster V";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Summon Monster V.
+
+#.....
+#----- VQAE
+
+item VQAE =
+
+  hp           0;
+  appearance   "A rolled up sheet of fine paper inside an metal tube.";
+  player name  "Scroll of Teleport";
+  campaign     FR / City of the Spider Queen;
+  base         Scroll of Teleport.
+
+#.....
+#----- IMVM
+
+item with multiuse IMVM =
+
+  hp           5;
+  appearance   "A simple wooden wand.";
+  player name  "Wand of Cure Light Wounds";
+  campaign     FR / City of the Spider Queen;
+  base         Wand of Cure Light Wounds;
+  count        38.
+
+#.....
+#----- BXGQ
+
+item with incomplete, weapon, wearable BXGQ =
+
+  hp           4;
+  appearance   "An iron mace set with silver rivets.";
+  player name  "Rod of Thunder and Lightning";
+  campaign     FR / City of the Spider Queen;
+  base         Rod of Thunder and Lightning.
+
+#.....
 #----- KAMO
 
 item with contents KAMO =
@@ -1436,7 +1787,28 @@ item with contents KAMO =
                CGCY,
                DMUR,
                PSSN,
-               MWWS.
+               MWWS,
+               VNVY,
+               GQVF,
+               AVWD,
+               SLJF,
+               QMDM,
+               BJLA,
+               NDXN,
+               DVCO,
+               PQDY,
+               RUNF,
+               YHCN,
+               YTGP,
+               YCOY,
+               DQRT,
+               TWAJ,
+               GTRT,
+               QVJR,
+               GUIY,
+               KKYQ,
+               AYUF,
+               QXFL, HOXC, JENG, IEAZ, AIPU, OEZG, TPJZ, GDBY, RHRS, IMVM, BXGQ, TIBX, VQAE.
 
 #.....
 

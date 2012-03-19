@@ -192,7 +192,6 @@ base item with weapon, incomplete Weapon +5 =
 #.....
 
 #.....
-
 #----- Potions
 
 #----- Potion
@@ -810,6 +809,765 @@ base item Rod of Thunder and Lightning =
   of 1 or 2 as rolls of 3, for a range of 27 to 54 points), and the
   thunderclap deals 2d6 points of sonic damage. A single DC 16 Reflex save
   applies for both effects.".
+
+#.....
+
+#.....
+#----- Scrolls
+
+#----- Scroll
+
+base item Scroll =
+
+  weight            1 lb;
+  probability       Common;
+  size              Tiny;
+  appearances       Common "A rolled up sheet of fine paper inside an ivory tube.",
+                    Common "A rolled up sheet of fine paper inside an jade tube.",
+                    Common "A rolled up sheet of fine paper inside an metal tube.",
+                    Common "A rolled up sheet of fine paper inside an leather tube.",
+                    Common "A rolled up sheet of fine paper inside an wood tube.",
+                    Rare "A rolled up sheet of fine paper.";
+  substance         paper 1/10 in;
+  break DC          8;
+  player name       "Scroll";
+  worlds            Generic;
+  references        WTC 17752: 237-238;
+  description
+  "A scroll is a heavy sheet of fine vellum or high-quality paper. An area the
+  size of a piece of modern-day notebook paper (about \frac[8]{1}{2} inches
+  wide and 11 inches long) is sufficient to hold one spell. The sheet is
+  reinforced at the top and bottom with stripes of leather slightly longer than
+  the sheet is wide. A scroll holding more than one spell has the same width
+  (about \frac[8]{1}{2} inches) but is an extra foot or so long for each extra
+  spell. Scrolls that hold three or more spells are usually fitted with
+  reinforcing rods at each end rather than simple stirps of leather. A scroll
+  as AC 9, 1 hit point, harness 0, and a break DC of 8.
+
+  To protect it from wrinkling or tearing, a scroll is rolled up from both ends
+  to form a double cylinder. (This also helps the user unroll the scroll
+  quickly.) The scroll is placed in a tube of ivory, jade, leather, metal, or
+  wood. Most scroll cases are inscribed with magic symbols (see \Spell{Arcane
+  Mark}). The symbols often hide magic traps such as \Spell{Glyph of Warding}
+  or \Spell{Fire Trap} spells.";
+  categories        mundane.
+
+#.....
+
+#----- Scroll of Bear's Endurance
+
+base item Scroll of Bear's Endurance =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Bear's Endurance}";
+  short description "A scroll with \SpellRef[Wiz 3]{Bear's Endurance}";
+  synonyms          "Bear's Endurance, Scroll".
+
+#.....
+#----- Scroll of Blade Barrier
+
+base item Scroll of Blade Barrier =
+
+  base              Scroll;
+  value             [scroll(7)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 13]{Blade Barrier}";
+  short description "A scroll with \SpellRef[Clr 13]{Blade Barrier}";
+  synonyms          "Blade Barrier, Scroll".
+
+#.....
+#----- Scroll of Burning Hands
+
+base item Scroll of Burning Hands =
+
+  base              Scroll;
+  value             [scroll(1)];
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Burning Hands}";
+  short description "A scroll with \SpellRef[Wiz 1]{Burning Hands}";
+  synonyms          "Burning Hands, Scroll".
+
+#.....
+#----- Scroll of Bull's Strength
+
+base item Scroll of Bull's Strength =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Bull's Strength}";
+  short description "A scroll with \SpellRef[Wiz 3]{Bull's Strength}";
+  synonyms          "Bull's Strength, Scroll".
+
+#.....
+#----- Scroll of Charm Person
+
+base item Scroll of Charm Person =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Charm Person}";
+  short description "A scroll with \SpellRef[Wiz 1]{Charm Person}";
+  synonyms          "Charm Person, Scroll".
+
+#.....
+#----- Scroll of Chain Lightning
+
+base item Scroll of Chain Lightning =
+
+  base              Scroll;
+  value             [scroll(6)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 11]{Chain Lightning}";
+  short description "A scroll with \SpellRef[Wiz 11]{Chain Lightning}";
+  synonyms          "Chain Lightning, Scroll".
+
+#.....
+#----- Scroll of Chill Metal
+
+base item Scroll of Chill Metal =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Chill Metal}";
+  short description "A scroll with \SpellRef[Clr 3]{Chill Metal}";
+  synonyms          "Chill Metal, Scroll".
+
+#.....
+#----- Scroll of Color Spray
+
+base item Scroll of Color Spray =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Color Spray}";
+  short description "A scroll with \SpellRef[Wiz 1]{Color Spray}";
+  synonyms          "Color Spray, Scroll".
+
+#.....
+#----- Scroll of Control Undead
+
+base item Scroll of Control Undead =
+
+  base              Scroll;
+  value             [scroll(7)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 13]{Control Undead}";
+  short description "A scroll with \SpellRef[Wiz 13]{Control Undead}";
+  synonyms          "Control Undead, Scroll".
+
+#.....
+#----- Scroll of Death Ward
+
+base item Scroll of Death Ward =
+
+  base              Scroll;
+  value             [scroll(4)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 7]{Death Ward}";
+  short description "A scroll with \SpellRef[Clr 7]{Death Ward}";
+  synonyms          "Searing Light, Scroll".
+
+#.....
+#----- Scroll of Delay Poison
+
+base item Scroll of Delay Poison =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Delay Poison}";
+  short description "A scroll with \SpellRef[Clr 3]{Delay Poison}";
+  synonyms          "Delay Poison, Scroll".
+
+#.....
+#----- Scroll of Dismissal
+
+base item Scroll of Dismissal =
+
+  base              Scroll;
+  value             [scroll(4)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 7]{Dismissal}";
+  short description "A scroll with \SpellRef[Wiz 7]{Dismissal}";
+  synonyms          "Dismissal, Scroll".
+
+#.....
+#----- Scroll of Displacement
+
+base item Scroll of Displacement =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Displacement}";
+  short description "A scroll with \SpellRef[Wiz 5]{Displacement}";
+  synonyms          "Displacement, Scroll".
+
+#.....
+#----- Scroll of Endure Elements
+
+base item Scroll of Endure Elements =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 1]{Endure Elements}";
+  short description "A scroll with \SpellRef[Clr 1]{Endure Elements}";
+  synonyms          "Endure Elements, Scroll".
+
+#.....
+#----- Scroll of Haste
+
+base item Scroll of Haste =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Haste}";
+  short description "A scroll with \SpellRef[Wiz 5]{Haste}";
+  synonyms          "Haste, Scroll".
+
+#.....
+#----- Scroll of Heat Metal
+
+base item Scroll of Heat Metal =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Heat Metal}";
+  short description "A scroll with \SpellRef[Clr 3]{Heat Metal}";
+  synonyms          "Heat Metal, Scroll".
+
+#.....
+#----- Scroll of Fire Trap
+
+base item Scroll of Fire Trap =
+
+  base              Scroll;
+  value             [scroll(4, 7, 25)];
+  value             725 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 7]{Fire Trap}";
+  short description "A scroll with \SpellRef[Wiz 7]{Fire Trap}";
+  synonyms          "Fire Trap, Scroll".
+
+#.....
+#----- Scroll of Flame Arrow
+
+base item Scroll of Flame Arrow =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Flame Arrow}";
+  short description "A scroll with \SpellRef[Wiz 5]{Flame Arrow}";
+  synonyms          "Flame Arrow, Scroll".
+
+#.....
+#----- Scroll of Flame Strike
+
+base item Scroll of Flame Strike =
+
+  base              Scroll;
+  value             [scroll(5)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 9]{Flame Strike}";
+  short description "A scroll with \SpellRef[Wiz 9]{Flame Strike}";
+  synonyms          "Flame Strike, Scroll".
+
+#.....
+#----- Scroll of Glitterdust
+
+base item Scroll of Glitterdust =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Glitterdust}";
+  short description "A scroll with \SpellRef[Wiz 3]{Glitterdust}";
+  synonyms          "Glitterdust, Scroll".
+
+#.....
+#----- Scroll of Globe of Invulnerability
+
+base item Scroll of Globe of Invulnerability =
+
+  base              Scroll;
+  value             [scroll(6)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 11]{Globe of Invulnerability}";
+  short description "A scroll with \SpellRef[Wiz 11]{Globe of Invulnerability}";
+  synonyms          "Globe of Invulnerability, Scroll".
+
+#.....
+#----- Scroll of Greater Magic Weapon
+
+base item Scroll of Greater Magic Weapon =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Greater Magic Weapon}";
+  short description "A scroll with \SpellRef[Wiz 5]{Greater Magic Weapon}";
+  synonyms          "Greater Magic Weapon, Scroll".
+
+#.....
+#----- Scroll of Identify
+
+base item Scroll of Identify =
+
+  base              Scroll;
+  value             [scroll(1, 1, 100)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Identify}";
+  short description "A scroll with \SpellRef[Wiz 1]{Identify}";
+  synonyms          "Identify, Scroll".
+
+#.....
+#----- Scroll of Inflict Critical Wounds
+
+base item Scroll of Inflict Critical Wounds =
+
+  base              Scroll;
+  value             [scroll(8)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 15]{Inflict Critical Wounds}";
+  short description "A scroll with \SpellRef[Clr 15]{Inflict Critical Wounds}";
+  synonyms          "Inflict Critical Wounds, Scroll".
+
+#.....
+#----- Scroll of Invisibility
+
+base item Scroll of Invisibility =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Invisibility}";
+  short description "A scroll with \SpellRef[Clr 3]{Invisibility}";
+  synonyms          "Invisibility, Scroll".
+
+#.....
+#----- Scroll of Invisibility Purge
+
+base item Scroll of Invisibility Purge =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Invisibility Purge}";
+  short description "A scroll with \SpellRef[Clr 5]{Invisibility Purge}";
+  synonyms          "Invisibility Purge, Scroll".
+
+#.....
+#----- Scroll of Jump
+
+base item Scroll of Jump =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Jump}";
+  short description "A scroll with \SpellRef[Wiz 1]{Jump}";
+  synonyms          "Jump, Scroll".
+
+#.....
+#----- Scroll of Knock
+
+base item Scroll of Knock =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Knock}";
+  short description "A scroll with \SpellRef[Wiz 3]{Knock}";
+  synonyms          "Knock, Scroll".
+
+#.....
+#----- Scroll of Locate Object
+
+base item Scroll of Locate Object =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Locate Object}";
+  short description "A scroll with \SpellRef[Wiz 3]{Locate Object}";
+  synonyms          "Locate Object, Scroll".
+
+#.....
+#----- Scroll of Lesser Restoration
+
+base item Scroll of Lesser Restoration =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Lesser Restoration}";
+  short description "A scroll with \SpellRef[Clr 3]{Lesser Restoration}";
+  synonyms          "Lesser Restoration, Scroll".
+
+#.....
+#----- Scroll of Mage Armor
+
+base item Scroll of Mage Armor =
+
+  value             25 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Mage Armor}";
+  short description "A scroll with \SpellRef[Wiz 1]{Mage Armor}";
+  synonyms          "Mage Armor, Scroll".
+
+#.....
+#----- Scroll of Magic Circle Against Evil
+
+base item Scroll of Magic Circle Against Evil =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Magic Circle Against Evil}";
+  short description "A scroll with \SpellRef[Clr 5]{Magic Circle Against Evil}";
+  synonyms          "Magic Circle Against Evil, Scroll".
+
+#.....
+#----- Scroll of Melf's Acid Arrow
+
+base item Scroll of Melf's Acid Arrow =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Melf's Acid Arrow}";
+  short description "A scroll with \SpellRef[Wiz 3]{Melf's Acid Arrow}";
+  synonyms          "Melf's Acid Arrow, Scroll".
+
+#.....
+#----- Scroll of Minor Image
+
+base item Scroll of Minor Image =
+
+  base              Scroll;
+  value             [scroll(2)];
+  value             150 gp;
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Minor Image}";
+  short description "A scroll with \SpellRef[Wiz 3]{Minor Image}";
+  synonyms          "Minor Image, Scroll".
+
+#.....
+#----- Scroll of Neutralize Poison
+
+base item Scroll of Neutralize Poison =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Drd 5]{Neutralize Poison}";
+  short description "A scroll with \SpellRef[Drd 5]{Neutralize Poison}";
+  synonyms          "Neutralize Poison, Scroll".
+
+#.....
+#----- Scroll of Owl's Wisdom
+
+base item Scroll of Owl's Wisdom =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Owl's Wisdom}";
+  short description "A scroll with \SpellRef[Wiz 3]{Owl's Wisdom}";
+  synonyms          "Owl's Wisdom, Scroll".
+
+#.....
+#----- Scroll of Protection from Evil
+
+base item Scroll of Protection from Evil =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 1]{Protection from Evil}";
+  short description "A scroll with \SpellRef[Clr 1]{Protection from Evil}";
+  synonyms          "Protection from Evil, Scroll".
+
+#.....
+#----- Scroll of Ray of Enfeeblement
+
+base item Scroll of Ray of Enfeeblement =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Ray of Enfeeblement}";
+  short description "A scroll with \SpellRef[Wiz 1]{Ray of Enfeeblement}";
+  synonyms          "Ray of Enfeeblement, Scroll".
+
+#.....
+#----- Scroll of Remove Blindness & Deafness
+
+base item Scroll of Remove Blindness & Deafness =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Remove Blindness & Deafness}";
+  short description "A scroll with \SpellRef[Clr 5]{Remove Blindness & Deafness}";
+  synonyms          "Remove Blindness & Deafness, Scroll".
+
+#.....
+#----- Scroll of Remove Curse
+
+base item Scroll of Remove Curse =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Remove Curse}";
+  short description "A scroll with \SpellRef[Clr 5]{Remove Curse}";
+  synonyms          "Remove Curse, Scroll".
+
+#.....
+#----- Scroll of Remove Disease
+
+base item Scroll of Remove Disease =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Remove Disease}";
+  short description "A scroll with \SpellRef[Clr 5]{RemoveDisease}";
+  synonyms          "Remove Disease, Scroll".
+
+#.....
+#----- Scroll of Remove Fear
+
+base item Scroll of Remove Fear =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 1]{Remove Fear}";
+  short description "A scroll with \SpellRef[Clr 1]{RemoveFear}";
+  synonyms          "Remove Fear, Scroll".
+
+#.....
+#----- Scroll of Remove Paralysis
+
+base item Scroll of Remove Paralysis =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 3]{Remove Paralysis}";
+  short description "A scroll with \SpellRef[Clr 3]{Remove Paralysis}";
+  synonyms          "Remove Paralysis, Scroll".
+
+#.....
+#----- Scroll of Restoration
+
+base item Scroll of Restoration =
+
+  base              Scroll;
+  value             [scroll(4, 7, 100)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 7]{Restoration}";
+  short description "A scroll with \SpellRef[Clr 7]{Restoration}";
+  synonyms          "Restoration, Scroll".
+
+#.....
+#----- Scroll of Searing Light
+
+base item Scroll of Searing Light =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 5]{Searing Light}";
+  short description "A scroll with \SpellRef[Clr 5]{Searing Light}";
+  synonyms          "Searing Light, Scroll".
+
+#.....
+#----- Scroll of Spider Climb
+
+base item Scroll of Spider Climb =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Spider Climb}";
+  short description "A scroll with \SpellRef[Wiz 3]{Spider Climb}";
+  synonyms          "Spider Climb, Scroll".
+
+#.....
+#----- Scroll of Stoneskin
+
+base item Scroll of Stoneskin =
+
+  base              Scroll;
+  value             [scroll(4, 7, 250)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 7]{Stoneskin}";
+  short description "A scroll with \SpellRef[Wiz 7]{Stoneskin}";
+  synonyms          "Stoneskin, Scroll".
+
+#.....
+#----- Scroll of Suggestion
+
+base item Scroll of Suggestion =
+
+  base              Scroll;
+  value             [scroll(3)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 5]{Suggestion}";
+  short description "A scroll with \SpellRef[Wiz 5]{Suggestion}";
+  synonyms          "Suggestion, Scroll".
+
+#.....
+#----- Scroll of Summon Monster V
+
+base item Scroll of Summon Monster V =
+
+  base              Scroll;
+  value             [scroll(7)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 9]{Summon Monster V}";
+  short description "A scroll with \SpellRef[Clr 9]{Summon Monster V}";
+  synonyms          "Summon Monster V, Scroll".
+
+#.....
+#----- Scroll of Teleport
+
+base item Scroll of Teleport =
+
+  base              Scroll;
+  value             [scroll(7)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 9]{Teleport}";
+  short description "A scroll with \SpellRef[Clr 9]{Teleport}";
+  synonyms          "Teleport, Scroll".
+
+#.....
+#----- Scroll of Wall of Stone
+
+base item Scroll of Wall of Stone =
+
+  base              Scroll;
+  value             [scroll(7)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 9]{Wall of Stone}.";
+  short description "A scroll with \SpellRef[Wiz 9]{Wall of Stone}.";
+  synonyms          "Wall of Stone, Scroll".
 
 #.....
 
@@ -2611,715 +3369,6 @@ base item Potion of Sneaking [Potion] =
   description
   "This potion grants the drinker the ability to walk softly and dampens sound around her slightly, granting a +10 circumstance bonus to her \Skill{Move Silently} checks for 1 hour.";
   short description "Move Silently +10 for 1 hour.".
-
-#.....
-
-#.....
-#----- Scrolls
-
-#----- Scroll
-
-base item Scroll =
-
-  weight            1 lb;
-  probability       Common;
-  size              Tiny;
-  hardness          0;
-  hp                1;
-  appearances       Common "A rolled up sheet of fine paper inside an ivory tube.",
-                    Common "A rolled up sheet of fine paper inside an jade tube.",
-                    Common "A rolled up sheet of fine paper inside an metal tube.",
-                    Common "A rolled up sheet of fine paper inside an leather tube.",
-                    Common "A rolled up sheet of fine paper inside an wood tube.",
-                    Rare "A rolled up sheet of fine paper.";
-  substance         paper 1/10 in;
-  break DC          8;
-  player name       "Scroll";
-  worlds            Generic;
-  references        WTC 17752: 237-238;
-  description
-  "A scroll is a heavy sheet of fine vellum or high-quality paper. An area the
-  size of a piece of modern-day notebook paper (about \frac[8]{1}{2} inches
-  wide and 11 inches long) is sufficient to hold one spell. The sheet is
-  reinforced at the top and bottom with stripes of leather slightly longer than
-  the sheet is wide. A scroll holding more than one spell has the same width
-  (about \frac[8]{1}{2} inches) but is an extra foot or so long for each extra
-  spell. Scrolls that hold three or more spells are usually fitted with
-  reinforcing rods at each end rather than simple stirps of leather. A scroll
-  as AC 9, 1 hit point, harness 0, and a break DC of 8.
-
-  To protect it from wrinkling or tearing, a scroll is rolled up from both ends
-  to form a double cylinder. (This also helps the user unroll the scroll
-  quickly.) The scroll is placed in a tube of ivory, jade, leather, metal, or
-  wood. Most scroll cases are inscribed with magic symbols (see \Spell{Arcane
-  Mark}). The symbols often hide magic traps such as \Spell{Glyph of Warding}
-  or \Spell{Fire Trap} spells.";
-  categories        mundane.
-
-
-#.....
-
-#----- Scroll of Bear's Endurance
-
-base item Scroll of Bear's Endurance [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Bear's Endurance}";
-  short description "A scroll with \SpellRef[Wiz 3]{Bear's Endurance}";
-  synonyms          "Bear's Endurance, Scroll".
-
-#.....
-#----- Scroll of Blade Barrier
-
-base item Scroll of Blade Barrier [Scroll] =
-
-  value             2275 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 13]{Blade Barrier}";
-  short description "A scroll with \SpellRef[Clr 13]{Blade Barrier}";
-  synonyms          "Blade Barrier, Scroll".
-
-#.....
-#----- Scroll of Burning Hands
-
-base item Scroll of Burning Hands [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 1]{Burning Hands}";
-  short description "A scroll with \SpellRef[Wiz 1]{Burning Hands}";
-  synonyms          "Burning Hands, Scroll".
-
-#.....
-#----- Scroll of Bull's Strength
-
-base item Scroll of Bull's Strength [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Bull's Strength}";
-  short description "A scroll with \SpellRef[Wiz 3]{Bull's Strength}";
-  synonyms          "Bull's Strength, Scroll".
-
-#.....
-#----- Scroll of Charm Person
-
-base item Scroll of Charm Person [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 1]{Charm Person}";
-  short description "A scroll with \SpellRef[Wiz 1]{Charm Person}";
-  synonyms          "Charm Person, Scroll".
-
-#.....
-#----- Scroll of Chain Lightning
-
-base item Scroll of Chain Lightning [Scroll] =
-
-  value             1650 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 11]{Chain Lightning}";
-  short description "A scroll with \SpellRef[Wiz 11]{Chain Lightning}";
-  synonyms          "Chain Lightning, Scroll".
-
-#.....
-#----- Scroll of Chill Metal
-
-base item Scroll of Chill Metal [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 3]{Chill Metal}";
-  short description "A scroll with \SpellRef[Clr 3]{Chill Metal}";
-  synonyms          "Chill Metal, Scroll".
-
-#.....
-#----- Scroll of Color Spray
-
-base item Scroll of Color Spray [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 1]{Color Spray}";
-  short description "A scroll with \SpellRef[Wiz 1]{Color Spray}";
-  synonyms          "Color Spray, Scroll".
-
-#.....
-#----- Scroll of Control Undead
-
-base item Scroll of Control Undead [Scroll] =
-
-  value             2275 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 13]{Control Undead}";
-  short description "A scroll with \SpellRef[Wiz 13]{Control Undead}";
-  synonyms          "Control Undead, Scroll".
-
-#.....
-#----- Scroll of Death Ward
-
-base item Scroll of Death Ward [Scroll] =
-
-  value             700 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 7]{Death Ward}";
-  short description "A scroll with \SpellRef[Clr 7]{Death Ward}";
-  synonyms          "Searing Light, Scroll".
-
-#.....
-#----- Scroll of Delay Poison
-
-base item Scroll of Delay Poison [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 3]{Delay Poison}";
-  short description "A scroll with \SpellRef[Clr 3]{Delay Poison}";
-  synonyms          "Delay Poison, Scroll".
-
-#.....
-#----- Scroll of Displacement
-
-base item Scroll of Dismissal [Scroll] =
-
-  value             700 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 7]{Dismissal}";
-  short description "A scroll with \SpellRef[Wiz 7]{Dismissal}";
-  synonyms          "Dismissal, Scroll".
-
-#.....
-#----- Scroll of Displacement
-
-base item Scroll of Displacement [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 5]{Displacement}";
-  short description "A scroll with \SpellRef[Wiz 5]{Displacement}";
-  synonyms          "Displacement, Scroll".
-
-#.....
-#----- Scroll of Endure Elements
-
-base item Scroll of Endure Elements [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 1]{Endure Elements}";
-  short description "A scroll with \SpellRef[Clr 1]{Endure Elements}";
-  synonyms          "Endure Elements, Scroll".
-
-#.....
-#----- Scroll of Haste
-
-base item Scroll of Haste [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 5]{Haste}";
-  short description "A scroll with \SpellRef[Wiz 5]{Haste}";
-  synonyms          "Haste, Scroll".
-
-#.....
-#----- Scroll of Heat Metal
-
-base item Scroll of Heat Metal [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 3]{Heat Metal}";
-  short description "A scroll with \SpellRef[Clr 3]{Heat Metal}";
-  synonyms          "Heat Metal, Scroll".
-
-#.....
-#----- Scroll of Flame Arrow
-
-base item Scroll of Fire Trap [Scroll] =
-
-  value             725 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 7]{Fire Trap}";
-  short description "A scroll with \SpellRef[Wiz 7]{Fire Trap}";
-  synonyms          "Fire Trap, Scroll".
-
-#.....
-#----- Scroll of Flame Arrow
-
-base item Scroll of Flame Arrow [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 5]{Flame Arrow}";
-  short description "A scroll with \SpellRef[Wiz 5]{Flame Arrow}";
-  synonyms          "Flame Arrow, Scroll".
-
-#.....
-#----- Scroll of Flame Strike
-
-base item Scroll of Flame Strike [Scroll] =
-
-  value             1125 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 9]{Flame Strike}";
-  short description "A scroll with \SpellRef[Wiz 9]{Flame Strike}";
-  synonyms          "Flame Strike, Scroll".
-
-#.....
-#----- Scroll of Glitterdust
-
-base item Scroll of Glitterdust [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Glitterdust}";
-  short description "A scroll with \SpellRef[Wiz 3]{Glitterdust}";
-  synonyms          "Glitterdust, Scroll".
-
-#.....
-#----- Scroll of Globe of Invulnerability
-
-base item Scroll of Globe of Invulnerability [Scroll] =
-
-  value             1650 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 11]{Globe of Invulnerability}";
-  short description "A scroll with \SpellRef[Wiz 11]{Globe of Invulnerability}";
-  synonyms          "Globe of Invulnerability, Scroll".
-
-#.....
-#----- Scroll of Greater Magic Weapon
-
-base item Scroll of Greater Magic Weapon [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 5]{Greater Magic Weapon}";
-  short description "A scroll with \SpellRef[Wiz 5]{Greater Magic Weapon}";
-  synonyms          "Greater Magic Weapon, Scroll".
-
-#.....
-#----- Scroll of Identify
-
-base item Scroll of Identify [Scroll] =
-
-  value             125 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 1]{Identify}";
-  short description "A scroll with \SpellRef[Wiz 1]{Identify}";
-  synonyms          "Identify, Scroll".
-
-#.....
-#----- Scroll of Inflict Critical Wounds
-
-base item Scroll of Inflict Critical Wounds [Scroll] =
-
-  value             3000 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 15]{Inflict Critical Wounds}";
-  short description "A scroll with \SpellRef[Clr 15]{Inflict Critical Wounds}";
-  synonyms          "Inflict Critical Wounds, Scroll".
-
-#.....
-#----- Scroll of Invisibility
-
-base item Scroll of Invisibility [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 3]{Invisibility}";
-  short description "A scroll with \SpellRef[Clr 3]{Invisibility}";
-  synonyms          "Invisibility, Scroll".
-
-#.....
-#----- Scroll of Invisibility Purge
-
-base item Scroll of Invisibility Purge [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 5]{Invisibility Purge}";
-  short description "A scroll with \SpellRef[Clr 5]{Invisibility Purge}";
-  synonyms          "Invisibility Purge, Scroll".
-
-#.....
-#----- Scroll of Jump
-
-base item Scroll of Jump [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 1]{Jump}";
-  short description "A scroll with \SpellRef[Wiz 1]{Jump}";
-  synonyms          "Jump, Scroll".
-
-#.....
-#----- Scroll of Knock
-
-base item Scroll of Knock [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Knock}";
-  short description "A scroll with \SpellRef[Wiz 3]{Knock}";
-  synonyms          "Knock, Scroll".
-
-#.....
-#----- Scroll of Locate Object
-
-base item Scroll of Locate Object [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Locate Object}";
-  short description "A scroll with \SpellRef[Wiz 3]{Locate Object}";
-  synonyms          "Locate Object, Scroll".
-
-#.....
-#----- Scroll of Lesser Restoration
-
-base item Scroll of Lesser Restoration [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 3]{Lesser Restoration}";
-  short description "A scroll with \SpellRef[Clr 3]{Lesser Restoration}";
-  synonyms          "Lesser Restoration, Scroll".
-
-#.....
-#----- Scroll of Mage Armor
-
-base item Scroll of Mage Armor [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 1]{Mage Armor}";
-  short description "A scroll with \SpellRef[Wiz 1]{Mage Armor}";
-  synonyms          "Mage Armor, Scroll".
-
-#.....
-#----- Scroll of Magic Circle Against Evil
-
-base item Scroll of Magic Circle Against Evil [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 5]{Magic Circle Against Evil}";
-  short description "A scroll with \SpellRef[Clr 5]{Magic Circle Against Evil}";
-  synonyms          "Magic Circle Against Evil, Scroll".
-
-#.....
-#----- Scroll of Melf's Acid Arrow
-
-base item Scroll of Melf's Acid Arrow [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Melf's Acid Arrow}";
-  short description "A scroll with \SpellRef[Wiz 3]{Melf's Acid Arrow}";
-  synonyms          "Melf's Acid Arrow, Scroll".
-
-#.....
-#----- Scroll of Minor Image
-
-base item Scroll of Minor Image [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Minor Image}";
-  short description "A scroll with \SpellRef[Wiz 3]{Minor Image}";
-  synonyms          "Minor Image, Scroll".
-
-#.....
-#----- Scroll of Neutralize Poison
-
-base item Scroll of Neutralize Poison [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Drd 5]{Neutralize Poison}";
-  short description "A scroll with \SpellRef[Drd 5]{Neutralize Poison}";
-  synonyms          "Neutralize Poison, Scroll".
-
-#.....
-#----- Scroll of Owl's Wisdom
-
-base item Scroll of Owl's Wisdom [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Owl's Wisdom}";
-  short description "A scroll with \SpellRef[Wiz 3]{Owl's Wisdom}";
-  synonyms          "Owl's Wisdom, Scroll".
-
-#.....
-#----- Scroll of Protection from Evil
-
-base item Scroll of Protection from Evil [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 1]{Protection from Evil}";
-  short description "A scroll with \SpellRef[Clr 1]{Protection from Evil}";
-  synonyms          "Protection from Evil, Scroll".
-
-#.....
-#----- Scroll of Ray of Enfeeblement
-
-base item Scroll of Ray of Enfeeblement [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 1]{Ray of Enfeeblement}";
-  short description "A scroll with \SpellRef[Wiz 1]{Ray of Enfeeblement}";
-  synonyms          "Ray of Enfeeblement, Scroll".
-
-#.....
-#----- Scroll of Remove Blindness & Deafness
-
-base item Scroll of Remove Blindness & Deafness [Scroll]=
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 5]{Remove Blindness & Deafness}";
-  short description "A scroll with \SpellRef[Clr 5]{Remove Blindness & Deafness}";
-  synonyms          "Remove Blindness & Deafness, Scroll".
-
-#.....
-#----- Scroll of Remove Curse
-
-base item Scroll of Remove Curse [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 5]{Remove Curse}";
-  short description "A scroll with \SpellRef[Clr 5]{Remove Curse}";
-  synonyms          "Remove Curse, Scroll".
-
-#.....
-#----- Scroll of Remove Disease
-
-base item Scroll of Remove Disease [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 5]{Remove Disease}";
-  short description "A scroll with \SpellRef[Clr 5]{RemoveDisease}";
-  synonyms          "Remove Disease, Scroll".
-
-#.....
-#----- Scroll of Remove Fear
-
-base item Scroll of Remove Fear [Scroll] =
-
-  value             25 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 1]{Remove Fear}";
-  short description "A scroll with \SpellRef[Clr 1]{RemoveFear}";
-  synonyms          "Remove Fear, Scroll".
-
-#.....
-#----- Scroll of Remove Paralysis
-
-base item Scroll of Remove Paralysis [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 3]{Remove Paralysis}";
-  short description "A scroll with \SpellRef[Clr 3]{Remove Paralysis}";
-  synonyms          "Remove Paralysis, Scroll".
-
-#.....
-#----- Scroll of Restoration
-
-base item Scroll of Restoration [Scroll] =
-
-  value             800 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 7]{Restoration}";
-  short description "A scroll with \SpellRef[Clr 7]{Restoration}";
-  synonyms          "Restoration, Scroll".
-
-#.....
-#----- Scroll of Searing Light
-
-base item Scroll of Searing Light [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 5]{Searing Light}";
-  short description "A scroll with \SpellRef[Clr 5]{Searing Light}";
-  synonyms          "Searing Light, Scroll".
-
-#.....
-#----- Scroll of Spider Climb
-
-base item Scroll of Spider Climb [Scroll] =
-
-  value             150 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 3]{Spider Climb}";
-  short description "A scroll with \SpellRef[Wiz 3]{Spider Climb}";
-  synonyms          "Spider Climb, Scroll".
-
-#.....
-#----- Scroll of Stoneskin
-
-base item Scroll of Stoneskin [Scroll] =
-
-  value             950 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 7]{Stoneskin}";
-  short description "A scroll with \SpellRef[Wiz 7]{Stoneskin}";
-  synonyms          "Stoneskin, Scroll".
-
-#.....
-#----- Scroll of Suggestion
-
-base item Scroll of Suggestion [Scroll] =
-
-  value             375 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 5]{Suggestion}";
-  short description "A scroll with \SpellRef[Wiz 5]{Suggestion}";
-  synonyms          "Suggestion, Scroll".
-
-#.....
-#----- Scroll of Summon Monster V
-
-base item Scroll of Summon Monster V [Scroll] =
-
-  value             1125 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 9]{Summon Monster V}";
-  short description "A scroll with \SpellRef[Clr 9]{Summon Monster V}";
-  synonyms          "Summon Monster V, Scroll".
-
-#.....
-#----- Scroll of Teleport
-
-base item Scroll of Teleport [Scroll] =
-
-  value             1125 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Clr 9]{Teleport}";
-  short description "A scroll with \SpellRef[Clr 9]{Teleport}";
-  synonyms          "Teleport, Scroll".
-
-#.....
-#----- Scroll of Wall of Stone
-
-base item Scroll of Wall of Stone [Scroll] =
-
-  value             1125 gp;
-  probability       Common;
-  player name       "Scroll";
-  description
-  "A scroll with the spell \SpellRef[Wiz 9]{Wall of Stone}.";
-  short description "A scroll with \SpellRef[Wiz 9]{Wall of Stone}.";
-  synonyms          "Wall of Stone, Scroll".
 
 #.....
 

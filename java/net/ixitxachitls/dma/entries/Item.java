@@ -24,12 +24,16 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import net.ixitxachitls.dma.entries.extensions.Composite;
+import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
@@ -40,6 +44,7 @@ import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -629,6 +634,45 @@ public class Item extends CampaignEntry<BaseItem>
   }
 
   //.........................................................................
+  //--------------------------- containedItems -----------------------------
+
+  /**
+   * Get all the items contained in this one.
+   *
+   * @return      a list of all contained items
+   *
+   */
+  public @Nonnull Map<String, Item> containedItems()
+  {
+    Map<String, Item> items = new HashMap<String, Item>();
+
+    Contents contents = (Contents)getExtension("contents");
+    if(contents != null)
+    {
+      Map<String, Item> contained = contents.containedItems();
+      for(String key : contained.keySet())
+        if(items.containsKey(key))
+          Log.warning("item loop detected for " + key);
+
+      items.putAll(contents.containedItems());
+    }
+
+    Composite composite = (Composite)getExtension("composite");
+    if(composite != null)
+    {
+      Map<String, Item> contained = composite.containedItems();
+      for(String key : contained.keySet())
+        if(items.containsKey(key))
+          Log.warning("item loop detected for " + key);
+
+      items.putAll(composite.containedItems());
+    }
+
+    return items;
+  }
+
+  //........................................................................
+
 
   //------------------------------ printCommand ----------------------------
 

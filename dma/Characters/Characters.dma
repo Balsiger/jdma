@@ -5,7 +5,7 @@ character Andrinor =
   base        Salamix;
   state       adventuring;
   campaign    FR/City of the Spider Queen;
-  items       IMEO, JRXI, GHSL, DFST, WJCI, PQFP, HOZL, GPFG, RSRI, MFJO, SODS, VTVG, AGRC, EJAH, MTFT, TDJH;
+  items       IMEO, JRXI, GHSL, DFST, WJCI, PQFP, HOZL, GPFG, RSRI, MFJO, SODS, VTVG, AGRC, EJAH, MTFT, TDJH, PVDB;
   level       13.
 
 #.....
@@ -17,6 +17,7 @@ character Eskarina Weatherwax =
   base        Ylene;
   state       adventuring;
   campaign    FR/City of the Spider Queen;
+  items       XKIR, GRND, AXME, KTSS, XQMF, KAMO, VMKO, WSLS;
   level       13.
 
 #.....

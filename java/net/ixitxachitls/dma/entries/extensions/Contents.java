@@ -24,7 +24,9 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,6 +44,7 @@ import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -423,27 +426,37 @@ public class Contents extends Extension<Item>
   // }
 
   //........................................................................
-  //------------------------------- contains -------------------------------
+  //---------------------------- containedItems ----------------------------
 
   /**
-   * Check if the container contains the item with the given name.
+   * Get all the items contained in this contents.
    *
-   * @param       inItem the name of the item to look for
-   *
-   * @return      true if the item is contained, false if not
+   * @return      a list with all the items
    *
    */
-  public boolean contains(@Nonnull String inItem)
+  public @Nonnull Map<String, Item> containedItems()
   {
+    Map<String, Item> items = new HashMap<String, Item>();
     for(Name name : m_contents)
-      if(inItem.equals(name.get()))
-        return true;
+    {
+      Item item = m_entry.getCampaign().getItem(name.get());
+      items.put(name.get(), item);
 
-    return false;
+      if(item == null)
+        continue;
+
+      Map<String, Item> contained = item.containedItems();
+      for(String key : contained.keySet())
+        if(items.containsKey(key))
+          Log.warning("depected item loop for " + key);
+
+      items.putAll(item.containedItems());
+    }
+
+    return items;
   }
 
   //........................................................................
-
 
   //........................................................................
 

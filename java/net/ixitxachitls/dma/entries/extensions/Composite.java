@@ -24,7 +24,9 @@
 package net.ixitxachitls.dma.entries.extensions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -41,6 +43,7 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -217,6 +220,35 @@ public class Composite extends Extension<Item>
   // }
 
   //........................................................................
+  //---------------------------- containedItems ----------------------------
+
+  /**
+   * Get all the items contained in this contents.
+   *
+   * @return      a list with all the items
+   *
+   */
+  public @Nonnull Map<String, Item> containedItems()
+  {
+    Map<String, Item> items = new HashMap<String, Item>();
+    for(Name name : m_includes)
+    {
+      Item item = m_entry.getCampaign().getItem(name.get());
+      items.put(name.get(), item);
+
+      if(item == null)
+        continue;
+
+      Map<String, Item> contained = item.containedItems();
+      for(String key : contained.keySet())
+        if(items.containsKey(key))
+          Log.warning("depected item loop for " + key);
+
+      items.putAll(item.containedItems());
+    }
+
+    return items;
+  }
 
   //........................................................................
   //----------------------------- computeValue -----------------------------

@@ -524,29 +524,49 @@ public class Campaign extends Entry<BaseCampaign>
 
     if("items".equals(inKey))
     {
-      List<Item> items =
-        DMADataFactory.get().getEntries(Item.TYPE, getKey(), 0, 100);
       List<Character> characters =
         DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
 
       List<Object> commands = new ArrayList<Object>();
 
-    itemLoop:
-      for(Item item : items)
+      for(int pos = 0;; pos += 100)
       {
+        // TODO: this is expensive, we might want to do this only on demand?
+        List<Item> items =
+          DMADataFactory.get().getEntries(Item.TYPE, getKey(), pos, 100);
+
+        Map<String, Item> owned = new HashMap<String, Item>();
         for(Character character : characters)
-          if(character.possesses(item.getName()))
-            continue itemLoop;
+        {
+          Map<String, Item> contained = character.containedItems();
+          for(String key : contained.keySet())
+            if(owned.containsKey(key))
+              Log.warning("item " + key + " is possessed by two characters");
 
-        if(!commands.isEmpty())
-          commands.add(", ");
+          owned.putAll(contained);
+        }
 
-        commands.add(new Link(item.getNameCommand(inDM), getPath() + "/"
-                              + Item.TYPE.getLink() + "/" + item.getName()));
+        for(Item item : items)
+        {
+          if(owned.containsKey(item.getName()))
+            continue;
+
+          if(!commands.isEmpty())
+            commands.add(", ");
+
+          commands.add(new Link(item.getNameCommand(inDM), getPath() + "/"
+                                + Item.TYPE.getLink() + "/" + item.getName()));
+        }
+
+        if(items.size() < 100)
+          break;
+
+        if(commands.size() > 100)
+        {
+          commands.add(", ...");
+          break;
+        }
       }
-
-      if(items.size() >= 100)
-        commands.add(", ...");
 
       return new FormattedValue(new Command(commands), null, "items")
         .withPlural("items");
