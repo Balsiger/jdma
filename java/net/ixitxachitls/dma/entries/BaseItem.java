@@ -1799,8 +1799,6 @@ public class BaseItem extends BaseEntry
     //     + "#.......................................................\n";
     //   AbstractEntry entry = createBaseItem();
 
-    //   //System.out.println("read entry:\n'" + entry + "'");
-
     //   assertNotNull("base item should have been read", entry);
     //   assertEquals("base item name does not match", "winter blanket",
     //                 entry.getName());

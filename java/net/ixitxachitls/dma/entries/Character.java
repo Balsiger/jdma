@@ -45,6 +45,7 @@ import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.OverlayIcon;
 import net.ixitxachitls.output.commands.Window;
+import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -289,7 +290,6 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   public boolean possesses(@Nonnull String inItem)
   {
-    System.out.println(getName() + " possessing " + inItem);
     return containedItems().containsKey(inItem);
   }
 
@@ -406,7 +406,9 @@ public class Character extends CampaignEntry<BaseCharacter>
       if(item == null)
         continue;
 
-      total = total.add(item.getValue());
+      Money value = item.getValue();
+      if(value != null)
+        total = total.add(value);
     }
 
     return total;
@@ -431,7 +433,9 @@ public class Character extends CampaignEntry<BaseCharacter>
       if(item == null)
         continue;
 
-      total = total.add(item.getWeight());
+      Weight weight = item.getWeight();
+      if(weight != null)
+        total = total.add(weight);
     }
 
     return total;
@@ -582,6 +586,18 @@ public class Character extends CampaignEntry<BaseCharacter>
           commands.add(new Link(item.getNameCommand(inDM), url));
         else
           commands.add(new Link(name, url));
+      }
+
+      if(inDM)
+      {
+        commands.add(" | ");
+        commands.add(new Link("Add", "javascript:item.create("
+                              + Encodings.toJSString(getCampaign().getPath())
+                              + ", "
+                              + Encodings.toJSString
+                              (getCampaign().getEditType() + "/"
+                               + TYPE.getLink()
+                               + "/" + getName()) + ");\""));
       }
 
       return new FormattedValue(new Command(commands), m_items, "items")
@@ -856,6 +872,36 @@ public class Character extends CampaignEntry<BaseCharacter>
 
   //----------------------------------------------------------- manipulators
 
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given entry to the campaign entry.
+   *
+   * @param       inEntry the entry to add
+   *
+   * @return      true if added, false if not
+   *
+   */
+  @Override
+  public boolean add(@Nonnull CampaignEntry inEntry)
+  {
+    String name = inEntry.getName();
+    List<Name> names = new ArrayList<Name>();
+    for(Name item : m_items)
+      if(name.equals(item.get()))
+        return true;
+      else
+        names.add(item);
+
+    names.add(m_items.newElement().as(name));
+    m_items = m_items.as(names);
+
+    changed();
+    save();
+    return true;
+  }
+
+  //........................................................................
   //------------------------------ updateKey -------------------------------
 
   /**
@@ -1053,7 +1099,6 @@ public class Character extends CampaignEntry<BaseCharacter>
   //   Item                    item  = (Item)inEntry;
   //   ValueGroup.PrintCommand print = item.printCommand(inDM, false);
 
-  //   System.out.println("add item command: " + inEntry.getID());
   //   if(inDM)
   //     ioCommands.add(item.getCommand(print, Item.LIST_COMMAND_DM, inDM));
   //   else

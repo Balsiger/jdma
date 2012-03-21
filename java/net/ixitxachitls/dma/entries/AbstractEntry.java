@@ -1107,7 +1107,6 @@ public class AbstractEntry extends ValueGroup
 
 //       if(value == null || !value.isDefined())
 //         continue;
-//       System.out.println(inName + ": " + value);
 
 //       if(inCombine == Combine.FIRST)
 //         return value;
@@ -2598,7 +2597,7 @@ public class AbstractEntry extends ValueGroup
   @SuppressWarnings("unchecked")
   public @Nullable AbstractExtension addExtension(@Nonnull String inName)
   {
-    if(m_extensions.containsKey(inName))
+    if(m_extensions.containsKey(inName) || inName.isEmpty())
       return null;
 
     // TODO: clean up names if tags are not used anmore
@@ -3603,8 +3602,6 @@ public class AbstractEntry extends ValueGroup
 
 //       AbstractEntry entry = AbstractEntry.read(reader);
 
-//       //System.out.println(entry);
-
 //       assertNotNull("entry should have been read", entry);
 //       assertEquals("entry name does not match", "test",
 //                    entry.getName());
@@ -3629,8 +3626,6 @@ public class AbstractEntry extends ValueGroup
 
 //       entry = AbstractEntry.read(reader);
 
-//       //System.out.println(entry);
-
 //       assertNotNull("entry should have been read", entry);
 //       assertEquals("entry name does not match", "test",
 //                    entry.getName());
@@ -3645,8 +3640,6 @@ public class AbstractEntry extends ValueGroup
 //       reader = new ParseReader(new java.io.StringReader(text), "test");
 
 //       entry = AbstractEntry.read(reader);
-
-//       //System.out.println(entry);
 
 //       assertNotNull("entry should have been read", entry);
 //       assertEquals("entry name does not match", "test",
@@ -3664,8 +3657,6 @@ public class AbstractEntry extends ValueGroup
 //       reader = new ParseReader(new java.io.StringReader(text), "test");
 
 //       entry = AbstractEntry.read(reader);
-
-//       //System.out.println(entry);
 
 //       assertNotNull("entry should have been read", entry);
 //       assertEquals("entry name does not match", "test",
@@ -3707,8 +3698,6 @@ public class AbstractEntry extends ValueGroup
 //       reader = new ParseReader(new java.io.StringReader(text), "test");
 
 //       entry = AbstractEntry.read(reader);
-
-//       //System.out.println(entry);
 
 //       assertNotNull("entry should have been read", entry);
 //       assertEquals("entry name does not match", "test",

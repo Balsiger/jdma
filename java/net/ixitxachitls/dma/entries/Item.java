@@ -1797,7 +1797,6 @@ public class Item extends CampaignEntry<BaseItem>
     //   Entry entry = (Entry)Item.read(reader);
 
     //   entry.complete();
-    //   //System.out.println("read entry:\n'" + entry + "'");
 
     //   assertNotNull("item should have been read", entry);
     //   assertEquals("item name does not match", "Winter Blanket",

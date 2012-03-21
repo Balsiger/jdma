@@ -322,8 +322,6 @@ public boolean doRead(@Nonnull ParseReader inReader)
       // now with some value
       value = new Decimal(10023, 0, 20000, 10000);
 
-      //System.out.println(value);
-
       assertEquals("not defined after setting", true, value.isDefined());
       assertEquals("value not correctly gotten", 10023, value.get());
       assertEquals("value not correctly converted", "1.0023",

@@ -328,7 +328,6 @@ public class Area extends Units<Area>
 
        value = new Area(null, new Rational(1, 2, 3), new Rational(2), false);
 
-       //System.out.println(value.toPrint());
        assertEquals("not defined at start", true, value.isDefined());
        assertEquals("string", "1 2/3 sq ft 2 sq in", value.toString());
        assertEquals("print",
@@ -348,7 +347,6 @@ public class Area extends Units<Area>
        value = new Area(new Rational(1), new Rational(1, 1, 2),
                         new Rational(2, 3), false);
 
-       //System.out.println(value.toPrint());
        assertEquals("not defined at start", true, value.isDefined());
        assertEquals("string", "1 sq yd 1 1/2 sq ft 2/3 sq in",
                     value.toString());
@@ -369,7 +367,6 @@ public class Area extends Units<Area>
        value = new Area(new Rational(1), new Rational(3, 1, 4),
                         new Rational(2, 3), true);
 
-       //System.out.println(value);
        assertEquals("not defined at start", true, value.isDefined());
        assertEquals("string", "1 sq m 3 1/4 sq dm 2/3 sq cm",
                     value.toString());

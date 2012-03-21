@@ -268,6 +268,43 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 
   //----------------------------------------------------------- manipulators
 
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given entry to the campaign entry.
+   *
+   * @param       inEntry the entry to add
+   *
+   * @return      true if added, false if not
+   *
+   */
+  public boolean add(@Nonnull CampaignEntry inEntry)
+  {
+    return false;
+  }
+
+  //........................................................................
+
+  //--------------------------------- save ---------------------------------
+
+  /**
+   * Save the entry if it has been changed.
+   *
+   * @return      true if saved, false if not
+   *
+   */
+  public boolean save()
+  {
+    if(m_name.get().startsWith(Entry.TEMPORARY))
+      do
+      {
+        randomID();
+      } while(DMADataFactory.get().getEntry(getKey()) != null);
+
+    return super.save();
+  }
+
+  //........................................................................
   //------------------------------ updateKey -------------------------------
 
   /**

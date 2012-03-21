@@ -236,8 +236,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
 
       return new FormattedValue
         (new Command(commands), Strings.toString(categories, ", ", ""),
-         "categories")
-        .withEditable(true);
+         "categories");
     }
 
     return super.computeValue(inKey, inDM);
@@ -1251,8 +1250,6 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   //     Entry entry = new Entry("just a test", new Type(Entry.class),
   //                             new Type(BaseEntry.class));
 
-  //     //System.out.println(entry);
-
   //     // undefined value
   //     assertEquals("name no correctly set", "just a test",
   //                  entry.getName().toString());
@@ -1301,7 +1298,6 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
 
   //     Entry entry = (Entry)Entry.read(reader);
 
-  //     //System.out.println(entry);
   //     assertNotNull("entry should have been read", entry);
   //     assertEquals("entry name does not match", "just a = test",
   //                  entry.getName());

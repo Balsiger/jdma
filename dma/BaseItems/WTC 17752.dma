@@ -1820,7 +1820,7 @@ base item with container Bag of Holding I =
 
   capacity          30 cu ft;
   value             2500 gp;
-  weight            15 lbs;
+  weight            [=15 lbs];
   probability       Very Rare;
   size              Medium-size;
   appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
@@ -1865,7 +1865,7 @@ base item with container Bag of Holding II =
 
   capacity          70 cu ft;
   value             5000 gp;
-  weight            25 lbs;
+  weight            [=25 lbs];
   probability       Very Rare;
   size              Medium-size;
   appearances       Common "A common cloth sack, about 2 feet by 4 feet in size.";
@@ -2434,9 +2434,6 @@ base item with incomplete, wearable Slippers of Spider Climbing =
 #.....
 
 --- end here ---
-
-
-
 
 # the following items are not yet completely defined
 

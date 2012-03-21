@@ -391,7 +391,6 @@ public class Duration extends Units<Duration>
       // now with some value (pounds)
       value = new Duration(null, null, null, new Rational(1, 1, 2));
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string ", "1 1/2 seconds", value.toString());
       assertEquals("string ", "\\window{\\span{unit}{\\frac[1]{1}{2} seconds}}"
@@ -408,7 +407,6 @@ public class Duration extends Units<Duration>
       value = new Duration(new Rational(2), new Rational(1, 2, 3),
                            new Rational(3), new Rational(1));
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "2 days 1 2/3 hours 3 minutes 1 second",
                    value.toString());
@@ -430,7 +428,6 @@ public class Duration extends Units<Duration>
       // now with some value (metric)
        value = new Duration(new Rational(1, 1, 2));
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 1/2 rounds", value.toString());
       assertEquals("print",
@@ -447,7 +444,6 @@ public class Duration extends Units<Duration>
 
       value = new Duration(new Rational(12033));
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "12033 rounds",
                    value.toString());

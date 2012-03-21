@@ -1669,8 +1669,6 @@ public class Units<T extends Units> extends Value<T>
           new Rational(1)
         }, s_sets, s_sets[0], 4);
 
-      //System.out.println(value);
-
       assertEquals("not defined after setting", true, value.isDefined());
       assertEquals("base",      "20 1/100", value.getAsBase().toString());
       assertEquals("base unit", "gps", value.getBaseUnit());

@@ -210,7 +210,7 @@ edit.refresh = function()
   gui.removeAction('save');
   gui.removeAction('cancel');
 
-  if(location.search == '?create')
+  if(location.search.match(/(\?|&)create($|&)/))
   {
     edit.editAll();
     $(':input')[0].focus();

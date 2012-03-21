@@ -128,7 +128,7 @@ public class EntryServlet extends PageServlet
    *
    */
   @Override
-@OverridingMethodsMustInvokeSuper
+  @OverridingMethodsMustInvokeSuper
   protected void writeBody(@Nonnull HTMLWriter inWriter,
                            @Nullable String inPath,
                            @Nonnull DMARequest inRequest)
@@ -186,8 +186,31 @@ public class EntryServlet extends PageServlet
           entry = type.create(id);
         else
         {
-          entry = type.create(Entry.TEMPORARY);
-          entry.addBase(id);
+          String postfix = "";
+          if(inRequest.hasParam("store"))
+            postfix = "-" + inRequest.getParam("store");
+
+          entry = type.create(Entry.TEMPORARY + postfix);
+          entry.updateKey(key);
+
+          if(inRequest.hasParam("bases"))
+          {
+            for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
+              entry.addBase(base);
+          }
+
+          if(inRequest.hasParam("extensions"))
+          {
+            for(String extension
+                  : inRequest.getParam("extensions").split("\\s*,\\s*"))
+              if(extension != null && !extension.isEmpty())
+                entry.addExtension(extension);
+          }
+          else
+            entry.addBase(id);
+
+          if(entry instanceof Entry)
+            ((Entry)entry).complete();
         }
         entry.setOwner(inRequest.getUser());
       }

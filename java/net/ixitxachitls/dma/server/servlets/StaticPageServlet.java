@@ -228,6 +228,8 @@ public void init(@Nonnull ServletConfig inConfig)
                    + "</SCRIPT>\n"
                    + "    <SCRIPT type=\"text/javascript\" src=\"/js/edit.js\">"
                    + "</SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/item.js\">"
+                   + "</SCRIPT>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/jdma.css\" />\n"
                    + "    <SCRIPT type=\"text/javascript\" "

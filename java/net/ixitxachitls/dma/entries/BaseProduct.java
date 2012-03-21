@@ -2953,8 +2953,6 @@ public class BaseProduct extends BaseEntry
 
       AbstractEntry entry = BaseProduct.read(reader);
 
-      //System.out.println("read entry:\n'" + entry + "'");
-
       assertNotNull("base product should have been read", entry);
       assertEquals("base product name does not match", "WTC 88567",
                    entry.getName());

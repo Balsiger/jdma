@@ -598,7 +598,6 @@ public @Nonnull String doGroup()
 
       value = new Volume(new Rational(1, 2, 3), new Rational(2), false);
 
-      //System.out.println(value.toPrint());
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 2/3 cu ft 2 cu in", value.toString());
       assertEquals("print",
@@ -625,7 +624,6 @@ public @Nonnull String doGroup()
       value = new Volume(new Rational(1), new Rational(1, 1, 2),
                          new Rational(2, 3), new Rational(4), null);
 
-      //System.out.println(value.toPrint());
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 gallon 1 1/2 quarts 2/3 pint 4 cups",
                    value.toString());
@@ -650,7 +648,6 @@ public @Nonnull String doGroup()
 
       value = new Volume(new Rational(1), new Rational(3, 1, 4), null);
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 l 3 1/4 dl", value.toString());
       assertEquals("print",

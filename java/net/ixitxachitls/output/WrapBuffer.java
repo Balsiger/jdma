@@ -934,7 +934,6 @@ public @Nonnull String toString()
         + "aspacehehehehtrue42.\n"
         + "12342.14242";
 
-      //System.out.println(buffer);
       assertEquals("lines do not match", result, buffer.getLines());
       assertEquals("buffer has width 20 and alignment left and the "
                    + "following lines:\ncurrent: ''\n", buffer.toString());
@@ -958,10 +957,6 @@ public @Nonnull String toString()
       String test = "12345678901234567890";
 
       buffer.add(test + '\n');
-      //System.out.println("'" + buffer.getLine() + "'");
-      //System.out.println("'" + buffer.getLine() + "'");
-      //System.out.println("'" + buffer.getLine() + "'");
-      //System.out.println("'" + buffer.getLines() + "'");
       assertEquals("wrapping not correct", test, buffer.getLine());
       assertNull("superfluous line return", buffer.getLine());
 
@@ -996,20 +991,12 @@ public @Nonnull String toString()
 
       buffer.add(test + '\n');
 
-      //System.out.println("line '" + buffer.getLine() + "'");
-      //System.out.println("line '" + buffer.getLine() + "'");
-      //System.out.println("line '" + buffer.getLine() + "'");
-      //System.out.println("lines '" + buffer.getLines() + "'");
       assertEquals("wrapping not correct", test, buffer.getLine());
       assertNull("superfluous line return", buffer.getLine());
 
       test = "12345 67890AAAAAA12345 67890";
 
       buffer.add(test + '\n');
-      //System.out.println("line '" + buffer.getLine() + "'");
-      //System.out.println("line '" + buffer.getLine() + "'");
-      //System.out.println("line '" + buffer.getLine() + "'");
-      //System.out.println("lines '" + buffer.getLines() + "'");
       assertEquals("wrapping not correct", test.substring(0, 22) + "    ",
                    buffer.getLine());
       assertEquals("wrapping not correct",

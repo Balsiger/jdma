@@ -399,7 +399,6 @@ public String doGroup()
       // now with some value (cm)
       value = new Distance(null, null, new Rational(1, 1, 2), true);
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string ", "1 1/2 cm", value.toString());
       assertEquals("print",
@@ -416,7 +415,6 @@ public String doGroup()
       value = new Distance(new Rational(1), new Rational(1, 2, 3),
                            new Rational(2), false);
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 mi 1 2/3 ft 2 in", value.toString());
       assertEquals("print",
@@ -435,7 +433,6 @@ public String doGroup()
       // now with some value (metric)
        value = new Distance(null, new Rational(1, 1, 2), null, true);
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 1/2 m", value.toString());
       assertEquals("print",
@@ -452,7 +449,6 @@ public String doGroup()
       value = new Distance(new Rational(1), new Rational(3, 1, 4),
                            new Rational(20), true);
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 km 3 1/4 m 20 cm",
                    value.toString());

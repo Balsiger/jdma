@@ -481,7 +481,6 @@ public class Weight extends Units<Weight>
 
       value = new Weight(new Rational(1), new Rational(3));
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "1 lb 3 oz",
                    value.toString());
@@ -505,7 +504,6 @@ public class Weight extends Units<Weight>
       // now with some value (metric)
        value = new Weight(null, new Rational(1, 1, 2), null);
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "1 1/2 kg",
                    value.toString());
@@ -529,7 +527,6 @@ public class Weight extends Units<Weight>
       value = new Weight(new Rational(1), new Rational(3, 1, 4),
                          new Rational(20));
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "1 t 3 1/4 kg 20 g",
                    value.toString());
@@ -555,7 +552,6 @@ public class Weight extends Units<Weight>
       // now with some value (carats)
       value = new Weight(new Rational(25, 1, 3));
 
-      //System.out.println(value);
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "25 1/3 ct",
                    value.toString());

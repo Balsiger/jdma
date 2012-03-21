@@ -206,6 +206,7 @@ public class PageServlet extends DMAServlet
       .addCSSFile("gui")
       .addJSFile("gui")
       .addJSFile("edit")
+      .addJSFile("item")
       .addCSSFile("jdma")
       .addJSFile("jdma")
       // make android use the device width/height
@@ -585,6 +586,8 @@ public class PageServlet extends DMAServlet
                    + "    <SCRIPT type=\"text/javascript\" src=\"/js/gui.js\">"
                    + "</SCRIPT>\n"
                    + "    <SCRIPT type=\"text/javascript\" src=\"/js/edit.js\">"
+                   + "</SCRIPT>\n"
+                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/item.js\">"
                    + "</SCRIPT>\n"
                    + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
                    + "href=\"/css/jdma.css\" />\n"

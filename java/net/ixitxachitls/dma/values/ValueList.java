@@ -838,8 +838,6 @@ public @Nullable String getChoices()
 
       list = new ValueList<Name>(input);
 
-      //System.out.println(list);
-
       // defined value
       assertEquals("not defined at start", true, list.isDefined());
       assertEquals("defined value not correct", "Hello,\nhow are,\nyou",
@@ -894,7 +892,6 @@ public @Nullable String getChoices()
       // normal read
       ValueList<Name> list = new ValueList<Name>(new Name(), ":");
 
-      //System.out.println(list);
       list = list.read(reader);
       assertTrue("list should have been read", list != null);
       assertEquals("converted list does not match",

@@ -42,6 +42,8 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.entries.CampaignEntry;
+import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -101,6 +103,9 @@ public class SaveActionServlet extends ActionServlet
     /** A flag if multiple entries are affected by the change. */
     protected boolean m_multiple = false;
 
+    /** The path to store the created entry after creation, if any. */
+    protected @Nullable String m_store;
+
     /** A map with all the changed values. */
     protected @Nonnull Map<String, String>m_values =
       new HashMap<String, String>();
@@ -115,7 +120,7 @@ public class SaveActionServlet extends ActionServlet
     public @Nonnull String toString()
     {
       return m_key + " (" + (m_owner == null ? "no owner" : m_owner.getName())
-        + "/" + m_file + (m_multiple ? ", single" : ", multiple") + "):"
+        + "/" + m_file + (m_multiple ? ", multiple" : ", single") + "):"
         + m_values;
     }
 
@@ -137,6 +142,17 @@ public class SaveActionServlet extends ActionServlet
 
       if(inKey.indexOf("=") >= 0)
         m_multiple = true;
+    }
+
+    /**
+     * Set the path to store this entry after creation, if any.
+     *
+     * @param  inStore the name of the entry to store in
+     */
+    public void store(@Nullable String inStore)
+    {
+      if(inStore != null)
+        m_store = inStore;
     }
 
     /**
@@ -241,6 +257,7 @@ public class SaveActionServlet extends ActionServlet
   {
     List<String> errors = new ArrayList<String>();
     Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
+    Map<String, CampaignEntry> stores = new HashMap<String, CampaignEntry>();
     for(Changes change : preprocess(inRequest, inRequest.getParams(), errors))
       for(AbstractEntry entry : change.entries(errors))
       {
@@ -268,14 +285,32 @@ public class SaveActionServlet extends ActionServlet
                + Encodings.toJSString(rest) + ");");
           }
           else
+          {
             entries.add(entry);
+
+            if(change.m_store != null && entry instanceof CampaignEntry)
+            {
+              AbstractEntry.EntryKey<? extends AbstractEntry> key =
+                extractKey(change.m_store);
+
+              if(key == null)
+                Log.warning("Cannot find entry for storage: " + change.m_store);
+              else
+              {
+                CampaignEntry store =
+                  (CampaignEntry)DMADataFactory.get().getEntry(key);
+                if(store != null)
+                  stores.put(entry.getName(), store);
+              }
+            }
+          }
         }
       }
 
     List<String> saved = new ArrayList<String>();
+    String path = "";
 
     // do we really have something to do?
-    String path = "";
     if(entries.size() <= 0)
       errors.add("gui.alert('No values to save');");
     else
@@ -283,15 +318,23 @@ public class SaveActionServlet extends ActionServlet
       // update all entries and mark them as saved
       for(AbstractEntry entry : entries)
       {
+        // We have to get the store for the entry before saving, as saving can
+        // change the name.
+        CampaignEntry store = stores.get(entry.getName());
         if(entry.save())
+        {
           saved.add(Encodings.escapeJS(entry.getType().toString()) + " "
                     + Encodings.escapeJS(entry.getName()));
+
+          if(store != null && store.add((CampaignEntry)entry))
+            path = Encodings.toJSString(store.getPath());
+        }
         else
           errors.add("Coult not store " + entry.getType() + " '"
                      + entry.getName() + "'");
       }
 
-      if(entries.size() == 1)
+      if(entries.size() == 1 && path.isEmpty())
         path = Encodings.toJSString(entries.iterator().next().getPath());
     }
 
@@ -300,7 +343,8 @@ public class SaveActionServlet extends ActionServlet
       + (saved.isEmpty() ? ""
          : "gui.info('The following entries were updated:<p>"
          + Strings.BR_JOINER.join(saved) + "'); "
-         + "util.link(null" + (path.isEmpty() ? "" : ", "  + path) + ");")
+         + "util.link(null" + (path.isEmpty() ? "" : ", "  + path + "")
+         + ");")
       + Strings.NEWLINE_JOINER.join(errors);
   }
 
@@ -335,6 +379,16 @@ public class SaveActionServlet extends ActionServlet
       String keyName = parts[0];
       String valueName = parts[1];
 
+      // extract the storage info if there is one
+      String storePath = null;
+      String []store =
+        Strings.getPatterns(keyName, "(.*/" + Entry.TEMPORARY + ")-(.+)");
+      if(store.length == 2)
+      {
+        keyName = store[0];
+        storePath = store[1];
+      }
+
       AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(keyName);
       if(key == null)
       {
@@ -351,7 +405,12 @@ public class SaveActionServlet extends ActionServlet
         changes.put(key, change);
       }
 
-      change.set(valueName, param.getValue());
+      if("name".equals(valueName)
+         && param.getValue().startsWith(Entry.TEMPORARY))
+        change.set("name", Entry.TEMPORARY);
+      else
+        change.set(valueName, param.getValue());
+      change.store(storePath);
     }
 
     return changes.values();

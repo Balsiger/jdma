@@ -418,8 +418,6 @@ public class Money extends Units<Money>
       // now with some value
       value = new Money(1, 2, 3, 4);
 
-      //System.out.println(value);
-
       assertEquals("not defined after setting", true, value.isDefined());
       assertEquals("copper",   1, value.getCopper());
       assertEquals("silver",   2, value.getSilver());

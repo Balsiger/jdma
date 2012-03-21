@@ -2163,11 +2163,9 @@ public abstract class ValueGroup implements Changeable
                             @Nonnull List<? extends ValueGroup> inEntries)
   {
     T total = null;
-    System.out.println("entires: " + inEntries);
     for(ValueGroup entry : inEntries)
     {
       T value = new Combination<T>(entry, inKey).total();
-      System.out.println(inKey + ": " + value + " (" + entry.getName() + ")");
       if(value == null || !value.isDefined())
         continue;
 

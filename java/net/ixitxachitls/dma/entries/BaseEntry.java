@@ -293,29 +293,6 @@ public class BaseEntry extends AbstractEntry
      (new LinkFormatter<Name>("/" + getType().getMultipleLink()
                               + "/categories/")));
 
-//   static
-//   {
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("General", "Categories", "categories",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(inEntry instanceof BaseProduct)
-//                          return new Object []
-//                          { ((BaseProduct)inEntry).getProductType(), };
-
-//                        if(inEntry instanceof BaseEntry)
-//                          return ((BaseEntry)inEntry).getCategories();
-
-//                        if(inEntry instanceof Entry)
-//                          return ((Entry)inEntry).getCategories().toArray();
-
-//                        return new Object[0];
-//                      }
-//                    }, true, false));
-//   }
-
   //........................................................................
 
   static
@@ -1295,7 +1272,6 @@ public class BaseEntry extends AbstractEntry
         new ParseReader(new java.io.StringReader(s_text), "test");
       BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
 
-      //System.out.println(entry);
       m_logger.verify();
 
       assertNotNull("entry should have been read", entry);
@@ -1572,7 +1548,6 @@ public class BaseEntry extends AbstractEntry
 //       BaseEntry entry = (BaseEntry)BaseEntry.read(reader);
 //       entry.complete();
 
-//       //System.out.println(entry);
 //       m_logger.verify();
 
 //       assertNotNull("entry should have been read", entry);
