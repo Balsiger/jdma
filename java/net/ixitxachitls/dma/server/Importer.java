@@ -54,6 +54,7 @@ import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.extensions.Composite;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.server.servlets.DMAServlet;
 import net.ixitxachitls.util.CommandLineParser;
 import net.ixitxachitls.util.Encodings;
@@ -238,6 +239,7 @@ public final class Importer
 
     DatastoreService store = DatastoreServiceFactory.getDatastoreService();
     DMADatastore dmaStore = new DMADatastore();
+    DMARequest.ensureTypes();
 
     List<Entity> entities = new ArrayList<Entity>();
     List<AbstractEntry> errors = new ArrayList<AbstractEntry>();
@@ -318,6 +320,12 @@ public final class Importer
       AbstractEntry.EntryKey key =
         DMAServlet.extractKey(PATH_JOINER.join(parts));
 
+      if(key == null)
+      {
+        Log.warning("invalid key for " + image + ", ignored");
+        continue;
+      }
+
       // check if this is the main image
       if(m_mainImages || key.getID().equalsIgnoreCase(name)
          || name.contains(key.getID())
@@ -358,7 +366,7 @@ public final class Importer
         try
         {
           String line = rd.readLine();
-          if(!"OK".equals(line))
+          if(line != null && !"OK".equals(line) && !line.isEmpty())
           {
             Log.error("Server returned an error:");
             for(; line != null; line = rd.readLine())

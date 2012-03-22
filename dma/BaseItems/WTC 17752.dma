@@ -64,6 +64,259 @@ base item with armor Armor +1 =
   categories        magic.
 
 #.....
+#----- Armor +2
+
+base item with armor Armor +2 =
+
+  synonyms          "+2";
+  AC bonus          +2 enhancement;
+  base              Mwk Armor;
+  probability       Uncommon;
+  player name       "";
+  hardness          3;
+  hp                20;
+  value             [magic armor(2)];
+  references        WTC 17752: 216-217;
+  description       "Magical +2 armor.";
+  short description "Armor +2.";
+  categories        magic.
+
+#.....
+#----- Armor +3
+
+base item with armor Armor +3 =
+
+  synonyms          "+3";
+  AC bonus          +3 enhancement;
+  base              Mwk Armor;
+  probability       Uncommon;
+  player name       "";
+  hardness          4;
+  hp                30;
+  value             [magic armor(3)];
+  references        WTC 17752: 216-217;
+  description       "Magical +3 armor.";
+  short description "Armor +3.";
+  categories        magic.
+
+#.....
+#----- Armor +4
+
+base item with armor Armor +4 =
+
+  synonyms          "+4";
+  AC bonus          +4 enhancement;
+  base              Mwk Armor;
+  probability       Uncommon;
+  player name       "";
+  hardness          5;
+  hp                40;
+  value             [magic armor(4)];
+  references        WTC 17752: 216-217;
+  description       "Magical +4 armor.";
+  short description "Armor +4.";
+  categories        magic.
+
+#.....
+#----- Armor +5
+
+base item with armor Armor +5 =
+
+  synonyms          "+5";
+  AC bonus          +5 enhancement;
+  base              Mwk Armor;
+  probability       Uncommon;
+  player name       "";
+  hardness          6;
+  hp                50;
+  value             [magic armor(5)];
+  references        WTC 17752: 216-217;
+  description       "Magical +5 armor.";
+  short description "Armor +5.";
+  categories        magic.
+
+#.....
+
+#----- Light Fortification
+
+base item with incomplete, armor Light Fortification Armor =
+
+  value             [magic armor(1)];
+  incomplete        "25% to ignore critical hit or sneak";
+  categories        fortification, light, damage reduction, magic;
+  short description "25% change to ignore critital hit or sneak attacks.";
+  references        WTC 17752: 219;
+  synonyms          "light fortification", "Armor, Light Fortification", "Fortification Armor, Light";
+  description
+
+  "This suit of armor or shield produces a magical force that protects vital
+  areas of the wearer more effectively. When a critical hit or sneak attack is
+  scored on the wearer, there is a 25% chance that the critical hit or sneak
+  attack is negated and damage is instead rolled normally.".
+
+#.....
+#----- Moderate Fortification
+
+base item with incomplete, armor Moderate Fortification Armor =
+
+  value             [magic armor(3)];
+  incomplete        "75% to ignore critical hit or sneak";
+  categories        fortification, moderate, damage reduction, magic;
+  short description "75% change to ignore critital hit or sneak attacks.";
+  references        WTC 17752: 219;
+  synonyms          "moderate fortification", "Armor, Moderate Fortification", "Fortification Armor, Moderate";
+  description
+
+  "This suit of armor or shield produces a magical force that protects vital
+  areas of the wearer more effectively. When a critical hit or sneak attack is
+  scored on the wearer, there is a 75% chance that the critical hit or sneak
+  attack is negated and damage is instead rolled normally.".
+
+#.....
+#----- Heavy Fortification
+
+base item with incomplete, armor Moderate Fortification Armor =
+
+  value             [magic armor(3)];
+  incomplete        "100% to ignore critical hit or sneak";
+  categories        fortification, moderate, damage reduction, magic;
+  short description "100% change to ignore critital hit or sneak attacks.";
+  references        WTC 17752: 219;
+  synonyms          "heavy fortification", "Armor, Heavy Fortification", "Fortification Armor, Heavy";
+  description
+
+  "This suit of armor or shield produces a magical force that protects vital
+  areas of the wearer more effectively. When a critical hit or sneak attack is
+  scored on the wearer, there is a 100% chance that the critical hit or sneak
+  attack is negated and damage is instead rolled normally.".
+
+#.....
+#----- Shadow Armor
+
+base item with incomplete, armor Shadow Armor =
+
+  value             3750 gp;
+  incomplete        "+5 competence bonus on Hide";
+  categories        shadow, magic;
+  synonyms          "shadow", "Armor, Shadow";
+  references        WTC 17752: 219;
+  description
+
+  "This armor is jet black and blurs the wearer whenever she tries to hide,
+  granting a +5 competence bonus on Hide checks.  (The armor's armor check
+  penalty still applies normally.)".
+
+#.....
+#----- Silent Moves Armor
+
+base item with incomplete, armor Silent Moves Armor =
+
+  value             3750 gp;
+  incomplete        "+5 competence bonus on Move Silently";
+  categories        silent, move, magic;
+  synonyms          "silent moves", "Armor, Silent Moves";
+  references        WTC 17752: 219;
+  description
+
+  "This armor is well oiled and magically con- structed so that it not only
+  makes little sound, but it dampens sound around it. It provides a +5
+  competence bonus on its wearer's Move Silently checks. (The armor;s armor
+  check penalty still applies normally.)".
+
+#.....
+#----- Blurring
+
+base item with incomplete, armor Blurring Armor =
+
+  value             [magic armor(1)];
+  incomplete        "20% miss chance";
+  categories        blur, blurring, magic;
+  appearances       common "This armor appears indistinct, as though its edges were smeared.";
+  short description "Gain concealment (20% miss) 3 times a day for 5 rounds.";
+  references        WTC 17752: 219;
+  synonyms          "blurring", "Armor, Blurring";
+  description
+
+  "When you activiate this armor, your appearance becomes distorted and hazy as
+  if you were affected by a \SpellRef{blur} spell.
+
+  The blurring property functions three times per day, and the effect lasts for
+  5 rounds.".
+
+#.....
+#----- Invulnerability Armor
+
+base item with incomplete, armor Invulnerability Armor =
+
+  value             [magic armor(3)];
+  incomplete        "DR 5/magic";
+  categories        invulnerability, damage reduction, magic;
+  short description "Damage Reduction 5/magic.";
+  references        WTC 17752: 219;
+  synonyms          "invulnerability", "Armor, Involnerability";
+  description
+
+  "This suit of armor grants the wearer damage reduction of 5/magic.".
+
+#.....
+#----- Elven Chain
+
+base item with armor, wearable Elven Chain =
+
+  base              Chainmail;
+  armor type        Light Armor;
+  max dexterity     +4;
+  check penalty     +3;
+  arcane failure    20%;
+  speed             30 ft/20 ft;
+  value             4150 gp;
+  weight            20 lbs;
+  probability       Very Rare;
+  appearances       Common "A suprisingly light chainmail.";
+  references        WTC 17752: 220;
+  description
+  "This extremely light chainmail is made of very fine mithral links. Speed
+  while wearing elven chain is 30 feet for Medium creatures, or 20 feet for
+  Small. The armor has an arcane spell failure chance of 20%, a maximum
+  Dexterity bonus of +4, and an armor check penalty of -2. It is considered
+  light armor and weighs 20 pounds.";
+  short description "A extremly well made, very light chainmail.";
+  synonyms          "Chain, Elven";
+  categories        elf,
+                    armor.
+
+#.....
+#----- Demon Armor
+
+base item Demon Armor  =
+
+  base              Full Plate, Armor +4;
+  categories        armor, demon, plate, full;
+  synonyms          "Armor, Demon";
+  value             52260 gp;
+  size              medium-size;
+  probability       very rare;
+  appearances       common    "The armor looks like the hide of a demon.";
+  worlds            generic;
+  references        WTC 17752: 220;
+  short description "Full Plate +4 with claw attacks (1d10 damage) and \SpellRef{Contagion} with For DC 14.";
+  description
+
+  "This plate armor is fashioned to make the wearer appear to be a demon. The
+  helmet is shaped to look like a horned demon head, and its wearer looks out
+  of the open, tooth-filled mouth.  This +4 full plate allows the wearer to
+  make claw attacks that deal 1d10 points of damage, strike as +1 weapons, and
+  afflict the target as if she had been struck by a \SpellRef{contagion} spell
+  (Fortitude DC 14 negates). Use of contagion requires a normal melee attack
+  with the claws. The “claws” are built into the armor’s vambraces and
+  gauntlets.  The armor bestows one negative level on any nonevil creature
+  wearing it. This negative level persists as long as the armor is worn and
+  disappears when the armor is removed.
+
+  The negative level never results in actual level loss, but it cannot be
+  overcome in any way (including restoration spells) while the armor is worn.".
+
+#.....
 
 #.....
 #----- Weapons
@@ -2529,290 +2782,6 @@ base item with armor, incomplete, wearable Heavy Mithral Shield =
   references        WTC 17752: 284;
   synonyms          "Shield, Heavy Mithral",
                     "Heavy Shield, Mithral".
-
-#.....
-
-#.....
-#----- Numbered Magical Armor
-
-#----- Armor +2
-
-base item with armor Armor +2 [Mwk Armor] =
-
-  probability       Uncommon;
-  value             4150 gp;
-  player name       "";
-  references        WTC 17752: 216-217;
-  description
-  "Magical +1 armor.";
-  short description "+2 armor.";
-  synonyms          "+2";
-  categories        magic.
-
-#.....
-#----- Armor +3
-
-base item with armor Armor +3 [Mwk Armor] =
-
-  probability       Uncommon;
-  value             8150 gp;
-  player name       "";
-  references        WTC 17752: 216-217;
-  description
-  "Magical +3 armor.";
-  short description "+3 armor.";
-  synonyms          "+3";
-  categories        magic.
-
-#.....
-#----- Armor +4
-
-base item with armor Armor +4 [Mwk Armor] =
-
-  probability       Uncommon;
-  value             16150 gp;
-  player name       "";
-  references        WTC 17752: 216-217;
-  description
-  "Magical +4 armor.";
-  short description "+4 armor.";
-  synonyms          "+4";
-  categories        magic.
-
-#.....
-#----- Armor +5
-
-base item with armor Armor +5 [Mwk Armor] =
-
-  probability       Uncommon;
-  value             25150 gp;
-  player name       "";
-  references        WTC 17752: 216-217;
-  description
-  "Magical +5 armor.";
-  short description "+5 armor.";
-  synonyms          "+5";
-  categories        magic.
-
-#.....
-#----- Armor +6
-
-base item with armor Armor +6 [Mwk Armor] =
-
-  probability       Uncommon;
-  value             36150 gp;
-  player name       "";
-  references        WTC 17752: 216-217;
-  description
-  "Magical +6 armor.";
-  short description "+6 armor.";
-  synonyms          "+6";
-  categories        magic.
-
-#.....
-#----- Armor +7
-
-base item with armor Armor +7 [Mwk Armor] =
-
-  probability       Uncommon;
-  value             49000 gp;
-  player name       "";
-  references        WTC 17752: 216-217;
-  description
-  "Magical +6 armor.";
-  short description "+7 armor.";
-  synonyms          "+7";
-  categories        magic.
-
-#.....
-#----- Magic Defense +1
-
-base item with armor Magic Defense +1 =
-
-  AC bonus          +1 enhancement.
-
-#.....
-#----- Magic Defense +2
-
-base item with armor Magic Defense +2 =
-
-  AC bonus          +2 enhancement.
-
-#.....
-#----- Magic Defense +3
-
-base item with armor Magic Defense +3 =
-
-  AC bonus          +3 enhancement.
-
-#.....
-#----- Magic Defense +4
-
-base item with armor Magic Defense +4 =
-
-  AC bonus          +4 enhancement.
-
-#.....
-#----- Magic Defense +5
-
-base item with armor Magic Defense +5 =
-
-  AC bonus          +5 enhancement.
-
-#.....
-
-#----- Shadow Armor
-
-base item with incomplete, armor Shadow Armor =
-
-  value             3750 gp;
-  incomplete        "+5 competence bonus on Hide";
-  categories        shadow, magic;
-  synonyms          "shadow";
-  references        WTC 17752: 219;
-  description
-
-  "This armor is jet black and blurs the wearer whenever she tries to hide,
-  granting a +5 competence bonus on Hide checks.  (The armorâs armor check
-  penalty still applies normally.)".
-
-#.....
-#----- Silent Moves Armor
-
-base item with incomplete, armor Silent Moves Armor =
-
-  value             3750 gp;
-  incomplete        "+5 competence bonus on Move Silently";
-  categories        silent, move, magic;
-  synonyms          "silent moves";
-  references        WTC 17752: 219;
-  description
-
-  "This armor is well oiled and magically con- structed so that it not only
-  makes little sound, but it dampens sound around it. It provides a +5
-  competence bonus on its wearer's Move Silently checks. (The armor;s armor
-  check penalty still applies normally.)".
-
-#.....
-#----- Light Fortification
-
-base item with incomplete, armor Light Fortification =
-
-  incomplete        "+1 bonus, 25% to ignore critical hit or sneak";
-  categories        fortification, light, damage reduction, magic;
-  short description "25% change to ignore critital hit or sneak attacks.";
-  references        WTC 17752: 219;
-  description
-
-  "This suit of armor or shield produces a magical force that protects vital
-  areas of the wearer more effectively. When a critical hit or sneak attack is
-  scored on the wearer, there is a 25% chance that the critical hit or sneak
-  attack is negated and damage is instead rolled normally.".
-
-#.....
-#----- Moderate Fortification
-
-base item with incomplete, armor Moderate Fortification =
-
-  incomplete        "+3 bonus, 75% to ignore critical hit or sneak";
-  categories        fortification, moderate, damage reduction, magic;
-  short description "75% change to ignore critital hit or sneak attacks.";
-  references        WTC 17752: 219;
-  description
-
-  "This suit of armor or shield produces a magical force that protects vital
-  areas of the wearer more effectively. When a critical hit or sneak attack is
-  scored on the wearer, there is a 75% chance that the critical hit or sneak
-  attack is negated and damage is instead rolled normally.".
-
-#.....
-#----- Blurring
-
-base item with incomplete, armor Blurring =
-
-  incomplete        "+1 bonus, 20% miss chance";
-  categories        blur, blurring, magic;
-  appearances       common "This armor appears indistinct, as though its edges were smeared.";
-  short description "Gain concealment (20% miss) 3 times a day for 5 rounds.";
-  references        WTC 17752: 219;
-  description
-
-  "When you activiate this armor, your appearance becomes distorted and hazy as
-  if you were affected by a \SpellRef{blur} spell.
-
-  The blurring property functions three times per day, and the effect lasts for
-  5 rounds.".
-
-#.....
-#----- Invulnerability Armor
-
-base item with incomplete, armor Invulnerability Armor =
-
-  incomplete        "DR 5/magic";
-  categories        invulnerability, damage reduction, magic;
-  short description "Damage Reduction 5/magic.";
-  references        WTC 17752: 219;
-  description
-
-  "This suit of armor grants the wearer damage reduction of 5/magic.".
-
-#.....
-
-#----- Elven Chain
-
-base item with armor, wearable Elven Chain [Chainmail] =
-
-  armor type        Light Armor;
-  max dexterity     +4;
-  check penalty     +3;
-  arcane failure    20%;
-  speed             30 ft/20 ft;
-  value             4150 gp;
-  weight            20 lbs;
-  probability       Very Rare;
-  appearances       Common "A suprisingly light chainmail.";
-  references        WTC 17752: 220;
-  description
-  "This extremely light chainmail is made of very fine mithral links. Speed
-  while wearing elven chain is 30 feet for Medium creatures, or 20 feet for
-  Small. The armor has an arcane spell failure chance of 20%, a maximum
-  Dexterity bonus of +4, and an armor check penalty of -2. It is considered
-  light armor and weighs 20 pounds.";
-  short description "A extremly well made, very light chainmail.";
-  synonyms          "Chain, Elven";
-  categories        elf,
-                    armor.
-
-#.....
-#----- Demon Armor
-
-base item Demon Armor [Full Plate, Armor +4, Magic Defense +4] =
-
-  player name       "Full Plate";
-  categories        armor, demon, plate, full;
-  synonyms          "Armor, Demon";
-  value             52260 gp;
-  size              medium-size;
-  probability       very rare;
-  appearances       common    "The armor looks like the hide of a demon.";
-  worlds            generic;
-  references        WTC 17752: 220;
-  short description "Full Plate +4 with claw attacks (1d10 damage) and \SpellRef{Contagion} with For DC 14.";
-  description
-
-  "This plate armor is fashioned to make the wearer appear to be a demon. The
-  helmet is shaped to look like a horned demon head, and its wearer looks out
-  of the open, tooth-filled mouth.  This +4 full plate allows the wearer to
-  make claw attacks that deal 1d10 points of damage, strike as +1 weapons, and
-  afflict the target as if she had been struck by a \SpellRef{contagion} spell
-  (Fortitude DC 14 negates). Use of contagion requires a normal melee attack
-  with the claws. The “claws” are built into the armor’s vambraces and
-  gauntlets.  The armor bestows one negative level on any nonevil creature
-  wearing it. This negative level persists as long as the armor is worn and
-  disappears when the armor is removed.
-
-  The negative level never results in actual level loss, but it cannot be
-  overcome in any way (including restoration spells) while the armor is worn.".
 
 #.....
 
