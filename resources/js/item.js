@@ -51,6 +51,9 @@ item.create = function(inCampaign, inStore)
           + '<input type="text" name="bases" validate="non-empty" '
           + 'validateButton="#create-button" size="50" maxlength="300">'
           + '</label><br>'
+          + '<label>'
+          + '<input type="checkbox" name="identified" value="yes">'
+          + ' identified<br />'
           + '<label>Extensions (comma separated)<br>'
           + '<input type="text" name="extensions" validate="non-empty" '
           + 'validateButton="#create-button" size="50" maxlength="300">'
@@ -77,7 +80,9 @@ item.create = function(inCampaign, inStore)
                                            [0].value) +
                         '&extensions=' +
                         encodeURIComponent($('input[name="extensions"]', this)
-                                           [0].value));
+                                           [0].value) +
+                        ($('input[name="identified"]', this)[0].checked ?
+                         '&identified' : ''));
             }
           },
           {

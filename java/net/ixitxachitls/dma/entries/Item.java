@@ -673,7 +673,6 @@ public class Item extends CampaignEntry<BaseItem>
 
   //........................................................................
 
-
   //------------------------------ printCommand ----------------------------
 
   /**
@@ -1332,8 +1331,6 @@ public class Item extends CampaignEntry<BaseItem>
 
       m_appearance = m_appearance.as(Strings.toString(appearances, " ", ""));
     }
-
-//     //......................................................................
 //     //----- qualities ------------------------------------------------------
 
 //     if(!m_qualities.isDefined())
@@ -1403,6 +1400,18 @@ public class Item extends CampaignEntry<BaseItem>
 //     // matcher.appendTail(replaced);
 
 //     // m_description.set(replaced.toString());
+  }
+
+  //......................................................................
+  //------------------------------- identify -------------------------------
+
+  /**
+   * Identify the item by filling out the player name (and maybe notes?).
+   *
+   */
+  public void identify()
+  {
+    m_playerName = m_playerName.as(getNameCommand(true).toString());
   }
 
   //........................................................................

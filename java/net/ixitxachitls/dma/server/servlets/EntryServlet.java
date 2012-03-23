@@ -37,6 +37,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
+import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.output.ascii.ASCIIDocument;
 import net.ixitxachitls.output.commands.Command;
@@ -198,6 +199,9 @@ public class EntryServlet extends PageServlet
             for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
               entry.addBase(base);
           }
+
+          if(inRequest.hasParam("identified") && entry instanceof Item)
+            ((Item)entry).identify();
 
           if(inRequest.hasParam("extensions"))
           {
