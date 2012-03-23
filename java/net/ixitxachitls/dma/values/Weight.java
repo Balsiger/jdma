@@ -73,7 +73,7 @@ public class Weight extends Units<Weight>
    * @param       inOunces number of ounces
    *
    */
-  public Weight(Rational inPounds, Rational inOunces)
+  public Weight(@Nullable Rational inPounds, @Nullable Rational inOunces)
   {
     super(new Rational [] { inPounds, inOunces}, s_sets, s_sets[0], 5);
   }

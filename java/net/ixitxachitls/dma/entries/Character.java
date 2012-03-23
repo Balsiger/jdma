@@ -38,6 +38,7 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Color;
@@ -398,7 +399,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   public @Nonnull Money totalWealth()
   {
-    Money total = new Money();
+    Money total = new Money(0, 0, 0, 0);
 
     for(Name name : m_items)
     {
@@ -425,7 +426,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   public @Nonnull Weight totalWeight()
   {
-    Weight total = new Weight();
+    Weight total = new Weight(new Rational(0), null);
 
     for(Name name : m_items)
     {

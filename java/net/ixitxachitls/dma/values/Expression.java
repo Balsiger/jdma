@@ -73,6 +73,9 @@ public abstract class Expression implements Comparable<Expression>
     /** The number of magical weapon plusses computed so far. */
     private int m_magicWeapon = 0;
 
+    /** The number of magical ammunition plusses computed so far. */
+    private int m_magicAmmunition = 0;
+
     /**
      * Convert to a string.
      *
@@ -81,7 +84,8 @@ public abstract class Expression implements Comparable<Expression>
     @Override
     public String toString()
     {
-      return "magic armor " + m_magicArmor + ", magic weapon " + m_magicWeapon;
+      return "magic armor " + m_magicArmor + ", magic weapon " + m_magicWeapon
+        + ", magic ammunition " + m_magicAmmunition;
     }
   }
 
@@ -193,7 +197,7 @@ public abstract class Expression implements Comparable<Expression>
 
     /** Pattern for a factor. */
     private static final Pattern s_pattern =
-      Pattern.compile("\\*\\s+(\\d+)(?:/(\\d+))?");
+      Pattern.compile("\\*\\s*(\\d+)(?:\\s*/\\s*(\\d+))?");
 
     @Override
     public @Nonnull String toString()
@@ -215,8 +219,11 @@ public abstract class Expression implements Comparable<Expression>
     {
       Matcher matcher = s_pattern.matcher(inText);
       if(matcher.find())
-        return new Factor(Integer.parseInt(matcher.group(1)),
-                          Integer.parseInt(matcher.group(2)));
+        if(matcher.group(2) == null)
+          return new Factor(Integer.parseInt(matcher.group(1)), 1);
+        else
+          return new Factor(Integer.parseInt(matcher.group(1)),
+                            Integer.parseInt(matcher.group(2)));
 
       return null;
     }
@@ -524,6 +531,83 @@ public abstract class Expression implements Comparable<Expression>
   }
 
   //........................................................................
+  //----- MagicAmmunition ------------------------------------------------------
+
+  /** An expression representing the number of plusses for magical ammunition. */
+  public static class MagicAmmunition extends Expression
+  {
+    /**
+     * Create the magic ammunition expression.
+     *
+     * @param inPlus the number of magical plusses for the ammunition
+     */
+    public MagicAmmunition(int inPlus)
+    {
+      super(1);
+
+      m_plus = inPlus;
+    }
+
+    /** The number of plusses for magical armor. */
+    private int m_plus;
+
+    /** Pattern for magical armor. */
+    private static final Pattern s_pattern =
+      Pattern.compile("magic ammunition\\((\\d+)\\)");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      return "[magic ammunition(" + m_plus + ")]";
+    }
+
+    /**
+     * Parse a magic ammunition from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed magic ammunition or null if not properly parsed
+     */
+    protected static @Nullable MagicAmmunition parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        return new MagicAmmunition(Integer.parseInt(matcher.group(1)));
+
+      return null;
+    }
+
+    /**
+     * Compute the value for the expression.  We compute the value here in
+     * relation to previously computed magic armor values and only adding the
+     * difference.
+     *
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    public @Nullable Value compute(@Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      // 2 * (m + p)^2 - m^2 = 4mp + 2 * p^2
+      int factor = 4 * ioShared.m_magicArmor * m_plus + 2 * m_plus * m_plus;
+      ioShared.m_magicAmmunition += m_plus;
+
+      Money value = new Money(0, 0, factor * 200, 0);
+
+      if(inValue == null)
+        return value;
+
+      if(!(inValue instanceof Money))
+        return inValue;
+
+      return ((Money)inValue).add(value);
+    }
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -577,7 +661,15 @@ public abstract class Expression implements Comparable<Expression>
     if(result != null)
       return result;
 
+    result = Factor.parse(inText);
+    if(result != null)
+      return result;
+
     result = MagicWeapon.parse(inText);
+    if(result != null)
+      return result;
+
+    result = MagicAmmunition.parse(inText);
     if(result != null)
       return result;
 

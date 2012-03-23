@@ -2306,16 +2306,17 @@ public class AbstractEntry extends ValueGroup
    */
   private void setupExtensionsFromBases()
   {
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
+    if(!isBase())
+      for(BaseEntry base : getBaseEntries())
+      {
+        if(base == null)
+          continue;
 
-      for(AbstractExtension extension : base.m_extensions.values())
-        for(String name
-              : AbstractExtension.getAutoExtensions(extension.getClass()))
-          addExtension(name);
-    }
+        for(AbstractExtension extension : base.m_extensions.values())
+          for(String name
+                : AbstractExtension.getAutoExtensions(extension.getClass()))
+            addExtension(name);
+      }
   }
 
   //........................................................................
@@ -2659,16 +2660,19 @@ public class AbstractEntry extends ValueGroup
     {
       Log.warning("could not find class for extension " + name
                   + ", extension ignored");
+      e.printStackTrace(System.out);
     }
     catch(InstantiationException e)
     {
       Log.warning("could not instantiate class for extension " + name
                   + ", extension ignored");
+      e.printStackTrace(System.out);
     }
     catch(IllegalAccessException e)
     {
       Log.warning("could access constructor for extension " + name
                   + ", extension ignored");
+      e.printStackTrace(System.out);
     }
     catch(java.lang.reflect.InvocationTargetException e)
     {
