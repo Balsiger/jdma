@@ -100,6 +100,9 @@ public class SaveActionServlet extends ActionServlet
     /** Flag if creating a new value or not. */
     protected boolean m_create = false;
 
+    /** The extensions for the entry, if any. */
+    protected @Nullable String []m_extensions;
+
     /** A flag if multiple entries are affected by the change. */
     protected boolean m_multiple = false;
 
@@ -137,6 +140,8 @@ public class SaveActionServlet extends ActionServlet
         m_file = inValue;
       else if("create".equals(inKey))
         m_create = true;
+      else if("extensions".equals(inKey))
+        m_extensions = inValue.split("\\s*,\\s*");
       else
         m_values.put(inKey, inValue);
 
@@ -192,6 +197,11 @@ public class SaveActionServlet extends ActionServlet
           entry = m_key.getType().create(m_key.getID());
           if(entry != null)
             entry.updateKey(m_key);
+
+          // setting up extensions first
+          if(m_extensions != null)
+            for(String extension : m_extensions)
+              entry.addExtension(extension);
         }
 
         if(entry == null)
