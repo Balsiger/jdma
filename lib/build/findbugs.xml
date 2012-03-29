@@ -173,6 +173,16 @@
     <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
   </Match>
 
+ <Match>
+    <Class name="~net\.ixitxachitls\.dma\.entries\.AbstractEntry" />
+    <Bug pattern="NP_BOOLEAN_RETURN_NULL" />
+  </Match>
+
+ <Match>
+    <Class name="~net\.ixitxachitls\.dma\.entries\.ValueGroup" />
+    <Bug pattern="NP_BOOLEAN_RETURN_NULL" />
+  </Match>
+
 
 
 </FindBugsFilter>

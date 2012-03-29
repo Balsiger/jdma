@@ -23,6 +23,9 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,7 +35,9 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -112,7 +117,7 @@ public abstract class Expression implements Comparable<Expression>
 
     /** Pattern for magical armor. */
     private static final Pattern s_pattern =
-      Pattern.compile("magic armor\\((\\d+)\\)");
+      Pattern.compile("^\\s*magic armor\\((\\d+)\\)");
 
     @Override
     public @Nonnull String toString()
@@ -143,13 +148,15 @@ public abstract class Expression implements Comparable<Expression>
      * relation to previously computed magic armor values and only adding the
      * difference.
      *
+     * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
      *
      * @return      the computed, adjusted value, if any
      *
      */
-    public @Nullable Value compute(@Nullable Value inValue,
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
                                    @Nonnull Shared ioShared)
     {
       // (m + p)^2 - m^2 = 2mp + p^2
@@ -197,7 +204,7 @@ public abstract class Expression implements Comparable<Expression>
 
     /** Pattern for a factor. */
     private static final Pattern s_pattern =
-      Pattern.compile("\\*\\s*(\\d+)(?:\\s*/\\s*(\\d+))?");
+      Pattern.compile("^\\s*\\*\\s*(\\d+)(?:\\s*/\\s*(\\d+))?");
 
     @Override
     public @Nonnull String toString()
@@ -233,13 +240,15 @@ public abstract class Expression implements Comparable<Expression>
     /**
      * Compute the value for the expression.
      *
+     * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
      *
      * @return      the compute, adjusted value
      *
      */
-    public @Nullable Value compute(@Nullable Value inValue,
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
                                    @Nonnull Shared ioShared)
     {
       if(inValue == null)
@@ -252,7 +261,7 @@ public abstract class Expression implements Comparable<Expression>
   }
 
   //........................................................................
-  //----- Equal -----------------------------------------------------------
+  //----- Equal ------------------------------------------------------------
 
   /** An expression representing equal to a value. */
   public static class Equal extends Expression
@@ -274,7 +283,7 @@ public abstract class Expression implements Comparable<Expression>
     private @Nonnull String m_value;
 
     /** Pattern for a equal. */
-    private static final Pattern s_pattern = Pattern.compile("\\s*=\\s*(.*)");
+    private static final Pattern s_pattern = Pattern.compile("^\\s*=\\s*(.*)");
 
     @Override
     public @Nonnull String toString()
@@ -301,19 +310,171 @@ public abstract class Expression implements Comparable<Expression>
     /**
      * Compute the value for the expression.
      *
+     * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
      *
      * @return      the compute, adjusted value
      *
      */
-    public @Nullable Value compute(@Nullable Value inValue,
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
                                    @Nonnull Shared ioShared)
     {
       if(inValue == null)
         return null;
 
       return inValue.read(m_value);
+    }
+  }
+
+  //........................................................................
+  //----- Switch -----------------------------------------------------------
+
+  /** An expression representing switch value. */
+  public static class Switch extends Expression
+  {
+    /**
+     * Create the switch expression.
+     *
+     * @param inExpressions the expressions for all the statements
+     *
+     */
+    public Switch(@Nonnull String inExpressions)
+    {
+      super(3);
+
+      for(String statement : inExpressions.split("\\s*,\\s*"))
+      {
+        String []parts = statement.split("\\s*:\\s*");
+        if(parts.length != 2)
+          continue;
+
+        m_statements.add(new Pair<String, String>(parts[0], parts[1]));
+      }
+    }
+
+    /** The expressions for the switch statements. */
+    private @Nonnull List<Pair<String, String>> m_statements =
+      new ArrayList<Pair<String, String>>();
+
+    /** Pattern for a switch. */
+    private static final Pattern s_pattern =
+      Pattern.compile("^\\s*switch\\s*\\((.*)\\)");
+
+    /** Pattern for 'in' conditions. */
+    private static final Pattern s_inCondition =
+      Pattern.compile("^(.*)\\s+in\\s+(.*)$");
+
+    /** Pattern for 'is' conditions. */
+    private static final Pattern s_isCondition =
+      Pattern.compile("^(.*)\\s+is\\s+(.*)$");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      StringBuilder builder = new StringBuilder("[switch(");
+      boolean first = true;
+      for(Pair<String, String> statement : m_statements)
+      {
+        if(first)
+          first = false;
+        else
+          builder.append(", ");
+
+        builder.append(statement.first() + ": " + statement.second());
+      }
+
+      builder.append(")]");
+
+      return builder.toString();
+    }
+
+    /**
+     * Parse a magic weapon from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed magic weapon or null if not properly parsed
+     */
+    protected static @Nullable Switch parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        return new Switch(matcher.group(1));
+
+      return null;
+    }
+
+    /**
+     * Compute the value for the expression.
+     *
+     * @param       inEntry   the entry to compute for
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    @SuppressWarnings("unchecked") // adding
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      if(inValue == null)
+        return null;
+
+      for(Pair<String, String> statement : m_statements)
+      {
+        String condition = statement.first();
+        String value = statement.second();
+
+        if(isTrue(inEntry, condition))
+        {
+          ParseReader reader =
+            new ParseReader(new StringReader(value), "switch");
+          return inValue.add(inValue.read(reader));
+        }
+      }
+
+      return inValue;
+    }
+
+    /**
+     * Check if the given condition is true.
+     *
+     * @param  inEntry     the entry to check for
+     * @param  inCondition the string representation of a condition to check
+     *
+     * @return true if the condition holds, false if not
+     *
+     */
+    private boolean isTrue(@Nonnull ValueGroup inEntry,
+                           @Nonnull String inCondition)
+    {
+      if("default".equalsIgnoreCase(inCondition))
+        return true;
+
+      Matcher matcher = s_inCondition.matcher(inCondition);
+      if(matcher.find())
+      {
+        String value = matcher.group(1);
+        String key = matcher.group(2);
+
+        return inEntry.isValueIn(value, key);
+      }
+
+      matcher = s_isCondition.matcher(inCondition);
+      if(matcher.find())
+      {
+        String key = matcher.group(1);
+        String value = matcher.group(2);
+
+        Boolean result = inEntry.isValue(value, key);
+        return result != null && result;
+      }
+
+      return false;
     }
   }
 
@@ -424,6 +585,7 @@ public abstract class Expression implements Comparable<Expression>
     /**
      * Compute the value for the expression.
      *
+     * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
      *
@@ -431,7 +593,8 @@ public abstract class Expression implements Comparable<Expression>
      *
      */
     @SuppressWarnings("unchecked")
-    public @Nullable Value compute(@Nullable Value inValue,
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
                                    @Nonnull Shared ioShared)
     {
       int gold = m_material + 5 * m_xp;
@@ -505,13 +668,15 @@ public abstract class Expression implements Comparable<Expression>
      * relation to previously computed magic armor values and only adding the
      * difference.
      *
+     * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
      *
      * @return      the compute, adjusted value
      *
      */
-    public @Nullable Value compute(@Nullable Value inValue,
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
                                    @Nonnull Shared ioShared)
     {
       // 2 * (m + p)^2 - m^2 = 4mp + 2 * p^2
@@ -531,9 +696,11 @@ public abstract class Expression implements Comparable<Expression>
   }
 
   //........................................................................
-  //----- MagicAmmunition ------------------------------------------------------
+  //----- MagicAmmunition --------------------------------------------------
 
-  /** An expression representing the number of plusses for magical ammunition. */
+  /**
+   * An expression representing the number of plusses for magical ammunition.
+   */
   public static class MagicAmmunition extends Expression
   {
     /**
@@ -582,13 +749,15 @@ public abstract class Expression implements Comparable<Expression>
      * relation to previously computed magic armor values and only adding the
      * difference.
      *
+     * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
      *
      * @return      the compute, adjusted value
      *
      */
-    public @Nullable Value compute(@Nullable Value inValue,
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
                                    @Nonnull Shared ioShared)
     {
       // 2 * (m + p)^2 - m^2 = 4mp + 2 * p^2
@@ -657,27 +826,32 @@ public abstract class Expression implements Comparable<Expression>
    */
   protected static @Nullable Expression parse(@Nonnull String inText)
   {
-    Expression result = MagicArmor.parse(inText);
+    String text = inText.replace("\n", "");
+    Expression result = MagicArmor.parse(text);
     if(result != null)
       return result;
 
-    result = Factor.parse(inText);
+    result = Factor.parse(text);
     if(result != null)
       return result;
 
-    result = MagicWeapon.parse(inText);
+    result = MagicWeapon.parse(text);
     if(result != null)
       return result;
 
-    result = MagicAmmunition.parse(inText);
+    result = MagicAmmunition.parse(text);
     if(result != null)
       return result;
 
-    result = MagicItem.parse(inText);
+    result = MagicItem.parse(text);
     if(result != null)
       return result;
 
-    result = Equal.parse(inText);
+    result = Equal.parse(text);
+    if(result != null)
+      return result;
+
+    result = Switch.parse(text);
     if(result != null)
       return result;
 
@@ -810,13 +984,15 @@ public abstract class Expression implements Comparable<Expression>
   /**
    * Compute the value for the expression.
    *
+   * @param       inEntry   the entry to compute for
    * @param       inValue   the value to compute from
    * @param       ioShared  shared data for all expressions
    *
    * @return      the compute, adjusted value
    *
    */
-  public abstract @Nullable Value compute(@Nonnull Value inValue,
+  public abstract @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                          @Nullable Value inValue,
                                           @Nonnull Shared ioShared);
 
   //........................................................................

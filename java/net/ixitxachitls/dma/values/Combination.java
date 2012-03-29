@@ -245,7 +245,7 @@ public class Combination<V extends Value>
               : new TreeSet<Expression>(m_expressions.keySet()))
           for(ValueGroup entry : m_expressions.get(expression))
             if(entry != null)
-              m_total = (V)expression.compute(m_total, shared);
+              m_total = (V)expression.compute(m_entry, m_total, shared);
       }
 
       if(m_total instanceof Units)

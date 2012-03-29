@@ -47,6 +47,7 @@ import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.util.Pair;
@@ -1396,6 +1397,63 @@ public abstract class ValueGroup implements Changeable
     Value value = getValue(inKey);
     if(value == null)
       return false;
+
+    return inValue.equalsIgnoreCase(value.toString());
+  }
+
+  //........................................................................
+  //------------------------------ isValueIn -------------------------------
+
+  /**
+   * Check if the given value is in the group value with the given key.
+   *
+   * @param       inValue the value to look for
+   * @param       inKey   the key of the value to check in
+   *
+   * @return      true if it is in, false if it is not
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public boolean isValueIn(@Nonnull String inValue, @Nonnull String inKey)
+  {
+    Value value = getValue(inKey);
+    if(value == null)
+      return false;
+
+    if(!(value instanceof ValueList))
+    {
+      Log.warning("must have a value list for in conditions for " + inValue
+                  + " in " + inKey + ", not a " + value.getClass());
+      return false;
+    }
+
+    for(Value v : (ValueList<Value>)value)
+      if(inValue.equalsIgnoreCase(v.toString()))
+        return true;
+
+    return false;
+  }
+
+  //........................................................................
+  //------------------------------ isValue -------------------------------
+
+  /**
+   * Check if the given value has the value given.
+   *
+   * @param       inValue the value to look for
+   * @param       inKey   the key of the value to check in
+   *
+   * @return      true if it is in, false if it is not, null if undefined or
+   *              invalid
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable Boolean isValue(@Nonnull String inValue,
+                                   @Nonnull String inKey)
+  {
+    Value value = getValue(inKey);
+    if(value == null || !value.isDefined())
+      return null;
 
     return inValue.equalsIgnoreCase(value.toString());
   }

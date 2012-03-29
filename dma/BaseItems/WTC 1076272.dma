@@ -1,5 +1,52 @@
 # Magic Item Compendium
 
+#----- Armband of Maximized Healing
+
+base item Armband of Maximized Healing =
+
+  player name       "Armband";
+  categories        armband, maximized, healing;
+  synonyms          "Maximized Healing, Armband of", "Healing, Armband of Maximized";
+  value             7200 gp;
+  weight            1 lbs;
+  size              small;
+  probability       very rare;
+  substance         iron 1/2 inch;
+  appearances       common    "Numerous small diamonds adorn this silver armband like tiny constellations.";
+  worlds            generic;
+  references        WTC 1076272: 72;
+  short description "Activated as a swift (mental) action up to three times per day maximize the next healing spell (6th level or lower).";
+  description
+
+  "When you activate an \Item{armband of maximixed healing} as a Swift (mental) action, the next healing spell of 6th level or lower that you cast on your turn is automatically maximized (as the Maximize Spell feat, but with no adjustment to spell level or casting time).
+
+  An \Item{armband of maximized healing} functions three times per day.".
+
+#.....
+#----- Daylight Pellet
+
+base item Daylight Pellet =
+
+  player name       "Ceramic Stone";
+  categories        magic, stone, pellet, light;
+  synonyms          "Pellet, Daylight";
+  value             150 gp;
+  weight            1/10 lbs;
+  size              medium-size;
+  probability       common;
+  substance         stone 1 inch;
+  appearances       common    "Within a thick black pouch, you see a handful of tiny ceramic beads. Thin veins of light shine through cracks in each bead.";
+  worlds            generic;
+  references        WTC 1076272: 156;
+  short description "A ceramic stone that creates \SpellRef[Clr 5]{daylight}.";
+  description
+
+  "A \Item{daylight pellet} can be thrown up to 50 feet; when it lands, it
+  shatters and creates illumination equivalent to a \SpellRef[Clr 5]{daylight}
+  spell, but with a duration of 10 rounds. These small stones are usually found
+  in pouches containing 3d4 pellets. Using a pellet destroys it.".
+
+#.....
 #----- Everfull Mug
 
 base item with incomplete Everfull Mug =
@@ -80,6 +127,27 @@ base item with wearable, incomplete Healing Belt =
   ".
 
 #.....
+#----- Helm of Glorious Recovery
+
+base item Helm of Glorious Recovery =
+
+  player name       "Helm";
+  categories        helm, recovery, healing;
+  synonyms          "Glorious Recovery, Helm of", "Recovery, Helm of Glorious";
+  value             5600 gp;
+  weight            3 lbs;
+  size              small;
+  probability       very rare;
+  substance         iron 1 inch;
+  appearances       common    "This magnificient helm is chased with gold and silver, and set with three yellow topazes.";
+  worlds            generic;
+  references        WTC 1076272: 111;
+  short description "Once per day heal 4d8 +7 damage";
+  description
+
+  "Developed by a militant, lawful good sect for its paladins, these helmets are potent healing devices. Once per day, this helment can heal you of 4d8 +7 points of damage.".
+
+#.....
 #----- Magic Bedroll
 
 base item with incomplete Magic Bedroll =
@@ -105,33 +173,6 @@ base item with incomplete Magic Bedroll =
   point per character level in addition to the hit points you recover
   normally. Getting in and out of a \Item{Magic Bedroll} is a full-round
   action.".
-
-#.....
-
---- end here ---
-
-#----- Daylight Pellet
-
-base item Daylight Pellet =
-
-  player name       "Ceramic Stone";
-  categories        magic, stone, pellet, light;
-  synonyms          "Pellet, Daylight";
-  value             150 gp;
-  weight            1/10 lbs;
-  size              medium-size;
-  probability       common;
-  substance         stone 1 inch;
-  appearances       common    "Within a thick black pouch, you see a handful of tiny ceramic beads. Thin veins of light shine through cracks in each bead.";
-  worlds            generic;
-  references        WTC 1076272: 156;
-  short description "A ceramic stone that creates \SpellRef[Clr 5]{daylight}.";
-  description
-
-  "A \Item{daylight pellet} can be thrown up to 50 feet; when it lands, it
-  shatters and creates illumination equivalent to a \SpellRef[Clr 5]{daylight}
-  spell, but with a duration of 10 rounds. These small stones are usually found
-  in pouches containing 3d4 pellets. Using a pellet destroys it.".
 
 #.....
 #----- Reliquiary Holy Symbol
@@ -169,50 +210,6 @@ base item Reliquiary Holy Symbol =
   of the deity).".
 
 #.....
-#----- Armband of Maximized Healing
-
-base item Armband of Maximized Healing =
-
-  player name       "Armband";
-  categories        armband, maximized, healing;
-  synonyms          "Maximized Healing, Armband of", "Healing, Armband of Maximized";
-  value             7200 gp;
-  weight            1 lbs;
-  size              small;
-  probability       very rare;
-  substance         iron 1/2 inch;
-  appearances       common    "Numerous small diamonds adorn this silver armband like tiny constellations.";
-  worlds            generic;
-  references        WTC 1076272: 72;
-  short description "Activated as a swift (mental) action up to three times per day maximize the next healing spell (6th level or lower).";
-  description
-
-  "When you activate an \Item{armband of maximixed healing} as a Swift (mental) action, the next healing spell of 6th level or lower that you cast on your turn is automatically maximized (as the Maximize Spell feat, but with no adjustment to spell level or casting time).
-
-  An \Item{armband of maximized healing} functions three times per day.".
-
-#.....
-#----- Helm of Glorious Recovery
-
-base item Helm of Glorious Recovery =
-
-  player name       "Helm";
-  categories        helm, recovery, healing;
-  synonyms          "Glorious Recovery, Helm of", "Recovery, Helm of Glorious";
-  value             5600 gp;
-  weight            3 lbs;
-  size              small;
-  probability       very rare;
-  substance         iron 1 inch;
-  appearances       common    "This magnificient helm is chased with gold and silver, and set with three yellow topazes.";
-  worlds            generic;
-  references        WTC 1076272: 111;
-  short description "Once per day heal 4d8 +7 damage";
-  description
-
-  "Developed by a militant, lawful good sect for its paladins, these helmets are potent healing devices. Once per day, this helment can heal you of 4d8 +7 points of damage.".
-
-#.....
 #----- Transmuting
 
 base item with incomplete, weapon Transmuting =
@@ -221,10 +218,10 @@ base item with incomplete, weapon Transmuting =
   synonyms          "transmuting";
   references        WTC 1076272: 45;
   appearances       common "This odd-looking weapon has both shard and blunt sections. Its pommel or grip is set with a diamond, a peice of jet, a sapphire, and a ruby. In addition, it is inlaid with with both adamantine and silver.";
-  short description "";
+  short description "First successful attack learns to overcome damage reduction.";
   description
 
-  "Whe you score a successful hit with a transmuting weapon against a creature
+  "When you score a successful hit with a transmuting weapon against a creature
   that has damage reduction, that attack is resolved normally. At the start of
   your next turn, however, the weapon transforms, taking on the properties
   required to overcome that creature's damage reduction.
@@ -242,3 +239,5 @@ base item with incomplete, weapon Transmuting =
   takes on, and it always deals normal damage.".
 
 #.....
+
+

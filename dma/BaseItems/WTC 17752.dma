@@ -2370,6 +2370,41 @@ base item Scroll of Wall of Stone =
 #.....
 
 #.....
+#----- Special Materials
+
+#----- Silver Weapon
+
+base item with weapon, incomplete Silver Weapon =
+
+  incomplete        "does not work with rate metals such as adamantine, cold iron, or mithral, +90 gp for a double headed weapon, 10 hp per inch of thickness, not generally just 10 hp";
+  value             [switch(ammunition in categories: 2 gp,
+                            weapon style is light melee: 20 gp,
+                            weapon style is one-handed melee: 90 gp,
+                            weapon style is two-handed melee: 180 gp)];
+  probability       Uncommon;
+  hardness          8;
+  damage            -1;
+  hp                10;
+  player name       "Silver";
+  references        WTC 17752: 284-285;
+  description
+
+  "A complex process involving metallurgy and alchemy can bond silver to a
+  weapon made of steel so that it bypasses the damage reduction of creatures
+  such as lycanthropes.
+
+  On a successful attack with a silvered weapon, the wielder takes a -1 penalty
+  on the damage roll (with the usual minimum of 1 point of damage). The
+  alchemical silvering process can't be applied to nonmetal items, and it
+  doesn't work on rare metals such as adamantine, cold iron, and mithral.
+
+  Alchemical silver has 10 hit points per inch of thickness and hardness 8.";
+
+  synonyms          "Silver".
+
+#.....
+
+#.....
 #----- Staffs
 
 #----- Staff
@@ -3425,7 +3460,7 @@ base item Gauntlets of Ogre Power =
   substance         leather 2 in;
   player name       "Gauntlets";
   worlds            Generic;
-  references        WTC 11752: 257;
+  references        WTC 17752: 257;
   description
   "These gauntlets are made of tough leather with iron studs running across the
   back of the hands and fingers. They grant the wearer great strength, adding a
@@ -4406,33 +4441,6 @@ base item with armor Mithral Shield =
   well.";
   synonyms          "Mithral Shield",
                     "Shield, Mithral".
-
-#.....
-#----- Light Silver Weapon
-
-base item with weapon Light Silver Weapon =
-
-  value             20 gp;
-  probability       Uncommon;
-  hardness          8;
-  damage            -1;
-  hp                10;
-  player name       "Silver";
-  references        WTC 17752: 284-285;
-  description
-
-  "A complex process involving metallurgy and alchemy can bond silver to a
-  weapon made of steel so that it bypasses the damage reduction of creatures
-  such as lycanthropes.
-
-  On a successful attack with a silvered weapon, the wielder takes a -1 penalty
-  on the damage roll (with the usual minimum of 1 point of damage). The
-  alchemical silvering process can't be applied to nonmetal items, and it
-  doesn't work on rare metals such as adamantine, cold iron, and mithral.
-
-  Alchemical silver has 10 hit points per inch of thickness and hardness 8.";
-
-  synonyms          "Silver".
 
 #.....
 
