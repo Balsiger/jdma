@@ -27,6 +27,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.output.commands.Link;
@@ -280,6 +281,18 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    */
   public boolean add(@Nonnull CampaignEntry inEntry)
   {
+    Contents contents = (Contents)getExtension("contents");
+    if(contents == null)
+      return false;
+
+    if(contents.add(inEntry))
+    {
+      changed();
+      save();
+
+      return true;
+    }
+
     return false;
   }
 

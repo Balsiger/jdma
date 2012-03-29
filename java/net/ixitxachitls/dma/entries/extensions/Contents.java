@@ -31,6 +31,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.ValueHandle;
@@ -44,6 +45,7 @@ import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -313,6 +315,19 @@ public class Contents extends Extension<Item>
           commands.add(new Link(name, url));
       }
 
+      if(inDM)
+      {
+        commands.add(" | ");
+        commands.add(new Link
+                     ("Add", "javascript:item.create("
+                      + Encodings.toJSString(m_entry.getCampaign().getPath())
+                      + ", "
+                      + Encodings.toJSString
+                      (m_entry.getCampaign().getEditType() + "/"
+                       + Item.TYPE.getLink()
+                       + "/" + m_entry.getName()) + ");\""));
+      }
+
       return new FormattedValue(new Command(commands), m_contents, "contents");
     }
 
@@ -461,6 +476,35 @@ public class Contents extends Extension<Item>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given entry to the campaign entry.
+   *
+   * @param       inEntry the entry to add
+   *
+   * @return      true if added, false if not
+   *
+   */
+  public boolean add(@Nonnull CampaignEntry inEntry)
+  {
+    String name = inEntry.getName();
+    List<Name> names = new ArrayList<Name>();
+    for(Name item : m_contents)
+      if(name.equals(item.get()))
+        return true;
+      else
+        names.add(item);
+
+    names.add(m_contents.newElement().as(name));
+    m_contents = m_contents.as(names);
+
+    return true;
+  }
+
+  //........................................................................
+
 
   //-------------------------------- store ---------------------------------
 

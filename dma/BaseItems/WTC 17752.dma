@@ -394,6 +394,7 @@ base item with incomplete, weapon Strength Rating +1 =
   incomplete        "gain +1 Str bonus, if any";
   value             100 gp;
   probability       Rare;
+  player name       "(Str +1)";
   references        WTC 17524: 119;
   description
 
@@ -412,6 +413,7 @@ base item with incomplete, weapon Strength Rating +2 =
 
   base              Strength Rating +1;
   incomplete        "gain +2 Str bonus, if any";
+  player name       "(Str +2)";
   description
 
   "A composite longbow can be made with a high strength rating (representing an
@@ -429,6 +431,7 @@ base item with incomplete, weapon Strength Rating +3 =
 
   base              Strength Rating +1;
   incomplete        "gain +3 Str bonus, if any";
+  player name       "(Str +3)";
   description
 
   "A composite longbow can be made with a high strength rating (representing an
@@ -446,6 +449,7 @@ base item with incomplete, weapon Strength Rating +4 =
 
   base              Strength Rating +1;
   incomplete        "gain +4 Str bonus, if any";
+  player name       "(Str +4)";
   description
 
   "A composite longbow can be made with a high strength rating (representing an
