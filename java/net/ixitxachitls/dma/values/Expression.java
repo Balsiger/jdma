@@ -764,7 +764,7 @@ public abstract class Expression implements Comparable<Expression>
       int factor = 4 * ioShared.m_magicArmor * m_plus + 2 * m_plus * m_plus;
       ioShared.m_magicAmmunition += m_plus;
 
-      Money value = new Money(0, 0, factor * 200, 0);
+      Money value = new Money(0, 0, factor * 20, 0);
 
       if(inValue == null)
         return value;

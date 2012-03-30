@@ -23,11 +23,11 @@ base item Cli Lyre =
   \Spell{suggestion}.".
 
 #.....
-#----- Corrosive Weapon +2
+#----- Corrosive Weapon
 
-base item with weapon Corrosive Weapon +2 =
+base item with weapon Corrosive =
 
-  value             6000 gp;
+  value             [magic weapon(2)];
   probability       very rare;
   player name       "";
   damage            1d6 acid;
@@ -49,9 +49,10 @@ base item with weapon Corrosive Weapon +2 =
 
 base item with incomplete, weapon Venomous =
 
+  value             [magic weapon(1)];
   categories        magic, poison, weapon enhancement, enhancement;
   references        WTC 11964: 141;
-  short description "One a day deliver a \SpellRef{poison} DC 14 after struck.";
+  short description "Once a day deliver a \SpellRef{poison} DC 14 after struck.";
   description
 
   "Once per day, a venomous weapon can inflict a \SpellRef{Poison} spell (DC 14) upon a creature struck by the weapon (or projectile) once per day. The wielder can decide to use the power after he has struck. Doing so is a free action, but the \Spell{poison} spell must be inflicted on the same round that the weapon or projectile strikes.".
