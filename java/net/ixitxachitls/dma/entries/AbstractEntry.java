@@ -2363,7 +2363,7 @@ public class AbstractEntry extends ValueGroup
    * Setup all auto extensions from base entries.
    *
    */
-  private void setupExtensionsFromBases()
+  protected void setupExtensionsFromBases()
   {
     if(!isBase())
       for(BaseEntry base : getBaseEntries())

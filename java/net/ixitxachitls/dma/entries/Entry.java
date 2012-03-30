@@ -1194,6 +1194,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
       } while(DMADataFactory.get().getEntry(getKey()) != null);
     }
 
+    setupExtensionsFromBases();
     for(AbstractExtension extension : m_extensions.values())
       if(extension instanceof Extension)
         ((Extension)extension).complete();

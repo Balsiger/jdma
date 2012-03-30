@@ -151,6 +151,7 @@ public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
   @OverridingMethodsMustInvokeSuper
   public void complete()
   {
+    System.out.println("completing extension");
     // nothing to do here
   }
 

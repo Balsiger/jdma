@@ -228,6 +228,8 @@ public class Counted extends Extension<Item>
   @Override
   public void complete()
   {
+    super.complete();
+
     if(!m_count.isDefined())
     {
       Number total = new Combination<Number>(this, "count").total();
