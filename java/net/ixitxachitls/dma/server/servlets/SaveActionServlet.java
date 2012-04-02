@@ -141,7 +141,11 @@ public class SaveActionServlet extends ActionServlet
       else if("create".equals(inKey))
         m_create = true;
       else if("extensions".equals(inKey))
+      {
         m_extensions = inValue.split("\\s*,\\s*");
+        // also set it as a normal value for existing entries
+        m_values.put(inKey, inValue);
+      }
       else
         m_values.put(inKey, inValue);
 
