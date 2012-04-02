@@ -1,5 +1,3 @@
-#----- Linen Purse ---------------------------------------------------------
-
 #----- Linen Purse
 
 base item with container Linen Purse =
@@ -76,7 +74,6 @@ base item with container Leather Purse =
 
 
 #.....
-
 #----- Quilted Silk Box
 
 base item with container Quilted Silk Box =

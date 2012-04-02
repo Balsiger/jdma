@@ -1913,7 +1913,7 @@ public class AbstractEntry extends ValueGroup
                                                  ""), null, "extensions")
         .withEditable(true)
         .withEditType("multiselection")
-        .withEditChoices("armor||commoditiy||composite||container||counted"
+        .withEditChoices("armor||commodity||composite||container||counted"
                          + "||incomplete||light||multiple||multiuse||timed"
                          + "||weapon||wearable");
 

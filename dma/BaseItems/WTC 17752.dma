@@ -1656,6 +1656,20 @@ base item Scroll =
 
 #.....
 
+#----- Scroll of Alarm
+
+base item Scroll of Alarm =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Alarm}";
+  short description "A scroll with \SpellRef[Wiz 1]{Alarm}";
+  synonyms          "Alarm, Scroll".
+
+#.....
 #----- Scroll of Bear's Endurance
 
 base item Scroll of Bear's Endurance =
@@ -1769,6 +1783,20 @@ base item Scroll of Color Spray =
   synonyms          "Color Spray, Scroll".
 
 #.....
+#----- Scroll of Comprehend Languages
+
+base item Scroll of Comprehend Languages =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Comprehend Languages}";
+  short description "A scroll with \SpellRef[Wiz 1]{Comprehend Languages}";
+  synonyms          "Comprehend Language, Scroll".
+
+#.....
 #----- Scroll of Control Undead
 
 base item Scroll of Control Undead =
@@ -1781,6 +1809,20 @@ base item Scroll of Control Undead =
   "A scroll with the spell \SpellRef[Wiz 13]{Control Undead}";
   short description "A scroll with \SpellRef[Wiz 13]{Control Undead}";
   synonyms          "Control Undead, Scroll".
+
+#.....
+#----- Scroll of Darkvision
+
+base item Scroll of Darkvision =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Darkvision}";
+  short description "A scroll with \SpellRef[Wiz 3]{Darkvision}";
+  synonyms          "Darkvision, Scroll".
 
 #.....
 #----- Scroll of Death Ward
@@ -1966,6 +2008,20 @@ base item Scroll of Greater Magic Weapon =
   synonyms          "Greater Magic Weapon, Scroll".
 
 #.....
+#----- Scroll of Hold Portal
+
+base item Scroll of Hold Portal =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Hold Portal}";
+  short description "A scroll with \SpellRef[Wiz 1]{Hold Portal}";
+  synonyms          "Hold Portal, Scroll".
+
+#.....
 #----- Scroll of Identify
 
 base item Scroll of Identify =
@@ -2078,11 +2134,25 @@ base item Scroll of Lesser Restoration =
   synonyms          "Lesser Restoration, Scroll".
 
 #.....
+#----- Scroll of Levitate
+
+base item Scroll of Levitate =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Levitate}";
+  short description "A scroll with \SpellRef[Wiz 3]{Levitate}";
+  synonyms          "Levitate, Scroll".
+
+#.....
 #----- Scroll of Mage Armor
 
 base item Scroll of Mage Armor =
 
-  value             25 gp;
+  value             [scroll(1)];
   probability       Common;
   player name       "Scroll";
   description
@@ -2103,6 +2173,19 @@ base item Scroll of Magic Circle Against Evil =
   "A scroll with the spell \SpellRef[Clr 5]{Magic Circle Against Evil}";
   short description "A scroll with \SpellRef[Clr 5]{Magic Circle Against Evil}";
   synonyms          "Magic Circle Against Evil, Scroll".
+
+#.....
+#----- Scroll of Magic Weapon
+
+base item Scroll of Magic Weapon=
+
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Magic Weapon}";
+  short description "A scroll with \SpellRef[Wiz 1]{Magic Weapon}";
+  synonyms          "Magic Weapon, Scroll".
 
 #.....
 #----- Scroll of Melf's Acid Arrow
@@ -2190,6 +2273,19 @@ base item Scroll of Ray of Enfeeblement =
   synonyms          "Ray of Enfeeblement, Scroll".
 
 #.....
+#----- Scroll of Reduce Person
+
+base item Scroll of Reduce Person =
+
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 1]{Reduce Persons}";
+  short description "A scroll with \SpellRef[Wiz 1]{Reduce Person}";
+  synonyms          "Reduce Person, Scroll".
+
+#.....
 #----- Scroll of Remove Blindness & Deafness
 
 base item Scroll of Remove Blindness & Deafness =
@@ -2262,6 +2358,20 @@ base item Scroll of Remove Paralysis =
 #.....
 #----- Scroll of Restoration
 
+base item Scroll of Resist Energy =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{Resist Energy}";
+  short description "A scroll with \SpellRef[Wiz 3]{Resist Energy}";
+  synonyms          "Resist Energyx, Scroll".
+
+#.....
+#----- Scroll of Restoration
+
 base item Scroll of Restoration =
 
   base              Scroll;
@@ -2286,6 +2396,20 @@ base item Scroll of Searing Light =
   "A scroll with the spell \SpellRef[Clr 5]{Searing Light}";
   short description "A scroll with \SpellRef[Clr 5]{Searing Light}";
   synonyms          "Searing Light, Scroll".
+
+#.....
+#----- Scroll of See Invisibility
+
+base item Scroll of See Invisibility =
+
+  base              Scroll;
+  value             [scroll(2)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz 3]{See Invisibilty}";
+  short description "A scroll with \SpellRef[Wiz 3]{See Invisibility}";
+  synonyms          "See Invisibility, Scroll".
 
 #.....
 #----- Scroll of Spider Climb
@@ -2356,6 +2480,20 @@ base item Scroll of Teleport =
   "A scroll with the spell \SpellRef[Clr 9]{Teleport}";
   short description "A scroll with \SpellRef[Clr 9]{Teleport}";
   synonyms          "Teleport, Scroll".
+
+#.....
+#----- Scroll of Tenser's Floating Disk
+
+base item Scroll of Tenser's Floating Disk =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Wiz]{Tenser's Floating Disk}";
+  short description "A scroll with \SpellRef[Wiz 1]{Tenser's Floating Disk}";
+  synonyms          "Tenser's Floating Disk, Scroll".
 
 #.....
 #----- Scroll of Wall of Stone
@@ -2500,6 +2638,30 @@ base item with multiuse Wand =
 
 #.....
 
+#----- Wand of Arcane Mark
+
+base item with multiuse Wand of Arcane Mark =
+
+  base Wand;
+  value [wand(0)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Arcane Mark}";
+  short description "A wand with \SpellRef[Wiz 1]{Arcane Mark}";
+  synonyms          "Arcane Mark, Wand".
+
+#.....
+#----- Wand of Charm Person
+
+base item with multiuse Wand of Charm Person =
+
+  base Wand;
+  value [wand(1)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Charm Person}";
+  short description "A wand with \SpellRef[Wiz 1]{Charm Person}";
+  synonyms          "Charm Person, Wand".
+
+#.....
 #----- Wand of Cure Light Wounds
 
 base item with multiuse Wand of Cure Light Wounds =
@@ -2524,6 +2686,18 @@ base item with multiuse Wand of Darkvision =
   synonyms          "Darkvision, Wand".
 
 #.....
+#----- Wand of Detect Magic
+
+base item with multiuse Wand of Detect Magic =
+
+  base Wand;
+  value [wand(0)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Detect Magic}";
+  short description "A wand with \SpellRef[Wiz 1]{Detect Magic}";
+  synonyms          "Detect Magic, Wand".
+
+#.....
 #----- Wand of Dispel Magic
 
 base item with multiuse Wand of Dispel Magic =
@@ -2534,6 +2708,30 @@ base item with multiuse Wand of Dispel Magic =
   "A wand with the spell \SpellRef[Wiz 5]{Dispel Magic}";
   short description "A wand with \SpellRef[Wiz 5]{Dispel Magic}";
   synonyms          "Dispel Magic, Wand".
+
+#.....
+#----- Wand of Enlarge Person
+
+base item with multiuse Wand of Enlarge Person =
+
+  base Wand;
+  value [wand(1)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Enlarge Person}";
+  short description "A wand with \SpellRef[Wiz 1]{Enlarge Person}";
+  synonyms          "Enlarge Person, Wand".
+
+#.....
+#----- Wand of Feather Fall
+
+base item with multiuse Wand of Feather Fall =
+
+  base Wand;
+  value [wand(1)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Feather Fall}";
+  short description "A wand with \SpellRef[Wiz 1]{Feather Fall}";
+  synonyms          "Enlarge Person, Wand".
 
 #.....
 #----- Wand of Fireball 5
@@ -2620,6 +2818,18 @@ base item with multiuse Wand of Lightning Bolt 10 =
   synonyms          "Lightning Light, Wand".
 
 #.....
+#----- Wand of Enlarge Person
+
+base item with multiuse Wand of Mage Armor =
+
+  base Wand;
+  value [wand(1)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Mage Armor}";
+  short description "A wand with \SpellRef[Wiz 1]{Mage Armor}";
+  synonyms          "Mage Armor, Wand".
+
+#.....
 #----- Wand of Magic Missile
 
 base item with multiuse Wand of Magic Missile =
@@ -2666,6 +2876,18 @@ base item with multiuse Wand of Neutralize Poison =
   "A wand with the spell \SpellRef[Clr 7]{Neutralize Poison}";
   short description "A wand with \SpellRef[Clr 7]{Neutralize Poison}";
   synonyms          "Neutralize Poison, Wand".
+
+#.....
+#----- Wand of Read Magic
+
+base item with multiuse Wand of Read Magic =
+
+  base Wand;
+  value [wand(0)];
+  description
+  "A wand with the spell \SpellRef[Wiz 1]{Read Magic}";
+  short description "A wand with \SpellRef[Wiz 1]{Read Magic}";
+  synonyms          "Read Magic, Wand".
 
 #.....
 #----- Wand of Searing Light
@@ -4254,7 +4476,7 @@ base item with wearable Robe of Useful Items =
 #.....
 #----- Rope of Climbing
 
-base item with commodity, incomplete Rope of Climbing =
+base item with incomplete Rope of Climbing =
 
   value             3000 gp;
   weight            3 lbs;
