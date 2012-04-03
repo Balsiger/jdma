@@ -252,7 +252,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /** The armor check penalty. */
   @Key("check penalty")
   @DM
-  protected Number m_checkPenalty = new Number(-20, 20)
+  protected Number m_checkPenalty = new Number(-20, 0)
     .withFormatter(s_penaltyFormatter)
     .withGrouping(s_penaltyGrouping);
 

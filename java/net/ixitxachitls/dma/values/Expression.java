@@ -261,6 +261,94 @@ public abstract class Expression implements Comparable<Expression>
   }
 
   //........................................................................
+  //----- Addition ---------------------------------------------------------
+
+  /** An expression representing factor to multiply the values with. */
+  public static class Addition extends Expression
+  {
+    /**
+     * Create the factor expression.
+     *
+     * @param inAddition the value to add or subtract
+     * @param inSubtract true to subtract the value, false for addition
+     */
+    public Addition(String inAddition, boolean inSubtract)
+    {
+      super(3);
+
+      m_addition = inAddition;
+      m_subtract = inSubtract;
+    }
+
+    /** The additional value. */
+    private String m_addition;
+
+    /** The flag if adding or subtracting. */
+    private boolean m_subtract;
+
+    /** Pattern for an addition. */
+    private static final Pattern s_pattern =
+      Pattern.compile("^\\s*(\\+|\\-)(.*)");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      return "[" + (m_subtract ? "-" : "+") + m_addition + "]";
+    }
+
+    /**
+     * Parse an addition from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed magic weapon or null if not properly parsed
+     */
+    protected static @Nullable Addition parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        return new Addition(matcher.group(2), "-".equals(matcher.group(1)));
+
+      return null;
+    }
+
+    //------------------------------ compute -------------------------------
+
+    /**
+     * Compute the value for the expression.
+     *
+     * @param       inEntry   the entry to compute for
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      if(inValue == null)
+        return null;
+
+      Value addition = inValue.read(m_addition);
+      if(addition == null)
+      {
+        Log.warning("cannot parse value " + m_addition + " for addition");
+        return inValue;
+      }
+      else
+        if(m_subtract)
+          return inValue.subtract(addition);
+        else
+          return inValue.add(addition);
+    }
+
+    //......................................................................
+  }
+
+  //........................................................................
   //----- Equal ------------------------------------------------------------
 
   /** An expression representing equal to a value. */
@@ -832,6 +920,10 @@ public abstract class Expression implements Comparable<Expression>
       return result;
 
     result = Factor.parse(text);
+    if(result != null)
+      return result;
+
+    result = Addition.parse(text);
     if(result != null)
       return result;
 

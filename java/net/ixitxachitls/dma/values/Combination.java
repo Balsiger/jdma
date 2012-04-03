@@ -238,15 +238,7 @@ public class Combination<V extends Value>
             else
               m_total = (V)m_total.add(value);
 
-      if(!m_expressions.isEmpty())
-      {
-        Expression.Shared shared = new Expression.Shared();
-        for(Expression expression
-              : new TreeSet<Expression>(m_expressions.keySet()))
-          for(ValueGroup entry : m_expressions.get(expression))
-            if(entry != null)
-              m_total = (V)expression.compute(m_entry, m_total, shared);
-      }
+      m_total = computeExpressions(m_total);
 
       if(m_total instanceof Units)
         m_total = (V)((Units)m_total).simplify();
@@ -275,6 +267,8 @@ public class Combination<V extends Value>
           m_min = value;
         else if(value.compareTo(m_min) < 0)
           m_min = value;
+
+      m_min = computeExpressions(m_min);
     }
 
     return m_min;
@@ -300,6 +294,8 @@ public class Combination<V extends Value>
           m_max = value;
         else if(value.compareTo(m_max) > 0)
           m_max = value;
+
+      m_max = computeExpressions(m_max);
     }
 
     return m_max;
@@ -373,6 +369,37 @@ public class Combination<V extends Value>
       return true;
 
     return m_values.keySet().iterator().next().isArithmetic();
+  }
+
+  //........................................................................
+  //-------------------------- computeExpressions --------------------------
+
+  /**
+   * Compute the value taking all expressions into account.
+   *
+   * @param       inValue the value to start from
+   *
+   * @return      the adjusted value from all the expressions
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable V computeExpressions(@Nullable V inValue)
+  {
+    if(inValue == null)
+      return null;
+
+    if(m_expressions.isEmpty())
+      return inValue;
+
+    V value = inValue;
+    Expression.Shared shared = new Expression.Shared();
+    for(Expression expression
+          : new TreeSet<Expression>(m_expressions.keySet()))
+      for(ValueGroup entry : m_expressions.get(expression))
+        if(entry != null)
+          value = (V)expression.compute(m_entry, value, shared);
+
+    return value;
   }
 
   //........................................................................

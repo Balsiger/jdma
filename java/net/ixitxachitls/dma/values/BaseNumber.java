@@ -388,9 +388,10 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
   {
     T result = create();
 
+    result.m_defined = true;
     result.m_number = m_number - inValue.m_number;
 
-    check();
+    result.check();
 
     return result;
   }

@@ -15,7 +15,7 @@
 base item with armor Mwk Armor =
 
   synonyms          "Masterwork Armor", "Armor, Masterwork";
-  check penalty     +1;
+  check penalty     [--1];
   value             150 gp;
   probability       Uncommon;
   appearances       Common "Good workmanship.",
@@ -266,7 +266,7 @@ base item with armor, wearable Elven Chain =
   base              Chainmail;
   armor type        Light Armor;
   max dexterity     +4;
-  check penalty     +3;
+  check penalty     [--3];
   arcane failure    20%;
   speed             30 ft/20 ft;
   value             4150 gp;
@@ -2514,6 +2514,33 @@ base item Scroll of Wall of Stone =
 #.....
 #----- Special Materials
 
+#----- Mithral Armor
+
+base item with armor Mithral Armor =
+
+  base              Mwk Armor;
+  value             [switch(armor type is light armor: 850 gp,
+                            armor type is medium armor: 3850 gp,
+                            armor type is heavy armor: 8850 gp,
+                            armor type is shield: 850 gp)];
+  probability       Rare;
+  hardness          15;
+  substance         {~, this should be 1 in, but since all hp are summed up}
+                    mithral 1/2 in;
+  weight            [* 1/2];
+  arcane failure    [-10%];
+  check penalty     [--3];
+  max dexterity     [+2];
+  player name       "Mithral Shield";
+  references        WTC 17752: 284;
+  synonyms          "Mithral";
+  description
+  "Mithral is a very rare silvery, glistening metal that is lighter than iron
+  but just as hard. When worked like steel, it becomes a wonderful material
+  from which to create armor and is occasionally used for other items as
+  well.".
+
+#.....
 #----- Silver Weapon
 
 base item with weapon, incomplete Silver Weapon =
@@ -4646,29 +4673,6 @@ base item Winged Boots =
 
 #----- Special Materials
 
-#----- Mithral Shield
-
-base item with armor Mithral Shield =
-
-  value             1000 gp;
-  probability       Rare;
-  hardness          15;
-  substance         {~, this should be 1 in, but since all hp are summed up}
-                    mithral 1/2 in;
-  weight            [/2 "mithral"];
-  arcane failure    [-10% "mithral"];
-  check penalty     [+3 "mithral"];
-  player name       "Mithral Shield";
-  references        WTC 17752: 284;
-  description
-  "Mithral is a very rare silvery, glistening metal that is lighter than iron
-  but just as hard. When worked like steel, it becomes a wonderful material
-  from which to create armor and is occasionally used for other items as
-  well.";
-  synonyms          "Mithral Shield",
-                    "Shield, Mithral".
-
-#.....
 
 #----- Mithral Breastplate
 

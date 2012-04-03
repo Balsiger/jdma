@@ -92,7 +92,7 @@ public class Percent extends BaseNumber<Percent>
    *
    */
   @Override
-public Percent create()
+  public Percent create()
   {
     return super.create(new Percent());
   }
@@ -137,7 +137,7 @@ public Percent create()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(@Nonnull ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
