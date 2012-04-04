@@ -1,0 +1,44 @@
+#----- Belt
+
+base item with wearable, incomplete Belt =
+
+  incomplete   "As long as they are nonmagical, might be possible to wear more than one";
+  probability  Common;
+  value        3 sp;
+  substance    leather 1/2 in;
+  player name  "Belt";
+  weight       1 lb;
+  size         small;
+  references   TSR 9358: 81;
+  appearances  Very Rare "A simple rope use as a belt.",
+               Common "A ragged, brown strip of cloth used as belt.",
+               Common "A simple brown leather belt.",
+               Rare "A simple black leather belt.",
+               Very Rare "An ornate brown leather belt.",
+               Very Rare "An ornate black leather belt.";
+  description  "A belt to be put around ones waist.";
+  short description "A belt.";
+  slot         waist;
+  don          1 standard action/1 standard action;
+  remove       1 standard action;
+  categories   gear, mundane.
+
+#.....
+#----- Key
+
+base item Key =
+
+  probability Uncommon;
+  value       1 sp;
+  substance   iron 1/2 in;
+  player name "Key";
+  size        tiny;
+  weight      1/10 lb;
+  appearances Common "A simple, rusted key",
+              Common "A simple iron key.",
+              Common "A glittering iron key.";
+  categories  mundane, key;
+  description "A simple key.";
+  short description "A key.".
+
+#.....

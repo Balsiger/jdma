@@ -2,8 +2,9 @@
 
 #----- Nightstick
 
-base item Nightstick [Rod] =
+base item Nightstick =
 
+  base              Rod;
   player name       "Rod";
   categories        rod, turn undead, cleric;
   value             7500 gp;

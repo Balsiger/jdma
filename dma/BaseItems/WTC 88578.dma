@@ -4,7 +4,7 @@
 
 base item with composite Armor Lubricant =
 
-  contains          Vial (ceramic)|Vial (glass)|Vial (metal);
+  contains          Ceramic Vial|Glass Vial|Metal Vial;
   value             40 gp;
   weight            0 lbs;
   probability       Rare;
@@ -34,9 +34,9 @@ base item with composite Armor Lubricant =
 #.....
 #----- Foesplitter Axe
 
-base item Foesplitter Axe
-  [Battleaxe, Weapon +2, Magic Attack +1, Keen] =
+base item Foesplitter Axe =
 
+  base              Battleaxe, Weapon +2, Keen;
   player name       "Battleaxe";
   categories        special;
   synonyms          "Axe, Foesplitter";

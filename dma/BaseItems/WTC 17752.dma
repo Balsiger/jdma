@@ -1881,6 +1881,20 @@ base item Scroll of Displacement =
   synonyms          "Displacement, Scroll".
 
 #.....
+#----- Scroll of Ebon Eyes
+
+base item Scroll of Ebon Eyes =
+
+  base              Scroll;
+  value             [scroll(1)];
+  probability       Common;
+  player name       "Scroll";
+  description
+  "A scroll with the spell \SpellRef[Clr 1]{Ebon Eyes}";
+  short description "A scroll with \SpellRef[Clr 1]{Ebon Eyes}";
+  synonyms          "Ebon Eyes, Scroll".
+
+#.....
 #----- Scroll of Endure Elements
 
 base item Scroll of Endure Elements =

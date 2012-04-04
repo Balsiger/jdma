@@ -239,5 +239,20 @@ base item with incomplete, weapon Transmuting =
   takes on, and it always deals normal damage.".
 
 #.....
+#----- Ring of Arming
 
+base item with wearable, incomplete Ring of Arming =
+
+  incomplete "Activation is a standard action with command word.";
+  base Ring;
+  value 5000 gp;
+  references WTC 1076272: 122;
+  slot  finger;
+  appearances Common "This perfectly smooth adamantine ring bears a massive turquise carved in the shape of a heavily armored knight.";
+  description "When you activate a \Item{ring of arming} as a standard action, any armor or weapon you currently wear disappear and are stored magically within the ring, and any armor weapon currently stored within the ring appear in the appropriate places on your body (items that must be held appear at your feed if you don't have free hands).";
+  categories armor;
+  synonyms "Arming, Ring of";
+  short description "Switch between two sets of armor and weapons with a standard action.".
+
+#.....
 

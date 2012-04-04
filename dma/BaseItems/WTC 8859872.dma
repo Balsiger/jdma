@@ -2,9 +2,11 @@
 
 #----- Wand of Lesser Vigor
 
-base item with multiuse Wand of Lesser Vigor [Wand 1-1] =
+base item with multiuse Wand of Lesser Vigor =
 
-  description       
+  base Wand;
+  value [wand(1)];
+  description
   "A wand with the spell \SpellRef[Clr 1]{Lesser Vigor}";
   short description "A wand with \SpellRef[Clr 1]{Lesser Vigor}";
   synonyms          "Lesser Vigor, Wand", "Vigor, Lesser, Wand", "Wanf of Vigor, Lesser".

@@ -55,8 +55,9 @@ base item with container Potion Belt =
 #.....
 #----- Spectral Dagger
 
-base item Spectral Dagger [Dagger] =
+base item Spectral Dagger =
 
+  base              Dagger;
   categories        dagger, magic, spectral, chill, touch;
   synonyms          "Dagger, Spectral";
   value             20000 gp;
