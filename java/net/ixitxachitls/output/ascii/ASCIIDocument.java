@@ -189,7 +189,7 @@ public class ASCIIDocument extends Document
     s_actions.put(ImageLink.NAME, null);
     s_actions.put(net.ixitxachitls.output.commands.Table.NAME, new Table());
     s_actions.put(Link.NAME, new Identity(1));
-    s_actions.put(Editable.NAME, new Identity(3));
+    s_actions.put(Editable.NAME, new Identity(2));
     s_actions.put(Title.NAME, new Multi(new Action []
       {
         new Align(Buffer.Alignment.center),

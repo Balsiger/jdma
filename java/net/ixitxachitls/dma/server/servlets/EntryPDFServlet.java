@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMAData;
+import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
@@ -70,12 +70,10 @@ public class EntryPDFServlet extends PDFServlet
   /**
    * Create the servlet.
    *
-   * @param       inData     all the available data
-   *
    */
-  public EntryPDFServlet(@Nonnull DMAData inData)
+  public EntryPDFServlet()
   {
-    m_data = inData;
+    // nothing to do
   }
 
   //........................................................................
@@ -84,9 +82,6 @@ public class EntryPDFServlet extends PDFServlet
 
   //-------------------------------------------------------------- variables
 
-  /** All the available entries. */
-  protected @Nonnull DMAData m_data;
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
@@ -94,50 +89,6 @@ public class EntryPDFServlet extends PDFServlet
 
   //-------------------------------------------------------------- accessors
 
-  //------------------------------- getEntry -------------------------------
-
-  /**
-   * Get the abstract entry associated with the given request.
-   *
-   * @param       inPath the path to the page
-   *
-   * @return      the entry or null if it could not be found
-   *
-   */
-  @Override
-public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
-  {
-    String id = Strings.getPattern(inPath, "/([^/]*?)(\\.pdf)?$");
-    AbstractType<? extends AbstractEntry> type = getType(inPath);
-
-    if(type == null || id == null)
-      return null;
-
-    return m_data.getEntry(AbstractEntry.createKey(id, type));
-  }
-
-  //........................................................................
-  //------------------------------- getType --------------------------------
-
-  /**
-   * Get the type associated with the given request.
-   *
-   * @param       inPath the path to the page
-   *
-   * @return      the type for the request
-   *
-   */
-  public @Nullable AbstractType<? extends AbstractEntry>
-    getType(@Nonnull String inPath)
-  {
-    String type = Strings.getPattern(inPath, ".*/([^/]*?)/");
-    if(type == null)
-      return null;
-
-    return AbstractType.getTyped(type);
-  }
-
-  //........................................................................
   //--------------------------- getLastModified ----------------------------
 
   /**
@@ -170,7 +121,7 @@ public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
    *
    */
   @Override
-protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
+  protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
   {
     String path = inRequest.getRequestURI();
     if(path == null)
@@ -279,7 +230,7 @@ protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
       EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
       EasyMock.replay(m_request, m_response);
 
-      return new EntryPDFServlet(new DMAData.Test.Data())
+      return new EntryPDFServlet()
         {
           private static final long serialVersionUID = 1L;
 
@@ -363,9 +314,7 @@ protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
     {
       EasyMock.replay(m_request, m_response);
 
-      EntryPDFServlet servlet = new EntryPDFServlet
-        (new DMAData.Test.Data(new net.ixitxachitls.dma.entries.BaseEntry
-                               ("test")));
+      EntryPDFServlet servlet = new EntryPDFServlet();
 
       assertEquals("entry", "test",
                    servlet.getEntry("/just/some/base entry/test").getName());

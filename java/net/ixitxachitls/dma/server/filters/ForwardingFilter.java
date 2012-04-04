@@ -146,7 +146,7 @@ public void destroy()
     *
     */
   @Override
-public void doFilter(@Nonnull ServletRequest inRequest,
+  public void doFilter(@Nonnull ServletRequest inRequest,
                        @Nonnull ServletResponse inResponse,
                        @Nonnull FilterChain inChain)
     throws ServletException, IOException

@@ -66,7 +66,7 @@ public abstract class PDFServlet extends DMAServlet
    */
   public PDFServlet()
   {
-
+    // nothing to do
   }
 
   //........................................................................

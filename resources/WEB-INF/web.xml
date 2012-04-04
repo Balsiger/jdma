@@ -80,6 +80,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>entry-pdf</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryPDFServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>entries</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.EntryListServlet</servlet-class>
   </servlet>
@@ -159,6 +164,11 @@
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>entry-pdf</servlet-name>
+    <url-pattern>/pdf/_entry/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -260,6 +270,9 @@
 
         ^/campaign/([^/]+)/([^/]+)/characters
         /_entries/base campaign/$1/campaign/$2/character
+
+        ^/campaign/([^/]+)/([^/]+)/character/([^/]+).pdf$
+        /pdf/_entry/base campaign/$1/campaign/$2/character/$3
 
         ^/campaign/([^/]+)/([^/]+)/character/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/character/$3

@@ -379,7 +379,7 @@ public class ITextDocument extends Document
                   ("<paragraph line-spacing=\"1.1\" spacing-before=\"10\">"
                    + "$1</paragraph><br />"));
     s_actions.put(Link.NAME, new Identity(1));
-    s_actions.put(Editable.NAME, new Identity(3));
+    s_actions.put(Editable.NAME, new Identity(2));
     s_actions.put(Hat.NAME,
                   new Replace(new Replace.Replacement []
                     {
@@ -640,6 +640,10 @@ public @Nonnull String toString()
       + "value=\"0xaa,0xaa,0xaa\" />"
       + "<color-def name=\"BaseCharacter\" color-space=\"RGB\" "
       + "value=\"0x33,0x99,0xcc\" />"
+      + "<color-def name=\"Character\" color-space=\"RGB\" "
+      + "value=\"0x33,0x99,0xcc\" />"
+      + "<color-def name=\"BaseItem\" color-space=\"RGB\" "
+      + "value=\"0x00,0x00,0x80\" />"
       + "<color-def name=\"BaseProduct\" color-space=\"RGB\" "
       + "value=\"0x80,0x80,0x80\" />"
       + "<color-def name=\"colored-even\" color-space=\"RGB\" "
