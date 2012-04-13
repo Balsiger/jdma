@@ -27,19 +27,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.output.pdf.PDFDocument;
 import net.ixitxachitls.output.commands.Left;
 import net.ixitxachitls.output.commands.Title;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -150,7 +146,7 @@ public class EntryPDFServlet extends PDFServlet
     String title = entry.getType() + ": " + entry.getName();
 
     PDFDocument document = new PDFDocument(title);
-    document.add(entry.printPage(inRequest.getUser()));
+    document.add(entry.print(inRequest.getUser()));
 
     return document;
   }
@@ -303,27 +299,6 @@ public class EntryPDFServlet extends PDFServlet
 
       m_logger.addExpected("WARNING: could not extract entry from "
                            + "'/baseentry/guru'");
-    }
-
-    //......................................................................
-    //----- path -----------------------------------------------------------
-
-    /** The path Test. */
-    @org.junit.Test
-    public void path()
-    {
-      EasyMock.replay(m_request, m_response);
-
-      EntryPDFServlet servlet = new EntryPDFServlet();
-
-      assertEquals("entry", "test",
-                   servlet.getEntry("/just/some/base entry/test").getName());
-      assertEquals("entry", "test",
-                   servlet.getEntry("/base entry/test").getName());
-      assertNull("entry", servlet.getEntry("test"));
-      assertNull("entry", servlet.getEntry(""));
-      assertNull("entry", servlet.getEntry("test/"));
-      assertNull("entry", servlet.getEntry("test/guru"));
     }
 
     //......................................................................

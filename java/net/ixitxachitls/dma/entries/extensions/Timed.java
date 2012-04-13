@@ -23,6 +23,9 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -34,6 +37,7 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -170,6 +174,15 @@ public class Timed extends Extension<Item>
                             ")"),
                            m_duration, "duration")
         .withEditable(true);
+
+    if("summary".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      commands.add(new Symbol("\u27F3"));
+      maybeAddValue(commands, "duration", inDM, null, null);
+
+      return new FormattedValue(new Command(commands), null, "summary");
+    }
 
     return super.computeValue(inKey, inDM);
   }

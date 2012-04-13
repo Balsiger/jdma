@@ -23,11 +23,19 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -126,6 +134,34 @@ public class Light extends Extension<Item>
   protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
+  }
+
+  //........................................................................
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if("summary".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      commands.add(new Symbol("\u263c"));
+      maybeAddValue(commands, "bright light", inDM, null, null);
+      maybeAddValue(commands, "shadowy light", inDM, " (", ")");
+
+      return new FormattedValue(new Command(commands), null, "summary");
+    }
+
+    return super.computeValue(inKey, inDM);
   }
 
   //........................................................................

@@ -348,7 +348,7 @@ public class DMAServer extends WebServer
                          .withAccess(BaseCharacter.Group.USER)),
         "/_entry/*");
     context.addServlet
-      (new ServletHolder(new EntryPDFServlet(m_baseData)
+      (new ServletHolder(new EntryPDFServlet()
                          .withAccess(BaseCharacter.Group.USER)),
        "/pdf/_entry/*");
     context.addServlet

@@ -30,6 +30,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.base.Joiner;
+
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.FormattedValue;
@@ -37,6 +39,7 @@ import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
@@ -89,7 +92,10 @@ public abstract class AbstractPrint
   private static final @Nonnull String s_delimiter =
     "((?:\\$|#|%|\\?|&)(?:\\+|&|>|<)?)(?:\\{(.*?)\\}|(\\w+))";
 
-  //........................................................................
+  /** The joiner to concatenate commands. */
+  private static final Joiner s_joiner = Joiner.on("").skipNulls();
+
+ //........................................................................
 
   //-------------------------------------------------------------- accessors
 
@@ -239,7 +245,8 @@ public abstract class AbstractPrint
     if(result.size() == 1)
       return result.get(0);
 
-    return new Command(result);
+    //return new Command(result);
+    return new BaseCommand(s_joiner.join(result));
   }
 
   //........................................................................

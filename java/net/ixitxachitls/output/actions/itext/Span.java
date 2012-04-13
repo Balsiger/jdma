@@ -115,7 +115,7 @@ public class Span extends Action
    *
    */
   @Override
-public void execute(@Nonnull Document inDocument,
+  public void execute(@Nonnull Document inDocument,
                       @Nullable List<? extends Object> inOptionals,
                       @Nullable List<? extends Object> inArguments)
   {
@@ -127,31 +127,29 @@ public void execute(@Nonnull Document inDocument,
 
     if(id.equalsIgnoreCase("key"))
       inDocument.add("<phrase no-wrap=\"true\">" + text + "\\ </phrase>");
-    else
-      if(id.equalsIgnoreCase("value"))
+    else if(id.equalsIgnoreCase("value"))
         inDocument.add("<phrase no-wrap=\"true\">" + text + ";</phrase>\\ ");
-      else
-        if(id.equalsIgnoreCase("key-dm"))
-        {
-          if(inDocument.isDM())
-            inDocument.add("<font color=\"dm\"><phrase no-wrap=\"true\">"
-                           + text + "\\ </phrase></font>");
-        }
-        else
-          if(id.equalsIgnoreCase("value-dm"))
-          {
-            if(inDocument.isDM())
-              inDocument.add("<font color=\"dm\"><phrase no-wrap=\"true\">"
-                             + text + ";</phrase></font>\\ ");
-          }
-          else
-            if(id.equalsIgnoreCase("dm"))
-            {
-              if(inDocument.isDM())
-                inDocument.add(text);
-            }
-            else
-              inDocument.add(text);
+    else if(id.equalsIgnoreCase("key-dm"))
+    {
+      if(inDocument.isDM())
+        inDocument.add("<font color=\"dm\"><phrase no-wrap=\"true\">"
+                       + text + "\\ </phrase></font>");
+    }
+    else if(id.equalsIgnoreCase("value-dm"))
+    {
+      if(inDocument.isDM())
+        inDocument.add("<font color=\"dm\"><phrase no-wrap=\"true\">"
+                       + text + ";</phrase></font>\\ ");
+    }
+    else if(id.equalsIgnoreCase("dm"))
+    {
+      if(inDocument.isDM())
+        inDocument.add(text);
+    }
+    else if(id.equalsIgnoreCase("base-text"))
+      inDocument.add("<font color=\"#AAAAAA\"> " + text + ": </font>");
+    else
+      inDocument.add(text);
   }
 
   //........................................................................

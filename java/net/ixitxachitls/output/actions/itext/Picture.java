@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.output.actions.itext;
 
-import java.net.URL;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -33,9 +32,7 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.output.Document;
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -125,6 +122,22 @@ public class Picture extends Action
 
   //........................................................................
 
+  //-------------------------- withIgnoreCaption ---------------------------
+
+  /**
+   * Ignore available caption.
+   *
+   * @return      this object for chaining
+   *
+   */
+  public Picture withIgnoreCaption()
+  {
+    m_ignoreCaption = true;
+    return this;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //-------------------------------------------------------------- variables
@@ -143,6 +156,9 @@ public class Picture extends Action
 
   /** The height of the icon to print. */
   private int m_height;
+
+  /** Flag if caption should be ignored. */
+  private boolean m_ignoreCaption = false;
 
   /** The name of the picture to display if a picture is not found. */
   private static @Nonnull String s_notFound =
@@ -170,8 +186,8 @@ public class Picture extends Action
    */
   @Override
 public void execute(@Nonnull Document inDocument,
-                      @Nullable List<? extends Object> inOptionals,
-                      @Nullable List<? extends Object> inArguments)
+                    @Nullable List<? extends Object> inOptionals,
+                    @Nullable List<? extends Object> inArguments)
   {
     if(inArguments == null || inArguments.size() < 1 || inArguments.size() > 4)
       throw new
@@ -198,12 +214,8 @@ public void execute(@Nonnull Document inDocument,
     if(name.startsWith("/"))
       name = name.substring(1);
 
-    URL url = Picture.class.getResource(Files.concatenate("/", name));
-    if(url == null)
-    {
-      Log.warning("image file '" + name + "' not found, using placeholder");
-      name = s_notFound;
-    }
+    if(name.endsWith("=s300"))
+      name = name.substring(0, name.length() - 5);
 
     String size = "";
     if(m_width != 0)
@@ -221,7 +233,7 @@ public void execute(@Nonnull Document inDocument,
         size = " height=\"20\"";
     }
 
-    if(caption == null)
+    if(caption == null || m_ignoreCaption)
       inDocument.add("<image source=\"" + name + "\" " + size + "/>");
     else
       inDocument.add(new Command("\\table{C}{"
@@ -255,12 +267,9 @@ public void execute(@Nonnull Document inDocument,
                      ("picture.extension", "caption", "link"));
 
       assertEquals("execution did not produce desired result",
-                   "\\table{C}{<image source=\"icons/not_found.png\" />}"
+                   "\\table{C}{<image source=\"picture.extension\" />}"
                    + "{\\scriptsize{\\color{#AAAAAA}{caption}}}",
                    doc.toString());
-
-      m_logger.addExpected("WARNING: image file 'picture.extension' "
-                           + "not found, using placeholder");
     }
 
     //......................................................................
@@ -281,12 +290,9 @@ public void execute(@Nonnull Document inDocument,
                      ("picture.extension", "caption", "link"));
 
       assertEquals("execution did not produce desired result",
-                   "\\table{C}{<image source=\"icons/not_found.png\" />}"
+                   "\\table{C}{<image source=\"picture.extension\" />}"
                    + "{\\scriptsize{\\color{#AAAAAA}{caption}}}",
                    doc.toString());
-
-      m_logger.addExpected("WARNING: image file 'picture.extension' "
-                           + "not found, using placeholder");
     }
 
     //......................................................................

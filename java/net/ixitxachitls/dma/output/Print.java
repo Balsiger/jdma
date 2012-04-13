@@ -209,7 +209,7 @@ public class Print extends AbstractPrint
       BaseCharacter user = new BaseCharacter("test");
 
       assertEquals("printing",
-                   "[start , ,  , "
+                   "[start  , "
                    + "\\title[entrytitle]"
                    + "{\\editable[Changing the name will not change "
                    + "any references to entries with that name, thus leaving "

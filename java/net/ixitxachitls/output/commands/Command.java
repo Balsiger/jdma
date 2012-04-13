@@ -192,7 +192,7 @@ public class Command implements PublicCloneable
    *
    */
   @Override
-public boolean equals(Object inOther)
+  public boolean equals(Object inOther)
   {
     if(this == inOther)
       return true;
@@ -216,7 +216,7 @@ public boolean equals(Object inOther)
    *
    */
   @Override
-public int hashCode()
+  public int hashCode()
   {
     return m_arguments.hashCode();
   }
@@ -232,7 +232,7 @@ public int hashCode()
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     StringBuilder result = new StringBuilder();
 

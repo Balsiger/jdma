@@ -670,14 +670,15 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       assertEquals("add", 4, number.get());
 
       number = number.subtract(new BaseNumber<BaseNumber>(3, 0, 10));
-      assertEquals("subtract", 1, number.get());
+      assertEquals("subtract", 2, number.get());
 
       number = number.add(new BaseNumber<BaseNumber>(50, 0, 100));
       assertEquals("add", 20, number.get());
 
       m_logger.addExpected("WARNING: number 30 too high, adjusted to 20");
       m_logger.addExpected("WARNING: number 0 too low, adjusted to 2");
-      m_logger.addExpected("WARNING: number 51 too high, adjusted to 20");
+      m_logger.addExpected("WARNING: number 1 too low, adjusted to 2");
+      m_logger.addExpected("WARNING: number 52 too high, adjusted to 20");
     }
 
     //......................................................................

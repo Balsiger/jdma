@@ -42,7 +42,11 @@ import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Color;
+import net.ixitxachitls.output.commands.Columns;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Divider;
+import net.ixitxachitls.output.commands.Icon;
+import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.OverlayIcon;
 import net.ixitxachitls.output.commands.Window;
@@ -168,10 +172,25 @@ public class Character extends CampaignEntry<BaseCharacter>
   public static final Type<Character> TYPE =
     new Type<Character>(Character.class, BaseCharacter.TYPE);
 
+  /** The print for nicely printing an overview of the entry with all data. */
+  public static final Print s_print =
+    new Print("\\table{3:L;10:L}{$image}{"
+              + "$title "
+              + "\\par "
+              + "\\bold{Player: } $base \\linebreak "
+              + "\\bold{Campaign: } $campaign \\linebreak "
+              + "\\bold{Level: } $level \\linebreak "
+              + "\\bold{Total Wealth: } $wealth \\linebreak "
+              + "\\bold{Carried Weight: } $weight \\linebreak"
+              + "} "
+              + "\\par\\par "
+              + "\\title{Items} "
+              + "$itemlist");
+
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint =
     new Print("$image "
-              + "${as pdf} ${as text} ${as dma} "
+              + "${do mail} ${as pdf dm} ${as pdf} ${as text} ${as dma} "
               + "$title "
               + "$clear "
               + "$files "
@@ -256,10 +275,12 @@ public class Character extends CampaignEntry<BaseCharacter>
   /**
    * Get all the items contained in this contents.
    *
+   * @param       inDeep true for returning all item, including nested ones,
+   *                     false for only the top level items
    * @return      a list with all the items
    *
    */
-  public @Nonnull Map<String, Item> containedItems()
+  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
     for(Name name : m_items)
@@ -269,7 +290,7 @@ public class Character extends CampaignEntry<BaseCharacter>
         continue;
 
       items.put(name.get(), item);
-      items.putAll(item.containedItems());
+      items.putAll(item.containedItems(inDeep));
     }
 
     return items;
@@ -291,39 +312,11 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   public boolean possesses(@Nonnull String inItem)
   {
-    return containedItems().containsKey(inItem);
+    return containedItems(true).containsKey(inItem);
   }
 
   //........................................................................
 
-  //---------------------------- getPossessions ----------------------------
-
-  /**
-   * Get all the items in the characters possession.
-   *
-   * @param       inDeep true to get all possession, false to only get top
-   *                     level possessions
-   *
-   * @return      an iterator over all possessions.
-   *
-   * @undefined   never
-   *
-   */
-  // public List<Entry> getPossessions(boolean inDeep)
-  // {
-  //   List<Entry> result = new ArrayList<Entry>();
-
-  //   if(inDeep)
-  //     for(EntryValue<Item> value : m_possessions)
-  //       result.addAll(value.get().getSubEntries(true));
-  //   else
-  //     for(EntryValue<Item> value : m_possessions)
-  //       result.add(value.get());
-
-  //   return result;
-  // }
-
-  //........................................................................
   //-------------------------- getCharacterLevel ---------------------------
 
   /**
@@ -490,6 +483,20 @@ public class Character extends CampaignEntry<BaseCharacter>
 
   //........................................................................
 
+  //----------------------------- getPrint -----------------------------
+
+  /**
+   * Get the print for a full page.
+   *
+   * @return the print for page printing
+   *
+   */
+  protected @Nonnull Print getPrint()
+  {
+    return s_print;
+  }
+
+  //........................................................................
   //----------------------------- getPagePrint -----------------------------
 
   /**
@@ -572,6 +579,20 @@ public class Character extends CampaignEntry<BaseCharacter>
       return new FormattedValue(command, null, "wealth");
     }
 
+    if("itemlist".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      for(Name name : m_items)
+      {
+        Item item = getCampaign().getItem(name.get());
+        commands.add(item.computeValue("itemlist", inDM)
+                     .format(item, inDM, true));
+      }
+
+      return new FormattedValue(new Columns("2", new Command(commands)),
+                                null, "itemlist");
+    }
+
     if("items".equals(inKey))
     {
       List<Object> commands = new ArrayList<Object>();
@@ -607,6 +628,19 @@ public class Character extends CampaignEntry<BaseCharacter>
 
     if("weight".equals(inKey))
       return new FormattedValue(totalWeight().format(), "", "weight");
+
+    if(inDM && "as pdf dm".equals(inKey))
+      return new FormattedValue
+        (new Divider("doc-link doc-link-icon",
+                     new Icon("doc-pdf.png", "DM", getName() + ".pdf")),
+         null, "as dm pdf");
+
+    if(inDM && "as pdf".equals(inKey))
+      return new FormattedValue
+        (new ImageLink("/icons/doc-pdf.png", getName(),
+                       getName() + ".pdf?user="
+                       + getBaseEntries().get(0).getName(),
+                       "doc-link"), null, "as pdf");
 
     return super.computeValue(inKey, inDM);
   }

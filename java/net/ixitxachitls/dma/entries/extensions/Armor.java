@@ -23,14 +23,23 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -134,6 +143,40 @@ public class Armor extends Extension<Item>
   protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
+  }
+
+  //........................................................................
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if(inDM && "summary".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      commands.add(new Linebreak());
+      commands.add(new Symbol("\u2602"));
+      maybeAddValue(commands, "armor type", inDM, null, " ");
+      maybeAddValue(commands, "AC bonus", inDM, null, null);
+      maybeAddValue(commands, "max dexterity", inDM, ", max Dex ", null);
+      maybeAddValue(commands, "check penalty", inDM, ", checks ", null);
+      maybeAddValue(commands, "arcane failure", inDM, ", arcane failure ",
+                    null);
+      maybeAddValue(commands, "speed", inDM, ", speed ", null);
+
+      return new FormattedValue(new Command(commands), null, "summary");
+    }
+
+    return super.computeValue(inKey, inDM);
   }
 
   //........................................................................

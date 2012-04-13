@@ -235,6 +235,8 @@
              overwrite="Yes" />
     <symlink link="${classes.dir}/fonts" resource="${resources.dir}/fonts"
              overwrite="Yes" />
+    <symlink link="${classes.dir}/icons" resource="${resources.dir}/icons"
+             overwrite="Yes" />
     <symlink link="${war.dir}/js" resource="${resources.dir}/js"
              overwrite="Yes" />
   </target>
@@ -246,6 +248,7 @@
     <mkdir dir="${war.dir}/html" />
     <mkdir dir="${classes.dir}/css" />
     <mkdir dir="${classes.dir}/fonts" />
+    <mkdir dir="${classes.dir}/icons" />
     <mkdir dir="${war.dir}/js" />
     <copy todir="${webinf.dir}/classes" flatten="false">
       <fileset dir="${classes.dir}">
@@ -265,6 +268,11 @@
     <copy todir="${classes.dir}/fonts" flatten="false">
       <fileset dir="${resources.dir}/fonts">
         <include name="**/*.ttf" />
+      </fileset>
+    </copy>
+    <copy todir="${classes.dir}/icons" flatten="false">
+      <fileset dir="${resources.dir}/icons">
+        <include name="**/*" />
       </fileset>
     </copy>
     <copy todir="${war.dir}/js" flatten="false">
@@ -332,6 +340,8 @@
     <dev_appserver war="${war.dir}" port="8888">
       <options>
         <arg value="--jvm_flag=-Xmx512m"/>
+        <arg value="--jvm_flag=-Dappengine.user.timezone.impl=UTC"/>
+        <arg value="--jvm_flag=-Dappengine.user.timezone=UTC"/>
       </options>
     </dev_appserver>
   </target>

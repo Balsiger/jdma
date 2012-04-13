@@ -96,6 +96,7 @@ import net.ixitxachitls.output.commands.Small;
 import net.ixitxachitls.output.commands.Sub;
 import net.ixitxachitls.output.commands.Subtitle;
 import net.ixitxachitls.output.commands.Super;
+import net.ixitxachitls.output.commands.Symbol;
 import net.ixitxachitls.output.commands.Textblock;
 import net.ixitxachitls.output.commands.Tiny;
 import net.ixitxachitls.output.commands.Title;
@@ -348,14 +349,14 @@ public class ITextDocument extends Document
 //                               + "border-style=\"bottom\">"
 //                               + "</cell></table>"));
     s_actions.put(Title.NAME,
-                  new Pattern("<paragraph font=\"title\">"
-                              + "$1</paragraph>"
-                              + "<table columns=\"1\" "
-                              + "spacing-after=\"5\">"
-                              + "<cell border-width=\"1\" "
-                              + "border-color=\"title\" "
-                              + "border-style=\"bottom\">"
-                              + "</cell></table>"));
+                  new Pattern("<paragraph font=\"title\" spacing-after=\"10\">"
+                              + "$1</paragraph>"));
+                              //+ "<table columns=\"1\" "
+                              //+ "spacing-after=\"5\">"
+                              //+ "<cell border-width=\"1\" "
+                              //+ "border-color=\"title\" "
+                              //+ "border-style=\"bottom\">"
+                              //+ "</cell></table>"));
     s_actions.put(Subtitle.NAME,
                   new Pattern("<paragraph font=\"subtitle\" halign=\"left\">"
                               + "$1"
@@ -367,7 +368,9 @@ public class ITextDocument extends Document
                   new Picture(net.ixitxachitls.output.commands.Image.NAME,
                               false, false));
     s_actions.put(Icon.NAME, new Picture(Icon.NAME, true, true, 50, 0));
-    s_actions.put(ImageLink.NAME, new Ignore());
+    s_actions.put(ImageLink.NAME,
+                  new Picture(ImageLink.NAME, true, true, 100, 0)
+                  .withIgnoreCaption());
     s_actions.put(Label.NAME, new Ignore());
 //     s_actions.put(LABEL,
 //                   new Picture(LABEL, false, false,
@@ -494,6 +497,7 @@ public class ITextDocument extends Document
 //     s_actions.put(Checked.NAME,
 //                   new Pattern("<font name=\"symbol\">c</font> $1"));
     s_actions.put(Script.NAME, new Ignore());
+    s_actions.put(Symbol.NAME, new Pattern("<font name=\"dejavu\">$1</font>"));
 
     s_actions.put("command", new Action());
     s_actions.put("baseCommand", new Action());
@@ -638,14 +642,14 @@ public @Nonnull String toString()
       + "value=\"0x80,0xff,0xff\" />"
       + "<color-def name=\"#AAAAAA\" color-space=\"RGB\" "
       + "value=\"0xaa,0xaa,0xaa\" />"
-      + "<color-def name=\"BaseCharacter\" color-space=\"RGB\" "
-      + "value=\"0x33,0x99,0xcc\" />"
       + "<color-def name=\"Character\" color-space=\"RGB\" "
       + "value=\"0x33,0x99,0xcc\" />"
-      + "<color-def name=\"BaseItem\" color-space=\"RGB\" "
-      + "value=\"0x00,0x00,0x80\" />"
+      + "<color-def name=\"BaseCharacter\" color-space=\"RGB\" "
+      + "value=\"0x33,0x99,0xcc\" />"
       + "<color-def name=\"BaseProduct\" color-space=\"RGB\" "
       + "value=\"0x80,0x80,0x80\" />"
+      + "<color-def name=\"BaseItem\" color-space=\"RGB\" "
+      + "value=\"0x00,0x00,0x80\" />"
       + "<color-def name=\"colored-even\" color-space=\"RGB\" "
       + "value=\"0xee,0xee,0xee\" />"
       + "<color-def name=\"indent\" color-space=\"RGB\" "
@@ -688,6 +692,9 @@ public @Nonnull String toString()
       + "<register-font family=\"Webdings\" "
       + "source=\"fonts/webdings.ttf\" />"
       + "<font-def size=\"6\" name=\"symbol\" family=\"Webdings\"/>"
+      + "<register-font family=\"Dejavu\" "
+      + "source=\"fonts/dejavu.ttf\" />"
+      + "<font-def size=\"6\" name=\"dejavu\" family=\"Dejavu\"/>"
 
       // style definitions
       + "<style-def name=\".count\" border-style=\"box\" "

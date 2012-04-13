@@ -42,7 +42,15 @@ import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Weight;
+import net.ixitxachitls.output.commands.Bold;
+import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Indent;
+import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Scriptsize;
+import net.ixitxachitls.output.commands.Small;
+import net.ixitxachitls.output.commands.Super;
+import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -261,93 +269,11 @@ public class Item extends CampaignEntry<BaseItem>
 
   //----- printing commands ------------------------------------------------
 
-  /** The command for printing on a page. */
-  // public static Command PAGE_COMMAND = new Command(new Object []
-  //   {
-  //     new Divider("center", "#{^world} #attachment #{+categories}"),
-  //     "$title ${player title}",
-  //     new Textblock(new Command(new Object []
-  //       {
-  //         "${+description}",
-  //         new Linebreak(),
-  //         new Hrule(),
-  //         "${+short description}",
-  //       }), "desc"),
-  //     new OverviewFiles("$image"),
-  //     new Table("description", "f" + "Illustrations: ".length()
-  //               + ":L(desc-label);100:L(desc-text)",
-  //             new Command("%base %{player name} %{player notes} %{dm notes} "
-  //                           + "%appearance %value %weight %hp "
-  //                           + "%qualities "
-  //                           + "%{+effects} %{+categories} %{+synonyms} "
-  //                           // counted
-  //                           + "%count %{+unit} "
-  //                           // weapon
-  //                           + "%{+damage} %{+splash} %{^type} %{+critical} "
-  //                          + "%{^style} %{^proficiency} %{>range} %{>reach} "
-  //                           // armor
-  //                          + "%{+AC bonus} %{^armor type} %{+max dexterity} "
-  //                           + "%{+check penalty} %{+arcane failure} "
-  //                           + "%{<speed} "
-  //                           // wearable
-  //                           + "%{<slot} %{+don} %{+remove} "
-  //                           // item
-  //                           + "%{+hardness} %{>break DC} "
-  //                           // incomplete
-  //                           + "%incomplete "
-  //                           // admin
-  //                           + "%{+references} %file")),
-  //     new Divider("clear", "${scripts}"),
-  //   });
-
-  /** The command for printing in a list. */
-  // public static Command LIST_COMMAND = new Command(new Object []
-  //   {
-  //     new Table("keep", "85:L;15:R", new Command []
-  //       {
-  //         new Small(new Command("${name}${player name}${id}")),
-  //         new Scriptsize("${weight}"),
-  //         new Left(new Scriptsize
-  //                  (new Command("${appearance}${player notes}"))),
-  //         null, // will span second column as well
-  //       }),
-  //     "${deep contents}",
-  //   });
 
   // public static Command LIST_COMMAND_DM = new Command(new Object []
   // {
-  //   new Table("keep", "80:L;10:R;10:R", new Command []
-  //     {
-  //       new Small("${name}${id}"),
-  //       new Scriptsize("${value}"),
-  //       new Scriptsize("${weight}"),
-  //     }),
   //   new Scriptsize(new Left(new Command(new Object []
   //     {
-  //       new Color("subtitle", "${short description}"),
-  //       new Linebreak(),
-  //       new Emph("$appearance"),
-  //       " ",
-  //       new Color("player-notes", "${player notes}"),
-  //       " ",
-  //       new Color("dm-notes", "${dm notes}"),
-  //       new Linebreak(),
-  //       "${<size}; ${hp}/${max hp} hp; "
-  //       + "?{|qualities|; }?{|effects|; }?{hardness |+hardness|; }"
-  //       + "?{break DC |>break DC|; }"
-  //       // counted
-  //       + "?{|count| }?{+unit}"
-  //       // weapon
-  //       + "?{|^type| }?{|^style| }?{|proficiency| weapon; }"
-  //       + "?{damage |+damage|; }?{splash |+splash|; }"
-  //       + "?{critical |+critical|; }?{range |>range|; }?{reach |>reach|; }"
-  //       // armor
-  //       + "?{|^armor type| }?{|#AC bonus|; }?{max dex |+max dexterity|; }"
-  //       + "?{check penalty |+check penalty|; }"
-  //       + "?{arcane failure |+arcane failure|; }"
-  //       + "?{speed |<speed|; }"
-  //       // wearable
-  //       + "?{slot |<slot|; }?{don |+don|;}?{remove |+remove|; }",
   //       new Color("dm-notes", "&{incomplete}"),
   //       new Linebreak(),
   //       "$description",
@@ -639,33 +565,35 @@ public class Item extends CampaignEntry<BaseItem>
   /**
    * Get all the items contained in this one.
    *
+   * @param       inDeep true for returning all item, including nested ones,
+   *                     false for only the top level items
    * @return      a list of all contained items
    *
    */
-  public @Nonnull Map<String, Item> containedItems()
+  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
 
     Contents contents = (Contents)getExtension("contents");
     if(contents != null)
     {
-      Map<String, Item> contained = contents.containedItems();
+      Map<String, Item> contained = contents.containedItems(inDeep);
       for(String key : contained.keySet())
         if(items.containsKey(key))
           Log.warning("item loop detected for " + key);
 
-      items.putAll(contents.containedItems());
+      items.putAll(contents.containedItems(inDeep));
     }
 
     Composite composite = (Composite)getExtension("composite");
     if(composite != null)
     {
-      Map<String, Item> contained = composite.containedItems();
+      Map<String, Item> contained = composite.containedItems(inDeep);
       for(String key : contained.keySet())
         if(items.containsKey(key))
           Log.warning("item loop detected for " + key);
 
-      items.putAll(composite.containedItems());
+      items.putAll(composite.containedItems(inDeep));
     }
 
     return items;
@@ -923,6 +851,65 @@ public class Item extends CampaignEntry<BaseItem>
                            m_hp, "hp")
         .withEditable(true);
 
+    if("itemlist".equals(inKey))
+    {
+      List<Object> item = new ArrayList<Object>();
+      item.add(new Small(new Bold(computeValue("name", inDM)
+                                  .format(this, inDM, true))));
+      item.add(new Scriptsize(computeValue("weight", inDM)
+                              .format(this, inDM, true)));
+      item.add(new Scriptsize(new Command(computeValue("appearance", inDM)
+                                          .format(this, inDM, true),
+                                          computeValue("player notes", inDM)
+                                          .format(this, inDM, true))));
+
+      if(inDM)
+      {
+        item.add(new Scriptsize(computeValue("value", inDM)
+                                .format(this, inDM, true)));
+
+        List<Object> values = new ArrayList<Object>();
+        maybeAddValue(values, "size", inDM, null, ";");
+        maybeAddValue(values, "hp", inDM, " ", ";");
+        maybeAddValue(values, "break DC", inDM, " break DC", ";");
+        maybeAddValue(values, "counted:summary", inDM, " ", ";");
+        maybeAddValue(values, "wearable:summary", inDM, " ", ";");
+        maybeAddValue(values, "timed:summary", inDM, " ", ";");
+        maybeAddValue(values, "light:summary", inDM, " ", ";");
+        maybeAddValue(values, "weapon:summary", inDM, " ", ";");
+        maybeAddValue(values, "armor:summary", inDM, " ", ";");
+        maybeAddValue(values, "incomplete:summary", inDM, " ", ";");
+
+        item.add(new Scriptsize
+                 (new Command(new Color("subtitle",
+                                        computeValue("short description", true)
+                                        .format(this, true, true)),
+                              " ",
+                              new Color("dm-notes",
+                                        computeValue("dm notes", true)
+                                        .format(this, true, true)),
+                              new Linebreak(),
+                              new Command(values))));
+      }
+
+      Command command = new Table("keep", "85:L;15:R", new Command(item));
+
+      List<Object> nested = new ArrayList<Object>();
+      for(Map.Entry<String, Item> entry : containedItems(false).entrySet())
+      {
+        if(entry.getValue() == null)
+          nested.add(entry.getKey());
+        else
+          nested.add(entry.getValue().computeValue("itemlist", inDM)
+                     .format(entry.getValue(), inDM, true));
+      }
+
+      if(!nested.isEmpty())
+        command = new Command(command, new Indent(new Command(nested)));
+
+      return new FormattedValue(command, null, "itemlist");
+    }
+
     return super.computeValue(inKey, inDM);
   }
 
@@ -940,7 +927,8 @@ public class Item extends CampaignEntry<BaseItem>
   public @Nonnull Object getNameCommand(boolean inDM)
   {
     if(!inDM)
-      return computeValue("player name", inDM).format(this, inDM, false);
+      return new Color("Item", computeValue("player name", inDM)
+                       .format(this, inDM, false));
 
     String name = null;
     for(BaseEntry base : getBaseEntries())
@@ -967,7 +955,7 @@ public class Item extends CampaignEntry<BaseItem>
       m_playerName.isDefined() && !name.equals(playerName);
 
     if(hasPlayerName)
-      name += " [" + playerName + "]";
+      return new Command(playerName, new Super(name));
 
     return name;
   }

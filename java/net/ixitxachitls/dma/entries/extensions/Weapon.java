@@ -23,11 +23,20 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Linebreak;
+import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -127,6 +136,40 @@ public class Weapon extends Extension<Item>
   protected @Nonnull ListPrint getListPrint()
   {
     return s_listPrint;
+  }
+
+  //........................................................................
+  //----------------------------- computeValue -----------------------------
+
+  /**
+   * Get a value for printing.
+   *
+   * @param     inKey  the name of the value to get
+   * @param     inDM   true if formattign for dm, false if not
+   *
+   * @return    a value handle ready for printing
+   *
+   */
+  @Override
+  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  {
+    if(inDM && "summary".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      commands.add(new Linebreak());
+      commands.add(new Symbol("\u2694"));
+      maybeAddValue(commands, "weaypon type", inDM, null, null);
+      maybeAddValue(commands, "proficiency", inDM, " ", null);
+      maybeAddValue(commands, "weapon style", inDM, " ", null);
+      maybeAddValue(commands, "damage", inDM, " ", null);
+      maybeAddValue(commands, "critical", inDM, " (critical ", ")");
+      maybeAddValue(commands, "range", inDM, ", range ", null);
+      maybeAddValue(commands, "reach", inDM, ", reach ", null);
+
+      return new FormattedValue(new Command(commands), null, "summary");
+    }
+
+    return super.computeValue(inKey, inDM);
   }
 
   //........................................................................

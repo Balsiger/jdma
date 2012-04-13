@@ -69,6 +69,11 @@ DIV.subtitletext, DIV.subtitletext A
   margin-left: 5px;
 }
 
+.doc-link-icon
+{
+  margin-top: -2px;
+}
+
 .dma-formatted, .text-formatted
 {
   white-space: pre;

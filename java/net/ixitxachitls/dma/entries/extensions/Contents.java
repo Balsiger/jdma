@@ -156,34 +156,6 @@ public class Contents extends Extension<Item>
   }
 
   //........................................................................
-  //---------------------------- getSubEntries -----------------------------
-
-  /**
-   * Get all the sub entries present in this extension.
-   *
-   * @param       inDeep true if get all sub entries, even nested one,
-   *                     false for only the ones of here
-   *
-   * @return      the list with all the entries or null if none
-   *
-   * @undefined   never (may return null)
-   *
-   */
-  // public List<Entry> getSubEntries(boolean inDeep)
-  // {
-  //   List<Entry> list = new ArrayList<Entry>();
-
-  //   if(inDeep)
-  //    for(Iterator<EntryValue<Item>> i = m_contents.iterator(); i.hasNext(); )
-  //       list.addAll(i.next().get().getSubEntries(true));
-  //   else
-  //    for(Iterator<EntryValue<Item>> i = m_contents.iterator(); i.hasNext(); )
-  //       list.add(i.next().get());
-
-  //   return list;
-  // }
-
-  //........................................................................
   //---------------------------- getStorageName ----------------------------
 
   /**
@@ -446,10 +418,12 @@ public class Contents extends Extension<Item>
   /**
    * Get all the items contained in this contents.
    *
+   * @param       inDeep true for returning all item, including nested ones,
+   *                     false for only the top level items
    * @return      a list with all the items
    *
    */
-  public @Nonnull Map<String, Item> containedItems()
+  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
     for(Name name : m_contents)
@@ -457,15 +431,15 @@ public class Contents extends Extension<Item>
       Item item = m_entry.getCampaign().getItem(name.get());
       items.put(name.get(), item);
 
-      if(item == null)
+      if(item == null || !inDeep)
         continue;
 
-      Map<String, Item> contained = item.containedItems();
+      Map<String, Item> contained = item.containedItems(true);
       for(String key : contained.keySet())
         if(items.containsKey(key))
           Log.warning("depected item loop for " + key);
 
-      items.putAll(item.containedItems());
+      items.putAll(item.containedItems(true));
     }
 
     return items;

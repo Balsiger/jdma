@@ -394,6 +394,9 @@ public class AbstractEntry extends ValueGroup
   /** The files for this entry. */
   private @Nullable List<DMAData.File> m_files = null;
 
+  /** Flag if computing extension values. */
+  private boolean m_computingExtension = false;
+
   /** The random generator. */
   protected static final @Nonnull Random s_random = new Random();
 
@@ -1723,6 +1726,14 @@ public class AbstractEntry extends ValueGroup
   @Override
   public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   {
+    if(inKey.contains(":"))
+    {
+      String []parts = inKey.split(":");
+      AbstractExtension extension = getExtension(parts[0]);
+      if(extension != null)
+        return extension.computeValue(parts[1], inDM);
+    }
+
     if("title".equals(inKey))
     {
       return new FormattedValue
@@ -1841,12 +1852,9 @@ public class AbstractEntry extends ValueGroup
         .withDM(true);
 
     if("as pdf".equals(inKey))
-    {
       return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
                                               getName(), getName() + ".pdf",
-                                              "doc-link"), null, "as pdf")
-        .withDM(true);
-    }
+                                              "doc-link"), null, "as pdf");
 
     if("as text".equals(inKey))
       return new FormattedValue(new ImageLink("/icons/doc-txt.png",

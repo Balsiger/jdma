@@ -1536,6 +1536,20 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
+  //----------------------------- getPrint -----------------------------
+
+  /**
+   * Get the print for a full page.
+   *
+   * @return the print for page printing
+   *
+   */
+  protected @Nonnull Print getPrint()
+  {
+    return getPagePrint();
+  }
+
+  //........................................................................
   //----------------------------- getPagePrint -----------------------------
 
   /**
@@ -1591,6 +1605,23 @@ public abstract class ValueGroup implements Changeable
   public @Nonnull Object printPage(@Nullable BaseCharacter inUser)
   {
     return getPagePrint().print(this, inUser);
+  }
+
+  //........................................................................
+  //--------------------------------- print --------------------------------
+
+  /**
+   * Print the entry into a command for adding to a document.
+   *
+   * @param       inUser  the user printing, if any
+   *
+   * @return      the command representing this item in a list
+   *
+   */
+  public @Nonnull Object print(@Nullable BaseCharacter inUser)
+  {
+    System.out.println("print: " + getPrint().print(this, inUser));
+    return getPrint().print(this, inUser);
   }
 
   //........................................................................
@@ -2234,6 +2265,37 @@ public abstract class ValueGroup implements Changeable
     }
 
     return total;
+  }
+
+  //........................................................................
+  //---------------------------- maybeAddValue -----------------------------
+
+  /**
+   * Add the value for the given key to the list if it is not null.
+   *
+   * @param     ioList    the list to add to
+   * @param     inKey     the key of the value to add
+   * @param     inDM      true if adding for DM, false if not
+   * @param     inPrefix  the object to add before the value
+   * @param     inPostfix the object to add after the value
+   *
+   */
+  public @Nonnull void maybeAddValue(@Nonnull List<Object> ioList,
+                                     @Nonnull String inKey, boolean inDM,
+                                     @Nullable Object inPrefix,
+                                     @Nullable Object inPostfix)
+  {
+    Object value = computeValue(inKey, inDM).format(this, inDM, true);
+    if(value != null && !value.toString().isEmpty())
+    {
+      if(inPrefix != null)
+        ioList.add(inPrefix);
+
+      ioList.add(value);
+
+      if(inPostfix != null)
+        ioList.add(inPostfix);
+    }
   }
 
   //........................................................................

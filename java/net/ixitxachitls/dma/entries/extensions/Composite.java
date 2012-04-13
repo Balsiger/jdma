@@ -225,10 +225,12 @@ public class Composite extends Extension<Item>
   /**
    * Get all the items contained in this contents.
    *
+   * @param       inDeep true for returning all item, including nested ones,
+   *                     false for only the top level items
    * @return      a list with all the items
    *
    */
-  public @Nonnull Map<String, Item> containedItems()
+  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
     for(Name name : m_includes)
@@ -236,15 +238,15 @@ public class Composite extends Extension<Item>
       Item item = m_entry.getCampaign().getItem(name.get());
       items.put(name.get(), item);
 
-      if(item == null)
+      if(item == null || !inDeep)
         continue;
 
-      Map<String, Item> contained = item.containedItems();
+      Map<String, Item> contained = item.containedItems(true);
       for(String key : contained.keySet())
         if(items.containsKey(key))
           Log.warning("depected item loop for " + key);
 
-      items.putAll(item.containedItems());
+      items.putAll(item.containedItems(true));
     }
 
     return items;

@@ -204,7 +204,7 @@ public class Combination<V extends Value>
 
         if(inDM)
           commands.add(new Window(new Span("base-value", value.format()),
-                                  "from " + names, " [" + names + "]", "base"));
+                                  "from " + names, " /" + names + "/", "base"));
         else
           commands.add(value.format());
       }

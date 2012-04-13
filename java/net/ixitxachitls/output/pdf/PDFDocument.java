@@ -34,6 +34,8 @@ import javax.annotation.concurrent.NotThreadSafe;
 
 import org.ujac.print.DocumentPrinter;
 import org.ujac.util.io.ClassPathResourceLoader;
+import org.ujac.util.io.HttpResourceLoader;
+import org.ujac.util.io.MultiResourceLoader;
 
 import net.ixitxachitls.output.Buffer;
 import net.ixitxachitls.output.commands.Command;
@@ -128,7 +130,7 @@ public class PDFDocument extends ITextDocument
    *
    */
   @Override
-public boolean save(@Nonnull String inFileName)
+  public boolean save(@Nonnull String inFileName)
   {
     FileOutputStream output = null;
     try
@@ -187,8 +189,11 @@ public boolean save(@Nonnull String inFileName)
 
       // defining the ResourceLoader: This is necessary if you like to
       // dynamically load resources like images during template processing.
-      printer.setResourceLoader
+      MultiResourceLoader multiLoader = new MultiResourceLoader();
+      multiLoader.addResourceLoader
         (new ClassPathResourceLoader(getClass().getClassLoader()));
+      multiLoader.addResourceLoader(new HttpResourceLoader());
+      printer.setResourceLoader(multiLoader);
 
       // generating the document output
       printer.printDocument(inOutput);
@@ -365,6 +370,10 @@ public boolean save(@Nonnull String inFileName)
                    + "source=\"fonts/webdings.ttf\" />"
                    + "<font-def size=\"6\" name=\"symbol\" "
                    + "family=\"Webdings\"/>"
+                   + "<register-font family=\"Dejavu\" "
+                   + "source=\"fonts/dejavu.ttf\" />"
+                   + "<font-def size=\"6\" name=\"dejavu\" "
+                   + "family=\"Dejavu\"/>"
                    + "<style-def name=\".count\" border-style=\"box\" "
                    + "border-color=\"count\" font=\"count\"/>"
                    + "<style-def name=\".count-max\" border-style=\"box\" "
