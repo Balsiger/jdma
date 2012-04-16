@@ -19,7 +19,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-
 //------------------------------------------------------------------ imports
 
 package net.ixitxachitls.dma.entries.extensions;
@@ -38,6 +37,7 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.output.commands.Count;
 import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
@@ -73,6 +73,8 @@ public class Counted extends Extension<Item>
   public Counted(@Nonnull Item inEntry, @Nonnull String inName)
   {
     super(inEntry, inName);
+
+    init();
   }
 
   //........................................................................
@@ -100,6 +102,8 @@ public class Counted extends Extension<Item>
   /** The printer for printing the whole base item. */
   public static final Print s_pagePrint =
     new Print("%count %unit");
+
+  public static final Print s_emptyPrint = new Print("");
 
   //----- count ------------------------------------------------------------
 
@@ -171,6 +175,13 @@ public class Counted extends Extension<Item>
 
       return new FormattedValue(new Command(commands), null, "summary");
     }
+
+    if("list".equals(inKey))
+      return new FormattedValue
+        (new Command(m_entry.getNameCommand(inDM),
+                     new Count(m_count.get(), m_count.get(),
+                               computeValue("unit", inDM)
+                               .format(this, inDM, true))), null, "list");
 
     return super.computeValue(inKey, inDM);
   }
@@ -266,6 +277,18 @@ public class Counted extends Extension<Item>
   {
     super.complete();
 
+    init();
+  }
+
+  //........................................................................
+  //--------------------------------- init ---------------------------------
+
+  /**
+   * Initialize the count if it is not yet set.
+   *
+   */
+  private void init()
+  {
     if(!m_count.isDefined())
     {
       Number total = new Combination<Number>(this, "count").total();
@@ -278,6 +301,7 @@ public class Counted extends Extension<Item>
   }
 
   //........................................................................
+
 
   //........................................................................
 

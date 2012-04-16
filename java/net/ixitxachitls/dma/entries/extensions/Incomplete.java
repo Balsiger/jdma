@@ -170,7 +170,6 @@ public class Incomplete extends Extension<Entry<?>>
       commands.add(new Symbol("\u2639"));
       maybeAddValue(commands, "incomplete", inDM, null, null);
 
-      System.out.println("commands: " + commands);
       return new FormattedValue(new Color("dm-notes", new Command(commands)),
                                 null, "summary");
     }

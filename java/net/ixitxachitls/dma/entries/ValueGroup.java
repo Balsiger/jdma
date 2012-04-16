@@ -1620,7 +1620,6 @@ public abstract class ValueGroup implements Changeable
    */
   public @Nonnull Object print(@Nullable BaseCharacter inUser)
   {
-    System.out.println("print: " + getPrint().print(this, inUser));
     return getPrint().print(this, inUser);
   }
 

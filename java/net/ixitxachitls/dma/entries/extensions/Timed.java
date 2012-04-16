@@ -184,6 +184,13 @@ public class Timed extends Extension<Item>
       return new FormattedValue(new Command(commands), null, "summary");
     }
 
+    if("list".equals(inKey))
+      return new FormattedValue
+        (new Command(m_entry.getNameCommand(inDM),
+                     computeValue("duration", inDM)
+                     .format(m_entry, inDM, true)),
+         null, "list");
+
     return super.computeValue(inKey, inDM);
   }
 

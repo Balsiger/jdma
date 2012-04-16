@@ -1730,6 +1730,7 @@ public class AbstractEntry extends ValueGroup
     {
       String []parts = inKey.split(":");
       AbstractExtension extension = getExtension(parts[0]);
+      System.out.println(parts[0] + ": " + extension + "..." + getExtensionNames());
       if(extension != null)
         return extension.computeValue(parts[1], inDM);
     }

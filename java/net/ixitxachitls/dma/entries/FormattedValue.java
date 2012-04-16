@@ -100,13 +100,13 @@ public class FormattedValue extends ValueHandle<FormattedValue>
    *
    */
   @Override
-public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
+  public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     return m_value;
   }
 
   //........................................................................
-  //-------------------------------- formatted ---------------------------------
+  //------------------------------ formatted -------------------------------
 
   /**
    * Get the formatted value from the given entry.
@@ -118,9 +118,24 @@ public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
    *
    */
   @Override
-public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
+  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     return m_formatted;
+  }
+
+  //........................................................................
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Return a humand readable version of the value for debugging.
+   *
+   * @return      the string representation of the object
+   *
+   */
+  @Override
+  public @Nonnull String toString()
+  {
+    return m_value + " (" + m_formatted + ")";
   }
 
   //........................................................................
@@ -154,7 +169,6 @@ public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
     }
 
     //......................................................................
-
   }
 
   //........................................................................

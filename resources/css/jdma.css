@@ -74,6 +74,11 @@ DIV.subtitletext, DIV.subtitletext A
   margin-top: -2px;
 }
 
+.doc-link-mail
+{
+  margin-top: 10px;
+}
+
 .dma-formatted, .text-formatted
 {
   white-space: pre;

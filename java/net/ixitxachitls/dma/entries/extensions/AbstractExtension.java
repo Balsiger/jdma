@@ -397,7 +397,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-public boolean isDM(@Nullable BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
     return m_entry.isDM(inUser);
   }
@@ -434,8 +434,8 @@ public boolean isDM(@Nullable BaseCharacter inUser)
     if(value != null)
       return value;
 
-    // The value is not defined for this extension, but might be defined in a
-    // base.
+    // the value is not defined for this extension, but might be defined in a
+    // base
     String key;
     if(inKey.startsWith("_"))
       key = inKey.substring(1);
@@ -443,6 +443,21 @@ public boolean isDM(@Nullable BaseCharacter inUser)
       key = inKey;
 
     return new FormattedValue(new Combination(this, key).format(inDM), "", key);
+  }
+
+  //........................................................................
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Return a humand readable version of the value for debugging.
+   *
+   * @return      the string representation of the object
+   *
+   */
+  @Override
+  public @Nonnull String toString()
+  {
+    return m_name = " (for " + m_entry.getName() + ")";
   }
 
   //........................................................................

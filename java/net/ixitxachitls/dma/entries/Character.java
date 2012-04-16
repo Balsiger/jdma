@@ -49,6 +49,7 @@ import net.ixitxachitls.output.commands.Icon;
 import net.ixitxachitls.output.commands.ImageLink;
 import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.OverlayIcon;
+import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Pair;
@@ -185,7 +186,11 @@ public class Character extends CampaignEntry<BaseCharacter>
               + "} "
               + "\\par\\par "
               + "\\title{Items} "
-              + "$itemlist");
+              + "$itemlist "
+              + "\\title{Counted} "
+              + "$countedlist "
+              + "\\title{Timed} "
+              + "$timedlist ");
 
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint =
@@ -593,6 +598,52 @@ public class Character extends CampaignEntry<BaseCharacter>
                                 null, "itemlist");
     }
 
+    if("countedlist".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      for(Item item : containedItems(true).values())
+      {
+        ValueHandle value = item.computeValue("counted:list", inDM);
+        if (value != null && !value.value(item, inDM).toString().isEmpty())
+          commands.addAll(((Command)value.format(item, inDM, true))
+                          .getArguments());
+
+        value = item.computeValue("multiple:list", inDM);
+        if (value != null && !value.value(item, inDM).toString().isEmpty())
+          commands.addAll(((Command)value.format(item, inDM, true))
+                          .getArguments());
+
+        value = item.computeValue("multiuse:list", inDM);
+        if (value != null && !value.value(item, inDM).toString().isEmpty())
+          commands.addAll(((Command)value.format(item, inDM, true))
+                          .getArguments());
+      }
+
+      return new FormattedValue(new Table("colored",
+                                          "30:L(name)[Name];70:L(count)[Count]",
+                                          new Command(commands)),
+                                null, "countedlist");
+    }
+
+    if("timedlist".equals(inKey))
+    {
+      List<Object> commands = new ArrayList<Object>();
+      for(Item item : containedItems(true).values())
+      {
+        ValueHandle value = item.computeValue("timed:list", inDM);
+        if (value == null || value.value(item, inDM).toString().isEmpty())
+          continue;
+
+        commands.addAll(((Command)value.format(item, inDM, true))
+                        .getArguments());
+      }
+
+      return new FormattedValue(new Table("colored",
+                                          "30:L(name)[Name];70:L(count)[Count]",
+                                          new Command(commands)),
+                                null, "timedlist");
+    }
+
     if("items".equals(inKey))
     {
       List<Object> commands = new ArrayList<Object>();
@@ -639,8 +690,14 @@ public class Character extends CampaignEntry<BaseCharacter>
       return new FormattedValue
         (new ImageLink("/icons/doc-pdf.png", getName(),
                        getName() + ".pdf?user="
-                       + getBaseEntries().get(0).getName(),
-                       "doc-link"), null, "as pdf");
+                       + getBaseEntries().get(0).getName(), "doc-link"),
+         null, "as pdf");
+
+    if(inDM && "do mail".equals(inKey))
+      return new FormattedValue
+        (new ImageLink("/icons/mail.png", "Mail PDF",
+                       "/actions/mail" + getPath(), "doc-link doc-link-mail"),
+         null, "do mail");
 
     return super.computeValue(inKey, inDM);
   }
@@ -797,63 +854,6 @@ public class Character extends CampaignEntry<BaseCharacter>
   //   document.add(new Title(title));
 
   //----- overview -------------------------------------------------------
-
-  //   Weight total = new Weight();
-  //   Money value = new Money();
-
-  //   List<Object> commands = new ArrayList<Object>();
-  //   List<Entry> possessions = getPossessions(false);
-  //   List<Entry> allPossessions = getPossessions(true);
-
-  //   for(Entry entry : possessions)
-  //     addItemCommand(commands, inDM, entry);
-
-  //   for(Entry item : allPossessions)
-  //   {
-  //     total.add(((Item)item).getWeight());
-  //     value.add(((Item)item).getValue());
-  //   }
-
-  //   total.simplify();
-  //   value.simplify();
-
-  //   commands.add(new Hrule());
-  //   commands.add(new Right(new Bold(new Command(new Object []
-  //     {
-  //       "Total: ",
-  //       total.format(true),
-  //       inDM ? " / " : "",
-  //       inDM ? value.format(true) : "",
-  //     }))));
-
-  //   if(inDM)
-  //     document.add(new Command(commands.toArray(new Object[0])));
-  //   else
-  //     document.add(new Columns("2",
-  //                            new Command(commands.toArray(new Object[0]))));
-
-  //   //......................................................................
-
-  //   document.add(new Newpage());
-  //   document.add(new Par());
-
-  //----- weapons --------------------------------------------------------
-
-  //   commands.clear();
-  //   for(Entry<?> entry : allPossessions)
-  //     addTypedCommand(commands, inDM, entry,
-  //                     ValueGroup.ListCommand.Type.WEAPON);
-
-  //   if(!commands.isEmpty())
-  //    document.add(new Table("colored",
-  //                          "30:L(name)[Name];20:L(damage)[Damage];20:L(type)"
-  //                          + "[Type];20:L(style)[Style];10:L(range)[Range];"
-  //                            + "10:L(reach)[Reach]",
-  //                            commands.toArray(new Object[0])));
-
-  //   //......................................................................
-
-  //   document.add(new Par());
 
   //----- counted & multiple ---------------------------------------------
 

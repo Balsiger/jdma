@@ -60,7 +60,7 @@ public class Count extends BaseCommand
    * @param       inUnit  the unit per count
    *
    */
-  public Count(long inCount, long inMax, @Nonnull String inUnit)
+  public Count(long inCount, long inMax, @Nonnull Object inUnit)
   {
     this();
 
@@ -88,7 +88,7 @@ public class Count extends BaseCommand
    * @param       inStep  the step from counter to counter
    *
    */
-  public Count(long inCount, long inMax, @Nonnull String inUnit, long inStep)
+  public Count(long inCount, long inMax, @Nonnull Object inUnit, long inStep)
   {
     this(inCount, inMax, inUnit);
 
