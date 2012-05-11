@@ -175,6 +175,31 @@ function doRegister(inUsername, inRealName)
 }
 
 //..........................................................................
+//--------------------------------- ready ----------------------------------
+
+/**
+ * Called when the document is ready (or a new dynamic 'page' is loaded)
+ *
+ */
+function ready()
+{
+  // setup sections for extensions
+  $('div.section-title').click(function() {
+      $(this).parent().toggleClass('rotated');
+      if($(this).parent().hasClass('rotated'))
+      {
+        $(this).css('width', $(this).parent().height() + 'px');
+        $(this).css('min-width', $(this).parent().height() + 'px');
+      }
+      else
+        $(this).css('width', 'auto');
+    });
+
+  $('div.section-title').click();
+}
+
+//..........................................................................
+
 
 //----- admin --------------------------------------------------------------
 
@@ -220,5 +245,10 @@ admin.clearCache = function()
 }
 
 //..........................................................................
+
+// if there are sections on the page, install a handler for them and open them
+$(document).ready(function () {
+    ready();
+});
 
 

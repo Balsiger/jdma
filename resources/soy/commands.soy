@@ -1,0 +1,174 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/**
+ * The basic templates for rendering entries.
+ */
+
+{namespace dma.commands autoescape="false"}
+
+/**
+ * A link to a product.
+ *
+ * @param arg The arguments to the command.
+ * @param opt The optional arguments, if any
+ */
+{template .Product}
+  {call dma.page.link}
+    {param url: '/product/' + ($opt.0 ? $opt.0 : $arg.0) /}
+    {param text: $arg.0 /}
+    {param class: 'Product' /}
+  {/call}
+{/template}
+
+/**
+ * A link to a place.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .Place}
+  {call dma.page.link}
+    {param url: '/place/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'Place' /}
+  {/call}
+{/template}
+
+/**
+ * A link to an Item.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .Item}
+  {call dma.page.link}
+    {param url: '/item/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'Item' /}
+  {/call}
+{/template}
+
+/**
+ * A link to a Skill.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .Skill}
+  {call dma.page.link}
+    {param url: '/skill/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'Skill' /}
+  {/call}
+{/template}
+
+/**
+ * A popup/tooltip window.
+ *
+ * @param arg The arguments to the command.
+ * @param opt The optional arguments, if any
+ */
+{template .window}
+  <span class="windowed">
+    <span class="window{if $opt.1} {$opt.1}{/if}">{$arg.1}</span>
+    {$arg.0}
+  </span>
+{/template}
+
+/**
+ * A simple divider.
+ *
+ * @param arg The arguments to the command.
+ * @param opt The optional arguments, if any
+ */
+{template .divider}
+  <div {if $opt.0}id="{$opt.0}" {/if}class="{$arg.0}">
+    {$arg.1}
+  </div>
+{/template}
+
+/**
+ * A simple list.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .list}
+  <ul>
+    {foreach $argument in $arg}
+      <li>{$argument}</li>
+    {/foreach}
+  </ul>
+{/template}
+
+/**
+ * A simple span.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .span}
+  <span class="{$arg.0}">
+    {$arg.1}
+  </span>
+{/template}
+
+/**
+ * A command used for parsing in the old style.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .baseCommand}
+  {foreach $argument in $arg}
+    {$argument}
+  {/foreach}
+{/template}
+
+/**
+ * Start a new paragraph.
+ */
+{template .par}
+  <p>
+{/template}
+
+/**
+ * Special hat character.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .hat}
+  {switch $arg.0}
+    {case 'u'}
+      &ucirc;
+    {case 'U'}
+      &Ucirc;
+    {case 'o'}
+      &ocirc;
+    {case 'O'}
+      &Ocirc;
+    {case 'a'}
+      &acirc;
+    {case 'A'}
+      &Acirc;
+    {case 'i'}
+      &icirc;
+    {case 'I'}
+      &Icirc;
+    {default}
+      ^{$arg.0}
+  {/switch}
+{/template}

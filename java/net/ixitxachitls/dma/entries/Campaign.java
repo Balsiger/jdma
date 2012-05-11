@@ -538,7 +538,7 @@ public class Campaign extends Entry<BaseCampaign>
         Map<String, Item> owned = new HashMap<String, Item>();
         for(Character character : characters)
         {
-          Map<String, Item> contained = character.containedItems();
+          Map<String, Item> contained = character.containedItems(true);
           for(String key : contained.keySet())
             if(owned.containsKey(key))
               Log.warning("item " + key + " is possessed by two characters");

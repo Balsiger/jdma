@@ -33,6 +33,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.ArrayIterator;
@@ -264,6 +266,38 @@ public class Multiple extends Value<Multiple>
   }
 
   //........................................................................
+  //------------------------------- Multiple -------------------------------
+
+  /**
+   * Construct a special multiple object with non optional values and no
+   * delimiters. This is mostly used together with a template for printing.
+   *
+   * @param       inValue  the nested values
+   *
+   */
+  public Multiple(@Nonnull Value ... inValues)
+  {
+    m_elements = new Element[inValues.length];
+
+    String subTypes   = null;
+
+    for(int i = 0; i < inValues.length; i++)
+    {
+      if(inValues[i] == null)
+        throw new IllegalArgumentException("value  " + i + " must not be null");
+
+      m_elements[i] = new Element(inValues[i], false);
+
+      if(subTypes == null)
+        subTypes = m_elements[i].m_value.getEditType();
+      else
+        subTypes += "@" + m_elements[i].m_value.getEditType();
+    }
+
+    m_editType = "multiple()#" + subTypes;
+  }
+
+  //........................................................................
 
   //-------------------------------- create ---------------------------------
 
@@ -484,7 +518,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 
@@ -505,6 +539,41 @@ protected @Nonnull Command doFormat()
     }
 
     return new Command(commands);
+  }
+
+  //........................................................................
+  //------------------------------- doPrint --------------------------------
+
+  /**
+   * Generate a string representation of the value for printing.
+   *
+   * @param   the renderer to print with
+   *
+   * @return  the printed value as a string.
+   *
+   */
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
+                                    @Nonnull SoyRenderer inRenderer)
+  {
+    StringBuilder builder = new StringBuilder();
+
+    for(int i = 0; i < m_elements.length; i++)
+    {
+      if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
+        if(m_elements[i].m_front != null)
+          builder.append(m_elements[i].m_front);
+        else
+          if(i > 0)
+            builder.append(" ");
+
+      builder.append(get(i).print(inEntry, inRenderer));
+
+      if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
+        if(m_elements[i].m_tail != null)
+          builder.append(m_elements[i].m_tail);
+    }
+
+    return builder.toString();
   }
 
   //........................................................................

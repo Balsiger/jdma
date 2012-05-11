@@ -1,0 +1,480 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/**
+ * Templates for values.
+ */
+{namespace dma.value autoescape="false"}
+
+/**
+ * Base template for values to make them editable.
+ *
+ * @param entry The entry to print for
+ * @param value The value to print
+ * @param canEdit True if the value can be edited, false if not
+ * @param related Other related values to edit together
+ * @param content Content for printing the value, uses .print if not given
+ */
+{template .value}
+  {call .editable}
+    {param canEdit: $canEdit /}
+    {param name: $value.name /}
+    {param value: $value.edit /}
+    {param key: $entry.key /}
+    {param type: $value.type /}
+    {param related: $related ? $related : $value.related /}
+    {param choices: $value.choices /}
+    {param content}
+      {if $content}
+        {$content}
+      {else}
+        {if $value.isDefined}
+          {$value.print}
+        {/if}
+      {/if}
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * An editable value.
+ *
+ * @param canEdit If the value can be edited at all
+ * @param name The name of the value
+ * @param value The value as it can be edited
+ * @param key The key of the entry being edited
+ * @param type The type of value edited
+ * @param related The related values, if any
+ * @param choices The possible choices for the value, if any
+ * @param content The formatted value edited as it is displayed
+ *
+ */
+{template .editable}
+  {if $canEdit}
+    <dmaeditable name="{$name}" value="{$value|noAutoescape}" key="{$key}"
+      class="editable" type="{$type}"{if $related} related="{$related}"{/if}
+      {if $choices} values="{$choices}"{/if}>
+      {$content|noAutoescape}
+    </dmaeditable>
+  {else}
+    {$content|noAutoescape}
+  {/if}
+{/template}
+
+/**
+ * A value with a remark.
+ *
+ * @param naked The naked value without remark
+ * @param remarkType The remark type, if any
+ * @param remarkComment The remark comment, if any
+ *
+ */
+{template .remark}
+  {if $remarkType}
+    <span class="remark {$remarkType}">
+      {$naked}
+      <div class="remark-window">
+        {$remarkComment}
+      </div>
+    </span>
+  {else}
+    {$naked}
+  {/if}
+{/template}
+
+/**
+ * Formatting a link.
+ *
+ * @param args The template arguments
+ * @param entry The entry rendered
+ * @param value The value rendered
+ */
+{template .link}
+  {call dma.page.link}
+    {param url: '/' + $entry.type.multilink + '/' + $args.0 + '/'
+        + $value.group /}
+    {param text: $value.raw /}
+  {/call}
+{/template}
+
+/**
+ * Formatting an author.
+ *
+ * @param entry The entry rendered
+ * @param value The value rendered
+ */
+{template .person}
+  {call dma.page.link}
+    {param url: '/' + $entry.type.multilink + '/persons/'
+        + $value.multi.0.print /}
+    {param text: $value.multi.0.print /}
+  {/call}
+  {if $value.multi.1}
+    {sp}(
+    {call dma.page.link}
+      {param url: '/' + $entry.type.multilink + '/jobs/'
+          + $value.multi.1.print /}
+      {param text: $value.multi.1.print /}
+    {/call}
+    )
+  {/if}
+{/template}
+
+/**
+ * Formatting an content entry.
+ *
+ * @param entry The entry rendered
+ * @param value The value rendered
+ */
+{template .content}
+  {call dma.page.link}
+    {param url: '/' + $entry.type.multilink + '/parts/'
+        + $value.multi.0.print /}
+    {param text: $value.multi.0.print /}
+  {/call}
+  {if $value.multi.1}
+    {sp}{$value.multi.1.print}
+  {/if}
+  {sp}{$value.multi.2.print}
+{/template}
+
+/**
+ * Formatting the requirements.
+ *
+ * @ param entry The entry rendered
+ * @param value The value rendered
+ */
+{template .requirements}
+  {$value.multi.0.print}
+  {if length($value.multi.1.list) > 0}
+    <br />
+    optional{sp}
+    {$value.multi.1.print}
+  {/if}
+{/template}
+
+/**
+ * Formatting a product reference.
+ *
+ * @param id the id of the reference
+ * @param name the name of the reference product
+ */
+{template .reference}
+  {call dma.page.link}
+    {param url: '/product/' + $id /}
+    {param text: $name + ' (' + $id + ')' /}
+  {/call}
+{/template}
+
+/**
+ * Template for a money value.
+ *
+ * @param value the money value
+ * @param gold the value in gold pieces (as a Rational)
+ */
+{template .money}
+  <span {if $gold}class="term"{/if}>
+    {call dma.page.link}
+      {param url: '/items/values/' + $value.group /}
+      {param text: $value.raw /}
+    {/call}
+    {if $gold}<div class="explanation">{$gold.print} gp</div>{/if}
+  </span>
+{/template}
+
+/**
+ * Template for weight values.
+ *
+ * @param value the weight value
+ * @param metric true if the value is in metric units
+ * @ param pound true if the value is in pound units
+ * @ param carat true if the value is in carat units
+ * @param aspounds the value in pounds
+ * @param asmetric the value in metrics
+ */
+{template .weight}
+  <span class="term">
+    {call dma.page.link}
+      {param url: '/items/values/' + $value.group /}
+      {param text: $value.raw /}
+    {/call}
+    <div class="explanation">
+      {if $metric}
+        {$aspounds.raw}
+      {else}
+        {$asmetric.raw}
+      {/if}
+    </div>
+  </span>
+{/template}
+
+/**
+ * Template for distance values.
+ *
+ * @param value the distance value
+ * @param metric true if the value is in metric units
+ * @ param feet true if the value is in pound units
+ * @param asfeet the value in feet
+ * @param asmetric the value in metrics
+ */
+{template .distance}
+  <span class="term">
+    {call dma.page.link}
+      {param url: '/items/distances/' + $value.group /}
+      {param text: $value.raw /}
+    {/call}
+    <div class="explanation">
+      {if $metric}
+        {$asfeet.raw}
+      {else}
+        {$asmetric.raw}
+      {/if}
+    </div>
+  </span>
+{/template}
+
+/**
+ * Template for duration values.
+ *
+ * @param value the duration value
+ * @param metric true if the value is in metric units
+ * @ param rounds true if the value is in round units
+ * @param asrounds the value in rounds
+ * @param asmetric the value in metrics
+ */
+{template .duration}
+  <span class="term">
+    {call dma.page.link}
+      {param url: '/items/durations/' + $value.group /}
+      {param text: $value.raw /}
+    {/call}
+    <div class="explanation">
+      {if $metric}
+        {$asrounds.raw}
+      {else}
+        {$asmetric.raw}
+      {/if}
+    </div>
+  </span>
+{/template}
+
+/**
+ * Template for volume values.
+ *
+ * @param value the volume value
+ * @param metric true if the value is in metric units
+ * @ param feet true if the value is in pound units
+ * @param liquid true if this is a liquid value
+ * @param asfeet the value in feet
+ * @param asmetric the value in metrics
+ * @param asgallons the value in gallons
+ * @param asliters the value in liters
+ */
+{template .volume}
+  <span class="term">
+    {call dma.page.link}
+      {param url: '/items/volumes/' + $value.group /}
+      {param text: $value.raw /}
+    {/call}
+    <div class="explanation">
+      {if $liquid}
+        {if $metric}
+          {$asliters.raw}
+        {else}
+          {$asgallons.raw}
+        {/if}
+      {else}
+        {if $metric}
+          {$asfeet.raw}
+        {else}
+          {$asmetric.raw}
+        {/if}
+      {/if}
+    </div>
+  </span>
+{/template}
+
+/**
+ * Formatting the appearances.
+ *
+ * @ param entry The entry rendered
+ * @param value The value rendered
+ */
+{template .appearances}
+  <table>
+  {foreach $appearance in $value.list}
+    <tr>
+      <td>{$appearance.multi.0.print}</td>
+      <td>-{sp}</td>
+      <td>{$appearance.multi.1.print}</td>
+    </tr>
+  {/foreach}
+  </table>
+{/template}
+
+/**
+ * Formatting a damage value.
+ *
+ * @ param entry The entry rendered
+ * @ param value The value rendered
+ * @param base The base damage value
+ * @param type The damage type
+ * @param effect The damage effect, if any
+ * @param other Other damage, if any
+ */
+{template .damage}
+  {call dma.page.link}
+    {param ulr: '/items/damages/' + $base.group /}
+    {param text: $base.print /}
+  {/call}
+  {if $type and $type.isDefined}
+    {sp}{$type.print}
+  {/if}
+  {if $effect}
+    {sp}{$effect}
+  {/if}
+  {if $other}
+    {sp}{$other.print}
+  {/if}
+{/template}
+
+/**
+ * Formatting the contains value of a composite extension.
+ *
+ * @ param entry The entry rendered.
+ * @param value The value rendered.
+ */
+{template .contains}
+  {foreach $ands in $value.list}
+    {foreach $ors in $ands.list}
+      {call dma.page.link}
+        {param url: '/item/' + $ors.raw /}
+        {param text: $ors.print /}
+      {/call}
+      {if not isLast($ors)}
+        {sp}or{sp}
+      {/if}
+    {/foreach}
+    {if not isLast($ands)}
+      {sp}and{sp}
+    {/if}
+  {/foreach}
+{/template}
+
+/**
+ * Formatting of a damage value.
+ *
+ * @ param entry The entry rendered.
+ * @param value The value rendered.
+ */
+{template .damages}
+  {if $value.multi.0.isDefined}
+    {$value.multi.0.print}
+  {/if}
+  {if $value.multi.1.isDefined}
+    {sp}/ {$value.multi.1.print}
+  {/if}
+{/template}
+
+/**
+ * Formatting a combination value.
+ *
+ * @param total the total, combined value, if any
+ * @param bases the base values
+ * @param isDefined whether the top level value is defined
+ */
+{template .combination}
+  {if $total}
+    {if $ij.isDM}
+      <span class="windowed">
+        <span class="window base">
+          {foreach $base in $bases}
+            {$base.value.print}
+            {sp} from {$base.names}
+            <br />
+          {/foreach}
+        </span>
+        {$total.print}
+      </span>
+    {else}
+      {$total.print}
+    {/if}
+  {else}
+    {if length($bases) > 0}
+      {if $ij.isDM}
+        {if $bases[0].isLongtext}
+          <div class="longtext">
+            {foreach $base in $bases}
+              {if $base.value.isDefined}
+                <div class="base-title">
+                  <span class="base-text">from {$base.names}</span>
+                </div>
+                {$base.value.print}
+              {/if}
+            {/foreach}
+          </div>
+        {else}
+          {foreach $base in $bases}
+            {if $base.value.isDefined}
+              {if not isFirst($base) or $isDefined}
+                {sp}|{sp}
+              {/if}
+              <span class="windowed">
+                <span class="window base">
+                  from {$base.names}
+                </span>
+                {$base.value.print}
+              </span>
+            {/if}
+          {/foreach}
+        {/if}
+      {else}
+        {if $bases[0].isLongtext}
+          {foreach $base in $bases}
+            {$base.value.print}<p>
+          {/foreach}
+        {else}
+          {foreach $base in $bases}
+            {$base.value.print}{sp}
+          {/foreach}
+        {/if}
+      {/if}
+    {/if}
+  {/if}
+{/template}
+
+
+/**
+ * Print a value including it's base value.
+ *
+ * @param entry the entry to render
+ * @param value the value rendered
+ */
+{template .withbase}
+ {call dma.value.value}
+    {param entry: $entry /}
+    {param value: $value /}
+    {param canEdit: $ij.isDM /}
+  {/call}
+  {if not $value.isDefined}
+    {$value.combine.print}
+  {/if}
+{/template}

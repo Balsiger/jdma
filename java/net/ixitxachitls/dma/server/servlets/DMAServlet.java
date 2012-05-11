@@ -34,6 +34,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import com.google.appengine.api.utils.SystemProperty;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -129,6 +131,21 @@ public abstract class DMAServlet extends BaseServlet
 
   //........................................................................
 
+  //-------------------------------- isDev ---------------------------------
+
+  /**
+   * Checks wether we are running on dev or not.
+   *
+   * @return      true if running on a dev system
+   *
+   */
+  public boolean isDev()
+  {
+    return SystemProperty.environment.value() ==
+      SystemProperty.Environment.Value.Development;
+  }
+
+  //........................................................................
   //------------------------------ extractKey ------------------------------
 
   /**
@@ -200,7 +217,8 @@ public abstract class DMAServlet extends BaseServlet
    */
   public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
   {
-    AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(inPath);
+    String path = inPath.replaceAll("\\.[^\\./\\\\]*$", "");
+    AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(path);
     if(key == null)
       return null;
 

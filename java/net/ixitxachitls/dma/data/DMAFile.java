@@ -265,8 +265,7 @@ public String toString()
 
       if(file == null)
       {
-        Log.warning("cannot find file '" + Files.concatenate(m_path, m_name)
-                    + "'");
+        Log.warning("cannot find file '" + name + "'");
         return false;
       }
 

@@ -68,10 +68,6 @@
   <servlet>
     <servlet-name>html</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.StaticPageServlet</servlet-class>
-    <init-param>
-      <param-name>root</param-name>
-      <param-value>/html</param-value>
-    </init-param>
   </servlet>
 
   <servlet>
@@ -157,11 +153,6 @@
   </servlet-mapping>
 
   <servlet-mapping>
-    <servlet-name>html</servlet-name>
-    <url-pattern>*.html</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
   </servlet-mapping>
@@ -224,6 +215,11 @@
   <servlet-mapping>
     <servlet-name>main</servlet-name>
     <url-pattern>/main</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>html</servlet-name>
+    <url-pattern>/*</url-pattern>
   </servlet-mapping>
 
   <!-- this does not work on the dev server; you have to remove this to be -->

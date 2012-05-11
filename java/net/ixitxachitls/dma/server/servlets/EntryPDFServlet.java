@@ -34,6 +34,7 @@ import org.easymock.EasyMock;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.output.pdf.PDFDocument;
+import net.ixitxachitls.output.Document;
 import net.ixitxachitls.output.commands.Left;
 import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.util.logging.Log;
@@ -117,7 +118,7 @@ public class EntryPDFServlet extends PDFServlet
    *
    */
   @Override
-  protected @Nonnull PDFDocument createDocument(@Nonnull DMARequest inRequest)
+  protected @Nonnull Document createDocument(@Nonnull DMARequest inRequest)
   {
     String path = inRequest.getRequestURI();
     if(path == null)
@@ -145,7 +146,9 @@ public class EntryPDFServlet extends PDFServlet
 
     String title = entry.getType() + ": " + entry.getName();
 
-    PDFDocument document = new PDFDocument(title);
+    //PDFDocument document = new PDFDocument(title);
+    Document document =
+      new net.ixitxachitls.dma.output.html.HTMLDocument(title);
     document.add(entry.print(inRequest.getUser()));
 
     return document;

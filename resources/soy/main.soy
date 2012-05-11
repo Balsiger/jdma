@@ -1,0 +1,73 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+{namespace dma autoescape="contextual"}
+
+/**
+ * The page content for the static main page.
+ */
+{template .main}
+  {call dma.page.title}
+    {param title}
+      Dungeon Master Assistant
+    {/param}
+  {/call}
+  {call .navigation}
+    {param content}
+    {/param}
+  {/call}
+
+  <h1>DMA - Dungeon Master Assistant</h1>
+
+  The Dungeon Master Assitant is intended to help Dungeon Masters and Players
+  prepare and keep track of their Dungeons & Dragons 3.5 game. The tool is
+  still in development and thus only covers a fraction of its intended
+  possibilities. It currently only covers preliminary management for products
+  and items.
+
+  <br /><br/>
+  You can start looking at some information by clicking on the <div
+  class="sprite library"></div> <a href="/library/" onclick="util.link(event,
+  '/library')">library</a> icon on the top right. There you can also log in
+  using the <div class="sprite login"></div> login icon, if you have an account
+  here. An account allows you to change your entries and manmage your
+  characters.
+
+  <p>
+  DMA runs on Java 6 and provides own web server, giving access to all its
+  information through its web interface. The data itself is stored in a set
+  of <code>.dma</code> files, human readable text files containing all
+  information.
+
+  <p>
+  All data is stored in entities in two main categories, namely base entries and
+  entries. As the name implies, base entries are the base value and they
+  represent information that is static throughout one or even several
+  campaigns. On the other hand, entries represent actual objects used in a
+  game.<br />
+
+  For example, the base entry for a long sword contains all the game
+  information for a typical long sword (damage, value, weight, etc.). On the
+  other hand, the long sword entry contains information about a specific long
+  sword wielded by a character in a campaign. Thus, while there may be only one
+  base long sword, there might be multiple long sword, which all derive their
+  base values from the base entry.<br/>
+{/template}

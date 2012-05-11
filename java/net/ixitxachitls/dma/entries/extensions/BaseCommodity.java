@@ -121,7 +121,8 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   /** The area for this commodity. */
   @Key("area")
   protected @Nonnull Area m_area = new Area().withFormatter(s_areaFormatter)
-    .withGrouping(s_areaGrouping);
+    .withGrouping(s_areaGrouping)
+    .withTemplate("link", Index.Path.AREAS.getPath());
 
   static
   {
@@ -156,7 +157,8 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   /** The length of this commodity. */
   @Key("length")
   protected @Nonnull Distance m_length = new Distance()
-    .withFormatter(s_lengthFormatter).withGrouping(s_lengthGrouping);
+    .withFormatter(s_lengthFormatter)
+    .withGrouping(s_lengthGrouping);
 
   static
   {

@@ -1,0 +1,384 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distribbbuted in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/**
+ * The basic templates for rendering entries.
+ */
+
+{namespace dma.entry autoescape="false"}
+
+/**
+ * The main template for an entry.
+ *
+ * @param entry the entry to format
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ *
+ */
+{template .container}
+  {call .navigation}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+  {/call}
+  {delcall dma.entry.page}
+    {param entry: $entry /}
+  {/delcall}
+  {call .navigation}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+  {/call}
+  {literal}
+  <script>
+    $(document).ready(function()
+    {
+      $('DIV.files IMG.image')
+        .mouseover(util.replaceMainImage)
+        .mouseout(util.restoreMainImage);
+    });
+  </script>
+  {/literal}
+{/template}
+
+/**
+ * The container for dma output entries.
+ *
+ * @param entry the entry to format
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ *
+ */
+{template .dmacontainer}
+  {call .navigation}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param ist: $list /}
+    {param next: $next /}
+    {param last: $last /}
+  {/call}
+  <pre>
+    {$entry.dma}
+  </pre>
+  {call .navigation}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param list: $list /}
+    {param next: $next /}
+    {param last: $last /}
+  {/call}
+{/template}
+
+/**
+ * The entry navigation.
+ *
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ *
+ */
+{template .navigation}
+  <div class="entry-nav">
+    {call .navigationEntry}
+      {param url: $first /}
+      {param style: 'first' /}
+      {param tooltip: 'First' /}
+    {/call}
+    {call .navigationEntry}
+      {param url: $previous /}
+      {param style: 'previous' /}
+      {param tooltip: 'Previous' /}
+    {/call}
+    {call .navigationEntry}
+      {param url: $list /}
+      {param style: 'index' /}
+      {param tooltip: 'Index' /}
+    {/call}
+    {call .navigationEntry}
+      {param url: $next /}
+      {param style: 'next' /}
+      {param tooltip: 'Next' /}
+    {/call}
+    {call .navigationEntry}
+      {param url: $last /}
+      {param style: 'last' /}
+      {param tooltip: 'Last' /}
+    {/call}
+  </div>
+{/template}
+
+/**
+ * A single navigation entry.
+ *
+ * @param url The url to link to
+ * @param style Style to use for the link
+ * @param tooltip tooltip text
+ */
+{template .navigationEntry}
+  {call dma.page.link}
+    {param url: $url /}
+    {param tooltip: $tooltip /}
+    {param text}
+      <div class="{$style} sprite{if not $url} disabled{/if}"></div>
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * Ask the user if an entry should be created.
+ *
+ * @param id The id of the entry to find
+ * @param type The type of the entry
+ */
+{template .create}
+  {call dma.errors.error}
+    {param title}
+      Entry Not Found
+    {/param}
+    {param message}
+      The entry '{$id}' typed '{$type}' could not be found.
+    {/param}
+  {/call}
+  {if $ij.user}
+    <script>
+      if(confirm('The desired entry does not exist!\n\n' +
+          'Do you want to create a new entry with id \'{$id}\'?))
+        location.href = location.href.replace(/\?.*$/, '') + '?create';
+    </script>
+  {/if}
+{/template}
+
+/**
+ * The contents part of the page.
+ *
+ * @param entry The entry rendered.
+ */
+{deltemplate dma.entry.page}
+  {delcall dma.entry.files.main}
+    {param entry: $entry /}
+  {/delcall}
+  <div class="entrytitle">
+    <div class="title-actions">
+      {call dma.page.link}
+        {param url: $entry.name + '.dma' /}
+        {param text}
+          <div class="caption-container">
+            <div class="document sprite large"></div>
+            <div>dma</div>
+          </div>
+        {/param}
+      {/call}
+      {call dma.page.link}
+        {param url: $entry.name + '.pdf' /}
+        {param text}
+          <div class="caption-container">
+            <div class="document sprite large"></div>
+            <div>pdf</div>
+          </div>
+        {/param}
+      {/call}
+    </div>
+    {delcall dma.entry.title}
+      {param entry: $entry /}
+    {/delcall}
+    <div class="description">
+      {call dma.value.value}
+        {param canEdit: $ij.isDM /}
+        {param entry: $entry /}
+        {param value: $entry.description /}
+      {/call}
+      {$entry.description.bases}
+    </div>
+    <div class="short-description">
+      {call dma.value.value}
+        {param canEdit: $ij.isDM /}
+        {param entry: $entry /}
+        {param value: $entry.short_description /}
+      {/call}
+      {$entry.short_description.bases}
+    </div>
+  </div>
+  <div id="files" class="files">
+    {call dma.value.editable}
+      {param canEdit: $ij.isDM /}
+      {param name: 'files' /}
+      {param value: 'files' /}
+      {param key: $entry.key /}
+      {param type: 'files' /}
+      {param content}
+        <div id="files" class="files">
+          {foreach $file in $entry.files.other}
+            <div class="file">
+              <img src="{if $file.type == 'application/pdf'}/icons/pdf.png
+                        {else}{$file.icon}=s50{/if}" alt="{$file.name}"
+              class="image file"
+              onclick="util.link(event, '{$file.icon}')" />
+            </div>
+          {/foreach}
+        </div>
+      {/param}
+    {/call}
+  </div>
+  <div class="values">
+    {delcall dma.entry.values}
+      {param entry: $entry /}
+    {/delcall}
+  </div>
+{/deltemplate}
+
+/**
+ * The values for the entry.
+ *
+ * @param entry The entry rendered
+ */
+{deltemplate dma.entry.values}
+  No values in this entry.
+{/deltemplate}
+
+/**
+ * The main image of an entry.
+ *
+ * @param entry The entry formatted.
+ */
+{deltemplate dma.entry.files.main}
+  {call dma.value.editable}
+    {param canEdit: $ij.isDM or $ij.isOwner /}
+    {param name: 'image'/}
+    {param value: 'main'/}
+    {param key: $entry.key /}
+    {param type: 'image'/}
+    {param content}
+      {if $entry.files.main}
+        {call dma.page.link}
+          {param url: $entry.files.main.path /}
+          {param tooltip: 'Main' /}
+          {param text}
+            <img src="{$entry.files.main.icon}=s300" alt="Main"
+              class="image main" id="file=-main" />
+          {/param}
+        {/call}
+      {else}
+        {call dma.page.link}
+          {param url: '' /}
+          {param tooltip: 'Main' /}
+          {param text}
+            <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
+            class="image main" id="file=-main" />
+          {/param}
+        {/call}
+      {/if}
+    {/param}
+  {/call}
+{/deltemplate}
+
+/**
+ * The entry title.
+ *
+ * @param entry The entry rendered.
+ */
+{deltemplate dma.entry.title}
+  <h1>
+    {call dma.value.editable}
+      {param canEdit: $ij.isDM or $ij.isOwner /}
+      {param name: 'name' /}
+      {param value: $entry.name /}
+      {param key: $entry.key /}
+      {param type: 'name' /}
+      {param content: $entry.name /}
+    {/call}
+  </h1>
+  {call dma.page.title}
+    {param title: $entry.name /}
+  {/call}
+{/deltemplate}
+
+/**
+ * Printing a descriptive key value pair.
+ *
+ * @param entry The entry rendered.
+ * @param name The name of the value.
+ * @param value The value to print.
+ * @param withoutbase true if setting without base, false if setting with
+ * @param content The content if not using a value.
+ * @param access One of dm, owner, admin.
+ */
+{deltemplate dma.entry.keyvalue}
+  {if not $access
+      or ($access == 'user' and $ij.isUser)
+      or ($access == 'dm' and $ij.isDM)
+      or ($access == 'owner' and ($ij.isDM or $ij.isOwner or $ij.isAdmin))
+      or ($access == 'admin' and $ij.isAdmin)}
+    <div class="value {$entry.type.css}">
+      <div class="value-label-container">
+        <div class="value-label">
+          {$name}
+        </div>
+      </div>
+      <div class="value-content">
+        {if $value}
+          {if $withoutbase}
+            {call dma.value.value}
+              {param canEdit: $ij.isDM /}
+              {param entry: $entry /}
+              {param value: $value /}
+            {/call}
+          {else}
+            {call dma.value.withbase}
+              {param entry: $entry /}
+              {param value: $value /}
+            {/call}
+          {/if}
+        {else}
+          {$content}
+        {/if}
+      </div>
+    </div>
+  {/if}
+{/deltemplate}
+
+/**
+ * Printing of extension values.
+ *
+ * @param name The extension name
+ * @param content The content of the extension values
+ */
+{template .extension}
+  <div class="section">
+    <div class="section-title">
+      <span class="section-titletext">{$name}</span>
+    </div>
+    <div class="section-text">
+      {$content}
+    </div>
+  </div>
+{/template}

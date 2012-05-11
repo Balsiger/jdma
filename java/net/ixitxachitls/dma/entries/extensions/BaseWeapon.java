@@ -345,9 +345,11 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   protected @Nonnull Multiple m_damage = new Multiple(new Multiple.Element []
     {
       new Multiple.Element(new Damage().withIndexBase(BaseItem.TYPE), false),
-      new Multiple.Element(new Damage().withIndexBase(BaseItem.TYPE), true, "/",
+      new Multiple.Element(new Damage()
+                           .withIndexBase(BaseItem.TYPE)
+                           .withEditType("name[secondary]"), true, "/",
                            null),
-    });
+    }).withTemplate("damages");
 
   static
   {
@@ -361,7 +363,9 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   /** The splash damage the weapon inflicts (if any). */
   @Key("splash")
   protected @Nonnull Damage m_splash =
-    new Damage().withIndexBase(BaseItem.TYPE);
+    new Damage()
+    .withIndexBase(BaseItem.TYPE)
+    .withEditType("name[splash]");
 
   //........................................................................
   //----- type -------------------------------------------------------------
@@ -374,7 +378,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   /** The type of the weapon damage. */
   @Key("weapon type")
   protected EnumSelection<Type> m_type = new EnumSelection<Type>(Type.class)
-    .withFormatter(s_typeFormatter);
+    .withFormatter(s_typeFormatter)
+    .withTemplate("link", "weapontypes");
 
   static
   {
@@ -386,8 +391,9 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The critical range. */
   @Key("critical")
-  protected @Nonnull Critical m_critical =
-    new Critical().withIndexBase(BaseItem.TYPE);
+  protected @Nonnull Critical m_critical = new Critical()
+    .withIndexBase(BaseItem.TYPE)
+    .withTemplate("link", "criticals");
 
   static
   {
@@ -406,7 +412,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   /** The style of the weapon (for a medium character). */
   @Key("weapon style")
   protected @Nonnull EnumSelection<Style> m_style =
-    new EnumSelection<Style>(Style.class).withFormatter(s_styleFormatter);
+    new EnumSelection<Style>(Style.class).withFormatter(s_styleFormatter)
+    .withTemplate("link", "weaponstyles");
 
   static
   {
@@ -426,7 +433,8 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   @Key("proficiency")
   protected @Nonnull EnumSelection<Proficiency> m_proficiency =
     new EnumSelection<Proficiency>(Proficiency.class)
-    .withFormatter(s_proficiencyFormatter);
+    .withFormatter(s_proficiencyFormatter)
+    .withTemplate("link", "proficiencies");
 
   static
   {
@@ -462,8 +470,10 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   /** The range increment, if any, for this weapon. */
   @Key("range increment")
   protected @Nonnull Distance m_range =
-    new Distance().withFormatter(s_rangeFormatter)
-    .withGrouping(s_rangeGrouping);
+    new Distance()
+    .withFormatter(s_rangeFormatter)
+    .withGrouping(s_rangeGrouping)
+    .withTemplate("link", "ranges");
 
   static
   {
@@ -496,8 +506,10 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   /** The reach of the weapon. */
   @Key("reach")
   protected Distance m_reach =
-    new Distance(null, new Rational(5), null, false)
-    .withFormatter(s_reachFormatter).withGrouping(s_reachGrouping);
+    new Distance(null, new Rational(), null, false)
+    .withFormatter(s_reachFormatter)
+    .withGrouping(s_reachGrouping)
+    .withTemplate("link", "reaches");
 
   static
   {

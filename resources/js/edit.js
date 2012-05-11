@@ -82,8 +82,16 @@ edit.edit = function(inEvent, inElement, inNoRelated)
 
   var savable = false;
   if(element.__edit)
+  {
+    // we have to copy the array, as it will be cleared
+    var edits = [];
     for(var i = 0; i < element.__edit.length; i++)
-      savable |= edit.editValue(element.__edit[i], element, inNoRelated);
+      edits[i] = element.__edit[i];
+
+    for(var i = 0; i < edits.length; i++)
+      savable |= edit.editValue(edits[i], element, inNoRelated);
+  }
+
 
   if(savable)
   {

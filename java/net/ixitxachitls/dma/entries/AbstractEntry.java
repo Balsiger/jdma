@@ -797,7 +797,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-
   //------------------------------ getRefName ------------------------------
 
   /**
@@ -877,7 +876,8 @@ public class AbstractEntry extends ValueGroup
   //---------------------------- hasExtension -----------------------------
 
   /**
-   * Check if the entry has an extension with the given class.
+   * Check if the entry (or one of is bases) has an extension with the given
+   * class.
    *
    * @param       inExtension the class of the extension to look for
    *
@@ -894,6 +894,11 @@ public class AbstractEntry extends ValueGroup
          return true;
 
     return false;
+  }
+
+  public boolean hasExtension(@Nonnull String inExtension)
+  {
+    return m_extensions.keySet().contains(inExtension);
   }
 
   //........................................................................
@@ -1730,7 +1735,6 @@ public class AbstractEntry extends ValueGroup
     {
       String []parts = inKey.split(":");
       AbstractExtension extension = getExtension(parts[0]);
-      System.out.println(parts[0] + ": " + extension + "..." + getExtensionNames());
       if(extension != null)
         return extension.computeValue(parts[1], inDM);
     }
@@ -1739,7 +1743,8 @@ public class AbstractEntry extends ValueGroup
     {
       return new FormattedValue
         (new Title(computeValue("name", inDM).format(this, inDM, true),
-                   "entrytitle"), null, "title");
+                   "entrytitle"), computeValue("name", inDM).value(this, inDM),
+         "title");
     }
 
     if("desc".equals(inKey))
@@ -1941,6 +1946,42 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nullable Value compute(@Nonnull String inKey)
+  {
+    if("extensions".equals(inKey))
+    {
+      List<Name> values = new ArrayList<Name>();
+      for (String extension : m_extensions.keySet())
+        values.add(new Name(extension));
+
+      ValueList<Name> list;
+      if(values.isEmpty())
+        list = new ValueList<Name>(new Name(), ", ");
+      else
+        list = new ValueList<Name>(values, ", ");
+
+      list.withEditType("multiselection")
+        .withChoices("armor||commodity||composite||container||counted"
+                     + "||incomplete||light||multiple||multiuse||timed"
+                     + "||weapon||wearable");
+
+      return list;
+    }
+
+    return super.compute(inKey);
+  }
+
+  //........................................................................
   //--------------------------- shortPrintCommand --------------------------
 
   /**
@@ -2057,6 +2098,22 @@ public class AbstractEntry extends ValueGroup
   public boolean canEdit(@Nonnull String inKey, @Nonnull BaseCharacter inUser)
   {
     return inUser != null && inUser.hasAccess(BaseCharacter.Group.ADMIN);
+  }
+
+  //........................................................................
+  //----------------------------- isShownTo -------------------------------
+
+  /**
+   * Check if the given user is allowed to see the entry.
+   *
+   * @param       inUser the user trying to edit
+   *
+   * @return      true if the entry can be seen, false if not
+   *
+   */
+  public boolean isShownTo(@Nonnull BaseCharacter inUser)
+  {
+    return true;
   }
 
   //........................................................................
@@ -2818,15 +2875,18 @@ public class AbstractEntry extends ValueGroup
       if(inName.equals(getID()))
         return;
 
-    BaseEntry entry = (BaseEntry)DMADataFactory.get()
-      .getEntry(createKey(inName, baseType));
+    BaseEntry entry = (BaseEntry)
+      DMADataFactory.get().getEntry(createKey(inName, baseType));
     if(entry == null)
       Log.warning("base " + getType() + " '" + inName + "' not found");
+    else
+      addExtensions(entry.getExtensionNames());
 
     m_base = m_base.asAppended(m_base.newElement().as(inName));
 
     if(m_baseEntries == null)
       m_baseEntries = new ArrayList<BaseEntry>();
+
     m_baseEntries.add(entry);
   }
 

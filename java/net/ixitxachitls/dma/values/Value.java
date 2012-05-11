@@ -24,6 +24,10 @@
 package net.ixitxachitls.dma.values;
 
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,6 +35,9 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.output.soy.SoyEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Color;
@@ -108,6 +115,8 @@ public abstract class Value<T extends Value> implements
     inNew.m_choices = m_choices;
     inNew.m_related = m_related;
     inNew.m_indexBase = m_indexBase;
+    inNew.m_template = m_template;
+    inNew.m_templateArguments = m_templateArguments;
 
     return inNew;
   }
@@ -125,6 +134,7 @@ public abstract class Value<T extends Value> implements
    */
   @Override
   @SuppressWarnings("unchecked")
+  @Deprecated // do we still need this??
   public @Nonnull T clone()
   {
     try
@@ -190,7 +200,7 @@ public abstract class Value<T extends Value> implements
   @SuppressWarnings("unchecked")
   public @Nonnull T withEditType(@Nonnull String inType)
   {
-    if(inType.length() == 0)
+    if(inType.isEmpty())
       throw new IllegalArgumentException("must have a type here");
 
     m_editType = inType;
@@ -292,6 +302,47 @@ public abstract class Value<T extends Value> implements
   }
 
   //........................................................................
+  //----------------------------- withTemplate -----------------------------
+
+  /**
+   * Set the template for printing the value.
+   *
+   * @param       inTemplate the template name
+   *
+   * @return      the value itself for chaining
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withTemplate(@Nonnull String inTemplate)
+  {
+    m_template = inTemplate;
+
+    return (T)this;
+  }
+
+  //........................................................................
+  //----------------------------- withTemplate -----------------------------
+
+  /**
+   * Set the template for printing the value.
+   *
+   * @param       inTemplate  the template name
+   * @param       inArguments the (static) template arguments
+   *
+   * @return      the value itself for chaining
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nonnull T withTemplate(@Nonnull String inTemplate,
+                                 @Nonnull String ... inArguments)
+  {
+    m_template = inTemplate;
+    m_templateArguments = Arrays.asList(inArguments);
+
+    return (T)this;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -324,6 +375,12 @@ public abstract class Value<T extends Value> implements
 
   /** The index base, if any. */
   protected @Nullable String m_indexBase = null;
+
+  /** The template, if any. */
+  protected @Nullable String m_template = null;
+
+  /** The arguments to the template. */
+  protected @Nullable List<String> m_templateArguments = null;
 
   //........................................................................
 
@@ -456,9 +513,81 @@ public abstract class Value<T extends Value> implements
    *
    */
   @Override
-public int hashCode()
+  public int hashCode()
   {
     return toString().hashCode();
+  }
+
+  //........................................................................
+
+  //-------------------------------- print ---------------------------------
+
+  /**
+   * Generate a string representation of the value for printing.
+   *
+   * @param   the renderer to print with
+   *
+   * @return  the printed value as a string.
+   *
+   */
+  public @Nonnull String print(@Nonnull AbstractEntry inEntry,
+                               @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = collectData(inEntry, inRenderer);
+
+    if(m_template != null)
+    {
+      data.put("name", m_template);
+      data.put("args", m_templateArguments);
+      data.put("naked",
+               inRenderer.render("dma.value." + m_template, data));
+    }
+    else
+      data.put("naked", doPrint(inEntry, inRenderer));
+
+    return inRenderer.render("dma.value.remark", data);
+  }
+
+  //........................................................................
+  //------------------------------- doPrint --------------------------------
+
+  /**
+   * Do the standard printing after handling templates.
+   *
+   * @param       the renderer to print with
+   *
+   * @return      the string to be printed
+   *
+   */
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
+                                    @Nonnull SoyRenderer inRenderer)
+  {
+    return toString(false);
+  }
+
+  //........................................................................
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = new HashMap<String, Object>();
+    data.put("entry", new SoyEntry(inEntry, inRenderer));
+    data.put("value", new SoyValue("NONE", this, inEntry, inRenderer));
+
+    if(m_remark != null)
+    {
+      data.put("remarkType", m_remark.getType().name());
+      data.put("remarkComment", m_remark.getComment());
+    }
+
+    return data;
   }
 
   //........................................................................

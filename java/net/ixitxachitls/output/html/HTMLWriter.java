@@ -490,6 +490,29 @@ public class HTMLWriter
   }
 
   //........................................................................
+  //------------------------------- addHead --------------------------------
+
+  /**
+   * Write a string to the writer into the head.
+   *
+   * @param       inText the text to write
+   *
+   * @return      the writer for chaining
+   *
+   */
+  public HTMLWriter addHead(@Nonnull String inText)
+  {
+    ensureHead();
+    indent();
+    if("a".equalsIgnoreCase(m_tags.peek()))
+      m_writer.print(inText);
+    else
+      m_writer.println(inText);
+
+    return this;
+  }
+
+  //........................................................................
   //------------------------------ addCSSFile ------------------------------
 
   /**

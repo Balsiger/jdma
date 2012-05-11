@@ -516,7 +516,7 @@ public class ITextDocument extends Document
    *
    */
   @Override
-protected @Nonnull Map<String, Action> getKnownActions()
+  protected @Nonnull Map<String, Action> getKnownActions()
   {
     return s_actions;
   }
@@ -557,7 +557,7 @@ protected @Nonnull Map<String, Action> getKnownActions()
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       + "<!DOCTYPE ITEXT SYSTEM \"http://itext.sourceforge.net/itext.dtd\">\n"

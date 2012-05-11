@@ -1,0 +1,226 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/**
+ * Templates for base products
+ */
+{delpackage baseproduct}
+{namespace dma.entry.baseproduct}
+
+/**
+ * The entry title.
+ *
+ * @param entry The entry rendered.
+ */
+{deltemplate dma.entry.title}
+  <h1>
+    {call dma.value.value}
+      {param canEdit: $ij.isDM /}
+      {param entry: $entry /}
+      {param value: $entry.leader /}
+    {/call}
+    {call dma.value.value}
+      {param canEdit: $ij.isDM /}
+      {param entry: $entry /}
+      {param value: $entry.title /}
+    {/call}
+  </h1>
+  {call dma.page.title}
+    {param title: $entry.title.print /}
+  {/call}
+{/deltemplate}
+
+/**
+ * The values for the entry.
+ *
+ * @param entry The entry rendered
+ */
+{deltemplate dma.entry.values}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Base' /}
+    {param value: $entry.base /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Synonyms' /}
+    {param value: $entry.synonyms /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Notes' /}
+    {param value: $entry.notes /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Owners' /}
+    {param content}
+      {foreach $owner in $entry.owners.list}
+        {call dma.page.link}
+          {param url: '/user/' + $owner.multi.1.print + '/product/'
+              + $owner.multi.0.print /}
+          {param text: $owner.multi.1.print /}
+        {/call}
+        {if not isLast($owner)}, {/if}
+      {/foreach}
+      {if $ij.user}
+      {sp}| {call dma.page.link}
+          {param url: '/user/' + $ij.user.name + '/product/' + $entry.name
+              + '?create' /}
+          {param text: 'add' /}
+          {param tooltip: 'Add this product for yourself.' /}
+        {/call}
+      {/if}
+    {/param}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Worlds' /}
+    {param value: $entry.worlds /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'System' /}
+    {param value: $entry.system /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Audience' /}
+    {param value: $entry.audience /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Style' /}
+    {param value: $entry.style /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Producer' /}
+    {param value: $entry.producer /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Layout' /}
+    {param value: $entry.layout /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Product Type' /}
+    {param value: $entry.product_type /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Author' /}
+    {param value: $entry.author /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Author' /}
+    {param value: $entry.author /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Editor' /}
+    {param value: $entry.editor /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Cartography' /}
+    {param value: $entry.cartography /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Illustrations' /}
+    {param value: $entry.illustrations /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Typography' /}
+    {param value: $entry.typography /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Management' /}
+    {param value: $entry.management /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Date' /}
+    {param value: $entry.date /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'ISBN' /}
+    {param value: $entry.ISBN /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'ISBN 13' /}
+    {param value: $entry.ISBN13 /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Pages' /}
+    {param value: $entry.pages /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Series' /}
+    {param value: $entry.series /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Number' /}
+    {param value: $entry.number /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Volume' /}
+    {param value: $entry.volume /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Price' /}
+    {param value: $entry.price /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Contents' /}
+    {param value: $entry.contents /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Requirements' /}
+    {param value: $entry.requirements /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'References' /}
+    {param value: $entry.references /}
+  {/delcall}
+  {if length($entry.errors) > 0}
+    {delcall dma.entry.keyvalue}
+      {param entry: $entry /}
+      {param name: 'Errors' /}
+      {param content: $entry.errors /}
+    {/delcall}
+  {/if}
+{/deltemplate}

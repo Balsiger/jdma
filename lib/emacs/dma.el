@@ -275,3 +275,9 @@
 ;; delete trailing whitespace
 ;;
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;;
+;; soy mode
+;;
+(load-file "~/private/jDMA/svn/lib/emacs/soy-mode.el")
+(require 'soy-mode)

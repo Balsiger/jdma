@@ -26,7 +26,7 @@ package net.ixitxachitls.dma.server.servlets;
 // import java.util.ArrayList;
 // import java.util.Iterator;
 import java.util.List;
-// import java.util.Map;
+import java.util.Map;
 // import java.util.Set;
 // import java.util.TreeMap;
 // import java.util.TreeSet;
@@ -49,6 +49,7 @@ import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Encounter;
 // import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
+import net.ixitxachitls.dma.output.soy.SoyEntry;
 // import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Icon;
@@ -126,6 +127,15 @@ public class MainPageServlet extends PageServlet
 
   //------------------------------- writeBody ------------------------------
 
+  // protected @Nonnull Map<String, Object>
+  //   collectData(@Nonnull DMARequest inRequest)
+  // {
+  //   Map<String, Object> map = super.collectData(inRequest);
+  //   map.put("title", "main");
+
+  //   return map;
+  // }
+
   /**
    * Handles the body content of the request.
    *
@@ -136,7 +146,7 @@ public class MainPageServlet extends PageServlet
    *
    */
   @Override
-@OverridingMethodsMustInvokeSuper
+  @OverridingMethodsMustInvokeSuper
   protected void writeBody(@Nonnull HTMLWriter inWriter,
                            @Nullable String inPath,
                            @Nonnull DMARequest inRequest)
@@ -151,7 +161,6 @@ public class MainPageServlet extends PageServlet
     Log.info("serving dynamic user overview for " + user.getName());
 
     String title = "Overview for " + user.getName();
-    inWriter.title(title);
 
     HTMLDocument document = new HTMLDocument(title);
 

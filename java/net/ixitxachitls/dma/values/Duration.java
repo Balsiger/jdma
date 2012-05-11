@@ -23,10 +23,15 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -62,6 +67,8 @@ public class Duration extends Units<Duration>
   public Duration()
   {
     super(s_sets, 5);
+
+    withTemplate("duration");
   }
 
   //........................................................................
@@ -81,6 +88,8 @@ public class Duration extends Units<Duration>
   {
     super(new Rational [] { inDays, inHours, inMinutes, inSeconds },
           s_sets, s_sets[0], 5);
+
+    withTemplate("duration");
   }
 
   //........................................................................
@@ -95,6 +104,8 @@ public class Duration extends Units<Duration>
   public Duration(@Nonnull Rational inRounds)
   {
     super(new Rational [] { inRounds }, s_sets, s_sets[1], 5);
+
+    withTemplate("duration");
   }
 
   //........................................................................
@@ -295,6 +306,31 @@ public class Duration extends Units<Duration>
 
   //........................................................................
 
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  @Override
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+
+    data.put("metric", isMetric());
+    data.put("rounds", isRounds());
+    data.put("asmetric",
+             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+    data.put("asrounds",
+             new SoyValue("as rounds", asRounds(), inEntry, inRenderer));
+
+    return data;
+  }
+
+  //........................................................................
   //------------------------------- doGroup --------------------------------
 
   /**

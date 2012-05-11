@@ -34,7 +34,11 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
@@ -186,17 +190,7 @@ public class BaseCharacter extends BaseEntry
     new BaseType<BaseCharacter>(BaseCharacter.class).withLink("user", "users");
 
   /** The printer for printing the whole base character. */
-  public static final Print s_pagePrint =
-    new Print("$image "
-              + "${as pdf} ${as text} ${as dma}"
-              + "$title "
-              + "$clear $files"
-              + "\n " // need to start a new line for ascii
-              + "$par "
-              + "%name "
-              + "%{real name} %email "
-              + "%{last action} %group %characters %products "
-              + "%errors");
+  public static final Print s_pagePrint = new Print("");
 
   /** The printer for printing in a list. */
   public static final ListPrint s_listPrint =
@@ -357,6 +351,23 @@ public class BaseCharacter extends BaseEntry
   }
 
   //........................................................................
+  //----------------------------- isShownTo -------------------------------
+
+  /**
+   * Check if the given user is allowed to see the entry.
+   *
+   * @param       inUser the user trying to edit
+   *
+   * @return      true if the entry can be seen, false if not
+   *
+   */
+  @Override
+  public boolean isShownTo(@Nonnull BaseCharacter inUser)
+  {
+    return inUser != null;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -421,6 +432,45 @@ public class BaseCharacter extends BaseEntry
   }
 
   //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  @Override
+  public @Nullable Value compute(@Nonnull String inKey)
+  {
+    if("products".equals(inKey))
+    {
+      List<Product> products = DMADataFactory.get()
+        .getRecentEntries(Product.TYPE, this.getName(),
+                          BaseCharacter.TYPE);
+
+      List<Multiple> values = new ArrayList<Multiple>();
+      for(Product product : products)
+      {
+        values.add(new Multiple(new Name(product.getFullTitle()),
+                                new Name(product.getPath())));
+
+        if(values.size() > MAX_PRODUCTS)
+          break;
+      }
+
+      if(values.isEmpty())
+        return new ValueList<Multiple>(new Multiple(new Name(), new Name()));
+
+      return new ValueList<Multiple>(values);
+    }
+
+    return super.compute(inKey);
+  }
+
+  //........................................................................
   //------------------------------ readEntry -------------------------------
 
   /**
@@ -473,7 +523,6 @@ public class BaseCharacter extends BaseEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test

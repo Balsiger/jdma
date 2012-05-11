@@ -23,10 +23,15 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -61,6 +66,8 @@ public class Weight extends Units<Weight>
   public Weight()
   {
     super(s_sets, 5);
+
+    m_template = "weight";
   }
 
   //........................................................................
@@ -76,6 +83,8 @@ public class Weight extends Units<Weight>
   public Weight(@Nullable Rational inPounds, @Nullable Rational inOunces)
   {
     super(new Rational [] { inPounds, inOunces}, s_sets, s_sets[0], 5);
+
+    m_template = "weight";
   }
 
   //........................................................................
@@ -92,6 +101,8 @@ public class Weight extends Units<Weight>
   public Weight(Rational inTons, Rational inKilos, Rational inGrams)
   {
     super(new Rational [] { inTons, inKilos, inGrams }, s_sets, s_sets[1], 5);
+
+    m_template = "weight";
   }
 
   //........................................................................
@@ -106,6 +117,8 @@ public class Weight extends Units<Weight>
   public Weight(Rational inCarats)
   {
     super(new Rational [] { inCarats }, s_sets, s_sets[2], 5);
+
+    m_template = "weight";
   }
 
   //........................................................................
@@ -347,6 +360,32 @@ public class Weight extends Units<Weight>
 
   //........................................................................
 
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  @Override
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+
+    data.put("metric", isMetric());
+    data.put("pound", isPound());
+    data.put("carat", isCarat());
+    data.put("aspounds",
+             new SoyValue("as pound", asPound(), inEntry, inRenderer));
+    data.put("asmetric",
+             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+
+    return data;
+  }
+
+  //........................................................................
   //------------------------------- doGroup --------------------------------
 
   /**

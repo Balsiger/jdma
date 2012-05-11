@@ -164,7 +164,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /** The bonus of the armor. */
   @Key("AC bonus")
   @DM
-  protected @Nonnull Modifier m_bonus = new Modifier();
+  protected @Nonnull Modifier m_bonus = new Modifier()
+    .withTemplate("link", Index.Path.ARMOR_BONUSES.getPath());
 
   static
   {
@@ -184,7 +185,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
   @Key("armor type")
   protected @Nonnull EnumSelection<ArmorTypes> m_type =
      new EnumSelection<ArmorTypes>(ArmorTypes.class)
-    .withFormatter(s_typeFormatter);
+    .withFormatter(s_typeFormatter)
+    .withTemplate("link", Index.Path.ARMOR_TYPES.getPath());
 
   static
   {
@@ -218,7 +220,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
   @DM
   protected Number m_maxDex = new Number(0, 30, true)
     .withFormatter(s_maxDexFormatter)
-    .withGrouping(s_maxDexGrouping);
+    .withGrouping(s_maxDexGrouping)
+    .withTemplate("link", Index.Path.MAX_DEXTERITIES.getPath());
 
   static
   {
@@ -254,7 +257,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
   @DM
   protected Number m_checkPenalty = new Number(-20, 0)
     .withFormatter(s_penaltyFormatter)
-    .withGrouping(s_penaltyGrouping);
+    .withGrouping(s_penaltyGrouping)
+    .withTemplate("link", Index.Path.CHECK_PENALTIES.getPath());
 
   static
   {
@@ -287,7 +291,9 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /** The arcane spell failure. */
   @Key("arcane failure")
   protected Percent m_arcane = new Percent()
-    .withFormatter(s_arcaneFormatter).withGrouping(s_arcaneGrouping);
+    .withFormatter(s_arcaneFormatter)
+    .withGrouping(s_arcaneGrouping)
+    .withTemplate("link", Index.Path.ARCANE_FAILURES.getPath());;
 
   static
   {
@@ -303,7 +309,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new LinkFormatter<Distance>(link(BaseItem.TYPE, Index.Path.SPEEDS));
 
   /** The grouping for arcane failure. */
-protected static final Group<Distance, Long, String> s_speedGrouping =
+  protected static final Group<Distance, Long, String> s_speedGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         @Override

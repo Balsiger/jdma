@@ -1,0 +1,379 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/**
+ * Templates for base items
+ */
+{delpackage baseitem}
+{namespace dma.entry.baseitem}
+
+/**
+ * The values for the entry.
+ *
+ * @param entry The entry rendered
+ */
+{deltemplate dma.entry.values}
+  {if $entry.incomplete and $ij.isDM}
+    {call dma.entry.extension}
+      {param name: 'incomplete' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Incomplete' /}
+          {param value: $entry.incomplete /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Base' /}
+    {param value: $entry.base /}
+    {param access: 'dm' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Extensions' /}
+    {param value: $entry.extensions /}
+    {param access: 'dm' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Synonyms' /}
+    {param value: $entry.synonyms /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Player Name' /}
+    {param value: $entry.player_name /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Worlds' /}
+    {param value: $entry.worlds /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Categoeries' /}
+    {param value: $entry.categories /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Value' /}
+    {param value: $entry.value /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Weight' /}
+    {param value: $entry.weight /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'HP' /}
+    {param value: $entry.hp /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Size' /}
+    {param value: $entry.size /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Substance' /}
+    {param value: $entry.substance /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Hardness' /}
+    {param value: $entry.hardness /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Break DC' /}
+    {param value: $entry.break_DC /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Probability' /}
+    {param value: $entry.probability /}
+  {/delcall}
+
+  {if $entry.extension_multiuse or $entry.extension_multiple
+      or $entry.extension_counted}
+    {call dma.entry.extension}
+      {param name: $entry.extension_multiuse ? 'multiuse'
+          : $entry.extenion_multiple ? 'multiple' : 'counted' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Count' /}
+          {param content}
+            {call dma.value.value}
+              {param canEdit: $ij.isDM /}
+              {param entry: $entry /}
+              {param value: $entry.count /}
+            {/call}{sp}
+            {call dma.value.value}
+              {param canEdit: $ij.isDM /}
+              {param entry: $entry /}
+              {param value: $entry.unit /}
+            {/call}
+          {/param}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {if $entry.extension_weapon}
+    {call dma.entry.extension}
+      {param name: 'weapon' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Damage' /}
+          {param content}
+            {call dma.value.withbase}
+              {param entry: $entry /}
+              {param value: $entry.damage /}
+            {/call}
+            {if $entry.splash.isDefined
+                or $entry.splash.combine.print.isDefined}
+              <div>, splash&nbsp;</div>
+              {call dma.value.withbase}
+                {param entry: $entry /}
+                {param value: $entry.splash /}
+              {/call}
+            {/if}
+          {/param}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Critical' /}
+          {param value: $entry.critical /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Weapon Type' /}
+          {param value: $entry.weapon_type /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Weapon Style' /}
+          {param value: $entry.weapon_style /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Proficiency' /}
+          {param value: $entry.proficiency /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Range' /}
+          {param value: $entry.range_increment /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Reach' /}
+          {param value: $entry.reach /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {if $entry.extension_composite}
+    {call dma.entry.extension}
+      {param name: 'composite' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Contains' /}
+          {param value: $entry.contains /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {if $entry.extension_wearable}
+    {call dma.entry.extension}
+      {param name: 'wearable' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Slot' /}
+          {param value: $entry.slot /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Don' /}
+          {param value: $entry.don /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Remove' /}
+          {param value: $entry.remove /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {if $entry.extension_container}
+    {call dma.entry.extension}
+      {param name: 'container' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Capacity' /}
+          {param value: $entry.capacity /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'State' /}
+          {param value: $entry.state /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+  {if $entry.extension_armor}
+    {call dma.entry.extension}
+      {param name: 'armor' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'AC Bonus' /}
+          {param value: $entry.AC_bonus /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Type' /}
+          {param value: $entry.armor_type /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Max Dexterity' /}
+          {param value: $entry.max_dexterity /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Check Penalty' /}
+          {param value: $entry.check_penalty /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Arcane Failure' /}
+          {param value: $entry.arcane_failure /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Speed' /}
+          {param value: $entry.speed /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {if $entry.extension_light}
+    {call dma.entry.extension}
+      {param name: 'light' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Light' /}
+          {param content}
+            {call dma.value.value}
+              {param entry: $entry /}
+              {param value: $entry.bright_light /}
+              {param canEdit: $ij.isDM /}
+            {/call}
+            , shadowy{sp}
+            {call dma.value.value}
+              {param entry: $entry /}
+              {param value: $entry.shadowy_light /}
+              {param canEdit: $ij.isDM /}
+            {/call}
+          {/param}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {if $entry.extension_timed}
+    {call dma.entry.extension}
+      {param name: 'timed' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Duration' /}
+          {param value: $entry.duration /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {if $entry.extension_commodity}
+    {call dma.entry.extension}
+      {param name: 'commodity' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Length' /}
+          {param value: $entry.length /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Area' /}
+          {param value: $entry.area /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Appearances' /}
+    {param value: $entry.appearances /}
+  {/delcall}
+  {if $entry.qualities}
+    {delcall dma.entry.keyvalue}
+      {param entry: $entry /}
+      {param name: 'Qualities' /}
+      {param value: $entry.qualities /}
+    {/delcall}
+  {/if}
+  {if $entry.effects}
+    {delcall dma.entry.keyvalue}
+      {param entry: $entry /}
+      {param name: 'Effects' /}
+      {param value: $entry.effects /}
+    {/delcall}
+  {/if}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'References' /}
+    {param value: $entry.references /}
+  {/delcall}
+  {if length($entry.errors) > 0}
+    {delcall dma.entry.keyvalue}
+      {param entry: $entry /}
+      {param name: 'Errors' /}
+      {param content: $entry.errors /}
+    {/delcall}
+  {/if}
+{/deltemplate}

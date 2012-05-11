@@ -1,0 +1,86 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/**
+ * Templates for base products
+ */
+{delpackage basecharacter}
+{namespace dma.entry.basecharacter}
+
+/**
+ * The values for the entry.
+ *
+ * @param entry The entry rendered
+ */
+{deltemplate dma.entry.values}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Real Name' /}
+    {param value: $entry.real_name /}
+    {param access: 'owner' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Email' /}
+    {param value: $entry.email /}
+    {param access: 'owner' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Last Action' /}
+    {param value: $entry.last_action /}
+    {param access: 'owner' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Group' /}
+    {param value: $entry.group /}
+    {param access: 'admin' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Characters' /}
+    {param content: '(not yet implemented)' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Products' /}
+    {param content}
+      {foreach $product in $entry.products.list}
+        {if index($product) < 5}
+          {call dma.page.link}
+            {param url: $product.multi.1.print /}
+            {param text: $product.multi.0.print /}
+          {/call}
+          {if not isLast($product)}, {/if}
+        {else}
+          , ...
+        {/if}
+      {/foreach}
+      {sp}|{sp}
+      {call dma.page.link}
+        {param url: '/user/' + $entry.name + '/products' /}
+        {param text: 'view all' /}
+        {param tooltip: 'List all products of ' + $entry.name + '.' /}
+      {/call}
+    {/param}
+  {/delcall}
+{/deltemplate}

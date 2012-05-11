@@ -668,24 +668,8 @@ public class BaseItem extends BaseEntry
 
   /** The printer for printing the whole base item. */
   public static final Print s_pagePrint =
-    new Print("$image "
-              + "${as pdf} ${as text} ${as dma} "
-              + "$title "
-              + "$desc "
-              + "$clear "
-              + "$files "
-              + "\n"
-              + "$par "
-              + "#incomplete "
-              + "%base %extensions %synonyms %{player name} %worlds %categories"
-              + "%value %weight %hp %size %substance %hardness %{break DC}"
-              + "%probability "
-              + "#counted #multiple #multiuse #composite #wearable #container "
-              + "#weapon #armor #light #timed #commodity"
-              + "%appearances "
-              + "%qualities %effects"
-              // admin
-              + "%references %errors"
+    new Print(""
+              + "#commodity"
               );
 
   /** The printer for printing in a list. */
@@ -747,7 +731,8 @@ public class BaseItem extends BaseEntry
   @Key("probability")
   protected EnumSelection<Probability> m_probability =
     new EnumSelection<Probability>(Probability.COMMON)
-    .withFormatter(s_probabilityFormatter);
+    .withFormatter(s_probabilityFormatter)
+    .withTemplate("link", Index.Path.PROBABILITIES.getPath());
 
   static
   {
@@ -763,8 +748,9 @@ public class BaseItem extends BaseEntry
 
   /** The size of items of this kind. */
   @Key("size")
-  protected EnumSelection<Size> m_size =
-    new EnumSelection<Size>(Size.class).withFormatter(s_sizeFormatter);
+  protected EnumSelection<Size> m_size = new EnumSelection<Size>(Size.class)
+    .withTemplate("link", Index.Path.SIZES.getPath())
+    .withFormatter(s_sizeFormatter);
 
   static
   {
@@ -799,6 +785,7 @@ public class BaseItem extends BaseEntry
   @Key("hardness")
     protected Number m_hardness = new Number(0, 100)
     .withFormatter(s_hardnessFormatter)
+    .withTemplate("link", Index.Path.HARDNESSES.getPath())
     .withGrouping(s_hardnessGroup);
 
   static
@@ -836,6 +823,7 @@ public class BaseItem extends BaseEntry
   @DM
   protected Number m_hp = new Number(0, 100000)
     .withFormatter(s_hpFormatter)
+    .withTemplate("link", Index.Path.HPS.getPath())
     .withGrouping(s_hpGroup);
 
   static
@@ -880,7 +868,8 @@ public class BaseItem extends BaseEntry
                              .withEditType("selection[probability]"), false),
         new Multiple.Element(new Text()
                              .withEditType("string[description]"), false) }))
-    .withFormatter(s_appearancesFormatter);
+    .withFormatter(s_appearancesFormatter)
+    .withTemplate("appearances");
 
   //........................................................................
   //----- substance --------------------------------------------------------
@@ -892,7 +881,7 @@ public class BaseItem extends BaseEntry
 
   /** The thickness formatter. */
   protected static final Formatter<Distance> s_thicknessFormatter =
-    new LinkFormatter<Distance>(link(TYPE, Index.Path.THICKNESSES));
+    new LinkFormatter<Distance>(link(TYPE, Index.Path.DISTANCES));
 
   /** The group for thicknesses. */
   protected static final Group<Distance, Long, String> s_thicknessGrouping =
@@ -916,8 +905,9 @@ public class BaseItem extends BaseEntry
     new Multiple(new Multiple.Element []
       {
         new Multiple.Element
-        (new EnumSelection<Substance>(Substance.class).withFormatter
-         (s_substanceFormatter), false),
+        (new EnumSelection<Substance>(Substance.class)
+         .withFormatter(s_substanceFormatter)
+         .withTemplate("link", Index.Path.SUBSTANCES.getPath()), false),
         new Multiple.Element(new Distance()
                              .withFormatter(s_thicknessFormatter)
                              .withGrouping(s_thicknessGrouping),
@@ -927,7 +917,7 @@ public class BaseItem extends BaseEntry
   static
   {
     addIndex(new Index(Index.Path.SUBSTANCES, "Substances", TYPE));
-    addIndex(new Index(Index.Path.THICKNESSES, "Thicknesses", TYPE));
+    addIndex(new Index(Index.Path.DISTANCES, "Distances", TYPE));
   }
 
 
@@ -960,6 +950,7 @@ public class BaseItem extends BaseEntry
   @Key("break DC")
   protected Number m_break = new Number(0, 1000)
     .withFormatter(s_breakFormatter)
+    .withTemplate("link", Index.Path.BREAKS.getPath())
     .withGrouping(s_breakGrouping);
 
   static
@@ -1347,7 +1338,7 @@ public class BaseItem extends BaseEntry
     values.put(Index.Path.HARDNESSES, m_hardness.group());
     values.put(Index.Path.HPS, m_hp.group());
     values.put(Index.Path.SUBSTANCES, m_substance.get(0).group());
-    values.put(Index.Path.THICKNESSES,
+    values.put(Index.Path.DISTANCES,
                s_thicknessGrouping.group((Distance)m_substance.get(1)));
     values.put(Index.Path.BREAKS, m_break.group());
 

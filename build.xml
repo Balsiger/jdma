@@ -1,7 +1,5 @@
 <?xml version="1.0" ?>
 
-<!-- WARNING: requires ant 1.4.1+ to run -->
-
 <project name="jDMA" default="compile" basedir=".">
 
   <!-- completely ignore the classpath set in the environment -->
@@ -23,7 +21,7 @@
   <property name="version" value="allip" />
 
   <!-- Google App Engine -->
-  <property name="gae.dir" location="../../appengine-java-sdk-1.6.3" />
+  <property name="gae.dir" location="../../appengine-java-sdk-1.6.5" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->
@@ -107,6 +105,8 @@
     <pathelement location="${lib.test.dir}/appengine-api-labs.jar" />
     <pathelement location="${lib.test.dir}/appengine-api-stubs.jar" />
     <pathelement location="${lib.test.dir}/appengine-testing.jar" />
+    <!-- soy -->
+    <pathelement location="${lib.dir}/soy-latest.jar" />
     <!-- itext -->
     <!-- not compatible with ujac
     <pathelement location="${lib.dir}/iText-5.0.6.jar" /> -->
@@ -229,7 +229,7 @@
           unless="windows">
     <symlink link="${webinf.dir}/classes" resource="${classes.dir}"
              overwrite="Yes" />
-    <symlink link="${classes.dir}/html" resource="${resources.dir}/html"
+    <symlink link="${war.dir}/html" resource="${resources.dir}/html"
              overwrite="Yes" />
     <symlink link="${classes.dir}/css" resource="${resources.dir}/css"
              overwrite="Yes" />
@@ -238,6 +238,8 @@
     <symlink link="${classes.dir}/icons" resource="${resources.dir}/icons"
              overwrite="Yes" />
     <symlink link="${war.dir}/js" resource="${resources.dir}/js"
+             overwrite="Yes" />
+    <symlink link="${war.dir}/soy" resource="${resources.dir}/soy"
              overwrite="Yes" />
   </target>
 
@@ -258,6 +260,7 @@
     <copy todir="${war.dir}/html" flatten="false">
       <fileset dir="${resources.dir}/html">
         <include name="**/*.html" />
+        <include name="**/*.soy" />
       </fileset>
     </copy>
     <copy todir="${classes.dir}/css" flatten="false">
@@ -278,6 +281,11 @@
     <copy todir="${war.dir}/js" flatten="false">
       <fileset dir="${resources.dir}/js">
         <include name="**/*.js" />
+      </fileset>
+    </copy>
+    <copy todir="${war.dir}/soy" flatten="false">
+      <fileset dir="${resources.dir}/soy">
+        <include name="**/*.soy" />
       </fileset>
     </copy>
   </target>

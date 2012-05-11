@@ -1,0 +1,89 @@
+/******************************************************************************
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+{namespace dma.errors}
+
+/**
+ * The error for an invalid page.
+ *
+ * @param name The name of the page that is invalid.
+ */
+{template .invalidPage}
+  {call .error}
+    {param title}
+      Page Not Found
+    {/param}
+    {param message}
+      The requested page '{$name}' does not exist.
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * The error when extracting the entry fails.
+ *
+ * @param name The path to the entry that was tried to extract.
+ */
+{template .extract}
+  {call .error}
+    {param title}
+      Could Not Determine Entry Key
+    {/param}
+    {param message}
+      The key to the entry could not be extracted from '{$name}'.
+    {/param}
+  {/call}
+{/template}
+
+/**
+ * The error for no entry reference.
+ *
+ */
+{template .noEntry}
+  {call .error}
+    {param title}
+      No entry
+    {/param}
+    {param message}
+      No entry was requested.
+    {/param}
+  {/call}
+{/template}
+
+
+/**
+ * The general markup for an error message.
+ *
+ * @param title The error title
+ * @param message The error message
+ */
+{template .error}
+  {call dma.page.title}
+    {param title: $title /}
+  {/call}
+  <h1 style="">
+    {$title}
+  </h1>
+
+  <div>
+    {$message}
+  </div>
+{/template}

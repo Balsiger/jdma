@@ -23,10 +23,15 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -61,6 +66,8 @@ public class Volume extends Units<Volume>
   public Volume()
   {
     super(s_sets, 5);
+
+    withTemplate("volume");
   }
 
   //........................................................................
@@ -79,6 +86,8 @@ public class Volume extends Units<Volume>
   {
     super(new Rational [] { inLarge, inSmall }, s_sets,
           s_sets[inMetric ? 1 : 0], 5);
+
+    withTemplate("volume");
   }
 
   //........................................................................
@@ -102,6 +111,8 @@ public class Volume extends Units<Volume>
   {
     super(new Rational [] { inGallons, inQuarts, inPints, inCups, inOunces },
           s_sets, s_sets[2], 5);
+
+    withTemplate("volume");
   }
 
   //........................................................................
@@ -122,6 +133,8 @@ public class Volume extends Units<Volume>
   {
     super(new Rational [] { inLiter, inDeciLiter, inCentiLiter, }, s_sets,
           s_sets[3], 5);
+
+    withTemplate("volume");
   }
 
   //........................................................................
@@ -136,7 +149,7 @@ public class Volume extends Units<Volume>
    *
    */
   @Override
-public Volume create()
+  public Volume create()
   {
     return super.create(new Volume());
   }
@@ -363,6 +376,36 @@ public Volume create()
 
   //........................................................................
 
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  @Override
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+
+    data.put("metric", isMetric());
+    data.put("feet", isFeet());
+    data.put("liquid", isLiquid());
+    data.put("asfeet",
+             new SoyValue("as feet", asFeet(), inEntry, inRenderer));
+    data.put("asmetric",
+             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+    data.put("asgallons",
+             new SoyValue("as gallons", asGallons(), inEntry, inRenderer));
+    data.put("asliters",
+             new SoyValue("as liters", asLiters(), inEntry, inRenderer));
+
+    return data;
+  }
+
+  //........................................................................
   //------------------------------- doGroup --------------------------------
 
   /**

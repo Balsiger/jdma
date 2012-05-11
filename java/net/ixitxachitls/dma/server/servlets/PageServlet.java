@@ -23,11 +23,14 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,6 +46,7 @@ import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Table;
@@ -74,7 +78,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class PageServlet extends DMAServlet
+public class PageServlet extends SoyServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -90,25 +94,6 @@ public class PageServlet extends DMAServlet
 
   //-------------------------------------------------------------- variables
 
-  /** The project name. */
-  public static final String PROJECT = Config.get("project.name", "jDMA");
-
-  /** The project name. */
-  public static final String PROJECT_URL =
-    Config.get("project.url", "http://www.ixitxachitls.net");
-
-  /** The version number (or monster in this case ;-)). */
-  public static final String VERSION =
-    Config.get("project.version", "Allip");
-
-  /**
-   * The build date. Because I did not manage to simply replace the date in
-   * the config file from ant, all the build dates from all builds are
-   * concatenated in this value. We only need the first, though.
-   */
-  public static final String BUILD =
-    Config.get("project.build", "").replaceAll(";.*", "");
-
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
 
@@ -119,59 +104,75 @@ public class PageServlet extends DMAServlet
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- handle --------------------------------
+  //----------------------------- collectData ------------------------------
 
   /**
-   * Handle the request.
+   * Collect the data that is to be printed.
    *
-   * @param       inRequest  the original request
-   * @param       inResponse the original response
+   * @param    inRequest the request for the page
    *
-   * @return      a special result if something went wrong
-   *
-   * @throws      ServletException general error when processing the page
-   * @throws      IOException      writing to the page failed
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
    *
    */
-  @Override
-  protected @Nullable SpecialResult handle
-    (@Nonnull DMARequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
-    throws ServletException, IOException
+  protected @Nonnull Map<String, Object> collectData
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer renderer)
   {
-    // Set the output header.
-    inResponse.setHeader("Content-Type", "text/html");
-    inResponse.setHeader("Cache-Control", "max-age=0");
+    Map<String, Object> data = super.collectData(inRequest, renderer);
 
     boolean bodyOnly = inRequest.isBodyOnly();
-
     String path = inRequest.getRequestURI();
+
+    java.io.StringWriter buffer = new java.io.StringWriter();
     HTMLWriter writer;
     if(bodyOnly)
-      writer =
-        new HTMLBodyWriter(new PrintWriter(inResponse.getOutputStream()));
+      writer = new HTMLBodyWriter(new PrintWriter(buffer));
     else
-      writer = new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
+      writer = new HTMLWriter(new PrintWriter(buffer));
 
     if(!bodyOnly)
-    {
       writeHeader(writer, path, inRequest);
-      writer.end("div"); // header
-      writer.begin("div").id("page").classes("page");
-    }
 
     writeBody(writer, path, inRequest);
 
     if(!bodyOnly)
-    {
-      writer.end("div"); // page
       writeFooter(writer, path, inRequest);
-      writer.end("div"); // footer
-    }
 
     writer.close();
 
-    return null;
+    data.put("oldcontent", buffer.toString());
+    if(!data.containsKey("content"))
+      data.put("content", "No new content defined, yet.");
+
+    return data;
+  }
+
+  //........................................................................
+  //------------------------- collectInjectedData --------------------------
+
+  /**
+   * Collect the injected data that is to be printed.
+   *
+   * @param    inRequest the request for the page
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
+   *
+   */
+  protected @Nonnull Map<String, Object> collectInjectedData
+    (@Nonnull DMARequest inRequest, SoyRenderer renderer)
+  {
+    Map<String, Object> data = super.collectInjectedData(inRequest, renderer);
+
+    if(inRequest.getUser() == null)
+      data.put("dm", false);
+    else
+    {
+      AbstractEntry entry = getEntry(inRequest.getRequestURI());
+      data.put("dm", entry != null && entry.isDM(inRequest.getUser()));
+    }
+
+    return data;
   }
 
   //........................................................................
@@ -192,104 +193,6 @@ public class PageServlet extends DMAServlet
                              @Nonnull String inPath,
                              @Nonnull DMARequest inRequest)
   {
-    inWriter
-      .comment("This file was generate by " + PROJECT + ", version " + VERSION
-               + " (" + BUILD + ")")
-      // jquery
-      .addJSFile("jquery-1.5.1.min")
-      .addCSSFile("smoothness/jquery-ui-1.8.14.custom")
-      //.addJSFile("jquery-ui-1.8.14")
-      .addJSFile("jquery-ui-1.8.14.custom.min")
-      // jdma
-      .addJSFile("util")
-      .addJSFile("form")
-      .addCSSFile("gui")
-      .addJSFile("gui")
-      .addJSFile("edit")
-      .addJSFile("item")
-      .addCSSFile("jdma")
-      .addJSFile("jdma")
-      // make android use the device width/height
-      .meta("viewport",
-            "width=device-width, height=device-height")
-      .meta("Content-Type", "text/html; charset=utf-8",
-            "xml:lang", "en", "lang", "en")
-      // favicon
-      .link("SHORTCUT ICON", "/icons/favicon.png")
-      // header
-      .headScript("if(location.hostname != 'localhost')",
-                  "{",
-                  "  var _gaq = _gaq || [];",
-                  "  _gaq.push(['_setAccount', 'UA-1524401-1']);",
-                  "  _gaq.push(['_trackPageview']);",
-                  "  (function() {",
-                  "    var ga = document.createElement('script'); ga.type = "
-                  + "'text/javascript'; ga.async = true;",
-                  "    ga.src = ('https:' == document.location.protocol ? "
-                  + "'https://ssl' : 'http://www') + "
-                  + "'.google-analytics.com/ga.js';",
-                  "    var s = document.getElementsByTagName('script')[0]; "
-                  + "s.parentNode.insertBefore(ga, s);",
-                  "  })();",
-                  "}")
-      .begin("div").id("header")
-      .begin("div").id("header-right");
-
-    BaseCharacter user = inRequest.getUser();
-
-    //Use UserService from AppEngine for creating Login/Logout Url's
-    UserService userService = UserServiceFactory.getUserService();
-    if(user == null)
-    {
-      inWriter
-        .begin("a").id("login-icon").classes("sprite").tooltip("Login")
-        .href(userService.createLoginURL(inRequest.getOriginalPath())).end("a");
-
-      if(userService.isUserLoggedIn())
-      {
-        inWriter.script("$().ready(function(){ register(); } );");
-      }
-    }
-    else
-    {
-      inWriter
-        .begin("a").classes("user")
-        .onClick("util.link(event, '/user/" + user.getName() + "')")
-        .href("/user/" + user.getName())
-        .add(user.getName());
-
-      if(inRequest.hasUserOverride())
-        inWriter.add(" (" + inRequest.getRealUser().getName() + ")");
-
-      inWriter.end("a").add(" | ").begin("a").id("logout-icon")
-          .classes("sprite").tooltip("Logout")
-          .href(userService.createLogoutURL(inRequest.getOriginalPath()))
-          .end("a");
-    }
-
-    inWriter
-      .begin("a").classes("sprite", "library").tooltip("Library")
-      .href("/library").onClick("util.link(event, '/library');").end("a")
-      .begin("a").classes("sprite", "about").tooltip("About")
-      .href("/about.html").onClick("util.link(event, '/about.html')").end("a")
-      .begin("div").onMouseOver("$('#search :input').show()")
-      .onMouseOut("$('#search :input').hide()")
-      .begin("form").classes("search").id("search")
-      .onSubmit("util.link(event, '/search/' + this.search.value)")
-      .begin("input").name("search").end("input")
-      .begin("div").classes("sprite", "search").tooltip("Search").end("div")
-      .end("form") // search
-      .end("div") // search
-      .end("div") // header-right
-      .begin("div").id("header-left")
-      .add("DMA")
-      .end("div") // header-left
-      .begin("div").id("navigation")
-      .begin("a").id("home").classes("sprite").tooltip("Home").href("/")
-      .onClick("util.link(event, '/')").end("a")
-      .begin("span").id("subnavigation").add("&nbsp;").end("span")
-      .end("div")
-      .begin("div").id("actions").end("div");
   }
 
   //........................................................................
@@ -329,22 +232,6 @@ public class PageServlet extends DMAServlet
                              @Nonnull String inPath,
                              @Nonnull DMARequest inRequest)
   {
-    inWriter.begin("div").classes("footer")
-      .begin("p").end("p")
-      .begin("div").classes("version")
-      .add(PROJECT + " version " + VERSION + " (build " + BUILD + ")")
-      .end("div")
-      // we can't have spaces here, so we add it directly
-      .begin("img").src("/icons/html5.png").alt("Uses HTML 5!").end("img")
-      .begin("img").src("http://code.google.com/appengine/images/"
-                        + "appengine-silver-120x30.gif")
-      .alt("Powered by Google App Engine").end("img")
-      .begin("a").href("https://plus.google.com/109501801834573360902?prsrc=3")
-      .style("text-decoration:none;")
-      .begin("img").src("https://ssl.gstatic.com/images/icons/gplus-32.png")
-      .alt("jDMA on Google+").style("border:0;width:32px;height:32px;")
-      .end("img")
-      .end("a");
   }
 
   //........................................................................

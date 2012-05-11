@@ -135,7 +135,7 @@ public class Text extends BaseText<Text>
    *
    */
   @Override
-public @Nonnull String doGroup()
+  public @Nonnull String doGroup()
   {
     return m_text;
   }
@@ -150,7 +150,7 @@ public @Nonnull String doGroup()
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected @Nonnull String doToString()
   {
     return s_stringDelimiter
       + m_text.replaceAll("([" + s_stringDelimiter + "])", "\\\\$1")
@@ -167,7 +167,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     return new BaseCommand(m_text.replaceAll("[\n\f ]+", " "));
   }
@@ -192,7 +192,7 @@ protected @Nonnull Command doFormat()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(@Nonnull ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text = null;

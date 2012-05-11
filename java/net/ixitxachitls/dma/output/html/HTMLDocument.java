@@ -26,8 +26,12 @@ package net.ixitxachitls.dma.output.html;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.output.actions.html.Link;
+import net.ixitxachitls.output.Document;
+import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Event;
 import net.ixitxachitls.output.commands.Feat;
@@ -67,8 +71,7 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
   //----------------------------- HTMLDocument ----------------------------
 
   /**
-   * This is a convenience create using the standard dimension of the page
-   * from the configuration.
+   * Create the html document.
    *
    * @param       inTitle the HTML title of the document
    *
@@ -88,6 +91,11 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
   protected static final Map<String, Action> s_actions =
     new HashMap<String, Action>
     (net.ixitxachitls.output.html.HTMLDocument.s_actions);
+
+  /** A simple document for easy conversions. This should be last or the
+   * static values above will not be correctly set!*/
+  protected static final @Nonnull HTMLDocument s_simple =
+    new HTMLDocument("simple");
 
   static
   {
@@ -194,9 +202,35 @@ public class HTMLDocument extends net.ixitxachitls.output.html.HTMLDocument
    *
    */
   @Override
-protected Map<String, Action> getKnownActions()
+  protected Map<String, Action> getKnownActions()
   {
     return s_actions;
+  }
+
+  //........................................................................
+  //----------------------------- simpleConvert ----------------------------
+
+  /**
+   * Convert the given Object to a String (using command conversion).
+   *
+   * @param       inCommand the command to convert
+   *
+   * @return      the converted result
+   *
+   */
+  public static @Nonnull String simpleConvert(@Nonnull Object inCommand)
+  {
+    Command command;
+
+    if(inCommand instanceof Command)
+      command = (Command)inCommand;
+    else
+      command = new BaseCommand(inCommand.toString());
+
+    Document sub = s_simple.createSubDocument();
+    sub.add(command);
+
+    return sub.toString();
   }
 
   //........................................................................

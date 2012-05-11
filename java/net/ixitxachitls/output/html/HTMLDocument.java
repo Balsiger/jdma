@@ -501,7 +501,7 @@ public class HTMLDocument extends Document
    *
    */
   @Override
-protected @Nonnull Map<String, Action> getKnownActions()
+  protected @Nonnull Map<String, Action> getKnownActions()
   {
     return s_actions;
   }

@@ -227,6 +227,7 @@ public class BaseEntry extends AbstractEntry
   @Key("worlds")
   protected ValueList<Selection> m_worlds = new ValueList<Selection>
     (new Selection(WORLDS)
+     .withTemplate("link", "worlds")
      .withFormatter(new LinkFormatter<Selection>
                     ("/" + getType().getMultipleLink() + "/worlds/")));
 

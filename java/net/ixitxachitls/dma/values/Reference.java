@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -30,6 +32,7 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseProduct;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
 
@@ -91,7 +94,7 @@ public class Reference extends BaseText<Reference>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // this only works if it is overriden in all
+  @SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
   public @Nonnull Reference create()
   {
@@ -123,13 +126,57 @@ public class Reference extends BaseText<Reference>
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     resolve();
     if(m_product == null)
       return new Command(getEditValue());
 
     return new Link(getEditValue(), "/product/" + m_product.getName());
+  }
+
+  //........................................................................
+  //------------------------------- doPrint --------------------------------
+
+  /**
+   * Do the standard printing after handling templates.
+   *
+   * @param       the renderer to print with
+   *
+   * @return      the string to be printed
+   *
+   */
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
+                                    @Nonnull SoyRenderer inRenderer)
+  {
+    resolve();
+    if(m_product == null)
+      return getEditValue();
+
+    return inRenderer.render("dma.value.reference",
+                             collectData(inEntry, inRenderer));
+  }
+
+  //........................................................................
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  @Override
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+    data.put("id", get());
+
+    if(m_product != null)
+      data.put("name", inRenderer.renderCommands(m_product.getFullTitle()));
+
+    return data;
   }
 
   //........................................................................
@@ -142,7 +189,7 @@ protected @Nonnull Command doFormat()
    *
    */
   @Override
-public String getEditValue()
+  public String getEditValue()
   {
     resolve();
     if(m_product == null)

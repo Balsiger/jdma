@@ -23,10 +23,15 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -60,6 +65,7 @@ public class Money extends Units<Money>
   public Money()
   {
     super(s_sets, 1);
+    m_template = "money";
   }
 
   //........................................................................
@@ -92,6 +98,8 @@ public class Money extends Units<Money>
 
     if(inPlatinum < 0)
       throw new IllegalArgumentException("can only set positive values");
+
+    m_template = "money";
   }
 
   //........................................................................
@@ -304,6 +312,28 @@ public class Money extends Units<Money>
       return getAsBase();
 
     return toSet(0, false).getAsBase();
+  }
+
+  //........................................................................
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  @Override
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+
+    Rational gold = getAsGold();
+    if(gold.compare(getGold()) != 0)
+      data.put("gold", new SoyValue("as gold", gold, inEntry, inRenderer));
+
+    return data;
   }
 
   //........................................................................

@@ -28,6 +28,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -35,9 +37,13 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.Entries;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.Variable;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Linebreak;
@@ -153,6 +159,62 @@ public class Combination<V extends Value>
 
   //........................................................................
 
+  //-------------------------------- print ---------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull String print(SoyRenderer inRenderer)
+  {
+    combine();
+    Map<String, Object> data = new HashMap<String, Object>();
+
+    if(isArithmetic())
+    {
+      Value total = total();
+      if(total != null && total.isDefined())
+        data.put("total",
+                 new SoyValue(m_name + " total", total, (AbstractEntry)m_entry,
+                              inRenderer));
+    }
+
+    List<Map<String, Object>> baseValues = new ArrayList<Map<String, Object>>();
+    for(V value : m_values.keySet())
+    {
+      Map<String, Object> map = new HashMap<String, Object>();
+      map.put("value", new SoyValue(m_name, value, (AbstractEntry)m_entry,
+                                    inRenderer));
+      map.put("isLongtext", value instanceof FormattedText);
+      map.put("isText", value instanceof Text);
+      map.put("names", Entries.namesString(m_values.get(value)));
+
+      baseValues.add(map);
+    }
+
+    for(Expression expression : m_expressions.keySet())
+    {
+      Map<String, Object> map = new HashMap<String, Object>();
+      map.put("expression", expression);
+      map.put("names", Entries.namesString(m_expressions.get(expression)));
+
+      baseValues.add(map);
+    }
+
+    data.put("bases", baseValues);
+
+    Value value = m_entry.getValue(m_name);
+    if (value != null && value.isDefined())
+      data.put("isDefined", true);
+
+    return inRenderer.render("dma.value.combination", data);
+  }
+
+  //........................................................................
   //-------------------------------- format --------------------------------
 
   /**
@@ -305,7 +367,7 @@ public class Combination<V extends Value>
   //------------------------------- summary --------------------------------
 
   /**
-   * Compute a summary of how the final values is computed.
+   * Compute a summary of how the final value is computed.
    *
    * @return      the computed summary
    *
@@ -403,6 +465,39 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
+
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Convert to a human redable string for debugging.
+   *
+   * @return      the string representation
+   *
+   */
+  public @Nonnull String toString()
+  {
+    combine();
+    return "combination of " + m_name + " in " + m_entry.getName() + ": "
+      + toString(m_values) + " [" + toString(m_expressions) + "], total "
+      + m_total + ", min " + m_min + ", max " + m_max;
+  }
+
+  private @Nonnull String toString(Multimap inMap)
+  {
+    StringBuilder builder = new StringBuilder();
+
+    for(Object object : inMap.keySet())
+    {
+      builder.append(object.toString() + ": ");
+      for(Object entry : inMap.get(object))
+        builder.append(((ValueGroup)entry).getName() + ", ");
+    }
+
+    return builder.toString();
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

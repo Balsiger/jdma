@@ -63,7 +63,7 @@ gui.addAction = function(inName, inTitle, inAction)
   }
 
   var action = $('<div class="action-button" title="' + inTitle + '">' +
-                 '<div class="sprite" id="action-' + inName +
+                 '<div class="sprite large" id="action-' + inName +
                  '"></div></div>');
   action.click(inAction);
   actions.append(action);

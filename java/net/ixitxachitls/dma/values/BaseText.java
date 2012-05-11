@@ -27,6 +27,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
@@ -96,7 +98,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // this only works if it is overriden in all
+  @SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
   public @Nonnull T create()
   {
@@ -146,6 +148,24 @@ public class BaseText<T extends BaseText> extends Value<T>
 
   //........................................................................
 
+  //------------------------------- doPrint --------------------------------
+
+  /**
+   * Generate a string representation of the value for printing.
+   *
+   * @param   the renderer to print with
+   *
+   * @return  the printed value as a string.
+   *
+   */
+  @Override
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
+                                    @Nonnull SoyRenderer inRenderer)
+  {
+    return inRenderer.renderCommands(m_text);
+  }
+
+  //........................................................................
   //------------------------------- doFormat -------------------------------
 
   /**
@@ -155,7 +175,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     return new BaseCommand(m_text);
   }

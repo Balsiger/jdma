@@ -45,7 +45,9 @@ import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
@@ -1380,6 +1382,23 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //-------------------------------- isOwner -------------------------------
+
+  /**
+   * Check whether the given user is the owner of this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for owner, false for not
+   *
+   */
+  public boolean isOwner(@Nullable BaseCharacter inUser)
+  {
+    // Admins are owners of everything
+    return inUser.hasAccess(BaseCharacter.Group.ADMIN);
+  }
+
+  //........................................................................
   //------------------------------- matches --------------------------------
 
   /**
@@ -1641,6 +1660,22 @@ public abstract class ValueGroup implements Changeable
                                          @Nullable BaseCharacter inUser)
   {
     return getListPrint().print(inKey, this, inUser);
+  }
+
+  //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nullable Value compute(@Nonnull String inKey)
+  {
+    return getValue(inKey);
   }
 
   //........................................................................

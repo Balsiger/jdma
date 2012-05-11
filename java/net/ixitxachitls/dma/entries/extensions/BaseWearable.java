@@ -178,7 +178,9 @@ public class BaseWearable extends BaseExtension<BaseItem>
   /** The slot where the item can be worn. */
   @Key("slot")
   protected @Nonnull EnumSelection<Slot> m_slot =
-    new EnumSelection<Slot>(Slot.class).withFormatter(s_slotFormatter);
+    new EnumSelection<Slot>(Slot.class)
+    .withFormatter(s_slotFormatter)
+    .withTemplate("link", "slots");
 
   static
   {

@@ -117,7 +117,9 @@ public class BaseComposite extends BaseExtension<BaseItem>
     new ValueList<ValueList<Name>>
     (new ValueList<Name>(new Name().withFormatter(s_containsFormatter), "|")
      .withFormatter(s_orFormatter))
-    .withFormatter(s_andFormatter);
+    .withFormatter(s_andFormatter)
+    .withTemplate("contains");
+
 
   //........................................................................
 

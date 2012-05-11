@@ -24,6 +24,7 @@
 package net.ixitxachitls.output;
 
 import java.io.FileWriter;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -320,22 +321,6 @@ public class Document
     }
 
     //......................................................................
-    //----------------------------- addDocument ----------------------------
-
-    /**
-     * Add a complete document to this one. It will be saved along with the
-     * parent document.
-     *
-     * @param       inDocument the document to add
-     *
-     */
-    @Override
-    public void addDocument(@Nonnull Document inDocument)
-    {
-      Document.this.addDocument(inDocument);
-    }
-
-    //......................................................................
   }
 
   //........................................................................
@@ -400,9 +385,6 @@ public class Document
 
   /** The footer texts. */
   protected @Nonnull ArrayList<Object> m_footer = new ArrayList<Object>();
-
-  /** The subdocument, if any. */
-  private @Nullable List<Document> m_subDocuments = null;
 
   /** The documents attributes. */
   protected @Nonnull Map<String, String> m_attributes =
@@ -684,14 +666,6 @@ public class Document
 
       Log.info("wrote file '" + inFileName + "'");
 
-      if(m_subDocuments != null)
-      {
-        int count = 1;
-
-        for(Document doc : m_subDocuments)
-          doc.save(inFileName + "-" + count++);
-      }
-
       return true;
     }
     catch(java.io.IOException e)
@@ -714,6 +688,32 @@ public class Document
         return false;
       }
     }
+  }
+
+  //........................................................................
+  //--------------------------------- write --------------------------------
+
+  /**
+   * Write the contents of the document to the given stream.
+   *
+   * @param       inOutput the stream to write to
+   *
+   * @return      true if writtenn, false if not
+   *
+   */
+  public boolean  write(@Nonnull OutputStream inOutput)
+  {
+    try
+    {
+      inOutput.write(toString().getBytes());
+    }
+    catch(java.io.IOException e)
+    {
+      Log.warning("cannot write to stream: " + e);
+      return false;
+    }
+
+    return true;
   }
 
   //........................................................................
@@ -870,24 +870,6 @@ public class Document
   public void addFooter(@Nonnull Object inObject)
   {
     m_footer.add(inObject);
-  }
-
-  //........................................................................
-  //----------------------------- addDocument ------------------------------
-
-  /**
-   * Add a complete document to this one. It will be saved along with the
-   * parent document.
-   *
-   * @param       inDocument the document to add
-   *
-   */
-  public void addDocument(@Nonnull Document inDocument)
-  {
-    if(m_subDocuments == null)
-      m_subDocuments = new ArrayList<Document>();
-
-    m_subDocuments.add(inDocument);
   }
 
   //........................................................................
@@ -1163,28 +1145,6 @@ public @Nonnull String toString()
       doc.addFooter("footer3");
 
       assertEquals("footer", "footer1footer2footer3", doc.getFooter());
-    }
-
-    //......................................................................
-    //----- document -------------------------------------------------------
-
-    /** Test saving of a document.
-     *
-     * @throws Exception should not happen
-     */
-    @org.junit.Test
-    public void document() throws Exception
-    {
-      Document doc = new Document();
-      doc.addDocument(new Document());
-
-      // save to a temp file
-      java.io.File tmp = java.io.File.createTempFile("test", "file");
-
-      assertTrue("save", doc.save(tmp.getPath()));
-
-      assertTrue("delete", tmp.delete());
-      assertTrue("delete", new java.io.File(tmp.getPath() + "-1").delete());
     }
 
     //......................................................................

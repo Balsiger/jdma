@@ -236,6 +236,7 @@ util.link = function(inEvent, inTarget, inFunction)
 
     edit.refresh();
     gui.setupHighlight();
+    ready();
   });
 
   return false;
@@ -393,9 +394,11 @@ util.niceDate = function(inSeconds)
  */
 util.replaceMainImage = function()
 {
-  var main = $('DIV.mainimage IMG');
-  util.mainImage = main.attr('src')
-  main.attr('src', this.src);
+  var main = $('IMG.main.image');
+  if(!util.mainImage)
+    util.mainImage = main.attr('src');
+
+  main.attr('src', this.src.replace(/=s\d+/, "=s300"));
 };
 
 //..........................................................................
@@ -407,7 +410,7 @@ util.replaceMainImage = function()
  */
 util.restoreMainImage = function()
 {
-  $('DIV.mainimage IMG').attr('src', util.mainImage);
+  $('IMG.main.image').attr('src', util.mainImage);
 };
 
 //..........................................................................

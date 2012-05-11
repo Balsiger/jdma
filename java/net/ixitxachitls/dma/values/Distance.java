@@ -23,10 +23,15 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -61,6 +66,8 @@ public class Distance extends Units<Distance>
   public Distance()
   {
     super(s_sets, 3);
+
+    m_template = "distance";
   }
 
   //........................................................................
@@ -80,6 +87,8 @@ public class Distance extends Units<Distance>
   {
     super(new Rational [] { inLarge, inMiddle, inSmall }, s_sets,
           s_sets[inMetric ? 1 : 0], 3);
+
+    m_template = "distance";
   }
 
   //........................................................................
@@ -227,6 +236,31 @@ public Distance create()
 
   //........................................................................
 
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  @Override
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+
+    data.put("metric", isMetric());
+    data.put("feet", isFeet());
+    data.put("asfeet",
+             new SoyValue("as feet", asFeet(), inEntry, inRenderer));
+    data.put("asmetric",
+             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+
+    return data;
+  }
+
+  //........................................................................
   //------------------------------- doGroup --------------------------------
 
   /**
@@ -236,7 +270,7 @@ public Distance create()
    *
    */
   @Override
-public String doGroup()
+  public String doGroup()
   {
     Rational distance = getAsFeet();
 

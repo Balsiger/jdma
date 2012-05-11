@@ -260,7 +260,7 @@ public final class Files
     int path = Math.max(inName.lastIndexOf("\\"), inName.lastIndexOf("/"));
 
     int ext = inName.lastIndexOf(EXTENSION_SEPARATOR);
-    if(ext < 0)
+    if(ext < 0 || ext <= path)
       ext = inName.length();
 
     return inName.substring(path + 1, ext);

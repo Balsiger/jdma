@@ -24,12 +24,16 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
@@ -137,6 +141,7 @@ public class Damage extends Value<Damage>
   public Damage()
   {
     withEditType("name");
+    withTemplate("damage");
   }
 
   //........................................................................
@@ -349,6 +354,32 @@ public class Damage extends Value<Damage>
       + (m_type.isDefined() ? " " + m_type : "")
       + (m_effect != null ? " plus " + m_effect : "")
       + (m_other != null ? ", " + m_other : "");
+  }
+
+  //........................................................................
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data available for printing the value.
+   *
+   * @return      the data as a map
+   *
+   */
+  @Override
+  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+                                         @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+
+    data.put("base", new SoyValue("base damage", m_base, inEntry, inRenderer));
+    data.put("type", new SoyValue("damage type", m_type, inEntry, inRenderer));
+    data.put("effect", m_effect);
+
+    if(m_other != null)
+      data.put("other", new SoyValue("other damage", m_other, inEntry,
+                                     inRenderer));
+
+    return data;
   }
 
   //........................................................................

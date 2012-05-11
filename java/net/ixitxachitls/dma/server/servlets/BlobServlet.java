@@ -94,7 +94,7 @@ public class BlobServlet extends BaseServlet
    *
    */
   @Override
-public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
+  public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
                                         @Nonnull HttpServletResponse inResponse)
     throws IOException
   {

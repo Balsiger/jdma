@@ -34,6 +34,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.EmptyIterator;
@@ -366,10 +368,32 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected @Nonnull String doToString()
   {
     // we know this is defined
     return m_joiner.join(m_values);
+  }
+
+  //........................................................................
+  //------------------------------- doPrint --------------------------------
+
+  /**
+   * Generate a string representation of the value for printing.
+   *
+   * @param   the renderer to print with
+   *
+   * @return  the printed value as a string.
+   *
+   */
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
+                                    @Nonnull SoyRenderer inRenderer)
+  {
+    List<String> printed = new ArrayList<String>();
+    if(m_values != null)
+      for(T element : m_values)
+        printed.add(element.print(inEntry, inRenderer));
+
+    return m_joiner.join(printed);
   }
 
   //........................................................................
@@ -417,7 +441,7 @@ public boolean isDefined()
   }
 
   //........................................................................
-  //---------------------------- getEditValues -----------------------------
+  //------------------------------ getChoices ------------------------------
 
   /**
    * Get the all the possible values this value can be edited with.
@@ -426,9 +450,12 @@ public boolean isDefined()
    *
    */
   @Override
-public @Nullable String getChoices()
+  public @Nullable String getChoices()
   {
-    return m_type.getChoices();
+    if(super.getChoices() == null)
+      return m_type.getChoices();
+
+    return super.getChoices();
   }
 
   //........................................................................
