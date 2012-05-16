@@ -380,6 +380,57 @@
 {/template}
 
 /**
+ * Formatting an extensions value.
+ *
+ * @ param entry The entry rendered.
+ * @param value The value rendered.
+ */
+{template .extensions}
+  {foreach $extension in $value.list}
+    {$extension.print}{sp}
+  {/foreach}
+{/template}
+
+/**
+ * Formatting an extension value.
+ *
+ * @ param entry The entry rendered.
+ * @param value The value rendered.
+ */
+{template .extension}
+  <span title="symbol {$value.raw}">
+    {switch $value.raw}
+      {case 'armor'}
+        {literal}&#x2602;{/literal}
+      {case 'counted'}
+        {literal}&#x2736;{/literal}
+      {case 'incomplete'}
+        {literal}&#x2639;{/literal}
+      {case 'light'}
+        {literal}&#x263c;{/literal}
+      {case 'commodity'}
+        {literal}&#x25a4;{/literal}
+      {case 'timed'}
+        {literal}&#x27f3;{/literal}
+      {case 'weapon'}
+        {literal}&#x2694;{/literal}
+      {case 'wearable'}
+        {literal}&#x269c;{/literal}
+      {case 'composite'}
+        {literal}&#x2384;{/literal}
+      {case 'multiple'}
+        {literal}&#x2a35;{/literal}
+      {case 'multiuse'}
+        {literal}&#x2a34;{/literal}
+      {case 'container'}
+        {literal}&#x2a4f;{/literal}
+      {default}
+        {$value.raw}
+    {/switch}
+  </span>
+{/template}
+
+/**
  * Formatting of a damage value.
  *
  * @ param entry The entry rendered.
@@ -453,7 +504,9 @@
           {/foreach}
         {else}
           {foreach $base in $bases}
-            {$base.value.print}{sp}
+            {if $base.value.isDefined}
+              {$base.value.print}{sp}
+            {/if}
           {/foreach}
         {/if}
       {/if}
@@ -474,7 +527,7 @@
     {param value: $value /}
     {param canEdit: $ij.isDM /}
   {/call}
-  {if not $value.isDefined}
+  {if not $value.isDefined and $value.combine}
     {$value.combine.print}
   {/if}
 {/template}

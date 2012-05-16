@@ -84,3 +84,41 @@
     {/param}
   {/delcall}
 {/deltemplate}
+
+/**
+ * Template for the list titles.
+ */
+{deltemplate dma.entry.listtitles}
+  {call dma.entry.listtitle}{param title: '' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Name' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Real Name' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Last Action' /}{/call}
+{/deltemplate}
+
+/**
+ * Template for a single list entry.
+ *
+ * @param entry The entry to render.
+ */
+{deltemplate dma.entry.listentry}
+  {call dma.entry.listentryvalue}
+    {param style: 'extensions' /}
+    {param value: $entry.extensions /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'name' /}
+    {param content: $entry.name /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'realname' /}
+    {param value: $entry.real_name /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'lastaction' /}
+    {param value: $entry.last_action /}
+    {param entry: $entry /}
+  {/call}
+{/deltemplate}

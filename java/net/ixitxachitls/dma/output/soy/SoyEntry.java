@@ -96,8 +96,12 @@ public class SoyEntry extends SoyMapData
     if("key".equals(inName))
       return StringData.forValue(m_entry.getKey().toString());
 
+    if("path".equals(inName))
+      return StringData.forValue(m_entry.getPath());
+
     if("type".equals(inName))
       return new SoyMapData("name", m_entry.getType().getName(),
+                            "link", m_entry.getType().getLink(),
                             "multi", m_entry.getType().getMultiple(),
                             "multilink", m_entry.getType().getMultipleLink(),
                             "multidir", m_entry.getType().getMultipleDir(),

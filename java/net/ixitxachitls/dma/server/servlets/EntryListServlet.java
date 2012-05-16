@@ -23,7 +23,9 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,9 +35,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
@@ -128,7 +134,7 @@ public class EntryListServlet extends PageServlet
    *
    */
   @Override
-@OverridingMethodsMustInvokeSuper
+  @OverridingMethodsMustInvokeSuper
   protected void writeBody(@Nonnull HTMLWriter inWriter,
                            @Nullable String inPath,
                            @Nonnull DMARequest inRequest)
@@ -149,10 +155,6 @@ public class EntryListServlet extends PageServlet
     String title = Encodings.toWordUpperCase(type.getMultipleLink());
     Log.info("serving dynamic list " + title);
 
-    inWriter
-      .title(title)
-      .begin("h1").add(title).end("h1");
-
     List<AbstractEntry> entries = getEntries(inRequest, inPath, type,
                                              inRequest.getStart(),
                                              inRequest.getPageSize() + 1);
@@ -162,6 +164,61 @@ public class EntryListServlet extends PageServlet
 
     if(!entries.isEmpty())
       addNavigation(inWriter, entries.get(0).getListNavigation());
+  }
+
+  //........................................................................
+  //----------------------------- collectData ------------------------------
+
+  /**
+   * Collect the data that is to be printed.
+   *
+   * @param    inRequest the request for the page
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
+   *
+   */
+  @Override
+  protected @Nonnull Map<String, Object> collectData
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inRequest, inRenderer);
+
+    String path = inRequest.getRequestURI();
+    String typeName = "";
+    if(path != null)
+      typeName = Strings.getPattern(path, "([^/]*)/?$");
+
+    AbstractType<? extends AbstractEntry> type =
+      AbstractType.getTyped(typeName);
+    if(type == null)
+    {
+      data.put("type", typeName);
+      data.put("content", "dma.error.unknownType");
+      return data;
+    }
+
+    String title = Encodings.toWordUpperCase(type.getMultipleLink());
+    Log.info("serving dynamic list " + title);
+
+    List<AbstractEntry> rawEntries = getEntries(inRequest, path, type,
+                                                inRequest.getStart(),
+                                                inRequest.getPageSize() + 1);
+
+    List<SoyEntry> entries = new ArrayList<SoyEntry>();
+    for(AbstractEntry entry : rawEntries)
+      entries.add(new SoyEntry(entry, inRenderer));
+
+    data.put("content",
+             inRenderer.render
+             ("dma.entry.list",
+              map("title", title,
+                  "entries", entries,
+                  "pagesize", inRequest.getPageSize(),
+                  "start", inRequest.getStart()),
+              ImmutableSet.of(type.getName().replace(" ", ""))));
+
+    return data;
   }
 
   //........................................................................

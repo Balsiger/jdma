@@ -593,6 +593,20 @@ TABLE.entrylist TD.short
   width: 30%;
 }
 
+.list-extensions
+{
+  width: 0;
+  text-align: right;
+}
+
+.list-value,
+.list-weight,
+.list-worlds,
+.list-extensions
+{
+  white-space: nowrap;
+}
+
 /******************************************************************************
  * type colors
  *****************************************************************************/
@@ -1402,4 +1416,9 @@ DIV.campaign
   width:       300px;
   font-weight: bold;
   font-size:   large;
+}
+
+.symbol
+{
+  font-size: 12px;
 }

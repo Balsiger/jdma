@@ -162,6 +162,9 @@ public class BaseText<T extends BaseText> extends Value<T>
   protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
                                     @Nonnull SoyRenderer inRenderer)
   {
+    if(m_text == null)
+      return "";
+
     return inRenderer.renderCommands(m_text);
   }
 

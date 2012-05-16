@@ -224,3 +224,53 @@
     {/delcall}
   {/if}
 {/deltemplate}
+
+/**
+ * Template for the list titles.
+ */
+{deltemplate dma.entry.listtitles}
+  {call dma.entry.listtitle}{param title: '' /}{/call}
+  {call dma.entry.listtitle}{param title: 'ID' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Title' /}{/call}
+  {call dma.entry.listtitle}{param title: 'System' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Worlds' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Short Description' /}{/call}
+{/deltemplate}
+
+/**
+ * Template for a single list entry.
+ *
+ * @param entry The entry to render.
+ */
+{deltemplate dma.entry.listentry}
+  {call dma.entry.listentryvalue}
+    {param style: 'extensions' /}
+    {param value: $entry.extensions /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'name' /}
+    {param content: $entry.name /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'title' /}
+    {param value: $entry.title /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'system' /}
+    {param value: $entry.system /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'worlds' /}
+    {param value: $entry.worlds /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'short' /}
+    {param value: $entry.short_description /}
+    {param entry: $entry /}
+  {/call}
+{/deltemplate}

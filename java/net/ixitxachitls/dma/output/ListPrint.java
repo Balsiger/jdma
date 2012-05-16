@@ -108,21 +108,18 @@ public class ListPrint extends AbstractPrint
     (@Nonnull String inKey, @Nonnull ValueGroup inEntry,
      @Nullable BaseCharacter inUser)
   {
-    // CHECKSTYLE:OFF (this works in Java 1.6)
-    if(m_tokens == null)
-      synchronized(this)
+    synchronized(this)
+    {
+      if(m_tokens == null)
       {
-        if(m_tokens == null)
-        {
-          m_tokens = new ArrayList<List<String>>();
-          for(int i = 0; i < m_templates.length; i++)
-            if(m_templates[i] == null)
-              m_tokens.add(null);
-            else
-              m_tokens.add(tokenize(m_templates[i]));
-        }
+        m_tokens = new ArrayList<List<String>>();
+        for(int i = 0; i < m_templates.length; i++)
+          if(m_templates[i] == null)
+            m_tokens.add(null);
+          else
+            m_tokens.add(tokenize(m_templates[i]));
       }
-    // CHECKSTYLE:ON
+    }
 
     List<Object> result = new ArrayList<Object>();
     for(List<String> tokens : m_tokens)

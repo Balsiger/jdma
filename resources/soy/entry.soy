@@ -382,3 +382,138 @@
     </div>
   </div>
 {/template}
+
+/**
+ * Formatting a list of entries.
+ *
+ * @param title The list title.
+ * @param start The start index
+ * @param pagesize The size of the page
+ * @param entries The entries printed
+ *
+ */
+{template .list}
+  <h1>{$title}</h1>
+  {call dma.page.title}
+    {param title: $title /}
+  {/call}
+  {call .listnav}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: length($entries) /}
+  {/call}
+  {if $entries}
+    <table class="entrylist">
+      <tr class="title">
+        {delcall dma.entry.listtitles /}
+      </tr>
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {delcall dma.entry.listentry}
+            {param entry: $entry /}
+          {/delcall}
+        </tr>
+      {/foreach}
+    </table>
+    {call .listnav}
+      {param start: $start /}
+      {param pagesize: $pagesize /}
+      {param size: length($entries) /}
+    {/call}
+  {else}
+    <div class="error">No entries found!</div>
+  {/if}
+{/template}
+
+/**
+ * Template for a single list entry.
+ *
+ * @param entry The entry to render.
+ */
+{deltemplate dma.entry.listentry}
+  {call dma.entry.listentryvalue}
+    {param style: 'name' /}
+    {param entry: $entry /}
+    {param content: $entry.name /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'worlds' /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'short' /}
+    {param entry: $entry /}
+    {param value: $entry.short_description /}
+  {/call}
+{/deltemplate}
+
+/**
+ * Template for a list entry value.
+ *
+ * @param style The style to set the value
+ * @param value The value to set to
+ * @param entry The entry rendered
+ * @param content The content to set, if no value given
+ */
+{template .listentryvalue}
+  <td class="list-{$style}">
+    {if $content}
+      {$content}
+    {else}
+      {call dma.value.withbase}
+        {param entry: $entry /}
+        {param value: $value /}
+      {/call}
+    {/if}
+  </td>
+{/template}
+
+/**
+ * Template for the list titles.
+ */
+{deltemplate dma.entry.listtitles}
+  {call dma.entry.listtitle}{param title: 'Name' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Worlds' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Short description' /}{/call}
+{/deltemplate}
+
+/** Template for a single list title.
+ *
+ * @param title the title text
+ */
+{template .listtitle}
+  <td class="title">
+    {$title}
+  </td>
+{/template}
+
+/**
+ * Template for list navigation.
+ *
+ * @param start The start index of the entries
+ * @param pagesize The number of entries per page
+ * @param size The number of available entries
+ */
+{template .listnav}
+  <div class="list-navigation">
+    {if $start > 0}
+      {if $start - $pagesize > 0}
+        <a href="?start={$start - $pagesize}" class="paginate-previous"
+          onclick="return util.link(event, '?start={$start - $pagesize}');">
+          {literal}&laquo;{/literal} previous
+        </a>
+      {else}
+        <a href="" onclick="return util.link(event, '?');"
+            class="paginate-previous">
+          {literal}&laquo;{/literal} previous
+        </a>
+      {/if}
+    {/if}
+    {if $size > $pagesize}
+      <a href="?start={$start + $pagesize}" class="paginate-next"
+        onclick="return util.link(event, '?start={$start + $pagesize}');">
+        {literal}&raquo;{/literal} next
+      </a>
+    {/if}
+  </div>
+{/template}

@@ -288,7 +288,7 @@ public class SoyRenderer
   public @Nonnull String render(@Nonnull String inName,
                                 @Nullable Map<String, Object> inData)
   {
-    return render(inName, inData, (Set<String>)null);
+    return m_template.render(inName, new SoyMapData(inData), m_injected, null);
   }
 
   //........................................................................

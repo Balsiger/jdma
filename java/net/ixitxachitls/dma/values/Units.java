@@ -1145,7 +1145,7 @@ public class Units<T extends Units> extends Value<T>
     if(inSet < 0 || inSet >= m_sets.length)
       throw new IllegalArgumentException("invalid set given");
 
-    if(m_sets[inSet] == m_set)
+    if(m_sets[inSet] == m_set || m_set == null)
       return (T)this;
 
     Rational normalized = m_set.getAsBase(m_values);

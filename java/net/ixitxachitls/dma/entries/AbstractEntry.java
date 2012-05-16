@@ -1962,7 +1962,7 @@ public class AbstractEntry extends ValueGroup
     {
       List<Name> values = new ArrayList<Name>();
       for (String extension : m_extensions.keySet())
-        values.add(new Name(extension));
+        values.add(new Name(extension).withTemplate("extension"));
 
       ValueList<Name> list;
       if(values.isEmpty())
@@ -1973,7 +1973,8 @@ public class AbstractEntry extends ValueGroup
       list.withEditType("multiselection")
         .withChoices("armor||commodity||composite||container||counted"
                      + "||incomplete||light||multiple||multiuse||timed"
-                     + "||weapon||wearable");
+                     + "||weapon||wearable")
+        .withTemplate("extensions");
 
       return list;
     }

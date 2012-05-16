@@ -68,6 +68,19 @@
   {/call}
 {/template}
 
+/**
+ * The error for an invalid type.
+ *
+ * @param type the type that is invalid
+ */
+{template .invalidType}
+  {call .error}
+    {param title: 'Invalid type' /}
+    {param message}
+      The type '{$type}' is invalid.
+    {/param}
+  {/call}
+{/template}
 
 /**
  * The general markup for an error message.

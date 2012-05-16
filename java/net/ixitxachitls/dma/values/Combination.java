@@ -199,7 +199,7 @@ public class Combination<V extends Value>
     for(Expression expression : m_expressions.keySet())
     {
       Map<String, Object> map = new HashMap<String, Object>();
-      map.put("expression", expression);
+      map.put("expression", expression.toString());
       map.put("names", Entries.namesString(m_expressions.get(expression)));
 
       baseValues.add(map);
