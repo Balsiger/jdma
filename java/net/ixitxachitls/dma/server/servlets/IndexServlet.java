@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -36,12 +37,18 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.SortedSetMultimap;
+import com.google.common.collect.TreeMultimap;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.output.soy.SoyEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
@@ -95,32 +102,33 @@ public class IndexServlet extends PageServlet
 
   //----------------------------------------------------------- manipulators
 
-  //------------------------------- writeBody ------------------------------
+  //----------------------------- collectData ------------------------------
 
   /**
-   * Handles the body content of the request.
+   * Collect the data that is to be printed.
    *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
+   * @param    inRequest the request for the page
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
    *
    */
   @Override
-@OverridingMethodsMustInvokeSuper
-  protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
+  protected @Nonnull Map<String, Object> collectData
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
   {
-    if(inPath == null)
+    Map<String, Object> data = super.collectData(inRequest, inRenderer);
+
+    String path = inRequest.getRequestURI();
+    if(path == null)
     {
-      writeError(inWriter, "Not Found", "The index referenced does not exist!");
-      return;
+      data.put("content", inRenderer.render("dma.error.invalidPage"));
+
+      return data;
     }
 
     String []match =
-      Strings.getPatterns(inPath,
-                          "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
+      Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
     AbstractType<? extends AbstractEntry> type =
       AbstractType.getTyped(match[0]);
     String name = match[1];
@@ -128,8 +136,9 @@ public class IndexServlet extends PageServlet
 
     if(name == null || name.isEmpty() || type == null)
     {
-      writeError(inWriter, "Not Found", "The index referenced does not exist!");
-      return;
+      data.put("content", inRenderer.render("dma.error.invalidPage"));
+
+      return data;
     }
 
     name = name.replace("%20", " ");
@@ -141,34 +150,72 @@ public class IndexServlet extends PageServlet
     Index index = ValueGroup.getIndex(name);
     if(index == null)
     {
-      writeError(inWriter, "Not Found", "The index referenced does not exist!");
-      return;
+      data.put("content", inRenderer.render("dma.error.invalidPage"));
+
+      return data;
     }
 
     Log.info("serving dynamic " + type + " index '" + name + "/"
              + group + "'");
 
-    // write the title for the page
-    writeTitle(inWriter, index, name, type, group, inRequest.getUser());
-
+    String title = index.getTitle();
     if(group == null)
-      group = writeOverview(inWriter, index, name, type);
-
-    if(group != null)
     {
-      String typeLink = type.getMultipleLink();
-      format(inWriter,
-             // we get one more entry to know if we have to add pagination
-             DMADataFactory.get().getIndexEntries(name, type, null, group,
-                                                  inRequest.getStart(),
-                                                  inRequest.getPageSize() + 1),
-             inRequest.getUser(), inRequest.getStart(),
-             inRequest.getPageSize());
-      addNavigation(inWriter,
-                    typeLink, "/" + typeLink,
-                    name, "/" + typeLink + "/" + name,
-                    group, "/" + typeLink + "/" + name + "/" + group);
+      // get all the index groups available
+      SortedSet<String> indexes =
+        DMADataFactory.get().getIndexNames(name, type, false);
+
+      if(indexes.size() == 1)
+        group = indexes.iterator().next();
+      else
+      {
+        if(isNested(indexes))
+        {
+          SortedMap<String, List<String>> groups = nestedGroups(indexes);
+          data.put("content",
+                   inRenderer.render
+                   ("dma.entry.indexoverview",
+                    map("title", title,
+                        "indexes", groups,
+                        "keys", new ArrayList<String>(groups.keySet()),
+                        "name", name),
+                    ImmutableSet.of(type.getName().replace(" ", ""))));
+        }
+        else
+          data.put("content",
+                   inRenderer.render
+                   ("dma.entry.indexoverview",
+                    map("title", title,
+                        "indexes", new ArrayList<String>(indexes),
+                        "name", name),
+                    ImmutableSet.of(type.getName().replace(" ", ""))));
+
+        return data;
+      }
     }
+
+    title += " - " + group.replace("::", " ");
+
+    List<? extends AbstractEntry> rawEntries =
+      DMADataFactory.get().getIndexEntries(name, type, null, group,
+                                           inRequest.getStart(),
+                                           inRequest.getPageSize() + 1);
+
+    List<SoyEntry> entries = new ArrayList<SoyEntry>();
+    for(AbstractEntry entry : rawEntries)
+      entries.add(new SoyEntry(entry, inRenderer));
+
+    data.put("content",
+             inRenderer.render
+             ("dma.entry.index",
+              map("title", title,
+                  "name", name,
+                  "start", inRequest.getStart(),
+                  "pagesize", inRequest.getPageSize(),
+                  "entries", entries),
+              ImmutableSet.of(type.getName().replace(" ", ""))));
+
+    return data;
   }
 
   //........................................................................
@@ -177,215 +224,55 @@ public class IndexServlet extends PageServlet
 
   //------------------------------------------------- other member functions
 
-  //---------------------------- writeOverview -----------------------------
+  //----------------------------- nestedGroups -----------------------------
 
   /**
-   * Write the overview information for the current index.
+   * Generate the data structure for nested groups.
    *
-   * @param   inWriter  where to write to
-   * @param   inIndex   the index to write the overview for
-   * @param   inName    the name of the index to show
-   * @param   inType    the type of entries to show
+   * @param  inValues the index groups
    *
-   * @return  the group to show if the overview only contains one entry
-   *
-   */
-  protected @Nullable String writeOverview
-    (@Nonnull HTMLWriter inWriter,
-     @Nonnull Index inIndex,
-     @Nonnull String inName,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
-  {
-    // get all the index groups available
-    SortedSet<String> values =
-      DMADataFactory.get().getIndexNames(inName, inType, false);
-    if(values.isEmpty())
-    {
-      writeError(inWriter, "Not Found",
-                   "The index referenced does not exist!");
-      return null;
-    }
-
-    if(values.size() == 1)
-      return values.iterator().next();
-
-    if(values.iterator().next().contains("::"))
-      writeNestedOverview(inWriter, inName, values);
-    else
-      for(String value : values)
-        if(inIndex.hasImages())
-          writeIcon(inWriter,
-                    inType.getMultipleLink() + "/" + inName + "/" + value,
-                    value, inName + "/" + value);
-        else
-          writeName(inWriter, value, inName + "/" + value, "index-overview");
-
-    inWriter
-      .begin("div").classes("clear")
-      .end("div");
-
-    String typeLink = inType.getMultipleLink();
-    addNavigation(inWriter,
-                  typeLink, "/" + typeLink,
-                  inName, "/" + typeLink + "/" + inName);
-
-    return null;
-  }
-
-  //........................................................................
-  //------------------------- writeNestedOverview --------------------------
-
-  /**
-   * Write an overview with nested group names.
-   *
-   * @param     inWriter  where to write to
-   * @param     inPath    the base path to the index page
-   * @param     inNames   the group names of the overview
-   *
-   */
-  private void writeNestedOverview(@Nonnull HTMLWriter inWriter,
-                                   @Nonnull String inPath,
-                                   @Nonnull SortedSet<String> inNames)
-  {
-    SortedMap<String, List<String>> grouped = convertGroups(inNames);
-    for(Map.Entry<String, List<String>> value : grouped.entrySet())
-    {
-      if(value.getValue().size() <= 1)
-        writeName(inWriter, value.getKey(),
-                  inPath + "/" + value.getKey() + "::", "index-overview");
-      else
-      {
-        inWriter
-          .begin("div").classes("index-overview")
-          .onClick("$(this).next().toggle();")
-          .add(value.getKey())
-          .end("div")
-          .begin("div").classes("index-group");
-
-        for(String subvalue : value.getValue())
-          writeName(inWriter, subvalue, inPath + "/" + value.getKey()
-                    + "::" + subvalue, "index-overview index-nested");
-
-        inWriter
-          .end("div");
-      }
-    }
-  }
-
-  //........................................................................
-  //------------------------------ writeTitle ------------------------------
-
-  /**
-   * Write the title to the page.
-   *
-   * @param    inWriter  where to write to
-   * @param    inIndex   the index being written
-   * @param    inPath    the base path to the index pages
-   * @param    inType    the type of entries being printed
-   * @param    inGroup   the group written
-   * @param    inUser    the user making the request
-   *
-   */
-  protected static void writeTitle
-    (@Nonnull HTMLWriter inWriter, @Nonnull Index inIndex,
-     @Nonnull String inPath,
-     @Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nullable String inGroup,
-     @Nullable BaseCharacter inUser)
-  {
-    String title = inIndex.getTitle();
-    if(inGroup != null)
-      title += " - " + inGroup.replace("::", " ");
-
-    inWriter.title(title);
-
-    inWriter.begin("h1");
-
-    if(inGroup != null && inIndex.hasImages())
-      writeIcon(inWriter,
-                inType.getMultipleLink() + "/" + inPath + "/" + inGroup,
-                title, inPath + "/" + inGroup);
-    else if(inGroup != null && inUser != null && inIndex.isEditable(inGroup))
-      inWriter
-        .begin("dmaeditable")
-        .id("*=" + inPath)
-        .classes("editable")
-        .attribute("entry", inType.toString())
-        .attribute("value", Encodings.encodeHTMLAttribute(inGroup))
-        .attribute("key", inPath + "/" + inGroup)
-        .attribute("type", "string")
-        .begin("span")
-        .add(title)
-        .end("span")
-        .end("dmaeditable");
-    else
-      inWriter.add(title);
-
-    inWriter.end("h1");
-  }
-
-  //........................................................................
-
-  //---------------------------- convertGroups -----------------------------
-
-  /**
-   * Convert the given set of values into a list of lists by grouping all
-   * values with the same prefix (delimited by ::) together.
-   *
-   * @param       inValues the values to convert
-   *
-   * @return      the converted lists
+   * @return A sorted map of index groups to indexs pages
    *
    */
   public static @Nonnull SortedMap<String, List<String>>
-    convertGroups(SortedSet<String> inValues)
+    nestedGroups(@Nonnull SortedSet<String> inValues)
   {
-    SortedMap<String, List<String>> grouped =
-      new TreeMap<String, List<String>>();
-
-    String group = null;
-    List<String> list = null;
-
+    SortedSetMultimap<String, String> groups = TreeMultimap.create();
     for(String value : inValues)
     {
       String []parts = Index.stringToGroups(value);
-      if(!parts[0].equals(group))
-      {
-        group = parts[0];
-        list = new ArrayList<String>();
-        grouped.put(group, list);
-      }
-
       if(parts.length >= 2)
-        list.add(parts[1]);
+        groups.put(parts[0], parts[1]);
       else
-        list.add("");
+        groups.put(parts[0], "");
     }
 
-    return grouped;
+    SortedMap<String, List<String>> result =
+      new TreeMap<String, List<String>>();
+    for (String key : groups.keys())
+      result.put(key, new ArrayList<String>(groups.get(key)));
+
+    return result;
   }
 
   //........................................................................
-  //------------------------------ formatName ------------------------------
+  //------------------------------- isNested -------------------------------
 
   /**
-   * Write the given name to the given writer.
+   * Check if the index values represent a nested index or not.
    *
-   * @param     inWriter  the write to write to
-   * @param     inName    the name of the index
-   * @param     inPath    the path to link to, if any
-   * @param     inStyle   the style class for the name
+   * @param   inValue the index groups
+   *
+   * @return  true if nested groups are given, false if not
    *
    */
-  public void writeName(@Nonnull HTMLWriter inWriter, @Nonnull String inName,
-                        @Nonnull String inPath, @Nonnull String inStyle)
+  public static boolean isNested(@Nonnull SortedSet<String> inValues)
   {
-    inWriter
-      .begin("a").href(inPath).classes("index-link")
-      .begin("div").classes(inStyle)
-      .add(inName)
-      .end("div")
-      .end("a");
+    for(String value : inValues)
+      if(value.contains("::"))
+        return true;
+
+    return false;
   }
 
   //........................................................................
@@ -397,28 +284,6 @@ public class IndexServlet extends PageServlet
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //----- grouping -------------------------------------------------------
-
-    /** The grouping Test. */
-    @org.junit.Test
-      public void grouping()
-    {
-      assertTrue("grouped", convertGroups(new TreeSet<String>()).isEmpty());
-
-      SortedSet<String> set = new TreeSet<String>();
-      set.add("a::A");
-      set.add("a::C");
-      set.add("b::B");
-      set.add("a::D");
-      set.add("b::A");
-      set.add("b::C");
-      set.add("b::B");
-      assertContent("grouped keys", convertGroups(set).keySet(), "a", "b");
-      assertContent("grouped a", convertGroups(set).get("a"), "A", "C", "D");
-      assertContent("grouped b", convertGroups(set).get("b"), "A", "B", "C");
-    }
-
-    //......................................................................
   }
 
   //........................................................................

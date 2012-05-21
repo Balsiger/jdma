@@ -122,51 +122,6 @@ public class EntryListServlet extends PageServlet
 
   //----------------------------------------------------------- manipulators
 
-  //------------------------------- writeBody ------------------------------
-
-  /**
-   * Handles the body content of the request.
-   *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
-   *
-   */
-  @Override
-  @OverridingMethodsMustInvokeSuper
-  protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
-  {
-    String typeName = "";
-    if(inPath != null)
-      typeName = Strings.getPattern(inPath, "([^/]*)/?$");
-
-    AbstractType<? extends AbstractEntry> type =
-      AbstractType.getTyped(typeName);
-    if(type == null)
-    {
-      inWriter.add("unknown type '" + typeName + "' [" + inPath + "]");
-
-      return;
-    }
-
-    String title = Encodings.toWordUpperCase(type.getMultipleLink());
-    Log.info("serving dynamic list " + title);
-
-    List<AbstractEntry> entries = getEntries(inRequest, inPath, type,
-                                             inRequest.getStart(),
-                                             inRequest.getPageSize() + 1);
-
-    format(inWriter, entries, inRequest.getUser(), inRequest.getStart(),
-           inRequest.getPageSize());
-
-    if(!entries.isEmpty())
-      addNavigation(inWriter, entries.get(0).getListNavigation());
-  }
-
-  //........................................................................
   //----------------------------- collectData ------------------------------
 
   /**
@@ -193,8 +148,8 @@ public class EntryListServlet extends PageServlet
       AbstractType.getTyped(typeName);
     if(type == null)
     {
-      data.put("type", typeName);
-      data.put("content", "dma.error.unknownType");
+      data.put("content", inRenderer.render("dma.error.unknownType",
+                                            map("type", typeName)));
       return data;
     }
 

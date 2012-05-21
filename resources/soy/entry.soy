@@ -517,3 +517,110 @@
     {/if}
   </div>
 {/template}
+
+/**
+ * Template for rendering an index overview.
+ *
+ * @param title the page title
+ * @param indexes the names of the indexes to render
+ * @param name the index name
+ * @param keys the keys for nested groups
+ */
+{template .indexoverview}
+  <h1>{$title}</h1>
+  {call dma.page.title}
+    {param title: $title /}
+  {/call}
+  {if $keys}
+    {foreach $key in $keys}
+      {if length($indexes[$key]) == 1}
+        {call dma.page.link}
+          {param url : $name + '/' + $key /}
+          {param text}
+            <div class="index-overview">
+              {$key}
+            </div>
+          {/param}
+          {param tooltip: $key /}
+          {param class: 'index-link' /}
+        {/call}
+      {else}
+        <div class="index-overview" onclick="$(this).next().toggle();">
+          {$key}
+        </div>
+        <div class="index-group">
+          {foreach $index in $indexes[$key]}
+            {call dma.page.link}
+              {param url : $name + '/'
+                  + ($index ? $key + '::' + $index : $key) /}
+              {param text}
+                <div class="index-overview">
+                  {$index}
+                </div>
+              {/param}
+              {param tooltip: $index /}
+              {param class: 'index-link' /}
+            {/call}
+          {/foreach}
+        </div>
+      {/if}
+    {/foreach}
+  {else}
+    {foreach $index in $indexes}
+      {call dma.page.link}
+        {param url : $name + '/' + $index /}
+        {param text}
+          <div class="index-overview">
+            {$index}
+          </div>
+        {/param}
+        {param tooltip: $index /}
+        {param class: 'index-link' /}
+      {/call}
+    {ifempty}
+      <div class="error">No indexes found!</div>
+    {/foreach}
+  {/if}
+  <div style="clear: both"></div>
+{/template}
+
+/**
+ * Template for rendering an index.
+ *
+ * @param title the page title
+ * @param start the start index
+ * @param pagesize the size of a page
+ * @param entries the entries rendered
+ */
+{template .index}
+  <h1>{$title}</h1>
+  {call dma.page.title}
+    {param title: $title /}
+  {/call}
+  {call .listnav}
+    {param start: $start /}
+    {param pagesize: $pagesize /}
+    {param size: length($entries) /}
+  {/call}
+  {if $entries}
+    <table class="entrylist">
+      <tr class="title">
+        {delcall dma.entry.listtitles /}
+      </tr>
+      {foreach $entry in $entries}
+        <tr onclick="util.link(event, '{$entry.path}')">
+          {delcall dma.entry.listentry}
+            {param entry: $entry /}
+          {/delcall}
+        </tr>
+      {/foreach}
+    </table>
+    {call .listnav}
+      {param start: $start /}
+      {param pagesize: $pagesize /}
+      {param size: length($entries) /}
+    {/call}
+  {else}
+    <div class="error">No entries found!</div>
+  {/if}
+{/template}
