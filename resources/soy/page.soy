@@ -263,3 +263,42 @@
   </script>
 {/template}
 
+/**
+ * Template for the library page.
+ *
+ * @param types all the entry types
+ * @param indexes a map of the type to a list of indexes
+ */
+{template .library}
+  <h1>DMA Library</h1>
+  {call dma.page.title}
+    {param title: 'Library' /}
+  {/call}
+  {foreach $type in $types}
+    {call .link}
+      {param url: '/' + $type.multilink /}
+      {param text}
+        <img class="type highlight" src="/icons/types/{$type.file}.png"
+            alt="{$type.multi}">
+        <div class="caption">
+          {$type.multilink}
+        </div>
+      {/param}
+      {param class: 'type-image' /}
+    {/call}
+    <div class="type-indexes">
+      {if $indexes[$type.name]}
+        {foreach $index in $indexes[$type.name]}
+          {call .link}
+            {param url: '/' + $type.multilink + '/' + $index.path /}
+            {param text: $index.title /}
+            {param class: 'type-index' /}
+          {/call}
+        {/foreach}
+      {/if}
+    </div>
+    <div class="clear"></div>
+  {ifempty}
+    No types found.
+  {/foreach}
+{/template}

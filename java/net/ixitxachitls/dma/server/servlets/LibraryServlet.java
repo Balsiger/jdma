@@ -23,6 +23,13 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -37,6 +44,7 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Files;
 
@@ -92,72 +100,73 @@ public class LibraryServlet extends PageServlet
 
   //------------------------------------------------- other member functions
 
-  //------------------------------- writeBody ------------------------------
+  //----------------------------- collectData ------------------------------
 
   /**
-   * Handles the body content of the request.
+   * Collect the data that is to be printed.
    *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
+   * @param    inRequest the request for the page
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
    *
    */
   @Override
-@OverridingMethodsMustInvokeSuper
-  protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
+  protected @Nonnull Map<String, Object> collectData
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
   {
-    inWriter
-      .title("DMA Library")
-      .begin("h1").add("DMA Library").end("h1");
+    Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
-    Multimap <AbstractType<? extends AbstractEntry>, Index> types =
-      TreeMultimap.create();
+    Map<String, List<Map<String, Object>>> indexes =
+      new HashMap<String, List<Map<String, Object>>>();
 
     for(Index index : ValueGroup.getIndexes())
-      types.put(index.getType(), index);
+    {
+      String name = index.getType().getName();
+      List<Map<String, Object>> group = indexes.get(name);
+      if(group == null)
+      {
+        group = new ArrayList<Map<String, Object>>();
+        indexes.put(name, group);
+      }
 
+      group.add(map("title", index.getTitle(),
+                    "path", index.getPath()));
+    }
+
+    for(List<Map<String, Object>> index : indexes.values())
+      Collections.sort(index, new Comparator<Map<String, Object>>() {
+          public int compare(@Nonnull Map<String, Object> inFirst,
+                             @Nonnull Map<String, Object> inSecond) {
+            return ((String)inFirst.get("title")).compareTo
+              ((String)inSecond.get("title"));
+          }
+        });
+
+    List<Map<String, Object>> types = new ArrayList<Map<String, Object>>();
     for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
     {
       if(!(type instanceof BaseType) || type == BaseEntry.TYPE)
         continue;
 
-      inWriter
-        .begin("a").classes("type-image").href("/" + type.getMultipleLink())
-        .onClick("util.link(event, '/" + type.getMultipleLink() + "');")
-        .begin("img").classes("type", "highlight")
-        .src("/icons/types/" + Files.encodeName(type.getName()) + ".png")
-        .alt(type.getMultiple()).end("img")
-        .begin("div").classes("caption").add(type.getMultipleLink()).end("div")
-        .end("a") // type-image
-        .begin("div").classes("type-indexes");
-
-      if(types.get(type) != null)
-        for(Index index : types.get(type))
-        {
-          String link = "/" + type.getMultipleLink() + "/" + index.getPath();
-
-          inWriter
-            .begin("a").classes("type-index").href(link)
-            .onClick("util.link(event, '" + link + "');")
-            .add(index.getTitle())
-            .end("a");
-        }
-
-      inWriter
-        .end("div") // type-indexes
-        .begin("div").classes("clear").end("div");
+      types.add(map("name", type.getName(),
+                    "file", Files.encodeName(type.getName()),
+                    "link", type.getLink(),
+                    "multi", type.getMultiple(),
+                    "multilink", type.getMultipleLink(),
+                    "multidir", type.getMultipleDir(),
+                    "css", type.getName().replace(" ", "-")));
     }
 
-    addNavigation(inWriter, "library");
+    data.put("content",
+             inRenderer.render("dma.page.library",
+                               map("types", types,
+                                   "indexes", indexes)));
+
+    return data;
   }
 
   //........................................................................
 
-  //........................................................................
-
-  //------------------------------------------------------------------- test
   //........................................................................
 }
