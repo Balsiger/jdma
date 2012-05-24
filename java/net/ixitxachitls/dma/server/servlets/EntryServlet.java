@@ -453,9 +453,6 @@ public class EntryServlet extends PageServlet
 
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
-    data.put("isUser", user != null);
-    data.put("isAdmin",
-             user != null && user.hasAccess(BaseCharacter.Group.ADMIN));
     data.put("isDM", user != null && entry != null && entry.isDM(user));
     data.put("isOwner", user != null && entry != null && entry.isOwner(user));
 

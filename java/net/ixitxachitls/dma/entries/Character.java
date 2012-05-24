@@ -39,6 +39,7 @@ import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Color;
@@ -831,6 +832,32 @@ public class Character extends CampaignEntry<BaseCharacter>
                              new Pair<String, Object>("right-bottom",
                                                       "character/"
                                                       + m_state.getSelected()));
+  }
+
+  //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  @Override
+  public @Nullable Value compute(@Nonnull String inKey)
+  {
+    if("icon".equals(inKey))
+    {
+      DMAData.File main = getMainFile();
+      if(main == null)
+        return new Name("character/person.png");
+      else
+        return new Name(main.getIcon() + "=s100");
+    }
+
+    return super.compute(inKey);
   }
 
   //........................................................................

@@ -302,3 +302,51 @@
     No types found.
   {/foreach}
 {/template}
+
+/**
+ * The template for the main page.
+ *
+ * @param playing the information about the campains the user is playing in
+ * @param dm the information about the campaings the user is dming
+ */
+{template .main}
+  {call .title}
+    {param title: 'Overview for ' + $ij.user.name /}
+  {/call}
+
+  <h2>Campaigns Playing</h2>
+
+  {foreach $campaign in $playing.campaigns}
+    <div class="main-campaign">
+      {call .link}
+        {param url: $campaign.path /}
+        {param text: $campaign.name /}
+        {param class: 'main-campaign-title' /}
+      {/call}
+      {foreach $character in $playing.characters[$campaign.name]}
+        {call dma.entry.charactericon}
+          {param character: $character /}
+        {/call}
+      {/foreach}
+    </div>
+  {ifempty}
+    Not playing in any campaign.
+  {/foreach}
+  {foreach $campaign in $dm.campaigns}
+    {if isFirst($campaign)}
+      <h2>Campaigns DMing</h2>
+    {/if}
+    <div class="main-campaign">
+      {call .link}
+        {param url: $campaign.path /}
+        {param text: $campaign.name /}
+        {param class: 'main-campaign-title' /}
+      {/call}
+      {foreach $character in $dm.characters[$campaign.name]}
+        {call dma.entry.charactericon}
+          {param character: $character /}
+        {/call}
+      {/foreach}
+    </div>
+  {/foreach}
+{/template}

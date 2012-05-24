@@ -86,7 +86,7 @@ public class FileResource extends Resource
    *
    */
   @Override
-public @Nonnull List<String> files()
+  public @Nonnull List<String> files()
   {
     List<String> result = new ArrayList<String>();
 
@@ -114,7 +114,6 @@ public @Nonnull List<String> files()
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test

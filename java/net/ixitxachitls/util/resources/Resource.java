@@ -121,7 +121,7 @@ public abstract class Resource
    *
    */
   @Override
-public String toString()
+  public String toString()
   {
     if(m_url != null)
       return m_url.toString();
@@ -238,12 +238,62 @@ public String toString()
    * @return      the input stream to read from
    *
    */
-  public InputStream getInput()
+  public @Nullable InputStream getInput()
   {
-    return FileResource.class.getResourceAsStream(m_name);
+    return Resource.class.getResourceAsStream(m_name);
   }
 
   //........................................................................
+  //--------------------------------- read ---------------------------------
+
+  /**
+   * Get the whole contents of the resource as a string. Line termination is
+   * normalized to \n.
+   *
+   * @return      the contents as a string
+   *
+   */
+  public @Nonnull String read()
+  {
+    InputStream input = getInput();
+    if(input == null)
+      return "(invalid resource for '" + m_name + "')\n";
+
+    BufferedReader reader =
+      new BufferedReader(new InputStreamReader(input));
+
+    StringBuilder buffer = new StringBuilder();
+
+    try
+    {
+      for(String line = reader.readLine(); line != null;
+          line = reader.readLine())
+      {
+        buffer.append(line);
+        buffer.append('\n');
+      }
+    }
+    catch(java.io.IOException e)
+    {
+      Log.warning("error when reading resource: " + e);
+    }
+    finally
+    {
+      try
+      {
+        reader.close();
+      }
+      catch(java.io.IOException e)
+      {
+        Log.error("could not close reader for reading resource: " + e);
+      }
+    }
+
+    return buffer.toString();
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
@@ -307,6 +357,7 @@ public String toString()
    * @return      true if writing ok, false if not
    *
    */
+  @Deprecated
   public boolean write(@Nonnull HTMLWriter inWriter)
   {
     InputStream inputStream = FileResource.class.getResourceAsStream(m_name);

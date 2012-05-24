@@ -23,13 +23,13 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-// import java.util.ArrayList;
-// import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-// import java.util.Set;
+import java.util.SortedSet;
 // import java.util.TreeMap;
-// import java.util.TreeSet;
+import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,6 +50,7 @@ import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 // import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Icon;
@@ -125,253 +126,82 @@ public class MainPageServlet extends PageServlet
 
   //----------------------------------------------------------- manipulators
 
-  //------------------------------- writeBody ------------------------------
+  //------------------------------------------------- other member functions
 
-  // protected @Nonnull Map<String, Object>
-  //   collectData(@Nonnull DMARequest inRequest)
-  // {
-  //   Map<String, Object> map = super.collectData(inRequest);
-  //   map.put("title", "main");
-
-  //   return map;
-  // }
+  //----------------------------- collectData ------------------------------
 
   /**
-   * Handles the body content of the request.
+   * Collect the data that is to be printed.
    *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
+   * @param    inRequest the request for the page
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
    *
    */
   @Override
-  @OverridingMethodsMustInvokeSuper
-  protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
+  protected @Nonnull Map<String, Object> collectData
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
   {
-    super.writeBody(inWriter, inPath, inRequest);
+    Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
     BaseCharacter user = inRequest.getUser();
 
     if(user == null)
-      return;
+      return data;
 
-    Log.info("serving dynamic user overview for " + user.getName());
-
-    String title = "Overview for " + user.getName();
-
-    HTMLDocument document = new HTMLDocument(title);
-
-    // first the characters of the user
-    // we don't have these yet, though
-    document.add(new Subtitle("Campaigns Playing"));
-
-    Multimap<Campaign, Character> characters = TreeMultimap.create();
+    SortedSet<Campaign> campaigns = new TreeSet<Campaign>();
+    Map<String, List<SoyEntry>> characters =
+      new HashMap<String, List<SoyEntry>>();
     for(Character character : DMADataFactory.get().getEntries
           (Character.TYPE, "base", user.getName()))
-      characters.put(character.getCampaign(), character);
-
-    for(Campaign campaign : characters.keySet())
     {
-      document.add(new Divider("campaign",
-                               new Link(campaign.getName(),
-                                        campaign.getPath())));
-
-      for(Character character : characters.get(campaign))
-        document.add(character.getIcon(false));
-    }
-
-    // the campaigns the user is the dm for
-    List<Campaign> campaigns =
-      DMADataFactory.get().getEntries(Campaign.TYPE, "dm", user.getName());
-
-    if(!campaigns.isEmpty())
-    {
-      document.add(new Subtitle("Campaigns DMing"));
-      for(Campaign campaign : campaigns)
-      {
-        document.add(new Divider("campaign",
-                                 new Link(campaign.getName(),
-                                          campaign.getPath())));
-
-        // and all the characters there
-        for(Character character : DMADataFactory.get()
-              .getEntries(Character.TYPE, campaign.getKey(), 0, 20))
-          document.add(character.getIcon(true));
+      campaigns.add(character.getCampaign());
+      List<SoyEntry> list = characters.get(character.getCampaign().getName());
+      if(list == null) {
+        list = new ArrayList<SoyEntry>();
+        characters.put(character.getCampaign().getName(), list);
       }
+
+      list.add(new SoyEntry(character, inRenderer));
     }
 
-    inWriter.add(document.toString());
+    List<SoyEntry> soyCampaigns = new ArrayList<SoyEntry>();
+    for(Campaign campaign : campaigns)
+      soyCampaigns.add(new SoyEntry(campaign, inRenderer));
+
+    List<Campaign> dmCampaigns =
+      DMADataFactory.get().getEntries(Campaign.TYPE, "dm", user.getName());
+    List<SoyEntry> soyDMCampaigns = new ArrayList<SoyEntry>();
+    Map<String, List<SoyEntry>> dmCharacters =
+      new HashMap<String, List<SoyEntry>>();
+
+    for(Campaign campaign : dmCampaigns)
+    {
+      soyDMCampaigns.add(new SoyEntry(campaign, inRenderer));
+
+      // and all the characters there
+      List<SoyEntry> chars = new ArrayList<SoyEntry>();
+      for(Character character : DMADataFactory.get()
+            .getEntries(Character.TYPE, campaign.getKey(), 0, 20))
+        chars.add(new SoyEntry(character, inRenderer));
+      dmCharacters.put(campaign.getName(), chars);
+    }
+
+    data.put("content",
+             inRenderer.render
+             ("dma.page.main",
+              map("playing",
+                  map("campaigns", soyCampaigns,
+                      "characters", characters),
+                  "dm",
+                  map("campaigns", soyDMCampaigns,
+                      "characters", dmCharacters))));
+
+    return data;
   }
 
-  //-------------------------------- handle --------------------------------
-
-  /**
-   * Really handle the request.
-   *
-   * @param       inRequest  the http request to handle
-   * @param       inResponse the http response to write to
-   *
-   * @throws      java.io.IOException writing to page failed
-   *
-   * @undefined   never
-   *
-   */
-  // protected void handle(DMARequest inRequest,
-  //                       HttpServletResponse inResponse)
-  //   throws java.io.IOException
-  // {
-
-  //   // add the real content for the page
-
-  //   // get all the characters and encounters for the current user
-  //   for(Iterator<Entry> i = m_campaigns.getUnique(); i.hasNext(); )
-  //   {
-  //     Entry entry = i.next();
-
-  //     Map<String, Object> commands = new TreeMap<String, Object>();
-  //     Set<Encounter> encounters = new TreeSet<Encounter>();
-
-  //     // we are only interested in campaigns
-  //     if(!(entry instanceof Campaign))
-  //       continue;
-
-  //     Campaign campaign = (Campaign)entry;
-  //     boolean dm = user.getName().equalsIgnoreCase(campaign.getDMName());
-
-  //     boolean first = true;
-  //     for(Entry campaignEntry : campaign)
-  //     {
-  //       // we are only interested in characters
-  //       if(campaignEntry instanceof Character)
-  //       {
-  //         Character character = (Character)campaignEntry;
-
-  //         // we only treat characters that match either the user or are in a
-  //         // campaign the user is DM of
-  //         if(!dm && character.isBased(user))
-  //           continue;
-
-  //         // print the name of the campaign the first time
-  //         if(first)
-  //         {
-  //           document.add(new Subtitle(campaign.getName()));
-  //           first = false;
-  //         }
-
-  //         commands.put(character.getName().toLowerCase(),
-  //                      character.getIcon(character.isBased(user)));
-  //       }
-  //       else
-  //         // ... and encounters
-  //         if(dm && campaignEntry instanceof Encounter)
-  //           encounters.add((Encounter)campaignEntry);
-  //     }
-
-  //     for(Object command : commands.values())
-  //       document.add(command);
-
-  //     if(dm)
-  //     {
-  //       document.add("<table width=100% id='encounters-table' "
-  //                    + "class='encounters'>");
-  //       document.add("<colgroup><col width=0/><col/><col/></colgroup>");
-  //       document.add("<tr id='encounter-' class='encounter-group'>"
-  //                    + "<td colspan=3>Encounters"
-  //                    + "<div class='downloads'>"
-  //                    + "<a href='/pdf/dm/encounters/" + campaign.getID()
-  //                    + ".pdf'><img src='/icons/pdf-small.png'/></a>"
-  //                    + "</td>"
-  //                    + "</tr>\n");
-
-  //       String []lasts = {};
-  //       for(Encounter encounter : encounters)
-  //       {
-  //         // Determine the group for the encounter
-  //         String group = encounter.getQualifiedName();
-
-  //         // Determine if we have to set a new title
-  //         lasts = addTitle(document, campaign, group, lasts);
-
-  //         int pos = group.lastIndexOf("::");
-  //         String name = group.substring(pos + 2);
-  //         String parent = group.substring(0, pos);
-
-  //         document.add("<tr id='encounter-" + Encodings.toCSSString(group)
-  //                      + "' class='encounter child-of-encounter-"
-  //                      + Encodings.toCSSString(parent) + "'>");
-
-  //         for(Object cell : Encounter.FORMATTER.format(encounter.getName(),
-  //                                                      encounter)) {
-  //           document.add("<td>");
-  //           document.add(cell);
-  //           document.add("</td>");
-  //         }
-
-  //         document.add("</tr>");
-  //       }
-
-  //       document.add("</table>");
-  //       document.add(new Script("$j('#encounters-table').treeTable"
-  //                               + "({initialState: 'collapsed', "
-  //                               + "clickableNodeNames: true})"));
-  //     }
-  //   }
-
-  //   String text;
-  //   if(inRequest.isBodyOnly())
-  //  text = "<script>document.title = '" + Encodings.encodeHTMLAttribute(title)
-  //       + "';</script>" + document.toBodyString();
-  //   else
-  //     text = document.toString();
-
-  //   // add content type
-  //   inResponse.addHeader("Content-Type", m_type);
-
-  //   PrintStream print = new PrintStream(inResponse.getOutputStream());
-
-  //   print.print(text);
-  //   print.close();
-  // }
-
-  // private static String []addTitle(HTMLDocument document, Campaign campaign,
-  //                                  String group, String []lasts)
-  // {
-  //   String []groups = group.split("::");
-  //   String parent = "";
-
-  //   int i;
-  //   for(i = 0; i < groups.length; i++)
-  //     if(lasts.length <= i || !lasts[i].equals(groups[i]))
-  //       break;
-  //     else
-  //       parent += groups[i];
-
-  //   for(; i < groups.length - 1; i++)
-  //   {
-  //     document.add("<tr id='encounter-"
-  //                  + Encodings.toCSSString(parent + groups[i])
-  //                  + "' class='encounter-group child-of-encounter-"
-  //                  + Encodings.toCSSString(parent) + "'>"
-  //                  + "<td colspan=3 >"
-  //                  + "<span class='encounter-name'>" + groups[i] + "</span>"
-  //                  + "<div class='downloads'>"
-  //                  + "<a href='/pdf/dm/encounters/" + campaign.getID()
-  //                  + ".pdf?sub=" + groups[i] + "'>"
-  //                  + "<img src='/icons/pdf-small.png'/></a>"
-  //                  + "</td></tr>");
-  //     parent += groups[i];
-  //   }
-
-  //   return groups;
-  // }
-
   //........................................................................
 
-  //........................................................................
-
-  //------------------------------------------------- other member functions
   //........................................................................
 }

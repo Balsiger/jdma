@@ -89,7 +89,7 @@ public abstract class SoyServlet extends DMAServlet
   protected static final SoyTemplate s_template =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
                      "commands", "value",
-                     "basecharacter",
+                     "basecharacter", "character",
                      "baseproduct", "product",
                      "baseitem",
                      "basecampaign");
@@ -273,7 +273,9 @@ public abstract class SoyServlet extends DMAServlet
        user == null && userService.isUserLoggedIn()
        ? "$().ready(function(){ register(); } );" : "",
        "userOverride",
-       inRequest.hasUserOverride() ? inRequest.getRealUser().getName() : "");
+       inRequest.hasUserOverride() ? inRequest.getRealUser().getName() : "",
+       "isUser", user != null,
+       "isAdmin", user != null && user.hasAccess(BaseCharacter.Group.ADMIN));
   }
 
   //........................................................................

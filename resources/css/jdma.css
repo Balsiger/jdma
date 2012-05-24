@@ -1410,6 +1410,25 @@ SELECT.admin-button
  * main page
  *****************************************************************************/
 
+.main-campaign
+{
+  display: block;
+  border: 1px solid #aaf;
+  background-color: #eef;
+  min-height: 50px;
+  position: relative;
+  padding: 10px;
+}
+
+.main-campaign-title
+{
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 5px;
+  color: #000098 !important;
+}
+
 DIV.campaign
 {
   display:     inline-block;
