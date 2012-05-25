@@ -362,7 +362,7 @@ public class BaseCharacter extends BaseEntry
    *
    */
   @Override
-  public boolean isShownTo(@Nonnull BaseCharacter inUser)
+  public boolean isShownTo(@Nullable BaseCharacter inUser)
   {
     return inUser != null;
   }
