@@ -26,8 +26,6 @@ package net.ixitxachitls.dma.output.soy;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,8 +40,6 @@ import com.google.template.soy.data.restricted.UndefinedData;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.ValueHandle;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.errors.BaseError;
 
@@ -52,7 +48,7 @@ import net.ixitxachitls.util.errors.BaseError;
 //------------------------------------------------------------------- header
 
 /**
- * A soy wrapper around an abstract Entry
+ * A soy wrapper around an abstract Entry.
  *
  *
  * @file          SoyEntry.java
@@ -65,10 +61,20 @@ import net.ixitxachitls.util.errors.BaseError;
 
 //__________________________________________________________________________
 
+@Immutable
 public class SoyEntry extends SoyMapData
 {
   //--------------------------------------------------------- constructor(s)
 
+  //------------------------------- SoyEntry -------------------------------
+
+  /**
+   * Create the soy entry data.
+   *
+   * @param       inEntry    the entry with the values
+   * @param       inRenderer the renderer used for printing
+   *
+   */
   public SoyEntry(@Nonnull AbstractEntry inEntry,
                   @Nonnull SoyRenderer inRenderer)
   {
@@ -78,15 +84,29 @@ public class SoyEntry extends SoyMapData
 
   //........................................................................
 
+  //........................................................................
+
   //-------------------------------------------------------------- variables
 
-  private @Nonnull AbstractEntry m_entry;
-  private SoyRenderer m_renderer;
+  /** The entry with the data. */
+  private final @Nonnull AbstractEntry m_entry;
+
+  /** The renderer used for priting sub values. */
+  private final @Nonnull SoyRenderer m_renderer;
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------ getSingle -------------------------------
+
+  /**
+   * Get a single value out of the combination.
+   *
+   * @param  inName the name of the value to get
+   *
+   * @return the value found or null if not found
+   */
   @Override
   public @Nullable SoyData getSingle(@Nonnull String inName)
   {
@@ -157,15 +177,44 @@ public class SoyEntry extends SoyMapData
     return null;
   }
 
+  //........................................................................
+  //-------------------------------- equals --------------------------------
+
+  /**
+   * Checks if the given object is equal to this one.
+   *
+   * @param    inOther the object to compare against
+   *
+   * @return   true if the other is equal, false if not
+   *
+   */
   @Override
-  public Set<String> getKeys() {
-    throw new UnsupportedOperationException("not implemented");
+  public boolean equals(Object inOther)
+  {
+    if(!(inOther instanceof SoyEntry))
+      return false;
+
+    return m_entry.equals(((SoyEntry)inOther).m_entry)
+      && m_renderer.equals(((SoyEntry)inOther).m_renderer)
+      && super.equals(inOther);
   }
 
+  //........................................................................
+  //------------------------------- hashCode -------------------------------
+
+  /**
+   * Compute the hash code of the object.
+   *
+   * @return      the object's hash code
+   *
+   */
   @Override
-  public Map<String, SoyData> asMap() {
-    throw new UnsupportedOperationException("not implemented");
+  public int hashCode()
+  {
+    return super.hashCode() + m_renderer.hashCode() + m_entry.hashCode();
   }
+
+  //........................................................................
 
   //........................................................................
 

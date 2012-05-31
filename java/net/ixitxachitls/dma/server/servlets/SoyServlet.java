@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.server.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -34,10 +33,6 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.template.soy.SoyFileSet;
-import com.google.template.soy.data.SoyMapData;
-import com.google.template.soy.data.restricted.UndefinedData;
-import com.google.template.soy.tofu.SoyTofu;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
@@ -64,6 +59,7 @@ import net.ixitxachitls.dma.output.soy.SoyTemplate;
 
 //__________________________________________________________________________
 
+@Immutable
 public abstract class SoyServlet extends DMAServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -147,10 +143,7 @@ public abstract class SoyServlet extends DMAServlet
     throws ServletException, IOException
   {
     if(isDev())
-    {
       s_template.recompile();
-      SoyRenderer.recompile();
-    }
 
     // Set the output header.
     inResponse.setHeader("Content-Type", "text/html");
@@ -171,78 +164,20 @@ public abstract class SoyServlet extends DMAServlet
 
   //........................................................................
 
-  //-------------------------------- render --------------------------------
-
-  /**
-   * Render a template with the given data.
-   *
-   * @param       inName      the name of the template to render
-   * @param       inData      the data to use for rendering
-   * @param       inInjected  the injected data for rendering
-   * @parm        inDelegates the active delegates
-   *
-   * @return      the rendered template as string
-   *
-   */
-  // public @Nonnull String render(@Nonnull String inName,
-  //                               @Nullable Map<String, Object> inData,
-  //                               @Nullable Map<String, Object> inInjected,
-  //                               @Nullable Set<String> inDelegates)
-  // {
-  //   return s_template.render(inName, inData, inInjected, inDelegates);
-  // }
-
-  //........................................................................
-  //-------------------------------- render --------------------------------
-
-  /**
-   * Render a template with the given data.
-   *
-   * @param       inName     the name of the template to render
-   * @param       inData     the data to use for rendering
-   * @param       inInjected the injected data for rendering
-   *
-   * @return      the rendered template as string
-   *
-   */
-  // public @Nonnull String render(@Nonnull String inName,
-  //                               @Nullable Map<String, Object> inData,
-  //                               @Nullable Map<String, Object> inInjected)
-  // {
-  //   return render(inName, inData, inInjected, null);
-  // }
-
-  //........................................................................
-  //-------------------------------- render --------------------------------
-
-  /**
-   * Render a template without data.
-   *
-   * @param       inName     the name of the template to render
-   *
-   * @return      the rendered template as string
-   *
-   */
-  // public @Nonnull String render(@Nonnull String inName)
-  // {
-  //   return render(inName, null, null, null);
-  // }
-
-  //........................................................................
-
   //----------------------------- collectData ------------------------------
 
   /**
    * Collect the data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer for rendering sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
    *
    */
   protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer renderer)
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
   {
     return s_template.map("oldcontent", "");
   }
@@ -254,19 +189,20 @@ public abstract class SoyServlet extends DMAServlet
    * Collect the injected data that is to be printed.
    *
    * @param    inRequest the request for the page
+   * @param    inRenderer the renderer for rendering sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
    *
    */
   protected @Nonnull Map<String, Object> collectInjectedData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer renderer)
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
   {
     BaseCharacter user = inRequest.getUser();
     UserService userService = UserServiceFactory.getUserService();
 
     return s_template.map
-      ("user", user == null ? "" : new SoyEntry(user, renderer),
+      ("user", user == null ? "" : new SoyEntry(user, inRenderer),
        "loginURL", userService.createLoginURL(inRequest.getOriginalPath()),
        "logoutURL", userService.createLogoutURL(inRequest.getOriginalPath()),
        "registerScript",
@@ -296,6 +232,7 @@ public abstract class SoyServlet extends DMAServlet
   }
 
   //........................................................................
+
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -304,10 +241,6 @@ public abstract class SoyServlet extends DMAServlet
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

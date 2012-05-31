@@ -141,7 +141,8 @@ public class Reference extends BaseText<Reference>
   /**
    * Do the standard printing after handling templates.
    *
-   * @param       the renderer to print with
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return      the string to be printed
    *
@@ -162,6 +163,9 @@ public class Reference extends BaseText<Reference>
 
   /**
    * Collect the data available for printing the value.
+   *
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return      the data as a map
    *

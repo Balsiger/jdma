@@ -896,6 +896,20 @@ public class AbstractEntry extends ValueGroup
     return false;
   }
 
+  //........................................................................
+  //---------------------------- hasExtension -----------------------------
+
+  /**
+   * Check if the entry (or one of is bases) has an extension with the given
+   * name.
+   *
+   * @param       inExtension the name of the extension to look for
+   *
+   * @return      true if an extension of this name is present, false if not
+   *
+   * @undefined   IllegalArgumentException if no extension given
+   *
+   */
   public boolean hasExtension(@Nonnull String inExtension)
   {
     return m_extensions.keySet().contains(inExtension);
@@ -1949,11 +1963,12 @@ public class AbstractEntry extends ValueGroup
   //------------------------------- compute --------------------------------
 
   /**
+   * Compute a value for a given key, taking base entries into account if
+   * available.
    *
+   * @param    inKey the key of the value to compute
    *
-   * @param
-   *
-   * @return
+   * @return   the compute value
    *
    */
   public @Nullable Value compute(@Nonnull String inKey)

@@ -525,7 +525,8 @@ public abstract class Value<T extends Value> implements
   /**
    * Generate a string representation of the value for printing.
    *
-   * @param   the renderer to print with
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return  the printed value as a string.
    *
@@ -554,7 +555,8 @@ public abstract class Value<T extends Value> implements
   /**
    * Do the standard printing after handling templates.
    *
-   * @param       the renderer to print with
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return      the string to be printed
    *
@@ -570,6 +572,9 @@ public abstract class Value<T extends Value> implements
 
   /**
    * Collect the data available for printing the value.
+   *
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return      the data as a map
    *

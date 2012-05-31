@@ -474,7 +474,7 @@ public @Nonnull SortedSet<String> getIndexNames
    *
    */
   @Override
-public @Nullable <T extends AbstractEntry> T getEntry
+  public @Nullable <T extends AbstractEntry> T getEntry
                       (@Nonnull AbstractEntry.EntryKey<T> inKey)
   {
     NavigableMap<String, T> entries = getEntries(inKey.getType());
@@ -485,7 +485,8 @@ public @Nullable <T extends AbstractEntry> T getEntry
 
     // could not find the entry by id, try synonyms
     for(T synEntry : entries.values())
-      if(((BaseEntry)synEntry).hasSynonym(inKey.getID()))
+      if(synEntry instanceof BaseEntry
+         && ((BaseEntry)synEntry).hasSynonym(inKey.getID()))
         return synEntry;
 
     return null;

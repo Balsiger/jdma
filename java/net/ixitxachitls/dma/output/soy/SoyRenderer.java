@@ -24,8 +24,6 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,26 +33,22 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 
-import com.google.appengine.api.ThreadManager;
-import com.google.inject.Key;
 import com.google.template.soy.data.SoyMapData;
 
 import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- *
+ * Renderer for soy templates.
  *
  *
  * @file          SoyRenderer.java
  *
- * @author        Peter Balsiger
+ * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
 
@@ -66,6 +60,14 @@ public class SoyRenderer
 {
   //--------------------------------------------------------- constructor(s)
 
+  //----------------------------- SoyRenderer ------------------------------
+
+  /**
+   * Create the renderer.
+   *
+   * @param   inTemplate the soy template that can be used for rendering.
+   *
+   */
   public SoyRenderer(@Nonnull SoyTemplate inTemplate)
   {
     m_template = inTemplate;
@@ -73,13 +75,18 @@ public class SoyRenderer
 
   //........................................................................
 
+  //........................................................................
+
   //-------------------------------------------------------------- variables
 
+  /** The soy template. */
   private @Nonnull SoyTemplate m_template;
-  private @Nullable SoyMapData m_data = null;
-  private @Nullable SoyMapData m_injected = null;
 
-  protected static final SoyTemplate s_template = new SoyTemplate("commands");
+  /** The data to be used when rendering, if any. */
+  private @Nullable SoyMapData m_data = null;
+
+  /** The injected data to be used when rendering, if any. */
+  private @Nullable SoyMapData m_injected = null;
 
   /** Command starter character. */
   protected static final char s_command =
@@ -149,12 +156,15 @@ public class SoyRenderer
 
   //----------------------------------------------------------- manipulators
 
-  public static void recompile()
-  {
-    s_template.recompile();
-  }
+  //------------------------------- setData --------------------------------
 
-  public void setData(@Nonnull Map<String, Object> inData)
+  /**
+   * Set the data to be used for rendering.
+   *
+   * @param       inData the data to use
+   *
+   */
+  public void setData(@Nullable Map<String, Object> inData)
   {
     if(inData == null)
       m_data = null;
@@ -162,13 +172,24 @@ public class SoyRenderer
       m_data = new SoyMapData(inData);
   }
 
-  public void setInjected(@Nonnull Map<String, Object> inData)
+  //........................................................................
+  //----------------------------- setInjected ------------------------------
+
+  /**
+   * Set the injected data to bse used for rendering.
+   *
+   * @param   inData the injected data
+   *
+   */
+  public void setInjected(@Nullable Map<String, Object> inData)
   {
     if(inData == null)
       m_injected = null;
     else
       m_injected = new SoyMapData(inData);
   }
+
+  //........................................................................
 
   //........................................................................
 
@@ -296,11 +317,11 @@ public class SoyRenderer
   //---------------------------- renderCommands ----------------------------
 
   /**
+   * Render the commands in the given text.
    *
+   * @param    inText the text containing commands
    *
-   * @param
-   *
-   * @return
+   * @return   the rendered text
    *
    */
   public @Nonnull String renderCommands(@Nonnull String inText)
@@ -413,9 +434,10 @@ public class SoyRenderer
       // TODO: need to catch proper exception here
       try
       {
-        builder.append(m_template.nestedRender
+        builder.append(m_template.render
                        ("dma.commands." + name,
-                        new SoyMapData("opt", optionals, "arg", arguments)));
+                        new SoyMapData("opt", optionals, "arg", arguments),
+                        null, null));
       }
       catch(com.google.template.soy.tofu.SoyTofuException e)
       {

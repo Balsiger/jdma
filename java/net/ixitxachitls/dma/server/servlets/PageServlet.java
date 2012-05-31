@@ -23,11 +23,8 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -36,11 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 import org.easymock.EasyMock;
 
@@ -55,7 +48,6 @@ import net.ixitxachitls.output.html.HTMLDocument;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
-import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -109,16 +101,17 @@ public class PageServlet extends SoyServlet
   /**
    * Collect the data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer for sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
    *
    */
   protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer renderer)
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
   {
-    Map<String, Object> data = super.collectData(inRequest, renderer);
+    Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
     boolean bodyOnly = inRequest.isBodyOnly();
     String path = inRequest.getRequestURI();
@@ -154,15 +147,16 @@ public class PageServlet extends SoyServlet
    * Collect the injected data that is to be printed.
    *
    * @param    inRequest the request for the page
+   * @param    inRenderer the renderer for rendering sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
    *
    */
   protected @Nonnull Map<String, Object> collectInjectedData
-    (@Nonnull DMARequest inRequest, SoyRenderer renderer)
+    (@Nonnull DMARequest inRequest, SoyRenderer inRenderer)
   {
-    Map<String, Object> data = super.collectInjectedData(inRequest, renderer);
+    Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
     if(inRequest.getUser() == null)
       data.put("dm", false);

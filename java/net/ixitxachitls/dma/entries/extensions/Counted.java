@@ -103,6 +103,7 @@ public class Counted extends Extension<Item>
   public static final Print s_pagePrint =
     new Print("%count %unit");
 
+  /** The empty print command. */
   public static final Print s_emptyPrint = new Print("");
 
   //----- count ------------------------------------------------------------

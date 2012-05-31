@@ -24,17 +24,13 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
@@ -44,13 +40,10 @@ import com.google.common.collect.TreeMultimap;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.output.html.HTMLWriter;
-import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -109,7 +102,8 @@ public class IndexServlet extends PageServlet
   /**
    * Collect the data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer to render sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
@@ -124,7 +118,9 @@ public class IndexServlet extends PageServlet
     String path = inRequest.getRequestURI();
     if(path == null)
     {
-      data.put("content", inRenderer.render("dma.error.invalidPage"));
+      data.put("content",
+               inRenderer.render("dma.errors.invalidPage",
+                                 map("name", inRequest.getOriginalPath())));
 
       return data;
     }
@@ -138,7 +134,9 @@ public class IndexServlet extends PageServlet
 
     if(name == null || name.isEmpty() || type == null)
     {
-      data.put("content", inRenderer.render("dma.error.invalidPage"));
+      data.put("content",
+               inRenderer.render("dma.errors.invalidPage",
+                                 map("name", inRequest.getOriginalPath())));
 
       return data;
     }
@@ -152,7 +150,9 @@ public class IndexServlet extends PageServlet
     Index index = ValueGroup.getIndex(name);
     if(index == null)
     {
-      data.put("content", inRenderer.render("dma.error.invalidPage"));
+      data.put("content",
+               inRenderer.render("dma.errors.invalidPage",
+                                 map("name", inRequest.getOriginalPath())));
 
       return data;
     }
@@ -258,7 +258,7 @@ public class IndexServlet extends PageServlet
   /**
    * Check if the index values represent a nested index or not.
    *
-   * @param   inValue the index groups
+   * @param   inValues the index groups
    *
    * @return  true if nested groups are given, false if not
    *

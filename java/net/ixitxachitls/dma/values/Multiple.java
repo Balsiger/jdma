@@ -272,7 +272,7 @@ public class Multiple extends Value<Multiple>
    * Construct a special multiple object with non optional values and no
    * delimiters. This is mostly used together with a template for printing.
    *
-   * @param       inValue  the nested values
+   * @param       inValues  the nested values
    *
    */
   public Multiple(@Nonnull Value ... inValues)
@@ -547,7 +547,8 @@ protected @Nonnull String doToString()
   /**
    * Generate a string representation of the value for printing.
    *
-   * @param   the renderer to print with
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return  the printed value as a string.
    *

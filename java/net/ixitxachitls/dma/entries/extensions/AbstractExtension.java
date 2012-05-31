@@ -457,7 +457,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   @Override
   public @Nonnull String toString()
   {
-    return m_name = " (for " + m_entry.getName() + ")";
+    return m_name + " (for " + m_entry.getName() + ")";
   }
 
   //........................................................................

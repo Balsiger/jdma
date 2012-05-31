@@ -380,7 +380,8 @@ public class ValueList<T extends Value>
   /**
    * Generate a string representation of the value for printing.
    *
-   * @param   the renderer to print with
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return  the printed value as a string.
    *
@@ -407,7 +408,7 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_values != null;
   }

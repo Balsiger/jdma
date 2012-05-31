@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -31,12 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
-
-import com.google.common.collect.Multimap;
-import com.google.common.collect.TreeMultimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -45,7 +40,6 @@ import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Files;
 
 //..........................................................................
@@ -105,7 +99,8 @@ public class LibraryServlet extends PageServlet
   /**
    * Collect the data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer to render sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
@@ -135,9 +130,11 @@ public class LibraryServlet extends PageServlet
     }
 
     for(List<Map<String, Object>> index : indexes.values())
-      Collections.sort(index, new Comparator<Map<String, Object>>() {
+      Collections.sort(index, new Comparator<Map<String, Object>>()
+        {
           public int compare(@Nonnull Map<String, Object> inFirst,
-                             @Nonnull Map<String, Object> inSecond) {
+                             @Nonnull Map<String, Object> inSecond)
+          {
             return ((String)inFirst.get("title")).compareTo
               ((String)inSecond.get("title"));
           }

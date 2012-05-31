@@ -32,14 +32,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 // import javax.servlet.http.HttpServletResponse;
 // import javax.servlet.http.HttpServletRequest;
 // import javax.servlet.http.HttpServletResponse;
-
-import com.google.common.collect.Multimap;
-import com.google.common.collect.TreeMultimap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -48,19 +43,8 @@ import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Character;
 // import net.ixitxachitls.dma.entries.Encounter;
 // import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-// import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Icon;
-import net.ixitxachitls.output.commands.Link;
-// import net.ixitxachitls.output.commands.Script;
-import net.ixitxachitls.output.commands.Subtitle;
-// import net.ixitxachitls.output.commands.Table;
-import net.ixitxachitls.output.html.HTMLWriter;
-// import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -133,7 +117,8 @@ public class MainPageServlet extends PageServlet
   /**
    * Collect the data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer for rendering sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
@@ -158,7 +143,8 @@ public class MainPageServlet extends PageServlet
     {
       campaigns.add(character.getCampaign());
       List<SoyEntry> list = characters.get(character.getCampaign().getName());
-      if(list == null) {
+      if(list == null)
+      {
         list = new ArrayList<SoyEntry>();
         characters.put(character.getCampaign().getName(), list);
       }

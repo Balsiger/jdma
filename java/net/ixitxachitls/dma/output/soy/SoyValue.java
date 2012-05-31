@@ -49,12 +49,12 @@ import net.ixitxachitls.util.Encodings;
 //------------------------------------------------------------------- header
 
 /**
- *
+ * A wrapper to use dma values in soy templates.
  *
  *
  * @file          SoyValue.java
  *
- * @author        Peter Balsiger
+ * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
 
@@ -62,10 +62,22 @@ import net.ixitxachitls.util.Encodings;
 
 //__________________________________________________________________________
 
+@Immutable
 public class SoyValue extends SoyMapData
 {
   //--------------------------------------------------------- constructor(s)
 
+  //------------------------------- SoyValue -------------------------------
+
+  /**
+   * Create the soy value.
+   *
+   * @param    inName     the name of the value
+   * @param    inValue    the dma value
+   * @param    inEntry    the entry for the value
+   * @param    inRenderer the renderer for rendering sub values
+   *
+   */
   public SoyValue(@Nonnull String inName, @Nonnull Value inValue,
                   @Nonnull AbstractEntry inEntry,
                   @Nonnull SoyRenderer inRenderer)
@@ -78,17 +90,35 @@ public class SoyValue extends SoyMapData
 
   //........................................................................
 
+  //........................................................................
+
   //-------------------------------------------------------------- variables
 
-  protected @Nonnull String m_name;
-  protected @Nonnull Value m_value;
-  protected @Nonnull AbstractEntry m_entry;
-  protected @Nonnull SoyRenderer m_renderer;
+  /** The name of the value. */
+  protected final @Nonnull String m_name;
+
+  /** The real value. */
+  protected final @Nonnull Value m_value;
+
+  /** The entry containing the value. */
+  protected final @Nonnull AbstractEntry m_entry;
+
+  /** The renderer for rendering sub values. */
+  protected final @Nonnull SoyRenderer m_renderer;
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------ getSingle -------------------------------
+
+  /**
+   * Get a single value out of the combination.
+   *
+   * @param  inName the name of the value to get
+   *
+   * @return the value found or null if not found
+   */
   @Override
   @SuppressWarnings("unchecked") // need to case to value list
   public @Nullable SoyData getSingle(@Nonnull String inName)
@@ -172,14 +202,55 @@ public class SoyValue extends SoyMapData
     return null;
   }
 
+  //.........................................................................
+
+  //-------------------------------- equals --------------------------------
+
+  /**
+   * Checks if the given object is equal to this one.
+   *
+   * @param    inOther the object to compare against
+   *
+   * @return   true if the other is equal, false if not
+   *
+   */
+  @Override
+  public boolean equals(Object inOther)
+  {
+    if(!(inOther instanceof SoyValue))
+      return false;
+
+    return m_name.equals(((SoyValue)inOther).m_name)
+      && m_value.equals(((SoyValue)inOther).m_value)
+      && m_entry.equals(((SoyValue)inOther).m_entry)
+      && m_renderer.equals(((SoyValue)inOther).m_renderer)
+      && super.equals(inOther);
+  }
+
+  //........................................................................
+  //------------------------------- hashCode -------------------------------
+
+  /**
+   * Compute the hash code of the object.
+   *
+   * @return      the object's hash code
+   *
+   */
+  @Override
+  public int hashCode()
+  {
+    return super.hashCode() + m_renderer.hashCode() + m_entry.hashCode()
+      + m_value.hashCode() + m_name.hashCode();
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -188,10 +259,6 @@ public class SoyValue extends SoyMapData
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

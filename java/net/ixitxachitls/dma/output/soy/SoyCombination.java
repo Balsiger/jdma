@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2007 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -31,7 +31,6 @@ import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 
@@ -40,12 +39,13 @@ import net.ixitxachitls.dma.values.Value;
 //------------------------------------------------------------------- header
 
 /**
- *
+ * A soy data object for combination values taking data from an entry and it's
+ * base entries.
  *
  *
  * @file          SoyCombination.java
  *
- * @author        Peter Balsiger
+ * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
 
@@ -53,10 +53,23 @@ import net.ixitxachitls.dma.values.Value;
 
 //__________________________________________________________________________
 
+@Immutable
 public class SoyCombination extends SoyValue
 {
   //--------------------------------------------------------- constructor(s)
 
+  //---------------------------- SoyCombination ----------------------------
+
+  /**
+   * Create the soy combination value.
+   *
+   * @param    inName        the name of the value
+   * @param    inCombination the combination representing the value
+   * @param    inValue       the base value
+   * @param    inEntry       the entry witht the value
+   * @param    inRenderer    the renderer to render data
+   *
+   */
   public SoyCombination(@Nonnull String inName,
                         @Nonnull Combination inCombination,
                         @Nonnull Value inValue,
@@ -70,14 +83,26 @@ public class SoyCombination extends SoyValue
 
   //........................................................................
 
+  //........................................................................
+
   //-------------------------------------------------------------- variables
 
-  private @Nonnull Combination m_combination;
+  /** The combination stored here. */
+  private final @Nonnull Combination m_combination;
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------ getSingle -------------------------------
+
+  /**
+   * Get a single value out of the combination.
+   *
+   * @param  inName the name of the value to get
+   *
+   * @return the value found or null if not found
+   */
   @Override
   public @Nullable SoyData getSingle(@Nonnull String inName)
   {
@@ -88,25 +113,48 @@ public class SoyCombination extends SoyValue
   }
 
   //........................................................................
+  //-------------------------------- equals --------------------------------
 
-  //----------------------------------------------------------- manipulators
-
-  //........................................................................
-
-  //------------------------------------------------- other member functions
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The tests. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  /**
+   * Checks if the given object is equal to this one.
+   *
+   * @param    inOther the object to compare against
+   *
+   * @return   true if the other is equal, false if not
+   *
+   */
+  @Override
+  public boolean equals(Object inOther)
   {
+    if(!(inOther instanceof SoyCombination))
+      return false;
+
+    return m_combination.equals(((SoyCombination)inOther).m_combination)
+      && super.equals(inOther);
+  }
+
+  //........................................................................
+  //------------------------------- hashCode -------------------------------
+
+  /**
+   * Compute the hash code of the object.
+   *
+   * @return      the object's hash code
+   *
+   */
+  @Override
+  public int hashCode()
+  {
+    return super.hashCode() + m_combination.hashCode();
   }
 
   //........................................................................
 
-  //--------------------------------------------------------- main/debugging
+  //........................................................................
 
+  //----------------------------------------------------------- manipulators
+  //........................................................................
+
+  //------------------------------------------------- other member functions
   //........................................................................
 }

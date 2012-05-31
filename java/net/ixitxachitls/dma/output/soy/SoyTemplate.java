@@ -33,9 +33,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
 
-import com.google.appengine.api.utils.SystemProperty;
 import com.google.inject.Key;
 import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.data.SoyMapData;
@@ -55,7 +53,7 @@ import net.ixitxachitls.util.logging.Log;
  *
  * @file          SoyTemplate.java
  *
- * @author        Peter Balsiger
+ * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
 
@@ -112,20 +110,6 @@ public class SoyTemplate
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  public @Nonnull String nestedRender(@Nonnull String inName,
-                                      @Nonnull SoyMapData inData)
-  {
-    Map<Key<?>, Object> scope = removeScope();
-    try
-    {
-      return render(inName, inData, null, null);
-    }
-    finally
-    {
-      addScope(scope);
-    }
-  }
 
   //-------------------------------- render --------------------------------
 
@@ -203,7 +187,17 @@ public class SoyTemplate
 
   //----------------------------------------------------------- manipulators
 
-  private @Nonnull Map<Key<?>, Object> removeScope()
+  //----------------------------- removeScope ------------------------------
+
+  /**
+   * Remove the current scope from the tofu call stack. This is used to allow
+   * nested rendering (i.e. render a new template for inclusing in the one
+   * currently rendered).
+   *
+   * @return      the scope removed, if any
+   *
+   */
+  private @Nullable Map<Key<?>, Object> removeScope()
   {
     BaseTofu baseTofu = (BaseTofu)m_compiled;
     Map<Key<?>, Object> scope = baseTofu.apiCallScope.scopedValuesTl.get();
@@ -213,12 +207,22 @@ public class SoyTemplate
     return scope;
   }
 
-  private void addScope(@Nonnull Map<Key<?>, Object> inScope)
+  //........................................................................
+  //------------------------------- addScope -------------------------------
+
+  /**
+   * Add the given scope back to the tofu call stack.
+   *
+   * @param     inScope the scope to add back, if any
+   *
+   */
+  private void addScope(@Nullable Map<Key<?>, Object> inScope)
   {
     if(inScope != null)
       ((BaseTofu)m_compiled).apiCallScope.scopedValuesTl.set(inScope);
   }
 
+  //........................................................................
 
   //........................................................................
 
@@ -279,7 +283,7 @@ public class SoyTemplate
    * @return   the converted map
    *
    */
-  public @Nonnull Map<String, Object> map(Object ... inData)
+  public @Nonnull Map<String, Object> map(@Nonnull Object ... inData)
   {
     assert inData.length % 2 == 0 : "invalid number of arguments";
 
@@ -300,10 +304,6 @@ public class SoyTemplate
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

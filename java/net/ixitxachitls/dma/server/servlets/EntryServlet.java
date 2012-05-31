@@ -28,12 +28,11 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
 import com.google.common.collect.ImmutableSet;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -42,16 +41,8 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.html.HTMLDocument;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.output.ascii.ASCIIDocument;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.output.commands.Verbatim;
-import net.ixitxachitls.output.html.HTMLWriter;
-import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -122,177 +113,6 @@ public class EntryServlet extends PageServlet
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
-  //------------------------------- writeBody ------------------------------
-
-  /**
-   * Handles the body content of the request.
-   *
-   * @param     inWriter  the writer to take up the content (will be closed
-   *                      by the PageServlet)
-   * @param     inPath    the path of the request
-   * @param     inRequest the request for the page
-   *
-   */
-  @Override
-  @OverridingMethodsMustInvokeSuper
-  protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
-  {
-    super.writeBody(inWriter, inPath, inRequest);
-
-    if(inPath == null)
-    {
-      inWriter.title("Not Found")
-        .begin("h1").add("Invalid Reference").end("h1")
-        .add("The page referenced does not exist!");
-      Log.warning("no path given for request");
-
-      return;
-    }
-
-    boolean dma = false;
-    boolean txt = false;
-    String path = Files.decodeName(inPath);
-    if(path.endsWith(".dma"))
-    {
-      dma = true;
-      path = path.substring(0, path.length() - 4);
-    }
-    else if(path.endsWith(".txt"))
-    {
-      txt = true;
-      path = path.substring(0, path.length() - 4);
-    }
-
-    AbstractEntry entry = getEntry(path);
-
-    if(entry == null)
-    {
-      AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(path);
-      if(key == null)
-      {
-        Log.warning("could not extract entry from '" + path + "'");
-        inWriter.title("Not Found")
-          .begin("h1").add("Could Not Extract Entry").end("h1")
-          .add("Could not find the type and/or id of the entry for this page.");
-
-        return;
-      }
-
-      AbstractType<? extends AbstractEntry> type = key.getType();
-      String id = key.getID();
-
-      if(inRequest.hasParam("create") && inRequest.hasUser())
-      {
-        // create a new entry for filling out
-        Log.info("creating " + type + " '" + id + "'");
-
-        if(type.getBaseType() == type)
-          entry = type.create(id);
-        else
-        {
-          String postfix = "";
-          if(inRequest.hasParam("store"))
-            postfix = "-" + inRequest.getParam("store");
-
-          entry = type.create(Entry.TEMPORARY + postfix);
-          entry.updateKey(key);
-
-          if(inRequest.hasParam("bases"))
-          {
-            for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
-              entry.addBase(base);
-          }
-
-          if(inRequest.hasParam("identified") && entry instanceof Item)
-            ((Item)entry).identify();
-
-          if(inRequest.hasParam("extensions"))
-          {
-            for(String extension
-                  : inRequest.getParam("extensions").split("\\s*,\\s*"))
-              if(extension != null && !extension.isEmpty())
-                entry.addExtension(extension);
-          }
-          else
-            entry.addBase(id);
-
-          if(entry instanceof Entry)
-            ((Entry)entry).complete();
-        }
-        entry.setOwner(inRequest.getUser());
-      }
-
-      if(entry == null)
-      {
-        // entry not found, but ask if we want to create a new entry
-        Log.warning("could not find entry '" + id + "'.");
-
-        inWriter.title("Not Found")
-          .begin("h1").add("Entry Not Found").end("h1")
-          .add("Could not find " + type + " '" + id + "'.");
-
-        if(inRequest.hasUser())
-            inWriter
-              .script("if(confirm('The desired entry does not exist!\\n\\n"
-                      + "Do you want to create a new entry with id \\'" + id
-                      + "\\'?'))",
-                      "  location.href = location.href.replace(/\\?.*$/, '') "
-                      + "+ '?create';");
-
-        return;
-      }
-    }
-
-    String title = entry.getType() + ": " + entry.getName();
-    inWriter.title(title);
-
-    HTMLDocument document = new HTMLDocument(title);
-    AbstractType<? extends AbstractEntry> type = entry.getType();
-
-    List<String> ids = DMADataFactory.get().getIDs(type, null);
-
-    int current = ids.indexOf(entry.getName());
-    int last = ids.size() - 1;
-
-    Command navigation =
-      new Divider("entry-nav",
-                  new Command
-                  (new Link(new Divider("add sprite", ""),
-                            "javascript:createEntry()"),
-                   new Link(new Divider("remove sprite", ""),
-                            "javascript:removeEntry('"
-                            + entry.getName() + "')")));
-
-    document.add(navigation);
-
-    boolean dm = false;
-    if(inRequest.getUser() != null)
-      dm = entry.isDM(inRequest.getUser());
-
-    if(dma && dm)
-      document.add(new Divider("dma-formatted",
-                               new Verbatim(entry.toString())));
-    else
-      if(txt)
-      {
-        ASCIIDocument doc = new ASCIIDocument(80);
-        doc.add(entry.printPage(inRequest.getUser()));
-        document.add(new Divider("text-formatted",
-                                 new Verbatim(doc.toString())));
-      }
-      else
-        document.add(entry.printPage(inRequest.getUser()));
-
-    document.add(navigation);
-
-    inWriter.add(document.toString());
-
-    addNavigation(inWriter, entry.getNavigation());
-  }
-
   //........................................................................
 
   //........................................................................
@@ -304,7 +124,8 @@ public class EntryServlet extends PageServlet
   /**
    * Collect the data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer to render sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)
@@ -438,7 +259,8 @@ public class EntryServlet extends PageServlet
   /**
    * Collect the injected data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer to render sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)

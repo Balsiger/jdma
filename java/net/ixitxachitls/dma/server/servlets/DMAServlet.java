@@ -32,9 +32,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
 import com.google.appengine.api.utils.SystemProperty;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -141,8 +141,8 @@ public abstract class DMAServlet extends BaseServlet
    */
   public boolean isDev()
   {
-    return SystemProperty.environment.value() ==
-      SystemProperty.Environment.Value.Development;
+    return SystemProperty.environment.value()
+      == SystemProperty.Environment.Value.Development;
   }
 
   //........................................................................

@@ -435,11 +435,12 @@ public class BaseCharacter extends BaseEntry
   //------------------------------- compute --------------------------------
 
   /**
+   * Compute a value for a given key, taking base entries into account if
+   * available.
    *
+   * @param    inKey the key of the value to compute
    *
-   * @param
-   *
-   * @return
+   * @return   the compute value
    *
    */
   @Override

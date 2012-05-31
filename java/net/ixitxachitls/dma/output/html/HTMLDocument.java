@@ -28,9 +28,9 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import net.ixitxachitls.output.Document;
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.output.actions.html.Link;
-import net.ixitxachitls.output.Document;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Event;

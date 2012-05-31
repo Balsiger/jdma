@@ -30,8 +30,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.input.ParseReader;
@@ -361,6 +361,9 @@ public class Damage extends Value<Damage>
 
   /**
    * Collect the data available for printing the value.
+   *
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
    *
    * @return      the data as a map
    *

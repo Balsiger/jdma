@@ -95,9 +95,6 @@ public class DMAFile //implements Storage<AbstractEntry>
   /** The base path to the file read. */
   private @Nonnull String m_path;
 
-  /** All the available data. */
-  private @Nonnull DMAData m_data;
-
   /** The file level comment (if any). */
   private @Nonnull Comment m_comment = new Comment(1, -1);
 

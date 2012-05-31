@@ -28,21 +28,18 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
 import com.google.common.collect.ImmutableSet;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
-import net.ixitxachitls.output.html.HTMLWriter;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -127,7 +124,8 @@ public class EntryListServlet extends PageServlet
   /**
    * Collect the data that is to be printed.
    *
-   * @param    inRequest the request for the page
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer to render sub values
    *
    * @return   a map with key/value pairs for data (values can be primitives
    *           or maps or lists)

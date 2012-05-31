@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2007 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -23,11 +23,9 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -49,10 +47,17 @@ import com.google.common.base.Joiner;
 
 //__________________________________________________________________________
 
-public class Entries
+@Immutable
+public final class Entries
 {
   //--------------------------------------------------------- constructor(s)
 
+  //------------------------------- Entries --------------------------------
+
+  /**
+   * Private constructor to prevent instantiation.
+   *
+   */
   private Entries()
   {
     // don't construct
@@ -60,8 +65,11 @@ public class Entries
 
   //........................................................................
 
+  //........................................................................
+
   //-------------------------------------------------------------- variables
 
+  /** The joiner to create comma separated list strings. */
   private static final Joiner s_commaJoiner = Joiner.on(", ");
 
   //........................................................................
@@ -76,6 +84,17 @@ public class Entries
 
   //------------------------------------------------- other member functions
 
+  //-------------------------------- names ---------------------------------
+
+  /**
+   * Get a list of names of the given entries.
+   *
+   * @param     inEntries the entries to get the names for; null entries are
+   *                      skipped
+   *
+   * @return    a list of all the entries
+   *
+   */
   public static List<String> names(Iterable<ValueGroup> inEntries)
   {
     List<String> names = new ArrayList<String>();
@@ -86,6 +105,17 @@ public class Entries
     return names;
   }
 
+  //........................................................................
+  //----------------------------- namesString ------------------------------
+
+  /**
+   * Get all the names of the given entries as a comma separated string.
+   *
+   * @param       inEntries the entries to get the names for
+   *
+   * @return      a comma separated string with all the names
+   *
+   */
   public static String namesString(Iterable<ValueGroup> inEntries)
   {
     return s_commaJoiner.join(names(inEntries));

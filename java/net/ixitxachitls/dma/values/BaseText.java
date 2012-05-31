@@ -153,7 +153,8 @@ public class BaseText<T extends BaseText> extends Value<T>
   /**
    * Generate a string representation of the value for printing.
    *
-   * @param   the renderer to print with
+   * @param   inEntry    the entry to print
+   * @param   inRenderer the renderer to print with
    *
    * @return  the printed value as a string.
    *

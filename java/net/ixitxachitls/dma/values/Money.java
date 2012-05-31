@@ -320,6 +320,9 @@ public class Money extends Units<Money>
   /**
    * Collect the data available for printing the value.
    *
+   * @param       inEntry    the entry this value is in
+   * @param       inRenderer the renderer to render sub values
+   *
    * @return      the data as a map
    *
    */

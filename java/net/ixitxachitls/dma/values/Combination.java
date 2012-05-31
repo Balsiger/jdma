@@ -26,10 +26,10 @@ package net.ixitxachitls.dma.values;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -162,14 +162,14 @@ public class Combination<V extends Value>
   //-------------------------------- print ---------------------------------
 
   /**
+   * Render the combination using the renderer provided.
    *
+   * @param    inRenderer the renderer to render the combination value
    *
-   * @param
-   *
-   * @return
+   * @return   a string with the renderered value
    *
    */
-  public @Nonnull String print(SoyRenderer inRenderer)
+  public @Nonnull String print(@Nonnull SoyRenderer inRenderer)
   {
     combine();
     Map<String, Object> data = new HashMap<String, Object>();
@@ -482,6 +482,17 @@ public class Combination<V extends Value>
       + m_total + ", min " + m_min + ", max " + m_max;
   }
 
+  //........................................................................
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Convert the given map to a human redable string for debugging.
+   *
+   * @param       inMap the map to convert
+   *
+   * @return      the string representation
+   *
+   */
   private @Nonnull String toString(Multimap inMap)
   {
     StringBuilder builder = new StringBuilder();
@@ -497,7 +508,6 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
-
 
   //........................................................................
 

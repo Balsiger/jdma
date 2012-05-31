@@ -40,16 +40,14 @@ import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.io.Files;
-
 import com.google.appengine.api.conversion.Asset;
 import com.google.appengine.api.conversion.Conversion;
 import com.google.appengine.api.conversion.ConversionResult;
 import com.google.appengine.api.conversion.ConversionService;
 import com.google.appengine.api.conversion.ConversionServiceFactory;
+import com.google.common.io.Files;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.output.pdf.PDFDocument;
 import net.ixitxachitls.output.Document;
@@ -174,6 +172,16 @@ public abstract class PDFServlet extends DMAServlet
     return null;
   }
 
+  //--------------------------- createImageAsset ---------------------------
+
+  /**
+   * Create an image asset for an image in the pdf file.
+   *
+   * @param       inName the name of the image
+   *
+   * @return      the asset that can be added output document
+   *
+   */
   private @Nonnull Asset createImageAsset(@Nonnull String inName)
   {
     if(inName.startsWith("http://"))
@@ -182,6 +190,18 @@ public abstract class PDFServlet extends DMAServlet
       return createFileImageAsset(inName);
   }
 
+  //........................................................................
+  //------------------------- createURLImageAsset --------------------------
+
+  /**
+   * Create an url based image asset. This is used to include images served by
+   * app engine.
+   *
+   * @param       inName the name of the image
+   *
+   * @return      the asset to read from an url
+   *
+   */
   private @Nonnull Asset createURLImageAsset(@Nonnull String inName)
   {
     for(int i = 1; i <= 5; i++)
@@ -229,6 +249,17 @@ public abstract class PDFServlet extends DMAServlet
     return createNotFoundImageAsset(inName);
   }
 
+  //........................................................................
+  //------------------------ createFileImageAsset --------------------------
+
+  /**
+   * Create a file based image asset to include image files into the output.
+   *
+   * @param       inName the name of the image
+   *
+   * @return      the file based assed.
+   *
+   */
   private @Nonnull Asset createFileImageAsset(@Nonnull String inName)
   {
     try
@@ -247,6 +278,17 @@ public abstract class PDFServlet extends DMAServlet
     }
   }
 
+  //........................................................................
+  //----------------------- createNotFoundImageAsset -----------------------
+
+  /**
+   * Create an image asset for images that could not be found.
+   *
+   * @param       inName the name of the image that was not found
+   *
+   * @return      the image asset for inclusion in the output
+   *
+   */
   private @Nonnull Asset createNotFoundImageAsset(@Nonnull String inName)
   {
     try
@@ -262,6 +304,8 @@ public abstract class PDFServlet extends DMAServlet
          + "not be found");
     }
   }
+
+  //........................................................................
 
   //........................................................................
   //---------------------------- createDocument ----------------------------
