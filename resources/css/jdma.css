@@ -1414,19 +1414,19 @@ SELECT.admin-button
 {
   display: block;
   border: 1px solid #aaf;
-  background-color: #eef;
   min-height: 50px;
   position: relative;
-  padding: 10px;
+  padding: 20px 10px 10px 10px;
 }
 
 .main-campaign-title
 {
   position: absolute;
-  right: 0;
-  top: 0;
+  left: 10px;
+  top: -14px;
   padding: 5px;
   color: #000098 !important;
+  background-color: white;
 }
 
 DIV.campaign
