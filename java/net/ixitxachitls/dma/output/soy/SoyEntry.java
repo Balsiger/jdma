@@ -231,11 +231,43 @@ public class SoyEntry extends SoyMapData
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- single ---------------------------------------------------------
+
+    /** The single Test. */
+    @org.junit.Test
+    public void single()
+    {
+      SoyEntry soyEntry = new SoyEntry(new net.ixitxachitls.dma.entries
+                                       .BaseEntry("test entry"),
+                                       new SoyRenderer(new SoyTemplate()));
+
+      assertEquals("extension", "false",
+                   soyEntry.getSingle("extension_x").toString());
+      assertEquals("key", "/base entry/test entry",
+                   soyEntry.getSingle("key").toString());
+      assertEquals("path", "/entry/test entry",
+                   soyEntry.getSingle("path").toString());
+      assertEquals("type", "{multidir: BaseEntries, link: entry, "
+                   + "name: base entry, multi: Base Entries, "
+                   + "multilink: entrys, css: base-entry}",
+                   soyEntry.getSingle("type").toString());
+      assertEquals("files", "{other: [], "
+                   + "main: {icon: /icons/BaseEntries-dummy.png, name: main, "
+                   + "path: /icons/BaseEntries-dummy.png, type: image/png}}",
+                   soyEntry.getSingle("files").toString());
+      assertEquals("name", "test entry",
+                   soyEntry.getSingle("name").toString());
+      assertEquals("dma", "#----- test entry\n\n"
+                   + "base entry test entry =\n\n.\n\n#.....\n",
+                   soyEntry.getSingle("dma").toString());
+      assertEquals("errors", "[]",
+                   soyEntry.getSingle("errors").toString());
+      assertEquals("worlds", "{}",
+                   soyEntry.getSingle("worlds").toString());
+    }
+
+    //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

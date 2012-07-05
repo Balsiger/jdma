@@ -291,7 +291,7 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-public @Nonnull SortedSet<String> getIndexNames
+  public @Nonnull SortedSet<String> getIndexNames
     (@Nonnull String inIndex,
      @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
      @Nonnull String ... inFilters)

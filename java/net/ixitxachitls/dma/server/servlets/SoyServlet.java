@@ -36,6 +36,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+import org.easymock.EasyMock;
+
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -60,7 +62,7 @@ import net.ixitxachitls.dma.output.soy.SoyTemplate;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class SoyServlet extends DMAServlet
+public class SoyServlet extends DMAServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -80,6 +82,9 @@ public abstract class SoyServlet extends DMAServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The id for serialization. */
+  private static final long serialVersionUID = 1L;
 
   /** The template to render a page. */
   protected static final SoyTemplate s_template =
@@ -238,8 +243,73 @@ public abstract class SoyServlet extends DMAServlet
   //------------------------------------------------------------------- test
 
   /** The tests. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
+    //----- map ------------------------------------------------------------
+
+    /** The map Test. */
+    @org.junit.Test
+    public void map()
+    {
+      SoyServlet servlet = new SoyServlet();
+      assertEquals("empty", "{}", servlet.map().toString());
+      assertEquals("simple", "{second=b, third=c, first=a}",
+                   servlet.map("first", "a", "second", "b", "third", "c")
+                   .toString());
+    }
+
+    //......................................................................
+    //----- collectData ----------------------------------------------------
+
+    /** The collectData Test. */
+    @org.junit.Test
+    public void collectData()
+    {
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+
+      EasyMock.replay(request);
+
+      SoyServlet servlet = new SoyServlet();
+      assertEquals("content", "{oldcontent=}",
+                   servlet.collectData(request,
+                                       new SoyRenderer(new SoyTemplate()))
+                   .toString());
+
+      EasyMock.verify(request);
+    }
+
+    //......................................................................
+    //----- collectInjectedData --------------------------------------------
+
+    /** The collectInjectedData Test. */
+    @org.junit.Test
+    public void collectInjectedData()
+    {
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+
+      EasyMock.expect(request.getUser()).andStubReturn(null);
+      EasyMock.expect(request.getOriginalPath()).andStubReturn("path");
+      EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
+      EasyMock.replay(request);
+
+      SoyServlet servlet = new SoyServlet();
+      assertEquals("content",
+                   "{isUser=false, "
+                   + "registerScript=$().ready(function(){ register(); } );, "
+                   + "userOverride=, "
+                   + "logoutURL=/_ah/logout?continue=path, "
+                   + "isAdmin=false, "
+                   + "user=, "
+                   + "loginURL=/_ah/login?continue=path}",
+                   servlet.collectInjectedData
+                   (request,
+                    new SoyRenderer(new SoyTemplate())).toString());
+
+      EasyMock.verify(request);
+    }
+
+    //......................................................................
+
   }
 
   //........................................................................

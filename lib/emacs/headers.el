@@ -108,9 +108,6 @@
                   "" "left" ".")
   (previous-line 3)
   (insert (make-string my-temp ?\ ))
-;; a hack to ensure that fold will notice the new fold
-  (fold-mode)
-  (fold-mode)
 )
 
 (defun my-insert-right-fold ()
@@ -625,6 +622,7 @@
 (global-set-key [f7]  'my-insert-right-fold)
 (global-set-key [f8]  'my-insert-DMA)
 (global-set-key [f9]  'my-insert-copyright)
+(global-set-key [f10]  'my-insert-test-fold)
 ;; (global-set-key [f12]  'my-insert-icon-image)
 
 (defun string-trim (bag s)

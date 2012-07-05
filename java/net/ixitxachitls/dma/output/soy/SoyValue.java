@@ -35,7 +35,6 @@ import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.StringData;
-import com.google.template.soy.data.restricted.UndefinedData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.Combination;
@@ -154,14 +153,14 @@ public class SoyValue extends SoyMapData
 
     if("related".equals(inName))
       if(m_value.getRelated() == null)
-        return UndefinedData.INSTANCE;
+        return StringData.EMPTY_STRING;
       else
         return StringData.forValue(m_value.getRelated());
 
     if("choices".equals(inName))
     {
       if(m_value.getChoices() == null)
-        return UndefinedData.INSTANCE;
+        return StringData.EMPTY_STRING;
       else
         return StringData.forValue(m_value.getChoices());
     }
@@ -179,7 +178,7 @@ public class SoyValue extends SoyMapData
       if(m_value.hasExpression())
         return StringData.forValue(m_value.getExpression().toString());
       else
-        return UndefinedData.INSTANCE;
+        return StringData.EMPTY_STRING;
 
     if("list".equals(inName) && m_value instanceof ValueList)
     {
@@ -258,6 +257,50 @@ public class SoyValue extends SoyMapData
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- single ---------------------------------------------------------
+
+    /** The single Test. */
+    @org.junit.Test
+    public void single()
+    {
+      SoyValue soyValue =
+        new SoyValue("test",
+                     new net.ixitxachitls.dma.values.Text("just a name"),
+                     new net.ixitxachitls.dma.entries.BaseEntry("test entry"),
+                     new SoyRenderer(new SoyTemplate("lib/test/soy/test",
+                                                     "lib/test/soy/test2")));
+
+      assertEquals("edit", "&#34;just a name&#34;",
+                   soyValue.getSingle("edit").toString());
+      assertEquals("raw", "\"just a name\"",
+                   soyValue.getSingle("raw").toString());
+      assertEquals("print", "++ just a name ++",
+                   soyValue.getSingle("print").toString());
+      assertEquals("bases", "total: *undefined* bases: [] defined: no",
+                   soyValue.getSingle("bases").toString());
+      assertEquals("combine", "{}",
+                   soyValue.getSingle("combine").toString());
+      assertEquals("name", "test",
+                   soyValue.getSingle("name").toString());
+      assertEquals("type", "string",
+                   soyValue.getSingle("type").toString());
+      assertEquals("related", "",
+                   soyValue.getSingle("related").toString());
+      assertEquals("choices", "",
+                   soyValue.getSingle("choices").toString());
+      assertEquals("group", "just a name",
+                   soyValue.getSingle("group").toString());
+      assertEquals("isArithmetic", "false",
+                   soyValue.getSingle("isArithmetic").toString());
+      assertEquals("isDefined", "true",
+                   soyValue.getSingle("isDefined").toString());
+      assertEquals("expression", "",
+                   soyValue.getSingle("expression").toString());
+      assertNull("list", soyValue.getSingle("list"));
+      assertNull("multi", soyValue.getSingle("multi"));
+    }
+
+    //......................................................................
   }
 
   //........................................................................

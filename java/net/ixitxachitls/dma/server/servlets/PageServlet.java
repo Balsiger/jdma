@@ -425,10 +425,11 @@ public class PageServlet extends SoyServlet
       response.setHeader("Content-Type", "text/html");
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(request.isBodyOnly()).andReturn(false).anyTimes();
-      EasyMock.expect(request.getUser()).andReturn(null);
-      EasyMock.expect(request.getOriginalPath()).andReturn("index.html");
+      EasyMock.expect(request.getUser()).andStubReturn(null);
+      EasyMock.expect(request.getOriginalPath()).andStubReturn("index.html");
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
       EasyMock.expect(request.getRequestURI()).andReturn("/about.html");
+      EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 
@@ -445,129 +446,8 @@ public class PageServlet extends SoyServlet
         };
 
       assertNull("handle", servlet.handle(request, response));
-      assertEquals("content",
-                   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                   + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN"
-                   + "\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-                   + "\">\n"
-                   + "<HTML xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-                   + "  <HEAD>\n"
-                   + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jquery-1.5.1.min.js\"></SCRIPT>\n"
-                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
-                   + "href=\"/css/smoothness/jquery-ui-1.8.14.custom.css\" />\n"
-                   + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jquery-ui-1.8.14.custom.min.js\"></SCRIPT>\n"
-                   + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/util.js\"></SCRIPT>\n"
-                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/form.js\">"
-                   + "</SCRIPT>\n"
-                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
-                   + "href=\"/css/gui.css\" />\n"
-                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/gui.js\">"
-                   + "</SCRIPT>\n"
-                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/edit.js\">"
-                   + "</SCRIPT>\n"
-                   + "    <SCRIPT type=\"text/javascript\" src=\"/js/item.js\">"
-                   + "</SCRIPT>\n"
-                   + "    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
-                   + "href=\"/css/jdma.css\" />\n"
-                   + "    <SCRIPT type=\"text/javascript\" "
-                   + "src=\"/js/jdma.js\"></SCRIPT>\n"
-                   + "    <META name=\"viewport\" "
-                   + "content=\"width=device-width, height=device-height\"/>\n"
-                   + "    <META name=\"Content-Type\" "
-                   + "content=\"text/html; charset=utf-8\" xml:lang=\"en\" "
-                   + "lang=\"en\"/>\n"
-                   + "    <LINK ref=\"SHORTCUT ICON\" "
-                   + "href=\"/icons/favicon.png\" />\n"
-                   + "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      if(location.hostname != 'localhost')\n"
-                   + "      {\n"
-                   + "        var _gaq = _gaq || [];\n"
-                   + "        _gaq.push(['_setAccount', 'UA-1524401-1']);\n"
-                   + "        _gaq.push(['_trackPageview']);\n"
-                   + "        (function() {\n"
-                   +  "          var ga = document.createElement('script'); "
-                   + "ga.type = 'text/javascript'; ga.async = true;\n"
-                   + "          ga.src = "
-                   + "('https:' == document.location.protocol "
-                   + "? 'https://ssl' : 'http://www') + "
-                   + "'.google-analytics.com/ga.js';\n"
-                   + "          var s = "
-                   + "document.getElementsByTagName('script')[0]; "
-                   + "s.parentNode.insertBefore(ga, s);\n"
-                   + "        })();\n"
-                   + "      }\n"
-                   + "    </SCRIPT>\n"
-                   + "  </HEAD>\n"
-                   + "  <BODY>\n"
-                   + "    <!-- This file was generate by jDMA, version "
-                   + "Allip () -->\n"
-                   + "    <DIV id=\"header\">\n"
-                   + "      <DIV id=\"header-right\">\n"
-                   + "        <A id=\"login-icon\" class=\"sprite\" "
-                   + "title=\"Login\" "
-                   + "href=\"/_ah/login?continue=index.html\">\n"
-                   + "</A>\n"
-                   + "        <A class=\"sprite library\" title=\"Library\" "
-                   + "href=\"/library\" "
-                   + "onclick=\"util.link(event, '/library');\">\n"
-                   + "</A>\n"
-                   + "        <A class=\"sprite about\" title=\"About\" "
-                   + "href=\"/about.html\" "
-                   + "onclick=\"util.link(event, '/about.html')\">\n"
-                   + "</A>\n"
-                   + "        <DIV onmouseover=\"$('#search :input').show()\" "
-                   + "onmouseout=\"$('#search :input').hide()\">\n"
-                   + "          <FORM class=\"search\" id=\"search\" "
-                   + "onsubmit=\"util.link(event, '/search/' + "
-                   + "this.search.value)\">\n"
-                   + "            <INPUT name=\"search\"/>\n"
-                   + "            <DIV class=\"sprite search\" "
-                   + "title=\"Search\">\n"
-                   + "            </DIV>\n"
-                   + "          </FORM>\n"
-                   + "        </DIV>\n"
-                   + "      </DIV>\n"
-                   + "      <DIV id=\"header-left\">\n"
-                   + "        DMA\n"
-                   + "      </DIV>\n"
-                   + "      <DIV id=\"navigation\">\n"
-                   + "        <A id=\"home\" class=\"sprite\" title=\"Home\" "
-                   + "href=\"/\" onclick=\"util.link(event, '/')\">\n"
-                   + "</A>\n"
-                   + "        <SPAN id=\"subnavigation\">\n"
-                   + "          &nbsp;\n"
-                   + "        </SPAN>\n"
-                   + "      </DIV>\n"
-                   + "      <DIV id=\"actions\">\n"
-                   + "      </DIV>\n"
-                   + "    </DIV>\n"
-                   + "    <DIV id=\"page\" class=\"page\">\n"
-                   + "      This is the body.\n"
-                   + "    </DIV>\n"
-                   + "    <DIV class=\"footer\">\n"
-                   + "      <P/>\n"
-                   + "      <DIV class=\"version\">\n"
-                   + "        jDMA version Allip (build )\n"
-                   + "      </DIV>\n"
-                   + "      <IMG src=\"/icons/html5.png\" "
-                   + "alt=\"Uses HTML 5!\"/>\n"
-                   + "      <IMG src=\"http://code.google.com/appengine/"
-                   + "images/appengine-silver-120x30.gif\" "
-                   + "alt=\"Powered by Google App Engine\"/>\n"
-                   + "      <A href=\"https://plus.google.com/"
-                   + "109501801834573360902?prsrc=3\" "
-                   + "style=\"text-decoration:none;\">"
-                   + "<IMG src=\"https://ssl.gstatic.com/images/icons/"
-                   + "gplus-32.png\" alt=\"jDMA on Google+\" "
-                   + "style=\"border:0;width:32px;height:32px;\"/>\n"
-                   + "</A>\n"
-                   + "    </DIV>\n"
-                   + "  </BODY>\n"
-                   + "</HTML>\n",
-                   output.toString());
+      String content = output.toString();
+      assertPattern("content", ".*<title>DMA - Unknown</title>.*", content);
 
       output.close();
       EasyMock.verify(request, response);
@@ -592,7 +472,10 @@ public class PageServlet extends SoyServlet
       response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(request.isBodyOnly()).andReturn(true).anyTimes();
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(request.getRequestURI()).andReturn("/about.html");
+      EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
+      EasyMock.expect(request.getUser()).andStubReturn(null);
+      EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
+      EasyMock.expect(request.getOriginalPath()).andStubReturn("/about.html");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);
 
@@ -609,7 +492,9 @@ public class PageServlet extends SoyServlet
         };
 
       assertNull("handle", servlet.handle(request, response));
-      assertEquals("content", "    This is the body.\n", output.toString());
+      assertEquals("content",
+                   "No new content defined, yet.    This is the body.\n\n",
+                   output.toString());
 
       output.close();
       EasyMock.verify(request, response);

@@ -31,11 +31,15 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.TreeMultimap;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -44,6 +48,7 @@ import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -127,10 +132,16 @@ public class IndexServlet extends PageServlet
 
     String []match =
       Strings.getPatterns(path, "^/_index/([^/]+)/([^/]+)(?:/(.*$))?");
-    AbstractType<? extends AbstractEntry> type =
-      AbstractType.getTyped(match[0]);
-    String name = match[1];
-    String group = match[2];
+    AbstractType<? extends AbstractEntry> type = null;
+    String name = null;
+    String group = null;
+
+    if(match.length == 3)
+    {
+      type = AbstractType.getTyped(match[0]);
+      name = match[1];
+      group = match[2];
+    }
 
     if(name == null || name.isEmpty() || type == null)
     {
@@ -281,6 +292,111 @@ public class IndexServlet extends PageServlet
   /** The test. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- nested ---------------------------------------------------------
+
+    /** The nested Test. */
+    @org.junit.Test
+    public void nested()
+    {
+      assertFalse("empty", isNested(ImmutableSortedSet.<String>of()));
+      assertFalse("non-nested", isNested(ImmutableSortedSet.of("one")));
+      assertFalse("non-nested", isNested(ImmutableSortedSet.of("one", "two")));
+      assertTrue("nested", isNested(ImmutableSortedSet.of("one::nested")));
+      assertTrue("nested",
+                 isNested(ImmutableSortedSet.of("one", "two::nested")));
+    }
+
+    //......................................................................
+    //----- groups ---------------------------------------------------------
+
+    /** The groups Test. */
+    @org.junit.Test
+    public void groups()
+    {
+      assertEquals("empty", "{}",
+                   nestedGroups(ImmutableSortedSet.<String>of()).toString());
+      assertEquals("non-nested", "{one=[], three=[], two=[]}",
+                   nestedGroups(ImmutableSortedSet.of("one", "two", "three"))
+                   .toString());
+      assertEquals("nested",
+                   "{one=[first, second, third], three=[], two=[first]}",
+                   nestedGroups(ImmutableSortedSet.of
+                                ("one::first", "two::first", "one::second",
+                                 "one::third", "three"))
+                   .toString());
+    }
+
+    //......................................................................
+    //----- noPath ---------------------------------------------------------
+
+    /** The nopath Test. */
+    @org.junit.Test
+    public void noPath()
+    {
+      assertEquals("no path", "invalid page: null", checkContent(null));
+    }
+
+    //......................................................................
+    //----- invalidPath ----------------------------------------------------
+
+    /** The invalid path Test. */
+    @org.junit.Test
+    public void invalidPath()
+    {
+      assertEquals("invalid path", "invalid page: some page",
+                 checkContent("some page"));
+    }
+
+    //......................................................................
+    //----- invalidPath ----------------------------------------------------
+
+    /** The simple Test. */
+    @org.junit.Test
+    public void simple()
+    {
+      assertEquals("simple",
+                   "index overview (title: Worlds, "
+                   + "indexes: [Index-1, Index-2, Index-3], "
+                   + "name: worlds, keys: no keys)",
+                 checkContent("/_index/base item/worlds"));
+    }
+
+    //......................................................................
+
+    //---------------------------- checkContent ----------------------------
+
+    /**
+     * Check the contents of the generated page for a pattern.
+     *
+     * @param       inPath    the path to the page
+     *
+     * @return      the content generated
+     *
+     */
+    public String checkContent(@Nullable String inPath)
+    {
+      IndexServlet servlet = new IndexServlet();
+
+      DMARequest request = EasyMock.createMock(DMARequest.class);
+
+      EasyMock.expect(request.isBodyOnly()).andStubReturn(false);
+      EasyMock.expect(request.getRequestURI()).andStubReturn(inPath);
+      EasyMock.expect(request.getOriginalPath()).andStubReturn(inPath);
+      EasyMock.replay(request);
+
+      String content = servlet.collectData
+        (request,
+         new SoyRenderer(new SoyTemplate("lib/test/soy/errors",
+                                         "lib/test/soy/entry")))
+        .get("content").toString();
+
+      EasyMock.verify(request);
+
+      return content;
+    }
+
+    //......................................................................
+
   }
 
   //........................................................................

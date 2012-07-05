@@ -140,7 +140,7 @@ public class EntryServlet extends PageServlet
     String path = inRequest.getRequestURI();
     if(path == null)
     {
-      data.put("content", "dma.error.noEntry");
+      data.put("content", inRenderer.render("dma.error.noEntry"));
       return data;
     }
 
@@ -163,7 +163,8 @@ public class EntryServlet extends PageServlet
       AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(path);
       if(key == null)
       {
-        data.put("content", "dma.error.extract");
+        data.put("content", inRenderer.render("dma.errors.extract",
+                                              map("name", path)));
         return data;
       }
 
@@ -288,7 +289,7 @@ public class EntryServlet extends PageServlet
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
+  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
   {
     /** The request for the test. */
     private DMARequest m_request = null;
@@ -363,7 +364,6 @@ public class EntryServlet extends PageServlet
     public void cleanup() throws Exception
     {
       m_output.close();
-      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................
@@ -389,8 +389,10 @@ public class EntryServlet extends PageServlet
       m_response.setHeader("Content-Type", "text/html");
       m_response.setHeader("Cache-Control", "max-age=0");
       EasyMock.expect(m_request.isBodyOnly()).andReturn(true).anyTimes();
-      EasyMock.expect(m_request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(m_request.getRequestURI()).andReturn(inPath);
+      EasyMock.expect(m_request.getQueryString()).andStubReturn("");
+      EasyMock.expect(m_request.getRequestURI()).andStubReturn(inPath);
+      EasyMock.expect(m_request.getOriginalPath()).andStubReturn(inPath);
+      EasyMock.expect(m_request.hasUserOverride()).andStubReturn(false);
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.hasUser()).andStubReturn(true);
       EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
@@ -424,29 +426,14 @@ public class EntryServlet extends PageServlet
     {
       EntryServlet servlet =
         createServlet("/baseentry/guru",
-                      new BaseEntry("guru"), null, null, false);
+                      new net.ixitxachitls.dma.entries.BaseItem("guru"), null,
+                      null, false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
-      assertEquals("content",
-                   "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'base entry: guru';\n"
-                   + "    </SCRIPT>\n"
-                   + s_imageScript
-                   + "    " + s_navigation
-                   + "\n<h1 class=\"entrytitle\">"
-                   + "guru</h1>\n"
-                   + s_navigation
-                   + "\n"
-                   + "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      $('#subnavigation').html(' &raquo; "
-                   + "<a href=\"/entrys\" class=\"navigation-link\" "
-                   + "onclick=\"return util.link(event, \\'/entrys\\');\" >"
-                   + "entry</a> &raquo; <a href=\"/entry/guru\" "
-                   + "class=\"navigation-link\" "
-                   + "onclick=\"return util.link(event, \\'/entry/guru\\');\" >"
-                   + "guru</a>');\n"
-                   + "    </SCRIPT>\n",
-                   m_output.toString());
+      assertPattern("content", ".*'DMA - guru'.*>Weight<.*>Probability<.*",
+                    m_output.toString());
+
+      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................
@@ -460,20 +447,19 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void noPath() throws Exception
     {
-      EntryServlet servlet = createServlet(null, null, null, null, false);
+      EntryServlet servlet = createServlet("", null, null, null, false);
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
-                   "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'Not Found';\n"
-                   + "    </SCRIPT>\n"
-                   + "    <H1>\n"
-                   + "      Invalid Reference\n"
-                   + "    </H1>\n"
-                   + "    The page referenced does not exist!\n",
+                   "<script>"
+                   + "document.title = 'DMA - Could Not Determine Entry Key';"
+                   + "</script>"
+                   + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
+                   + "<div>The key to the entry could not be extracted from "
+                   + "&#39;&#39;.</div>\n",
                    m_output.toString());
 
-      m_logger.addExpected("WARNING: no path given for request");
+      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................
@@ -492,18 +478,15 @@ public class EntryServlet extends PageServlet
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
-                   "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'Not Found';\n"
-                   + "    </SCRIPT>\n"
-                   + "    <H1>\n"
-                   + "      Could Not Extract Entry\n"
-                   + "    </H1>\n"
-                   + "    Could not find the type and/or id of the entry "
-                   + "for this page.\n",
+                   "<script>"
+                   + "document.title = 'DMA - Could Not Determine Entry Key';"
+                   + "</script>"
+                   + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
+                   + "<div>The key to the entry could not be extracted from "
+                   + "&#39;/baseentry/guru&#39;.</div>\n",
                    m_output.toString());
 
-      m_logger.addExpected("WARNING: could not extract entry from "
-                           + "'/baseentry/guru'");
+      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................
@@ -522,18 +505,15 @@ public class EntryServlet extends PageServlet
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
-                   "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'Not Found';\n"
-                   + "    </SCRIPT>\n"
-                   + "    <H1>\n"
-                   + "      Could Not Extract Entry\n"
-                   + "    </H1>\n"
-                   + "    Could not find the type and/or id of the entry "
-                   + "for this page.\n",
+                   "<script>"
+                   + "document.title = 'DMA - Could Not Determine Entry Key';"
+                   + "</script>"
+                   + "<h1 style=\"\">Could Not Determine Entry Key</h1>"
+                   + "<div>The key to the entry could not be extracted from "
+                   + "&#39;/baseentry/guru&#39;.</div>\n",
                    m_output.toString());
 
-      m_logger.addExpected("WARNING: could not extract entry from "
-                           + "'/baseentry/guru'");
+      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................
@@ -548,29 +528,14 @@ public class EntryServlet extends PageServlet
     public void create() throws Exception
     {
       EntryServlet servlet =
-        createServlet("/base entry/guru", null, BaseEntry.TYPE, "guru", true);
+        createServlet("/base item/guru", null,
+                      net.ixitxachitls.dma.entries.BaseItem.TYPE, "guru", true);
 
       assertNull("handle", servlet.handle(m_request, m_response));
-      assertEquals("content",
-                   "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'base entry: guru';\n"
-                   + "    </SCRIPT>\n"
-                   + s_imageScript
-                   + "    " + s_navigation
-                   + "\n<h1 class=\"entrytitle\">"
-                   + "guru</h1>\n"
-                   + s_navigation
-                   + "\n"
-                   + "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      $('#subnavigation').html(' &raquo; "
-                   + "<a href=\"/entrys\" class=\"navigation-link\" "
-                   + "onclick=\"return util.link(event, \\'/entrys\\');\" >"
-                   + "entry</a> &raquo; <a href=\"/entry/guru\" "
-                   + "class=\"navigation-link\" "
-                   + "onclick=\"return util.link(event, \\'/entry/guru\\');\" >"
-                   + "guru</a>');\n"
-                   + "    </SCRIPT>\n",
-                   m_output.toString());
+      assertPattern("content", ".*'DMA - guru'.*>Weight<.*>Probability<.*",
+                    m_output.toString());
+
+      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................
@@ -589,23 +554,13 @@ public class EntryServlet extends PageServlet
 
       assertNull("handle", servlet.handle(m_request, m_response));
       assertEquals("content",
-                   "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      document.title = 'Not Found';\n"
-                   + "    </SCRIPT>\n"
-                   + "    <SCRIPT type=\"text/javascript\">\n"
-                   + "      if(confirm('The desired entry does not exist!\\n\\n"
-                   + "Do you want to create a new entry with id "
-                   + "\\'guru\\'?'))\n"
-                   + "        location.href = "
-                   + "location.href.replace(/\\?.*$/, '') + '?create';\n"
-                   + "    </SCRIPT>\n"
-                   + "    <H1>\n"
-                   + "      Entry Not Found\n"
-                   + "    </H1>\n"
-                   + "    Could not find base entry 'guru'.\n",
+                   "<script>document.title = 'DMA - Entry Not Found';</script>"
+                   + "<h1 style=\"\">Entry Not Found</h1>"
+                   + "<div>The entry &#39;guru&#39; typed &#39;base entry&#39; "
+                   + "could not be found.</div>\n",
                    m_output.toString());
 
-      m_logger.addExpected("WARNING: could not find entry 'guru'.");
+      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................
@@ -645,6 +600,8 @@ public class EntryServlet extends PageServlet
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
                    servlet.extractKey("/base entry/test").getType());
       assertNull("type", servlet.extractKey(""));
+
+      EasyMock.verify(m_request, m_response);
     }
 
     //......................................................................

@@ -42,6 +42,7 @@ import com.google.template.soy.tofu.internal.BaseTofu;
 
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.resources.Resource;
 
 //..........................................................................
 
@@ -246,10 +247,6 @@ public class SoyTemplate
   /**
    * Compile the templates for rendering.
    *
-   * @param
-   *
-   * @return
-   *
    */
   public void compile()
   {
@@ -258,10 +255,19 @@ public class SoyTemplate
     // Bundle the Soy files for your project into a SoyFileSet.
     SoyFileSet.Builder files = new SoyFileSet.Builder();
     for(String file : m_files)
+    {
+      String name;
       if(file.contains("/"))
-        files.add(new File(file + ".soy"));
+        name = file + ".soy";
       else
-        files.add(new File("soy/" + file + ".soy"));
+        name = "soy/" + file + ".soy";
+
+      File pureFile = new File(name);
+      if(pureFile.canRead())
+        files.add(pureFile);
+      else
+        files.add(Resource.get(name).asFile());
+    }
 
     files.setCompileTimeGlobals(map("dma.project", PROJECT,
                                     "dma.url", PROJECT_URL,
@@ -283,7 +289,7 @@ public class SoyTemplate
    * @return   the converted map
    *
    */
-  public @Nonnull Map<String, Object> map(@Nonnull Object ... inData)
+  public static @Nonnull Map<String, Object> map(@Nonnull Object ... inData)
   {
     assert inData.length % 2 == 0 : "invalid number of arguments";
 
@@ -303,6 +309,42 @@ public class SoyTemplate
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- map ------------------------------------------------------------
+
+    /** The map Test. */
+    @org.junit.Test
+    public void map()
+    {
+      assertEquals("empty", "{}", SoyTemplate.map().toString());
+      assertEquals("simple", "{b=2, a=1}",
+                   SoyTemplate.map("a", "1", "b", "2").toString());
+      assertEquals("nested", "{b={n1=2, n2=3}, a=1}",
+                   SoyTemplate.map("a", "1", "b",
+                                   SoyTemplate.map("n1", "2", "n2", "3"))
+                   .toString());
+    }
+
+    //......................................................................
+    //----- render ---------------------------------------------------------
+
+    /** The render Test. */
+    @org.junit.Test
+    public void render()
+    {
+      SoyTemplate renderer = new SoyTemplate("lib/test/soy/test");
+
+      assertEquals("render",
+                   "first: first data second: second data "
+                   + "third: first injected fourth: second injected "
+                   + "fifth: jDMA",
+                   renderer.render
+                   ("dma.commands.test",
+                    SoyTemplate.map("first", "first data",
+                                    "second", "second data"),
+                    SoyTemplate.map("first", "first injected",
+                                    "second", "second injected"),
+                    null));
+    }
   }
 
   //........................................................................

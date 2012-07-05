@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -95,7 +96,7 @@ public final class Entries
    * @return    a list of all the entries
    *
    */
-  public static List<String> names(Iterable<ValueGroup> inEntries)
+  public static List<String> names(@Nonnull Iterable<ValueGroup> inEntries)
   {
     List<String> names = new ArrayList<String>();
     for(ValueGroup entry : inEntries)
@@ -116,7 +117,7 @@ public final class Entries
    * @return      a comma separated string with all the names
    *
    */
-  public static String namesString(Iterable<ValueGroup> inEntries)
+  public static String namesString(@Nonnull Iterable<ValueGroup> inEntries)
   {
     return s_commaJoiner.join(names(inEntries));
   }
@@ -128,11 +129,38 @@ public final class Entries
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- names ----------------------------------------------------------
+
+    /** The names Test. */
+    @org.junit.Test
+    public void names()
+    {
+      assertEquals("empty", "", namesString(entries()));
+      assertEquals("one", "name", namesString(entries("name")));
+      assertEquals("two", "name1, name2",
+                   namesString(entries("name1", "name2")));
+      assertEquals("full", "first name, second name, third name",
+                   namesString(entries("first name", "second name",
+                                       "third name")));
+    }
+
+    /** Create a list of entries with the given names.
+     *
+     * @param  inNames the names of the entries
+     * @return the created list
+     */
+    private List<ValueGroup> entries(String ... inNames)
+    {
+      List<ValueGroup> list = new ArrayList<ValueGroup>();
+
+      for(String name : inNames)
+        list.add(new BaseEntry(name));
+
+      return list;
+    }
+
+    //......................................................................
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

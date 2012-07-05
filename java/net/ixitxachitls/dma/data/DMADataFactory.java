@@ -112,7 +112,6 @@ public final class DMADataFactory
         }
         else
           s_base = new DMAData.Test.Data();
-            //EasyMock.createMock(DMAData.class);
     }
 
     return s_base;

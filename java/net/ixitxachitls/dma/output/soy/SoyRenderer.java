@@ -565,11 +565,69 @@ public class SoyRenderer
   /** The tests. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
+    //----- mark -----------------------------------------------------------
+
+    /** Testing marking of passages. */
+    @org.junit.Test
+    public void mark()
+    {
+      assertEquals("simple", "\001<0>abc\002<0>",
+                   markBrackets("{abc}", '\\', '{', '}', '\001', '\002'));
+      assertEquals("multiple", "\001<0>abc\002<0>  \001<0>\002<0>",
+                   markBrackets("{abc}  {}", '\\', '{', '}', '\001', '\002'));
+      assertEquals("nested",
+                   "\001<0>a{b{}}{{}}c\002<0>\001<0>\002<0>",
+                   markBrackets("{a{b{}}{{}}c}{}", '\\', '{', '}', '\001',
+                                '\002'));
+      assertEquals("escaped", "\001<0>a\\{b\\}c\002<0>",
+                   markBrackets("{a\\{b\\}c}", '\\', '{', '}', '\001',
+                                '\002'));
+      assertEquals("incomplete", "{a\001<0>b\002<0>{",
+                   markBrackets("{a{b}{", '\\', '{', '}', '\001', '\002'));
+    }
+
+    //......................................................................
+    //----- renderCommands -------------------------------------------------
+
+    /** The renderCommands Test. */
+    @org.junit.Test
+    public void renderCommands()
+    {
+      SoyRenderer renderer =
+        new SoyRenderer(new SoyTemplate("lib/test/soy/test"));
+
+      assertEquals("empty", "", renderer.renderCommands(""));
+      assertEquals("text", "just a text",
+                   renderer.renderCommands("just a text"));
+      assertEquals("commands", "just a -- command --",
+                   renderer.renderCommands("just a \\bold{command}"));
+    }
+
+    //......................................................................
+    //----- render ---------------------------------------------------------
+
+    /** The render Test. */
+    @org.junit.Test
+    public void render()
+    {
+      SoyRenderer renderer =
+        new SoyRenderer(new SoyTemplate("lib/test/soy/test"));
+
+      assertEquals("render",
+                   "first: first data second: second data "
+                   + "third: first injected fourth: second injected "
+                   + "fifth: jDMA",
+                   renderer.render
+                   ("dma.commands.test",
+                    SoyTemplate.map("first", "first data",
+                                    "second", "second data"),
+                    SoyTemplate.map("first", "first injected",
+                                    "second", "second injected")));
+    }
+
+    //......................................................................
+
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

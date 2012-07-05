@@ -133,5 +133,23 @@
   (insert (concat (make-string my-col ?\ ) "  "))
 )
 
+(defun my-insert-test-fold ()
+  "Insert a test fold"
+  (interactive)
+  (set 'my-text (read-from-minibuffer "Test: "))
+  (my-insert-fold "left" my-text)
+  (insert "/** The "
+          my-text
+          " Test. */\n"
+          "    @org.junit.Test\n"
+          "    public void "
+          my-text
+          "()\n"
+          "    {\n"
+          "      \n"
+          "    }")
+  (previous-line 1)
+  (forward-char 1)
+)
 
 

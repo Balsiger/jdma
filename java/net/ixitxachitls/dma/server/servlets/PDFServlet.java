@@ -47,9 +47,6 @@ import com.google.appengine.api.conversion.ConversionService;
 import com.google.appengine.api.conversion.ConversionServiceFactory;
 import com.google.common.io.Files;
 
-import org.easymock.EasyMock;
-
-import net.ixitxachitls.dma.output.pdf.PDFDocument;
 import net.ixitxachitls.output.Document;
 import net.ixitxachitls.util.logging.Log;
 
@@ -331,52 +328,7 @@ public abstract class PDFServlet extends DMAServlet
 
   //------------------------------------------------------------------- test
 
-  /** The test. */
-  public static class Test extends net.ixitxachitls.server.ServerUtils.Test
-  {
-    //----- handle ---------------------------------------------------------
-
-    /** The handle Test.
-     *
-     * @throws Exception should not happen
-     */
-    @org.junit.Test
-    public void handle() throws Exception
-    {
-      PDFServlet servlet = new PDFServlet() {
-          private static final long serialVersionUID = 1L;
-          @Override
-          protected Document createDocument(@Nonnull DMARequest inRequest)
-          {
-            Document test = new PDFDocument("test");
-            test.setAlignment(net.ixitxachitls.output.Buffer.Alignment.left);
-            test.add(new net.ixitxachitls.output.commands
-                     .Left("This is just some test file"));
-
-            return test;
-          }
-        };
-
-      DMARequest request = EasyMock.createMock(DMARequest.class);
-      HttpServletResponse response =
-        EasyMock.createMock(HttpServletResponse.class);;
-      MockServletOutputStream output = new MockServletOutputStream();
-
-      response.setHeader("Content-Type", "application/pdf");
-      response.setHeader("Cache-Control", "max-age=0");
-      EasyMock.expect(response.getOutputStream()).andReturn(output);
-
-      EasyMock.replay(request, response);
-
-      assertNull(servlet.handle(request, response));
-      assertEquals("content", "%PDF-1.4\n%",
-                   output.toString().substring(0, 10));
-
-      EasyMock.verify(request, response);
-    }
-
-    //......................................................................
-  }
+  // no tests, as conversion only works on app engine
 
   //........................................................................
 }

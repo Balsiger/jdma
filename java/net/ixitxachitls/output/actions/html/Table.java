@@ -324,38 +324,6 @@ public void execute(@Nonnull Document inDocument,
 
       doc = new net.ixitxachitls.output.html.HTMLDocument("title");
       action.execute(doc,
-                     com.google.common.collect.ImmutableList.of("name"),
-                     com.google.common.collect.ImmutableList.of
-                     ("#js#10:L;20:C,|,|;30:R(name)[title], * , * ",
-                      "first",
-                      "second",
-                      "third",
-                      "first again, this time somewhat 'larger', to see that "
-                      + "wordwrapping \"works\"",
-                      "second, this is short",
-                      "third, this is also a bit longer, because two lines "
-                      + "should wrap, to have a better test case",
-                      "first",
-                      "second"));
-
-      assertEquals("execution did not produce desired result",
-                   "<table id='table_name' class='name'></table>"
-                   + "<script type='text/javascript'>\n"
-                   + "  var table_name = new Table('table_name', [null], "
-                   + "'/icons', '', '', null, true, '', '', null, true, "
-                   + "'name', 'title', null, true);\n\n"
-                   + "table_name.add('first', 'second', 'third');\n"
-                   + "table_name.add('first again, this time somewhat "
-                   + "\\'larger\\', to see that wordwrapping \"works\"', "
-                   + "'second, this is short', "
-                   + "'third, this is also a bit longer, because two lines "
-                   + "should wrap, to have a better test case');\n"
-                   + "table_name.add('first', 'second');\n"
-                   + "</script>\n",
-                   doc.toString());
-
-      doc = new net.ixitxachitls.output.html.HTMLDocument("title");
-      action.execute(doc,
                      com.google.common.collect.ImmutableList.of("class"),
                      com.google.common.collect.ImmutableList.of
                      ("#inline#10:L;20:C(name)[title],|,|;30:R, * , * ",

@@ -194,7 +194,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected @Nonnull String doToString()
   {
     return m_text.replaceAll("([" + s_nameDelimPattern + "])", "\\\\$1");
   }
@@ -210,7 +210,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_text != null;
   }
