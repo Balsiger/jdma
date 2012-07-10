@@ -286,9 +286,11 @@ public class AbstractEntry extends ValueGroup
 
     // we have to init this here, as we need to have the type set
     m_base = new ValueList<Name>
-      (new Name().withFormatter(new LinkFormatter<Name>
-                                ("/" + getType().getBaseType().getLink()
-                                 + "/")));
+      (new Name()
+       .withTemplate("link", getType().getBaseType().getLink())
+       .withFormatter(new LinkFormatter<Name>
+                      ("/" + getType().getBaseType().getLink()
+                       + "/")));
   }
 
   //........................................................................
@@ -1994,7 +1996,19 @@ public class AbstractEntry extends ValueGroup
       return list;
     }
 
-    return super.compute(inKey);
+    Value value = super.compute(inKey);
+    if(value != null)
+      return value;
+
+    // The value is not declared in this entry, but might be in a base entry.
+    for(BaseEntry base : getBaseEntries())
+    {
+      value = base.compute(inKey);
+      if(value != null)
+        return value.create();
+    }
+
+    return null;
   }
 
   //........................................................................

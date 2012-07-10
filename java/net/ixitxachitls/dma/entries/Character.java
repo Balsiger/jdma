@@ -36,6 +36,7 @@ import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Money;
+import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
@@ -856,6 +857,45 @@ public class Character extends CampaignEntry<BaseCharacter>
         return new Name("character/person.png");
       else
         return new Name(main.getIcon() + "=s100");
+    }
+
+    if("wealth".equals(inKey))
+    {
+      Money wealth = totalWealth();
+      Number number = new Number(0, 100000000);
+
+      return new Multiple
+        (new Multiple.Element(wealth, false),
+         new Multiple.Element(number.as((int)wealth.getAsGold().getValue()),
+                              false),
+         new Multiple.Element(number.as(wealthPerLevel((int)m_level.get() - 1)),
+                              false),
+         new Multiple.Element(number.as(wealthPerLevel((int)m_level.get())),
+                              false),
+         new Multiple.Element(number.as(wealthPerLevel((int)m_level.get() + 1)),
+                              false));
+    }
+
+    if("weight".equals(inKey))
+      return totalWeight();
+
+    if("items".equals(inKey))
+    {
+      List<Multiple> items = new ArrayList<Multiple>();
+      for(Name name : m_items)
+      {
+        Item item = getCampaign().getItem(name.get());
+        items.add(new Multiple
+                  (new Multiple.Element(name, false),
+                   new Multiple.Element
+                   (item != null ? new Name(item.getPlayerName()) : new Name(),
+                    true),
+                   new Multiple.Element
+                   (item != null ? new Name(item.getDMName()) : new Name(),
+                    true)));
+      }
+
+      return new ValueList<Multiple>(items);
     }
 
     return super.compute(inKey);

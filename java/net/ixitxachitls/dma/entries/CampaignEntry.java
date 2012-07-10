@@ -130,7 +130,8 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   @Key("campaign")
   protected Multiple m_campaign =
     new Multiple(new Multiple.Element(new Name(), false, null, " / "),
-                 new Multiple.Element(new Name(), false));
+                 new Multiple.Element(new Name(), false))
+    .withTemplate("campaign");
 
   //........................................................................
 

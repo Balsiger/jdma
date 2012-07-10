@@ -101,7 +101,7 @@ public class SoyEntry extends SoyMapData
   //------------------------------ getSingle -------------------------------
 
   /**
-   * Get a single value out of the combination.
+   * Get a single value out of the entry.
    *
    * @param  inName the name of the value to get
    *
@@ -118,6 +118,12 @@ public class SoyEntry extends SoyMapData
 
     if("path".equals(inName))
       return StringData.forValue(m_entry.getPath());
+
+    if("isBase".equals(inName))
+      return BooleanData.forValue(m_entry.isBase());
+
+    if("editType".equals(inName))
+      return StringData.forValue(m_entry.getEditType());
 
     if("type".equals(inName))
       return new SoyMapData("name", m_entry.getType().getName(),
@@ -169,10 +175,6 @@ public class SoyEntry extends SoyMapData
     Value value = m_entry.compute(name);
     if(value != null)
       return new SoyValue(name, value, m_entry, m_renderer);
-
-    value = m_entry.getValue(name);
-    if(value != null)
-      return StringData.forValue(value.toString());
 
     return null;
   }

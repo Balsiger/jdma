@@ -34,9 +34,11 @@ import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
+import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.values.BaseNumber;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Value;
@@ -197,6 +199,10 @@ public class SoyValue extends SoyMapData
 
       return new SoyListData(values);
     }
+
+    if("number".equals(inName) && m_value instanceof BaseNumber)
+      return IntegerData.forValue((int)((BaseNumber)m_value).get());
+
 
     return null;
   }

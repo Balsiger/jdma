@@ -25,3 +25,114 @@
 {delpackage character}
 {namespace dma.entry.character}
 
+/**
+ * The values for the entry.
+ *
+ * @param entry The entry rendered
+ */
+{deltemplate dma.entry.values}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Name' /}
+    {param content}
+      {call dma.value.editable}
+        {param canEdit: $ij.isDM or $ij.isOwner /}
+        {param name: 'name' /}
+        {param value: $entry.name /}
+        {param key: $entry.key /}
+        {param type: 'name' /}
+        {param content: $entry.name /}
+      {/call}
+    {/param}
+    {param access: 'user' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Base' /}
+    {param value: $entry.base /}
+    {param access: 'user' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Campaign' /}
+    {param value: $entry.campaign /}
+    {param access: 'user' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Level' /}
+    {param value: $entry.level /}
+    {param access: 'user' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Wealth' /}
+    {param content}
+      {if $entry.wealth.multi.1.number < $entry.wealth.multi.2.number}
+        <span class="error">
+          {$entry.wealth.multi.1.raw} gp
+          (too low, should be around {$entry.wealth.multi.3.raw} gp)
+        </span>{sp}
+      {elseif $entry.wealth.multi.1.number > $entry.wealth.multi.4.number}
+          <span class="error">
+            {$entry.wealth.multi.1.raw} gp
+            (too high, should be around {$entry.wealth.multi.3.raw} gp)
+          </span>{sp}
+      {elseif $entry.wealth.multi.1.number <
+          $entry.wealth.multi.3.number + $entry.wealth.multi.2.number / 2}
+          <span class="warning">
+            {$entry.wealth.multi.1.raw} gp
+            (a little too low, should be around {$entry.wealth.multi.3.raw} gp)
+          </span>{sp}
+      {elseif $entry.wealth.multi.1.number >
+          $entry.wealth.multi.3.number + $entry.wealth.multi.4.number / 2}
+          <span class="error">
+            {$entry.wealth.multi.1.raw} gp
+            (too high, should be around {$entry.wealth.multi.3.raw} gp)
+          </span>{sp}
+      {/if}
+    {/param}
+    {param access: 'owner' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Carried Weight' /}
+    {param content: $entry.weight.print /}
+    {param access: 'user' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Items' /}
+    {param content}
+      {foreach $item in $entry.items.list}
+        {call dma.page.link}
+          {param url: '/campaign/' + $entry.campaign.multi.0.raw + '/'
+              + $entry.campaign.multi.1.raw + '/item/'
+              + $item.multi.0.raw /}
+          {param text}
+            {if $ij.isDM}
+              {$item.multi.2.print}
+            {else}
+              {$item.multi.1.print}
+            {/if}
+          {/param}
+        {/call}
+        {if not isLast($item)}, {/if}
+      {/foreach}
+      {if $ij.user}
+      {sp}| {call dma.page.link}
+          {param js: 'item.create(\'/campaign/'
+              + $entry.campaign.multi.0.raw + '/'
+              + $entry.campaign.multi.1.raw + '\', \''
+              + '/base campaign/' + $entry.campaign.multi.0.raw
+              + '/campaign/' + $entry.campaign.multi.1.raw
+              + '/' + $entry.type.link + '/'
+              + $entry.name + '\');' /}
+          {param text: 'add' /}
+          {param tooltip: 'Add a new item to this character.' /}
+        {/call}
+      {/if}
+    {/param}
+    {param access: 'user' /}
+  {/delcall}
+{/deltemplate}
