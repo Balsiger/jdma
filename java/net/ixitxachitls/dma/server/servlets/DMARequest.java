@@ -107,9 +107,6 @@ public class DMARequest extends HttpServletRequestWrapper
   /** The URL and post parameters. */
   private @Nonnull Multimap<String, String> m_params;
 
-  /** The campaign containing all campaigns. */
-//   private Campaign m_campaigns = null;
-
   /** The campaign for the current request, if any. */
 //   private Campaign m_campaign = null;
 

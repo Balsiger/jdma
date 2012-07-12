@@ -37,7 +37,10 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.output.commands.BaseCommand;
@@ -473,6 +476,93 @@ public class Campaign extends Entry<BaseCampaign>
   // }
 
   //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Compute a value for a given key, taking base entries into account if
+   * available.
+   *
+   * @param    inKey the key of the value to compute
+   *
+   * @return   the compute value
+   *
+   */
+  public @Nullable Value compute(@Nonnull String inKey)
+  {
+    if("characters".equals(inKey))
+    {
+      List<String> characters =
+        DMADataFactory.get().getIDs(Character.TYPE, getKey());
+
+      List<Multiple> list = new ArrayList<Multiple>();
+      for(String character : characters)
+        list.add(new Multiple
+                 (new Multiple.Element(new Name(character), false),
+                  new Multiple.Element(new Name(getPath() + "/"
+                                                + Character.TYPE.getLink() + "/"
+                                                + character), false)));
+
+      return new ValueList<Multiple>(list);
+    }
+
+    if("items".equals(inKey))
+    {
+      List<Character> characters =
+        DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
+      List<Multiple> list = new ArrayList<Multiple>();
+
+      for(int pos = 0;; pos += 100)
+      {
+        // TODO: this is expensive, we might want to do this only on demand?
+        List<Item> items =
+          DMADataFactory.get().getEntries(Item.TYPE, getKey(), pos, 100);
+
+        Map<String, Item> owned = new HashMap<String, Item>();
+        for(Character character : characters)
+        {
+          Map<String, Item> contained = character.containedItems(true);
+          for(String key : contained.keySet())
+            if(owned.containsKey(key))
+              Log.warning("item " + key + " is possessed by two characters");
+
+          owned.putAll(contained);
+        }
+
+        for(Item item : items)
+        {
+          if(owned.containsKey(item.getName()))
+            continue;
+
+          list.add(new Multiple
+                   (new Multiple.Element(new Name(item.getPlayerName()),
+                                         false),
+                    new Multiple.Element(new Name(item.getDMName()),
+                                         false),
+                    new Multiple.Element(new Name(getPath() + "/"
+                                                  + Item.TYPE.getLink() + "/"
+                                                  + item.getName()), false)));
+        }
+
+        if(items.size() < 100)
+          break;
+      }
+
+      if(list.isEmpty())
+        return new ValueList<Multiple>
+          (new Multiple(new Multiple.Element(new Name(), false),
+                        new Multiple.Element(new Name(), false),
+                        new Multiple.Element(new Name(), false)));
+      else
+        return new ValueList<Multiple>(list);
+    }
+
+    if("basename".equals(inKey))
+      return new Name(m_base.get(0).get());
+
+    return super.compute(inKey);
+  }
+
+  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -605,6 +695,27 @@ public class Campaign extends Entry<BaseCampaign>
   {
     return "/" + BaseCampaign.TYPE + "/" + m_base.get(0).get()
       + "/" + Campaign.TYPE + "/" + getName();
+  }
+
+  //........................................................................
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry. Everybody is a DM
+   * for a base product.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  @Override
+  public boolean isDM(@Nullable BaseCharacter inUser)
+  {
+    if(inUser == null)
+      return false;
+
+    return inUser.getName().equals(getDMName());
   }
 
   //........................................................................

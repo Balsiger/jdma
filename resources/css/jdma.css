@@ -1429,14 +1429,6 @@ SELECT.admin-button
   background-color: white;
 }
 
-DIV.campaign
-{
-  display:     inline-block;
-  width:       300px;
-  font-weight: bold;
-  font-size:   large;
-}
-
 .symbol
 {
   font-size: 12px;
