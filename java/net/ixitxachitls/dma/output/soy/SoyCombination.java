@@ -109,6 +109,9 @@ public class SoyCombination extends SoyValue
     if("print".equals(inName))
       return StringData.forValue(m_combination.print(m_renderer));
 
+    if("min".equals(inName))
+      return StringData.forValue(m_combination.min().toString());
+
     return super.getSingle(inName);
   }
 

@@ -39,8 +39,10 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
+import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Text;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Bold;
 import net.ixitxachitls.output.commands.Color;
@@ -151,26 +153,7 @@ public class Item extends CampaignEntry<BaseItem>
 
   /** The print for printing a whole page entry. */
   public static final Print s_pagePrint =
-    new Print("$image "
-              + "${as pdf} ${as text} ${as dma} "
-              + "$title "
-              + "$desc "
-              + "$clear "
-              + "$files "
-              + "\n"
-              + "$par "
-              + "#incomplete "
-              + "%name %extensions %{player name} %base %campaign "
-              + "%categories "
-              + "%weight %value %>size %hp %substance %hardness %{break DC} "
-              + "%appearance "
-              + "#counted #multiple #multiuse #composite #wearable #container "
-              + "#weapon #armor #light #timed #commodity #contents "
-              + "%{player notes} %{dm notes} "
-              + "%qualities %effects"
-              // admin
-              + "%references %errors"
-              );
+    new Print("");
 
   /** The printer for printing in a list. */
   public static final ListPrint s_listPrint =
@@ -604,6 +587,29 @@ public class Item extends CampaignEntry<BaseItem>
     }
 
     return items;
+  }
+
+  //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Compute a value for a given key, taking base entries into account if
+   * available.
+   *
+   * @param    inKey the key of the value to compute
+   *
+   * @return   the compute value
+   *
+   */
+  public @Nullable Value compute(@Nonnull String inKey)
+  {
+    if("dmName".equals(inKey))
+      return new Name(getDMName());
+
+    if("playerName".equals(inKey))
+      return new Name(getPlayerName());
+
+    return super.compute(inKey);
   }
 
   //........................................................................
