@@ -1,0 +1,33 @@
+/** Soy test file. */
+
+/**
+ * The templates for testing.
+ *
+ */
+
+{namespace dma.commands autoescape="contextual"}
+
+/**
+ * The test template
+ *
+ * @param first
+ * @param second
+ *
+ */
+{template .test}
+  first: {$first}{sp}
+  second: {$second}{sp}
+  third: {$ij.first}{sp}
+  fourth: {$ij.second}{sp}
+  fifth: {dma.project}
+{/template}
+
+/**
+ * Test for bolding printing.
+ *
+ * @param arg the arguments
+ */
+{template .bold}
+  -- {$arg.0} --
+{/template}
+

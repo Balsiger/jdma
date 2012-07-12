@@ -1,0 +1,21 @@
+/** Soy test file. */
+
+/**
+ * The templates for testing.
+ *
+ */
+
+{namespace dma.entry autoescape="contextual"}
+
+/**
+ * Testing invalid page.
+ *
+ * @param title the page title
+ * @param indexes the names of the indexes to render
+ * @param name the index name
+ * @param keys the keys for nested groups
+ */
+{template .indexoverview}
+  index overview (title: {$title}, indexes: {$indexes}, name: {$name},
+  keys: {if $keys}{$keys}{else}no keys{/if})
+{/template}

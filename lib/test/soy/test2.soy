@@ -1,0 +1,30 @@
+/** Soy test file. */
+
+/**
+ * The templates for testing.
+ *
+ */
+
+{namespace dma.value autoescape="contextual"}
+
+/**
+ * Testing remarks.
+ *
+ * @param naked the naked value
+ */
+{template .remark}
+  ++ {$naked} ++
+{/template}
+
+/**
+ * Testing combinations.
+ *
+ * @param total the total, combined value, if any
+ * @param bases the base values
+ * @param isDefined whether the top level value is defined
+ */
+{template .combination}
+  total: {if $total}{$total}{else}*undefined*{/if}{sp}
+  bases: {$bases}{sp}
+  defined: {if $isDefined}yes{else}no{/if}
+{/template}
