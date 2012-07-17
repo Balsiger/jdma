@@ -31,6 +31,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,10 +46,13 @@ import com.google.appengine.api.conversion.Conversion;
 import com.google.appengine.api.conversion.ConversionResult;
 import com.google.appengine.api.conversion.ConversionService;
 import com.google.appengine.api.conversion.ConversionServiceFactory;
+import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.Document;
 import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.resources.TemplateResource;
 
 //..........................................................................
 
@@ -69,7 +73,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ThreadSafe
-public abstract class PDFServlet extends DMAServlet
+public abstract class PDFServlet extends SoyServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -120,51 +124,66 @@ public abstract class PDFServlet extends DMAServlet
      @Nonnull HttpServletResponse inResponse)
     throws ServletException, IOException
   {
-    // Set the output header.
-    inResponse.setHeader("Content-Type", "application/pdf");
-    inResponse.setHeader("Cache-Control", "max-age=0");
+    Log.info("creating pdf for " + inRequest.getOriginalPath());
 
     Document document = createDocument(inRequest);
     String content = document.toString();
 
-    // Create a conversion request from HTML to PDF.
-    List<Asset> assets = new ArrayList<Asset>();
-    assets.add(new Asset("text/html", content.getBytes(), "pdf conversion"));
-
-    // Determine all image assets.
-    Matcher matcher =
-      Pattern.compile("<img\\s+[^>]*src=\"(.*?)\".*?>").matcher(content);
-    while(matcher.find())
-      assets.add(createImageAsset(matcher.group(1)));
-
-
-    com.google.appengine.api.conversion.Document doc =
-      new com.google.appengine.api.conversion.Document(assets);
-    Conversion conversion = new Conversion(doc, "application/pdf");
-
-    ConversionService service = ConversionServiceFactory.getConversionService();
-    ConversionResult result = service.convert(conversion);
-
-    if (result.success())
+    if(isDev())
     {
-      // Note: in most cases, we will return data all in one asset,
-      // except that we return multiple assets for multi-page images.
-      for (Asset resultAsset : result.getOutputDoc().getAssets())
-        inResponse.getOutputStream().write(resultAsset.getData());
+      // Set the output header.
+      inResponse.setHeader("Content-Type", "text/html");
+      inResponse.setHeader("Cache-Control", "max-age=0");
+
+      if(!document.write(inResponse.getOutputStream()))
+        return new HTMLError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                             "PDF Writing Failed",
+                             "Could not successfully write the requested "
+                             + "pdf file.");
     }
     else
     {
-      return new HTMLError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                           "PDF Writing Failed",
-                           "Could not successfully write the requested "
-                           + "pdf file (" + result.getErrorCode() + ")");
-    }
+      // Set the output header.
+      inResponse.setHeader("Content-Type", "application/pdf");
+      inResponse.setHeader("Cache-Control", "max-age=0");
 
-    // if(!document.write(inResponse.getOutputStream()))
-    //   return new HTMLError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-    //                        "PDF Writing Failed",
-    //                        "Could not successfully write the requested "
-    //                         + "pdf file.");
+      // Remove links as they are not supported and might break rendering.
+      content = content.replaceAll("<link\\s+.*?>", "");
+
+      // Create a conversion request from HTML to PDF.
+      List<Asset> assets = new ArrayList<Asset>();
+      assets.add(new Asset("text/html", content.getBytes(), "pdf conversion"));
+
+      // Determine all image assets.
+      Matcher matcher =
+        Pattern.compile("<img\\s+[^>]*src=\"(.*?)\".*?>").matcher(content);
+      while(matcher.find())
+      {
+        Asset asset = createImageAsset(matcher.group(1));
+        assets.add(asset);
+        Log.warning("adding asset for " + matcher.group(1) + " / "
+                    + asset.getName() + " / " + asset.getMimeType());
+      }
+
+      com.google.appengine.api.conversion.Document doc =
+        new com.google.appengine.api.conversion.Document(assets);
+      Conversion conversion = new Conversion(doc, "application/pdf");
+
+      ConversionService service =
+        ConversionServiceFactory.getConversionService();
+      ConversionResult result = service.convert(conversion);
+
+      if(result.success())
+        // Note: in most cases, we will return data all in one asset,
+        // except that we return multiple assets for multi-page images.
+        for (Asset resultAsset : result.getOutputDoc().getAssets())
+          inResponse.getOutputStream().write(resultAsset.getData());
+      else
+        return new HTMLError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                             "PDF Writing Failed",
+                             "Could not successfully write the requested "
+                             + "pdf file (" + result.getErrorCode() + ")");
+    }
 
     return null;
   }
@@ -319,6 +338,39 @@ public abstract class PDFServlet extends DMAServlet
     (@Nonnull DMARequest inRequest);
 
   //........................................................................
+  //------------------------- collectInjectedData --------------------------
+
+  /**
+   * Collect the injected data that is to be printed.
+   *
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer to render sub values
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
+   *
+   */
+  @Override
+  protected @Nonnull Map<String, Object> collectInjectedData
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
+
+    data.put("isPDF", true);
+    try
+    {
+      data.put("css_jdma",
+               TemplateResource.get("css/jdma.css", "web.template.css")
+               .read()
+               .replaceAll("url\\(.*?\\)", ""));
+    }
+    catch(java.io.IOException e)
+    {
+      Log.error("Could not import css file for pdf: " + e);
+    }
+
+    return data;
+  }
 
   //........................................................................
 

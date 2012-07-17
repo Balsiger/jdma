@@ -92,8 +92,14 @@
   <script type="text/javascript" src="/js/jdma.js"></script>
 
   // DMA CSS
-  <link rel="STYLESHEET" type="text/css" href="/css/jdma.css" />
-  <link rel="STYLESHEET" type="text/css" href="/css/gui.css" />
+  {if $ij.isPDF}
+    <style>
+      {$ij.css_jdma |noAutoescape}
+    </style>
+  {else}
+    <link rel="STYLESHEET" type="text/css" href="/css/jdma.css" />
+    <link rel="STYLESHEET" type="text/css" href="/css/gui.css" />
+  {/if}
 
   // viewport setting for mobile browsers
   <meta name="viewport" content="width=device-width, height=device-height"/>

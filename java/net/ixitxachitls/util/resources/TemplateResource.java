@@ -30,6 +30,7 @@ import java.net.URL;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
@@ -89,7 +90,8 @@ public class TemplateResource extends FileResource
   private @Nullable String m_content;
 
   /** Flag if files should be reread each time they are accessed. */
-  private static boolean s_reread = Config.get("web/template.reread", true);
+  private static boolean s_reread = SystemProperty.environment.value()
+    == SystemProperty.Environment.Value.Development;
 
   //........................................................................
 
@@ -131,18 +133,17 @@ public class TemplateResource extends FileResource
 
   //------------------------------------------------- other member functions
 
-  //-------------------------------- write ---------------------------------
+  //--------------------------------- read ---------------------------------
 
   /**
-   * Write the resources to the given output.
+   * Get the whole contents of the resource as a string. Line termination is
+   * normalized to \n.
    *
-   * @param       inOutput the output stream to write to
-   *
-   * @return      true if writing ok, false if not
+   * @return      the contents as a string
    *
    */
   @Override
-public boolean write(@Nonnull OutputStream inOutput)
+  public @Nonnull String read()
   {
     if(m_content == null)
     {
@@ -156,9 +157,28 @@ public boolean write(@Nonnull OutputStream inOutput)
       catch(java.io.IOException e)
       {
         Log.warning("cannot read resource '" + this + ": " + e);
-        return false;
+        m_content = "";
       }
     }
+
+    return m_content;
+  }
+
+  //........................................................................
+  //-------------------------------- write ---------------------------------
+
+  /**
+   * Write the resources to the given output.
+   *
+   * @param       inOutput the output stream to write to
+   *
+   * @return      true if writing ok, false if not
+   *
+   */
+  @Override
+  public boolean write(@Nonnull OutputStream inOutput)
+  {
+    read();
 
     try
     {

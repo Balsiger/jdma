@@ -412,7 +412,7 @@
  * @param value The value rendered.
  */
 {template .extension}
-  <span title="symbol {$value.raw}">
+  <span title="{$value.raw}" class="extension-symbol">
     {switch $value.raw}
       {case 'armor'}
         {literal}&#x2602;{/literal}

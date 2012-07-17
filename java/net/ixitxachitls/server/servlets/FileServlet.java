@@ -307,7 +307,7 @@ public class FileServlet extends BaseServlet
    *
    */
   @Override
-protected synchronized @Nullable SpecialResult handle
+  protected synchronized @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)
     throws IOException, ServletException

@@ -1433,3 +1433,52 @@ SELECT.admin-button
 {
   font-size: 12px;
 }
+
+/******************************************************************************
+ * PDF printing
+ *****************************************************************************/
+
+@media print
+{
+  #header,
+  DIV.footer,
+  DIV.title-actions,
+  DIV.section-title
+  {
+    display: none;
+  }
+
+  DIV.page
+  {
+    padding: 0;
+  }
+
+  .entrytitle
+  {
+    margin: 0 0 0 170px;
+  }
+
+  BODY
+  {
+    font-size: 8pt;
+  }
+
+  @page
+  {
+    margin: 5mm;
+    size: A4 portrait;
+  }
+
+  .clear.title-end
+  {
+    margin-top: 20px;
+    height: 20px;
+    width: 100%;
+  }
+
+  .value-label-container,
+  .value-content
+  {
+    -webkit-print-color-adjust: exact;
+  }
+}

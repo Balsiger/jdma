@@ -229,8 +229,6 @@
           unless="windows">
     <symlink link="${webinf.dir}/classes" resource="${classes.dir}"
              overwrite="Yes" />
-    <symlink link="${war.dir}/html" resource="${resources.dir}/html"
-             overwrite="Yes" />
     <symlink link="${classes.dir}/css" resource="${resources.dir}/css"
              overwrite="Yes" />
     <symlink link="${classes.dir}/fonts" resource="${resources.dir}/fonts"
@@ -247,7 +245,6 @@
           description="preparation steps for windows machines"
           if="windows">
     <mkdir dir="${webinf.dir}/classes" />
-    <mkdir dir="${war.dir}/html" />
     <mkdir dir="${classes.dir}/css" />
     <mkdir dir="${classes.dir}/fonts" />
     <mkdir dir="${classes.dir}/icons" />
@@ -255,12 +252,6 @@
     <copy todir="${webinf.dir}/classes" flatten="false">
       <fileset dir="${classes.dir}">
         <include name="**/*" />
-      </fileset>
-    </copy>
-    <copy todir="${war.dir}/html" flatten="false">
-      <fileset dir="${resources.dir}/html">
-        <include name="**/*.html" />
-        <include name="**/*.soy" />
       </fileset>
     </copy>
     <copy todir="${classes.dir}/css" flatten="false">

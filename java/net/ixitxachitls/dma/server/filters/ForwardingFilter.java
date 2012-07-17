@@ -88,7 +88,7 @@ public class ForwardingFilter implements Filter
    *
    */
   @Override
-public void init(@Nonnull FilterConfig inConfig)
+  public void init(@Nonnull FilterConfig inConfig)
   {
     m_config = inConfig;
 
@@ -107,7 +107,7 @@ public void init(@Nonnull FilterConfig inConfig)
    *
    */
   @Override
-public void destroy()
+  public void destroy()
   {
     // nothing to do
   }

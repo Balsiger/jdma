@@ -198,15 +198,6 @@
           </div>
         {/param}
       {/call}
-      {call dma.page.link}
-        {param url: $entry.name + '.pdf' /}
-        {param text}
-          <div class="caption-container">
-            <div class="document sprite large"></div>
-            <div>pdf</div>
-          </div>
-        {/param}
-      {/call}
     </div>
     {delcall dma.entry.title}
       {param entry: $entry /}
@@ -249,7 +240,8 @@
       {/param}
     {/call}
   </div>
-  <div class="values">
+  <div class="clear title-end"></div>
+  <div class="values clear">
     {delcall dma.entry.values}
       {param entry: $entry /}
     {/delcall}

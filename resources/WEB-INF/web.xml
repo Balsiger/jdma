@@ -276,6 +276,9 @@
         ^/campaign/([^/]+)/([^/]+)/items
         /_entries/base campaign/$1/campaign/$2/item
 
+        ^/campaign/([^/]+)/([^/]+)/item/([^/]+).pdf$
+        /pdf/_entry/base campaign/$1/campaign/$2/item/$3
+
         ^/campaign/([^/]+)/([^/]+)/item/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/item/$3
 
@@ -285,11 +288,17 @@
         ^/product/([^/]+)$
         /_entry/base product/$1
 
+        ^/item/([^/]+).pdf$
+        /pdf/_entry/base item/$1
+
         ^/item/([^/]+)$
         /_entry/base item/$1
 
         ^/campaign/([^/]+)$
         /_entry/base campaign/$1
+
+        ^/campaign/([^/]+).pdf$
+        /pdf/_entry/base campaign/$1
 
         ^/campaign/([^/]+)/([^/]+)$
         /_entry/base campaign/$1/campaign/$2

@@ -108,7 +108,7 @@ public class AdminServlet extends BaseServlet
    *
    */
   @Override
-@OverridingMethodsMustInvokeSuper
+  @OverridingMethodsMustInvokeSuper
   protected @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)
