@@ -357,17 +357,10 @@ public abstract class PDFServlet extends SoyServlet
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
     data.put("isPDF", true);
-    try
-    {
-      data.put("css_jdma",
-               TemplateResource.get("css/jdma.css", "web.template.css")
-               .read()
-               .replaceAll("url\\(.*?\\)", ""));
-    }
-    catch(java.io.IOException e)
-    {
-      Log.error("Could not import css file for pdf: " + e);
-    }
+    data.put("css_jdma",
+             TemplateResource.get("css/jdma.css", "web.template.css")
+             .read()
+             .replaceAll("url\\(.*?\\)", ""));
 
     return data;
   }
