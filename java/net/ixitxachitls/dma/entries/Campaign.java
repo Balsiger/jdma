@@ -65,7 +65,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-public class Campaign extends Entry<BaseCampaign>
+public class Campaign extends CampaignEntry<BaseCampaign>
 {
   //--------------------------------------------------------- constructor(s)
 

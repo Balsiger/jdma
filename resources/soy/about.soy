@@ -30,17 +30,8 @@
       About
     {/param}
   {/call}
-  {call .navigation}
-    {param content}
-      {call .navigationEntry}
-        {param text}
-          about
-        {/param}
-        {param url}
-          /about
-        {/param}
-      {/call}
-    {/param}
+  {call dma.navigation.navigation}
+    {param entries: [['label': 'about', 'url': '/about']] /}
   {/call}
 
   <h1>About</h1>

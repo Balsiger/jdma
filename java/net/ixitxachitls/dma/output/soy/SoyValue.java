@@ -83,13 +83,35 @@ public class SoyValue extends SoyMapData
                   @Nonnull AbstractEntry inEntry,
                   @Nonnull SoyRenderer inRenderer)
   {
+    this(inName, inValue, inEntry, inRenderer, true);
+  }
+
+  //........................................................................
+  //------------------------------- SoyValue -------------------------------
+
+  /**
+   * Create the soy value.
+   *
+   * @param    inName     the name of the value
+   * @param    inValue    the dma value
+   * @param    inEntry    the entry for the value
+   * @param    inRenderer the renderer for rendering sub values
+   * @param    inEditable true if the value can be edited, false if not
+   *
+   */
+  public SoyValue(@Nonnull String inName, @Nonnull Value inValue,
+                  @Nonnull AbstractEntry inEntry,
+                  @Nonnull SoyRenderer inRenderer, boolean inEditable)
+  {
     m_name = inName;
     m_value = inValue;
     m_entry = inEntry;
     m_renderer = inRenderer;
+    m_editable = inEditable;
   }
 
   //........................................................................
+
 
   //........................................................................
 
@@ -106,6 +128,9 @@ public class SoyValue extends SoyMapData
 
   /** The renderer for rendering sub values. */
   protected final @Nonnull SoyRenderer m_renderer;
+
+  /** A flag if the value can be edited. */
+  protected final boolean m_editable;
 
   //........................................................................
 
@@ -127,6 +152,9 @@ public class SoyValue extends SoyMapData
     if("edit".equals(inName))
       return StringData.forValue
         (Encodings.encodeHTMLAttribute(m_value.getEditValue()));
+
+    if("isEditable".equals(inName))
+      return BooleanData.forValue(m_editable);
 
     if("raw".equals(inName))
       return StringData.forValue(m_value.toString(false));

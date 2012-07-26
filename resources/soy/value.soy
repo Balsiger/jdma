@@ -35,7 +35,7 @@
  */
 {template .value}
   {call .editable}
-    {param canEdit: $canEdit /}
+    {param canEdit: $canEdit and (not $value or $value.isEditable) /}
     {param name: $value.name /}
     {param value: $value.edit /}
     {param key: $entry.key /}
@@ -101,7 +101,7 @@
 {/template}
 
 /**
- * Formatting a link.
+ * Formatting a link for an index.
  *
  * @param args The template arguments
  * @param entry The entry rendered
@@ -114,6 +114,20 @@
     {param text: $value.raw /}
   {/call}
 {/template}
+
+/**
+ * Formatting a link to an entry.
+ *
+ * @param entry The entry rendered
+ * @param value The value rendered
+ */
+{template .entrylink}
+  {call dma.page.link}
+    {param url: '/' + $entry.type.link + '/' + $value.group /}
+    {param text: $value.raw /}
+  {/call}
+{/template}
+
 
 /**
  * Formatting a link.
@@ -472,9 +486,13 @@
       <span class="windowed">
         <span class="window base">
           {foreach $base in $bases}
-            {$base.value.print}
-            {sp} from {$base.names}
-            <br />
+            {if $base and $base.value}
+              {$base.value.print}
+              {sp} from {$base.names}
+              <br />
+            {else}
+              undefined value from {$base.names}
+            {/if}
           {/foreach}
         </span>
         {$total.print}
@@ -534,12 +552,13 @@
  *
  * @param entry the entry to render
  * @param value the value rendered
+ * @param canEdit the value can be edited
  */
 {template .withbase}
  {call dma.value.value}
     {param entry: $entry /}
     {param value: $value /}
-    {param canEdit: $ij.isDM /}
+    {param canEdit: $canEdit /}
   {/call}
   {if not $value.isDefined and $value.combine}
     {$value.combine.print}

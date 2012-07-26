@@ -160,8 +160,7 @@ public class SoyTemplate
                                 @Nullable SoyMapData inInjected,
                                 @Nullable Set<String> inDelegates)
   {
-    if(m_compiled == null)
-      compile();
+    compile();
 
     Map<Key<?>, Object> scope = removeScope();
     String rendered = "";
@@ -232,7 +231,7 @@ public class SoyTemplate
   //------------------------------ recompile -------------------------------
 
   /**
-   * Force recompilation of when rendering next.
+   * Force recompilation when rendering next.
    *
    */
   public void recompile()
@@ -250,6 +249,9 @@ public class SoyTemplate
    */
   public void compile()
   {
+    if(m_compiled != null)
+      return;
+
     Log.important("compiling soy templates");
 
     // Bundle the Soy files for your project into a SoyFileSet.

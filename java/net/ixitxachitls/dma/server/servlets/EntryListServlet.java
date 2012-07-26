@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -164,6 +165,8 @@ public class EntryListServlet extends PageServlet
              ("dma.entry.list",
               map("title", title,
                   "entries", entries,
+                  "label", title.toLowerCase(Locale.US),
+                  "path", path,
                   "pagesize", inRequest.getPageSize(),
                   "start", inRequest.getStart()),
               ImmutableSet.of(type.getName().replace(" ", ""))));

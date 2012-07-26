@@ -40,6 +40,7 @@ import com.google.template.soy.data.restricted.UndefinedData;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.errors.BaseError;
 
@@ -176,6 +177,14 @@ public class SoyEntry extends SoyMapData
     if(value != null)
       return new SoyValue(name, value, m_entry, m_renderer);
 
+    for(BaseEntry base : m_entry.getBaseEntries())
+      if(base != null)
+      {
+        value = base.compute(name);
+        if(value != null)
+          return new SoyValue(name, value.create(), m_entry, m_renderer, false);
+      }
+
     return null;
   }
 
@@ -217,6 +226,22 @@ public class SoyEntry extends SoyMapData
   }
 
   //........................................................................
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Convert the soy entry into a string for debugging.
+   *
+   * @return  the value converted into a string
+   *
+   */
+  @Override
+  public @Nonnull String toString()
+  {
+    return m_entry.getName() + " (soy)";
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

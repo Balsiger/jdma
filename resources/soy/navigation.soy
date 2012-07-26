@@ -19,31 +19,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-{namespace dma}
-
-/**
- * A navigation entry.
- *
- * @param text
- * @param url
- */
-{template .navigationEntry}
-  <span class="navigation-entry">
-    &raquo;&nbsp;
-    <a href="{$url}" class="navigation-link"
-      onclick="util.link(event, '{$url}')">
-      {$text}
-    </a>
-  </span>
-{/template}
+{namespace dma.navigation}
 
 /**
  * Setup the whole navigation.
  *
- * @param content
+ * @param entries a list of navigation entries (label and url object)
  */
 {template .navigation}
   <script>
-    $('#subnavigation').html('{$content|escapeJs}');
+    $('#subnavigation').html('
+    {foreach $entry in $entries}
+      &raquo;{sp}
+      <a href="{$entry.url|escapeJs}" class="navigation-link"
+         onclick="util.link(event, \'{$entry.url|escapeJs}\')">
+        {$entry.label|escapeJs}
+      </a>{sp}
+    {/foreach}
+    ');
   </script>
 {/template}

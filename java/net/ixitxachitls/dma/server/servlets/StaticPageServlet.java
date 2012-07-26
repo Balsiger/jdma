@@ -106,6 +106,7 @@ public class StaticPageServlet extends SoyServlet
 
     try
     {
+      System.out.println("rendering: " + name);
       map.put("content", inRenderer.render(name));
     }
     catch(com.google.template.soy.tofu.SoyTofuException e)

@@ -23,36 +23,25 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import javax.annotation.Nonnull;
-
-import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.output.pdf.PDFDocument;
-import net.ixitxachitls.output.Document;
-import net.ixitxachitls.output.commands.Left;
-import net.ixitxachitls.output.commands.Title;
-import net.ixitxachitls.util.logging.Log;
-
-
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.ImmutableSet;
-
-import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.output.pdf.PDFDocument;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
+import net.ixitxachitls.output.Document;
+import net.ixitxachitls.output.commands.Left;
+import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.util.logging.Log;
 
 

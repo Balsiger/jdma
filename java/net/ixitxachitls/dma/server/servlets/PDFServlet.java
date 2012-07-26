@@ -46,7 +46,6 @@ import com.google.appengine.api.conversion.Conversion;
 import com.google.appengine.api.conversion.ConversionResult;
 import com.google.appengine.api.conversion.ConversionService;
 import com.google.appengine.api.conversion.ConversionServiceFactory;
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -238,8 +237,6 @@ public abstract class PDFServlet extends SoyServlet
               read = input.read(buffer))
             output.write(buffer, 0, read);
 
-          System.out.println("\n\n\n" + inName + ": " + output.size()
-                             + "\n\n\n");
           return new Asset("image/png", output.toByteArray(), inName);
         }
         catch(java.io.IOException e)

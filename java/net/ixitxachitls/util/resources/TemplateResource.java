@@ -35,7 +35,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................

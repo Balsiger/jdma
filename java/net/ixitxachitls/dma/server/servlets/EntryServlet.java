@@ -276,8 +276,11 @@ public class EntryServlet extends PageServlet
 
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
-    data.put("isDM", user != null && entry != null && entry.isDM(user));
-    data.put("isOwner", user != null && entry != null && entry.isOwner(user));
+    // If we don't have an entry, it's probably being created and thus we
+    // should have access to it.
+    data.put("isDM", user != null && (entry == null || entry.isDM(user)));
+
+    data.put("isOwner", user != null && (entry == null || entry.isOwner(user)));
 
     return data;
   }

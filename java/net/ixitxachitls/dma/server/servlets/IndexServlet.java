@@ -190,6 +190,7 @@ public class IndexServlet extends PageServlet
                    ("dma.entry.indexoverview",
                     map("title", title,
                         "indexes", groups,
+                        "type", type.getMultipleLink(),
                         "keys", new ArrayList<String>(groups.keySet()),
                         "name", name),
                     ImmutableSet.of(type.getName().replace(" ", ""))));
@@ -200,6 +201,7 @@ public class IndexServlet extends PageServlet
                    ("dma.entry.indexoverview",
                     map("title", title,
                         "indexes", new ArrayList<String>(indexes),
+                        "type", type.getMultipleLink(),
                         "name", name),
                     ImmutableSet.of(type.getName().replace(" ", ""))));
 

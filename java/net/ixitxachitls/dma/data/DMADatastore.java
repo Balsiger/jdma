@@ -1014,6 +1014,9 @@ public Multimap<String, String> getOwners(String inID)
     // update any key related value
     entry.updateKey(convert(inEntity.getKey()));
 
+    // update extensions, if necessary
+    entry.setupExtensions();
+
     return entry;
   }
 

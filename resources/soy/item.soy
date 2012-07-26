@@ -54,7 +54,7 @@
  * @param entry The entry rendered
  */
 {deltemplate dma.entry.values}
-  {if $entry.incomplete and $ij.isDM}
+  {if $entry.extension_incomplete and $ij.isDM}
     {call dma.entry.extension}
       {param name: 'incomplete' /}
       {param content}
@@ -82,16 +82,19 @@
     {param entry: $entry /}
     {param name: 'Synonyms' /}
     {param value: $entry.synonyms /}
+    {param noedit: true /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Player Name' /}
     {param value: $entry.player_name /}
+    {param access: 'owner' /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Player Notes' /}
     {param value: $entry.player_notes /}
+    {param access: 'owner' /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -108,11 +111,13 @@
     {param entry: $entry /}
     {param name: 'Worlds' /}
     {param value: $entry.worlds /}
+    {param noedit: true /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Categoeries' /}
     {param value: $entry.categories /}
+    {param noedit: true /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -135,23 +140,27 @@
     {param entry: $entry /}
     {param name: 'Size' /}
     {param content: $entry.size.combine.min /}
+    {param noedit: true /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Substance' /}
     {param value: $entry.substance /}
+    {param noedit: true /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Hardness' /}
     {param value: $entry.hardness /}
     {param access: 'dm' /}
+    {param noedit: true /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Break DC' /}
     {param value: $entry.break_DC /}
     {param access: 'dm' /}
+    {param noedit: true /}
   {/delcall}
   {if $entry.extension_multiuse or $entry.extension_multiple
       or $entry.extension_counted}
@@ -255,7 +264,7 @@
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
           {param name: 'Slot' /}
-          {param value: $entry.slot /}
+          {param content: $entry.slot /}
         {/delcall}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -288,6 +297,49 @@
       {/param}
     {/call}
   {/if}
+
+  {if $entry.extension_contents}
+    {call dma.entry.extension}
+      {param name: 'contents' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Contents' /}
+          {param content}
+            {foreach $item in $entry.contents.list}
+              {call dma.page.link}
+                {param url: $item.multi.2.print /}
+                {param text}
+                  {if $ij.isDM}
+                    {$item.multi.1.print}
+                  {else}
+                    {$item.multi.0.print}
+                  {/if}
+                {/param}
+              {/call}
+            {if not isLast($item)}, {/if}
+            {ifempty}
+              No items stored.
+            {/foreach}
+            {if $ij.isDM or $ij.isOwner}
+              {sp}|{sp}
+              {call dma.page.link}
+                {param js: 'item.create(\'/campaign/'
+                    + $entry.campaign.multi.0.print + '/'
+                    + $entry.campaign.multi.1.print
+                    + '\', \'/base campaign/' + $entry.campaign.multi.0.print
+                    + '/campaign/' + $entry.campaign.multi.1.print
+                    + '/item/' + $entry.name + '\');' /}
+                {param text: 'add' /}
+                {param tooltip: 'Add a new item to this container.' /}
+              {/call}
+            {/if}
+          {/param}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+
   {if $entry.extension_armor}
     {call dma.entry.extension}
       {param name: 'armor' /}
@@ -381,20 +433,6 @@
         {/delcall}
       {/param}
     {/call}
-  {/if}
-  {if $entry.qualities}
-    {delcall dma.entry.keyvalue}
-      {param entry: $entry /}
-      {param name: 'Qualities' /}
-      {param value: $entry.qualities /}
-    {/delcall}
-  {/if}
-  {if $entry.effects}
-    {delcall dma.entry.keyvalue}
-      {param entry: $entry /}
-      {param name: 'Effects' /}
-      {param value: $entry.effects /}
-    {/delcall}
   {/if}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}

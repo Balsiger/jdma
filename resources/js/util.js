@@ -147,6 +147,7 @@ util.reload = function(inPage)
   */
 util.link = function(inEvent, inTarget, inFunction)
 {
+  window.console.log("target", inTarget);
   if(inTarget && inTarget.match('^javascript:'))
     return true;
 
@@ -199,6 +200,9 @@ util.link = function(inEvent, inTarget, inFunction)
     search = util.removeQueryParam(search, 'create');
     search = util.removeQueryParam(search, 'start');
     search = util.removeQueryParam(search, 'end');
+    search = util.removeQueryParam(search, 'store');
+    search = util.removeQueryParam(search, 'bases');
+    search = util.removeQueryParam(search, 'extensions');
 
     if(search)
       target += search;

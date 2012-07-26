@@ -307,6 +307,8 @@ public class SaveActionServlet extends ActionServlet
               AbstractEntry.EntryKey<? extends AbstractEntry> key =
                 extractKey(change.m_store);
 
+              System.out.println(change.m_store + ": " + key);
+
               if(key == null)
                 Log.warning("Cannot find entry for storage: " + change.m_store);
               else

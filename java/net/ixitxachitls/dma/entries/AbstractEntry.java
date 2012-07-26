@@ -287,7 +287,7 @@ public class AbstractEntry extends ValueGroup
     // we have to init this here, as we need to have the type set
     m_base = new ValueList<Name>
       (new Name()
-       .withTemplate("link", getType().getBaseType().getLink())
+       .withTemplate("entrylink")
        .withFormatter(new LinkFormatter<Name>
                       ("/" + getType().getBaseType().getLink()
                        + "/")));
@@ -1996,19 +1996,15 @@ public class AbstractEntry extends ValueGroup
       return list;
     }
 
-    Value value = super.compute(inKey);
-    if(value != null)
-      return value;
-
-    // The value is not declared in this entry, but might be in a base entry.
-    for(BaseEntry base : getBaseEntries())
+    // check extensions for a value
+    for(AbstractExtension extension : m_extensions.values())
     {
-      value = base.compute(inKey);
+      Value value = extension.compute(inKey);
       if(value != null)
-        return value.create();
+        return value;
     }
 
-    return null;
+    return super.compute(inKey);
   }
 
   //........................................................................
@@ -2258,7 +2254,7 @@ public class AbstractEntry extends ValueGroup
           addBase(base);
 
       // setup extensions from base entries
-      setupExtensionsFromBases();
+      setupExtensions();
 
       changed();
       return null;
@@ -2453,14 +2449,28 @@ public class AbstractEntry extends ValueGroup
 //   }
 
   //........................................................................
-  //----------------------- setupExtensionsFromBases -----------------------
+  //--------------------------- setupExtensions ----------------------------
 
   /**
    * Setup all auto extensions from base entries.
    *
    */
-  protected void setupExtensionsFromBases()
+  public void setupExtensions()
   {
+    for(AbstractExtension extension : m_extensions.values())
+      for(String name
+            : AbstractExtension.getAutoExtensions(extension.getClass()))
+      {
+        if(isBase())
+        {
+          if(name.startsWith("base "))
+            addExtension(name);
+        }
+        else
+          if(!name.startsWith("base "))
+            addExtension(name);
+      }
+
     if(!isBase())
       for(BaseEntry base : getBaseEntries())
       {
@@ -2470,7 +2480,8 @@ public class AbstractEntry extends ValueGroup
         for(AbstractExtension extension : base.m_extensions.values())
           for(String name
                 : AbstractExtension.getAutoExtensions(extension.getClass()))
-            addExtension(name);
+            if(!name.startsWith("base "))
+              addExtension(name);
       }
   }
 
@@ -2689,7 +2700,7 @@ public class AbstractEntry extends ValueGroup
       readValues(inReader);
 
     // add the automatic extensions from base
-    setupExtensionsFromBases();
+    setupExtensions();
 
     return true;
   }
@@ -2909,8 +2920,8 @@ public class AbstractEntry extends ValueGroup
       DMADataFactory.get().getEntry(createKey(inName, baseType));
     if(entry == null)
       Log.warning("base " + getType() + " '" + inName + "' not found");
-    else
-      addExtensions(entry.getExtensionNames());
+    // else
+    //   addExtensions(entry.getExtensionNames());
 
     m_base = m_base.asAppended(m_base.newElement().as(inName));
 

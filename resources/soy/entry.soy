@@ -184,6 +184,11 @@
  * @param entry The entry rendered.
  */
 {deltemplate dma.entry.page}
+  {call dma.navigation.navigation}
+    {param entries:
+        [[ 'label': $entry.type.name, 'url': '/' + $entry.type.multilink ],
+         [ 'label': $entry.name, 'url': $entry.path ]] /}
+  {/call}
   {delcall dma.entry.files.main}
     {param entry: $entry /}
   {/delcall}
@@ -323,6 +328,7 @@
  * @param withoutbase true if setting without base, false if setting with
  * @param content The content if not using a value.
  * @param access One of dm, owner, admin.
+ * @param noedit If given, value cannot be edited
  */
 {deltemplate dma.entry.keyvalue}
   {if not $access
@@ -336,11 +342,12 @@
           {$name}
         </div>
       </div>
-      <div class="value-content">
+      <div class="value-content
+          {if not $noedit and ($ij.isDM or $ij.isOwner)} value-noedit{/if}">
         {if $value}
           {if $withoutbase}
             {call dma.value.value}
-              {param canEdit: $ij.isDM /}
+              {param canEdit: not $noedit and ($ij.isDM or $ij.isOwner) /}
               {param entry: $entry /}
               {param value: $value /}
             {/call}
@@ -348,6 +355,7 @@
             {call dma.value.withbase}
               {param entry: $entry /}
               {param value: $value /}
+              {param canEdit: not $noedit and ($ij.isDM or $ij.isOwner) /}
             {/call}
           {/if}
         {else}
@@ -382,12 +390,17 @@
  * @param start The start index
  * @param pagesize The size of the page
  * @param entries The entries printed
+ * @param label The navigation label for this page
+ * @param path The path to this page
  *
  */
 {template .list}
   <h1>{$title}</h1>
   {call dma.page.title}
     {param title: $title /}
+  {/call}
+  {call dma.navigation.navigation}
+    {param entries: [[ 'label': $label, 'url': $path ]] /}
   {/call}
   {call .listnav}
     {param start: $start /}
@@ -517,11 +530,16 @@
  * @param indexes the names of the indexes to render
  * @param name the index name
  * @param keys the keys for nested groups
+ * @param type The type of the entries shown
  */
 {template .indexoverview}
   <h1>{$title}</h1>
   {call dma.page.title}
     {param title: $title /}
+  {/call}
+  {call dma.navigation.navigation}
+    {param entries: [[ 'label': $type, 'url': '/' + $type ],
+                     [ 'label': $name, 'url': '' ]] /}
   {/call}
   {if $keys}
     {foreach $key in $keys}

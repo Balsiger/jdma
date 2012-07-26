@@ -45,7 +45,6 @@ edit.all = [];
  */
 edit.makeEditable = function()
 {
-  window.console.log("making editable");
   var target = edit.findTarget(this);
 
   if(!target.__edit)
@@ -1426,10 +1425,13 @@ edit.Image.prototype.edit = function(inEditable, inTarget, inNoRelated) {
   var parent = inEditable.firstChild;
   parent.style.position = 'relative';
   var image = parent.firstChild;
-  var element = this.getElement();
-  element.css('height', image.clientHeight);
-  element.css('width', image.clientWidth);
-  $(parent).prepend(element);
+  if(image)
+  {
+    var element = this.getElement();
+    element.css('height', image.clientHeight);
+    element.css('width', image.clientWidth);
+    $(parent).prepend(element);
+  }
 
   return false;
 };

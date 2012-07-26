@@ -149,7 +149,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    */
   @SuppressWarnings("unchecked")
   @Override
-  public @Nonnull EntryKey<Character> getKey()
+  public @Nonnull EntryKey<? extends AbstractEntry> getKey()
   {
     Campaign campaign = getCampaign();
 
