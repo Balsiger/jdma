@@ -692,10 +692,10 @@ public abstract class ValueGroup implements Changeable
    *
    * @param    inKey the key of the value to compute
    *
-   * @return   the compute value
+   * @return   the computed value
    *
    */
-  public @Nullable Value compute(@Nonnull String inKey)
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     return getValue(inKey);
   }

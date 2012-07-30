@@ -1846,7 +1846,7 @@ public class BaseProduct extends BaseEntry
    * @return   the compute value
    *
    */
-  public @Nullable Value compute(@Nonnull String inKey)
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     if("owners".equals(inKey))
     {

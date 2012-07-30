@@ -40,7 +40,6 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Color;
@@ -848,7 +847,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-  public @Nullable Value compute(@Nonnull String inKey)
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     if("icon".equals(inKey))
     {
@@ -885,6 +884,11 @@ public class Character extends CampaignEntry<BaseCharacter>
       for(Name name : m_items)
       {
         Item item = getCampaign().getItem(name.get());
+
+        // Note: this is for legacy items that don't yet have a parent.
+        if (item != null && item.getParent() != this)
+          item.setParent(getKey());
+
         items.add(new Multiple
                   (new Multiple.Element(name, false),
                    new Multiple.Element
@@ -978,7 +982,7 @@ public class Character extends CampaignEntry<BaseCharacter>
   //--------------------------------- add ----------------------------------
 
   /**
-   * Add the given entry to the campaign entry.
+   * Add the given entry to the character entry.
    *
    * @param       inEntry the entry to add
    *
@@ -998,6 +1002,8 @@ public class Character extends CampaignEntry<BaseCharacter>
 
     names.add(m_items.newElement().as(name));
     m_items = m_items.as(names);
+
+    inEntry.setParent(getKey());
 
     changed();
     save();

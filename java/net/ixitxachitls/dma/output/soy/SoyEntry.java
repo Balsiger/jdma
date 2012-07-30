@@ -173,16 +173,22 @@ public class SoyEntry extends SoyMapData
     }
 
     String name = inName.replace("_", " ");
-    Value value = m_entry.compute(name);
+    Object value = m_entry.compute(name);
     if(value != null)
-      return new SoyValue(name, value, m_entry, m_renderer);
+      return convert(name, value);
 
     for(BaseEntry base : m_entry.getBaseEntries())
       if(base != null)
       {
         value = base.compute(name);
         if(value != null)
-          return new SoyValue(name, value.create(), m_entry, m_renderer, false);
+        {
+          if(value instanceof Value)
+            return new SoyValue(name, ((Value)value).create(), m_entry,
+                                m_renderer, false);
+
+          return convert(name, value);
+        }
       }
 
     return null;
@@ -250,6 +256,44 @@ public class SoyEntry extends SoyMapData
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //------------------------------- convert --------------------------------
+
+  /**
+   * Convert the given value into a soy data structure (deep).
+   *
+   * @param       inName  the name of the value to convert
+   * @param       inValue the value to convert
+   *
+   * @return      the converted value
+   *
+   */
+  public @Nullable SoyData convert(@Nonnull String inName,
+                                   @Nullable Object inValue)
+  {
+    if(inValue instanceof Value)
+      return new SoyValue(inName, (Value)inValue, m_entry, m_renderer);
+
+    if(inValue instanceof AbstractEntry)
+      return new SoyEntry((AbstractEntry)inValue, m_renderer);
+
+    if(inValue instanceof List)
+    {
+      SoyListData list = new SoyListData();
+      for(Object element : (List)inValue)
+        list.add(convert(inName + "_list", element));
+
+      return list;
+    }
+
+    if(inValue == null)
+      return null;
+
+    return StringData.forValue(inValue.toString());
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

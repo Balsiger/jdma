@@ -230,6 +230,55 @@ public class AbstractEntry extends ValueGroup
     }
 
     /**
+     * Convert the given string to a key.
+     *
+     * @param   inText the text to convert
+     *
+     * @return  the converted key
+     */
+    public static @Nullable EntryKey<? extends AbstractEntry> fromString
+      (@Nonnull String inText)
+    {
+      String []paths = inText.split("/");
+      if(paths == null || paths.length == 0)
+        return null;
+
+      return fromString(paths, paths.length - 1);
+    }
+
+    /**
+     * Extract the key from the given paths array nd index.
+     *
+     * @param    inPaths the paths pieces
+     * @param    inIndex the index to start from with computation (descaending)
+     *
+     * @return   the key for the path part or null if not found
+     *
+     */
+    @SuppressWarnings("unchecked") // creating wildard type
+    private static @Nullable EntryKey<? extends AbstractEntry>
+    fromString(@Nonnull String []inPaths, int inIndex)
+    {
+      if(inPaths.length <= inIndex || inIndex < 1)
+        return null;
+
+      String id = inPaths[inIndex--].replace("%20", " ");
+      AbstractType<? extends AbstractEntry> type =
+        AbstractType.getTyped(inPaths[inIndex].replace("%20", " "));
+
+      if(type == null)
+        return null;
+
+      EntryKey<? extends AbstractEntry> parent =
+        fromString(inPaths, inIndex - 1);
+
+      if(parent == null)
+        return new EntryKey(id, type);
+
+      return new EntryKey(id, type, parent);
+    }
+
+    /**
      * Determine if this key is equal to the given object.
      *
      * @param inOther the object to compare for
@@ -291,6 +340,8 @@ public class AbstractEntry extends ValueGroup
        .withFormatter(new LinkFormatter<Name>
                       ("/" + getType().getBaseType().getLink()
                        + "/")));
+
+    setupExtensions();
   }
 
   //........................................................................
@@ -1973,7 +2024,8 @@ public class AbstractEntry extends ValueGroup
    * @return   the compute value
    *
    */
-  public @Nullable Value compute(@Nonnull String inKey)
+  @Override
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     if("extensions".equals(inKey))
     {
@@ -1999,7 +2051,7 @@ public class AbstractEntry extends ValueGroup
     // check extensions for a value
     for(AbstractExtension extension : m_extensions.values())
     {
-      Value value = extension.compute(inKey);
+      Object value = extension.compute(inKey);
       if(value != null)
         return value;
     }
@@ -2464,7 +2516,7 @@ public class AbstractEntry extends ValueGroup
         if(isBase())
         {
           if(name.startsWith("base "))
-            addExtension(name);
+            addExtension(name.substring(5));
         }
         else
           if(!name.startsWith("base "))

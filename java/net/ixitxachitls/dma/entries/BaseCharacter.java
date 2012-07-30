@@ -37,7 +37,6 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
@@ -444,7 +443,7 @@ public class BaseCharacter extends BaseEntry
    *
    */
   @Override
-  public @Nullable Value compute(@Nonnull String inKey)
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     if("products".equals(inKey))
     {

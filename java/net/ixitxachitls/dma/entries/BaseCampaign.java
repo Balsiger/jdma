@@ -33,7 +33,6 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
@@ -198,7 +197,7 @@ public class BaseCampaign extends BaseEntry
    *
    */
   @Override
-  public @Nullable Value compute(@Nonnull String inKey)
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     if("campaigns".equals(inKey))
     {

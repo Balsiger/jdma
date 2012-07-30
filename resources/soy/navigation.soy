@@ -39,3 +39,30 @@
     ');
   </script>
 {/template}
+
+/**
+ * Setup the whole navigation.
+ *
+ * @param entry the entry to compute navigation forx
+ */
+{template .entryNavigation}
+  <script>
+    $('#subnavigation').html('
+    {foreach $navEntry in $entry.navigation}
+      &raquo;{sp}
+      <a href="{$navEntry.path|escapeJs}" class="navigation-link"
+         onclick="util.link(event, \'{$navEntry.path|escapeJs}\')">
+        {if $navEntry.dmName}
+          {if $ij.isDM}
+            {$navEntry.dmName|escapeJs} ({$navEntry.name|escapeJs})
+          {else}
+            {$navEntry.playerName|escapeJs} ({$navEntry.name|escapeJs})
+          {/if}
+        {else}
+          {$navEntry.name}
+        {/if}
+      </a>{sp}
+    {/foreach}
+    ');
+  </script>
+{/template}

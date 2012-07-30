@@ -59,7 +59,7 @@ H1
 .title-actions
 {
   float: right;
-  margin-top: -20px;
+  margin-top: -26px;
 }
 
 H2
@@ -190,7 +190,7 @@ DIV.subtitletext, DIV.subtitletext A
 {
   background-image: url('/icons/icons-large.png');
   width:            35px;
-  height:           50px;
+  height:           55px;
 }
 
 .sprite.large:hover
@@ -296,6 +296,12 @@ DIV.add
 DIV.remove
 {
   background-position: -182px;
+}
+
+DIV.delete.sprite
+{
+  background-position: -86px;
+  width: 38px;
 }
 
 /******************************************************************************

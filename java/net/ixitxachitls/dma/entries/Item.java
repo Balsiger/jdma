@@ -39,10 +39,8 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
-import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.output.commands.Bold;
 import net.ixitxachitls.output.commands.Color;
@@ -601,13 +599,13 @@ public class Item extends CampaignEntry<BaseItem>
    * @return   the compute value
    *
    */
-  public @Nullable Value compute(@Nonnull String inKey)
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     if("dmName".equals(inKey))
-      return new Name(getDMName());
+      return getDMName();
 
     if("playerName".equals(inKey))
-      return new Name(getPlayerName());
+      return getPlayerName();
 
     return super.compute(inKey);
   }

@@ -267,7 +267,7 @@ public class Contents extends Extension<Item>
    *
    */
   @Override
-  public @Nullable Value compute(@Nonnull String inKey)
+  public @Nullable Object compute(@Nonnull String inKey)
   {
     if("contents".equals(inKey))
     {
@@ -276,6 +276,11 @@ public class Contents extends Extension<Item>
       for(Name name : m_contents)
       {
         Item item = m_entry.getCampaign().getItem(name.get());
+
+        // Note: this is for legacy items that don't yet have a parent.
+        if (item.getParent() != m_entry)
+          item.setParent(m_entry.getKey());
+
         list.add(new Multiple
                  (new Multiple.Element(new Name(item.getPlayerName()), false),
                   new Multiple.Element(new Name(item.getDMName()), false),
@@ -504,6 +509,7 @@ public class Contents extends Extension<Item>
    */
   public boolean add(@Nonnull CampaignEntry inEntry)
   {
+    new Exception().printStackTrace(System.out);
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();
     for(Name item : m_contents)
@@ -519,37 +525,6 @@ public class Contents extends Extension<Item>
   }
 
   //........................................................................
-
-
-  //-------------------------------- store ---------------------------------
-
-  /**
-   * Store this entry in the given storage container.
-   *
-   * @param       inStorage   the storage that stores this entry
-   *
-   * @return      true if stored, false if not
-   *
-   */
-  // public boolean store(Storage<? extends AbstractEntry> inStorage)
-  // {
-  //   super.store(inStorage);
-
-  //   for(EntryValue<Item> value : m_contents)
-  //   {
-  //     Item item = value.get();
-
-  //     item.store(this);
-
-  //     if(item.isChanged())
-  //       changed();
-  //   }
-
-  //   return true;
-  // }
-
-  //........................................................................
-
   //--------------------------------- add ----------------------------------
 
   /**

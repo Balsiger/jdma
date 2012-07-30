@@ -23,6 +23,10 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -134,6 +138,21 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
     .withTemplate("campaign");
 
   //........................................................................
+  //----- parent -----------------------------------------------------------
+
+  /** The parent entry, if any. */
+  @Key("parent")
+  protected Name m_parent = new Name();
+
+  //........................................................................
+
+  /** The cached parent entry, if any. */
+  private @Nullable CampaignEntry m_cachedParent;
+
+  static
+  {
+    extractVariables(CampaignEntry.class);
+  }
 
   //........................................................................
 
@@ -187,19 +206,32 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    */
   public @Nullable Campaign getCampaign()
   {
-    if(m_cachedCampaign == null)
-    {
-      if(!m_campaign.isDefined())
-        return null;
-
+    if(m_cachedCampaign == null && m_campaign.isDefined())
       m_cachedCampaign = DMADataFactory.get().getEntry
         (new AbstractEntry.EntryKey<Campaign>
          (m_campaign.get(1).toString(), Campaign.TYPE,
           new AbstractEntry.EntryKey<BaseCampaign>(m_campaign.get(0).toString(),
                                                    BaseCampaign.TYPE)));
-    }
 
     return m_cachedCampaign;
+  }
+
+  //........................................................................
+  //------------------------------ getParent -------------------------------
+
+  /**
+   * Get the parent entry this character is in.
+   *
+   * @return      the campaign entry that includes this one
+   *
+   */
+  public @Nullable CampaignEntry getParent()
+  {
+    if(m_cachedParent == null && m_parent.isDefined())
+      m_cachedParent = (CampaignEntry)DMADataFactory.get().getEntry
+        (EntryKey.fromString(m_parent.get()));
+
+    return m_cachedParent;
   }
 
   //........................................................................
@@ -265,10 +297,67 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   }
 
   //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Compute a value for a given key, taking base entries into account if
+   * available.
+   *
+   * @param    inKey the key of the value to compute
+   *
+   * @return   the compute value
+   *
+   */
+  public @Nullable Object compute(@Nonnull String inKey)
+  {
+    if("navigation".equals(inKey))
+    {
+      List<CampaignEntry> list = new ArrayList<CampaignEntry>();
+
+      list.add(this);
+
+      for(CampaignEntry parent = getParent(); parent != null;
+          parent = parent.getParent())
+        list.add(parent);
+
+      if(getCampaign() != null)
+        list.add(getCampaign());
+
+      Collections.reverse(list);
+      return list;
+    }
+
+    return super.compute(inKey);
+  }
+
+  //........................................................................
 
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------ setParent -------------------------------
+
+  /**
+   * Set the parent to the given key.
+   *
+   * @param   inParent the key of the parent entry
+   *
+   * @return
+   *
+   */
+  public void setParent(@Nullable EntryKey inParent)
+  {
+    if(inParent != null)
+      m_parent = m_parent.as(inParent.toString());
+    else
+      m_parent = m_parent.create();
+
+    changed();
+    save();
+  }
+
+  //........................................................................
 
   //--------------------------------- add ----------------------------------
 
@@ -288,6 +377,8 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 
     if(contents.add(inEntry))
     {
+      inEntry.setParent(getKey());
+
       changed();
       save();
 

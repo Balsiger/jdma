@@ -520,7 +520,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   static
   {
-    setAutoExtensions(BaseWeapon.class, "weapon", "wearable");
+    setAutoExtensions(BaseWeapon.class, "weapon", "wearable", "base wearable");
     extractVariables(BaseItem.class, BaseWeapon.class);
   }
 

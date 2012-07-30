@@ -38,7 +38,6 @@ import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.logging.Log;
@@ -162,46 +161,7 @@ public abstract class DMAServlet extends BaseServlet
   public static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
     extractKey(@Nonnull String inPath)
   {
-    String []paths = inPath.split("/");
-    if(paths == null || paths.length == 0)
-      return null;
-
-    return extractKey(paths, paths.length - 1);
-  }
-
-  //........................................................................
-  //------------------------------ extractKey ------------------------------
-
-  /**
-   * Extract the key from the given paths array nd index.
-   *
-   * @param    inPaths the paths pieces
-   * @param    inIndex the index to start from with computation (descaending)
-   *
-   * @return   the key for the path part or null if not found
-   *
-   */
-  @SuppressWarnings("unchecked") // creating wildard type
-  private static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
-    extractKey(@Nonnull String []inPaths, int inIndex)
-  {
-    if(inPaths.length <= inIndex || inIndex < 1)
-      return null;
-
-    String id = inPaths[inIndex--].replace("%20", " ");
-    AbstractType<? extends AbstractEntry> type =
-      AbstractType.getTyped(inPaths[inIndex].replace("%20", " "));
-
-    if(type == null)
-      return null;
-
-    AbstractEntry.EntryKey<? extends AbstractEntry> parent =
-      extractKey(inPaths, inIndex - 1);
-
-    if(parent == null)
-      return new AbstractEntry.EntryKey(id, type);
-
-    return new AbstractEntry.EntryKey(id, type, parent);
+    return AbstractEntry.EntryKey.fromString(inPath);
   }
 
   //........................................................................

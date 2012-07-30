@@ -231,7 +231,6 @@ public class SoyValue extends SoyMapData
     if("number".equals(inName) && m_value instanceof BaseNumber)
       return IntegerData.forValue((int)((BaseNumber)m_value).get());
 
-
     return null;
   }
 
