@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.output.soy;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -142,7 +143,7 @@ public class SoyEntry extends SoyMapData
 
       SoyListData data = new SoyListData();
       for(DMAData.File file : files)
-        if(!file.getName().equals(main.getName()))
+        if(main != null && !file.getName().equals(main.getName()))
           data.add(new SoyMapData("path", file.getPath(),
                                   "icon", file.getIcon(),
                                   "name", file.getName(),
@@ -285,6 +286,9 @@ public class SoyEntry extends SoyMapData
 
       return list;
     }
+
+    if(inValue instanceof Map)
+      return new SoyMapData((Map<String, ?>)inValue);
 
     if(inValue == null)
       return null;

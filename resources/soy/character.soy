@@ -68,27 +68,28 @@
     {param entry: $entry /}
     {param name: 'Wealth' /}
     {param content}
-      {if $entry.wealth.multi.1.number < $entry.wealth.multi.2.number}
+      {if $entry.wealth.total < $entry.wealth.lower}
         <span class="error">
-          {$entry.wealth.multi.1.raw} gp
-          (too low, should be around {$entry.wealth.multi.3.raw} gp)
+          {formatNumber($entry.wealth.total)} gp
+          (too low, should be around {formatNumber($entry.wealth.equal)} gp)
         </span>{sp}
-      {elseif $entry.wealth.multi.1.number > $entry.wealth.multi.4.number}
+      {elseif $entry.wealth.total > $entry.wealth.higher}
           <span class="error">
-            {$entry.wealth.multi.1.raw} gp
-            (too high, should be around {$entry.wealth.multi.3.raw} gp)
+            {formatNumber($entry.wealth.total)} gp
+            (too high, should be around {formatNumber($entry.wealth.equal)} gp)
           </span>{sp}
-      {elseif $entry.wealth.multi.1.number <
-          $entry.wealth.multi.3.number + $entry.wealth.multi.2.number / 2}
+      {elseif $entry.wealth.total <
+          $entry.wealth.lower + $entry.wealth.equal / 2}
           <span class="warning">
-            {$entry.wealth.multi.1.raw} gp
-            (a little too low, should be around {$entry.wealth.multi.3.raw} gp)
+            {formatNumber($entry.wealth.total)} gp
+            (a little too low, should be around
+            {formatNumber($entry.wealth.equal)} gp)
           </span>{sp}
-      {elseif $entry.wealth.multi.1.number >
-          $entry.wealth.multi.3.number + $entry.wealth.multi.4.number / 2}
+      {elseif $entry.wealth.total >
+          $entry.wealth.higher + $entry.wealth.equal / 2}
           <span class="error">
-            {$entry.wealth.multi.1.raw} gp
-            (too high, should be around {$entry.wealth.multi.3.raw} gp)
+            {formatNumber($entry.wealth.total)} gp
+            (too high, should be around {formatNumber($entry.wealth.equal)} gp)
           </span>{sp}
       {/if}
     {/param}
@@ -105,32 +106,21 @@
     {param name: 'Items' /}
     {param content}
       {foreach $item in $entry.items.list}
-        {call dma.page.link}
-          {param url: '/campaign/' + $entry.campaign.multi.0.raw + '/'
-              + $entry.campaign.multi.1.raw + '/item/'
-              + $item.multi.0.raw /}
-          {param text}
-            {if $ij.isDM}
-              {$item.multi.2.print}
-            {else}
-              {$item.multi.1.print}
-            {/if}
-          {/param}
-        {/call}
-        {if not isLast($item)}, {/if}
+        {call dma.entry.itemreference}
+          {param item: entry($entry.campaign.key + '/item/'
+              + $item.print) /}
+          {/call}
+      {ifempty}
+        No items stored.
       {/foreach}
       {if $ij.user}
-      {sp}| {call dma.page.link}
-          {param js: 'item.create(\'/campaign/'
-              + $entry.campaign.multi.0.raw + '/'
-              + $entry.campaign.multi.1.raw + '\', \''
-              + '/base campaign/' + $entry.campaign.multi.0.raw
-              + '/campaign/' + $entry.campaign.multi.1.raw
-              + '/' + $entry.type.link + '/'
-              + $entry.name + '\');' /}
-          {param text: 'add' /}
-          {param tooltip: 'Add a new item to this character.' /}
-        {/call}
+      {sp}|{sp}
+      {call dma.page.link}
+        {param js: 'item.create(\'' + $entry.campaign.path + '\', \''
+            + $entry.campaign.key + '/character/' + $entry.name + '\');' /}
+        {param text: 'add' /}
+        {param tooltip: 'Add a new item to this container.' /}
+      {/call}
       {/if}
     {/param}
     {param access: 'user' /}

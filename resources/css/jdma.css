@@ -507,6 +507,32 @@ DIV.textblock.desc
   text-align: justify;
 }
 
+DIV.item-reference
+{
+  display: inline-block;
+  border: 1px solid #000098;
+  background-color: #eef;
+  border-radius: 3px;
+  padding: 4px;
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 1px;
+}
+
+DIV.item-reference:hover
+{
+  background-color: #cce;
+}
+
+IMG.item-image
+{
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
+
 /******************************************************************************
  * entry lists
  *****************************************************************************/

@@ -675,3 +675,32 @@
   </div>
 {/template}
 
+/**
+ * Template for rendering an item reference.
+ *
+ * @param item the item rendered
+ */
+{template .itemreference private="true"}
+  {if $item.name}
+    {call dma.page.link}
+      {param url: $item.path /}
+      {param text}
+        <div class="item-reference"
+            title="{if $ij.isDM}{$item.dmName}{else}{$item.playerName}{/if}">
+          <img class="item-image"
+              src="{if $item.files.main}{$item.files.main.icon}=s15
+              {else}/icons/{$item.type.multilink}-dummy.png{/if}">
+          {if $ij.isDM}
+            {$item.dmName}
+          {else}
+            {$item.playerName}
+          {/if}
+        </div>
+      {/param}
+    {/call}
+  {else}
+    <div class="item-reference" title="{$item}">
+      {$item}
+    </div>
+  {/if}
+{/template}

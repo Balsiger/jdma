@@ -310,6 +310,9 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    */
   public @Nullable Object compute(@Nonnull String inKey)
   {
+    if("campaign".equals(inKey))
+      return getCampaign();
+
     if("navigation".equals(inKey))
     {
       List<CampaignEntry> list = new ArrayList<CampaignEntry>();

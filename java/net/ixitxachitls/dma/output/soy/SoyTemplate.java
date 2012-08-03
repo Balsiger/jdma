@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,15 +35,30 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.multibindings.Multibinder;
 import com.google.template.soy.SoyFileSet;
+import com.google.template.soy.SoyModule;
+import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyMapData;
+import com.google.template.soy.data.restricted.IntegerData;
+import com.google.template.soy.data.restricted.StringData;
+import com.google.template.soy.shared.restricted.SoyFunction;
 import com.google.template.soy.tofu.SoyTofu;
 import com.google.template.soy.tofu.internal.BaseTofu;
+import com.google.template.soy.tofu.restricted.SoyTofuFunction;
 
+import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
+
 
 //..........................................................................
 
@@ -84,6 +100,111 @@ public class SoyTemplate
 
   //........................................................................
 
+  /** A plugin function to return an entry for a given key. */
+  public static class EntryFunction implements SoyTofuFunction
+  {
+    @Override
+    public String getName()
+    {
+      return "entry";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      AbstractEntry.EntryKey key =
+        AbstractEntry.EntryKey.fromString(inArgs.get(0).toString());
+
+      if(key == null)
+      {
+        Log.warning("invalid key for entry soy function for " + inArgs.get(0));
+        return StringData.forValue("invalid key '" + inArgs.get(0) + "'");
+      }
+
+      AbstractEntry entry = DMADataFactory.get().getEntry(key);
+
+      if(entry == null)
+      {
+        Log.warning("unknown entry for entry soy function for "
+                    + inArgs.get(0));
+        return StringData.forValue("unknown entry '" + inArgs.get(0) + "'");
+      }
+
+      // TODO: will fail if a value is actually rendered
+      return new SoyEntry(entry, null);
+    }
+  }
+
+  /** A plugin function to convert the argument into an integer. */
+  public static class IntegerFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "integer";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      return IntegerData.forValue(Integer.valueOf(inArgs.get(0).toString()));
+    }
+  }
+
+  /** A plugin function to format numbers or printing. */
+  public static class FormatNumberFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "formatNumber";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      if(inArgs.get(0) instanceof IntegerData)
+        return StringData.forValue
+          (NumberFormat.getIntegerInstance()
+           .format(((IntegerData)inArgs.get(0)).getValue()));
+
+      return inArgs.get(0);
+    }
+  }
+
+  /** The Guice module with our own plugins. */
+  public static class DMAModule extends AbstractModule
+  {
+    @Override
+    public void configure()
+    {
+      Multibinder<SoyFunction> soyFunctionsSetBinder =
+        Multibinder.newSetBinder(binder(), SoyFunction.class);
+
+      soyFunctionsSetBinder.addBinding().to(EntryFunction.class);
+      soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
+      soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
+    }
+  }
+
   //........................................................................
 
   //-------------------------------------------------------------- variables
@@ -107,6 +228,9 @@ public class SoyTemplate
 
   /** A flag if templates should be recompiled. */
   private static List<SoyTemplate> s_templates = new ArrayList<SoyTemplate>();
+
+  /** The injector with our own plugins. */
+  private Injector m_injector = createInjector();
 
   //........................................................................
 
@@ -255,7 +379,7 @@ public class SoyTemplate
     Log.important("compiling soy templates");
 
     // Bundle the Soy files for your project into a SoyFileSet.
-    SoyFileSet.Builder files = new SoyFileSet.Builder();
+    SoyFileSet.Builder files = m_injector.getInstance(SoyFileSet.Builder.class);
     for(String file : m_files)
     {
       String name;
@@ -303,6 +427,26 @@ public class SoyTemplate
   }
 
   //........................................................................
+  //---------------------------- createInjector ----------------------------
+
+  /**
+   * Create an injector for compiling templates that includes our own
+   * plugins.
+   *
+   * @return   the injector to use for creating compiled templates
+   *
+   */
+  public Injector createInjector()
+  {
+    List<Module> modules = new ArrayList<Module>();
+    modules.add(new SoyModule());
+    modules.add(new DMAModule());
+
+    return Guice.createInjector(modules);
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

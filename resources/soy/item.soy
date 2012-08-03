@@ -306,29 +306,18 @@
           {param name: 'Contents' /}
           {param content}
             {foreach $item in $entry.contents.list}
-              {call dma.page.link}
-                {param url: $item.multi.2.print /}
-                {param text}
-                  {if $ij.isDM}
-                    {$item.multi.1.print}
-                  {else}
-                    {$item.multi.0.print}
-                  {/if}
-                {/param}
+              {call dma.entry.itemreference}
+                {param item: entry($entry.campaign.key + '/item/'
+                    + $item.print) /}
               {/call}
-            {if not isLast($item)}, {/if}
             {ifempty}
               No items stored.
             {/foreach}
             {if $ij.isDM or $ij.isOwner}
               {sp}|{sp}
               {call dma.page.link}
-                {param js: 'item.create(\'/campaign/'
-                    + $entry.campaign.multi.0.print + '/'
-                    + $entry.campaign.multi.1.print
-                    + '\', \'/base campaign/' + $entry.campaign.multi.0.print
-                    + '/campaign/' + $entry.campaign.multi.1.print
-                    + '/item/' + $entry.name + '\');' /}
+                {param js: 'item.create(\'' + $entry.campaign.path + '\', \''
+                    + $entry.campaign.key + '/item/' + $entry.name + '\');' /}
                 {param text: 'add' /}
                 {param tooltip: 'Add a new item to this container.' /}
               {/call}
@@ -496,3 +485,4 @@
     {param entry: $entry /}
   {/call}
 {/deltemplate}
+

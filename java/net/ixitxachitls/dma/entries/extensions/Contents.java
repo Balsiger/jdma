@@ -39,7 +39,6 @@ import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Money;
-import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -255,51 +254,6 @@ public class Contents extends Extension<Item>
 
   //........................................................................
 
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key, taking base entries into account if
-   * available.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the compute value
-   *
-   */
-  @Override
-  public @Nullable Object compute(@Nonnull String inKey)
-  {
-    if("contents".equals(inKey))
-    {
-      List<Multiple> list = new ArrayList<Multiple>();
-
-      for(Name name : m_contents)
-      {
-        Item item = m_entry.getCampaign().getItem(name.get());
-
-        // Note: this is for legacy items that don't yet have a parent.
-        if (item.getParent() != m_entry)
-          item.setParent(m_entry.getKey());
-
-        list.add(new Multiple
-                 (new Multiple.Element(new Name(item.getPlayerName()), false),
-                  new Multiple.Element(new Name(item.getDMName()), false),
-                  new Multiple.Element(new Name(item.getPath()), false)));
-      }
-
-      if(list.isEmpty())
-        return new ValueList<Multiple>
-          (new Multiple(new Multiple.Element(new Name(), false),
-                        new Multiple.Element(new Name(), false),
-                        new Multiple.Element(new Name(), false)));
-      else
-        return new ValueList<Multiple>(list);
-    }
-
-    return super.compute(inKey);
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
