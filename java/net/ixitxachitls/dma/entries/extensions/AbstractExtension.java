@@ -442,7 +442,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
     else
       key = inKey;
 
-    return new FormattedValue(new Combination(this, key).format(inDM), "", key);
+    return null;
   }
 
   //........................................................................

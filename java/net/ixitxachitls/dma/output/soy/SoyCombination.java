@@ -23,15 +23,26 @@
 
 package net.ixitxachitls.dma.output.soy;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.template.soy.data.SoyData;
+import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.Entries;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Expression;
+import net.ixitxachitls.dma.values.FormattedText;
+import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 
 //..........................................................................
@@ -71,7 +82,7 @@ public class SoyCombination extends SoyValue
    *
    */
   public SoyCombination(@Nonnull String inName,
-                        @Nonnull Combination inCombination,
+                        @Nonnull Combination<? extends Value> inCombination,
                         @Nonnull Value inValue,
                         @Nonnull AbstractEntry inEntry,
                         @Nonnull SoyRenderer inRenderer)
@@ -88,7 +99,7 @@ public class SoyCombination extends SoyValue
   //-------------------------------------------------------------- variables
 
   /** The combination stored here. */
-  private final @Nonnull Combination m_combination;
+  private final @Nonnull Combination<? extends Value> m_combination;
 
   //........................................................................
 
@@ -106,11 +117,41 @@ public class SoyCombination extends SoyValue
   @Override
   public @Nullable SoyData getSingle(@Nonnull String inName)
   {
-    if("print".equals(inName))
-      return StringData.forValue(m_combination.print(m_renderer));
+    if("total".equals(inName))
+    {
+      Value total = m_combination.total();
+      if (total == null)
+        return null;
+
+      return new SoyValue(m_combination.getName(), total, m_entry, null);
+    }
 
     if("min".equals(inName))
       return StringData.forValue(m_combination.min().toString());
+
+    if("bases".equals(inName))
+    {
+      List<Map<String, Object>> bases = new ArrayList<Map<String, Object>>();
+
+      for(Map.Entry<? extends Value, Collection<ValueGroup>> entry
+            : m_combination.valuesPerGroup().asMap().entrySet())
+        bases.add
+          (SoyTemplate.map
+           ("value", new SoyValue(m_combination.getName(),
+                                  entry.getKey(), m_entry, null),
+            "isLongText", entry.getKey() instanceof FormattedText,
+            "isText", entry.getKey() instanceof Text,
+            "names", Entries.namesString(entry.getValue())));
+
+      for(Map.Entry<Expression, Collection<ValueGroup>> entry
+            : m_combination.expressionsPerGroup().asMap().entrySet())
+        bases.add
+          (SoyTemplate.map
+           ("expression", entry.getKey().toString(),
+            "names", Entries.namesString(entry.getValue())));
+
+      return new SoyListData(bases);
+    }
 
     return super.getSingle(inName);
   }

@@ -2009,7 +2009,7 @@ public class AbstractEntry extends ValueGroup
     else
       key = inKey;
 
-    return new FormattedValue(new Combination(this, key).format(inDM), "", key);
+    return null;
   }
 
   //........................................................................

@@ -326,18 +326,18 @@ public class Money extends Units<Money>
    * @return      the data as a map
    *
    */
-  @Override
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  // @Override
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
-    Rational gold = getAsGold();
-    if(gold.compare(getGold()) != 0)
-      data.put("gold", new SoyValue("as gold", gold, inEntry, inRenderer));
+  //   Rational gold = getAsGold();
+  //   if(gold.compare(getGold()) != 0)
+  //     data.put("gold", new SoyValue("as gold", gold, inEntry, inRenderer));
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
 

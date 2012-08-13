@@ -36,6 +36,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
@@ -142,13 +143,28 @@ public class Combination<V extends Value>
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------- getName --------------------------------
+
+  /**
+   * Get the name of the combined value.
+   *
+   * @return      the name of the combined value
+   *
+   */
+  public @Nonnull String getName()
+  {
+    return m_name;
+  }
+
+  //........................................................................
+
   //-------------------------------- values --------------------------------
 
   /**
    * Get all the values for the combination. If the same value is found twice,
    * it is also returned twice.
    *
-   * @return      a list with all the value
+   * @return      a list with all the values
    *
    */
   public @Nonnull Collection<V> values()
@@ -158,125 +174,53 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
-
-  //-------------------------------- print ---------------------------------
+  //-------------------------------- values --------------------------------
 
   /**
-   * Render the combination using the renderer provided.
+   * Get the values for this combination, per bases.
    *
-   * @param    inRenderer the renderer to render the combination value
-   *
-   * @return   a string with the renderered value
+   * @return      the base values and their entries
    *
    */
-  public @Nonnull String print(@Nonnull SoyRenderer inRenderer)
+  public @Nullable Multimap<V, ValueGroup> valuesPerGroup()
   {
     combine();
-    Map<String, Object> data = new HashMap<String, Object>();
-
-    if(isArithmetic())
-    {
-      Value total = total();
-      if(total != null && total.isDefined())
-        data.put("total",
-                 new SoyValue(m_name + " total", total, (AbstractEntry)m_entry,
-                              inRenderer));
-    }
-
-    List<Map<String, Object>> baseValues = new ArrayList<Map<String, Object>>();
-    for(V value : m_values.keySet())
-    {
-      Map<String, Object> map = new HashMap<String, Object>();
-      map.put("value", new SoyValue(m_name, value, (AbstractEntry)m_entry,
-                                    inRenderer));
-      map.put("isLongtext", value instanceof FormattedText);
-      map.put("isText", value instanceof Text);
-      map.put("names", Entries.namesString(m_values.get(value)));
-
-      baseValues.add(map);
-    }
-
-    for(Expression expression : m_expressions.keySet())
-    {
-      Map<String, Object> map = new HashMap<String, Object>();
-      map.put("expression", expression.toString());
-      map.put("names", Entries.namesString(m_expressions.get(expression)));
-
-      baseValues.add(map);
-    }
-
-    data.put("bases", baseValues);
-
-    Value value = m_entry.getValue(m_name);
-    if (value != null && value.isDefined())
-      data.put("isDefined", true);
-
-    return inRenderer.render("dma.value.combination", data);
+    return Multimaps.unmodifiableMultimap(m_values);
   }
 
   //........................................................................
-  //-------------------------------- format --------------------------------
+  //----------------------------- expressions ------------------------------
 
   /**
-   * Format the combination of all the values for printing.
+   * Get all the expressions for the combination. If the same value is found
+   * twice, it is also returned twice.
    *
-   * @param       inDM true if formatting for the DM, false if not
-   *
-   * @return      the formatted value
+   * @return      a list with all the expressions
    *
    */
-  public @Nonnull Command format(boolean inDM)
+  public @Nonnull Collection<Expression> expressions()
   {
     combine();
-
-    if(isArithmetic())
-    {
-      V total = total();
-      if(total == null)
-        return new Command("");
-
-      if(inDM)
-        return new Window(total.format(), summary(), "", "base");
-
-      return total.format();
-    }
-
-    // not arithmetic
-    List<Object> commands = new ArrayList<Object>();
-    for(V value : m_values.keySet())
-    {
-      List<String> nameList = new ArrayList<String>();
-      for(ValueGroup entry : m_values.get(value))
-        nameList.add(entry.getName());
-      String names = Strings.toString(nameList, ", ", "");
-
-      if(value instanceof FormattedText)
-      {
-        commands.add(new Divider("base-title", new Span("base-text", names)));
-        commands.add(value.format());
-      }
-      else
-      {
-        if(!commands.isEmpty())
-          if(value instanceof Text)
-            commands.add(" ");
-          else
-            commands.add(", ");
-
-
-        if(inDM)
-          commands.add(new Window(new Span("base-value", value.format()),
-                                  "from " + names, " /" + names + "/", "base"));
-        else
-          commands.add(value.format());
-      }
-
-    }
-
-    return new Command(commands);
+    return Collections.unmodifiableCollection(m_expressions.keys());
   }
 
   //........................................................................
+  //-------------------------- expressionPerGroup --------------------------
+
+  /**
+   * Get the expression per group they came from.
+   *
+   * @return      the base entries for the given expression per group
+   *
+   */
+  public @Nullable Multimap<Expression, ValueGroup> expressionsPerGroup()
+  {
+    combine();
+    return Multimaps.unmodifiableMultimap(m_expressions);
+  }
+
+  //........................................................................
+
   //--------------------------------- total --------------------------------
 
   /**
@@ -493,6 +437,7 @@ public class Combination<V extends Value>
    * @return      the string representation
    *
    */
+  @SuppressWarnings("unchecked")
   private @Nonnull String toString(Multimap inMap)
   {
     StringBuilder builder = new StringBuilder();

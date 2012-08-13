@@ -66,6 +66,7 @@ public class Reference extends BaseText<Reference>
    */
   public Reference()
   {
+    withTemplate("reference");
   }
 
   //........................................................................
@@ -147,16 +148,16 @@ public class Reference extends BaseText<Reference>
    * @return      the string to be printed
    *
    */
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
-                                    @Nonnull SoyRenderer inRenderer)
-  {
-    resolve();
-    if(m_product == null)
-      return getEditValue();
+  // protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
+  //                                   @Nonnull SoyRenderer inRenderer)
+  // {
+  //   resolve();
+  //   if(m_product == null)
+  //     return getEditValue();
 
-    return inRenderer.render("dma.value.reference",
-                             collectData(inEntry, inRenderer));
-  }
+  //   return inRenderer.render("dma.value.reference",
+  //                            collectData(inEntry, inRenderer));
+  // }
 
   //........................................................................
   //----------------------------- collectData ------------------------------
@@ -170,18 +171,18 @@ public class Reference extends BaseText<Reference>
    * @return      the data as a map
    *
    */
-  @Override
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = super.collectData(inEntry, inRenderer);
-    data.put("id", get());
+  // @Override
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  //   data.put("id", get());
 
-    if(m_product != null)
-      data.put("name", inRenderer.renderCommands(m_product.getFullTitle()));
+  //   if(m_product != null)
+  //     data.put("name", inRenderer.renderCommands(m_product.getFullTitle()));
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
   //----------------------------- getEditValue -----------------------------

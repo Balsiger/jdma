@@ -70,26 +70,25 @@
     {param content}
       {if $entry.wealth.total < $entry.wealth.lower}
         <span class="error">
-          {formatNumber($entry.wealth.total)} gp
-          (too low, should be around {formatNumber($entry.wealth.equal)} gp)
+          {$entry.wealth.total |number} gp
+          (too low, should be around {$entry.wealth.equal |number} gp)
         </span>{sp}
       {elseif $entry.wealth.total > $entry.wealth.higher}
           <span class="error">
-            {formatNumber($entry.wealth.total)} gp
-            (too high, should be around {formatNumber($entry.wealth.equal)} gp)
+            {$entry.wealth.total |number} gp
+            (too high, should be around {$entry.wealth.equal |number} gp)
           </span>{sp}
       {elseif $entry.wealth.total <
           $entry.wealth.lower + $entry.wealth.equal / 2}
           <span class="warning">
-            {formatNumber($entry.wealth.total)} gp
-            (a little too low, should be around
-            {formatNumber($entry.wealth.equal)} gp)
+            {$entry.wealth.total |number} gp (a little too low, should be around
+            {$entry.wealth.equal |number} gp)
           </span>{sp}
       {elseif $entry.wealth.total >
           $entry.wealth.higher + $entry.wealth.equal / 2}
           <span class="error">
-            {formatNumber($entry.wealth.total)} gp
-            (too high, should be around {formatNumber($entry.wealth.equal)} gp)
+            {$entry.wealth.total |number} gp
+            (too high, should be around {$entry.wealth.equal |number} gp)
           </span>{sp}
       {/if}
     {/param}
@@ -109,7 +108,7 @@
         {call dma.entry.itemreference}
           {param item: entry($entry.campaign.key + '/item/'
               + $item.print) /}
-          {/call}
+        {/call}
       {ifempty}
         No items stored.
       {/foreach}

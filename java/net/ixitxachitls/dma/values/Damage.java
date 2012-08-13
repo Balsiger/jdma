@@ -368,22 +368,22 @@ public class Damage extends Value<Damage>
    * @return      the data as a map
    *
    */
-  @Override
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  // @Override
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
-    data.put("base", new SoyValue("base damage", m_base, inEntry, inRenderer));
-    data.put("type", new SoyValue("damage type", m_type, inEntry, inRenderer));
-    data.put("effect", m_effect);
+  //   data.put("base", new SoyValue("base damage", m_base, inEntry, inRenderer));
+  //   data.put("type", new SoyValue("damage type", m_type, inEntry, inRenderer));
+  //   data.put("effect", m_effect);
 
-    if(m_other != null)
-      data.put("other", new SoyValue("other damage", m_other, inEntry,
-                                     inRenderer));
+  //   if(m_other != null)
+  //     data.put("other", new SoyValue("other damage", m_other, inEntry,
+  //                                    inRenderer));
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
 

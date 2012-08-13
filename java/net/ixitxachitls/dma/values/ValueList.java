@@ -102,6 +102,7 @@ public class ValueList<T extends Value>
     m_joiner    = Joiner.on(inDelimiter);
 
     append(inType);
+    withTemplate("list", m_delimiter);
   }
 
   //........................................................................
@@ -142,6 +143,8 @@ public class ValueList<T extends Value>
     // add all the elements (they must be copied!)
     for(T value : inValues)
       append(value);
+
+    withTemplate("list", m_delimiter);
   }
 
   //........................................................................
@@ -386,16 +389,16 @@ public class ValueList<T extends Value>
    * @return  the printed value as a string.
    *
    */
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
-                                    @Nonnull SoyRenderer inRenderer)
-  {
-    List<String> printed = new ArrayList<String>();
-    if(m_values != null)
-      for(T element : m_values)
-        printed.add(element.print(inEntry, inRenderer));
+  // protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
+  //                                   @Nonnull SoyRenderer inRenderer)
+  // {
+  //   List<String> printed = new ArrayList<String>();
+  //   if(m_values != null)
+  //     for(T element : m_values)
+  //       printed.add(element.print(inEntry, inRenderer));
 
-    return m_joiner.join(printed);
-  }
+  //   return m_joiner.join(printed);
+  // }
 
   //........................................................................
 

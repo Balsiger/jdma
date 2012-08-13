@@ -49,8 +49,11 @@ import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 import com.google.template.soy.shared.restricted.SoyFunction;
+import com.google.template.soy.shared.restricted.SoyPrintDirective;
 import com.google.template.soy.tofu.SoyTofu;
 import com.google.template.soy.tofu.internal.BaseTofu;
+import com.google.template.soy.tofu.restricted.SoyAbstractTofuFunction;
+import com.google.template.soy.tofu.restricted.SoyAbstractTofuPrintDirective;
 import com.google.template.soy.tofu.restricted.SoyTofuFunction;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -101,7 +104,8 @@ public class SoyTemplate
   //........................................................................
 
   /** A plugin function to return an entry for a given key. */
-  public static class EntryFunction implements SoyTofuFunction
+  public static class EntryFunction extends SoyAbstractTofuFunction
+    implements  SoyTofuFunction
   {
     @Override
     public String getName()
@@ -116,9 +120,9 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData compute(@Nonnull List<SoyData> inArgs)
     {
-      AbstractEntry.EntryKey key =
+      AbstractEntry.EntryKey<? extends AbstractEntry> key =
         AbstractEntry.EntryKey.fromString(inArgs.get(0).toString());
 
       if(key == null)
@@ -190,6 +194,133 @@ public class SoyTemplate
     }
   }
 
+  public static class NumberDirective extends SoyAbstractTofuPrintDirective
+  {
+    @Override
+    public String getName()
+    {
+      return "|number";
+    }
+
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(0);
+    }
+
+
+    @Override
+    public boolean shouldCancelAutoescape()
+    {
+      return false;
+    }
+
+
+    @Override
+    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    {
+      return NumberFormat.getIntegerInstance()
+        .format(Integer.valueOf(inValue.toString()));
+    }
+  }
+
+  public static class PrintDirective extends SoyAbstractTofuPrintDirective
+  {
+    @Override
+    public String getName()
+    {
+      return "|print";
+    }
+
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(0);
+    }
+
+
+    @Override
+    public boolean shouldCancelAutoescape()
+    {
+      return false;
+    }
+
+
+    @Override
+    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    {
+      if(inValue instanceof SoyValue)
+        return ((SoyValue)inValue).print();
+
+      return inValue.toString();
+    }
+  }
+
+  public static class RawDirective extends SoyAbstractTofuPrintDirective
+  {
+    @Override
+    public String getName()
+    {
+      return "|raw";
+    }
+
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(0);
+    }
+
+
+    @Override
+    public boolean shouldCancelAutoescape()
+    {
+      return false;
+    }
+
+
+    @Override
+    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    {
+      if(inValue instanceof SoyValue)
+        return ((SoyValue)inValue).raw();
+
+      return inValue.toString();
+    }
+  }
+
+  public static class CSSDirective extends SoyAbstractTofuPrintDirective
+  {
+    @Override
+    public String getName()
+    {
+      return "|css";
+    }
+
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(0);
+    }
+
+
+    @Override
+    public boolean shouldCancelAutoescape()
+    {
+      return true;
+    }
+
+
+    @Override
+    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    {
+      return inValue.toString().replace(" ", "-");
+    }
+  }
+
   /** The Guice module with our own plugins. */
   public static class DMAModule extends AbstractModule
   {
@@ -202,6 +333,14 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(EntryFunction.class);
       soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
+
+      Multibinder<SoyPrintDirective> soyDirectivesSetBinder =
+        Multibinder.newSetBinder(binder(), SoyPrintDirective.class);
+
+      soyDirectivesSetBinder.addBinding().to(NumberDirective.class);
+      soyDirectivesSetBinder.addBinding().to(PrintDirective.class);
+      soyDirectivesSetBinder.addBinding().to(CSSDirective.class);
+      soyDirectivesSetBinder.addBinding().to(RawDirective.class);
     }
   }
 

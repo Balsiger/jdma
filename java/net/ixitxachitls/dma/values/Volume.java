@@ -387,26 +387,26 @@ public class Volume extends Units<Volume>
    * @return      the data as a map
    *
    */
-  @Override
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  // @Override
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
-    data.put("metric", isMetric());
-    data.put("feet", isFeet());
-    data.put("liquid", isLiquid());
-    data.put("asfeet",
-             new SoyValue("as feet", asFeet(), inEntry, inRenderer));
-    data.put("asmetric",
-             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
-    data.put("asgallons",
-             new SoyValue("as gallons", asGallons(), inEntry, inRenderer));
-    data.put("asliters",
-             new SoyValue("as liters", asLiters(), inEntry, inRenderer));
+  //   data.put("metric", isMetric());
+  //   data.put("feet", isFeet());
+  //   data.put("liquid", isLiquid());
+  //   data.put("asfeet",
+  //            new SoyValue("as feet", asFeet(), inEntry, inRenderer));
+  //   data.put("asmetric",
+  //            new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+  //   data.put("asgallons",
+  //            new SoyValue("as gallons", asGallons(), inEntry, inRenderer));
+  //   data.put("asliters",
+  //            new SoyValue("as liters", asLiters(), inEntry, inRenderer));
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
   //------------------------------- doGroup --------------------------------

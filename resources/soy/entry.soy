@@ -223,20 +223,18 @@
       {param entry: $entry /}
     {/delcall}
     <div class="description">
-      {call dma.value.value}
+      {call dma.value.withbase}
         {param canEdit: $ij.isDM /}
         {param entry: $entry /}
         {param value: $entry.description /}
       {/call}
-      {$entry.description.bases}
     </div>
     <div class="short-description">
-      {call dma.value.value}
+      {call dma.value.withbase}
         {param canEdit: $ij.isDM /}
         {param entry: $entry /}
         {param value: $entry.short_description /}
       {/call}
-      {$entry.short_description.bases}
     </div>
   </div>
   <div id="files" class="files">

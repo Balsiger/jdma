@@ -41,6 +41,7 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.BaseNumber;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Encodings;
@@ -129,12 +130,56 @@ public class SoyValue extends SoyMapData
   /** The renderer for rendering sub values. */
   protected final @Nonnull SoyRenderer m_renderer;
 
+  /** The command renderer for rendering values. */
+  public static final @Nonnull SoyRenderer COMMAND_RENDERER =
+    new SoyRenderer(new SoyTemplate("commands", "value", "page"));
+
   /** A flag if the value can be edited. */
   protected final boolean m_editable;
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //-------------------------------- print ---------------------------------
+
+  /**
+   * Print the value to soy.
+   *
+   * @return  a string representation for html rendering
+   *
+   */
+  public @Nonnull String print()
+  {
+    String template = m_value.getTemplate();
+    if (template == null)
+      return m_value.print(m_entry, COMMAND_RENDERER);
+
+    return COMMAND_RENDERER.render
+      ("dma.value." + template,
+       SoyTemplate.map("name", template,
+                       "args", m_value.getTemplateArguments(),
+                       "value", this,
+                       "entry", new SoyEntry(m_entry, COMMAND_RENDERER),
+                       "naked", m_value.print(m_entry, COMMAND_RENDERER)));
+  }
+
+  //........................................................................
+  //--------------------------------- raw ----------------------------------
+
+  /**
+   * Convert the value to a raw string (no template processing for the value).
+   *
+   * @return   the raw string representation
+   *
+   */
+  public @Nonnull String raw()
+  {
+    return m_value.toString(false);
+  }
+
+  //........................................................................
+
 
   //------------------------------ getSingle -------------------------------
 
@@ -162,18 +207,16 @@ public class SoyValue extends SoyMapData
     if("print".equals(inName))
       return StringData.forValue(m_value.print(m_entry, m_renderer));
 
-    if("bases".equals(inName))
-      return StringData.forValue(new Combination<Value>(m_entry, m_name)
-                                 .withIgnoreTop()
-                                 .print(m_renderer));
+    // if("bases".equals(inName))
+    //   return StringData.forValue(new Combination<Value>(m_entry, m_name)
+    //                              .withIgnoreTop()
+    //                              .print(m_renderer));
 
     if("combine".equals(inName))
-      if(m_value.isDefined())
-        return this;
-      else
-        return new SoyCombination(m_name,
-                                  new Combination<Value>(m_entry, m_name),
-                                  m_value, m_entry, m_renderer);
+      return new SoyCombination(m_name,
+                                new Combination<Value>(m_entry, m_name)
+                                .withIgnoreTop(),
+                                m_value, m_entry, m_renderer);
 
     if("name".equals(inName))
       return StringData.forValue(m_name);
@@ -231,7 +274,22 @@ public class SoyValue extends SoyMapData
     if("number".equals(inName) && m_value instanceof BaseNumber)
       return IntegerData.forValue((int)((BaseNumber)m_value).get());
 
-    return null;
+    if("remark".equals(inName))
+    {
+      Remark remark = m_value.getRemark();
+      if (remark != null)
+        return new SoyMapData("type", remark.getType().getDescription(),
+                              "comment", remark.getComment());
+    }
+
+    Object value = m_value.compute(inName);
+    if(value == null)
+      return null;
+
+    if(value instanceof Boolean)
+      return BooleanData.forValue((Boolean)value);
+
+    return StringData.forValue(value.toString());
   }
 
   //.........................................................................

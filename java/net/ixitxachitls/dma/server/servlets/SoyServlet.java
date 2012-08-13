@@ -42,6 +42,7 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
+import net.ixitxachitls.dma.output.soy.SoyValue;
 
 //..........................................................................
 
@@ -148,7 +149,10 @@ public class SoyServlet extends DMAServlet
     throws ServletException, IOException
   {
     if(isDev())
+    {
       s_template.recompile();
+      SoyValue.COMMAND_RENDERER.recompile();
+    }
 
     // Set the output header.
     inResponse.setHeader("Content-Type", "text/html");

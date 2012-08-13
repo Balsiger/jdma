@@ -33,6 +33,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.collect.ImmutableList;
+
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.output.soy.SoyEntry;
@@ -337,7 +339,7 @@ public abstract class Value<T extends Value> implements
                                  @Nonnull String ... inArguments)
   {
     m_template = inTemplate;
-    m_templateArguments = Arrays.asList(inArguments);
+    m_templateArguments = ImmutableList.copyOf(inArguments);
 
     return (T)this;
   }
@@ -380,11 +382,42 @@ public abstract class Value<T extends Value> implements
   protected @Nullable String m_template = null;
 
   /** The arguments to the template. */
-  protected @Nullable List<String> m_templateArguments = null;
+  protected @Nullable ImmutableList<String> m_templateArguments = null;
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //----------------------------- getTemplate ------------------------------
+
+  /**
+   * Get the template to use for rendering.
+   *
+   * @return      the name of the template, if any
+   *
+   */
+  public @Nullable String getTemplate()
+  {
+    return m_template;
+  }
+
+  //........................................................................
+  //------------------------- getTemplateArguments -------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nullable List<String> getTemplateArguments()
+  {
+    return m_templateArguments;
+  }
+
+  //........................................................................
 
   //------------------------------- toString -------------------------------
 
@@ -534,19 +567,21 @@ public abstract class Value<T extends Value> implements
   public @Nonnull String print(@Nonnull AbstractEntry inEntry,
                                @Nonnull SoyRenderer inRenderer)
   {
-    Map<String, Object> data = collectData(inEntry, inRenderer);
+    //Map<String, Object> data = collectData(inEntry, inRenderer);
 
-    if(m_template != null)
-    {
-      data.put("name", m_template);
-      data.put("args", m_templateArguments);
-      data.put("naked",
-               inRenderer.render("dma.value." + m_template, data));
-    }
-    else
-      data.put("naked", doPrint(inEntry, inRenderer));
+    return doPrint(inEntry, inRenderer);
 
-    return inRenderer.render("dma.value.remark", data);
+    // if(m_template != null)
+    // {
+    //   data.put("name", m_template);
+    //   data.put("args", m_templateArguments);
+    //   data.put("naked",
+    //            inRenderer.render("dma.value." + m_template, data));
+    // }
+    // else
+    //   data.put("naked", doPrint(inEntry, inRenderer));
+
+    // return inRenderer.render("dma.value.remark", data);
   }
 
   //........................................................................
@@ -579,21 +614,21 @@ public abstract class Value<T extends Value> implements
    * @return      the data as a map
    *
    */
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = new HashMap<String, Object>();
-    data.put("entry", new SoyEntry(inEntry, inRenderer));
-    data.put("value", new SoyValue("NONE", this, inEntry, inRenderer));
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = new HashMap<String, Object>();
+  //   // data.put("entry", new SoyEntry(inEntry, inRenderer));
+  //   // data.put("value", new SoyValue("NONE", this, inEntry, inRenderer));
 
-    if(m_remark != null)
-    {
-      data.put("remarkType", m_remark.getType().name());
-      data.put("remarkComment", m_remark.getComment());
-    }
+  //   // if(m_remark != null)
+  //   // {
+  //   //   data.put("remarkType", m_remark.getType().name());
+  //   //   data.put("remarkComment", m_remark.getComment());
+  //   // }
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
 
@@ -820,6 +855,42 @@ public abstract class Value<T extends Value> implements
   public @Nullable Expression getExpression()
   {
     return m_expression;
+  }
+
+  //........................................................................
+  //------------------------------ getRemark -------------------------------
+
+  /**
+   * Get the remark for this value, if any.
+   *
+   * @return   the remark set for the value
+   *
+   */
+  public @Nullable Remark getRemark()
+  {
+    return m_remark;
+  }
+
+  //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Compute a value for a given key.
+   *
+   * @param    inKey the key of the value to compute
+   *
+   * @return   the computed value
+   *
+   */
+  public @Nullable Object compute(@Nonnull String inKey)
+  {
+    if("template".equals(inKey))
+      if(m_template != null)
+        return m_template;
+      else
+        return "(none)";
+
+    return null;
   }
 
   //........................................................................

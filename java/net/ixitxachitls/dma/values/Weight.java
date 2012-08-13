@@ -371,22 +371,22 @@ public class Weight extends Units<Weight>
    * @return      the data as a map
    *
    */
-  @Override
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  // @Override
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
-    data.put("metric", isMetric());
-    data.put("pound", isPound());
-    data.put("carat", isCarat());
-    data.put("aspounds",
-             new SoyValue("as pound", asPound(), inEntry, inRenderer));
-    data.put("asmetric",
-             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+  //   data.put("metric", isMetric());
+  //   data.put("pound", isPound());
+  //   data.put("carat", isCarat());
+  //   data.put("aspounds",
+  //            new SoyValue("as pound", asPound(), inEntry, inRenderer));
+  //   data.put("asmetric",
+  //            new SoyValue("as metric", asMetric(), inEntry, inRenderer));
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
   //------------------------------- doGroup --------------------------------
@@ -401,6 +401,40 @@ public class Weight extends Units<Weight>
   protected @Nonnull String doGroup()
   {
     return s_grouping.group(this);
+  }
+
+  //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Compute a value for a given key.
+   *
+   * @param    inKey the key of the value to compute
+   *
+   * @return   the computed value
+   *
+   */
+  public @Nullable Object compute(@Nonnull String inKey)
+  {
+    if("asMetric".equals(inKey))
+      return asMetric();
+
+    if("asPounds".equals(inKey))
+      return asPound();
+
+    if("asCarat".equals(inKey))
+      return asCarat();
+
+    if("isMetric".equals(inKey))
+      return isMetric();
+
+    if("isPound".equals(inKey))
+      return isPound();
+
+    if("isCarat".equals(inKey))
+      return isCarat();
+
+    return super.compute(inKey);
   }
 
   //........................................................................

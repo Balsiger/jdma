@@ -317,21 +317,21 @@ public class Duration extends Units<Duration>
    * @return      the data as a map
    *
    */
-  @Override
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  // @Override
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
-    data.put("metric", isMetric());
-    data.put("rounds", isRounds());
-    data.put("asmetric",
-             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
-    data.put("asrounds",
-             new SoyValue("as rounds", asRounds(), inEntry, inRenderer));
+  //   data.put("metric", isMetric());
+  //   data.put("rounds", isRounds());
+  //   data.put("asmetric",
+  //            new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+  //   data.put("asrounds",
+  //            new SoyValue("as rounds", asRounds(), inEntry, inRenderer));
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
   //------------------------------- doGroup --------------------------------

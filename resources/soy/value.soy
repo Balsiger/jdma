@@ -47,7 +47,17 @@
         {$content}
       {else}
         {if $value.isDefined}
-          {$value.print}
+          {if $value.remark}
+            {call dma.value.remark}
+              {param value: $value /}
+              {param remarkType: $value.remark.type /}
+              {param remarkComment: $value.remark.comment /}
+            {/call}
+          {else}
+            {$value |print}
+          {/if}
+        {else}
+          &nbsp;
         {/if}
       {/if}
     {/param}
@@ -82,21 +92,21 @@
 /**
  * A value with a remark.
  *
- * @param naked The naked value without remark
+ * @param value The value to be printed
  * @param remarkType The remark type, if any
  * @param remarkComment The remark comment, if any
  *
  */
 {template .remark}
   {if $remarkType}
-    <span class="remark {$remarkType}">
-      {$naked}
+    <span class="remark {$remarkType |css}">
+      {$value |print}
       <div class="remark-window">
         {$remarkComment}
       </div>
     </span>
   {else}
-    {$naked}
+    {$value |print}
   {/if}
 {/template}
 
@@ -232,11 +242,6 @@
  * Template for weight values.
  *
  * @param value the weight value
- * @param metric true if the value is in metric units
- * @ param pound true if the value is in pound units
- * @ param carat true if the value is in carat units
- * @param aspounds the value in pounds
- * @param asmetric the value in metrics
  */
 {template .weight}
   <span class="term">
@@ -245,10 +250,10 @@
       {param text: $value.raw /}
     {/call}
     <div class="explanation">
-      {if $metric}
-        {$aspounds.raw}
+      {if $value.isMetric}
+        {$value.asPounds |raw}
       {else}
-        {$asmetric.raw}
+        {$value.asMetric |raw}
       {/if}
     </div>
   </span>
@@ -348,13 +353,13 @@
  */
 {template .appearances}
   <table>
-  {foreach $appearance in $value.list}
-    <tr>
-      <td>{$appearance.multi.0.print}</td>
-      <td>-{sp}</td>
-      <td>{$appearance.multi.1.print}</td>
-    </tr>
-  {/foreach}
+    {foreach $appearance in $value.list}
+      <tr>
+        <td>{$appearance.multi.0 |print}</td>
+        <td>-{sp}</td>
+        <td>{$appearance.multi.1 |print}</td>
+      </tr>
+    {/foreach}
   </table>
 {/template}
 
@@ -476,76 +481,66 @@
 /**
  * Formatting a combination value.
  *
- * @param total the total, combined value, if any
- * @param bases the base values
- * @param isDefined whether the top level value is defined
+ * @param combination the combination value
+ * @ param total the total, combined value, if any
+ * @ param bases the base values
+ * @ param isDefined whether the top level value is defined
  */
 {template .combination}
-  {if $total}
-    {if $ij.isDM}
-      <span class="windowed">
-        <span class="window base">
-          {foreach $base in $bases}
-            {if $base and $base.value}
-              {$base.value.print}
-              {sp} from {$base.names}
-              <br />
-            {else}
-              undefined value from {$base.names}
-            {/if}
-          {/foreach}
-        </span>
-        {$total.print}
-      </span>
-    {else}
-      {$total.print}
-    {/if}
-  {else}
-    {if length($bases) > 0}
-      {if $ij.isDM}
-        {if $bases[0].isLongtext}
+  {if $combination.total}
+    {if $combination.bases and length($combination.bases) > 0}
+      {if $combination.bases[0].isLongText}
+        {if $ij.isDM}
           <div class="longtext">
-            {foreach $base in $bases}
+            {foreach $base in $combination.bases}
               {if $base.value.isDefined}
                 <div class="base-title">
                   <span class="base-text">from {$base.names}</span>
                 </div>
-                {$base.value.print}
+                {$base.value |print}
               {/if}
             {/foreach}
           </div>
-        {else}
-          {foreach $base in $bases}
-            {if $base.value.isDefined}
-              {if not isFirst($base) or $isDefined}
-                {sp}|{sp}
-              {/if}
-              <span class="windowed">
-                <span class="window base">
-                  from {$base.names}
-                </span>
-                {$base.value.print}
-              </span>
-            {/if}
-          {/foreach}
         {/if}
-      {else}
-        {if $bases[0].isLongtext}
-          {foreach $base in $bases}
-            {$base.value.print}<p>
-          {/foreach}
-        {else}
-          {foreach $base in $bases}
-            {if $base.value.isDefined}
-              {$base.value.print}{sp}
+      {elseif $combination.bases[0].isText}
+        {foreach $base in $combination.bases}
+          {if $base.value.isDefined}
+            {if not isFirst($base) or $combination.isDefined}
+              {sp}|{sp}
             {/if}
-          {/foreach}
+            <span class="windowed">
+              <span class="window base">
+                from {$base.names}
+              </span>
+              {$base.value |print}
+            </span>
+          {/if}
+        {/foreach}
+      {else}
+        {if $ij.isDM}
+          <span class="windowed">
+            <span class="window base">
+              {foreach $base in $combination.bases}
+                {if $base and $base.value}
+                  <span class="base-value">{$base.value |print}</span>
+                  {sp} from {$base.names}
+                  <br />
+                {elseif $base.expression}
+                  {$base.expression} from {$base.names}
+                {else}
+                  undefined value from {$base.names}
+                {/if}
+              {/foreach}
+            </span>
+            <i>{$combination.total|print}</i>
+          </span>
+        {else}
+          {$combination.total|print}
         {/if}
       {/if}
     {/if}
   {/if}
 {/template}
-
 
 /**
  * Print a value including it's base value.
@@ -555,12 +550,27 @@
  * @param canEdit the value can be edited
  */
 {template .withbase}
- {call dma.value.value}
+  {call dma.value.value}
     {param entry: $entry /}
     {param value: $value /}
     {param canEdit: $canEdit /}
   {/call}
-  {if not $value.isDefined and $value.combine}
-    {$value.combine.print}
+  {if $value.combine}
+    {call dma.value.combination}
+      {param combination: $value.combine /}
+    {/call}
   {/if}
+{/template}
+
+/**
+ * Print a value list.
+ *
+ * @param value the value to print
+ * @param args arguments to the template
+ */
+{template .list}
+  {foreach $element in $value.list}
+    {$element |print}
+    {if not isLast($element)}{$args[0]}{/if}
+  {/foreach}
 {/template}

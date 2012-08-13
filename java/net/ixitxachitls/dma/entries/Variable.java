@@ -154,17 +154,18 @@ public class Variable extends ValueHandle<Variable>
    *
    */
   @Override
+  @Deprecated
   public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
   {
     Value value = get(inEntry);
 
-    // if the current value is not defined, use the combine value from the base
-    // entries
-    if(!value.isDefined())
-      return new Combination<Value>(inEntry, m_key).format(inDM);
+    // // if the current value is not defined, use the combine value from the base
+    // // entries
+    // if(!value.isDefined())
+    //   return new Combination<Value>(inEntry, m_key).format(inDM);
 
-    if(m_bases)
-      return new Combination<Value>(inEntry, m_key).format(inDM);
+    // if(m_bases)
+    //   return new Combination<Value>(inEntry, m_key).format(inDM);
 
     return value.format(!m_printUndefined);
   }

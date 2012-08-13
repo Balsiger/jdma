@@ -247,21 +247,21 @@ public Distance create()
    * @return      the data as a map
    *
    */
-  @Override
-  public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-                                         @Nonnull SoyRenderer inRenderer)
-  {
-    Map<String, Object> data = super.collectData(inEntry, inRenderer);
+  // @Override
+  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+  //                                        @Nonnull SoyRenderer inRenderer)
+  // {
+  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
-    data.put("metric", isMetric());
-    data.put("feet", isFeet());
-    data.put("asfeet",
-             new SoyValue("as feet", asFeet(), inEntry, inRenderer));
-    data.put("asmetric",
-             new SoyValue("as metric", asMetric(), inEntry, inRenderer));
+  //   data.put("metric", isMetric());
+  //   data.put("feet", isFeet());
+  //   data.put("asfeet",
+  //            new SoyValue("as feet", asFeet(), inEntry, inRenderer));
+  //   data.put("asmetric",
+  //            new SoyValue("as metric", asMetric(), inEntry, inRenderer));
 
-    return data;
-  }
+  //   return data;
+  // }
 
   //........................................................................
   //------------------------------- doGroup --------------------------------

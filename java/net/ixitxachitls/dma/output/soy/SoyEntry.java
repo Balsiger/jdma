@@ -269,6 +269,7 @@ public class SoyEntry extends SoyMapData
    * @return      the converted value
    *
    */
+  @SuppressWarnings("unchecked")
   public @Nullable SoyData convert(@Nonnull String inName,
                                    @Nullable Object inValue)
   {

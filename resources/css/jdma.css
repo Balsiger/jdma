@@ -1181,8 +1181,8 @@ SPAN.windowed:hover .window
   background:   #eee;
   z-index:      20;
   border:       1px solid #ccc;
-  padding:      10px;
-  color:        #222211;
+  padding:      5px 10px;
+  color:        #221;
   font-weight:  normal;
   font-size:    x-small;
   white-space:  nowrap;
@@ -1195,10 +1195,17 @@ SPAN.window.base
   top: auto;
   border-style: solid;
   border-width: 1px;
-  border-radius: 10px;
+  border-radius: 3px;
   font-size: small;
-  padding: 10px;
   white-space: nowrap;
+}
+
+SPAN.base-value
+{
+  width: 200px;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .term
@@ -1304,14 +1311,14 @@ DIV.section.rotated DIV.section-text
   display: block;
 }
 
-SPAN.HOUSE_RULE
+SPAN.House-Rule
 {
   border-bottom-color: #880000;
   border-bottom-width: 1px;
   border-bottom-style: dotted;
 }
 
-SPAN.ESTIMATION
+SPAN.Estimation
 {
   border-bottom-color: #008800;
   border-bottom-width: 1px;
@@ -1366,14 +1373,14 @@ SPAN.base-text
   width: 100%;
 }
 
-SPAN.HOUSE_RULE .remark-window
+SPAN.House-Rule .remark-window
 {
   border-color: #AA0000;
   color:        #440000;
   background:   #ffffee;
 }
 
-SPAN.ESTIMATION .remark-window
+SPAN.Estimation .remark-window
 {
   border-color: #00AA00;
   color:        #004400;

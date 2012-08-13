@@ -160,39 +160,39 @@ public class Timed extends Extension<Item>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("duration".equals(inKey))
-      return
-        new FormattedValue(new Command
-                           (computeValue("_duration", inDM)
-                            .format(this, inDM, false),
-                            " (max ",
-                            new Combination(this, "duration")
-                            .withIgnoreTop().format(inDM),
-                            ")"),
-                           m_duration, "duration")
-        .withEditable(true);
+  // @Override
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  // {
+  //   if("duration".equals(inKey))
+  //     return
+  //       new FormattedValue(new Command
+  //                          (computeValue("_duration", inDM)
+  //                           .format(this, inDM, false),
+  //                           " (max ",
+  //                           new Combination(this, "duration")
+  //                           .withIgnoreTop().format(inDM),
+  //                           ")"),
+  //                          m_duration, "duration")
+  //       .withEditable(true);
 
-    if("summary".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      commands.add(new Symbol("\u27F3"));
-      maybeAddValue(commands, "duration", inDM, null, null);
+  //   if("summary".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     commands.add(new Symbol("\u27F3"));
+  //     maybeAddValue(commands, "duration", inDM, null, null);
 
-      return new FormattedValue(new Command(commands), null, "summary");
-    }
+  //     return new FormattedValue(new Command(commands), null, "summary");
+  //   }
 
-    if("list".equals(inKey))
-      return new FormattedValue
-        (new Command(m_entry.getNameCommand(inDM),
-                     computeValue("duration", inDM)
-                     .format(m_entry, inDM, true)),
-         null, "list");
+  //   if("list".equals(inKey))
+  //     return new FormattedValue
+  //       (new Command(m_entry.getNameCommand(inDM),
+  //                    computeValue("duration", inDM)
+  //                    .format(m_entry, inDM, true)),
+  //        null, "list");
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //---------------------------- addListCommands ---------------------------
