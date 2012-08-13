@@ -153,7 +153,7 @@ public class SoyValue extends SoyMapData
   {
     String template = m_value.getTemplate();
     if (template == null)
-      return m_value.print(m_entry, COMMAND_RENDERER);
+      return m_value.print(m_entry);
 
     return COMMAND_RENDERER.render
       ("dma.value." + template,
@@ -161,7 +161,7 @@ public class SoyValue extends SoyMapData
                        "args", m_value.getTemplateArguments(),
                        "value", this,
                        "entry", new SoyEntry(m_entry, COMMAND_RENDERER),
-                       "naked", m_value.print(m_entry, COMMAND_RENDERER)));
+                       "naked", m_value.print(m_entry)));
   }
 
   //........................................................................
@@ -175,7 +175,7 @@ public class SoyValue extends SoyMapData
    */
   public @Nonnull String raw()
   {
-    return m_value.toString(false);
+    return m_value.print(m_entry);
   }
 
   //........................................................................
@@ -205,7 +205,7 @@ public class SoyValue extends SoyMapData
       return StringData.forValue(m_value.toString(false));
 
     if("print".equals(inName))
-      return StringData.forValue(m_value.print(m_entry, m_renderer));
+      return StringData.forValue(m_value.print(m_entry));
 
     // if("bases".equals(inName))
     //   return StringData.forValue(new Combination<Value>(m_entry, m_name)

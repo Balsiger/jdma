@@ -574,3 +574,12 @@
     {if not isLast($element)}{$args[0]}{/if}
   {/foreach}
 {/template}
+
+/**
+ * Print a text value with command substitution.
+ *
+ * @param value the value to print
+ */
+{template .text}
+  {$value |commands}
+{/template}

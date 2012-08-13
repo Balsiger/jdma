@@ -553,8 +553,7 @@ protected @Nonnull String doToString()
    * @return  the printed value as a string.
    *
    */
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
-                                    @Nonnull SoyRenderer inRenderer)
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry)
   {
     StringBuilder builder = new StringBuilder();
 
@@ -567,7 +566,7 @@ protected @Nonnull String doToString()
           if(i > 0)
             builder.append(" ");
 
-      builder.append(get(i).print(inEntry, inRenderer));
+      builder.append(get(i).print(inEntry));
 
       if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
         if(m_elements[i].m_tail != null)

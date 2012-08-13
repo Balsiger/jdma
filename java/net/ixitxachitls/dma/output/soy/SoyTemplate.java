@@ -103,6 +103,8 @@ public class SoyTemplate
 
   //........................................................................
 
+  //----- EntryFunction ----------------------------------------------------
+
   /** A plugin function to return an entry for a given key. */
   public static class EntryFunction extends SoyAbstractTofuFunction
     implements  SoyTofuFunction
@@ -145,6 +147,9 @@ public class SoyTemplate
     }
   }
 
+  //........................................................................
+  //----- IntegerFunction --------------------------------------------------
+
   /** A plugin function to convert the argument into an integer. */
   public static class IntegerFunction implements SoyTofuFunction
   {
@@ -166,6 +171,9 @@ public class SoyTemplate
       return IntegerData.forValue(Integer.valueOf(inArgs.get(0).toString()));
     }
   }
+
+  //........................................................................
+  //----- FormatNumberFunction ---------------------------------------------
 
   /** A plugin function to format numbers or printing. */
   public static class FormatNumberFunction implements SoyTofuFunction
@@ -193,6 +201,10 @@ public class SoyTemplate
       return inArgs.get(0);
     }
   }
+
+  //........................................................................
+
+  //----- NumberDirective --------------------------------------------------
 
   public static class NumberDirective extends SoyAbstractTofuPrintDirective
   {
@@ -224,6 +236,9 @@ public class SoyTemplate
         .format(Integer.valueOf(inValue.toString()));
     }
   }
+
+  //........................................................................
+  //----- PrintDirective ---------------------------------------------------
 
   public static class PrintDirective extends SoyAbstractTofuPrintDirective
   {
@@ -258,6 +273,9 @@ public class SoyTemplate
     }
   }
 
+  //........................................................................
+  //----- RawDirective -----------------------------------------------------
+
   public static class RawDirective extends SoyAbstractTofuPrintDirective
   {
     @Override
@@ -291,6 +309,49 @@ public class SoyTemplate
     }
   }
 
+  //........................................................................
+  //----- CommandsDirective ------------------------------------------------
+
+  public static class CommandsDirective extends SoyAbstractTofuPrintDirective
+  {
+    /** The command renderer for rendering values. */
+    public static final @Nonnull SoyRenderer COMMAND_RENDERER =
+      new SoyRenderer(new SoyTemplate("commands", "value", "page"));
+
+    @Override
+    public String getName()
+    {
+      return "|commands";
+    }
+
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(0);
+    }
+
+
+    @Override
+    public boolean shouldCancelAutoescape()
+    {
+      return false;
+    }
+
+
+    @Override
+    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    {
+      if(inValue instanceof SoyValue)
+        return COMMAND_RENDERER.renderCommands(((SoyValue)inValue).raw());
+
+      return inValue.toString();
+    }
+  }
+
+  //........................................................................
+  //----- CSSDirective -----------------------------------------------------
+
   public static class CSSDirective extends SoyAbstractTofuPrintDirective
   {
     @Override
@@ -313,13 +374,14 @@ public class SoyTemplate
       return true;
     }
 
-
     @Override
     public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
     {
       return inValue.toString().replace(" ", "-");
     }
   }
+
+  //........................................................................
 
   /** The Guice module with our own plugins. */
   public static class DMAModule extends AbstractModule
@@ -341,6 +403,7 @@ public class SoyTemplate
       soyDirectivesSetBinder.addBinding().to(PrintDirective.class);
       soyDirectivesSetBinder.addBinding().to(CSSDirective.class);
       soyDirectivesSetBinder.addBinding().to(RawDirective.class);
+      soyDirectivesSetBinder.addBinding().to(CommandsDirective.class);
     }
   }
 

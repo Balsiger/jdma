@@ -96,7 +96,7 @@ public class FormattedText extends BaseText<FormattedText>
    *
    */
   @Override
-public @Nonnull FormattedText create()
+  public @Nonnull FormattedText create()
   {
     return super.create(new FormattedText());
   }
@@ -134,7 +134,7 @@ public @Nonnull FormattedText create()
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected @Nonnull String doToString()
   {
     return s_stringDelimiter
       + m_text.replaceAll("([" + s_stringDelimiter + "])", "\\\\$1")
@@ -151,7 +151,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     return new BaseCommand(m_text.replaceAll("\\s*(?:\n\n|\r\r)\\s*",
                                              "\\\\par ")

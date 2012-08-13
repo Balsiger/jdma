@@ -341,13 +341,15 @@ public class SoyRenderer
     if(inText.isEmpty())
       return inText;
 
-    if(inText.indexOf(s_command) < 0)
-      return inText;
+    String text = inText.replace("\n\n", "\\par ");
+
+    if(text.indexOf(s_command) < 0)
+      return text;
 
     // mark the brackets in the text
     final StringBuilder builder = new StringBuilder();
-    String text = markBrackets(inText, s_escape, s_argStart, s_argEnd,
-                               s_markArgStart, s_markArgEnd);
+    text = markBrackets(text, s_escape, s_argStart, s_argEnd,
+                        s_markArgStart, s_markArgEnd);
     text = markBrackets(text, s_escape, s_optArgStart, s_optArgEnd,
                         s_markOptArgStart, s_markOptArgEnd);
 

@@ -564,24 +564,9 @@ public abstract class Value<T extends Value> implements
    * @return  the printed value as a string.
    *
    */
-  public @Nonnull String print(@Nonnull AbstractEntry inEntry,
-                               @Nonnull SoyRenderer inRenderer)
+  public @Nonnull String print(@Nonnull AbstractEntry inEntry)
   {
-    //Map<String, Object> data = collectData(inEntry, inRenderer);
-
-    return doPrint(inEntry, inRenderer);
-
-    // if(m_template != null)
-    // {
-    //   data.put("name", m_template);
-    //   data.put("args", m_templateArguments);
-    //   data.put("naked",
-    //            inRenderer.render("dma.value." + m_template, data));
-    // }
-    // else
-    //   data.put("naked", doPrint(inEntry, inRenderer));
-
-    // return inRenderer.render("dma.value.remark", data);
+    return doPrint(inEntry);
   }
 
   //........................................................................
@@ -596,8 +581,7 @@ public abstract class Value<T extends Value> implements
    * @return      the string to be printed
    *
    */
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
-                                    @Nonnull SoyRenderer inRenderer)
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry)
   {
     return toString(false);
   }

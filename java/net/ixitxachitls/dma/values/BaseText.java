@@ -84,6 +84,7 @@ public class BaseText<T extends BaseText> extends Value<T>
   {
     m_text     = inText;
     m_editType = "name";
+    withTemplate("text");
   }
 
   //........................................................................
@@ -160,13 +161,12 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
-                                    @Nonnull SoyRenderer inRenderer)
+  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry)
   {
     if(m_text == null)
       return "";
 
-    return inRenderer.renderCommands(m_text);
+    return m_text;
   }
 
   //........................................................................
