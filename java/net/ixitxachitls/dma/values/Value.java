@@ -37,9 +37,6 @@ import com.google.common.collect.ImmutableList;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.output.soy.SoyEntry;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Color;
@@ -585,34 +582,6 @@ public abstract class Value<T extends Value> implements
   {
     return toString(false);
   }
-
-  //........................................................................
-  //----------------------------- collectData ------------------------------
-
-  /**
-   * Collect the data available for printing the value.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the data as a map
-   *
-   */
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
-  // {
-  //   Map<String, Object> data = new HashMap<String, Object>();
-  //   // data.put("entry", new SoyEntry(inEntry, inRenderer));
-  //   // data.put("value", new SoyValue("NONE", this, inEntry, inRenderer));
-
-  //   // if(m_remark != null)
-  //   // {
-  //   //   data.put("remarkType", m_remark.getType().name());
-  //   //   data.put("remarkComment", m_remark.getComment());
-  //   // }
-
-  //   return data;
-  // }
 
   //........................................................................
 

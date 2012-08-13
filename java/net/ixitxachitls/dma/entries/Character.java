@@ -31,10 +31,11 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableMap;
+
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
@@ -859,10 +860,12 @@ public class Character extends CampaignEntry<BaseCharacter>
     }
 
     if("wealth".equals(inKey))
-      return SoyTemplate.map("total", (int)totalWealth().getAsGold().getValue(),
-                             "lower", wealthPerLevel((int)m_level.get() - 1),
-                             "equal", wealthPerLevel((int)m_level.get()),
-                             "higher", wealthPerLevel((int)m_level.get() + 1));
+      return new ImmutableMap.Builder<String, Object>()
+        .put("total", (int)totalWealth().getAsGold().getValue())
+        .put("lower", wealthPerLevel((int)m_level.get() - 1))
+        .put("equal", wealthPerLevel((int)m_level.get()))
+        .put("higher", wealthPerLevel((int)m_level.get() + 1))
+        .build();
 
     if("weight".equals(inKey))
       return totalWeight();
