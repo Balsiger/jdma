@@ -401,6 +401,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return      true if saved, false if not
    *
    */
+  @Override
   public boolean save()
   {
     if(m_name.get().startsWith(Entry.TEMPORARY))

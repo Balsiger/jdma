@@ -187,6 +187,7 @@ public class EntryServlet extends PageServlet
           entry = type.create(Entry.TEMPORARY + postfix);
           entry.updateKey(key);
 
+          entry.addBase(id);
           if(inRequest.hasParam("bases"))
             for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
               entry.addBase(base);

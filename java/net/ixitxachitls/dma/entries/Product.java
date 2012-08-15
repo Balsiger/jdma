@@ -23,8 +23,13 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableMap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -950,6 +955,39 @@ public class Product extends Entry<BaseProduct>
   }
 
   //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Compute a value for a given key, taking base entries into account if
+   * available.
+   *
+   * @param    inKey the key of the value to compute
+   *
+   * @return   the compute value
+   *
+   */
+  public @Nullable Object compute(@Nonnull String inKey)
+  {
+    if("navigation".equals(inKey))
+    {
+      List<Object> list = new ArrayList<Object>();
+
+      list.add(new ImmutableMap.Builder()
+               .put("name", m_owner.get())
+               .put("path", "/user/" + m_owner.get())
+               .build());
+      list.add(this);
+
+      return list;
+    }
+
+    if("fullTitle".equals(inKey))
+      return getFullTitle();
+
+    return super.compute(inKey);
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -971,6 +1009,27 @@ public class Product extends Entry<BaseProduct>
       return;
 
     m_owner = m_owner.as(parent.getID());
+  }
+
+  //........................................................................
+  //--------------------------------- save ---------------------------------
+
+  /**
+   * Save the entry if it has been changed.
+   *
+   * @return      true if saved, false if not
+   *
+   */
+  @Override
+  public boolean save()
+  {
+    if(m_name.get().startsWith(Entry.TEMPORARY))
+      do
+      {
+        randomID();
+      } while(DMADataFactory.get().getEntry(getKey()) != null);
+
+    return super.save();
   }
 
   //........................................................................
