@@ -1422,15 +1422,13 @@ extend(edit.Image, edit.Base);
  * @return      true if the edited value has to be saved
  */
 edit.Image.prototype.edit = function(inEditable, inTarget, inNoRelated) {
-  var parent = inEditable.firstChild;
-  parent.style.position = 'relative';
-  var image = parent.firstChild;
+  var image = inEditable.firstChild;
   if(image)
   {
     var element = this.getElement();
     element.css('height', image.clientHeight);
     element.css('width', image.clientWidth);
-    $(parent).prepend(element);
+    $(inEditable).prepend(element);
   }
 
   return false;

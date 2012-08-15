@@ -253,6 +253,8 @@
               class="image file"
               onclick="util.link(event, '{$file.icon}')" />
             </div>
+          {ifempty}
+            <div class="nofiles"></div>
           {/foreach}
         </div>
       {/param}

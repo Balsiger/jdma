@@ -430,10 +430,20 @@ DIV.short-description
 
 DIV.files
 {
-  margin:  10px 0;
+  margin:      10px 0;
   padding-top: 2px;
+  clear:       both;
+}
+
+DIV.nofiles
+{
   min-height:  10px;
   min-width:   10px;
+}
+
+DIV.nofiles:hover
+{
+  border:      1px dashed #ccc;
 }
 
 DIV.file

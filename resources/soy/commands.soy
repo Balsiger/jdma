@@ -92,6 +92,19 @@
 {/template}
 
 /**
+ * A link to a Group.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .Grup}
+  {call dma.page.link}
+    {param url: '/group/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'Group' /}
+  {/call}
+{/template}
+
+/**
  * A Spell reference..
  *
  * @param arg The arguments to the command.
