@@ -26,9 +26,7 @@ package net.ixitxachitls.dma.values;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
@@ -38,19 +36,11 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.Entries;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.Variable;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Span;
-import net.ixitxachitls.output.commands.Window;
-import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 

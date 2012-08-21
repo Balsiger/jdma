@@ -24,16 +24,12 @@
 package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.ValueGroup;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.dma.output.soy.SoyValue;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
@@ -357,35 +353,6 @@ public class Damage extends Value<Damage>
   }
 
   //........................................................................
-  //----------------------------- collectData ------------------------------
-
-  /**
-   * Collect the data available for printing the value.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the data as a map
-   *
-   */
-  // @Override
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
-  // {
-  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
-
-  //   data.put("base", new SoyValue("base damage", m_base, inEntry, inRenderer));
-  //   data.put("type", new SoyValue("damage type", m_type, inEntry, inRenderer));
-  //   data.put("effect", m_effect);
-
-  //   if(m_other != null)
-  //     data.put("other", new SoyValue("other damage", m_other, inEntry,
-  //                                    inRenderer));
-
-  //   return data;
-  // }
-
-  //........................................................................
 
   //------------------------------ isDefined -------------------------------
 
@@ -396,7 +363,7 @@ public class Damage extends Value<Damage>
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_base.isDefined();
   }

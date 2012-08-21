@@ -851,17 +851,6 @@ public class Item extends CampaignEntry<BaseItem>
         .withEditType("name");
     }
 
-    // if("hp".equals(inKey))
-    //   return
-    //     new FormattedValue(new Command
-    //                        (computeValue("_hp", inDM).format(this, inDM, false),
-    //                         " (max ",
-    //                         new Combination(this, "hp")
-    //                         .withIgnoreTop().format(inDM),
-    //                         ")"),
-    //                        m_hp, "hp")
-    //     .withEditable(true);
-
     if("itemlist".equals(inKey))
     {
       List<Object> item = new ArrayList<Object>();

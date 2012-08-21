@@ -77,14 +77,12 @@ public class SoyValue extends SoyMapData
    * @param    inName     the name of the value
    * @param    inValue    the dma value
    * @param    inEntry    the entry for the value
-   * @param    inRenderer the renderer for rendering sub values
    *
    */
   public SoyValue(@Nonnull String inName, @Nonnull Value inValue,
-                  @Nonnull AbstractEntry inEntry,
-                  @Nonnull SoyRenderer inRenderer)
+                  @Nonnull AbstractEntry inEntry)
   {
-    this(inName, inValue, inEntry, inRenderer, true);
+    this(inName, inValue, inEntry, true);
   }
 
   //........................................................................
@@ -96,18 +94,15 @@ public class SoyValue extends SoyMapData
    * @param    inName     the name of the value
    * @param    inValue    the dma value
    * @param    inEntry    the entry for the value
-   * @param    inRenderer the renderer for rendering sub values
    * @param    inEditable true if the value can be edited, false if not
    *
    */
   public SoyValue(@Nonnull String inName, @Nonnull Value inValue,
-                  @Nonnull AbstractEntry inEntry,
-                  @Nonnull SoyRenderer inRenderer, boolean inEditable)
+                  @Nonnull AbstractEntry inEntry, boolean inEditable)
   {
     m_name = inName;
     m_value = inValue;
     m_entry = inEntry;
-    m_renderer = inRenderer;
     m_editable = inEditable;
   }
 
@@ -126,9 +121,6 @@ public class SoyValue extends SoyMapData
 
   /** The entry containing the value. */
   protected final @Nonnull AbstractEntry m_entry;
-
-  /** The renderer for rendering sub values. */
-  protected final @Nonnull SoyRenderer m_renderer;
 
   /** The command renderer for rendering values. */
   public static final @Nonnull SoyRenderer COMMAND_RENDERER =
@@ -160,7 +152,7 @@ public class SoyValue extends SoyMapData
        SoyTemplate.map("name", template,
                        "args", m_value.getTemplateArguments(),
                        "value", this,
-                       "entry", new SoyEntry(m_entry, COMMAND_RENDERER),
+                       "entry", new SoyEntry(m_entry),
                        "naked", m_value.print(m_entry)));
   }
 
@@ -207,16 +199,10 @@ public class SoyValue extends SoyMapData
     if("print".equals(inName))
       return StringData.forValue(m_value.print(m_entry));
 
-    // if("bases".equals(inName))
-    //   return StringData.forValue(new Combination<Value>(m_entry, m_name)
-    //                              .withIgnoreTop()
-    //                              .print(m_renderer));
-
     if("combine".equals(inName))
       return new SoyCombination(m_name,
                                 new Combination<Value>(m_entry, m_name)
-                                .withIgnoreTop(),
-                                m_value, m_entry, m_renderer);
+                                .withIgnoreTop(), m_value, m_entry);
 
     if("name".equals(inName))
       return StringData.forValue(m_name);
@@ -257,7 +243,7 @@ public class SoyValue extends SoyMapData
     {
       List<SoyValue> values = new ArrayList<SoyValue>();
       for (Value value : (ValueList<Value>)m_value)
-        values.add(new SoyValue(m_name, value, m_entry, m_renderer));
+        values.add(new SoyValue(m_name, value, m_entry));
 
       return new SoyListData(values);
     }
@@ -266,7 +252,7 @@ public class SoyValue extends SoyMapData
     {
       List<SoyValue> values = new ArrayList<SoyValue>();
       for (Multiple.Element element : (Multiple)m_value)
-        values.add(new SoyValue(m_name, element.get(), m_entry, m_renderer));
+        values.add(new SoyValue(m_name, element.get(), m_entry));
 
       return new SoyListData(values);
     }
@@ -313,7 +299,6 @@ public class SoyValue extends SoyMapData
     return m_name.equals(((SoyValue)inOther).m_name)
       && m_value.equals(((SoyValue)inOther).m_value)
       && m_entry.equals(((SoyValue)inOther).m_entry)
-      && m_renderer.equals(((SoyValue)inOther).m_renderer)
       && super.equals(inOther);
   }
 
@@ -329,7 +314,7 @@ public class SoyValue extends SoyMapData
   @Override
   public int hashCode()
   {
-    return super.hashCode() + m_renderer.hashCode() + m_entry.hashCode()
+    return super.hashCode() + m_entry.hashCode()
       + m_value.hashCode() + m_name.hashCode();
   }
 
@@ -357,18 +342,14 @@ public class SoyValue extends SoyMapData
       SoyValue soyValue =
         new SoyValue("test",
                      new net.ixitxachitls.dma.values.Text("just a name"),
-                     new net.ixitxachitls.dma.entries.BaseEntry("test entry"),
-                     new SoyRenderer(new SoyTemplate("lib/test/soy/test",
-                                                     "lib/test/soy/test2")));
+                     new net.ixitxachitls.dma.entries.BaseEntry("test entry"));
 
       assertEquals("edit", "&#34;just a name&#34;",
                    soyValue.getSingle("edit").toString());
       assertEquals("raw", "\"just a name\"",
                    soyValue.getSingle("raw").toString());
-      assertEquals("print", "++ just a name ++",
+      assertEquals("print", "just a name",
                    soyValue.getSingle("print").toString());
-      assertEquals("bases", "total: *undefined* bases: [] defined: no",
-                   soyValue.getSingle("bases").toString());
       assertEquals("combine", "{}",
                    soyValue.getSingle("combine").toString());
       assertEquals("name", "test",

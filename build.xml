@@ -96,6 +96,8 @@
   <path id="classpath">
     <pathelement location="${classes.dir}" />
     <pathelement location="${resources.dir}" />
+    <!-- guava -->
+    <pathelement location="${lib.dir}/guava-13.0.jar" />
     <!-- for testing -->
     <pathelement location="${lib.test.dir}/junit-4.8.2.jar" />
     <pathelement location="${lib.test.dir}/cglib-nodep-2.2.jar" />
@@ -132,8 +134,6 @@
     <pathelement location="${lib.dir}/activation.jar" />
     <!-- java annotations -->
     <pathelement location="${lib.dir}/jsr305.jar" />
-    <!-- guava -->
-    <pathelement location="${lib.dir}/guava-13.0.jar" />
     <!-- somehow required probably because checkstyle does not handle -->
     <!-- build.sysclasspath... -->
     <pathelement location="${lib.build.dir}/checkstyle-all-5.1.jar"  />
@@ -359,7 +359,7 @@
           description="Uploads the application to App Engine.">
     <replace file="${war.dir}/WEB-INF/appengine-web.xml"
              token="&lt;application&gt;jdmaixit-dev&lt;/application&gt;"
-             value="&lt;application&gt;jdmaixit&lt;/application&gt;" />
+             value="&lt;application&gt;jdmaixit-hrd&lt;/application&gt;" />
     <replaceregexp file="${war.dir}/WEB-INF/appengine-web.xml"
              match="&lt;version&gt;.*&lt;/version&gt;"
              replace="&lt;version&gt;${version}&lt;/version&gt;" />
@@ -369,7 +369,7 @@
   <target name="gae-update-dev" depends="compile"
           description="Uploads the application to App Engine.">
     <replace file="${war.dir}/WEB-INF/appengine-web.xml"
-             token="&lt;application&gt;jdmaixit&lt;/application&gt;"
+             token="&lt;application&gt;jdmaixit-hrd&lt;/application&gt;"
              value="&lt;application&gt;jdmaixit-dev&lt;/application&gt;" />
     <replaceregexp file="${war.dir}/WEB-INF/appengine-web.xml"
              match="&lt;version&gt;.*&lt;/version&gt;"

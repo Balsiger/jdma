@@ -209,7 +209,7 @@ public class Print extends AbstractPrint
       BaseCharacter user = new BaseCharacter("test");
 
       assertEquals("printing",
-                   "[start  , "
+                   "[start , \\color{error}{ * first * },  , "
                    + "\\title[entrytitle]"
                    + "{\\editable[Changing the name will not change "
                    + "any references to entries with that name, thus leaving "
@@ -217,8 +217,7 @@ public class Print extends AbstractPrint
                    + "manually.]{/base entry/test}{test}{name}{test}{name}}"
                    + ",  middle , "
                    + "\\editable{/base entry/test}"
-                   + "{\\divider{base-title}{\\span{base-text}{test}}"
-                   + "\\baseCommand{desc}}{description}"
+                   + "{\\baseCommand{desc}}{description}"
                    + "{\"desc\"}{formatted},  the end]",
                    ((Command)print.print(entry, user)).getArguments()
                    .toString());

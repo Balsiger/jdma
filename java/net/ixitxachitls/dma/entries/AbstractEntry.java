@@ -2003,11 +2003,11 @@ public class AbstractEntry extends ValueGroup
       return value;
 
     // The value is not defined here, but might be in a base.
-    String key;
-    if(inKey.startsWith("_"))
-      key = inKey.substring(1);
-    else
-      key = inKey;
+    // String key;
+    // if(inKey.startsWith("_"))
+    //   key = inKey.substring(1);
+    // else
+    //   key = inKey;
 
     return null;
   }

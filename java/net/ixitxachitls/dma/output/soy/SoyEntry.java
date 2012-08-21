@@ -77,11 +77,9 @@ public class SoyEntry extends SoyMapData
    * @param       inRenderer the renderer used for printing
    *
    */
-  public SoyEntry(@Nonnull AbstractEntry inEntry,
-                  @Nonnull SoyRenderer inRenderer)
+  public SoyEntry(@Nonnull AbstractEntry inEntry)
   {
     m_entry = inEntry;
-    m_renderer = inRenderer;
   }
 
   //........................................................................
@@ -92,9 +90,6 @@ public class SoyEntry extends SoyMapData
 
   /** The entry with the data. */
   private final @Nonnull AbstractEntry m_entry;
-
-  /** The renderer used for priting sub values. */
-  private final @Nonnull SoyRenderer m_renderer;
 
   //........................................................................
 
@@ -185,8 +180,7 @@ public class SoyEntry extends SoyMapData
         if(value != null)
         {
           if(value instanceof Value)
-            return new SoyValue(name, ((Value)value).create(), m_entry,
-                                m_renderer, false);
+            return new SoyValue(name, ((Value)value).create(), m_entry, false);
 
           return convert(name, value);
         }
@@ -213,7 +207,6 @@ public class SoyEntry extends SoyMapData
       return false;
 
     return m_entry.equals(((SoyEntry)inOther).m_entry)
-      && m_renderer.equals(((SoyEntry)inOther).m_renderer)
       && super.equals(inOther);
   }
 
@@ -229,7 +222,7 @@ public class SoyEntry extends SoyMapData
   @Override
   public int hashCode()
   {
-    return super.hashCode() + m_renderer.hashCode() + m_entry.hashCode();
+    return super.hashCode() + m_entry.hashCode();
   }
 
   //........................................................................
@@ -274,10 +267,10 @@ public class SoyEntry extends SoyMapData
                                    @Nullable Object inValue)
   {
     if(inValue instanceof Value)
-      return new SoyValue(inName, (Value)inValue, m_entry, m_renderer);
+      return new SoyValue(inName, (Value)inValue, m_entry);
 
     if(inValue instanceof AbstractEntry)
-      return new SoyEntry((AbstractEntry)inValue, m_renderer);
+      return new SoyEntry((AbstractEntry)inValue);
 
     if(inValue instanceof List)
     {
@@ -314,8 +307,7 @@ public class SoyEntry extends SoyMapData
     public void single()
     {
       SoyEntry soyEntry = new SoyEntry(new net.ixitxachitls.dma.entries
-                                       .BaseEntry("test entry"),
-                                       new SoyRenderer(new SoyTemplate()));
+                                       .BaseEntry("test entry"));
 
       assertEquals("extension", "false",
                    soyEntry.getSingle("extension_x").toString());

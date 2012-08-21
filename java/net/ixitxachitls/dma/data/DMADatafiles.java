@@ -528,40 +528,17 @@ public class DMADatafiles implements DMAData
   /**
    * Get the recent ids of a specific type.
    *
-   * @param       <T>    the real type of the entries to get
-   * @param       inType the type of entries to get ids for
+   * @param       <T>      the real type of the entries to get
+   * @param       inType   the type of entries to get ids for
+   * @param       inParent the key of the parent entry, if any
    *
    * @return      the recent ids
    *
    */
   @Override
-public @Nonnull <T extends AbstractEntry>
-    List<T> getRecentEntries(@Nonnull AbstractType<T> inType)
-  {
-    throw new UnsupportedOperationException("not implemented");
-  }
-
-  //........................................................................
-  //---------------------------- getRecentEntries --------------------------
-
-  /**
-   * Get all the ids of a specific type, sorted and navigable.
-   *
-   * @param       <T>    the real type of entries to get
-   * @param       inType the type of entries to get ids for
-   * @param       inParentID   the id of the parent for recent entries
-   * @param       inParentType the type of the parent entries
-   *
-   * @return      all the ids
-   *
-   */
-  @Override
-@SuppressWarnings("unchecked") // need to cast cache value
-  public @Nonnull  <T extends AbstractEntry> List<T>
-    getRecentEntries(@Nonnull AbstractType<T> inType,
-                     @Nonnull String inParentID,
-                     @Nonnull AbstractType<? extends AbstractEntry>
-                     inParentType)
+  public @Nonnull <T extends AbstractEntry> List<T> getRecentEntries
+    (@Nonnull AbstractType<T> inType,
+     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -578,7 +555,7 @@ public @Nonnull <T extends AbstractEntry>
    *
    */
   @Override
-public Multimap<String, String> getOwners(String inID)
+  public Multimap<String, String> getOwners(String inID)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -594,7 +571,7 @@ public Multimap<String, String> getOwners(String inID)
    *
    */
   @Override
-public @Nonnull String toString()
+  public @Nonnull String toString()
   {
     StringBuilder result =
       new StringBuilder("path " + m_path + ", files " + m_names);
@@ -627,7 +604,7 @@ public @Nonnull String toString()
    *
    */
   @Override
-public boolean remove(@Nonnull String inID,
+  public boolean remove(@Nonnull String inID,
                         @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     throw new UnsupportedOperationException("not implemented");

@@ -149,12 +149,12 @@ public class MainPageServlet extends PageServlet
         characters.put(character.getCampaign().getName(), list);
       }
 
-      list.add(new SoyEntry(character, inRenderer));
+      list.add(new SoyEntry(character));
     }
 
     List<SoyEntry> soyCampaigns = new ArrayList<SoyEntry>();
     for(Campaign campaign : campaigns)
-      soyCampaigns.add(new SoyEntry(campaign, inRenderer));
+      soyCampaigns.add(new SoyEntry(campaign));
 
     List<Campaign> dmCampaigns =
       DMADataFactory.get().getEntries(Campaign.TYPE, "dm", user.getName());
@@ -164,13 +164,13 @@ public class MainPageServlet extends PageServlet
 
     for(Campaign campaign : dmCampaigns)
     {
-      soyDMCampaigns.add(new SoyEntry(campaign, inRenderer));
+      soyDMCampaigns.add(new SoyEntry(campaign));
 
       // and all the characters there
       List<SoyEntry> chars = new ArrayList<SoyEntry>();
       for(Character character : DMADataFactory.get()
             .getEntries(Character.TYPE, campaign.getKey(), 0, 20))
-        chars.add(new SoyEntry(character, inRenderer));
+        chars.add(new SoyEntry(character));
       dmCharacters.put(campaign.getName(), chars);
     }
 

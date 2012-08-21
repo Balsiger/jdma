@@ -24,10 +24,7 @@
 package net.ixitxachitls.dma.values;
 
 import java.io.StringReader;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,8 +62,8 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class Value<T extends Value> implements
-  Comparable<Object>, PublicCloneable
+public abstract class Value<T extends Value>
+  implements Comparable<Object>, PublicCloneable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -402,11 +399,9 @@ public abstract class Value<T extends Value> implements
   //------------------------- getTemplateArguments -------------------------
 
   /**
+   * Get the list of arguments for the template rendering this value.
    *
-   *
-   * @param
-   *
-   * @return
+   * @return  the list of arguments for the template
    *
    */
   public @Nullable List<String> getTemplateArguments()
@@ -556,7 +551,6 @@ public abstract class Value<T extends Value> implements
    * Generate a string representation of the value for printing.
    *
    * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
    *
    * @return  the printed value as a string.
    *
@@ -573,7 +567,6 @@ public abstract class Value<T extends Value> implements
    * Do the standard printing after handling templates.
    *
    * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
    *
    * @return      the string to be printed
    *

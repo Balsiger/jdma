@@ -107,7 +107,6 @@ public class SoyTemplate
 
   /** A plugin function to return an entry for a given key. */
   public static class EntryFunction extends SoyAbstractTofuFunction
-    implements  SoyTofuFunction
   {
     @Override
     public String getName()
@@ -142,8 +141,7 @@ public class SoyTemplate
         return StringData.forValue("unknown entry '" + inArgs.get(0) + "'");
       }
 
-      // TODO: will fail if a value is actually rendered
-      return new SoyEntry(entry, null);
+      return new SoyEntry(entry);
     }
   }
 
@@ -206,6 +204,7 @@ public class SoyTemplate
 
   //----- NumberDirective --------------------------------------------------
 
+  /** A directive to nicely format a number. */
   public static class NumberDirective extends SoyAbstractTofuPrintDirective
   {
     @Override
@@ -240,6 +239,7 @@ public class SoyTemplate
   //........................................................................
   //----- PrintDirective ---------------------------------------------------
 
+  /** A directive to nicely print a value. */
   public static class PrintDirective extends SoyAbstractTofuPrintDirective
   {
     @Override
@@ -276,6 +276,7 @@ public class SoyTemplate
   //........................................................................
   //----- RawDirective -----------------------------------------------------
 
+  /** A directive to print a value raw. */
   public static class RawDirective extends SoyAbstractTofuPrintDirective
   {
     @Override
@@ -312,6 +313,7 @@ public class SoyTemplate
   //........................................................................
   //----- CommandsDirective ------------------------------------------------
 
+  /** A directive to parse and render comands embedded in a string. */
   public static class CommandsDirective extends SoyAbstractTofuPrintDirective
   {
     /** The command renderer for rendering values. */
@@ -352,6 +354,7 @@ public class SoyTemplate
   //........................................................................
   //----- CSSDirective -----------------------------------------------------
 
+  /** A direactive to format a string as a css id. */
   public static class CSSDirective extends SoyAbstractTofuPrintDirective
   {
     @Override
@@ -562,6 +565,7 @@ public class SoyTemplate
    */
   public void recompile()
   {
+    if(true) return;
     m_compiled = null;
   }
 

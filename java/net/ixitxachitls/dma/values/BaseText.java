@@ -28,7 +28,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Command;
@@ -155,7 +154,6 @@ public class BaseText<T extends BaseText> extends Value<T>
    * Generate a string representation of the value for printing.
    *
    * @param   inEntry    the entry to print
-   * @param   inRenderer the renderer to print with
    *
    * @return  the printed value as a string.
    *

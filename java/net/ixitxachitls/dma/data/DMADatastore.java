@@ -25,10 +25,8 @@ package net.ixitxachitls.dma.data;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -41,11 +39,8 @@ import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
@@ -74,7 +69,9 @@ import net.ixitxachitls.util.logging.Log;
 
 /**
  * Wrapper for accessing data from app engine's datastore.
- *
+ * TODO: it would be nice to use a chache for entries here. Unfortunately, the
+ * guava cache cannot be used on appengine and the memcache required
+ * serializable objects and copies them for getting.
  *
  * @file          DMADatastore.java
  *
@@ -110,6 +107,9 @@ public class DMADatastore implements DMAData
   //-------------------------------------------------------------- variables
 
   /** The access to the datastore. */
+  private @Nonnull DataStore m_data = new DataStore();
+
+  /** The access to the datastore. */
   private @Nonnull DatastoreService m_store;
 
   /** The blob store service. */
@@ -118,19 +118,8 @@ public class DMADatastore implements DMAData
   /** The image service to serve images. */
   private @Nonnull ImagesService m_image;
 
-  /** The cache for indexes. */
-  private static MemcacheService s_cache =
-    MemcacheServiceFactory.getMemcacheService();
-
   /** Joiner to join keys together. */
   private static final Joiner s_keyJoiner = Joiner.on(":");
-
-  /** Experiation time for the cache. */
-  private static Expiration s_expiration = Expiration.byDeltaSeconds(60 * 60);
-
-  /** Long experiation time for the cache. */
-  private static Expiration s_longExpiration =
-    Expiration.byDeltaSeconds(24 * 60 * 60);
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -164,21 +153,12 @@ public class DMADatastore implements DMAData
                                  <? extends AbstractEntry> inParent,
                                  int inStart, int inSize)
   {
-    Log.debug("getting entries for " + inType + " from " + inStart
-              + " and size " + inSize);
     List<T> entries = new ArrayList<T>();
+    Iterable<Entity> entities =
+      m_data.getEntities(inType.toString(), convert(inParent),
+                         inType.getSortField(), inStart, inSize);
 
-    Query query;
-    if(inParent == null)
-      query = new Query(inType.toString());
-    else
-      query = new Query(inType.toString(), convert(inParent));
-    String sort = inType.getSortField();
-    if(sort != null)
-      query.addSort(sort, Query.SortDirection.ASCENDING);
-    FetchOptions options =
-      FetchOptions.Builder.withOffset(inStart).limit(inSize);
-    for(Entity entity : m_store.prepare(query).asIterable(options))
+    for(Entity entity : entities)
       entries.add((T)convert(entity));
 
     return entries;
@@ -201,17 +181,15 @@ public class DMADatastore implements DMAData
   public @Nullable <T extends AbstractEntry> T getEntry
                       (@Nonnull AbstractEntry.EntryKey<T> inKey)
   {
-    Log.debug("getting " + inKey);
-
-    return convert(inKey.getID(), inKey.getType(), getEntity(convert(inKey)));
+    return convert(inKey.getID(), inKey.getType(),
+                   m_data.getEntity(convert(inKey)));
   }
 
   //........................................................................
   //------------------------------- getEntry -------------------------------
 
   /**
-   * Get the entry denoted by a key value pair. This throws a
-   * TooManyResultsException if more thone one result is found.
+   * Get the entry denoted by a key value pair.
    *
    * @param      inType  the type of entry to get
    * @param      inKey   the key to look for
@@ -229,33 +207,14 @@ public class DMADatastore implements DMAData
                                @Nonnull String inKey,
                                @Nonnull String inValue)
   {
-    Log.debug("getting " + inType + " with " + inKey + " = " + inValue);
-
-    String key = "key:" + inKey + ":" + inValue;
-    Entity entity = (Entity)s_cache.get(key);
-
-    if(entity == null)
-    {
-      Query query = new Query(inType.toString());
-      query.addFilter(toPropertyName(inKey), Query.FilterOperator.EQUAL,
-                      inValue);
-      entity = m_store.prepare(query).asSingleEntity();
-
-      if(entity == null)
-        return null;
-
-      s_cache.put(key, entity, s_expiration);
-    }
-
-    return (T)convert(entity);
+    return (T)convert(m_data.getEntity(inType.toString(), inKey, inValue));
   }
 
   //........................................................................
   //------------------------------ getEntries ------------------------------
 
   /**
-   * Get the entry denoted by a key value pair. This throws a
-   * TooManyResultsException if more thone one result is found.
+   * Get the entry denoted by a key value pair.
    *
    * @param      inType  the type of entry to get
    * @param      inKey   the key to look for
@@ -267,66 +226,15 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-@SuppressWarnings("unchecked") // casting return
+  @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> List<T>
                       getEntries(@Nonnull AbstractType<T> inType,
                                  @Nonnull String inKey,
                                  @Nonnull String inValue)
   {
-    Log.debug("getting multiple " + inType + " with " + inKey + " = "
-              + inValue);
-
-    String key = "list-key:" + inKey + ":" + inValue;
-    List<Entity> entities = (List<Entity>)s_cache.get(key);
-
-    if(entities == null)
-    {
-      Query query = new Query(inType.toString());
-      query.addFilter(toPropertyName(inKey), Query.FilterOperator.EQUAL,
-                      inValue);
-      FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
-
-      entities = new ArrayList<Entity>();
-      for(Entity entity : m_store.prepare(query).asIterable(options))
-        entities.add(entity);
-
-      s_cache.put(key, entities, s_expiration);
-    }
-
-    return (List<T>)convert(entities);
-  }
-
-  //........................................................................
-  //------------------------------- getEntity ------------------------------
-
-  /**
-   * Get an entity denoted with a key.
-   *
-   * @param       inKey the key of the entity to get
-   *
-   * @return      the entity found, if any
-   *
-   */
-  public @Nullable Entity getEntity(@Nonnull Key inKey)
-  {
-    Entity entity = (Entity)s_cache.get(inKey);
-
-    if(entity == null)
-    {
-      try
-      {
-        entity = m_store.get(inKey);
-        s_cache.put(inKey, entity, s_expiration);
-      }
-      catch(com.google.appengine.api.datastore.EntityNotFoundException e)
-      {
-        Log.warning("could not get entity for " + inKey);
-
-        return null;
-      }
-    }
-
-    return entity;
+    return (List<T>)
+      convert(m_data.getEntities(inType.toString(), null, 0, 1000,
+                                 inKey, inValue));
   }
 
   //........................................................................
@@ -342,137 +250,55 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // need to cast cache value
   public @Nonnull List<String> getIDs
     (@Nonnull AbstractType<? extends AbstractEntry> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
-    List<String> ids = (List<String>)s_cache.get("ids-" + inType.toString());
-
-    if(ids != null)
-      return ids;
-
-    Log.debug("getting ids for " + inType);
-
-    Query query;
-    if(inParent == null)
-      query = new Query(inType.toString());
-    else
-      query = new Query(inType.toString(), convert(inParent));
-    String sort = inType.getSortField();
-    if(sort != null)
-      query.addSort(sort, Query.SortDirection.ASCENDING);
-    query.setKeysOnly();
-    FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
-    ids = new ArrayList<String>();
-    for(Entity entity : m_store.prepare(query).asIterable(options))
-      ids.add(entity.getKey().getName());
-
-    s_cache.put("ids-" + inType.toString(), ids, s_longExpiration);
-    return ids;
+    return m_data.getIDs(inType.toString(), inType.getSortField(),
+                         convert(inParent));
   }
 
   //........................................................................
   //---------------------------- getRecentEntries --------------------------
 
   /**
-   * Get all the ids of a specific type, sorted and navigable.
+   * Get all the ids of a specific type, sorting by last change.
    *
-   * @param       <T>    the real type of entries to get
-   * @param       inType the type of entries to get ids for
-   *
-   * @return      all the ids
-   *
-   */
-  @Override
-@SuppressWarnings("unchecked") // need to cast cache value
-  public @Nonnull  <T extends AbstractEntry> List<T>
-    getRecentEntries(@Nonnull AbstractType<T> inType)
-  {
-    Log.debug("getting recent entries for " + inType);
-    List<Entity> entities = (List<Entity>)
-      s_cache.get("recent-" + inType.toString());
-
-    if(entities == null)
-    {
-      Query query = new Query(inType.toString());
-      query.addSort("change", Query.SortDirection.DESCENDING);
-      FetchOptions options =
-        FetchOptions.Builder.withLimit(BaseCharacter.MAX_PRODUCTS + 1);
-      entities = m_store.prepare(query).asList(options);
-
-      s_cache.put("recent-" + inType.toString(), entities, s_expiration);
-    }
-
-    return (List<T>)convert(entities);
-  }
-
-  //........................................................................
-  //---------------------------- getRecentEntries --------------------------
-
-  /**
-   * Get all the ids of a specific type, sorted and navigable.
-   *
-   * @param       <T>          the real type of entries to get
-   * @param       inType       the type of entries to get ids for
-   * @param       inParentID   the id of the parent for recent entries
-   * @param       inParentType the type of the parent entries
+   * @param       <T>      the real type of entries to get
+   * @param       inType   the type of entries to get ids for
+   * @param       inParent the key of the parent entry
    *
    * @return      all the ids
    *
    */
   @Override
-@SuppressWarnings("unchecked") // need to cast cache value
-  public @Nonnull  <T extends AbstractEntry> List<T>
-    getRecentEntries(@Nonnull AbstractType<T> inType,
-                     @Nonnull String inParentID,
-                     @Nonnull AbstractType<? extends AbstractEntry>
-                     inParentType)
+  @SuppressWarnings("unchecked") // need to cast cache value
+  public @Nonnull  <T extends AbstractEntry> List<T> getRecentEntries
+    (@Nonnull AbstractType<T> inType,
+     @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
-    Log.debug("getting recent entries for " + inType + " with parent "
-              + inParentID + "/" + inParentType);
-    List<Entity> entities = (List<Entity>)
-      s_cache.get("recent-" + inParentID + "-" + inType.toString());
-
-    if(entities == null)
-    {
-      Key parent = KeyFactory.createKey(inParentType.toString(), inParentID);
-      Query query = new Query(inType.toString(), parent);
-      query.addSort("change", Query.SortDirection.DESCENDING);
-      FetchOptions options =
-        FetchOptions.Builder.withLimit(BaseCharacter.MAX_PRODUCTS + 1);
-      entities = m_store.prepare(query).asList(options);
-
-      s_cache.put("recent-" + inParentID + "-" + inType.toString(), entities,
-                  s_expiration);
-    }
-
-    return (List<T>)convert(entities);
+    return (List<T>)
+      convert(m_data.getRecentEntities(inType.toString(),
+                                       BaseCharacter.MAX_PRODUCTS + 1,
+                                       convert(inParent)));
   }
 
   //........................................................................
   //------------------------------ getOwners -------------------------------
 
   /**
-   * Get the owner of the given base product.
+   * Get the owners and products for a given base procut.
    *
-   * @param    inID the id of the base product to own
+   * @param    inID the id of the base product
    *
    * @return   a multi map from owner to ids
    *
    */
   @Override
-public Multimap<String, String> getOwners(String inID)
+  public Multimap<String, String> getOwners(String inID)
   {
-    Log.debug("getting owners for " + inID);
-
-    Query query = new Query(Product.TYPE.toString());
-    FetchOptions options = FetchOptions.Builder.withLimit(5);
-    query.addFilter(toPropertyName("base"), Query.FilterOperator.EQUAL, inID);
-    query.setKeysOnly();
-
     Multimap<String, String> owners = HashMultimap.create();
-    for(Entity entity : m_store.prepare(query).asIterable(options))
+    for(Entity entity : m_data.getIDs(Product.TYPE.toString(), "base", inID))
       owners.put(entity.getKey().getParent().getName(),
                  entity.getKey().getName());
 
@@ -493,13 +319,9 @@ public Multimap<String, String> getOwners(String inID)
   @Override
   public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
   {
-    Log.debug("getting files for " + inEntry.getName());
-    Query query = new Query("file", convert(inEntry.getKey()));
-    query.addSort("__key__", Query.SortDirection.ASCENDING);
-    PreparedQuery preparedQuery = m_store.prepare(query);
     List<File> files = new ArrayList<File>();
-    for(Entity entity : preparedQuery.asList
-          (FetchOptions.Builder.withLimit(100)))
+    for(Entity entity : m_data.getEntities("file", convert(inEntry.getKey()),
+                                           "__key__", 0, 100))
     {
       String name = (String)entity.getProperty("name");
       String type = (String)entity.getProperty("type");
@@ -554,28 +376,18 @@ public Multimap<String, String> getOwners(String inID)
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
      @Nonnull String inGroup, int inStart, int inSize)
   {
-    Log.debug("getting index entries for " + inIndex);
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
-    Query query;
-    if(inParent == null)
-      query = new Query(inType.toString());
-    else
-      query = new Query(inType.toString(), convert(inParent));
-    FetchOptions options =
-      FetchOptions.Builder.withOffset(inStart);
-    if(inSize > 0)
-      options.limit(inSize);
-
-    query.addFilter(toPropertyName(Index.PREFIX + inIndex),
-                    Query.FilterOperator.EQUAL, inGroup);
-    for(Entity entity : m_store.prepare(query).asIterable(options))
+    for(Entity entity : m_data.getEntities(inType.toString(), convert(inParent),
+                                           inStart, inSize,
+                                           Index.PREFIX + inIndex, inGroup))
       entries.add(convert(entity));
 
     return (List<T>)entries;
   }
 
   //........................................................................
+
   //---------------------------- getIndexNames -----------------------------
 
   /**
@@ -598,36 +410,20 @@ public Multimap<String, String> getOwners(String inID)
    *
    */
   @Override
-@SuppressWarnings("unchecked") // need to cast from property value
+  @SuppressWarnings("unchecked") // need to cast from property value
   public @Nonnull SortedSet<String> getIndexNames
     (@Nonnull String inIndex,
      @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
      @Nonnull String ... inFilters)
   {
-    Log.debug("getting index names for " + inIndex);
-    SortedSet<String> names = null;
-    String key = inType + ":" + inIndex;
-    if(inFilters.length > 0)
-      key += ":" + s_keyJoiner.join(inFilters);
+    SortedSet<String> names = new TreeSet<String>();
 
-    if(inCached)
-      names = (SortedSet<String>)s_cache.get(key);
+    for(Entity entity : m_data.getEntities(inType.toString(), null,
+                                           0, 100, inFilters))
 
-    if(names != null)
-      return names;
-
-    names = new TreeSet<String>();
-
-    Query query = new Query(inType.toString());
-    for(int i = 0; i + 1 < inFilters.length; i += 2)
-      query.addFilter(inFilters[i], Query.FilterOperator.EQUAL,
-                      inFilters[i + 1]);
-
-    FetchOptions options = FetchOptions.Builder.withChunkSize(100);
-    for(Entity entity : m_store.prepare(query).asIterable(options))
     {
       List<String> values = (List<String>)
-        entity.getProperty(toPropertyName(Index.PREFIX + inIndex));
+        entity.getProperty(m_data.toPropertyName(Index.PREFIX + inIndex));
 
       if(values == null)
         continue;
@@ -636,7 +432,6 @@ public Multimap<String, String> getOwners(String inID)
         names.add(value);
     }
 
-    s_cache.put(key, names, s_longExpiration);
     return names;
   }
 
@@ -679,23 +474,7 @@ public Multimap<String, String> getOwners(String inID)
     (@Nonnull String inID,
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    Log.debug("removing " + inType + " with id " + inID);
-    Key key = KeyFactory.createKey(inType.toString(), inID);
-
-    s_cache.delete(key);
-
-    try
-    {
-      m_store.delete(key);
-      return true;
-    }
-    catch(IllegalArgumentException e)
-    {
-      Log.warning("could not remove entity for " + inType + " with id " + inID
-                  + " (" + key + ")");
-
-      return false;
-    }
+    return m_data.remove(KeyFactory.createKey(inType.toString(), inID));
   }
 
   //........................................................................
@@ -712,10 +491,6 @@ public Multimap<String, String> getOwners(String inID)
   @Override
   public boolean update(@Nonnull AbstractEntry inEntry)
   {
-    Log.debug("Storing data for " + inEntry.getType() + " "
-              + inEntry.getName());
-
-    Entity entity = convert(inEntry);
     if(inEntry.getName().equals(Entry.TEMPORARY) && inEntry instanceof Entry)
     {
       // determine a new, real id to use; this should actually be in a
@@ -723,9 +498,7 @@ public Multimap<String, String> getOwners(String inID)
       ((Entry)inEntry).complete();
     }
 
-    s_cache.put(entity.getKey(), entity, s_expiration);
-    m_store.put(entity);
-    return true;
+    return m_data.update(convert(inEntry));
   }
 
   //........................................................................
@@ -761,27 +534,24 @@ public Multimap<String, String> getOwners(String inID)
   {
     Log.debug("adding file for " + inEntry.getType() + " " + inEntry.getName());
     // if a file with the same name is already there, we have to delete it first
-    Key key =
-      KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
+    Key key = KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
     Entity entity = null;
 
-    try
-    {
-      entity = m_store.get(key);
-      Log.important("replacing file " + inName + " for " + inEntry.getType()
-                    + " " + inEntry.getName() + " [" + inKey + "]");
-      m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
-      m_store.delete(key);
-    }
-    catch(com.google.appengine.api.datastore.EntityNotFoundException e)
-    {
-      entity = new Entity(key);
-    }
+      entity = m_data.getEntity(key);
+      if(entity != null)
+      {
+        Log.important("replacing file " + inName + " for " + inEntry.getType()
+                      + " " + inEntry.getName() + " [" + inKey + "]");
+        m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
+        m_store.delete(key);
+      }
+      else
+        entity = new Entity(key);
 
     entity.setProperty("path", inKey.getKeyString());
     entity.setProperty("name", inName);
     entity.setProperty("type", inType);
-    m_store.put(entity);
+    m_data.update(entity);
   }
 
   //........................................................................
@@ -796,20 +566,17 @@ public Multimap<String, String> getOwners(String inID)
    */
   public void removeFile(@Nonnull AbstractEntry inEntry, @Nonnull String inName)
   {
-    Log.debug("removing file " + inName + " for " + inEntry.getName());
-    Key key =
-      KeyFactory.createKey(KeyFactory.createKey(inEntry.getType().toString(),
-                                                inEntry.getName()),
-                           "file", inName);
-    try
+    Key key = KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
+
+    Entity entity = m_data.getEntity(key);
+    if(entity != null)
     {
-      Entity entity = m_store.get(key);
       m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
-      Log.important("deleting file " + inName + " for " + inEntry.getType()
+      m_data.remove(key);
+      Log.important("deleted file " + inName + " for " + inEntry.getType()
                     + " " + inEntry.getName());
-      m_store.delete(key);
     }
-    catch(com.google.appengine.api.datastore.EntityNotFoundException e)
+    else
     {
       Log.warning("trying to delete noexistant file " + inName + " for "
                   + inEntry.getType() + " " + inEntry.getName());
@@ -817,6 +584,7 @@ public Multimap<String, String> getOwners(String inID)
   }
 
   //........................................................................
+
   //------------------------------- rebuild --------------------------------
 
   /**
@@ -834,60 +602,16 @@ public Multimap<String, String> getOwners(String inID)
   public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     Log.debug("rebuilding data for " + inType);
-    List<Entity> entities = new ArrayList<Entity>();
 
-    Query query = new Query(inType.toString());
-    FetchOptions options = FetchOptions.Builder.withChunkSize(100);
-    int ignored = 0;
-    for(Entity entity : m_store.prepare(query).asIterable(options))
+    int count = 0;
+    for(Entity entity : m_data.getEntities(inType.toString(), null, null,
+                                           0, 10000))
     {
-      Entity newEntity = convert(convert(entity));
-
-      Set<String> keys = new HashSet<String>();
-      keys.addAll(entity.getProperties().keySet());
-      keys.addAll(newEntity.getProperties().keySet());
-
-      boolean add = false;
-      for(String key : keys)
-      {
-        Object oldValue = entity.getProperty(key);
-        Object newValue = newEntity.getProperty(key);
-
-        if(oldValue == null)
-        {
-          if(newValue == null)
-            continue;
-
-          add = true;
-          break;
-        }
-
-        if(newValue == null)
-        {
-          add = true;
-          break;
-        }
-
-        if(!oldValue.toString().equals(newValue.toString()))
-        {
-          add = true;
-          break;
-        }
-      }
-
-      if(add)
-      {
-        entities.add(convert(convert(entity)));
-        if(entities.size() >= s_maxRebuild)
-          break;
-      }
-      else
-        ignored++;
+      m_data.update(convert(convert(entity)));
+      count++;
     }
 
-    m_store.put(entities);
-    Log.debug("rebuild " + entities.size() + " entries, ignored " + ignored);
-    return entities.size();
+    return count;
   }
 
   //........................................................................
@@ -906,8 +630,11 @@ public Multimap<String, String> getOwners(String inID)
    * @return      the converted key
    *
    */
-  public @Nonnull Key convert(@Nonnull AbstractEntry.EntryKey inKey)
+  public @Nullable Key convert(@Nullable AbstractEntry.EntryKey inKey)
   {
+    if(inKey == null)
+      return null;
+
     AbstractEntry.EntryKey parent = inKey.getParent();
     if(parent != null)
       return KeyFactory.createKey(convert(parent), inKey.getType().toString(),
@@ -964,6 +691,8 @@ public Multimap<String, String> getOwners(String inID)
     if(inEntity == null)
       return null;
 
+    Log.debug("converting entity " + inID + " to " + inType);
+
     T entry = inType.create(inID);
     if(entry == null)
     {
@@ -981,7 +710,7 @@ public Multimap<String, String> getOwners(String inID)
     for(Map.Entry<String, Object> property
           : inEntity.getProperties().entrySet())
     {
-      String name = fromPropertyName(property.getKey());
+      String name = m_data.fromPropertyName(property.getKey());
       if(name.startsWith(Index.PREFIX) || "change".equals(name)
          || "extensions".equals(name))
         continue;
@@ -1094,13 +823,13 @@ public Multimap<String, String> getOwners(String inID)
         List<String> values = new ArrayList<String>();
         for(Value item : ((ValueList<Value>)value.getValue()))
           values.add(item.toString());
-        entity.setProperty(toPropertyName(value.getKey()), values);
+        entity.setProperty(m_data.toPropertyName(value.getKey()), values);
       }
       else
       {
         String valueText = value.getValue().toString();
         if(value.getValue() instanceof LongFormattedText)
-          entity.setProperty(toPropertyName(value.getKey()),
+          entity.setProperty(m_data.toPropertyName(value.getKey()),
                              new Text(valueText));
         else
         {
@@ -1110,7 +839,7 @@ public Multimap<String, String> getOwners(String inID)
                         + " is longer than 500 characters and will be "
                         + "truncated!");
 
-          entity.setProperty(toPropertyName(value.getKey()), valueText);
+          entity.setProperty(m_data.toPropertyName(value.getKey()), valueText);
         }
       }
     }
@@ -1119,67 +848,20 @@ public Multimap<String, String> getOwners(String inID)
     Multimap<Index.Path, String> indexes = inEntry.computeIndexValues();
     for(Index.Path index : indexes.keySet())
       // must convert the contained set to a list to make it serializable
-      entity.setProperty(toPropertyName("index-" + index.getPath()),
+      entity.setProperty(m_data.toPropertyName("index-" + index.getPath()),
                          new ArrayList<String>(indexes.get(index)));
 
     // save the time for recent changes
-    entity.setProperty(toPropertyName("change"), new Date());
+    entity.setProperty(m_data.toPropertyName("change"), new Date());
 
     // save the extensions
-    entity.setProperty(toPropertyName("extensions"),
+    entity.setProperty(m_data.toPropertyName("extensions"),
                        inEntry.getExtensionNames());
 
     return entity;
   }
 
   //........................................................................
-  //---------------------------- toPropertyName ----------------------------
-
-  /**
-   * Convert the given name into a name that can be used as a property in the
-   * datastore.
-   *
-   * @param    inName the name to convert
-   *
-   * @return   the converted name
-   *
-   */
-  public @Nonnull String toPropertyName(@Nonnull String inName)
-  {
-    return inName.replaceAll(" ", "_");
-  }
-
-  //........................................................................
-  //--------------------------- fromPropertyName ---------------------------
-
-  /**
-   * Convert the given name into a name that can be used as a property in the
-   * datastore.
-   *
-   * @param    inName the name to convert
-   *
-   * @return   the converted name
-   *
-   */
-  public @Nonnull String fromPropertyName(@Nonnull String inName)
-  {
-    return inName.replaceAll("_", " ");
-  }
-
-  //........................................................................
-
-  //........................................................................
-
-  //------------------------------------------------------------------- test
-
-  /** The test. */
-  // public static class Test extends net.ixitxachitls.util.test.TestCase
-  // {
-  // }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

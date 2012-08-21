@@ -211,7 +211,7 @@ public class SoyServlet extends DMAServlet
     UserService userService = UserServiceFactory.getUserService();
 
     return s_template.map
-      ("user", user == null ? "" : new SoyEntry(user, inRenderer),
+      ("user", user == null ? "" : new SoyEntry(user),
        "loginURL", userService.createLoginURL(inRequest.getOriginalPath()),
        "logoutURL", userService.createLogoutURL(inRequest.getOriginalPath()),
        "registerScript",

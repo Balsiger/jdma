@@ -194,7 +194,7 @@ public class ListPrint extends AbstractPrint
 
       assertEquals("format", "format", print.getFormat());
       assertEquals("printing",
-                   "[start, , "
+                   "[start, \\color{error}{ * first * }, "
                    + "\\title[entrytitle]"
                    + "{test}]",
                    print.print("key", entry, null).toString());

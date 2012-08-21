@@ -290,7 +290,7 @@ public class EntryPDFServlet extends PDFServlet
              inRenderer.render
              (template,
               map("entry",
-                  new SoyEntry(entry, inRenderer),
+                  new SoyEntry(entry),
                   "first", current <= 0 ? "" : ids.get(0) + extension,
                   "previous",
                   current <= 0 ? "" : ids.get(current - 1) + extension,

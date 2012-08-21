@@ -196,34 +196,17 @@ public interface DMAData
   /**
    * Get the recent ids of a specific type.
    *
-   * @param       <T>    the real type of the entries to get
-   * @param       inType the type of entries to get ids for
+   * @param       <T>      the real type of the entries to get
+   * @param       inType   the type of entries to get ids for
+   * @param       inParent the key of the parent entry
    *
    * @return      the recent ids
    *
    */
   public abstract @Nonnull <T extends AbstractEntry>
-    List<T> getRecentEntries(@Nonnull AbstractType<T> inType);
-
-  //........................................................................
-  //--------------------------- getRecentEntries ---------------------------
-
-  /**
-   * Get the recent ids of a specific type.
-   *
-   * @param       <T>    the real type of the entries to get
-   * @param       inType the type of entries to get ids for
-   * @param       inParentID   the id of the parent for recent entries
-   * @param       inParentType the type of the parent entries
-   *
-   * @return      the recent ids
-   *
-   */
-  public abstract @Nonnull <T extends AbstractEntry>
-    List<T> getRecentEntries(@Nonnull AbstractType<T> inType,
-                             @Nonnull String inParentID,
-                             @Nonnull AbstractType<? extends AbstractEntry>
-                             inParentType);
+    List<T> getRecentEntries
+      (@Nonnull AbstractType<T> inType,
+       @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent);
 
   //........................................................................
   //------------------------------- getEntry -------------------------------

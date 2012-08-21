@@ -40,12 +40,10 @@ import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.Variables;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -436,11 +434,11 @@ public abstract class AbstractExtension<T extends AbstractEntry>
 
     // the value is not defined for this extension, but might be defined in a
     // base
-    String key;
-    if(inKey.startsWith("_"))
-      key = inKey.substring(1);
-    else
-      key = inKey;
+    // String key;
+    // if(inKey.startsWith("_"))
+    //   key = inKey.substring(1);
+    // else
+    //   key = inKey;
 
     return null;
   }

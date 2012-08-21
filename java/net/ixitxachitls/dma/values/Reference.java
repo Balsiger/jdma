@@ -23,8 +23,6 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.util.Map;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -32,7 +30,6 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseProduct;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Link;
 

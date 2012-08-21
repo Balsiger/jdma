@@ -218,7 +218,7 @@ public class IndexServlet extends PageServlet
 
     List<SoyEntry> entries = new ArrayList<SoyEntry>();
     for(AbstractEntry entry : rawEntries)
-      entries.add(new SoyEntry(entry, inRenderer));
+      entries.add(new SoyEntry(entry));
 
     data.put("content",
              inRenderer.render

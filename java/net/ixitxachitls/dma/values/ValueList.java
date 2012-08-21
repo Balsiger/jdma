@@ -34,8 +34,6 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.EmptyIterator;

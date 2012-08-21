@@ -34,7 +34,6 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Joiner;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.ArrayIterator;
@@ -548,7 +547,6 @@ protected @Nonnull String doToString()
    * Generate a string representation of the value for printing.
    *
    * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
    *
    * @return  the printed value as a string.
    *

@@ -78,16 +78,14 @@ public class SoyCombination extends SoyValue
    * @param    inCombination the combination representing the value
    * @param    inValue       the base value
    * @param    inEntry       the entry witht the value
-   * @param    inRenderer    the renderer to render data
    *
    */
   public SoyCombination(@Nonnull String inName,
                         @Nonnull Combination<? extends Value> inCombination,
                         @Nonnull Value inValue,
-                        @Nonnull AbstractEntry inEntry,
-                        @Nonnull SoyRenderer inRenderer)
+                        @Nonnull AbstractEntry inEntry)
   {
-    super(inName, inValue, inEntry, inRenderer);
+    super(inName, inValue, inEntry);
 
     m_combination = inCombination;
   }
@@ -123,7 +121,7 @@ public class SoyCombination extends SoyValue
       if (total == null)
         return null;
 
-      return new SoyValue(m_combination.getName(), total, m_entry, null);
+      return new SoyValue(m_combination.getName(), total, m_entry);
     }
 
     if("min".equals(inName))
@@ -137,8 +135,8 @@ public class SoyCombination extends SoyValue
             : m_combination.valuesPerGroup().asMap().entrySet())
         bases.add
           (SoyTemplate.map
-           ("value", new SoyValue(m_combination.getName(),
-                                  entry.getKey(), m_entry, null),
+           ("value", new SoyValue(m_combination.getName(), entry.getKey(),
+                                  m_entry),
             "isLongText", entry.getKey() instanceof FormattedText,
             "isText", entry.getKey() instanceof Text,
             "names", Entries.namesString(entry.getValue())));

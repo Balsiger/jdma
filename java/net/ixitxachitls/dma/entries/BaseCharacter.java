@@ -404,8 +404,7 @@ public class BaseCharacter extends BaseEntry
     if("products".equals(inKey))
     {
       List<Product> products = DMADataFactory.get()
-        .getRecentEntries(Product.TYPE, this.getName(),
-                          BaseCharacter.TYPE);
+        .getRecentEntries(Product.TYPE, getKey());
 
       List<Object> commands = new ArrayList<Object>();
       boolean more = products.size() > MAX_PRODUCTS;
@@ -448,8 +447,7 @@ public class BaseCharacter extends BaseEntry
     if("products".equals(inKey))
     {
       List<Product> products = DMADataFactory.get()
-        .getRecentEntries(Product.TYPE, this.getName(),
-                          BaseCharacter.TYPE);
+        .getRecentEntries(Product.TYPE, getKey());
 
       List<Multiple> values = new ArrayList<Multiple>();
       for(Product product : products)
