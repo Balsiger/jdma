@@ -292,31 +292,35 @@
     {param entries: [['label': 'library', 'url': '/library']] /}
   {/call}
   {foreach $type in $types}
-    {call .link}
-      {param url: '/' + $type.multilink /}
-      {param text}
-        <img class="type highlight" src="/icons/types/{$type.file}.png"
-            alt="{$type.multi}">
-        <div class="caption">
-          {$type.multilink}
+    {if $ij.user or $type.multilink == 'items'
+        or $type.multilink == 'products'}
+      <div class="library-entry">
+        {call .link}
+          {param url: '/' + $type.multilink /}
+          {param text}
+            <img class="type highlight" src="/icons/types/{$type.file}.png"
+              alt="{$type.multi}">
+            <div class="caption">
+              {$type.multilink}
+            </div>
+          {/param}
+          {param class: 'type-image library-title' /}
+        {/call}
+        <div class="library-indexes">
+          {if $indexes[$type.name]}
+            {foreach $index in $indexes[$type.name]}
+              {call .link}
+                {param url: '/' + $type.multilink + '/' + $index.path /}
+                {param text: $index.title /}
+                {param class: 'library-index' /}
+              {/call}
+            {/foreach}
+          {/if}
         </div>
-      {/param}
-      {param class: 'type-image' /}
-    {/call}
-    <div class="type-indexes">
-      {if $indexes[$type.name]}
-        {foreach $index in $indexes[$type.name]}
-          {call .link}
-            {param url: '/' + $type.multilink + '/' + $index.path /}
-            {param text: $index.title /}
-            {param class: 'type-index' /}
-          {/call}
-        {/foreach}
-      {/if}
-    </div>
-    <div class="clear"></div>
+      </div>
+    {/if}
   {ifempty}
-    No types found.
+    Nothing found to display.
   {/foreach}
 {/template}
 

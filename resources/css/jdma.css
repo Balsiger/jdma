@@ -655,6 +655,35 @@ TABLE.entrylist TD.short
 }
 
 /******************************************************************************
+ * library
+ *****************************************************************************/
+
+DIV.library-entry
+{
+  display:        inline-block;
+  width:          150px;
+  text-align:     center;
+  vertical-align: top;
+}
+
+DIV.library-indexes {
+}
+
+DIV.index-overview,
+A.library-index
+{
+  display:       block;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+  font-size:     small;
+}
+
+A.library-title.type-image
+{
+  float: none;
+}
+
+/******************************************************************************
  * type colors
  *****************************************************************************/
 
@@ -1084,22 +1113,6 @@ A.Skill:hover     { color: $hilightcolor_Skill }
  * Index
  *****************************************************************************/
 
-DIV.index-overview,
-A.type-index
-{
-  float:            left;
-  width:            200px;
-  background-color: #eee;
-  margin:           4px;
-  padding:          4px;
-  text-align:       center;
-  border-radius:    5px;
-  box-shadow:       0 1px 3px #777;
-  height:           1em;
-  overflow:         hidden;
-  text-overflow:    ellipsis;
-}
-
 DIV.index-group
 {
   display: none;
@@ -1138,12 +1151,6 @@ A.type-image {
 A.type-image:hover {
   color:           #444;
   text-decoration: none;
-}
-
-DIV.type-indexes {
-  height:         120px;
-  display:        table-cell;
-  vertical-align: middle;
 }
 
 /******************************************************************************

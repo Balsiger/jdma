@@ -258,6 +258,9 @@
         ^/$
         user:/main
 
+        ^/$
+        /library
+
         ^/user/([^/]+)/products$
         /_entries/base character/$1/product
 

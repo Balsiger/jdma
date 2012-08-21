@@ -24,7 +24,6 @@
 package net.ixitxachitls.dma.server.filters;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -39,6 +38,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.LinkedListMultimap;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
@@ -122,8 +124,8 @@ public class ForwardingFilter implements Filter
   private @Nonnull FilterConfig m_config;
 
   /** The filter mappings. */
-  private @Nonnull Map<String, String> m_mappings =
-    new LinkedHashMap<String, String>();
+  private @Nonnull Multimap<String, String> m_mappings =
+    LinkedListMultimap.create();
 
   //........................................................................
 
@@ -192,7 +194,7 @@ public class ForwardingFilter implements Filter
     }
 
     BaseCharacter user = null;
-    for(Map.Entry<String, String> entry : m_mappings.entrySet())
+    for(Map.Entry<String, String> entry : m_mappings.entries())
     {
       String pattern = entry.getKey();
       String replacement = entry.getValue();

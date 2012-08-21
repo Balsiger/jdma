@@ -97,8 +97,6 @@ public class SoyTemplate
   public SoyTemplate(@Nonnull String ... inFiles)
   {
     m_files.addAll(Arrays.asList(inFiles));
-
-    s_templates.add(this);
   }
 
   //........................................................................
@@ -431,9 +429,6 @@ public class SoyTemplate
   public static final String VERSION =
     Config.get("project.version", "Allip");
 
-  /** A flag if templates should be recompiled. */
-  private static List<SoyTemplate> s_templates = new ArrayList<SoyTemplate>();
-
   /** The injector with our own plugins. */
   private Injector m_injector = createInjector();
 
@@ -512,6 +507,22 @@ public class SoyTemplate
 
   //........................................................................
 
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Convert to a string for debugging.
+   *
+   * @return      a string representation
+   *
+   */
+  public @Nonnull String toString()
+  {
+    return "files: " + m_files;
+  }
+
+  //........................................................................
+
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -565,7 +576,6 @@ public class SoyTemplate
    */
   public void recompile()
   {
-    if(true) return;
     m_compiled = null;
   }
 

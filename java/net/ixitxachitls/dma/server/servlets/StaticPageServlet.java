@@ -100,13 +100,12 @@ public class StaticPageServlet extends SoyServlet
     String name = "dma" + path.replaceAll("/", ".");
 
     if(name.endsWith("."))
-      name += "main";
+      name += "page.library";
     else if(name.endsWith(".html"))
       name = name.substring(0, name.length() - 5);
 
     try
     {
-      System.out.println("rendering: " + name);
       map.put("content", inRenderer.render(name));
     }
     catch(com.google.template.soy.tofu.SoyTofuException e)
