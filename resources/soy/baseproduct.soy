@@ -46,6 +46,13 @@
   {call dma.page.title}
     {param title: $entry.title.print /}
   {/call}
+  <h2>
+    {call dma.value.value}
+      {param canEdit: $ij.isDM /}
+      {param entry: $entry /}
+      {param value: $entry.subtitle /}
+    {/call}
+  </h2>
 {/deltemplate}
 
 /**

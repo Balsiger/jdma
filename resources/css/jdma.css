@@ -669,13 +669,27 @@ DIV.library-entry
 DIV.library-indexes {
 }
 
-DIV.index-overview,
 A.library-index
 {
   display:       block;
   overflow:      hidden;
   text-overflow: ellipsis;
   font-size:     small;
+}
+
+DIV.index-overview
+{
+  float:            left;
+  width:            200px;
+  background-color: #eee;
+  margin:           4px;
+  padding:          4px;
+  text-align:       center;
+  border-radius:    5px;
+  box-shadow:       0 1px 3px #777;
+  height:           1em;
+  overflow:         hidden;
+  text-overflow:    ellipsis;
 }
 
 A.library-title.type-image
