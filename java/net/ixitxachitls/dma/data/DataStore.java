@@ -97,27 +97,31 @@ public class DataStore
   private @Nonnull ImagesService m_image;
 
   /** The cache for indexes. */
-  private static MemcacheService s_cache =
-    MemcacheServiceFactory.getMemcacheService();
+  private static MemcacheService s_cacheEntity =
+    MemcacheServiceFactory.getMemcacheService("entity");
+
+  /** The cache for lookups by value. */
+  private static MemcacheService s_cacheByValue =
+    MemcacheServiceFactory.getMemcacheService("byValue");
+
+  /** The cache for lookup lists by value. */
+  private static MemcacheService s_cacheListByValue =
+    MemcacheServiceFactory.getMemcacheService("listByValue");
+
+  /** The cache for lookup ids. */
+  private static MemcacheService s_cacheIDs =
+    MemcacheServiceFactory.getMemcacheService("ids");
+
+  /** The cache for lookup ids by value. */
+  private static MemcacheService s_cacheIDsByValue =
+    MemcacheServiceFactory.getMemcacheService("idsByValue");
+
+  /** The cache for lookup ids by value. */
+  private static MemcacheService s_cacheRecent =
+    MemcacheServiceFactory.getMemcacheService("recent");
 
   /** Experiation time for the cache. */
   private static Expiration s_expiration = Expiration.byDeltaSeconds(60 * 60);
-
-  /** Possible prefixes for cache values. */
-  private enum Prefix {
-      /** A single entity value. */
-      SINGLE,
-      /** A single entity denoted by key/value. */
-      BY_VALUE,
-      /** A list of entities denotyed by key/value. */
-      BY_VALUE_LIST,
-      /** Ids for entities. */
-      IDS,
-      /** Recent entities. */
-      RECENT,
-      /** Ids of entities denoted by key/value. */
-      IDS_BY_VALUE
-  }
 
   /** The key for the value containing the last change of an entity. */
   private static final String CHANGE = "change";
@@ -139,8 +143,7 @@ public class DataStore
    */
   public @Nullable Entity getEntity(@Nonnull Key inKey)
   {
-    Entity entity =
-      (Entity)s_cache.get(Prefix.SINGLE.toString() + inKey.toString());
+    Entity entity = (Entity)s_cacheEntity.get(inKey.toString());
 
     if(entity == null)
     {
@@ -148,7 +151,7 @@ public class DataStore
       {
         Log.debug("gae: getting entity for " + inKey);
         entity = m_store.get(inKey);
-        s_cache.put(Prefix.SINGLE.toString() + inKey, entity, s_expiration);
+        s_cacheEntity.put(inKey, entity, s_expiration);
       }
       catch(com.google.appengine.api.datastore.EntityNotFoundException e)
       {
@@ -180,7 +183,7 @@ public class DataStore
                                     @Nonnull String inValue)
   {
     Entity entity = (Entity)
-      s_cache.get(Prefix.BY_VALUE + inKey + "--" + inValue);
+      s_cacheByValue.get(inKey + "--" + inValue);
 
     if(entity == null)
     {
@@ -194,8 +197,7 @@ public class DataStore
       if(entity == null)
         return null;
 
-      s_cache.put(Prefix.BY_VALUE + inKey + "--" + inValue, entity,
-                  s_expiration);
+      s_cacheByValue.put(inKey + "--" + inValue, entity, s_expiration);
     }
 
     return entity;
@@ -266,9 +268,8 @@ public class DataStore
     Log.debug("getting multiple " + inType + " with "
               + Arrays.toString(inFilters));
 
-    String key =
-      Prefix.BY_VALUE_LIST.toString() + "--" + Arrays.toString(inFilters);
-    List<Entity> entities = (List<Entity>)s_cache.get(key);
+    String key = Arrays.toString(inFilters);
+    List<Entity> entities = (List<Entity>)s_cacheListByValue.get(key);
 
     if(entities == null)
     {
@@ -289,7 +290,7 @@ public class DataStore
       for(Entity entity : m_store.prepare(query).asIterable(options))
         entities.add(entity);
 
-      s_cache.put(key, entities, s_expiration);
+      s_cacheListByValue.put(key, entities, s_expiration);
     }
 
     return entities;
@@ -313,9 +314,8 @@ public class DataStore
                                       @Nonnull String inKey,
                                       @Nonnull String inValue)
   {
-    String key = Prefix.IDS_BY_VALUE.toString() + "--" + inType
-      + "--" + inKey + "=" + inValue;
-    List<Entity> ids = (List<Entity>)s_cache.get(key);
+    String key = inType + "--" + inKey + "=" + inValue;
+    List<Entity> ids = (List<Entity>)s_cacheIDsByValue.get(key);
 
     if(ids == null)
     {
@@ -332,7 +332,7 @@ public class DataStore
       for(Entity entity : m_store.prepare(query).asIterable(options))
         ids.add(entity);
 
-      s_cache.put(key, ids, s_expiration);
+      s_cacheIDsByValue.put(key, ids, s_expiration);
     }
 
     return ids;
@@ -356,8 +356,7 @@ public class DataStore
                                       @Nullable String inSortField,
                                       @Nullable Key inParent)
   {
-    List<String> ids = (List<String>)
-      s_cache.get(Prefix.IDS.toString() + "--" + inType);
+    List<String> ids = (List<String>)s_cacheIDs.get(inType);
 
     if(ids == null)
     {
@@ -379,7 +378,7 @@ public class DataStore
       for(Entity entity : m_store.prepare(query).asIterable(options))
         ids.add(entity.getKey().getName());
 
-      s_cache.put(Prefix.IDS.toString() + "--" + inType, ids, s_expiration);
+      s_cacheIDs.put(inType, ids, s_expiration);
     }
 
     return ids;
@@ -402,9 +401,8 @@ public class DataStore
   public List<Entity> getRecentEntities(@Nonnull String inType, int inSize,
                                         @Nullable Key inParent)
   {
-    String key = Prefix.RECENT.toString() + "--" + inType
-      + (inParent != null ? inParent.toString() : "");
-    List<Entity> entities = (List<Entity>)s_cache.get(key);
+    String key = inType + (inParent != null ? inParent.toString() : "");
+    List<Entity> entities = (List<Entity>)s_cacheRecent.get(key);
 
     if(entities == null)
     {
@@ -422,7 +420,7 @@ public class DataStore
         FetchOptions.Builder.withLimit(inSize);
       entities = m_store.prepare(query).asList(options);
 
-      s_cache.put(key, entities, s_expiration);
+      s_cacheRecent.put(key, entities, s_expiration);
     }
 
     return entities;
@@ -450,8 +448,14 @@ public class DataStore
 
     try
     {
-      s_cache.delete(Prefix.SINGLE.toString() + inKey);
+      s_cacheEntity.delete(inKey);
       m_store.delete(inKey);
+      s_cacheByValue.clearAll();
+      s_cacheListByValue.clearAll();
+      s_cacheRecent.clearAll();
+      s_cacheIDs.clearAll();
+      s_cacheIDsByValue.clearAll();
+
       return true;
     }
     catch(IllegalArgumentException e)
@@ -476,9 +480,11 @@ public class DataStore
   {
     Log.debug("Storing data for " + inEntity.getKey());
 
-    s_cache.put(Prefix.SINGLE.toString() + inEntity.getKey(), inEntity,
-                s_expiration);
+    s_cacheEntity.put(inEntity.getKey(), inEntity, s_expiration);
     m_store.put(inEntity);
+    s_cacheByValue.clearAll();
+    s_cacheListByValue.clearAll();
+    s_cacheRecent.clearAll();
 
     return true;
   }
