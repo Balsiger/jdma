@@ -96,11 +96,37 @@
  *
  * @param arg The arguments to the command.
  */
-{template .Grup}
+{template .Group}
   {call dma.page.link}
     {param url: '/group/' + $arg.0 /}
     {param text: $arg.0 /}
     {param class: 'Group' /}
+  {/call}
+{/template}
+
+/**
+ * A link to a Group.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .NPC}
+  {call dma.page.link}
+    {param url: '/npc/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'NPC' /}
+  {/call}
+{/template}
+
+/**
+ * A link to a Monster.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .Monster}
+  {call dma.page.link}
+    {param url: '/monster/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'Monster' /}
   {/call}
 {/template}
 

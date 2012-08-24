@@ -74,7 +74,6 @@ public class SoyEntry extends SoyMapData
    * Create the soy entry data.
    *
    * @param       inEntry    the entry with the values
-   * @param       inRenderer the renderer used for printing
    *
    */
   public SoyEntry(@Nonnull AbstractEntry inEntry)

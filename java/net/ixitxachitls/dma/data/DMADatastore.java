@@ -44,9 +44,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.memcache.Expiration;
-import com.google.appengine.api.memcache.MemcacheService;
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -475,6 +472,23 @@ public class DMADatastore implements DMAData
      @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
     return m_data.remove(KeyFactory.createKey(inType.toString(), inID));
+  }
+
+  //........................................................................
+  //-------------------------------- remove --------------------------------
+
+  /**
+   * Remove the described entity from the datastore.
+   *
+   * @param       inKey   the key of the entry to delete
+   *
+   * @return      true if removed, false if not
+   *
+   */
+  @Override
+  public boolean remove(@Nonnull AbstractEntry.EntryKey inKey)
+  {
+    return m_data.remove(convert(inKey));
   }
 
   //........................................................................

@@ -9,6 +9,10 @@
       <param-name>logMessage</param-name>
       <param-value>Appstats available: /appstats/details?time={ID}</param-value>
     </init-param>
+    <init-param>
+      <param-name>calculateRpcCosts</param-name>
+      <param-value>true</param-value>
+    </init-param>
   </filter>
   <filter-mapping>
     <filter-name>appstats</filter-name>
@@ -101,6 +105,11 @@
   </servlet>
 
   <servlet>
+    <servlet-name>remove</servlet-name>
+    <servlet-class>net.ixitxachitls.dma.server.servlets.RemoveActionServlet</servlet-class>
+  </servlet>
+
+  <servlet>
     <servlet-name>blobimport</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.BlobImportServlet</servlet-class>
   </servlet>
@@ -180,6 +189,11 @@
   <servlet-mapping>
     <servlet-name>save</servlet-name>
     <url-pattern>/actions/save</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>remove</servlet-name>
+    <url-pattern>/actions/remove</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

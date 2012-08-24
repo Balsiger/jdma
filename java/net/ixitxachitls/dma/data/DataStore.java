@@ -450,9 +450,11 @@ public class DataStore
     {
       s_cacheEntity.delete(inKey);
       m_store.delete(inKey);
-      s_cacheByValue.clearAll();
-      s_cacheListByValue.clearAll();
-      s_cacheRecent.clearAll();
+      // TODO: we should clear some of these caches too, but just clearing all
+      // of them results in too many requests to the datastore
+      //s_cacheByValue.clearAll();
+      //s_cacheListByValue.clearAll();
+      //s_cacheRecent.clearAll();
       s_cacheIDs.clearAll();
       s_cacheIDsByValue.clearAll();
 
@@ -482,9 +484,13 @@ public class DataStore
 
     s_cacheEntity.put(inEntity.getKey(), inEntity, s_expiration);
     m_store.put(inEntity);
-    s_cacheByValue.clearAll();
-    s_cacheListByValue.clearAll();
-    s_cacheRecent.clearAll();
+    // TODO: we should clear some of these caches too, but just clearing all
+    // of them results in too many requests to the datastore
+    //s_cacheByValue.clearAll();
+    //s_cacheListByValue.clearAll();
+    //s_cacheRecent.clearAll();
+    s_cacheIDs.clearAll();
+    s_cacheIDsByValue.clearAll();
 
     return true;
   }

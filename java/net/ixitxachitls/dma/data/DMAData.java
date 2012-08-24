@@ -333,7 +333,7 @@ public interface DMAData
   //-------------------------------- remove --------------------------------
 
   /**
-   *
+   * Removes the entry from the datastore.
    *
    * @param       inID    the id of the entry to remove
    * @param       inType  the type of the entry to remove
@@ -344,6 +344,19 @@ public interface DMAData
   public abstract boolean remove
     (@Nonnull String inID,
      @Nonnull AbstractType<? extends AbstractEntry> inType);
+
+  //........................................................................
+  //-------------------------------- remove --------------------------------
+
+  /**
+   * Removes the entry from the datastore.
+   *
+   * @param       inKey   the key of the entry to remove
+   *
+   * @return      true if removed, false if not
+   *
+   */
+  public abstract boolean remove(@Nonnull AbstractEntry.EntryKey inKey);
 
   //........................................................................
   //---------------------------------- update -------------------------------

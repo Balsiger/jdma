@@ -37,10 +37,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
-import com.google.common.collect.Multimap;
 import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.server.servlets.DMARequest;

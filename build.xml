@@ -21,7 +21,7 @@
   <property name="version" value="allip" />
 
   <!-- Google App Engine -->
-  <property name="gae.dir" location="../../appengine-java-sdk-1.7.0" />
+  <property name="gae.dir" location="../../appengine-java-sdk-1.7.1" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->
