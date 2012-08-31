@@ -301,6 +301,46 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the value for the given fields.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inFields the fields to return
+   *
+   * @return      a list of records found, each with values for each field,
+   *              in the order they were specificed
+   *
+   */
+  public List<List<String>> getMultiValues
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull String ... inFields)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the value for the given fields.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inField  the fields to return
+   *
+   * @return      a list of records found, each with values for each field,
+   *              in the order they were specificed
+   *
+   */
+  public SortedSet<String> getValues
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull String inField)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
 
   //------------------------------- hasEntry -------------------------------
 
@@ -606,6 +646,22 @@ public class DMADatafiles implements DMAData
   @Override
   public boolean remove(@Nonnull String inID,
                         @Nonnull AbstractType<? extends AbstractEntry> inType)
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
+  //-------------------------------- remove --------------------------------
+
+  /**
+   * Removes the entry from the datastore.
+   *
+   * @param       inKey   the key of the entry to remove
+   *
+   * @return      true if removed, false if not
+   *
+   */
+  public boolean remove(@Nonnull AbstractEntry.EntryKey inKey)
   {
     throw new UnsupportedOperationException("not implemented");
   }

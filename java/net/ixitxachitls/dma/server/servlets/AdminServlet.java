@@ -63,7 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class AdminServlet extends BaseServlet
+public class AdminServlet extends SoyServlet
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -88,6 +88,39 @@ public class AdminServlet extends BaseServlet
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //--------------------------- getLastModified ----------------------------
+
+  /**
+    * Get the time of the last modification.
+    *
+    * @return      the time of the last modification in miliseconds or -1
+    *              if unknown
+    *
+    */
+  public long getLastModified()
+  {
+    return -1;
+  }
+
+  //........................................................................
+  //--------------------------- getTemplateName ----------------------------
+
+  /**
+   * Get the name of the template to render the page.
+   *
+   * @param     inRequest the request for the page
+   *
+   * @return    the name of the template
+   *
+   */
+  protected @Nonnull String getTemplateName(@Nonnull DMARequest inRequest)
+  {
+    return "dma.admin.page";
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators

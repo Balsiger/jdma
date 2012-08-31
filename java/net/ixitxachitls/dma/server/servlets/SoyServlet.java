@@ -90,7 +90,7 @@ public class SoyServlet extends DMAServlet
   /** The template to render a page. */
   protected static final SoyTemplate s_template =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
-                     "commands", "value",
+                     "commands", "value", "admin",
                      "basecharacter", "character",
                      "baseproduct", "product",
                      "baseitem", "item",
