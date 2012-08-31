@@ -443,13 +443,13 @@ DIV.files
 
 DIV.nofiles
 {
-  min-height:  10px;
-  min-width:   10px;
+  min-height:  20px;
+  min-width:   50px;
 }
 
 DIV.nofiles:hover
 {
-  border:      1px dashed #ccc;
+  outline: 1px dashed #ccc;
 }
 
 DIV.file

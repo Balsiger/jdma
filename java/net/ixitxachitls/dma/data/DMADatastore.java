@@ -530,6 +530,17 @@ public class DMADatastore implements DMAData
   @Override
   public boolean remove(@Nonnull AbstractEntry.EntryKey inKey)
   {
+    // also remove all blobs for this entry
+    for(Entity entity : m_data.getEntities("file", convert(inKey), "__key__",
+                                           0, 1000))
+    {
+      m_blobs.delete(new BlobKey((String)entity.getProperty("path")));
+      m_data.remove(KeyFactory.createKey(convert(inKey), "file",
+                                         (String)entity.getProperty("name")));
+      Log.important("deleted file " + entity.getProperty("name") + " for "
+                    + inKey);
+    }
+
     return m_data.remove(convert(inKey));
   }
 
