@@ -56,6 +56,8 @@
           {else}
             {$value |print}
           {/if}
+        {elseif $value.hasExpression}
+          {$value.getExpression}
         {else}
           &nbsp;
         {/if}
@@ -263,10 +265,6 @@
  * Template for distance values.
  *
  * @param value the distance value
- * @param metric true if the value is in metric units
- * @ param feet true if the value is in pound units
- * @param asfeet the value in feet
- * @param asmetric the value in metrics
  */
 {template .distance}
   <span class="term">
@@ -275,10 +273,10 @@
       {param text: $value.raw /}
     {/call}
     <div class="explanation">
-      {if $metric}
-        {$asfeet.raw}
+      {if $value.isMetric}
+        {$value.asFeet |raw}
       {else}
-        {$asmetric.raw}
+        {$value.asMetric |raw}
       {/if}
     </div>
   </span>
@@ -288,10 +286,6 @@
  * Template for duration values.
  *
  * @param value the duration value
- * @param metric true if the value is in metric units
- * @ param rounds true if the value is in round units
- * @param asrounds the value in rounds
- * @param asmetric the value in metrics
  */
 {template .duration}
   <span class="term">
@@ -300,10 +294,10 @@
       {param text: $value.raw /}
     {/call}
     <div class="explanation">
-      {if $metric}
-        {$asrounds.raw}
+      {if $value.isMetric}
+       {$value.asRounds |raw}
       {else}
-        {$asmetric.raw}
+        {$value.asMetric |raw}
       {/if}
     </div>
   </span>
@@ -313,13 +307,6 @@
  * Template for volume values.
  *
  * @param value the volume value
- * @param metric true if the value is in metric units
- * @ param feet true if the value is in pound units
- * @param liquid true if this is a liquid value
- * @param asfeet the value in feet
- * @param asmetric the value in metrics
- * @param asgallons the value in gallons
- * @param asliters the value in liters
  */
 {template .volume}
   <span class="term">
@@ -328,17 +315,17 @@
       {param text: $value.raw /}
     {/call}
     <div class="explanation">
-      {if $liquid}
-        {if $metric}
-          {$asliters.raw}
+      {if $value.isLiquid}
+        {if $value.isMetric}
+          {$value.asLiters |raw}
         {else}
-          {$asgallons.raw}
+          {$value.asGallons |raw}
         {/if}
       {else}
-        {if $metric}
-          {$asfeet.raw}
+        {if $value.isMetric}
+          {$value.asFeet |raw}
         {else}
-          {$asmetric.raw}
+          {$value.asMetric |raw}
         {/if}
       {/if}
     </div>
@@ -482,9 +469,6 @@
  * Formatting a combination value.
  *
  * @param combination the combination value
- * @ param total the total, combined value, if any
- * @ param bases the base values
- * @ param isDefined whether the top level value is defined
  */
 {template .combination}
   {if $combination.total}

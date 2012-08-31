@@ -44,6 +44,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -328,7 +329,8 @@ public class DMADatastore implements DMAData
         type = "image/png";
 
       if(type.startsWith("image/"))
-        icon = m_image.getServingUrl(new BlobKey(path));
+        icon = m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey
+                                     (new BlobKey(path)));
       else if("application/pdf".equals(type))
         icon = "/icons/pdf.png";
       else
@@ -384,7 +386,6 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
-
   //---------------------------- getIndexNames -----------------------------
 
   /**
@@ -407,6 +408,7 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
+  @Deprecated
   @SuppressWarnings("unchecked") // need to cast from property value
   public @Nonnull SortedSet<String> getIndexNames
     (@Nonnull String inIndex,
@@ -430,6 +432,46 @@ public class DMADatastore implements DMAData
     }
 
     return names;
+  }
+
+  //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the value for the given fields.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inFields the fields to return
+   *
+   * @return      a list of records found, each with values for each field,
+   *              in the order they were specificed
+   *
+   */
+  public List<List<String>> getMultiValues
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull String ... inFields)
+  {
+    return m_data.getMultiValues(inType.toString(), null, inFields);
+  }
+
+  //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the value for the given fields.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inField  the field to return
+   *
+   * @return      a list of records found, each with values for each field,
+   *              in the order they were specificed
+   *
+   */
+  public SortedSet<String> getValues
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull String inField)
+  {
+    return m_data.getValues(inType.toString(), null, inField);
   }
 
   //........................................................................

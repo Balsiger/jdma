@@ -145,8 +145,11 @@ public class EntryServlet extends PageServlet
     }
 
     boolean dma = path.endsWith(".dma");
+    boolean print = path.endsWith(".print");
     if(dma)
       path = path.substring(0, path.length() - 4);
+    if(print)
+      path = path.substring(0, path.length() - 6);
 
     AbstractEntry entry = getEntry(path);
     if(entry != null && !entry.isShownTo(inRequest.getUser()))
@@ -231,6 +234,11 @@ public class EntryServlet extends PageServlet
       extension = ".dma";
       template = "dma.entry.dmacontainer";
     }
+    else if(print)
+    {
+      extension = ".print";
+      template = "dma.entry.printcontainer";
+    }
     else
     {
       extension = "";
@@ -240,8 +248,7 @@ public class EntryServlet extends PageServlet
     data.put("content",
              inRenderer.render
              (template,
-              map("entry",
-                  new SoyEntry(entry),
+              map("entry", new SoyEntry(entry),
                   "first", current <= 0 ? "" : ids.get(0) + extension,
                   "previous",
                   current <= 0 ? "" : ids.get(current - 1) + extension,

@@ -289,7 +289,7 @@ public class Combination<V extends Value>
         if(m_max == null)
           m_max = value;
         else if(value.compareTo(m_max) > 0)
-          m_max = value;
+            m_max = value;
 
       m_max = computeExpressions(m_max);
     }
@@ -382,6 +382,9 @@ public class Combination<V extends Value>
   public @Nullable V computeExpressions(@Nullable V inValue)
   {
     if(inValue == null)
+      inValue = getAnyValue(m_entry, m_name);
+
+    if(inValue == null)
       return null;
 
     if(m_expressions.isEmpty())
@@ -399,6 +402,42 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
+  //----------------------------- getAnyValue ------------------------------
+
+  /**
+   * Get any value for the given name, even if it is undefined or comes from a
+   * bse entry.
+   *
+   * @param      inEntry the entry to look in for
+   * @param      inName  the name of the value
+   *
+   * @return     the value found or null if it could not be found in this entry
+   *             or any of its bases
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable V getAnyValue(@Nonnull ValueGroup inEntry,
+                                 @Nonnull String inName)
+  {
+    V value = (V)inEntry.getValue(m_name);
+    if(value != null)
+      return value;
+
+    for(BaseEntry base : inEntry.getBaseEntries())
+    {
+      if(base == null)
+        continue;
+
+      value = getAnyValue(base, inName);
+      if(value != null)
+        return value;
+    }
+
+    return null;
+  }
+
+  //........................................................................
+
 
   //------------------------------- toString -------------------------------
 
@@ -541,7 +580,6 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
-
 
   //........................................................................
 

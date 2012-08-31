@@ -428,7 +428,7 @@ public class PageServlet extends SoyServlet
       EasyMock.expect(request.getUser()).andStubReturn(null);
       EasyMock.expect(request.getOriginalPath()).andStubReturn("index.html");
       EasyMock.expect(request.getQueryString()).andReturn("").anyTimes();
-      EasyMock.expect(request.getRequestURI()).andReturn("/about.html");
+      EasyMock.expect(request.getRequestURI()).andStubReturn("/about.html");
       EasyMock.expect(request.hasUserOverride()).andStubReturn(false);
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);

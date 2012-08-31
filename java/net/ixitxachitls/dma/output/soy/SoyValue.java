@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.output.soy;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,9 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Encodings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -129,6 +132,9 @@ public class SoyValue extends SoyMapData
   /** A flag if the value can be edited. */
   protected final boolean m_editable;
 
+  /** The combination for this value, if any needed yet. */
+  protected @Nullable SoyCombination m_combination = null;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -200,9 +206,15 @@ public class SoyValue extends SoyMapData
       return StringData.forValue(m_value.print(m_entry));
 
     if("combine".equals(inName))
-      return new SoyCombination(m_name,
-                                new Combination<Value>(m_entry, m_name)
-                                .withIgnoreTop(), m_value, m_entry);
+    {
+      if(m_combination == null)
+        m_combination =
+          new SoyCombination(m_name,
+                             new Combination<Value>(m_entry, m_name)
+                             .withIgnoreTop(), m_value, m_entry);
+
+      return m_combination;
+    }
 
     if("name".equals(inName))
       return StringData.forValue(m_name);
@@ -268,14 +280,27 @@ public class SoyValue extends SoyMapData
                               "comment", remark.getComment());
     }
 
+    // check if there is a function with the given name
+    Method method = Classes.getMethod(m_value.getClass(), inName);
+    if(method != null)
+      try
+      {
+        return convert(method.invoke(m_value));
+      }
+      catch(IllegalAccessException e)
+      {
+        Log.warning("cannot access method: " + e);
+      }
+      catch(java.lang.reflect.InvocationTargetException e)
+      {
+        Log.warning("cannot invoke method: " + e);
+      }
+
     Object value = m_value.compute(inName);
     if(value == null)
       return null;
 
-    if(value instanceof Boolean)
-      return BooleanData.forValue((Boolean)value);
-
-    return StringData.forValue(value.toString());
+    return convert(value);
   }
 
   //.........................................................................
@@ -326,6 +351,28 @@ public class SoyValue extends SoyMapData
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //------------------------------- convert --------------------------------
+
+  /**
+   * Convert the given object into a soy value.
+   *
+   * @param       inObject the object to convert
+   *
+   * @return      the converted object
+   *
+   */
+  public @Nonnull SoyData convert(@Nonnull Object inObject)
+  {
+    if(inObject instanceof Boolean)
+      return BooleanData.forValue((Boolean)inObject);
+
+    return StringData.forValue(inObject.toString());
+  }
+
+  //........................................................................
+
+
   //........................................................................
 
   //------------------------------------------------------------------- test
@@ -350,7 +397,7 @@ public class SoyValue extends SoyMapData
                    soyValue.getSingle("raw").toString());
       assertEquals("print", "just a name",
                    soyValue.getSingle("print").toString());
-      assertEquals("combine", "{}",
+      assertEquals("combine", "total , min {}, max {}, bases []",
                    soyValue.getSingle("combine").toString());
       assertEquals("name", "test",
                    soyValue.getSingle("name").toString());

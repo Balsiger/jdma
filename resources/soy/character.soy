@@ -68,29 +68,9 @@
     {param entry: $entry /}
     {param name: 'Wealth' /}
     {param content}
-      {if $entry.wealth.total < $entry.wealth.lower}
-        <span class="error">
-          {$entry.wealth.total |number} gp
-          (too low, should be around {$entry.wealth.equal |number} gp)
-        </span>{sp}
-      {elseif $entry.wealth.total > $entry.wealth.higher}
-          <span class="error">
-            {$entry.wealth.total |number} gp
-            (too high, should be around {$entry.wealth.equal |number} gp)
-          </span>{sp}
-      {elseif $entry.wealth.total <
-          $entry.wealth.lower + $entry.wealth.equal / 2}
-          <span class="warning">
-            {$entry.wealth.total |number} gp (a little too low, should be around
-            {$entry.wealth.equal |number} gp)
-          </span>{sp}
-      {elseif $entry.wealth.total >
-          $entry.wealth.higher + $entry.wealth.equal / 2}
-          <span class="error">
-            {$entry.wealth.total |number} gp
-            (too high, should be around {$entry.wealth.equal |number} gp)
-          </span>{sp}
-      {/if}
+      {call .wealth}
+        {param wealth: $entry.wealth /}
+      {/call}
     {/param}
     {param access: 'owner' /}
   {/delcall}
@@ -125,3 +105,73 @@
     {param access: 'user' /}
   {/delcall}
 {/deltemplate}
+
+/**
+ * The container for printing entries.
+ *
+ * @param entry the entry to format
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ *
+ */
+{deltemplate dma.entry.print}
+  <h1>{$entry.name}{if $ij.isDM} (DM view){/if}</h1>
+  <table>
+    <tr><td>Player:</td><td>{$entry.base.print}</td></tr>
+    <tr><td>Campaign:</td><td>{$entry.campaign.name}</td></tr>
+    <tr><td>Level:</td><td>{$entry.level.print}</td></tr>
+    <tr><td>Wealth:</td>
+      <td>
+        {call .wealth}
+          {param wealth: $entry.wealth /}
+        {/call}
+      </td>
+    </tr>
+    <tr><td>Weight:</td><td>{$entry.weight.getAsPounds |print} lbs</td></tr>
+  </table>
+  <h2>Items</h2>
+  <div class="item-overview">
+    {foreach $item in $entry.items.list}
+      {call dma.entry.itemoverview}
+        {param item: entry($entry.campaign.key + '/item/' + $item.print) /}
+      {/call}
+    {ifempty}
+      No items yet.
+    {/foreach}
+  </div>
+  <script>
+    //window.print();
+  </script>
+{/deltemplate}
+
+/**
+ * Print the wealth of a character.
+ *
+ * @param wealth The wealth to print
+ */
+{template .wealth private="true"}
+  {if $wealth.total < $wealth.lower}
+    <span class="error">
+      {$wealth.total |number} gp
+      (too low, should be around {$wealth.equal |number} gp)
+    </span>{sp}
+  {elseif $wealth.total > $wealth.higher}
+    <span class="error">
+      {$wealth.total |number} gp
+      (too high, should be around {$wealth.equal |number} gp)
+    </span>{sp}
+  {elseif $wealth.total < $wealth.lower + $wealth.equal / 2}
+    <span class="warning">
+      {$wealth.total |number} gp (a little too low, should be around
+      {$wealth.equal |number} gp)
+    </span>{sp}
+  {elseif $wealth.total > $wealth.higher + $wealth.equal / 2}
+    <span class="error">
+      {$wealth.total |number} gp
+      (too high, should be around {$wealth.equal |number} gp)
+    </span>{sp}
+  {/if}
+{/template}

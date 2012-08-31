@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.SortedSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,12 +38,14 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.common.collect.ImmutableSortedSet;
 
 import net.ixitxachitls.util.logging.Log;
 
@@ -120,8 +123,20 @@ public class DataStore
   private static MemcacheService s_cacheRecent =
     MemcacheServiceFactory.getMemcacheService("recent");
 
+  /** The cache for lookup ids by value. */
+  private static MemcacheService s_cacheValues =
+    MemcacheServiceFactory.getMemcacheService("values");
+
+  /** The cache for lookup ids by value. */
+  private static MemcacheService s_cacheMultiValues =
+    MemcacheServiceFactory.getMemcacheService("multiValues");
+
   /** Experiation time for the cache. */
   private static Expiration s_expiration = Expiration.byDeltaSeconds(60 * 60);
+
+  /** Experiation time for the cache. */
+  private static Expiration s_longExpiration =
+    Expiration.byDeltaSeconds(60 * 60 * 24 * 7);
 
   /** The key for the value containing the last change of an entity. */
   private static final String CHANGE = "change";
@@ -190,8 +205,9 @@ public class DataStore
       Log.debug("gae: getting " + inType + " entity for " + inKey + "="
                 + inValue);
       Query query = new Query(inType);
-      query.addFilter(toPropertyName(inKey), Query.FilterOperator.EQUAL,
-                      inValue);
+      query.setFilter(new Query.FilterPredicate(toPropertyName(inKey),
+                                                Query.FilterOperator.EQUAL,
+                                                inValue));
       entity = m_store.prepare(query).asSingleEntity();
 
       if(entity == null)
@@ -279,10 +295,14 @@ public class DataStore
       else
         query = new Query(inType, inParent);
 
+      List<Query.Filter> filters = new ArrayList<Query.Filter>();
       for(int i = 0; i + 1 < inFilters.length; i += 2)
-        query.addFilter(toPropertyName(inFilters[i]),
-                        Query.FilterOperator.EQUAL,
-                        inFilters[i + 1]);
+        filters.add(new Query.FilterPredicate(toPropertyName(inFilters[i]),
+                                              Query.FilterOperator.EQUAL,
+                                              inFilters[i + 1]));
+
+      query.setFilter(new Query.CompositeFilter
+                      (Query.CompositeFilterOperator.AND, filters));
       FetchOptions options =
         FetchOptions.Builder.withOffset(inStart).limit(inSize);
 
@@ -323,8 +343,9 @@ public class DataStore
                 + inValue);
 
       Query query = new Query(inType);
-      query.addFilter(toPropertyName(inKey), Query.FilterOperator.EQUAL,
-                      inValue);
+      query.setFilter(new Query.FilterPredicate(toPropertyName(inKey),
+                                                Query.FilterOperator.EQUAL,
+                                                inValue));
       query.setKeysOnly();
 
       FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
@@ -427,6 +448,104 @@ public class DataStore
   }
 
   //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the values for the given fields.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inParent the key of the parent entry, if any
+   * @param       inFields the fields to return
+   *
+   * @return      a list of records found, each with values for each field,
+   *              in the order they were specificed
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public List<List<String>> getMultiValues(@Nonnull String inType,
+                                           @Nullable Key inParent,
+                                           @Nonnull String ... inFields)
+  {
+    List<List<String>> records = (List<List<String>>)s_cacheMultiValues.get
+      (inType + ":" + Arrays.toString(inFields));
+
+    if (records == null)
+    {
+      Query query;
+      if(inParent == null)
+        query = new Query(inType);
+      else
+        query = new Query(inType, inParent);
+
+      for(String field : inFields)
+        query.addProjection(new PropertyProjection(field, String.class));
+
+      records = new ArrayList<List<String>>();
+      FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+      for (Entity entity : m_store.prepare(query).asIterable(options))
+      {
+        List<String> record = new ArrayList<String>();
+        for(String field : inFields)
+          record.add((String)entity.getProperty(field));
+
+        records.add(record);
+      }
+
+      // These queries are really expensive!
+      s_cacheMultiValues.put(inType + ":" + Arrays.toString(inFields), records,
+                             s_longExpiration);
+    }
+
+    return records;
+  }
+
+  //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the values for the given field.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inParent the key of the parent entry, if any
+   * @param       inField  the fields to return
+   *
+   * @return      a list of values found
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public SortedSet<String> getValues(@Nonnull String inType,
+                                     @Nullable Key inParent,
+                                     @Nonnull String inField)
+  {
+    SortedSet<String> values =
+      (SortedSet<String>)s_cacheValues.get(inType + ":" + inField);
+
+    if (values == null)
+    {
+      Query query;
+      if(inParent == null)
+        query = new Query(inType);
+      else
+        query = new Query(inType, inParent);
+
+      query.addProjection(new PropertyProjection(inField, String.class));
+
+      ImmutableSortedSet.Builder<String> builder =
+        ImmutableSortedSet.naturalOrder();
+      FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
+      for (Entity entity : m_store.prepare(query).asIterable(options))
+        builder.add((String)entity.getProperty(inField));
+
+      values = builder.build();
+
+      // These queries are really expensive!
+      s_cacheValues.put(inType + ":" + inField, values, s_longExpiration);
+    }
+
+    return values;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -482,6 +601,14 @@ public class DataStore
   {
     Log.debug("Storing data for " + inEntity.getKey());
 
+    // Only clear the cache for new entities; this does only check the cache,
+    // but should usually be enough.
+    if(s_cacheEntity.get(inEntity.getKey()) == null)
+    {
+      s_cacheIDs.clearAll();
+      s_cacheIDsByValue.clearAll();
+    }
+
     s_cacheEntity.put(inEntity.getKey(), inEntity, s_expiration);
     m_store.put(inEntity);
     // TODO: we should clear some of these caches too, but just clearing all
@@ -489,8 +616,6 @@ public class DataStore
     //s_cacheByValue.clearAll();
     //s_cacheListByValue.clearAll();
     //s_cacheRecent.clearAll();
-    s_cacheIDs.clearAll();
-    s_cacheIDsByValue.clearAll();
 
     return true;
   }

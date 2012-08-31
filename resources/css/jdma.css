@@ -59,7 +59,7 @@ H1
 .title-actions
 {
   float: right;
-  margin-top: -26px;
+  margin-top: 5px;
 }
 
 H2
@@ -189,8 +189,8 @@ DIV.subtitletext, DIV.subtitletext A
 .sprite.large
 {
   background-image: url('/icons/icons-large.png');
-  width:            35px;
-  height:           55px;
+  width:            19px;
+  height:           25px;
 }
 
 .sprite.large:hover
@@ -230,7 +230,13 @@ DIV.subtitletext, DIV.subtitletext A
 
 .document.sprite
 {
-  background-position: 0;
+  background-position: 0 0;
+}
+
+.print.sprite
+{
+  background-position: -95px 0;
+  width: 24px;
 }
 
 #search INPUT
@@ -534,6 +540,54 @@ DIV.item-reference
 DIV.item-reference:hover
 {
   background-color: #cce;
+}
+
+DIV.item-overview
+{
+  -webkit-column-count: 2;
+  -webkit-column-rule: 1px solid #ccc;
+  column-count: 2;
+  column-fill: auto;
+}
+
+DIV.item-overview-entry
+{
+  display: inline-block;
+  width: 100%;
+  margin-top: 10px;
+}
+
+DIV.item-overview-weight,
+DIV.item-overview-value
+{
+  width: 100px;
+  float: right;
+}
+
+DIV.item-overview-desc
+{
+  margin-left: 20px;
+  font-size: small;
+}
+
+DIV.item-overview-contents
+{
+  margin-left: 20px;
+  border-left: 4px solid orange;
+  padding-left: 5px;
+}
+
+DIV.item-overview-values
+{
+  margin-left: 20px;
+  font-size: small;
+}
+
+SPAN.item-overview-value-dm,
+DIV.item-overview-value-dm
+{
+  color: #009;
+  font-style: italic;
 }
 
 IMG.item-image
@@ -1039,23 +1093,23 @@ DIV.action-container:hover
 
 #action-save
 {
-  background-position: -34px 0;
+  background-position: -20px 0;
   height: 25px !important;
   width: 26px !important;
 }
 
 #action-cancel
 {
-  background-position: -61px 0;
+  background-position: -47px 0;
   height: 25px !important;
   width: 25px !important;
 }
 
 #action-delete
 {
-  background-position: -86px 0;
+  background-position: -71px 0;
   height: 29px !important;
-  width: 25px !important;
+  width: 24px !important;
 }
 
 /******************************************************************************
@@ -1575,4 +1629,15 @@ SELECT.admin-button
   {
     -webkit-print-color-adjust: exact;
   }
+
+  .term
+  {
+    border:none !important;
+  }
 }
+
+BODY.print
+{
+  padding: 10px;
+}
+

@@ -29,12 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.CampaignEntry;
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
@@ -43,9 +40,6 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -254,59 +248,6 @@ public class Contents extends Extension<Item>
 
   //........................................................................
 
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("contents".equals(inKey))
-    {
-      // we have to add the links here as we can't do it at construction time
-      // as the campaign might not yet be available
-      List<Object> commands = new ArrayList<Object>();
-
-      for(Name name : m_contents)
-      {
-        if(!commands.isEmpty())
-          commands.add(", ");
-
-        Item item = m_entry.getCampaign().getItem(name.get());
-        String url = m_entry.getCampaign().getPath() + "/item/" + name;
-        if(item != null)
-          commands.add(new Link(item.getNameCommand(inDM), url));
-        else
-          commands.add(new Link(name, url));
-      }
-
-      if(inDM)
-      {
-        commands.add(" | ");
-        commands.add(new Link
-                     ("Add", "javascript:item.create("
-                      + Encodings.toJSString(m_entry.getCampaign().getPath())
-                      + ", "
-                      + Encodings.toJSString
-                      (m_entry.getCampaign().getEditType() + "/"
-                       + Item.TYPE.getLink()
-                       + "/" + m_entry.getName()) + ");\""));
-      }
-
-      return new FormattedValue(new Command(commands), m_contents, "contents");
-    }
-
-    return super.computeValue(inKey, inDM);
-  }
-
-  //........................................................................
   //--------------------------- addPrintCommands ---------------------------
 
   /**

@@ -115,6 +115,9 @@ public class SoyServlet extends DMAServlet
     if(inRequest.isBodyOnly())
       return "dma.page.bodyOnly";
 
+    if(inRequest.getRequestURI().endsWith(".print"))
+      return "dma.page.print";
+
     return "dma.page.full";
   }
 

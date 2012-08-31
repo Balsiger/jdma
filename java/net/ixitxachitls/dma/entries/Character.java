@@ -886,10 +886,6 @@ public class Character extends CampaignEntry<BaseCharacter>
    */
   // public PDFDocument createItemsDocument(boolean inDM)
   // {
-  //   String title = "Items of " + getName() + (inDM ? " (DM)" : "");
-
-  //   PDFDocument document = new PDFDocument(title, "items", inDM, false);
-
   //   // print all item information for available items
   //   document.add(new Title(title));
 

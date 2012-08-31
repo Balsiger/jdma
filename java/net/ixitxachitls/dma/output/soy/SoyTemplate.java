@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -229,7 +230,7 @@ public class SoyTemplate
     @Override
     public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
     {
-      return NumberFormat.getIntegerInstance()
+      return NumberFormat.getIntegerInstance(new Locale("de", "ch"))
         .format(Integer.valueOf(inValue.toString()));
     }
   }

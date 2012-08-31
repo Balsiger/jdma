@@ -312,6 +312,40 @@ public interface DMAData
      @Nonnull String ... inFilters);
 
   //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the value for the given fields.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inFields the fields to return
+   *
+   * @return      a list of records found, each with values for each field,
+   *              in the order they were specificed
+   *
+   */
+  public abstract List<List<String>> getMultiValues
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull String ... inFields);
+
+  //........................................................................
+  //------------------------------ getValues -------------------------------
+
+  /**
+   * Get the value for the given fields.
+   *
+   * @param       inType   the type of entries to look for
+   * @param       inField  the fields to return
+   *
+   * @return      a list of records found, each with values for each field,
+   *              in the order they were specificed
+   *
+   */
+  public abstract SortedSet<String> getValues
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull String inField);
+
+  //........................................................................
 
   //------------------------------ isChanged -------------------------------
 

@@ -37,6 +37,7 @@
       {param entry: $entry /}
       {param value: $entry.leader /}
     {/call}
+    {if $entry.leader.isDefined}{sp}{/if}
     {call dma.value.value}
       {param canEdit: $ij.isDM /}
       {param entry: $entry /}

@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.util;
 
+import java.lang.reflect.Method;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -160,15 +162,50 @@ public final class Classes
   }
 
   //........................................................................
+  //------------------------------ getMethod -------------------------------
+
+  /**
+   * Obtains the method with the given name from the given class, traversing to
+   * superclasses if necessary.
+   *
+   * @param     inClass     the class to get the method from
+   * @param     inName      the name of the method
+   * @param     inArguments the argument types for the method
+   *
+   * @return    the method found
+   *
+   */
+  public static @Nullable Method getMethod(@Nonnull Class<?> inClass,
+                                           @Nonnull String inName,
+                                           @Nonnull Class<?> ... inArguments)
+  {
+    Class<?> current = inClass;
+    Method method = null;
+    while (current != Object.class)
+    {
+      try
+      {
+        method = current.getDeclaredMethod(inName, inArguments);
+        break;
+      }
+      catch (NoSuchMethodException e)
+      {
+        current = current.getSuperclass();
+      }
+    }
+
+    return method;
+  }
+
+  //........................................................................
+
 
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
-
   //........................................................................
 
   //------------------------------------------------------------------- test

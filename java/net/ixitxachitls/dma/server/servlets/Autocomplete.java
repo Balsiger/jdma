@@ -24,6 +24,8 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -33,13 +35,20 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseProduct;
+import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.output.html.JsonWriter;
 
 //..........................................................................
@@ -88,6 +97,13 @@ public class Autocomplete extends JSONServlet
   /** The maximal number of results to return. */
   private static final int s_max = 20;
 
+  /** The cache for the values. */
+  private static final Map<String, SortedSet<String>> s_cache =
+    Maps.newHashMap();
+
+  /** The joiner for keys. */
+  private static final Joiner s_keyJoiner = Joiner.on("//");
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -107,33 +123,37 @@ public class Autocomplete extends JSONServlet
    */
   @Override
   @SuppressWarnings("unchecked") // need to cast from cache
-  protected void writeJson(@Nonnull DMARequest inRequest,
-                           @Nonnull String inPath,
-                           @Nonnull JsonWriter inWriter)
+  protected synchronized void writeJson(@Nonnull DMARequest inRequest,
+                                        @Nonnull String inPath,
+                                        @Nonnull JsonWriter inWriter)
   {
     // compute the index involved
     String []parts = inPath.replace("%20", " ").split("/");
 
     if(parts.length > 3)
     {
-      String term = inRequest.getParam("term");
+      String term = normalize(inRequest.getParam("term"));
       AbstractType<? extends AbstractEntry> type =
         AbstractType.getTyped(parts[2]);
+      String field = parts[3];
+      String []keys = Arrays.copyOfRange(parts, 2, parts.length);
 
-      if(type != null && parts[3] != null)
+      if(type != null && field != null)
       {
-        SortedSet<String> names = new TreeSet<String>();
-        String []filters = new String[0];
-        if(parts.length > 4)
-          filters = Arrays.copyOfRange(parts, 4, parts.length);
-        for(String name : DMADataFactory.get()
-              .getIndexNames(parts[3], type, true, filters))
-        {
-          if(match(name, term))
-            names.add(name);
+        ensureCached(type, field);
 
-          if(names.size() > s_max)
-            break;
+        SortedSet<String> items = cached(keys);
+        List<String> names = Lists.newArrayList();
+        if(items != null)
+        {
+          for(String name : items)
+          {
+            if(match(name, term))
+              names.add(name);
+
+            if(names.size() > s_max)
+              break;
+          }
         }
 
         inWriter.strings(names);
@@ -158,7 +178,7 @@ public class Autocomplete extends JSONServlet
    */
   private boolean match(@Nonnull String inName, @Nullable String inAuto)
   {
-    if(inAuto == null)
+    if(inAuto == null || inAuto.isEmpty())
       return true;
 
     if(inName.regionMatches(true, 0, inAuto, 0, inAuto.length()))
@@ -175,8 +195,142 @@ public class Autocomplete extends JSONServlet
   }
 
   //........................................................................
+  //------------------------------ normalize -------------------------------
 
+  /**
+   * Normalize the given name for comparison.
+   *
+   * @param    inName the name to normalize
+   *
+   * @return   the normalized name
+   *
+   */
+  private @Nonnull String normalize(@Nonnull String inName)
+  {
+    return inName.replaceAll(" +", " ");
+  }
 
+  //........................................................................
+  //---------------------------- ensureCached ------------------------------
+
+  /**
+   * Ensure that the desired values are in the cache, loading them if
+   * necessary. Note that this is an expensive operation.
+   *
+   * @param       inType  the type of entries to auto complete
+   * @param       inField the field with the autocomplete values
+   *
+   */
+  public @Nonnull void ensureCached
+    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+     @Nonnull String inField)
+  {
+    // Check if already cached.
+    SortedSet<String> value = cached(inType.toString(), inField);
+    if(value != null)
+      return;
+
+    value = DMADataFactory.get().getValues(inType, inField);
+
+    if(inType == BaseProduct.TYPE)
+      if("author".equals(inField)
+         || "editor".equals(inField)
+         || "cover".equals(inField)
+         || "cartography".equals(inField)
+         || "illlustrations".equals(inField)
+         || "typography".equals(inField)
+         || "management".equals(inField))
+        value = extractPersonsAndJobs(value, inType.toString(), inField);
+
+    cache(value, inType.toString(), inField);
+  }
+
+  //........................................................................
+  //-------------------------------- cache ---------------------------------
+
+  /**
+   * Cache the given value with the given keys.
+   *
+   * @param       inValues the values to store
+   * @param       inKeys   the key parts to store with
+   *
+   */
+  public void cache(@Nonnull SortedSet<String> inValues,
+                    @Nonnull String ... inKeys)
+  {
+    s_cache.put(s_keyJoiner.join(inKeys), inValues);
+  }
+
+  //........................................................................
+  //-------------------------------- cached --------------------------------
+
+  /**
+   * Get the cached value for the given keys.
+   *
+   * @param   inKeys the key parts for the cached value
+   *
+   * @return  the cached value or null if not cached
+   *
+   */
+  public @Nullable SortedSet<String> cached(@Nonnull String ... inKeys)
+  {
+    return s_cache.get(s_keyJoiner.join(inKeys));
+  }
+
+  //........................................................................
+  //------------------------ extractPersonsAndJobs -------------------------
+
+  /**
+   * Extract person and job information from the obtained values.
+   *
+   * @param    inTexts the texts read from the datastore
+   * @param    inType  the type of values read
+   * @param    inField the name of the field the values came from
+   *
+   * @return   a sorted set with the person names
+   *
+   */
+  private @Nonnull SortedSet<String> extractPersonsAndJobs
+    (@Nonnull SortedSet<String> inTexts, @Nonnull String inType,
+     @Nonnull String inField)
+  {
+    SortedSet<String> persons = new TreeSet<String>();
+    SortedSet<String> globalJobs = new TreeSet<String>();
+    cache(globalJobs, inType, inField, "jobs");
+    Map<String, SortedSet<String>> jobs = Maps.newHashMap();
+
+    Multiple value = new Multiple(new Multiple.Element(new Text(), false),
+                                  new Multiple.Element(new Name(), true));
+    for(String text : inTexts)
+    {
+      Multiple parsed = value.read(text);
+      if (parsed != null)
+      {
+        String person = ((Text)parsed.get(0)).get();
+        persons.add(person);
+        if(parsed.get(1).isDefined())
+        {
+          String job = ((Name)parsed.get(1)).get();
+          globalJobs.add(job);
+          SortedSet<String> personJobs = jobs.get(person);
+          if(personJobs == null)
+          {
+            personJobs = new TreeSet<String>();
+            jobs.put(person, personJobs);
+          }
+
+          personJobs.add(job);
+        }
+      }
+    }
+
+    for(Map.Entry<String, SortedSet<String>> entry : jobs.entrySet())
+      cache(entry.getValue(), inType, inField, "jobs", "name", entry.getKey());
+
+    return persons;
+  }
+
+  //........................................................................
 
   //........................................................................
 

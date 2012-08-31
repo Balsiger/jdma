@@ -844,11 +844,11 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text().withFormatter(s_personFormatter)
-         .withEditType("autostring(base product/persons)[name]"),
+         .withEditType("autostring(base product/author)[name]"),
          false),
         new Multiple.Element
         (new Name().withFormatter(s_jobFormatter)
-         .withEditType("autoname(base product/jobs)[job]")
+         .withEditType("autoname(base product/author/jobs|name)[job]")
          .withRelated("name"),
          true, " ", null) })
                             .withFormatter(s_nameFormatter)
@@ -870,15 +870,17 @@ public class BaseProduct extends BaseEntry
   @Key("editor")
   protected @Nonnull ValueList<Multiple> m_editors =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      { new Multiple.Element(new Text()
-                             .withFormatter(s_personFormatter)
-                             .withEditType
-                             ("autostring(base product/persons)[name]"),
-                             false),
-        new Multiple.Element(new Name()
-                             .withFormatter(s_jobFormatter)
-                             .withEditType("autoname(base product/jobs)[job]"),
-                             true) })
+      { new Multiple.Element
+        (new Text()
+         .withFormatter(s_personFormatter)
+         .withEditType
+         ("autostring(base product/editor)[name]"),
+         false),
+        new Multiple.Element
+        (new Name()
+         .withFormatter(s_jobFormatter)
+         .withEditType("autoname(base product/editor/jobs|name)[job]"),
+         true) })
                             .withFormatter(s_nameFormatter)
                             .withTemplate("person"))
     .withFormatter(s_listFormatter);
@@ -890,16 +892,18 @@ public class BaseProduct extends BaseEntry
   @Key("cover")
   protected @Nonnull ValueList<Multiple> m_cover =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      { new Multiple.Element(new Text()
-                             .withFormatter(s_personFormatter)
-                             .withEditType
-                             ("autostring(base product/persons)[name]"),
-                             false),
-        new Multiple.Element(new Name().
-                             withFormatter(s_jobFormatter)
-                             .withEditType
-                             ("autoname(base product/jobs)[job]"),
-                             true) }).withFormatter(s_nameFormatter)
+      { new Multiple.Element
+        (new Text()
+         .withFormatter(s_personFormatter)
+         .withEditType
+         ("autostring(base product/cover)[name]"),
+         false),
+        new Multiple.Element
+        (new Name().
+         withFormatter(s_jobFormatter)
+         .withEditType
+         ("autoname(base product/cover/jobs|name)[job]"),
+         true) }).withFormatter(s_nameFormatter)
                             .withTemplate("person"))
     .withFormatter(s_listFormatter);
 
@@ -910,17 +914,18 @@ public class BaseProduct extends BaseEntry
   @Key("cartography")
   protected @Nonnull ValueList<Multiple> m_cartographers =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      { new Multiple.Element(new Text()
-                             .withFormatter(s_personFormatter)
-                             .withEditType
-                             ("autostring(base product/persons)[name]"),
-                             false),
-        new Multiple.Element(new Name()
-                             .withFormatter(s_jobFormatter)
-                             .withEditType
-                             ("autoname(base product/jobs)"
-                              + "[job]"),
-                             true) }).withFormatter(s_nameFormatter)
+      { new Multiple.Element
+        (new Text()
+         .withFormatter(s_personFormatter)
+         .withEditType
+         ("autostring(base product/cartography)[name]"),
+         false),
+        new Multiple.Element
+        (new Name()
+         .withFormatter(s_jobFormatter)
+         .withEditType
+         ("autoname(base product/cartography/jobs|name)[job]"),
+         true) }).withFormatter(s_nameFormatter)
                             .withTemplate("person"))
     .withFormatter(s_listFormatter);
 
@@ -931,16 +936,18 @@ public class BaseProduct extends BaseEntry
   @Key("illustrations")
   protected @Nonnull ValueList<Multiple> m_illustrators =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      { new Multiple.Element(new Text()
-                             .withFormatter(s_personFormatter)
-                             .withEditType
-                             ("autostring(base product/persons)[name]"),
-                             false),
-        new Multiple.Element(new Name()
-                             .withFormatter(s_jobFormatter)
-                             .withEditType
-                             ("autoname(base product/jobs)[job]"),
-                             true) }).withFormatter(s_nameFormatter)
+      { new Multiple.Element
+        (new Text()
+         .withFormatter(s_personFormatter)
+         .withEditType
+         ("autostring(base product/illustrations)[name]"),
+         false),
+        new Multiple.Element
+        (new Name()
+         .withFormatter(s_jobFormatter)
+         .withEditType
+         ("autoname(base product/illustrations/jobs|name)[job]"),
+         true) }).withFormatter(s_nameFormatter)
                             .withTemplate("person"))
     .withFormatter(s_listFormatter);
 
@@ -951,16 +958,18 @@ public class BaseProduct extends BaseEntry
   @Key("typography")
   protected @Nonnull ValueList<Multiple> m_typographers =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      { new Multiple.Element(new Text()
-                             .withFormatter(s_personFormatter)
-                             .withEditType
-                             ("autostring(base product/persons)[name]"),
-                             false),
-        new Multiple.Element(new Name()
-                             .withFormatter(s_jobFormatter)
-                             .withEditType
-                             ("autoname(base product/jobs)[job]"),
-                             true) }).withFormatter(s_nameFormatter)
+      { new Multiple.Element
+        (new Text()
+         .withFormatter(s_personFormatter)
+         .withEditType
+         ("autostring(base product/typography)[name]"),
+         false),
+        new Multiple.Element
+        (new Name()
+         .withFormatter(s_jobFormatter)
+         .withEditType
+         ("autoname(base product/typography/jobs|name)[job]"),
+         true) }).withFormatter(s_nameFormatter)
                             .withTemplate("person"))
     .withFormatter(s_listFormatter);
 
@@ -971,16 +980,17 @@ public class BaseProduct extends BaseEntry
   @Key("management")
   protected @Nonnull ValueList<Multiple> m_managers =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
-      { new Multiple.Element(new Text()
-                             .withFormatter(s_personFormatter)
-                             .withEditType
-                             ("autostring(base product/persons)"
-                              + "[name]"), false),
-        new Multiple.Element(new Name()
-                             .withFormatter(s_jobFormatter)
-                             .withEditType
-                             ("autoname(base product/jobs)[job]"),
-                             true) }).withFormatter(s_nameFormatter)
+      { new Multiple.Element
+        (new Text()
+         .withFormatter(s_personFormatter)
+         .withEditType
+         ("autostring(base product/management)[name]"), false),
+        new Multiple.Element
+        (new Name()
+         .withFormatter(s_jobFormatter)
+         .withEditType
+         ("autoname(base product/management/jobs|name)[job]"),
+         true) }).withFormatter(s_nameFormatter)
                             .withTemplate("person"))
     .withFormatter(s_listFormatter);
 

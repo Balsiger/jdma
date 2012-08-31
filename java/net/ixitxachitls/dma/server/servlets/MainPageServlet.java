@@ -132,7 +132,6 @@ public class MainPageServlet extends PageServlet
 
     BaseCharacter user = inRequest.getUser();
 
-    System.out.println("user: " + user);
     if(user == null)
       return data;
 

@@ -347,6 +347,31 @@ public class Duration extends Units<Duration>
   }
 
   //........................................................................
+  //------------------------------- compute --------------------------------
+
+  /**
+   * Compute a value for a given key.
+   *
+   * @param    inKey the key of the value to compute
+   *
+   * @return   the computed value
+   *
+   */
+  public @Nullable Object compute(@Nonnull String inKey)
+  {
+    if("isMetric".equals(inKey))
+      return isMetric();
+
+    if("asRounds".equals(inKey))
+      return asRounds();
+
+    if("asMetric".equals(inKey))
+      return asMetric();
+
+    return null;
+  }
+
+  //........................................................................
 
   //........................................................................
 

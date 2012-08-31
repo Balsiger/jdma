@@ -98,6 +98,50 @@
 {/template}
 
 /**
+ * The container for printing entries.
+ *
+ * @param entry the entry to format
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ *
+ */
+{template .printcontainer}
+  {delcall dma.entry.print}
+    {param entry: $entry /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param ist: $list /}
+    {param next: $next /}
+    {param last: $last /}
+  {/delcall}
+{/template}
+
+/**
+ * The template for printing entries.
+ *
+ * @param entry the entry to format
+ * @param first the first entry available, if any
+ * @param previous the previous entry, if any
+ * @param list the overview of all entries
+ * @param next the next entry, if any
+ * @param last the last entry, if any
+ *
+ */
+{deltemplate dma.entry.print}
+  {call .container}
+    {param entry: $entry /}
+    {param first: $first /}
+    {param previous: $previous /}
+    {param ist: $list /}
+    {param next: $next /}
+    {param last: $last /}
+  {/call}
+{/deltemplate}
+
+/**
  * The entry navigation.
  *
  * @param first the first entry available, if any
@@ -217,6 +261,15 @@
           <div class="caption-container">
             <div class="document sprite large"></div>
             <div>dma</div>
+          </div>
+        {/param}
+      {/call}
+      {call dma.page.link}
+        {param url: $entry.name + '.print' /}
+        {param text}
+          <div class="caption-container">
+            <div class="print sprite large"></div>
+            <div>print</div>
           </div>
         {/param}
       {/call}
@@ -376,7 +429,9 @@
             {/call}
           {/if}
         {else}
-          {$content}
+          {if $content}
+            {$content}
+          {/if}
         {/if}
       </div>
     </div>
@@ -705,4 +760,243 @@
       {$item}
     </div>
   {/if}
+{/template}
+
+/**
+ * Print an item in the overview list.
+ *
+ * @param item the item to print
+ */
+{template .itemoverview private="true"}
+  <div class="item-overview-entry">
+    <div class="item-overview-weight">
+      {if $item.weight.combine.total}
+        {$item.weight.combine.total.print}
+      {else}
+        -
+      {/if}
+    </div>
+    {if $ij.isDM}
+      {if $item.value.combine.total}
+        <div class="item-overview-value">
+          {$item.value.combine.total.print}
+        </div>
+      {/if}
+    {/if}
+    <div>
+      <img class="item-image"
+          src="{if $item.files.main}{$item.files.main.icon}=s15
+          {else}/icons/{$item.type.multilink}-dummy.png{/if}">
+      {if $ij.isDM}
+        {$item.dmName}
+      {else}
+        {$item.playerName}
+      {/if}
+      {sp}({$item.name})
+    </div>
+    <div class="item-overview-desc">
+      {$item.appearance |print}
+    </div>
+    {if $item.playernotes}
+      <div class="item-overview-notes">
+        {$item.playernotes |print}
+      </div>
+    {/if}
+  </div>
+  <div class="item-overview-values">
+    {call .overviewValue}
+      {param prefix: 'size' /}
+      {param postfix: ';' /}
+      {param value: $item.size.combine.max /}
+    {/call}
+    {call .overviewValue}
+      {param prefix: 'hp' /}
+      {param postfix: ',' /}
+      {param value: $item.hp.combine.total /}
+      {param dm: true /}
+    {/call}
+    {call .overviewValue}
+      {param prefix: 'break DC' /}
+      {param postfix: ';' /}
+      {param value: $item.break_DC.combine.total /}
+      {param dm: true /}
+    {/call}
+    {if $item.extension_counted}
+      {call .overviewValue}
+        {param prefix: '&#x2736' /}
+        {param postfix: ';' /}
+        {param content: $item.count.print + ' '
+            + $item.unit.combine.total.print /}
+      {/call}
+    {elseif $item.extension_multiuse or $item.extension_multiple}
+      {call .overviewValue}
+        {param prefix: '&#x2736' /}
+        {param postfix: ';' /}
+        {param value: $item.count /}
+      {/call}
+    {/if}
+    {if $item.extension_wearable}
+      {call .overviewValue}
+        {param prefix: '&#x269c' /}
+        {param value: $item.slot.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ' ' /}
+        {param value: $item.don.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ', ' /}
+        {param postfix: ';' /}
+        {param value: $item.remove.combine.total /}
+      {/call}
+    {/if}
+    {if $item.extension_timed}
+      {call .overviewValue}
+        {param prefix: '&#x27f3' /}
+        {param postfix: ';' /}
+        {param value: $item.duration.combine.total /}
+      {/call}
+    {/if}
+    {if $item.extension_light}
+      {call .overviewValue}
+        {param prefix: '&#x263c' /}
+        {param value: $item.bright_light.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ' /' /}
+        {param postfix: ';' /}
+        {param value: $item.shadowy_light.combine.total /}
+      {/call}
+    {/if}
+    {if $item.extension_weapon}
+      {call .overviewValue}
+        {param prefix: '&#x2694' /}
+        {param value: $item.weapon_type.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ' ' /}
+        {param value: $item.proficiency.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ' ' /}
+        {param value: $item.weapon_style.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ', ' /}
+        {param value: $item.damage.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ' ' /}
+        {param first: true /}
+      {/call}
+      {if $item.range.combine.total}
+        {call .overviewValue}
+          {param prefix: ', range' /}
+          {param value: $item.range.combine.total /}
+        {/call}
+      {/if}
+      {if $item.reach.combine.total}
+        {call .overviewValue}
+          {param prefix: ', reach' /}
+          {param value: $item.reach.combine.total /}
+        {/call}
+      {/if}
+      ;{sp}
+    {/if}
+    {if $item.extension_armor}
+      {call .overviewValue}
+        {param prefix: '&#x2602' /}
+        {param value: $item.armor_type.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ', AC' /}
+        {param value: $item.AC_bonus.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ', max dex' /}
+        {param value: $item.max_dexterity.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ', check penalty' /}
+        {param value: $item.check_penalty.combine.total /}
+      {/call}
+      {call .overviewValue}
+        {param prefix: ', arcane failure' /}
+        {param value: $item.arcane_failure.combine.total /}
+      {/call}
+      ;{sp}
+    {/if}
+    {if $item.extension_incomplete and $ij.isDM}
+      <div class="item-overview-value-dm">
+        <literal>&#x2639</literal>{sp}
+        {$item.incomplete.combine.total |print}
+      </div>
+    {/if}
+    {if $item.dm_notes.isDefined and $ij.isDM}
+      <div class="item-overview-value-dm">
+        {$item.dm_notes |print}
+      </div>
+    {/if}
+    {if $ij.isDM}
+      <div class="item-overview-value-dm">
+        {$item.short_description.combine.total |print}
+      </div>
+    {/if}
+  </div>
+  {if $item.extension_contents}
+    <div class="item-overview-contents">
+      {foreach $content in $item.contents.list}
+        {call .itemoverview}
+          {param item: entry($item.campaign.key + '/item/' + $content.print) /}
+        {/call}
+      {/foreach}
+    </div>
+  {/if}
+{/template}
+
+/**
+ * Print the value with the given pre and post fix.
+ *
+ * @param prefix   the prefix for the value
+ * @param postfix  the postfix for the value
+ * @param value    the vaue to print
+ * @param content  formatted content instead of a value
+ * @param dm       if printing only for dm
+ */
+{template .overviewValue}
+  {if $dm}
+    {if $ij.isDM}
+      <span class="item-overview-value-dm">
+        {call .overviewValueRaw data="all" /}
+      </span>
+    {/if}
+  {else}
+    {call .overviewValueRaw data="all" /}
+  {/if}
+{/template}
+
+/**
+ * Print the raw value, ignoring dm handling.
+ *
+ * @param prefix   the prefix for the value
+ * @param postfix  the postfix for the value
+ * @param value    the vaue to print
+ * @param content  formatted content instead of a value
+ */
+{template .overviewValueRaw private="true"}
+  {if $prefix}{$prefix}{sp}{/if}
+  {if $content}
+    {$content}
+  {else}
+    {if $value}
+      {if $value.isDefined}
+        {$value |print}
+      {else}
+        ?
+      {/if}
+    {else}
+      (no value)
+    {/if}
+  {/if}
+  {if $postfix}{$postfix}{sp}{/if}
 {/template}

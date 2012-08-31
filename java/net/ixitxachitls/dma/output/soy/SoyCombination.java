@@ -34,7 +34,6 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
-import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.Entries;
@@ -125,7 +124,10 @@ public class SoyCombination extends SoyValue
     }
 
     if("min".equals(inName))
-      return StringData.forValue(m_combination.min().toString());
+      return new SoyValue(m_name, m_combination.min(), m_entry);
+
+    if("max".equals(inName))
+      return new SoyValue(m_name, m_combination.max(), m_entry);
 
     if("bases".equals(inName))
     {
@@ -191,6 +193,24 @@ public class SoyCombination extends SoyValue
   }
 
   //........................................................................
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Convert to a string for debugging.
+   *
+   * @return      the string represenation
+   *
+   */
+  public @Nonnull String toString()
+  {
+    return "total " + (getSingle("total") != null ? getSingle("total") : "")
+      + ", min " + (getSingle("min") != null ? getSingle("min") : "")
+      + ", max " + (getSingle("max") != null ? getSingle("max") : "")
+      + ", bases " + (getSingle("bases") != null ? getSingle("bases") : "");
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

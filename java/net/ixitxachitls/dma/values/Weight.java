@@ -399,40 +399,6 @@ public class Weight extends Units<Weight>
   }
 
   //........................................................................
-  //------------------------------- compute --------------------------------
-
-  /**
-   * Compute a value for a given key.
-   *
-   * @param    inKey the key of the value to compute
-   *
-   * @return   the computed value
-   *
-   */
-  public @Nullable Object compute(@Nonnull String inKey)
-  {
-    if("asMetric".equals(inKey))
-      return asMetric();
-
-    if("asPounds".equals(inKey))
-      return asPound();
-
-    if("asCarat".equals(inKey))
-      return asCarat();
-
-    if("isMetric".equals(inKey))
-      return isMetric();
-
-    if("isPound".equals(inKey))
-      return isPound();
-
-    if("isCarat".equals(inKey))
-      return isCarat();
-
-    return super.compute(inKey);
-  }
-
-  //........................................................................
 
   //........................................................................
 
