@@ -28,12 +28,62 @@
 /**
  * The admin page.
  *
- * @ param title The page title
- * @ param content The real page content
- * @ param oldcontent The old page content
+ * @param types The available entry types
+ * @param logs The available log entries
+ * @param events The available event entries
  *
  */
 {template .page}
+  <title>DMA Administration</title>
+  <link rel="STYLESHEET" type="text/css" href="/css/jdma.css" />
+  <link rel="STYLESHEET" type="text/css" href="/css/gui.css" />
+  <script type="text/javascript" src="/js/jquery-1.5.1.min.js"></script>
+  <script type="text/javascript" src="/js/jdma.js"></script>
+  <script type="text/javascript" src="/js/util.js"></script>
+  <script type="text/javascript" src="/js/gui.js"></script>
   <h1>DMA Administration</h1>
-  the admin page
+
+  <h2>DMA Indexes</h2>
+
+  Resetting indexes for type:
+  <p>
+    <select onchange="admin.resetIndexes(this.value)">
+      <option value="">plese select</option>
+      {foreach $type in $types}
+        <option value="{$type}">{$type}</option>
+      {/foreach}
+    </select>
+  </p>
+
+  <h2>DMA Caches</h2>
+
+  <a onclick="admin.clearCache()">Clear all DMA caches</a>
+
+  <h2>Recent Events</h2>
+
+  <div id="admin-events"></div>
+
+  <select class="admin-button" onchange="admin.show(this.value)">
+    <option value="DEBUG">Debug</option>
+    <option value="COMPLETE">Complete</option>
+    <option value="STATUS">Status</option>
+    <option value="INFO">Info</option>
+    <option value="IMPORTANT">Important</option>
+    <option value="WARNING">Warning</option>
+    <option value="ERROR">Error</option>
+  </select>
+
+  <h2>Recent Log Entries</h2>
+
+  <div id="admin-logs"></div>
+
+  <script>
+    {foreach $log in $logs}
+      admin.addLog('{$log.types |escapeJs}', '{$log.text |escapeJs}',
+                   {$log.date |escapeJs});
+    {/foreach}
+    {foreach $event in $events}
+      admin.addEvent('{$event.text |escapeJs}', {$event.date |escapeJs});
+    {/foreach}
+  </script>
 {/template}

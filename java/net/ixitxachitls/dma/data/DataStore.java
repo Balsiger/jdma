@@ -295,14 +295,22 @@ public class DataStore
       else
         query = new Query(inType, inParent);
 
-      List<Query.Filter> filters = new ArrayList<Query.Filter>();
-      for(int i = 0; i + 1 < inFilters.length; i += 2)
-        filters.add(new Query.FilterPredicate(toPropertyName(inFilters[i]),
-                                              Query.FilterOperator.EQUAL,
-                                              inFilters[i + 1]));
+      if (inFilters.length > 2)
+      {
+        List<Query.Filter> filters = new ArrayList<Query.Filter>();
+        for(int i = 0; i + 1 < inFilters.length; i += 2)
+          filters.add(new Query.FilterPredicate(toPropertyName(inFilters[i]),
+                                                Query.FilterOperator.EQUAL,
+                                                inFilters[i + 1]));
 
-      query.setFilter(new Query.CompositeFilter
-                      (Query.CompositeFilterOperator.AND, filters));
+        query.setFilter(new Query.CompositeFilter
+                        (Query.CompositeFilterOperator.AND, filters));
+      }
+      else
+        query.setFilter(new Query.FilterPredicate(toPropertyName(inFilters[0]),
+                                                  Query.FilterOperator.EQUAL,
+                                                  inFilters[1]));
+
       FetchOptions options =
         FetchOptions.Builder.withOffset(inStart).limit(inSize);
 

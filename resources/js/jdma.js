@@ -223,7 +223,7 @@ admin.addLog = function(inType, inText, inSeconds)
 
 admin.show = function(inType)
 {
-  $('#admin-logs div.COMPLETE').hide();
+  $('#admin-logs div.DEBUG').hide();
   $('#admin-logs div.' + inType).show();
 };
 

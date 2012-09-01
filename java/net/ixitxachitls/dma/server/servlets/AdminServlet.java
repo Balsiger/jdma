@@ -25,7 +25,10 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,6 +43,7 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
+import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.server.servlets.BaseServlet;
 import net.ixitxachitls.util.Encodings;
@@ -125,9 +129,52 @@ public class AdminServlet extends SoyServlet
 
   //----------------------------------------------------------- manipulators
 
-  //---------------------------- createDocument ----------------------------
+  //----------------------------- collectData ------------------------------
 
-  //------------------------------- writeBody ------------------------------
+  /**
+   * Collect the data that is to be printed.
+   *
+   * @param    inRequest  the request for the page
+   * @param    inRenderer the renderer for rendering sub values
+   *
+   * @return   a map with key/value pairs for data (values can be primitives
+   *           or maps or lists)
+   *
+   */
+  protected @Nonnull Map<String, Object> collectData
+    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  {
+    Map<String, Object> data = super.collectData(inRequest, inRenderer);
+
+    List<String> types = new ArrayList<String>();
+    for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
+      types.add(type.toString());
+
+    data.put("types", types);
+
+    List<Map<String, Object>> logs = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> events = new ArrayList<Map<String, Object>>();
+    for(Iterator<Log.Message> i = Log.getLast(); i.hasNext(); )
+    {
+      Log.Message message = i.next();
+
+      if(message.getType() == Log.Type.EVENT)
+        events.add(map("text", message.getText(),
+                       "date", "" + message.getDate()));
+      else
+        logs.add(map("types", message.getType().types(),
+                     "text", message.getText(),
+                     "date", "" + message.getDate()));
+    }
+
+    data.put("logs", logs);
+    data.put("events", events);
+
+    return data;
+  }
+
+  //........................................................................
+  //--------------------------------- handle -------------------------------
 
   /**
    * Handles the body content of the request.
@@ -138,14 +185,14 @@ public class AdminServlet extends SoyServlet
    * @return      an error if something went wrong
    *
    * @throws      IOException      writing to the page failed
+   * @throws      ServletException  writing to the page failed
    *
    */
   @Override
-  @OverridingMethodsMustInvokeSuper
   protected @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,
      @Nonnull HttpServletResponse inResponse)
-    throws IOException
+    throws IOException, javax.servlet.ServletException
   {
     if(!(inRequest instanceof DMARequest))
     {
@@ -154,17 +201,13 @@ public class AdminServlet extends SoyServlet
                            "expected a dma request");
     }
 
-    // Set the output header.
-    inResponse.setHeader("Content-Type", "text/html");
-    inResponse.setHeader("Cache-Control", "max-age=0");
-
     DMARequest request = (DMARequest)inRequest;
 
     BaseCharacter user = request.getUser();
     if(user == null || !user.hasAccess(BaseCharacter.Group.ADMIN))
     {
       if(user == null)
-        Log.warning("admin request with login");
+        Log.warning("admin request without valid user");
       else
         Log.warning("admin request by non-admin " + user.getName());
 
@@ -175,6 +218,10 @@ public class AdminServlet extends SoyServlet
     String reset = request.getParam("reset");
     if(reset != null)
     {
+      // Set the output header.
+      inResponse.setHeader("Content-Type", "text/html");
+      inResponse.setHeader("Cache-Control", "max-age=0");
+
       AbstractType<? extends AbstractEntry> type = AbstractType.getTyped(reset);
       if(type == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
@@ -194,7 +241,18 @@ public class AdminServlet extends SoyServlet
     String cache = request.getParam("cache");
     if(cache != null)
     {
-      MemcacheServiceFactory.getMemcacheService().clearAll();
+      // Set the output header.
+      inResponse.setHeader("Content-Type", "text/html");
+      inResponse.setHeader("Cache-Control", "max-age=0");
+
+      MemcacheServiceFactory.getMemcacheService("entity").clearAll();
+      MemcacheServiceFactory.getMemcacheService("byValue").clearAll();
+      MemcacheServiceFactory.getMemcacheService("listByValue").clearAll();
+      MemcacheServiceFactory.getMemcacheService("ids").clearAll();
+      MemcacheServiceFactory.getMemcacheService("idsByValue").clearAll();
+      MemcacheServiceFactory.getMemcacheService("recent").clearAll();
+      MemcacheServiceFactory.getMemcacheService("values").clearAll();
+      MemcacheServiceFactory.getMemcacheService("multiValues").clearAll();
       Log.event(user.getName(), "admin clear cache",
                 "All caches have been cleared");
 
@@ -204,119 +262,43 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
-    HTMLWriter writer =
-      new HTMLWriter(new PrintWriter(inResponse.getOutputStream()));
+    return super.handle(inRequest, inResponse);
 
-    writer
-      .title("DMA - Administration")
-      .addJSFile("jquery-1.5.1.min")
-      .addJSFile("jdma")
-      .addCSSFile("jdma")
-      .addJSFile("util")
-      .addJSFile("gui")
-      .addCSSFile("gui")
-      .begin("h1").add("DMA - Administration").end("h1")
-      .begin("h2").add("DMA Indexes").end("h2")
-      .add("Resetting indexes for type: ")
-      .begin("select").onChange("admin.resetIndexes(this.value)")
-      .begin("option").value("").add("please select").end("option");
+    //   .begin("div").id("admin-events").end("div")
+    //   .begin("select").classes("admin-button")
+    //   .onChange("admin.show(this.value)")
+    //   .begin("option").value("COMPLETE").add("Complete").end("option")
+    //   .begin("option").value("DEBUG").add("Debug").end("option")
+    //   .begin("option").value("STATUS").attribute("selected", "").add("Status")
+    //   .end("option")
+    //   .begin("option").value("INFO").add("Info").end("option")
+    //   .begin("option").value("WARNING").add("Warning").end("option")
+    //   .begin("option").value("ERROR").add("Error").end("option")
+    //   .end("select")
+    //   .begin("h2").add("Recent Log Entries").end("h2")
+    //   .begin("div").id("admin-logs").end("div")
+    //   .begin("script");
 
-    for(AbstractType<? extends AbstractEntry> type : AbstractType.getAll())
-      writer
-        .begin("option").value(type.toString()).add(type.toString())
-        .end("option");
+    // for(Iterator<Log.Message> i = Log.getLast(); i.hasNext(); )
+    // {
+    //   Log.Message message = i.next();
 
-    writer
-      .end("select")
-      .begin("h2").add("DMA Caches").end("h2")
-      .begin("a").onClick("admin.clearCache()").add("Clear all DMA caches")
-      .end("a")
-      .begin("h2").add("Recent Events").end("h2")
-      .begin("div").id("admin-events").end("div")
-      .begin("select").classes("admin-button")
-      .onChange("admin.show(this.value)")
-      .begin("option").value("COMPLETE").add("Complete").end("option")
-      .begin("option").value("DEBUG").add("Debug").end("option")
-      .begin("option").value("STATUS").attribute("selected", "").add("Status")
-      .end("option")
-      .begin("option").value("INFO").add("Info").end("option")
-      .begin("option").value("WARNING").add("Warning").end("option")
-      .begin("option").value("ERROR").add("Error").end("option")
-      .end("select")
-      .begin("h2").add("Recent Log Entries").end("h2")
-      .begin("div").id("admin-logs").end("div")
-      .begin("script");
+    //   if(message.getType() == Log.Type.EVENT)
+    //     writer.add("admin.addEvent("
+    //                  + Encodings.toJSString(message.getText())
+    //                  + ", " + message.getDate() + ");\n");
+    //   else
+    //     writer.add("admin.addLog("
+    //                  + Encodings.toJSString(message.getType().types())
+    //                  + ", " + Encodings.toJSString(message.getText())
+    //                  + ", " + message.getDate() + ");\n");
+    // }
 
-    for(Iterator<Log.Message> i = Log.getLast(); i.hasNext(); )
-    {
-      Log.Message message = i.next();
-
-      if(message.getType() == Log.Type.EVENT)
-        writer.add("admin.addEvent("
-                     + Encodings.toJSString(message.getText())
-                     + ", " + message.getDate() + ");\n");
-      else
-        writer.add("admin.addLog("
-                     + Encodings.toJSString(message.getType().types())
-                     + ", " + Encodings.toJSString(message.getText())
-                     + ", " + message.getDate() + ");\n");
-    }
-
-    writer.end("script");
-    writer.close();
-
-    return null;
+    // writer.end("script");
+    // writer.close();
   }
 
   //........................................................................
-
-  // private static @Nonnull String getTypes(@Nonnull String inType)
-  // {
-  //   StringBuffer result = new StringBuffer();
-
-  //   if(inType.equalsIgnoreCase("FATAL"))
-  //     return result.toString();
-
-  //   result.append(" " + EVENT);
-  //   if(inType.equals(IgnoreCase("EVENT")))
-  //     return result.toString();
-
-  //   result.append(" " + ERROR);
-  //   if(inType.equals(IgnoreCase("ERROR")))
-  //     return result.toString();
-
-  //   result.append(" " + WARNING);
-  //   if(inType.equals(IgnoreCase("WARNING")))
-  //     return result.toString();
-
-  //   result.append(" " + NECESSARY);
-  //   if(inType.equals(IgnoreCase("NECESSARY")))
-  //     return result.toString();
-
-  //   result.append(" " + IMPORTANT);
-  //   if(inType.equals(IgnoreCase("IMPORTANT")))
-  //     return result.toString();
-
-  //   result.append(" " + USEFUL);
-  //   if(inType.equals(IgnoreCase("USEFUL")))
-  //     return result.toString();
-
-  //   result.append(" " + INFO);
-  //   if(inType.equals(IgnoreCase("INFO")))
-  //     return result.toString();
-
-  //   result.append(" " + COMPLETE);
-  //   if(inType.equals(IgnoreCase("COMPLETE")))
-  //     return result.toString();
-
-  //   result.append(" " + STATUS);
-  //   if(inType.equals(IgnoreCase("STATUS")))
-  //     return result.toString();
-
-  //   result.append(" " + DEBUG);
-  //   return result.toString();
-  // }
-
   //........................................................................
 
   //------------------------------------------------- other member functions
