@@ -826,21 +826,21 @@
       {/call}
       {if $item.extension_counted}
         {call .overviewValue}
-          {param prefix: '&#x2736' /}
+          {param prefix: '&#x2736;' /}
           {param postfix: ';' /}
           {param content: $item.count.print + ' '
               + $item.unit.combine.total.print /}
         {/call}
       {elseif $item.extension_multiuse or $item.extension_multiple}
         {call .overviewValue}
-          {param prefix: '&#x2736' /}
+          {param prefix: '&#x2736;' /}
           {param postfix: ';' /}
           {param value: $item.count /}
         {/call}
       {/if}
       {if $item.extension_wearable}
         {call .overviewValue}
-          {param prefix: '&#x269c' /}
+          {param prefix: '&#x269c;' /}
           {param value: $item.slot.combine.total /}
         {/call}
         {call .overviewValue}
@@ -855,14 +855,14 @@
       {/if}
       {if $item.extension_timed}
         {call .overviewValue}
-          {param prefix: '&#x27f3' /}
+          {param prefix: '&#x27f3;' /}
           {param postfix: ';' /}
           {param value: $item.duration.combine.total /}
         {/call}
       {/if}
       {if $item.extension_light}
         {call .overviewValue}
-          {param prefix: '&#x263c' /}
+          {param prefix: '&#x263c;' /}
           {param value: $item.bright_light.combine.total /}
         {/call}
         {call .overviewValue}
@@ -873,7 +873,7 @@
       {/if}
       {if $item.extension_weapon}
         {call .overviewValue}
-          {param prefix: '&#x2694' /}
+          {param prefix: '&#x2694;' /}
           {param value: $item.weapon_type.combine.total /}
         {/call}
         {call .overviewValue}
@@ -908,7 +908,7 @@
       {/if}
       {if $item.extension_armor}
         {call .overviewValue}
-          {param prefix: '&#x2602' /}
+          {param prefix: '&#x2602;' /}
           {param value: $item.armor_type.combine.total /}
         {/call}
         {call .overviewValue}
@@ -931,7 +931,7 @@
       {/if}
       {if $item.extension_incomplete and $ij.isDM}
         <div class="item-overview-value-dm">
-          <literal>&#x2639</literal>{sp}
+          <literal>&#x2639;</literal>{sp}
           {$item.incomplete.combine.total |print}
         </div>
       {/if}

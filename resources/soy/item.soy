@@ -57,7 +57,7 @@
 */
   {if $entry.extension_incomplete and $ij.isDM}
     {call dma.entry.extension}
-      {param name: 'incomplete' /}
+      {param name: '&#x2639; - incomplete' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -166,8 +166,8 @@
   {if $entry.extension_multiuse or $entry.extension_multiple
       or $entry.extension_counted}
     {call dma.entry.extension}
-      {param name: $entry.extension_multiuse ? 'multiuse'
-          : $entry.extenion_multiple ? 'multiple' : 'counted' /}
+      {param name: '&#x2736; - ' + $entry.extension_multiuse ? 'multiuse'
+          : $entry.extension_multiple ? 'multiple' : 'counted' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -191,7 +191,7 @@
 
   {if $entry.extension_weapon}
     {call dma.entry.extension}
-      {param name: 'weapon' /}
+      {param name: '&#x2694; - weapon' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -247,7 +247,7 @@
 
   {if $entry.extension_composite}
     {call dma.entry.extension}
-      {param name: 'composite' /}
+      {param name: '&#x2295; - composite' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -260,7 +260,7 @@
 
   {if $entry.extension_wearable}
     {call dma.entry.extension}
-      {param name: 'wearable' /}
+      {param name: '&#x2736; - wearable' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -283,7 +283,7 @@
 
   {if $entry.extension_container}
     {call dma.entry.extension}
-      {param name: 'container' /}
+      {param name: '&#x25a3; - container' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -301,7 +301,7 @@
 
   {if $entry.extension_contents}
     {call dma.entry.extension}
-      {param name: 'contents' /}
+      {param name: '&#x25c8; - contents' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -332,7 +332,7 @@
 
   {if $entry.extension_armor}
     {call dma.entry.extension}
-      {param name: 'armor' /}
+      {param name: '&#x2602; - armor' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -371,7 +371,7 @@
 
   {if $entry.extension_light}
     {call dma.entry.extension}
-      {param name: 'light' /}
+      {param name: '&#263c; - light' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -396,7 +396,7 @@
 
   {if $entry.extension_timed}
     {call dma.entry.extension}
-      {param name: 'timed' /}
+      {param name: '&#x27f3 - timed' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -409,7 +409,7 @@
 
   {if $entry.extension_commodity}
     {call dma.entry.extension}
-      {param name: 'commodity' /}
+      {param name: '&#x2a3b; - commodity' /}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
