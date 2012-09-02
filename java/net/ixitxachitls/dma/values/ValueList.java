@@ -212,34 +212,6 @@ public class ValueList<T extends Value>
   }
 
   //........................................................................
-  //-------------------------------- clone ---------------------------------
-
-  /**
-   * Make a copy of the value and return it. If necessary, this is a deep
-   * copy, although type relevant values are never copied, because these
-   * are immutable.
-   *
-   * @return      a copy of the current value
-   *
-   */
-//   @SuppressWarnings("unchecked") // casting value
-//   public ValueList<T> clone()
-//   {
-//     ValueList<T> result = super.clone();
-
-//     // now clone all the values
-//     if(m_values != null)
-//     {
-//       result.m_values = new ArrayList<T>();
-
-//       for(Value value : m_values)
-//         result.m_values.add((T)value.clone());
-//     }
-
-//     return result;
-//   }
-
-  //........................................................................
 
   //........................................................................
 
@@ -275,7 +247,7 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-  public String getEditValue()
+  public @Nonnull String getEditValue()
   {
     List<String> result = new ArrayList<String>();
 
@@ -752,12 +724,9 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-@SuppressWarnings("unchecked")
-  public boolean doRead(ParseReader inReader)
+  @SuppressWarnings("unchecked")
+  public boolean doRead(@Nonnull ParseReader inReader)
   {
-    if(inReader == null)
-      throw new IllegalArgumentException("must have a reader here");
-
     ParseReader.Position pos = inReader.getPosition();
 
     do

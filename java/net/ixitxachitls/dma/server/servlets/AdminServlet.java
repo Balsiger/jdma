@@ -32,7 +32,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,9 +43,6 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.output.html.HTMLWriter;
-import net.ixitxachitls.server.servlets.BaseServlet;
-import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -185,7 +181,7 @@ public class AdminServlet extends SoyServlet
    * @return      an error if something went wrong
    *
    * @throws      IOException      writing to the page failed
-   * @throws      ServletException  writing to the page failed
+   * @throws      javax.servlet.ServletException  writing to the page failed
    *
    */
   @Override
@@ -263,39 +259,6 @@ public class AdminServlet extends SoyServlet
     }
 
     return super.handle(inRequest, inResponse);
-
-    //   .begin("div").id("admin-events").end("div")
-    //   .begin("select").classes("admin-button")
-    //   .onChange("admin.show(this.value)")
-    //   .begin("option").value("COMPLETE").add("Complete").end("option")
-    //   .begin("option").value("DEBUG").add("Debug").end("option")
-    //   .begin("option").value("STATUS").attribute("selected", "").add("Status")
-    //   .end("option")
-    //   .begin("option").value("INFO").add("Info").end("option")
-    //   .begin("option").value("WARNING").add("Warning").end("option")
-    //   .begin("option").value("ERROR").add("Error").end("option")
-    //   .end("select")
-    //   .begin("h2").add("Recent Log Entries").end("h2")
-    //   .begin("div").id("admin-logs").end("div")
-    //   .begin("script");
-
-    // for(Iterator<Log.Message> i = Log.getLast(); i.hasNext(); )
-    // {
-    //   Log.Message message = i.next();
-
-    //   if(message.getType() == Log.Type.EVENT)
-    //     writer.add("admin.addEvent("
-    //                  + Encodings.toJSString(message.getText())
-    //                  + ", " + message.getDate() + ");\n");
-    //   else
-    //     writer.add("admin.addLog("
-    //                  + Encodings.toJSString(message.getType().types())
-    //                  + ", " + Encodings.toJSString(message.getText())
-    //                  + ", " + message.getDate() + ");\n");
-    // }
-
-    // writer.end("script");
-    // writer.close();
   }
 
   //........................................................................
