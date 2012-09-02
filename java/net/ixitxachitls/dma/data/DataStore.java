@@ -158,7 +158,7 @@ public class DataStore
    */
   public @Nullable Entity getEntity(@Nonnull Key inKey)
   {
-    Entity entity = (Entity)s_cacheEntity.get(inKey.toString());
+    Entity entity = (Entity)s_cacheEntity.get(inKey);
 
     if(entity == null)
     {
@@ -175,7 +175,6 @@ public class DataStore
         return null;
       }
     }
-
 
     return entity;
   }
