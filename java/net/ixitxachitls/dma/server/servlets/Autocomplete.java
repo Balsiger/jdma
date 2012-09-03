@@ -237,7 +237,7 @@ public class Autocomplete extends JSONServlet
          || "editor".equals(inField)
          || "cover".equals(inField)
          || "cartography".equals(inField)
-         || "illlustrations".equals(inField)
+         || "illustrations".equals(inField)
          || "typography".equals(inField)
          || "management".equals(inField))
         value = extractPersonsAndJobs(value, inType.toString(), inField);
