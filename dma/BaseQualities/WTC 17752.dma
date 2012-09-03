@@ -1,0 +1,438 @@
+#----- Death Attack
+
+#----- Death Attack
+
+base quality Death Attack =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17752: 180-181;
+  description
+  "If a character studies his victim for 3 rounds and then makes a sneak attack
+  with a melee weapon that successfully deals damage, the sneak attack has the
+  additional effect of possibly either paralyzing or killing the target
+  (character's choice). While studying the victim, the assassin can undertake
+  other actions as long as his attention stays focused on the target and the
+  target does not detect the assassin or recognize the assassin as an enemy. If
+  the victim of such an attack fails a Fortitude save (DC 10 + character's
+  class level + the character's Int modifier) against the kill effect, he
+  dies. If the saving throw fails against the paralysis effect, the victim's
+  mind and body become enervated, rendering her helpless and unable to act for
+  1d6 rounds plus 1 round per level of the character. If the victim's saving
+  throw succeeds, the attack is just a normal sneak attack. Once the character
+  has completed the 3 rounds of study, he must make the death attack within the
+  next 3 rounds. If a death attack is attempted and fails (the victim makes her
+  save) or if the assassin does not launch the attack within 3 rounds of
+  completing the study, 3 new rounds of study are required before he can
+  attempt another death attack.";
+  short description "Study victim for 3 rounds, make sneak attack with melee attack dealing damage; save DC $dc or die/helpless for 1d6 + $level rounds.";
+  synonyms          "Attack, Death";
+  categories        attack.
+
+
+#.....
+#----- Poison Use
+
+base quality Poison Use =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17752: 181;
+  description
+  "The character is trained in the use of poison and never risks accidentally
+  poisoning themselves when applying poison to a blade.";
+  short description "Does not risk to poison itself.";
+  synonyms          "Use, Poison";
+  categories        option.
+
+
+#.....
+#----- Magic Armor plus 1
+
+base quality Magic Armor plus 1 =
+
+  type              Supernatural;
+  effects           Armor Class +1 enhancement;
+  qualifier         +1;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to armor class";
+  short description "A magical armor bonus.";
+  synonyms          "Magic Armor +1",
+                    "Armor +1, Magic",
+                    "+1 Armor";
+  categories        magical.
+
+
+#.....
+#----- Magic Armor plus 2
+
+base quality Magic Armor plus 2 =
+
+  type              Supernatural;
+  effects           Armor Class +2 enhancement;
+  qualifier         +2;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to armor class";
+  short description "A magical armor bonus.";
+  synonyms          "Magic Armor +2",
+                    "Armor +2, Magic",
+                    "+2 Armor";
+  categories        magical.
+
+
+#.....
+#----- Magic Armor plus 3
+
+base quality Magic Armor plus 3 =
+
+  type              Supernatural;
+  effects           Armor Class +3 enhancement;
+  qualifier         +3;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to armor class";
+  short description "A magical armor bonus.";
+  synonyms          "Magic Armor +3",
+                    "Armor +3, Magic",
+                    "+3 Armor";
+  categories        magical.
+
+
+#.....
+#----- Magic Armor plus 4
+
+base quality Magic Armor plus 4 =
+
+  type              Supernatural;
+  effects           Armor Class +4 enhancement;
+  qualifier         +4;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to armor class";
+  short description "A magical armor bonus.";
+  synonyms          "Magic Armor +4",
+                    "Armor +4, Magic",
+                    "+4 Armor";
+  categories        magical.
+
+
+#.....
+#----- Magic Armor plus 5
+
+base quality Magic Armor plus 5 =
+
+  type              Supernatural;
+  effects           Armor Class +5 enhancement;
+  qualifier         +5;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to armor class";
+  short description "A magical armor bonus.";
+  synonyms          "Magic Armor +5",
+                    "Armor +5, Magic",
+                    "+5 Armor";
+  categories        magical.
+
+
+#.....
+#----- Magic Weapon plus 1
+
+base quality Magic Weapon plus 1 =
+
+  type              Supernatural;
+  effects           Attack +1 enhancement, Damage +1 enhancement;
+  qualifier         +1;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to weapon class";
+  short description "A magical weapon bonus.";
+  synonyms          "Magic Weapon +1",
+                    "Weapon +1, Magic",
+                    "+1 Weapon";
+  categories        magical.
+
+
+#.....
+#----- Magic Weapon plus 2
+
+base quality Magic Weapon plus 2 =
+
+  type              Supernatural;
+  effects           Attack +2 enhancement, Damage +2 enhancement;
+  qualifier         +2;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to weapon class";
+  short description "A magical weapon bonus.";
+  synonyms          "Magic Weapon +2",
+                    "Weapon +2, Magic",
+                    "+2 Weapon";
+  categories        magical.
+
+
+#.....
+#----- Magic Weapon plus 3
+
+base quality Magic Weapon plus 3 =
+
+  type              Supernatural;
+  effects           Attack +3 enhancement, Damage +3 enhancement;
+  qualifier         +3;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to weapon class";
+  short description "A magical weapon bonus.";
+  synonyms          "Magic Weapon +3",
+                    "Weapon +3, Magic",
+                    "+3 Weapon";
+  categories        magical.
+
+
+#.....
+#----- Magic Weapon plus 4
+
+base quality Magic Weapon plus 4 =
+
+  type              Supernatural;
+  effects           Attack +4 enhancement, Damage +4 enhancement;
+  qualifier         +4;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to weapon class";
+  short description "A magical weapon bonus.";
+  synonyms          "Magic Weapon +4",
+                    "Weapon +4, Magic",
+                    "+4 Weapon";
+  categories        magical.
+
+
+#.....
+#----- Magic Weapon plus 5
+
+base quality Magic Weapon plus 5 =
+
+  type              Supernatural;
+  effects           Attack +5 enhancement, Damage +5 enhancement;
+  qualifier         +5;
+  worlds            Generic;
+  references        WTC 17752: 216;
+  description
+  "A standard magical bonus to weapon class";
+  short description "A magical weapon bonus.";
+  synonyms          "Magic Weapon +5",
+                    "Weapon +5, Magic",
+                    "+5 Weapon";
+  categories        magical.
+
+
+#.....
+#----- Resistance to Acid
+
+base quality Resistance to Acid =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17752: 298;
+  description
+  "A creature with resistance to acid has the ability (usually extraordinary)
+  to ignore some acid damage) each round, but it does not have total immunity.
+  Each resistance ability is defined by what energy type it resists and how
+  many points of damage are resisted. It doesn’t matter whether the damage has
+  a mundane or magical source.
+
+  When resistance completely negates the damage from an energy attack, the
+  attack does not disrupt a spell.  This resistance does not stack with the
+  resistance that a spell, such as \Spell{endure elements}, might provide.";
+  short description "Ignore a $value points of acid damage per round.";
+  synonyms          "Acid, Resistance to";
+  categories        resistance.
+
+#.....
+#----- Resistance to Cold
+
+base quality Resistance to Cold =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17752: 298;
+  description
+  "A creature with resistance to cold has the ability (usually extraordinary)
+  to ignore some cold damage) each round, but it does not have total immunity.
+  Each resistance ability is defined by what energy type it resists and how
+  many points of damage are resisted. It doesn’t matter whether the damage has
+  a mundane or magical source.
+
+  When resistance completely negates the damage from an energy attack, the
+  attack does not disrupt a spell.  This resistance does not stack with the
+  resistance that a spell, such as \Spell{endure elements}, might provide.";
+  short description "Ignore a $value points of cold damage per round.";
+  synonyms          "Cold, Resistance to";
+  categories        resistance.
+
+#.....
+#----- Resistance to Fire
+
+base quality Resistance to Fire =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17752: 298;
+  description
+  "A creature with resistance to fire has the ability (usually extraordinary)
+  to ignore some fire damage) each round, but it does not have total immunity.
+  Each resistance ability is defined by what energy type it resists and how
+  many points of damage are resisted. It doesn’t matter whether the damage has
+  a mundane or magical source.
+
+  When resistance completely negates the damage from an energy attack, the
+  attack does not disrupt a spell.  This resistance does not stack with the
+  resistance that a spell, such as \Spell{endure elements}, might provide.";
+  short description "Ignore a $value points of fire damage per round.";
+  synonyms          "Fire, Resistance to";
+  categories        resistance.
+
+#.....
+#----- Resistance to Electricity
+
+base quality Resistance to Electricity =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17752: 298;
+  description
+  "A creature with resistance to electricity has the ability (usually
+  extraordinary) to ignore some electricity damage) each round, but it does not
+  have total immunity.  Each resistance ability is defined by what energy type
+  it resists and how many points of damage are resisted. It doesn’t matter
+  whether the damage has a mundane or magical source.
+
+  When resistance completely negates the damage from an energy attack, the
+  attack does not disrupt a spell.  This resistance does not stack with the
+  resistance that a spell, such as \Spell{endure elements}, might provide.";
+  short description "Ignore a $value points of electricity damage per round.";
+  synonyms          "Electricity, Resistance to";
+  categories        resistance.
+
+#.....
+#----- Dark Blessing
+
+base quality Dark Blessing =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17752: 182;
+  description
+  "A blackguard applies his Charisma modifier (if positive) as a bonus on all
+  saving throws.";
+  short description "Apply Charisma modifier (if positive) to all saves.";
+  synonyms          "Blessing, Dark";
+  categories        resistance.
+
+#.....
+#----- Shadow Illusion
+
+base quality Shadow Illusion =
+
+  type              Spell-like;
+  worlds            Generic;
+  references        WTC 17752: 195;
+  description
+  "Can create visual illusions from surrounding shadows. This ability’s effect
+  is identical to that of the arcane spell \SpellRef{silent image} and may be
+  employed once per day.";
+  short description "Create illusions from surrounding shadows like \SpellRef{silent image}.";
+  synonyms          "Illusion, Shadow",
+                    "";
+  categories        action.
+
+#.....
+#----- Hide in Plain Sight
+
+base quality Hide in Plain Sight =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17752: 195;
+  description
+  "A shadowdancer can use the Hide skill even while being observed. As long as
+  she is within 10 feet of some sort of shadow, a shadowdancer can hide herself
+  from view in the open without anything to actually hide behind. She cannot,
+  however, hide in her own shadow.";
+  short description "Can use Hide even if observed if within 10 ft of shadow.";
+  synonyms          "Plain Sight, Hide in",
+                    "Sight, Plain, Hide in";
+  categories        action.
+
+#.....
+#----- Shadow Jump
+
+base quality Shadow Jump =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17752: 159;
+  description
+  "At 4th level, a shadowdancer gains the ability to travel between shadows as
+  if by means of a dimension doorspell. The limitation is that the magical
+  transport must begin and end in an area with at least some shadow. A
+  shadowdancer can jump up to a total of 20 feet each day in this way; this may
+  be a single jump of 20 feet or two jumps of 10 feet each. Every two levels
+  higher than 4th, the distance a shadowdancer can jump each day doubles (40
+  feet at 6th, 80 feet at 8th, and 160 feet at 10th). This amount can be split
+  among many jumps, but each one, no matter how small, counts as a 10-foot
+  increment. (A 6th-level shadowdancer who jumps 32 feet cannot jump again
+  until the next day.)";
+  short description "Can jump between shadows for a total of [[20 * (2 ^ (($level - 4) / 2))]] ft per day in at least 10 ft jumps.";
+  synonyms          "Jump, Shadow";
+  categories        action,
+                    attack,
+                    aura,
+                    communication,
+                    health,
+                    immunity,
+                    option,
+                    resistance,
+                    sense,
+                    vulnerability.
+
+#.....
+#----- Summon Shadow
+
+base quality Summon Shadow =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17752: 195;
+  description
+  "At 3rd level, a shadowdancer can summon a shadow, an undead shade (see the
+  Monster Manual for the shadow’s statistics). Unlike a normal shadow, this
+  shadow’s alignment matches that of the shadowdancer, and the creature cannot
+  create spawn. The summoned shadow cannot be turned, rebuked, or commanded by
+  any third party. This shadow serves as a companion to the shadowdancer and
+  can communicate intelligibly with the shadowdancer. Every third level gained
+  by the shadowdancer adds +2 HD (and the requisite base attack and base save
+  bonus increases) to her shadow companion. For example, a 9thlevel
+  shadowdancer can have a shadow companion with 6 HD.  If a shadow companion is
+  destroyed, or the shadowdancer chooses to dismiss it, the shadowdancer must
+  attempt a DC 15 Fortitude save. If the saving throw fails, the shadowdancer
+  loses 200 experience points per shadowdancer level. A successful saving throw
+  reduces the loss by half, to 100 XP per prestige class level. The
+  shadowdancer’s XP total can never go below 0 as the result of a shadow’s dis-
+  missal or destruction. A destroyed or dismissed shadow companion cannot be
+  replaced for 30 days.";
+  short description "Summon a shadow (+[[($level / 3) * 2]] HD), loos [[200 * $level]] XP if killed or [[100 * $level]] XP if For DC 15.";
+  synonyms          "Shadow, Summon";
+  categories        action.
+
+#.....

@@ -1,0 +1,51 @@
+# Monsters of Faerun
+
+#----- Death Shiver
+
+base quality Death Shiver =
+
+  synonyms          "Shiver, Death";
+  categories        action;
+  type              Ex;
+  short description "At death within 1d10 x 5 ft spread make Ref DC 15 or suffer 2d10 electrical damage.";
+  worlds            generic;
+  references        WTC 11832: 23;
+  description
+
+  "At death, all remaining electrical force remaining in the death kiss' body
+  shoots out of its corpse. All beings withing a 5- to 50-foot radious spread
+  (1d10 x 5) must make a Reflex save or suffer 2d10 points of electrical
+  damage.".
+
+#.....
+#----- Electric Aura
+
+base quality Electric Aura =
+
+  synonyms          "Aura, Electric";
+  categories        aura;
+  type              Ex;
+  short description "1% change per point of damage infliced for Ref DC 15 or take 1d10 electrical damage.";
+  worlds            generic;
+  references        WTC 11832: 22-23;
+  description
+
+  "Whenever the death kiss is damaged by a slashing or piercing melee weapon, there is a 1% chance per point of damage inflicted by the blow that the creature's electric aura will shock the attacker for 1d10 points of damage. A Reflex save (DC 15) avoids the damage. If the blow reduces the death kiss to 0 or fewer hit points, the change increases to 5% per point of damage inflicted by the blow.".
+
+#.....
+#----- Vulnerability to Silence
+
+base quality Vulnerability to Silence =
+
+  synonyms          "Silence, Vulnerability to";
+  categories        vulnerability;
+  type              Ex;
+  short description "Blinded if affected by \Spell{silence}.";
+  worlds            Forgotten Realms;
+  references        WTC 11832: 82;
+  description
+
+  "\Monster{Tomb Tapper}s affected by a \Spell{silence} spell lose their sonar
+  navigation capability and are considered effectively blinded.".
+
+#.....

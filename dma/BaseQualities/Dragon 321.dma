@@ -1,0 +1,14 @@
+#----- Amphibious ----------------------------------------------------------
+
+#----- Amphibious
+
+base quality Amphibious =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        Dragon 321: 60;
+  description
+  "Although aquatic, the creature can survive indefinitely on land.";
+  short description "Can live indefinitely on land".
+
+#.....

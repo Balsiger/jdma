@@ -1,0 +1,32 @@
+# Player's Guide to Faerun
+
+#----- Hatred Domain
+
+base quality Hatred Domain =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88647: 87;
+  description
+  "Choose one opponent. Against that opponent you gain a +2 profane bonus on
+  attack rolls, saving throws, and Armor Class for 1 minute. This supernatural
+  ability is usable once per day as a free action.";
+  short description "Gain a +2 profane bonus to attack, saves and AC for 1 minute, once per day as a free action.";
+  synonyms          "Domain, Hatred";
+  categories        option.
+
+#.....
+#----- Slime Domain
+
+base quality Slime Domain =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88647: 91;
+  description
+  "You can rebuke or command oozes as an evil cleric rebukes or commands undead. This ability is usable a number of times per day equal to 3 + your Charisma modifier.";
+  short description "Rebuke or command oozes like undead.";
+  synonyms          "Domain, Slime";
+  categories        action.
+
+#.....

@@ -1,0 +1,1171 @@
+# Player's Handbook
+
+#----- Sneak Attack
+
+base quality Sneak Attack =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 50;
+  description
+  "If a rogue can catch an opponent when he is unable to defend himself
+  effectively from her attack, she can strike a vital spot for extra
+  damage. Basically, the rogue's attack deals extra damage any time her
+  target would be denied a Dexterity bonus to AC (whether the target actually
+  has a Dexterity bonus or not), or when the rogue flanks her target. This
+  extra damage is 1d6 at 1st level, and it increases by 1d6 every two rogue
+  levels thereafter. Should the rogue score a critical hit with a sneak attack,
+  this extra damage is not multiplied. (See Table 8-5: Attack Roll
+  Modifiers and Table 8-6: Armor Class Modifiers, page 151, for combat
+  situations in which the rogue flanks an opponent or the opponent loses his
+  Dexterity bonus to AC.)
+
+  Ranged attacks can count as sneak attacks only if the target is within 30
+  feet. A rogue can't strike with deadly accuracy from beyond that range.
+
+  With a \Item{sap} (blackjack) or an unarmed strike, a rogue can make a sneak
+  attack that deals nonlethal damage instead of lethal damage. She cannot use
+  a weapon that deals lethal damage to deal nonlethal damage in a sneak attack,
+  not even with the usual –4 penalty, because she must make optimal use
+  of her weapon in order to execute a sneak attack. (See Nonlethal Damage, page
+  146.)
+
+  A rogue can sneak attack only living creatures with discernible
+  anatomies — undead, constructs, oozes, plants, and incorporeal
+  creatures lack vital areas to attack. Any creature that is immune to critical
+  hits is not vulnerable to sneak attacks. The rogue must be able to see the
+  target well enough to pick out a vital spot and must be able to reach such a
+  spot. A rogue cannot sneak attack while striking a creature with concealment
+  (see page 152) or striking the limbs of a creature whose vitals are beyond
+  reach.";
+  short description "Deal $damage extra damage if target is flanked or denied is Dex Bonus to AC.";
+  synonyms          "Attack, Sneak";
+  categories        attack.
+
+#.....
+#----- Uncanny Dodge
+
+base quality Uncanny Dodge =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 50;
+  description
+  "Starting at 4th level, a rogue can react to danger before her senses would
+  normally allow her to do so. She retains her Dexterity bonus to AC (if any)
+  even if she is caught flat-footed or struck by an invisible
+  attacker. However, she still loses her Dexterity bonus to AC if immobilized.
+  If a rogue already has uncanny dodge from a different class (a rogue with at
+  least two levels of barbarian, for example), she automatically gains
+  \Quality{improved uncanny dodge} instead.' ";
+  short description "Retain Dex bonus to AC even if flat-footed or struck by invisible attacker.";
+  synonyms          "Dodge, Uncanny";
+  categories        option.
+
+#.....
+#----- Evasion
+
+base quality Evasion =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "At 2nd level and higher, a rogue can avoid even magical and unusual attacks
+  with great agility. If she makes a successful Reflex saving throw against an
+  attack that normally deals half damage on a successful save (such as a
+  \Monster{red dragon}'s fiery breath or a \Spell{fireball}), she instead takes
+  no damage. Evasion can be used only if the rogue is wearing light armor or no
+  armor. A helpless rogue (such as one who is unconscious or paralysed) does
+  not gain the benefit of evasion.";
+  short description "Take no damage on a successful Ref save against an attack allowing one for half damage.";
+  categories        quality.
+
+#.....
+#----- Trap Sense
+
+base quality Trap Sense =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 50;
+  description
+  "The character has an intuitive sense that alerts her to danger from traps,
+  giving her a bonus on Reflex saves made to avoid traps and a dodge bonus to
+  AC against attacks made by traps. Trap sense bonuses gained from multiple
+  classes stack.";
+  short description "Get a +1 per 3 levels bonus to Ref saves to avoid traps and to AC against attacks by traps.";
+  synonyms          "Sense, Trap";
+  categories        resistance.
+
+#.....
+#----- Improved Uncanny Dodge
+
+base quality Improved Uncanny Dodge =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17724: 50;
+  description
+  "The character can no longer be flanked; she can react to opponents on
+  opposite sides of her as easily as she can react to a single attacker. This
+  defense denies a \Class{rogue} the ability to sneak attack the character by
+  flanking her, unless the attacker has at least four more \Class{rogue} levels
+  than the target does.
+
+  If a character already has uncanny dodge (see above) from a second class, the
+  character automatically gains improved uncanny dodge instead, and the levels
+  from the classes that grant uncanny dodge stack to determine the minimum
+  \Class{rogue} level required to flank the character.";
+  short description "Cannot be flanked anymore (unless high level).";
+  synonyms          "Uncanny Dodge, Improved",
+                    "Dodge, Uncanny Improved";
+  categories        option.
+
+#.....
+#----- Masterwork Weapon
+
+base quality Masterwork Weapon =
+
+  type              Extraordinary;
+  effects           Attack +1 enhancement;
+  qualifier         mwk;
+  worlds            Generic;
+  references        WTC 17524: 122;
+  description
+  "A masterwork weapon is a finely crafted version of a normal weapon. Wielding
+  it provides a +1 enhancement bonus on attack rolls.
+
+  You can't add the masterwork quality to a weapon after it is created; it must
+  be crafted as a masterwork weapon (see the Craft skill, page 70). The
+  masterwork quality adds 300 gp to the cost of a normal weapon (or 6 gp to the
+  cost of a single unit of ammunition, such as an arrow). For example, a
+  masterwork bastard sword costs 335 gp, while a set of 10 masterwork arrows
+  costs 70 gp. Adding the masterwork quality to a double weapon costs twice the
+  normal increase (+600 gp).
+
+  Masterwork ammunition is damaged (effectively destroyed) when used. The
+  enhancement bonus of masterwork ammunition does not stack with any
+  enhancement bonus of the projectile weapon firing it.
+
+  All magic weapons are automatically considered to be of masterwork
+  quality. The enhancement bonus granted by the masterwork quality doesn¢t
+  stack with the enhancement bonus provided by the weapon¢s magic.
+
+  Even though some types of armor and shields (such as spiked shields) can be
+  used as weapons, you can't create a masterwork version of such an item that
+  confers an enhancement bonus on attack rolls. Instead, masterwork armor and
+  shields have lessened armor check penalties (see \Quality{Masterwork
+  Armor})";
+  short description "Very well made.";
+  synonyms          "mwk";
+  categories        attack.
+
+#.....
+#----- Rebuke Undead
+
+base quality Rebuke Undead =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 33;
+  description
+  "Any cleric, regardless of alignment, has the power to affect undead
+  creatures (such as \Monster{skeletons}, \Monster{zombies}, \Monster{ghosts},
+  and \Monster{vampires}) by channeling the power of his faith through his holy
+  (or unholy) symbol (see Turn or Rebuke Undead, page 159).  An evil cleric (or
+  a neutral cleric who worships an evil deity) rebukes or commands such
+  creatures., forcing them to cower in awe of his power. If your character is a
+  neutral cleric of a neutral deity, you must choose whether his turning
+  ability functions as that of a good cleric or an evil cleric. Once you make
+  this choice, it cannot be reversed. This decision also determines whether the
+  cleric can cast spontaneous cure or inflict spells (see above).
+
+  Exceptions: All lawful neutral clerics of Wee Jas (goddess of death and
+  magic) rebuke or command undead.  All clerics of St. Cuthbert (god of
+  retribution) and all nonevil clerics of Obad-Hai (god of nature) turn of
+  destroy undead.
+
+  A cleric may attempt to turn undead a number of times per day equal to 3 +
+  his Charisma modifier. A cleric with 5 or more ranks in Knowledge (religion)
+  gets a +2 bonus on turning checks against undead.";
+  short description "Rebuke or command undead creatures as a $level cleric, $times/day.";
+  synonyms          "Undead, Rebuke";
+  categories        action.
+
+#.....
+#----- Fast Movement
+
+base quality Fast Movement =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 25;
+  description
+  "A barbarian’s land speed is faster than the norm for his race by +10
+  feet. This benefit applies only when he is wearing no armor, light armor, or
+  medium armor and not carrying a heavy load. Apply this bonus before modifying
+  the barbarian’s speed because of any load carried or armor worn. For example,
+  a human barbarian has a speed of 40 feet, rather than 30 feet, when wearing
+  light or no armor. When wearing medium armor or carrying a medium load, his
+  speed drops to 30 feet. A halfling barbarian has a speed of 30 feet, rather
+  than 20 feet, in light or no armor. When wearing medium armor or carrying a
+  medium load, his speed drops to 20 feet.";
+  short description "Speed +$range if medium armor or less and no heavy load.";
+  synonyms          "Movement, Fast";
+  categories        option.
+
+#.....
+#----- Rage Quality
+
+base quality Rage Quality =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 25-26;
+  description
+  "A barbarian can fly into a screaming blood frenzy a certain number of times
+  per day. In a rage, a barbarian gains phenomenal strength and durability
+  but becomes reckless and less able to defend himself. He temporarily gains
+  a +4 bonus to Strength, a +4 bonus to Constitution, and a +2 morale bonus on
+  Will saves, but he takes a –2 penalty to Armor Class.
+
+  The increase in Constitution increases the barbarian’s hit points by 2 points
+  per level, but these hit points go away at the end of the rage when his
+  Constitution score drops back to normal. (These extra hit points are not lost
+  first the way temporary hit points are; see Temporary Hit Points, page 146.)
+  While raging, a barbarian cannot use any Charisma-, Dexterity-, or
+  Intelligence-based skills (except for Balance, Escape Artist, Intimidate, and
+  Ride), the Concentration skill, or any abilities that require patience or
+  concentration, nor can he cast spells or activate magic items that require a
+  command word, a spell trigger (such as a wand), or spell completion (such as
+  a scroll) to function. He can use any feat he has except Combat Expertise,
+  item creation feats, and metamagic feats. A fit of rage lasts for a number of
+  rounds equal to 3 + the character’s (newly improved) Constitution modifier. A
+  barbarian may prematurely end his rage. At the end of the rage, the barbarian
+  loses the rage modifiers and restric- tions and becomes fatigued (–2 penalty
+  to Strength, –2 penalty to Dexterity, can’t charge or run) for the duration
+  of the current encounter (unless he is a 17th-level barbarian, at which point
+  this limitation no longer applies; see below).  A barbarian can fly into a
+  rage only once per encounter. At 1st level he can use his rage ability once
+  per day. At 4th level and every four levels there- after, he can use it one
+  additional time per day (to a maximum of six times per day at 20th
+  level). Entering a rage takes no time itself, but a barbarian can do it only
+  during his action (see Initiative, page 136), not in response to some- one
+  else’s action. A barbarian can’t, for example, fly into a rage when struck
+  down by an arrow in order to get the extra hit points from the increased
+  Constitution, although the extra hit points would be of benefit if he had
+  gone into a rage earlier in the round, before the arrow struck.";
+  short description "Fly into rage for 3 + Con modifier rounds, gaining +4 Str, +4 Con, Will +2 morale, -2 AC.";
+  categories        action.
+
+#.....
+#----- Favored Enemies
+
+base quality Favored Enemies =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 47;
+  description
+  "At 1st level, a ranger may select a type of creature from among those given
+  on Table 3–14: Ranger Favored Enemies. Due to his extensive study on his
+  chosen type of foe and training in the proper techniques for combating such
+  creatures, the ranger gains a +2 bonus on Bluff, Listen, Sense Motive, Spot,
+  and Survival checks when using these skills against creatures of this
+  type. Likewise, he gets a +2 bonus on weapon damage rolls against such
+  creatures.
+
+  At 5th level and every five levels thereafter (10th, 15th, and 20th level),
+  the ranger may select an additional favored enemy from those given on the
+  table. In addition, at each such interval, the bonus against any one favored
+  enemy (including the one just selected, if so desired) increases by 2. For
+  example, a 5th-level ranger has two favored enemies; against one he gains a
+  +4 bonus on Bluff, Listen, Sense Motive, Spot, and Survival checks and weapon
+  damage rolls, and against the other he has a +2 bonus. At 10th level, he has
+  three favored enemies, and he gains an additional +2 bonus, which he can
+  allocate to the bonus against any one of his three favored enemies.  Thus,
+  his bonuses could be either +4, +4, +2 or +6, +2, +2.  If the ranger chooses
+  humanoids or outsiders as a favored enemy, he must also choose an associated
+  subtype, as indicated on the table.  If a specific creature falls into more
+  than one category of favored enemy (for instance, devils are both evil
+  outsiders and lawful outsiders), the ranger’s bonuses do not stack; he simply
+  uses whichever bonus is higher. See the Monster Manual for more infor- mation
+  on types of creatures.";
+  short description "Gain a bonus to Bluff, Listen, Sense Motive, Spot, Survival and damage againast enemies of the types $notes.";
+  synonyms          "Enemies, Favored";
+  categories        option.
+
+#.....
+#----- Evil Caster
+
+base quality Evil Caster =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 186;
+  description
+  "You cast evil spells at +1 caster level (from the evil domain).";
+  short description "+1 caster level to evil spells.";
+  synonyms          "Caster, Evil";
+  categories        option.
+
+#.....
+#----- Chaos Caster
+
+base quality Chaos Caster =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 186;
+  description
+  "You cast chaos spells at +1 caster level (from the chaos domain).";
+  short description "+1 caster level to chaos spells.";
+  synonyms          "Caster, Chaos";
+  categories        option.
+
+#.....
+#----- Animal Companion
+
+base quality with incomplete Animal Companion =
+
+  incomplete
+  "should be level dependent";
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 17524: 35-36,
+                    WTC 88754: 3;
+  description
+  "A druid may begin play with an animal companion. This animal is a loyal
+  companion that accompanies the druid on her adventures as appropriate for its
+  kind.
+
+  As a druid advances in level, the animal’s power increases: 1-2 1 bonus
+  tricks, Link, Share Spells; 3-5 +2 HD, +2 natural armor, +1 Str, +1 Dex, 2
+  Bonus Tricks, Evasion. 6-8 +4 HD, +4 natural armor, +2 Str, +2 Dex, 3 Bonus
+  Tricks, Devotion; 9-11 +6 HD, +6 natural armor, +3 Str, +3 Dex, 4 Bonus
+  Tricks, Multiattack; 12-14 +8 HD, +8 natural armor, +4 Str, +4 Dex, 5 Bonus
+  Tricks; 15-17 +10 HD, +10 natural armor, +5 Str, +5 Dex, 6 Bonus Tricks,
+  Improved Evasion; 18-20 +12 HD, +12 natural armor, +6 Str, +6 Dex, 7 Bonus
+  Tricks.
+
+  If a druid releases her companion from service, she
+  may gain a new one by performing a ceremony requiring 24 uninterrupted hours
+  of prayer. This ceremony can also replace an animal companion that has
+  perished.";
+  short description "Has $name as animal compaions (see desc for details).";
+  synonyms          "Companions, Animal";
+  categories        option.
+
+#.....
+#----- Wild Empathy
+
+base quality Wild Empathy =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 35,
+                    WTC 88574: 3;
+  description
+  "A druid can use body language, vocalizations, and demeanor to improve the
+  attitude of an animal (such as a bear or a monitor lizard). This ability
+  functions just like a Diplomacy check made to improve the attitude of a
+  person (see Chapter 4: Skills). The druid rolls 1d20 and adds her druid level
+  and her Charisma modifier to determine the wild empathy check result. The
+  typical domestic animal has a starting attitude of indifferent, while wild
+  animals are usually unfriendly.
+
+  To use wild empathy, the druid and the animal must be able to study each
+  other, which means that they must be within 30 feet of one another under
+  normal conditions. Generally, influencing an animal in this way takes 1
+  minute but, as with influencing people, it might take more or less time.  A
+  druid can also use this ability to influence a magical beast with an
+  Intelligence score of 1 or 2 (such as a basilisk or a girallon), but she
+  takes a –4 penalty on the check.";
+  short description "Improve attitude of animal with a Diplomacy check.";
+  synonyms          "Empathy, Wild";
+  categories        communication.
+
+#.....
+#----- Nature Sense
+
+base quality Nature Sense =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36,
+                    WTC 88574: 3;
+  description
+  "A druid gains a +2 bonus on Knowledge (nature) and Survival checks. She can
+  identify plants and animals (their species and special traits) with perfect
+  accuracy. She can determine whether water is safe to drink or dangerous.";
+  short description "+2 on Knowledge (nature) and Survival, identify plants and animals, water safety.";
+  synonyms          "Sense, Nature";
+  categories        sense.
+
+#.....
+#----- Resist Nature's Lure
+
+base quality Resist Nature's Lure =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 37,
+                    WTC 88574: 3;
+  description
+  "A druid gains a +4 bonus on saving throws against the spell-like abilities
+  of fey (such as dryads, pixies, and sprites).";
+  short description "+4 on saves vs. spell-like abilities of fey.";
+  synonyms          "Nature's Lure, Resist";
+  categories        resistance.
+
+#.....
+#----- Trackless Step
+
+base quality Trackless Step =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36,
+                    WTC 88574: 3;
+  description
+  "A druid leaves no trail in natural surroundings and cannot be tracked. She
+  may choose to leave a trail if so desired.";
+  short description "Does leave no trail in natural surroundings, cannot be tracked.";
+  synonyms          "Step, Trackless";
+  categories        aura.
+
+#.....
+#----- Venom Immunity
+
+base quality Venom Immunity =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 37,
+                    WTC 88574: 3;
+  description
+  "The druid has immunity to all poisons.";
+  short description "Immunte to all poisons.";
+  synonyms          "Immunity, Venom";
+  categories        immunity.
+
+#.....
+#----- Wild Shape
+
+base quality Wild Shape =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 37,
+                    WTC 88574: 3;
+  description
+  "At 5th level, a druid gains the ability to turn herself into any Small or
+  Medium animal and back again once per day. Her options for new forms include
+  all creatures with the animal type (see the Monster Manual). This ability
+  functions like the polymorph spell, except as noted here. The effect lasts
+  for 1 hour per druid level, or until she changes back. Changing form (to
+  animal or back) is a standard action and doesn’t provoke an attack of
+  opportunity.
+
+  The form chosen must be that of an animal the druid is familiar with. For
+  example, a druid who has never been outside a temperate forest could not
+  become a polar bear.  A druid loses her ability to speak while in animal form
+  because she is limited to the sounds that a normal, untrained animal can
+  make, but she can communicate normally with other animals of the same general
+  grouping as her new form. (The normal sound a wild parrot makes is a squawk,
+  so changing to this form does not permit speech.)
+
+  A druid can use this ability more times per day at 6th, 7th, 10th, 14th, and
+  18th level, as noted on Table 3–8: The Druid. In addition, she gains the
+  ability to take the shape of a Large animal at 8th level, a Tiny animal at
+  11th level, and a Huge animal at 15th level. The new form’s Hit Dice can’t
+  exceed the character’s druid level. For instance, a druid can’t take the form
+  of a dire bear (a Large creature that always has at least 12 HD) until 12th
+  level, even though she can begin taking Large forms at 8th level.
+
+  At 12th level, a druid becomes able to use wild shape to change into a plant
+  creature, such as a shambling mound, with the same size restrictions as for
+  animal forms. (A druid can’t use this ability to take the form of a plant
+  that isn’t a creature, such as a tree or a rose bush.)
+
+  At 16th level, a druid becomes able to use wild shape to change into a Small,
+  Medium, or Large elemental (air, earth, fire, or water) once per day. These
+  elemental forms are in addition to her normal wild shape usage. In addition
+  to the normal effects of wild shape, the druid gains all the elemental’s
+  extraordinary, supernatural, and spell-like abilities.  She also gains the
+  elemental’s feats for as long as she maintains the wild shape, but she
+  retains her own creature type (humanoid, in most cases).  At 18th level, a
+  druid becomes able to assume elemental form twice per day, and at 20th level
+  she can do so three times per day. At 20th level, a druid may use this wild
+  shape ability to change into a Huge elemental.";
+  short description "Turn itself into an animal (small or medium at 5th level, large at 8th level, tiny at 11th level, huge at 15th level) of no more HD than his level. At 12th level can change into a plant and from 16th into an elemental. Gain number of level hp after change.";
+  synonyms          "Shape, Wild";
+  categories        action.
+
+#.....
+#----- Woodland Stride
+
+base quality Woodland Stride =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 37,
+                    WTC 88574: 3;
+  description
+  "A druid may move through any sort of undergrowth (such as natural thorns,
+  briars, overgrown areas, and similar terrain) at her normal speed and with-
+  out taking damage or suffering any other impairment. However, thorns, briars,
+  and overgrown areas that have been magically manipulated to impede motion
+  still affect her.";
+  short description "Move through natural undergrowth unimpaired.";
+  synonyms          "Stride, Woodland";
+  categories        option.
+
+#.....
+#----- Bonus HD
+
+base quality Bonus HD =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "Extra eight-sided (d8) Hit Dice, each of which gains a Constitution
+  modifier, as normal. Remember that extra Hit Dice improve the animal
+  companion’s base attack and base save bonuses. An animal companion’s base
+  attack bonus is the same as that of a druid of a level equal to the animal’s
+  HD. An animal companion has good Fortitude and Reflex saves (treat it as a
+  character whose level equals the animal’s HD).  An animal companion gains
+  additional skill points and feats for bonus HD as normal for advancing a
+  monster’s Hit Dice (see the Monster Manual).";
+  short description "+$value extra d8 Hit Dice, also increasing base attack and base saves.";
+  synonyms          "HD, Bonus";
+  categories        health.
+
+#.....
+#----- Bonus Natural Armor
+
+base quality Bonus Natural Armor =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "The number noted here is an improvement to the animal companion’s existing
+  natural armor bonus.";
+  short description "Gain +$value to natural armor.";
+  synonyms          "Natural Armor, Bonus";
+  categories        resistance.
+
+#.....
+#----- Bonus Strength
+
+base quality Bonus Strength =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "Add this value to the animal companion’s Strength score.";
+  short description "Gain +$value to Strength.";
+  synonyms          "Strength, Bonus";
+  categories        resistance.
+
+#.....
+#----- Bonus Dexterity
+
+base quality Bonus Dexterity =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "Add this value to the animal companion’s Dexterity score.";
+  short description "Gain +$value to Dexterity.";
+  synonyms          "Dexterity, Bonus";
+  categories        resistance.
+
+#.....
+#----- Bonus Tricks
+
+base quality Bonus Tricks =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "The value given in this column is the total number of 'bonus' tricks that
+  the animal knows in addition to any that the druid might choose to teach it
+  (see the Handle Animal skill, page 74). These bonus tricks don’t require any
+  training time or Handle Animal checks, and they don’t count against the
+  normal limit of tricks known by the animal. The druid selects these bonus
+  tricks, and once selected, they can’t be changed.";
+  short description "Gain +$value additional tricks.";
+  synonyms          "Dexterity, Tricks";
+  categories        option.
+
+#.....
+#----- Link
+
+base quality Link =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "A druid can handle her animal companion as a free action, or push it as a
+  move action, even if she doesn’t have any ranks in the Handle Animal
+  skill. The druid gains a +4 circumstance bonus on all wild empathy checks and
+  Handle Animal checks made regarding an animal companion.";
+  short description "Handle animal companion as free action or push as move action, +4 cirumstance to wild empathy and handle animal.";
+  categories        communication.
+
+#.....
+#----- Share Spells
+
+base quality Share Spells =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "At the druid’s option, she may have any spell (but not any spell-like
+  ability) she casts upon herself also affect her animal companion. The animal
+  companion must be within 5 feet of her at the time of casting to receive the
+  benefit. If the spell or effect has a duration other than instantaneous, it
+  stops affecting the animal companion if the companion moves farther than 5
+  feet away and will not affect the animal again, even if it returns to the
+  druid before the duration expires.  Additionally, the druid may cast a spell
+  with a target of “You” on her animal companion (as a touch range spell)
+  instead of on herself. A druid and her animal companion can share spells even
+  if the spells normally do not affect creatures of the companion’s type
+  (animal).";
+  short description "Spells cast on herself also affect animal compaion within 5 ft if desired, can target spells to animal companion with target of 'you'.";
+  synonyms          "Spells, Share";
+  categories        aura.
+
+#.....
+#----- Devotion
+
+base quality Devotion =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 36;
+  description
+  "An animal companion’s devotion to its master is so complete that it gains a
+  +4 morale bonus on Will saves against enchantment spells and effects.";
+  short description "+4 morale for Will against enchantment spells and effects.";
+  categories        resistance.
+
+#.....
+#----- Flurry of Blows
+
+base quality Flurry of Blows =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 40-41;
+  description
+  "When unarmored, a monk may strike with a flurry of blows at the expense of
+  accuracy. When doing so, she may make one extra attack in a round at her
+  highest base attack bonus, but this attack takes a –2 penalty, as does each
+  other attack made that round. The resulting modified base attack bonuses are
+  shown in the Flurry of Blows Attack Bonus column on Table 3–10: The Monk.
+  This penalty applies for 1 round, so it also affects attacks of opportunity
+  the monk might make before her next action. When a monk reaches 5th level,
+  the penalty lessens to –1, and at 9th level it disappears. A monk must use a
+  full attack action (see page 143) to strike with a flurry of blows.
+
+  When using flurry of blows, a monk may attack only with unarmed strikes or
+  with special monk weapons (kama, nunchaku, quarterstaff, sai, shuriken, and
+  siangham). She may attack with unarmed strikes and special monk weapons
+  interchangeably as desired. For example, at 6th level, the monk Ember could
+  make one attack with her unarmed strike at an attack bonus of +3 and one
+  attack with a special monk weapon at an attack bonus of +3. When using
+  weapons as part of a flurry of blows, a monk applies her Strength bonus (not
+  Str bonus × 1-1/2 or × 1/2) to her damage rolls for all successful attacks,
+  whether she wields a weapon in one or both hands. The monk can’t use any
+  weapon other than a special monk weapon as part of a flurry of blows.
+
+  In the case of the quarterstaff, each end counts as a separate weapon for the
+  purpose of using the flurry of blows ability. Even though the quarterstaff
+  requires two hands to use, a monk may still intersperse unarmed strikes with
+  quarterstaff strikes, assuming that she has enough attacks in her flurry of
+  blows routine to do so. For example, an 8th-level monk could make two attacks
+  with the quarterstaff (one with each end) at a +5 attack bonus and one with
+  an unarmed strike at a +0 attack bonus, or she could attack with one end of
+  the quarterstaff and one unarmed strike each at a +5 attack bonus, and with
+  the other end of the quarterstaff at a +0 attack bonus, or she could attack
+  with one end of the quarterstaff and one unarmed strike at a +5 attack bonus
+  each, and with the other end of the quarterstaff at a +0 attack bonus.  She
+  cannot, however, wield any other weapon at the same time that she uses a
+  quarterstaff.
+
+  When a monk reaches 11th level, her flurry of blows ability improves. In
+  addition to the standard single extra attack she gets from flurry of blows,
+  she gets a second extra attack at her full base attack bonus.";
+  short description "Make [[range($level, 0: an, 11: two)]] additonal attack at highest bonus with a full round action, but all attacks take [[range($level, 0: -2, 5: -1, 9:0)]] penalty.";
+  synonyms          "Blows, Flurry of";
+  categories        attack.
+
+#.....
+#----- Ki Strike
+
+base quality Ki Strike =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17523: 41;
+  description
+  "At 4th level, a monk’s unarmed attacks are empowered with ki. Her unarmed
+  attacks are treated as magic weapons for the purpose of dealing damage to
+  creatures with damage reduction (see Damage Reduction, page 291 of the
+  Dungeon Master’s Guide). Ki strike improves with the character’s monk
+  level. At 10th level, her unarmed attacks are also treated as lawful weapons
+  for the purpose of dealing damage to creatures with damage reduction. At 16th
+  level, her unarmed attacks are treated as adamantine weapons for the purpose
+  of dealing damage to creatures with damage reduction and bypassing hardness
+  (see Smashing an Object, page 165).  ";
+  short description "Unarmed attacks are treated as magic weapons (lawful after 10th, adamantine after 16th) for purpose of damage reduction and hardness.";
+  synonyms          "Strike, Ki";
+  categories        attack.
+
+#.....
+#----- Improved Evasion
+
+base quality Improved Evasion =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 42;
+  description
+  "At 9th level, a monk’s evasion ability improves. She still takes no damage
+  on a successful Reflex saving throw against attacks such as a dragon’s breath
+  weapon or a fireball, but henceforth she takes only half damage on a failed
+  save. A helpless monk (such as one who is unconscious or paralysed) does
+  not gain the benefit of improved evasion.";
+  short description "No damage for successfull Ref save against atack, only half for failure.";
+  synonyms          "Evasion, Improved";
+  categories        resistance.
+
+#.....
+#----- Purity of Body
+
+base quality Purity of Body =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 41;
+  description
+  "At 5th level, a monk gains control over her body’s immune system. She gains
+  immunity to all diseases except for supernatural and magical diseases (such
+  as mummy rot and lycanthropy).  ";
+  short description "Immunity to all diseases.";
+  synonyms          "Body, Purity of";
+  categories        immunity.
+
+#.....
+#----- Slow Fall
+
+base quality Slow Fall =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 41;
+  description
+  "At 4th level or higher, a monk within arm’s reach of a wall can use it to
+  slow her descent. When first using this ability, she takes damage as if the
+  fall were 20 feet shorter than it actually is.  The monk’s ability to slow
+  her fall (that is, to reduce the effective distance of the fall when next to
+  a wall) improves with her monk level until at 20th level she can use a nearby
+  wall to slow her descent and fall any distance without harm. See the Special
+  column on Table 3–10 for details.";
+  short description "Slow fall up to $range with no damage if within arm's reach of wall.";
+  synonyms          "Fall, Slow";
+  categories        resistance.
+
+#.....
+#----- Still Mind
+
+base quality Still Mind =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 41;
+  description
+  "A monk of 3rd level or higher gains a +2 bonus on saving throws against
+  spells and effects from the school of enchantment, since her meditation and
+  training improve her resistance to mind-affecting attacks.";
+  short description "+2 on saves vs. enchantment spells and effects.";
+  synonyms          "Mind, Still";
+  categories        resistance.
+
+#.....
+#----- Wholeness of Body
+
+base quality Wholeness of Body =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 42;
+  description
+  "At 7th level or higher, a monk can heal her own wounds. She can heal a
+  number of hit points of damage equal to twice her current monk level each
+  day, and she can spread this healing out among several uses.";
+  short description "Heal up to twice level hit points per day (can be spread).";
+  synonyms          "Body, Wholeness of";
+  categories        health.
+
+#.....
+#----- Water Domain
+
+base quality Water Domain =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 189;
+  description
+  "Turn or destroy fire creatures as a good cleric turns undead. Rebuke,
+  command, or bolster water creatures as an evil cleric rebukes undead. Use
+  these abilities a total number of times per day equal to 3 + your Charisma
+  modifier. This granted power is a supernatural ability.";
+  short description "Turn fire/rebuke water creatures 3 + Cha/day.";
+  synonyms          "Domain, Water";
+  categories        action.
+
+#.....
+#----- Destruction Domain
+
+base quality Destruction Domain =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 186;
+  description
+  "You gain the smite power, the supernatural ability to make a single melee
+  attack with a +4 bonus on attack rolls and a bonus on damage rolls equal to
+  your cleric level (if you hit).  You must declare the smite before making the
+  attack. This ability is usable once per day.";
+  short description "Once per day smite with a +4 to attack and +Cleric level to damage.";
+  synonyms          "Domain, Desctruction";
+  categories        action.
+
+#.....
+#----- Familiar
+
+base quality Familiar =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature can obtain a familiar. Doing so takes 24 hours and uses up
+  magical materials that cost 100 gp. A familiar is a magical beast that
+  resembles a small animal and is unusually tough and intelligent. The creature
+  serves as a companion and servant.
+
+  The sorcerer chooses the kind of familiar he gets. As the sorcerer advances
+  in level, his familiar also increases in power.
+
+  If the familiar dies or is dismissed by the sorcerer, the sorcerer must
+  attempt a DC 15 Fortitude saving throw. Failure means he loses 200 experience
+  points per level; success reduces the loss to one-half that
+  amount. However, a creatures’s experience point total can never go below 0 as
+  the result of a familiar’s demise or dismissal. For example, suppose that
+  Hennet is a 3rd-level sorcerer with 3,230 XP when his owl familiar is killed
+  by a bugbear. Hennet makes a successful saving throw, so he loses 300 XP,
+  dropping him below 3,000 XP and back to 2nd level (see the Dungeon Master’s
+  Guide for rules for losing levels). A slain or dismissed familiar cannot be
+  replaced for a year and day. A slain familiar can be raised from the dead
+  just as a character can be, and it does not lose a level or a Constitution
+  point when this happy event occurs.
+
+  A character with more than one class that grants a familiar may have only one
+  familiar at a time.";
+  short description "Gain a magical animal companion ($name) that increases in level as the creature does.";
+  categories        option.
+
+#.....
+#----- Empathic Link
+
+base quality Empathic Link =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 53;
+  description
+  "The master has an empathic link with his familiar out to a distance of up to
+  1 mile. The master cannot see through the familiar’s eyes, but they can
+  communicate empathically. Because of the limited nature of the link, only
+  general emotional content (such as fear, hunger, happiness, curiosity) can be
+  communicated. Note that the low Intelligence of a low-level master’s familiar
+  limits what the creature is able to communicate or understand, and even
+  intelligent familiars see the world differently from humans, so
+  misunderstandings are always possible.
+
+  Because of this empathic link, the master has the same connection to an item
+  or place that his familiar does. For instance, if his familiar has seen a
+  room, the master can teleport into that room as if he has seen it too.";
+  short description "Communicate general emotional content up to a mile away.";
+  synonyms          "Link, Empathic";
+  categories        communication.
+
+#.....
+#----- Deliver Touch Spells
+
+base quality Deliver Touch Spells =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 53;
+  description
+  "The familiar can deliver touch spells for the master. If the master and the
+  familiar are in contact at the time the master casts a touch spell, he can
+  designate his familiar as the 'toucher.' The familiar can then deliver the
+  touch spell just as the master could. As usual, if the master casts another
+  spell before the touch is delivered, the touch spell dissipates.";
+  short description "Familiar can deliver touch spells if it touches master whe spell is cast.";
+  synonyms          "Touch Spells, Deliver";
+  categories        option.
+
+#.....
+#----- Bardic Knowledge
+
+base quality Bardic Knowledge =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 28-29;
+  description
+  "A bard picks up a lot of stray knowledge while wandering the land and
+  learning stories from other bards. He may make a special bardic knowledge
+  check with a bonus equal to his bard level + his Intelligence modifier to see
+  whether he knows some relevant information about local notable people,
+  legendary items, or noteworthy places. (If the bard has 5 or more ranks in
+  Knowledge (history), he gains a +2 bonus on this check.)
+
+  A successful bardic knowledge check will not reveal the powers of a magic
+  item but may give a hint as to its general function. A bard may not take 10
+  or take 20 on this check; this sort of knowledge is essentially random. The
+  DM can determine the Difficulty Class of the check by referring to the table
+  above.";
+  short description "Make Int check (Int modifier + bard level) to check if knows relevant information about local noteable people, legendary items, or noteworthy places.";
+  synonyms          "Knowledge, Bardic";
+  categories        action.
+
+#.....
+#----- Countersong
+
+base quality Countersong =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 29;
+  description
+  "A bard with 3 or more ranks in a Perform skill can use his music or poetics
+  to counter magical effects that depend on sound (but not spells that simply
+  have verbal components). Each round of the countersong, he makes a Perform
+  check. Any creature within 30 feet of the bard (including the bard himself)
+  that is affected by a sonic or language-dependent magical attack (such as a
+  sound burst or command spell) may use the bard’s Perform check result in
+  place of its saving throw if, after the saving throw is rolled, the Perform
+  check result proves to be higher. If a creature within range of the
+  countersong is already under the effect of a noninstantaneous sonic or
+  language-dependent magical attack, it gains another saving throw against the
+  effect each round it hears the countersong, but it must use the bard’s
+  Perform check result for the save. Countersong has no effect against effects
+  that don’t allow saves.  The bard may keep up the countersong for 10 rounds.";
+  short description "For 10 rounds can perform and all within 30 ft can use the perform check result as instead of own saving throw vs. sonic or language-dependent magical attacks.";
+  categories        action.
+
+#.....
+#----- Fascinate
+
+base quality Fascinate =
+
+  type              Spell-like;
+  worlds            Generic;
+  references        WTC 17524: 29;
+  description
+  "A bard with 3 or more ranks in a Perform skill can use his music or poetics
+  to cause one or more creatures to become fascinated with him. Each creature
+  to be fascinated must be within 90 feet, able to see and hear the bard, and
+  able to pay attention to him. The bard must also be able to see the
+  creature. The distraction of a nearby combat or other dangers prevents the
+  ability from working. For every three levels a bard attains beyond 1st, he
+  can target one additional creature with a single use of this ability (two at
+  4th level, three at 7th level, and so on).  To use the ability, a bard makes
+  a Perform check. His check result is the DC for each affected creature’s Will
+  save against the effect. If a creature’s saving throw succeeds, the bard
+  cannot attempt to fascinate that creature again for 24 hours. If its saving
+  throw fails, the creature sits quietly and listens to the song, taking no
+  other actions, for as long as the bard continues to play and concentrate (up
+  to a maximum of 1 round per bard level). While fascinated, a target takes a
+  –4 penalty on skill checks made as reactions, such as Listen and Spot
+  checks. Any potential threat requires the bard to make another Perform check
+  and allows the creature a new saving throw against a DC equal to the new
+  Perform check result. Any obvious threat, such as someone drawing a weapon,
+  casting a spell, or aiming a ranged weapon at the target, automatically
+  breaks the effect.  Fascinate is an enchantment (compulsion), mind-affecting
+  ability.";
+  short description "[[1 + ($level / 3)]] creatures within 90 feet, able to see and hear Will DC Perform check or sit quietly and listen.";
+  categories        action,
+                    attack,
+                    aura,
+                    communication,
+                    health,
+                    immunity,
+                    option,
+                    resistance,
+                    sense,
+                    vulnerability.
+
+#.....
+#----- Inspire Competence
+
+base quality Inspire Competence =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 29;
+  description
+  "A bard of 3rd level or higher with 6 or more ranks in a Perform skill can
+  use his music or poetics to help an ally succeed at a task. The ally must be
+  within 30 feet and able to see and hear the bard. The bard must also be able
+  to see the ally.  Depending on the task that the ally has at hand, the bard
+  may use his bardic music to lift the ally’s spirits, to help him or her focus
+  mentally, or in some other way. The ally gets a +2 competence bonus on skill
+  checks with a particular skill as long as he or she continues to hear the
+  bard’s music. The DM may rule that certain uses of this ability are
+  infeasible—chanting to make a rogue move more quietly, for example, is
+  self-defeating. The effect lasts as long as the bard concentrates, up to a
+  maximum of 2 minutes. A bard can’t inspire competence in himself. Inspire
+  competence is a mind-affecting ability.  ";
+  short description "Ally within 30 ft gains +2 competence bonus to skill (not bard).";
+  synonyms          "Competence, Inspire";
+  categories        action.
+
+#.....
+#----- Inspire Courage
+
+base quality Inspire Courage =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 29;
+  description
+  "A bard with 3 or more ranks in a Perform skill can use song or poetics to
+  inspire courage in his allies (including himself), bolstering them against
+  fear and improving their combat abilities. To be affected, an ally must be
+  able to hear the bard sing.  The effect lasts for as long as the ally hears
+  the bard sing and for 5 rounds thereafter. An affected ally receives a +1
+  morale bonus on saving throws against charm and fear effects and a +1 morale
+  bonus on attack and weapon damage rolls. At 8th level, and every six bard
+  levels thereafter, this bonus increases by 1 (+2 at 8th, +3 at 14th, and +4
+  at 20th). Inspire courage is a mind-affecting ability.  ";
+  short description "Ally hearing bard (and 5 rounds after) gains +[[($level + 4) / 6]] morale for saves vs. fear and char and +[[($level + 4)/ 6]] morale to attack and damage.";
+  synonyms          "Courage, Inspire";
+  categories        action,
+                    attack,
+                    aura,
+                    communication,
+                    health,
+                    immunity,
+                    option,
+                    resistance,
+                    sense,
+                    vulnerability.
+
+#.....
+#----- Inspire Greatness
+
+base quality Inspire Greatness =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 29;
+  description
+  "A bard of 9th level or higher with 12 or more ranks in a Perform skill can
+use music or poetics to inspire greatness in himself or a single willing ally
+within 30 feet, granting him or her extra fighting capability. For every three
+levels a bard attains beyond 9th, he can target one additional ally with a
+single use of this ability (two at 12th level, three at 15th, four at 18th). To
+inspire greatness, a bard must sing and an ally must hear him sing. The effect
+lasts for as long as the ally hears the bard sing and for 5 rounds
+thereafter. A creature inspired with greatness gains 2 bonus Hit Dice (d10s),
+the commensurate number of temporary hit points (apply the target’s
+Constitution modifier, if any, to these bonus Hit Dice), a +2 competence bonus
+on attack rolls, and a +1 competence bonus on Fortitude saves. The bonus Hit
+Dice count as regular Hit Dice for determining the effect of spells such as
+sleep. Inspire greatness is a mind-affecting ability.  ";
+  short description "[[($level - 6) / 3]] willing allies within 30 ft for 5 rounds after singing gets 2 bonus hit dice (2d10 + CON hps), +2 competence on attack, +1 competence on Fort saves.";
+  synonyms          "Greatness, Inspire";
+  categories        action.
+
+#.....
+#----- Suggestion Quality
+
+base quality Suggestion Quality =
+
+  type              Spell-like;
+  worlds            Generic;
+  references        WTC 17524: 29;
+  description
+  "A bard of 6th level or higher with 9 or more ranks in a Perform skill can
+  make a suggestion (as the spell) to a creature that he has already fascinated
+  (see above). Using this ability does not break the bard’s concentration on
+  the fascinate effect, nor does it allow a second saving throw against the
+  fascinate effect. Making a suggestion doesn’t count against a bard’s daily
+  limit on bardic music performances. A Will saving throw (DC 10 + 1/2 bard’s
+  level + bard’s Cha modifier) negates the effect. This ability affects only a
+  single creature (but see mass suggestion, below). Suggestion is an enchanment
+  (compulsion), mind-affecting, language dependent ability.";
+  short description "Creature already fascinated Will DC [[10 + ($level / 2)]] + Cha or follow suggestion.";
+  synonyms          "Suggestion";
+  categories        action.
+
+#.....
+#----- Defensive Roll
+
+base quality Defensive Roll =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17524: 51;
+  description
+  "The rogue can roll with a potentially lethal blow to take less damage from
+  it than she otherwise would. Once per day, when she would be reduced to 0 or
+  fewer hit points by damage in combat (from a weapon or other blow, not a
+  spell or special ability), the rogue can attempt to roll with the
+  damage. To use this ability, the rogue must attempt a Reflex saving throw (DC
+  = damage dealt). If the save succeeds, she takes only half damage from the
+  blow; if it fails, she takes full damage. She must be aware of the attack and
+  able to react to it in order to execute her defensive roll— if she is denied
+  her Dexterity bonus to AC, she can’t use this ability.  Since this effect
+  would not normally allow a character to make a Reflex save for half damage,
+  the rogue’s evasion ability does not apply to the defensive roll.  ";
+  short description "Once per day if reduced to 0 or less hp from weapon or blow Ref DC damage dealt for half.";
+  synonyms          "Roll, Defensive";
+  categories        action.
+
+#.....
+#----- Slippery Mind
+
+base quality Slippery Mind =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 17524: 51;
+  description
+  "This ability represents the rogue’s ability to wriggle free from magical
+  effects that would otherwise control or compel her. If a rogue with slippery
+  mind is affected by an enchantment spell or effect and fails her saving
+  throw, she can attempt it again 1 round later at the same DC. She gets only
+  this one extra chance to succeed on her saving throw.";
+  short description "Attempt another save 1 round later (same DC) against enchantment spell or effect where save failed.";
+  synonyms          "Mind, Slippery";
+  categories        resistance.
+
+#.....

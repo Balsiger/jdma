@@ -1,0 +1,1267 @@
+# City of the Spider Queen
+
+#----- Ink Cloud
+
+base quality Ink Cloud =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 136;
+  description
+  "An arachnoid giant octopus can emit a cloud of jet-black ink 20 feet wide by
+  20 feet long once per minute as a free action. The cloud provides total
+  concealment, which the octopus normally uses to escape a losing
+  fight. Creatures within the cloud experience the effects of total
+  darkness. ";
+  short description "Emit a $name ink cloud, provides total concealment, total darkness inside.";
+  synonyms          "Cloud, Ink";
+  categories        action.
+
+#.....
+#----- Jet
+
+base quality Jet =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 1;
+  description
+  "The creature can jet backward once per round as a double move action, at
+  a speed of $range.";
+  short description "Move $range ft as a double move backwards.";
+  categories        action.
+
+#.....
+#----- Strength Damage
+
+base quality Strength Damage =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 124;
+  description
+  "The bite of the creature deals $damage Strength damage.";
+  short description "Bite deals $damage Str damage.";
+  synonyms          "Damage, Strength";
+  categories        aura.
+
+#.....
+#----- Undead Traits
+
+base quality Undead Traits =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 124;
+  description
+  "The creature is immune to mind-affecting effects, poison, sleep, paralysis,
+  stunning, disease, death effects, necromantic effects, and any effect that
+  requires a Fortitude save unless it also works on objects. It is not subject
+  to critical hits, subdual damage, ability damage, ability drain, energy
+  drain, or death from massive damage. A wraith spider cannot be raised, and
+  resurrection works only if it is willing.";
+  short description "Immunte to mind-affecting, poison, sleep, paralysis, stunning, disease, death effects, necromantic effects, effects with Fort save, critical hits, subdual damage, ability damage, ability drain, energy drain, death from massive damage, cannot be raised.";
+  synonyms          "Traits, Undead";
+  categories        resistance.
+
+#.....
+#----- Immunity to Mold and Fungus
+
+base quality Immunity to Mold and Fungus =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 314;
+  description
+  "Rothe are immune to any ill effects of contact with mold and fungus or their spores.";
+  short description "Immunte to effects of mold and fungus.";
+  synonyms          "Mold and Fungus, Immunity";
+  categories        immunity.
+
+#.....
+#----- Resist Enchantment
+
+base quality Resist Enchantment =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 314;
+  description
+  "Each rothe has a mind of such determination that it gains a +4 racial saving
+  throw bonus against Enchantment spells and effects.";
+  short description "+4 racial bonus against Enchantment spells and effects.";
+  synonyms          "Enchantment, Resist";
+  categories        resistance.
+
+#.....
+#----- Stampede
+
+base quality Stampede =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 313-314;
+  description
+  "Panicked rothe first attempt to break free of creatures who are harrying or herding them by outrunning them as a herd. If this is impossible, the rothe turn to face their opponents and charge in a solid wedge of packed flesh. They run over anything their size or smaller, dealing $damage damage for each rothe in the stampede.";
+  short description "";
+  categories        action.
+
+#.....
+#----- Rake
+
+base quality Rake =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 137;
+  description
+  "On any round that a nycaloth has a hold on an opponent (see Improved Grab),
+  it can make two rake attacks (+15 melee) with its hind legs for 1d6+5 points
+  of damage each.";
+  short description "When holding an opponent to two rake attacks (+15 melee, 1d6+5 damage each)";
+  categories        attack.
+
+#.....
+#----- Summon Tugoloth
+
+base quality Summon Tugoloth =
+
+  type              Spell-like;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 138;
+  description
+  "Once per day, a nycaloth can attempt to summon another nycaloth (or, if you
+  are using Manual of the Planes, 1d3 mezzoloths) with a 30% chance of
+  success. Summoned yugoloths remain for 1 hour, and they cannot use their own
+  summon abilities during that time. There is a 25% chance that a summoned
+  yugoloth turns on its summoner, attacking immediately (and hoping for a
+  reward from whomever was threatening the first yugoloth). ";
+  short description "Summon another Nycaloth (30% chance, 25% chance to turn on summoner)";
+  synonyms          "Yugoloth, Summon";
+  categories        action.
+
+#.....
+#----- Wounding
+
+base quality Wounding =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 138;
+  description
+  "A wound resulting from a nycaloth’s claw attack bleeds for an additional 1
+  point of damage per round thereafter. Multiple wounds from such attacks
+  result in cumulative bleeding loss (two wounds for 2 points of damage per
+  round, and so on). The bleeding can be stopped only by a successful Heal
+  check (DC 15) or the application of a cure spell or some other healing spell
+  (heal, healing circle, or the like).";
+  short description "Each successfull attack deals 1 point of damage per round until Heal DC 15 or cure spell.";
+  categories        option.
+
+#.....
+#----- Telepathy
+
+base quality Telepathy =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 138;
+  description
+  "You can communicate with any creature within $range that has a language.";
+  short description "Telepathically communicate with any creature with a language within $range.";
+  categories        communication.
+
+#.....
+#----- Consume
+
+base quality Consume =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 118;
+  description
+  "When a maurezhi slays a sentient living creature (Intelligence score 3 or
+  higher) and consumes the body, it gains additional power from this grisly
+  food. It must begin eating the corpse within 10 minutes of its death and
+  requires 30 minutes to complete the consumption. If the maurezhi is
+  interrupted during this process, it can’t completely consume the corpse or
+  gain the benefits.  A creature that has been consumed by a maurezhi cannot be
+  restored to life through any form of raising or resurrection that requires
+  part of the corpse. A wish, miracle, or true resurrection spell can restore a
+  devoured victim to life, but there is a 50% chance that even such powerful
+  magic will fail.  There is no limit to the number of corpses a maurezhi can
+  devour in this fashion, but it advances (see below) only by devouring the
+  corpses of creatures whose Hit Dice or levels are at least half its own
+  current Hit Dice. For example, a maurezhi of 13 Hit Dice can advance only by
+  devouring the corpse of a character of at least 7th level.  For each suitable
+  corpse a maurezhi consumes, its hit Dice, natural armor bonus, Strength,
+  Intelligence, and base attack bonus each increase by +1. Its base saving
+  throw bonuses improve according to its new Hit Dice. It gains additional
+  skill points equal to 8 + its Intelligence modifier, and it spends these
+  additional points on skills possessed by its victim (all of which are treated
+  as class skills for the maurezhi). If the added Hit Die brings the maurezhi’s
+  total to any multiple of four, it gains a new feat as well, which it can
+  choose from among the feats its previous victims had, assuming that it meets
+  the necessary prerequisites.  In addition, the maurezhi gains access to the
+  memories of the creature it has consumed, can speak any language that
+  creature knew, and can assume that creature’s form (see below).  The maurezhi
+  can reach a maximum of 20 Hit Dice through advancement. Its challenge rating,
+  damage reduction and spell resistance improve with advancement as shown on
+  the table below.  Maurezhi Damage Spell Total HD Reduction Resistance CR 5–7
+  10/+1 19 9 8–9 15/+1 20 10 10–14 20/+2 21 11 15–19 20/+2 22 12 20 30/+3 23 13
+  ";
+  short description "Gain additional powers when slaying a living creature and consuming it (see table).";
+  categories        action.
+
+#.....
+#----- Paralysis
+
+base quality Paralysis =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 118;
+  description
+  "Any creature hit by an attack must succeed at a Fortitude save or be
+  paralyzed. The save DC is Charisma-based.";
+  short description "When hit, For DC $dc or be paralyzed for $duration.";
+  categories        attack.
+
+#.....
+#----- Pounce
+
+base quality Pounce =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 118;
+  description
+  "If a maurezhi charges, it can make a full attack even though it has moved.";
+  short description "When charging do a full attack, even though moved.";
+  categories        attack.
+
+#.....
+#----- Assume Shape
+
+base quality Assume Shape =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88547: 118;
+  description
+  "A maurezhi can take on the appearance of any humanoid creature whose corpse
+  it has consumed. This ability functions like the alter self spell (caster
+  level 10th), except that the maurezhi can remain in the chosen form
+  indefinitely.  It can assume a new form or return to its own as a standard
+  action.";
+  short description "Can assume the appearance of any humanoid creature consumed.";
+  synonyms          "Shape, Assume";
+  categories        action.
+
+#.....
+#----- Summon Creatures
+
+base quality Summon Creatures =
+
+  type              Spell-like;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 1;
+  description
+  "This ability functions like a summon monster spell of the appropriate level,
+  except that it has only a limited chance of success. Once per day a maurezhi
+  can attempt to summon 1d4 ghouls with a 100% chance of success, or 2d4
+  dretches with a 60% chance of success.";
+  short description "Summon 1d4 ghouls (100% success) or 2d4 dretches (60% success).";
+  synonyms          "Creatures, Summon",
+                    "";
+  categories        action.
+
+#.....
+#----- Caustic Blood
+
+base quality Caustic Blood =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 123;
+  description
+  "A quth-maren’s natural attacks deal an additional 1d6 points of acid damage
+  from the creature’s caustic blood. Any creature hitting a quth-maren with
+  natural weapons or unarmed attacks also takes 1d6 points of acid damage.";
+  short description "A natural attack deals an additional 1d6 acid damage; hitting with natural weapons or unarmed attacks deals attacker 1d6 acid amage.";
+  synonyms          "Blood, Caustic";
+  categories        attack.
+
+#.....
+#----- Spit Blood
+
+base quality Spit Blood =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 123;
+  description
+  "Once every 1d4 rounds, as a standard action, a quth-maren can spit a glob of
+  its acidic blood as a grenadelike weapon attack. The quth-maren must make a
+  successful ranged touch attack to hit its target. This attack has a range
+  increment of 10 feet, with a maximum range of 5 range increments. The glob
+  deals 2d6 points of acid damage on a direct hit, and 2 points of splash
+  damage 5 feet of where it lands.";
+  short description "Every 1d4 rounds, spit a glob of acid, rance 10 ft, 5 increments, 2d6 acid damage, 2 splash to 5 ft.";
+  synonyms          "Blood, Spit";
+  categories        action.
+
+#.....
+#----- Horrifying Gaze
+
+base quality Horrifying Gaze =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 123;
+  description
+  "A living creature within 30 feet that meets a quth-maren’s deathless gaze
+  must succeed at a Will save (DC 17) or cower in fear (lose Dexterity bonus to
+  AC, unable to act, any foe gains a +2 bonus on attack rolls).";
+  short description "Meet gaze within, Will DC 17 or cover in fear (no DEX to AC, unable to act, -2 AC.";
+  synonyms          "Gaze, Horrifying";
+  categories        action.
+
+#.....
+#----- Command Undead Quality
+
+base quality Command Undead Quality =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 123;
+  description
+  "Because the quth-maren was an evil cleric in life, it can command undead as
+  a 5th-level evil cleric. It cannot rebuke undead, but it can dispel turning
+  or bol- ster other undead.";
+  short description "Command Undead as a 5th level evil cleric.";
+  synonyms          "Undead, Command";
+  categories        action.
+
+#.....
+#----- Domination
+
+base quality Domination =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 134;
+  description
+  "A vampire can  make a gaze attack against one creature within 30  feet as a
+  standard action.  The target must make a successful Will save (DC as noted in
+  individual  statistics  block)  or  be  affected  as  though  by  a  dominate
+  person spell (caster level  12th).";
+  short description "Gaze up to 30 ft, Will DC $dc or as \SpellRef[Wiz 12][10]{Dominate Person}.";
+  categories        attack.
+
+#.....
+#----- Alternate Form
+
+base quality Alternate Form =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 119/134;
+  description
+  "A vampire can assume the shape of a bat, dire bat, wolf, or dire wolf as a
+  standard action. This ability is similar to a \Spell{polymorph self} spell
+  (caster level 12th), except that the vampire can assume only one of the forms
+  noted here. It can remain in that form until it assumes another or until the
+  next sunrise.";
+  short description "Assume the form of a $name as a standard action.";
+  synonyms          "Form, Alternate";
+  categories        action.
+
+#.....
+#----- Alternate Form (Druid)
+
+base quality Alternate Form Druid =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 3;
+  description
+  "With a successful Control Shape check, Thelossa can assume the form of a
+  dire bat as a full-round action.  Upon assuming her dire bat form, she
+  regains hit points as if she had rested for a day. If slain, she reverts to
+  her drow form, though she remains dead. However, any part of her body that is
+  separated from the whole retains its animal form.";
+  short description "With a successful Control Shape check turn into a dire bat and heal as if rested for a day.";
+  synonyms          "Form Druid, Alternate";
+  categories        action.
+
+#.....
+#----- Children of the Night
+
+base quality Children of the Night =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 134;
+  description
+  "Once per day, a vampire can summon 4d8 dire rats, 10d10 bats, or 3d6 wolves
+  as a standard action. These creatures arrive in 2d6 rounds and serve the
+  vampire for up to 1 hour.";
+  short description "Once per day summon 4d8 dire rats, 10d10 bats, or 3d6 wolves as a standard action.";
+  synonyms          "Night, Children of";
+  categories        action.
+
+#.....
+#----- Gaseous Form Quality
+
+base quality Gaseous Form Quality =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 134;
+  description
+  "At will, a vampire can assume gaseous form as the spell (caster level 6th),
+  but it can remain gaseous indefinitely and has a fly speed of 20 feet with
+  perfect maneuverability Using this ability is a standard action.";
+  short description "At will as a standard action assume gaseous form as \SpellRef[Wiz 6]{Gaseous Form} indefinitely, fly speed 20.";
+  synonyms          "Form, Gaseous";
+  categories        action.
+
+#.....
+#----- Spider Climb Quality
+
+base quality Spider Climb Quality =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 134;
+  description
+  "A vampire can climb sheer surfaces as though with a spider climb spell.";
+  short description "Climb sheer surfaces as \Spell{Spider Climb}.";
+  synonyms          "Climb, Spider";
+  categories        option.
+
+#.....
+#----- Aura of Despair
+
+base quality Aura of Despair =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 139;
+  description
+  "Zedarr radiates a malign aura that causes every enemy within 10 feet of him
+to suffer a –2 morale penalty on all saving throws.";
+  short description "Enemies within 10 feet gain a -2 moral penalty on all saves.";
+  synonyms          "Despair, Aura of";
+  categories        aura.
+
+#.....
+#----- Spider Mastery
+
+base quality Spider Mastery =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 119;
+  description
+  "A drider vampire can compel a spiderkind creature (see Spiderkind sidebar)
+  to obey its mental commands. An unwilling, intelligent target that fails a
+  Will saving throw (DC 18) obeys one command as if under a suggestionspell.
+
+  A successful save allows the creature to resist the command, but the drider
+  vampire can attempt to command it again next round. Commanding an
+  unwilling target requires a standard action; otherwise, issuing commands is a
+  free action. ";
+  short description "Can comand spiderkind creature via mental commands (free action for willing, standard action to compel, DC $dc).";
+  synonyms          "Mastery, Spider";
+  categories        option.
+
+#.....
+#----- Displacement Quality
+
+base quality Displacement Quality =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 139;
+  description
+  "Any melee or ranged attack directed at Ripper has a 50% miss chance unless
+  the attacker can locate the beast by some means other than sight. A true
+  seeing effect allows the user to see the beast’s position, but see
+  invisibility has no effect.";
+  short description "Melee and ranged attacks have a 50% miss chance.";
+  categories        aura.
+
+#.....
+#----- Resistance to Ranged Attacks
+
+base quality Resistance to Ranged Attacks =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 139;
+  description
+  "A displacer beast gains a +2 resistance bonus on saves against any ranged
+  spell or ranged magical attack that specifically targets it, except for
+  ranged touch attacks.";
+  short description "+2 resistance bonus for saves against ranged spell or magical attazcks that target the creature.";
+  synonyms          "Ranged Attacks, Resistance to";
+  categories        resistance.
+
+#.....
+#----- Manifestation
+
+base quality Manifestation =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 140;
+  description
+  "When the creature manifests, it becomes visible but is still incorporeal. It
+  can use its $name against material opponents.";
+  short description "Become visible and can use $name against material opponents.";
+  categories        action.
+
+#.....
+#----- Rejuvenation
+
+base quality Rejuvenation =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 140;
+  description
+  "If destroyed, Alisannara restores herself in 2d4 days if she makes a
+  successful level check (DC 16).";
+  short description "If destroyed, level check DC 16 to restore in 2d4 days.";
+  categories        action,
+                    attack,
+                    aura,
+                    communication,
+                    health,
+                    immunity,
+                    option,
+                    resistance,
+                    sense,
+                    vulnerability.
+
+#.....
+#----- Destructive Touch
+
+base quality Destructive Touch =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 126;
+  description
+  "A keening spirit that hits a living target with its incorporeal touch
+  attack deals 1d8 points of damage. Against ethereal opponents, it adds its
+  Strength modifier to attack and damage rolls. Against material opponents, it
+  adds its Dexterity modifier to attack rolls only.";
+  short description "Deal 1d8 damage with incorporeal touch attack.";
+  synonyms          "Touch, Destructive";
+  categories        attack.
+
+#.....
+#----- Fear Aura
+
+base quality Fear Aura =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 125;
+  description
+  "A keening spirit is shrouded in a dreadful aura of death and evil. Any
+  creature within a 60-foot radius that looks at it must succeed at a Will
+  save (DC 10 + 1/2 keening spirit’s HD + keening spirit’s Charisma modifier)
+  or be affected as though by a fearspell cast by a sorcerer of the keening
+  spirit’s character level.";
+  short description "Aura to 60 ft, Will DC $dc or as \SpellRef[Wiz $level]{Fear}";
+  synonyms          "",
+                    "";
+  categories        action,
+                    attack,
+                    aura,
+                    communication,
+                    health,
+                    immunity,
+                    option,
+                    resistance,
+                    sense,
+                    vulnerability.
+
+#.....
+#----- Keening
+
+base quality Keening =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 125;
+  description
+  "A keening spirit’s most dreaded weapon is its wail or keen. This ability
+  functions like the wail of the banshee spell, but it affects any number of
+  creatures within a 30-foot spread centered on the keening spirit. A
+  successful Fortitude save (DC 10 + 1/2 keening spirit’s HD + keening spirit’s
+  Charisma modifier) negates the effect. A keening spirit can use this ability
+  only once per day. ";
+  short description "Once per day 30-foot spread, Fort DC $dc or be killed.";
+  categories        attack.
+
+#.....
+#----- Paralyzing Glare
+
+base quality Paralyzing Glare =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 125;
+  description
+  "The first time a revenant confronts its killer, the latter must make a Will
+  save (DC 10 + 1/2 the revenant’s Hit Dice and/or levels + the revenant’s
+  Charisma modifier) or be paralyzed for 2d4 rounds.";
+  short description "First killer is confronted Will DC $dc or be paralyzed for 2d4 rounds.";
+  synonyms          "Glare, Paralyzing";
+  categories        aura.
+
+#.....
+#----- Vengeful Strike
+
+base quality Vengeful Strike =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 125;
+  description
+  "Any melee attack the revenant makes against its killer inflicts an
+  additional +1d10 points of damage. ";
+  short description "Any melee attack against killer with +1d10 damage.";
+  synonyms          "Strike, Vengeful";
+  categories        attack.
+
+#.....
+#----- Find the Guilty
+
+base quality Find the Guilty =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 125;
+  description
+  "So long as a revenant and its killer are on the same plane of existence, the
+  revenant knows in which direction its killer can be found and how far away he
+  or she is. Depending on the magical abilities of the base creature, this
+  extraordinary sense may even be made to work across planar boundaries.";
+  short description "Know location of kill if on the same plane.";
+  synonyms          "Guilty, Find the";
+  categories        sense.
+
+#.....
+#----- Turning Immunity
+
+base quality Turning Immunity =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 125;
+  description
+  "A revenant cannot be turned or rebuked by clerics or paladins. ";
+  short description "Immune to turning or rebuking.";
+  synonyms          "Immunity, Turning";
+  categories        immunity.
+
+#.....
+#----- Curse of Lycantrophy
+
+base quality Curse of Lycanthropy =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 4;
+  description
+  "Any humanoid hit by Thelossa’s bite attack must succeed at a Fortitude save
+  (DC 14) or contract lycanthropy.";
+  short description "If bitten, Fort DC 14 or contract lycanthropy.";
+  synonyms          "Lycanthropy, Curse of";
+  categories        health.
+
+#.....
+#----- Petrifying Gaze
+
+base quality Petrifying Gaze =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 4;
+  description
+  "A fiendish dracolisk can turn a target within 30 feet that meets its gaze to
+  stone permanently. A successful Fortitude save (DC 17) negates the
+  effect. Each opponent within range of its gaze attack must attempt a saving
+  throw each round at the beginning of that opponent’s turn in initiative
+  order. The dracolisk can also actively gaze as an attack action by choosing a
+  target within range, who must then attempt a saving throw.";
+  short description "Within 30 ft any who meet gaze Fort DC 17 or turn to stone, can also be done as an action.";
+  synonyms          "Gaze, Petrifying";
+  categories        action,
+                    attack,
+                    aura,
+                    communication,
+                    health,
+                    immunity,
+                    option,
+                    resistance,
+                    sense,
+                    vulnerability.
+
+#.....
+#----- Command Spiders
+
+base quality Command Spiders =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 6;
+  description
+  "Rhuallith can compel any spiderkind creature to obey her verbal commands. An
+  unwilling, intelligent target is entitled to a Will saving throw (DC 17). A
+  failed saving throw indicates that the target obeys one command, per a
+  suggestion spell. A successful saving throw allows the creature to resist the
+  command, but Rhuallith can attempt to command it again next round.  The act
+  of commanding an unwilling target is a standard action.  Otherwise, issuing
+  commands is a free action.";
+  short description "Can command spiders to obey verbal commands, Will DC 17 if unwilling.";
+  synonyms          "Spiders, Command";
+  categories        action.
+
+#.....
+#----- Poison Touch
+
+base quality Poison Touch =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 6;
+  description
+  "Rhuallith delivers poison (Fortitude save DC 19) with a successful touch
+  attack. The initial and secondary damage is the same (1d3 points of Strength
+  damage). She can elect not to secrete poison. Secreted poison cannot be
+  harvested or saved for any purpose.";
+  short description "Deliver poison with touch attack, Fort DC 19 or 1d3/1d3 Str.";
+  synonyms          "Touch, Poison";
+  categories        attack.
+
+#.....
+#----- Poison Save Bonus
+
+base quality Poison Save Bonus =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 6;
+  description
+  "This gives a $value bonus to Poison saves.";
+  short description "A $value bonus to Poison saves.";
+  synonyms          "Bonus, Poison Save".
+
+#.....
+#----- Speak with Spiders
+
+base quality Speak with Spiders =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 6;
+  description
+  "Rhuallith can freely communicate with any spiderkind creature (see
+'Spiderkind' in City of the Spider Queen).";
+  short description "Communicate freely with any spiderkind creature.";
+  synonyms          "Spiders, Speak with";
+  categories        communication.
+
+#.....
+#----- Spider Magic
+
+base quality Spider Magic =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 6;
+  description
+  "Rhuallith uses her total character level when determining level-based
+  factors (range, duration, and so forth) of her arachnemancer spells.";
+  short description "Use total character level for level based factors of arachnemancer spells.";
+  synonyms          "Magic, Spider";
+  categories        option.
+
+#.....
+#----- Spiderform Quality
+
+base quality Spiderform Quality =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88547: 6;
+  description
+  "Rhuallith can change her form to that of a monstrous spider of any size,
+  from Diminutive to Gargantuan. This supernatural ability works like the spell
+  polymorph self. The change can last no more than 80 minutes, but during that
+  time, she can shift back and forth between the spider form and her real form
+  as desired (the shift requires a standard action).";
+  short description "As a standard action change into monstrous spider from diminutive to gargantuan for 80 min.";
+  categories        action.
+
+#.....
+#----- Webwalking
+
+base quality Webwalking =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 6;
+  description
+  "Rhuallith can ignore web spells and spiderkind webbing as if affected by a
+  freedom of movement spell.  She can walk along webs as if on solid ground (no
+  Balance skill check required).";
+  short description "Ignore web spells and walk along webs as if on solid ground (no Balance check).";
+  categories        immunity.
+
+#.....
+#----- Forcecage Web
+
+base quality Forcecage Web =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 121;
+  description
+  "Eight times per day, a jade spider can cast a magical web of glowing green
+  energy as a standard action.  This effect functions like a forcecagespell,
+  except that it affects only one target and allows a Reflex save (DC 17) to
+  avoid the effect. A target that fails its saving throw is imprisoned within a
+  barred cage of force. After using its forcecage web, a jade spider must wait
+  2d4 rounds before doing so again.";
+  short description "Create forcage from webs and imprison a creature unless Ref DC 17.";
+  synonyms          "Web, Forcecage";
+  categories        action.
+
+#.....
+#----- Petrification
+
+base quality Petrification =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 121;
+  description
+  "The bite of a jade spider injects a glowing green venom that turns the
+  victim to stone. A creature bitten by the spider must succeed at a Fortitude
+  save (DC 22) or immediately turn to stone. ";
+  short description "Creature bitten Fort DC 22 or turn to stone.";
+  categories        attack.
+
+#.....
+#----- See Invisibility
+
+base quality See Invisibility Quality =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 122;
+  description
+  "This ability functions like a \SpellRef{see invisibility} spell, except that
+  it is always active and its range extends to the limit of the jade spider’s
+  vision.";
+  short description "See invisibile creatures normally.";
+  synonyms          "Invisibility, See";
+  categories        sense.
+
+#.....
+#----- Squeeze
+
+base quality Squeeze =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 142;
+  description
+  "A chuul that gets a hold automatically deals claw damage, plus an additional
+  1d8 points of bludgeoning damage from the crushing force each round the hold
+  is maintained.";
+  short description "When getting a hold deal claw damage +1d8 bludgeoning per round hold is maintained.";
+  categories        attack.
+
+#.....
+#----- Lightning Bolt Quality
+
+base quality Lightning Bolt Quality =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 143;
+  description
+  "Two or more kuo-toa whips operating together can generate a stroke of
+  lightning every 1d4 rounds. The whips must join hands to launch the bolt but
+  need merely remain within 30 feet of one another while it builds. The
+  lightning bolt deals 1d6 points of damage per whip (Reflex DC 13 + number of
+  whips for half).";
+  short description "Every 1d4 two whips can create a lightning bolt for 1d6 damage per whip (Ref DC 13 + number of whips for half) by holding hands.";
+  synonyms          "Bolt, Lightning";
+  categories        attack.
+
+#.....
+#----- Negative Energy Touch
+
+base quality Negative Energy Touch =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 17755: 144;
+  description
+  "Three times per day, a kir-lanan can empower its touch with negative energy,
+  similar to the chill touch spell. If it hits with a melee touch attack, it
+  deals 2d6 points of damage and 1 point of Strength damage.  A successful
+  Fortitude save negates the Strength damage.  The kir-lanan heals the same
+  number of points of damage as it deals with this attack, though it cannot
+  exceed its normal maximum hit points by this means.
+
+  A kir-lanan can use a claw attack to deliver this negative energy effect, but
+  it must hit with a regular melee attack to do so. It does not regain hit
+  points for the claw damage it in-flicts, just the negative energy damage.";
+  short description "Thrice per day empower touch with negative enery as \Spell{chill touch}, deling 2d6 damage plus 1 Str (Fort DC $dc negates), heal the same amount.";
+  synonyms          "Touch, Negative Energy",
+                    "Energy, Negative Touch";
+  categories        action.
+
+#.....
+#----- Harmed by Positive Energy
+
+base quality Harmed by Positive Energy =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 144;
+  description
+  "Because of the negative energy that suffuses its frame, a kir-lanan is
+  vulnerable to attacks using positive energy, just as undead are. It takes
+  damage from cure spells, holy water, and blessed weapons. It cannot be
+  turned, but it is uncomfortable around such displays of positive energy and
+  generally seeks to avoid a turning cleric anyway.
+
+  Like undead, a kir-lanan is healed by inflict spells and other applications
+  of negative energy. It gains 5 temporary hit points for each negative level
+  it would gain from an energy drain effect, such as enervation, energy drain,
+  or a shadow dragon’s breath weapon.";
+  short description "Takes damage from cure spells, holy water and blessed weapons, uncomfortable around turning cleric, gains 5 temporary hit point per level from energy drain effects.";
+  synonyms          "Positive Energy, Harmed by";
+  categories        vulnerability.
+
+#.....
+#----- Frightful Presence
+
+base quality Frightful Presence =
+
+  type              Extraordinary;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 145;
+  description
+  "Whenever Glouroth attacks, charges, or flies overhead, every creature within
+  a radius of 180 feet with fewer than 22 HD must make a successful Will save
+  (DC 26) or become shaken for 4d6 rounds (or panicked if it has 4 or fewer
+  HD). Creatures that successfully save are immune to Glouroth’s frightful
+  presence for one day.";
+  short description "Will DC 26 within 180 ft if fewer than 22 HD or become shaken (-2 on attacks, saves, skill and ability checks) for 4d6 rounds (or panicked if 4 or less HD).";
+  synonyms          "Presence, Frightful";
+  categories        aura.
+
+#.....
+#----- Shadow Blend
+
+base quality Shadow Blend =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 88574: 145;
+  description
+  "During any conditions other than full daylight, Glouroth can disappear into
+  the shadows, giving him nine-tenths concealment. Artificial illumination,
+  even a light or continual flamespell, does not negate this ability, but a
+  daylight spell does.";
+  short description "In other day full daylight can disappear into the shadows for total concealment (target field, 50% miss chance, no attack of opportunity).";
+  synonyms          "Blend, Shadow";
+  categories        action,
+                    attack,
+                    aura,
+                    communication,
+                    health,
+                    immunity,
+                    option,
+                    resistance,
+                    sense,
+                    vulnerability.
+
+#.....
+#----- Horrific Appearance
+
+base quality Horrific Appearance =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 146;
+  description
+  "Any living creature within 60 feet that views Taharak must succeed at a
+  Fortitude save (DC 18) or immediately take 1d4 points of Strength drain,
+  1d4 points of Dexterity drain, and 1d4 points of Constitution drain. A
+  creature that successfully saves against this effect cannot be affected by
+  Taharak’s horrific appearance again for one day.";
+  short description "Seeing within 60 ft Fort DC 18 or take 1d4 Str, 1d4 Dex, 1d4 Con drain (save immunizes for a day).";
+  synonyms          "Appereance, Horrific";
+  categories        aura.
+
+#.....
+#----- Withering
+
+base quality Withering =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 146;
+  description
+  "Taharak’s touch acts as a rod of withering, dealing 1d4 points of Strength
+  damage and 1d4 points of Constitution damage with a successful incorporeal
+  touch attack (Fort DC 28 negates). If Taharak scores a critical hit, the
+  damage is Constitution drain instead.";
+  short description "Touch requires Fort DC 28 or 1d4 Str and 1d4 Con damage (Con drain on critical hit).";
+  categories        attack.
+
+#.....
+#----- Wisdom Drain
+
+base quality Wisdom Drain =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 116;
+  description
+  "If an abyssal ghoul successfully pins a living opponent, it can drain 1d6
+  points of Wisdom with its smoky tongue on the same action. Each round
+  thereafter that the pin is maintained, it automatically drains an additional
+  1d6 points of Wisdom. A creature reduced to 0 Wisdom by an abyssal ghoul
+  becomes unconscious until at least 1 point of Wisdom is restored.";
+  short description "When pinning an openent, drain 1d6 points of Wis with smoky tongue.";
+  synonyms          "Drain, Wisdom";
+  categories        attack.
+
+#.....
+#----- Deathwatch
+
+base quality Deathwatch Quality =
+
+  type              Spell-like;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 116;
+  description
+  "This ability functions like the \SpellRef{deathwatch} spell, except that it
+  is always active and the abyssal ghoul always knows how near death all
+  creatures within 90 feet of it are. Because of this knowledge, it often
+  pauses to kill fragile creatures (those with 3 or fewer hit points remaining)
+  before moving on to attack healthier foes.";
+  short description "Always knows how near death all creatures within 90 feet are.";
+  categories        communication.
+
+#.....
+#----- Natural Lycanthrope
+
+base quality Natural Lycanthrope =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 88574: 148;
+  description
+  "The creature was born a lycanthrope and has full control over her
+  lycanthropy. She never needs to make Control Shape checks.";
+  short description "Never needs to make Control Shape checks.";
+  synonyms          "Lycanthrope, Natural";
+  categories        resistance.
+
+#.....
+#----- Rat Empathy
+
+base quality Rat Empathy =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 88574: 148;
+  description
+  "The creature has a +4 racial bonus on checks to influence a rat’s
+  attitude. She can communicate simple concepts and (if the animal is friendly)
+  commands.";
+  short description "+4 racial to influence rat's attidue, communicate simple concepts and commands (if friendly).";
+  synonyms          "Empathy, Rat";
+  categories        communication.
+
+#.....
+#----- Magic Absorption
+
+base quality Magic Absorption =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 88574: 128;
+  description
+  "A silveraith can ready an action to absorb spells targeted at it as if it
+  were a rod of absorption.  When it absorbs spell energy, it creates a
+  backlash of negative energy that deals 1d6 points of damage per absorbed
+  spell level to the caster of the spell (Will save for half). A negative
+  energy protection spell negates this damage, and undead spellcasters are
+  actually healed by this effect.";
+  short description "Ready action to absorb spells, dealing 1d6 negateive energy damage per spell level (Will $dc for half).";
+  synonyms          "Absorption, Magic";
+  categories        action.
+
+#.....
+#----- Incorporeal
+
+base quality Incorporeal =
+
+  type              Supernatural;
+  worlds            Generic;
+  references        WTC 88574: 128;
+  description
+  "A silveraith can be harmed only by other incorporeal creatures, +1 or better
+  magic weapons, spells, spell-like abilities, and supernatural abilities. The
+  creature has a 50% chance to ignore any damage from a corporeal source,
+  except for force effects or attacks made with ghost touch weapons. A
+  silveraith can pass through solid objects, but not force effects, at
+  will. Its attacks ignore natural armor, armor, and shields, but deflection
+  bonuses and force effects work normally against them. A silveraith always
+  moves silently and cannot be heard with Listen checks if it doesn’t wish to
+  be.  ";
+  short description "50% chance to ignore damage from corporeal source, can only be harmed by incorporeal creatures, +1 or better, spells, spell-like abilities; can pass though solid objecst (not force effects); attacks ignore natural armor, armor and shields (not deflection and force); always moves silently (cannot be heard)";
+  categories        immunity.
+
+#.....
+#----- Corrupting Touch
+
+base quality Corrupting Touch =
+
+  synonyms          "Touch, Corrupting";
+  categories        attack;
+  type              Su;
+  short description "Attack deals 1d4 damage (1d4+2 vs ethereal).";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 149;
+  description
+
+  "When the ghost hits a living target with its incorporeal touch attack, it deals 1d4 points of damage (or 1d4+2 against ethereal opponents).".
+
+#.....
+#----- Corrupting Gaze
+
+base quality Corrupting Gaze =
+
+  synonyms          "Gaze, Corrupting";
+  categories        aura;
+  type              Su;
+  short description "Fort DC 17 within 30 ft or take 2d10 damage plus 1d4 Cha drain.";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 149;
+  description
+
+  "Any creature within 30 feet that meets the officer's gaze must succeed at a Fortitude save (DC 17) or take 2d10 points of damage plus 1d4 points of Charisma drain.".
+
+#.....
+#----- Rend
+
+base quality Rend =
+
+  categories        attack;
+  type              Ex;
+  short description "Automatically do $damage damage if getting a hold.";
+  worlds            generic;
+  references        WTC 88574: 153;
+  description
+
+  "A creatures that gets a hold latches onto the opponent's body and tears the flesh. The attack automatically deals $damage points of damage.".
+
+#.....
+#----- Arcane Reach
+
+base quality Arcane Reach =
+
+  synonyms          "Reach, Arcane";
+  categories        option;
+  type              Su;
+  short description "Use touch spells on targets up to 30 ft away (ranged touch if attack necessary).";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 154;
+  description
+
+  "Duneth can use touch spells on targets up to 30 feet away. If the spell
+  requires a touch attck, he must make a ranged touch attack.".
+
+#.....
+#----- Freezing Fog
+
+base quality Freezing Fog =
+
+  synonyms          "Fog, Freezing";
+  categories        attack;
+  type              Sp;
+  short description "3 times per day create \SpellRef{solid fog} coupled with icy surface  as of \SpellRef{grease}.";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 154;
+  description
+
+  "Three times per day, Ice can produce an effect similar to that of a \SpellRef{solid fog} spell, except that it also causes a rime of slippery ice to form on any surface the fog touches, creating the effect of a \SpellRef{grease} spell. Ice is immune to the \Spell{grease} effect because of her icewalking ability.".
+
+#.....
+#----- Icewalking
+
+base quality Icewalking =
+
+  categories        resistance;
+  type              Ex;
+  short description "Climb icy surfaces as with \SpellRef{Spider Climb}.";
+  worlds            generic;
+  references        WTC 88574: 154;
+  description
+
+  "This ability works like the \SpellRef{Spider Climb} spell, but the surfaces Ice climbs must be icy. It is always in effect.".
+
+#.....
+#----- Magic Immunity
+
+base quality Magic Immunity =
+
+  synonyms          "Immunity to Magic";
+  categories        immunity;
+  type              Ex;
+  short description "Immune all all spells, spell-like or supernatural effects, except eletricity which slows for 3 rounds and fire which heals \frac{1}{3} of damage.";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 156;
+  description
+
+  "A mighty iron golem is immune to all spells, spell-like abilities, and
+  supernatural effects, except as follows. An electricity effect slows it (as
+  the \SpellRef{slow} spell) for 3 rounds, with no saving throw. A fire effect
+  breaks any slow effect on the golem and cures 1 point of damage for each 3
+  points of damage it would otherwise deal. ".
+
+#.....
+#----- Rust Vulnerability
+
+base quality Rust Vulnerability =
+
+  synonyms          "Vulnerability to Rust";
+  categories        vulnerability;
+  type              Ex;
+  short description "Affected normally by rust attacks.";
+  worlds            Forgotten Realms;
+  references        WTC 88574: 156;
+  description
+
+  "A might iron golem is affected normally by rust attacks, such as that of a
+  rust monster or a rusting grasp spell.".
+
+#.....

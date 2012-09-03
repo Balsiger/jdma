@@ -1,0 +1,1027 @@
+#----- Affected As Evil
+
+base quality Affected As Evil =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "For all effects the creature is treated as if it has an evil alignment,
+  even if it hasn't. The creature also suffers effects according to its actual
+  alignment.";
+  short description "Affected as if creature has evil alignment.".
+
+#.....
+#----- Good Swimmer
+
+base quality Good Swimmer =
+
+  type              Extraordinary;
+  effects           Skill Swim +8 racial if "doing special check or avoiding hazard";
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature has a special racial bonus on any \Skill{swim} check to perform
+  some special action or to avoid a hazard. It can always choose to take 10 on
+  a \Skill{swim} check, even if distracted or endangered. It can use the run
+  action while swimming in a straight line.";
+  short description "Swim +8 for special maneuvers, can always take 10.".
+
+#.....
+#----- Good Hiding
+
+base quality Good Hiding =
+
+  type              Extraordinary;
+  effects           Skill Hide +4 racial, Skill Hide +8 racial if "in coral, rock, or kelp";
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature has a special racial bonus on any \Skill{hide} check, which
+  improves in areas of coral, rock, or heavy kelp.";
+  short description "Hide +4 racial (+8 in coral, rock, or kelp)".
+
+
+#.....
+#----- Good Spot
+
+base quality Good Spot =
+
+  type              Extraordinary;
+  effects           Skill Spot +8 racial;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature has a special racial bonus on any \Skill{spot} check.";
+  short description "Spot +8 racial".
+
+
+#.....
+#----- Good Bluff
+
+base quality Good Bluff =
+
+  type              Extraordinary;
+  effects           Skill Bluff +4 racial, Skill Bluff +4 circumstance if "reading thoughts";
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature has a special racial bonus on \Skill{Survival} checks made to
+  orient itself.";
+  short description "Bluff +4 racial (additional +4 if reading thoughts)".
+
+
+#.....
+#----- Good Orientation
+
+base quality Good Orientation =
+
+  type              Extraordinary;
+  effects           Skill Survival +4 racial if "orienting itself";
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature has a special racial bonus on \Skill{Survival} checks made to
+  orient itself.";
+  short description "Survival +4 racial for orienting itself".
+
+#.....
+#----- Water Hiding
+
+base quality Water Hiding =
+
+  type              Extraordinary;
+  effects           Skill Hide +8 racial if "underwater";
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature has a special racial bonus on \Skill{hide} checks under
+  water.";
+  short description "Hide +8 racial under water".
+
+
+#.....
+#----- Breathe Water
+
+base quality Breathe Water =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is capable of breathing under water (like any fish).";
+  short description "The creature is capable of breathing under water.".
+
+
+#.....
+#----- Breathe No Air
+
+base quality Breathe No Air =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature cannot breath air (like most fishes).";
+  short description "The creature cannot breath air.".
+
+
+#.....
+#----- No Soul
+
+base quality No Soul =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature does not have a soul. It's soul and body are a single
+  unit. When it is slain, no soul is set loose. Spells that restore souls to
+  their bodies such as \Spell{raise dead}, \Spell{reincarnate}, and
+  \Spell{resurrection}, don't work. It takes a different magical effect, such
+  as \Spell{limited wish}, \Spell{wish}, \Spell{miracle}, or \Spell{true
+  resurrection} to restore the creature to life.";
+  short description "The create does not have a soul.".
+
+
+#.....
+#----- Detect Concealed Door
+
+base quality Detect Concealed Door =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "A creature who merely passes within 5 feet of a secret or concealed door is
+  entitled to a \Skill{Search} check to notice it as if he or she were actively
+  looking for the door.";
+  short description "Get a search check within 5 ft of a secret or concealed door.";
+  synonyms          "Door, Detect Concealed",
+                    "Concealed Door, Detect";
+  categories        aura.
+
+#.....
+#----- Does Not Eat
+
+base quality Does Not Eat =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature does not need to eat, although it can probably do so if it
+  desires.";
+  short description "The creature does not need to eat.".
+
+
+#.....
+#----- Does Not Sleep
+
+base quality Does Not Sleep =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature does not need to sleep.";
+  short description "The creature does not need to sleep.".
+
+
+#.....
+#----- Does Not Breathe
+
+base quality Does Not Breathe =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature does not need to breath.";
+  short description "The creature does not need to breath.".
+
+
+#.....
+#----- Weapons Evil
+
+base quality Weapons Evil =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature's natural and all its wielded weapons are treated as
+  evil-aligned for overcoming damage reduction.";
+  short description "Natural and wielded weapons are treated as evil.".
+
+
+#.....
+#----- Affected As Lawful
+
+base quality Affected As Lawful =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "For all effects the creature is treated as if it has an lawful alignment,
+  even if it hasn't. The creature also suffers effects according to its actual
+  alignment.";
+  short description "Affected as if creature has lawful alignment.".
+
+
+#.....
+#----- Weapons Lawful
+
+base quality Weapons Lawful =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature's natural and all its wielded weapons are treated as
+  lawful-aligned for overcoming damage reduction.";
+  short description "Natural and wielded weapons are treated as lawful.".
+
+
+#.....
+#----- Spell
+
+base quality Spell =
+
+  type              Spell-like;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature can cast a spell as a spell-like ability.";
+  short description "Can cast a specific spell.";
+  categories        action,
+                    option,
+                    sense.
+
+
+#.....
+#----- Grapple Bonus
+
+base quality Grapple Bonus =
+
+  type              Extraordinary;
+  effects           Grapple +12 racial if "attached";
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature gets a (usually racial) bonus to grapple checks.";
+  short description "A bonus to grapple";
+  synonyms          "Bonus, Grapple";
+  categories        option.
+
+
+#.....
+#----- Mindless
+
+base quality Mindless =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature does not posses a mind that can be influenced.";
+  short description "Does not have a mind.";
+  categories        immunity.
+
+
+#.....
+#----- Immunity To Magical Sleep
+
+base quality Immunity To Magical Sleep =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature cannot be affected by any magical sleep.";
+  short description "Immune to magical sleep..";
+  synonyms          "Magical Sleep, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity To Mind Affecting Effects
+
+base quality Immunity To Mind Affecting Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature cannot be affected by any effects affecting the mind.";
+  short description "Immune to effects affecting the mind.";
+  synonyms          "Mind Affecting Effects, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Electricity
+
+base quality Immunity To Electricity =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all electrical damage.";
+  short description "Immune to all electrical damage.";
+  synonyms          "Electricity, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Energy Drain
+
+base quality Immunity To Energy Drain =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all energy drain.";
+  short description "Immune to all energy drain.";
+  synonyms          "Energy Drain, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Acid
+
+base quality Immunity To Acid =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all acid damage.";
+  short description "Immune to all acid damage.";
+  synonyms          "Acid, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Charm
+
+base quality Immunity To Charm =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all charm effects.";
+  short description "Immune to all charm effects.";
+  synonyms          "Charm, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Cold
+
+base quality Immunity To Cold =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all cold damage.";
+  short description "Immune to all cold damage.";
+  synonyms          "Cold, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Critical Hits
+
+base quality Immunity to Critical Hits =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all critical hits.";
+  short description "Immune to all critical hits.";
+  synonyms          "Critical Hits, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Fire
+
+base quality Immunity To Fire =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all fire damage.";
+  short description "Immune to all fire damage.";
+  synonyms          "Fire, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Phantasms
+
+base quality Immunity To Phantasms =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all phantasms.";
+  short description "Immune to all phantasms.";
+  synonyms          "Phantasms, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Poison
+
+base quality Immunity To Poison =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all poison damage.";
+  short description "Immune to all poison damage.";
+  synonyms          "Poison, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Polymorph
+
+base quality Immunity To Polymorph =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to polymorping.";
+  short description "Cannot be polymorphed.";
+  synonyms          "Polymorph, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Gas
+
+base quality Immunity To Gas =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all damage from gases.";
+  short description "Immune to all gas damage.";
+  synonyms          "Gas, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Sleep Effects
+
+base quality Immunity To Sleep Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all sleep effects.";
+  short description "Immune to all sleep effects.";
+  synonyms          "Sleep Effects, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Death Effects
+
+base quality Immunity To Death Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all death effects.";
+  short description "Immune to all death effects.";
+  synonyms          "Death Effects, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Fatigue Effects
+
+base quality Immunity To Fatigue Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all fatigue effects.";
+  short description "Immune to all fatigue effects.";
+  synonyms          "Fatigue Effects, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Exhaustion Effects
+
+base quality Immunity To Exhaustion Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all exhaustion effects.";
+  short description "Immune to all exhaustion effects.";
+  synonyms          "Exhaustion Effects, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Fortitude Save Effects
+
+base quality Immunity To Fortitude Save Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all fortitude save effects.";
+  short description "Immune to all fortitude save effects.";
+  synonyms          "Fortitude Save Effects, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Paralysis
+
+base quality Immunity To Paralysis =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all paralysis.";
+  short description "Immune to all paralysis.";
+  synonyms          "Paralysis, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Charm Effects
+
+base quality Immunity To Charm Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all \Spell{charm} effects.";
+  short description "Immune to all charm effects.";
+  synonyms          "Charm Effects, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Stunning
+
+base quality Immunity To Stunning =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all stunning effects.";
+  short description "Immune to all stunning effects.";
+  synonyms          "Stunning, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Disease
+
+base quality Immunity To Disease =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all diseases.";
+  short description "Immune to all diseases.";
+  synonyms          "Disease, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Strength Damage
+
+base quality Immunity To Strength Damage =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all strength damage.";
+  short description "Immune to all strength damage.";
+  synonyms          "Strength Damage, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Dexterity Damage
+
+base quality Immunity To Dexterity Damage =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all dexterity damage.";
+  short description "Immune to all dexterity damage.";
+  synonyms          "Dexterity Damage, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Constitution Damage
+
+base quality Immunity To Constitution Damage =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all constitution damage.";
+  short description "Immune to all constitution damage.";
+  synonyms          "Constitution Damage, Immunity to";
+  categories        immunity.
+
+
+#.....
+#----- Immunity to Gaze Attacks
+
+base quality Immunity To Gaze Attacks =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to all gaze attacks.";
+  short description "Immune to all gaze attacks.";
+  synonyms          "Gaze Attacks, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Visual Effects
+
+base quality Immunity To Visual Effects =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to visual effects.";
+  short description "Immune to visual effects.";
+  synonyms          "Visual Effects, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Immunity to Illusions
+
+base quality Immunity To Illusions =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is immune to illusions.";
+  short description "Immune to illusions.";
+  synonyms          "Illusions, Immunity to";
+  categories        immunity.
+
+#.....
+#----- Not Subject to Critical Hits
+
+base quality Not Subject To Critical Hits =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature takes no additional damage from critical hits.";
+  short description "Cannot be hurt by additional damage from critical hits.";
+  synonyms          "Critical Hits, Not Subject to";
+  categories        immunity.
+
+
+#.....
+#----- Not Subject to Nonlethal Damage
+
+base quality Not Subject To Nonlethal Damage =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature takes no damage from nonlethal attacks.";
+  short description "Cannot be hurt by nonlethal damage.";
+  synonyms          "Nonlethal Damage, Not Subject to";
+  categories        immunity.
+
+
+#.....
+#----- Not Subject to Ability Drain
+
+base quality Not Subject To Ability Drain =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature takes no damage from ability drain attacks.";
+  short description "Cannot be hurt by ability drain.";
+  synonyms          "Ability Drain, Not Subject to";
+  categories        immunity.
+
+
+#.....
+#----- Not Subject to Ability Damage
+
+base quality Not Subject To Ability Damage =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature takes no damage from ability damage attacks.";
+  short description "Cannot be hurt by ability damage.";
+  synonyms          "Ability Damage, Not Subject to";
+  categories        immunity.
+
+
+#.....
+#----- Not Subject to Subdual Damage
+
+base quality Not Subject To Subdual Damage =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature takes no damage from subdual damage.";
+  short description "Cannot be hurt by subdual damage.";
+  synonyms          "Subdual Damage, Not Subject to";
+  categories        immunity.
+
+
+#.....
+#----- Not Subject to Energy Drain
+
+base quality Not Subject To Energy Drain =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature takes no damage from energy drain attacks.";
+  short description "Cannot be hurt by energy drain.";
+  synonyms          "Energy Drain, Not Subject to";
+  categories        immunity.
+
+
+#.....
+#----- Not Subject to Flanking
+
+base quality Not Subject To Flanking =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature cannot be flanked.";
+  short description "Cannot be flanked.";
+  synonyms          "Flanking, Not Subject to", "Cannot be Flanked";
+  categories        immunity.
+
+#.....
+#----- Not Subject to Death from Massive Damage
+
+base quality Not Subject To Death from Massive Damage =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature is not subject to death from massive damage.";
+  short description "Cannot die from massive damage.";
+  synonyms          "Death from Massive Damage, Not Subject to";
+  categories        immunity.
+
+
+#.....
+#----- Not Affected By Raise Dead
+
+base quality Not Affected By Raise Dead =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The \Spell{raise dead} spell does not have an effect on the creature.";
+  short description "Is not affected by \Spell{raise dead}.";
+  synonyms          "Raise Dead, Not Affected By";
+  categories        immunity.
+
+
+#.....
+#----- Not Affected By Reincarnate
+
+base quality Not Affected By Reincarnate =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The \Spell{reincarnate} spell does not have an effect on the creature.";
+  short description "Is not affected by \Spell{reincarnate}.";
+  synonyms          "Reincarnate, Not Affected By";
+  categories        immunity.
+
+
+#.....
+#----- Not Affected By Resurrection
+
+base quality Not Affected By Resurrection =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The \Spell{resurrection} spell does not have an effect on the creature.";
+  short description "Is not affected by \Spell{resurrection}.";
+  synonyms          "Resurrection, Not Affected By";
+  categories        immunity.
+
+
+#.....
+#----- Uses Charisma For Concentration Checks
+
+base quality Uses Charisma For Concentration Checks =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        WTC 17755: 1;
+  description
+  "The creature uses its charisma modifier for \Skill{Concentration} checks.";
+  short description "Uses charisma to make concentration checks.";
+  synonyms          "Concentration Checks, Uses Charisma";
+  categories        resistance.
+
+
+#.....
+#----- No Natural Healing
+
+base quality No Natural Healing =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature does not heal naturally, e.g. when resting.";
+  short description "Does not heal naturally.".
+
+
+#.....
+#----- Shapechanger
+
+base quality Shapechanger =
+
+  type              Extraordinary;
+  worlds            Generic;
+  references        DMA;
+  description
+  "The creature is capable of changing its shape.";
+  short description "The creature can change its shape.".
+
+
+#.....
+#----- Skill Bonus
+
+base quality Skill Bonus =
+
+  type              Extraordinary;
+  effects           Skill;
+  worlds            Generic;
+  references        DMA;
+  description
+  "This gives a bonus to a \Skill{\Value{name}} of \Value{modifier}.";
+  short description "A bonus to \Skill{\Value{name}} of \Value{modifier}.";
+  synonyms          "Bonus, Skill".
+
+
+#.....
+#----- Fortitude Bonus
+
+base quality Fortitude Bonus =
+
+  type              Extraordinary;
+  effects           Fortitude Save;
+  worlds            Generic;
+  references        DMA;
+  description
+  "This gives a bonus to Fortitude saves.";
+  short description "A bonus to Fortitude saves.";
+  synonyms          "Bonus, Fortitude".
+
+
+#.....
+#----- Swimm Speed
+
+base quality Swim Speed =
+
+  synonyms          "Speed, Swim";
+  categories        action;
+  type              Ex;
+  short description "Can move in water without making Swim checks";
+  worlds            generic;
+  references        WTC 17755: 306;
+  description
+
+  "These creatures always have swim speeds and thus can move in water without
+  making Swim checks".
+
+#.....
+#----- Spell-like Ability
+
+base quality Spell-like Ability =
+
+  synonyms          "Ability, Spell-like";
+  categories        action;
+  type              Su;
+  short description "$times/day cast \SpellRef[Sor $level][$dc]{$name}.";
+  worlds            generic;
+  references        DMA;
+  description
+
+  "Can cast a spell as an ability.".
+
+#.....
+#----- All-Around Vision
+
+base quality All-Around Vision =
+
+  synonyms          "Vision, All-Around";
+  categories        sense;
+  type              Ex;
+  short description "Creature always looks in all diractions at once.";
+  worlds            generic;
+  references        DMA ;
+  description
+
+  "The creatures automatically looks at all directions at once. It cannot be surpised.".
+
+#.....
+#----- Half Damage from Slashing
+
+base quality Half Damage from Slashing =
+
+  synonyms          "Slashing, Half Damage from";
+  categories        resistance;
+  type              Ex;
+  short description "Half damage from slashing attacks.";
+  worlds            generic;
+  references        DMA;
+  description
+
+  "The creature takes only half damage from slashing weapons.".
+
+#.....
+#----- Half Damage from Piercing
+
+base quality Half Damage from Piercing =
+
+  synonyms          "Piercing, Half Damage from";
+  categories        resistance;
+  type              Ex;
+  short description "Half damage from piercing attacks.";
+  worlds            generic;
+  references        DMA;
+  description
+
+  "The creature takes only half damage from piercing weapons.".
+
+#.....
+#----- Poison Save
+
+base quality Poison Save =
+
+  synonyms          "Save, Poison";
+  categories        resistance;
+  type              Ex;
+  short description "+$value to saves against poison.";
+  worlds            generic;
+  references        DMA;
+  description
+
+  "The creature gets a +$value to saves against Poison.".
+
+#.....

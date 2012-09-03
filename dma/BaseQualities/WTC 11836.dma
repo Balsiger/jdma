@@ -1,0 +1,218 @@
+# Forgotten Realms Campaign Setting
+
+#----- Strike of Vengeance
+
+base quality Strike of Vengeance =
+
+  type              Supernatural;
+  worlds            Forgotten Realms;
+  references        WTC 11836: 65;
+  description
+  "If you have been harmed by someone in combat, you may make a strike of
+  vengeance with a melee or ranged weapon against that individual on your next
+  attack. If this attack hits, you deal maximum damage. You may use this
+  supernatural ability once per day.";
+  short description "Make a retributive attack against an opponent that hit you, next attack deals maxium damage if it hits.";
+  synonyms          "Vengeance, Strike of";
+  categories        attack.
+
+#.....
+#----- Smite Infidel
+
+base quality Smite Infidel =
+
+  synonyms          "Infidel, Smite";
+  categories        attack;
+  type              Su;
+  short description "Smite creature of other patron with $value attack bonus and $level additional damage.";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 42;
+  description
+
+  "Once per day, a divine champion may attempt to smite a creature with a different patron deity (or no patron deity at all) with one normal melee attack. She adds her Charisma bonus to the attack roll and deals 1 extra point of damage per divine champion level. If the divine champion acceidentally smites someone of the same patron, the smite has no effect but is still used up for that day. If the divine champion is also a Paladin, she may use smite evil and this ability separately or combine them into a single strike if the target is evil and of a different faith.".
+
+#.....
+#----- Divine Wrath
+
+base quality Divine Wrath =
+
+  synonyms          "Wrath, Divine";
+  categories        action, attack, aura, communication, health, immunity, option, resistance, sense, vulnerability;
+  type              Su;
+  short description "As a free action gain +3 to attack, damage, saves and DR 5/- for $value rounds.";
+  worlds            Forgotten Realms;
+  references        WTC 11836;
+  description
+
+  "The divine champion channels a portion of her patron's power into wrath, giving her a +3 bonus on attack rolls, damage, and saving throws for a number of rounds equal to her Charisma bonus. During this time, the divine champion also has damage reduction 5/-. This ability can be used once per day and is invoked as a free action.".
+
+#.....
+#----- Lay on Hands
+
+base quality Lay on Hands =
+
+  synonyms          "Hands, Lay on";
+  categories        action;
+  type              Sp;
+  short description "Heal self or creature of same patron for [[$level * value]] hp.";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 43;
+  description
+
+  "As a defender of the faith, a divine champion may lay on hands to heal
+  herself or another creature following the same patron deity as himself. The
+  ability works like a paladin's ability to lay on hands, except the divine
+  champion may heal 1 point of damage per divine champion level times her
+  Charisma bonus. If the divine champion is a paladin, she can combine this
+  healing with a paladin class' lay on hands ability.".
+
+#.....
+#----- Sacred Defense
+
+base quality Sacred Defense =
+
+  synonyms          "Defense, Sacred";
+  categories        resistance;
+  type              Su;
+  short description "[[range($level, 2: +1, 4: +2)]] to save against divine spells and spell-like/supernatural abilities of outsiders.";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 43;
+  description
+
+  "Add this value (+1 at 2nd level, +2 at 4th level) to the divine champion's
+  saving throws against divine spells, as well as spell-like and supernatural
+  abilities of outsider.".
+
+#.....
+#----- Greater Shield of Shadows
+
+base quality Greater Shield of Shadows =
+
+  synonyms          "Shield of Shadows, Greater", "Shadows, Greater Shield of";
+  categories        resistance;
+  type              Su;
+  short description "";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 53;
+  description
+
+  "A shadow adept can create a mobile disk of purple-black force as a standard action. The shield of shadows has the effects of a \SpellRef{Shield} spell and also provides three-quarters concealment (30% miss chance) against attacks from the other side of the shield of shadows. As with the \Spell{shield} spell, the shadow adept can change the defensive direction of the shield of shadows as a free action one per round on his turn. The shadow adept can see and reach through the shield, so it does not provide cover or concealment to opponents.
+
+The shield of shadows lasts 1 round per caster level per day and need not be used all at once. Creating or dismissing the shield of shadows is a standard action.
+
+The Greater Shield of Shadows also grants spell resistance of 12+ the character's shadow adept level on attacks against the shadow adept that originate from the other side of the shield, as if the shadow adept were under the effect of a \SpellRef{Spell Resistance} spell.".
+
+#.....
+#----- Shadesight
+
+base quality Shadesight =
+
+  categories        sense;
+  type              Su;
+  short description "60 ft Darkvision event through any darkness effects.";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 314;
+  description
+
+  "A shade has 60-foot darkvision. It can see normally through any darkness
+  effects, but not through fog, invisibility, obscurement, and so forth.".
+
+#.....
+#----- Shadow Defense
+
+base quality Shadow Defense =
+
+  synonyms          "Defense, Shadow";
+  categories        resistance;
+  type              Su;
+  short description "+$value to saves vs spells from Enchantment, Illusion, Necromancy, or darkness descriptor.";
+  worlds            Forgotten Realms;
+  references        WTC 11736: 53;
+  description
+
+  "Add this value to a shadow adept's saving throws against spells from the shools of Enchanment, Illusion, and Necromancy, and spells with the darkness descriptior.".
+
+#.....
+#----- Shadow Double
+
+base quality Shadow Double =
+
+  synonyms          "Double, Shadow";
+  categories        action;
+  type              Su;
+  short description "Once per day create double from shadowstuff with same abilitiy scores, base AC, hps, saves, attack bonus but no equipment; can be used tiems as creator or as spell originator with a \SpellRef{project image}.";
+  worlds            Forgotten Realms;
+  references        WTC 11736: 53;
+  description
+
+  "Once per day, a shadow adept can use a standard action to create a double of himself woven from shadowstuff. The double has the ability scores, base AC, hit points, saves, and attack bonuses as its creator, but no equipment. (Any apparent clothing or equipment is nonfunctional). The double can attack the creator's enemies if given a weapon or items (since it can use anything its creator can), or function as the target of a \SpellRef{project image} spell, duplicating the creator's actions and acting as the origin of the creator's spells when it is in direct line of sight. Mentally commanding the double is a free action. Using it as the originator of a spell counts as an action for the creator and the double.
+
+The double lasts 1 round per caster level. The death of the double does not affect the shadow adept or vice versa. The double still lasts to the end of its duration if its creator dies.".
+
+#.....
+#----- Spell Power
+
+base quality Spell Power =
+
+  synonyms          "Power, Spell";
+  categories        option;
+  type              Su;
+  short description "+$value to DC for saves and caster level checks for spell resistance for Enchanment, Illusion, Necronamncy, or darkness descriptor spells.";
+  worlds            Forgotten Realms;
+  references        WTC 11836: 53;
+  description
+
+  "Add this value to the DC for saving throws and caster level checks to
+  overcome spell resistance checks for spells the shadow adept casts from the
+  schools of Enchanment, Illusion, and Necromancy, and spells with the darkness
+  descriptor. This stacks with other spell power effects that affect the
+  specified spells.".
+
+#.....
+#----- Feather Fall Quality
+
+base quality Feather Fall Quality =
+
+  synonyms          "Fall, Feather", "Feather Fall";
+  categories        option;
+  type              Sp;
+  short description "Permanent \SpellRef{Feather Fall} with personal range.";
+  worlds            generic;
+  references        WTC 11836: 311;
+  description
+
+  "A death tyrant's body natural buoyancy grants it a permanent \SpellRef{feather fall} effect with personal range.".
+
+#.....
+#----- Partial Actions Only
+
+base quality Partial Actions Only =
+
+  synonyms          "Actions Only, Partial", "Only, Partial Actions";
+  categories        action;
+  type              Ex;
+  short description "Can only move, or attack, or partial charge.";
+  worlds            generic;
+  references        WTC 11836: 311;
+  description
+
+  "Death tyrants are slow and unresponsive, so they can perform only partial
+  actions. Thus, they can move or attack, but can do both only if they charge
+  (a partial charge).".
+
+#.....
+#----- Invulnerability
+
+base quality Invulnerability =
+
+  categories        immunity;
+  type              Su;
+  short description "If slain, will return to phylactery; can repossess reptilian corpse from there within 90 ft.";
+  worlds            generic;
+  references        WTC 11836: 311;
+  description
+
+  "If a dracolich is slain, its spirit immediately returns to its phylactery. If there is no reptilian corpse within 90 feet for the spirit to possess, it is trapped in the phylactery until such a time --- if ever --- that a corpse becomes available. A dracolish is difficult to destroy. If its spirit is currently contained in its phylactery, destroying that item when a suitable corpse is not within range effectively destorys the dracolich. Likewise, an active dracolich is unable to attempt further possessions if its phylactery is destroyed. The fate of a disembodied dracolich spirit --- that is, a spirit with no body or phylactery --- is unknown, but presumably it is drawn to the \Place{Lower Planes}.".
+
+#.....
+

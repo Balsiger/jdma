@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.values.conditions.Condition;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Emph;
@@ -237,6 +238,9 @@ public class Modifier extends Value<Modifier>
 
   /** The flag if defined or not. */
   private boolean m_defined = false;
+
+  /** The condition for the modifier, if any. */
+  private @Nullable Condition m_condition;
 
   /** A next modifier, if any. */
   private @Nullable Modifier m_next;
@@ -452,7 +456,6 @@ public class Modifier extends Value<Modifier>
    *
    * @return      a String representation
    *
-
    */
   @Override
   protected @Nonnull String doToString()
