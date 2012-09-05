@@ -611,6 +611,8 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize base campaign type");
     if(net.ixitxachitls.dma.entries.Campaign.TYPE == null)
       Log.warning("could not properly initialize campaign type");
+    if(net.ixitxachitls.dma.entries.BaseQuality.TYPE == null)
+      Log.warning("could not properly initialize base quality type");
   }
 
   //........................................................................

@@ -152,6 +152,7 @@ public class LibraryServlet extends PageServlet
                     "multi", type.getMultiple(),
                     "multilink", type.getMultipleLink(),
                     "multidir", type.getMultipleDir(),
+                    "multishort", type.getMultiple().replace("Base ", ""),
                     "css", type.getName().replace(" ", "-")));
     }
 

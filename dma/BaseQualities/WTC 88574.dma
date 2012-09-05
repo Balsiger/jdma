@@ -328,9 +328,9 @@ base quality Horrifying Gaze =
   categories        action.
 
 #.....
-#----- Command Undead Quality
+#----- Command Undead
 
-base quality Command Undead Quality =
+base quality Command Undead =
 
   type              Supernatural;
   worlds            Forgotten Realms;
@@ -412,9 +412,9 @@ base quality Children of the Night =
   categories        action.
 
 #.....
-#----- Gaseous Form Quality
+#----- Gaseous Form
 
-base quality Gaseous Form Quality =
+base quality Gaseous Form =
 
   type              Supernatural;
   worlds            Forgotten Realms;
@@ -428,9 +428,9 @@ base quality Gaseous Form Quality =
   categories        action.
 
 #.....
-#----- Spider Climb Quality
+#----- Spider Climb
 
-base quality Spider Climb Quality =
+base quality Spider Climb =
 
   type              Extraordinary;
   worlds            Forgotten Realms;
@@ -478,9 +478,9 @@ base quality Spider Mastery =
   categories        option.
 
 #.....
-#----- Displacement Quality
+#----- Displacement
 
-base quality Displacement Quality =
+base quality Displacement =
 
   type              Supernatural;
   worlds            Forgotten Realms;
@@ -795,9 +795,9 @@ base quality Spider Magic =
   categories        option.
 
 #.....
-#----- Spiderform Quality
+#----- Spiderform
 
-base quality Spiderform Quality =
+base quality Spiderform =
 
   type              Supernatural;
   worlds            Forgotten Realms;
@@ -863,7 +863,7 @@ base quality Petrification =
 #.....
 #----- See Invisibility
 
-base quality See Invisibility Quality =
+base quality See Invisibility =
 
   type              Supernatural;
   worlds            Forgotten Realms;
@@ -892,9 +892,9 @@ base quality Squeeze =
   categories        attack.
 
 #.....
-#----- Lightning Bolt Quality
+#----- Lightning Bolt
 
-base quality Lightning Bolt Quality =
+base quality Lightning Bolt =
 
   type              Supernatural;
   worlds            Forgotten Realms;
@@ -1055,7 +1055,7 @@ base quality Wisdom Drain =
 #.....
 #----- Deathwatch
 
-base quality Deathwatch Quality =
+base quality Deathwatch =
 
   type              Spell-like;
   worlds            Forgotten Realms;

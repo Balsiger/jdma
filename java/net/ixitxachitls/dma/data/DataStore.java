@@ -294,7 +294,7 @@ public class DataStore
       else
         query = new Query(inType, inParent);
 
-      if (inFilters.length > 2)
+      if(inFilters.length > 2)
       {
         List<Query.Filter> filters = new ArrayList<Query.Filter>();
         for(int i = 0; i + 1 < inFilters.length; i += 2)
@@ -305,7 +305,7 @@ public class DataStore
         query.setFilter(new Query.CompositeFilter
                         (Query.CompositeFilterOperator.AND, filters));
       }
-      else
+      else if(inFilters.length > 0)
         query.setFilter(new Query.FilterPredicate(toPropertyName(inFilters[0]),
                                                   Query.FilterOperator.EQUAL,
                                                   inFilters[1]));
@@ -628,7 +628,6 @@ public class DataStore
   }
 
   //........................................................................
-
 
   //........................................................................
 

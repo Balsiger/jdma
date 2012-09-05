@@ -169,9 +169,9 @@ base quality Spell Power =
   specified spells.".
 
 #.....
-#----- Feather Fall Quality
+#----- Feather Fall
 
-base quality Feather Fall Quality =
+base quality Feather Fall =
 
   synonyms          "Fall, Feather", "Feather Fall";
   categories        option;

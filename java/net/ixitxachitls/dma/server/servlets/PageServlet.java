@@ -161,10 +161,7 @@ public class PageServlet extends SoyServlet
     if(inRequest.getUser() == null)
       data.put("dm", false);
     else
-    {
-      AbstractEntry entry = getEntry(inRequest.getRequestURI());
-      data.put("dm", entry != null && entry.isDM(inRequest.getUser()));
-    }
+      data.put("dm", inRequest.getUser().hasAccess(BaseCharacter.Group.DM));
 
     return data;
   }

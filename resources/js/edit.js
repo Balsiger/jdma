@@ -321,6 +321,10 @@ edit.Base.create = function(inElement)
 
   switch(properties.type)
   {
+    case 'non-empty':
+      properties.validate = 'non-empty';
+      return new edit.Name(element, properties);
+
     case 'name':
       return new edit.Name(element, properties);
 

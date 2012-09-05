@@ -57,7 +57,11 @@
 */
   {if $entry.extension_incomplete and $ij.isDM}
     {call dma.entry.extension}
-      {param name: '&#x2639; - incomplete' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'incomplete' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -166,8 +170,12 @@
   {if $entry.extension_multiuse or $entry.extension_multiple
       or $entry.extension_counted}
     {call dma.entry.extension}
-      {param name: '&#x2736; - ' + $entry.extension_multiuse ? 'multiuse'
-          : $entry.extension_multiple ? 'multiple' : 'counted' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: $entry.extension_multiuse ? 'multiuse'
+              : $entry.extension_multiple ? 'multiple' : 'counted' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -191,7 +199,11 @@
 
   {if $entry.extension_weapon}
     {call dma.entry.extension}
-      {param name: '&#x2694; - weapon' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'weapon' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -247,7 +259,11 @@
 
   {if $entry.extension_composite}
     {call dma.entry.extension}
-      {param name: '&#x2295; - composite' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'composite' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -260,7 +276,11 @@
 
   {if $entry.extension_wearable}
     {call dma.entry.extension}
-      {param name: '&#x2736; - wearable' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'wearable' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -283,7 +303,11 @@
 
   {if $entry.extension_container}
     {call dma.entry.extension}
-      {param name: '&#x25a3; - container' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'container' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -301,7 +325,11 @@
 
   {if $entry.extension_contents}
     {call dma.entry.extension}
-      {param name: '&#x25c8; - contents' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'contents' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -332,7 +360,11 @@
 
   {if $entry.extension_armor}
     {call dma.entry.extension}
-      {param name: '&#x2602; - armor' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'armor' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -371,7 +403,11 @@
 
   {if $entry.extension_light}
     {call dma.entry.extension}
-      {param name: '&#263c; - light' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'light' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -396,7 +432,11 @@
 
   {if $entry.extension_timed}
     {call dma.entry.extension}
-      {param name: '&#x27f3 - timed' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'timed' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -409,7 +449,11 @@
 
   {if $entry.extension_commodity}
     {call dma.entry.extension}
-      {param name: '&#x2a3b; - commodity' /}
+      {param name}
+        {call dma.value.extensionTitle}
+          {param value: 'commodity' /}
+        {/call}
+      {/param}
       {param content}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}

@@ -206,7 +206,7 @@ public class Modifier extends Value<Modifier>
   //........................................................................
 
   {
-    withEditType("name");
+    withEditType("non-empty");
   }
 
   //-------------------------------- create --------------------------------
@@ -266,6 +266,86 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //------------------------------ getMinValue -----------------------------
+
+  /**
+   * Get the value of the modifier stored.
+   *
+   * @return      the minimally possible value
+   *
+   */
+  public int getMinValue()
+  {
+    if(m_next == null)
+      return minValue();
+
+    return minValue() + m_next.getMinValue();
+  }
+
+  //........................................................................
+  //------------------------------- minValue -------------------------------
+
+  /**
+   * Compute the minimal value of this modifier, ignoring the next.
+   *
+   * @return   the minimal possible value
+   *
+   */
+  private int minValue()
+  {
+    if(m_condition == null || m_condition.check(false) == Condition.Result.TRUE)
+      return m_value;
+
+    if(m_condition.check(false) == Condition.Result.FALSE)
+      return 0;
+
+    if(m_value < 0)
+      return m_value;
+
+    return 0;
+  }
+
+  //........................................................................
+  //------------------------------ getMaxValue -----------------------------
+
+  /**
+   * Get the value of the modifier stored.
+   *
+   * @return      the maximally possible value
+   *
+   */
+  public int getMaxValue()
+  {
+    if(m_next == null)
+      return maxValue();
+
+    return maxValue() + m_next.getMaxValue();
+  }
+
+  //........................................................................
+  //------------------------------- maxValue -------------------------------
+
+  /**
+   * Compute the minimal value of this modifier, ignoring the next.
+   *
+   * @return  the maxiamally possible value
+   *
+   */
+  private int maxValue()
+  {
+    if(m_condition == null || m_condition.check(false) == Condition.Result.TRUE)
+      return m_value;
+
+    if(m_condition.check(false) == Condition.Result.FALSE)
+      return 0;
+
+    if(m_value > 0)
+      return m_value;
+
+    return 0;
+  }
+
+  //........................................................................
   //-------------------------------- getType -------------------------------
 
   /**
@@ -277,6 +357,44 @@ public class Modifier extends Value<Modifier>
   public @Nonnull Type getType()
   {
     return m_type;
+  }
+
+  //........................................................................
+  //------------------------------- getBase --------------------------------
+
+  /**
+   * Get the base modifiers, without conditions.
+   *
+   * @return      a list of the modifiers found
+   *
+   */
+  public @Nonnull List<String> getBase()
+  {
+    List<String> result = new ArrayList<String>();
+    return addBase(result);
+  }
+
+  //........................................................................
+  //------------------------------- addBase --------------------------------
+
+  /**
+   * Add the base modifier value (without condition) to the given list.
+   *
+   * @param       ioBases the list to add to
+   *
+   * @return      the complete list
+   *
+   */
+  private @Nonnull List<String> addBase(@Nonnull List<String> ioBases)
+  {
+    if(!isDefined())
+      return ioBases;
+
+    ioBases.add((m_value >= 0 ? "+" : "") + m_value + " " + m_type);
+    if(m_next != null)
+      m_next.addBase(ioBases);
+
+    return ioBases;
   }
 
   //........................................................................
@@ -295,11 +413,15 @@ public class Modifier extends Value<Modifier>
    */
   public boolean stackOrMore(@Nonnull Modifier inOther)
   {
-    // penalties always stack!
-    if(m_value < 0)
+    if(stacks() || inOther.stacks())
       return true;
 
-    if(stacks())
+    if(m_condition != null
+       && m_condition.check(false) == Condition.Result.FALSE)
+      return false;
+
+    if(inOther.m_condition != null
+       && inOther.m_condition.check(false) == Condition.Result.FALSE)
       return true;
 
     // the values generally don't stack, i.e. only the larger one is used
@@ -373,6 +495,11 @@ public class Modifier extends Value<Modifier>
     if(m_value < 0)
       return true;
 
+    // undefined conditions always stack to let the user decide
+    if(m_condition != null
+       && m_condition.check(false) == Condition.Result.UNDEFINED)
+      return true;
+
     return m_type.stacks();
   }
 
@@ -403,6 +530,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
+  @Deprecated
   protected @Nonnull Command doFormat()
   {
     int value = getValue();
@@ -468,6 +596,12 @@ public class Modifier extends Value<Modifier>
     result.append(m_value);
     result.append(" " + m_type);
 
+    if(m_condition != null)
+    {
+      result.append(" if ");
+      result.append(m_condition.toString());
+    }
+
     if(m_next != null)
     {
       result.append(" ");
@@ -526,7 +660,7 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
-  //------------------------------- doRead ---------------------------------
+  //-------------------------------- doRead --------------------------------
 
   /**
    * Read the value from the reader and replace the current one.
@@ -537,7 +671,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(@Nonnull ParseReader inReader)
   {
     try
     {
@@ -550,6 +684,20 @@ public boolean doRead(@Nonnull ParseReader inReader)
       // no type read, thus it is general
       if(m_type == null)
         m_type = Type.GENERAL;
+
+      ParseReader.Position pos = inReader.getPosition();
+      if(inReader.expect("if"))
+      {
+        m_condition = (Condition)new Condition().read(inReader);
+
+        if(m_condition == null)
+        {
+          inReader.logError(pos, "expected.condition", null);
+          inReader.seek(pos);
+        }
+       }
+
+      m_next = read(inReader);
     }
     catch(net.ixitxachitls.input.ReadException e)
     {
@@ -666,6 +814,14 @@ public boolean doRead(@Nonnull ParseReader inReader)
           "complete", "0 general", "+0 general",   null,
           "complete 2", "0 armor \"test\"", "+0 armor", " \"test\"",
           "complete negative", "-3 dodge", "-3 dodge",   null,
+          "condition", "+3 armor if \"just a test\"",
+          "+3 armor if \"just a test\"", null,
+
+          "multiple", "+3 armor +2 shield", "+3 armor +2 shield", null,
+          "multiple no type", "+3 +2", "+3 general +2 general", null,
+          "multiple no type", "+3 +2 dodge", "+3 general +2 dodge", null,
+          "multiple condition", "+3 shield if \"test\" +2 armor",
+          "+3 shield if \"test\" +2 armor", null,
         };
 
      Value.Test.readTest(texts, new Modifier());

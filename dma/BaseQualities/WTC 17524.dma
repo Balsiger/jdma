@@ -128,7 +128,7 @@ base quality Improved Uncanny Dodge =
 base quality Masterwork Weapon =
 
   type              Extraordinary;
-  effects           Attack +1 enhancement;
+  effects           Attack: +1 enhancement;
   qualifier         mwk;
   worlds            Generic;
   references        WTC 17524: 122;
@@ -216,9 +216,9 @@ base quality Fast Movement =
   categories        option.
 
 #.....
-#----- Rage Quality
+#----- Rage
 
-base quality Rage Quality =
+base quality Rage =
 
   type              Extraordinary;
   worlds            Generic;
@@ -329,9 +329,8 @@ base quality Chaos Caster =
 
 base quality with incomplete Animal Companion =
 
-  incomplete
-  "should be level dependent";
   type              Extraordinary;
+  incomplete        "should be level dependent";
   worlds            Forgotten Realms;
   references        WTC 17524: 35-36,
                     WTC 88754: 3;
@@ -1105,9 +1104,9 @@ sleep. Inspire greatness is a mind-affecting ability.  ";
   categories        action.
 
 #.....
-#----- Suggestion Quality
+#----- Suggestion
 
-base quality Suggestion Quality =
+base quality Suggestion =
 
   type              Spell-like;
   worlds            Generic;

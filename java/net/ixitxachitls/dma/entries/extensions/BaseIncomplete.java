@@ -27,8 +27,7 @@ import javax.annotation.Nonnull;
 
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseItem;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.entries.BaseQuality;
 import net.ixitxachitls.dma.values.LongFormattedText;
 
 //..........................................................................
@@ -90,9 +89,9 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%incomplete");
+  // /** The printer for printing the whole base item. */
+  // public static final Print s_pagePrint =
+  //   new Print("%incomplete");
 
   //----- incomplete -------------------------------------------------------
 
@@ -106,6 +105,7 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
   {
     setAutoExtensions(BaseIncomplete.class, "incomplete");
     extractVariables(BaseItem.class, BaseIncomplete.class);
+    extractVariables(BaseQuality.class, BaseIncomplete.class);
   }
 
   //........................................................................
@@ -120,11 +120,11 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
    * @return the print for page printing
    *
    */
-  @Override
-protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
+  // @Override
+  // protected @Nonnull Print getPagePrint()
+  // {
+  //   return s_pagePrint;
+  // }
 
   //........................................................................
   //----------------------------- getListPrint -----------------------------
@@ -135,11 +135,11 @@ protected @Nonnull Print getPagePrint()
    * @return the print for list entry
    *
    */
-  @Override
-protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
+  // @Override
+  // protected @Nonnull ListPrint getListPrint()
+  // {
+  //   return s_listPrint;
+  // }
 
   //........................................................................
 

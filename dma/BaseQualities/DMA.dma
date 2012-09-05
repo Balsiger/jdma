@@ -17,7 +17,7 @@ base quality Affected As Evil =
 base quality Good Swimmer =
 
   type              Extraordinary;
-  effects           Skill Swim +8 racial if "doing special check or avoiding hazard";
+  effects           Skill Swim: +8 racial if "doing special check or avoiding hazard";
   worlds            Generic;
   references        DMA;
   description
@@ -33,7 +33,7 @@ base quality Good Swimmer =
 base quality Good Hiding =
 
   type              Extraordinary;
-  effects           Skill Hide +4 racial, Skill Hide +8 racial if "in coral, rock, or kelp";
+  effects           Skill Hide: +4 racial, Skill Hide: +8 racial if "in coral, rock, or kelp";
   worlds            Generic;
   references        DMA;
   description
@@ -48,7 +48,7 @@ base quality Good Hiding =
 base quality Good Spot =
 
   type              Extraordinary;
-  effects           Skill Spot +8 racial;
+  effects           Skill Spot: +8 racial;
   worlds            Generic;
   references        DMA;
   description
@@ -62,7 +62,7 @@ base quality Good Spot =
 base quality Good Bluff =
 
   type              Extraordinary;
-  effects           Skill Bluff +4 racial, Skill Bluff +4 circumstance if "reading thoughts";
+  effects           Skill Bluff: +4 racial, Skill Bluff: +4 circumstance if "reading thoughts";
   worlds            Generic;
   references        DMA;
   description
@@ -77,7 +77,7 @@ base quality Good Bluff =
 base quality Good Orientation =
 
   type              Extraordinary;
-  effects           Skill Survival +4 racial if "orienting itself";
+  effects           Skill Survival: +4 racial if "orienting itself";
   worlds            Generic;
   references        DMA;
   description
@@ -91,7 +91,7 @@ base quality Good Orientation =
 base quality Water Hiding =
 
   type              Extraordinary;
-  effects           Skill Hide +8 racial if "underwater";
+  effects           Skill Hide: +8 racial if "underwater";
   worlds            Generic;
   references        DMA;
   description
@@ -266,7 +266,7 @@ base quality Spell =
 base quality Grapple Bonus =
 
   type              Extraordinary;
-  effects           Grapple +12 racial if "attached";
+  effects           Grapple: +12 racial if "attached";
   worlds            Generic;
   references        DMA;
   description

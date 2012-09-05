@@ -418,7 +418,7 @@ public class DMADatastore implements DMAData
     SortedSet<String> names = new TreeSet<String>();
 
     for(Entity entity : m_data.getEntities(inType.toString(), null,
-                                           0, 100, inFilters))
+                                           0, 10000, inFilters))
 
     {
       List<String> values = (List<String>)

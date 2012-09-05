@@ -25,6 +25,8 @@ package net.ixitxachitls.dma.entries;
 
 import javax.annotation.Nonnull;
 
+import com.google.common.collect.Multimap;
+
 // import net.ixitxachitls.output.commands.Command;
 // import net.ixitxachitls.output.commands.Divider;
 // import net.ixitxachitls.output.commands.Hrule;
@@ -34,6 +36,7 @@ import javax.annotation.Nonnull;
 // import net.ixitxachitls.output.commands.Textblock;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 //import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Name;
@@ -250,14 +253,10 @@ public class BaseQuality extends BaseEntry
 
   /** The type of this entry. */
   public static final BaseType<BaseQuality> TYPE =
-    new BaseType<BaseQuality>(BaseQuality.class, "Base Qualities");
+    new BaseType<BaseQuality>(BaseQuality.class, "Base Qualities")
+    .withLink("quality", "qualities");
 
   //----- type -------------------------------------------------------------
-
-  /** The formatter for effect types. */
-  // protected static ValueFormatter<EnumSelection<EffectType>> s_typeFormatter
-  //   = new LinkFormatter<EnumSelection<EffectType>>
-  //   ("/index/effecttypes/");
 
   /** The type of the effect. */
   @Key("type")
@@ -272,41 +271,19 @@ public class BaseQuality extends BaseEntry
   //........................................................................
   //----- effects ----------------------------------------------------------
 
-  /** The formatter for what is affected. */
-  // protected static ValueFormatter<EnumSelection<Affects>>
-  //   s_affectsFormatter = new LinkFormatter<EnumSelection<Affects>>
-  //   ("/index/affects/");
-
   /** The effects of the feat. */
   @Key("effects")
   protected ValueList<Multiple> m_effects =
     new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
       { new Multiple.Element(new EnumSelection<Affects>(Affects.class), false),
         new Multiple.Element(new Name(), true),
-        new Multiple.Element(new net.ixitxachitls.dma.values.Modifier(), true),
+        new Multiple.Element(new Modifier(), true, ": ", null),
       }));
 
   static
   {
     addIndex(new Index(Index.Path.AFFECTS, "Affects", TYPE));
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("Quality", "Affects", "affects",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(!(inEntry instanceof BaseQuality))
-//                          return null;
-
-//                        List<Object> result = new ArrayList<Object>();
-
-//                       for(Multiple effect : ((BaseQuality)inEntry).m_effects)
-// //                        result.add(((net.ixitxachitls.dma.values.Modifier)
-// //                                      effect.get(2).get()).asReference());
-
-//                        return result.toArray();
-//                      }
-//                    }, true, FORMATTER, FORMAT, true));
+    addIndex(new Index(Index.Path.MODIFIERS, "Modifiers", TYPE));
   }
 
   //........................................................................
@@ -322,6 +299,17 @@ public class BaseQuality extends BaseEntry
   {
     extractVariables(BaseQuality.class);
   }
+
+  //----- special indexes --------------------------------------------------
+
+  static
+  {
+    addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
+    addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
+    addIndex(new Index(Index.Path.EXTENSIONS, "Extensions", TYPE));
+  }
+
+  //........................................................................
 
   //----- printing commands ------------------------------------------------
 
@@ -379,6 +367,32 @@ public class BaseQuality extends BaseEntry
 
   //   return summary;
   // }
+
+  //........................................................................
+  //-------------------------- computeIndexValues --------------------------
+
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @return      a multi map of values per index name
+   *
+   */
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    values.put(Index.Path.EFFECT_TYPES, m_qualityType.group());
+    for(Multiple effect : m_effects)
+    {
+      values.put(Index.Path.AFFECTS, effect.get(0).toString()
+                 + (effect.get(1).isDefined() ? " " + effect.get(1) : ""));
+      for(String modifier : ((Modifier)effect.get(2)).getBase())
+        values.put(Index.Path.MODIFIERS, modifier);
+    }
+
+    return values;
+  }
 
   //........................................................................
 

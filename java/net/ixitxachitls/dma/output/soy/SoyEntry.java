@@ -167,7 +167,7 @@ public class SoyEntry extends SoyMapData
       return new SoyListData(errors);
     }
 
-    String name = inName.replace("_", " ");
+    String name = inName.replace("__", "").replace("_", " ");
     Object value = m_entry.compute(name);
     if(value != null)
       return convert(name, value);

@@ -231,7 +231,7 @@
   {if $entry.isBase}
     {call dma.navigation.navigation}
       {param entries:
-          [[ 'label': $entry.type.link, 'url': '/' + $entry.type.link ],
+          [[ 'label': $entry.type.link, 'url': '/' + $entry.type.multilink ],
           [ 'label': $entry.name, 'url': $entry.path ]] /}
     {/call}
   {else}

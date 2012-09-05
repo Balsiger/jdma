@@ -407,19 +407,29 @@
  */
 {template .extensions}
   {foreach $extension in $value.list}
-    {$extension.print}{sp}
+    {call .extension}
+      {param value: $extension.raw /}
+    {/call}{sp}
   {/foreach}
+{/template}
+
+/**
+ * An extension title.
+ *
+ * @param value The value rendered.
+ */
+{template .extensionTitle}
+  {call .extension data="all" /} - {$value}
 {/template}
 
 /**
  * Formatting an extension value.
  *
- * @ param entry The entry rendered.
  * @param value The value rendered.
  */
 {template .extension}
-  <span title="{$value.raw}" class="extension-symbol">
-    {switch $value.raw}
+  <span title="{$value}" class="extension-symbol">
+    {switch $value}
       {case 'armor'}
         {literal}&#x2602;{/literal}
       {case 'counted'}
@@ -444,8 +454,12 @@
         {literal}&#x2a34;{/literal}
       {case 'container'}
         {literal}&#x2a4f;{/literal}
+      {case 'composite'}
+        {literal}&#x2295;{/literal}
+      {case 'contents'}
+        {literal}&#x25c8;{/literal}
       {default}
-        {$value.raw}
+        {$value}
     {/switch}
   </span>
 {/template}

@@ -40,7 +40,7 @@ base quality Adhesive =
 #.....
 #----- Acid
 
-base quality Acid Quality =
+base quality Acid =
 
   type              Extraordinary;
   worlds            Generic;
@@ -553,7 +553,7 @@ base quality Dancing Chains =
 #.....
 #----- Darkvision
 
-base quality Darkvision Quality =
+base quality Darkvision =
 
   type              Extraordinary;
   worlds            Generic;
@@ -599,7 +599,7 @@ base quality Death Throes =
 #.....
 #----- Detect Thoughts
 
-base quality Detect Thoughts Quality =
+base quality Detect Thoughts =
 
   type              Supernatural;
   worlds            Generic;
@@ -703,9 +703,9 @@ base quality Earth Mastery =
   categories        aura.
 
 #.....
-#----- Energy Drain Quality
+#----- Energy Drain
 
-base quality Energy Drain Quality =
+base quality Energy Drain =
 
   type              Supernatural;
   worlds            Forgotten Realms;
@@ -722,7 +722,7 @@ base quality Energy Drain Quality =
 #.....
 #----- Entangle
 
-base quality Entangle Quality =
+base quality Entangle =
 
   type              Extraordinary;
   worlds            Generic;
@@ -843,9 +843,9 @@ base quality Fast Healing =
   categories        health.
 
 #.....
-#----- Fear Quality
+#----- Fear
 
-base quality Fear Quality =
+base quality Fear =
 
   type              Supernatural;
   worlds            Generic;
@@ -1004,7 +1004,7 @@ base quality Light Blindness =
 base quality Light Sensitivity =
 
   type              Extraordinary;
-  effects           Attack -1 general if "in bright sunlight or within \Spell{daylight}", Skill Search -1 general if "in bright sunlight or within \Spell{daylight}", Skill Spot -1 general if "in bright sunlight or within \Spell{daylight}";
+  effects           Attack: -1 general if "in bright sunlight or within \Spell{daylight}", Skill Search: -1 general if "in bright sunlight or within \Spell{daylight}", Skill Spot: -1 general if "in bright sunlight or within \Spell{daylight}";
   worlds            Generic;
   references        WTC 17755: 203;
   description
@@ -1259,9 +1259,9 @@ base quality Paralyzing Touch =
   categories        attack.
 
 #.....
-#----- Plane Shift Quality
+#----- Plane Shift
 
-base quality Plane Shift Quality =
+base quality Plane Shift =
 
   type              Supernatural;
   worlds            Generic;
@@ -1276,7 +1276,7 @@ base quality Plane Shift Quality =
 #.....
 #----- Poison
 
-base quality Poison Quality =
+base quality Poison =
 
   type              Extraordinary;
   worlds            Generic;
@@ -1591,7 +1591,7 @@ base quality Smoke =
 #.....
 #----- Spell Resistance
 
-base quality Spell Resistance Quality =
+base quality Spell Resistance =
 
   type              Extraordinary;
   worlds            Generic;
@@ -1665,9 +1665,9 @@ base quality Stench =
   categories        aura type Ex.
 
 #.....
-#----- Stone Shape Quality
+#----- Stone Shape
 
-base quality Stone Shape Quality =
+base quality Stone Shape =
 
   type              Extraordinary;
   worlds            Generic;
@@ -1867,7 +1867,7 @@ base quality Tremorsense =
 #.....
 #----- True Seeing
 
-base quality True Seeing Quality =
+base quality True Seeing =
 
   type              Supernatural;
   worlds            Generic;
@@ -2078,7 +2078,7 @@ base quality Weakness =
 #.....
 #----- Web
 
-base quality Web Quality =
+base quality Web =
 
   type              Extraordinary;
   worlds            Generic;
@@ -2117,7 +2117,7 @@ base quality Web Quality =
 #.....
 #----- Whirlwind Quality
 
-base quality Whirlwind Quality =
+base quality Whirlwind =
 
   type              Supernatural;
   worlds            Generic;
@@ -2328,7 +2328,7 @@ base quality Lifesense =
 #.....
 #----- Trample Quality
 
-base quality Trample Quality =
+base quality Trample =
 
   type              Extraordinary;
   short description "Trample other creatures for $damage damage, Ref DC $dc for half.".

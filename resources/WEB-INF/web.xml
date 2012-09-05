@@ -80,11 +80,6 @@
   </servlet>
 
   <servlet>
-    <servlet-name>entry-pdf</servlet-name>
-    <servlet-class>net.ixitxachitls.dma.server.servlets.EntryPDFServlet</servlet-class>
-  </servlet>
-
-  <servlet>
     <servlet-name>entries</servlet-name>
     <servlet-class>net.ixitxachitls.dma.server.servlets.EntryListServlet</servlet-class>
   </servlet>
@@ -164,11 +159,6 @@
   <servlet-mapping>
     <servlet-name>entry</servlet-name>
     <url-pattern>/_entry/*</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>entry-pdf</servlet-name>
-    <url-pattern>/pdf/_entry/*</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>
@@ -284,17 +274,11 @@
         ^/campaign/([^/]+)/([^/]+)/characters
         /_entries/base campaign/$1/campaign/$2/character
 
-        ^/campaign/([^/]+)/([^/]+)/character/([^/]+).pdf$
-        /pdf/_entry/base campaign/$1/campaign/$2/character/$3
-
         ^/campaign/([^/]+)/([^/]+)/character/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/character/$3
 
         ^/campaign/([^/]+)/([^/]+)/items
         /_entries/base campaign/$1/campaign/$2/item
-
-        ^/campaign/([^/]+)/([^/]+)/item/([^/]+).pdf$
-        /pdf/_entry/base campaign/$1/campaign/$2/item/$3
 
         ^/campaign/([^/]+)/([^/]+)/item/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/item/$3
@@ -305,8 +289,8 @@
         ^/product/([^/]+)$
         /_entry/base product/$1
 
-        ^/item/([^/]+).pdf$
-        /pdf/_entry/base item/$1
+        ^/quality/([^/]+)$
+        /_entry/base quality/$1
 
         ^/item/([^/]+)$
         /_entry/base item/$1
@@ -314,14 +298,14 @@
         ^/campaign/([^/]+)$
         /_entry/base campaign/$1
 
-        ^/campaign/([^/]+).pdf$
-        /pdf/_entry/base campaign/$1
-
         ^/campaign/([^/]+)/([^/]+)$
         /_entry/base campaign/$1/campaign/$2
 
         ^/products/(.*)$
         /_index/base product/$1
+
+        ^/qualities/(.*)$
+        /_index/base quality/$1
 
         ^/items/(.*)$
         /_index/base item/$1
@@ -331,6 +315,9 @@
 
         ^/products$
         /_entries/base product
+
+        ^/qualities$
+        /_entries/base quality
 
         ^/items$
         /_entries/base item

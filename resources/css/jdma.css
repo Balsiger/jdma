@@ -677,6 +677,11 @@ TABLE.entrylist TD.label
   width: 1%;
 }
 
+TABLE.entrylist TD
+{
+  vertical-align: top;
+}
+
 TABLE.entrylist TD.id,
 TABLE.entrylist TD.system
 {
@@ -700,6 +705,7 @@ TABLE.entrylist TD.short
   text-align: right;
 }
 
+.list-name,
 .list-value,
 .list-weight,
 .list-worlds,
