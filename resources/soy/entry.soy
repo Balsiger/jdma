@@ -239,57 +239,60 @@
       {param entry: $entry /}
     {/call}
   {/if}
-  {delcall dma.entry.files.main}
-    {param entry: $entry /}
-  {/delcall}
-  <div class="entrytitle">
-    <div class="title-actions">
-      {if $ij.isDM}
-        <script>
-          gui.addAction('delete', 'Delete',
-                         function() {lb}
-                             if(confirm('Do you really want to delete this?'))
-                               util.ajax('/actions/remove',
-                                 {lb} key: '{$entry.key |escapeJs}' {rb}, null,
-                                 true);
-                         {rb});
-        </script>
-      {/if}
-      {call dma.page.link}
-        {param url: $entry.name + '.dma' /}
-        {param text}
-          <div class="caption-container">
-            <div class="document sprite large"></div>
-            <div>dma</div>
-          </div>
-        {/param}
-      {/call}
-      {call dma.page.link}
-        {param url: $entry.name + '.print' /}
-        {param text}
-          <div class="caption-container">
-            <div class="print sprite large"></div>
-            <div>print</div>
-          </div>
-        {/param}
-      {/call}
-    </div>
-    {delcall dma.entry.title}
+  <div class="leading">
+    {delcall dma.entry.files.main}
       {param entry: $entry /}
     {/delcall}
-    <div class="description">
-      {call dma.value.withbase}
-        {param canEdit: $ij.isDM /}
+    <div class="entrytitle">
+      <div class="title-actions">
+        {if $ij.isDM}
+          <script>
+            gui.addAction('delete', 'Delete',
+                           function() {lb}
+                               if(confirm('Do you really want to delete this?'))
+                                 util.ajax('/actions/remove',
+                                   {lb} key: '{$entry.key |escapeJs}' {rb},
+                                   null,
+                                   true);
+                           {rb});
+          </script>
+        {/if}
+        {call dma.page.link}
+          {param url: $entry.name + '.dma' /}
+          {param text}
+            <div class="caption-container">
+              <div class="document sprite large"></div>
+              <div>dma</div>
+            </div>
+          {/param}
+        {/call}
+        {call dma.page.link}
+          {param url: $entry.name + '.print' /}
+          {param text}
+            <div class="caption-container">
+              <div class="print sprite large"></div>
+              <div>print</div>
+            </div>
+          {/param}
+        {/call}
+      </div>
+      {delcall dma.entry.title}
         {param entry: $entry /}
-        {param value: $entry.description /}
-      {/call}
-    </div>
-    <div class="short-description">
-      {call dma.value.withbase}
-        {param canEdit: $ij.isDM /}
-        {param entry: $entry /}
-        {param value: $entry.short_description /}
-      {/call}
+      {/delcall}
+      <div class="description">
+        {call dma.value.withbase}
+          {param canEdit: $ij.isDM /}
+          {param entry: $entry /}
+          {param value: $entry.description /}
+        {/call}
+      </div>
+      <div class="short-description">
+        {call dma.value.withbase}
+          {param canEdit: $ij.isDM /}
+          {param entry: $entry /}
+          {param value: $entry.short_description /}
+        {/call}
+      </div>
     </div>
   </div>
   <div id="files" class="files">
@@ -305,8 +308,8 @@
             <div class="file">
               <img src="{if $file.type == 'application/pdf'}/icons/pdf.png
                         {else}{$file.icon}=s50{/if}" alt="{$file.name}"
-              class="image file"
-              onclick="util.link(event, '{$file.icon}')" />
+                   class="image file"
+                   onclick="util.link(event, '{$file.icon}')" />
             </div>
           {ifempty}
             <div class="nofiles"></div>
@@ -315,7 +318,6 @@
       {/param}
     {/call}
   </div>
-  <div class="clear title-end"></div>
   <div class="values clear">
     {delcall dma.entry.values}
       {param entry: $entry /}

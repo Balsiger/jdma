@@ -50,10 +50,21 @@ H1
   margin-bottom: 20px;
 }
 
+.leading
+{
+  display: box;
+  display: -webkit-box;
+  box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+  width: 100%;
+  margin-top: 20px;
+}
+
 .entrytitle
 {
-  margin-left: 330px;
-  margin-top: 40px;
+  margin-left: 40px;
+  box-flex:    1;
+  -webkit-box-flex: 1;
 }
 
 .title-actions
@@ -418,7 +429,6 @@ IMG.main.image
   margin:     0 10px 0 0;
   display:    inline-block;
   box-shadow: 1px 1px 3px #777;
-  float:      left;
   position:   relative;
 }
 
@@ -787,6 +797,20 @@ A.library-title.type-image
 {
   color:            white;
   background-color: $color_Item;
+}
+
+.value.base-quality .value-label-container,
+.value.quality .value-label-container
+{
+  color:            white;
+  background-color: $color_Quality;
+}
+
+.value.base-feat .value-label-container,
+.value.feat .value-label-container
+{
+  color:            white;
+  background-color: $color_Feat;
 }
 
 /******************************************************************************
@@ -1197,6 +1221,10 @@ A.Class:hover     { color: $hilightcolor_Class }
 A.Feat            { color: $color_Feat }
 A.Feat:visited    { color: $lightcolor_Feat }
 A.Feat:hover      { color: $hilightcolor_Feat }
+
+A.Quality            { color: $color_Quality }
+A.Quality:visited    { color: $lightcolor_Quality }
+A.Quality:hover      { color: $hilightcolor_Quality }
 
 A.Skill           { color: $color_Skill }
 A.Skill:visited   { color: $lightcolor_Skill }

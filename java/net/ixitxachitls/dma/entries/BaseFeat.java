@@ -25,9 +25,14 @@ package net.ixitxachitls.dma.entries;
 
 import javax.annotation.Nonnull;
 
-//import net.ixitxachitls.dma.entries.indexes.Index;
+import com.google.common.collect.Multimap;
+
+import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
+import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.FormattedText;
+import net.ixitxachitls.dma.values.LongFormattedText;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 //import net.ixitxachitls.dma.values.Selection;
@@ -70,7 +75,7 @@ public class BaseFeat extends BaseEntry
     METAMAGIC("Metamagic"),
 
     /** A regional feat. */
-    REGIONA("Region"),
+    REGIONAL("Regional"),
 
     /** A special feat. */
     SPECIAL("Special"),
@@ -155,8 +160,6 @@ public class BaseFeat extends BaseEntry
   public static final BaseType<BaseFeat> TYPE =
     new BaseType<BaseFeat>(BaseFeat.class);
 
-  //----- entry values -----------------------------------------------------
-
   //----- type -------------------------------------------------------------
 
   /** The type of the feat. */
@@ -164,19 +167,24 @@ public class BaseFeat extends BaseEntry
   protected EnumSelection<Type> m_featType =
     new EnumSelection<Type>(Type.class);
 
+  static
+  {
+    addIndex(new Index(Index.Path.TYPES, "Types", TYPE));
+  }
+
   //........................................................................
   //----- benefit ----------------------------------------------------------
 
   /** The benefits. */
   @Key("benefit")
-  protected FormattedText m_benefit = new FormattedText();
+  protected LongFormattedText m_benefit = new LongFormattedText();
 
   //........................................................................
   //----- special ----------------------------------------------------------
 
   /** The special remarks. */
   @Key("special")
-  protected FormattedText m_special = new FormattedText();
+  protected LongFormattedText m_special = new LongFormattedText();
 
   //........................................................................
   //----- normal -----------------------------------------------------------
@@ -190,7 +198,7 @@ public class BaseFeat extends BaseEntry
 
   /** The prerequisites. */
   @Key("prerequisites")
-  protected FormattedText m_prerequisites = new FormattedText();
+  protected LongFormattedText m_prerequisites = new LongFormattedText();
 
   //........................................................................
   //----- effects ----------------------------------------------------------
@@ -202,17 +210,27 @@ public class BaseFeat extends BaseEntry
       { new Multiple.Element(new EnumSelection<BaseQuality.Affects>
                              (BaseQuality.Affects.class), false),
         new Multiple.Element(new Name(), true),
-        new Multiple.Element(new net.ixitxachitls.dma.values.Modifier(), true),
+        new Multiple.Element(new Modifier(), true, ":", null),
       }));
-
-  //........................................................................
 
   //........................................................................
 
   static
   {
     extractVariables(BaseFeat.class);
+    extractVariables(BaseFeat.class, BaseIncomplete.class);
   }
+
+  //----- special indexes --------------------------------------------------
+
+  static
+  {
+    addIndex(new Index(Index.Path.WORLDS, "Worlds", TYPE));
+    addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
+    addIndex(new Index(Index.Path.EXTENSIONS, "Extensions", TYPE));
+  }
+
+  //........................................................................
 
   //----- commands ---------------------------------------------------------
 
@@ -508,6 +526,27 @@ public class BaseFeat extends BaseEntry
   //........................................................................
 
   //-------------------------------------------------------------- accessors
+
+  //-------------------------- computeIndexValues --------------------------
+
+  /**
+   * Get all the values for all the indexes.
+   *
+   * @return      a multi map of values per index name
+   *
+   */
+  @Override
+  public Multimap<Index.Path, String> computeIndexValues()
+  {
+    Multimap<Index.Path, String> values = super.computeIndexValues();
+
+    values.put(Index.Path.TYPES, m_featType.group());
+
+    return values;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -548,8 +587,8 @@ public class BaseFeat extends BaseEntry
       + "base feat Acrobatic =\n"
       + "\n"
       + "  type              General;\n"
-      + "  world             generic;\n"
-      + "  references        \"WTC 17524\" 89;\n"
+      + "  worlds            generic;\n"
+      + "  references        WTC 17524: 89;\n"
       + "  short description \"+2 bonus on Jump and Tumble checks\";\n"
       + "  benefit           \"You get a +2 bonus on all Jump checks and "
       + "Tumble checks.\";\n"
@@ -567,29 +606,23 @@ public class BaseFeat extends BaseEntry
     @org.junit.Test
     public void testRead()
     {
-      //net.ixitxachitls.util.logging.Log.add("out",
-      //                                      new net.ixitxachitls.util.logging
-      //                                      .ANSILogger());
-
       String result =
-      "#----- Acrobatic [General] --------------------------------------\n"
+      "#----- Acrobatic [General]\n"
         + "\n"
         + "base feat Acrobatic =\n"
         + "\n"
         + "  type              General;\n"
         + "  benefit           \"You get a +2 bonus on all Jump checks and "
         + "Tumble checks.\";\n"
-        + "  world             Generic;\n"
-        + "  references        \"WTC 17524\" 89;\n"
-        + "  short description \"+2 bonus on Jump and Tumble checks\";\n"
+        + "  worlds            Generic;\n"
+        + "  references        WTC 17524: 89;\n"
         + "  description       \"You have excellent body awareness and "
-        + "coordination.\".\n"
+        + "coordination.\";\n"
+        + "  short description \"+2 bonus on Jump and Tumble checks\".\n"
         + "\n"
-        + "#..............................................................\n";
+        + "#.....\n";
 
       AbstractEntry entry = createBaseFeat();
-
-      //System.out.println("read entry:\n'" + entry + "'");
 
       assertNotNull("base item should have been read", entry);
       assertEquals("base item name does not match", "Acrobatic",

@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
@@ -998,6 +999,7 @@ public class BaseItem extends BaseEntry
   {
     // set the possible values
     extractVariables(BaseItem.class);
+    extractVariables(BaseItem.class, BaseIncomplete.class);
   }
 
   //........................................................................

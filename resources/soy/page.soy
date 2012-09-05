@@ -31,7 +31,6 @@
  *
  * @param title The page title
  * @param content The real page content
- * @param oldcontent The old page content
  *
  */
 {template .full}
@@ -45,10 +44,6 @@
     <div id="page-container">
       <div id="page" class="page">
         {$content|noAutoescape}
-
-        <div style="border: 2px solid red; margin-top: 20px;">
-          {$oldcontent|noAutoescape}
-        </div>
       </div>
       <div id="footer-spacer"></div>
     </div>

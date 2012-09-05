@@ -95,7 +95,8 @@ public class SoyServlet extends DMAServlet
                      "baseproduct", "product",
                      "baseitem", "item",
                      "basecampaign", "campaign",
-                     "basequality");
+                     "basequality",
+                     "basefeat");
 
   //........................................................................
 

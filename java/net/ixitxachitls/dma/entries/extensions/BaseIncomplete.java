@@ -26,8 +26,6 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.Nonnull;
 
 import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.BaseItem;
-import net.ixitxachitls.dma.entries.BaseQuality;
 import net.ixitxachitls.dma.values.LongFormattedText;
 
 //..........................................................................
@@ -104,8 +102,6 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
   static
   {
     setAutoExtensions(BaseIncomplete.class, "incomplete");
-    extractVariables(BaseItem.class, BaseIncomplete.class);
-    extractVariables(BaseQuality.class, BaseIncomplete.class);
   }
 
   //........................................................................

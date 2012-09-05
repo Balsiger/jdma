@@ -34,6 +34,7 @@ import com.google.common.collect.Multimap;
 // import net.ixitxachitls.output.commands.Script;
 // import net.ixitxachitls.output.commands.Table;
 // import net.ixitxachitls.output.commands.Textblock;
+import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Modifier;
@@ -298,6 +299,7 @@ public class BaseQuality extends BaseEntry
   static
   {
     extractVariables(BaseQuality.class);
+    extractVariables(BaseQuality.class, BaseIncomplete.class);
   }
 
   //----- special indexes --------------------------------------------------
