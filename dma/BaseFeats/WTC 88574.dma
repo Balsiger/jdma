@@ -1,0 +1,14 @@
+#----- Silver Palm
+
+base feat Silver Palm =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all \Skill{Appraise} and \Skill{Bluff} checks.";
+  worlds            Generic;
+  references        WTC 88574: 37;
+  description
+  "Your culture is based on haggling and the art of the deal.";
+  short description "+2 to \Skill{Appraise} and \Skill{Bluff}".
+
+#.....

@@ -1,0 +1,201 @@
+# Player's Guide to Faerun
+
+#----- Discipline [Regional]
+
+base feat Discipline =
+
+  type              Regional;
+  benefit
+  "You gain a +2 bonus on Will saves and a +2 bonus on \Skill{Concentration} checks.";
+  special
+  "You may select this feat only as a 1st-level character. You may only have one regional feat.";
+  prerequisites
+  "\Monster{chitin (\Place{Underdark} [\Place{Yatchol}], \Monsetr{elf} (\Place{Everska} or The \Place{Yuirwood}), \Monster{gnome} (the \Place{Western Heartlands}), \Monster{halfling} (\Place{Luiren}), \Monster{human} (\Place{Aglarond}, \Place{Cormyr}, \Place{Shadovar}, \Place{Shou Expatriate}, or \Place{Thay}), \Monster{planetouched} (\Place{Mulhorand}), or \Monster{slyth} (\Place{Underdark} [\Place{Fluvenilstra}])";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 38;
+  description
+  "Your people are admired for their single-minded determination and clarity of purpose. Your are difficult to distract by spell or blow.";
+  short description "Gain +2 on Will saves and \Skill{Concentration} checks.".
+
+#.....
+#----- Insidious Magic [Metamagic]
+
+base feat Insidious Magic =
+
+  type              Metamagic;
+  benefit
+  "Any Weave user who employs a divination spell (such as \Spell{detect magic}), spell-like ability, or magic item that could detect magical aura of one of your spells must make a successful level check (DC 11 + your caster level) to succeed. Similarly, a Weave user attempting to reveal the effects of one of your spells spells via a divination spell (such as \Spell{See Invisibility}) must make a caster level check to succeed. The Weave user may check only once for each divination spell used, no matter how many of your spell effects are operating in the area. All creatures employing spells or spell-like abilities are considered Weave users unless the posses the \Feat{Shadow Weave Magic} feat.
+
+This benefit does not extend to spells cast from the schools of evocation or transmutation.";
+  prerequisites
+  "Shadow Weave Magic";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 45;
+  description
+  "You can use the Shadow Weave to make your spells harder for Weave users to detect.";
+  short description "Weave user must make a level check (DC 11 + your caster level) to detect your spells.".
+
+#.....
+#----- Pernicious Magic [Metamagic]
+
+base feat Pernicious Magic =
+
+  type              Metamagic;
+  benefit
+  "You gain a +4 bonus on caster level checks made to defeat a Weave user's spell resistance. All creatures employing spells or spell-like abilities are considered Weave users unless they posses the \Feat{Shadow Weave Magic} feat. This benefit stacks with those from \Feat{Spell Penetration} and \Feat{Greater Spell Penetration} feats, but it does not extend to spells you cast from the schools of evocation or transmutation.";
+  prerequisites
+  "Shadow Weave Magic";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 42;
+  description
+  "You can use the Shadow Weave to make your spells harder for Weave users to resist.";
+  short description "+4 to caster level check against Weave user's spell resistance (not for evocation and transmutation spells).".
+
+#.....
+#----- Shadow Weave Magic [General]
+
+base feat Shadow Weave Magic =
+
+  type              General;
+  benefit
+  "From now on, your spells tap the Shadow Weave instead of teh Weave. You can also activate magic items that use the Shadow Weave without taking damage.
+
+The saving throw for every spell you cast from schools of enchantment, illusion, and necromancy increases by +1. You also get a +1 bonus on caster level checks to overcome spell resistance with spells from these schools.
+
+The Shadow Weave proves less optimal for effects involving energy or matter. Your effective caster level for spells you cast from the schools of evocation or transmutation (except spells with the darkness descriptor) is reduced by one. A 1-st level Shadow Weave user cannot cast spells from these schools at all.
+
+You can no longer cast spells with the light descriptor. No matter what school they are from, such spells automatically fail. Your ability to use items that produce light effects is also limited --- you cannot invoke an item's light power it is activation is spell completion or spell-trigger.
+
+From now on, any magic item you create is Shadow Weave item (see Chapter 2 of the Forgotten Realms Campaign Setting).";
+  prerequisites
+  "Wis 15 or patron deity \God{Shar}.";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 43;
+  description
+  "You have discovered the dangerous secret of the Shadow Weave.";
+  short description "Gain +1 on save DC and spell penetration with enchantment, illusion, and necromancy spells; -1 caster level with evocation and transmutation spells; can't use light spells.".
+
+#.....
+#----- Survivor [Regions]
+
+base feat Survivor =
+
+  type              Regional;
+  benefit
+  "You get a +2 bonus to Fortitude saves and a +2 bonus on Survival Checks.";
+  special           "You may select this feat only as a 1st-level character. You may only have one regional feat.";
+  prerequisites
+  "Dwarf (Chult or the Great Glacier), Elf (the Chondalwood, the Inner Sea, or the Outer Sea), Human (Anauroch, Chult, the Great Glacier, Narfell, or the Shar), Kuo-toa (Underdark [Sloopdilmonpolop]), Slyth (Underdark [Fluvenilstra]), or Taer (the Icrerim Mountains)";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 45;
+  short description "+2 to For and Survival.";
+  description
+  "Your people thrive in places others find almost uninhabitable, and you know amany of the secrets of the wilderness.".
+
+#.....
+#----- Tenacious Magic [General]
+
+base feat Tenacious Magic =
+
+  type              General;
+  benefit
+  "Your spells resist dispelling attempts made by Weave users. All creatures employing spells or spell-like abilities are considered Weave users unless they possess the \Feat{Shadow Weave Magic} feat. When a Weave user makes a dispel check to dispel one of your spells (including using \Spell{dispel magic} to counterspell a spell you are casting), the DC is 15 + your caster level. This benefit does not extend to spells you cast from the schools of evocation or transmutation.";
+  prerequisites
+  "Shadow Weave Magic";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 45;
+  description
+  "You can use the Shadow Weave to make your spells harder for Weave users to dispell.";
+  short description "Dispel DC of your spells is 15 + your level against Weave uers.".
+
+#.....
+#----- Thug [Regional]
+
+base feat Thug =
+
+  type              Regional;
+  benefit
+  "You gain a +2 bonus on initiative checks and a +2 bonus on \Skill{Appraise} and \Skill{Intimidate} checks.";
+  special
+  "You may select this feat only as a 1st-level character. You may only have one regional feat.";
+  prerequisites
+  "\Monster{Centaur} (the Plateau of \Place{Thay}),
+                     \Monster{dwarf} (\Place{Underdark} [\Place{Northdark}] or \Place{Waterdeep}), \Monster{gnoll} (the Plateau of \Place{Thay}), \Monster{grimlock} (\Place{Underdark} [\Place{Reeshov}]), \Monster{human} (the \Place{Dragon Coast}, the \Place{Moonsea}, the \Place{Nelanthe Isles}, \Place{Unther}, the \Place{Vast}, or the \Place{Vilhon Reach}), \Monster{orc} (\Place{Amn}, \Place{Thesk}, or \Place{Underdark} [\Place{Northdark}]), or planetouched (\Place{Impiltur}, the \Place{Silver Marches}, \Place{Unther}, or the \Place{Western Heartlands}).";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 45;
+  description
+  "You have a knack for getting the jump on the competition and pushing people
+  around. While others debate, you act.";
+  short description "Gain a +2 on initiative checks, and a +2 on \Skill{Appraise} and \Skill{Intimidate} checks.".
+
+#.....
+#----- Twin Spell [Metamagic]
+
+base feat Twin Spell =
+
+  type              Metamagic;
+  benefit
+  "A spell altered by this feat takes effect twice, as if you were simultaneously casting the spell two times on the same location or against the same target. Any variables in the spell (such as targets, shaping an area, and so on) apply to both of the resulting spells. The target suffers all the effects of both spells individually and receives a saving throw for each.
+
+In some cases, such as a twinned \Spell{charm person}, failure of both of the target's saving throws results in redundant effects, although any ally of the target would have to succeed on two dispel checks to remove the effect. As with other metamagic feats, twinning a spell does not affect its vulnerability to counterspelling. (For example, countering with an untwinned spell deosn't negate just half of the twinned spell).
+
+A twinned spell uses up a spell slot four levels higher than the spell's actual level.";
+  prerequisites
+  "Any other metamatic feat";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 46;
+  description
+  "You can cast a spell simultaneously with another spell just like it.";
+  short description "Spell takes effect twice on target or area.".
+
+#.....
+#----- Twin Sword Style [Regional]
+
+base feat Twin Sword Style =
+
+  type              Regional;
+  short description "Gain +2 shield bonus to AC against one melee opponent.";
+  benefit
+  "When fighting with two blades (dagger, longsword, rapier, scimitar, or short sword, in any combination), you can designate a melee opponent during your action and gain +2 shield bonus to your Armor Class against attacks from that opponent. This bonus stacks with the shield bonus from a buckler or animated shield. You can select a new melee opponent as a free action on your turn. You lose this bonus if you are caught flat-footed or lose your Dexterity bonus to AC for any reason.";
+  prerequisites
+  "Elf (Menzoberranzan or Waterdeep), half-elf (Waterdeep), or human (Sembia or Waterdeep), proficient with martial weapons";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 46;
+  special "You may select this feat only as a 1st-level character. You may have only one regional feat.";
+  description
+  "You have mastered a defensive style based on wielding a blade in each hand.".
+
+#.....
+#----- Spellcasting Prodigy [General]
+
+base feat Spellcasting Prodigy =
+
+  type              General;
+  benefit
+  "For the purpose of determining bonus spells, the the ability score that controls your spellcasting (Charisma for bards and sorcerers, Wisdom for divine spellcasters, or Intelligence for wizards) as 2 points higher than its actual value.";
+  special           "You can gain \Feat{Spellcasting Prodigy} multiple times. Each time you take the feat it applies to a different spellcasting ability score. You can take this feat even if you don'd have any levels in a spelcasting class yet.";
+  prerequisites
+  "You may select this feat only as a 1st-level character.";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 44;
+  short description "+2 to spellcasting ability score to determine bonus spells";
+  description
+  "You have an exceptional gift for magic.".
+
+#.....
+#----- Persistent Spell [Metamagic]
+
+base feat Persistent Spell =
+
+  type              Metamagic;
+  benefit
+  "A persistent spell has a duration of 24 hours. The persistent spell must have a personal range or fixed range (for example, Spell{comprehend languages} or \Spell{detect magic}). Spells of instantaneous duration cannot be affected by this feat, nor can spells whose effects are discharged. You need not concentrate on spells such as \Spell{detect magic} or \Spell{detect thoughts} to be aware of the mere precense or absence of the thing detected, but you must still concentrate to gain additional information as normal. Concentration on such a spell is a standard action that does not provoke an attack of opportunity. A persistent spells uses up a spell slot 6 levels higher than the spell's actual level.";
+  prerequisites
+  "Extend Spell";
+  worlds            Forgotten Realms;
+  references        WTC 88647: 42;
+  short description "Make a personal or fixed range spell last 24 hours.".
+  description
+  "You can make a spell last all day.";
+
+#.....

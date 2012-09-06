@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2011 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -1282,6 +1282,30 @@ public class ParseReader
       if(expectCase(element.toString(), inIgnoreCase))
         return element;
     }
+
+    return null;
+  }
+
+  //........................................................................
+  //------------------------------ expectCase ------------------------------
+
+  /**
+   * Check for and over read one of the objects given in the Iterator.
+   * Again, white spaces in the text and in the stream are compacted.
+   *
+   * @param       <T>          the type of objects expected and returned
+   * @param       inTexts      the texts to try to find
+   * @param       inIgnoreCase a flag if casing should be ignored or not
+   *
+   * @return      the object found, or null if none was found
+   *
+   */
+  public @Nullable <T> T expectCase(@Nonnull Iterable<T> inTexts,
+                                    boolean inIgnoreCase)
+  {
+    for(T element : inTexts)
+      if(expectCase(element.toString(), inIgnoreCase))
+        return element;
 
     return null;
   }

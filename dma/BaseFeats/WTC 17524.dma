@@ -1,0 +1,2784 @@
+#----- Acrobatic [General]
+
+base feat Acrobatic =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Jump checks and Tumble checks.";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You have excellent body awareness and coordination.";
+  short description "+2 bonus on Jump and Tumble checks".
+
+#.....
+#----- Agile [General]
+
+base feat Agile =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Balance checks and Escape Artist
+                    checks.";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You are particularly flexible and poised.";
+  short description "+2 bonus on Balance and Escape Artist checks".
+
+#.....
+#----- Alertness [General]
+
+base feat Alertness =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Listen checks and Spot checks.";
+  special
+  "The master of a familiar (see the Familiars sidebar, page
+                    52) gains the benefit of the Alertness feat whenever the
+                    familiar is within arm’s reach.";
+  effects           Skill Listen: +2 general, Skill Spot +2 general;
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You have finely tuned senses.";
+  short description "+2 bonus on Listen and Spot checks".
+
+#.....
+#----- Animal Affinity [General]
+
+base feat Animal Affinity =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Handle Animal checks and Ride
+                    checks.";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You are good with animals.";
+  short description "+2 bonus on Handle Animal and Ride checks".
+
+#.....
+#----- Armor Proficiency (Heavy) [General]
+
+base feat Heavy Armor Proficiency =
+
+  synonyms          "Armor Proficiency, Heavy";
+  type              General;
+  benefit
+  "See Armor Proficiency (light).";
+  special
+  "Fighters, paladins, and clerics automatically have Armor
+                    Proficiency (heavy) as a bonus feat. They need not select
+                    it.";
+  normal
+  "See Armor Proficiency (light).";
+  prerequisites
+  "Armor Proficiency (light), Armor Proficiency (medium).";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You are proficient with heavy armor (see Table 7–6: Armor and Shields, page
+  123).";
+  short description "No armor check penalty on attack rolls".
+
+#.....
+#----- Armor Proficiency (Light) [General]
+
+base feat Light Armor Proficiency =
+
+  synonyms          "Armor Proficiency, Light";
+  type              General;
+  benefit
+  "When you wear a type of armor with which you are
+                    proficient, the armor check penalty for that armor applies
+                    only to Balance, Climb, Escape Artist, Hide, Jump, Move
+                    Silently, Pick Pocket, and Tumble checks.";
+  special
+  "All characters except wizards, sorcerers, and monks
+                    automatically have Armor Proficiency (light) as a bonus
+                    feat.  They need not select it.";
+  normal
+  "A character who is wearing armor with which she is not
+                    proficient applies its armor check penalty to attack rolls
+                    and to all skill checks that involve moving, including
+                    Ride.";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You are proficient with light armor (see Table 7–6: Armor and Shields, page
+  123).";
+  short description "No armor check penalty on attack rolls".
+
+#.....
+#----- Armor Proficiency (Medium) [General]
+
+base feat Armor Proficiency =
+
+  synonyms          "Armor Proficiency, Medium";
+  type              General;
+  benefit
+  "See Armor Proficiency (light).";
+  special
+  "Fighters,
+                    barbarians, paladins, clerics, druids, and bards
+                    automatically have Armor Proficiency (medium) as a bonus
+                    feat. They need not select it.";
+  normal
+  "See Armor Proficiency (light).";
+  prerequisites
+  "Armor Proficiency (light).";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You are proficient with medium armor (see Table 7–6: Armor and Shields, page
+  123).";
+  short description "No armor check penalty on attack rolls".
+
+#.....
+#----- Athletic [General]
+
+base feat Athletic =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Climb checks and Swim checks.";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You have a knack for athletic endeavors.";
+  short description "+2 bonus on Climb and Swim checks".
+
+#.....
+#----- Augment Summoning [General]
+
+base feat Augment Summoning =
+
+  type              General;
+  benefit
+  "Each creature you conjure with any summon spell gains a +4
+                    enhancement bonus to Strength and Constitution for the
+                    duration of the spell that summoned it.";
+  prerequisites
+  "Spell Focus (conjuration).";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "Your summoned creatures are more powerful than normal.";
+  short description "Summoned creatures gain +4 Str, +4 Con".
+
+#.....
+#----- Blind-Fight [General]
+
+base feat Blind-Fight =
+
+  type              General;
+  benefit
+  "In melee, every time you miss because of concealment,
+                    you can reroll your miss chance percentile roll one time to
+                    see if you actually hit (see Concealment, page 152).
+
+                    An invisible attacker gets no advantages related to hitting
+                    you in melee. That is, you don’t lose your Dexterity bonus
+                    to Armor Class, and the attacker doesn’t get the usual +2
+                    bonus for being invisible (see Table 8–5: Attack Roll
+                    Modifiers and Table 8–6: Armor Class Modifiers, page
+                    151). The invisible attacker’s bonuses do still apply for
+                    ranged attacks, however.
+
+                    You take only half the usual penalty to speed for being
+                    unable to see. Darkness and poor visibility in general
+                    reduces your speed to three-quarters normal, instead of
+                    one-half (see Table 9–4: Hampered Movement, page 163).";
+  special
+  "The Blind-Fight feat is of no use against a character who
+                    is the subject of a blink spell (see page 206).  A fighter
+                    may select Blind-Fight as one of his fighter bonus feats
+                    (see page 38).";
+  normal
+  "Regular attack roll modifiers for invisible attackers
+                    trying to hit you (see Table 8–5: Attack Roll Modifiers,
+                    page 151) apply, and you lose your Dexterity bonus to
+                    AC. The speed reduction for darkness and poor visibility
+                    (see Table 9–4: Hampered Movement, page 163) also
+                    applies.";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You know how to fight in melee without being able to see your foes.";
+  short description "Reroll miss chance for concealment".
+
+#.....
+#----- Brew Potion [Item Creation]
+
+base feat Brew Potion =
+
+  type              Item Creation;
+  benefit
+  "You can create a potion of any 3rd-level or lower spell
+                    that you know and that targets one or more
+                    creatures. Brewing a potion takes one day. When you create
+                    a potion, you set the caster level, which must be
+                    sufficient to cast the spell in question and no higher than
+                    your own level. The base price of a potion is its spell
+                    level × its caster level × 50 gp. To brew a potion, you
+                    must spend 1/25 of this base price in XP and use up raw
+                    materials costing one half this base price.
+
+                    When you create a potion, you make any choices that you
+                    would normally make when casting the spell. Whoever drinks
+                    the potion is the target of the spell.
+
+                    Any potion that stores a spell with a costly material
+                    component or an XP cost also carries a commensurate
+                    cost. In addition to the costs derived from the base price,
+                    you must expend the material component or pay the XP when
+                    creating the potion.";
+  prerequisites
+  "Caster level 3rd.";
+  worlds            Generic;
+  references        WTC 17524: 89;
+  description
+  "You can create potions, which carry spells within themselves. See the
+  Dungeon Master’s Guide for rules on potions.";
+  short description "Create magic potions".
+
+#.....
+#----- Cleave [General]
+
+base feat Cleave =
+
+  type              General;
+  benefit
+  "If you deal a creature enough damage to make it drop
+                    (typically by dropping it to below 0 hit points or killing
+                    it), you get an immediate, extra melee attack against
+                    another creature within reach. You cannot take a 5-foot
+                    step before making this extra attack.
+
+                    The extra attack is with the same weapon and at the same
+                    bonus as he attack that dropped the previous creature. You
+                    can use this ability once per round.";
+  special
+  "A fighter may select Cleave as one of his fighter bonus
+                    feats (see page 38).";
+  prerequisites
+  "Str 13, Power Attack.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You can follow through with powerful blows.";
+  short description "Extra melee attack after dropping target".
+
+#.....
+#----- Combat Casting [General]
+
+base feat Combat Casting =
+
+  type              General;
+  benefit
+  "You get a +4 bonus on Concentration checks made to cast a
+                    spell or use a spell-like ability while on the defensive
+                    (see Casting on the Defensive, page 140) or while you are
+                    grappling or pinned.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You are adept at casting spells in combat.";
+  short description "+4 bonus on Concentration checks for defensive casting".
+
+#.....
+#----- Combat Expertise [General]
+
+base feat Combat Expertise =
+
+  type              General;
+  benefit
+  "When you use the attack action or the full attack action
+                    in melee, you can take a penalty of as much as –5 on your
+                    attack roll and add the same number (+5 or less) as a dodge
+                    bonus to your Armor Class. This number may not exceed your
+                    base attack bonus.
+
+                    The changes to attack rolls and Armor Class last until your
+                    next action.";
+  special
+  "A fighter may select Combat Expertise as one of his
+                    fighter bonus feats (see page 38).";
+  normal
+  "A character without the Combat Expertise feat can fight
+                    defensively while using the attack or full attack action to
+                    take a –4 penalty on attack rolls and gain a +2 dodge bonus
+                    to Armor Class.";
+  prerequisites
+  "Int 13.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You are trained at using your combat skill for defense as well as offense.";
+  short description "Trade attack bonus for AC (max 5 points)".
+
+#.....
+#----- Combat Reflexes [General]
+
+base feat Combat Reflexes =
+
+  type              General;
+  benefit
+  "When foes leave themselves open, you may make a number of
+                    additional attacks of opportunity equal to your Dexterity
+                    bonus. For example, a fighter with a Dexterity of 15 can
+                    make a total of three attacks of opportunity in 1 round—the
+                    one attack of opportunity any character is entitled to,
+                    plus two more because of his +2 Dexterity bonus. If four
+                    goblins move out of the character’s threatened squares, he
+                    can make one attack of opportunity each against three of
+                    the four. You can still make only one attack of opportunity
+                    per opportunity.
+
+                    With this feat, you may also make attacks of opportunity
+                    while flat-footed.";
+  special
+  "The Combat Reflexes feat does not allow a rogue to use
+                    her opportunist ability (see page 51) more than once per
+                    round.
+
+                    A fighter may select Combat Reflexes as one of his fighter
+                    bonus feats (see page 38). A monk may select Combat
+                    Reflexes as a bonus feat at 2nd level.";
+  normal
+  "A character without this feat can make only one attack of
+                    opportunity per round and can’t make attacks of opportunity
+                    while flat-footed.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You can respond quickly and repeatedly to opponents who let their defenses
+  down.";
+  short description "Additional attacks of opportunity (+Dex bonus)".
+
+#.....
+#----- Craft Magic Arms And Armor [Item Creation]
+
+base feat Craft Magic Arms And Armor =
+
+  type              Item Creation;
+  benefit
+  "You can create any magic weapon, armor, or shield whose
+                    prerequisites you meet (see the Dungeon Master’s Guide for
+                    prerequisites and other information on these
+                    items). Enhancing a weapon, suit of armor, or shield takes
+                    one day for each 1,000 gp in the price of its magical
+                    features. To enhance a weapon, suit of armor, or shield,
+                    you must spend 1/25 of its features’ total price in XP and
+                    use up raw materials costing one-half of this total
+                    price.
+
+                    The weapon, armor, or shield to be enhanced must
+                    be a mas- terwork item that you provide. Its cost is not
+                    included in the above cost.
+
+                    You can also mend a broken magic weapon, suit of armor, or
+                    shield if it is one that you could make. Doing so costs
+                    half the XP, half the raw materials, and half the time it
+                    would take to craft that item in the first place.";
+  prerequisites
+  "Caster level 5th.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You can create magic weapons, armor, and shields.";
+  short description "Create magic weapons, armor, and shields".
+
+#.....
+#----- Craft Rod [Item Creation]
+
+base feat Craft Rod =
+
+  type              Item Creation;
+  benefit
+  "You can create any rod whose prerequisites you meet (see
+                    the Dungeon Master’s Guide for prerequisites and other
+                    infor- mation on rods). Crafting a rod takes one day for
+                    each 1,000 gp in its base price. To craft a rod, you must
+                    spend 1/25 of its base price in XP and use up raw materials
+                    costing one-half of its base price.
+
+                    Some rods incur extra costs in material components or XP,
+                    as noted in their descriptions. These costs are in addition
+                    to those derived from the rod’s base price.";
+  prerequisites
+  "Caster level 9th.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You can create magic rods, which have varied magical effects.";
+  short description "Create magic rods".
+
+#.....
+#----- Craft Staff [Item Creation]
+
+base feat Craft Staff =
+
+  type              Item Creation;
+  benefit
+  "You can create any staff whose prerequisites you meet (see
+                    the Dungeon Master’s Guide for prerequisites and other
+                    information on staffs).
+
+                    Crafting a staff takes one day for each 1,000 gp in its
+                    base price. To craft a staff, you must spend 1/25 of its
+                    base price in XP and use up raw materials costing one-half
+                    of its base price. A newly created staff has 50 charges.
+
+                    Some staffs incur extra costs in material components or XP,
+                    as noted in their descrip- tions. These costs are in
+                    addition to those derived from the staff ’s base price.";
+  prerequisites
+  "Caster level 12th.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You can create magic staffs, each of which has multiple magical effects.";
+  short description "Create magic staffs".
+
+#.....
+#----- Craft Wand [Item Creation]
+
+base feat Craft Wand =
+
+  type              Item Creation;
+  benefit
+  "You can create a wand of any 4th-level or lower spell that
+                    you know. Crafting a wand takes one day for each 1,000 gp
+                    in its base price. The base price of a wand is its caster
+                    level × the spell level × 750 gp. To craft a wand, you must
+                    spend 1/25 of this base price in XP and use up raw
+                    materials costing one-half of this base price. A newly
+                    created wand has 50 charges.
+
+                    Any wand that stores a spell with a costly material
+                    component or an XP cost also carries a commensurate
+                    cost. In addition to the cost derived from the base price,
+                    you must expend fifty copies of the material component or
+                    pay fifty times the XPcost.";
+  prerequisites
+  "Caster level 5th.";
+  worlds            Generic;
+  references        WTC 17524: 92;
+  description
+  "You can create wands, which hold spells (see the Dungeon Master’s Guide for
+  rules on wands).";
+  short description "Create magic wands".
+
+#.....
+#----- Craft Wondrous Item [Item Creation]
+
+base feat Craft Wondrous Item =
+
+  type              Item Creation;
+  benefit
+  "You can create any wondrous item whose prerequisites you
+                    meet (see the Dungeon Master’s Guide for prerequisites and
+                    other information on wondrous items). Enchanting a wondrous
+                    item takes one day for each 1,000 gp in its price. To
+                    enchant a wondrous item, you must spend 1/25 of the item’s
+                    price in XP and use up raw materials costing half of this
+                    price.
+
+                    You can also mend a broken wondrous item if it is one that
+                    you could make. Doing so costs half the XP, half the raw
+                    materials, and half the time it would take to craft that
+                    item in the first place.
+
+                    Some wondrous items incur extra costs in material
+                    components or XP, as noted in their descriptions. These
+                    costs are in addition to those derived from the item’s base
+                    price. You must pay such a cost to create an item or to
+                    mend a broken one.";
+  prerequisites
+  "Caster level 3rd.";
+  worlds            Generic;
+  references        WTC 17524: 92-93;
+  description
+  "You can create a wide variety of magic items, such as a crystal ball or a
+  flying carpet.";
+  short description "Create magic wondrous items".
+
+#.....
+#----- Deceitful [General]
+
+base feat Deceitful =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Disguise checks and Forgery
+                    checks.";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "You have a knack for disguising the truth.";
+  short description "+2 bonus on Disguise and Forgery checks".
+
+#.....
+#----- Deflect Arrows [General]
+
+base feat Deflect Arrows =
+
+  type              General;
+  benefit
+  "You must have at least one hand free (holding nothing) to
+                    use this feat. Once per round when you would normally be
+                    hit with a ranged weapon, you may deflect it so that you
+                    take no damage from it. You must be aware of the attack and
+                    not flat-footed.
+
+                    Attempting to deflect a ranged weapon doesn’t count as an
+                    action.
+
+                    Unusually massive ranged weapons, such as boulders hurled
+                    by giants, and ranged attacks generated by spell effects,
+                    such as Melf’s acid arrow, can’t be deflected.";
+  special
+  "A monk may select Deflect Arrows as a bonus feat at 2nd
+                    level, even if she does not meet the prerequisites.
+
+                    A fighter may select Deflect Arrows as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Dex 13, Improved Unarmed Strike.";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "You can deflect incoming arrows, as well as crossbow bolts, spears, and
+  other projectile or thrown weapons.";
+  short description "Deflect one ranged attack per round".
+
+#.....
+#----- Deft Hands [General]
+
+base feat Deft Hands =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Sleight of Hand checks and Use
+                    Rope checks.";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "You have exceptional manual dexterity.";
+  short description "+2 bonus on Sleight of Hand and Use Rope checks".
+
+#.....
+#----- Diehard [General]
+
+base feat Diehard =
+
+  type              General;
+  benefit
+  "When reduced to between –1 and –9 hit points, you
+                    automatically become stable. You don’t have to roll d% to
+                    see if you lose 1 hit point each round.
+
+                    When reduced to negative hit points, you may choose to act
+                    as if you were disabled, rather than dying. You must make
+                    this decision as soon as you are reduced to negative hit
+                    points (even if it isn’t your turn). If you do not choose
+                    to act as if you were disabled, you immediately fall
+                    unconscious.
+
+                    When using this feat, you can take either a single move or
+                    stan- dard action each turn, but not both, and you cannot
+                    take a full-round action. You can take a move action
+                    without further injuring yourself, but if you perform any
+                    standard action (or any other action the DM deems as
+                    strenuous, including some free actions, such as casting a
+                    quickened spell) you take 1 point of damage after
+                    completing the act. If you reach –10 hit points, you
+                    immediately ie.";
+  normal
+  "A character without this feat who is reduced to between –1
+                    and –9 hit points is unconscious and dying, as described in
+                    Chapter 8: Combat.";
+  prerequisites
+  "Endurance.";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "You can remain conscious after attacks that would fell others.";
+  short description "Remain conscious at –1 to –9 hp".
+
+#.....
+#----- Diligent [General]
+
+base feat Diligent =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Appraise checks and Decipher
+                    Script checks.";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "Your meticulousness allows you to analyze minute details that others miss.";
+  short description "+2 bonus on Appraise and Decipher Script checks".
+
+#.....
+#----- Dodge [General]
+
+base feat Dodge =
+
+  type              General;
+  benefit
+  "During your action, you designate an opponent and receive
+                    a +1 dodge bonus to Armor Class against attacks from that
+                    opponent. You can select a new opponent on any action.
+
+                    A condition that makes you lose your Dexterity bonus to
+                    Armor Class (if any) also makes you lose dodge
+                    bonuses. Also, dodge bonuses (such as this one and a
+                    dwarf’s racial bonus on dodge attempts against giants)
+                    stack with each other, unlike most other types of
+                    bonuses.";
+  special
+  "A fighter may select Dodge as one of his fighter bonus
+                    feats (see page 38).";
+  prerequisites
+  "Dex 13.";
+  effects           Armor Class: +1 dodge if "selected dodge target";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "You are adept at dodging blows.";
+  short description "+1 dodge bonus to AC against selected target".
+
+#.....
+#----- Empower Spell [Metamagic]
+
+base feat Empower Spell =
+
+  type              Metamagic;
+  benefit
+  "All variable, numeric effects of an empowered spell are
+                    increased by one-half. An empowered spell deals half again
+                    as much damage as normal, cures half again as many hit
+                    points, affects half again as many targets, and so forth,
+                    as appropriate. For example, an empowered magic missile
+                    deals 1-1/2 times its normal damage (roll 1d4+1 and
+                    multiply the result by 1-1/2 for each missile). Saving
+                    throws and opposed rolls (such as the one you make when you
+                    cast dispel magic) are not affected, nor are spells without
+                    random variables. An empowered spell uses up a spell slot
+                    two levels higher than the spell’s actual level.";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "You can cast spells to greater effect.";
+  short description "Increase spell’s variable, numeric effects by 50%".
+
+#.....
+#----- Endurance [General]
+
+base feat Endurance Feat =
+
+  type              General;
+  benefit
+  "You gain a +4 bonus on the following checks and saves:
+                    Swim checks made to resist nonlethal damage (see page 84),
+                    Constitution checks made to continue running (see page
+                    144), Constitution checks made to avoid nonlethal damage
+                    from a forced march (see page 164), Constitution checks
+                    made to hold your breath (see page 84), Constitution checks
+                    made to avoid nonlethal damage from starvation or thirst
+                    (see page 304 of the Dun- geon Master’s Guide), Fortitude
+                    saves made to avoid nonlethal damage from hot or cold
+                    environments (see pages 302 and 303 of the Dungeon Master’s
+                    Guide), and Forti- tude saves made to resist damage from
+                    suffocation (see page 304 of the Dun- geon Master’s
+                    Guide). Also, you may sleep in light or medium armor
+                    without becoming fatigued.";
+  special
+  "A ranger automatically gains Endurance as a bonus feat at
+                    3rd level (see page 48). He need not select it.";
+  normal
+  "A character without this feat who sleeps in medium or
+                    heavier armor is automatically fatigued the next day.";
+  worlds            Generic;
+  references        WTC 17524: 93;
+  description
+  "You are capable of amazing feats of stamina.";
+  short description "+4 bonus on checks or saves to resist nonlethal damage".
+
+#.....
+#----- Enlarge Spell [Metamagic]
+
+base feat Enlarge Spell =
+
+  type              Metamagic;
+  benefit
+  "You can alter a spell with a range of close, medium, or
+                    long to increase its range by 100%. An enlarged spell with
+                    a range of close now has a range of 50 ft. + 5 ft./level,
+                    while medium-range spells have a range of 200 ft. + 20
+                    ft./level and long-range spells have a range of 800 ft. +
+                    80 ft./level. An enlarged spell uses up a spell slot one
+                    level higher than the spell’s actual level.
+
+                    Spells whose ranges are not defined by distance, as well as
+                    spells whose ranges are not close, medium, or long, do not
+                    have increased ranges.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You can cast spells farther than normal.";
+  short description "Double spell’s range".
+
+#.....
+#----- Eschew Materials [General]
+
+base feat Eschew Materials =
+
+  type              General;
+  benefit
+  "You can cast any spell that has a material component
+                    costing 1 gp or less without needing that component. (The
+                    casting of the spell still provokes attacks of opportunity
+                    as normal.) If the spell requires a material component that
+                    costs more than 1 gp, you must have the material component
+                    at hand to cast the spell, just as normal.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You can cast spells without relying on material components.";
+  short description "Cast spells without material components".
+
+#.....
+#----- Exotic Weapon Proficiency [General]
+
+base feat Exotic Weapon Proficiency =
+
+  type              General;
+  benefit
+  "You make attack rolls with the weapon normally.";
+  special
+  "You can gain Exotic Weapon Proficiency multiple times.
+
+                    Each time you take the feat, it applies to a new type of
+                    exotic weapon. Proficiency with the bastard sword or the
+                    dwarven waraxe has an additional prerequisite of Str 13.
+
+                    A fighter may select Exotic Weapon Proficiency as one of
+                    his fighter bonus feats (see page 38).";
+  normal
+  "A character who uses a weapon with which he or she is not
+                    proficient takes a –4 penalty on attack rolls.";
+  prerequisites
+  "Base attack bonus +1 (plus Str 13 for bastard sword or
+                    dwarven waraxe).";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "Choose a type of exotic weapon, such as dire flail or shuriken (see Table
+  7–5: Weapons, page 116, for a list of exotic weapons). You understand how to
+  use that type of exotic weapon in combat.";
+  short description "No penalty on attacks with specific exotic weapon".
+
+#.....
+#----- Extend Spell [Metamagic]
+
+base feat Extend Spell =
+
+  type              Metamagic;
+  benefit
+  "An extended spell lasts twice as long as normal. A spell
+                    with a duration of concentration, instantaneous, or
+                    permanent is not affected by this feat. An extended spell
+                    uses up a spell slot one level higher than the spell’s
+                    actual level.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You can cast spells that last longer than normal.";
+  short description "Double spell’s duration".
+
+#.....
+#----- Extra Turning [General]
+
+base feat Extra Turning =
+
+  type              General;
+  benefit
+  "Each time you take this feat, you can use your ability to
+                    turn or rebuke creatures four more times per day than
+                    normal.
+
+                    If you have the ability to turn or rebuke more than one
+                    kind of creature (such as a good-aligned cleric with access
+                    to the Fire domain, who can turn undead and water creatures
+                    and can also rebuke fire creatures), each of your turning
+                    or rebuking abilities gains four additional uses per day.";
+  special
+  "You can gain Extra Turning multiple times. Its effects
+                    stack. Each time you take the feat, you can use each of
+                    your turning or rebuking abilities four additional times
+                    per day.";
+  normal
+  "Without this feat, a character can typically turn or
+                    rebuke undead (or other creatures) a number of times per
+                    day equal to 3 + his or her Charisma modifier.";
+  prerequisites
+  "Ability to turn or rebuke creatures.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You can turn or rebuke creatures more often than normal.";
+  short description "Can turn or rebuke 4 more times per day".
+
+#.....
+#----- Far Shot [General]
+
+base feat Far Shot =
+
+  type              General;
+  benefit
+  "When you use a projectile weapon, such as a bow, its range
+                    increment increases by one-half (multiply by 1-1/2). When
+                    you use a thrown weapon, its range increment is doubled.";
+  special
+  "A fighter may select Far Shot as one of his fighter bonus
+                    feats (see page 38).";
+  prerequisites
+  "Point Blank Shot.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You can get greater distance out of a ranged weapon.";
+  short description "Increase range increment by 50% or 100%".
+
+#.....
+#----- Forge Ring [Item Creation]
+
+base feat Forge Ring =
+
+  type              Item Creation;
+  benefit
+  "You can create any ring whose prerequisites you meet (see
+                    the Dungeon Master’s Guide for prerequisites and other
+                    infor- mation on rings). Crafting a ring takes one day for
+                    each 1,000 gp in its base price. To craft a ring, you must
+                    spend 1/25 of its base price in XP and use up raw materials
+                    costing one-half of its base price.
+
+                    You can also mend a broken ring if it is one that you could
+                    make.
+
+                    Doing so costs half the XP, half the raw materials, and
+                    half the time it would take to forge that ring in the first
+                    place.
+
+                    Some magic rings incur extra costs in material components
+                    or XP, as noted in their descriptions. For example, a ring
+                    of three wishes costs 15,000 XP in addition to costs
+                    derived from its base price (as many XP as it costs to cast
+                    wish three times). You must pay such a cost to forge such a
+                    ring or to mend a broken one.";
+  prerequisites
+  "Caster level 12th.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You can create magic rings, which have varied magical effects.";
+  short description "Create magic rings".
+
+#.....
+#----- Great Cleave [General]
+
+base feat Great Cleave =
+
+  type              General;
+  benefit
+  "This feat works like Cleave, except that there is no limit
+                    to the number of times you can use it per round.";
+  special
+  "A fighter may select Great Cleave as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Str 13, Cleave, Power Attack, base attack bonus +4.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You can wield a melee weapon with such power that you can strike multiple
+  times when you fell your foes.";
+  short description "No limit to cleave attacks each round".
+
+#.....
+#----- Great Fortitude [General]
+
+base feat Great Fortitude =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Fortitude saving throws.";
+  effects           Fortitude Save: +2 general;
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "You are tougher than normal.";
+  short description "+2 bonus on Fortitude saves".
+
+#.....
+#----- Greater Spell Focus [General]
+
+base feat Greater Spell Focus =
+
+  type              General;
+  benefit
+  "Add +1 to the Difficulty Class for all saving throws
+                    against spells from the school of magic you select. This
+                    bonus stacks with the bonus from Spell Focus.";
+  special
+  "You can gain this feat multiple times. Its effects do not
+                    stack. Each time you take the feat, it applies to a new
+                    school of magic to which you already have applied the Spell
+                    Focus feat.";
+  worlds            Generic;
+  references        WTC 17524: 94;
+  description
+  "Choose a school of magic to which you already have applied the Spell Focus
+  feat. Your spells of that school are now even more potent than before.";
+  short description "+1 bonus on save DCs against specific school of magic".
+
+#.....
+#----- Greater Spell Penetration [General]
+
+base feat Greater Spell Penetration =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on caster level checks (1d20 + caster
+                    level) made to overcome a creature’s spell resistance. This
+                    bonus stacks with the one from Spell Penetration (see page
+                    100).";
+  prerequisites
+  "Spell Penetration.";
+  worlds            Generic;
+  references        WTC 17524: 94-95;
+  description
+  "Your spells are remarkably potent, breaking through spell resistance more
+  readily than normal.";
+  short description "+4 to caster level checks to defeat spell resistance".
+
+#.....
+#----- Greater Two-Weapon Fighting [General]
+
+base feat Greater Two-Weapon Fighting =
+
+  type              General;
+  benefit
+  "You get a third attack with your off-hand weapon, albeit
+                    at a –10 penalty.";
+  special
+  "A fighter may select Greater Two-Weapon Fighting as
+                    one of his fighter bonus feats (see page 38).
+
+                    An 11th-level ranger who has chosen the two-weapon combat
+                    style is treated as having Greater Two-Weapon Fighting,
+                    even if he does not have the prerequisites for it, but only
+                    when he is wearing light or no armor (see page 48).";
+  prerequisites
+  "Dex 19, Improved Two-Weapon Fighting, Two-Weapon Fighting,
+                    base attack bonus +11.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "You are a master at fighting two-handed.";
+  short description "Gain third off-hand attack".
+
+#.....
+#----- Greater Weapon Focus [General]
+
+base feat Greater Weapon Focus =
+
+  type              General;
+  benefit
+  "You gain a +1 bonus on all attack rolls you make using the
+                    selected weapon. This bonus stacks with other bonuses on
+                    attack rolls, including the one from Weapon Focus (see
+                    below)";
+  special
+  "You can gain Greater Weapon Focus multiple times. Its
+                    effects do not stack. Each time you take the feat, it
+                    applies to a new type of weapon.
+
+                    A fighter must have Greater Weapon Focus with a given
+                    weapon to gain the Greater Weapon Specialization feat for
+                    that weapon.
+
+                    A fighter may select Greater Weapon Focus as one of his
+                    fighter bonus feats (see page 38).";
+  prerequisites
+  "Proficiency with selected weapon, Weapon Focus with
+                    selected weapon, fighter level 8th.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "Choose one type of weapon, such as greataxe, for which you have already
+  selected Weapon Focus. You can also choose unarmed strike or grapple as your
+  weapon for purposes of this feat. You are especially good at using this
+  weapon.";
+  short description "+2 bonus on attack rolls with selected weapon".
+
+#.....
+#----- Greater Weapon Specialization [General]
+
+base feat Greater Weapon Specialization =
+
+  type              General;
+  benefit
+  "You gain a +2 bonus on all damage rolls you make using the
+                    selected weapon. This bonus stacks with other bonuses on
+                    damage rolls, including the one from Weapon Specialization
+                    (see below).";
+  special
+  "You can gain Greater Weapon Specialization multiple
+                    times. Its effects do not stack. Each time you take the
+                    feat, it applies to a new type of weapon.
+
+                    A fighter may select Greater Weapon Specialization as one
+                    of his fighter bonus feats (see page 38).";
+  prerequisites
+  "Proficiency with selected weapon, Greater Weapon Focus
+                    with selected weapon, Weapon Focus with selected weapon,
+                    Weapon Specialization with selected weapon, fighter level
+                    12th.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "Choose one type of weapon, such as greataxe, for which you have already
+  selected Weapon Specialization. You can also choose unarmed strike or grapple
+  as your weapon for purposes of this feat.
+
+  You deal extra damage when using this weapon.";
+  short description "+4 bonus on damage rolls with selected weapon".
+
+#.....
+#----- Heighten Spell [Metamagic]
+
+base feat Heighten Spell =
+
+  type              Metamagic;
+  benefit
+  "A heightened spell has a higher spell level than normal
+                    (up to a maximum of 9th level). Unlike other metamagic
+                    feats, Heighten Spell actually increases the effective
+                    level of the spell that it modifies. All effects dependent
+                    on spell level (such as saving throw DCs and ability to
+                    penetrate a lesser globe of invulnerability) are calculated
+                    according to the heightened level. The heightened spell is
+                    as difficult to prepare and cast as a spell of its
+                    effective level. For example, a cleric could prepare hold
+                    person as a 4th-level spell (instead of a 2nd-level spell),
+                    and it would in all ways be treated as a 4th-level spell.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "You can cast a spell as if it were a higher-level spell than it actually
+  is.";
+  short description "Cast spells as higher level".
+
+#.....
+#----- Improved Bull Rush [General]
+
+base feat Improved Bull Rush =
+
+  type              General;
+  benefit
+  "When you perform a bull rush (page 154), you do not
+                    provoke an attack of opportunity from the defender. You
+                    also gain a +4 bonus on the opposed Strength check you make
+                    to push back the defender.";
+  special
+  "A fighter may select Improved Bull Rush as one of his
+                    fighter bonus feats (see page 38).";
+  prerequisites
+  "Str 13, Power Attack.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "You know how to push opponents back.";
+  short description "+4 bonus on bull rush attempts; no attack of opportunity".
+
+#.....
+#----- Improved Counterspell [General]
+
+base feat Improved Counterspell =
+
+  type              General;
+  benefit
+  "When counterspelling, you may use a spell of the same
+                    school that is one or more spell levels higher than the
+                    target spell.";
+  normal
+  "Without this feat, you may counter a spell only with the
+                    same spell or with a spell specifically designated as
+                    countering the target spell.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "You understand the nuances of magic to such an extent that you can counter
+  your opponent’s spells with great efficiency.";
+  short description "Counterspell with spell of same school".
+
+#.....
+#----- Improved Critical [General]
+
+base feat Improved Critical =
+
+  type              General;
+  benefit
+  "When using the weapon you selected, your threat range is
+                    doubled. For example, a longsword usually threatens a
+                    critical hit on a roll of 19–20 (two numbers). If a
+                    character using a longsword has Improved Critical
+                    (longsword), the threat range becomes 17–20 (four
+                    numbers).";
+  special
+  "You can gain Improved Critical multiple times. The effects
+                    do not stack. Each time you take the feat, it applies to a
+                    new type of weapon.
+
+                    This effect doesn’t stack with any other effect that
+                    expands the threat range of a weapon (such as the keen edge
+                    spell).
+
+                    A fighter may select Improved Critical as one of his
+                    fighter bonus feats (see page 38).";
+  prerequisites
+  "Proficient with weapon, base attack bonus +8.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "Choose one type of weapon, such as longsword or greataxe. With that weapon,
+  you know how to hit where it hurts.";
+  short description "Double threat range of weapon".
+
+#.....
+#----- Improved Disarm [General]
+
+base feat Improved Disarm =
+
+  type              General;
+  benefit
+  "You do not provoke an attack of opportunity when you
+                    attempt to disarm an opponent, nor does the opponent have a
+                    chance to disarm you. You also gain a +4 bonus on the
+                    opposed attack roll you make to disarm your opponent.";
+  special
+  "A fighter may select Improved Disarm as one of his fighter
+                    bonus feats (see page 38).
+
+                    A monk may select Improved Disarm as a bonus feat at 6th
+                    level, even if she does not meet the prerequisites.";
+  normal
+  "See the normal disarm rules, page 155.";
+  prerequisites
+  "Int 13, Combat Expertise.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "You know how to disarm opponents in melee combat.";
+  short description "+4 bonus on disarm attempts; no attack of opportunity".
+
+#.....
+#----- Improved Feint [General]
+
+base feat Improved Feint =
+
+  type              General;
+  benefit
+  "You can make a Bluff check to feint in combat as a move
+                    action.";
+  normal
+  "Feinting in combat is a standard action.
+
+                    A fighter may select Improved Feint as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Int 13, Combat Expertise.";
+  worlds            Generic;
+  references        WTC 17524: 95;
+  description
+  "You are skilled at misdirecting your opponent’s attention in combat.";
+  short description "Feint in combat as move action".
+
+#.....
+#----- Improved Grapple [General]
+
+base feat Improved Grapple =
+
+  type              General;
+  benefit
+  "You do not provoke an attack of opportunity when you make
+                    a touch attack to start a grapple. You also gain a +4 bonus
+                    on all grapple checks, regardless of whether you started
+                    the grapple.";
+  special
+  "A fighter may select Improved Grapple as one of his
+                    fighter bonus feats (see page 38).
+
+                    A monk may select Improved Grapple as a bonus feat at 1st
+                    level, even if she does not meet the prerequisites.";
+  normal
+  "Without this feat, you provoke an attack of opportunity
+                    when you make a touch attack to start a grapple.";
+  prerequisites
+  "Dex 13, Improved Unarmed Strike.";
+  worlds            Generic;
+  references        WTC 17524: 95-96;
+  description
+  "You are skilled at grappling opponents.";
+  short description "+4 bonus on grapple checks; no attack of opportunity".
+
+#.....
+#----- Improved Initiative [General]
+
+base feat Improved Initiative =
+
+  type              General;
+  benefit
+  "You get a +4 bonus on initiative checks.";
+  special
+  "A fighter may select Improved Initiative as one of his
+                    fighter bonus feats (see page 38).";
+  effects           Initiative: +4 general;
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "You can react more quickly than normal in a fight.";
+  short description "+4 bonus on initiative checks".
+
+#.....
+#----- Improved Overrun [General]
+
+base feat Improved Overrun =
+
+  type              General;
+  benefit
+  "When you attempt to overrun an opponent, the target may
+                    not choose to avoid you. You also gain a +4 bonus on your
+                    Strength check to knock down your opponent.";
+  special
+  "A fighter may select Improved Overrun as one of his
+                    fighter bonus feats (see page 38).";
+  normal
+  "Without this feat, the target of an overrun can choose to
+                    avoid you or to block you.";
+  prerequisites
+  "Str 13, Power Attack.";
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "You are skilled at knocking down opponents.";
+  short description "+4 bonus on overrun attempts; no attack of opportunity".
+
+#.....
+#----- Improved Precise Shot [General]
+
+base feat Improved Precise Shot =
+
+  type              General;
+  benefit
+  "Your ranged attacks ignore the AC bonus granted to targets
+                    by anything less than total cover, and the miss chance
+                    granted to targets by anything less than total
+                    concealment. Total cover and total concealment provide
+                    their normal benefits against your ranged attacks.
+
+                    In addition, when you shoot or throw ranged weapons at a
+                    grappling opponent, you automatically strike at the
+                    opponent you have chosen.";
+  special
+  "A fighter may select Improved Precise Shot as one of his
+                    fighter bonus feats (see page 38).
+
+                    An 11th-level ranger who has chosen the archery combat
+                    style is treated as having Improved Precise Shot, even if
+                    he does not have the prerequisites for it, but only when he
+                    is wearing light or no armor (see page 48).";
+  normal
+  "See pages 150–152 for rules on the effects of cover and
+                    concealment. Without this feat, a character who shoots or
+                    throws a ranged weapon at a target involved in a grapple
+                    must roll randomly to see which grappling combatant the
+                    attack strikes.";
+  prerequisites
+  "Dex 19, Point Blank Shot, Precise Shot, base attack bonus
+                    +11.";
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "Your ranged attacks can ignore the effects of cover or concealment.";
+  short description "Ignore less than total cover/concealment on ranged attack".
+
+#.....
+#----- Improved Shield Bash [General]
+
+base feat Improved Shield Bash =
+
+  type              General;
+  benefit
+  "When you perform a shield bash, you may still apply the
+                    shield’s shield bonus to your AC.";
+  special
+  "A fighter may select Improved Shield Bash as one of his
+                    fighter bonus feats (see page 38).";
+  normal
+  "Without this feat, a character who performs a shield bash
+                    loses the shield’s shield bonus to AC until his or her next
+                    turn.";
+  prerequisites
+  "Shield Proficiency.";
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "You can bash with a shield while retaining its shield bonus to your Armor
+  Class.";
+  short description "Retain shield bonus to AC when shield bashing".
+
+#.....
+#----- Improved Sunder [General]
+
+base feat Improved Sunder =
+
+  type              General;
+  benefit
+  "When you strike at an object held or carried by an
+                    opponent (such as a weapon or shield), you do not provoke
+                    an attack of opportunity (see Sunder, page 158).
+
+                    You also gain a +4 bonus on any attack roll made to attack
+                    an object held or carried by another character.";
+  special
+  "A fighter may select Improved Sunder as one of his fighter
+                    bonus feats (see page 38).";
+  normal
+  "Without this feat, you provoke an attack of opportunity
+                    when you strike at an object held or carried by another
+                    character.";
+  prerequisites
+  "Str 13, Power Attack.";
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "You are skilled at attacking your opponents’ weapons and shields, as well as
+  other objects.";
+  short description "+4 bonus on sunder attempts; no attack of opportunity".
+
+#.....
+#----- Improved Trip [General]
+
+base feat Improved Trip =
+
+  type              General;
+  benefit
+  "You do not provoke an attack of opportunity when you
+                    attempt to trip an opponent while you are unarmed. You also
+                    gain a +4 bonus on your Strength check to trip your
+                    opponent.
+
+                    If you trip an opponent in melee combat, you immediately
+                    get a melee attack against that opponent as if you hadn’t
+                    used your attack for the trip attempt. For example, at 11th
+                    level, Tordek gets three attacks at bonuses of +11, +6, and
+                    +1. In the current round, he attempts to trip his
+                    opponent. His first attempt fails (using up his first
+                    attack). His second attempt succeeds, and he immediately
+                    makes a melee attack against his opponent with a bonus of
+                    +6.
+
+                    Finally, he takes his last attack at a bonus of +1.";
+  special
+  "At 6th level, a monk may select Improved Trip as a bonus
+                    feat, even if she does not have the prerequisites.
+
+                    A fighter may select Improved Trip as one of his fighter
+                    bonus feats (see page 38).";
+  normal
+  "Without this feat, you provoke an attack of opportunity
+                    when you attempt to trip an opponent while you are
+                    unarmed. See Trip, page 158.";
+  prerequisites
+  "Int 13, Combat Expertise.";
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "You are trained not only in tripping opponents safely but also in following
+  through with an attack.";
+  short description "+4 bonus on trip attempts; no attack of opportunity".
+
+#.....
+#----- Improved Turning [General]
+
+base feat Improved Turning =
+
+  type              General;
+  benefit
+  "You turn or rebuke creatures as if you were one level
+                    higher than you are in the class that grants you the
+                    ability.";
+  prerequisites
+  "Ability to turn or rebuke creatures.";
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "Your turning or rebuking attempts are more powerful than normal.";
+  short description "+1 level for turning check".
+
+#.....
+#----- Improved Two-Weapon Fighting [General]
+
+base feat Improved Two-Weapon Fighting =
+
+  type              General;
+  benefit
+  "In addition to the standard single extra attack you get
+                    with an off-hand weapon, you get a second attack with it,
+                    albeit at a – 5 penalty (see Table 8–10, page 160).";
+  special
+  "A fighter may select Improved Two-Weapon Fighting as one
+                    of his fighter bonus feats.
+
+                    A 6th-level ranger who has chosen the two-weapon combat
+                    style is treated as having Improved Two-Weapon Fighting,
+                    even if he does not have the prerequisites for it, but only
+                    when he is wearing light or no armor (see page 48).";
+  normal
+  "Without this feat, you can only get a single extra attack
+                    with an off-hand weapon.";
+  prerequisites
+  "Dex 17, Two-Weapon Fighting, base attack bonus +6.";
+  worlds            Generic;
+  references        WTC 17524: 96;
+  description
+  "You are an expert in fighting two-handed.";
+  short description "Gain second off-hand attack".
+
+#.....
+#----- Improved Unarmed Strike [General]
+
+base feat Improved Unarmed Strike =
+
+  type              General;
+  benefit
+  "You are considered to be armed even when unarmed — that
+                    is, you do not provoke attacks or opportunity from armed
+                    opponents when you attack them while unarmed. However, you
+                    still get an attack of opportunity against any opponent who
+                    makes an unarmed attack on you.
+
+                    In addition, your unarmed strikes can deal lethal or
+                    nonlethal damage, at your option.";
+  special
+  "A monk automatically gains Improved Unarmed Strike as a
+                    bonus feat at 1st level. She need not select it.
+
+                    A fighter may select Improved Unarmed Strike as one of his
+                    fighter bonus feats (see page 38).";
+  normal
+  "Without this feat, you are considered unarmed when
+                    attacking with an unarmed strike, and you can deal only
+                    nonlethal damage with such an attack.";
+  worlds            Generic;
+  references        WTC 17524: 96-97;
+  description
+  "You are skilled at fighting while unarmed.";
+  short description "Considered armed even when unarmed".
+
+#.....
+#----- Investigator [General]
+
+base feat Investigator =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Gather Information checks and
+                    Search checks.";
+  worlds            Generic;
+  references        WTC 17524: 97;
+  description
+  "You have a knack for finding information.";
+  short description "+2 bonus on Gather Information and Search checks".
+
+#.....
+#----- Iron Will [General]
+
+base feat Iron Will =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Will saving throws.";
+  effects           Will Save: +2 general;
+  worlds            Generic;
+  references        WTC 17524: 97;
+  description
+  "You have a stronger will than normal.";
+  short description "+2 bonus on Will saves".
+
+#.....
+#----- Leadership [General]
+
+base feat Leadership =
+
+  type              General;
+  benefit
+  "You can attract loyal companions and devoted followers,
+                    subordinates who assist you. Your DM has information on
+                    what sort of cohort and how many followers you can
+                    recruit.";
+  special
+  "Check with your DM before selecting this feat, and work
+                    with your DM to determine an appropriate cohort and
+                    followers for your character (the Dungeon Master’s Guide
+                    has more information on cohorts and followers).";
+  prerequisites
+  "Character level 6th.";
+  worlds            Generic;
+  references        WTC 17524: 97;
+  description
+  "You are the sort of person others want to follow, and you have done some
+  work attempting to recruit cohorts and followers.";
+  short description "Attract cohort and followers".
+
+#.....
+#----- Lightning Reflexes [General]
+
+base feat Lightning Reflexes =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Reflex saving throws.";
+  worlds            Generic;
+  references        WTC 17524: 97;
+  description
+  "You have faster than normal reflexes.";
+  short description "+2 bonus on Reflex saves".
+
+#.....
+#----- Magical Aptitude [General]
+
+base feat Magical Aptitude =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Spellcraft checks and Use Magic
+                    Device checks.";
+  worlds            Generic;
+  references        WTC 17524: 97;
+  description
+  "You have a knack for magical endeavors.";
+  short description "+2 bonus on Spellcraft and Use Magic Device checks".
+
+#.....
+#----- Manyshot [General]
+
+base feat Manyshot =
+
+  type              General;
+  benefit
+  "As a standard action, you may fire two arrows at a single
+                    opponent within 30 feet. Both arrows use the same attack
+                    roll (with a –4 penalty) to determine success and deal
+                    damage normally (but see Special).
+
+                    For every five points of base attack bonus you have above
+                    +6, you may add one additional arrow to this attack, to a
+                    maximum of four arrows at a base attack bonus of
+                    +16. However, each arrow after the second adds a
+                    cumulative –2 penalty on the attack roll (for a total
+                    penalty of –6 for three arrows and –8 for four).
+
+                    Damage reduction and other resistances apply separately
+                    against each arrow fired.";
+  special
+  "Regardless of the number of arrows you fire, you apply
+                    precision-based damage (such as sneak attack damage) only
+                    once. If you score a critical hit, only the first arrow
+                    fired deals critical damage; all others deal regular
+                    damage.
+
+                    A fighter may select Manyshot as one of his fighter bonus
+                    feats (see page 38).
+
+                    A 6th-level ranger who has chosen the archery combat style
+                    is treated as having Manyshot even if he does not have the
+                    prerequisites for it, but only when he is wearing light or
+                    no armor (see page 48).";
+  prerequisites
+  "Dex 17, Point Blank Shot, Rapid Shot, base attack bonus
+                    +6";
+  worlds            Generic;
+  references        WTC 17524: 97;
+  description
+  "You can fire multiple arrows simultaneously against a nearby target.";
+  short description "Shoot two or more arrows simultaneously".
+
+#.....
+#----- Martial Weapon Proficiency [General]
+
+base feat Martial Weapon Proficiency =
+
+  type              General;
+  benefit
+  "You make attack rolls with the selected weapon normally.";
+  special
+  "Barbarians, fighters, paladins, and rangers are proficient
+                    with all martial weapons. They need not select this feat.
+
+                    You can gain Martial Weapon Proficiency multiple
+                    times. Each time you take the feat, it applies to a new
+                    type of weapon.
+
+                    A cleric who chooses the War domain automatically gains the
+                    Martial Weapon Proficiency feat related to his deity’s
+                    favored weapon as a bonus feat, if the weapon is a martial
+                    one. He need not select it.
+
+                    A sorcerer or wizard who casts the spell Tenser’s
+                    transformation on himself or herself gains proficiency with
+                    all martial weapons for the duration of the spell.";
+  normal
+  "When using a weapon with which you are not proficient, you
+                    take a –4 penalty on attack rolls.";
+  worlds            Generic;
+  references        WTC 17524: 97;
+  description
+  "Choose a type of martial weapon, such as a longbow (see Table 7–5: Weapons,
+  page 116, for a list of martial weapons). You understand how to use that type
+  of martial weapon in combat.
+
+  Use this feat to expand the list of weapons with which you are proficient
+  beyond the basic list in your class description.";
+  short description "No penalty on attacks with specific martial weapon".
+
+#.....
+#----- Maximize Spell [Metamagic]
+
+base feat Maximize Spell =
+
+  type              Metamagic;
+  benefit
+  "All variable, numeric effects of a spell modified by this
+                    feat are maximized. A maximized spell deals maximum damage,
+                    cures the maximum number of hit points, affects the maximum
+                    number of targets, etc., as appropriate. For example, a
+                    maximized fireball deals 6 points of damage per caster
+                    level (up to a maximum of 60 points of damage at 10th
+                    caster level). Saving throws and opposed rolls (such as the
+                    one you make when you cast dispel magic) are not affected,
+                    nor are spells without random variables. A maximized spell
+                    uses up a spell slot three levels higher than the spell’s
+                    actual level.
+
+                    An empowered, maximized spell gains the separate benefits
+                    of each feat: the maximum result plus one-half the normally
+                    rolled result. An empowered, maximized fireball cast by a
+                    15th-level wizard deals points of damage equal to 60 plus
+                    one half of 10d6.";
+  worlds            Generic;
+  references        WTC 17524: 97-98;
+  description
+  "You can cast spells to maximum effect.";
+  short description "Maximize spell’s variable, numeric effects".
+
+#.....
+#----- Mobility [General]
+
+base feat Mobility =
+
+  type              General;
+  benefit
+  "You get a +4 dodge bonus to Armor Class against attacks of
+                    opportunity caused when you move out of or within a
+                    threatened area. A condition that makes you lose your
+                    Dexterity bonus to Armor Class (if any) also makes you lose
+                    dodge bonuses. Dodge bonuses (such as this one and a
+                    dwarf’s racial bonus on dodge attempts against giants)
+                    stack with each other, unlike most types of bonuses.";
+  special
+  "A fighter may select Mobility as one of his fighter bonus
+                    feats (see page 38).";
+  prerequisites
+  "Dex 13, Dodge.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You are skilled at dodging past opponents and avoiding blows.";
+  short description "+4 dodge bonus to AC against some attacks of opportunity".
+
+#.....
+#----- Mounted Archery [General]
+
+base feat Mounted Archery =
+
+  type              General;
+  benefit
+  "The penalty you take when using a ranged weapon while
+                    mounted is halved: –2 instead of –4 if your mount is taking
+                    a double move, and –4 instead of –8 if your mount is
+                    running (see Mounted Combat, page 157).";
+  special
+  "A fighter may select Mounted Archery as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Ride 1 rank, Mounted Combat.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You are skilled at using ranged weapons while mounted.";
+  short description "Half penalty for ranged attacks while mounted".
+
+#.....
+#----- Mounted Combat [General]
+
+base feat Mounted Combat =
+
+  type              General;
+  benefit
+  "Once per round when your mount is hit in combat, you may
+                    attempt a Ride check (as a reaction) to negate the hit. The
+                    hit is negated if your Ride check result is greater than
+                    the opponent’s attack roll. (Essentially, the Ride check
+                    result becomes the mount’s Armor Class if it’s higher than
+                    the mount’s regular AC.)";
+  special
+  "A fighter may select Mounted Combat as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Ride 1 rank.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You are skilled in mounted combat.";
+  short description "Negate hits on mount with Ride check".
+
+#.....
+#----- Natural Spell [General]
+
+base feat Natural Spell =
+
+  type              General;
+  benefit
+  "You can complete the verbal and somatic components of
+                    spells while in a wild shape. For example, while in the
+                    form of a hawk, you could substitute screeches and gestures
+                    with your talons for the normal verbal and somatic
+                    components of a spell. You can also use any material
+                    components or focuses you possess, even if such items are
+                    melded within your current form. This feat does not permit
+                    the use of magic items while you are in a form that could
+                    not ordinarily use them, and you do not gain the ability to
+                    speak while in a wild shape.";
+  prerequisites
+  "Wis 13, wild shape ability.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You can cast spells while in a wild shape.";
+  short description "Cast spells while in wild shape".
+
+#.....
+#----- Negotiator [General]
+
+base feat Negotiator =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Diplomacy checks and Sense
+                    Motive checks.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You are good at gauging and swaying attitudes.";
+  short description "+2 bonus on Diplomacy and Sense Motive checks".
+
+#.....
+#----- Nimble Fingers [General]
+
+base feat Nimble Fingers =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Disable Device checks and Open
+                    Lock checks.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You are adept at manipulating small, delicate objects.";
+  short description "+2 bonus on Disable Device and Open Lock checks".
+
+#.....
+#----- Persuasive [General]
+
+base feat Persuasive =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Bluff checks and Intimidate
+                    checks.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You have a way with words and body language.";
+  short description "+2 bonus on Bluff checks and Intimidate checks".
+
+#.....
+#----- Point Blank Shot [General]
+
+base feat Point Blank Shot =
+
+  type              General;
+  benefit
+  "You get a +1 bonus on attack and damage rolls with ranged
+                    weapons at ranges of up to 30 feet.";
+  special
+  "A fighter may select Point Blank Shot as one of his
+                    fighter bonus feats (see page 38).";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You are skilled at making well-placed shots with ranged weapons at close
+  range.";
+  short description "+1 bonus on ranged attack and damage within 30 ft.".
+
+#.....
+#----- Power Attack [General]
+
+base feat Power Attack =
+
+  type              General;
+  benefit
+  "On your action, before making attack rolls for a round,
+                    you may choose to subtract a number from all melee attack
+                    rolls and add the same number to all melee damage
+                    rolls. This number may not exceed your base attack
+                    bonus. The penalty on attacks and bonus on damage apply
+                    until your next turn.";
+  special
+  "If you attack with a two-handed weapon, or with a one-
+                    handed weapon wielded in two hands, instead add twice the
+                    number subtracted from your attack rolls. You can’t add the
+                    bonus from Power Attack to the damage dealt with a light
+                    weapon (except with unarmed strikes or natural weapon
+                    attacks), even though the penalty on attack rolls still
+                    applies. (Normally, you treat a double weapon as a
+                    one-handed weapon and a light weapon. If you choose to use
+                    a double weapStun opponent with unarmed strike on like a
+                    two-handed weapon, attacking with
+                    only one end of it in a round, you treat it as a two-handed
+                    weapon.)  A fighter may select Power Attack as one of his
+                    fighter bonus feats (see page 38).";
+  prerequisites
+  "Str 13.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You can make exceptionally powerful melee attacks.";
+  short description "Trade attack bonus for damage (up to base attack bonus)".
+
+#.....
+#----- Precise Shot [General]
+
+base feat Precise Shot =
+
+  type              General;
+  benefit
+  "You can shoot or throw ranged weapons at an opponent
+                    engaged in melee without taking the standard –4 penalty on
+                    your attack roll (see Shooting or Throwing into a Melee,
+                    page 140).";
+  special
+  "A fighter may select Precise Shot as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Point Blank Shot.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You are skilled at timing and aiming ranged attacks.";
+  short description "No –4 penalty for shooting into melee".
+
+#.....
+#----- Quick Draw [General]
+
+base feat Quick Draw =
+
+  type              General;
+  benefit
+  "You can draw a weapon as a free action instead of as a
+                    move action. You can draw a hidden weapon (see the Sleight
+                    of Hand skill, page 81) as a move action.
+
+                    A character who has selected this feat may throw weapons at
+                    his full normal rate of attacks (much like a character with
+                    a bow).";
+  special
+  "A fighter may select Quick Draw as one of his fighter
+                    bonus feats (see page 38).";
+  normal
+  "Without this feat, you may draw a weapon as a move action,
+                    or (if your bStun opponent with unarmed strikease attack
+                    bonus is +1 or higher) as a free
+                    action as part of movement (see page 142). Without this
+                    feat, you can draw a hidden weapon as a standard action.";
+  prerequisites
+  "Base attack bonus +1.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You can draw weapons with startling speed.";
+  short description "Draw weapon as free weapon".
+
+#.....
+#----- Quicken Spell [Metamagic]
+
+base feat Quicken Spell =
+
+  type              Metamagic;
+  benefit
+  "Casting a quickened spell is a free action. You can per-
+                    form another action, even casting another spell, in the
+                    same round as you cast a quickened spell. You may cast only
+                    one quickened spell per round. A spell whose casting time
+                    is more than 1 full-round action cannot be quickened. A
+                    quickened spell uses up a spell slot four levels higher
+                    than the spell’s actual level. Casting a quickened spell
+                    doesn’t provoke an attack of opportunity.";
+  special
+  "This feat can’t be applied to any spell cast spontaneously
+                    (including sorcerer spells, bard spells, and cleric or
+                    druid spells cast spontaneously), since applying a
+                    metamagic feat to a spontaneously cast spell automatically
+                    increases the casting time to a full-round action.";
+  worlds            Generic;
+  references        WTC 17524: 98;
+  description
+  "You can cast a spell with a moment’s thought.";
+  short description "Cast spells as free action".
+
+#.....
+#----- Rapid Reload [General]
+
+base feat Rapid Reload =
+
+  type              General;
+  benefit
+  "The time required for you to reload your chosen type of
+                    crossbow is reduced to a free action (for a hand or light
+                    crossbow) or a move action (for a heavy crossbow).
+                    Reloading a crossbow still provokes an attack of oppor-
+                    tunity.  If you have selected this feat for hand crossbow
+                    or light crossbow, you may fire that weapon as many times
+                    in a full attack action as you could attack if you were
+                    using a bow.";
+  special
+  "You can gain Rapid Reload multiple times. Each time you
+                    take the feat, it applies to a new type of crossbow.  A
+                    fighter may select Rapid Reload as one of his fighter bonus
+                    feats (see page 38).";
+  normal
+  "A character with- out this feat needs a move action to
+                    reload a hand or light crossbow, or a full- round action to
+                    reload a heavy crossbow.";
+  prerequisites
+  "Weapon Proficiency (crossbow type chosen).";
+  worlds            Generic;
+  references        WTC 17524: 99;
+  description
+  "Choose a type of crossbow (hand, light, or heavy). You can reload a crossbow
+  of that type more quickly than normal.";
+  short description "Reload crossbow more quickly".
+
+#.....
+#----- Rapid Shot [General]
+
+base feat Rapid Shot =
+
+  type              General;
+  benefit
+  "You can get one extra attack per round with a ranged
+                    weapon. The attack is at your highest base attack bonus,
+                    but each attack you make in that round (the extra one and
+                    the normal ones) takes a –2 penalty. You must use the full
+                    attack action (see page 143) to use this feat.";
+  special
+  "A fighter may select Rapid Shot as one of his fighter
+                    bonus feats (see page 38).
+
+                    A 2nd-level ranger who has chosen the archery combat style
+                    is treated as having Rapid Shot, even if he does not have
+                    the prerequisites for it, but only when he is wearing light
+                    or no armor (see page 48).";
+  prerequisites
+  "Dex 13, Point Blank Shot.";
+  worlds            Generic;
+  references        WTC 17524: 99;
+  description
+  "You can use ranged weapons with exceptional speed.";
+  short description "Shot One extra ranged attack each round".
+
+#.....
+#----- Ride-By Attack [General]
+
+base feat Ride-By Attack =
+
+  type              General;
+  benefit
+  "When you are mounted and use the charge action, you may
+                    move and attack as if with a standard charge and then move
+                    again (continuing the straight line of the charge). Your
+                    total movement for the round can’t exceed double your
+                    mounted speed. You and your mount do not provoke an attack
+                    of opportunity from the opponent that you attack.";
+  special
+  "A fighter may select Ride-By Attack as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Ride 1 rank, Mounted Combat.";
+  worlds            Generic;
+  references        WTC 17524: 99;
+  description
+  "You are skilled at making fast attacks for your mount.";
+  short description "Move before and after a mounted charge".
+
+#.....
+#----- Run [General]
+
+base feat Run =
+
+  type              General;
+  benefit
+  "When run- ning, you move five times your normal speed (if
+                    wearing medium, light, or no armor and carry- ing no more
+                    than a medium load) or four times your speed (if wearing
+                    heavy armor or carrying a heavy load). If you make a jump
+                    after a running start (see the Jump skill des- cription,
+                    page 77), you gain a +4 bonus on your Jump check. While
+                    run- ning, you retain your Dex- terity bonus to AC.";
+  normal
+  "You move four times your speed while running (if wearing
+                    med- ium, light or no armor and carrying no more than a
+                    light load) or three times your speed (if wearing heavy
+                    armor or carrying a medium or heavy load), and you lose
+                    your Dexterity bonus to AC.";
+  worlds            Generic;
+  references        WTC 17524: 99;
+  description
+  "You are fleet of foot.";
+  short description "Run 5 times normal speed, +4 bonus on Jump checks made after a running start".
+
+#.....
+#----- Scribe Scroll [Item Creation]
+
+base feat Scribe Scroll =
+
+  type              General;
+  benefit
+  "You can create a scroll of any spell that you know.";
+  prerequisites
+  "Caster level 1st.";
+  worlds            Generic;
+  references        WTC 17524: 99-100;
+  description
+  "Scribing a scroll takes one day for each 1,000 gp in its base price. The
+  base price of a scroll is its spell level × its caster level × 25 gp. To
+  scribe a scroll, you must spend 1/25 of this base price in XP and use up raw
+  materials costing one-half of this base price.
+
+  Any scroll that stores a spell with a costly material component or an XP cost
+  also carries a commensurate cost. In addition to the costs derived from the
+  Mialee casts a spell from a scroll she scribed.
+
+  base price, you must expend the material component or pay the XP when
+  scribing the scroll.
+
+  You can create scrolls, from which you or another spellcaster can cast the
+  scribed spells. See the Dungeon Master’s Guide for rules on scrolls.";
+  short description "Create magic scrolls".
+
+#.....
+#----- Self-Sufficient [General]
+
+base feat Self-Sufficient =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Heal checks and Survival
+                    checks.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You can take care of yourself in harsh environments and situations.";
+  short description "+2 bonus on Heal and Survival checks".
+
+#.....
+#----- Shield Proficiency [General]
+
+base feat Shield Proficiency =
+
+  type              General;
+  benefit
+  "You can use a shield and take only the standard penalties
+                    (see Table 7–6: Armor and Shields, page 123).";
+  special
+  "Barbarians, bards, clerics, druids, fighters, paladins,
+                    and rangers automatically have Shield Proficiency as a
+                    bonus feat. They need not select it.";
+  normal
+  "When you are using a shield with which you are not
+                    proficient, you take the shield’s armor check penalty on
+                    attack rolls and on all skill checks that involve moving,
+                    including Ride checks.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You are proficient with bucklers, small shields, and large shields.";
+  short description "No armor check penalty on attack rolls".
+
+#.....
+#----- Shot On The Run [General]
+
+base feat Shot On The Run =
+
+  type              General;
+  benefit
+  "When using the attack action with a ranged weapon, you can
+                    move both before and after the attack, provided that your
+                    total distance moved is not greater than your speed.";
+  special
+  "A fighter may select Shot on the Run as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Dex 13, Dodge, Mobility, Point Blank Shot, base attack
+                    bonus +4.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You are highly trained in skirmish ranged weapon tactics.";
+  short description "Move before and after ranged attack".
+
+#.....
+#----- Silent Spell [Metamagic]
+
+base feat Silent Spell =
+
+  type              Metamagic;
+  benefit
+  "A silent spell can be cast with no verbal components.
+
+                    Spells without verbal components are not affected. A silent
+                    spell uses up a spell slot one level higher than the
+                    spell’s actual level.";
+  special
+  "Bard spells cannot be enhanced by this metamagic feat.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You can cast spells silently.";
+  short description "Cast spells without verbal components".
+
+#.....
+#----- Simple Weapon Proficiency [General]
+
+base feat Simple Weapon Proficiency =
+
+  type              General;
+  benefit
+  "You make attack rolls with simple weapons normally.";
+  special
+  "All characters except for druids, monks, rogues, and
+                    wizards are automatically proficient with all simple
+                    weapons. They need not select this feat.
+
+                    A sorcerer or wizard who casts the spell Tenser’s
+                    transformation on himself or herself gains proficiency with
+                    all simple weapons for the duration of the spell.";
+  normal
+  "When using a weapon with which you are not proficient, you
+                    take a –4 penalty on attack rolls.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You understand how to use all types of simple weapons in combat (see Table
+  7–5: Weapons, page 116, for a list of simple weapons).";
+  short description "No –4 penalty on attack rolls with simple weapons".
+
+#.....
+#----- Skill Focus [General]
+
+base feat Skill Focus =
+
+  type              General;
+  benefit
+  "You get a +3 bonus on all checks involving that skill.";
+  special
+  "You can gain this feat multiple times. Its effects do not
+                    stack. Each time you take the feat, it applies to a new
+                    skill.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "Choose a skill, such as Move Silently. You have a special knack with that
+  skill.";
+  short description "+3 bonus on checks with selected skill".
+
+#.....
+#----- Snatch Arrows [General]
+
+base feat Snatch Arrows =
+
+  type              General;
+  benefit
+  "When using the Deflect Arrows feat (page 93), you may
+                    catch the weapon instead of just deflecting it. Thrown
+                    weapons, such as spears or axes, can immediately be thrown
+                    back at the original attacker (even though it isn’t your
+                    turn) or kept for later use.
+
+                    You must have at least one hand free (holding nothing) to
+                    use this feat.";
+  special
+  "A fighter may select Snatch Arrows as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Dex 15, Deflect Arrows, Improved Unarmed Strike.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You are adept at grabbing incoming arrows, as well as crossbow bolts,
+  spears, and other projectile or thrown weapons.";
+  short description "Catch a deflected ranged attack".
+
+#.....
+#----- Spell Focus [General]
+
+base feat Spell Focus =
+
+  type              General;
+  benefit
+  "Add +1 to the Difficulty Class for all saving throws
+                    against spells from the school of magic you select.";
+  special
+  "You can gain this feat multiple times. Its effects do not
+                    stack.
+
+                    Each time you take the feat, it applies to a new school of
+                    magic.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "Choose a school of magic, such as illusion. Your spells of that school are
+  more potent than normal.";
+  short description "+1 bonus on save DCs against specific school of magic".
+
+#.....
+#----- Spell Mastery [Special]
+
+base feat Spell Mastery =
+
+  type              Special;
+  benefit
+  "Each time you take this feat, choose a number of spells
+                    equal to your Intelligence modifier that you already
+                    know. From that point on, you can prepare these spells
+                    without referring to a spellbook.";
+  normal
+  "Without this feat, you must use a spellbook to prepare all
+                    your spells, except read magic.";
+  prerequisites
+  "Wizard level 1st.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You are so intimately familiar with certain spells that you don’t need a
+  spellbook to prepare them anymore.";
+  short description "Can prepare some spells without spellbook".
+
+#.....
+#----- Spell Penetration [General]
+
+base feat Spell Penetration =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on caster level checks (1d20 + caster
+                    level) made to overcome a creature’s spell resistance.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "Your spells are especially potent, breaking through spell resistance more
+  readily than normal.";
+  short description "+2 bonus on caster level checks to defeat spell resistance".
+
+#.....
+#----- Spirited Charge [General]
+
+base feat Spirited Charge =
+
+  type              General;
+  benefit
+  "When mounted and using the charge action, you deal double
+                    damage with a melee weapon (or triple damage with a
+                   lance).";
+  special
+  "A fighter may select Spirited Charge as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Ride 1 rank, Mounted Combat, Ride-By Attack.";
+  worlds            Generic;
+  references        WTC 17524: 100;
+  description
+  "You are trained at making a devastating mounted charge.";
+  short description "Attack Double damage with mounted charge".
+
+#.....
+#----- Spring Attack [General]
+
+base feat Spring Attack =
+
+  type              General;
+  benefit
+  "When using the attack action with a melee weapon, you can
+                    move both before and after the attack, provided that your
+                    total distance moved is not greater than your speed. Moving
+                    in this way does not provoke an attack of opportunity from
+                    the defender you attack, though it might provoke attacks of
+                    opportunity from other creatures, if appropriate. You can’t
+                    use this feat if you are wearing heavy armor.  You must
+                    move at least 5 feet both before and after you make your
+                    attack in order to utilize the benefits of Spring Attack.";
+  special
+  "A fighter may select Spring Attack as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Dex 13, Dodge, Mobility, base attack bonus +4.";
+  worlds            Generic;
+  references        WTC 17524: 100-101;
+  description
+  "You are trained in fast melee attacks and fancy footwork.";
+  short description "Move before and after melee attack, no AoO from target.".
+
+#.....
+#----- Stealthy [General]
+
+base feat Stealthy =
+
+  type              General;
+  benefit
+  "You get a +2 bonus on all Hide checks and Move Silently
+                    checks.";
+  worlds            Generic;
+  references        WTC 17524: 101;
+  description
+  "You are particularly good at avoiding notice.";
+  short description "+2 bonus on Hide and Move Silently checks".
+
+#.....
+#----- Still Spell [Metamagic]
+
+base feat Still Spell =
+
+  type              Metamagic;
+  benefit
+  "A stilled spell can be cast with no somatic components.
+
+                    Spells without somatic components are not affected. A
+                    stilled spell uses up a spell slot one level higher than
+                    the spell’s actual level.";
+  worlds            Generic;
+  references        WTC 17524: 101;
+  description
+  "You can cast spells without gestures.";
+  short description "Cast spells without somatic components".
+
+#.....
+#----- Stunning Fist [General]
+
+base feat Stunning Fist =
+
+  type              General;
+  benefit
+  "You must declare that you are using this feat before you
+                    make your attack roll (thus, a failed attack roll ruins the
+                    attempt).
+
+                    Stunning Fist forces a foe damaged by your unarmed attack
+                    to make a Fortitude saving throw (DC 10 + 1/2 your
+                    character level + your Wis modifier), in addition to
+                    dealing damage normally. A defender who fails this saving
+                    throw is stunned for 1 round (until just before your next
+                    action). A stunned character can’t act, loses any Dexterity
+                    bonus to AC, and takes a –2 penalty to AC. You may attempt
+                    a stunning attack once per day for every four levels you
+                    have attained (but see Special), and no more than once per
+                    round. Constructs, oozes, plants, undead, incorporeal
+                    creatures, and creatures immune to critical hits cannot be
+                    stunned.";
+  special
+  "A monk may select Stunning Fist as a bonus feat at 1st
+                    level, even if she does not meet the prerequisites. A monk
+                    who selects this feat may attempt a stunning attack a
+                    number of times per day equal to her monk level, plus one
+                    more time per day for every four levels she has in classes
+                    other than monk.
+
+                    A fighter may select Stunning Fist as one of his fighter
+                    bonus feats (see page 38).";
+  prerequisites
+  "Dex 13, Wis 13, Improved Unarmed Strike, base attack bonus
+                    +8.";
+  worlds            Generic;
+  references        WTC 17524: 101;
+  description
+  "You know how to strike opponents in vulnerable areas.";
+  short description "Stun opponent with unarmed strike".
+
+#.....
+#----- Toughness [General]
+
+base feat Toughness =
+
+  type              General;
+  benefit
+  "You gain +3 hit points.";
+  special
+  "A character may gain this feat multiple times. Its effects
+                    stack.";
+  effects           Hit Points: +3 general;
+  worlds            Generic;
+  references        WTC 17524: 101;
+  description
+  "You are tougher than normal.";
+  short description "+3 hit points".
+
+#.....
+#----- Tower Shield Proficiency [General]
+
+base feat Tower Shield Proficiency =
+
+  type              General;
+  benefit
+  "You can use a tower shield and suffer only the standard
+                    penalties (see Table 7–6: Armor and Shields, page 123).";
+  special
+  "Fighters automatically have Tower Shield Proficiency as a
+                    bonus feat. They need not select it.";
+  normal
+  "A character who is using a shield with which he or she is
+                    not proficient takes the shield’s armor check penalty on
+                    attack rolls and on all skill checks that involve moving,
+                    including Ride.";
+  prerequisites
+  "Shield Proficiency.";
+  worlds            Generic;
+  references        WTC 17524: 101;
+  description
+  "You are proficient with tower shields.";
+  short description "No armor check penalty on attack rolls".
+
+#.....
+#----- Track [General]
+
+base feat Track =
+
+  type              General;
+  benefit
+  "To find tracks or to follow them for 1 mile requires a
+                    successful Survival check. You must make another Survival
+                    check every time the tracks become difficult to follow,
+                    such as when other tracks cross them or when the tracks
+                    backtrack and diverge.
+
+                    You move at half your normal speed (or at your normal speed
+                    with a –5 penalty on the check, or at up to twice your
+                    normal speed with a –20 penalty on the check). The DC
+                    depends on the surface and the prevailing conditions, as
+                    given on the table below: Surface Survival DC Surface
+                    Survival DC Very soft ground 5 Firm ground 15 Soft ground
+                    10 Hard ground 20 Very Soft Ground: Any surface (fresh
+                    snow, thick dust, wet mud) that holds deep, clear
+                    impressions of footprints.
+
+                    Soft Ground: Any surface soft enough to yield to pressure,
+                    but firmer than wet mud or fresh snow, in which a creature
+                    leaves frequent but shallow footprints.
+
+                    Firm Ground: Most normal outdoor surfaces (such as lawns,
+                    fields, woods, and the like) or exceptionally soft or dirty
+                    indoor surfaces (thick rugs and very dirty or dusty
+                    floors). The creature might leave some traces (broken
+                    branches or tufts of hair), but it leaves only occasional
+                    or partial footprints.
+
+                    Hard Ground: Any surface that doesn’t hold footprints at
+                    all, such as bare rock or an indoor floor. Most streambeds
+                    fall into this category, since any footprints left behind
+                    are obscured or washed away. The creature leaves only
+                    traces (scuff marks or displaced pebbles).
+
+                    Several modifiers may apply to the Survival check, as given
+                    on the table below.
+
+                    Condition Survival DC Modifier Every three creatures in the
+                    group being tracked –1 Size of creature or creatures being
+                    tracked:1 Fine +8 Diminutive +4 Tiny +2 Small +1 Medium +0
+                    Large –1 Huge –2 Gargantuan –4 Colossal –8 Every 24 hours
+                    since the trail was made +1 Every hour of rain since the
+                    trail was made +1 Fresh snow cover since the trail was made
+                    +10 Poor visibility:2 Overcast or moonless night +6
+                    Moonlight +3 Fog or precipitation +3 Tracked party hides
+                    trail (and moves at half speed) +5 1 For a group of mixed
+                    sizes, apply only the modifier for the largest size
+                    category.
+
+                    2 Apply only the largest modifier from this category.
+
+                    If you fail a Survival check, you can retry after 1 hour
+                    (outdoors) or 10 minutes (indoors) of searching.";
+  special
+  "A ranger automatically has Track as a bonus feat. He need
+                    not select it.
+
+                    This feat does not allow you to find or follow the tracks
+                    made by a subject of a pass without trace spell.";
+  normal
+  "Without this feat, you can use the Survival skill to find
+                    tracks, but you can follow them only if the DC for the task
+                    is 10 or lower. Alternatively, you can use the Search skill
+                    to find a footprint or similar sign of a creature’s passage
+                    using the DCs given above, but you can’t use Search to
+                    follow tracks, even if someone else has already found
+                    them.";
+  worlds            Generic;
+  references        WTC 17524: 101;
+  description
+  "You can follow the trails of creatures and characters across most types of
+  terrain.";
+  short description "Use Survival skill to track".
+
+#.....
+#----- Trample [General]
+
+base feat Trample =
+
+  type              General;
+  benefit
+  "When you attempt to overrun an opponent while mounted,
+                    your target may not choose to avoid you. Your mount may
+                    make one hoof attack against any target you knock down,
+                    gaining the standard +4 bonus on attack rolls against prone
+                    targets (see Overrun, page 157).";
+  special
+  "A fighter may select Trample as one of his fighter bonus
+                    feats (see page 38).";
+  prerequisites
+  "Ride 1 rank, Mounted Combat.";
+  worlds            Generic;
+  references        WTC 17524: 101-102;
+  description
+  "You are trained in using your mount to knock down opponents.";
+  short description "Target cannot avoid mounted overrun".
+
+#.....
+#----- Two-Weapon Defense [General]
+
+base feat Two Weapon Defense =
+
+  type              General;
+  benefit
+  "When wielding a double weapon or two weapons (not
+                    including natural weapons or unarmed strikes), you gain a
+                    +1 shield bonus to your AC.
+
+                    When you are fighting defensively or using the total
+                    defense action, this shield bonus increases to +2.";
+  special
+  "A fighter may select Two-Weapon Defense as one of his
+                    fighter bonus feats.";
+  prerequisites
+  "Dex 15, Two-Weapon Fighting.";
+  worlds            Generic;
+  references        WTC 17524: 102;
+  description
+  "Your two-weapon fighting style bolsters your defense as well as your
+  offense.";
+  short description "Off-hand weapon grants +1 shield bonus to AC".
+
+#.....
+#----- Two-Weapon Fighting [General]
+
+base feat Two-Weapon Fighting =
+
+  type              General;
+  benefit
+  "Your penalties on attack rolls for fighting with two
+                    weapons are reduced. The penalty for your primary hand
+                    lessens by 2 and the one for your off hand lessens by 6.";
+  special
+  "A 2nd-level ranger who has chosen the two-weapon combat
+                    style is treated as having Two-Weapon Fighting, even if he
+                    does not have the prerequisite for it, but only when he is
+                    wearing light or no armor (see page 48).
+
+                    A fighter may select Two-Weapon Fighting as one of his
+                    fighter bonus feats (see page 38).";
+  normal
+  "See Two-Weapon Fighting, page 160, and Table 8–10:
+                    Two-Weapon Fighting Penalties, page 160.";
+  prerequisites
+  "Dex 15.";
+  worlds            Generic;
+  references        WTC 17524: 102;
+  description
+  "You can fight with a weapon in each hand. You can make one extra attack each
+  round with the second weapon.";
+  short description "Reduce two-weapon fighting penalties by 2/6".
+
+#.....
+#----- Weapon Finesse [General]
+
+base feat Weapon Finesse =
+
+  type              General;
+  benefit
+  "With a light weapon, rapier, whip, or spiked chain made
+                    for a creature of your size category, you may use your
+                    Dexterity modifier instead of your Strength modifier on
+                    attack rolls. If you carry a shield, its armor check
+                    penalty applies to your attack rolls.";
+  special
+  "A fighter may select Weapon Finesse as one of his fighter
+                    bonus feats (see page 38).
+
+                    Natural weapons are always considered light weapons.";
+  prerequisites
+  "Base attack bonus +1.";
+  worlds            Generic;
+  references        WTC 17524: 102;
+  description
+  "You are especially skilled at using weapons that can benefit as much from
+  Dexterity as from Strength.";
+  short description "Use Dex modifier instead of Str modifier on attack rolls".
+
+#.....
+#----- Weapon Focus [General]
+
+base feat Weapon Focus =
+
+  type              General;
+  benefit
+  "You gain a +1 bonus on all attack rolls you make using the
+                    selected weapon.";
+  special
+  "You can gain this feat multiple times. Its effects do not
+                    stack. Each time you take the feat, it applies to a new
+                    type of weapon.
+
+                    A fighter may select Weapon Focus as one of his fighter
+                    bonus feats (see page 38). He must have Weapon Focus with a
+                    weapon to gain the Weapon Specialization feat for that
+                    weapon.";
+  prerequisites
+  "Proficiency with selected weapon, base attack bonus +1.";
+  worlds            Generic;
+  references        WTC 17524: 102;
+  description
+  "Choose one type of weapon, such as greataxe. You can also choose unarmed
+  strike or grapple (or ray, if you are a spellcaster) as your weapon for
+  purposes of this feat. You are especially good at using this weapon. (If you
+  have chosen ray, you are especially good with rays, such as the one produced
+  by the ray of frost spell.)";
+  short description "+1 bonus on attack rolls with selected weapon".
+
+#.....
+#----- Weapon Specialization [General]
+
+base feat Weapon Specialization =
+
+  type              General;
+  benefit
+  "You gain a +2 bonus on all damage rolls you make using the
+                    selected weapon.";
+  special
+  "You can gain this feat multiple times. Its effects do not
+                    stack. Each time you take the feat, it applies to a new
+                    type of weapon.
+
+                    A fighter may select Weapon Specialization as one of his
+                    fighter bonus feats (see page 38).";
+  prerequisites
+  "Proficiency with selected weapon, Weapon Focus with
+                    selected weapon, fighter level 4th.";
+  worlds            Generic;
+  references        WTC 17524: 102;
+  description
+  "Choose one type of weapon, such as greataxe, for which you have already
+  selected the Weapon Focus feat. You can also choose unarmed strike or grapple
+  as your weapon for purposes of this feat.
+
+  You deal extra damage when using this weapon.";
+  short description "+2 bonus on damage rolls with selected weapon".
+
+#.....
+#----- Whirlwind Attack [General]
+
+base feat Whirlwind Attack =
+
+  type              General;
+  benefit
+  "When you use the full attack action, you can give up your
+                    regular attacks and instead make one melee attack at your
+                    full base attack bonus against each opponent within
+                    reach.
+
+                    When you use the Whirlwind Attack feat, you also forfeit
+                    any bonus or extra attacks granted by other feats, spells,
+                    or abilities (such as the Cleave feat or the haste
+                    spell).";
+  special
+  "A fighter may select Whirlwind Attack as one of his
+                    fighter bonus feats.";
+  prerequisites
+  "Dex 13, Int 13, Combat Expertise, Dodge, Mobility, Spring
+                    Attack, base attack bonus +4.";
+  worlds            Generic;
+  references        WTC 17524: 102;
+  description
+  "You can strike nearby opponents in an amazing, spinning attack.";
+  short description "One melee attack against each opponent within reach".
+
+#.....
+#----- Widen Spell [Metamagic]
+
+base feat Widen Spell =
+
+  type              Metamagic;
+  benefit
+  "You Can Alter A Burst, Emanation, Line, Or Spread Shaped
+                    Spell To Increase Its Area. Any Numeric Measurements Of The
+                    Spell’s area increase by 100%. For example, a fireball
+                    spell (which normally produces a 20-foot-radius spread)
+                    that is widened now fills a 40-foot- Radius Spread. A
+                    Widened Spell Uses Up A Spell Slot Three Levels Higher Than
+                    The Spell’s Actual Level.
+
+                    Spells that do not have an area of one of these four sorts
+                    are not affected by this feat.";
+  worlds            Generic;
+  references        WTC 17524: 102;
+  description
+  "You can increase the area of your spells.";
+  short description "Double spell’s area".
+
+#.....
