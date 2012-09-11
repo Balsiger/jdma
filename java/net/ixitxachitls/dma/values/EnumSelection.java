@@ -155,7 +155,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-public @Nonnull EnumSelection<T> create()
+  public @Nonnull EnumSelection<T> create()
   {
     return super.create(new EnumSelection<T>(m_enum, m_selections,
                                              m_simpleSelections,
@@ -228,7 +228,7 @@ public @Nonnull EnumSelection<T> create()
    *
    */
   @Override
-public @Nonnull String getChoices()
+  public @Nonnull String getChoices()
   {
     return Strings.toString(m_selections, "||", "");
   }
@@ -244,7 +244,7 @@ public @Nonnull String getChoices()
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected @Nonnull Command doFormat()
   {
     return new Command(m_selected);
   }
@@ -259,7 +259,7 @@ protected @Nonnull Command doFormat()
    *
    */
   @Override
-public @Nonnull String doToString()
+  public @Nonnull String doToString()
   {
     if(m_selected instanceof Named)
       return ((Named)m_selected).getName();
@@ -278,7 +278,7 @@ public @Nonnull String doToString()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_selected != null;
   }
@@ -384,7 +384,7 @@ public boolean isDefined()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(@Nonnull ParseReader inReader)
   {
     int selected;
     if(m_multiSelections != null)

@@ -158,7 +158,7 @@ public class IndexServlet extends PageServlet
       group = group.replace("%20", " ");
 
     // determine the index to use
-    Index index = ValueGroup.getIndex(name);
+    Index index = ValueGroup.getIndex(name, type);
     if(index == null)
     {
       data.put("content",
@@ -175,8 +175,10 @@ public class IndexServlet extends PageServlet
     if(group == null)
     {
       // get all the index groups available
+      // SortedSet<String> indexes =
+      //   DMADataFactory.get().getIndexNames(name, type, false);
       SortedSet<String> indexes =
-        DMADataFactory.get().getIndexNames(name, type, false);
+        DMADataFactory.get().getValues(type, Index.PREFIX + name);
 
       if(indexes.size() == 1)
         group = indexes.iterator().next();

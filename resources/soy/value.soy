@@ -483,60 +483,80 @@
  * Formatting a combination value.
  *
  * @param combination the combination value
+ * @param entry the entry printed
+ * @param value the value printed
+ * @param canEdit the value can be edited
  */
 {template .combination}
   {if $combination.total}
     {if $combination.bases and length($combination.bases) > 0}
-      {if $combination.bases[0].isLongText}
-        {if $ij.isDM}
-          <div class="longtext">
-            {foreach $base in $combination.bases}
-              {if $base.value.isDefined}
-                <div class="base-title">
-                  <span class="base-text">from {$base.names}</span>
-                </div>
-                {$base.value |print}
-              {/if}
-            {/foreach}
-          </div>
-        {/if}
-      {elseif $combination.bases[0].isText}
-        {foreach $base in $combination.bases}
-          {if $base.value.isDefined}
-            {if not isFirst($base) or $combination.isDefined}
-              {sp}|{sp}
-            {/if}
-            <span class="windowed">
-              <span class="window base">
-                from {$base.names}
-              </span>
-              {$base.value |print}
-            </span>
-          {/if}
-        {/foreach}
-      {else}
-        {if $ij.isDM}
-          <span class="windowed">
-            <span class="window base">
+      {call dma.value.value}
+        {param entry: $entry /}
+        {param value: $value /}
+        {param canEdit: $canEdit /}
+        {param content}
+          {if $ij.isDM}
+            {if $combination.bases[0].isLongText}
+              <div class="longtext">
+                {foreach $base in $combination.bases}
+                  {if $base.value.isDefined}
+                    <div class="base-title">
+                      <span class="base-text">from {$base.names}</span>
+                    </div>
+                    {$base.value |print}
+                  {/if}
+                {/foreach}
+              </div>
+            {elseif $combination.bases[0].isText}
               {foreach $base in $combination.bases}
-                {if $base and $base.value}
-                  <span class="base-value">{$base.value |print}</span>
-                  {sp} from {$base.names}
-                  <br />
-                {elseif $base.expression}
-                  {$base.expression} from {$base.names}
-                {else}
-                  undefined value from {$base.names}
+                {if $base.value.isDefined}
+                  {if not isFirst($base) or $combination.isDefined}
+                    {sp}|{sp}
+                  {/if}
+                  <span class="windowed">
+                    <span class="window base">
+                      from {$base.names}
+                    </span>
+                    {$base.value |print}
+                  </span>
                 {/if}
               {/foreach}
-            </span>
-            <i>{$combination.total|print}</i>
-          </span>
-        {else}
-          {$combination.total|print}
-        {/if}
-      {/if}
+            {else}
+              <span class="windowed">
+                <span class="window base">
+                  {foreach $base in $combination.bases}
+                    {if $base and $base.value}
+                      <span class="base-value">{$base.value |print}</span>
+                        {sp} from {$base.names}
+                      <br />
+                    {elseif $base.expression}
+                      {$base.expression} from {$base.names}
+                    {else}
+                      undefined value from {$base.names}
+                    {/if}
+                  {/foreach}
+                </span>
+                <i>{$combination.total|print}</i>
+              </span>
+            {/if}
+          {else}
+            {$combination.total|print}
+          {/if}
+        {/param}
+      {/call}
+    {else}
+      {call dma.value.value}
+        {param entry: $entry /}
+        {param value: $value /}
+        {param canEdit: $canEdit /}
+      {/call}
     {/if}
+  {else}
+    {call dma.value.value}
+      {param entry: $entry /}
+      {param value: $value /}
+      {param canEdit: $canEdit /}
+    {/call}
   {/if}
 {/template}
 
@@ -548,16 +568,20 @@
  * @param canEdit the value can be edited
  */
 {template .withbase}
-  {call dma.value.value}
-    {param entry: $entry /}
-    {param value: $value /}
-    {param canEdit: $canEdit /}
-  {/call}
   {if $value.combine}
     {call dma.value.combination}
       {param combination: $value.combine /}
+      {param value: $value /}
+      {param entry: $entry /}
+      {param canEdit: $canEdit /}
     {/call}
-  {/if}
+  {else}
+    {call dma.value.value}
+      {param entry: $entry /}
+      {param value: $value /}
+      {param canEdit: $canEdit /}
+    {/call}
+ {/if}
 {/template}
 
 /**

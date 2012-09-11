@@ -49,9 +49,9 @@
     <property name="web.template.css.color_Product" value="#404040" />
     <property name="web.template.css.lightcolor_Product" value="#808080" />
     <property name="web.template.css.hilightcolor_Product" value="#a0a0a0" />
-    <property name="web.template.css.color_Skill" value="#80ffff" />
-    <property name="web.template.css.lightcolor_Skill" value="#a0ffff" />
-    <property name="web.template.css.hilightcolor_Skill" value="#c0ffff" />
+    <property name="web.template.css.color_Skill" value="#00a0a0" />
+    <property name="web.template.css.lightcolor_Skill" value="#00ffff" />
+    <property name="web.template.css.hilightcolor_Skill" value="#ff8080" />
     <property name="web.template.css.color_Spell" value="#8080ff" />
     <property name="web.template.css.lightcolor_Spell" value="#a0a0ff" />
     <property name="web.template.css.hilightcolor_Spell" value="#c0c0fff" />

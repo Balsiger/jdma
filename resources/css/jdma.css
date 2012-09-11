@@ -498,7 +498,7 @@ DIV.value-label-container
 {
   position:    absolute;
   height:      100%;
-  width:       150px;
+  width:       160px;
   text-align:  right;
   font-weight: bold;
 }
@@ -506,13 +506,14 @@ DIV.value-label-container
 DIV.value-label
 {
   padding:     5px;
+  white-space: nowrap;
 }
 
 DIV.value-content
 {
   padding:          5px;
   background-color: #eee;
-  margin-left:      151px;
+  margin-left:      161px;
   min-height:       1.125em;
   line-height:      1.125em;
   display:          -webkit-box;
@@ -799,6 +800,13 @@ A.library-title.type-image
   background-color: $color_Item;
 }
 
+.value.base-monster .value-label-container,
+.value.monster .value-label-container
+{
+  color:            white;
+  background-color: $color_Monster;
+}
+
 .value.base-quality .value-label-container,
 .value.quality .value-label-container
 {
@@ -811,6 +819,13 @@ A.library-title.type-image
 {
   color:            white;
   background-color: $color_Feat;
+}
+
+.value.base-skill .value-label-container,
+.value.skill .value-label-container
+{
+  color:            white;
+  background-color: $color_Skill;
 }
 
 /******************************************************************************
@@ -908,9 +923,20 @@ DIV.edit-container
   min-height:    30px;
 }
 
+.edit-last-spacer
+{
+  background: blue;
+  -moz-box-flex: 100;
+  -webkit-box-flex: 100;
+  box-flex: 100;
+}
+
 .edit-list-multiple
 {
   display: -webkit-box;
+  display: box;
+  box-orient: horizontal;
+  -webkit-box-orient: horizontal;
 }
 
 DIV.flex

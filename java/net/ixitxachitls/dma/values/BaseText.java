@@ -302,7 +302,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(@Nonnull ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text =

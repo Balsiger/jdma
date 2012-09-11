@@ -1,0 +1,49 @@
+#----- Dire Eel ------------------------------------------------------------
+
+# Incomplete:
+#   Weapon Focus without (bite)
+
+base monster with incomplete Dire Eel =
+
+  incomplete        "\list
+                     {\Feat{Weapon Focus} without 'bite', +1 for bite}
+                     {\Feat{Toughness} (calculated in hps, should be
+                      removed)}
+                     {Will Save should only be +3 (why?)}
+                     {Automatic damage when attached}";
+  synonyms          "Eel, Dire", "Eel, Giant", "Giant Eel";
+  size              Large (Long);
+  type              Animal (Aquatic);
+  hit dice          6d8+15;
+  speed             Swim 30 ft;
+  natural armor     +3;
+  base attack       +4;
+  primary attacks   1 Bite melee (1d8+6);
+  special attacks   Attach;
+  special qualities Low-light Vision, Scent, good swimmer, good hiding;
+  strength          19;
+  dexterity         13;
+  constitution      14;
+  intelligence      1;
+  wisdom            12;
+  charisma          2;
+  class skills      Listen: +4, Spot: +5, Swim: +8;
+  feats             Improved Initiative, Toughness, Weapon Focus;
+  environment       Warm Aquatic;
+  organization      Solitary, pair;
+  challenge rating  3;
+  treasure          none;
+  alignment         always neutral;
+  advancements      7-12 HD (Large), 13-18 HD (Huge);
+  level adjustment  -;
+  languages         -;
+  short description "A large version of a normal eel.";
+  worlds            generic;
+  references        WTC 17867: 148;
+  description
+
+  "The dire eel is a moraylike animal of unusual size. It can reach lengths of
+  20 feet or more and weigh up to 500 pounds. It resembles its smaller
+  relations in other respects.".
+
+#...........................................................................

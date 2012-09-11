@@ -198,7 +198,12 @@ public final class Importer
       }
     }
     else
+    {
+      if(file.getName().endsWith("~"))
+        return;
+
       addFile(inFile);
+    }
   }
 
   //........................................................................

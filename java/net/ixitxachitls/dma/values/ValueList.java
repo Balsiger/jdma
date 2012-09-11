@@ -25,8 +25,10 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -655,6 +657,41 @@ public class ValueList<T extends Value>
 //     return result;
 //   }
 
+
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the current and given value and return it. The current value is not
+   * changed.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the added values
+   *
+   */
+  public @Nonnull ValueList<T> add(@Nonnull ValueList<T> inValue)
+  {
+    List<T> values = new ArrayList<T>();
+    Set<String> added = new HashSet<String>();
+
+    // only add the same value once
+    for(T value : m_values)
+      if(!added.contains(value.toString()))
+      {
+        added.add(value.toString());
+        values.add(value);
+      }
+
+    for(T value : inValue.m_values)
+      if(!added.contains(value.toString()))
+      {
+        added.add(value.toString());
+        values.add(value);
+      }
+
+    return as(values);
+  }
 
   //........................................................................
 

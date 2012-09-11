@@ -65,6 +65,7 @@ public class Dice extends Value<Dice>
     m_number   = 0;
     m_dice     = 0;
     m_modifier = 0;
+    m_editType = "dice";
   }
 
   //........................................................................
@@ -89,6 +90,7 @@ public class Dice extends Value<Dice>
     m_number   = inNumber;
     m_dice     = inDice;
     m_modifier = inModifier;
+    m_editType = "dice";
   }
 
   //........................................................................
@@ -103,7 +105,7 @@ public class Dice extends Value<Dice>
    *
    */
   @Override
-public Dice create()
+  public Dice create()
   {
     return super.create(new Dice());
   }
@@ -160,7 +162,7 @@ public Dice create()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_dice > 0 || m_number > 0;
   }

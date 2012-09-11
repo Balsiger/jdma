@@ -23,15 +23,18 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.BaseProduct;
+import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.BaseType;
+import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
 
 //..........................................................................
 
@@ -44,6 +47,8 @@ import net.ixitxachitls.output.commands.Link;
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
+ * @param         <T> the type of entry referenced
+ *
  */
 
 //..........................................................................
@@ -51,7 +56,7 @@ import net.ixitxachitls.output.commands.Link;
 //__________________________________________________________________________
 
 @Immutable
-public class Reference extends BaseText<Reference>
+public class Reference<T extends BaseEntry> extends Value<Reference>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -60,9 +65,14 @@ public class Reference extends BaseText<Reference>
   /**
    * Construct the text object.
    *
+   * @param   inType the type of entry referenced
+   *
    */
-  public Reference()
+  public Reference(BaseType<T>inType)
   {
+    m_type = inType;
+    m_name = new Name();
+
     withTemplate("reference");
   }
 
@@ -72,12 +82,48 @@ public class Reference extends BaseText<Reference>
   /**
    * Construct the text object.
    *
+   * @param       inType           the type of entry referenced
    * @param       inText           the text to store
    *
    */
-  public Reference(@Nonnull String inText)
+  public Reference(BaseType<T>inType, @Nonnull String inText)
   {
-    super(inText);
+    m_type = inType;
+    m_name = new Name(inText);
+  }
+
+  //........................................................................
+  //---------------------------- withParameters ----------------------------
+
+  /**
+   * Add parameters to the object. Should only be called when constructing.
+   *
+   * @param       inParameters     the parameters to the reference
+   *
+   * @return      the object for chaining
+   *
+   */
+  public Reference<T> withParameters(@Nonnull Map<String, Value> inParameters)
+  {
+    return withParameters(new Parameters(inParameters));
+  }
+
+  //........................................................................
+  //---------------------------- withParameters ----------------------------
+
+  /**
+   * Add parameters to the object. Should only be called when constructing.
+   *
+   * @param       inParameters     the parameters to the reference
+   *
+   * @return      the object for chaining
+   *
+   */
+  public Reference<T> withParameters(@Nonnull Parameters inParameters)
+  {
+    m_parameters = inParameters;
+
+    return this;
   }
 
   //........................................................................
@@ -96,7 +142,11 @@ public class Reference extends BaseText<Reference>
                                  // derivations
   public @Nonnull Reference create()
   {
-    return super.create(new Reference());
+    if(m_parameters == null)
+      return super.create(new Reference<T>(m_type));
+
+    return super.create(new Reference<T>(m_type)
+                        .withParameters(m_parameters.create()));
   }
 
   //........................................................................
@@ -108,8 +158,17 @@ public class Reference extends BaseText<Reference>
   /** Flag if references was resolved or not. */
   private boolean m_resolved = false;
 
-  /** The base product referenced here. */
-  private @Nullable BaseProduct m_product = null;
+  /** The base entry referenced here. */
+  private @Nullable T m_entry;
+
+  /** The type of entry referenced. */
+  private @Nonnull BaseType<T> m_type;
+
+  /** The name of the refernce. */
+  private @Nonnull Name m_name;
+
+  /** The parameters for the reference, if any. */
+  private @Nullable Parameters m_parameters;
 
   //........................................................................
 
@@ -126,11 +185,12 @@ public class Reference extends BaseText<Reference>
   @Override
   protected @Nonnull Command doFormat()
   {
-    resolve();
-    if(m_product == null)
-      return new Command(getEditValue());
+    // resolve();
+    // if(m_product == null)
+    //   return new Command(getEditValue());
 
-    return new Link(getEditValue(), "/product/" + m_product.getName());
+    // return new Link(getEditValue(), "/product/" + m_product.getName());
+    return new Command("guru");
   }
 
   //........................................................................
@@ -159,49 +219,70 @@ public class Reference extends BaseText<Reference>
   //........................................................................
   //----------------------------- collectData ------------------------------
 
+   /**
+    * Collect the data available for printing the value.
+    *
+    * @param       inEntry    the entry this value is in
+    * @param       inRenderer the renderer to render sub values
+    *
+    * @return      the data as a map
+    *
+    */
+   // @Override
+   // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
+   //                                        @Nonnull SoyRenderer inRenderer)
+   // {
+   //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
+   //   data.put("id", get());
+
+   //   if(m_product != null)
+   //     data.put("name", inRenderer.renderCommands(m_product.getFullTitle()));
+
+   //   return data;
+   // }
+
+   //........................................................................
+   //----------------------------- getEditValue -----------------------------
+
+   /**
+    * Get the value to be used for editing.
+    *
+    * @return      the value for editing
+    *
+    */
+   @Override
+   public String getEditValue()
+   {
+     // TODO: check if this is ok
+     // resolve();
+     // if(m_product == null)
+     //   return super.getEditValue();
+
+     // return m_product.getFullTitle() + " (" + get() + ")";
+     return m_name.get();
+   }
+
+   //........................................................................
+  //------------------------------ doToString ------------------------------
+
   /**
-   * Collect the data available for printing the value.
+   * Return a string representation of the value. The value can be assumed to
+   * be defined when this is called. This method should not be called directly,
+   * instead call toString().
    *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the data as a map
+   * @return      a string representation.
    *
    */
-  // @Override
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
-  // {
-  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
-  //   data.put("id", get());
-
-  //   if(m_product != null)
-  //     data.put("name", inRenderer.renderCommands(m_product.getFullTitle()));
-
-  //   return data;
-  // }
-
-  //........................................................................
-  //----------------------------- getEditValue -----------------------------
-
-  /**
-   * Get the value to be used for editing.
-   *
-   * @return      the value for editing
-   *
-   */
-  @Override
-  public String getEditValue()
+  protected @Nonnull String doToString()
   {
-    resolve();
-    if(m_product == null)
-      return super.getEditValue();
+    if(m_parameters == null || !m_parameters.isDefined())
+      return m_name.toString();
 
-    return m_product.getFullTitle() + " (" + get() + ")";
+    return m_name.toString() + " [" + m_parameters.toString() + "]";
   }
 
   //........................................................................
-  //------------------------------- resolve --------------------------------
+   //------------------------------- resolve --------------------------------
 
   /**
    * Resolve the referenced base product.
@@ -212,15 +293,30 @@ public class Reference extends BaseText<Reference>
     if(m_resolved)
       return;
 
-    if(m_product == null)
-      m_product = DMADataFactory.get()
-        .getEntry(AbstractEntry.createKey(get(), BaseProduct.TYPE));
+    if(m_entry == null)
+      m_entry = DMADataFactory.get()
+        .getEntry(AbstractEntry.createKey(m_name.get(), m_type));
 
     m_resolved = true;
   }
 
   //........................................................................
 
+  //------------------------------ isDefined -------------------------------
+
+  /**
+   * Check if the value is defined or not.
+   *
+   * @return      true if the value is defined, false if not
+   *
+   */
+  @Override
+  public boolean isDefined()
+  {
+    return m_name.isDefined();
+  }
+
+  //........................................................................
   //----------------------------- isArithmetic -----------------------------
 
   /**
@@ -240,6 +336,50 @@ public class Reference extends BaseText<Reference>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //------------------------------- doRead ---------------------------------
+
+  /**
+   * Read the value from the reader and replace the current one.
+   *
+   * @param       inReader   the reader to read from
+   *
+   * @return      true if read, false if not
+   *
+   */
+  @Override
+  public boolean doRead(@Nonnull ParseReader inReader)
+  {
+    Name name = m_name.read(inReader);
+    if(name == null)
+      return false;
+
+    m_name = name;
+
+    ParseReader.Position pos = inReader.getPosition();
+    if(m_parameters != null && inReader.expect('['))
+    {
+      Parameters parameters = m_parameters.read(inReader);
+      if (parameters == null)
+      {
+        inReader.seek(pos);
+        return true;
+      }
+
+      m_parameters = parameters;
+
+      if(!inReader.expect(']'))
+      {
+        inReader.error(inReader.getPosition(), "read.reference.params", null);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions

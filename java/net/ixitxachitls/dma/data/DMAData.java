@@ -543,20 +543,16 @@ public interface DMAData
       /**
        * Get the names for the given index.
        *
-       * @param       inIndex   the index to get it for
        * @param       inType    the type of entries to look for
-       * @param       inCached  true to use the cache if possible, false for not
-       * @param       inFilters pairs of property key and values to use for
-       *                        filtering
+       * @param       inField   the field for which to get the value
        *
        * @return      a list with all the names
        *
        */
       @Override
-      public @Nonnull SortedSet<String> getIndexNames
-        (@Nonnull String inIndex,
-         @Nonnull AbstractType<? extends AbstractEntry> inType,
-         boolean inCached, @Nonnull String ... inFilters)
+      public @Nonnull SortedSet<String> getValues
+        (@Nonnull AbstractType<? extends AbstractEntry> inType,
+         @Nonnull String inField)
       {
         return ImmutableSortedSet.of("Index-1", "Index-2", "Index-3");
       }

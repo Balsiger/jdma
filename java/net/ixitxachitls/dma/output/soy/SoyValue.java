@@ -211,7 +211,7 @@ public class SoyValue extends SoyMapData
         m_combination =
           new SoyCombination(m_name,
                              new Combination<Value>(m_entry, m_name)
-                             .withIgnoreTop(), m_value, m_entry);
+                             /*.withIgnoreTop()*/, m_value, m_entry);
 
       return m_combination;
     }

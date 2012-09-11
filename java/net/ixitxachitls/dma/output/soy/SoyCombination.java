@@ -114,6 +114,8 @@ public class SoyCombination extends SoyValue
   @Override
   public @Nullable SoyData getSingle(@Nonnull String inName)
   {
+    // try
+    // {
     if("total".equals(inName))
     {
       Value total = m_combination.total();
@@ -135,13 +137,15 @@ public class SoyCombination extends SoyValue
 
       for(Map.Entry<? extends Value, Collection<ValueGroup>> entry
             : m_combination.valuesPerGroup().asMap().entrySet())
-        bases.add
-          (SoyTemplate.map
-           ("value", new SoyValue(m_combination.getName(), entry.getKey(),
-                                  m_entry),
-            "isLongText", entry.getKey() instanceof FormattedText,
-            "isText", entry.getKey() instanceof Text,
-            "names", Entries.namesString(entry.getValue())));
+        if(entry.getValue().size() != 1
+           || entry.getValue().iterator().next() != m_entry)
+          bases.add
+            (SoyTemplate.map
+             ("value", new SoyValue(m_combination.getName(), entry.getKey(),
+                                    m_entry),
+              "isLongText", entry.getKey() instanceof FormattedText,
+              "isText", entry.getKey() instanceof Text,
+              "names", Entries.namesString(entry.getValue())));
 
       for(Map.Entry<Expression, Collection<ValueGroup>> entry
             : m_combination.expressionsPerGroup().asMap().entrySet())
@@ -152,6 +156,12 @@ public class SoyCombination extends SoyValue
 
       return new SoyListData(bases);
     }
+    // }
+    // catch(Exception e)
+    // {
+    //   System.out.println("eception when getting combination value:");
+    //   e.printStackTrace(System.out);
+    // }
 
     return super.getSingle(inName);
   }

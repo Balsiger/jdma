@@ -1,0 +1,251 @@
+#
+# The DMA specific base monsters.
+#
+#
+#
+
+#----- Human ---------------------------------------------------------------
+
+base monster Human =
+
+  size              Medium-size (tall);
+  type              Humanoid;
+  hit dice          1d4;
+  speed             30 ft;
+  natural armor     0;
+  base attack       +0;
+  primary attacks   fist melee (1d4);
+  strength          9;
+  dexterity         9;
+  constitution      9;
+  intelligence      9;
+  wisdom            9;
+  charisma          9;
+  class skills      Climb: +0, Craft: +0, Handle Animal: +0, Jump: +0,
+                    Listen: +0, Profession: +0, Ride: +0, Spot: +0, Swim: +0,
+                    Use Rope: +0;
+  environment       any any;
+  organization      any;
+  alignment         always any;
+  challenge rating  1/2;
+  treasure          none;
+  level adjustment  -;
+  encounter         "Various";
+  combat            "Various";
+  languages         common;
+  tactics           "Various";
+  character         "Various";
+  reproduction      "Various";
+  short description "A simple human.";
+  worlds            generic;
+  references        WTC 17752: 109;
+  description
+
+  "A simple human commoner.".
+
+#...........................................................................
+
+#----- Human Fighter 1st ---------------------------------------------------
+
+base monster with incomplete Human Fighter 1st =
+
+  base              Human;
+  synonyms          "Fighter, 1st Human", "1st Level Fighter, Human";
+  hit dice          1d10;
+  base attack       +1;
+  strength          15;
+  dexterity         13;
+  constitution      14;
+  intelligence      10;
+  wisdom            12;
+  charisma          8;
+  class skills      Climb: +4, Jump: +4;
+  feats             Exotic Weapon Proficiency, Power Attack, Blind-Fight;
+  good saves        Fortitude;
+  challenge rating  1;
+  treasure          none;
+  short description "A 1st level fighter";
+  possessions       Splint Mail, Heavy Steel Shield,
+                    "Bastard Sword = qualities Masterwork Weapon",
+                    Composite Longbow;
+  references        WTC 17755: 117;
+  description
+
+  "A standard first level fighter".
+
+#...........................................................................
+#----- Human Fighter 2nd ---------------------------------------------------
+
+base monster Human Fighter 2nd =
+
+  base              Human Fighter 1st;
+  synonyms          "Fighter, 2nd Human", "2nd Level Fighter, Human";
+  hit dice          2d10;
+  base attack       +2;
+  class skills      Climb: +5, Jump: +5;
+  feats             Exotic Weapon Proficiency, Power Attack, Blind-Fight,
+                    Improved Initiative;
+  challenge rating  2;
+  short description "A 2nd level fighter";
+  possessions       Half-Plate, Heavy Steel Shield,
+                    "Bastard Sword = qualities Masterwork Weapon",
+                    "Composite Longbow = qualities Masterwork Weapon";
+  description
+
+  "A standard second level fighter".
+
+#...........................................................................
+#----- Human Fighter 3rd ---------------------------------------------------
+
+base monster Human Fighter 3rd =
+
+  base              Human Fighter 2nd;
+  synonyms          "Fighter, 3rd Human", "3rd Level Fighter, Human";
+  hit dice          3d10;
+  base attack       +3;
+  class skills      Climb: +6, Jump: +6;
+  feats             Exotic Weapon Proficiency, Power Attack, Blind-Fight,
+                    Improved Initiative, Weapon Focus;
+  challenge rating  3;
+  short description "A 3rd level fighter";
+  possessions       Full Plate, Heavy Steel Shield,
+                   "Bastard Sword = qualities Masterwork Weapon",
+                    "Composite Longbow = qualities Masterwork Weapon";
+  description
+
+  "A standard third level fighter".
+
+#...........................................................................
+#----- Human Fighter 4th ---------------------------------------------------
+
+base monster Human Fighter 4th =
+
+  base              Human Fighter 3rd;
+  synonyms          "Fighter, 4th Human", "4th Level Fighter, Human";
+  hit dice          4d10;
+  strength          16;
+  base attack       +4;
+  class skills      Climb: +7, Jump: +7;
+  challenge rating  4;
+  short description "A 4th level fighter";
+  description
+
+  "A standard fourth level fighter".
+
+#...........................................................................
+#----- Human Fighter 5th ---------------------------------------------------
+
+base monster Human Fighter 5th =
+
+  base              Human Fighter 4th;
+  synonyms          "Fighter, 5th Human", "5th Level Fighter, Human";
+  hit dice          5d10;
+  base attack       +5;
+  class skills      Climb: +8, Jump: +8;
+  challenge rating  5;
+  short description "A 5th level fighter";
+  description
+
+  "A standard fifth level fighter".
+
+#...........................................................................
+#----- Human Fighter 6th ---------------------------------------------------
+
+base monster Human Fighter 6th =
+
+  base              Human Fighter 5th;
+  synonyms          "Fighter, 6th Human", "6th Level Fighter, Human";
+  hit dice          6d10;
+  base attack       +6;
+  class skills      Climb: +9, Jump: +9;
+  challenge rating  6;
+  short description "A 6th level fighter";
+  possessions       "Full Plate = qualities Magic Armor plus 1",
+                    Heavy Steel Shield,
+                    "Bastard Sword = qualities Masterwork Weapon",
+                    "Composite Longbow = qualities Masterwork Weapon ";
+  description
+
+  "A standard sixth level fighter".
+
+#...........................................................................
+#----- Human Fighter 7th ---------------------------------------------------
+
+base monster Human Fighter 7th =
+
+  base              Human Fighter 6th;
+  synonyms          "Fighter, 7th Human", "7th Level Fighter, Human";
+  hit dice          7d10;
+  base attack       +7;
+  class skills      Climb: +10, Jump: +10;
+  challenge rating  7;
+  short description "A 7th level fighter";
+  possessions       "Full Plate = qualities Magic Armor plus 1",
+                    Heavy Steel Shield,
+                    "Bastard Sword = qualities Magic Weapon plus 1",
+                    "Composite Longbow = qualities Masterwork Weapon ";
+  description
+
+  "A standard seventh level fighter".
+
+#...........................................................................
+#----- Human Fighter 8th ---------------------------------------------------
+
+base monster Human Fighter 8th =
+
+  base              Human Fighter 7th;
+  synonyms          "Fighter, 8th Human", "8th Level Fighter, Human";
+  hit dice          8d10;
+  base attack       +8;
+  class skills      Climb: +11, Jump: +11;
+  challenge rating  8;
+  short description "A 8th level fighter";
+  possessions       "Full Plate = qualities Magic Armor plus 1",
+                    "Heavy Steel Shield = qualities Magic Armor plus 1",
+                    "Bastard Sword = qualities Magic Weapon plus 1",
+                    "Composite Longbow = qualities Masterwork Weapon ";
+  description
+
+  "A standard eighth level fighter".
+
+#...........................................................................
+#----- Human Fighter 9th ---------------------------------------------------
+
+base monster Human Fighter 9th =
+
+  base              Human Fighter 8th;
+  synonyms          "Fighter, 9th Human", "9th Level Fighter, Human";
+  hit dice          9d10;
+  base attack       +9;
+  class skills      Climb: +12, Jump: +12;
+  challenge rating  9;
+  short description "A 9th level fighter";
+  possessions       "Full Plate = qualities Magic Armor plus 1",
+                    "Heavy Steel Shield = qualities Magic Armor plus 1",
+                    "Bastard Sword = qualities Magic Weapon plus 1",
+                    "Composite Longbow = qualities Magic Weapon plus 1";
+  description
+
+  "A standard ninth level fighter".
+
+#...........................................................................
+#----- Human Fighter 10th --------------------------------------------------
+
+base monster Human Fighter 10th =
+
+  base              Human Fighter 9th;
+  synonyms          "Fighter, 10th Human", "10th Level Fighter, Human";
+  hit dice          10d10;
+  base attack       +10;
+  class skills      Climb: +13, Jump: +13;
+  challenge rating  10;
+  short description "A 10th level fighter";
+  possessions       "Full Plate = qualities Magic Armor plus 2",
+                    "Heavy Steel Shield = qualities Magic Armor plus 1",
+                    "Bastard Sword = qualities Magic Weapon plus 1",
+                    "Composite Longbow = qualities Magic Weapon plus 1";
+  description
+
+  "A standard tenth level fighter".
+
+#...........................................................................

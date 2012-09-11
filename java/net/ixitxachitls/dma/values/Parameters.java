@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.values;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
@@ -182,7 +181,7 @@ public class Parameters extends Value<Parameters>
     // }
 
     // return new Command(commands.toArray());
-    return null;
+    return new Command("guru");
   }
 
   //........................................................................

@@ -248,7 +248,7 @@ public class BaseEntry extends AbstractEntry
     new ValueList<Multiple>
     (new Multiple
      (new Multiple.Element
-      (new Reference().withEditType
+      (new Reference<BaseProduct>(BaseProduct.TYPE).withEditType
        ("autokey(base product/titles)[product]"), false),
       new Multiple.Element
       (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")

@@ -1,0 +1,107 @@
+#----- Quelzarn ------------------------------------------------------------
+
+base monster Quelzarn =
+
+  size              {~} gargantuan (long);
+  type              {~} magical beast (aquatic);
+  hit dice          {~} 5d10;
+  speed             {~} 20 ft, Swim 50 ft;
+  natural armor     {~} +8;
+  base attack       {~} +5;
+  primary attacks   {~} 1 bite melee (3d4);
+  special attacks   spell [Name Hold Monster, Level 10]/1 minute,
+                    Swallow Whole;
+  special qualities Darkvision [Range 60 ft], immunity to electricity,
+                    Improved Grab, Spell Resistance [Value 15], breathe water,
+                    breathe no air, Blindsight [Range 30 ft] if "in water",
+                    good swimmer, water hiding;
+  strength          {~} 27;
+  dexterity         {~} 12;
+  constitution      {~} 21;
+  intelligence      {~} 7;
+  wisdom            {~} 16;
+  charisma          {~} 15;
+  class skills      {~} Spot: +4, Listen: +4;
+  feats             {~} Iron Will, Improved Initiative;
+  environment       {~} warm aquatic;
+  organization      solitary;
+  challenge rating  {~} 6;
+  treasure          {~} standard;
+  alignment         always neutral;
+  advancements      6-15 HD (Gargantuan);
+  level adjustment  -;
+  encounter         "";
+  combat            "\Monster{Quelzarn} will eat anything living (and carrion
+                    if desperate). They spend their days cruising for meals, or
+                    drifting while they digest one. \Monster{Quelzarn} can
+                    cast a 60-foot-range \Spell{hold monster} spell once every
+                    turn. They use this in battle and to immobilize prey.
+                    \Monster{Quelzarn} are highly resistant to the polluted
+                    waters of busy harbors and vast swamps alike. They have
+                    been known to hold a sailor standing on a dock, and then
+                    rear out of the water to drag him down.
+
+                    \Monster{Quelzarn} bite for 3-12 damage, and are capable
+                    of swallowing whole any creature of 4\frac{1}{2} feet in
+                    height or less. (The victim, even if held, is allowed a
+                    Dexterity Check to avoid this fate.) Swallowed victims
+                    will drown in 6 rounds; they will find that the interior of
+                    a \Monster{quelzarn} is AC 9, and inflicting 20 points of
+                    damage to one will cause
+                    the creature to spit its victim(s) out. Swallowed victims
+                    suffer only 1d2 points of damage from the creatures
+                    teeth. Angry quelzarn are capable of vomiting a swallowed
+                    creature out in order to bite it.";
+
+  languages         -;
+  tactics           "";
+  character         "Quelzarn are attracted by magical attempts to control
+                     their wills, but receive a saving throw every second
+                     round against such magics (or spell-like natural or item
+                    powers) to break free of control.
+
+                    The interest of quelzarn in magic use, plus their shape and
+                    humanlike eyes, sometimes causes them to be mistaken for
+                    nagas.  Quelzarn roam great distances in their lives, and
+                    are thought to mate (they do so only seldomly) in deep
+                    undersea caves. They may cooperate with other creatures (in
+                    return for food), and will never attack another of their
+                    kind. If one quelzarn encounters another while attacking
+                    prey, they tend to ignore each other and attack
+                    independently rather than fighting or closely
+                    cooperating.";
+  reproduction      "Quelzarn are thought to have a magical origin, perhaps the
+                     result of long-ago experimentation by mages of Unther
+                     (certainly, the creatures were once hunted there for
+                     sport). They have a natural magic resistance, and are
+                     entirely immune to all electrical attacks, both magical
+                     and natural.";
+  short description "A giant water snake.";
+  worlds            Forgotten Realms;
+  references        TSR 9248: 47;
+
+  description
+
+  "\Monster{Quelzarn} are giant, solitary water snakes found in both fresh and
+  salt water. They are agile and swift hunters, and may be of magical origin.
+
+  \Monster{Quelzarn} are eel-like in appearance, with mottled brown or green
+  slimy skin that is extremely slippery. The slime enables them to breathe air
+  through skin membranes, and is often home to mosses and
+  weed. \Monster{Quelzarn} are usually 30-40 feet in length, and have a
+  spinelike fin running the length of their backs. Broad, leaf-shaped fins
+  cover their gills just behind their wide, toothed jaws, and a quelzarns head
+  sports a bony, fin-shaped crest.
+
+  Quelzarn have no distinct lairs. Any treasure found within a quelzarn will be
+  inorganic matter that has been swallowed (such as coins and gems). The
+  digestive juices of quelzarn slowly break down flesh, tissue, and even
+  bone. The brain and cranial fluids of quelzarn have been found useful in the
+  making of spell inks for slow and hold magics, and as a distillate in the
+  manufacture of rings of free action. Quelzarn tissue is a useful alternative
+  ingredient in the seasoning of wood to be used in the fashioning of wands of
+  lightning. Quelzarn skin is leathery and snakelike, but death or severing
+  causes it to cease producing its slimy coating. It soon shrivels into
+  uselessness.".
+
+#...........................................................................

@@ -488,14 +488,18 @@ public class SoyTemplate
     compile();
 
     Map<Key<?>, Object> scope = removeScope();
-    String rendered = "";
     try
     {
-      rendered = m_compiled.newRenderer(inName)
+      return m_compiled.newRenderer(inName)
         .setData(inData)
         .setIjData(inInjected)
         .setActiveDelegatePackageNames(inDelegates)
         .render();
+    }
+    catch(Exception e)
+    {
+      System.out.println("Exception when rendering template:");
+      e.printStackTrace(System.out);
     }
     finally
     {
@@ -503,7 +507,7 @@ public class SoyTemplate
         addScope(scope);
     }
 
-    return rendered;
+    return "(error)";
   }
 
   //........................................................................

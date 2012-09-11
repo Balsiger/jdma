@@ -507,7 +507,7 @@ base quality with incomplete Damage Reduction =
   category but not the other is of no help in overcoming the creature's damage
   reduction - a magic sword or a nonmagical mace is no better at harming a
   \Monster{lich} than any other weapon.";
-  short description "Ignore damage $name.";
+  short description "Ignore damage of $value/$name.";
   categories        resistance.
 
 #.....

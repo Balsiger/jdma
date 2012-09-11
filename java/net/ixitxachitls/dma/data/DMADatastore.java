@@ -56,6 +56,7 @@ import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
+import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Strings;
@@ -895,7 +896,9 @@ public class DMADatastore implements DMAData
       else
       {
         String valueText = value.getValue().toString();
-        if(value.getValue() instanceof LongFormattedText)
+        if(value.getValue() instanceof LongFormattedText
+           || (value.getValue() instanceof Union
+               && ((Union)value.getValue()).get() instanceof LongFormattedText))
           entity.setProperty(m_data.toPropertyName(value.getKey()),
                              new Text(valueText));
         else

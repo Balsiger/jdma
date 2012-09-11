@@ -338,8 +338,14 @@ public class BaseTofu implements SoyTofu {
       rv.exec(template);
 
     } catch (RenderException re) {
-      re.printStackTrace(System.out);
+      System.out.println("rendering exception: " + re);
 
+      re.printStackTrace(System.out);
+      Throwable cause = re.getCause();
+      if(cause != null) {
+        System.out.println("cause: " + cause);
+        cause.printStackTrace(System.out);
+      }
       throw new SoyTofuException(re);
     }
   }

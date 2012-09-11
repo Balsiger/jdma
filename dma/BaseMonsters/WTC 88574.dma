@@ -1,0 +1,11 @@
+#----- Mighty Iron Golem
+
+base monster Mighty Iron Golem =
+
+  base              Iron Golem;
+  synonyms          "Iron Golem, Mighty", "Golem, Mighty Iron";
+  size              Huge (tall);
+  worlds            Forgotten Realms;
+  references        WTC 88574: 156.
+
+#.....

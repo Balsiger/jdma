@@ -972,7 +972,7 @@ public class Product extends Entry<BaseProduct>
     {
       List<Object> list = new ArrayList<Object>();
 
-      list.add(new ImmutableMap.Builder()
+      list.add(new ImmutableMap.Builder<String, Object>()
                .put("name", m_owner.get())
                .put("path", "/user/" + m_owner.get())
                .build());

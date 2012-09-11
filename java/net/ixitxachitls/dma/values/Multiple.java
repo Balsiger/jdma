@@ -477,7 +477,7 @@ public boolean isDefined()
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected @Nonnull String doToString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -485,6 +485,9 @@ protected @Nonnull String doToString()
 
     for(int i = 0; i < m_elements.length; i++)
     {
+      if(m_elements[i].isOptional() && !m_elements[i].get().isDefined())
+        continue;
+
       String element = m_elements[i].toString();
 
       if(element.length() > 0)
@@ -585,7 +588,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-public @Nonnull String getChoices()
+  public @Nonnull String getChoices()
   {
     ArrayList<String> list = new ArrayList<String>();
 
@@ -595,10 +598,12 @@ public @Nonnull String getChoices()
 
       if(values != null)
         list.add(values);
+      else
+        list.add("");
     }
 
     if(list.size() > 0)
-      return Strings.toString(list, "::", "");
+      return Strings.toString(list, "~~", "");
 
     return super.getChoices();
   }

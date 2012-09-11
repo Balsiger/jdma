@@ -1,0 +1,55 @@
+#----- Giant Crayfish
+
+base monster Giant Crayfish =
+
+  synonyms          "Crayfish, Giant";
+  size              Large (long);
+  type              Vermin (aquatic);
+  hit dice          4d8;
+  speed             20 ft, swim 30 ft;
+  natural armor     +9;
+  base attack       +3;
+  primary attacks   2 Claw melee (1d6+5);
+  special qualities Amphibious, Darkvision [range 60 ft], good swimmer,
+                    mindless, immunity to mind affecting effects,
+                    breathe water;
+  strength          20;
+  dexterity         7;
+  constitution      16;
+  intelligence      -1;
+  wisdom            12;
+  charisma          1;
+  class skills      Swim: +8;
+  feats             Improved Initiative, Run;
+  environment       Warm Aquatic;
+  organization      Solitary;
+  challenge rating  3;
+  treasure          none;
+  alignment         Always Neutral;
+  advancements      5-9 HD (Large), 8-12 HD (Huge);
+  level adjustment  -;
+  encounter         "This massive creature rises from the waters, its large
+                    pincers clacking excitedly as it moves toward you. A
+                    six-limbed, lowbodied crustacean, it holds its large,
+                    narrow claws in front of its body as it moves.";
+  combat            "Giant crayfish line in wait by heavily trafficked areas,
+                    covering themselves with muck from the lake bottom. They
+                    erupt from the water to ambush prey. While somewhat
+                    ungainly on land, they are capable of great speed in
+                    water. Some crayfish attempt to kill prey on land, but few
+                    ever engage in protracted combat out of the water. Upon
+                    meeting any significant resistance, the giant crayfish
+                    attempts to grapple a single target and drag it under
+                    water, where the environment greatly favors the predator.";
+  languages         -;
+  tactics           "";
+  character         "";
+  reproduction      "";
+  short description "A giant version of a natural crayfish";
+  worlds            generic;
+  references        Dragon 321: 60;
+  description
+
+  "".
+
+#.....

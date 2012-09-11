@@ -145,6 +145,9 @@ form.checkValue = function(inType, inValue)
     case 'price':
       return inValue.match(/^[^\d\s]+\s?\d+(\.\d\d)?$/);
 
+    case 'dice':
+      return inValue && inValue.match(/^(\d+d\d+)?\s*?([+-]?\d+)?$/);
+
     case 'pages':
       if(!inValue.match(/^\d+(\s*-\s*\d+)?(\/\d+(\s*-\s*\d+)?)*$/))
         return false;

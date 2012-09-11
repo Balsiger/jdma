@@ -1264,11 +1264,11 @@ public class BaseProduct extends BaseEntry
     new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new ValueList<Reference>
-         (new Reference().withEditType
+         (new Reference<BaseProduct>(TYPE).withEditType
           ("autokey(base product/titles|system)[required]")), true),
         new Multiple.Element
         (new ValueList<Reference>
-         (new Reference().withEditType
+         (new Reference<BaseProduct>(TYPE).withEditType
           ("autokey(base product/titles|system)[optional]")), true, " : ",
          null),
       })

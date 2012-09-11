@@ -1,0 +1,727 @@
+#----- Aboleth -------------------------------------------------------------
+
+base monster Aboleth =
+
+  size              huge (long);
+  type              Aberration (Aquatic);
+  hit dice          8d8;
+  speed             10 ft, swim 60 ft;
+  natural armor     +7;
+  base attack       +6;
+  primary attacks   4 tentacle melee (1d6 plus slime);
+  special attacks   enslave, psionics, slime;
+  special qualities darkvision [range 60 ft], mucus cloud, breathe water,
+                    breathe no air, good swimmer;
+  strength          26;
+  dexterity         12;
+  constitution      20;
+  intelligence      15;
+  wisdom            17;
+  charisma          17;
+  class skills      Concentration: +11, Knowledge [subtype any one]: +11,
+                    Listen: +11, Spot: +11, Swim: +8;
+  feats             Alertness, Combat Casting, Iron Will;
+  environment       underground;
+  organization      solitary, brood (1d3+1),
+                    slaver brood (1d3+1 plus 1d6+6 skum);
+  challenge rating  7;
+  treasure          double standard;
+  alignment         usually lawful evil;
+  advancements      9-16 HD (Huge), 17-24 HD (Gargantuan);
+  level adjustment  -;
+  worlds            generic;
+  references        WTC 17755: 8-9;
+  short description "A revolting, fishlike amphibian found primarily in
+                     subterranean rivers and lakes.";
+  encounter         "The cool, refreshing water suddenly erupts in a storm of
+                     reaching, grasping tentacles. The tentacles connect to a
+                     primeval fish, 20 feet in length from its bulbous head to
+                     its crescent-shaped tail. Three slit-shaped eyes,
+                     protected by bony ridges, are set one atop the other in
+                     the front of its head, which remains just beneath the
+                     surface as it attacks.";
+  combat             "An \Monster{aboleth} attacks by flailing with its long,
+                      slimy tentacles, though it prefers to fight from a
+                      distance using its illusion powers.";
+  languages          Aboleth, Undercommon, Aquan;
+  tactics            "\Monster[aboleth]{Aboleths} are smart enough to refrain
+                     from immediately attacking land dwellers who draw near.
+                     Instead they hang back, hoping their prey will enter the
+                     water, which they often make appear cool, clear, and
+                     refreshing with their powers of illusion.
+                     \Monster[aboleth]{Aboleths} also use their psionic
+                     abilities to enslave individuals for use against their own
+                     companions.";
+  character          "\Monster[aboleth]{Aboleths} are cruel and highly
+                     intelligent, making the dangerous predators. They know
+                     many ancient and terrible secrets, for they inherit their
+                     parent's knowledge at birth and assimilate the memories
+                     of all they consume.";
+  reproduction       "\Monster[aboleth]{Aboleths} have both male and female
+                     reproductive organs. They breed in solitude, laying 1d3
+                     eggs every five years. These eggs grow for another five
+                     years before hatching into full-grown
+                     \Monster[aboleth]{aboleths}. Although the young are
+                     physically mature, they remain with their parent for some
+                     ten years, obeying the older creature utterly.";
+  description
+
+  "The \Monster{aboleth} is a revolting fishlike amphibian found primarily in
+  subterranean lakes and rivers. It despises all nonaquatic creatures and
+  attempts to destroy them on sigh.
+
+  An \Monster{aboleth} has a pink belly. Four pulsating blue black orifices
+  line the bottom of its body and secrete a gray slime that smells like rancid
+  grease. It uses its tail for propulsion in the water and drags itself along
+  with its tentacles on land. An \Monster{aboleth} weighs about 6,500 pounds.".
+
+#...........................................................................
+#----- Achaierai -----------------------------------------------------------
+
+base monster Achaierai =
+
+  size              Large (Tall);
+  type              Outsider (Evil, Extraplanar, Lawful);
+  hit dice          6d8;
+  speed             50 ft;
+  natural armor     +10;
+  base attack       +6;
+  primary attacks   2 claw melee (2d6);
+  secondary attacks bite melee (4d6);
+  special attacks   Black cloud;
+  special qualities Darkvision [Range 60 ft], No Soul, Does Not Eat,
+                    Does Not Sleep, Affected As Evil, Weapons Evil,
+                    Affected as Lawful, Weapons Lawful;
+  strength          19;
+  dexterity         13;
+  constitution      14;
+  intelligence      11;
+  wisdom            14;
+  charisma          16;
+  class skills      Balance: +9, Climb: +9, Diplomacy: +5, Hide: +9, Jump: +9,
+                    Listen: +9, Move Silently: +9, Sense Motive: +9, Spot: +9;
+  feats             Dodge, Mobility, Spring Attack;
+  environment       Infernal Battlefield of Acheron;
+  organization      Solitary, flock (1d4+4);
+  challenge rating  5;
+  treasure          Double standard;
+  alignment         Always lawful evil;
+  advancements      7-12 HD (Large), 13-18 HD (Huge);
+  level adjustment  -;
+  encounter         "A large creature stands on four stiltlike legs. It has a
+                    birdlike body, round and plump, about the size of a small
+                    pony, balanced atop its legs. Feathers that range in color
+                    from brown to red cover its body, and its terrible claws
+                    and beak glint like burnished metal.";
+  combat            "In close combat, an achaierai lashes out with two of its
+                    four legs and snaps with its powerful beak.
+                    An \\Monster{achaierai}'s natural weapons, as well as any
+                    weapons it wields, are treated as evil-aligned and
+                    lawful aligned for the purpose of overcoming damage
+                    reduction.";
+  languages         Infernal;
+  tactics           "It makes frequent use of its \Feat{Spring Attack} feat
+                    to strike quickly and then retreat out of range before an
+                    enemy can counterattack.";
+  character         "They are evil, clever, and predatory, with a distinct
+                    taste for torture.";
+  reproduction      "";
+  short description "A massive, 15-foot-tall flightless bird.";
+  worlds            generic;
+  references        WTC 17755: 9-10;
+  description
+
+  "Achaierais are massive, 15-foot-tall flightless birds that inhabit the plane
+  of \Place{Acheraon} and are only occasionally encountered elsewhere.
+
+  They weigh about 750 pounds.".
+
+#...........................................................................
+#----- Doppelganger --------------------------------------------------------
+
+base monster with incomplete Doppelganger =
+
+  incomplete        "\list{should have advancement by character class}";
+
+  size              Medium-size (tall);
+  type              Monstrous Humanoid (Shapechanger);
+  hit dice          4d8;
+  speed             30 ft;
+  natural armor     +4;
+  base attack       +4;
+  primary attacks   Slam melee (1d6+1);
+  special attacks   Detect Thoughts;
+  special qualities Change Shape, Immunity to Sleep Effects,
+                    Immunity to Charm Effects,
+                    Skill Bonus [name Bluff, modifier +4 racial],
+                    Skill Bonus [name Disguise, modifier +4 racial],
+                    Skill Bonus [name Disguise, modifier +10 circumstance if
+                                 "changing shape"],
+                    Skill Bonus [name Bluff, modifier +4 circumstance if
+                                 "detecting thoughts of target"],
+                    Skill Bonus [name Disguise, modifier +4 circumstance if
+                                 "detecting thoughts of target"],
+                    Shapechanger, Darkvision [range 60 ft];
+  strength          12;
+  dexterity         13;
+  constitution      12;
+  intelligence      13;
+  wisdom            14;
+  charisma          13;
+  class skills      Bluff: +5, Disguise: +4, Intimidate: +2,
+                    Listen: +4, Sense Motive: +4, Spot: +4;
+  feats             Dodge, Great Fortitude;
+  environment       any any;
+  organization      solitary, pair, gang (1d4+2);
+  challenge rating  3;
+  treasure          double standard;
+  alignment         usually neutral;
+  level adjustment  -;
+  encounter         "This gaunt, gray-skinned humanoid has long, gangly limbs
+                    and a bulbous head with large, octopoid eyes. Its face is
+                    otherwise blank and featureless.";
+  combat            "When in its natural form, a doppelganger strikes with its
+                    powerful fists. In the shape of a warrior or some other
+                    armed person, it attacks with whatever weapon is
+                    appropriate. In such cases, it uses its detect thoughs
+                    ability to employ the same tactics and strategies as the
+                    person it is impersonating.";
+  languages         -;
+  tactics           "";
+  character         "Because they can take the shape of any humanoid between 4
+                    and 8 feet tall, doppelgangers are natural spies and
+                    assassins. They can sneak past sentries, slip into secured
+                    places, and fool even lovers or close friends. They are
+                    cunning and patient, willing to wait until an opportunity
+                    presents itself instead of attacking rashly.
+
+                    Doppelgangers make excellent use of their natural mimicry
+                    to stage ambushes, bait traps, and infiltrate humanoid
+                    society. Although not usually evil, they are interested
+                    only in themselves and regard all others as playthings to
+                    be manipulated and deceived.";
+  reproduction      "";
+  short description "";
+  worlds            generic;
+  references        WTC 17755: 67-68;
+  description
+
+  "Doppelgangers are strange beings that are able to take on the shapes of
+  those they encounter. In its natural form, the creature looks more or less
+  humanoid, but slender and frail, with gangly limbs and half-formed
+  features. The flesh is pale and hairless. Its large, bulging eyes are yellow
+  with slitted pupils.
+
+  A doppelganger's appearance is deceiving even when it's in its true form. A
+  doppelganger is hardy, with a natural agility not in keeping with its frail
+  appearance.
+
+  In its natural form a doppelganger is about 5\frac{1}{2} feet tall and
+  weights about 150 pounds.".
+
+#...........................................................................
+#----- Giant Wasp ----------------------------------------------------------
+
+base monster with incomplete Giant Wasp =
+
+  incomplete        "\list{should not have skill points as mindless}";
+
+  synonyms          "Wasp, Giant";
+  size              Large (long);
+  type              vermin;
+  hit dice          5d8;
+  speed             20 ft, fly 60 ft (good);
+  natural armor     +4;
+  base attack       +3;
+  primary attacks   Sting melee (1d3+6 plus poison);
+  special attacks   Poison;
+  special qualities Darkvision [Range 60 ft], good spot, good orientation,
+                    Mindless, Immunity to Mind Affecting Effects;
+  strength          18;
+  dexterity         12;
+  constitution      14;
+  intelligence      -1;
+  wisdom            13;
+  charisma          11;
+  environment       Temperate forest;
+  organization      solitary, swarm (1d4+1), nest (1d10+10);
+  challenge rating  3;
+  treasure          none;
+  alignment         Always neutral;
+  advancements      6-8 HD (Large), 9-15 HD (Huge);
+  level adjustment  -;
+  encounter         ;
+  combat            "Giant wasps attack when hungry or threatened, stinging
+                    their prey to death. They take dead or incapacitated
+                    opponents back to their lairs as food for their unhatched
+                    young";
+  languages         -;
+  tactics           "";
+  character         "";
+  reproduction      "";
+  short description "A giant version of a common wasp.";
+  worlds            generic;
+  references        WTC 17755: 286/286;
+  description
+
+  "This is the giant version of the common wasp. It measures around 10 ft.".
+
+#...........................................................................
+#----- Golem
+
+base monster Golem =
+
+  special qualities Immunity to Magic;
+  environment       ;
+  organization      ;
+  challenge rating  ;
+  treasure          ;
+  alignment         ;
+  advancements      ;
+  level adjustment  ;
+  encounter         ;
+  combat            ;
+  languages         ;
+  tactics           ;
+  character         ;
+  reproduction      ;
+  short description "A magically created automaton.";
+  worlds            generic;
+  references        WTC 17755: 134;
+  description
+
+  "Golems are magically created automatons of great power. Constructing one
+  involves the employment of mighty magic and elemental forces.
+
+  The animating force for a golem is a spirit from the Elemental Plane of
+  Earth. The process of creating the golem binds the unwilling spirit to the
+  artificial body and subjects it to the will of the golem’s creator.".
+
+#.....
+#----- Human Warrior Skeleton ----------------------------------------------
+
+base monster with incomplete Human Warrior Skeleton =
+
+  incomplete        "\list{computed shield into natural armor}
+                    {should be done as template}
+                    {should not have skill points}";
+
+  synonyms          "Skeleton, Human Warrior", "Warrior, Skeleton Human";
+  size              medium-size (tall);
+  type              undead;
+  hit dice          1d12;
+  speed             30 ft;
+  natural armor     +4;
+  base attack       +0;
+  primary attacks   Weapon melee (1d6+1), 2 Claw melee (1d4+1);
+  special qualities Damage Reduction [Value 5, Name bludgeoning],
+                    Darkvision [Range 60 ft], Immunity to Cold,
+                    Immunity to Mind Affecting Effects, Immunity to Poison,
+                    Immunity to Sleep Effects, Immunity to Paralysis,
+                    Immunity to Stunning, Immunity to Disease,
+                    Not Subject to Critical Hits, Immunity to Death Effects,
+                    Not Subject to Nonlethal Damage,
+                    Not Subject to Ability Drain,
+                    Immunity to Strength Damage, Immunity to Dexterity Damage,
+                    Immunity to Dexterity Damage, Not Subject to Energy Drain,
+                    Immunity to Constitution Damage,
+                    Immunity to Fatigue Effects, No Natural Healing,
+                    Immunity to Exhaustion Effects,
+                    Immunity to Fortitude Save Effects,
+                    Uses Charisma for Concentration Checks,
+                    Not Affected by Raise Dead, Not Affected by Reincarnate,
+                    Does Not Eat, Does Not Breath, Does Not Sleep;
+  strength          13;
+  dexterity         13;
+  constitution      -1;
+  intelligence      -1;
+  wisdom            10;
+  charisma          1;
+  feats             Improved Initiative;
+  environment       Temperate plains;
+  organization      any;
+  challenge rating  1/3;
+  treasure          none;
+  alignment         Always Neutral Evil;
+  level adjustment  -;
+  encounter         "This creature appears to be nothing but a set of animated
+                    bones. Pinpoints of red light smolder in its empty eye
+                    sockets.";
+  combat            "A skeleton does only what it is ordered to do. It can draw
+                    no conclusions of its own and takes no initiative. Because
+                    of this limitation, its instructions must always be simple,
+                    such as 'Kill anyone who enters this chamber.' A skeleton
+                    attacks until destroyed, for that is what it was created to
+                    do. The thread posed by a group of skeletons depends
+                    primarily on its size.";
+  languages         -;
+  tactics           "";
+  character         "Skeletons are the animated bones of the dead, mindless
+                    automatons that obey the orders of their evil masters.";
+  reproduction      "";
+  short description "A human skeleton.";
+  worlds            generic;
+  references        WTC 17755: 225;
+  description
+
+  "A skeleton is seldom garbed in anything more than the rotting remnants of
+  any clothing or armor it was wearing when slain.".
+
+#...........................................................................
+#----- Human Commoner Zombie -----------------------------------------------
+
+base monster with incomplete Human Commoner Zombie =
+
+  incomplete        "\list{should be done as template}
+                    {should not have skill points}";
+
+  synonyms          "Zombie, Human Commoner", "Commoner, Zombie Human";
+  size              medium-size (tall);
+  type              undead;
+  hit dice          2d12;
+  speed             30 ft;
+  natural armor     +2;
+  base attack       +1;
+  primary attacks   Slam melee (1d6+1), Weapon melee (1d6+1);
+  special qualities Single Actions Only,
+                    Damage Reduction [Value 5, Name slashing],
+                    Darkvision [Range 60 ft], Immunity to Cold,
+                    Immunity to Mind Affecting Effects, Immunity to Poison,
+                    Immunity to Sleep Effects, Immunity to Paralysis,
+                    Immunity to Stunning, Immunity to Disease,
+                    Not Subject to Critical Hits, Immunity to Death Effects,
+                    Not Subject to Nonlethal Damage,
+                    Not Subject to Ability Drain,
+                    Immunity to Strength Damage, Immunity to Dexterity Damage,
+                    Immunity to Dexterity Damage, Not Subject to Energy Drain,
+                    Immunity to Constitution Damage,
+                    Immunity to Fatigue Effects, No Natural Healing,
+                    Immunity to Exhaustion Effects,
+                    Immunity to Fortitude Save Effects,
+                    Uses Charisma for Concentration Checks,
+                    Not Affected by Raise Dead, Not Affected by Reincarnate,
+                    Does Not Eat, Does Not Breath, Does Not Sleep;
+  strength          12;
+  dexterity         8;
+  constitution      -1;
+  intelligence      -1;
+  wisdom            10;
+  charisma          1;
+  feats             Toughness;
+  environment       any any;
+  organization      any;
+  challenge rating  1/2;
+  treasure          none;
+  alignment         Always Neutral Evil;
+  level adjustment  -;
+  encounter         "";
+  combat            "Because of their utter lack of intelligence, the
+                    instructions given to a newly created zombie must be very
+                    simple, such as 'Kill anyone who enters this room'.";
+  languages         -;
+  tactics           "";
+  character         "Zombies are corpses reanimated through dark and sinister
+                    magic. These mindless automatons shamble about, doing their
+                    creator's bidding without fear or hesitation.";
+  reproduction      "";
+  short description "A human zombie.";
+  worlds            generic;
+  references        WTC 17755: 265-266;
+  description
+
+  "Zombies are not pleasant to look upon. Drawn from their graves, half decayed
+  and partially consumed by worms, they wear the tattered remains of their
+  burial clothes. A rank odor of death hangs heavy in the air around them.".
+
+#...........................................................................
+#----- Iron Golem
+
+base monster Iron Golem =
+
+  base              Golem;
+  synonyms          "Golem, Iron";
+  size              Large (tall);
+  type              Construct;
+  hit dice          18d10 +30;
+  speed             20 ft;
+  natural armor     22;
+  encounter         "This metallic automaton is twice the height of a normal human and resembles an armored giant.";
+  combat            "Iron golems are mighty combatants. They strike with deadly accuracy and incredible force. Their bodies are nearly invulnerable but can be reduced to piles of rubbish by rust monsters.";
+  short description "A humanoid automaton made from iron.";
+  worlds            generic;
+  references        WTC 17755: 136-137;
+  description
+
+  "This golem has a humanoid body made from iron.
+
+  An iron golem can be fashioned in any manner, just like a \Monster{stone
+  golem}, although it almost always displays armor of some sort. Its features
+  are much smoother than those of a \Monster{stone golem}. \Monster[iron
+  golem]{Iron golems} sometimes carry a short sword in one hand.
+
+  An iron golem is 12 feet tall and weighs about 5,000 pounds.
+
+  An iron golem cannot speak or make any vocal noise, nor does it have any
+  distinguishable odor. It moves with a ponderous but smooth gait. Each step
+  causes the floor to tremble unless it is on a thick, solid foundation.".
+
+#............................................................................
+#----- Orc -----------------------------------------------------------------
+
+base monster with incomplete Orc =
+
+  incomplete        "\list
+                    {should wear armor, not have natural armor}
+                    {should attack with weapon (Falchion or Javelin)}
+                    {should have additional information for organization
+                    (class levels)}
+                    {advancement should be 'by character class'}";
+
+  size              Medium-size (tall);
+  type              Humanoid (Orc);
+  hit dice          1d8;
+  speed             30 ft;
+  natural armor     +3;
+  base attack       +1;
+  primary attacks   Weapon melee (2d4+1), Weapon ranged (1d6);
+  special attacks   ;
+  special qualities Darkvision [range 60 ft], Light Sensitivity;
+  strength          17;
+  dexterity         11;
+  constitution      12;
+  intelligence      8;
+  wisdom            7;
+  charisma          6;
+  class skills      Listen: +1, Spot: +1;
+  feats             Alertness;
+  environment       temperate hills;
+  organization      gang (1d3+1), squad (1d10+10), band (1d70+30);
+  challenge rating  1/2;
+  treasure          standard;
+  alignment         often chaotic evil;
+  level adjustment  +0;
+  encounter         "This creature looks like a primitive human with gray skin
+                    and coarse hair. It has a stooped posture, low forehead,
+                    and a piglike face with prominent lower canines that
+                    resemble a boar's tusks.";
+  combat            "Orcs are proficient with all simple weapons, preferring
+                    those that cause the most damage in the least time. Many
+                    orcs who take up the \Class{warrior} or \Class{fighter}
+                    class also gain proficiency with the falchion or the
+                    greataxe as a martial weapon. ";
+  languages         Orc, some Goblin, some Giant;
+  tactics           "They enjoy attacking from
+                    conealment and setting ambushes, and they obey the rules of
+                    war (such as honoring a truce) only as long as it is
+                    convenient for them.";
+  character         "Orcs are aggressive humanoids that raid, pillage, and
+                    battle other creatures. They have a hatred for
+                    \Monster[elf]{elves} and \Monster[dwarf]{dwarves} that
+                    began generations ago, and often kill such creatures on
+                    sight.
+
+                    When not actually fighting other creatures, orcs are
+                    usually planning raids or practicing their fighting
+                    skill.";
+  reproduction      "";
+  short description "The typical orc";
+  worlds            generic;
+  references        WTC 17755: 203;
+  description
+
+  "An orc's hair usually is black. It has lupine ears and reddish eyes. Orcs
+  prefer wearing vivid colors that many humans would consider unpleasant, such
+  as blood red, mustard yellow, yellow-green, and deep purple. Their equipment
+  is dirty and unkempt. Ad adult male orc is little over 6 feet tall and weighs
+  about 210 pounds. Females are slightly smaller.
+
+  The language an orc speaks varies slightly from tribe to tribe, but any orc
+  is understandable by someone else who speaks Orc. Some orcs know Goblin or
+  Giant as well.
+
+  Most encountered away from their home are warriors; the information in the
+  statistics block is for one of 1st level.".
+
+#...........................................................................
+#----- Owlbear -------------------------------------------------------------
+
+base monster with incomplete Owlbear =
+
+  incomplete        "\list{should have 2 less skill points}
+                    {damage not computed for strength}";
+
+  size              Large (tall);
+  type              Magical Beast;
+  hit dice          5d10;
+  speed             30 ft;
+  natural armor     +5;
+  base attack       +5;
+  primary attacks   2 Claw melee (1d6+5);
+  secondary attacks Bite melee (1d8+2);
+  special attacks   Improved Grab;
+  special qualities Scent, Darkvision [Range 60 ft];
+  strength          21;
+  dexterity         12;
+  constitution      21;
+  intelligence      2;
+  wisdom            12;
+  charisma          10;
+  class skills      Listen: +5, Spot: +5;
+  feats             Alertness, Track;
+  environment       temperate forest;
+  organization      solitary, pair, pack (1d6+2);
+  challenge rating  4;
+  treasure          none;
+  alignment         always neutral;
+  advancements      6-8 HD (Large), 9-12 HD (Huge);
+  level adjustment  -;
+  encounter         "This creature has a thick, shaggy coat of feathers and
+                    fur. Its body is like a bear's but it has an avian head
+                    with big, round eyes and a hooked beak.";
+  combat            "Owlbears attach prey---any creature bigger than a
+                    mouse---on sight, always fighting to the death.";
+  languages         -;
+  tactics           "They slash with claws and beak, trying to grab their prey
+                    and rip it apart.";
+  character         "Owlbears are extraordinarily vicious predators with a
+                    reputation for ferocity, aggression, and sheer ill
+                    temper. The tend to attack nearly anything that moves
+                    without provocation.";
+  reproduction      "Scholars have long debated the origins of the owlbear. The
+                    most common theory is that a demented wizard created the
+                    first specimen by crossing a giant owl with a bear.";
+  short description "A cross between an bear and an owl.";
+  worlds            generic;
+  references        WTC 17755: 206;
+  description
+
+  "An owlbear's coat ranges in color from brown-black to yellowish brown; its
+  beak is a dull ivory color. A full-grown male can stand as tall as 8 feet and
+  weight up to 1'500 pounds. Adventurers who have survived encounters with the
+  creature often speak of the bestial madness they glimpsed in its red-trimmed
+  eyes.
+
+  Owlbears inhabit wilderness areas, making their lairs within tangled forests
+  or in shallow underground caverns. They can be active during they day or
+  night, depending on the habits of available prey. Adults live in mated pairs
+  and hunt in packs, leaving their young in the lair. A lair usually has 1d6
+  young, fetching a price of 3'000 gp each in many civilized areas. While
+  owlbears cannot be domesticated, they can still be placed in strategically
+  important areas as free-roaming guardians. Professional trainers charge 2'000
+  gp to rear or train an owlbear (DC 23 for a young creature, DC 30 for an
+  adult).".
+
+#...........................................................................
+#----- Pegasus -------------------------------------------------------------
+
+base monster with incomplete Pegasus =
+
+  incomplete        "\list
+                    {should have a cohort indication in the level adjustment}";
+
+  size              Large (long);
+  type              Magical Beast;
+  hit dice          4d10;
+  speed             60 ft, fly 120 ft (average);
+  natural armor     +3;
+  base attack       +4;
+  primary attacks   2 hoof melee (1d6);
+  secondary attacks bite melee (1d3);
+  special attacks   ;
+  special qualities Darkvision [range 60 ft], Low-Light Vision, Scent,
+                    Spell [name Detect Good, level 5],
+                    Spell [name Detect Evil, level 5],
+                    Skill Bonus [name Listen, modifier +4 racial],
+                    Skill Bonus [name Spot, modifier +4 racial];
+  strength          18;
+  dexterity         15;
+  constitution      16;
+  intelligence      10;
+  wisdom            13;
+  charisma          13;
+  class skills      Listen: +3, Sense Motive: +8, Spot: +3;
+  feats             Flyby Attack, Iron Will;
+  environment       Temperate forest;
+  organization      solitary, pair, herd (1d5+5);
+  challenge rating  3;
+  treasure          none;
+  alignment         Usually Chaotic Good;
+  advancements      5-8 HD (Large);
+  level adjustment  +2;
+  encounter         "This creature looks like a horse but has two large,
+                    feathered wings. Its coat and wings are pure white";
+  combat            "\Monster[Pegasus]{Pegasi} attack with their sharp hooves
+                    and powerful bite. Mate pairs and herds attack as a team,
+                    fighting to the death to defend their eggs and young.";
+  languages         Understand Common;
+  tactics           "";
+  character         "Though highly prized as aerial steeds, pegasi are wild
+                    and shy creatures not easily tamed.";
+  reproduction      "Pegasi mate for life, building their nests in high,
+                    remove locations. A mated pair have either 1-2 eggs or 1-2
+                    young in their nest.";
+  short description "";
+  worlds            generic;
+  references        WTC 17755: 1;
+  description
+
+  "The \Monster{Pegasus} is a magnificent winged horse that sometimes serves
+  the cause of good.
+
+  Typical \Monster{pegasus} stands 6 feet hight at the shoulder, weights 1'500
+  pounds, and has a wingspan of 20 feet. Rumors tell of some specimens that are
+  brown or black instead of white.
+
+  \Monster[Pegasus]{Pegasi} cannot speak, but they understand common.".
+
+#...........................................................................
+#----- Stirge --------------------------------------------------------------
+
+base monster Stirge =
+
+  size              Tiny (tall);
+  type              magical beast;
+  hit dice          1d10;
+  speed             10 ft, fly 40 ft (average);
+  natural armor     +0;
+  base attack       +1;
+  primary attacks   Touch melee (1d1);
+  special attacks   Attach, Blood Drain;
+  special qualities Darkvision [range 60 ft], Low-Light Vision,
+                    grapple bonus [Modifier +12 racial if "attached"];
+  strength          3;
+  dexterity         19;
+  constitution      10;
+  intelligence      1;
+  wisdom            12;
+  charisma          6;
+  class skills      Hide: +14, Listen: +4, Spot: +4;
+  feats             Alertness, Weapon Finesse;
+  environment       Warm Marsh;
+  organization      Colony (1d3+1), Flock (1d4+4), Storm (1d6+8);
+  challenge rating  1/2;
+  treasure          none;
+  alignment         always neutral;
+  level adjustment  -;
+  encounter         "This nasty-looking creature seems to be a cross between a
+                    bat and a giant mosquito. It has membranous bat wings, a
+                    short furry body, eight jointed legs that end in sharp
+                    pincers, and a needlelike proboscis.";
+  combat            "A stirge attacks by landing on a victim, finding a
+                    vulnerable spot, and plunging its proboscis into the
+                    flesh. This is a touch attack and can target only Small or
+                    larger creatures.";
+  languages         -;
+  tactics           "";
+  character         "";
+  reproduction      "";
+  short description "A huge mosquito.";
+  worlds            generic;
+  references        WTC 17755: 236;
+  description
+
+  "".
+
+#...........................................................................
+
+

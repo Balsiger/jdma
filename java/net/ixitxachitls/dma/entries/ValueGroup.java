@@ -32,13 +32,15 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
@@ -223,8 +225,8 @@ public abstract class ValueGroup implements Changeable
   private static final @Nonnull Variables s_emptyVariables = new Variables();
 
   /** All the indexes. */
-  protected static final @Nonnull Map<String, Index> s_indexes =
-    new Hashtable<String, Index>();
+  protected static final @Nonnull Multimap<String, Index> s_indexes =
+    ArrayListMultimap.create();
 
   // TODO: make this not static and move to campaign.
   /** The name of the current game. */
@@ -549,15 +551,23 @@ public abstract class ValueGroup implements Changeable
    * Get all the indexes.
    *
    * @param       inPath the path to the index to get
+   * @param       inType the type of the entries in the index
    *
    * @return      the index found or null if not found
    *
-   * @undefined   never
-   *
    */
-  public static @Nullable Index getIndex(@Nonnull String inPath)
+  public static @Nullable Index getIndex
+    (@Nonnull String inPath,
+     @Nonnull AbstractType<? extends AbstractEntry> inType)
   {
-    return s_indexes.get(inPath);
+    if(s_indexes.get(inPath) == null)
+      return null;
+
+    for(Index index : s_indexes.get(inPath))
+      if(index.getType() == inType)
+        return index;
+
+    return null;
   }
 
   //........................................................................

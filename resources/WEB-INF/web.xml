@@ -295,6 +295,12 @@
         ^/feat/([^/]+)$
         /_entry/base feat/$1
 
+        ^/skill/([^/]+)$
+        /_entry/base skill/$1
+
+        ^/monster/([^/]+)$
+        /_entry/base monster/$1
+
         ^/item/([^/]+)$
         /_entry/base item/$1
 
@@ -313,6 +319,12 @@
         ^/feats/(.*)$
         /_index/base feat/$1
 
+        ^/skills/(.*)$
+        /_index/base skill/$1
+
+        ^/monsters/(.*)$
+        /_index/base monster/$1
+
         ^/items/(.*)$
         /_index/base item/$1
 
@@ -327,6 +339,12 @@
 
         ^/feats
         /_entries/base feat
+
+        ^/skills
+        /_entries/base skill
+
+        ^/monsters
+        /_entries/base monster
 
         ^/items$
         /_entries/base item

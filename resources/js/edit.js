@@ -332,6 +332,7 @@ edit.Base.create = function(inElement)
       return new edit.String(element, properties);
 
     case 'selection':
+      window.console.log("selection: ", properties);
       return new edit.Selection(element, properties);
 
     case 'multiselection':
@@ -382,6 +383,10 @@ edit.Base.create = function(inElement)
 
     case 'price':
       properties.validate = 'price';
+      return new edit.Name(element, properties);
+
+    case 'dice':
+      properties.validate = 'dice';
       return new edit.Name(element, properties);
   }
 
@@ -437,7 +442,15 @@ edit.Base._parse = function(inEditable)
   // extract values if any
   var values = inEditable.getAttribute('values');
   if(values)
-    properties.values = values.split('||');
+    if(values.match(/~~/))
+    {
+      properties.values = [];
+      values = values.split(/~~/);
+      for(var i = 0; i < values.length; i++)
+        properties.values.push(values[i].split('||'));
+    }
+    else
+      properties.values = values.split('||');
 
   return properties;
 };
@@ -1159,7 +1172,7 @@ edit.Multiple.prototype._createElement = function()
       name: this.name,
       script: null,
       value: i < this.subvalues.length ? this.subvalues[i] : "",
-      values: this.properties.values,
+      values: this.properties.values[i],
       note: null,
       label: type.label,
       related: null,
@@ -1171,6 +1184,8 @@ edit.Multiple.prototype._createElement = function()
     this.items.push(item);
     element.append(item._element);
   }
+
+  element.append($('<span class="edit-last-spacer"></span>'));
 
   return element;
 };
@@ -1192,19 +1207,29 @@ edit.Multiple.prototype.isDefined = function()
 edit.Multiple.prototype._getValue = function()
 {
   var result = '';
+  var lastDefined = false;
 
   for(var i = 0; i < this.items.length; i++)
   {
     var value = this.items[i].getValue();
 
     if(value.length > 0 && value != '$undefined$')
+    {
       if(this.delimiters[i])
         result += this.delimiters[i] + value;
       else
         result += ' ' + value;
+
+      lastDefined = true;
+    }
+    else
+      lastDefined = false;
   }
 
-  return result + this.delimiters[i];
+  if(lastDefined)
+    return result + this.delimiters[i];
+
+  return result;
 };
 
 //..........................................................................
