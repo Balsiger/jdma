@@ -32,6 +32,8 @@
  * @param canEdit True if the value can be edited, false if not
  * @param related Other related values to edit together
  * @param content Content for printing the value, uses .print if not given
+ * @param note Text to be displayed when editing
+ *
  */
 {template .value}
   {call .editable}
@@ -42,6 +44,7 @@
     {param type: $value.type /}
     {param related: $related ? $related : $value.related /}
     {param choices: $value.choices /}
+    {param note: $note /}
     {param content}
       {if $content}
         {$content}
@@ -77,13 +80,14 @@
  * @param related The related values, if any
  * @param choices The possible choices for the value, if any
  * @param content The formatted value edited as it is displayed
+ * @param note Text to be displayed when editing
  *
  */
 {template .editable}
   {if $canEdit}
     <dmaeditable name="{$name}" value="{$value|noAutoescape}" key="{$key}"
       class="editable" type="{$type}"{if $related} related="{$related}"{/if}
-      {if $choices} values="{$choices}"{/if}>
+      {if $choices} values="{$choices}"{/if}{if $note} note="{$note}"{/if}>
       {$content|noAutoescape}
     </dmaeditable>
   {else}
@@ -486,6 +490,7 @@
  * @param entry the entry printed
  * @param value the value printed
  * @param canEdit the value can be edited
+ * @param note The note to display on edit, if any
  */
 {template .combination}
   {if $combination.total}
@@ -494,6 +499,7 @@
         {param entry: $entry /}
         {param value: $value /}
         {param canEdit: $canEdit /}
+        {param note: $note /}
         {param content}
           {if $ij.isDM}
             {if $combination.bases[0].isLongText}
@@ -566,6 +572,7 @@
  * @param entry the entry to render
  * @param value the value rendered
  * @param canEdit the value can be edited
+ * @param note Text to be displayed when editing
  */
 {template .withbase}
   {if $value.combine}
@@ -574,12 +581,14 @@
       {param value: $value /}
       {param entry: $entry /}
       {param canEdit: $canEdit /}
+      {param note: $note /}
     {/call}
   {else}
     {call dma.value.value}
       {param entry: $entry /}
       {param value: $value /}
       {param canEdit: $canEdit /}
+      {param note: $note /}
     {/call}
  {/if}
 {/template}

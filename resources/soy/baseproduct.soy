@@ -64,6 +64,14 @@
 {deltemplate dma.entry.values}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
+    {param name: 'Name' /}
+    {param value: $entry.__name /}
+    {param note: 'Important: changing the name will create a copy of the '
+        + 'value with the new name but keep the old entry as is! '
+        + 'Images and Files will NOT be copied!' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
     {param name: 'Base' /}
     {param value: $entry.base /}
   {/delcall}

@@ -401,6 +401,7 @@
  * @param content The content if not using a value.
  * @param access One of dm, owner, admin.
  * @param noedit If given, value cannot be edited
+ * @param note The not to be displayed on edit, if any
  */
 {deltemplate dma.entry.keyvalue}
   {if not $access
@@ -422,12 +423,14 @@
               {param canEdit: not $noedit and ($ij.isDM or $ij.isOwner) /}
               {param entry: $entry /}
               {param value: $value /}
+              {param note: $note /}
             {/call}
           {else}
             {call dma.value.withbase}
               {param entry: $entry /}
               {param value: $value /}
               {param canEdit: not $noedit and ($ij.isDM or $ij.isOwner) /}
+              {param note: $note /}
             {/call}
           {/if}
         {else}
