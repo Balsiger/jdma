@@ -43,6 +43,7 @@ import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.errors.BaseError;
 
 //..........................................................................
@@ -168,7 +169,13 @@ public class SoyEntry extends SoyMapData
     }
 
     String name = inName.replace("__", "").replace("_", " ");
+
     Object value = m_entry.compute(name);
+    if(value != null)
+      return convert(name, value);
+
+    // check if there is a function with the given name
+    value = Classes.callMethod(inName, m_entry);
     if(value != null)
       return convert(name, value);
 

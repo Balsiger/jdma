@@ -212,7 +212,7 @@ public class Text extends BaseText<Text>
       inReader.logWarning(pos, "value.text.unterminated",
                           "read till end of text");
 
-    m_text   = text;
+    m_text = text;
 
     return true;
   }

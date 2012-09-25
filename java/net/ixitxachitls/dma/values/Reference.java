@@ -63,7 +63,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
   //------------------------------ Reference -------------------------------
 
   /**
-   * Construct the text object.
+   * Construct the reference object.
    *
    * @param   inType the type of entry referenced
    *
@@ -73,7 +73,8 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
     m_type = inType;
     m_name = new Name();
 
-    withTemplate("reference");
+    withTemplate("reference", "/" + inType.getLink() + "/");
+    m_editType = "non-empty";
   }
 
   //........................................................................
@@ -90,6 +91,9 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
   {
     m_type = inType;
     m_name = new Name(inText);
+
+    withTemplate("reference", "/" + inType.getLink() + "/");
+    m_editType = "non-empty";
   }
 
   //........................................................................
@@ -242,7 +246,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
    // }
 
    //........................................................................
-   //----------------------------- getEditValue -----------------------------
+  //----------------------------- getEditValue -----------------------------
 
    /**
     * Get the value to be used for editing.
@@ -250,17 +254,11 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
     * @return      the value for editing
     *
     */
-   @Override
-   public String getEditValue()
-   {
-     // TODO: check if this is ok
-     // resolve();
-     // if(m_product == null)
-     //   return super.getEditValue();
-
-     // return m_product.getFullTitle() + " (" + get() + ")";
-     return m_name.get();
-   }
+   // @Override
+   // public String getEditValue()
+   // {
+   //   return m_name.get();
+   // }
 
    //........................................................................
   //------------------------------ doToString ------------------------------
@@ -282,7 +280,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
   }
 
   //........................................................................
-   //------------------------------- resolve --------------------------------
+  //------------------------------- resolve --------------------------------
 
   /**
    * Resolve the referenced base product.
@@ -298,6 +296,21 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
         .getEntry(AbstractEntry.createKey(m_name.get(), m_type));
 
     m_resolved = true;
+  }
+
+  //........................................................................
+  //------------------------------- doGroup --------------------------------
+
+  /**
+   * Really do grouping for this object. This method can be derived to have
+   * special grouping in derivations.
+   *
+   * @return      a string denoting the group this value is in
+   *
+   */
+  protected @Nonnull String doGroup()
+  {
+    return m_name.toString();
   }
 
   //........................................................................

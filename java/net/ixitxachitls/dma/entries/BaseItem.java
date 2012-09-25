@@ -667,20 +667,6 @@ public class BaseItem extends BaseEntry
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print(""
-              + "#commodity"
-              );
-
-  /** The printer for printing in a list. */
-  public static final ListPrint s_listPrint =
-    new ListPrint("1:L(label);10:L(name)[Name];"
-                  + "1:L(value)[Value];1:L(weight)[Weight];1:L(worlds)[Worlds];"
-                  + "1:L(short)[Short Description];5:L(extensions)[Extensions]",
-                  "$label $listlink", null, "$value", "$weight",
-                  "$worlds", "${short description}", "$extensions");
-
   /** The type of this entry. */
   public static final BaseType<BaseItem> TYPE =
     new BaseType<BaseItem>(BaseItem.class);
@@ -835,31 +821,6 @@ public class BaseItem extends BaseEntry
   //........................................................................
   //----- appearances ------------------------------------------------------
 
-  /** The formatter for the appearances list. */
-  protected static final Formatter<ValueList<Multiple>>
-    s_appearancesFormatter =
-    new Formatter<ValueList<Multiple>>()
-  {
-    @Override
-    public @Nonnull Command format(@Nonnull ValueList<Multiple> inList)
-    {
-      ArrayList<Command> elements = new ArrayList<Command>();
-
-      for(Multiple multiple : inList)
-      {
-        for(Multiple.Element element : multiple)
-          elements.add(element.get().format(false));
-      }
-
-      return new Table("subtable", new int [] { -9, 53 },
-                              new Buffer.Alignment []
-                      {
-                        Buffer.Alignment.left, Buffer.Alignment.left,
-                      }, new String [] { "", " ", "", "", },
-                       elements.toArray());
-    }
-  };
-
   /** The possible standard appearances of items of this kind. */
   @Key("appearances")
   protected ValueList<Multiple> m_appearances =
@@ -869,7 +830,6 @@ public class BaseItem extends BaseEntry
                              .withEditType("selection[probability]"), false),
         new Multiple.Element(new Text()
                              .withEditType("string[description]"), false) }))
-    .withFormatter(s_appearancesFormatter)
     .withTemplate("appearances");
 
   //........................................................................
@@ -1252,36 +1212,6 @@ public class BaseItem extends BaseEntry
 
   //........................................................................
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -1348,13 +1278,6 @@ public class BaseItem extends BaseEntry
   }
 
   //........................................................................
-
-  //   // set the player name to the name if none given
-  //   if(!m_playerName.isDefined())
-  //     m_playerName.set(getName());
-
-  //   super.save();
-  // }
 
   //........................................................................
 

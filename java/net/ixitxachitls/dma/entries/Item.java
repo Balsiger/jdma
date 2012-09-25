@@ -505,6 +505,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the requested name
    *
    */
+  @Override
   public @Nonnull String getPlayerName()
   {
     if(m_playerName.isDefined())
@@ -515,6 +516,41 @@ public class Item extends CampaignEntry<BaseItem>
         return base.getName();
 
     return getName();
+  }
+
+  //........................................................................
+  //------------------------------ getDMName -------------------------------
+
+  /**
+   * Get the name of the item for DMs.
+   *
+   * @return the dm specific name
+   *
+   */
+  @Override
+  public @Nonnull String getDMName()
+  {
+    List<String> parts = new ArrayList<String>();
+
+    for(BaseEntry base : getBaseEntries())
+    {
+      if(base == null)
+        continue;
+
+      String name = base.getName();
+      List<String> synonyms = base.getSynonyms();
+      // if the first synonym does not contain a ',', we use that name as it
+      // might be better readable than the restricted real name
+      if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
+        name = synonyms.get(0);
+
+      parts.add(name);
+    }
+
+    if(parts.isEmpty())
+      parts.add(getName());
+
+    return Strings.SPACE_JOINER.join(parts);
   }
 
   //........................................................................
@@ -958,40 +994,6 @@ public class Item extends CampaignEntry<BaseItem>
       return new Command(playerName, new Super(name));
 
     return name;
-  }
-
-  //........................................................................
-  //------------------------------ getDMName -------------------------------
-
-  /**
-   * Get the name of the item for DMs.
-   *
-   * @return the dm specific name
-   *
-   */
-  public @Nonnull String getDMName()
-  {
-    List<String> parts = new ArrayList<String>();
-
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
-
-      String name = base.getName();
-      List<String> synonyms = base.getSynonyms();
-      // if the first synonym does not contain a ',', we use that name as it
-      // might be better readable than the restricted real name
-      if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
-        name = synonyms.get(0);
-
-      parts.add(name);
-    }
-
-    if(parts.isEmpty())
-      parts.add(getName());
-
-    return Strings.SPACE_JOINER.join(parts);
   }
 
   //........................................................................

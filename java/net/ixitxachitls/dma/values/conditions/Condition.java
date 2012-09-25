@@ -63,7 +63,8 @@ public class Condition<T extends Condition> extends Value<T>
    */
   public Condition()
   {
-    // nothing to do
+    withTemplate("condition");
+    withEditType("string");
   }
 
   //........................................................................
@@ -78,6 +79,9 @@ public class Condition<T extends Condition> extends Value<T>
   public Condition(@Nonnull String inDescription)
   {
     m_description = m_description.as(inDescription);
+
+    withTemplate("condition");
+    withEditType("string");
   }
 
   //........................................................................

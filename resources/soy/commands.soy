@@ -53,6 +53,32 @@
 {/template}
 
 /**
+ * A link to a god.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .God}
+  {call dma.page.link}
+    {param url: '/god/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'God' /}
+  {/call}
+{/template}
+
+/**
+ * A link to a class.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .Class}
+  {call dma.page.link}
+    {param url: '/class/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'Class' /}
+  {/call}
+{/template}
+
+/**
  * A link to an Item.
  *
  * @param arg The arguments to the command.

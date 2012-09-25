@@ -785,10 +785,7 @@ public class DMADatastore implements DMAData
 
       Object value = property.getValue();
       if(value == null)
-      {
-        Log.warning("ignoring null value for " + name);
         continue;
-      }
 
       String text;
       String rest;

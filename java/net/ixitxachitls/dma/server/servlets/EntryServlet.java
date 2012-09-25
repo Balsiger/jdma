@@ -146,10 +146,13 @@ public class EntryServlet extends PageServlet
 
     boolean dma = path.endsWith(".dma");
     boolean print = path.endsWith(".print");
+    boolean summary = path.endsWith(".summary");
     if(dma)
       path = path.substring(0, path.length() - 4);
-    if(print)
+    else if(print)
       path = path.substring(0, path.length() - 6);
+    else if(summary)
+      path = path.substring(0, path.length() - 8);
 
     AbstractEntry entry = getEntry(path);
     if(entry != null && !entry.isShownTo(inRequest.getUser()))
@@ -238,6 +241,11 @@ public class EntryServlet extends PageServlet
     {
       extension = ".print";
       template = "dma.entry.printcontainer";
+    }
+    else if(summary)
+    {
+      extension = ".summary";
+      template = "dma.entry.summarycontainer";
     }
     else
     {

@@ -496,18 +496,18 @@ public class SoyTemplate
         .setActiveDelegatePackageNames(inDelegates)
         .render();
     }
-    catch(Exception e)
-    {
-      System.out.println("Exception when rendering template:");
-      e.printStackTrace(System.out);
-    }
+    // catch(Exception e)
+    // {
+    //   System.out.println("Exception when rendering template:");
+    //   e.printStackTrace(System.out);
+    // }
     finally
     {
       if(scope != null)
         addScope(scope);
     }
 
-    return "(error)";
+    // return "(error)";
   }
 
   //........................................................................

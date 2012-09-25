@@ -88,7 +88,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @param       inName  the name of the campaign
    *
    */
-  public Campaign(String inName)
+  public Campaign(@Nonnull String inName)
   {
     super(inName, TYPE, BASE_TYPE);
   }
@@ -475,6 +475,24 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   // }
 
   //........................................................................
+  //------------------------------- monsters -------------------------------
+
+  /**
+   * Get the free roaming monsters in the campaign.
+   *
+   * @return  the list of monster names
+   *
+   */
+  public List<Monster> monsters()
+  {
+    List<Monster> monsters =
+      DMADataFactory.get().getEntries(Monster.TYPE, getKey(), 0, 100);
+
+    return monsters;
+  }
+
+  //........................................................................
+
   //------------------------------- compute --------------------------------
 
   /**

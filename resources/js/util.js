@@ -147,7 +147,6 @@ util.reload = function(inPage)
   */
 util.link = function(inEvent, inTarget, inFunction)
 {
-  window.console.log("target", inTarget);
   if(inTarget && inTarget.match('^javascript:'))
     return true;
 
@@ -389,7 +388,85 @@ util.niceDate = function(inSeconds)
 };
 
 //..........................................................................
+//--------------------------------- parse ----------------------------------
 
+/**
+ * Parse the given string as a recursive data structure.
+ *
+ * util.parse("#(one#|two#|#(threea#|threeb#|threec#|threed#)"
+   + "#|four#|#(fivea#|#(fiveaa#)#|fiveb#)#|six#)")
+ *
+ * will be transformed into
+ *
+ * [one, two, [threea, threeb, threec, threed], four, [fivea, [fiveaa], fiveb],
+ *  six]
+ *
+ * @param       inText the text to parse
+ *
+ * @return      the parsed data structure as a nested array or a single string
+ *
+ */
+util.parse = function(inText)
+{
+  var result = ['dummy']; // we have to have a dummy to pass by reference
+  util._parse(result, inText);
+  if(result.length == 1)
+    return '';
+
+  if(result.length == 2)
+    return result[1];
+
+  return result.slice(1);
+};
+
+util._parse = function(inResult, inText)
+{
+  if(!inText.match(/^#\(/))
+  {
+    inResult.push(inText);
+    return '';
+  }
+
+  var text = inText.substring(2);
+  var count = 0;
+  while(true)
+  {
+    text = util._parseNext(inResult, text);
+
+    if(text.match(/^#\)/))
+      break;
+
+    text = text.substring(2);
+
+    if(count++ > 30)
+      break;
+  }
+
+  return text;
+}
+
+util._parseNext = function(inResult, inText)
+{
+  if(inText.match(/^#\(/))
+  {
+    var result = ['dummy'];
+    var text = util._parse(result, inText);
+    inResult.push(result.slice(1));
+    return text.substring(2);
+  }
+
+  var match = inText.match(/^((?:\n|.)*?)(#\||#\))/);
+  if(match)
+  {
+    inResult.push(match[1]);
+    return inText.substring(match[1].length);
+  }
+
+  inResult.push('(invalid format)');
+  return '';
+};
+
+//..........................................................................
 //---------------------------- replaceMainImage ----------------------------
 
 /**

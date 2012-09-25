@@ -81,7 +81,7 @@
   {call .navigation}
     {param first: $first /}
     {param previous: $previous /}
-    {param ist: $list /}
+    {param list: $list /}
     {param next: $next /}
     {param last: $last /}
   {/call}
@@ -113,9 +113,21 @@
     {param entry: $entry /}
     {param first: $first /}
     {param previous: $previous /}
-    {param ist: $list /}
+    {param list: $list /}
     {param next: $next /}
     {param last: $last /}
+  {/delcall}
+{/template}
+
+/**
+ * The container for entry summaries.
+ *
+ * @param entry the entry to format
+ *
+ */
+{template .summarycontainer}
+  {delcall dma.entry.summary}
+    {param entry: $entry /}
   {/delcall}
 {/template}
 
@@ -135,10 +147,22 @@
     {param entry: $entry /}
     {param first: $first /}
     {param previous: $previous /}
-    {param ist: $list /}
+    {param list: $list /}
     {param next: $next /}
     {param last: $last /}
   {/call}
+{/deltemplate}
+
+/**
+ * The template for an entry summary.
+ *
+ * @param entry the entry to format
+ *
+ */
+{deltemplate dma.entry.summary}
+  <div class="summary">
+    <h1>{$entry.dmName} ({$entry.name})</h1>
+  </div>
 {/deltemplate}
 
 /**
@@ -256,16 +280,25 @@
                                    true);
                            {rb});
           </script>
+          {call dma.page.link}
+            {param url: $entry.name + '.summary' /}
+            {param text}
+              <div class="caption-container">
+                <div class="summary sprite large"></div>
+                <div>summary</div>
+              </div>
+            {/param}
+          {/call}
+          {call dma.page.link}
+            {param url: $entry.name + '.dma' /}
+            {param text}
+              <div class="caption-container">
+                <div class="document sprite large"></div>
+                <div>dma</div>
+              </div>
+            {/param}
+          {/call}
         {/if}
-        {call dma.page.link}
-          {param url: $entry.name + '.dma' /}
-          {param text}
-            <div class="caption-container">
-              <div class="document sprite large"></div>
-              <div>dma</div>
-            </div>
-          {/param}
-        {/call}
         {call dma.page.link}
           {param url: $entry.name + '.print' /}
           {param text}
@@ -416,7 +449,7 @@
         </div>
       </div>
       <div class="value-content
-          {if not $noedit and ($ij.isDM or $ij.isOwner)} value-noedit{/if}">
+          {if $noedit and not $ij.isDM and not $ij.isOwner} value-noedit{/if}">
         {if $value}
           {if $withoutbase}
             {call dma.value.value}
@@ -988,6 +1021,7 @@
 /**
  * Print the raw value, ignoring dm handling.
  *
+ * @param entry    the entry to render
  * @param prefix   the prefix for the value
  * @param postfix  the postfix for the value
  * @param value    the vaue to print
@@ -1002,7 +1036,11 @@
       {if $value.isDefined}
         {$value |print}
       {else}
-        ?
+        {call dma.value.withbase}
+          {param entry: $entry /}
+          {param value: $value /}
+          {param canEdit: false /}
+        {/call}
       {/if}
     {else}
       (no value)

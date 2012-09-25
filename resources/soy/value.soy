@@ -36,37 +36,41 @@
  *
  */
 {template .value}
-  {call .editable}
-    {param canEdit: $canEdit and (not $value or $value.isEditable) /}
-    {param name: $value.name /}
-    {param value: $value.edit /}
-    {param key: $entry.key /}
-    {param type: $value.type /}
-    {param related: $related ? $related : $value.related /}
-    {param choices: $value.choices /}
-    {param note: $note /}
-    {param content}
-      {if $content}
-        {$content}
-      {else}
-        {if $value.isDefined}
-          {if $value.remark}
-            {call dma.value.remark}
-              {param value: $value /}
-              {param remarkType: $value.remark.type /}
-              {param remarkComment: $value.remark.comment /}
-            {/call}
-          {else}
-            {$value |print}
-          {/if}
-        {elseif $value.hasExpression}
-          {$value.getExpression}
+  {if $value}
+    {call .editable}
+      {param canEdit: $canEdit and (not $value or $value.isEditable) /}
+      {param name: $value.name /}
+      {param value: $value.edit /}
+      {param key: $entry.key /}
+      {param type: $value.type /}
+      {param related: $related ? $related : $value.related /}
+      {param choices: $value.choices /}
+      {param note: $note /}
+      {param content}
+        {if $content}
+          {$content}
         {else}
-          &nbsp;
+          {if $value.isDefined}
+            {if $value.remark}
+              {call dma.value.remark}
+                {param value: $value /}
+                {param remarkType: $value.remark.type /}
+                {param remarkComment: $value.remark.comment /}
+              {/call}
+            {else}
+              {$value |print}
+            {/if}
+          {elseif $value.hasExpression}
+            {$value.getExpression}
+          {else}
+            &nbsp;
+          {/if}
         {/if}
-      {/if}
-    {/param}
-  {/call}
+      {/param}
+    {/call}
+  {else}
+    (not found)
+  {/if}
 {/template}
 
 /**
@@ -132,6 +136,19 @@
 {/template}
 
 /**
+ * Formatting a reference.
+ *
+ * @param args The template arguments
+ * @param value The value rendered
+ */
+{template .reference}
+  {call dma.page.link}
+    {param url: $args.0 + $value.group /}
+    {param text: $value.raw /}
+  {/call}
+{/template}
+
+/**
  * Formatting a link to an entry.
  *
  * @param entry The entry rendered
@@ -146,7 +163,7 @@
 
 
 /**
- * Formatting a link.
+ * Formatting a campaign link.
  *
  * @ param entry The entry rendered
  * @param value The value rendered
@@ -213,19 +230,6 @@
     optional{sp}
     {$value.multi.1.print}
   {/if}
-{/template}
-
-/**
- * Formatting a product reference.
- *
- * @param id the id of the reference
- * @param name the name of the reference product
- */
-{template .reference}
-  {call dma.page.link}
-    {param url: '/product/' + $id /}
-    {param text: $name + ' (' + $id + ')' /}
-  {/call}
 {/template}
 
 /**
@@ -358,25 +362,22 @@
  * Formatting a damage value.
  *
  * @ param entry The entry rendered
- * @ param value The value rendered
- * @param base The base damage value
- * @param type The damage type
- * @param effect The damage effect, if any
- * @param other Other damage, if any
+ * @param value The value rendered
+ * @ param args
  */
 {template .damage}
   {call dma.page.link}
-    {param ulr: '/items/damages/' + $base.group /}
-    {param text: $base.print /}
+    {param url: '/items/damages/' + $value.group /}
+    {param text: $value.raw /}
   {/call}
-  {if $type and $type.isDefined}
-    {sp}{$type.print}
+  {if $value.getType}
+    {sp}{$value.getType}
   {/if}
-  {if $effect}
-    {sp}{$effect}
+  {if $value.effect}
+    {sp}{$value.effect}
   {/if}
-  {if $other}
-    {sp}{$other.print}
+  {if $value.next}
+    {sp}{$value.next.print}
   {/if}
 {/template}
 
@@ -603,6 +604,28 @@
   {foreach $element in $value.list}
     {$element |print}
     {if not isLast($element)}{$args[0]}{/if}
+  {/foreach}
+{/template}
+
+/**
+ * Print a multiple value.
+ *
+ * @param value the value to print
+ * @param args arguments to the template
+ */
+{template .multiple}
+  {foreach $element in $value.multi}
+    {if $element.isDefined}
+      {if $args[index($element) * 2]}
+        {$args[index($element) * 2]}
+      {else}
+        {sp}
+      {/if}
+      {$element |print}
+      {if $args[index($element) * 2 + 1]}
+        {$args[index($element) * 2 + 1]}
+      {/if}
+    {/if}
   {/foreach}
 {/template}
 

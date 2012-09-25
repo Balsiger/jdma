@@ -250,6 +250,12 @@ DIV.subtitletext, DIV.subtitletext A
   width: 24px;
 }
 
+.summary.sprite
+{
+  background-position: -121px 0;
+  width: 26Epx;
+}
+
 #search INPUT
 {
   font-size: 10px;
@@ -516,6 +522,10 @@ DIV.value-content
   margin-left:      161px;
   min-height:       1.125em;
   line-height:      1.125em;
+}
+
+DIV.value-content-edit
+{
   display:          -webkit-box;
   -webkit-box-orient: horizontal;
 }
@@ -606,6 +616,22 @@ IMG.item-image
   width: 15px;
   height: 15px;
   margin-right: 5px;
+}
+
+/******************************************************************************
+ * summary
+ *****************************************************************************/
+
+DIV.summary
+{
+}
+
+DIV.summary H1
+{
+  font-size: medium;
+  border: none;
+  padding: 0;
+  margin: 0 0 5px 0;
 }
 
 /******************************************************************************

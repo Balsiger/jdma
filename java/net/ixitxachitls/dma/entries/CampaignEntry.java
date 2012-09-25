@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.output.commands.Link;
+import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -247,6 +248,54 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   public @Nonnull String getEditType()
   {
     return getCampaign().getEditType() + "/" + super.getEditType();
+  }
+
+  //........................................................................
+  //---------------------------- getPlayerName -----------------------------
+
+  /**
+   * Get the name of the entry as given to the plaer.
+   *
+   * @return      the requested name
+   *
+   */
+  public @Nonnull String getPlayerName()
+  {
+    return getName();
+  }
+
+  //........................................................................
+  //------------------------------ getDMName -------------------------------
+
+  /**
+   * Get the name of the item for DMs.
+   *
+   * @return the dm specific name
+   *
+   */
+  public @Nonnull String getDMName()
+  {
+    List<String> parts = new ArrayList<String>();
+
+    for(BaseEntry base : getBaseEntries())
+    {
+      if(base == null)
+        continue;
+
+      String name = base.getName();
+      List<String> synonyms = base.getSynonyms();
+      // if the first synonym does not contain a ',', we use that name as it
+      // might be better readable than the restricted real name
+      if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
+        name = synonyms.get(0);
+
+      parts.add(name);
+    }
+
+    if(parts.isEmpty())
+      parts.add(getName());
+
+    return Strings.SPACE_JOINER.join(parts);
   }
 
   //........................................................................

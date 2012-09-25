@@ -81,6 +81,9 @@ public abstract class Expression implements Comparable<Expression>
     /** The number of magical ammunition plusses computed so far. */
     private int m_magicAmmunition = 0;
 
+    /** Flag if class values were already computed or not. */
+    private boolean m_class = false;
+
     /**
      * Convert to a string.
      *
@@ -413,6 +416,85 @@ public abstract class Expression implements Comparable<Expression>
         return null;
 
       return inValue.read(m_value);
+    }
+  }
+
+  //........................................................................
+  //----- ByClass ----------------------------------------------------------
+
+  /** An expression representing a value from classes, ignoring non class
+   * values. */
+  public static class ByClass extends Expression
+  {
+    /**
+     * Create the by class expression.
+     *
+     * @param inValue the value to set to
+     *
+     */
+    public ByClass(@Nonnull String inValue)
+    {
+      super(10);
+
+      m_value = inValue;
+    }
+
+    /** The value to set to. */
+    private @Nonnull String m_value;
+
+    /** Pattern for a equal. */
+    private static final Pattern s_pattern =
+      Pattern.compile("^\\s*class\\((.*)\\)");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      return "[class(" + m_value + ")]";
+    }
+
+    /**
+     * Parse a by class expression from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed by class or null if not properly parsed
+     */
+    protected static @Nullable ByClass parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        return new ByClass(matcher.group(1));
+
+      return null;
+    }
+
+    /**
+     * Compute the value for the expression.
+     * Note: expression are computed after values, which means we can just cearl
+     * the value if this is the first expression.
+     *
+     * @param       inEntry   the entry to compute for
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      if(inValue == null)
+        return null;
+
+      Value value = inValue.read(m_value);
+
+      if(ioShared.m_class)
+        return inValue.add(value);
+
+      ioShared.m_class = true;
+      return value;
     }
   }
 
@@ -944,6 +1026,10 @@ public abstract class Expression implements Comparable<Expression>
       return result;
 
     result = Switch.parse(text);
+    if(result != null)
+      return result;
+
+    result = ByClass.parse(text);
     if(result != null)
       return result;
 

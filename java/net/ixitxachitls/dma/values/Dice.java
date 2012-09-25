@@ -424,26 +424,6 @@ public class Dice extends Value<Dice>
   }
 
   //........................................................................
-  //-------------------------------- addTo ---------------------------------
-
-  /**
-   * Add the given value to the beginning of the current one.
-   *
-   * @param       inValue the value to add to this one
-   *
-   */
-  // public void addTo(Dice inValue)
-  // {
-  //   if(isDefined())
-  //     throw new UnsupportedOperationException("cannot add to this "
-  //                                             + getClass());
-
-  //   m_number = inValue.m_number;
-  //   m_dice = inValue.m_dice;
-  //   m_modifier = inValue.m_modifier;
-  // }
-
-  //........................................................................
   //------------------------------- multiply -------------------------------
 
   /**

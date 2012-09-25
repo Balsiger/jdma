@@ -239,6 +239,21 @@ public class Damage extends Value<Damage>
   }
 
   //........................................................................
+  //------------------------------ getEffect -------------------------------
+
+  /**
+   * Get the effect that applies with the damage, if any.
+   *
+   * @return      the applied effect
+   *
+   */
+  public @Nullable String getEffect()
+  {
+    return m_effect;
+  }
+
+  //........................................................................
+
   //--------------------------------- next ---------------------------------
 
   /**
@@ -334,10 +349,10 @@ public class Damage extends Value<Damage>
   }
 
   //........................................................................
-  //----------------------------- convertValue -----------------------------
+  //------------------------------ doToString ------------------------------
 
   /**
-   * Convert the value to a string, depending on the given kind.
+   * Convert the value to a string.
    *
    * @return      a String representation, depending on the kind given
    *

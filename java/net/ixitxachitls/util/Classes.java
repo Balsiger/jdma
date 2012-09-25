@@ -28,6 +28,8 @@ import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.util.logging.Log;
+
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -195,6 +197,53 @@ public final class Classes
     }
 
     return method;
+  }
+
+  //........................................................................
+  //------------------------------ callMethod ------------------------------
+
+  /**
+   * Call the name method with the given arguments.
+   *
+   * @param       inName      the name of the method to call
+   * @param       inObject    the object in which to call the method
+   * @param       inArguments the arguments to call the method with
+   *
+   * @return      the result of the method, or null if something failed
+   *
+   */
+  public static @Nullable Object callMethod(@Nonnull String inName,
+                                            @Nonnull Object inObject,
+                                            @Nonnull Object ... inArguments)
+  {
+    Class<?> []arguments = new Class<?>[inArguments.length];
+    for(int i = 0; i < inArguments.length; i++)
+      arguments[i] = inArguments.getClass();
+
+    Method method = getMethod(inObject.getClass(), inName, arguments);
+    if(method == null)
+    {
+      method = getMethod(inObject.getClass(),
+                         "get" + Character.toUpperCase(inName.charAt(0))
+                         + inName.substring(1), arguments);
+      if(method == null)
+        return null;
+    }
+
+    try
+    {
+      return method.invoke(inObject, inArguments);
+    }
+    catch(IllegalAccessException e)
+    {
+      Log.warning("cannot access method: " + e);
+    }
+    catch(java.lang.reflect.InvocationTargetException e)
+    {
+      Log.warning("cannot invoke method: " + e);
+    }
+
+    return null;
   }
 
   //........................................................................

@@ -98,7 +98,7 @@ public class ValueList<T extends Value>
   {
     m_type      = inType;
     m_delimiter = inDelimiter;
-    m_editType  = "list(" + inDelimiter + ")#" + m_type.getEditType();
+    m_editType  = "#(list#|" + inDelimiter + "#|" + m_type.getEditType() + "#)";
     m_joiner    = Joiner.on(inDelimiter);
 
     append(inType);
@@ -137,7 +137,7 @@ public class ValueList<T extends Value>
 
     m_type      = inValues.get(0);
     m_delimiter = inDelimiter;
-    m_editType  = "list(" + inDelimiter + ")#" + m_type.getEditType();
+    m_editType  = "#(list#|" + inDelimiter + "#|" + m_type.getEditType() + "#)";
     m_joiner    = Joiner.on(inDelimiter);
 
     // add all the elements (they must be copied!)
@@ -180,12 +180,14 @@ public class ValueList<T extends Value>
 
     m_type      = inValues[0];
     m_delimiter = inDelimiter;
-    m_editType  = "list(" + inDelimiter + ")#" + m_type.getEditType();
+    m_editType  = "#(list#|" + inDelimiter + "#|" + m_type.getEditType() + "#)";
     m_joiner    = Joiner.on(inDelimiter);
 
     // add all the elements (they must be copied!)
     for(int i = 0; i < inValues.length; i++)
       append(inValues[i]);
+
+    withTemplate("list", m_delimiter);
   }
 
   //........................................................................
@@ -236,6 +238,10 @@ public class ValueList<T extends Value>
   protected static final @Nonnull String s_delimiter =
     Config.get("resource:values/list.delimiter", ",\n");
 
+  /** The joiner for editing values. */
+  protected static final @Nonnull Joiner s_editJoiner =
+    Joiner.on(Config.get("resource:entries/edit.multiple.delimiter", "#|"));
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -251,12 +257,17 @@ public class ValueList<T extends Value>
   @Override
   public @Nonnull String getEditValue()
   {
-    List<String> result = new ArrayList<String>();
+    if(m_editType.startsWith("#(list"))
+    {
+      List<String> result = new ArrayList<String>();
 
-    for(Iterator<T> i = iterator(); i.hasNext(); )
-      result.add(i.next().getEditValue());
+      for(Iterator<T> i = iterator(); i.hasNext(); )
+        result.add(i.next().getEditValue());
 
-    return m_joiner.join(result);
+      return "#(" + s_editJoiner.join(result) + "#)";
+    }
+
+    return toString();
   }
 
   //........................................................................

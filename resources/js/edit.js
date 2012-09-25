@@ -117,6 +117,7 @@ edit.edit = function(inEvent, inElement, inNoRelated)
 edit.editValue = function(inEditable, inTarget, inNoRelated)
 {
   var editable = edit.Base.create(inEditable);
+  $(inTarget).addClass('value-content-edit');
   return editable.edit(inEditable, inTarget, inNoRelated);
 };
 
@@ -325,6 +326,10 @@ edit.Base.create = function(inElement)
       properties.validate = 'non-empty';
       return new edit.Name(element, properties);
 
+    case 'any':
+      properties.validate = 'any';
+      return new edit.Name(element, properties);
+
     case 'name':
       return new edit.Name(element, properties);
 
@@ -332,7 +337,6 @@ edit.Base.create = function(inElement)
       return new edit.String(element, properties);
 
     case 'selection':
-      window.console.log("selection: ", properties);
       return new edit.Selection(element, properties);
 
     case 'multiselection':
@@ -425,10 +429,10 @@ edit.Base._parse = function(inEditable)
 {
   var properties = {
     key: inEditable.getAttribute('key'),
-    value: inEditable.getAttribute('value'),
+    value: util.parse(inEditable.getAttribute('value')),
     name: inEditable.getAttribute('name'),
     script: inEditable.getAttribute('script'),
-    values: inEditable.getAttribute('vaues'),
+    values: inEditable.getAttribute('values'),
     note: inEditable.getAttribute('note'),
     related: inEditable.getAttribute('related')
   };
@@ -459,40 +463,37 @@ edit.Base._parse = function(inEditable)
  * Parse a type string.
  *
  * @param inType the type to parse
- * @param an object with the parsed values (type, subtype, label, options)
+ * @return an object with the parsed values (type, subtype, label, options)
  *
  */
 edit.Base._parseType = function(inType)
 {
-  // extract subtype, if any 'type#subtype'
-  var types = inType.match(/^((?:\n|.)+?)\#((?:\n|.)+)$/);
+  var parsed = util.parse(inType);
+  return edit.Base._createType(parsed);
+};
 
-  var properties = { type: inType };
-  if(types)
-  {
-    properties.type    = types[1];
-    properties.subtype = types[2];
-  }
+edit.Base._parseTypeOnly = function(inType)
+{
+  var match = inType.match(/([^\(\0\[\]]*)(?:\(([^\[\]]*)\))?(?:\[(.*)\])/);
+  if(!match)
+    return { type: inType, label: '', options: '' };
 
-  // extract type options, if any 'type(option)type'
-  types = properties.type.match(/(.*?)\(((?:\n|.)*)\)(.*)/);
+  return { type: match[1], label: match[3], options: match[2] };
+};
 
-  if(types)
-  {
-    properties.type    = types[1] + types[3];
-    properties.options = types[2];
-  }
+edit.Base._createType = function(inParsed)
+{
+  if(inParsed instanceof Array)
+    var type = inParsed[0];
+  else
+    var type = inParsed;
 
-  // extract label if any 'type[label]'
-  types = properties.type.match(/(.*)\[(.*)\]/);
+  var result = edit.Base._parseTypeOnly(type);
 
-  if(types)
-  {
-    properties.type  = types[1];
-    properties.label = types[2];
-  }
+  if(inParsed instanceof Array)
+    result.subtype = inParsed.slice(1);
 
-  return properties;
+  return result;
 };
 
 /**
@@ -509,6 +510,8 @@ edit.Base.prototype.save = function(inValues, inCreate)
     value = this.getValue();
   else
     value = '$undefined$';
+
+  window.console.log("save", value, this.isDefined, this._defined, this);
 
   inValues[this.key + '::' + this.name] = value;
   if(inCreate)
@@ -787,6 +790,11 @@ edit.String.prototype._getValue = function()
   return "\"" + value + "\"";
 };
 
+edit.String.prototype.isDefined = function()
+{
+  return edit.String._super._getValue.call(this) != '';
+};
+
 //..........................................................................
 //---------------------------------------------------------- FormattedString
 
@@ -957,25 +965,13 @@ edit.MultiSelection.prototype._getValue = function()
  */
 edit.List = function(inEditable, inProperties)
 {
-  this.delimiter = inProperties.options.trim();
-  this.subtype = inProperties.subtype;
-  this._initValues = inProperties.value.split(this.delimiter);
+  this.delimiter = inProperties.subtype[0].trim();
+  this.subtype = inProperties.subtype[1];
+  this._initValues = inProperties.value;
+  if (!(this._initValues instanceof Array))
+    this._initValues = [ this._initValues ];
+
   this._entries = [];
-
-  // fix strings that were split in the middle because the delimiter appears in
-  // the middle of a string
-  for(var i = 0; this._initValues.length > 1 && i < this._initValues.length - 1;
-      i++)
-        if(this._initValues[i].replace(/[^\"]+/g, "").length % 2)
-        {
-          this._initValues[i] += this.delimiter + this._initValues[i + 1];
-          this._initValues.splice(i + 1, 1);
-          i--; // do this again
-        }
-
-  // trim values
-  for(var i = 0; i < this._initValues.length; i++)
-    this._initValues[i] = this._initValues[i].trim();
 
   // ignore lists with only a single, empty element
   if(this._initValues.length == 1 && this._initValues[0].length == 0)
@@ -1017,7 +1013,7 @@ edit.List.prototype._createLine = function(inValue, inPrevious)
 {
   var line = $('<div class="edit-list-element" />');
 
-  var type = edit.Base._parseType(this.subtype);
+  var type = edit.Base._createType(this.subtype);
   var entry = edit.Base.create({
     key: this.key,
     type: type.type,
@@ -1089,6 +1085,17 @@ edit.List.prototype._remove = function(inEntry)
 };
 
 /**
+ * Make the value undefined.
+ */
+edit.List.prototype._undefine = function()
+{
+  edit.List._super._undefine.call(this);
+
+  for(var i = 0; i < this._entries.length; i++)
+    this._remove(this._entries[i]);
+};
+
+/**
   * Add an empty line after the given entry.
   *
   * @param the entry to add after
@@ -1143,10 +1150,16 @@ edit.List.prototype.isDefined = function()
 edit.Multiple = function(inEditable, inProperties)
 {
   this.items = [];
-  this.subvalues = inProperties.value.split(/::/);
-  this.subtypes = inProperties.subtype.split(/@/);
-  this.delimiters =
-    inProperties.options ? inProperties.options.split(/::/) : [];
+  this.subvalues = inProperties.value;
+  this.subtypes = [];
+  this.delimiters = [];
+
+  for(var i = 0; i < inProperties.subtype.length; i += 3)
+  {
+    this.delimiters.push(inProperties.subtype[i]);
+    this.subtypes.push(inProperties.subtype[i + 1]);
+    this.delimiters.push(inProperties.subtype[i + 2]);
+  }
 
   // have to setup init values first
   edit.Field.call(this, inEditable, inProperties);
@@ -1164,14 +1177,15 @@ edit.Multiple.prototype._createElement = function()
 
   for(var i = 0; i < this.subtypes.length; i++)
   {
-    var type = edit.Base._parseType(this.subtypes[i]);
+    var type = edit.Base._createType(this.subtypes[i]);
+    var value = i < this.subvalues.length ? this.subvalues[i] : "";
     var item = edit.Base.create({
       key: this.key,
       type: type.type,
       value: this._value.length > i ? this._value[i] : "",
       name: this.name,
       script: null,
-      value: i < this.subvalues.length ? this.subvalues[i] : "",
+      value: value,
       values: this.properties.values[i],
       note: null,
       label: type.label,
@@ -1200,6 +1214,17 @@ edit.Multiple.prototype.isDefined = function()
 };
 
 /**
+ * Make the value undefined.
+ */
+edit.Multiple.prototype._undefine = function()
+{
+  edit.Multiple._super._undefine.call(this);
+
+  for(var i = 0; i < this.items.length; i++)
+    this.items[i]._undefine();
+};
+
+/**
  * Get the value of the field.
  *
  * @return the fields value, ready for storing.
@@ -1212,22 +1237,19 @@ edit.Multiple.prototype._getValue = function()
   for(var i = 0; i < this.items.length; i++)
   {
     var value = this.items[i].getValue();
-
-    if(value.length > 0 && value != '$undefined$')
+    if(value.length > 0 && value != '$undefined$' && this.items[i].isDefined())
     {
-      if(this.delimiters[i])
-        result += this.delimiters[i] + value;
+      if(this.delimiters[2 * i])
+        result += this.delimiters[2 * i];
       else
-        result += ' ' + value;
+        result += ' ';
 
-      lastDefined = true;
+      result += value;
+
+      if(this.delimiters[2 * i + 1])
+        result += this.delimiters[2 * i + 1];
     }
-    else
-      lastDefined = false;
   }
-
-  if(lastDefined)
-    return result + this.delimiters[i];
 
   return result;
 };

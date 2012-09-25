@@ -283,7 +283,13 @@
         ^/campaign/([^/]+)/([^/]+)/item/([^/]+)$
         /_entry/base campaign/$1/campaign/$2/item/$3
 
-       ^/user/([^/]+)$
+        ^/campaign/([^/]+)/([^/]+)/monsters
+        /_entries/base campaign/$1/campaign/$2/monster
+
+        ^/campaign/([^/]+)/([^/]+)/monster/([^/]+)$
+        /_entry/base campaign/$1/campaign/$2/monster/$3
+
+        ^/user/([^/]+)$
         /_entry/base character/$1
 
         ^/product/([^/]+)$

@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
@@ -198,6 +199,9 @@ public class BaseMonster extends BaseEntry
     /** Eladrin. */
     ELADRIN("Eladrin"),
 
+    /** Elf. */
+    ELF("Elf"),
+
     /** Evil. */
     EVIL("Evil"),
 
@@ -296,7 +300,7 @@ public class BaseMonster extends BaseEntry
     SWIM("Swim"),
 
     /** Running. */
-    RUN("Run");
+    RUN("");
 
     /** The value's name. */
     private @Nonnull String m_name;
@@ -548,6 +552,9 @@ public class BaseMonster extends BaseEntry
     /** Pair organization. */
     PAIR("pair"),
 
+    /** Patrol organization. */
+    PATROL("patrol"),
+
     /** Slaver Brood organization. */
     SLAVER_BROOD("slaver brood"),
 
@@ -632,6 +639,15 @@ public class BaseMonster extends BaseEntry
       return m_name;
     }
 
+    /** Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return m_name;
+    }
   };
 
   //........................................................................
@@ -689,6 +705,16 @@ public class BaseMonster extends BaseEntry
     {
       return m_name;
     }
+
+    /** Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return m_name;
+    }
   };
 
   //........................................................................
@@ -736,6 +762,17 @@ public class BaseMonster extends BaseEntry
      *
      */
     public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /**
+     * Convert to a string
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -909,6 +946,9 @@ public class BaseMonster extends BaseEntry
     /** Draconic. */
     DRACONIC("Draconic"),
 
+    /** Drow Sign Language. */
+    DROW_SIGN("Drow Sign"),
+
     /** Druidic. */
     DRUIDIC("Druidic"),
 
@@ -938,6 +978,9 @@ public class BaseMonster extends BaseEntry
 
     /** Infernal. */
     INFERNAL("Infernal"),
+
+    /** Kuo-toa. */
+    KUO_TOA("Kuo-toa"),
 
     /** Orc. */
     ORC("Orc"),
@@ -976,6 +1019,16 @@ public class BaseMonster extends BaseEntry
     {
       return m_name;
     }
+
+    /** Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String toString()
+    {
+      return m_name;
+    }
   };
 
   //........................................................................
@@ -984,6 +1037,12 @@ public class BaseMonster extends BaseEntry
   /** The possible sizes in the game. */
   public enum LanguageModifier implements EnumSelection.Named
   {
+    /** Automatic. */
+    AUTOMATIC("Automatic"),
+
+    /** Bonus. */
+    BONUS("Bonus"),
+
     /** Some. */
     SOME("Some"),
 
@@ -1009,6 +1068,16 @@ public class BaseMonster extends BaseEntry
      *
      */
     public @Nonnull String getName()
+    {
+      return m_name;
+    }
+
+    /** Get the name of the value.
+     *
+     * @return the name of the value
+     *
+     */
+    public @Nonnull String toString()
     {
       return m_name;
     }
@@ -1209,7 +1278,7 @@ public class BaseMonster extends BaseEntry
       (new EnumSelection<BaseItem.Size>(BaseItem.Size.class), false),
       new Multiple.Element
       (new EnumSelection<BaseItem.SizeModifier>(BaseItem.SizeModifier.class),
-       false, " (", ")"),
+       true, " (", ")"),
     });
 
   static
@@ -1219,16 +1288,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- type -------------------------------------------------------------
-
-  /** The formatter for types. */
-  //protected static
-  // ValueFormatter<EnumSelection<MonsterType>> s_typeFormatter =
-  //   new LinkFormatter<EnumSelection<MonsterType>>("/index/monstertypes/");
-
-  /** The formatter for sub types. */
-  // protected static ValueFormatter<EnumSelection<MonsterSubtype>>
-  //   s_subtypeFormatter =
-  //new LinkFormatter<EnumSelection<MonsterSubtype>>("/index/monstersubtypes/");
 
   /** The monster type and subtype. */
   @Key("type")
@@ -1280,18 +1339,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- speed ------------------------------------------------------------
-
-  /** The formatter for the movent modes. */
-  // protected static ValueFormatter<Selection> s_movementModeFormatter =
-  //   new LinkFormatter<Selection>("/index/movementmodes/");
-
-  /** The formatter for the distance. */
-  // protected static ValueFormatter<Distance> s_speedFormatter =
-  //   new LinkFormatter<Distance>("/index/speeds/");
-
-  /** The formatter for the fly modes. */
-  // protected static ValueFormatter<Selection> s_flyModeFormatter =
-  //   new LinkFormatter<Selection>("/index/maneuverabilities/");
 
   /** The monster's speed. */
   @Key("speed")
@@ -1448,12 +1495,14 @@ public class BaseMonster extends BaseEntry
   protected ValueList<Multiple> m_primaryAttacks
     = new ValueList<Multiple>(",", new Multiple(new Multiple.Element []
     {
-      new Multiple.Element(new Number(1, 20), true),
+      new Multiple.Element(new Number(1, 20).withEditType("name[number]"),
+                           true),
       new Multiple.Element(new EnumSelection<AttackMode>(AttackMode.class),
                            false),
       new Multiple.Element(new EnumSelection<AttackStyle>(AttackStyle.class),
                            false),
-      new Multiple.Element(new Damage(), false, " (", ")"),
+      new Multiple.Element(new Damage().withEditType("name[damage]"),
+                           false, " (", ")"),
     }));
 
   //........................................................................
@@ -1532,10 +1581,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- special attacks --------------------------------------------------
 
-  /** The formatter for special attacks. */
-  // protected static ValueFormatter<Distance> s_specialAttacksFormatter =
-  //   new LinkFormatter<Distance>("/entry/basequality/");
-
   /** The special attacks. */
   @Key("special attacks")
   protected ValueList<Multiple> m_specialAttacks = new ValueList<Multiple>
@@ -1551,8 +1596,11 @@ public class BaseMonster extends BaseEntry
                                               .put("Value", new Number(1, 100))
                                               .put("Modifier", new Modifier())
                                               .put("Dice", new Dice())
-                                              .build()), false),
-         new Multiple.Element(new Duration(), true, "/", null),
+                                              .put("Times", new Number(1, 100))
+                                              .build())
+                              .withTemplate("reference", "/quality/"), false),
+         new Multiple.Element(new Number(1, 100)
+                              .withEditType("name[per day]"), true, "/", null)
        }));
 
   //........................................................................
@@ -1574,18 +1622,18 @@ public class BaseMonster extends BaseEntry
                                                    new Number(-50, 50, true))
                                               .put("Value", new Number(0, 100))
                                               .put("Modifier", new Modifier())
-                                              .build()), false),
-         new Multiple.Element(new Condition(), true, " if ", null),
-         new Multiple.Element(new Duration(), true, "/", null),
+                                              .build())
+                              .withTemplate("reference", "/quality/"), false),
+         new Multiple.Element(new Condition()
+                              .withEditType("string[condition]"),
+                              true, " if ", null),
+         new Multiple.Element(new Number(1, 100)
+                              .withEditType("name[per day]"), true, "/", null),
        }));
 
 
   //........................................................................
   //----- class skills -----------------------------------------------------
-
-  /** The formatter for class skills. */
-  // protected static ValueFormatter<SimpleText> s_classSkillsFormatter =
-  //   new LinkFormatter<SimpleText>("/entry/baseskill/");
 
   /** The class skills. */
   @Key("class skills")
@@ -1600,30 +1648,24 @@ public class BaseMonster extends BaseEntry
                               new EnumSelection<BaseSkill.Subtype>
                               (BaseSkill.Subtype.class))
                          .build()), false),
-        new Multiple.Element(new Number(0, 100, true), false, ": ", null),
+        new Multiple.Element(new Number(0, 100, true)
+                             .withEditType("number[modifier]"),
+                             false, ": ", null),
       }));
 
   //........................................................................
   //----- feats ------------------------------------------------------------
 
-  /** The formatter for class skills. */
-  // protected static ValueFormatter<Text> s_featFormatter =
-  //   new LinkFormatter<Text>("/entry/basefeat/");
-
   /** The feats. */
   @Key("feats")
-  protected ValueList<Name> m_feats = new ValueList<Name>(", ", new Name());
+  protected ValueList<Reference> m_feats = new ValueList<Reference>
+    (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
+     .withParameters(new ImmutableMap.Builder<String, Value>()
+                     .put("Name", new Name())
+                     .build()));
 
   //........................................................................
   //----- environment ------------------------------------------------------
-
-  /** The formatter for climates. */
-  //protected static ValueFormatter<EnumSelection<Climate>> s_climateFormatter =
-  //   new LinkFormatter<EnumSelection<Climate>>("/index/climates/");
-
-  /** The formatter for terrains. */
-  //protected static ValueFormatter<EnumSelection<Climate>> s_terrainFormatter =
-  //   new LinkFormatter<EnumSelection<Climate>>("/index/terrains/");
 
   /** The environment. */
   @Key("environment")
@@ -1642,11 +1684,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- organization -----------------------------------------------------
 
-  /** The formatter for organizations. */
-  // protected static ValueFormatter<EnumSelection<Organization>>
-  //   s_organizationFormatter =
-  //   new LinkFormatter<EnumSelection<Organization>>("/index/organizations/");
-
   /** The monster's organization. */
   @Key("organization")
   protected ValueList<Multiple> m_organizations =
@@ -1654,38 +1691,20 @@ public class BaseMonster extends BaseEntry
       {
         new Multiple.Element(new EnumSelection<Organization>(Organization.ANY),
                              false),
-        new Multiple.Element(new Multiple(new Multiple.Element []
-          {
-            new Multiple.Element(new Dice(), false),
-            new Multiple.Element(new Multiple(new Multiple.Element []
-              {
-                new Multiple.Element(new Dice(), false),
-                new Multiple.Element(new Name(), false),
-              }), true, " plus ", null),
-          }), true, " (", ")"),
+        new Multiple.Element(new Dice().withEditType("dice[number]"), false),
+        new Multiple.Element(new ValueList<Multiple>
+                             (", ",
+                              new Multiple(new Multiple.Element []
+                                {
+                                  new Multiple.Element(new Dice(), false),
+                                  new Multiple.Element(new Name(), false),
+                                })).withEditType("any[additional]"),
+                             true, " plus ", null),
       }));
 
   static
   {
     addIndex(new Index(Index.Path.ORGANIZATIONS, "Organizations", TYPE));
-    // s_indexes.add(new ExtractorIndex<ExtractorIndex>
-    //               ("Monster::General", "Organization", "organizations",
-    //                new ExtractorIndex.Extractor()
-    //                {
-    //                  public Object []get(AbstractEntry inEntry)
-    //                  {
-    //                    if(!(inEntry instanceof BaseMonster))
-    //                      return null;
-
-    //                    ArrayList<Object> results = new ArrayList<Object>();
-
-    //                    for(Multiple value :
-    //                          ((BaseMonster)inEntry).m_organizations)
-    //                      results.add(value.get(0).get());
-
-    //                    return results.toArray();
-    //                  }
-    //                }, true, FORMATTER, FORMAT, true));
   }
 
   //........................................................................
@@ -1771,7 +1790,7 @@ public class BaseMonster extends BaseEntry
   @Key("level adjustment")
   protected Union m_levelAdjustment =
     new Union(new Selection(new String [] { "-" }),
-              new Number(0, 20, true));
+              new Number(0, 20, true)).withEditType("name");
 
   static
   {
@@ -2274,6 +2293,23 @@ public class BaseMonster extends BaseEntry
 
   //   return false;
   // }
+
+  //........................................................................
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  @Override
+  public boolean isDM(@Nullable BaseCharacter inUser)
+  {
+    return inUser != null && inUser.hasAccess(BaseCharacter.Group.DM);
+  }
 
   //........................................................................
 

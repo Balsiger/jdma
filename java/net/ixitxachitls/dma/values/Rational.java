@@ -58,6 +58,8 @@ public class Rational extends BaseRational<Rational>
   public Rational()
   {
     // nothing to do
+
+    m_editType = "name";
   }
 
   //........................................................................
@@ -103,6 +105,8 @@ public class Rational extends BaseRational<Rational>
   public Rational(long inLeader, long inNominator, long inDenominator)
   {
     super(inLeader, inNominator, inDenominator);
+
+    m_editType = "name";
   }
 
   //........................................................................

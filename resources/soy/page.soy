@@ -267,16 +267,16 @@
     <a href="{$url}" class="navigation-link{if $class} {$class}{/if}"
       {if $tooltip} title="{$tooltip}"{/if}
         onclick="util.link(event, '{$url}')">
-      {$text|noAutoescape}
+      {if $text}{$text|noAutoescape}{else}{$url}{/if}
     </a>
   {elseif $js}
     <a class="navigation-link{if $class} {$class}{/if}"
       {if $tooltip} title="{$tooltip}"{/if}
         onclick="{$js|escapeHtml}">
-      {$text|noAutoescape}
+      {if $text}{$text|noAutoescape}{else}{$url}{/if}
     </a>
   {else}
-    {$text|noAutoescape}
+    {if $text}{$text|noAutoescape}{else}{$url}{/if}
   {/if}
 {/template}
 

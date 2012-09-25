@@ -241,8 +241,7 @@ public class Multiple extends Value<Multiple>
   {
     m_elements = new Element[inElements.length];
 
-    String delimiters = "";
-    String subTypes   = null;
+    List<String> delimList = new ArrayList<String>();
 
     for(int i = 0; i < inElements.length; i++)
     {
@@ -252,16 +251,19 @@ public class Multiple extends Value<Multiple>
 
       m_elements[i] = inElements[i];
 
-      delimiters += Strings.handleNull(m_elements[i].m_front) + "::"
-          + Strings.handleNull(m_elements[i].m_tail);
-
-      if(subTypes == null)
-        subTypes = m_elements[i].m_value.getEditType();
+      if(m_elements[i].m_front == null)
+        delimList.add("");
       else
-        subTypes += "@" + m_elements[i].m_value.getEditType();
+        delimList.add(m_elements[i].m_front);
+
+      if(m_elements[i].m_tail == null)
+        delimList.add("");
+      else
+        delimList.add(m_elements[i].m_tail);
     }
 
-    m_editType = "multiple(" + delimiters + ")#" + subTypes;
+    m_editType = createEditType(m_elements);
+    withTemplate("multiple", delimList.toArray(new String [0]));
   }
 
   //........................................................................
@@ -278,23 +280,17 @@ public class Multiple extends Value<Multiple>
   {
     m_elements = new Element[inValues.length];
 
-    String subTypes   = null;
-
     for(int i = 0; i < inValues.length; i++)
     {
       if(inValues[i] == null)
         throw new IllegalArgumentException("value  " + i + " must not be null");
 
       m_elements[i] = new Element(inValues[i], false);
-
-      if(subTypes == null)
-        subTypes = m_elements[i].m_value.getEditType();
-      else
-        subTypes += "@" + m_elements[i].m_value.getEditType();
     }
 
-    m_editType = "multiple()#" + subTypes;
-  }
+    m_editType = createEditType(m_elements);
+    withTemplate("multiple");
+ }
 
   //........................................................................
 
@@ -308,7 +304,7 @@ public class Multiple extends Value<Multiple>
    *
    */
   @Override
-public @Nonnull Multiple create()
+  public @Nonnull Multiple create()
   {
     Element []elements = new Element[m_elements.length];
 
@@ -333,8 +329,7 @@ public @Nonnull Multiple create()
 
   /** The joiner for editing values. */
   protected static final @Nonnull Joiner s_editJoiner =
-    Joiner.on(Config.get("resource:entries/edit.multiple.delimiter", "::"));
-
+    Joiner.on(Config.get("resource:entries/edit.multiple.delimiter", "#|"));
 
   //........................................................................
 
@@ -351,12 +346,46 @@ public @Nonnull Multiple create()
   @Override
   public String getEditValue()
   {
-    List<String> result = new ArrayList<String>();
+    if(m_editType.startsWith("#(multiple"))
+    {
+      List<String> result = new ArrayList<String>();
 
-    for(Iterator<Multiple.Element> i = iterator(); i.hasNext(); )
-      result.add(i.next().get().getEditValue());
+      for(Iterator<Multiple.Element> i = iterator(); i.hasNext(); )
+        result.add(i.next().get().getEditValue());
 
-    return s_editJoiner.join(result);
+      return "#(" + s_editJoiner.join(result) + "#)";
+    }
+
+    return toString();
+  }
+
+  //........................................................................
+  //---------------------------- createEditType ----------------------------
+
+  /**
+   * Create the type for editing this value
+   *
+   * @param       inElements the elements to create the edit type for
+   *
+   * @return      the edit type as an encoded string
+   *
+   */
+  protected @Nonnull String createEditType(Element ... inElements)
+  {
+    StringBuilder builder = new StringBuilder();
+    for(Element element : inElements)
+    {
+      builder.append("#|");
+      builder.append
+        (com.google.common.base.Strings.nullToEmpty(element.m_front));
+      builder.append("#|");
+      builder.append(element.m_value.getEditType());
+      builder.append("#|");
+      builder.append
+        (com.google.common.base.Strings.nullToEmpty(element.m_tail));
+    }
+
+    return "#(multiple" + builder.toString() + "#)";
   }
 
   //........................................................................

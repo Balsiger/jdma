@@ -96,3 +96,64 @@ item.create = function(inCampaign, inStore)
 };
 
 //..........................................................................
+
+/** The object to store everything in. */
+var monster = new Object();
+
+//--------------------------------- create ---------------------------------
+
+/**
+ * Create an item for the given entry.
+ *
+ * @param   inCampaign the campaign to create the item in
+ * @param   inStore    the key of the entry to store the item in (if any)
+ *
+ */
+monster.create = function(inCampaign, inStore)
+{
+  var entryDialog = $('<div id="create-monster"/>')
+    .html('<label>Base Monsters (comma separated)<br>'
+          + '<input type="text" name="bases" validate="non-empty" '
+          + 'validateButton="#create-button" size="50" maxlength="300">'
+          + '</label><br>'
+          + '<label>'
+          + '<label>Extensions (comma separated)<br>'
+          + '<input type="text" name="extensions" validate="non-empty" '
+          + 'validateButton="#create-button" size="50" maxlength="300">'
+          + '</label>'
+          + '<p>')
+    .dialog({
+      title: 'Monster Creation',
+      modal: true,
+      resizable: false,
+      width: 500,
+      closeOnEscape: true,
+      dialogClass: 'create-dialog dialog',
+      buttons: [
+          {
+            id:  'create-button',
+            text: 'Create',
+            click: function() {
+              $(this).dialog('close');
+              util.link(event,
+                        '/' + inCampaign + '/monster/TEMPORARY?create' +
+                        (inStore ? '&store=' + inStore : '') +
+                        '&bases=' +
+                        encodeURIComponent($('input[name="bases"]', this)
+                                           [0].value) +
+                        '&extensions=' +
+                        encodeURIComponent($('input[name="extensions"]', this)
+                                           [0].value));
+            }
+          },
+          {
+            text: 'Cancel',
+            click: function() {
+              $(this).dialog('close');
+            }
+          }
+      ]
+    });
+};
+
+//..........................................................................

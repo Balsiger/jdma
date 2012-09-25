@@ -148,6 +148,9 @@ public final class Strings
   /** The joiner to convert with spaces. */
   public static final Joiner SPACE_JOINER = Joiner.on(' ');
 
+  /** The joiner to convert with spaces. */
+  public static final Joiner COMMA_JOINER = Joiner.on(", ");
+
   /** The joiner to convert with escaped newlines. */
   public static final Joiner BR_JOINER = Joiner.on("<br />");
 

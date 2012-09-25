@@ -178,7 +178,6 @@ public class SoyValue extends SoyMapData
 
   //........................................................................
 
-
   //------------------------------ getSingle -------------------------------
 
   /**
@@ -202,8 +201,8 @@ public class SoyValue extends SoyMapData
     if("raw".equals(inName))
       return StringData.forValue(m_value.toString(false));
 
-    if("print".equals(inName))
-      return StringData.forValue(m_value.print(m_entry));
+    // if("print".equals(inName))
+    //   return StringData.forValue(print(m_entry));
 
     if("combine".equals(inName))
     {
@@ -280,23 +279,17 @@ public class SoyValue extends SoyMapData
                               "comment", remark.getComment());
     }
 
-    // check if there is a function with the given name
-    Method method = Classes.getMethod(m_value.getClass(), inName);
-    if(method != null)
-      try
-      {
-        return convert(method.invoke(m_value));
-      }
-      catch(IllegalAccessException e)
-      {
-        Log.warning("cannot access method: " + e);
-      }
-      catch(java.lang.reflect.InvocationTargetException e)
-      {
-        Log.warning("cannot invoke method: " + e);
-      }
+    // check if there is a function with the given name in this soy value
+    Object value = Classes.callMethod(inName, this);
+    if(value != null)
+      return convert(value);
 
-    Object value = m_value.compute(inName);
+    // check if ther eis a function with the given name in the value itselfx
+    value = Classes.callMethod(inName, m_value);
+    if(value != null)
+      return convert(value);
+
+    value = m_value.compute(inName);
     if(value == null)
       return null;
 
@@ -362,7 +355,7 @@ public class SoyValue extends SoyMapData
    * @return      the converted object
    *
    */
-  public @Nonnull SoyData convert(@Nonnull Object inObject)
+  public static @Nonnull SoyData convert(@Nonnull Object inObject)
   {
     if(inObject instanceof Boolean)
       return BooleanData.forValue((Boolean)inObject);

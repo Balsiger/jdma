@@ -1595,7 +1595,7 @@ public class AbstractEntry extends ValueGroup
       Value value = var.get(this);
 
       // We don't store this if we don't have a value.
-      if(value == null || (!value.isDefined() && !value.hasExpression()))
+      if(value == null) // || (!value.isDefined() && !value.hasExpression()))
         continue;
 
       values.put(var.getKey(), value);
@@ -2303,7 +2303,8 @@ public class AbstractEntry extends ValueGroup
       m_baseEntries = null;
       if(!inText.startsWith(Value.UNDEFINED))
         for(String base : inText.split(",\\s*"))
-          addBase(base);
+          if(base != null && !base.isEmpty())
+            addBase(base);
 
       // setup extensions from base entries
       setupExtensions();
