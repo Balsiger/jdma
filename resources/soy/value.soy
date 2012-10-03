@@ -68,6 +68,8 @@
         {/if}
       {/param}
     {/call}
+  {elseif $content}
+    {$content}
   {else}
     (not found)
   {/if}
@@ -463,6 +465,8 @@
         {literal}&#x2295;{/literal}
       {case 'contents'}
         {literal}&#x25c8;{/literal}
+      {case 'magic'}
+        {literal}&#x2734;{/literal}
       {default}
         {$value}
     {/switch}
@@ -503,49 +507,9 @@
         {param note: $note /}
         {param content}
           {if $ij.isDM}
-            {if $combination.bases[0].isLongText}
-              <div class="longtext">
-                {foreach $base in $combination.bases}
-                  {if $base.value.isDefined}
-                    <div class="base-title">
-                      <span class="base-text">from {$base.names}</span>
-                    </div>
-                    {$base.value |print}
-                  {/if}
-                {/foreach}
-              </div>
-            {elseif $combination.bases[0].isText}
-              {foreach $base in $combination.bases}
-                {if $base.value.isDefined}
-                  {if not isFirst($base) or $combination.isDefined}
-                    {sp}|{sp}
-                  {/if}
-                  <span class="windowed">
-                    <span class="window base">
-                      from {$base.names}
-                    </span>
-                    {$base.value |print}
-                  </span>
-                {/if}
-              {/foreach}
-            {else}
-              <span class="windowed">
-                <span class="window base">
-                  {foreach $base in $combination.bases}
-                    {if $base and $base.value}
-                      <span class="base-value">{$base.value |print}</span>
-                        {sp} from {$base.names}
-                      <br />
-                    {elseif $base.expression}
-                      {$base.expression} from {$base.names}
-                    {else}
-                      undefined value from {$base.names}
-                    {/if}
-                  {/foreach}
-                </span>
-                <i>{$combination.total|print}</i>
-              </span>
-            {/if}
+            {call dma.value.combined}
+              {param combination: $combination /}
+            {/call}
           {else}
             {$combination.total|print}
           {/if}
@@ -564,6 +528,59 @@
       {param value: $value /}
       {param canEdit: $canEdit /}
     {/call}
+  {/if}
+{/template}
+
+/**
+ * Format a combination value, withtout editing.
+ *
+ * @param combination
+ */
+{template .combined}
+  {if $combination.bases[0].isLongText}
+    <div class="longtext">
+      {foreach $base in $combination.bases}
+        {if $base.value.isDefined}
+          <div class="base-title">
+            <span class="base-text">from {$base.names}</span>
+          </div>
+          {$base.value |print}
+        {/if}
+      {/foreach}
+    </div>
+  {elseif $combination.bases[0].isText}
+    {foreach $base in $combination.bases}
+      {if $base.value.isDefined}
+        {if not isFirst($base) or $combination.isDefined}
+          {sp}|{sp}
+        {/if}
+        <span class="windowed">
+          <span class="window base">
+            from {$base.names}
+          </span>
+          {$base.value |print}
+        </span>
+      {/if}
+    {/foreach}
+  {else}
+    <span class="windowed">
+      <span class="window base">
+        {foreach $base in $combination.bases}
+          {if $base and $base.value}
+            <span class="base-value">{$base.value |print}</span>
+            {sp} from {$base.names}
+            <br />
+          {elseif $base.expression}
+            {$base.expression} from {$base.names}
+          {else}
+            undefined value from {$base.names}
+          {/if}
+        {/foreach}
+      </span>
+      <span class="value-combination">
+        {$combination.total |print}
+      </span>
+    </span>
   {/if}
 {/template}
 
@@ -636,4 +653,61 @@
  */
 {template .text}
   {$value |commands}
+{/template}
+
+/**
+ * A condition to a modifier.
+ *
+ * @param value the condition value
+ *
+ */
+{template .condition}
+  <em>{$value |raw}</em>
+{/template}
+
+/**
+ * Print a modifier value.
+ *
+ * @param value the value to print
+ * @ param args arguments to the template
+ */
+{template .modifier}
+  {$value |raw}
+{/template}
+
+/**
+ * Print a modified number value.
+ *
+ * @param value the value to print
+ * @ param args arguments to the template
+ */
+{template .modifiednumber}
+  <span class="windowed">
+    <span class="window base">
+      Modifier: {$value.modifier |print}<br /><br />
+      {foreach $name in keys($value.modifiers)}
+        <span class="base-value">{$value.modifiers[$name] |print}</span>
+        {sp} from {$name}
+        <br />
+      {/foreach}
+    </span>
+    {$value |raw}
+  </span>
+{/template}
+
+/**
+ * Print a daily references value.
+ *
+ * @param value the value to print
+ * @ param args arguments to the template
+ */
+{template .dailyreferences}
+  {foreach $ref in $value.list}
+    {$ref.multi.0 |print}
+    {if $ref.multi.1.isDefined and $ref.multi.1.print != '1'}
+      {sp}{$ref.multi.1 |print} times per day
+    {/if}
+    : {entry($ref.multi.0.print)}
+  {if not isLast($ref)}<br/>{/if}
+  {/foreach}
 {/template}

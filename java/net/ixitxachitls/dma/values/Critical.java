@@ -232,6 +232,24 @@ protected @Nonnull Command doFormat()
 
   //----------------------------------------------------------- manipulators
 
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given and current values.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the addition of both values
+   *
+   */
+  @Override
+  @SuppressWarnings("unchecked") // have to cast
+  public @Nonnull Critical add(@Nonnull Critical inValue)
+  {
+    return super.add(inValue);
+  }
+
+  //........................................................................
   //------------------------------- multiply -------------------------------
 
   /**

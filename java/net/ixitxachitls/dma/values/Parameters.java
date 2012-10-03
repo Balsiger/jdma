@@ -26,8 +26,10 @@ package net.ixitxachitls.dma.values;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -67,14 +69,13 @@ public class Parameters extends Value<Parameters>
    *
    * @param       inValues the key value pairs for the paramers.
    *
-   * @undefined   IllegalArgumentException if no parameters given
-   * @undefined   IllegalArgumentException if invalid parameters given (i.e.
-   *                                       numbers don't match)
-   *
    */
   public Parameters(@Nonnull Map<String, Value> inValues)
   {
-    m_values = inValues;
+    m_values = Maps.newHashMap();
+
+    for(Map.Entry<String, Value> entry : inValues.entrySet())
+      m_values.put(entry.getKey().toLowerCase(), entry.getValue());
   }
 
   //........................................................................
@@ -113,6 +114,23 @@ public class Parameters extends Value<Parameters>
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------- getValue -------------------------------
+
+  /**
+   * Get the value for the given name.
+   *
+   * @param       inName the name of value to get
+   *
+   * @return      the value for the name, if any
+   *
+   */
+  public @Nullable Value getValue(@Nonnull String inName)
+  {
+    return m_values.get(inName);
+  }
+
+  //........................................................................
+
   //---------------------------- getKeyValues ------------------------------
 
   /**
@@ -140,14 +158,12 @@ public class Parameters extends Value<Parameters>
    *
    * @return      the defined key/value pairs
    *
-   * @undefined   never
-   *
    */
   // public Map<String, Value> getLCKeyValues()
   // {
   //   Map<String, Value> result = new TreeMap<String, Value>();
 
-  //   for(int i = 0; i < m_values.length; i++)
+  //   for(Map.Entry<String, Value> entry : m_values.sint i = 0; i < m_values.length; i++)
   //     if(m_values[i].isDefined())
   //       result.put(m_keys[i].toLowerCase(), m_values[i]);
 

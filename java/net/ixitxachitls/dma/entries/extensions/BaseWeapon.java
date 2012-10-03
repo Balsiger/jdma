@@ -37,6 +37,7 @@ import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
@@ -342,20 +343,22 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The damage the weapon inflicts. */
   @Key("damage")
-  protected @Nonnull Multiple m_damage = new Multiple(new Multiple.Element []
-    {
-      new Multiple.Element(new Damage().withIndexBase(BaseItem.TYPE), false),
-      new Multiple.Element(new Damage()
-                           .withIndexBase(BaseItem.TYPE)
-                           .withEditType("name[secondary]"), true, "/",
-                           null),
-    }).withTemplate("damages");
+  protected @Nonnull Damage m_damage = new Damage()
+    .withIndexBase(BaseItem.TYPE);
 
   static
   {
     addIndex(new Index(Index.Path.DAMAGES, "Damages", BaseItem.TYPE));
     addIndex(new Index(Index.Path.DAMAGE_TYPES, "Damage Types", BaseItem.TYPE));
   }
+
+  //........................................................................
+  //----- secondary damage -------------------------------------------------
+
+  /** The damage the weapon inflicts. */
+  @Key("secondary damage")
+  protected @Nonnull Damage m_secondaryDamage = new Damage()
+    .withIndexBase(BaseItem.TYPE);
 
   //........................................................................
   //----- splash -----------------------------------------------------------
@@ -370,15 +373,9 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //........................................................................
   //----- type -------------------------------------------------------------
 
-  /** The formatter for types. */
-  protected static final Formatter<EnumSelection<Type>> s_typeFormatter =
-    new LinkFormatter<EnumSelection<Type>>
-    (link(BaseItem.TYPE, Index.Path.WEAPON_TYPES));
-
   /** The type of the weapon damage. */
   @Key("weapon type")
   protected EnumSelection<Type> m_type = new EnumSelection<Type>(Type.class)
-    .withFormatter(s_typeFormatter)
     .withTemplate("link", "weapontypes");
 
   static
@@ -423,17 +420,10 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //........................................................................
   //----- proficiency ------------------------------------------------------
 
-  /** The formatter for the proficiency. */
-  protected static final Formatter<EnumSelection<Proficiency>>
-    s_proficiencyFormatter =
-    new  LinkFormatter<EnumSelection<Proficiency>>
-    (link(BaseItem.TYPE, Index.Path.PROFICIENCIES));
-
   /** The proficiency required for the weapon. */
   @Key("proficiency")
   protected @Nonnull EnumSelection<Proficiency> m_proficiency =
     new EnumSelection<Proficiency>(Proficiency.class)
-    .withFormatter(s_proficiencyFormatter)
     .withTemplate("link", "proficiencies");
 
   static
@@ -444,11 +434,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   //........................................................................
   //----- range ------------------------------------------------------------
-
-  /** The formatter for weapon ranges. */
-  protected static final Formatter<Distance> s_rangeFormatter =
-    new LinkFormatter<Distance>
-    (link(BaseItem.TYPE, Index.Path.RANGES));
 
   /** The grouping for ranges. */
   protected static final Group<Distance, Long, String> s_rangeGrouping =
@@ -471,7 +456,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   @Key("range increment")
   protected @Nonnull Distance m_range =
     new Distance()
-    .withFormatter(s_rangeFormatter)
     .withGrouping(s_rangeGrouping)
     .withTemplate("link", "ranges");
 
@@ -482,10 +466,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   //........................................................................
   //----- reach ------------------------------------------------------------
-
-  /** The formatter for the reach value. */
-  protected static final Formatter<Distance> s_reachFormatter =
-    new LinkFormatter<Distance>("/index/weapon reaches/");
 
   /** The grouping for reaches. */
   protected static final Group<Distance, Long, String> s_reachGrouping =
@@ -507,7 +487,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   @Key("reach")
   protected Distance m_reach =
     new Distance(null, new Rational(), null, false)
-    .withFormatter(s_reachFormatter)
     .withGrouping(s_reachGrouping)
     .withTemplate("link", "reaches");
 
@@ -515,6 +494,13 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   {
     addIndex(new Index(Index.Path.REACHES, "Weapon Reaches", BaseItem.TYPE));
   }
+
+  //........................................................................
+  //----- max attacks ------------------------------------------------------
+
+  /** The maximal number of attacks per round. */
+  @Key("max attacks")
+  protected @Nonnull Number m_maxAttacks = new Number(1, 10);
 
   //........................................................................
 
@@ -533,12 +519,26 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   /**
    * Get the damage value.
    *
-   * @return      a clone of the damage value
+   * @return      the damage value
    *
    */
-  public @Nonnull Multiple getDamage()
+  public @Nonnull Damage getDamage()
   {
     return m_damage;
+  }
+
+  //........................................................................
+  //--------------------------- getSecondaryDamage--------------------------
+
+  /**
+   * Get the secondary damage value.
+   *
+   * @return      the secondary damage value
+   *
+   */
+  public @Nonnull Damage getSecondaryDamage()
+  {
+    return m_secondaryDamage;
   }
 
   //........................................................................
@@ -587,8 +587,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     super.computeIndexValues(ioValues);
 
     // damages
-    for(Damage damage = (Damage)m_damage.get(0); damage != null;
-        damage = damage.next())
+    for(Damage damage = m_damage; damage != null; damage = damage.next())
     {
       ioValues.put(Index.Path.DAMAGES, damage.getBaseNumber() + "d"
                    + damage.getBaseDice());
@@ -598,9 +597,9 @@ public class BaseWeapon extends BaseExtension<BaseItem>
         ioValues.put(Index.Path.DAMAGE_TYPES, type.toString());
     }
 
-    if(m_damage.get(1).isDefined())
-      for(Damage damage = (Damage)m_damage.get(1); damage != null;
-        damage = damage.next())
+    if(m_secondaryDamage.isDefined())
+      for(Damage damage = m_secondaryDamage; damage != null;
+          damage = damage.next())
       {
         ioValues.put(Index.Path.DAMAGES, damage.getBaseNumber() + "d"
                      + damage.getBaseDice());

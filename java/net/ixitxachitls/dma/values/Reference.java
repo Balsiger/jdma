@@ -178,6 +178,53 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------- getName --------------------------------
+
+  /**
+   * Get the name of the reference.
+   *
+   * @return  the name of the reference (without parameters)
+   *
+   */
+  public @Nonnull String getName()
+  {
+    return m_name.get();
+  }
+
+  //........................................................................
+  //---------------------------- getParameters -----------------------------
+
+  /**
+   * Get the parameters defined for the feat.
+   *
+   * @return      the parameters, if any
+   *
+   */
+  public @Nullable Parameters getParameters()
+  {
+    return m_parameters;
+  }
+
+  //........................................................................
+  //------------------------------- summary --------------------------------
+
+  /**
+   * Get the summary for the reference.
+   *
+   * @return      the string with the summary
+   *
+   */
+  public @Nonnull String summary()
+  {
+    resolve();
+    if(m_entry == null)
+      return "(unknown)";
+
+    return m_entry.getSummary(m_parameters);
+  }
+
+  //........................................................................
+
   //------------------------------- doFormat -------------------------------
 
   /**

@@ -37,6 +37,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
@@ -466,6 +467,34 @@ public class BaseEntry extends AbstractEntry
   }
 
   //........................................................................
+  //------------------------------ getSummary ------------------------------
+
+  /**
+   * Get a summary for the entry, using the given parameters.
+   *
+   * @param       inParameters
+   *
+   * @return      the string with the summary
+   *
+   */
+  public @Nonnull String getSummary(@Nullable Parameters inParameters)
+  {
+    String summary = getShortDescription();
+
+    if(inParameters == null || !inParameters.isDefined())
+      return summary;
+
+    summary = computeExpressions(summary, inParameters);
+
+    Value notes = inParameters != null ? inParameters.getValue("Notes") : null;
+    if(notes != null)
+      summary += " (" + notes + ")";
+
+    return summary;
+  }
+
+  //........................................................................
+
   //------------------------- getRefSummaryCommand -------------------------
 
   /**
@@ -1222,6 +1251,9 @@ public class BaseEntry extends AbstractEntry
       if(net.ixitxachitls.dma.entries.extensions.BaseMultiuse.s_pagePrint
          == null)
         Log.warning("could not properly initialize base multiuse extension");
+      if(net.ixitxachitls.dma.entries.extensions.BaseMagic.s_pagePrint
+         == null)
+        Log.warning("could not properly initialize base magic extension");
     }
   }
 

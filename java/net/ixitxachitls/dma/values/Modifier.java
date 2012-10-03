@@ -206,6 +206,7 @@ public class Modifier extends Value<Modifier>
   //........................................................................
 
   {
+    withTemplate("modifier");
     withEditType("non-empty");
   }
 
@@ -225,6 +226,7 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+
 
   //........................................................................
 
@@ -739,6 +741,38 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //-------------------------------- ignore --------------------------------
+
+  /**
+   * Ignore all modifiers with the given type.
+   *
+   * @param      inTypes the types to ignore
+   *
+   * @return     the modifier that is left after ignoring the given types, if
+   *             any
+   *
+   */
+  public @Nullable Modifier ignore(@Nonnull Type ... inTypes)
+  {
+    for(Type type : inTypes)
+      if(m_type == type)
+        if(m_next != null)
+          return m_next.ignore(inTypes);
+        else
+          return null;
+
+    if(m_next == null)
+      return this;
+
+    Modifier next = m_next.ignore(inTypes);
+    if(next == m_next)
+      return this;
+
+    return as(m_value, m_type, next);
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

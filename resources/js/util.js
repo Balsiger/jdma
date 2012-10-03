@@ -413,7 +413,7 @@ util.parse = function(inText)
   if(result.length == 1)
     return '';
 
-  if(result.length == 2)
+  if(result.length == 2 && !(result[1] instanceof Array))
     return result[1];
 
   return result.slice(1);

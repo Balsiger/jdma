@@ -535,6 +535,11 @@ DIV.value-content.value-noedit
   background-color: #ddd;
 }
 
+SPAN.value-combination
+{
+  color: #666;
+}
+
 DIV.textblock.desc
 {
   border:     none;

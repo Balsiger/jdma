@@ -36,6 +36,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
+import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.Variable;
@@ -115,10 +116,14 @@ public class Combination<V extends Value>
   private boolean m_ignoreTop = false;
 
   /** All the values found. */
-  private @Nullable Multimap<V, ValueGroup> m_values;
+  private @Nullable Multimap<V, String> m_values = ArrayListMultimap.create();
 
   /** All the expressions found. */
-  private @Nullable Multimap<Expression, ValueGroup> m_expressions;
+  private @Nullable Multimap<Expression, ValueGroup> m_expressions =
+    ArrayListMultimap.create();
+
+  /** Flag if already combine. */
+  private boolean m_combined = false;
 
   /** Lazy cache for the total value. */
   private @Nullable V m_total;
@@ -147,6 +152,35 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the entry this combinaton is based on.
+   *
+   * @return  the entry
+   *
+   */
+  public AbstractEntry getEntry()
+  {
+    return (AbstractEntry)m_entry;
+  }
+
+  //........................................................................
+  //------------------------------ getTopValue -----------------------------
+
+  /**
+   * Get the top value from this entry.
+   *
+   * @return  the top value
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public V getTopValue()
+  {
+    return (V)m_entry.getValue(m_name);
+  }
+
+  //........................................................................
 
   //-------------------------------- values --------------------------------
 
@@ -164,7 +198,7 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
-  //-------------------------------- values --------------------------------
+  //--------------------------- valuesPerGroup -----------------------------
 
   /**
    * Get the values for this combination, per bases.
@@ -172,7 +206,7 @@ public class Combination<V extends Value>
    * @return      the base values and their entries
    *
    */
-  public @Nullable Multimap<V, ValueGroup> valuesPerGroup()
+  public @Nullable Multimap<V, String> valuesPerGroup()
   {
     combine();
     return Multimaps.unmodifiableMultimap(m_values);
@@ -227,12 +261,13 @@ public class Combination<V extends Value>
       combine();
 
       for(V value : m_values.keySet())
-        for(ValueGroup entry : m_values.get(value))
-          if(entry != null)
-            if(m_total == null)
-              m_total = value;
-            else
-              m_total = (V)m_total.add(value);
+        for(String name : m_values.get(value))
+        {
+          if(m_total == null)
+            m_total = value;
+          else
+            m_total = (V)m_total.add(value);
+        }
 
       m_total = computeExpressions(m_total);
 
@@ -317,14 +352,14 @@ public class Combination<V extends Value>
       commands.add(value.format());
       commands.add(" from ");
       boolean first = true;
-      for(ValueGroup entry : m_values.get(value))
+      for(String name : m_values.get(value))
       {
         if(first)
           first = false;
         else
           commands.add(", ");
 
-        commands.add(entry.getName());
+        commands.add(name);
       }
       commands.add(new Linebreak());
     }
@@ -406,7 +441,7 @@ public class Combination<V extends Value>
 
   /**
    * Get any value for the given name, even if it is undefined or comes from a
-   * bse entry.
+   * base entry.
    *
    * @param      inEntry the entry to look in for
    * @param      inName  the name of the value
@@ -437,7 +472,6 @@ public class Combination<V extends Value>
   }
 
   //........................................................................
-
 
   //------------------------------- toString -------------------------------
 
@@ -475,7 +509,7 @@ public class Combination<V extends Value>
     {
       builder.append(object.toString() + ": ");
       for(Object entry : inMap.get(object))
-        builder.append(((ValueGroup)entry).getName() + ", ");
+        builder.append(entry + ", ");
     }
 
     return builder.toString();
@@ -495,11 +529,10 @@ public class Combination<V extends Value>
    */
   private void combine()
   {
-    if(m_values != null)
+    if(m_combined)
       return;
 
-    m_values = ArrayListMultimap.create();
-    m_expressions = ArrayListMultimap.create();
+    m_combined = true;
     combine(m_entry, m_ignoreTop);
   }
 
@@ -523,14 +556,11 @@ public class Combination<V extends Value>
       if(value != null)
       {
         if(value.isDefined())
-          m_values.put(value, inEntry);
+          m_values.put(value, inEntry.getName());
 
         if(value.hasExpression())
           m_expressions.put(value.getExpression(), inEntry);
       }
-
-      // check if there is something that changes the value
-      inEntry.adjustCombination(m_name, this);
     }
 
     Variable variable = inEntry.getVariable(m_name);
@@ -547,6 +577,26 @@ public class Combination<V extends Value>
 
         combine(base, false);
       }
+
+    // check if there is something that changes the value, we do it last to
+    // have previous computation available.
+    inEntry.adjustCombination(m_name, this);
+  }
+
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given value with the given name to the combination.
+   *
+   * @param       inValue the value to add
+   * @param       inName  the name to add
+   *
+   */
+  public void add(V inValue, String inName)
+  {
+    clear();
+    m_values.put(inValue, inName);
   }
 
   //........................................................................
@@ -561,7 +611,7 @@ public class Combination<V extends Value>
    */
   public void add(V inValue, ValueGroup inEntry)
   {
-    m_values.put(inValue, inEntry);
+    add(inValue, inEntry.getName());
   }
 
   //........................................................................
@@ -576,7 +626,22 @@ public class Combination<V extends Value>
    */
   public void add(Expression inExpression, ValueGroup inEntry)
   {
+    clear();
     m_expressions.put(inExpression, inEntry);
+  }
+
+  //........................................................................
+  //-------------------------------- clear ---------------------------------
+
+  /**
+   * Clear previous computation of the combination.
+   *
+   */
+  public void clear()
+  {
+    m_total = null;
+    m_min = null;
+    m_max = null;
   }
 
   //........................................................................

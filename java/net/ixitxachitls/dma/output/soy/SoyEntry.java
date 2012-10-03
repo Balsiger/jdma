@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -32,19 +33,24 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.collect.Multimap;
 import com.google.template.soy.data.SoyData;
+import com.google.template.soy.data.SoyDataException;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
+import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 import com.google.template.soy.data.restricted.UndefinedData;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.errors.BaseError;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -175,9 +181,12 @@ public class SoyEntry extends SoyMapData
       return convert(name, value);
 
     // check if there is a function with the given name
-    value = Classes.callMethod(inName, m_entry);
-    if(value != null)
-      return convert(name, value);
+    if(!inName.startsWith("__"))
+    {
+      value = Classes.callMethod(name, m_entry);
+      if(value != null)
+        return convert(name, value);
+    }
 
     for(BaseEntry base : m_entry.getBaseEntries())
       if(base != null)
@@ -272,13 +281,23 @@ public class SoyEntry extends SoyMapData
   public @Nullable SoyData convert(@Nonnull String inName,
                                    @Nullable Object inValue)
   {
+    if(inValue instanceof Combination)
+    {
+      Combination<? extends Value> combination =
+        (Combination<? extends Value>)inValue;
+
+      return new SoyCombination(combination.getName(), combination,
+                                combination.getTopValue(),
+                                combination.getEntry());
+    }
+
     if(inValue instanceof Value)
       return new SoyValue(inName, (Value)inValue, m_entry);
 
     if(inValue instanceof AbstractEntry)
       return new SoyEntry((AbstractEntry)inValue);
 
-    if(inValue instanceof List)
+    if(inValue instanceof Collection)
     {
       SoyListData list = new SoyListData();
       for(Object element : (List)inValue)
@@ -288,12 +307,36 @@ public class SoyEntry extends SoyMapData
     }
 
     if(inValue instanceof Map)
-      return new SoyMapData((Map<String, ?>)inValue);
+    {
+      SoyMapData map = new SoyMapData();
+      Map<?, ?> input = (Map<?, ?>)inValue;
+      for(Map.Entry<?, ?> entry : input.entrySet())
+        map.putSingle(entry.getKey().toString(),
+                      convert(inName, entry.getValue()));
+
+      return map;
+    }
+
+    if(inValue instanceof Multimap)
+      return convert(inName, ((Multimap)inValue).asMap());
+
+    if(inValue instanceof Long)
+      return IntegerData.forValue(((Long)inValue).intValue());
 
     if(inValue == null)
       return null;
 
-    return StringData.forValue(inValue.toString());
+    try
+    {
+      return SoyData.createFromExistingData(inValue);
+    }
+    catch(SoyDataException e)
+    {
+      Log.warning("could not convert " + inValue.getClass()
+        + ", defaulting to string");
+
+      return StringData.forValue(inValue.toString());
+    }
   }
 
   //........................................................................

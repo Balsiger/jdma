@@ -273,8 +273,32 @@
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
-    {param name: 'Possessions' /}
-    {param value: $entry.possessions /}
+    {param name: 'Possesions' /}
+    {param value: $entry.possesions /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Possesions' /}
+    {param content}
+      {foreach $item in $entry.possesions.list}
+        {call dma.entry.itemreference}
+          {param item: entry($entry.campaign.key + '/item/'
+              + $item.print) /}
+        {/call}
+      {ifempty}
+        No items stored.
+      {/foreach}
+      {if $ij.isDM}
+      {sp}|{sp}
+      {call dma.page.link}
+        {param js: 'item.create(\'' + $entry.campaign.path + '\', \''
+            + $entry.campaign.key + '/monster/' + $entry.name + '\');' /}
+        {param text: 'add' /}
+        {param tooltip: 'Add a new item to this monster.' /}
+      {/call}
+      {/if}
+    {/param}
+    {param access: 'dm' /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -359,6 +383,9 @@
  */
 {deltemplate dma.entry.summary}
   <div class="summary">
+    {call dma.page.title}
+      {param title: $entry.given_name.print + ' - Summary' /}
+    {/call}
     <h1>
       {if $entry.given_name.isDefined}
         {$entry.given_name.print}
@@ -375,21 +402,130 @@
       {param entry: $entry /}
       {param value: $entry.challenge_rating /}
     {/call}
-    {call dma.value.withbase}
+    {call dma.entry.overviewValue}
       {param entry: $entry /}
       {param value: $entry.size /}
     {/call}
-    {sp}
-    {call dma.value.withbase}
+    {call dma.entry.overviewValue}
+      {param postfix: ';' /}
       {param entry: $entry /}
       {param value: $entry.__type /}
-    {/call};
-    {sp}
+    {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'HD' /}
       {param postfix: ';' /}
       {param entry: $entry /}
       {param value: $entry.hit_dice /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'hp' /}
+      {param entry: $entry /}
+      {param value: $entry.hp /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: ' of' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param value: $entry.hp /}
+    {/call}
+    <br />
+    {call dma.entry.overviewValue}
+      {param prefix: 'Init' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param combination: $entry.initiative /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Speed' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param value: $entry.speed /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'AC' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.armor_class /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'touch' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.armor_class_touch /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'flat-footed' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param value: $entry.armor_class_flat_footed /}
+    {/call}
+    <br />
+    {call dma.entry.overviewValue}
+      {param prefix: 'Atk' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param content}
+        {foreach $weapon in $entry.attacks.weapons}
+          {foreach $attack in $weapon.attacks}
+            +{$attack |print}
+            {if not isLast($attack)}/{/if}
+          {/foreach}
+          {sp}{$weapon.style |print}
+          {sp}(
+          {call dma.value.combined}
+            {param combination: $weapon.damage /}
+          {/call}
+            /
+            {call dma.value.combined}
+              {param combination: $weapon.critical /}
+            {/call}
+           , {$weapon.name})
+           {if not isLast($weapon)}
+             , or{sp}
+           {/if}
+        {/foreach}
+        {sp}(base{sp}
+        <span class="windowed">
+          +{$entry.attacks.base[0]}
+          <span class="window base">
+            {foreach $modifier in keys($entry.attacks.bases)}
+              <span class="base-value">{$modifier}</span>
+              {sp} from{sp}
+              {foreach $name in $entry.attacks.bases[$modifier]}
+                {$name}
+                {if not isLast($name)}
+                  ,
+                {/if}
+              {/foreach}
+              <br />
+            {/foreach}
+          </span>
+        </span>
+        , grapple +{$entry.attacks.grapple |print})
+      {/param}
+    {/call}
+    <br />
+    {call dma.entry.overviewValue}
+      {param prefix: '<div class="summary-title">Special Attacks</div>' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param content}
+        {foreach $attack in $entry.special_attack_summaries}
+          <b>{$attack.name}</b>
+          {switch $attack.number}
+            {case -1}
+            {case 0}
+            {case 1}
+              {sp}once per day
+            {case 2}
+              {sp}twice per day
+            {default}
+              {sp}{$attack.number} times per day
+          {/switch}
+          : {$attack.summary}
+        <br />
+        {/foreach}
+      {/param}
     {/call}
   </div>
 {/deltemplate}

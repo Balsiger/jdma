@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -153,11 +153,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%{AC bonus} %{armor type} %{max dexterity} %{check penalty} "
-              + "%{arcane failure} %speed");
 
   //----- ac bonus ---------------------------------------------------------
 
@@ -353,36 +348,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //------------------------- computeIndexValues ---------------------------
 
   /**

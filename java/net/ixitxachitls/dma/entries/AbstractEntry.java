@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.entries;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,7 +34,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
@@ -51,7 +54,9 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Comment;
+import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
@@ -1995,8 +2000,8 @@ public class AbstractEntry extends ValueGroup
         .withEditable(true)
         .withEditType("multiselection")
         .withEditChoices("armor||commodity||composite||container||counted"
-                         + "||incomplete||light||multiple||multiuse||timed"
-                         + "||weapon||wearable");
+                         + "||incomplete||light||magic||multiple||multiuse"
+                         + "||timed||weapon||wearable");
 
     ValueHandle value = super.computeValue(inKey, inDM);
     if(value != null)
@@ -2041,7 +2046,7 @@ public class AbstractEntry extends ValueGroup
 
       list.withEditType("multiselection")
         .withChoices("armor||commodity||composite||container||counted"
-                     + "||incomplete||light||multiple||multiuse||timed"
+                     + "||incomplete||light||magic||multiple||multiuse||timed"
                      + "||weapon||wearable")
         .withTemplate("extensions");
 
@@ -2245,7 +2250,7 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //----------------------------- adjustValue ------------------------------
+  //-------------------------- adjustCombination ---------------------------
 
   /**
    * Adjust the value for the given name for any special properites.
@@ -2266,6 +2271,37 @@ public class AbstractEntry extends ValueGroup
       extension.adjustCombination(inName, ioCombination);
 
     super.adjustCombination(inName, ioCombination);
+  }
+
+  //........................................................................
+  //---------------------------- addModifiers ------------------------------
+
+  /**
+   * Add current modifiers to the given map.
+   *
+   * @param       inName        the name of the value to modify
+   * @param       ioModifers    the map of modifiers
+   *
+   */
+  @Override
+  public void addModifiers(@Nonnull String inName,
+                           @Nonnull Map<String, Modifier> ioModifiers)
+  {
+    // add the modifiers from all base values
+    for(BaseEntry base : getBaseEntries())
+    {
+      if(base == null)
+        continue;
+
+      base.addModifiers(inName, ioModifiers);
+    }
+
+    // now ask all the extensions if they want to contribute something
+    for(AbstractExtension<? extends AbstractEntry> extension
+          : m_extensions.values())
+      extension.addModifiers(inName, ioModifiers);
+
+    super.addModifiers(inName, ioModifiers);
   }
 
   //........................................................................
@@ -3202,186 +3238,187 @@ public class AbstractEntry extends ValueGroup
    * @return      the computed string
    *
    */
-  // TODO: make this more generic and move it to an external class
-//   public String computeExpressions(String inText,
-//                                    Map<String, ? extends Object> inValues)
-//   {
-//     String text = inText;
-//     StringBuffer result = new StringBuffer();
+  public @Nonnull String computeExpressions(@Nonnull String inText,
+                                            @Nullable Parameters inParameters)
+  {
+    // TODO: make this more generic and move it to a separate class
+    String text = inText;
+    StringBuffer result = new StringBuffer();
 
-//     if(inValues != null)
-//     {
-//       Matcher matcher = s_varPattern.matcher(text);
+    if(inParameters != null)
+    {
+      Matcher matcher = s_varPattern.matcher(text);
+      while(matcher.find())
+      {
+        Value value = inParameters.getValue(matcher.group(1));
+        if(value != null && value.isDefined())
+          matcher.appendReplacement(result, value.toString());
+      }
 
-//       while(matcher.find())
-//         if(inValues.containsKey(matcher.group(1)))
-//           matcher.appendReplacement(result,
-//                                   inValues.get(matcher.group(1)).toString());
+      matcher.appendTail(result);
 
-//       matcher.appendTail(result);
+      text = result.toString();
+      result = new StringBuffer();
+    }
 
-//       text = result.toString();
-//       result = new StringBuffer();
-//     }
+    Matcher matcher = s_expPattern.matcher(text);
 
-//     Matcher matcher = s_expPattern.matcher(text);
+    while(matcher.find())
+      matcher.appendReplacement(result,
+                                "" + computeExpression(matcher.group(1)));
 
-//     while(matcher.find())
-//       matcher.appendReplacement(result,
-//                                 "" + computeExpression(matcher.group(1)));
+    matcher.appendTail(result);
 
-//     matcher.appendTail(result);
+    return result.toString();
+  }
 
-//     return result.toString();
-//   }
+  private String computeExpression(String inExpression)
+  {
+    inExpression = inExpression.replaceAll("[ \t\n\f\r]", "");
 
-//   private String computeExpression(String inExpression)
-//   {
-//     inExpression = inExpression.replaceAll("[ \t\n\f\r]", "");
+    StringTokenizer tokens =
+      new StringTokenizer(inExpression, "()+-*/,^", true);
 
-//     StringTokenizer tokens =
-//       new StringTokenizer(inExpression, "()+-*/,^", true);
+    return computeExpression(inExpression, tokens);
+  }
 
-//     return computeExpression(inExpression, tokens);
-//   }
+  private String computeExpression(String inExpression,
+                                   StringTokenizer inTokens)
+  {
+    if(!inTokens.hasMoreTokens())
+    {
+      Log.warning("invalid expression, expected more: "  + inExpression);
 
-//   private String computeExpression(String inExpression,
-//                                    StringTokenizer inTokens)
-//   {
-//     if(!inTokens.hasMoreTokens())
-//     {
-//       Log.warning("invalid expression, expected more: "  + inExpression);
+      return "* invalid expression, expected (: " + inExpression + " *";
+    }
 
-//       return "* invalid expression, expected (: " + inExpression + " *";
-//     }
+    String token = inTokens.nextToken();
 
-//     String token = inTokens.nextToken();
+    if("min".equals(token))
+    {
+      if(!"(".equals(inTokens.nextToken()))
+      {
+        Log.warning("invalid expression, expected '(': " + inExpression);
 
-//     if("min".equals(token))
-//     {
-//       if(!"(".equals(inTokens.nextToken()))
-//       {
-//         Log.warning("invalid expression, expected '(': " + inExpression);
+        return "* invalid expression, expected (: " + inExpression + " *";
+      }
 
-//         return "* invalid expression, expected (: " + inExpression + " *";
-//       }
+      String first = computeExpression(inExpression, inTokens);
+      String second = computeExpression(inExpression, inTokens);
 
-//       String first = computeExpression(inExpression, inTokens);
-//       String second = computeExpression(inExpression, inTokens);
+    return "" + Math.min(Integer.parseInt(first), Integer.parseInt(second));
+    }
 
-//     return "" + Math.min(Integer.parseInt(first), Integer.parseInt(second));
-//     }
+    if("max".equals(token))
+    {
+      if(!"(".equals(inTokens.nextToken()))
+      {
+        Log.warning("invalid expression, expected '(': " + inExpression);
 
-//     if("max".equals(token))
-//     {
-//       if(!"(".equals(inTokens.nextToken()))
-//       {
-//         Log.warning("invalid expression, expected '(': " + inExpression);
+        return "* invalid expression, expect (: " + inExpression + " *";
+      }
 
-//         return "* invalid expression, expect (: " + inExpression + " *";
-//       }
+      String first = computeExpression(inExpression, inTokens);
+      String second = computeExpression(inExpression, inTokens);
 
-//       String first = computeExpression(inExpression, inTokens);
-//       String second = computeExpression(inExpression, inTokens);
+    return "" + Math.max(Integer.parseInt(first), Integer.parseInt(second));
+    }
 
-//     return "" + Math.max(Integer.parseInt(first), Integer.parseInt(second));
-//     }
+    if("range".equals(token))
+    {
+      if(!"(".equals(inTokens.nextToken()))
+      {
+        Log.warning("invalid expression, expected '(': " + inExpression);
 
-//     if("range".equals(token))
-//     {
-//       if(!"(".equals(inTokens.nextToken()))
-//       {
-//         Log.warning("invalid expression, expected '(': " + inExpression);
+        return "* invalid expression, expect (: " + inExpression + " *";
+      }
 
-//         return "* invalid expression, expect (: " + inExpression + " *";
-//       }
+    int level = Integer.parseInt(computeExpression(inExpression, inTokens));
+      List<String> ranges = new ArrayList<String>();
 
-//     int level = Integer.parseInt(computeExpression(inExpression, inTokens));
-//       List<String> ranges = new ArrayList<String>();
+      String current = "";
+      for(String argument = inTokens.nextToken();
+          !"(".equals(argument) && inTokens.hasMoreTokens();
+          argument = inTokens.nextToken())
+      {
+        if(",".equals(argument))
+        {
+          ranges.add(current);
+          current = "";
+        }
+        else
+        {
+          current += argument;
+        }
+      }
+      ranges.add(current);
+      Collections.reverse(ranges);
 
-//       String current = "";
-//       for(String argument = inTokens.nextToken();
-//           !"(".equals(argument) && inTokens.hasMoreTokens();
-//           argument = inTokens.nextToken())
-//       {
-//         if(",".equals(argument))
-//         {
-//           ranges.add(current);
-//           current = "";
-//         }
-//         else
-//         {
-//           current += argument;
-//         }
-//       }
-//       ranges.add(current);
-//       Collections.reverse(ranges);
+      for(String range : ranges) {
+        String []parts = range.split(":\\s*");
+        if(parts.length != 2)
+          continue;
 
-//       for(String range : ranges) {
-//         String []parts = range.split(":\\s*");
-//         if(parts.length != 2)
-//           continue;
+        try
+        {
+          if(level >= Integer.parseInt(parts[0]))
+            return parts[1];
+        }
+        catch(NumberFormatException e)
+        {
+          // just ignore it
+        }
+      }
 
-//         try
-//         {
-//           if(level >= Integer.parseInt(parts[0]))
-//             return parts[1];
-//         }
-//         catch(NumberFormatException e)
-//         {
-//           // just ignore it
-//         }
-//       }
+      return "* invalid range *";
+    }
 
-//       return "* invalid range *";
-//     }
+    try
+    {
+      String value;
 
-//     try
-//     {
-//       String value;
+      if("(".equals(token))
+        value = computeExpression(inExpression, inTokens);
+      else
+        value = token;
 
-//       if("(".equals(token))
-//         value = computeExpression(inExpression, inTokens);
-//       else
-//         value = token;
+      if(!inTokens.hasMoreTokens())
+        return value;
 
-//       if(!inTokens.hasMoreTokens())
-//         return value;
+      String operator = inTokens.nextToken();
 
-//       String operator = inTokens.nextToken();
+      if(",".equals(operator) || ")".equals(operator))
+        return value;
 
-//       if(",".equals(operator) || ")".equals(operator))
-//         return value;
+      String operand = computeExpression(inExpression, inTokens);
 
-//       String operand = computeExpression(inExpression, inTokens);
+      if("+".equals(operator))
+        return "" + (Integer.parseInt(value) + Integer.parseInt(operand));
 
-//       if("+".equals(operator))
-//         return "" + (Integer.parseInt(value) + Integer.parseInt(operand));
+      if("-".equals(operator))
+        return "" + (Integer.parseInt(value) - Integer.parseInt(operand));
 
-//       if("-".equals(operator))
-//         return "" + (Integer.parseInt(value) - Integer.parseInt(operand));
+      if("*".equals(operator))
+        return "" + (Integer.parseInt(value) * Integer.parseInt(operand));
 
-//       if("*".equals(operator))
-//         return "" + (Integer.parseInt(value) * Integer.parseInt(operand));
+      if("/".equals(operator))
+        return "" + (Integer.parseInt(value) / Integer.parseInt(operand));
 
-//       if("/".equals(operator))
-//         return "" + (Integer.parseInt(value) / Integer.parseInt(operand));
+      if("^".equals(operator))
+        return "" + (int)Math.pow(Integer.parseInt(value),
+                                  Integer.parseInt(operand));
 
-//       if("^".equals(operator))
-//         return "" + (int)Math.pow(Integer.parseInt(value),
-//                                   Integer.parseInt(operand));
+      Log.warning("invalid operator " + operator + ": " + inExpression);
 
-//       Log.warning("invalid operator " + operator + ": " + inExpression);
+      return value;
+    }
+    catch(NumberFormatException e)
+    {
+      Log.warning(e + ", for " + inExpression);
 
-//       return value;
-//     }
-//     catch(NumberFormatException e)
-//     {
-//       Log.warning(e + ", for " + inExpression);
-
-//       return "* invalid number *";
-//     }
-//   }
+      return "* invalid number *";
+    }
+  }
 
   //........................................................................
 

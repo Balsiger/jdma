@@ -28,6 +28,7 @@ import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -220,12 +221,13 @@ public final class Classes
     for(int i = 0; i < inArguments.length; i++)
       arguments[i] = inArguments.getClass();
 
-    Method method = getMethod(inObject.getClass(), inName, arguments);
+    String name = Encodings.toCamelCase(inName);
+
+    Method method = getMethod(inObject.getClass(), name, arguments);
     if(method == null)
     {
-      method = getMethod(inObject.getClass(),
-                         "get" + Character.toUpperCase(inName.charAt(0))
-                         + inName.substring(1), arguments);
+      name = "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+      method = getMethod(inObject.getClass(), name, arguments);
       if(method == null)
         return null;
     }
@@ -237,10 +239,12 @@ public final class Classes
     catch(IllegalAccessException e)
     {
       Log.warning("cannot access method: " + e);
+      e.printStackTrace(System.err);
     }
     catch(java.lang.reflect.InvocationTargetException e)
     {
       Log.warning("cannot invoke method: " + e);
+      e.printStackTrace(System.err);
     }
 
     return null;

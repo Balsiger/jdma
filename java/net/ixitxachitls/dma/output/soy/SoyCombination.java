@@ -43,6 +43,7 @@ import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -135,17 +136,17 @@ public class SoyCombination extends SoyValue
     {
       List<Map<String, Object>> bases = new ArrayList<Map<String, Object>>();
 
-      for(Map.Entry<? extends Value, Collection<ValueGroup>> entry
+      for(Map.Entry<? extends Value, Collection<String>> entry
             : m_combination.valuesPerGroup().asMap().entrySet())
         if(entry.getValue().size() != 1
-           || entry.getValue().iterator().next() != m_entry)
+           || !entry.getValue().iterator().next().equals(m_entry.getName()))
           bases.add
             (SoyTemplate.map
              ("value", new SoyValue(m_combination.getName(), entry.getKey(),
                                     m_entry),
               "isLongText", entry.getKey() instanceof FormattedText,
               "isText", entry.getKey() instanceof Text,
-              "names", Entries.namesString(entry.getValue())));
+              "names", Strings.COMMA_JOINER.join(entry.getValue())));
 
       for(Map.Entry<Expression, Collection<ValueGroup>> entry
             : m_combination.expressionsPerGroup().asMap().entrySet())

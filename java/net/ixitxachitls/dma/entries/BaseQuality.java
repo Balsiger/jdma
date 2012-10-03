@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.Map;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -40,9 +42,9 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
-//import net.ixitxachitls.dma.values.Parameters;
+import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Name;
-// import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 // import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 // import net.ixitxachitls.dma.values.formatters.ValueFormatter;
@@ -344,34 +346,6 @@ public class BaseQuality extends BaseEntry
 
   //-------------------------------------------------------------- accessors
 
-  //------------------------------ getSummary ------------------------------
-
-  /**
-   * Get the summary of the quality.
-   *
-   * @param       inParameters the parameters to parametrize this quality
-   *
-   * @return      a string with the summary
-   *
-   */
-  // public String getSummary(Parameters inParameters)
-  // {
-  //   String summary = getShortDescription();
-
-  //   if(!inParameters.isDefined())
-  //     return summary;
-
-  //   Map<String, Value> values = inParameters.getLCKeyValues();
-  //   summary = computeExpressions(summary, values);
-
-  //   Value notes = values.get("Notes");
-  //   if(notes != null)
-  //     summary += " (" + notes + ")";
-
-  //   return summary;
-  // }
-
-  //........................................................................
   //-------------------------- computeIndexValues --------------------------
 
   /**

@@ -46,6 +46,9 @@ import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
+import net.ixitxachitls.dma.values.ModifiedNumber;
+import net.ixitxachitls.dma.values.Modifier;
+import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
@@ -750,6 +753,43 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //--------------------------- collectModifiers ---------------------------
+
+  /**
+   * collect the modifiers for the named value.
+   *
+   * @param       inName the name of the value to collect
+   *
+   * @return      a mapping between location and modifier found
+   *
+   */
+  public Map<String, Modifier> collectModifiers(@Nonnull String inName)
+  {
+    Map<String, Modifier> modifiers = new HashMap<String, Modifier>();
+
+    addModifiers(inName, modifiers);
+
+    return modifiers;
+  }
+
+  //........................................................................
+
+  //---------------------------- addModifiers ------------------------------
+
+  /**
+   * Add current modifiers to the given map.
+   *
+   * @param       inName        the name of the value to modify
+   * @param       ioModifers    the map of modifiers
+   *
+   */
+  public void addModifiers(@Nonnull String inName,
+                           @Nonnull Map<String, Modifier> inModifiers)
+  {
+    // nothing to do
+  }
+
+  //........................................................................
 
   //---------------------------- getBaseEntries ----------------------------
 
@@ -1362,6 +1402,34 @@ public abstract class ValueGroup implements Changeable
       if(inPostfix != null)
         ioList.add(inPostfix);
     }
+  }
+
+  //........................................................................
+  //------------------------------- convert --------------------------------
+
+  /**
+   * Compute the modified number for the name value.
+   *
+   * @param       the name of the value to compute
+   * @param       the type of modifiers to ignore for the value
+   *
+   * @return      the modified number for the value
+   *
+   */
+  public @Nonnull ModifiedNumber modified(@Nonnull String inName,
+                                          Modifier.Type ... inIgnore)
+  {
+    Combination<Number> combination = new Combination<Number>(this, inName);
+
+    ModifiedNumber number = new ModifiedNumber(combination.total().get());
+    for(Map.Entry<String, Modifier> entry : collectModifiers(inName).entrySet())
+    {
+      Modifier modifier = entry.getValue().ignore(inIgnore);
+      if(modifier != null)
+        number.withModifier(modifier, entry.getKey());
+    }
+
+    return number;
   }
 
   //........................................................................

@@ -105,6 +105,19 @@
 {/template}
 
 /**
+ * A link to a Feat.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .Feat}
+  {call dma.page.link}
+    {param url: '/feat/' + $arg.0 /}
+    {param text: $arg.0 /}
+    {param class: 'Feat' /}
+  {/call}
+{/template}
+
+/**
  * A link to a Spell.
  *
  * @param arg The arguments to the command.

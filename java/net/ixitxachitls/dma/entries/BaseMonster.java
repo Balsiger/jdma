@@ -1362,10 +1362,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- natural armor ----------------------------------------------------
 
-  /** The formatter for natural armor. */
-  // protected static ValueFormatter<Number> s_naturalFormatter =
-  //   new LinkFormatter<Number>("/index/naturalarmors/");
-
   /** The natural armor of the monster. */
   @Key("natural armor")
   protected Number m_natural = new Number(0, 1000, true);

@@ -673,15 +673,10 @@ public class BaseItem extends BaseEntry
 
   //----- value ------------------------------------------------------------
 
-  /** The formatter for values. */
-  protected static final Formatter<Money> s_valueFormatter =
-    new LinkFormatter<Money>(link(TYPE, Index.Path.VALUES));
-
   /** The total standard value of the base item. */
   @Key("value")
   @DM
-  protected @Nonnull Money m_value =
-    new Money().withFormatter(s_valueFormatter);
+  protected @Nonnull Money m_value = new Money();
 
   static
   {
@@ -691,13 +686,9 @@ public class BaseItem extends BaseEntry
   //........................................................................
   //----- weight -----------------------------------------------------------
 
-  /** The formatter for weights. */
-  protected static final Formatter<Weight> s_weightFormatter =
-    new LinkFormatter<Weight>(link(TYPE, Index.Path.WEIGHTS));
-
   /** The standard weight of the item. */
   @Key("weight")
-  protected Weight m_weight = new Weight().withFormatter(s_weightFormatter);
+  protected Weight m_weight = new Weight();
 
   static
   {
@@ -707,18 +698,12 @@ public class BaseItem extends BaseEntry
   //........................................................................
   //----- probability ------------------------------------------------------
 
-  /** The formatter for probabilities. */
-  protected static final Formatter<EnumSelection<Probability>>
-    s_probabilityFormatter = new LinkFormatter<EnumSelection<Probability>>
-    (link(TYPE, Index.Path.PROBABILITIES));
-
   /** The probability that for random determination, an item of this kind will
    * be selected. The probability is measured to the total of all probabilities
    * of all possible items. */
   @Key("probability")
   protected EnumSelection<Probability> m_probability =
     new EnumSelection<Probability>(Probability.COMMON)
-    .withFormatter(s_probabilityFormatter)
     .withTemplate("link", Index.Path.PROBABILITIES.getPath());
 
   static
@@ -729,15 +714,10 @@ public class BaseItem extends BaseEntry
   //........................................................................
   //----- size -------------------------------------------------------------
 
-  /** The formatter for sizes. */
-  protected static final Formatter<EnumSelection<Size>> s_sizeFormatter
-    = new LinkFormatter<EnumSelection<Size>>(link(TYPE, Index.Path.SIZES));
-
   /** The size of items of this kind. */
   @Key("size")
   protected EnumSelection<Size> m_size = new EnumSelection<Size>(Size.class)
-    .withTemplate("link", Index.Path.SIZES.getPath())
-    .withFormatter(s_sizeFormatter);
+    .withTemplate("link", Index.Path.SIZES.getPath());
 
   static
   {
@@ -746,10 +726,6 @@ public class BaseItem extends BaseEntry
 
   //........................................................................
   //----- hardness ---------------------------------------------------------
-
-  /** The formatter for hardness. */
-  protected static final Formatter<Number> s_hardnessFormatter =
-    new LinkFormatter<Number>(link(TYPE, Index.Path.HARDNESSES));
 
   /** The grouping for the hardness. */
   protected static final Group<Number, Long, String> s_hardnessGroup =
@@ -771,7 +747,6 @@ public class BaseItem extends BaseEntry
   /** The items standard hardness. */
   @Key("hardness")
     protected Number m_hardness = new Number(0, 100)
-    .withFormatter(s_hardnessFormatter)
     .withTemplate("link", Index.Path.HARDNESSES.getPath())
     .withGrouping(s_hardnessGroup);
 
@@ -782,10 +757,6 @@ public class BaseItem extends BaseEntry
 
   //........................................................................
   //----- hit points -------------------------------------------------------
-
-  /** The formatter for hit points. */
-  protected static final Formatter<Number> s_hpFormatter
-    = new LinkFormatter<Number>(link(TYPE, Index.Path.HPS));
 
   /** The groups for hit points. */
   protected static final Group<Number, Long, String> s_hpGroup =
@@ -809,7 +780,6 @@ public class BaseItem extends BaseEntry
   @Key("hp")
   @DM
   protected Number m_hp = new Number(0, 100000)
-    .withFormatter(s_hpFormatter)
     .withTemplate("link", Index.Path.HPS.getPath())
     .withGrouping(s_hpGroup);
 
@@ -835,15 +805,6 @@ public class BaseItem extends BaseEntry
   //........................................................................
   //----- substance --------------------------------------------------------
 
-  /** The formatter for substances. */
-  protected static final Formatter<EnumSelection<Substance>>
-    s_substanceFormatter = new LinkFormatter<EnumSelection<Substance>>
-    (link(TYPE, Index.Path.SUBSTANCES));
-
-  /** The thickness formatter. */
-  protected static final Formatter<Distance> s_thicknessFormatter =
-    new LinkFormatter<Distance>(link(TYPE, Index.Path.DISTANCES));
-
   /** The group for thicknesses. */
   protected static final Group<Distance, Long, String> s_thicknessGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
@@ -867,10 +828,8 @@ public class BaseItem extends BaseEntry
       {
         new Multiple.Element
         (new EnumSelection<Substance>(Substance.class)
-         .withFormatter(s_substanceFormatter)
          .withTemplate("link", Index.Path.SUBSTANCES.getPath()), false),
         new Multiple.Element(new Distance()
-                             .withFormatter(s_thicknessFormatter)
                              .withGrouping(s_thicknessGrouping),
                              false, " ", null),
       });
@@ -884,10 +843,6 @@ public class BaseItem extends BaseEntry
 
   //........................................................................
   //----- break DC ---------------------------------------------------------
-
-  /** The formatter for hit points. */
-  protected static final Formatter<Number> s_breakFormatter =
-    new LinkFormatter<Number>(link(TYPE, Index.Path.BREAKS));
 
   /** The group for break values. */
   protected static final Group<Number, Long, String> s_breakGrouping =
@@ -910,7 +865,6 @@ public class BaseItem extends BaseEntry
   /** The break DC for breaking this item (or bursting out of it). */
   @Key("break DC")
   protected Number m_break = new Number(0, 1000)
-    .withFormatter(s_breakFormatter)
     .withTemplate("link", Index.Path.BREAKS.getPath())
     .withGrouping(s_breakGrouping);
 

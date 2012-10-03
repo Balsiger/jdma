@@ -257,17 +257,12 @@ public class ValueList<T extends Value>
   @Override
   public @Nonnull String getEditValue()
   {
-    if(m_editType.startsWith("#(list"))
-    {
-      List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<String>();
 
-      for(Iterator<T> i = iterator(); i.hasNext(); )
-        result.add(i.next().getEditValue());
+    for(Iterator<T> i = iterator(); i.hasNext(); )
+      result.add(i.next().getEditValue());
 
-      return "#(" + s_editJoiner.join(result) + "#)";
-    }
-
-    return toString();
+    return "#(" + s_editJoiner.join(result) + "#)";
   }
 
   //........................................................................

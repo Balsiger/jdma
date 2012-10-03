@@ -207,20 +207,17 @@
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
           {param name: 'Damage' /}
-          {param content}
-            {call dma.value.withbase}
-              {param entry: $entry /}
-              {param value: $entry.damage /}
-            {/call}
-            {if $entry.splash.isDefined
-                or $entry.splash.combine.print.isDefined}
-              <div>, splash&nbsp;</div>
-              {call dma.value.withbase}
-                {param entry: $entry /}
-                {param value: $entry.splash /}
-              {/call}
-            {/if}
-          {/param}
+          {param value: $entry.damage /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Secondary Damage' /}
+          {param value: $entry.secondaryDamage /}
+        {/delcall}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Splash' /}
+          {param value: $entry.splash /}
         {/delcall}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}

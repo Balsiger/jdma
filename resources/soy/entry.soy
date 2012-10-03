@@ -1000,11 +1000,12 @@
 /**
  * Print the value with the given pre and post fix.
  *
- * @param prefix   the prefix for the value
- * @param postfix  the postfix for the value
- * @param value    the vaue to print
- * @param content  formatted content instead of a value
- * @param dm       if printing only for dm
+ * @param prefix      the prefix for the value
+ * @param postfix     the postfix for the value
+ * @param value       the vaue to print
+ * @param content     formatted content instead of a value
+ * @param combination a combination value to print (instead of value or content)
+ * @param dm          if printing only for dm
  */
 {template .overviewValue}
   {if $dm}
@@ -1021,15 +1022,23 @@
 /**
  * Print the raw value, ignoring dm handling.
  *
- * @param entry    the entry to render
- * @param prefix   the prefix for the value
- * @param postfix  the postfix for the value
- * @param value    the vaue to print
- * @param content  formatted content instead of a value
+ * @param entry       the entry to render
+ * @param prefix      the prefix for the value
+ * @param postfix     the postfix for the value
+ * @param value       the vaue to print
+ * @param content     formatted content instead of a value
+ * @param combination a combination value to print (instead of value or content)
  */
 {template .overviewValueRaw private="true"}
   {if $prefix}{$prefix}{sp}{/if}
-  {if $content}
+  {if $combination}
+    {call dma.value.combination}
+      {param combination: $combination /}
+      {param entry: $entry /}
+      {param value: $value /}
+      {param canEdit: false /}
+    {/call}
+  {elseif $content}
     {$content}
   {else}
     {if $value}

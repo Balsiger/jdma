@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.output.soy;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -284,7 +285,7 @@ public class SoyValue extends SoyMapData
     if(value != null)
       return convert(value);
 
-    // check if ther eis a function with the given name in the value itselfx
+    // check if there is a function with the given name in the value itself
     value = Classes.callMethod(inName, m_value);
     if(value != null)
       return convert(value);
@@ -355,12 +356,26 @@ public class SoyValue extends SoyMapData
    * @return      the converted object
    *
    */
-  public static @Nonnull SoyData convert(@Nonnull Object inObject)
+  @SuppressWarnings("unchecked")
+  private @Nonnull SoyData convert(@Nonnull Object inObject)
   {
     if(inObject instanceof Boolean)
       return BooleanData.forValue((Boolean)inObject);
 
-    return StringData.forValue(inObject.toString());
+    if(inObject instanceof Map)
+    {
+      SoyMapData map = new SoyMapData();
+      Map<?, ?> input = (Map<?, ?>)inObject;
+      for(Map.Entry<?, ?> entry : input.entrySet())
+        map.putSingle(entry.getKey().toString(), convert(entry.getValue()));
+
+      return map;
+    }
+
+    if(inObject instanceof Value)
+      return new SoyValue(m_name, (Value)inObject, m_entry);
+
+    return SoyData.createFromExistingData(inObject);
   }
 
   //........................................................................

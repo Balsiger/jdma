@@ -389,52 +389,6 @@ public class Damage extends Value<Damage>
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- addTo ---------------------------------
-
-  /**
-   * Add the given value to the beginning of the current one.
-   *
-   * @param       inValue the value to add to this one
-   *
-   * @undefined   IllegalArgumentException if given value is null
-   * @undefined   UnsupportedOperationException if operation not allowed
-   *
-   */
-  // public void addTo(Damage inValue)
-  // {
-  //   m_stored = true;
-  //   if(isDefined())
-  //   {
-  //     if((inValue.m_type == null && m_type == null
-  //         || (inValue.m_type != null && m_type != null
-  //             && inValue.m_type.getSelected() == m_type.getSelected()))
-  //        && (m_effect == null && inValue.m_effect == null
-  //            || (m_effect != null && m_effect.equals(inValue.m_effect)))
-  //        && (m_base.getDice() == inValue.m_base.getDice()
-  //            || m_base.getDice() == 1 || inValue.m_base.getDice() == 1))
-  //       m_base.set(m_base.getNumber() + inValue.m_base.getNumber(),
-  //                  Math.max(m_base.getDice(), m_base.getDice()),
-  //                  m_base.getModifier() + inValue.m_base.getModifier());
-  //     else
-  //       if(m_other == null)
-  //         m_other = inValue.clone();
-  //       else
-  //         m_other.addTo(inValue);
-  //   }
-  //   else
-  //   {
-  //     m_base = (Dice)inValue.m_base.clone();
-  //     m_type = (EnumSelection<Type>)inValue.m_type.clone();
-
-  //     if(m_other != null)
-  //       m_other = (Damage)inValue.m_other.clone();
-
-  //     m_effect = inValue.m_effect;
-  //   }
-  // }
-
-  //........................................................................
-
   //------------------------------- doRead ---------------------------------
 
   /**
@@ -504,7 +458,10 @@ public class Damage extends Value<Damage>
   @Override
   public @Nonnull Damage add(@Nonnull Damage inValue)
   {
-    if(inValue.m_type == m_type && inValue.m_base.getDice() == m_base.getDice())
+    if(inValue.m_type.getSelected() == m_type.getSelected()
+       && (inValue.m_base.getDice() == m_base.getDice()
+           || inValue.m_base.getNumber() == 0 || m_base.getNumber() == 0
+           || inValue.m_base.getDice() <= 1 || m_base.getDice() <= 1))
       if(m_other == null)
         return as(m_base.add(inValue.m_base), m_type, inValue.m_other);
       else if(inValue.m_other == null)

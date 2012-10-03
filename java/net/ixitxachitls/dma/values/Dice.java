@@ -81,7 +81,7 @@ public class Dice extends Value<Dice>
    */
   public Dice(int inNumber, int inDice, int inModifier)
   {
-    if(inNumber <= 0)
+    if(inNumber < 0)
       throw new IllegalArgumentException("must have at least one roll");
 
     if(inDice <= 0)
@@ -412,12 +412,12 @@ public class Dice extends Value<Dice>
     if(!inValue.isDefined())
       return this;
 
-    if(m_dice != inValue.m_dice)
+    if(m_number > 0 && inValue.m_number > 0 && m_dice != inValue.m_dice)
       throw new UnsupportedOperationException("can only add same dice");
 
     Dice result = create();
     result.m_number = m_number + inValue.m_number;
-    result.m_dice = m_dice;
+    result.m_dice = m_number > 0 ? m_dice : inValue.m_dice;
     result.m_modifier = m_modifier + inValue.m_modifier;
 
     return result;

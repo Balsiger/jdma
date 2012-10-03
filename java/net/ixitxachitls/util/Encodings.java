@@ -292,6 +292,40 @@ public final class Encodings
   }
 
   //........................................................................
+  //--------------------------- toCamelCaseCase -----------------------------
+
+  /**
+    * Remove all '_' and ' ' and replace subsequene characters with upper case
+    * letters.
+    *
+    * @param       inText the text to convert
+    *
+    * @return      the converted text
+    *
+    */
+  public static @Nonnull String toCamelCase(@Nonnull String inText)
+  {
+    if(inText.length() == 0)
+      return inText;
+
+    String []split = inText.split("[_ ]");
+
+    if(split.length <= 1)
+      return inText;
+
+    StringBuilder result = new StringBuilder(split[0]);
+
+    for(int i = 1; i < split.length; i++)
+      if(split[i].length() == 1)
+        result.append(Character.toUpperCase(split[i].charAt(0)));
+      else if(split[i].length() > 1)
+        result.append(Character.toUpperCase(split[i].charAt(0))
+                      + split[i].substring(1));
+
+    return result.toString();
+  }
+
+  //........................................................................
   //--------------------------- toWordUpperCase ----------------------------
 
   /**
@@ -300,7 +334,7 @@ public final class Encodings
     *
     * @param       inText the text to convert
     *
-    * @return      the converted text (may be null)
+    * @return      the converted text
     *
     */
   public static @Nonnull String toWordUpperCase(@Nonnull String inText)

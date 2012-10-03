@@ -488,11 +488,13 @@ public @Nonnull String toString()
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e + " / " + e.getCause());
+      e.printStackTrace(System.err);
     }
     catch(java.lang.IllegalAccessException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e + " / " + e.getCause());
+      e.printStackTrace(System.err);
     }
 
     return null;
@@ -521,21 +523,25 @@ public @Nonnull String toString()
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e + " / " + e.getCause());
+      e.printStackTrace(System.err);
     }
     catch(java.lang.reflect.InvocationTargetException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e + " / " + e.getCause());
+      e.printStackTrace(System.err);
     }
     catch(java.lang.InstantiationException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e + " / " + e.getCause());
+      e.printStackTrace(System.err);
     }
     catch(java.lang.IllegalAccessException e)
     {
       Log.error("cannot instantiate entry of type " + m_name + " ["
                 + m_class + "]: " + e + " / " + e.getCause());
+      e.printStackTrace(System.err);
     }
 
     return null;
