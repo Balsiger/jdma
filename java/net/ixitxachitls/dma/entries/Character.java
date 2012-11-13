@@ -434,7 +434,7 @@ public class Character extends CampaignEntry<BaseCharacter>
       if(item == null)
         continue;
 
-      Weight weight = item.getWeight();
+      Weight weight = item.getTotalWeight();
       if(weight != null)
         total = total.add(weight);
     }

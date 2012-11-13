@@ -67,6 +67,8 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+import com.google.appengine.api.datastore.KeyFactory;
+
 public class DataStore
 {
   //--------------------------------------------------------- constructor(s)
@@ -140,7 +142,6 @@ public class DataStore
 
   /** The key for the value containing the last change of an entity. */
   private static final String CHANGE = "change";
-
 
   //........................................................................
 

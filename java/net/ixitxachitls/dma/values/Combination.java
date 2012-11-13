@@ -406,7 +406,7 @@ public class Combination<V extends Value>
   //-------------------------- computeExpressions --------------------------
 
   /**
-   * Compute the value taking all expressions into account.
+   * Compute the value, taking all expressions into account.
    *
    * @param       inValue the value to start from
    *

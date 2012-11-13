@@ -35,7 +35,7 @@ import net.ixitxachitls.output.commands.Command;
 //------------------------------------------------------------------- header
 
 /**
- * This class repretents a selection of one of multiple possible values.
+ * This class repretents a union of one of multiple possible values.
  *
  * @file          Union.java
  *

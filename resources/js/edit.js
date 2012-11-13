@@ -927,7 +927,7 @@ edit.MultiSelection.prototype._createElement = function()
 
       element.append(checkbox);
 
-      if (this._value.contains(value))
+      if (this._value.contains && this._value.contains(value))
         checkbox.find('input').attr('checked', 'checked');
     }
 

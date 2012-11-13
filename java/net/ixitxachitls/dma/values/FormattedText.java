@@ -128,9 +128,9 @@ public class FormattedText extends BaseText<FormattedText>
   //------------------------------ doToString ------------------------------
 
   /**
-   * Convert the value to a string, depending on the given kind.
+   * Convert the value to a string.
    *
-   * @return      a String representation, depending on the kind given
+   * @return      the String representation.
    *
    */
   @Override
@@ -178,7 +178,7 @@ public class FormattedText extends BaseText<FormattedText>
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(@Nonnull ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text = null;

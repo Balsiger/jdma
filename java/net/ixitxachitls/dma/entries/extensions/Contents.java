@@ -563,7 +563,7 @@ public class Contents extends Extension<Item>
         if(item == null)
           continue;
 
-        Weight value = item.getWeight();
+        Weight value = item.getTotalWeight();
         if(value == null)
           continue;
 

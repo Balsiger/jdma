@@ -559,6 +559,26 @@ public final class Strings
   }
 
   //........................................................................
+  //----------------------------- signedNumber -----------------------------
+
+  /**
+   * Print the number with a plus sign if it is not negative.
+   *
+   * @param       the number to print
+   *
+   * @return      the signed string
+   *
+   */
+  public static @Nonnull String signedNumber(long inNumber)
+  {
+    if(inNumber >= 0)
+      return "+" + inNumber;
+
+    return "" + inNumber;
+  }
+
+  //........................................................................
+
 
   //-------------------------------- nameLF --------------------------------
 

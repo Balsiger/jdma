@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -34,10 +35,13 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
+import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -70,17 +74,34 @@ public class Parameters extends Value<Parameters>
    * @param       inValues the key value pairs for the paramers.
    *
    */
-  public Parameters(@Nonnull Map<String, Value> inValues)
+  public Parameters()
   {
-    m_values = Maps.newHashMap();
+  }
 
-    for(Map.Entry<String, Value> entry : inValues.entrySet())
-      m_values.put(entry.getKey().toLowerCase(), entry.getValue());
+  //........................................................................
+  //--------------------------------- with ---------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public Parameters with(@Nonnull String inName, @Nonnull Value inValue,
+                         @Nonnull Type inType)
+  {
+    m_values.put(inName.toLowerCase(Locale.US), inValue);
+    m_types.put(inName.toLowerCase(Locale.US), inType);
+
+    return this;
   }
 
   //........................................................................
 
-  //------------------------------ createNew -------------------------------
+
+  //-------------------------------- create --------------------------------
 
   /**
    * Create a new list with the same type information as this one, but one
@@ -91,11 +112,12 @@ public class Parameters extends Value<Parameters>
    */
   public Parameters create()
   {
-    Map<String, Value> values = Maps.newHashMap();
+    Parameters result = new Parameters();
     for(Map.Entry<String, Value> entry : m_values.entrySet())
-      values.put(entry.getKey(), entry.getValue().create());
+      result.with(entry.getKey(), entry.getValue().create(),
+                  m_types.get(entry.getKey()));
 
-    return super.create(new Parameters(values));
+    return super.create(result);
   }
 
   //........................................................................
@@ -105,10 +127,16 @@ public class Parameters extends Value<Parameters>
   //-------------------------------------------------------------- variables
 
   /** The values read or stored. */
-  protected @Nonnull Map<String, Value> m_values;
+  protected @Nonnull Map<String, Value> m_values = Maps.newHashMap();;
+
+  /** The type of the values stored. */
+  protected @Nonnull Map<String, Type> m_types = Maps.newHashMap();
 
   /** The joiner for printing the map values. */
   private static final Joiner s_joiner = Joiner.on(", ");
+
+  /** The parameter types. */
+  public enum Type { UNIQUE, ADD, MAX, MIN, };
 
   //........................................................................
 
@@ -126,7 +154,29 @@ public class Parameters extends Value<Parameters>
    */
   public @Nullable Value getValue(@Nonnull String inName)
   {
-    return m_values.get(inName);
+    return m_values.get(inName.toLowerCase(Locale.US));
+  }
+
+  //........................................................................
+  //------------------------------ getSummary ------------------------------
+
+  /**
+   * Get a summary for the parameters.
+   *
+   * @return    the parameters summary
+   *
+   */
+  public @Nonnull String getSummary()
+  {
+    if(getValue("summary") != null && getValue("summary").isDefined())
+      return getValue("summary").toString();
+
+    List<String> result = Lists.newArrayList();
+    for(Value value : m_values.values())
+      if(value.isDefined())
+        result.add(value.toString());
+
+    return Strings.SPACE_JOINER.join(result);
   }
 
   //........................................................................
@@ -219,7 +269,7 @@ public class Parameters extends Value<Parameters>
       if (!entry.getValue().isDefined())
         continue;
 
-      values.add(entry.getKey() + " " + entry.getValue().toString());
+      values.add(entry.getKey() + " " + entry.toString());
     }
 
     return s_joiner.join(values);
@@ -268,7 +318,7 @@ public class Parameters extends Value<Parameters>
     for(String key = inReader.expectCase(m_values.keySet(), true); key != null;
         key = inReader.expectCase(m_values.keySet(), true))
     {
-      Value value = m_values.get(key).read(inReader);
+      Value value = getValue(key).read(inReader);
       if(value == null)
       {
         inReader.seek(pos);
@@ -291,6 +341,47 @@ public class Parameters extends Value<Parameters>
   }
 
   //........................................................................
+  //------------------------------- asValues -------------------------------
+
+  /**
+   * Create a new parameter value with the given values for parameters
+   *
+   * @param       inParameters the parameter values to use
+   *
+   * @return      the copied parameter
+   *
+   */
+  public @Nonnull Parameters asValues
+    (@Nullable Map<String, String> inParameters)
+  {
+    if(inParameters == null || inParameters.isEmpty())
+      return this;
+
+    Parameters result = new Parameters();
+    for(Map.Entry<String, Value> entry : m_values.entrySet())
+      result.with(entry.getKey(), entry.getValue(),
+                  m_types.get(entry.getKey()));
+
+    for(Map.Entry<String, String> entry : inParameters.entrySet())
+    {
+      Value value = result.getValue(entry.getKey());
+      if(value == null)
+      {
+        Log.warning("cannot find parameter for " + entry.getKey());
+        continue;
+      }
+
+      value = value.read(entry.getValue());
+      if (value == null)
+        Log.warning("invalid value for " + entry.getKey() + " ignored");
+      else
+        result.with(entry.getKey(), value, result.m_types.get(entry.getKey()));
+    }
+
+    return result;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -308,12 +399,10 @@ public class Parameters extends Value<Parameters>
     @org.junit.Test
     public void init()
     {
-      Parameters parameters =
-        new Parameters(new ImmutableMap.Builder<String, Value>()
-                       .put("a", new Name())
-                       .put("b", new Rational())
-                       .put("c", new Dice())
-                       .build());
+      Parameters parameters = new Parameters()
+        .with("a", new Name(), Type.UNIQUE)
+        .with("b", new Rational(), Type.UNIQUE)
+        .with("c", new Dice(), Type.UNIQUE);
 
       // undefined value
       assertEquals("not undefined at start", false, parameters.isDefined());
@@ -323,11 +412,10 @@ public class Parameters extends Value<Parameters>
                    parameters.format(false).toString());
 
       // now with some parameters
-      parameters = new Parameters(new ImmutableMap.Builder<String, Value>()
-                                  .put("a", new Name())
-                                  .put("b", new Rational(1, 2))
-                                  .put("c", new Dice(1, 3, 2))
-                                  .build());
+      parameters = new Parameters()
+        .with("a", new Name(), Type.UNIQUE)
+        .with("b", new Rational(1, 2), Type.UNIQUE)
+        .with("c", new Dice(1, 3, 2), Type.UNIQUE);
 
       assertEquals("not defined after setting", true, parameters.isDefined());
       assertEquals("value not correctly converted", "b 1/2, c 1d3 +2",
@@ -367,13 +455,10 @@ public class Parameters extends Value<Parameters>
           "partly", "c 1d4 +2, b g, a hello", "c 1d4 +2", ", b g, a hello",
         };
 
-      Value.Test.readTest(tests,
-                          new Parameters
-                          (new ImmutableMap.Builder<String, Value>()
-                           .put("a", new Name())
-                           .put("b", new Rational())
-                           .put("c", new Dice())
-                           .build()));
+      Value.Test.readTest(tests, new Parameters()
+                          .with("a", new Name(), Type.UNIQUE)
+                          .with("b", new Rational(), Type.UNIQUE)
+                          .with("c", new Dice(), Type.UNIQUE));
     }
 
     //......................................................................

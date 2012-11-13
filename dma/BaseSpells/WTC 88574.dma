@@ -1,0 +1,91 @@
+# City of the Spider Queen
+
+#----- Spider Plague
+
+base spell Spider Plague =
+
+  base              Insect Plague;
+  categories        spider;
+  synonyms          "Plague, Spider";
+  references        WTC 88574: 6;
+  short description "Spiders only.";
+  worlds            generic;
+  description
+
+  "Spiders only.".
+
+#.....
+#----- Spiderskin
+
+base spell Spiderskin =
+
+  base              Barkskin;
+  references        WTC 88574: 6;
+  worlds            Forgotten Realms.
+
+#.....
+#----- Summon Monstrous Spider I
+
+base spell Summon Monstrous Spider I =
+
+  base              Summon Monster I;
+  categories        spider, summon;
+  synonyms          "Mounstrous Spider, Summon", "Spider, Summon Monstrous";
+  duration          2 round/level (D);
+  references        WTC 88574: 6;
+  short description "Summon \Monster{small monstrous spider} only, double duration.";
+  summary           "Summon \Monster{small monstrous spider} only for [[$level * 2]] rounds (D).";
+  worlds            Forgotten Realms;
+  description
+
+  "Summon \Monster{small monstrous spider} for double the duration.".
+
+#.....
+#----- Summon Monstrous Spider III
+
+base spell Summon Monstrous Spider III =
+
+  base              Summon Monster III;
+  categories        spider, summon;
+  synonyms          "Mounstrous Spider, Summon", "Spider, Summon Monstrous";
+  duration          2 round/level (D);
+  references        WTC 88574: 6;
+  short description "Summon \Monster{large monstrous spider} only, double duration.";
+  summary           "Summon \Monster{large monstrous spider} only for [[$level * 2]] rounds (D).";
+  worlds            Forgotten Realms;
+  description
+
+  "Summon \Monster{large monstrous spider} for double the duration.".
+
+#.....
+#----- Summon Spider Swarm
+
+base spell Summon Spider Swarm =
+
+  categories        spider;
+  synonyms          "Spider Swarm, Summon", "Swarm, Summon Spider";
+  references        WTC 88574: 6;
+  summary           "Only summons spiders that can't fly";
+  short description "This variant only summons spiders that can't fly.";
+  worlds            Forgotten Realms;
+  description
+
+  "This variant only summons spiders that can't fly.".
+
+#.....
+#----- Wall of Webs
+
+base spell Wall of Webs =
+
+  base              Wall of Iron;
+  categories        web, spider;
+  synonyms          "Webs, Wall of";
+  references        WTC 88574: 6;
+  short description "A wall made of concentrated webbing.";
+  summary           "Create 2 inch wall of webs with $level 5 ft squares with 30 hp per 2 inch and hardness 10.";
+  worlds            generic;
+  description
+
+  "A wall made of concentrated webbing.".
+
+#.....

@@ -401,19 +401,24 @@
 
   <!-- clean everything -->
   <target name="clean-all"
-          depends="clean, clean-dist, clean-coverage"
+          depends="clean, clean-data, clean-dist, clean-coverage"
           description="call all clean targets" >
   </target>
 
   <!-- clean the build -->
   <target name ="clean"
           description="clean up the build directories" >
-    <delete dir="${build.dir}" followsymlinks="false" includeemptydirs="true"
+    <delete dir="${classes.dir}" followsymlinks="false" includeemptydirs="true"
             removeNotFollowedSymlinks="true"/>
     <delete>
       <fileset dir="${basedir}" defaultexcludes="no"
                includes="**/*.class, **/*~, **/#*#, **/.#*, **/default.log"/>
     </delete>
+  </target>
+
+  <!-- clean the build -->
+  <target name ="clean-data"
+          description="clean up the build directories" >
     <!-- copy the base data back -->
     <mkdir dir="${webinf.dir}/appengine-generated" />
     <copy todir="${webinf.dir}/appengine-generated">

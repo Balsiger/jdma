@@ -1,0 +1,192 @@
+# Forgotten Realms Campaign Setting
+
+#----- Aganazzar's Scorcher
+
+base spell Aganazzar's Scorcher =
+
+  summary           "5 th path of flames from caster to [[25 + (($level / 2) * 5)]] ft away, [[min(5, $level / 2)]]d8 fire damage.";
+  school            Evocation;
+  descriptor        Fire;
+  level             Sorcerer 2, Wizard 2;
+  components        Verbose, Somatic, Focus;
+  casting time      1 standard action;
+  range             Close;
+  target            "5 ft path to close range";
+  duration          Instantaneous;
+  saving throw      Reflex Half;
+  spell resistance  Yes;
+  worlds            Forgotten Realms;
+  references        WTC 11836: 66;
+  description
+  "A jet of roaring flame bursts from your outstretched hand, scorching any
+  creature in a 5-foot-wide path to the edge of the spell's
+  range. \Spell{Aganazzar's Scorcher} deals 1d8 points of damage per two caster
+  levels, to a maximum of 5d8 points of damage.
+
+  \emph{Focus}: A red dragon scale.";
+  short description "Create a burst of roarding flames.".
+
+#.....
+#----- Spiderform
+
+base spell Spiderform =
+
+  summary           "Polymorph yourself into a driver, tiny, small, medium or large monstrous spider for $level hours (D), gaining hp as a day's rest when doing so.";
+  school            Transmutation;
+  descriptor        Mind-affecting;
+  level             Drow 5;
+  components        Verbose, Somatic, Divine Focus;
+  casting time      1 standard action;
+  range             Personal;
+  target            "You";
+  duration          1 hour/level (D);
+  worlds            Forgotten Realms;
+  references        WTC 11836: 74;
+  description
+  "You can polymorph into a drider or Tiny, Small, Medium-size, or Large
+  monstrous spider (see the Monster Manual). You regain lost hit points as if
+  you rested for a day on the initial transformation. The spell lasts until you
+  decide to resume your normal shape.
+
+  You acquire the physical and natural abilities of the creature you polymorph
+  into, including natural size, Strength, Dexterity, and Constitution scores,
+  armor, attack routines, and movement capabilities.
+
+  Unlike \Spell{Polymorph Self}, you acquire the poisonous bite and
+  web-spinning ability of whichever spider you chose. You do not suffer any
+  disorientation.
+
+  You retain your Intelligence, Wisdom, and Charsima scores, level and class,
+  hit points (despite the change in Constitution score), alignment, base attack
+  bonus, and base saves. (New Strength, Dexterity, and Constitution scores may
+  affect final attack and save bonuses.) You can cast spells and use magic
+  items if you choose drider form, but no other spider form is capable of
+  spellcasting or manipulating devices.
+
+  If you chose drider form, your equipment remains and continues to function as
+  long as it fits a drider's body shape. Retained items include anything worn
+  on the upper body (head, neck, shoulders, hands, arms, and waist). Otherwise
+  your equipment is subsumed into the new form and ceases to function for the
+  duration of the spell.";
+  short description "You can polymorph into a driver or tiny, small, medium-size, or Large monstrous spider.".
+
+#.....
+#----- Thunderlance
+
+base spell Thunderlance =
+
+  summary           "";
+  school            Evocation;
+  descriptor        Force;
+  level             Sorcerer 4, Wizard 4;
+  components        Verbose, Somatic, Material;
+  casting time      1 standard action;
+  range             0 ft;
+  effect            "A spearlike beam";
+  duration          1 round/level (D);
+  saving throw      None;
+  spell resistance  Yes;
+  worlds            Forgotten Realms;
+  references        WTC 11836: 75;
+  description
+  "A faint, gray, shimmering force in the general shape of a staff or spear
+  springs from your hand. You can freely make force retract or grow to any size
+  from 1 foot to 20 feet, but it always remains a straight line of force. This
+  gives you a natural reach of 20. You can use the \Spell{thunderlance} to make
+  powerful meleet attacks.
+
+  The \Spell{thunderlance} strikes as a Huge \Item{longspear}, dealing a base
+  2d6 points of damage (crit x3). You only need one hand to wield the
+  \Spell{thunderlance}, and you suffer no nonproficiency penalties if you do
+  not have Martial Weapon Proficiency (longspear). The \Spell{thunderlance}
+  strikes with a Strength score equal to 12 + your caster level (maximum 15)
+  which replaces your own Strength score when you make attack and damage rolls
+  with the spell.
+
+  If you successfully strike a target protected by any force effect of 3rd
+  level or lower, such as a \Spell{shield} or \Spell{mage armor} spell, the
+  \Spell{thunderlance} may dispel the force effect in addition to damaging the
+  target. Make a dispel check against the caster who created the effect. If you
+  succeed, the effect is dispelled. The \Spell{thunderlance} remains whether
+  you succeed or fail this check.
+
+  You can choose to attack objects or use the Strength score of
+  \Spell{thunderlance} for Strength scores involving breaking or damaging
+  items.
+
+  Magical Components: A small metal spear.";
+  short description "".
+
+#.....
+#----- Grimwald's Graymantle
+
+base spell Grimwald's Graymantle =
+
+  categories        heal, hinder, prevent;
+  synonyms          "Graymantle, Grimwald's";
+  school            Necromancy;
+  level             Sor 5, Wiz 5;
+  casting time      1 standard action;
+  components        V, S, M;
+  range             Medium;
+  target            "One creature";
+  duration          1 round/level;
+  saving throw      Fortitude negates;
+  spell resistance  Yes;
+  references        WTC 11836: 71;
+  summary           "For DC $dc or for $level rounds a creature [[100 + (10 * $level)]] ft away hit cannot benefit from any healing spells or items.";
+  short description "Prevent target creature from benefit from healing.";
+  worlds            Forgotten Realms;
+  description
+
+  "You imbue a skull or bone with a pale gray radiance and then hurl (or touch)
+  the skull or bone to hit a target creature. You can attack with the skull on
+  the round you cast the spell, but otherwise it is a standard action.
+
+  If the skull or bone hits the target, the gray radiance is transferred from
+  the skull to the creature, covering it entirely. For the duration of the
+  spell, the creature cannot regain hit points or ability score points by any
+  means. Nor can the creature remove negative levels. Natural regeneration
+  (such as that of \Monster{trolls}) is stopped, as are the effects of a
+  \Item{ring of regeneration}, \Item{potion of healing}, or \Item{staff of
+  caring}. Spells that return lost hit points (\Spell{cure light wounds},
+  \Spell{heal}) do not work on that individual. Other necromantic spells
+  function normally, including those that cure afflictions (\Spell{disease},
+  \Spell{blindness}). Those that remove hit points (\Spell{cause light wounds})
+  are unaffected by the spell. The subject can improve his current hit points
+  by boosting his Constitution score and can receive temporary hit points (from
+  an \Spell{aid} spell, for example).
+
+  Upon the experiation of the spell, automatic healing abilities and items such
+  as a \Item{ring of regeneration} or a \Monster{troll}'s regeneration ability
+  begin to function again.
+
+  \emph{Material Component:} The skull or bone used.".
+
+#.....
+#----- Snilloc's Snowball Swarm
+
+base spell Snilloc's Snowball Swarm =
+
+  categories        cold, snow, swarm;
+  synonyms          "Snowball Swarm, Snilloc's", "Swarm, Snilloc's Snowball";
+  school            Evocation;
+  descriptor        cold;
+  casting time      1 standard action;
+  components        v, s, m;
+  range             medium;
+  effect            "10-ft radius burst";
+  duration          instantaneous;
+  saving throw      reflex half;
+  spell resistance  yes;
+  references        WTC 11836: 74;
+  summary           "Flurry of snowballs in a 10 ft burst within [[50 + ($level * 5)]] ft deals [[min(5, 1 + ($level / 2))]]d6 cold damage (Ref $dc for half).";
+  short description "Throw a flurry of snowballs in a burst.";
+  worlds            Forgotten Realms;
+  description
+
+  "A flurry of magic snowballs erupts from a point you select. The swarm of snowballs deals 2d6 points of cold damage to creatures and objects within the burst. For every two caster levels beyond 3rd, the swnoball deals and extra die of damage, to a maximum of 5d6 at 9th level or higher.
+
+  Material Component: A piece of ice or a small white rock chip.".
+
+#.....

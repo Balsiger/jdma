@@ -282,13 +282,13 @@
       {param url: '/items/distances/' + $value.group /}
       {param text: $value.raw /}
     {/call}
-    <div class="explanation">
+    <span class="explanation">
       {if $value.isMetric}
         {$value.asFeet |raw}
       {else}
         {$value.asMetric |raw}
       {/if}
-    </div>
+    </span>
   </span>
 {/template}
 
@@ -375,9 +375,11 @@
   {if $value.getType}
     {sp}{$value.getType}
   {/if}
+  /*
   {if $value.effect}
     {sp}{$value.effect}
   {/if}
+  */
   {if $value.next}
     {sp}{$value.next.print}
   {/if}
@@ -684,7 +686,7 @@
 {template .modifiednumber}
   <span class="windowed">
     <span class="window base">
-      Modifier: {$value.modifier |print}<br /><br />
+      {if $value.modifier}Modifier: {$value.modifier |print}<br /><br />{/if}
       {foreach $name in keys($value.modifiers)}
         <span class="base-value">{$value.modifiers[$name] |print}</span>
         {sp} from {$name}

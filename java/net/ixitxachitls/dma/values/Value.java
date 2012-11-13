@@ -858,7 +858,8 @@ public abstract class Value<T extends Value>
    */
   public @Nonnull T add(@Nonnull T inValue)
   {
-    throw new UnsupportedOperationException("cannot add " + getClass());
+    throw new UnsupportedOperationException
+      ("cannot add " + getClass() + " for " + this);
   }
 
   //........................................................................

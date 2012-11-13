@@ -49,6 +49,7 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Classes;
+import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.errors.BaseError;
 import net.ixitxachitls.util.logging.Log;
 
@@ -319,6 +320,11 @@ public class SoyEntry extends SoyMapData
 
     if(inValue instanceof Multimap)
       return convert(inName, ((Multimap)inValue).asMap());
+
+    if(inValue instanceof Pair)
+      return new SoyMapData
+        ("first", convert(inName, ((Pair)inValue).first()),
+         "second", convert(inName, ((Pair)inValue).second()));
 
     if(inValue instanceof Long)
       return IntegerData.forValue(((Long)inValue).intValue());

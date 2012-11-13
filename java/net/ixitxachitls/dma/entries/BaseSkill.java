@@ -65,7 +65,7 @@ public class BaseSkill extends BaseEntry
   /** The possible sizes in the game. */
   public enum Subtype implements EnumSelection.Named
   {
-    /** Fortitude. */
+    /** Any sub type. */
     ANY_ONE("Any One");
 
     /** The value's name. */

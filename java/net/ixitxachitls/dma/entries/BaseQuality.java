@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -39,11 +40,14 @@ import com.google.common.collect.Multimap;
 // import net.ixitxachitls.output.commands.Textblock;
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 // import net.ixitxachitls.dma.values.formatters.LinkFormatter;
@@ -372,6 +376,99 @@ public class BaseQuality extends BaseEntry
   }
 
   //........................................................................
+  //------------------------- computeSkillModifier -------------------------
+
+  /**
+   * Get a modifier for a skill.
+   *
+   * @param       inName the name of the skill to modify
+   * @param       inParameters the parameters for the skill
+   *
+   * @return      the modifier, if any
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable Modifier computeSkillModifier
+    (@Nonnull String inName, @Nonnull Parameters inParameters)
+  {
+    Modifier result = null;
+
+    for(Multiple effect : m_effects)
+      if(((EnumSelection<Affects>)effect.get(0)).getSelected() == Affects.SKILL
+         && inName.equalsIgnoreCase(effect.get(1).toString()))
+        result =
+          computeModifierExpression((Modifier)effect.get(2), inParameters)
+          .as(result);
+
+    return result;
+  }
+
+  private @Nullable Modifier computeModifierExpression
+    (@Nonnull Modifier inModifier, @Nonnull Parameters inParameters)
+  {
+    if(inModifier == null)
+      return null;
+
+    Modifier next =
+      computeModifierExpression(inModifier.getNext(), inParameters);
+
+    if(inModifier.getExpression() instanceof Expression.Expr)
+    {
+      System.out.println("parameters: " + inParameters);
+      return inModifier.as(Integer.valueOf
+                           (computeExpressions(((Expression.Expr)
+                                                inModifier.getExpression())
+                                               .getText(), inParameters)
+                            .replace('+', '0')),
+                           inModifier.getType(), inModifier.getCondition(),
+                           next);
+    }
+
+    return inModifier.as(next);
+  }
+
+  //........................................................................
+  //--------------------------- addContributions ---------------------------
+
+  /**
+   * Add contributions for this entry to the given list.
+   *
+   * @param       inName          the name of the value to contribute to
+   * @param       ioContributions the list of contributions to add to
+   *
+   */
+  @SuppressWarnings("unchecked")
+  //@Override
+  public void addContributions
+    (@Nonnull String inName,
+     @Nonnull List<Contribution<? extends Value>> ioContributions,
+     // TODO: remove the parameters and handle this in a quality!
+     @Nonnull Parameters inParameters)
+  {
+    addContributions(inName, ioContributions);
+
+    for(Multiple multiple : m_effects)
+    {
+      Affects affects = ((EnumSelection<Affects>)multiple.get(0)).getSelected();
+      if(("fortitude save".equals(inName) && affects == Affects.FORTITUDE_SAVE)
+         || ("reflex save".equals(inName) && affects == Affects.REFLEX_SAVE)
+         || ("will save".equals(inName) && affects == Affects.WILL_SAVE))
+      {
+        Modifier modifier = (Modifier)multiple.get(2);
+        ioContributions.add
+          (new Contribution
+           (modifier.as
+            (Integer.valueOf(computeExpressions
+                             (((Expression.Expr)modifier.getExpression())
+                              .getText(), inParameters).replace('+', '0')),
+             modifier.getType(), modifier.getCondition(), null),
+            this, null));
+      }
+    }
+  }
+
+  //........................................................................
+
   //--------------------------------- isDM ---------------------------------
 
   /**

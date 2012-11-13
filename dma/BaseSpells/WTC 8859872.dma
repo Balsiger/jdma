@@ -1,0 +1,72 @@
+# Spell Compendium
+
+#----- Lesser Vigor
+
+base spell Lesser Vigor =
+
+  synonyms          "Vigor, Lesser";
+  school            Conjuration (Healing);
+  level             Cleric 1, Druid 1;
+  casting time      1 standard action;
+  components        verbose, somatic;
+  range             Touch;
+  target            "Living creature touched";
+  duration          1 round/level + 10 rounds "(max 15 rounds)";
+  saving throw      Will negates (harmless);
+  spell resistance  Yes (harmless);
+  references        WTC 8859872: 229;
+  short description "Target gains Fast Healing 1";
+  worlds            generic;
+  description
+
+  "\emph{The sounds of battle ring in your ears as you lay hands on your fallen
+  comrade. You can spare neither time nor magic to do more right now, but the
+  blood flow slows to a trickle and her breathing becomes less labored, even
+  as you are called to the aid of another.}
+
+  The subject gains fast healing 1, enabling it to heal 1 hit point per round
+  until the spell ends and automatically becoming stabilized if it begins dying
+  from hit point loss during that time.  Lesser vigor does not restore hit
+  points lost from starvation, thirst, or suffocation, nor does it allow a
+  creature to regrow or attach lost body parts.  The effects of multiple vigor
+  spells do not stack; only the highest-level effect applies.".
+
+#.....
+#----- Cloak of Dark Power
+
+base spell Cloak of Dark Power =
+
+  categories        dark, cloak, power;
+  synonyms          "Dark Power, Cloak of", "Power, Cloak of Dark";
+  school            Abjuration;
+  level             Drow 1;
+  casting time      1 standard action;
+  components        v, s;
+  range             touch;
+  target            "Creature touched";
+  duration          1 minute/level;
+  saving throw      Will negates (harmless);
+  spell resistance  Yes (harmless);
+  references        WTC 8859872: 48;
+  short description "Gives immunity to sunlight, +4 resistance to saves against light or darkness spells or effects.";
+  summary           "For $level minutes gain immunity to sunlight and +4 resistance to saves vs. light or darkness spells or effects.";
+  worlds            generic;
+  description
+
+  "A dim gray haze appears around the creature. Light bends around this haze,
+  leaving the creature in a patch of strange and shifting darkness.
+
+  Cloak of dark power creates a dusky haze around the subject. The haze does
+  not interfere with vision, but the subject and anything it wears or carries is
+  protected from the effects of full sunlight, even under the open, daytime sky
+  of the surface world. A drow subject suffers no blindness or bright
+  illumination combat penalties while under the effect of cloak of dark power.
+
+  The subject also gains a +4 resistance bonus on saves against light or
+  darkness spells or effects.".
+
+#.....
+
+
+
+

@@ -24,16 +24,19 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
@@ -45,6 +48,7 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Reference;
@@ -874,7 +878,7 @@ public class BaseMonster extends BaseEntry
   };
 
   //........................................................................
-  //----- alignment modifier -----------------------------------------------
+  //----- alignment status -------------------------------------------------
 
   /** The possible alignment modifiers in the game. */
   public enum AlignmentStatus implements EnumSelection.Named
@@ -1096,7 +1100,7 @@ public class BaseMonster extends BaseEntry
     REFLEX("Reflex", "Ref"),
 
     /** Wisdom. */
-    WISDOM("Widsom", "Wis");
+    WISDOM("Wisdom", "Wis");
 
     /** The value's name. */
     private @Nonnull String m_name;
@@ -1166,7 +1170,7 @@ public class BaseMonster extends BaseEntry
     INTELLIGENCE("Intelligence", "Int"),
 
     /** Wisdom. */
-    WISDOM("Widsom", "Wis"),
+    WISDOM("Wisdom", "Wis"),
 
     /** Charisma. */
     CHARISMA("Charisma", "Cha"),
@@ -1374,10 +1378,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- base attack ------------------------------------------------------
 
-  /** The formatter for base attacks. */
-  // protected static ValueFormatter<Number> s_baseAttackFormatter =
-  //   new LinkFormatter<Number>("/index/baseattacks/");
-
   /** The base attack bonus. */
   @Key("base attack")
   protected Number m_attack = new Number(-1, 100, true);
@@ -1389,10 +1389,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- strength ---------------------------------------------------------
-
-  /** The strength formatter. */
-  // protected static ValueFormatter<Number> s_strengthFormatter =
-  //   new LinkFormatter<Number>("/index/strengths/");
 
   /** The monster's Strength. */
   @Key("strength")
@@ -1406,10 +1402,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- dexterity --------------------------------------------------------
 
-  /** The dexterity formatter. */
-  // protected static ValueFormatter<Number> s_dexterityFormatter =
-  //   new LinkFormatter<Number>("/index/dexterities/");
-
   /** The monster's Dexterity. */
   @Key("dexterity")
   protected Number m_dexterity = new Number(-1, 100, false);
@@ -1421,10 +1413,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- constitution -----------------------------------------------------
-
-  /** The constitution formatter. */
-  // protected static ValueFormatter<Number> s_constitutionFormatter =
-  //   new LinkFormatter<Number>("/index/constitutions/");
 
   /** The monster's Constitution. */
   @Key("constitution")
@@ -1438,10 +1426,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- intelligence -----------------------------------------------------
 
-  /** The intelligence formatter. */
-  // protected static ValueFormatter<Number> s_intelligenceFormatter =
-  //   new LinkFormatter<Number>("/index/inteligences/");
-
   /** The monster's Intelligence. */
   @Key("intelligence")
   protected Number m_intelligence = new Number(-1, 100, false);
@@ -1453,10 +1437,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- wisdom -----------------------------------------------------------
-
-  /** The wisdom formatter. */
-  // protected static ValueFormatter<Number> s_wisdomFormatter =
-  //   new LinkFormatter<Number>("/index/wisdoms/");
 
   /** The monster's Wisdom. */
   @Key("wisdom")
@@ -1470,10 +1450,6 @@ public class BaseMonster extends BaseEntry
   //........................................................................
   //----- charisma ---------------------------------------------------------
 
-  /** The charisma formatter. */
-  // protected static ValueFormatter<Number> s_charismaFormatter =
-  //   new LinkFormatter<Number>("/index/strengths/");
-
   /** The monster's Charisma. */
   @Key("charisma")
   protected Number m_charisma = new Number(-1, 100, false);
@@ -1481,6 +1457,42 @@ public class BaseMonster extends BaseEntry
   static
   {
     addIndex(new Index(Index.Path.CHARISMAS, "Charismas", TYPE));
+  }
+
+  //........................................................................
+  //----- fortitude save ---------------------------------------------------
+
+  /** The monster's Charisma. */
+  @Key("fortitude save")
+  protected Number m_fortitudeSave = new Number(-1, 100, true);
+
+  static
+  {
+    addIndex(new Index(Index.Path.FORTITUDE_SAVES, "Fortitude Saves", TYPE));
+  }
+
+  //........................................................................
+  //----- will save --------------------------------------------------------
+
+  /** The monster's Charisma. */
+  @Key("will save")
+  protected Number m_willSave = new Number(-1, 100, true);
+
+  static
+  {
+    addIndex(new Index(Index.Path.WILL_SAVES, "Will Saves", TYPE));
+  }
+
+  //........................................................................
+  //----- reflex save ------------------------------------------------------
+
+  /** The monster's Charisma. */
+  @Key("reflex save")
+  protected Number m_reflexSave = new Number(-1, 100, true);
+
+  static
+  {
+    addIndex(new Index(Index.Path.REFLEX_SAVES, "Reflex Saves", TYPE));
   }
 
   //........................................................................
@@ -1583,18 +1595,24 @@ public class BaseMonster extends BaseEntry
     (", ",
      new Multiple(new Multiple.Element []
        {
-         new Multiple.Element(new Reference<BaseQuality>(BaseQuality.TYPE)
-                              .withParameters(new ImmutableMap.Builder
-                                              <String, Value>()
-                                              .put("Range", new Distance())
-                                              .put("Name", new Name())
-                                              .put("Level", new Number(1, 100))
-                                              .put("Value", new Number(1, 100))
-                                              .put("Modifier", new Modifier())
-                                              .put("Dice", new Dice())
-                                              .put("Times", new Number(1, 100))
-                                              .build())
-                              .withTemplate("reference", "/quality/"), false),
+         new Multiple.Element
+         (new Reference<BaseQuality>(BaseQuality.TYPE)
+          .withParameter("Range", new Distance(), Parameters.Type.MAX)
+          .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
+          .withParameter("Summary", new Name(), Parameters.Type.ADD)
+          .withParameter("Level", new Number(1, 100), Parameters.Type.ADD)
+          .withParameter("Value", new Number(1, 100), Parameters.Type.ADD)
+          .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
+          .withParameter("Dice", new Dice(), Parameters.Type.ADD)
+          .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
+          .withParameter("Class", new EnumSelection<BaseSpell.SpellClass>
+                         (BaseSpell.SpellClass.class), Parameters.Type.UNIQUE)
+          .withParameter("DC", new Number(0, 100), Parameters.Type.MAX)
+          .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
+          .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
+          .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
+          .withParameter("Damage", new Damage(), Parameters.Type.ADD)
+          .withTemplate("reference", "/quality/"), false),
          new Multiple.Element(new Number(1, 100)
                               .withEditType("name[per day]"), true, "/", null)
        }));
@@ -1608,18 +1626,17 @@ public class BaseMonster extends BaseEntry
     (", ",
      new Multiple(new Multiple.Element []
        {
-         new Multiple.Element(new Reference<BaseQuality>(BaseQuality.TYPE)
-                              .withParameters(new ImmutableMap.Builder
-                                              <String, Value>()
-                                              .put("Range", new Distance())
-                                              .put("Name", new Name())
-                                              .put("Level", new Number(1, 100))
-                                              .put("Racial",
-                                                   new Number(-50, 50, true))
-                                              .put("Value", new Number(0, 100))
-                                              .put("Modifier", new Modifier())
-                                              .build())
-                              .withTemplate("reference", "/quality/"), false),
+         new Multiple.Element
+         (new Reference<BaseQuality>(BaseQuality.TYPE)
+          .withParameter("Range", new Distance(), Parameters.Type.MAX)
+          .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
+          .withParameter("Summary", new Name(), Parameters.Type.ADD)
+          .withParameter("Level", new Number(1, 100), Parameters.Type.ADD)
+          .withParameter("Racial",
+                         new Number(-50, 50, true), Parameters.Type.ADD)
+          .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
+          .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
+          .withTemplate("reference", "/quality/"), false),
          new Multiple.Element(new Condition()
                               .withEditType("string[condition]"),
                               true, " if ", null),
@@ -1638,12 +1655,10 @@ public class BaseMonster extends BaseEntry
       {
         new Multiple.Element
         (new Reference<BaseSkill>(BaseSkill.TYPE)
-         .withParameters(new ImmutableMap.Builder
-                         <String, Value>()
-                         .put("Subtype",
-                              new EnumSelection<BaseSkill.Subtype>
-                              (BaseSkill.Subtype.class))
-                         .build()), false),
+         .withParameter("Subtype",
+                        new EnumSelection<BaseSkill.Subtype>
+                        (BaseSkill.Subtype.class), Parameters.Type.UNIQUE),
+         false),
         new Multiple.Element(new Number(0, 100, true)
                              .withEditType("number[modifier]"),
                              false, ": ", null),
@@ -1656,9 +1671,7 @@ public class BaseMonster extends BaseEntry
   @Key("feats")
   protected ValueList<Reference> m_feats = new ValueList<Reference>
     (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
-     .withParameters(new ImmutableMap.Builder<String, Value>()
-                     .put("Name", new Name())
-                     .build()));
+     .withParameter("Name", new Name(), Parameters.Type.UNIQUE));
 
   //........................................................................
   //----- environment ------------------------------------------------------
@@ -1687,7 +1700,7 @@ public class BaseMonster extends BaseEntry
       {
         new Multiple.Element(new EnumSelection<Organization>(Organization.ANY),
                              false),
-        new Multiple.Element(new Dice().withEditType("dice[number]"), false),
+        new Multiple.Element(new Dice().withEditType("dice[number]"), true),
         new Multiple.Element(new ValueList<Multiple>
                              (", ",
                               new Multiple(new Multiple.Element []
@@ -1739,11 +1752,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //----- alignment --------------------------------------------------------
-
-  /** The formatter for the treasure. */
-  // protected static ValueFormatter<EnumSelection<Alignment>>
-  //   s_alignmentFormatter =
-  //   new LinkFormatter<EnumSelection<Alignment>>("/index/alignments/");
 
   /** The monster's alignment. */
   @Key("alignment")
@@ -1873,7 +1881,6 @@ public class BaseMonster extends BaseEntry
   protected ValueList<EnumSelection<Save>> m_goodSaves =
     new ValueList<EnumSelection<Save>>(new EnumSelection<Save>(Save.class),
                                        ", ");
-
   //........................................................................
 
   /** The feats entries. */
@@ -2084,6 +2091,85 @@ public class BaseMonster extends BaseEntry
   // {
   //   return m_featEntries.iterator();
   // }
+
+  //........................................................................
+  //----------------------- collectSpecialQualities ------------------------
+
+  /**
+   * Get the special qualities for this and all base monsters.
+   *
+   * @return  a list of base qualities
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast multiple part
+  public @Nonnull List<Reference<BaseQuality>> collectSpecialQualities()
+  {
+    List<Reference<BaseQuality>> qualities = Lists.newArrayList();
+
+    for(Multiple quality : m_specialQualities)
+      qualities.add((Reference<BaseQuality>)quality.get(0));
+
+    for(BaseEntry base : getBaseEntries())
+    {
+      if(!(base instanceof BaseMonster))
+        continue;
+
+      qualities.addAll(((BaseMonster)base).collectSpecialQualities());
+    }
+
+    return qualities;
+  }
+
+  //........................................................................
+  //----------------------------- collectFeats -----------------------------
+
+  /**
+   * Collect the feats by entry.
+   *
+   * @param       ioFeats the feats store
+   *
+   */
+  public void collectFeats(@Nonnull Multimap<Reference, String> ioFeats)
+  {
+    for(Reference feat : m_feats)
+      ioFeats.put(feat, getName());
+
+    for(BaseEntry base : getBaseEntries())
+      if(base instanceof BaseMonster)
+        ((BaseMonster)base).collectFeats(ioFeats);
+  }
+
+  //........................................................................
+  //--------------------------- addContributions ---------------------------
+
+  /**
+   * Add contributions for this entry to the given list.
+   *
+   * @param       inName          the name of the value to contribute to
+   * @param       ioContributions the list of contributions to add to
+   *
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void addContributions
+    (@Nonnull String inName,
+     @Nonnull List<Contribution<? extends Value>> ioContributions)
+  {
+    super.addContributions(inName, ioContributions);
+
+    for(Multiple multiple : m_specialQualities)
+    {
+      Reference<BaseQuality> reference =
+        (Reference<BaseQuality>)multiple.get(0);
+      BaseQuality quality = reference.getEntry();
+
+      if(quality == null)
+        continue;
+
+      quality.addContributions(inName, ioContributions,
+                               reference.getParameters());
+    }
+  }
 
   //........................................................................
 

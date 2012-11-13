@@ -40,12 +40,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.ModifiedNumber;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Number;
@@ -773,7 +775,6 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
-
   //---------------------------- addModifiers ------------------------------
 
   /**
@@ -802,6 +803,46 @@ public abstract class ValueGroup implements Changeable
   public List<BaseEntry> getBaseEntries()
   {
     return new ArrayList<BaseEntry>();
+  }
+
+  //........................................................................
+  //------------------------- collectContributions -------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull List<Contribution<? extends Value>> collectContributions
+    (@Nonnull String inName)
+  {
+    List<Contribution<? extends Value>> contributions = Lists.newArrayList();
+
+    addContributions(inName, contributions);
+
+    return contributions;
+  }
+
+  //........................................................................
+  //--------------------------- addContributions ---------------------------
+
+  /**
+   * Add contributions for this entry to the given list.
+   *
+   * @param       inName          the name of the value to contribute to
+   * @param       ioContributions the list of contributions to add to
+   *
+   */
+  public void addContributions
+    (@Nonnull String inName,
+     @Nonnull List<Contribution<? extends Value>> ioContributions)
+  {
+    Value v = getValue(inName);
+    if(v != null && v.isDefined())
+      ioContributions.add(new Contribution<Value>(v, this, null));
   }
 
   //........................................................................

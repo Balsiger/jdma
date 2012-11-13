@@ -629,6 +629,13 @@ IMG.item-image
 
 DIV.summary
 {
+  width: 400px;
+}
+
+DIV.summary p
+{
+  padding: 2px 0 0 0;
+  margin: 0;
 }
 
 DIV.summary H1
@@ -637,6 +644,39 @@ DIV.summary H1
   border: none;
   padding: 0;
   margin: 0 0 5px 0;
+}
+
+DIV.summary DIV.abilities
+{
+  margin-top: 10px;
+  font-size: small;
+}
+
+DIV.abilities DIV.ability
+{
+  padding: 1px;
+}
+
+DIV.ability DIV.ability-title
+{
+  background-color: $color_Quality;
+  color: white;
+  padding: 3px;
+  text-align: center;
+  border-left: 1px solid $color_Quality;
+  border-right: 1px solid $color_Quality;
+  border-top: 1px solid $color_Quality;
+  -webkit-print-color-adjust: exact;
+}
+
+DIV.ability DIV.ability-text
+{
+  background: #ddd;
+  padding: 3px;
+  border-left: 1px solid #131210;
+  border-right: 1px solid #131210;
+  border-bottom: 1px solid #131210;
+  -webkit-print-color-adjust: exact;
 }
 
 /******************************************************************************
@@ -857,6 +897,13 @@ A.library-title.type-image
 {
   color:            white;
   background-color: $color_Skill;
+}
+
+.value.base-spell .value-label-container,
+.value.spell .value-label-container
+{
+  color:            white;
+  background-color: $color_Spell;
 }
 
 /******************************************************************************

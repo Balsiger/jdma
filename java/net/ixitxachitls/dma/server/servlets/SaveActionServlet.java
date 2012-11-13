@@ -335,6 +335,7 @@ public class SaveActionServlet extends ActionServlet
         // We have to get the store for the entry before saving, as saving can
         // change the name.
         CampaignEntry store = stores.get(entry.getName());
+        System.out.println("store: " + store);
         if(entry.save())
         {
           saved.add(Encodings.escapeJS(entry.getType().toString()) + " "
@@ -352,6 +353,7 @@ public class SaveActionServlet extends ActionServlet
         path = Encodings.toJSString(entries.iterator().next().getPath());
     }
 
+    System.out.println("path: " + path);
     return
       (errors.isEmpty() ? "" : "gui.alert('Parse error for values');")
       + (saved.isEmpty() ? ""

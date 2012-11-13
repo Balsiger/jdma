@@ -97,6 +97,31 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
   }
 
   //........................................................................
+  //----------------------------- withParameter ----------------------------
+
+  /**
+   * Add parameters to the object. Should only be called when constructing.
+   *
+   * @param       inName     the parameter name
+   * @param       inValue    the parameter value
+   * @param       inType     the parameter type
+   *
+   * @return      the object for chaining
+   *
+   */
+  public Reference<T> withParameter(@Nonnull String inName,
+                                    @Nonnull Value inValue,
+                                    @Nonnull Parameters.Type inType)
+  {
+    if(m_parameters == null)
+      m_parameters = new Parameters();
+
+    m_parameters.with(inName, inValue, inType);
+
+    return this;
+  }
+
+  //........................................................................
   //---------------------------- withParameters ----------------------------
 
   /**
@@ -107,10 +132,10 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
    * @return      the object for chaining
    *
    */
-  public Reference<T> withParameters(@Nonnull Map<String, Value> inParameters)
-  {
-    return withParameters(new Parameters(inParameters));
-  }
+  // public Reference<T> withParameters(@Nonnull Map<String, Value> inParameters)
+  // {
+  //   return withParameters(new Parameters(inParameters));
+  // }
 
   //........................................................................
   //---------------------------- withParameters ----------------------------
@@ -211,16 +236,41 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
   /**
    * Get the summary for the reference.
    *
+   * @param       a map with all the parameters to use for the reference
+   *
    * @return      the string with the summary
    *
    */
-  public @Nonnull String summary()
+  public @Nonnull String summary(@Nullable Map<String, String> inParameters)
   {
     resolve();
     if(m_entry == null)
       return "(unknown)";
 
+    return m_entry.getSummary(m_parameters.asValues(inParameters));
+  }
+
+  public @Nonnull String summary() {
+    resolve();
+    if(m_entry == null)
+      return "(unknown)";
+
     return m_entry.getSummary(m_parameters);
+  }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the entry that is referenced.
+   *
+   * @return  the referenced entry or null if it could not be found
+   *
+   */
+  public @Nullable T getEntry()
+  {
+    resolve();
+    return m_entry;
   }
 
   //........................................................................

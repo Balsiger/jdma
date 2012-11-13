@@ -186,7 +186,6 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
-
   //------------------------------- Modifier -------------------------------
 
   /**
@@ -226,7 +225,24 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //------------------------------- withNext -------------------------------
 
+  /**
+   * Set the next modifier in the chain.
+   *
+   * @param       inNext the next modifier
+   *
+   * @return      this modifier for chaining
+   *
+   */
+  public @Nonnull Modifier withNext(@Nullable Modifier inNext)
+  {
+    m_next = inNext;
+
+    return this;
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -359,6 +375,34 @@ public class Modifier extends Value<Modifier>
   public @Nonnull Type getType()
   {
     return m_type;
+  }
+
+  //........................................................................
+  //-------------------------------- getType -------------------------------
+
+  /**
+   * Get the condition type stored.
+   *
+   * @return      the requested condition
+   *
+   */
+  public @Nullable Condition getCondition()
+  {
+    return m_condition;
+  }
+
+  //........................................................................
+  //-------------------------------- getNext -------------------------------
+
+  /**
+   * Get the next modifier stored.
+   *
+   * @return      the next modifier, if any
+   *
+   */
+  public @Nullable Modifier getNext()
+  {
+    return m_next;
   }
 
   //........................................................................
@@ -632,7 +676,7 @@ public class Modifier extends Value<Modifier>
    */
   public @Nonnull Modifier as(int inValue, @Nonnull Type inType)
   {
-    return as(inValue, inType, null);
+    return as(inValue, inType, null, null);
   }
 
   //........................................................................
@@ -641,24 +685,46 @@ public class Modifier extends Value<Modifier>
   /**
    * Create a new the value with similar setup but new value.
    *
-   * @param       inValue the new value of the modifier
-   * @param       inType  the type of the modifier
-   * @param       inNext  the next modifier for this chain
+   * @param       inValue     the new value of the modifier
+   * @param       inType      the type of the modifier
+   * @param       inCondition the condition, if any
+   * @param       inNext      the next modifier for this chain
    *
    * @return      the new value
    *
    */
   public @Nonnull Modifier as(int inValue, @Nonnull Type inType,
+                              @Nullable Condition inCondition,
                               @Nullable Modifier inNext)
   {
     Modifier modifier = create();
 
-    modifier.m_value   = inValue;
-    modifier.m_type    = inType;
+    modifier.m_value = inValue;
+    modifier.m_type = inType;
     modifier.m_defined = true;
-    modifier.m_next    = inNext;
+    modifier.m_condition = inCondition;
+    modifier.m_next = inNext;
 
     return modifier;
+  }
+
+  //........................................................................
+  //---------------------------------- as ----------------------------------
+
+  /**
+   * Create a new the value with similar setup but new value.
+   *
+   * @param       inNext  the next modifier for this chain
+   *
+   * @return      the new value
+   *
+   */
+  public @Nonnull Modifier as(@Nullable Modifier inNext)
+  {
+    if(m_next == null)
+      return as(m_value, m_type, m_condition, inNext);
+
+    return as(m_value, m_type, m_condition, m_next.as(inNext));
   }
 
   //........................................................................
@@ -725,19 +791,19 @@ public class Modifier extends Value<Modifier>
   public @Nonnull Modifier add(@Nonnull Modifier inValue)
   {
     int value = m_value;
-    if(m_type == inValue.m_type)
+    if(m_type == inValue.m_type &&
+       ((m_condition != null && m_condition.equals(inValue.m_condition))
+        || m_condition == null && inValue.m_condition == null))
       if(m_type.stacks())
-        return as(m_value + inValue.m_value, m_type, m_next);
+        return as(m_value + inValue.m_value, m_type, m_condition, m_next);
       else
-        return as(Math.max(value, inValue.m_value), m_type, m_next);
+        return
+          as(Math.max(value, inValue.m_value), m_type, m_condition, m_next);
 
-    Modifier result = as(m_value, m_type);
     if(m_next == null)
-      result.m_next = inValue;
-    else
-      result.m_next = m_next.add(inValue);
+      return as(m_value, m_type, m_condition, inValue);
 
-    return result;
+    return as(m_value, m_type, m_condition, m_next.add(inValue));
   }
 
   //........................................................................
@@ -768,11 +834,10 @@ public class Modifier extends Value<Modifier>
     if(next == m_next)
       return this;
 
-    return as(m_value, m_type, next);
+    return as(m_value, m_type, m_condition, next);
   }
 
   //........................................................................
-
 
   //........................................................................
 

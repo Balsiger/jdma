@@ -301,6 +301,9 @@
         ^/feat/([^/]+)$
         /_entry/base feat/$1
 
+        ^/spell/([^/]+)$
+        /_entry/base spell/$1
+
         ^/skill/([^/]+)$
         /_entry/base skill/$1
 
@@ -325,6 +328,9 @@
         ^/feats/(.*)$
         /_index/base feat/$1
 
+        ^/spells/(.*)$
+        /_index/base spell/$1
+
         ^/skills/(.*)$
         /_index/base skill/$1
 
@@ -345,6 +351,9 @@
 
         ^/feats
         /_entries/base feat
+
+        ^/spells
+        /_entries/base spell
 
         ^/skills
         /_entries/base skill

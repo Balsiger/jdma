@@ -149,17 +149,6 @@ public class Item extends CampaignEntry<BaseItem>
   /** The type of the base entry to this entry. */
   public static final @Nonnull BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
 
-  /** The print for printing a whole page entry. */
-  public static final Print s_pagePrint =
-    new Print("");
-
-  /** The printer for printing in a list. */
-  public static final ListPrint s_listPrint =
-    new ListPrint("1:L(label);5:L(id)[ID];20(name)[Name];"
-                  + "1:L(weight)[Weight];1:L(value)[Value];1:L(hp)[HP]",
-                  "$label $listlink", null, "$name", "$weight", "$value",
-                  "$hp");
-
   //----- hp ---------------------------------------------------------------
 
   /** The actual number of hit points the item currently has. */
@@ -301,12 +290,12 @@ public class Item extends CampaignEntry<BaseItem>
   //------------------------------- getWeight ------------------------------
 
   /**
-   * Get the weight of the item.
+   * Get the total weight of the item.
    *
    * @return      the weight
    *
    */
-  public @Nonnull Weight getWeight()
+  public @Nonnull Weight getTotalWeight()
   {
     return new Combination<Weight>(this, "weight").total();
   }

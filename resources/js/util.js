@@ -408,6 +408,7 @@ util.niceDate = function(inSeconds)
  */
 util.parse = function(inText)
 {
+  window.console.log("parse", inText);
   var result = ['dummy']; // we have to have a dummy to pass by reference
   util._parse(result, inText);
   if(result.length == 1)

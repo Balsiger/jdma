@@ -84,6 +84,9 @@ public abstract class Expression implements Comparable<Expression>
     /** Flag if class values were already computed or not. */
     private boolean m_class = false;
 
+    /** Parameters, if any. */
+    private Parameters m_parameters = null;
+
     /**
      * Convert to a string.
      *
@@ -93,7 +96,8 @@ public abstract class Expression implements Comparable<Expression>
     public String toString()
     {
       return "magic armor " + m_magicArmor + ", magic weapon " + m_magicWeapon
-        + ", magic ammunition " + m_magicAmmunition;
+        + ", magic ammunition " + m_magicAmmunition
+        + ", parameters " + m_parameters;
     }
   }
 
@@ -787,6 +791,72 @@ public abstract class Expression implements Comparable<Expression>
   }
 
   //........................................................................
+  //----- Expr -------------------------------------------------------------
+
+  /** An expression representing a computable expression. */
+  public static class Expr extends Expression
+  {
+    /** Create the magic item expression. */
+    public Expr(@Nonnull String inText)
+    {
+      super(10);
+
+      m_text = inText;
+    }
+
+    /** The expression text. */
+    private @Nonnull String m_text;
+
+    /** Pattern for a expression. */
+    private static final Pattern s_pattern = Pattern.compile("expr\\((.*?)\\)");
+
+    @Override
+    public @Nonnull String toString()
+    {
+      return "[expr(" + m_text + ")]";
+    }
+
+    public @Nonnull String getText()
+    {
+      return m_text;
+    }
+
+    /**
+     * Parse an expr from the given text.
+     *
+     * @param  inText the text to parse from
+     *
+     * @return the parsed expr or null if not properly parsed
+     */
+    protected static @Nullable Expr parse(@Nonnull String inText)
+    {
+      Matcher matcher = s_pattern.matcher(inText);
+      if(matcher.find())
+        return new Expr(matcher.group(1));
+
+      return null;
+    }
+
+    /**
+     * Compute the value for the expression.
+     *
+     * @param       inEntry   the entry to compute for
+     * @param       inValue   the value to compute from
+     * @param       ioShared  shared data for all expressions
+     *
+     * @return      the compute, adjusted value
+     *
+     */
+    @SuppressWarnings("unchecked")
+    public @Nullable Value compute(@Nonnull ValueGroup inEntry,
+                                   @Nullable Value inValue,
+                                   @Nonnull Shared ioShared)
+    {
+      return null;
+    }
+  }
+
+  //........................................................................
   //----- MagicWeapon ------------------------------------------------------
 
   /** An expression representing the number of plusses for magical weapon. */
@@ -1030,6 +1100,10 @@ public abstract class Expression implements Comparable<Expression>
       return result;
 
     result = ByClass.parse(text);
+    if(result != null)
+      return result;
+
+    result = Expr.parse(text);
     if(result != null)
       return result;
 

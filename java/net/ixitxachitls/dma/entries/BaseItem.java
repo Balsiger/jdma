@@ -916,8 +916,6 @@ public class BaseItem extends BaseEntry
     extractVariables(BaseItem.class, BaseIncomplete.class);
   }
 
-  //........................................................................
-
   //----- special indexes --------------------------------------------------
 
   static
@@ -927,6 +925,8 @@ public class BaseItem extends BaseEntry
     addIndex(new Index(Index.Path.REFERENCES, "References", TYPE));
     addIndex(new Index(Index.Path.EXTENSIONS, "Extensions", TYPE));
   }
+
+  //........................................................................
 
   //........................................................................
 

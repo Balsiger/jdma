@@ -458,22 +458,29 @@ public class Damage extends Value<Damage>
   @Override
   public @Nonnull Damage add(@Nonnull Damage inValue)
   {
+    String effect = m_effect;
+    if(inValue.m_effect != null)
+      if(effect != null)
+        effect += " " + inValue.m_effect;
+      else
+        effect = inValue.m_effect;
+
     if(inValue.m_type.getSelected() == m_type.getSelected()
        && (inValue.m_base.getDice() == m_base.getDice()
            || inValue.m_base.getNumber() == 0 || m_base.getNumber() == 0
            || inValue.m_base.getDice() <= 1 || m_base.getDice() <= 1))
       if(m_other == null)
-        return as(m_base.add(inValue.m_base), m_type, inValue.m_other);
+        return as(m_base.add(inValue.m_base), m_type, inValue.m_other, effect);
       else if(inValue.m_other == null)
-        return as(m_base.add(inValue.m_base), m_type, m_other);
+        return as(m_base.add(inValue.m_base), m_type, m_other, effect);
       else
         return as(m_base.add(inValue.m_base), m_type,
-                  m_other.add(inValue.m_other));
+                  m_other.add(inValue.m_other), effect);
 
     if(m_other == null)
-      return as(m_base, m_type, inValue);
+      return as(m_base, m_type, inValue, effect);
 
-    return as(m_base, m_type, m_other.add(inValue));
+    return as(m_base, m_type, m_other.add(inValue), effect);
   }
 
   //........................................................................
@@ -514,6 +521,33 @@ public class Damage extends Value<Damage>
     damage.m_base = inDice;
     damage.m_type = inType;
     damage.m_other = inOther;
+
+    return damage;
+  }
+
+  //........................................................................
+  //---------------------------------- as ----------------------------------
+
+  /**
+   * Create a new damage value with the new data.
+   *
+   * @param     inDice   the damage dice
+   * @param     inType   the type of the damage
+   * @param     inOther  other additional damage, if any
+   * @param     inEffect the effects, if any
+   *
+   * @return    the newly created value
+   *
+   */
+  public Damage as(@Nonnull Dice inDice, EnumSelection<Type> inType,
+                   @Nullable Damage inOther, @Nullable String inEffect)
+  {
+    Damage damage = create();
+
+    damage.m_base = inDice;
+    damage.m_type = inType;
+    damage.m_other = inOther;
+    damage.m_effect = inEffect;
 
     return damage;
   }

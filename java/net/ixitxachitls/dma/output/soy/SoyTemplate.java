@@ -37,6 +37,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -46,6 +47,7 @@ import com.google.inject.multibindings.Multibinder;
 import com.google.template.soy.SoyFileSet;
 import com.google.template.soy.SoyModule;
 import com.google.template.soy.data.SoyData;
+import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
@@ -59,6 +61,13 @@ import com.google.template.soy.tofu.restricted.SoyTofuFunction;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
+import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Parameters;
+import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.util.Encodings;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.resources.Resource;
@@ -166,6 +175,99 @@ public class SoyTemplate
     public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
     {
       return IntegerData.forValue(Integer.valueOf(inArgs.get(0).toString()));
+    }
+  }
+
+  //........................................................................
+  //----- CamelFunction ----------------------------------------------------
+
+  /** A plugin function to format numbers or printing. */
+  public static class CamelFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "camel";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      return StringData.forValue
+        (Encodings.toWordUpperCase(inArgs.get(0).toString()));
+    }
+  }
+
+  //........................................................................
+  //----- CommandsFunction -------------------------------------------------
+
+  /** A plugin function to format numbers or printing. */
+  public static class CommandsFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "commands";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      return StringData.forValue
+        (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
+    }
+  }
+
+  //........................................................................
+  //----- ReferenceFunction ------------------------------------------------
+
+  /** A plugin function to format numbers or printing. */
+  public static class ReferenceFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "reference";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(2);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      BaseEntry entry = (BaseEntry)DMADataFactory.get().getEntry
+        (AbstractEntry.EntryKey.fromString(inArgs.get(0).toString()));
+
+      if(entry == null)
+        return inArgs.get(0);
+
+      Parameters parameters = new Parameters();
+      for(SoyData opt : (SoyListData)inArgs.get(1))
+      {
+        String []parts = Strings.getPatterns(opt.toString(), "^(\\w+)\\s(.*)$");
+        if(parts.length != 2)
+          Log.warning("invalid parameter " + opt + " ignored");
+        else
+          parameters.with(parts[0], new Name(parts[1]), Parameters.Type.UNIQUE);
+      }
+
+      return StringData.forValue(entry.getSummary(parameters));
     }
   }
 
@@ -315,10 +417,6 @@ public class SoyTemplate
   /** A directive to parse and render comands embedded in a string. */
   public static class CommandsDirective extends SoyAbstractTofuPrintDirective
   {
-    /** The command renderer for rendering values. */
-    public static final @Nonnull SoyRenderer COMMAND_RENDERER =
-      new SoyRenderer(new SoyTemplate("commands", "value", "page"));
-
     @Override
     public String getName()
     {
@@ -397,6 +495,9 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(EntryFunction.class);
       soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
+      soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
+      soyFunctionsSetBinder.addBinding().to(CommandsFunction.class);
+      soyFunctionsSetBinder.addBinding().to(ReferenceFunction.class);
 
       Multibinder<SoyPrintDirective> soyDirectivesSetBinder =
         Multibinder.newSetBinder(binder(), SoyPrintDirective.class);
@@ -432,6 +533,11 @@ public class SoyTemplate
 
   /** The injector with our own plugins. */
   private Injector m_injector = createInjector();
+
+  /** The command renderer for rendering values. */
+  public static final @Nonnull SoyRenderer COMMAND_RENDERER =
+    new SoyRenderer(new SoyTemplate("commands", "value", "page"));
+
 
   //........................................................................
 

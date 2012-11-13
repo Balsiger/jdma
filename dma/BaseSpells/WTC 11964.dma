@@ -1,0 +1,54 @@
+# Magic of Faerun, 3rd
+
+#----- Spirit Worm
+
+base spell Spirit Worm =
+
+  categories        necromancy, spirit, worm, constitution, damage;
+  synonyms          "Worm, Sprit";
+  school            Necromancy;
+  level             Sor 1, Wiz 1;
+  casting time      1 standard action;
+  components        v, s, m;
+  range             Touch;
+  target            "Living creature touched";
+  duration          1 round/level "(see text)";
+  saving throw      Fortitude partial;
+  spell resistance  Yes;
+  references        WTC 11964: 123;
+  short description "Deal continuous constitution damage.";
+  summary           "For DC $dc or for [[min(5, $level)]] rounds suffer temporary 1 Con damage; 1d2 damage per round if saved.";
+  worlds            Forgotten Realms;
+  description
+
+  "You create a lingering decay in the spirit and body of the target. If the target fails its saving throw, it takes 1 point of temporary Constitution damage each round while the spell lasts (maximum 5 points of Constitution). It it makes its safe, it does not lose any Constitution but takes 1d2 points of damage each round while the spell lasts (maximum 5d2). The damage remains after the spell ends.
+
+  \emph{Material Components:} A piece of fire-blackened ivory or bone carved in the shape of a segmented worm.".
+
+#.....
+#----- Death Armor
+
+base spell Death Armor =
+
+  categories        armor, death, aura, harm;
+  synonyms          "Armor, Death";
+  school            Necromancy;
+  level             Sor 4, Wiz 4;
+  casting time      1 standard action;
+  components        v, s, m;
+  range             Personal;
+  target            "You";
+  duration          1 round/level;
+  saving throw      Will negates (harmless);
+  spell resistance  Yes;
+  references        WTC 11964: 87-88;
+  short description "";
+  worlds            Forgotten Realms;
+  summary           "For $level rounds surrounded by black aura that deals 1d4 +[[min(5, ($level / 2))]] (spell resistance applies) to melee attackers (without reach weapons).";
+  description
+
+  "You are surrounded with a crackling black aura that injures creatures that contact it. Any creature striking you with its body or handheld weapons takes 1d4 hit points of damage +1 per 2 caster levels (maximum +5). If the creature has spell resistance, it applies to the damage. Weapons with exceptional reach, such as \Item{longspears}, do not endanger their users in this way.
+
+  \emph{Material Component:} A paste made of exotic herbs, ground bones, and onyx worth 50 gp, which is applied to your body when the spell is cast.".
+
+#.....

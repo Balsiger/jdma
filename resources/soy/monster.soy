@@ -198,6 +198,11 @@
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
+    {param name: 'Skills' /}
+    {param value: $entry.skills /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
     {param name: 'Class Skills' /}
     {param value: $entry.class_skills /}
   {/delcall}
@@ -240,6 +245,21 @@
     {param entry: $entry /}
     {param name: 'Level Adjustment' /}
     {param value: $entry.level_adjustment /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Fortitude Save' /}
+    {param value: $entry.fortitude_save /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Reflex Save' /}
+    {param value: $entry.reflex_save /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Will Save' /}
+    {param value: $entry.will_save /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -394,7 +414,7 @@
       {/if}
       {sp}({$entry.name})
     </h1>
-    {$entry.gender.print} {$entry.base.print}<br>
+    {$entry.gender.print} {$entry.base.print}<p>
 
     {call dma.entry.overviewValue}
       {param prefix: 'CR' /}
@@ -428,7 +448,7 @@
       {param entry: $entry /}
       {param value: $entry.hp /}
     {/call}
-    <br />
+    <p>
     {call dma.entry.overviewValue}
       {param prefix: 'Init' /}
       {param postfix: ';' /}
@@ -459,7 +479,7 @@
       {param entry: $entry /}
       {param value: $entry.armor_class_flat_footed /}
     {/call}
-    <br />
+    <p>
     {call dma.entry.overviewValue}
       {param prefix: 'Atk' /}
       {param postfix: ';' /}
@@ -504,14 +524,14 @@
         , grapple +{$entry.attacks.grapple |print})
       {/param}
     {/call}
-    <br />
+    <p>
     {call dma.entry.overviewValue}
-      {param prefix: '<div class="summary-title">Special Attacks</div>' /}
-      {param postfix: ';' /}
+      {param prefix: 'SA' /}
+      {param postfix: '' /}
       {param entry: $entry /}
       {param content}
         {foreach $attack in $entry.special_attack_summaries}
-          <b>{$attack.name}</b>
+          {$attack.name}{if $attack.params} {$attack.params}{/if}
           {switch $attack.number}
             {case -1}
             {case 0}
@@ -522,10 +542,143 @@
             {default}
               {sp}{$attack.number} times per day
           {/switch}
-          : {$attack.summary}
-        <br />
+          {if not isLast($attack)}, {/if}
         {/foreach}
       {/param}
     {/call}
+    <p>
+    {call dma.entry.overviewValue}
+      {param prefix: 'SQ' /}
+      {param postfix: '' /}
+      {param entry: $entry /}
+      {param content}
+        {foreach $quality in $entry.special_quality_summaries}
+          {$quality.name}{if $quality.params} {$quality.params}{/if}
+          {if $quality.condition}
+            {sp}<em>if {$quality.condition |print}</em>
+          {/if}
+          {switch $quality.number}
+            {case -1}
+
+            {case 0}
+            {case 1}
+              {sp}once per day
+            {case 2}
+              {sp}twice per day
+            {default}
+              {sp}{$quality.number} times per day
+          {/switch}
+          {if not isLast($quality)}, {/if}
+        {/foreach}
+      {/param}
+    {/call}
+    <p>
+    {call dma.entry.overviewValue}
+      {param prefix: 'AL' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param value: $entry.alignment /}
+    {/call}
+    SV{sp}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Fort' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.fortitudeSave /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Ref' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.reflexSave /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Will' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param value: $entry.willSave /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Str' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.strength /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Dex' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.dexterity /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Con' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.constitution /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Int' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.intelligence /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Wis' /}
+      {param postfix: ',' /}
+      {param entry: $entry /}
+      {param value: $entry.wisdom /}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Cha' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param value: $entry.charisma /}
+    {/call}
+    <p>
+    <em>Skills:</em>{sp}
+    {foreach $skill in $entry.allSkills}
+      {$skill.entry.name}
+      {if $skill.subtype} ({$skill.subtype}){/if}
+      {if $skill.modifier} {$skill.modifier |print}{/if}
+      {if not isLast($skill)}, {/if}
+    {/foreach}
+    <p>
+    <em>Feats:</em>{sp}
+    {foreach $ref in $entry.allFeats}
+      <span class="windowed">
+        <span class="window base">
+          from{sp}
+          {foreach $base in $ref.second}
+            {$base}{if not isLast($base)},{sp}{/if}
+          {/foreach}
+        </span>
+        {$ref.first.getName}
+        {if $ref.first.parameters.summary} {$ref.first.parameters.summary}{/if}
+        {if not isLast($ref)},{sp}{/if}
+      </span>
+    {/foreach}
+    <p>
+    <div class="abilities">
+      {foreach $attack in $entry.special_attack_summaries}
+        <div class="ability">
+          <div class="ability-title">{$attack.name} {$attack.params}</div>
+          <div class="ability-text">{commands($attack.summary)}</div>
+        </div>
+      {/foreach}
+      {foreach $quality in $entry.special_quality_summaries}
+        <div class="ability">
+          <div class="ability-title">{$quality.name} {$quality.params}</div>
+          <div class="ability-text">{commands($quality.summary)}</div>
+        </div>
+      {/foreach}
+      {foreach $feat in $entry.allFeats}
+        <div class="ability">
+          <div class="ability-title">
+            {$feat.first.getName} {$feat.first.parameters.summary}
+          </div>
+          <div class="ability-text">{commands($feat.first.summary)}</div>
+        </div>
+      {/foreach}
+    </div>
   </div>
 {/deltemplate}

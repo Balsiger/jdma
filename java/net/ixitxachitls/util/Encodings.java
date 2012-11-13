@@ -292,7 +292,7 @@ public final class Encodings
   }
 
   //........................................................................
-  //--------------------------- toCamelCaseCase -----------------------------
+  //----------------------------- toCamelCase ------------------------------
 
   /**
     * Remove all '_' and ' ' and replace subsequene characters with upper case

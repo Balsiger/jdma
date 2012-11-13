@@ -621,6 +621,8 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize monster type");
     if(net.ixitxachitls.dma.entries.BaseSkill.TYPE == null)
       Log.warning("could not properly initialize base skill type");
+    if(net.ixitxachitls.dma.entries.BaseSpell.TYPE == null)
+      Log.warning("could not properly initialize base spell type");
   }
 
   //........................................................................

@@ -162,6 +162,21 @@
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
+    {param name: 'Fortitude Save' /}
+    {param value: $entry.fortitude_save /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Reflex Save' /}
+    {param value: $entry.reflex_save /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Will Save' /}
+    {param value: $entry.will_save /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
     {param name: 'Class Skills' /}
     {param value: $entry.class_skills /}
   {/delcall}

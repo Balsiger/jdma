@@ -98,6 +98,7 @@ public class SoyServlet extends DMAServlet
                      "basequality",
                      "basefeat",
                      "baseskill",
+                     "basespell",
                      "basemonster", "monster");
 
   //........................................................................
@@ -130,7 +131,6 @@ public class SoyServlet extends DMAServlet
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -159,6 +159,7 @@ public class SoyServlet extends DMAServlet
     {
       s_template.recompile();
       SoyValue.COMMAND_RENDERER.recompile();
+      SoyTemplate.COMMAND_RENDERER.recompile();
     }
 
     // Set the output header.

@@ -34,6 +34,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.ixitxachitls.util.Strings;
+
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -63,12 +65,27 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    * Construct the number object using real values.
    *
    * @param       inNumber    the number inside this value
-   * @param       inModifiers the modifiers to the value
    *
    */
   public ModifiedNumber(long inNumber)
   {
-    super(inNumber, -100, +100, false);
+    this(inNumber, false);
+  }
+
+  //........................................................................
+  //---------------------------- ModifiedNumber ----------------------------
+
+  /**
+   * Construct the number object using real values.
+   *
+   * @param       inNumber    the number inside this value
+   * @param       inSign      whether to show a + for positive numbers or not
+   *
+   */
+  public ModifiedNumber(long inNumber, boolean inSign)
+  {
+    super(inNumber, -100, +100, inSign);
+    m_sign = inSign;
   }
 
   //........................................................................
@@ -81,6 +98,39 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   public ModifiedNumber()
   {
     super(-100, +100, false);
+  }
+
+  //........................................................................
+  //---------------------------- ModifiedNumber ----------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public ModifiedNumber
+    (@Nonnull List<Contribution<? extends Value>> inContributions)
+  {
+    this(0, true);
+
+    for(Contribution<? extends Value> contribution : inContributions)
+    {
+      Value value = contribution.getValue();
+      String text = contribution.getGroup().getName()
+        + (contribution.getText() == null ? ""
+           : " (" + contribution.getText() + ")");
+
+      if(value instanceof Number)
+        withModifier(new Modifier((int)((Number)value).get()), text);
+      else if(value instanceof Modifier)
+        withModifier((Modifier)value, text);
+      else
+        throw new UnsupportedOperationException("cannot modifiy number with "
+                                                + value.getClass());
+    }
   }
 
   //........................................................................
@@ -131,7 +181,6 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
 
   //........................................................................
 
-
   {
     withTemplate("modifiednumber");
   }
@@ -145,6 +194,9 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
 
   /** The total modifier with all values. */
   private @Nullable Modifier m_total;
+
+  /** Flag if showing a plus for positive numbers. */
+  private boolean m_sign = false;
 
   //........................................................................
 
@@ -195,7 +247,7 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   }
 
   //........................................................................
-  //----------------------------- getMinValue ------------------------------
+  //----------------------------- getMaxValue ------------------------------
 
   /**
    * Get the maximal possible modified value.
@@ -245,8 +297,16 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
     int min = m_total.getMinValue();
     int max = m_total.getMaxValue();
 
+    String prefix;
     if(min == max)
-      return "" + (m_number + min);
+      if(m_sign)
+        return Strings.signedNumber(m_number + min);
+      else
+        return "" + (m_number + min);
+
+    if(m_sign)
+      return Strings.signedNumber(m_number + min) + "-" +
+        Strings.signedNumber(m_number + max);
 
     return (m_number + min) + "-" + (m_number + max);
   }

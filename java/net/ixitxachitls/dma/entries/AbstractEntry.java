@@ -54,6 +54,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Comment;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
@@ -2305,6 +2306,31 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //--------------------------- addContributions ---------------------------
+
+  /**
+   * Add contributions for this entry to the given list.
+   *
+   * @param       inName          the name of the value to contribute to
+   * @param       ioContributions the list of contributions to add to
+   *
+   */
+  @Override
+  public void addContributions
+    (@Nonnull String inName,
+     @Nonnull List<Contribution<? extends Value>> ioContributions)
+  {
+    super.addContributions(inName, ioContributions);
+
+    for(BaseEntry base : getBaseEntries())
+      if(base != null)
+        base.addContributions(inName, ioContributions);
+
+    for(AbstractExtension extension : m_extensions.values())
+      extension.addContributions(inName, ioContributions);
+  }
+
+  //........................................................................
 
   //........................................................................
 
@@ -3251,6 +3277,7 @@ public class AbstractEntry extends ValueGroup
       while(matcher.find())
       {
         Value value = inParameters.getValue(matcher.group(1));
+        System.out.println(matcher.group(1) + ": " + value);
         if(value != null && value.isDefined())
           matcher.appendReplacement(result, value.toString());
       }

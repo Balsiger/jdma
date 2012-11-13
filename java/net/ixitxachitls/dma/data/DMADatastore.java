@@ -904,7 +904,8 @@ public class DMADatastore implements DMAData
             Log.warning("value for " + value.getKey() + " for "
                         + inEntry.getType() + " with id " + inEntry.getName()
                         + " is longer than 500 characters and will be "
-                        + "truncated!");
+                        + "truncated! (" + valueText.length() + ": "
+                        + valueText + ")");
 
           entity.setProperty(m_data.toPropertyName(value.getKey()), valueText);
         }
