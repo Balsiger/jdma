@@ -69,7 +69,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class SoyValue extends SoyMapData
+public class SoyValue extends SoyAbstract
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -104,27 +104,20 @@ public class SoyValue extends SoyMapData
   public SoyValue(@Nonnull String inName, @Nonnull Value inValue,
                   @Nonnull AbstractEntry inEntry, boolean inEditable)
   {
-    m_name = inName;
+    super(inName, inEntry);
+
     m_value = inValue;
-    m_entry = inEntry;
     m_editable = inEditable;
   }
 
   //........................................................................
 
-
   //........................................................................
 
   //-------------------------------------------------------------- variables
 
-  /** The name of the value. */
-  protected final @Nonnull String m_name;
-
   /** The real value. */
   protected final @Nonnull Value m_value;
-
-  /** The entry containing the value. */
-  protected final @Nonnull AbstractEntry m_entry;
 
   /** The command renderer for rendering values. */
   public static final @Nonnull SoyRenderer COMMAND_RENDERER =
@@ -243,7 +236,7 @@ public class SoyValue extends SoyMapData
       return BooleanData.forValue(m_value.isArithmetic());
 
     if("isDefined".equals(inName))
-      return BooleanData.forValue(m_value.isDefined());
+      return BooleanData.forValue(m_value != null && m_value.isDefined());
 
     if("expression".equals(inName))
       if(m_value.hasExpression())
@@ -283,18 +276,18 @@ public class SoyValue extends SoyMapData
     // check if there is a function with the given name in this soy value
     Object value = Classes.callMethod(inName, this);
     if(value != null)
-      return convert(value);
+      return convert(inName, value);
 
     // check if there is a function with the given name in the value itself
     value = Classes.callMethod(inName, m_value);
     if(value != null)
-      return convert(value);
+      return convert(inName, value);
 
     value = m_value.compute(inName);
-    if(value == null)
-      return null;
+    if(value != null)
+      return convert(inName, value);
 
-    return convert(value);
+    return new Undefined(m_name + "." + inName);
   }
 
   //.........................................................................
@@ -345,42 +338,6 @@ public class SoyValue extends SoyMapData
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //------------------------------- convert --------------------------------
-
-  /**
-   * Convert the given object into a soy value.
-   *
-   * @param       inObject the object to convert
-   *
-   * @return      the converted object
-   *
-   */
-  @SuppressWarnings("unchecked")
-  private @Nonnull SoyData convert(@Nonnull Object inObject)
-  {
-    if(inObject instanceof Boolean)
-      return BooleanData.forValue((Boolean)inObject);
-
-    if(inObject instanceof Map)
-    {
-      SoyMapData map = new SoyMapData();
-      Map<?, ?> input = (Map<?, ?>)inObject;
-      for(Map.Entry<?, ?> entry : input.entrySet())
-        map.putSingle(entry.getKey().toString(), convert(entry.getValue()));
-
-      return map;
-    }
-
-    if(inObject instanceof Value)
-      return new SoyValue(m_name, (Value)inObject, m_entry);
-
-    return SoyData.createFromExistingData(inObject);
-  }
-
-  //........................................................................
-
-
   //........................................................................
 
   //------------------------------------------------------------------- test

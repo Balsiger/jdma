@@ -438,16 +438,18 @@ IMG.main.image
   position:   relative;
 }
 
-DIV.desc
+DIV.description
 {
-  margin-left: 330px;
-  position:    relative;
+  width: 100%;
+  min-height: 50px;
 }
 
 DIV.short-description
 {
   margin-top: 15px;
   color:      #888;
+  width: 100%;
+  min-height: 20px;
 }
 
 DIV.files
@@ -629,54 +631,105 @@ IMG.item-image
 
 DIV.summary
 {
-  width: 400px;
+  font-size: 16px;
 }
 
-DIV.summary p
+DIV.summary P
 {
-  padding: 2px 0 0 0;
+  padding: 5px 0 0 0;
   margin: 0;
 }
 
 DIV.summary H1
 {
-  font-size: medium;
   border: none;
   padding: 0;
   margin: 0 0 5px 0;
+  font-size: 20px;
 }
 
-DIV.summary DIV.abilities
+DIV.summary DIV.description
 {
-  margin-top: 10px;
-  font-size: small;
+  font-style: italic;
+  background: #eee;
+  padding: 10px;
+  width: 95%;
+  margin-bottom: 10px;
+  min-height: auto;
 }
 
-DIV.abilities DIV.ability
+DIV.summary DIV.description DIV.base-title
 {
-  padding: 1px;
+  display: none;
+}
+
+#boxes
+{
+  margin-top: 20px;
+  width: 1095px; /* set for printing */
+}
+
+#boxes DIV.ability,
+#boxes DIV.feat,
+#boxes DIV.item-summary
+{
+  margin: 1px;
+  page-break-inside: avoid;
+  float: left;
+  width: 355px; /* set for printing */
+  border: 1px solid #131210
+}
+
+DIV.ability DIV.ability-title,
+DIV.feat DIV.feat-title,
+DIV.item-summary DIV.item-summary-title
+{
+  color: white;
+  padding: 3px;
+  text-align: center;
+  -webkit-print-color-adjust: exact;
+  font-weight: bold;
+  font-size: 12px;
 }
 
 DIV.ability DIV.ability-title
 {
   background-color: $color_Quality;
-  color: white;
-  padding: 3px;
-  text-align: center;
-  border-left: 1px solid $color_Quality;
-  border-right: 1px solid $color_Quality;
-  border-top: 1px solid $color_Quality;
-  -webkit-print-color-adjust: exact;
 }
 
-DIV.ability DIV.ability-text
+DIV.ability DIV.ability-numbers
+{
+  float: left;
+}
+
+DIV.ability DIV.ability-number
+{
+  background-color: white;
+  border-radius: 3px;
+  width: 15px;
+  height: 10px;
+  display: inline-block;
+  margin: 1px 1px;
+}
+
+DIV.feat DIV.feat-title
+{
+  background-color: $color_Feat;
+}
+
+DIV.item-summary DIV.item-summary-title
+{
+  background-color: $color_Item;
+}
+
+DIV.ability DIV.ability-text,
+DIV.feat DIV.feat-text,
+DIV.item-summary DIV.item-summary-text
 {
   background: #ddd;
   padding: 3px;
-  border-left: 1px solid #131210;
-  border-right: 1px solid #131210;
-  border-bottom: 1px solid #131210;
   -webkit-print-color-adjust: exact;
+  font-size: 12px;
 }
 
 /******************************************************************************

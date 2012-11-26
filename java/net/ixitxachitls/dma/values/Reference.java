@@ -217,6 +217,30 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
   }
 
   //........................................................................
+  //----------------------------- getFullName ------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull String getFullName()
+  {
+    if(m_parameters == null)
+      return getName();
+
+    String paramNames = m_parameters.getUniques();
+    if(paramNames.isEmpty())
+      return getName();
+
+    return getName() + " " + paramNames;
+  }
+
+  //........................................................................
+
   //---------------------------- getParameters -----------------------------
 
   /**
@@ -446,6 +470,35 @@ public class Reference<T extends BaseEntry> extends Value<Reference>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the given reference to this one, if possible.
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull Reference<T> add(@Nonnull Reference<T> inOther)
+  {
+    if(!getName().equals(inOther.getName()))
+      throw new IllegalStateException("cannot add references with different "
+                                      + "names");
+
+    Reference<T> ref = new Reference<T>(m_type, getName());
+    if(m_parameters == null)
+      ref.m_parameters = inOther.m_parameters;
+    else if(inOther.m_parameters == null)
+      ref.m_parameters = m_parameters;
+    else
+      ref.m_parameters = m_parameters.add(inOther.m_parameters);
+
+    return ref;
+  }
+
+  //........................................................................
 
   //------------------------------- doRead ---------------------------------
 

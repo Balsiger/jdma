@@ -114,7 +114,7 @@ public class Critical extends BaseNumber<Critical>
    *
    */
   @Override
-public Critical create()
+  public Critical create()
   {
     return super.create(new Critical());
   }
@@ -370,6 +370,26 @@ protected boolean doRead(@Nonnull ParseReader inReader)
       return false;
 
     return super.doRead(inReader);
+  }
+
+  //........................................................................
+  //------------------------------- doubled --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull Critical doubled()
+  {
+    Critical doubled = create();
+    doubled.m_threat = m_threat.as(2 * m_threat.getStart() - m_threat.getEnd(),
+                                   m_threat.getEnd());
+
+    return doubled;
   }
 
   //........................................................................

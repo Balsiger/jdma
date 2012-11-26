@@ -278,7 +278,7 @@ public class BaseText<T extends BaseText> extends Value<T>
     if(m_text != null)
       text = m_text;
 
-    String value = inValue.toString();
+    String value = inValue.m_text;
     if (text.matches(".*\\s+$") || value.matches("^\\s+.*"))
       text += value;
     else

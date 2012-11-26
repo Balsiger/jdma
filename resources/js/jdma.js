@@ -242,6 +242,10 @@ admin.clearCache = function()
 
 //..........................................................................
 
+//----- jQuery extensions --------------------------------------------------
+//..........................................................................
+
+
 // if there are sections on the page, install a handler for them and open them
 $(document).ready(function () {
     ready();

@@ -114,14 +114,18 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   public ModifiedNumber
     (@Nonnull List<Contribution<? extends Value>> inContributions)
   {
-    this(0, true);
+    this(0, inContributions);
+  }
+
+  public ModifiedNumber
+    (int base, @Nonnull List<Contribution<? extends Value>> inContributions)
+  {
+    this(base, true);
 
     for(Contribution<? extends Value> contribution : inContributions)
     {
       Value value = contribution.getValue();
-      String text = contribution.getGroup().getName()
-        + (contribution.getText() == null ? ""
-           : " (" + contribution.getText() + ")");
+      String text = contribution.getDescription();
 
       if(value instanceof Number)
         withModifier(new Modifier((int)((Number)value).get()), text);
@@ -316,6 +320,32 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   //........................................................................
 
   //----------------------------------------------------------- manipulators
+
+  //-------------------------------- ignore --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull ModifiedNumber ignore(Modifier.Type ... inTypes)
+  {
+    ModifiedNumber modified = new ModifiedNumber(get(), m_sign);
+    for (Map.Entry<String, Modifier> entry : m_modifiers.entrySet())
+    {
+      Modifier modifier = entry.getValue().ignore(inTypes);
+      if(modifier != null)
+        modified.withModifier(modifier, entry.getKey());
+    }
+
+    return modified;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions

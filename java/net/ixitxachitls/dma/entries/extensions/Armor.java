@@ -198,30 +198,6 @@ public class Armor extends Extension<Item>
   }
 
   //........................................................................
-  //---------------------------- addModifiers ------------------------------
-
-  /**
-   * Add current modifiers to the given map.
-   *
-   * @param       inName        the name of the value to modify
-   * @param       ioModifers    the map of modifiers
-   *
-   */
-  @Override
-  public void addModifiers(@Nonnull String inName,
-                           @Nonnull Map<String, Modifier> ioModifiers)
-  {
-    super.addModifiers(inName, ioModifiers);
-
-    if("armor class".equals(inName))
-    {
-      Modifier total = new Combination<Modifier>(m_entry, "AC bonus").total();
-      if(total.isDefined())
-        ioModifiers.put(m_entry.getDMName(), total);
-    }
-  }
-
-  //........................................................................
   //-------------------------- addSummaryCommand ---------------------------
 
   /**

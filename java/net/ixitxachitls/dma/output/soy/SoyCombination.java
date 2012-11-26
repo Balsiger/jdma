@@ -121,7 +121,7 @@ public class SoyCombination extends SoyValue
     {
       Value total = m_combination.total();
       if (total == null)
-        return null;
+        return new Undefined(m_name + "." + inName + ".total");
 
       return new SoyValue(m_combination.getName(), total, m_entry);
     }
@@ -131,6 +131,9 @@ public class SoyCombination extends SoyValue
 
     if("max".equals(inName))
       return new SoyValue(m_name, m_combination.max(), m_entry);
+
+    if("top".equals(inName))
+      return new SoyValue(m_name, m_combination.getTopValue(), m_entry);
 
     if("bases".equals(inName))
     {
@@ -161,7 +164,7 @@ public class SoyCombination extends SoyValue
     // catch(Exception e)
     // {
     //   System.out.println("eception when getting combination value:");
-    //   e.printStackTrace(System.out);
+    //    e.printStackTrace(System.out);
     // }
 
     return super.getSingle(inName);

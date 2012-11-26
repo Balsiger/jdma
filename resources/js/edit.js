@@ -511,8 +511,6 @@ edit.Base.prototype.save = function(inValues, inCreate)
   else
     value = '$undefined$';
 
-  window.console.log("save", value, this.isDefined, this._defined, this);
-
   inValues[this.key + '::' + this.name] = value;
   if(inCreate)
     inValues[this.key + '::create'] = true;
@@ -1182,10 +1180,10 @@ edit.Multiple.prototype._createElement = function()
     var item = edit.Base.create({
       key: this.key,
       type: type.type,
-      value: this._value.length > i ? this._value[i] : "",
+      //value: this._value.length > i ? this._value[i] : "",
+      value: value,
       name: this.name,
       script: null,
-      value: value,
       values: this.properties.values[i],
       note: null,
       label: type.label,

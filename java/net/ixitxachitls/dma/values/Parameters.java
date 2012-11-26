@@ -180,6 +180,29 @@ public class Parameters extends Value<Parameters>
   }
 
   //........................................................................
+  //------------------------------ getUniques ------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull String getUniques()
+  {
+    List<String> uniques = Lists.newArrayList();
+
+    for(String key : m_types.keySet())
+      if(m_types.get(key) == Type.UNIQUE
+         && m_values.get(key).isDefined())
+        uniques.add(m_values.get(key).toString());
+
+    return Strings.SPACE_JOINER.join(uniques);
+  }
+
+  //........................................................................
 
   //---------------------------- getKeyValues ------------------------------
 
@@ -269,7 +292,7 @@ public class Parameters extends Value<Parameters>
       if (!entry.getValue().isDefined())
         continue;
 
-      values.add(entry.getKey() + " " + entry.toString());
+      values.add(entry.getKey() + " " + entry.getValue().toString());
     }
 
     return s_joiner.join(values);
@@ -382,6 +405,51 @@ public class Parameters extends Value<Parameters>
   }
 
   //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull Parameters add(@Nonnull Parameters inParameters)
+  {
+    Parameters result = new Parameters();
+    for(String key : m_values.keySet())
+    {
+      result.m_types.put(key, m_types.get(key));
+      result.m_values.put(key, add(m_values.get(key),
+                                   inParameters.m_values.get(key)));
+    }
+
+    // Add all the values that only appear in the given parameters.
+    for(String key : inParameters.m_values.keySet())
+      if(!m_values.containsKey(key))
+      {
+        result.m_types.put(key, inParameters.m_types.get(key));
+        result.m_values.put(key, inParameters.m_values.get(key));
+      }
+
+    return result;
+  }
+
+  @SuppressWarnings("unchecked")
+  private @Nonnull Value add(@Nonnull Value inFirst, @Nullable Value inSecond)
+  {
+    if(inSecond == null || !inSecond.isDefined())
+      return inFirst;
+
+    if(!inFirst.isDefined())
+      return inSecond;
+
+    return inFirst.add(inSecond);
+  }
+
+  //........................................................................
+
 
   //........................................................................
 

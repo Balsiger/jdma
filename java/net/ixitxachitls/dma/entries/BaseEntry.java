@@ -269,6 +269,7 @@ public class BaseEntry extends AbstractEntry
 
   /** The short description text for this entry. */
   @Key("short description")
+  @WithBases
   @PrintUndefined
   protected Text m_short = new Text().withEditType("string[short description]");
 

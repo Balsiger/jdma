@@ -140,6 +140,11 @@ public class Damage extends Value<Damage>
     withTemplate("damage");
   }
 
+  public Damage(@Nonnull Dice inDice)
+  {
+    m_base = inDice;
+  }
+
   //........................................................................
 
   //-------------------------------- create --------------------------------

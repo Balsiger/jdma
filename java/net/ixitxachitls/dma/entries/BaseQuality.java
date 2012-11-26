@@ -414,12 +414,16 @@ public class BaseQuality extends BaseEntry
 
     if(inModifier.getExpression() instanceof Expression.Expr)
     {
-      System.out.println("parameters: " + inParameters);
+      String computed =
+        computeExpressions(((Expression.Expr)inModifier.getExpression())
+                           .getText(), inParameters);
+
+      Modifier modifier = inModifier.read(computed);
+      if (modifier != null)
+        return modifier.as(next);
+
       return inModifier.as(Integer.valueOf
-                           (computeExpressions(((Expression.Expr)
-                                                inModifier.getExpression())
-                                               .getText(), inParameters)
-                            .replace('+', '0')),
+                           (computed.replace('+', '0')),
                            inModifier.getType(), inModifier.getCondition(),
                            next);
     }
@@ -455,14 +459,24 @@ public class BaseQuality extends BaseEntry
          || ("will save".equals(inName) && affects == Affects.WILL_SAVE))
       {
         Modifier modifier = (Modifier)multiple.get(2);
-        ioContributions.add
-          (new Contribution
-           (modifier.as
-            (Integer.valueOf(computeExpressions
-                             (((Expression.Expr)modifier.getExpression())
-                              .getText(), inParameters).replace('+', '0')),
-             modifier.getType(), modifier.getCondition(), null),
-            this, null));
+        if(modifier.getExpression() instanceof Expression.Expr)
+        {
+          String expression =
+            computeExpressions(((Expression.Expr)modifier.getExpression())
+                               .getText(), inParameters);
+
+          Modifier computed = modifier.read(expression);
+          if (computed != null)
+            ioContributions.add(new Contribution(computed, this, null));
+          else
+            ioContributions.add
+              (new Contribution
+               (modifier.as(Integer.valueOf(expression.replace('+', '0')),
+                            modifier.getType(), modifier.getCondition(), null),
+                this, null));
+        }
+        else
+          ioContributions.add(new Contribution(modifier, this, null));
       }
     }
   }

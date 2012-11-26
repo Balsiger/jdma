@@ -52,7 +52,7 @@
  * @param entry The entry rendered
  */
 {deltemplate dma.entry.values}
-  {if $entry.incomplete and $ij.isDM}
+  {if def($entry.incomplete) and $ij.isDM}
     {call dma.entry.extension}
       {param name: 'incomplete' /}
       {param content}
@@ -289,7 +289,7 @@
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Reproduction' /}
-    {param value: $entry.reprodction /}
+    {param value: $entry.reproduction /}
   {/delcall}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
@@ -414,8 +414,19 @@
       {/if}
       {sp}({$entry.name})
     </h1>
-    {$entry.gender.print} {$entry.base.print}<p>
-
+    {if $entry.gender.print != 'Unknown'}
+      {$entry.gender.print}{sp}
+    {/if}
+    <p>
+    <div class="description">
+      {call dma.entry.overviewValue}
+        {param entry: $entry /}
+        {param value: $entry.encounter /}
+      {/call}
+    </div>
+    <p>
+    {$entry.base.print}
+    <p>
     {call dma.entry.overviewValue}
       {param prefix: 'CR' /}
       {param postfix: ';' /}
@@ -453,7 +464,7 @@
       {param prefix: 'Init' /}
       {param postfix: ';' /}
       {param entry: $entry /}
-      {param combination: $entry.initiative /}
+      {param value: $entry.initiative /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Speed' /}
@@ -485,6 +496,45 @@
       {param postfix: ';' /}
       {param entry: $entry /}
       {param content}
+        {foreach $primary in $entry.attacks.primary}
+          {$primary.number} {$primary.mode |print}{sp}
+          {foreach $attack in $primary.attacks}
+            +{$attack |print}
+            {if not isLast($attack)}/{/if}
+          {/foreach}
+          {sp}{$primary.style |print}
+          {sp}({$primary.damage |print}
+          {if def($primary.critical)}
+            / {$primary.critical |print}
+          {/if}
+          )
+          {if not isLast($primary)}
+            , or{sp}
+          {/if}
+        {/foreach}
+        {if len($entry.attacks.primary) and len($entry.attacks.secondary)}
+          {sp}and{sp}
+        {/if}
+        {foreach $secondary in $entry.attacks.secondary}
+          {$secondary.number} {$secondary.mode |print}{sp}
+          {foreach $attack in $secondary.attacks}
+            +{$attack |print}
+            {if not isLast($attack)}/{/if}
+          {/foreach}
+          {sp}{$secondary.style |print}
+          {sp}({$secondary.damage |print}
+          {if def($secondary.critical)}
+            / {$secondary.critical |print}
+          {/if}
+          )
+          {if not isLast($secondary)}
+            , or{sp}
+          {/if}
+        {/foreach}
+        {if (len($entry.attacks.primary) or len($entry.attacks.secondary))
+            and len($entry.attacks.weapons)}
+          {sp}or{sp}
+        {/if}
         {foreach $weapon in $entry.attacks.weapons}
           {foreach $attack in $weapon.attacks}
             +{$attack |print}
@@ -495,14 +545,14 @@
           {call dma.value.combined}
             {param combination: $weapon.damage /}
           {/call}
-            /
-            {call dma.value.combined}
-              {param combination: $weapon.critical /}
-            {/call}
-           , {$weapon.name})
-           {if not isLast($weapon)}
-             , or{sp}
-           {/if}
+          /
+          {call dma.value.combined}
+            {param combination: $weapon.critical /}
+          {/call}
+          , {$weapon.name})
+          {if not isLast($weapon)}
+            , or{sp}
+          {/if}
         {/foreach}
         {sp}(base{sp}
         <span class="windowed">
@@ -522,54 +572,6 @@
           </span>
         </span>
         , grapple +{$entry.attacks.grapple |print})
-      {/param}
-    {/call}
-    <p>
-    {call dma.entry.overviewValue}
-      {param prefix: 'SA' /}
-      {param postfix: '' /}
-      {param entry: $entry /}
-      {param content}
-        {foreach $attack in $entry.special_attack_summaries}
-          {$attack.name}{if $attack.params} {$attack.params}{/if}
-          {switch $attack.number}
-            {case -1}
-            {case 0}
-            {case 1}
-              {sp}once per day
-            {case 2}
-              {sp}twice per day
-            {default}
-              {sp}{$attack.number} times per day
-          {/switch}
-          {if not isLast($attack)}, {/if}
-        {/foreach}
-      {/param}
-    {/call}
-    <p>
-    {call dma.entry.overviewValue}
-      {param prefix: 'SQ' /}
-      {param postfix: '' /}
-      {param entry: $entry /}
-      {param content}
-        {foreach $quality in $entry.special_quality_summaries}
-          {$quality.name}{if $quality.params} {$quality.params}{/if}
-          {if $quality.condition}
-            {sp}<em>if {$quality.condition |print}</em>
-          {/if}
-          {switch $quality.number}
-            {case -1}
-
-            {case 0}
-            {case 1}
-              {sp}once per day
-            {case 2}
-              {sp}twice per day
-            {default}
-              {sp}{$quality.number} times per day
-          {/switch}
-          {if not isLast($quality)}, {/if}
-        {/foreach}
       {/param}
     {/call}
     <p>
@@ -643,42 +645,61 @@
       {if not isLast($skill)}, {/if}
     {/foreach}
     <p>
-    <em>Feats:</em>{sp}
-    {foreach $ref in $entry.allFeats}
-      <span class="windowed">
-        <span class="window base">
-          from{sp}
-          {foreach $base in $ref.second}
-            {$base}{if not isLast($base)},{sp}{/if}
-          {/foreach}
-        </span>
-        {$ref.first.getName}
-        {if $ref.first.parameters.summary} {$ref.first.parameters.summary}{/if}
-        {if not isLast($ref)},{sp}{/if}
-      </span>
-    {/foreach}
-    <p>
-    <div class="abilities">
+    <div id="boxes">
       {foreach $attack in $entry.special_attack_summaries}
         <div class="ability">
-          <div class="ability-title">{$attack.name} {$attack.params}</div>
+          <div class="ability-title">
+            {if $attack.number > 0}
+              <div class="ability-numbers">
+                {for $i in range($attack.number)}
+                  <div class="ability-number"></div>
+                {/for}
+              </div>
+            {/if}
+            {$attack.name} {$attack.params}
+          </div>
           <div class="ability-text">{commands($attack.summary)}</div>
         </div>
       {/foreach}
       {foreach $quality in $entry.special_quality_summaries}
         <div class="ability">
-          <div class="ability-title">{$quality.name} {$quality.params}</div>
+          <div class="ability-title">
+            {$quality.name} {$quality.params}
+            {if $quality.condition}
+              <br /><em>if {$quality.condition |print}</em>
+            {/if}
+          </div>
           <div class="ability-text">{commands($quality.summary)}</div>
         </div>
       {/foreach}
       {foreach $feat in $entry.allFeats}
-        <div class="ability">
-          <div class="ability-title">
-            {$feat.first.getName} {$feat.first.parameters.summary}
-          </div>
-          <div class="ability-text">{commands($feat.first.summary)}</div>
+        <div class="feat">
+          <span class="windowed">
+            <span class="window base">
+              from{sp}
+              {foreach $base in $feat.second}
+                {$base}{if not isLast($base)},{sp}{/if}
+              {/foreach}
+            </span>
+            <div class="feat-title">
+              {$feat.first.getName} {$feat.first.parameters.summary}
+            </div>
+          </span>
+          <div class="feat-text">{commands($feat.first.summary)}</div>
         </div>
+      {/foreach}
+      {foreach $item in $entry.possesions.list}
+        {call dma.entry.itemsummary}
+          {param item: entry($entry.campaign.key + '/item/' + $item.print) /}
+        {/call}
       {/foreach}
     </div>
   </div>
+  <div class="clear"></div>
+    {literal}
+      <script>
+        $('#boxes').masonry({
+          });
+      </script>
+     {/literal}
 {/deltemplate}

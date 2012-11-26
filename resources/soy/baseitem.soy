@@ -31,7 +31,7 @@
  * @param entry The entry rendered
  */
 {deltemplate dma.entry.values}
-  {if $entry.incomplete and $ij.isDM}
+  {if def($entry.incomplete) and $ij.isDM}
     {call dma.entry.extension}
       {param name: 'incomplete' /}
       {param content}
@@ -171,7 +171,7 @@
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
           {param name: 'Secondary Damage' /}
-          {param value: $entry.secondaryDamage /}
+          {param value: $entry.secondary_damage /}
         {/delcall}
         {delcall dma.entry.keyvalue}
           {param entry: $entry /}
@@ -369,14 +369,14 @@
     {param name: 'Appearances' /}
     {param value: $entry.appearances /}
   {/delcall}
-  {if $entry.qualities}
+  {if def($entry.qualities)}
     {delcall dma.entry.keyvalue}
       {param entry: $entry /}
       {param name: 'Qualities' /}
       {param value: $entry.qualities /}
     {/delcall}
   {/if}
-  {if $entry.effects}
+  {if def($entry.effects)}
     {delcall dma.entry.keyvalue}
       {param entry: $entry /}
       {param name: 'Effects' /}

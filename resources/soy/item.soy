@@ -185,11 +185,13 @@
               {param entry: $entry /}
               {param value: $entry.count /}
             {/call}{sp}
-            {call dma.value.value}
-              {param canEdit: $ij.isDM /}
-              {param entry: $entry /}
-              {param value: $entry.unit /}
-            {/call}
+            {if def($entry.unit)}
+              {call dma.value.withbase}
+                {param canEdit: $ij.isDM /}
+                {param entry: $entry /}
+                {param value: $entry.unit /}
+              {/call}
+            {/if}
           {/param}
         {/delcall}
       {/param}

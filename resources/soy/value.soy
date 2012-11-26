@@ -33,6 +33,9 @@
  * @param related Other related values to edit together
  * @param content Content for printing the value, uses .print if not given
  * @param note Text to be displayed when editing
+ * @param prefix The prefix to the value, if any
+ * @param postfix The postfix to the value, if any
+ * @param ifempty The text to print if the value is empty
  *
  */
 {template .value}
@@ -46,12 +49,16 @@
       {param related: $related ? $related : $value.related /}
       {param choices: $value.choices /}
       {param note: $note /}
+      {param ifempty: $ifempty /}
       {param content}
         {if $content}
+          {if $prefix}{$prefix}{sp}{/if}
           {$content}
+          {if $postfix}{$postfix}{sp}{/if}
         {else}
           {if $value.isDefined}
-            {if $value.remark}
+            {if $prefix}{$prefix}{sp}{/if}
+            {if def($value.remark)}
               {call dma.value.remark}
                 {param value: $value /}
                 {param remarkType: $value.remark.type /}
@@ -60,18 +67,25 @@
             {else}
               {$value |print}
             {/if}
+            {if $postfix}{$postfix}{sp}{/if}
           {elseif $value.hasExpression}
+            {if $prefix}{$prefix}{sp}{/if}
             {$value.getExpression}
-          {else}
-            &nbsp;
+            {if $postfix}{$postfix}{sp}{/if}
           {/if}
         {/if}
       {/param}
     {/call}
   {elseif $content}
+    {if $prefix}{$prefix}{sp}{/if}
     {$content}
+    {if $postfix}{$postfix}{sp}{/if}
   {else}
-    (not found)
+    {if $ifempty}
+      {$ifempty}
+    {else}
+      (not found)
+    {/if}
   {/if}
 {/template}
 
@@ -87,6 +101,7 @@
  * @param choices The possible choices for the value, if any
  * @param content The formatted value edited as it is displayed
  * @param note Text to be displayed when editing
+ * @param ifempty The text to print if empty
  *
  */
 {template .editable}
@@ -94,10 +109,18 @@
     <dmaeditable name="{$name}" value="{$value|noAutoescape}" key="{$key}"
       class="editable" type="{$type}"{if $related} related="{$related}"{/if}
       {if $choices} values="{$choices}"{/if}{if $note} note="{$note}"{/if}>
-      {$content|noAutoescape}
+      {if $content or not $ifempty}
+        {$content|noAutoescape}
+      {else}
+        {$ifempty}
+      {/if}
     </dmaeditable>
   {else}
-    {$content|noAutoescape}
+    {if $content or not $ifempty}
+      {$content|noAutoescape}
+    {else}
+      {$ifempty}
+    {/if}
   {/if}
 {/template}
 
@@ -372,15 +395,7 @@
     {param url: '/items/damages/' + $value.group /}
     {param text: $value.raw /}
   {/call}
-  {if $value.getType}
-    {sp}{$value.getType}
-  {/if}
-  /*
-  {if $value.effect}
-    {sp}{$value.effect}
-  {/if}
-  */
-  {if $value.next}
+  {if def($value.next)}
     {sp}{$value.next.print}
   {/if}
 {/template}
@@ -498,37 +513,37 @@
  * @param value the value printed
  * @param canEdit the value can be edited
  * @param note The note to display on edit, if any
+ * @param prefix The prefix to the value, if any
+ * @param postfix The postfix to the value, if any
+ * @param ifempty The text to print if the value is empty
  */
 {template .combination}
-  {if $combination.total}
-    {if $combination.bases and length($combination.bases) > 0}
-      {call dma.value.value}
-        {param entry: $entry /}
-        {param value: $value /}
-        {param canEdit: $canEdit /}
-        {param note: $note /}
-        {param content}
-          {if $ij.isDM}
-            {call dma.value.combined}
-              {param combination: $combination /}
-            {/call}
-          {else}
-            {$combination.total|print}
-          {/if}
-        {/param}
-      {/call}
-    {else}
-      {call dma.value.value}
-        {param entry: $entry /}
-        {param value: $value /}
-        {param canEdit: $canEdit /}
-      {/call}
-    {/if}
+  {if def($combination.total) and len($combination.bases) > 0}
+    {call dma.value.value}
+      {param entry: $entry /}
+      {param value: $value /}
+      {param canEdit: $canEdit /}
+      {param note: $note /}
+      {param prefix: $prefix /}
+      {param postfix: $postfix /}
+      {param content}
+        {if $ij.isDM}
+          {call dma.value.combined}
+            {param combination: $combination /}
+          {/call}
+        {else}
+          {$combination.total |print}
+        {/if}
+      {/param}
+    {/call}
   {else}
     {call dma.value.value}
       {param entry: $entry /}
       {param value: $value /}
       {param canEdit: $canEdit /}
+      {param prefix: $prefix /}
+      {param postfix: $postfix /}
+      {param ifempty: $ifempty /}
     {/call}
   {/if}
 {/template}
@@ -541,6 +556,9 @@
 {template .combined}
   {if $combination.bases[0].isLongText}
     <div class="longtext">
+      {if $combination.top.isDefined}
+        {$combination.top |print}
+      {/if}
       {foreach $base in $combination.bases}
         {if $base.value.isDefined}
           <div class="base-title">
@@ -551,6 +569,9 @@
       {/foreach}
     </div>
   {elseif $combination.bases[0].isText}
+    {if $combination.top.isDefined}
+      {$combination.top |print}
+    {/if}
     {foreach $base in $combination.bases}
       {if $base.value.isDefined}
         {if not isFirst($base) or $combination.isDefined}
@@ -593,15 +614,21 @@
  * @param value the value rendered
  * @param canEdit the value can be edited
  * @param note Text to be displayed when editing
+ * @param prefix the prefix for the value
+ * @param postfix the postfix for the value
+ * @param ifempty text to print if the value is empty
  */
 {template .withbase}
-  {if $value.combine}
+  {if def($value.combine)}
     {call dma.value.combination}
       {param combination: $value.combine /}
       {param value: $value /}
       {param entry: $entry /}
       {param canEdit: $canEdit /}
       {param note: $note /}
+      {param prefix: $prefix /}
+      {param postfix: $postfix /}
+      {param ifempty: $ifempty /}
     {/call}
   {else}
     {call dma.value.value}
@@ -609,6 +636,9 @@
       {param value: $value /}
       {param canEdit: $canEdit /}
       {param note: $note /}
+      {param prefix: $prefix /}
+      {param postfix: $postfix /}
+      {param ifempty: $ifempty /}
     {/call}
  {/if}
 {/template}

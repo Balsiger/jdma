@@ -49,6 +49,7 @@ import com.google.template.soy.SoyModule;
 import com.google.template.soy.data.SoyData;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
+import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 import com.google.template.soy.shared.restricted.SoyFunction;
@@ -175,6 +176,68 @@ public class SoyTemplate
     public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
     {
       return IntegerData.forValue(Integer.valueOf(inArgs.get(0).toString()));
+    }
+  }
+
+  //........................................................................
+  //----- DefFunction ---------------------------------------------------
+
+  /** A plugin function to convert the argument into an integer. */
+  public static class DefFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "def";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      if(inArgs.get(0) == null
+         || inArgs.get(0) instanceof SoyAbstract.Undefined)
+        return BooleanData.forValue(false);
+
+      return BooleanData.forValue(true);
+    }
+  }
+
+  //........................................................................
+  //----- LengthFunction ---------------------------------------------------
+
+  /** A plugin function to convert the argument into an integer. */
+  public static class LengthFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "len";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      if(inArgs.get(0) instanceof SoyListData)
+        return IntegerData.forValue(((SoyListData)inArgs.get(0)).length());
+
+      if(inArgs.get(0) instanceof SoyAbstract.Undefined)
+        return IntegerData.forValue(0);
+
+      Log.error("trying to compute length of " + inArgs.get(0).getClass()
+                + ", returning 0 instead");
+      return IntegerData.forValue(0);
     }
   }
 
@@ -370,6 +433,9 @@ public class SoyTemplate
       if(inValue instanceof SoyValue)
         return ((SoyValue)inValue).print();
 
+      if(inValue == null)
+        return "(null)";
+
       return inValue.toString();
     }
   }
@@ -494,6 +560,8 @@ public class SoyTemplate
 
       soyFunctionsSetBinder.addBinding().to(EntryFunction.class);
       soyFunctionsSetBinder.addBinding().to(IntegerFunction.class);
+      soyFunctionsSetBinder.addBinding().to(LengthFunction.class);
+      soyFunctionsSetBinder.addBinding().to(DefFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
       soyFunctionsSetBinder.addBinding().to(CommandsFunction.class);

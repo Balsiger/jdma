@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import com.google.common.collect.Multimap;
@@ -31,6 +33,8 @@ import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -369,6 +373,28 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
     ioValues.put(Index.Path.SPEEDS, m_speed.get(0).group());
     ioValues.put(Index.Path.SPEEDS, m_speed.get(1).group());
+  }
+
+  //........................................................................
+  //-------------------------- addContributions ----------------------------
+
+  /**
+   * Add current contributions to the given list.
+   *
+   * @param       inName          the name of the value to contribute to
+   * @param       ioContributions the list of contributions collected
+   *
+   */
+  @Override
+  public void addContributions
+    (@Nonnull String inName,
+     @Nonnull List<Contribution<? extends Value>> ioContributions)
+  {
+    super.addContributions(inName, ioContributions);
+
+    if("armor class".equals(inName) && m_bonus.isDefined())
+      ioContributions.add(new Contribution<Modifier>(m_bonus, m_entry,
+                                                     "armor"));
   }
 
   //........................................................................

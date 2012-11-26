@@ -72,7 +72,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class SoyEntry extends SoyMapData
+public class SoyEntry extends SoyAbstract
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -86,7 +86,7 @@ public class SoyEntry extends SoyMapData
    */
   public SoyEntry(@Nonnull AbstractEntry inEntry)
   {
-    m_entry = inEntry;
+    super(inEntry.getName(), inEntry);
   }
 
   //........................................................................
@@ -94,9 +94,6 @@ public class SoyEntry extends SoyMapData
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The entry with the data. */
-  private final @Nonnull AbstractEntry m_entry;
 
   //........................................................................
 
@@ -202,7 +199,7 @@ public class SoyEntry extends SoyMapData
         }
       }
 
-    return null;
+    return new Undefined(m_name + "." + name);
   }
 
   //........................................................................
@@ -266,88 +263,6 @@ public class SoyEntry extends SoyMapData
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //------------------------------- convert --------------------------------
-
-  /**
-   * Convert the given value into a soy data structure (deep).
-   *
-   * @param       inName  the name of the value to convert
-   * @param       inValue the value to convert
-   *
-   * @return      the converted value
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public @Nullable SoyData convert(@Nonnull String inName,
-                                   @Nullable Object inValue)
-  {
-    if(inValue instanceof Combination)
-    {
-      Combination<? extends Value> combination =
-        (Combination<? extends Value>)inValue;
-
-      return new SoyCombination(combination.getName(), combination,
-                                combination.getTopValue(),
-                                combination.getEntry());
-    }
-
-    if(inValue instanceof Value)
-      return new SoyValue(inName, (Value)inValue, m_entry);
-
-    if(inValue instanceof AbstractEntry)
-      return new SoyEntry((AbstractEntry)inValue);
-
-    if(inValue instanceof Collection)
-    {
-      SoyListData list = new SoyListData();
-      for(Object element : (List)inValue)
-        list.add(convert(inName + "_list", element));
-
-      return list;
-    }
-
-    if(inValue instanceof Map)
-    {
-      SoyMapData map = new SoyMapData();
-      Map<?, ?> input = (Map<?, ?>)inValue;
-      for(Map.Entry<?, ?> entry : input.entrySet())
-        map.putSingle(entry.getKey().toString(),
-                      convert(inName, entry.getValue()));
-
-      return map;
-    }
-
-    if(inValue instanceof Multimap)
-      return convert(inName, ((Multimap)inValue).asMap());
-
-    if(inValue instanceof Pair)
-      return new SoyMapData
-        ("first", convert(inName, ((Pair)inValue).first()),
-         "second", convert(inName, ((Pair)inValue).second()));
-
-    if(inValue instanceof Long)
-      return IntegerData.forValue(((Long)inValue).intValue());
-
-    if(inValue == null)
-      return null;
-
-    try
-    {
-      return SoyData.createFromExistingData(inValue);
-    }
-    catch(SoyDataException e)
-    {
-      Log.warning("could not convert " + inValue.getClass()
-        + ", defaulting to string");
-
-      return StringData.forValue(inValue.toString());
-    }
-  }
-
-  //........................................................................
-
-
   //........................................................................
 
   //------------------------------------------------------------------- test

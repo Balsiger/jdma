@@ -23,22 +23,26 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.EnumSelection;
+import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
-//import net.ixitxachitls.dma.values.Selection;
+import net.ixitxachitls.dma.values.Parameters;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-//import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
@@ -210,7 +214,7 @@ public class BaseFeat extends BaseEntry
       { new Multiple.Element(new EnumSelection<BaseQuality.Affects>
                              (BaseQuality.Affects.class), false),
         new Multiple.Element(new Name(), true),
-        new Multiple.Element(new Modifier(), true, ":", null),
+        new Multiple.Element(new Modifier(), true, ": ", null),
       }));
 
   //........................................................................
@@ -543,6 +547,54 @@ public class BaseFeat extends BaseEntry
     values.put(Index.Path.TYPES, m_featType.group());
 
     return values;
+  }
+
+  //........................................................................
+  //--------------------------- addContributions ---------------------------
+
+  /**
+   * Add contributions for this entry to the given list.
+   *
+   * @param       inName          the name of the value to contribute to
+   * @param       ioContributions the list of contributions to add to
+   *
+   */
+  @SuppressWarnings("unchecked")
+  //@Override
+  public void addContributions
+    (@Nonnull String inName,
+     @Nonnull List<Contribution<? extends Value>> ioContributions,
+     // TODO: remove the parameters and handle this in a quality!
+     @Nonnull Parameters inParameters)
+  {
+    addContributions(inName, ioContributions);
+
+    for(Multiple multiple : m_effects)
+    {
+      if(inName.equalsIgnoreCase(multiple.get(1).toString())
+         || inName.equalsIgnoreCase(multiple.get(0).toString()))
+      {
+        Modifier modifier = (Modifier)multiple.get(2);
+        if(modifier.getExpression() instanceof Expression.Expr)
+        {
+          String expression =
+            computeExpressions(((Expression.Expr)modifier.getExpression())
+                               .getText(), inParameters);
+
+          Modifier computed = modifier.read(expression);
+          if (computed != null)
+            ioContributions.add(new Contribution(computed, this, null));
+          else
+            ioContributions.add
+              (new Contribution
+               (modifier.as(Integer.valueOf(expression.replace('+', '0')),
+                            modifier.getType(), modifier.getCondition(), null),
+                this, null));
+        }
+        else
+          ioContributions.add(new Contribution(modifier, this, null));
+      }
+    }
   }
 
   //........................................................................

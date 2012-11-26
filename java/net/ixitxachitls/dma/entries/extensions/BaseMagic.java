@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -34,6 +35,7 @@ import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -42,6 +44,7 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Percent;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
@@ -161,31 +164,36 @@ public class BaseMagic extends BaseExtension<BaseItem>
   // }
 
   //........................................................................
-  //---------------------------- addModifiers ------------------------------
+  //-------------------------- addContributions ----------------------------
 
   /**
-   * Add current modifiers to the given map.
+   * Add current contributions to the given list.
    *
-   * @param       inName        the name of the value to modify
-   * @param       ioModifers    the map of modifiers
+   * @param       inName          the name of the value to contribute to
+   * @param       ioContributions the list of contributions collected
    *
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void addModifiers(@Nonnull String inName,
-                           @Nonnull Map<String, Modifier> ioModifiers)
+  public void addContributions
+    (@Nonnull String inName,
+     @Nonnull List<Contribution<? extends Value>> ioContributions)
   {
-    super.addModifiers(inName, ioModifiers);
+    super.addContributions(inName, ioContributions);
 
     if("dexterity".equals(inName))
     {
       if(((EnumSelection<BaseMonster.Ability>)m_ability.get(0)).getSelected()
          == BaseMonster.Ability.DEXTERITY)
-        ioModifiers.put(m_entry.getName(), (Modifier)m_ability.get(1));
+        ioContributions.add
+          (new Contribution<Modifier>((Modifier)m_ability.get(1),
+                                      m_entry, "magic"));
     }
 
     if(inName.equals(((Name)m_modifier.get(0)).get()))
-      ioModifiers.put(m_entry.getName(), (Modifier)m_modifier.get(1));
+      ioContributions.add
+        (new Contribution<Modifier>((Modifier)m_modifier.get(1),
+                                    m_entry, "magic"));
   }
 
   //........................................................................

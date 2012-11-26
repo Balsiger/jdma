@@ -100,7 +100,10 @@ public class Modifier extends Value<Modifier>
     ENHANCEMENT("enhancement", false),
 
     /** A deflection modifier against attacks. */
-    DEFLECTION("deflection", false);
+    DEFLECTION("deflection", false),
+
+    /** A competence modifier against attacks. */
+    COMPETENCE("competence", false);
 
     /** The value's name. */
     private @Nonnull String m_name;
@@ -794,11 +797,21 @@ public class Modifier extends Value<Modifier>
     if(m_type == inValue.m_type &&
        ((m_condition != null && m_condition.equals(inValue.m_condition))
         || m_condition == null && inValue.m_condition == null))
+    {
+      Modifier next;
+      if(m_next == null)
+        next = inValue.m_next;
+      else if(inValue.m_next == null)
+        next = m_next;
+      else
+        next = m_next.add(inValue.m_next);
+
       if(m_type.stacks())
-        return as(m_value + inValue.m_value, m_type, m_condition, m_next);
+        return as(m_value + inValue.m_value, m_type, m_condition, next);
       else
         return
-          as(Math.max(value, inValue.m_value), m_type, m_condition, m_next);
+          as(Math.max(value, inValue.m_value), m_type, m_condition, next);
+    }
 
     if(m_next == null)
       return as(m_value, m_type, m_condition, inValue);
@@ -821,7 +834,7 @@ public class Modifier extends Value<Modifier>
   public @Nullable Modifier ignore(@Nonnull Type ... inTypes)
   {
     for(Type type : inTypes)
-      if(m_type == type)
+      if(m_type == type && m_value >= 0)
         if(m_next != null)
           return m_next.ignore(inTypes);
         else

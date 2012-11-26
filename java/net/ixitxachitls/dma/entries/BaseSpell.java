@@ -2309,7 +2309,7 @@ public class BaseSpell extends BaseEntry
     return computeExpressions
       (summary, new Parameters()
        .with("level", new Number(inLevel, 0, 100), Parameters.Type.ADD)
-       .with("dc", new Number(dc, 0, 100), Parameters.Type.MAX));
+       .with("dc", new Number(dc, -100, 100), Parameters.Type.MAX));
   }
 
   //........................................................................
@@ -2326,6 +2326,9 @@ public class BaseSpell extends BaseEntry
   public @Nonnull String getSummary(@Nullable Parameters inParameters)
   {
     String summary = m_summary.get();
+
+    if(summary == null || summary.isEmpty())
+      return "(no summary)";
 
     if(inParameters == null || !inParameters.isDefined())
       return summary;
@@ -2386,6 +2389,24 @@ public class BaseSpell extends BaseEntry
       values.put(Index.Path.SUBSCHOOLS, subschool.group());
 
     return values;
+  }
+
+  //........................................................................
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry. Every user is a DM
+   * for a base campaign.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  @Override
+  public boolean isDM(@Nonnull BaseCharacter inUser)
+  {
+    return inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
 
   //........................................................................

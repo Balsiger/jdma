@@ -404,7 +404,6 @@ public class Contents extends Extension<Item>
    */
   public boolean add(@Nonnull CampaignEntry inEntry)
   {
-    new Exception().printStackTrace(System.out);
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();
     for(Name item : m_contents)

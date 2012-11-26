@@ -2162,10 +2162,10 @@ public class AbstractEntry extends ValueGroup
    * @return      the short description
    *
    */
-  public @Nonnull String getShortDescription()
-  {
-    return "";
-  }
+  // public @Nonnull String getShortDescription()
+  // {
+  //   return "";
+  // }
 
   //........................................................................
   //------------------------------- canEdit --------------------------------
@@ -3277,9 +3277,8 @@ public class AbstractEntry extends ValueGroup
       while(matcher.find())
       {
         Value value = inParameters.getValue(matcher.group(1));
-        System.out.println(matcher.group(1) + ": " + value);
         if(value != null && value.isDefined())
-          matcher.appendReplacement(result, value.toString());
+          matcher.appendReplacement(result, value.toString().replace('$', '_'));
       }
 
       matcher.appendTail(result);

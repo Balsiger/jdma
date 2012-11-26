@@ -176,6 +176,9 @@ public class BaseMonster extends BaseEntry
   /** The possible monster sub types in the game. */
   public enum MonsterSubtype implements EnumSelection.Named
   {
+    /** None. */
+    NONE("None"),
+
     /** Air. */
     AIR("Air"),
 
@@ -482,6 +485,18 @@ public class BaseMonster extends BaseEntry
 
     /** Infernal Battlefield of Acheron terrain. */
     INFENRAL_BATTLEFIELD_OF_ACHERON("Infernal Battlefield of Acheron"),
+
+    /** Elemental Plane of Air. */
+    ELEMENTAL_PLANE_OF_AIR("Elemental Plane of Air"),
+
+    /** Elemental Plane of Earth. */
+    ELEMENTAL_PLANE_OF_EARTH("Elemental Plane of Earth"),
+
+    /** Elemental Plane of Fire. */
+    ELEMENTAL_PLANE_OF_FIRE("Elemental Plane of Fire"),
+
+    /** Elemental Plane of Water. */
+    ELEMENTAL_PLANE_OF_WATER("Elemental Plane of Water"),
 
     /** Any terrain. */
     ANY("Any");
@@ -941,6 +956,9 @@ public class BaseMonster extends BaseEntry
     /** Aquan. */
     AQUAN("Aquan"),
 
+    /** Auran. */
+    AURAN("Auran"),
+
     /** Celestial. */
     CELESTIAL("Celestial"),
 
@@ -1270,10 +1288,6 @@ public class BaseMonster extends BaseEntry
 
   //----- size -------------------------------------------------------------
 
-  /** The formatter for sizes. */
-  // protected static ValueFormatter<Multiple> s_sizeFormatter =
-  //   new LinkFormatter<Multiple>("/index/monstersizes/");
-
   /** The monsters size. */
   @Key("size")
   protected Multiple m_size = new Multiple(new Multiple.Element []
@@ -1591,6 +1605,7 @@ public class BaseMonster extends BaseEntry
 
   /** The special attacks. */
   @Key("special attacks")
+  @WithBases
   protected ValueList<Multiple> m_specialAttacks = new ValueList<Multiple>
     (", ",
      new Multiple(new Multiple.Element []
@@ -1607,11 +1622,12 @@ public class BaseMonster extends BaseEntry
           .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
           .withParameter("Class", new EnumSelection<BaseSpell.SpellClass>
                          (BaseSpell.SpellClass.class), Parameters.Type.UNIQUE)
-          .withParameter("DC", new Number(0, 100), Parameters.Type.MAX)
+          .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
           .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Damage", new Damage(), Parameters.Type.ADD)
+          .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
           .withTemplate("reference", "/quality/"), false),
          new Multiple.Element(new Number(1, 100)
                               .withEditType("name[per day]"), true, "/", null)
@@ -1622,6 +1638,7 @@ public class BaseMonster extends BaseEntry
 
   /** The special qualities. */
   @Key("special qualities")
+  @WithBases
   protected ValueList<Multiple> m_specialQualities = new ValueList<Multiple>
     (", ",
      new Multiple(new Multiple.Element []
@@ -1707,7 +1724,7 @@ public class BaseMonster extends BaseEntry
                                 {
                                   new Multiple.Element(new Dice(), false),
                                   new Multiple.Element(new Name(), false),
-                                })).withEditType("any[additional]"),
+                                })),
                              true, " plus ", null),
       }));
 
@@ -2169,6 +2186,19 @@ public class BaseMonster extends BaseEntry
       quality.addContributions(inName, ioContributions,
                                reference.getParameters());
     }
+
+    for(Reference<BaseFeat> reference : m_feats)
+    {
+      BaseFeat feat = reference.getEntry();
+      if(feat == null)
+        continue;
+
+      feat.addContributions(inName, ioContributions, reference.getParameters());
+    }
+
+    if("armor class".equals(inName))
+    {
+    }
   }
 
   //........................................................................
@@ -2282,14 +2312,48 @@ public class BaseMonster extends BaseEntry
    * @return      true if the quality is there, false if not
    *
    */
-  // public boolean hasQuality(String inQuality)
-  // {
-  //   for(Multiple value : m_specialQualities)
-  //     if(value.toString().equalsIgnoreCase(inQuality))
-  //       return true;
+  public boolean hasQuality(@Nonnull String inQuality)
+  {
+    for(Multiple value : m_specialQualities)
+      if(value.toString().equalsIgnoreCase(inQuality))
+        return true;
 
-  //   return false;
-  // }
+    for(Multiple value : m_specialAttacks)
+      if(value.toString().equalsIgnoreCase(inQuality))
+        return true;
+
+    for(BaseEntry base : getBaseEntries())
+      if(base instanceof BaseMonster)
+        if(((BaseMonster)base).hasQuality(inQuality))
+          return true;
+
+    return false;
+  }
+
+  //........................................................................
+  //-------------------------------- hasFeat -------------------------------
+
+  /**
+   * Determine if the monster has the given quality.
+   *
+   * @param       inQuality the quality to look for
+   *
+   * @return      true if the quality is there, false if not
+   *
+   */
+  public boolean hasFeat(@Nonnull String inFeat)
+  {
+    for(Reference value : m_feats)
+      if(value.toString().equalsIgnoreCase(inFeat))
+        return true;
+
+    for(BaseEntry base : getBaseEntries())
+      if(base instanceof BaseMonster)
+        if(((BaseMonster)base).hasFeat(inFeat))
+          return true;
+
+    return false;
+  }
 
   //........................................................................
   //------------------------------ hasLanguage -----------------------------

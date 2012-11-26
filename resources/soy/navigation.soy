@@ -52,7 +52,7 @@
       &raquo;{sp}
       <a href="{$navEntry.path|escapeJs}" class="navigation-link"
          onclick="util.link(event, \'{$navEntry.path|escapeJs}\')">
-        {if $navEntry.dmName}
+        {if def($navEntry.dmName)}
           {if $ij.isDM}
             {$navEntry.dmName|escapeJs} ({$navEntry.name|escapeJs})
           {else}

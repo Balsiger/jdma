@@ -47,6 +47,7 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -126,10 +127,44 @@ public class DMADatastore implements DMAData
   /** The maximal number of entries to rebuild in one pass. */
   private static final int s_maxRebuild = 1000;
 
+  /** The cache for entries. */
+  private @Nonnull Map<AbstractEntry.EntryKey, AbstractEntry> m_entries =
+    Maps.newHashMap();
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get an entry denoted by type and id and their respective parents.
+   *
+   * @param      inKey  the key to the entry to get
+   *
+   * @param      <T>    the type of the entry to get
+   *
+   * @return     the entry found, if any
+   *
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public @Nullable <T extends AbstractEntry> T getEntry
+                      (@Nonnull AbstractEntry.EntryKey<T> inKey)
+  {
+    AbstractEntry entry = m_entries.get(inKey);
+
+    if(entry == null)
+    {
+      entry = convert(inKey.getID(), inKey.getType(),
+                      m_data.getEntity(convert(inKey)));
+      m_entries.put(inKey, entry);
+    }
+
+    return (T)entry;
+  }
+
+  //........................................................................
   //----------------------------- getEntries -------------------------------
 
   /**
@@ -161,27 +196,6 @@ public class DMADatastore implements DMAData
       entries.add((T)convert(entity));
 
     return entries;
-  }
-
-  //........................................................................
-  //------------------------------- getEntry -------------------------------
-
-  /**
-   * Get an entry denoted by type and id and their respective parents.
-   *
-   * @param      inKey  the key to the entry to get
-   *
-   * @param      <T>    the type of the entry to get
-   *
-   * @return     the entry found, if any
-   *
-   */
-  @Override
-  public @Nullable <T extends AbstractEntry> T getEntry
-                      (@Nonnull AbstractEntry.EntryKey<T> inKey)
-  {
-    return convert(inKey.getID(), inKey.getType(),
-                   m_data.getEntity(convert(inKey)));
   }
 
   //........................................................................
@@ -759,9 +773,13 @@ public class DMADatastore implements DMAData
     if(inEntity == null)
       return null;
 
+    T entry = (T)m_entries.get(convert(inEntity.getKey()));
+    if (entry != null)
+      return entry;
+
     Log.debug("converting entity " + inID + " to " + inType);
 
-    T entry = inType.create(inID);
+    entry = inType.create(inID);
     if(entry == null)
     {
       Log.warning("cannot create conversion " + inType + " entity with id "
@@ -811,6 +829,7 @@ public class DMADatastore implements DMAData
     // update extensions, if necessary
     entry.setupExtensions();
 
+    m_entries.put(entry.getKey(), entry);
     return entry;
   }
 
@@ -870,7 +889,7 @@ public class DMADatastore implements DMAData
   //------------------------------- convert --------------------------------
 
   /**
-   * Convert the given datastore entity into a dma entry.
+   * Convert the given dma entry into a datastore entity.
    *
    * @param      inEntry the entry to convert
    *

@@ -412,11 +412,18 @@ util.parse = function(inText)
   var result = ['dummy']; // we have to have a dummy to pass by reference
   util._parse(result, inText);
   if(result.length == 1)
+  {
+    window.console.log("parsed empty");
     return '';
+  }
 
   if(result.length == 2 && !(result[1] instanceof Array))
+  {
+    window.console.log("parsed", result[1]);
     return result[1];
+  }
 
+  window.console.log("parsed", result.slice(1));
   return result.slice(1);
 };
 
