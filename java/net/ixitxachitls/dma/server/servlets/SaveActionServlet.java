@@ -422,8 +422,18 @@ public class SaveActionServlet extends ActionServlet
       if("name".equals(valueName)
          && param.getValue().startsWith(Entry.TEMPORARY))
         change.set("name", Entry.TEMPORARY);
+      if("dmaValues".equals(valueName))
+      {
+        String text = param.getValue().replaceAll("(?sm)\\s*\"(.*)\"\\s*", "$1")
+          .replaceAll("(?sm)\\\\\"", "\"");
+
+        change.set("dmaValues",
+                   param.getValue().replaceAll("(?sm)\\s*\"(.*)\"\\s*", "$1")
+                   .replaceAll("(?sm)\\\\\"", "\""));
+      }
       else
         change.set(valueName, param.getValue());
+
       change.store(storePath);
     }
 

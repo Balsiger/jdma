@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +56,7 @@ import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Comment;
 import net.ixitxachitls.dma.values.Contribution;
+import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
@@ -1290,6 +1292,23 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //--------------------------------- dma ----------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public @Nonnull FormattedText dmaValues()
+  {
+    return new FormattedText(formatValues() + ".");
+  }
+
+  //........................................................................
+
 
   //------------------------- computeIndexValues ---------------------------
 
@@ -2389,6 +2408,13 @@ public class AbstractEntry extends ValueGroup
       return null;
     }
 
+    if("dmaValues".equals(inKey))
+    {
+      readValues(new ParseReader(new StringReader(inText), "dma values"));
+
+      return null;
+    }
+
     return super.set(inKey, inText);
   }
 
@@ -2835,10 +2861,6 @@ public class AbstractEntry extends ValueGroup
     while(!inReader.isAtEnd() && !inReader.expect(s_delimiter))
     {
       String key = inReader.expect(variables.getKeywords());
-
-      if(key != null)
-        readVariable(inReader, variables.getVariable(key));
-
       if(key == null)
       {
         inReader.logWarning(inReader.getPosition(), "entry.key.unknown",
@@ -2849,6 +2871,8 @@ public class AbstractEntry extends ValueGroup
         else
           continue;
       }
+      else
+        readVariable(inReader, variables.getVariable(key));
 
       if(inReader.expect(s_delimiter))
         break;
