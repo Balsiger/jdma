@@ -490,6 +490,24 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //----------------------------- uncacheEntry -----------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public <T extends AbstractEntry> void uncacheEntry
+            (@Nonnull AbstractEntry.EntryKey<T> inKey)
+  {
+    m_entries.remove(inKey);
+  }
+
+  //........................................................................
+
 
   //------------------------------ isChanged -------------------------------
 

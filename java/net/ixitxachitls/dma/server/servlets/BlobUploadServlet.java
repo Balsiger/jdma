@@ -39,6 +39,7 @@ import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -126,8 +127,9 @@ public class BlobUploadServlet extends BaseServlet
    * @throws IOException if problems reading the blob
    *
    */
+  @SuppressWarnings("unchecked")
   @Override
-public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
+  public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
                                         @Nonnull HttpServletResponse inResponse)
     throws IOException
   {
@@ -169,6 +171,8 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
       if(entry == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "could not find " + keyName);
+
+      store.uncacheEntry(key);
 
       String file = request.getParam("filename");
       String name = request.getParam("name");
@@ -218,7 +222,8 @@ public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
                 "Uploaded " + fileType + " file " + file + " for " + key);
 
 
-      String url =  m_image.getServingUrl(blobKey);
+      String url =
+        m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey(blobKey));
       writer
         .script("parent.window.edit.updateImage('file-" + filename + "', '"
                 + url + "=s300', 'util.link(event, \"" + url + "\");', "

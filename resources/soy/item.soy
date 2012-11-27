@@ -478,6 +478,13 @@
       {param content: $entry.errors /}
     {/delcall}
   {/if}
+  {if $ij.isAdmin}
+    {delcall dma.entry.keyvalue}
+      {param entry: $entry /}
+      {param name: 'DMA' /}
+      {param value: $entry.dmaValues /}
+    {/delcall}
+  {/if}
 {/deltemplate}
 
 /**
