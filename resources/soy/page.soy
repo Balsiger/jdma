@@ -308,8 +308,7 @@
     {param entries: [['label': 'library', 'url': '/library']] /}
   {/call}
   {foreach $type in $types}
-    {if $ij.user or $type.multilink == 'items'
-        or $type.multilink == 'products'}
+    {if $ij.user or $type.multilink != 'users'}
       <div class="library-entry">
         {call .link}
           {param url: '/' + $type.multilink /}
