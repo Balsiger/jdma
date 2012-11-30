@@ -479,9 +479,6 @@ public class BaseQuality extends BaseEntry
           ioContributions.add(new Contribution(modifier, this, null));
       }
 
-      System.out.println(affects + ": " + inName + " == " +
-                         computeExpressions(multiple.get(1).toString(),
-                                            inParameters));
       if(affects == Affects.SKILL
          && inName.equals(computeExpressions(multiple.get(1).toString(),
                                              inParameters)))
