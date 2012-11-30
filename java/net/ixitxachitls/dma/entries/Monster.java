@@ -4039,11 +4039,12 @@ public class Monster extends CampaignEntry<BaseMonster>
         throw new UnsupportedOperationException
           ("cannot handle conditional values for abiliies for saves");
 
-      ioContributions.add
-        (new Contribution<Number>
-         (new Number(abilityModifier((int)ability.getMaxValue()),
-                     -100, 100),
-          this, saveAbility.getShort() + " of " + ability.getMaxValue()));
+      if(ability.getMaxValue() >= 0)
+        ioContributions.add
+          (new Contribution<Number>
+           (new Number(abilityModifier((int)ability.getMaxValue()),
+                       -100, 100),
+            this, saveAbility.getShort() + " of " + ability.getMaxValue()));
     }
 
     for(Name name : m_possessions)

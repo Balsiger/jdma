@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.entries;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
@@ -642,6 +643,23 @@ public class BaseSkill extends BaseEntry
   public BaseMonster.Ability getAbility()
   {
     return m_ability.getSelected();
+  }
+
+  //........................................................................
+  //--------------------------------- isDM ---------------------------------
+
+  /**
+   * Check whether the given user is the DM for this entry.
+   *
+   * @param       inUser the user accessing
+   *
+   * @return      true for DM, false for not
+   *
+   */
+  @Override
+  public boolean isDM(@Nullable BaseCharacter inUser)
+  {
+    return inUser != null && inUser.hasAccess(BaseCharacter.Group.DM);
   }
 
   //........................................................................

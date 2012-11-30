@@ -2181,7 +2181,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the short description
    *
    */
-  // public @Nonnull String getShortDescription()
+  //public @Nonnull String getShortDescription()
   // {
   //   return "";
   // }

@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 
 import javax.annotation.Nonnull;
@@ -46,6 +47,7 @@ import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Maps;
 
 import net.ixitxachitls.util.logging.Log;
 
@@ -114,8 +116,10 @@ public class DataStore
     MemcacheServiceFactory.getMemcacheService("listByValue");
 
   /** The cache for lookup ids. */
-  private static MemcacheService s_cacheIDs =
-    MemcacheServiceFactory.getMemcacheService("ids");
+  // private static MemcacheService s_cacheIDs =
+  //   MemcacheServiceFactory.getMemcacheService("ids");
+  private static Map<String, List<String>> s_cacheIDs =
+    Maps.newHashMap();
 
   /** The cache for lookup ids by value. */
   private static MemcacheService s_cacheIDsByValue =
@@ -134,7 +138,8 @@ public class DataStore
     MemcacheServiceFactory.getMemcacheService("multiValues");
 
   /** Experiation time for the cache. */
-  private static Expiration s_expiration = Expiration.byDeltaSeconds(60 * 60);
+  private static Expiration s_expiration =
+    Expiration.byDeltaSeconds(60 * 60 * 24);
 
   /** Experiation time for the cache. */
   private static Expiration s_longExpiration =
@@ -361,7 +366,7 @@ public class DataStore
       for(Entity entity : m_store.prepare(query).asIterable(options))
         ids.add(entity);
 
-      s_cacheIDsByValue.put(key, ids, s_expiration);
+      s_cacheIDsByValue.put(key, ids); //, s_expiration);
     }
 
     return ids;
@@ -407,7 +412,7 @@ public class DataStore
       for(Entity entity : m_store.prepare(query).asIterable(options))
         ids.add(entity.getKey().getName());
 
-      s_cacheIDs.put(inType, ids, s_expiration);
+      s_cacheIDs.put(inType, ids); //, s_expiration);
     }
 
     return ids;
@@ -582,7 +587,7 @@ public class DataStore
       //s_cacheByValue.clearAll();
       //s_cacheListByValue.clearAll();
       //s_cacheRecent.clearAll();
-      s_cacheIDs.clearAll();
+      s_cacheIDs.clear(); //All();
       s_cacheIDsByValue.clearAll();
 
       return true;
@@ -613,7 +618,7 @@ public class DataStore
     // but should usually be enough.
     if(s_cacheEntity.get(inEntity.getKey()) == null)
     {
-      s_cacheIDs.clearAll();
+      s_cacheIDs.clear(); //All();
       s_cacheIDsByValue.clearAll();
     }
 

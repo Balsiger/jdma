@@ -648,9 +648,8 @@ DIV.summary H1
   font-size: 20px;
 }
 
-DIV.summary DIV.description
+DIV.summary DIV.intro-text
 {
-  font-style: italic;
   background: #eee;
   padding: 10px;
   width: 95%;
@@ -658,7 +657,15 @@ DIV.summary DIV.description
   min-height: auto;
 }
 
-DIV.summary DIV.description DIV.base-title
+DIV.summary DIV.intro-text DIV.description
+{
+  font-style: italic;
+  min-height: 0;
+  margin-bottom: 10px;
+}
+
+DIV.summary DIV.description DIV.base-title,
+DIV.summary DIV.combat DIV.base-title
 {
   display: none;
 }

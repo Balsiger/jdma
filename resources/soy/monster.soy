@@ -421,17 +421,24 @@
       {/if}
       {sp}({$entry.name})
     </h1>
+    <p>
+    <div class="intro-text">
+      <div class="description">
+        {call dma.entry.overviewValue}
+          {param entry: $entry /}
+          {param value: $entry.encounter /}
+        {/call}
+      </div>
+      <div class="combat">
+        {call dma.entry.overviewValue}
+          {param entry: $entry /}
+          {param value: $entry.combat /}
+        {/call}
+      </div>
+    </div>
     {if $entry.gender.print != 'Unknown'}
       {$entry.gender.print}{sp}
     {/if}
-    <p>
-    <div class="description">
-      {call dma.entry.overviewValue}
-        {param entry: $entry /}
-        {param value: $entry.encounter /}
-      {/call}
-    </div>
-    <p>
     {$entry.base.print}
     <p>
     {call dma.entry.overviewValue}

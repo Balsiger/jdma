@@ -478,6 +478,34 @@ public class BaseQuality extends BaseEntry
         else
           ioContributions.add(new Contribution(modifier, this, null));
       }
+
+      System.out.println(affects + ": " + inName + " == " +
+                         computeExpressions(multiple.get(1).toString(),
+                                            inParameters));
+      if(affects == Affects.SKILL
+         && inName.equals(computeExpressions(multiple.get(1).toString(),
+                                             inParameters)))
+        {
+          Modifier modifier = (Modifier)multiple.get(2);
+          if(modifier.getExpression() instanceof Expression.Expr)
+          {
+            String expression =
+              computeExpressions(((Expression.Expr)modifier.getExpression())
+                                 .getText(), inParameters);
+
+            Modifier computed = modifier.read(expression);
+            if (computed != null)
+              ioContributions.add(new Contribution(computed, this, null));
+            else
+              ioContributions.add
+                (new Contribution
+                 (modifier.as(Integer.valueOf(expression.replace('+', '0')),
+                              modifier.getType(), modifier.getCondition(), null),
+                  this, null));
+          }
+          else
+            ioContributions.add(new Contribution(modifier, this, null));
+        }
     }
   }
 

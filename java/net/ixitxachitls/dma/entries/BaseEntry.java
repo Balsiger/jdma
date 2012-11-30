@@ -462,7 +462,6 @@ public class BaseEntry extends AbstractEntry
    * @return      the selection containing the selected world
    *
    */
-  @Override
   public @Nonnull String getShortDescription()
   {
     return m_short.get();
@@ -482,6 +481,9 @@ public class BaseEntry extends AbstractEntry
   public @Nonnull String getSummary(@Nullable Parameters inParameters)
   {
     String summary = getShortDescription();
+
+    if(summary == null)
+      return "(none)";
 
     if(inParameters == null || !inParameters.isDefined())
       return summary;
