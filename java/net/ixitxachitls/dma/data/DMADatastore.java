@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -47,8 +48,10 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
@@ -332,11 +335,16 @@ public class DMADatastore implements DMAData
   @Override
   public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
   {
-    List<File> files = new ArrayList<File>();
+    List<File> files = Lists.newArrayList();
+    Set<String> names = Sets.newHashSet();
     for(Entity entity : m_data.getEntities("file", convert(inEntry.getKey()),
                                            "__key__", 0, 100))
     {
       String name = (String)entity.getProperty("name");
+      if(names.contains(name))
+        name = inEntry.getName() + "-" + name;
+      names.add(name);
+
       String type = (String)entity.getProperty("type");
       String path = (String)entity.getProperty("path");
       String icon = null;
@@ -344,8 +352,18 @@ public class DMADatastore implements DMAData
         type = "image/png";
 
       if(type.startsWith("image/"))
-        icon = m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey
-                                     (new BlobKey(path)));
+      {
+        try
+        {
+          icon = m_image.getServingUrl(ServingUrlOptions.Builder.withBlobKey
+                                       (new BlobKey(path)));
+        }
+        catch(IllegalArgumentException e)
+        {
+          Log.error("Cannot obtain serving url for '" + path + "': " + e);
+          continue;
+        }
+      }
       else if("application/pdf".equals(type))
         icon = "/icons/pdf.png";
       else
@@ -507,7 +525,22 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //------------------------------ clearCache ------------------------------
 
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public void clearCache()
+  {
+    m_entries.clear();
+  }
+
+  //........................................................................
 
   //------------------------------ isChanged -------------------------------
 

@@ -1855,68 +1855,68 @@ public class AbstractEntry extends ValueGroup
                                 null, "desc");
     }
 
-    if("image".equals(inKey))
-    {
-      AbstractType<? extends AbstractEntry> type = getType();
+    // if("image".equals(inKey))
+    // {
+    //   AbstractType<? extends AbstractEntry> type = getType();
 
-      for(DMAData.File file : getFiles())
-        if("main".equals(file.getName()))
-          return new FormattedValue
-            (new ImageLink(file.getIcon() + "=s300", "main",
-                           file.getPath(), "main")
-             .withID("file-main"), "main", "image")
-            .withEditable(true)
-            .withEditType("image");
+    //   for(DMAData.File file : getFiles())
+    //     if("main".equals(file.getName()))
+    //       return new FormattedValue
+    //         (new ImageLink(file.getIcon() + "=s300", "main",
+    //                        file.getPath(), "main")
+    //          .withID("file-main"), "main", "image")
+    //         .withEditable(true)
+    //         .withEditType("image");
 
-      return new FormattedValue
-        (new ImageLink("/icons/" + type.getMultipleLink()
-                       + "-dummy.png", "main",
-                       "/icons/" + type.getMultipleLink()
-                       + "-dummy.png", "main")
-         .withID("file-main"), "main", "image")
-        .withEditable(true)
-        .withEditType("image");
-    }
+    //   return new FormattedValue
+    //     (new ImageLink("/icons/" + type.getMultipleLink()
+    //                    + "-dummy.png", "main",
+    //                    "/icons/" + type.getMultipleLink()
+    //                    + "-dummy.png", "main")
+    //      .withID("file-main"), "main", "image")
+    //     .withEditable(true)
+    //     .withEditType("image");
+    // }
 
     if("clear".equals(inKey))
       // we need a non empty string here, because when parsing trailing empty
       // arguments are ignored.
       return new FormattedValue(new Divider("clear", " "), null, "clear");
 
-    if("files".equals(inKey))
-    {
-      List<Command> commands = new ArrayList<Command>();
-      boolean first = true;
-      for(DMAData.File file : getFiles())
-      {
-        if(first && "main".equals(file.getName()))
-        {
-          first = false;
-          continue;
-        }
+    // if("files".equals(inKey))
+    // {
+    //   List<Command> commands = new ArrayList<Command>();
+    //   boolean first = true;
+    //   for(DMAData.File file : getFiles())
+    //   {
+    //     if(first && "main".equals(file.getName()))
+    //     {
+    //       first = false;
+    //       continue;
+    //     }
 
-        String uri;
-        if(file.getType().startsWith("image/"))
-          uri = file.getIcon() + "=s50";
-        else if("application/pdf".equals(file.getType()))
-          uri = "/icons/pdf.png";
-        else
-        {
-          Log.warning("unknown file '" + file + "' ignored");
-          continue;
-        }
+    //     String uri;
+    //     if(file.getType().startsWith("image/"))
+    //       uri = file.getIcon() + "=s50";
+    //     else if("application/pdf".equals(file.getType()))
+    //       uri = "/icons/pdf.png";
+    //     else
+    //     {
+    //       Log.warning("unknown file '" + file + "' ignored");
+    //       continue;
+    //     }
 
-        commands.add(new Divider("file", new ImageLink(uri, file.getName(),
-                                                       file.getPath(),
-                                                       "file")));
-      }
+    //     commands.add(new Divider("file", new ImageLink(uri, file.getName(),
+    //                                                    file.getPath(),
+    //                                                    "file")));
+    //   }
 
-      return new FormattedValue
-        (new Divider("files", "files", new Command(commands)), "files", "files")
-        .withPlural("files")
-        .withEditable(true)
-        .withEditType("files");
-    }
+    //   return new FormattedValue
+    //     (new Divider("files", "files", new Command(commands)), "files", "files")
+    //     .withPlural("files")
+    //     .withEditable(true)
+    //     .withEditType("files");
+    // }
 
     if("errors".equals(inKey))
     {

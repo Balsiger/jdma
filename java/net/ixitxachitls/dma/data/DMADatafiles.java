@@ -341,6 +341,18 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------ clearCache ------------------------------
+
+  /**
+   * Clear the cache.
+   *
+   */
+  public void clearCache()
+  {
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  //........................................................................
 
   //------------------------------- hasEntry -------------------------------
 

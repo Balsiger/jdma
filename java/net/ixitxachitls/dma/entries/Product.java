@@ -978,6 +978,7 @@ public class Product extends Entry<BaseProduct>
                .build());
       list.add(this);
 
+      System.out.println("navigation: " + list);
       return list;
     }
 

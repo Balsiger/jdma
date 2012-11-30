@@ -1471,7 +1471,10 @@ extend(edit.Image, edit.Base);
  * @return      true if the edited value has to be saved
  */
 edit.Image.prototype.edit = function(inEditable, inTarget, inNoRelated) {
-  var image = inEditable.firstChild;
+  var image = inEditable.firstChild.firstChild;
+  if(!image)
+    image = inEditable.firstChild;
+
   if(image)
   {
     var element = this.getElement();
