@@ -175,22 +175,21 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
     if(!inModifier.isDefined())
       return this;
 
-    if(m_modifiers.containsKey(inName))
+    String name = inName;
+    if(m_modifiers.containsKey(name))
     {
-      Log.error("key " + inName + " already present as "
-                + m_modifiers.get(inName) + ", ignoring " + inModifier);
-      throw new IllegalArgumentException("key " + inName + " already present");
+      int i = 1;
+      while(m_modifiers.containsKey(name + " (" + i + ")"))
+        ;
+
+      name = name + " (" + i + ")";
     }
 
-    m_modifiers.put(inName, inModifier);
+    m_modifiers.put(name, inModifier);
     if(m_total == null)
       m_total = inModifier;
     else
-    {
-      System.out.println("adding modifier " + m_total + " to " + inModifier);
       m_total = m_total.add(inModifier);
-      System.out.println("result: " + m_total);
-    }
 
     return this;
   }

@@ -100,7 +100,6 @@ public class Parameters extends Value<Parameters>
 
   //........................................................................
 
-
   //-------------------------------- create --------------------------------
 
   /**
@@ -393,6 +392,9 @@ public class Parameters extends Value<Parameters>
         Log.warning("cannot find parameter for " + entry.getKey());
         continue;
       }
+
+      if(value.isDefined())
+        continue;
 
       value = value.read(entry.getValue());
       if (value == null)

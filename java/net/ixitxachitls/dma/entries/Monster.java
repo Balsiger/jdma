@@ -3816,6 +3816,13 @@ public class Monster extends CampaignEntry<BaseMonster>
          .put("params", references.get(key).getParameters().getSummary())
          .put("number", numbers.get(key))
          .put("summary", references.get(key).summary
+              // (references.get(key).getParameters()
+              //  .withIfEmpty("level", new Number(getLevel(), 0, 100))
+              //  .withIfEmpty
+              //  ("class",
+              //   new EnumSelection<BaseSpell.SpellClass>(getSpellClass()))
+              //  .withIfEmpty("ability",
+              //               new Number(getSpellAbilityModifier(), 0, 100))))
               (ImmutableMap.of("level", "" + getLevel(),
                                "class", "" + getSpellClass(),
                                "ability", "" + getSpellAbilityModifier())))
@@ -4257,6 +4264,10 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public boolean hasFeat(@Nonnull String inName)
   {
+    for(Reference feat : m_feats)
+      if(feat.toString().equalsIgnoreCase(inName))
+        return true;
+
     for(BaseEntry base : getBaseEntries())
       if(base instanceof BaseMonster)
         if(((BaseMonster)base).hasFeat(inName))
