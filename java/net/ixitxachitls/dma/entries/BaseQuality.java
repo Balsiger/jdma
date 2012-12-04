@@ -31,13 +31,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
-// import net.ixitxachitls.output.commands.Command;
-// import net.ixitxachitls.output.commands.Divider;
-// import net.ixitxachitls.output.commands.Hrule;
-// import net.ixitxachitls.output.commands.Linebreak;
-// import net.ixitxachitls.output.commands.Script;
-// import net.ixitxachitls.output.commands.Table;
-// import net.ixitxachitls.output.commands.Textblock;
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Contribution;
@@ -50,8 +43,7 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
-// import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-// import net.ixitxachitls.dma.values.formatters.ValueFormatter;
+import net.ixitxachitls.dma.values.conditions.Condition;
 
 //..........................................................................
 
@@ -447,7 +439,8 @@ public class BaseQuality extends BaseEntry
     (@Nonnull String inName,
      @Nonnull List<Contribution<? extends Value>> ioContributions,
      // TODO: remove the parameters and handle this in a quality!
-     @Nonnull Parameters inParameters)
+     @Nonnull Parameters inParameters,
+     @Nullable Condition inCondition)
   {
     addContributions(inName, ioContributions);
 
@@ -459,6 +452,7 @@ public class BaseQuality extends BaseEntry
          || ("will save".equals(inName) && affects == Affects.WILL_SAVE))
       {
         Modifier modifier = (Modifier)multiple.get(2);
+        modifier.withCondition(inCondition);
         if(modifier.getExpression() instanceof Expression.Expr)
         {
           String expression =
@@ -466,6 +460,7 @@ public class BaseQuality extends BaseEntry
                                .getText(), inParameters);
 
           Modifier computed = modifier.read(expression);
+          computed.withCondition(inCondition);
           if (computed != null)
             ioContributions.add(new Contribution(computed, this, null));
           else
@@ -484,6 +479,7 @@ public class BaseQuality extends BaseEntry
                                              inParameters)))
         {
           Modifier modifier = (Modifier)multiple.get(2);
+          modifier.withCondition(inCondition);
           if(modifier.getExpression() instanceof Expression.Expr)
           {
             String expression =
@@ -491,6 +487,7 @@ public class BaseQuality extends BaseEntry
                                  .getText(), inParameters);
 
             Modifier computed = modifier.read(expression);
+            computed.withCondition(inCondition);
             if (computed != null)
               ioContributions.add(new Contribution(computed, this, null));
             else

@@ -422,7 +422,8 @@ public class Parameters extends Value<Parameters>
     {
       result.m_types.put(key, m_types.get(key));
       result.m_values.put(key, add(m_values.get(key),
-                                   inParameters.m_values.get(key)));
+                                   inParameters.m_values.get(key),
+                                   m_types.get(key)));
     }
 
     // Add all the values that only appear in the given parameters.
@@ -437,7 +438,8 @@ public class Parameters extends Value<Parameters>
   }
 
   @SuppressWarnings("unchecked")
-  private @Nonnull Value add(@Nonnull Value inFirst, @Nullable Value inSecond)
+  private @Nonnull Value add(@Nonnull Value inFirst, @Nullable Value inSecond,
+                             @Nonnull Type inType)
   {
     if(inSecond == null || !inSecond.isDefined())
       return inFirst;
@@ -445,7 +447,15 @@ public class Parameters extends Value<Parameters>
     if(!inFirst.isDefined())
       return inSecond;
 
-    return inFirst.add(inSecond);
+    switch(inType)
+    {
+      case UNIQUE: return inFirst;
+      case ADD:    return inFirst.add(inSecond);
+      case MIN:    return inFirst.min(inSecond);
+      case MAX:    return inFirst.max(inSecond);
+    }
+
+    return inFirst;
   }
 
   //........................................................................

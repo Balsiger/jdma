@@ -2183,8 +2183,10 @@ public class BaseMonster extends BaseEntry
       if(quality == null)
         continue;
 
+      Condition condition = (Condition)multiple.get(1);
       quality.addContributions(inName, ioContributions,
-                               reference.getParameters());
+                               reference.getParameters(),
+                               condition.isDefined() ? condition : null);
     }
 
     for(Reference<BaseFeat> reference : m_feats)

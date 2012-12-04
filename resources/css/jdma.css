@@ -739,6 +739,15 @@ DIV.item-summary DIV.item-summary-text
   font-size: 12px;
 }
 
+DIV.page-image
+{
+  page-break-before: always;
+}
+
+DIV.page-image IMG
+{
+}
+
 /******************************************************************************
  * entry lists
  *****************************************************************************/

@@ -3504,7 +3504,8 @@ public class Monster extends CampaignEntry<BaseMonster>
         primary.put("mode", attack.get(1));
         primary.put("style", attack.get(2));
         primary.put("damage",
-                    adjustDamageForStrength((Damage)attack.get(3), melee));
+                    adjustDamageForStrength((Damage)attack.get(3), melee,
+                                            false));
         primary.put("critical", critical(null));
 
         primaryAttacks.add(primary);
@@ -3539,7 +3540,8 @@ public class Monster extends CampaignEntry<BaseMonster>
         secondary.put("mode", attack.get(1));
         secondary.put("style", attack.get(2));
         secondary.put("damage",
-                      adjustDamageForStrength((Damage)attack.get(3), melee));
+                      adjustDamageForStrength((Damage)attack.get(3), melee,
+                                              true));
         secondary.put("critical", critical(null));
 
         secondaryAttacks.add(secondary);
@@ -3876,65 +3878,77 @@ public class Monster extends CampaignEntry<BaseMonster>
   public List<Map<String, Object>> allSkills()
   {
     List<Map<String, Object>> skills = Lists.newArrayList();
-    Map<String, ModifiedNumber> ranks = skillRanks();
+    Map<String, Map<Value, ModifiedNumber>> ranks = skillRanks();
     List<Reference<BaseQuality>> qualities = collectSpecialQualities();
 
     for(BaseSkill skill :
           DMADataFactory.get().getEntries(BaseSkill.TYPE, null, 0, 1000))
     {
-      ModifiedNumber modifier = ranks.get(skill.getName());
-      if((modifier == null || modifier.getMaxValue() == 0)
-         && !skill.isUntrained())
-        continue;
-
-      if(modifier == null)
-        modifier = new ModifiedNumber(0, true);
-
-      // Ability modifiers
-      BaseMonster.Ability ability = skill.getAbility();
-      if(ability != null)
-        if(ability == BaseMonster.Ability.DEXTERITY)
-          modifier.withModifier
-            (new Modifier(dexterityModifierForAC()), "Dexterity");
-        else
-          modifier.withModifier
-            (new Modifier(abilityModifier((int)ability(ability).getMinValue()),
-                          Modifier.Type.ABILITY),
-             skill.getAbility().toString());
-
-      // Skill penalty from armor
-      // TODO: must be implemented
-
-      // Skill modifiers from items (and other modifiers)
-      for (Map.Entry<String, Modifier> entry
-             : collectModifiers(skill.getName()).entrySet())
-        modifier.withModifier(entry.getValue(), entry.getKey());
-
-      // Skill modifiers from special qualities
-      for(Reference<BaseQuality> reference : qualities)
+      Map<Value, ModifiedNumber> perName = ranks.get(skill.getName());
+      if(perName == null)
       {
-        BaseQuality quality = reference.getEntry();
-        if(quality == null)
-          continue;
-
-        Modifier qualityModifier = quality.computeSkillModifier
-          (skill.getName(), reference.getParameters());
-        if(qualityModifier != null)
-          modifier.withModifier(qualityModifier, quality.getName() + " "
-                                + reference.getParameters().getSummary());
+        perName = Maps.newHashMap();
+        perName.put(null, null);
       }
 
-      for(Contribution<? extends Value> contribution
-            : collectContributions(skill.getName()))
-        modifier.withModifier((Modifier)contribution.getValue(),
-                              contribution.getDescription());
+      for(Value type : perName.keySet())
+      {
+        ModifiedNumber modifier = perName.get(type);
 
-      Map<String, Object> values = Maps.newHashMap();
+        if((modifier == null || modifier.isZero()) && !skill.isUntrained())
+          continue;
 
-      values.put("entry", skill);
-      values.put("modifier", modifier);
+        if(modifier == null)
+          modifier = new ModifiedNumber(0, true);
 
-      skills.add(values);
+        // Ability modifiers
+        BaseMonster.Ability ability = skill.getAbility();
+        if(ability != null)
+          if(ability == BaseMonster.Ability.DEXTERITY)
+            modifier.withModifier
+              (new Modifier(dexterityModifierForAC()), "Dexterity");
+          else
+            modifier.withModifier
+              (new Modifier(abilityModifier((int)ability(ability)
+                                            .getMinValue()),
+                            Modifier.Type.ABILITY),
+               skill.getAbility().toString());
+
+        // Skill penalty from armor
+        // TODO: must be implemented
+
+        // Skill modifiers from items (and other modifiers)
+        for (Map.Entry<String, Modifier> entry
+               : collectModifiers(skill.getName()).entrySet())
+          modifier.withModifier(entry.getValue(), entry.getKey());
+
+        // Skill modifiers from special qualities
+        for(Reference<BaseQuality> reference : qualities)
+        {
+          BaseQuality quality = reference.getEntry();
+          if(quality == null)
+            continue;
+
+          Modifier qualityModifier = quality.computeSkillModifier
+            (skill.getName(), reference.getParameters());
+          if(qualityModifier != null)
+            modifier.withModifier(qualityModifier, quality.getName() + " "
+                                  + reference.getParameters().getSummary());
+        }
+
+        for(Contribution<? extends Value> contribution
+              : collectContributions(skill.getName()))
+          modifier.withModifier((Modifier)contribution.getValue(),
+                                contribution.getDescription());
+
+        Map<String, Object> values = Maps.newHashMap();
+
+        values.put("entry", skill);
+        values.put("subtype", type);
+        values.put("modifier", modifier);
+
+        skills.add(values);
+      }
     }
 
     return skills;
@@ -4089,23 +4103,29 @@ public class Monster extends CampaignEntry<BaseMonster>
   //----------------------- adjustDamageForStrength ------------------------
 
   /**
+   * Adjust the given damage value for streangth.
    *
+   * @param    inDamage    the damage to adjust
+   * @param    isMelee     if the damage is for a melee attack
+   * @param    isSecondary if the damage is for a secondary attack
    *
-   * @param
-   *
-   * @return
+   * @return   the adjusted damage
    *
    */
-  public @Nonnull Damage adjustDamageForStrength(@Nonnull Damage damage,
-                                                 boolean isMelee)
+  public @Nonnull Damage adjustDamageForStrength(@Nonnull Damage inDamage,
+                                                 boolean isMelee,
+                                                 boolean isSecondary)
   {
     if(!isMelee)
-      return damage;
+      return inDamage;
 
     int modifier =
       abilityModifier((int)ability(BaseMonster.Ability.STRENGTH).getMaxValue());
 
-    return damage.add(new Damage(new Dice(0, 1, modifier)));
+    if(isSecondary)
+      modifier /= 2;
+
+    return inDamage.add(new Damage(new Dice(0, 1, modifier)));
   }
 
   //........................................................................
@@ -4288,12 +4308,13 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the number of skill ranks per skill name
    *
    */
-  public Map<String, ModifiedNumber> skillRanks()
+  @SuppressWarnings("unchecked")
+  public Map<String, Map<Value, ModifiedNumber>> skillRanks()
   {
     Combination<ValueList<Multiple>> skills =
       new Combination<ValueList<Multiple>>(this, "class skills");
 
-    Map<String, ModifiedNumber> ranks = Maps.newHashMap();
+    Map<String, Map<Value, ModifiedNumber>> ranks = Maps.newHashMap();
 
     for(Map.Entry<ValueList<Multiple>, String> entry :
           skills.valuesPerGroup().entries())
@@ -4301,28 +4322,47 @@ public class Monster extends CampaignEntry<BaseMonster>
       String group = entry.getValue();
       for(Multiple skill : entry.getKey())
       {
-        String name = skill.get(0).toString();
-        ModifiedNumber number = ranks.get(name);
+        Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));
+        String name = ref.getName();
+        Value type = ref.getParameters().getValue("subtype");
+        Map<Value, ModifiedNumber> perName = ranks.get(name);
+        if(perName == null)
+        {
+          perName = Maps.newHashMap();
+          ranks.put(name, perName);
+        }
+
+        ModifiedNumber number = perName.get(type);
         if(number == null)
           number = new ModifiedNumber(0, true);
 
         number.withModifier(new Modifier((int)((Number)skill.get(1)).get()),
                             group);
 
-        ranks.put(name, number);
+        perName.put(type, number);
       }
     }
 
     for(Multiple skill : m_skills)
     {
-      String name = skill.get(0).toString();
-      ModifiedNumber number = ranks.get(name);
+      Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));
+      String name = ref.getName();
+      Value type = ref.getParameters().getValue("subtype");
+
+      Map<Value, ModifiedNumber> perName = ranks.get(name);
+      if(perName == null)
+      {
+        perName = Maps.newHashMap();
+        ranks.put(name, perName);
+      }
+
+      ModifiedNumber number = perName.get(type);
       if(number == null)
         number = new ModifiedNumber(0, true);
 
       number.withModifier(new Modifier((int)((Number)skill.get(1)).get()),
                           this.getName());
-      ranks.put(name, number);
+      perName.put(type, number);
     }
 
     return ranks;

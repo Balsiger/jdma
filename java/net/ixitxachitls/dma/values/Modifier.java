@@ -206,6 +206,25 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //---------------------------- withCondition -----------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public Modifier withCondition(@Nullable Condition inCondition)
+  {
+    m_condition = inCondition;
+
+    return this;
+  }
+
+  //........................................................................
+
 
   {
     withTemplate("modifier");
@@ -569,6 +588,23 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //-------------------------------- isZero --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public boolean isZero()
+  {
+    return getValue() == 0;
+  }
+
+  //........................................................................
+
 
   //------------------------------- doFormat -------------------------------
 

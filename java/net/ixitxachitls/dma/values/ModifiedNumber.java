@@ -35,6 +35,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -171,14 +172,25 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   public @Nonnull ModifiedNumber withModifier(@Nonnull Modifier inModifier,
                                               @Nonnull String inName)
   {
+    if(!inModifier.isDefined())
+      return this;
+
     if(m_modifiers.containsKey(inName))
+    {
+      Log.error("key " + inName + " already present as "
+                + m_modifiers.get(inName) + ", ignoring " + inModifier);
       throw new IllegalArgumentException("key " + inName + " already present");
+    }
 
     m_modifiers.put(inName, inModifier);
     if(m_total == null)
       m_total = inModifier;
     else
+    {
+      System.out.println("adding modifier " + m_total + " to " + inModifier);
       m_total = m_total.add(inModifier);
+      System.out.println("result: " + m_total);
+    }
 
     return this;
   }
@@ -280,6 +292,22 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   public boolean hasConditions()
   {
     return getMinValue() != getMaxValue();
+  }
+
+  //........................................................................
+  //-------------------------------- isZero --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public boolean isZero()
+  {
+    return getMinValue() == 0 && getMaxValue() == 0;
   }
 
   //........................................................................
