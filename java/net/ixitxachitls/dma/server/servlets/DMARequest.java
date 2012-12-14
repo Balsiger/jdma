@@ -78,15 +78,17 @@ public class DMARequest extends HttpServletRequestWrapper
    * @param       inParams  the parameters to the request (URL & post)
    *
    */
-//    * @param       inCampaigns the campaigns
   public DMARequest(@Nonnull HttpServletRequest inRequest,
-                    @Nonnull Multimap<String, String> inParams
-                    /*, Campaign inCampaigns*/)
+                    @Nonnull Multimap<String, String> inParams)
   {
     super(inRequest);
 
     m_params = inParams;
-//     m_campaigns = inCampaigns;
+
+    // Clear the cache in the datastore as it is dangerous and we want to
+    // limit it to a single request. Since the datastore is static, we assume
+    // that each instance only run one thread concurrently.
+    DMADataFactory.get().clearCache();
 
 //     extractCampaign(inRequest);
 //     extractDM(inRequest);
@@ -106,9 +108,6 @@ public class DMARequest extends HttpServletRequestWrapper
 
   /** The URL and post parameters. */
   private @Nonnull Multimap<String, String> m_params;
-
-  /** The campaign for the current request, if any. */
-//   private Campaign m_campaign = null;
 
   /** Flag if the user has been extracted. */
   private boolean m_extractedUser = false;

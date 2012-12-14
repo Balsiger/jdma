@@ -40,6 +40,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
 
@@ -211,7 +212,8 @@ public final class Exporter
             {
               try
               {
-                String url = image.getServingUrl(new BlobKey(path));
+                String url = image.getServingUrl
+                  (ServingUrlOptions.Builder.withBlobKey(new BlobKey(path)));
 
                 URLConnection connection = new URL(url).openConnection();
 

@@ -115,7 +115,7 @@ public class DMAServer extends WebServer
 
     // determine which base files to read
     Config.set("web.data.datastore", false);
-    m_baseData = DMADataFactory.get();
+    // m_baseData = DMADataFactory.get();
 
 //     java.util.Date start = new java.util.Date();
 

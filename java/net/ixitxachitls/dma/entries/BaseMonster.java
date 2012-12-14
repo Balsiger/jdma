@@ -498,6 +498,9 @@ public class BaseMonster extends BaseEntry
     /** Elemental Plane of Water. */
     ELEMENTAL_PLANE_OF_WATER("Elemental Plane of Water"),
 
+    /** Windswept dephts of pandemonium. */
+    WINDSWEPT_DEPTHS_OF_PANDEMONIUM("Windswept Depths of Pandemonium"),
+
     /** Any terrain. */
     ANY("Any");
 
@@ -552,6 +555,9 @@ public class BaseMonster extends BaseEntry
 
     /** Colony organization. */
     COLONY("colony"),
+
+    /** Covey organization. */
+    COVEY("covey"),
 
     /** Flock organization. */
     FLOCK("Flock"),
@@ -687,6 +693,9 @@ public class BaseMonster extends BaseEntry
     /** A fist attack. */
     FIST("Fist"),
 
+    /** A quill attack. */
+    QUILL("Quill"),
+
     /** A weapon attack. */
     WEAPON("Weapon"),
 
@@ -700,7 +709,10 @@ public class BaseMonster extends BaseEntry
     STING("Sting"),
 
     /** A hoof attack. */
-    HOOF("Hoof");
+    HOOF("Hoof"),
+
+    /** A snakes attack. */
+    SNAKES("Snakes");
 
     /** The value's name. */
     private @Nonnull String m_name;
@@ -1517,8 +1529,7 @@ public class BaseMonster extends BaseEntry
   protected ValueList<Multiple> m_primaryAttacks
     = new ValueList<Multiple>(",", new Multiple(new Multiple.Element []
     {
-      new Multiple.Element(new Number(1, 20).withEditType("name[number]"),
-                           true),
+      new Multiple.Element(new Dice().withEditType("name[dice]"), true),
       new Multiple.Element(new EnumSelection<AttackMode>(AttackMode.class),
                            false),
       new Multiple.Element(new EnumSelection<AttackStyle>(AttackStyle.class),
@@ -1621,7 +1632,7 @@ public class BaseMonster extends BaseEntry
           .withParameter("Dice", new Dice(), Parameters.Type.ADD)
           .withParameter("Times", new Number(1, 100), Parameters.Type.ADD)
           .withParameter("Class", new EnumSelection<BaseSpell.SpellClass>
-                         (BaseSpell.SpellClass.class), Parameters.Type.UNIQUE)
+                         (BaseSpell.SpellClass.class), Parameters.Type.ADD)
           .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
           .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)

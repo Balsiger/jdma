@@ -4,6 +4,7 @@
 
 item with armor, wearable IMEO =
 
+  hp           5000;
   appearance   "A battered suite of studded leather armor.";
   campaign     FR / City of the Spider Queen;
   base         Studded Leather Armor.
@@ -322,6 +323,7 @@ item with incomplete OPZK =
 
 item with commodity, incomplete ARNN =
 
+  hp           5000;
   appearance   "60 feet of thin rope.";
   player name  "Rope of Climbing";
   campaign     FR / City of the Spider Queen;
@@ -417,6 +419,7 @@ item with light, timed RWSH =
 
 item with incomplete, multiuse BKBX =
 
+  hp           5000;
   appearance   "A bag with cosmetics, hair dye, and small physical props.";
   campaign     FR / City of the Spider Queen;
   base         Disguise Kit;
@@ -954,6 +957,7 @@ item with multiple EKSM =
 
 item with incomplete, multiuse DIFG =
 
+  hp           5000;
   appearance   "A wooden box full of herbs, salves, bandages and other useful materials.";
   campaign     FR / City of the Spider Queen;
   base         Healer's Kit;
@@ -1136,7 +1140,8 @@ item with contents, incomplete XQMF =
   player name  "Heward's Handy Haversack";
   campaign     FR / City of the Spider Queen;
   base         Heward's Handy Haversack;
-  contents     TYQX, CJIQ,
+  contents     TYQX,
+               CJIQ,
                XXNV,
                VCQM,
                GKSP,
@@ -1249,6 +1254,7 @@ item with multiuse BAYA =
 
 item CGCY =
 
+  hp           5000;
   appearance   "";
   player name  "";
   campaign     FR / City of the Spider Queen.
@@ -1509,6 +1515,7 @@ item DVCO =
 
 item PQDY =
 
+  hp           5000;
   appearance   "";
   player name  "Scroll of Mage Armor";
   campaign     FR / City of the Spider Queen;
@@ -1585,6 +1592,7 @@ item TWAJ =
 
 item GTRT =
 
+  hp           5000;
   appearance   "";
   player name  "Scroll of Mage Armor";
   campaign     FR / City of the Spider Queen;
@@ -1808,7 +1816,19 @@ item with contents KAMO =
                GUIY,
                KKYQ,
                AYUF,
-               QXFL, HOXC, JENG, IEAZ, AIPU, OEZG, TPJZ, GDBY, RHRS, IMVM, BXGQ, TIBX, VQAE.
+               QXFL,
+               HOXC,
+               JENG,
+               IEAZ,
+               AIPU,
+               OEZG,
+               TPJZ,
+               GDBY,
+               RHRS,
+               IMVM,
+               BXGQ,
+               TIBX,
+               VQAE.
 
 #.....
 

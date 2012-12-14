@@ -69,6 +69,9 @@ public class BaseSkill extends BaseEntry
     /** Drow religion. */
     DROW_RELIGION("Drow Religion"),
 
+    /** Religion. */
+    RELIGION("Religion"),
+
     /** Any sub type. */
     ANY_ONE("Any One");
 

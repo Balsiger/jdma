@@ -449,7 +449,12 @@ public class BaseQuality extends BaseEntry
       Affects affects = ((EnumSelection<Affects>)multiple.get(0)).getSelected();
       if(("fortitude save".equals(inName) && affects == Affects.FORTITUDE_SAVE)
          || ("reflex save".equals(inName) && affects == Affects.REFLEX_SAVE)
-         || ("will save".equals(inName) && affects == Affects.WILL_SAVE))
+         || ("will save".equals(inName) && affects == Affects.WILL_SAVE)
+         || (affects == Affects.SKILL
+             && inName.equals(computeExpressions(multiple.get(1).toString(),
+                                                 inParameters)))
+         || (affects == Affects.DAMAGE && "damage".equals(inName))
+         || (affects == Affects.ATTACK && "attack".equals(inName)))
       {
         Modifier modifier = (Modifier)multiple.get(2);
         modifier.withCondition(inCondition);
@@ -460,9 +465,12 @@ public class BaseQuality extends BaseEntry
                                .getText(), inParameters);
 
           Modifier computed = modifier.read(expression);
-          computed.withCondition(inCondition);
-          if (computed != null)
+          if(computed != null)
+          {
+            computed.withCondition(inCondition);
+            computed.withCondition(modifier.getCondition());
             ioContributions.add(new Contribution(computed, this, null));
+          }
           else
             ioContributions.add
               (new Contribution
@@ -473,33 +481,6 @@ public class BaseQuality extends BaseEntry
         else
           ioContributions.add(new Contribution(modifier, this, null));
       }
-
-      if(affects == Affects.SKILL
-         && inName.equals(computeExpressions(multiple.get(1).toString(),
-                                             inParameters)))
-        {
-          Modifier modifier = (Modifier)multiple.get(2);
-          modifier.withCondition(inCondition);
-          if(modifier.getExpression() instanceof Expression.Expr)
-          {
-            String expression =
-              computeExpressions(((Expression.Expr)modifier.getExpression())
-                                 .getText(), inParameters);
-
-            Modifier computed = modifier.read(expression);
-            computed.withCondition(inCondition);
-            if (computed != null)
-              ioContributions.add(new Contribution(computed, this, null));
-            else
-              ioContributions.add
-                (new Contribution
-                 (modifier.as(Integer.valueOf(expression.replace('+', '0')),
-                              modifier.getType(), modifier.getCondition(), null),
-                  this, null));
-          }
-          else
-            ioContributions.add(new Contribution(modifier, this, null));
-        }
     }
   }
 

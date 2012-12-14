@@ -511,7 +511,7 @@
       {param entry: $entry /}
       {param content}
         {foreach $primary in $entry.attacks.primary}
-          {$primary.number} {$primary.mode |print}{sp}
+          {$primary.number |print} {$primary.mode |print}{sp}
           {foreach $attack in $primary.attacks}
             +{$attack |print}
             {if not isLast($attack)}/{/if}
@@ -519,7 +519,7 @@
           {sp}{$primary.style |print}
           {sp}({$primary.damage |print}
           {if def($primary.critical)}
-            / {$primary.critical |print}
+            {sp}/ {$primary.critical |print}
           {/if}
           )
           {if not isLast($primary)}
@@ -528,26 +528,22 @@
         {/foreach}
         {if len($entry.attacks.primary) and len($entry.attacks.secondary)}
           {sp}and{sp}
-        {/if}
-        {foreach $secondary in $entry.attacks.secondary}
-          {$secondary.number} {$secondary.mode |print}{sp}
-          {foreach $attack in $secondary.attacks}
-            +{$attack |print}
-            {if not isLast($attack)}/{/if}
+          {foreach $secondary in $entry.attacks.secondary}
+            {$secondary.number |print} {$secondary.mode |print}{sp}
+            {foreach $attack in $secondary.attacks}
+              +{$attack |print}
+              {if not isLast($attack)}/{/if}
+            {/foreach}
+            {sp}{$secondary.style |print}
+            {sp}({$secondary.damage |print}
+            {if def($secondary.critical)}
+              {sp}/ {$secondary.critical |print}
+            {/if}
+            ){sp}
+            {if not isLast($secondary)}
+              , or{sp}
+            {/if}
           {/foreach}
-          {sp}{$secondary.style |print}
-          {sp}({$secondary.damage |print}
-          {if def($secondary.critical)}
-            / {$secondary.critical |print}
-          {/if}
-          )
-          {if not isLast($secondary)}
-            , or{sp}
-          {/if}
-        {/foreach}
-        {if (len($entry.attacks.primary) or len($entry.attacks.secondary))
-            and len($entry.attacks.weapons)}
-          {sp}or{sp}
         {/if}
         {foreach $weapon in $entry.attacks.weapons}
           {foreach $attack in $weapon.attacks}
@@ -559,11 +555,29 @@
           {call dma.value.combined}
             {param combination: $weapon.damage /}
           {/call}
-          /
-          {call dma.value.combined}
-            {param combination: $weapon.critical /}
-          {/call}
+          {if def($weapon.critical)}
+            {sp}/ {$weapon.critical |print}
+          {/if}
           , {$weapon.name})
+          {if len($entry.attacks.secondary)}
+            {sp}and{sp}
+          {/if}
+          {foreach $secondary in $entry.attacks.secondary}
+            {$secondary.number |print} {$secondary.mode |print}{sp}
+            {foreach $attack in $secondary.attacks}
+              +{$attack |print}
+              {if not isLast($attack)}/{/if}
+            {/foreach}
+            {sp}{$secondary.style |print}
+            {sp}({$secondary.damage |print}
+            {if def($secondary.critical)}
+              {sp}/ {$secondary.critical |print}
+            {/if}
+            )
+            {if not isLast($secondary)}
+              , or{sp}
+            {/if}
+          {/foreach}
           {if not isLast($weapon)}
             , or{sp}
           {/if}
@@ -674,7 +688,7 @@
                 {/for}
               </div>
             {/if}
-            {$attack.name} {$attack.params}
+            {$attack.name}{if $attack.params} &ndash; {$attack.params}{/if}
           </div>
           <div class="ability-text">{commands($attack.summary)}</div>
         </div>

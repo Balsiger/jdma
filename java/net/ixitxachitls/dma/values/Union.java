@@ -276,6 +276,7 @@ public class Union extends Value<Union>
   {
     for(int i = 0; i < m_values.length; i++)
     {
+      ParseReader.Position pos = inReader.getPosition();
       Value value = m_values[i].read(inReader);
       if(value != null)
       {
@@ -284,6 +285,7 @@ public class Union extends Value<Union>
 
         return true;
       }
+      inReader.seek(pos);
     }
 
     return false;

@@ -3383,7 +3383,7 @@ public class AbstractEntry extends ValueGroup
         return "* invalid expression, expect (: " + inExpression + " *";
       }
 
-    int level = Integer.parseInt(computeExpression(inExpression, inTokens));
+      int level = Integer.parseInt(computeExpression(inExpression, inTokens));
       List<String> ranges = new ArrayList<String>();
 
       String current = "";
@@ -3421,6 +3421,51 @@ public class AbstractEntry extends ValueGroup
       }
 
       return "* invalid range *";
+    }
+
+    if("switch".equals(token))
+    {
+      if(!"(".equals(inTokens.nextToken()))
+      {
+        Log.warning("invalid expression, expected '(': " + inExpression);
+
+        return "* invalid expression, expect (: " + inExpression + " *";
+      }
+
+      String value = computeExpression(inExpression, inTokens);
+      List<String> options = new ArrayList<String>();
+
+      String current = "";
+      for(String argument = inTokens.nextToken();
+          !"(".equals(argument) && inTokens.hasMoreTokens();
+          argument = inTokens.nextToken())
+      {
+        if(",".equals(argument))
+        {
+          options.add(current);
+          current = "";
+        }
+        else
+        {
+          current += argument;
+        }
+      }
+      options.add(current);
+
+      for(String option : options) {
+        String []parts = option.split(":\\s*");
+        if(parts.length != 2)
+          continue;
+
+        String []cases = parts[0].split("\\|");
+        for(String single : cases)
+          if(single.trim().equalsIgnoreCase(value))
+            return parts[1];
+          else if("default".equalsIgnoreCase(single))
+            return parts[1];
+      }
+
+      return "* invalid switch *";
     }
 
     try

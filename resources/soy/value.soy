@@ -554,7 +554,7 @@
  * @param combination
  */
 {template .combined}
-  {if $combination.bases[0].isLongText}
+  {if def($combination.bases) and $combination.bases[0].isLongText}
     <div class="longtext">
       {if $combination.top.isDefined}
         {$combination.top |print}
@@ -568,7 +568,7 @@
         {/if}
       {/foreach}
     </div>
-  {elseif $combination.bases[0].isText}
+  {elseif def($combination.bases) and $combination.bases[0].isText}
     {if $combination.top.isDefined}
       {$combination.top |print}
     {/if}
@@ -588,17 +588,19 @@
   {else}
     <span class="windowed">
       <span class="window base">
-        {foreach $base in $combination.bases}
-          {if $base and $base.value}
-            <span class="base-value">{$base.value |print}</span>
-            {sp} from {$base.names}
-            <br />
-          {elseif $base.expression}
-            {$base.expression} from {$base.names}
-          {else}
-            undefined value from {$base.names}
-          {/if}
-        {/foreach}
+        {if def($combination.bases)}
+          {foreach $base in $combination.bases}
+            {if $base and $base.value}
+              <span class="base-value">{$base.value |print}</span>
+              {sp} from {$base.names}
+              <br />
+            {elseif $base.expression}
+              {$base.expression} from {$base.names}
+            {else}
+              undefined value from {$base.names}
+            {/if}
+          {/foreach}
+        {/if}
       </span>
       <span class="value-combination">
         {$combination.total |print}

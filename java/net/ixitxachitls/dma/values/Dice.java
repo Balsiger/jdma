@@ -296,7 +296,7 @@ public class Dice extends Value<Dice>
 
     if(m_modifier > 0)
       if(dice == null)
-        return "+" + m_modifier;
+        return "" + m_modifier;
       else
         return dice + " +" + m_modifier;
     else

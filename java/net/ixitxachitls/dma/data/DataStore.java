@@ -116,10 +116,9 @@ public class DataStore
     MemcacheServiceFactory.getMemcacheService("listByValue");
 
   /** The cache for lookup ids. */
-  // private static MemcacheService s_cacheIDs =
-  //   MemcacheServiceFactory.getMemcacheService("ids");
-  private static Map<String, List<String>> s_cacheIDs =
-    Maps.newHashMap();
+  // TODO: for some reason, the memcache does not cache long enough
+  private static MemcacheService s_cacheIDs =
+    MemcacheServiceFactory.getMemcacheService("ids");
 
   /** The cache for lookup ids by value. */
   private static MemcacheService s_cacheIDsByValue =
@@ -366,7 +365,7 @@ public class DataStore
       for(Entity entity : m_store.prepare(query).asIterable(options))
         ids.add(entity);
 
-      s_cacheIDsByValue.put(key, ids); //, s_expiration);
+      s_cacheIDsByValue.put(key, ids, s_expiration);
     }
 
     return ids;
@@ -412,7 +411,7 @@ public class DataStore
       for(Entity entity : m_store.prepare(query).asIterable(options))
         ids.add(entity.getKey().getName());
 
-      s_cacheIDs.put(inType, ids); //, s_expiration);
+      s_cacheIDs.put(inType, ids, s_expiration);
     }
 
     return ids;
@@ -546,8 +545,9 @@ public class DataStore
       ImmutableSortedSet.Builder<String> builder =
         ImmutableSortedSet.naturalOrder();
       FetchOptions options = FetchOptions.Builder.withChunkSize(1000);
-      for (Entity entity : m_store.prepare(query).asIterable(options))
-        builder.add((String)entity.getProperty(inField));
+      for(Entity entity : m_store.prepare(query).asIterable(options))
+        if(entity != null && entity.getProperty(inField) != null)
+          builder.add((String)entity.getProperty(inField));
 
       values = builder.build();
 
@@ -587,7 +587,7 @@ public class DataStore
       //s_cacheByValue.clearAll();
       //s_cacheListByValue.clearAll();
       //s_cacheRecent.clearAll();
-      s_cacheIDs.clear(); //All();
+      s_cacheIDs.clearAll();
       s_cacheIDsByValue.clearAll();
 
       return true;
@@ -618,7 +618,7 @@ public class DataStore
     // but should usually be enough.
     if(s_cacheEntity.get(inEntity.getKey()) == null)
     {
-      s_cacheIDs.clear(); //All();
+      s_cacheIDs.clearAll();
       s_cacheIDsByValue.clearAll();
     }
 

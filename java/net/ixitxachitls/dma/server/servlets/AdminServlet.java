@@ -249,8 +249,6 @@ public class AdminServlet extends SoyServlet
       MemcacheServiceFactory.getMemcacheService("recent").clearAll();
       MemcacheServiceFactory.getMemcacheService("values").clearAll();
       MemcacheServiceFactory.getMemcacheService("multiValues").clearAll();
-      MemcacheServiceFactory.getMemcacheService("multiValues").clearAll();
-      DMADataFactory.get().clearCache();
       Log.event(user.getName(), "admin clear cache",
                 "All caches have been cleared");
 

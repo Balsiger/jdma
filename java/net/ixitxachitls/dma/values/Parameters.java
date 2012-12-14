@@ -171,9 +171,9 @@ public class Parameters extends Value<Parameters>
       return getValue("summary").toString();
 
     List<String> result = Lists.newArrayList();
-    for(Value value : m_values.values())
-      if(value.isDefined())
-        result.add(value.toString());
+    for(String key : m_values.keySet())
+      if(m_types.get(key) == Type.UNIQUE && m_values.get(key).isDefined())
+        result.add(m_values.get(key).toString());
 
     return Strings.SPACE_JOINER.join(result);
   }

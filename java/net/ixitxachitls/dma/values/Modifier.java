@@ -32,6 +32,7 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.values.conditions.And;
 import net.ixitxachitls.dma.values.conditions.Condition;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
@@ -218,13 +219,18 @@ public class Modifier extends Value<Modifier>
    */
   public Modifier withCondition(@Nullable Condition inCondition)
   {
-    m_condition = inCondition;
+    if(inCondition == null)
+      return this;
+
+    if(m_condition == null)
+      m_condition = inCondition;
+    else
+      m_condition = new And(m_condition, inCondition);
 
     return this;
   }
 
   //........................................................................
-
 
   {
     withTemplate("modifier");
@@ -400,7 +406,7 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
-  //-------------------------------- getType -------------------------------
+  //----------------------------- getCondition -----------------------------
 
   /**
    * Get the condition type stored.

@@ -3500,7 +3500,7 @@ public class Monster extends CampaignEntry<BaseMonster>
 
         Map<String, Object> primary = Maps.newHashMap();
         primary.put("attacks", attacks);
-        primary.put("number", ((Number)attack.get(0)).get());
+        primary.put("number", attack.get(0));
         primary.put("mode", attack.get(1));
         primary.put("style", attack.get(2));
         primary.put("damage",
@@ -3536,7 +3536,7 @@ public class Monster extends CampaignEntry<BaseMonster>
 
         Map<String, Object> secondary = Maps.newHashMap();
         secondary.put("attacks", attacks);
-        secondary.put("number", ((Number)attack.get(0)).get());
+        secondary.put("number", attack.get(0));
         secondary.put("mode", attack.get(1));
         secondary.put("style", attack.get(2));
         secondary.put("damage",
@@ -3661,11 +3661,16 @@ public class Monster extends CampaignEntry<BaseMonster>
              && feat.first().getParameters() != null)
           {
             for(BaseEntry base : inItem.getBaseEntries())
+            {
+              if(base == null)
+                continue;
+
               if(base.getName().equalsIgnoreCase(name.get()))
               {
                 keyAbility = BaseMonster.Ability.DEXTERITY;
                 break;
               }
+            }
           }
       }
 
@@ -3679,9 +3684,14 @@ public class Monster extends CampaignEntry<BaseMonster>
            && feat.first().getParameters() != null)
         {
           for(BaseEntry base : inItem.getBaseEntries())
+          {
+            if(base == null)
+              continue;
+
             if(base.getName().equalsIgnoreCase(name.get()))
               modified.withModifier(new Modifier(1, Modifier.Type.GENERAL),
                                     "Weapn Focus");
+          }
         }
     }
 
@@ -3816,16 +3826,11 @@ public class Monster extends CampaignEntry<BaseMonster>
          .put("params", references.get(key).getParameters().getSummary())
          .put("number", numbers.get(key))
          .put("summary", references.get(key).summary
-              // (references.get(key).getParameters()
-              //  .withIfEmpty("level", new Number(getLevel(), 0, 100))
-              //  .withIfEmpty
-              //  ("class",
-              //   new EnumSelection<BaseSpell.SpellClass>(getSpellClass()))
-              //  .withIfEmpty("ability",
-              //               new Number(getSpellAbilityModifier(), 0, 100))))
               (ImmutableMap.of("level", "" + getLevel(),
                                "class", "" + getSpellClass(),
-                               "ability", "" + getSpellAbilityModifier())))
+                               "ability", "" + getSpellAbilityModifier
+                               (references.get(key).getParameters()
+                                .getValue("class")))))
          .build());
     }
 
@@ -3864,7 +3869,8 @@ public class Monster extends CampaignEntry<BaseMonster>
                          .summary(ImmutableMap.of
                                   ("level", "" + getLevel(),
                                    "class", "" + getSpellClass(),
-                                   "ability", "" + getSpellAbilityModifier())))
+                                   "ability", "" + getSpellAbilityModifier
+                                   (null))))
                     .build());
     }
 
@@ -3928,20 +3934,6 @@ public class Monster extends CampaignEntry<BaseMonster>
         for (Map.Entry<String, Modifier> entry
                : collectModifiers(skill.getName()).entrySet())
           modifier.withModifier(entry.getValue(), entry.getKey());
-
-        // Skill modifiers from special qualities
-        for(Reference<BaseQuality> reference : qualities)
-        {
-          BaseQuality quality = reference.getEntry();
-          if(quality == null)
-            continue;
-
-          Modifier qualityModifier = quality.computeSkillModifier
-            (skill.getName(), reference.getParameters());
-          if(qualityModifier != null)
-            modifier.withModifier(qualityModifier, quality.getName() + " "
-                                  + reference.getParameters().getSummary());
-        }
 
         for(Contribution<? extends Value> contribution
               : collectContributions(skill.getName()))
@@ -4155,7 +4147,8 @@ public class Monster extends CampaignEntry<BaseMonster>
       else
         return null;
 
-    improvedCritical = hasFeat("improved critical [name " + item.getName() + "]");
+    improvedCritical =
+      hasFeat("improved critical [name " + item.getName() + "]");
     Critical critical = new Combination<Critical>(item, "critical").total();
     if(critical == null)
       if(improvedCritical)
@@ -4163,7 +4156,37 @@ public class Monster extends CampaignEntry<BaseMonster>
       else
         return null;
 
-    return critical.doubled();
+    if(improvedCritical)
+      return critical.doubled();
+
+    return critical;
+  }
+
+  //........................................................................
+  //---------------------------- containedItems ----------------------------
+
+  /**
+   * Get all the items contained in this contents.
+   *
+   * @param       inDeep true for returning all item, including nested ones,
+   *                     false for only the top level items
+   * @return      a list with all the items
+   *
+   */
+  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
+  {
+    Map<String, Item> items = new HashMap<String, Item>();
+    for(Name name : m_possessions)
+    {
+      Item item = getCampaign().getItem(name.get());
+      if(item == null)
+        continue;
+
+      items.put(name.get(), item);
+      items.putAll(item.containedItems(inDeep));
+    }
+
+    return items;
   }
 
   //........................................................................
@@ -4204,10 +4227,18 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the modifier
    *
    */
-  public int getSpellAbilityModifier()
+  @SuppressWarnings("unchecked")
+  public int getSpellAbilityModifier(@Nullable Value inClassParam)
   {
     BaseMonster.Ability ability;
-    switch(getSpellClass())
+    BaseSpell.SpellClass spellClass;
+    if(inClassParam != null && inClassParam.isDefined())
+      spellClass = ((EnumSelection<BaseSpell.SpellClass>)inClassParam).
+        getSelected();
+    else
+      spellClass = getSpellClass();
+
+    switch(spellClass)
     {
       case WIZARD:
         ability = BaseMonster.Ability.INTELLIGENCE;
