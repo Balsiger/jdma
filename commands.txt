@@ -28,3 +28,5 @@ java net.ixitxachitls.dma.server.Importer "resources/files/base\ monster/Aboleth
 
 # import items
 java net.ixitxachitls.dma.server.Importer "dma/Characters/Characters.dma" "dma/Items/City\ of\ the\ Spider\ Queen.dma" "dma/BaseItems/WTC\ 17752.dma" "dma/BaseItems/WTC\ 17524.dma" "dma/BaseItems/WTC\ 1076272.dma"
+
+

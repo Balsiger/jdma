@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.server.servlets;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.ImmutableSet;
@@ -66,6 +66,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class EntryServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -110,12 +111,26 @@ public class EntryServlet extends PageServlet
   }
 
   //........................................................................
+  //------------------------------- isPublic -------------------------------
+
+  /**
+   * Checks whether the current page is public or requires some kind of
+   * login.
+   *
+   * @return      true if public, false if login is required
+   *
+   */
+  public boolean isPublic(DMARequest inRequest)
+  {
+    AbstractEntry entry = getEntry(inRequest.getRequestURI());
+    return entry != null && entry.isBase();
+  }
+
+  //........................................................................
 
   //........................................................................
 
   //----------------------------------------------------------- manipulators
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------- other member functions
@@ -133,8 +148,8 @@ public class EntryServlet extends PageServlet
    *
    */
   @Override
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
@@ -285,8 +300,8 @@ public class EntryServlet extends PageServlet
    *
    */
   @Override
-  protected @Nonnull Map<String, Object> collectInjectedData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectInjectedData(DMARequest inRequest,
+                                                    SoyRenderer inRenderer)
   {
     BaseCharacter user = inRequest.getUser();
     AbstractEntry entry = getEntry(inRequest.getRequestURI());
@@ -425,7 +440,7 @@ public class EntryServlet extends PageServlet
           private static final long serialVersionUID = 1L;
 
           @Override
-          public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
+          public @Nullable AbstractEntry getEntry(String inPath)
           {
             return inEntry;
           }

@@ -534,7 +534,7 @@ DIV.value-content-edit
 
 DIV.value-content.value-noedit
 {
-  background-color: #ddd;
+  color: #666;
 }
 
 SPAN.value-combination
@@ -1513,9 +1513,11 @@ SPAN.window.base
 
 SPAN.base-value
 {
-  width: 200px;
+  width: 400px;
   display: inline-block;
+  height: 13px;
   text-overflow: ellipsis;
+  white-space: nowrap;
   overflow: hidden;
 }
 
@@ -1639,13 +1641,6 @@ SPAN.Estimation
 SPAN.computed
 {
     border-bottom-color: #8888FF;
-    border-bottom-width: 1px;
-    border-bottom-style: dotted;
-}
-
-SPAN.base-value
-{
-    border-bottom-color: #88FF88;
     border-bottom-width: 1px;
     border-bottom-style: dotted;
 }
@@ -1787,6 +1782,12 @@ SELECT.admin-button
 .symbol
 {
   font-size: 12px;
+}
+
+.plusone
+{
+  position: absolute;
+  left: 10px;
 }
 
 /******************************************************************************

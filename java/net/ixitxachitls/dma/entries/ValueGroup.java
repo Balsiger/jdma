@@ -47,6 +47,7 @@ import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.ModifiedNumber;
 import net.ixitxachitls.dma.values.Modifier;
@@ -840,9 +841,25 @@ public abstract class ValueGroup implements Changeable
     (@Nonnull String inName,
      @Nonnull List<Contribution<? extends Value>> ioContributions)
   {
-    Value v = getValue(inName);
-    if(v != null && v.isDefined())
-      ioContributions.add(new Contribution<Value>(v, this, null));
+    // Value v = getValue(inName);
+    // if(v != null && v.isDefined())
+    //   ioContributions.add(new Contribution<Value>(v, this, null));
+  }
+
+  //........................................................................
+  //------------------------------- collect --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  protected void collect(String inName, Combined ioCombined)
+  {
+    // nothing to do here
   }
 
   //........................................................................

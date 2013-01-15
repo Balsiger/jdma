@@ -29,6 +29,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.Multimap;
@@ -43,6 +44,7 @@ import com.google.template.soy.data.restricted.StringData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.logging.Log;
 
@@ -65,20 +67,22 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public abstract class SoyAbstract extends SoyMapData
 {
   //----------------------------------------------------------------- nested
 
   @Immutable
+  @ParametersAreNonnullByDefault
   public static class Undefined extends SoyAbstract
   {
-    public Undefined(@Nonnull String inName)
+    public Undefined(String inName)
     {
       super(inName, null);
     }
 
     @Override
-    public @Nonnull SoyData getSingle(@Nonnull String inName)
+    public SoyData getSingle(String inName)
     {
       if("print".equals(inName)
          || "raw".equals(inName))
@@ -88,9 +92,33 @@ public abstract class SoyAbstract extends SoyMapData
     }
 
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return "(undefined " + m_name + ")";
+    }
+  }
+
+  @Immutable
+  @ParametersAreNonnullByDefault
+  public static class SoyWrapper extends SoyAbstract
+  {
+    public SoyWrapper(String inName, Object inValue, AbstractEntry inEntry)
+    {
+      super(inName, inEntry);
+
+      m_value = inValue;
+    }
+
+    private Object m_value;
+
+    @Override
+    public SoyData getSingle(String inName)
+    {
+      Object value = Classes.callMethod(inName, m_value);
+      if(value != null)
+        return convert(inName, value);
+
+      return new Undefined(m_name + "." + inName);
     }
   }
 
@@ -187,23 +215,28 @@ public abstract class SoyAbstract extends SoyMapData
         ("first", convert(inName, ((Pair)inObject).first()),
          "second", convert(inName, ((Pair)inObject).second()));
 
-    if(inObject instanceof Long)
+    if(inObject instanceof Long || inObject instanceof Integer)
       return IntegerData.forValue(((Long)inObject).intValue());
+
+    if(inObject instanceof String)
+      return StringData.forValue(inObject.toString());
 
     if(inObject == null)
       return new Undefined(m_name + "." + inName);
 
-    try
-    {
-      return SoyData.createFromExistingData(inObject);
-    }
-    catch(SoyDataException e)
-    {
-      Log.warning("could not convert " + inObject.getClass()
-        + ", defaulting to string");
+    return new SoyWrapper(m_name + "." + inName, inObject, m_entry);
 
-      return StringData.forValue(inObject.toString());
-    }
+    // try
+    // {
+    //   return SoyData.createFromExistingData(inObject);
+    // }
+    // catch(SoyDataException e)
+    // {
+    //   Log.warning("could not convert " + inObject.getClass()
+    //     + ", defaulting to string");
+
+    //   return StringData.forValue(inObject.toString());
+    // }
   }
 
   //........................................................................

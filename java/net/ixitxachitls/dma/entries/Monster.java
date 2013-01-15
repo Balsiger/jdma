@@ -48,6 +48,7 @@ import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
 import net.ixitxachitls.dma.entries.extensions.Weapon;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
@@ -4043,7 +4044,7 @@ public class Monster extends CampaignEntry<BaseMonster>
     else if("reflex save".equals(inName))
       saveAbility = BaseMonster.Ability.DEXTERITY;
     else if("will save".equals(inName))
-     saveAbility = BaseMonster.Ability.WISDOM;
+      saveAbility = BaseMonster.Ability.WISDOM;
 
     if(saveAbility != null)
     {
@@ -4094,6 +4095,33 @@ public class Monster extends CampaignEntry<BaseMonster>
                                                      Modifier.Type.GENERAL),
                                         this, "size"));
 
+      }
+    }
+  }
+
+  @Override
+  protected void collect(String inName, Combined ioCombined)
+  {
+    super.collect(inName, ioCombined);
+
+    if("hit dice".equals(inName))
+    {
+      int constitution = getCombinedConstitution();
+      if(constitution >= 0)
+      {
+        int bonus = abilityModifier(constitution);
+
+        for(Pair<Value, List<Combined.Node>> value : ioCombined.values())
+        {
+          int level = ((Dice)value.first()).getNumber();
+          ioCombined.add
+            (new Contribution<Modifier>(new Modifier(level * bonus,
+                                                     Modifier.Type.GENERAL),
+                                        this,
+                                        "Con of " + constitution
+                                        + " (" + (bonus > 0 ? "+" : "")
+                                        + bonus + " and level " + level + ")"));
+        }
       }
     }
   }
@@ -4201,7 +4229,13 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public int getLevel()
   {
-    return new Combination<Dice>(this, "hit dice").total().getNumber();
+    Combined hitDice = collect("hit dice");
+
+    int level = 0;
+    for(Pair<Value, List<Combined.Node>> value : hitDice.values())
+      level += ((Dice)value.first()).getNumber();
+
+    return level;
   }
 
   //........................................................................
@@ -4613,40 +4647,6 @@ public class Monster extends CampaignEntry<BaseMonster>
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------- adjustCombination ---------------------------
-
-  /**
-   * Adjust the value for the given name for any special properites.
-   *
-   * @param       inName        the name of the value to adjust
-   * @param       ioCombination the combinstaion to adjust
-   * @param       <V>           the real type of the value combined
-   *
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public <V extends Value> void
-            adjustCombination(@Nonnull String inName,
-                              Combination<V> ioCombination)
-  {
-    if("hit dice".equals(inName))
-    {
-      Combination<Dice> combination = (Combination<Dice>)ioCombination;
-      int constitution = getCombinedConstitution();
-      if(constitution >= 0)
-      {
-        int level = combination.total().getNumber();
-        int bonus = abilityModifier(constitution);
-        combination.add(new Dice(0, 1, level * bonus),
-                        "Con of " + constitution + " (" + (bonus > 0 ? "+" : "")
-                        + bonus + ") and level " + level);
-      }
-    }
-
-    super.adjustCombination(inName, ioCombination);
-  }
-
-  //........................................................................
   //-------------------------------- check ---------------------------------
 
   /**

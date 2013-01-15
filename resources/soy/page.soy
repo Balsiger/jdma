@@ -206,18 +206,37 @@
  */
 {template .footer}
   <div class="footer">
+    {if $ij.isPublic}
+      <div class="plusone">
+        <div class="g-plusone" data-annotation="inline" data-width="500"
+            data-href="http://www.ixitxachitls.net{$ij.originalPath}"></div>
+      </div>
+      <script type="text/javascript">
+        {literal}
+        (function() {
+          var po = document.createElement('script');
+          po.type = 'text/javascript'; po.async = true;
+          po.src = 'https://apis.google.com/js/plusone.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(po, s);
+        })();
+        {/literal}
+      </script>
+    {/if}
+    <div>
+      <img src="/icons/html5.png" alt="Uses HTML 5" />
+      <img
+      src="http://code.google.com/appengine/images/appengine-silver-120x30.gif"
+           alt="Powered by Google App Engine" />
+      <a href="https://plus.google.com/109501801834573360902?prsrc=3"
+         style="text-decoration:none">
+        <img src="https://ssl.gstatic.com/images/icons/gplus-32.png"
+             alt="DMA on Google+" style="border:0;width:32px;height:32px;" />
+      </a>
+    </div>
     <div class="version">
       {dma.project} version {dma.version}
     </div>
-    <img src="/icons/html5.png" alt="Uses HTML 5" />
-    <img
-      src="http://code.google.com/appengine/images/appengine-silver-120x30.gif"
-         alt="Powered by Google App Engine" />
-    <a href="https://plus.google.com/109501801834573360902?prsrc=3"
-       style="text-decoration:none">
-      <img src="https://ssl.gstatic.com/images/icons/gplus-32.png"
-           alt="DMA on Google+" style="border:0;width:32px;height:32px;" />
-    </a>
 {/template}
 
 /**

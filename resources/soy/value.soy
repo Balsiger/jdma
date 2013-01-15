@@ -621,11 +621,10 @@
  * @param ifempty text to print if the value is empty
  */
 {template .withbase}
-  {if def($value.combine)}
-    {call dma.value.combination}
-      {param combination: $value.combine /}
-      {param value: $value /}
+  {if def($value.isCombined)}
+    {call dma.value.newcombined}
       {param entry: $entry /}
+      {param value: $value /}
       {param canEdit: $canEdit /}
       {param note: $note /}
       {param prefix: $prefix /}
@@ -633,16 +632,16 @@
       {param ifempty: $ifempty /}
     {/call}
   {else}
-    {call dma.value.value}
+    {call dma.value.newcombined}
       {param entry: $entry /}
-      {param value: $value /}
+      {param value: $value.combined /}
       {param canEdit: $canEdit /}
       {param note: $note /}
       {param prefix: $prefix /}
       {param postfix: $postfix /}
       {param ifempty: $ifempty /}
     {/call}
- {/if}
+  {/if}
 {/template}
 
 /**
@@ -744,4 +743,84 @@
     : {entry($ref.multi.0.print)}
   {if not isLast($ref)}<br/>{/if}
   {/foreach}
+{/template}
+
+/**
+ * Print a combined value.
+ *
+ * @param entry The entry to print for
+ * @param value The value to print
+ * @param canEdit True if the value can be edited, false if not
+ * @param related Other related values to edit together
+ * @param content Content for printing the value, uses .print if not given
+ * @param note Text to be displayed when editing
+ * @param prefix The prefix to the value, if any
+ * @param postfix The postfix to the value, if any
+ * @param ifempty The text to print if the value is empty
+ */
+{template .newcombined}
+  {if $value}
+    {call .editable}
+      {param canEdit: $canEdit and (not $value or $value.isEditable) /}
+      {param name: $value.isEditable ? $value.name : 'unknown' /}
+      {param value: $value.isEditable ? $value.edit : '' /}
+      {param key: $entry.key /}
+      {param type: $value.isEditable ? $value.type : 'unknown' /}
+      {param related: $related ? $related :
+          $value.isEditable ? $value.related : '' /}
+      {param choices: $value.isEditable ? $value.choices : ''/}
+      {param note: $note /}
+      {param ifempty: $ifempty /}
+      {param content}
+        {if $content}
+          {if $prefix}{$prefix}{sp}{/if}
+          {$content}
+          {if $postfix}{$postfix}{sp}{/if}
+        {else}
+          {if $prefix}{$prefix}{sp}{/if}
+          {if def($value.remark)}
+            {call dma.value.remark}
+              {param value: $value /}
+              {param remarkType: $value.remark.type /}
+              {param remarkComment: $value.remark.comment /}
+            {/call}
+          {/if}
+          {foreach $val in $value.values}
+            <span class="windowed">
+              <span class="window base">
+                {foreach $node in $val.second}
+                  <div>
+                    <span class="base-value">
+                      {$node.value}
+                      </p> // Don't really know why this is necessary, but it
+                           // prevents the dom from getting upset.
+                    </span>:
+                    {sp}<span>{$node.entry.name}</span>
+                    {if def($node.description)}
+                      {sp}({$node.description})
+                    {/if}
+                  </div>
+                {/foreach}
+              </span>
+              {$val.first |print}{sp}
+            </span>
+          {/foreach}
+          {if $value.hasModifiers}
+            {$value.modifier |print}
+          {/if}
+          {if $postfix}{$postfix}{sp}{/if}
+        {/if}
+      {/param}
+    {/call}
+  {elseif $content}
+    {if $prefix}{$prefix}{sp}{/if}
+    {$content}
+    {if $postfix}{$postfix}{sp}{/if}
+  {else}
+    {if $ifempty}
+      {$ifempty}
+    {else}
+      (not found)
+    {/if}
+  {/if}
 {/template}

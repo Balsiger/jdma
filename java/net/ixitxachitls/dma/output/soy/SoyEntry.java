@@ -182,6 +182,9 @@ public class SoyEntry extends SoyAbstract
     if(!inName.startsWith("__"))
     {
       value = Classes.callMethod(name, m_entry);
+      System.out.println("calling method " + name + " for " + value + " / "
+                         + m_entry.getName());
+      System.out.println("converting to " + convert(name, value));
       if(value != null)
         return convert(name, value);
     }
@@ -191,12 +194,7 @@ public class SoyEntry extends SoyAbstract
       {
         value = base.compute(name);
         if(value != null)
-        {
-          if(value instanceof Value)
-            return new SoyValue(name, ((Value)value).create(), m_entry, false);
-
           return convert(name, value);
-        }
       }
 
     return new Undefined(m_name + "." + name);

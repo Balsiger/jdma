@@ -64,6 +64,7 @@ import net.ixitxachitls.output.commands.Linebreak;
 
 //__________________________________________________________________________
 
+@Deprecated
 public class Combination<V extends Value>
 {
   //--------------------------------------------------------- constructor(s)

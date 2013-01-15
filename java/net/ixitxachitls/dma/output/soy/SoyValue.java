@@ -30,6 +30,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.template.soy.data.SoyData;
@@ -68,6 +69,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 @Immutable
 public class SoyValue extends SoyAbstract
 {
@@ -83,8 +85,7 @@ public class SoyValue extends SoyAbstract
    * @param    inEntry    the entry for the value
    *
    */
-  public SoyValue(@Nonnull String inName, @Nonnull Value inValue,
-                  @Nonnull AbstractEntry inEntry)
+  public SoyValue(String inName, Value inValue, AbstractEntry inEntry)
   {
     this(inName, inValue, inEntry, true);
   }
@@ -101,8 +102,8 @@ public class SoyValue extends SoyAbstract
    * @param    inEditable true if the value can be edited, false if not
    *
    */
-  public SoyValue(@Nonnull String inName, @Nonnull Value inValue,
-                  @Nonnull AbstractEntry inEntry, boolean inEditable)
+  public SoyValue(String inName, Value inValue,
+                  AbstractEntry inEntry, boolean inEditable)
   {
     super(inName, inEntry);
 
@@ -117,10 +118,10 @@ public class SoyValue extends SoyAbstract
   //-------------------------------------------------------------- variables
 
   /** The real value. */
-  protected final @Nonnull Value m_value;
+  protected final Value m_value;
 
   /** The command renderer for rendering values. */
-  public static final @Nonnull SoyRenderer COMMAND_RENDERER =
+  public static final SoyRenderer COMMAND_RENDERER =
     new SoyRenderer(new SoyTemplate("commands", "value", "page"));
 
   /** A flag if the value can be edited. */
@@ -135,14 +136,25 @@ public class SoyValue extends SoyAbstract
 
   //-------------------------------- print ---------------------------------
 
+  public String toString()
+  {
+    return print();
+  }
+
   /**
    * Print the value to soy.
    *
    * @return  a string representation for html rendering
    *
    */
-  public @Nonnull String print()
+  public String print()
   {
+    if(m_value == null)
+      return "(no value)";
+
+    if(m_entry == null)
+      return "(no entry)";
+
     String template = m_value.getTemplate();
     if (template == null)
       return m_value.print(m_entry);
@@ -165,7 +177,7 @@ public class SoyValue extends SoyAbstract
    * @return   the raw string representation
    *
    */
-  public @Nonnull String raw()
+  public String raw()
   {
     return m_value.print(m_entry);
   }
@@ -183,94 +195,98 @@ public class SoyValue extends SoyAbstract
    */
   @Override
   @SuppressWarnings("unchecked") // need to case to value list
-  public @Nullable SoyData getSingle(@Nonnull String inName)
+  public @Nullable SoyData getSingle(String inName)
   {
-    if("edit".equals(inName))
-      return StringData.forValue
-        (Encodings.encodeHTMLAttribute(m_value.getEditValue()));
-
     if("isEditable".equals(inName))
-      return BooleanData.forValue(m_editable);
+      return BooleanData.forValue(m_value != null && m_editable);
 
-    if("raw".equals(inName))
-      return StringData.forValue(m_value.toString(false));
-
-    // if("print".equals(inName))
-    //   return StringData.forValue(print(m_entry));
-
-    if("combine".equals(inName))
-    {
-      if(m_combination == null)
-        m_combination =
-          new SoyCombination(m_name,
-                             new Combination<Value>(m_entry, m_name)
-                             /*.withIgnoreTop()*/, m_value, m_entry);
-
-      return m_combination;
-    }
-
-    if("name".equals(inName))
-      return StringData.forValue(m_name);
-
-    if("type".equals(inName))
-      return StringData.forValue(m_value.getEditType());
-
-    if("related".equals(inName))
-      if(m_value.getRelated() == null)
-        return StringData.EMPTY_STRING;
-      else
-        return StringData.forValue(m_value.getRelated());
-
-    if("choices".equals(inName))
-    {
-      if(m_value.getChoices() == null)
-        return StringData.EMPTY_STRING;
-      else
-        return StringData.forValue(m_value.getChoices());
-    }
-
-    if("group".equals(inName))
-      return StringData.forValue(m_value.group());
-
-    if("isArithmetic".equals(inName))
-      return BooleanData.forValue(m_value.isArithmetic());
+    if("combined".equals(inName))
+      return new SoyCombined(m_entry.collect(m_name));
 
     if("isDefined".equals(inName))
       return BooleanData.forValue(m_value != null && m_value.isDefined());
 
-    if("expression".equals(inName))
-      if(m_value.hasExpression())
-        return StringData.forValue(m_value.getExpression().toString());
-      else
-        return StringData.EMPTY_STRING;
-
-    if("list".equals(inName) && m_value instanceof ValueList)
+    if(m_value != null)
     {
-      List<SoyValue> values = new ArrayList<SoyValue>();
-      for (Value value : (ValueList<Value>)m_value)
-        values.add(new SoyValue(m_name, value, m_entry));
+      if("edit".equals(inName))
+        return StringData.forValue
+          (Encodings.encodeHTMLAttribute(m_value.getEditValue()));
 
-      return new SoyListData(values);
-    }
 
-    if("multi".equals(inName) && m_value instanceof Multiple)
-    {
-      List<SoyValue> values = new ArrayList<SoyValue>();
-      for (Multiple.Element element : (Multiple)m_value)
-        values.add(new SoyValue(m_name, element.get(), m_entry));
+      if("raw".equals(inName))
+        return StringData.forValue(m_value.toString(false));
 
-      return new SoyListData(values);
-    }
+      if("combine".equals(inName))
+      {
+        if(m_combination == null)
+          m_combination =
+            new SoyCombination(m_name,
+                               new Combination<Value>(m_entry, m_name)
+                               /*.withIgnoreTop()*/, m_value, m_entry);
 
-    if("number".equals(inName) && m_value instanceof BaseNumber)
-      return IntegerData.forValue((int)((BaseNumber)m_value).get());
+        return m_combination;
+      }
 
-    if("remark".equals(inName))
-    {
-      Remark remark = m_value.getRemark();
-      if (remark != null)
-        return new SoyMapData("type", remark.getType().getDescription(),
-                              "comment", remark.getComment());
+      if("name".equals(inName))
+        return StringData.forValue(m_name);
+
+      if("type".equals(inName))
+        return StringData.forValue(m_value.getEditType());
+
+      if("related".equals(inName))
+        if(m_value.getRelated() == null)
+          return StringData.EMPTY_STRING;
+        else
+          return StringData.forValue(m_value.getRelated());
+
+      if("choices".equals(inName))
+      {
+        if(m_value.getChoices() == null)
+          return StringData.EMPTY_STRING;
+        else
+          return StringData.forValue(m_value.getChoices());
+      }
+
+      if("group".equals(inName))
+        return StringData.forValue(m_value.group());
+
+      if("isArithmetic".equals(inName))
+        return BooleanData.forValue(m_value.isArithmetic());
+
+      if("expression".equals(inName))
+        if(m_value.hasExpression())
+          return StringData.forValue(m_value.getExpression().toString());
+        else
+          return StringData.EMPTY_STRING;
+
+      if("list".equals(inName) && m_value instanceof ValueList)
+      {
+        List<SoyValue> values = new ArrayList<SoyValue>();
+        for (Value value : (ValueList<Value>)m_value)
+          values.add(new SoyValue(m_name, value, m_entry));
+
+        return new SoyListData(values);
+      }
+
+      if("multi".equals(inName) && m_value instanceof Multiple)
+      {
+        List<SoyValue> values = new ArrayList<SoyValue>();
+        for (Multiple.Element element : (Multiple)m_value)
+          values.add(new SoyValue(m_name, element.get(), m_entry));
+
+        return new SoyListData(values);
+      }
+
+      if("number".equals(inName) && m_value instanceof BaseNumber)
+        return IntegerData.forValue((int)((BaseNumber)m_value).get());
+
+      if("remark".equals(inName) && m_value != null)
+      {
+        Remark remark = m_value.getRemark();
+        if (remark != null)
+          return new SoyMapData("type", remark.getType().getDescription(),
+                                "comment", remark.getComment());
+      }
     }
 
     // check if there is a function with the given name in this soy value
@@ -279,13 +295,16 @@ public class SoyValue extends SoyAbstract
       return convert(inName, value);
 
     // check if there is a function with the given name in the value itself
-    value = Classes.callMethod(inName, m_value);
-    if(value != null)
-      return convert(inName, value);
+    if(m_value != null)
+    {
+      value = Classes.callMethod(inName, m_value);
+      if(value != null)
+        return convert(inName, value);
 
-    value = m_value.compute(inName);
-    if(value != null)
-      return convert(inName, value);
+      value = m_value.compute(inName);
+      if(value != null)
+        return convert(inName, value);
+    }
 
     return new Undefined(m_name + "." + inName);
   }

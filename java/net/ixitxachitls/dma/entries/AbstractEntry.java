@@ -42,6 +42,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -54,6 +55,7 @@ import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Comment;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.FormattedText;
@@ -99,6 +101,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class AbstractEntry extends ValueGroup
   implements Comparable<AbstractEntry>
 {
@@ -1304,11 +1307,44 @@ public class AbstractEntry extends ValueGroup
    */
   public @Nonnull FormattedText dmaValues()
   {
+    System.out.println("dma values: " + formatValues());
     return new FormattedText(formatValues() + ".");
   }
 
   //........................................................................
 
+  //------------------------------- collect --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public Combined collect(String inName)
+  {
+    Combined combined = new Combined(inName, this);
+    collect(inName, combined);
+
+    return combined;
+  }
+
+  //........................................................................
+
+  @Override
+  protected void collect(String inName, Combined ioCombined)
+  {
+    super.collect(inName, ioCombined);
+
+    for(BaseEntry base : getBaseEntries())
+      if(base != null)
+        base.collect(inName, ioCombined);
+
+    for(AbstractExtension extension : m_extensions.values())
+      extension.collect(inName, ioCombined);
+  }
 
   //------------------------- computeIndexValues ---------------------------
 

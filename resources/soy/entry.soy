@@ -451,7 +451,8 @@
         </div>
       </div>
       <div class="value-content
-          {if $noedit and not $ij.isDM and not $ij.isOwner} value-noedit{/if}">
+          {if $noedit and not $ij.isDM and not $ij.isOwner} value-noedit{/if}
+          {if not $value.isEditable and $name != 'name'} value-noedit{/if}">
         {if $value}
           {if $withoutbase}
             {call dma.value.value}
@@ -827,7 +828,7 @@
 {template .itemsummary private="true"}
   <div class="item-summary">
     <div class="item-summary-title">
-      {if $item.name}
+      {if def($item) and $item.name}
         {if $ij.isDM}
           {$item.dmName}
         {else}
@@ -835,11 +836,11 @@
         {/if}
         {sp}({$item.name})
       {else}
-        {$item}  ({$item.name})
+        {$item}
       {/if}
     </div>
     <div class="item-summary-text">
-      {if $item.name}
+      {if def($item) and $item.name}
         <div class="item-summary-desc">
           {$item.appearance |print}
         </div>

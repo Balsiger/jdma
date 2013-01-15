@@ -1529,7 +1529,7 @@ public class BaseProduct extends BaseEntry
       return "";
 
     if(m_leader == null || !m_title.isDefined()
-       || m_leader.get().isEmpty())
+       || !m_leader.isDefined())
       return m_title.get();
 
     return m_leader.get() + " " + m_title.get();

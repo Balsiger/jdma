@@ -43,6 +43,7 @@ import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -128,6 +129,22 @@ public class SoyServlet extends DMAServlet
 
   //........................................................................
 
+  //------------------------------- isPublic -------------------------------
+
+  /**
+   * Checks whether the current page is public or requires some kind of
+   * login.
+   *
+   * @return      true if public, false if login is required
+   *
+   */
+  public boolean isPublic(DMARequest inRequest)
+  {
+    return true;
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -157,6 +174,7 @@ public class SoyServlet extends DMAServlet
   {
     if(isDev())
     {
+      Log.important("recompiling soy templates on dev");
       s_template.recompile();
       SoyValue.COMMAND_RENDERER.recompile();
       SoyTemplate.COMMAND_RENDERER.recompile();
@@ -220,6 +238,8 @@ public class SoyServlet extends DMAServlet
 
     return s_template.map
       ("user", user == null ? "" : new SoyEntry(user),
+       "isPublic", isPublic(inRequest),
+       "originalPath", inRequest.getOriginalPath(),
        "loginURL", userService.createLoginURL(inRequest.getOriginalPath()),
        "logoutURL", userService.createLogoutURL(inRequest.getOriginalPath()),
        "registerScript",

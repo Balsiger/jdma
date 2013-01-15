@@ -64,6 +64,7 @@ import net.ixitxachitls.util.Strings;
 
 //__________________________________________________________________________
 
+@Deprecated
 @Immutable
 public class SoyCombination extends SoyValue
 {
