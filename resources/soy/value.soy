@@ -787,21 +787,22 @@
           {/if}
           {foreach $val in $value.values}
             <span class="windowed">
-              <span class="window base">
+              <div class="window base">
                 {foreach $node in $val.second}
-                  <div>
-                    <span class="base-value">
-                      {$node.value}
-                      </p> // Don't really know why this is necessary, but it
-                           // prevents the dom from getting upset.
-                    </span>:
-                    {sp}<span>{$node.entry.name}</span>
-                    {if def($node.description)}
-                      {sp}({$node.description})
-                    {/if}
+                  <div class="base-entry">
+                    <div class="base-value">
+                      {$node.value |firstline}
+                    </div>
+                    :{sp}
+                    <div class="base-name">
+                      {$node.entry.name}
+                      {if def($node.description)}
+                        {sp}({$node.description})
+                      {/if}
+                    </div>
                   </div>
                 {/foreach}
-              </span>
+              </div>
               {$val.first |print}{sp}
             </span>
           {/foreach}

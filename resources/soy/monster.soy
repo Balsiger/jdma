@@ -441,6 +441,7 @@
       {$entry.gender.print}{sp}
     {/if}
     {$entry.base.print}
+    </p>
     <p>
     {call dma.entry.overviewValue}
       {param prefix: 'CR' /}
@@ -474,6 +475,7 @@
       {param entry: $entry /}
       {param value: $entry.hp /}
     {/call}
+    </p>
     <p>
     {call dma.entry.overviewValue}
       {param prefix: 'Init' /}
@@ -505,6 +507,7 @@
       {param entry: $entry /}
       {param value: $entry.armor_class_flat_footed /}
     {/call}
+    </p>
     <p>
     {call dma.entry.overviewValue}
       {param prefix: 'Atk' /}
@@ -603,6 +606,7 @@
         , grapple +{$entry.attacks.grapple |print})
       {/param}
     {/call}
+    </p>
     <p>
     {call dma.entry.overviewValue}
       {param prefix: 'AL' /}
@@ -671,6 +675,7 @@
       {param entry: $entry /}
       {param value: $entry.charisma /}
     {/call}
+    </p>
     <p>
     <em>Skills:</em>{sp}
     {foreach $skill in $entry.allSkills}
@@ -683,6 +688,7 @@
         {if not isLast($skill)}, {/if}
       {/if}
     {/foreach}
+    </p>
     <p>
     <div id="boxes">
       {foreach $attack in $entry.special_attack_summaries}
@@ -760,4 +766,5 @@
       }, 100);
     </script>
   {/literal}
+  </p>
 {/deltemplate}

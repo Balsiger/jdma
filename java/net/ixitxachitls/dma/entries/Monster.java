@@ -3987,10 +3987,10 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the modifier for the save
    *
    */
-  public ModifiedNumber getFortitudeSave()
-  {
-    return new ModifiedNumber(collectContributions("fortitude save"));
-  }
+  // public ModifiedNumber getFortitudeSave()
+  // {
+  //   return new ModifiedNumber(collectContributions("fortitude save"));
+  // }
 
   //........................................................................
   //----------------------------- getReflexSave -----------------------------

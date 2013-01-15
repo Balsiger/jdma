@@ -182,9 +182,6 @@ public class SoyEntry extends SoyAbstract
     if(!inName.startsWith("__"))
     {
       value = Classes.callMethod(name, m_entry);
-      System.out.println("calling method " + name + " for " + value + " / "
-                         + m_entry.getName());
-      System.out.println("converting to " + convert(name, value));
       if(value != null)
         return convert(name, value);
     }

@@ -517,6 +517,52 @@ public class SoyTemplate
   }
 
   //........................................................................
+  //----- FirstLineDirective ------------------------------------------------
+
+  /** A directive to parse and render comands embedded in a string. */
+  public static class FirstLineDirective extends SoyAbstractTofuPrintDirective
+  {
+    @Override
+    public String getName()
+    {
+      return "|firstline";
+    }
+
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(0);
+    }
+
+
+    @Override
+    public boolean shouldCancelAutoescape()
+    {
+      return false;
+    }
+
+    private String firstLine(String inText)
+    {
+      String line = Strings.getPattern(inText, "(.*?)\n");
+      if(line == null)
+        return inText;
+
+      return line;
+    }
+
+    @Override
+    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    {
+      if(inValue instanceof SoyValue)
+        return COMMAND_RENDERER.renderCommands
+          (firstLine(((SoyValue)inValue).raw()));
+
+      return firstLine(inValue.toString());
+    }
+  }
+
+  //........................................................................
   //----- CSSDirective -----------------------------------------------------
 
   /** A direactive to format a string as a css id. */
@@ -577,6 +623,7 @@ public class SoyTemplate
       soyDirectivesSetBinder.addBinding().to(CSSDirective.class);
       soyDirectivesSetBinder.addBinding().to(RawDirective.class);
       soyDirectivesSetBinder.addBinding().to(CommandsDirective.class);
+      soyDirectivesSetBinder.addBinding().to(FirstLineDirective.class);
     }
   }
 
