@@ -422,7 +422,7 @@
       {/if}
       {sp}({$entry.name})
     </h1>
-    <p>
+    <div class="par">
     <div class="intro-text">
       <div class="description">
         {call dma.entry.overviewValue}
@@ -441,13 +441,12 @@
       {$entry.gender.print}{sp}
     {/if}
     {$entry.base.print}
-    </p>
-    <p>
+    <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'CR' /}
       {param postfix: ';' /}
       {param entry: $entry /}
-      {param value: $entry.challenge_rating /}
+      {param value: $entry.challenge_rating.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param entry: $entry /}
@@ -475,8 +474,7 @@
       {param entry: $entry /}
       {param value: $entry.hp /}
     {/call}
-    </p>
-    <p>
+    <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'Init' /}
       {param postfix: ';' /}
@@ -493,22 +491,21 @@
       {param prefix: 'AC' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.armor_class /}
+      {param value: $entry.armorClass /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'touch' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.armor_class_touch /}
+      {param value: $entry.armorClassTouch /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'flat-footed' /}
       {param postfix: ';' /}
       {param entry: $entry /}
-      {param value: $entry.armor_class_flat_footed /}
+      {param value: $entry.armorClassFlatFooted /}
     {/call}
-    </p>
-    <p>
+    <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'Atk' /}
       {param postfix: ';' /}
@@ -590,24 +587,28 @@
         <span class="windowed">
           +{$entry.attacks.base[0]}
           <span class="window base">
-            {foreach $modifier in keys($entry.attacks.bases)}
-              <span class="base-value">{$modifier}</span>
-              {sp} from{sp}
-              {foreach $name in $entry.attacks.bases[$modifier]}
-                {$name}
-                {if not isLast($name)}
-                  ,
-                {/if}
+            {foreach $base in $entry.attacks.bases}
+              {foreach $node in $base.second}
+                <div class="base-entry">
+                  <div class="base-value">
+                    {$node.value |firstline}
+                  </div>
+                  :{sp}
+                  <div class="base-name">
+                    {$node.entry.name}
+                    {if def($node.description)}
+                      {sp}({$node.description})
+                    {/if}
+                  </div>
+                </div>
               {/foreach}
-              <br />
             {/foreach}
           </span>
         </span>
         , grapple +{$entry.attacks.grapple |print})
       {/param}
     {/call}
-    </p>
-    <p>
+    <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'AL' /}
       {param postfix: ';' /}
@@ -619,64 +620,57 @@
       {param prefix: 'Fort' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.fortitudeSave /}
-    {/call}
-    {call dma.entry.overviewValue}
-      {param prefix: 'Fort' /}
-      {param postfix: ',' /}
-      {param entry: $entry /}
       {param value: $entry.fortitude_save /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Ref' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.reflexSave /}
+      {param value: $entry.reflex_save /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Will' /}
       {param postfix: ';' /}
       {param entry: $entry /}
-      {param value: $entry.willSave /}
+      {param value: $entry.will_save /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Str' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.strength /}
+      {param value: $entry.strength.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Dex' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.dexterity /}
+      {param value: $entry.dexterity.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Con' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.constitution /}
+      {param value: $entry.constitution.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Int' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.intelligence /}
+      {param value: $entry.intelligence.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Wis' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.wisdom /}
+      {param value: $entry.wisdom.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Cha' /}
       {param postfix: ';' /}
       {param entry: $entry /}
-      {param value: $entry.charisma /}
+      {param value: $entry.charisma.combined /}
     {/call}
-    </p>
-    <p>
+    <div class="par">
     <em>Skills:</em>{sp}
     {foreach $skill in $entry.allSkills}
       {if not $skill.modifier.isZero}
@@ -688,8 +682,7 @@
         {if not isLast($skill)}, {/if}
       {/if}
     {/foreach}
-    </p>
-    <p>
+    <div class="par">
     <div id="boxes">
       {foreach $attack in $entry.special_attack_summaries}
         <div class="ability">
@@ -766,5 +759,4 @@
       }, 100);
     </script>
   {/literal}
-  </p>
 {/deltemplate}

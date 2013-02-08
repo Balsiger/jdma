@@ -26,7 +26,7 @@ package net.ixitxachitls.dma.entries.extensions;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -35,6 +35,7 @@ import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -65,6 +66,7 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseMagic extends BaseExtension<BaseItem>
 {
   //----------------------------------------------------------------- nested
@@ -81,7 +83,7 @@ public class BaseMagic extends BaseExtension<BaseItem>
    * @param       inName  the name of the extension
    *
    */
-  public BaseMagic(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseMagic(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -113,7 +115,7 @@ public class BaseMagic extends BaseExtension<BaseItem>
   /** The bonus to an ability. */
   @Key("ability")
   @DM
-  protected @Nonnull Multiple m_ability = new Multiple
+  protected Multiple m_ability = new Multiple
     (new Multiple.Element(new EnumSelection<BaseMonster.Ability>
                           (BaseMonster.Ability.class), false),
      new Multiple.Element(new Modifier(), false));
@@ -124,7 +126,7 @@ public class BaseMagic extends BaseExtension<BaseItem>
   /** A general modifier to a value. */
   @Key("modifier")
   @DM
-  protected @Nonnull Multiple m_modifier = new Multiple
+  protected Multiple m_modifier = new Multiple
     (new Multiple.Element(new Name(), false),
      new Multiple.Element(new Modifier(), false, ": ", null));
 
@@ -149,7 +151,7 @@ public class BaseMagic extends BaseExtension<BaseItem>
    *
    */
   // @Override
-  // public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  // public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   // {
   //   super.computeIndexValues(ioValues);
 
@@ -164,36 +166,33 @@ public class BaseMagic extends BaseExtension<BaseItem>
   // }
 
   //........................................................................
-  //-------------------------- addContributions ----------------------------
+  //------------------------------ collect ---------------------------------
 
   /**
    * Add current contributions to the given list.
    *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions collected
+   * @param       inName     the name of the value to contribute to
+   * @param       ioCombined the list of contributions collected
    *
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions)
+  public void collect(String inName, Combined ioCombined)
   {
-    super.addContributions(inName, ioContributions);
+    super.collect(inName, ioCombined);
 
     if("dexterity".equals(inName))
     {
       if(((EnumSelection<BaseMonster.Ability>)m_ability.get(0)).getSelected()
          == BaseMonster.Ability.DEXTERITY)
-        ioContributions.add
-          (new Contribution<Modifier>((Modifier)m_ability.get(1),
-                                      m_entry, "magic"));
+        ioCombined.add(new Contribution<Modifier>((Modifier)m_ability.get(1),
+                                                  m_entry, "magic"));
     }
 
+    System.out.println("magic " + inName + ": " + m_modifier.get(0));
     if(inName.equals(((Name)m_modifier.get(0)).get()))
-      ioContributions.add
-        (new Contribution<Modifier>((Modifier)m_modifier.get(1),
-                                    m_entry, "magic"));
+      ioCombined.add(new Contribution<Modifier>((Modifier)m_modifier.get(1),
+                                                m_entry, "magic"));
   }
 
   //........................................................................

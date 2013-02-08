@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.entries.extensions;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -34,6 +35,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -62,6 +64,7 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseArmor extends BaseExtension<BaseItem>
 {
   //----------------------------------------------------------------- nested
@@ -88,7 +91,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
      * @param inName     the name of the value
      *
      */
-    private ArmorTypes(@Nonnull String inName)
+    private ArmorTypes(String inName)
     {
       m_name = constant("armor.types", inName);
     }
@@ -99,7 +102,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -110,7 +113,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -131,7 +134,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
    * @param       inName  the name of the extension
    *
    */
-  public BaseArmor(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseArmor(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -163,7 +166,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /** The bonus of the armor. */
   @Key("AC bonus")
   @DM
-  protected @Nonnull Modifier m_bonus = new Modifier()
+  protected Modifier m_bonus = new Modifier()
     .withTemplate("link", Index.Path.ARMOR_BONUSES.getPath());
 
   static
@@ -182,7 +185,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   /** The type of the armor. */
   @Key("armor type")
-  protected @Nonnull EnumSelection<ArmorTypes> m_type =
+  protected EnumSelection<ArmorTypes> m_type =
      new EnumSelection<ArmorTypes>(ArmorTypes.class)
     .withFormatter(s_typeFormatter)
     .withTemplate("link", Index.Path.ARMOR_TYPES.getPath());
@@ -204,7 +207,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         @Override
-        public Long extract(@Nonnull Number inValue)
+        public Long extract(Number inValue)
         {
           return inValue.get();
         }
@@ -241,7 +244,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     (new Group.Extractor<Number, Long>()
       {
         @Override
-        public Long extract(@Nonnull Number inValue)
+        public Long extract(Number inValue)
         {
           return inValue.get();
         }
@@ -278,7 +281,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     (new Group.Extractor<Percent, Long>()
       {
         @Override
-        public Long extract(@Nonnull Percent inValue)
+        public Long extract(Percent inValue)
         {
           return inValue.get();
         }
@@ -312,7 +315,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         @Override
-        public Long extract(@Nonnull Distance inValue)
+        public Long extract(Distance inValue)
         {
           return inValue.getAsFeet().getLeader();
         }
@@ -361,7 +364,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
 
@@ -386,15 +389,13 @@ public class BaseArmor extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions)
+  public void collect
+    (String inName, Combined ioCombined)
   {
-    super.addContributions(inName, ioContributions);
+    super.collect(inName, ioCombined);
 
     if("armor class".equals(inName) && m_bonus.isDefined())
-      ioContributions.add(new Contribution<Modifier>(m_bonus, m_entry,
-                                                     "armor"));
+      ioCombined.add(new Contribution<Modifier>(m_bonus, m_entry, "armor"));
   }
 
   //........................................................................

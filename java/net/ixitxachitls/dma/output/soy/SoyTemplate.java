@@ -288,9 +288,8 @@ public class SoyTemplate
     @Override
     public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
     {
-      return StringData.forValue("guru - " + inArgs.get(0) + " - guru");
-      // return StringData.forValue
-      //   (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
+      return StringData.forValue
+        (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
     }
   }
 
@@ -431,7 +430,6 @@ public class SoyTemplate
     @Override
     public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
     {
-      System.out.println("printing for " + inValue.getClass());
       if(inValue instanceof SoyValue)
         return ((SoyValue)inValue).print();
 

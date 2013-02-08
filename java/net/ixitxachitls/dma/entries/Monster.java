@@ -3319,16 +3319,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public ModifiedNumber ability(BaseMonster.Ability inAbility)
   {
-    Combination<Number> ability =
-      new Combination<Number>(this, inAbility.toString().toLowerCase());
-
-    Map<String, Modifier> modifiers =
-      collectModifiers(inAbility.toString().toLowerCase());
-    ModifiedNumber modified = new ModifiedNumber(ability.max().get());
-    for(Map.Entry<String, Modifier> entry : modifiers.entrySet())
-      modified.withModifier(entry.getValue(), entry.getKey());
-
-    return modified;
+    return collect(inAbility.toString().toLowerCase()).modifier();
   }
 
   //........................................................................
@@ -3369,10 +3360,10 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public ModifiedNumber armorClassTouch()
   {
-    return armorClass().ignore(Modifier.Type.ARMOR,
-                             Modifier.Type.NATURAL_ARMOR,
-                             Modifier.Type.SHIELD,
-                             Modifier.Type.ENHANCEMENT);
+    return armorClass().modifier().ignore(Modifier.Type.ARMOR,
+                                          Modifier.Type.NATURAL_ARMOR,
+                                          Modifier.Type.SHIELD,
+                                          Modifier.Type.ENHANCEMENT);
   }
 
   //........................................................................
@@ -3384,16 +3375,11 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the armor class
    *
    */
-  public ModifiedNumber armorClass()
+  public Combined armorClass()
   {
-    ModifiedNumber armor =
-      new ModifiedNumber(10, collectContributions("armor class"));
-
-    Combination<Number> natural =
-      new Combination<Number>(this, "natural armor");
-    armor.withModifier
-      (new Modifier((int)natural.total().get(), Modifier.Type.NATURAL_ARMOR),
-       "natural armor");
+    Combined armor = collect("armor class");
+    armor.add(new Contribution<Number>(new Number(10, 10, 10), this, "base"));
+    armor.add(collect("natural armor"), "natural armor");
 
     return armor;
   }
@@ -3409,7 +3395,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public ModifiedNumber armorClassFlatFooted()
   {
-    ModifiedNumber armor = armorClass();
+    ModifiedNumber armor = armorClass().modifier();
 
     if(hasQuality("uncanny dodge"))
       return armor;
@@ -3463,90 +3449,19 @@ public class Monster extends CampaignEntry<BaseMonster>
    *   base attacks - a list with the base attack values
    *
    */
-  @SuppressWarnings("unchecked")
   public Map<String, Object> attacks()
   {
-    List<Long> baseAttacks = new ArrayList<Long>();
-    Combination<Number> baseAttack =
-      new Combination<Number>(this, "base attack");
+    Combined baseAttack = new Combined("base attack", this);
+    ModifiedNumber baseAttackNumber = baseAttack.modifier();
+    if(baseAttackNumber.hasConditions())
+      throw new UnsupportedOperationException
+        ("conditions in base attack are not supported");
 
-    if(baseAttack.total() != null)
-      for(long attack = baseAttack.total().get(); attack > 0; attack -= 5)
-        baseAttacks.add(attack);
+    List<Long> baseAttacks = Lists.newArrayList();
+    for(long attack = baseAttackNumber.getMinValue(); attack > 0; attack -= 5)
+      baseAttacks.add(attack);
 
     boolean weaponFinesse = hasFeat("Weapon Finesse");
-
-    List<Map<String, Object>> primaryAttacks = Lists.newArrayList();
-    Combination<ValueList<Multiple>> primaries =
-      new Combination<ValueList<Multiple>>(this, "primary attacks");
-    if(primaries.total() != null && primaries.total().isDefined())
-      for(Multiple attack : primaries.total())
-      {
-        if(((EnumSelection<BaseMonster.AttackMode>)attack.get(1)).getSelected()
-           == BaseMonster.AttackMode.WEAPON)
-          continue;
-
-        boolean melee =
-          ((EnumSelection<BaseMonster.AttackStyle>)
-           attack.get(2)).getSelected() == BaseMonster.AttackStyle.MELEE;
-
-        BaseMonster.Ability keyAbility;
-        if(weaponFinesse || !melee)
-          keyAbility = BaseMonster.Ability.DEXTERITY;
-        else
-          keyAbility = BaseMonster.Ability.STRENGTH;
-
-        List<ModifiedNumber> attacks = Lists.newArrayList();
-        attacks.add(naturalAttack(keyAbility, baseAttacks.get(0), false));
-
-        Map<String, Object> primary = Maps.newHashMap();
-        primary.put("attacks", attacks);
-        primary.put("number", attack.get(0));
-        primary.put("mode", attack.get(1));
-        primary.put("style", attack.get(2));
-        primary.put("damage",
-                    adjustDamageForStrength((Damage)attack.get(3), melee,
-                                            false));
-        primary.put("critical", critical(null));
-
-        primaryAttacks.add(primary);
-      }
-
-    List<Map<String, Object>> secondaryAttacks = Lists.newArrayList();
-    Combination<ValueList<Multiple>> secondaries =
-      new Combination<ValueList<Multiple>>(this, "secondary attacks");
-    if(secondaries.total() != null && secondaries.total().isDefined())
-      for(Multiple attack : secondaries.total())
-      {
-        if(((EnumSelection<BaseMonster.AttackMode>)attack.get(1)).getSelected()
-           == BaseMonster.AttackMode.WEAPON)
-          continue;
-
-        boolean melee =
-          ((EnumSelection<BaseMonster.AttackStyle>)
-           attack.get(2)).getSelected() == BaseMonster.AttackStyle.MELEE;
-
-        BaseMonster.Ability keyAbility;
-        if(weaponFinesse || !melee)
-          keyAbility = BaseMonster.Ability.DEXTERITY;
-        else
-          keyAbility = BaseMonster.Ability.STRENGTH;
-
-        List<ModifiedNumber> attacks = Lists.newArrayList();
-        attacks.add(naturalAttack(keyAbility, baseAttacks.get(0) - 5, false));
-
-        Map<String, Object> secondary = Maps.newHashMap();
-        secondary.put("attacks", attacks);
-        secondary.put("number", attack.get(0));
-        secondary.put("mode", attack.get(1));
-        secondary.put("style", attack.get(2));
-        secondary.put("damage",
-                      adjustDamageForStrength((Damage)attack.get(3), melee,
-                                              true));
-        secondary.put("critical", critical(null));
-
-        secondaryAttacks.add(secondary);
-      }
 
     List<Map<String, Object>> weaponAttacks =
       new ArrayList<Map<String, Object>>();
@@ -3560,21 +3475,18 @@ public class Monster extends CampaignEntry<BaseMonster>
         continue;
 
       Map<String, Object> weapon = new HashMap<String, Object>();
-      Number maxAttacksValue =
-        new Combination<Number>(item, "max attacks").min();
+      long maxAttacks =
+        new Combined("max attacks", item).modifier().getMinValue();
 
-      long maxAttacks = Long.MAX_VALUE;
-      if(maxAttacksValue != null && maxAttacksValue.isDefined())
-        maxAttacks = maxAttacksValue.get();
+      if(maxAttacks <= 0)
+        maxAttacks = Long.MAX_VALUE;
 
       List<ModifiedNumber> attacks = new ArrayList<ModifiedNumber>();
       for(int i = 0; i < maxAttacks && i < baseAttacks.size(); i++)
         attacks.add(weaponAttack(item, baseAttacks.get(i)));
 
       weapon.put("attacks", attacks);
-      weapon.put("style",
-                 new Combination<EnumSelection<BaseWeapon.Style>>
-                 (item, "weapon style").total());
+      weapon.put("style", new Combined("weapon style", item));
       weapon.put("name", item.getDMName());
       weapon.put("damage", new Combination<Multiple>(item, "damage"));
       weapon.put("critical", critical(item));
@@ -3584,12 +3496,58 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     return new ImmutableMap.Builder<String, Object>()
       .put("base", baseAttacks)
-      .put("bases", baseAttack.valuesPerGroup())
-      .put("primary", primaryAttacks)
-      .put("secondary", secondaryAttacks)
+      .put("bases", baseAttack.values())
+      .put("primary", attacks("primary attacks", baseAttacks))
+      .put("secondary", attacks("secondary attacks", baseAttacks))
       .put("weapons", weaponAttacks)
       .put("grapple", grapple())
       .build();
+  }
+
+  private List<Map<String, Object>> attacks(String inName,
+                                            List<Long> inBaseAttacks)
+  {
+    boolean weaponFinesse = hasFeat("Weapon Finesse");
+    Combined attacksValue = new Combined(inName, this);
+
+    List<Map<String, Object>> result = Lists.newArrayList();
+    for(Value list : attacksValue.valuesOnly())
+      for(Multiple attack : (ValueList<Multiple>)list)
+      {
+        if(((EnumSelection<BaseMonster.AttackMode>)attack.get(1)).getSelected()
+           == BaseMonster.AttackMode.WEAPON)
+          continue;
+
+        boolean melee =
+          ((EnumSelection<BaseMonster.AttackStyle>)
+           attack.get(2)).getSelected() == BaseMonster.AttackStyle.MELEE;
+
+        BaseMonster.Ability keyAbility;
+        if(weaponFinesse || !melee)
+          keyAbility = BaseMonster.Ability.DEXTERITY;
+        else
+          keyAbility = BaseMonster.Ability.STRENGTH;
+
+        List<ModifiedNumber> attacks = Lists.newArrayList();
+        attacks.add(naturalAttack
+                    (keyAbility,
+                     inBaseAttacks.get(0)
+                     - ("secondary attacks".equals(inName) ? 5 : 0), false));
+
+        Map<String, Object> single = Maps.newHashMap();
+        single.put("attacks", attacks);
+        single.put("number", attack.get(0));
+        single.put("mode", attack.get(1));
+        single.put("style", attack.get(2));
+        single.put("damage",
+                    adjustDamageForStrength((Damage)attack.get(3), melee,
+                                            false));
+        single.put("critical", critical(null));
+
+        result.add(single);
+      }
+
+    return result;
   }
 
   //........................................................................
@@ -4001,10 +3959,10 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the modifier for the save
    *
    */
-  public ModifiedNumber getReflexSave()
-  {
-    return new ModifiedNumber(collectContributions("reflex save"));
-  }
+  // public ModifiedNumber getReflexSave()
+  // {
+  //   return new ModifiedNumber(collectContributions("reflex save"));
+  // }
 
   //........................................................................
   //------------------------------ getWillSave ------------------------------
@@ -4015,10 +3973,10 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the modifier for the save
    *
    */
-  public ModifiedNumber getWillSave()
-  {
-    return new ModifiedNumber(collectContributions("will save"));
-  }
+  // public ModifiedNumber getWillSave()
+  // {
+  //   return new ModifiedNumber(collectContributions("will save"));
+  // }
 
   //........................................................................
   //--------------------------- addContributions ---------------------------
@@ -4037,6 +3995,12 @@ public class Monster extends CampaignEntry<BaseMonster>
      @Nonnull List<Contribution<? extends Value>> ioContributions)
   {
     super.addContributions(inName, ioContributions);
+  }
+
+  @Override
+  protected void collect(String inName, Combined ioCombined)
+  {
+    super.collect(inName, ioCombined);
 
     BaseMonster.Ability saveAbility = null;
     if("fortitude save".equals(inName))
@@ -4054,7 +4018,7 @@ public class Monster extends CampaignEntry<BaseMonster>
           ("cannot handle conditional values for abiliies for saves");
 
       if(ability.getMaxValue() >= 0)
-        ioContributions.add
+        ioCombined.add
           (new Contribution<Number>
            (new Number(abilityModifier((int)ability.getMaxValue()),
                        -100, 100),
@@ -4067,7 +4031,37 @@ public class Monster extends CampaignEntry<BaseMonster>
       if(item == null)
         continue;
 
-      item.addContributions(inName, ioContributions);
+      item.collect(inName, ioCombined);
+    }
+
+    for(Reference<BaseFeat> reference : m_feats)
+    {
+      BaseFeat feat = reference.getEntry();
+      if(feat == null)
+        continue;
+
+      feat.collect(inName, ioCombined, reference.getParameters());
+    }
+
+    if("hit dice".equals(inName))
+    {
+      int constitution = getCombinedConstitution();
+      if(constitution >= 0)
+      {
+        int bonus = abilityModifier(constitution);
+
+        for(Pair<Value, List<Combined.Node>> value : ioCombined.values())
+        {
+          int level =+ ((Dice)value.first()).getNumber();
+          ioCombined.add
+            (new Contribution<Modifier>(new Modifier(level * bonus,
+                                                     Modifier.Type.GENERAL),
+                                        this,
+                                        "Con of " + constitution
+                                        + " (" + (bonus > 0 ? "+" : "")
+                                        + bonus + " and level " + level + ")"));
+        }
+      }
     }
 
     if("armor class".equals(inName))
@@ -4076,7 +4070,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       ModifiedNumber dexterity = ability(BaseMonster.Ability.DEXTERITY);
       int modifier = dexterityModifierForAC();
 
-      ioContributions.add
+      ioCombined.add
         (new Contribution<Modifier>
          (new Modifier(modifier, Modifier.Type.ABILITY),
           this, "Dex of " + dexterity
@@ -4090,38 +4084,11 @@ public class Monster extends CampaignEntry<BaseMonster>
           ((EnumSelection<BaseItem.Size>)minSize.get(0)).getSelected();
 
         if(size.modifier() != 0)
-          ioContributions.add
+          ioCombined.add
             (new Contribution<Modifier>(new Modifier(size.modifier(),
                                                      Modifier.Type.GENERAL),
                                         this, "size"));
 
-      }
-    }
-  }
-
-  @Override
-  protected void collect(String inName, Combined ioCombined)
-  {
-    super.collect(inName, ioCombined);
-
-    if("hit dice".equals(inName))
-    {
-      int constitution = getCombinedConstitution();
-      if(constitution >= 0)
-      {
-        int bonus = abilityModifier(constitution);
-
-        for(Pair<Value, List<Combined.Node>> value : ioCombined.values())
-        {
-          int level = ((Dice)value.first()).getNumber();
-          ioCombined.add
-            (new Contribution<Modifier>(new Modifier(level * bonus,
-                                                     Modifier.Type.GENERAL),
-                                        this,
-                                        "Con of " + constitution
-                                        + " (" + (bonus > 0 ? "+" : "")
-                                        + bonus + " and level " + level + ")"));
-        }
       }
     }
   }
@@ -4233,7 +4200,8 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     int level = 0;
     for(Pair<Value, List<Combined.Node>> value : hitDice.values())
-      level += ((Dice)value.first()).getNumber();
+      if(value.first() instanceof Dice)
+        level += ((Dice)value.first()).getNumber();
 
     return level;
   }

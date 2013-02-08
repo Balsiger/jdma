@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -36,6 +37,7 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
@@ -82,6 +84,7 @@ import net.ixitxachitls.input.ParseReader;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseMonster extends BaseEntry
 {
   //----------------------------------------------------------------- nested
@@ -2169,6 +2172,36 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
   //--------------------------- addContributions ---------------------------
+
+  @Override
+  protected void collect(String inName, Combined ioCombined)
+  {
+    super.collect(inName, ioCombined);
+
+    for(Multiple multiple : m_specialQualities)
+    {
+      Reference<BaseQuality> reference =
+        (Reference<BaseQuality>)multiple.get(0);
+      BaseQuality quality = reference.getEntry();
+
+      if(quality == null)
+        continue;
+
+      Condition condition = (Condition)multiple.get(1);
+      quality.collect(inName, ioCombined, reference.getParameters(),
+                      condition.isDefined() ? condition : null);
+    }
+
+    for(Reference<BaseFeat> reference : m_feats)
+    {
+      BaseFeat feat = reference.getEntry();
+      if(feat == null)
+        continue;
+
+      feat.collect(inName, ioCombined, reference.getParameters());
+    }
+  }
+
 
   /**
    * Add contributions for this entry to the given list.

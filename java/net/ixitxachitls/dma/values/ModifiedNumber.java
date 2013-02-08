@@ -132,6 +132,13 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
         withModifier(new Modifier((int)((Number)value).get()), text);
       else if(value instanceof Modifier)
         withModifier((Modifier)value, text);
+      else if(value instanceof ModifiedNumber)
+      {
+        withModifier(new Modifier((int)((ModifiedNumber)value).get()), text);
+        for(Map.Entry<String, Modifier> modifier
+              : ((ModifiedNumber)value).m_modifiers.entrySet())
+          withModifier(modifier.getValue(), modifier.getKey());
+      }
       else
         throw new UnsupportedOperationException("cannot modifiy number with "
                                                 + value.getClass());

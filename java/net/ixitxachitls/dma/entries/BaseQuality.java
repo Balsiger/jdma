@@ -26,13 +26,14 @@ package net.ixitxachitls.dma.entries;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Expression;
@@ -62,6 +63,7 @@ import net.ixitxachitls.dma.values.conditions.Condition;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseQuality extends BaseEntry
 {
   //----------------------------------------------------------------- nested
@@ -81,10 +83,10 @@ public class BaseQuality extends BaseEntry
     SUPERNATURAL("Supernatural", "Su");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the effect type.
      *
@@ -92,7 +94,7 @@ public class BaseQuality extends BaseEntry
      * @param inShort     the short name of the value
      *
      */
-    private EffectType(@Nonnull String inName, @Nonnull String inShort)
+    private EffectType(String inName, String inShort)
     {
       m_name = constant("type", inName);
       m_short = constant("type.short", inShort);
@@ -103,7 +105,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -113,7 +115,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -123,7 +125,7 @@ public class BaseQuality extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -166,10 +168,10 @@ public class BaseQuality extends BaseEntry
     HP("Hit Points", "HP");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
@@ -177,7 +179,7 @@ public class BaseQuality extends BaseEntry
      * @param inShort     the short name of the value
      *
      */
-    private Affects(@Nonnull String inName, @Nonnull String inShort)
+    private Affects(String inName, String inShort)
     {
       m_name = constant("affects", inName);
       m_short = constant("affects.short", inShort);
@@ -188,7 +190,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -198,7 +200,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -208,7 +210,7 @@ public class BaseQuality extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -240,7 +242,7 @@ public class BaseQuality extends BaseEntry
    * @param       inName the name of the base item
    *
    */
-  public BaseQuality(@Nonnull String inName)
+  public BaseQuality(String inName)
   {
     super(inName, TYPE);
   }
@@ -381,7 +383,7 @@ public class BaseQuality extends BaseEntry
    */
   @SuppressWarnings("unchecked")
   public @Nullable Modifier computeSkillModifier
-    (@Nonnull String inName, @Nonnull Parameters inParameters)
+    (String inName, Parameters inParameters)
   {
     Modifier result = null;
 
@@ -396,7 +398,7 @@ public class BaseQuality extends BaseEntry
   }
 
   private @Nullable Modifier computeModifierExpression
-    (@Nonnull Modifier inModifier, @Nonnull Parameters inParameters)
+    (Modifier inModifier, Parameters inParameters)
   {
     if(inModifier == null)
       return null;
@@ -436,10 +438,10 @@ public class BaseQuality extends BaseEntry
   @SuppressWarnings("unchecked")
   //@Override
   public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions,
+    (String inName,
+     List<Contribution<? extends Value>> ioContributions,
      // TODO: remove the parameters and handle this in a quality!
-     @Nonnull Parameters inParameters,
+     Parameters inParameters,
      @Nullable Condition inCondition)
   {
     addContributions(inName, ioContributions);
@@ -480,6 +482,53 @@ public class BaseQuality extends BaseEntry
         }
         else
           ioContributions.add(new Contribution(modifier, this, null));
+      }
+    }
+  }
+
+  protected void collect(String inName, Combined ioCombined,
+                         Parameters inParameters,
+                         @Nullable Condition inCondition)
+  {
+    super.collect(inName, ioCombined);
+
+    for(Multiple multiple : m_effects)
+    {
+      Affects affects = ((EnumSelection<Affects>)multiple.get(0)).getSelected();
+      if(("fortitude save".equals(inName) && affects == Affects.FORTITUDE_SAVE)
+         || ("reflex save".equals(inName) && affects == Affects.REFLEX_SAVE)
+         || ("will save".equals(inName) && affects == Affects.WILL_SAVE)
+         || (affects == Affects.SKILL
+             && inName.equals(computeExpressions(multiple.get(1).toString(),
+                                                 inParameters)))
+         || (affects == Affects.DAMAGE && "damage".equals(inName))
+         || (affects == Affects.AC && "armor class".equals(inName))
+         || (affects == Affects.ATTACK && "attack".equals(inName)))
+      {
+        Modifier modifier = (Modifier)multiple.get(2);
+        modifier.withCondition(inCondition);
+        if(modifier.getExpression() instanceof Expression.Expr)
+        {
+          String expression =
+            computeExpressions(((Expression.Expr)modifier.getExpression())
+                               .getText(), inParameters);
+
+          Modifier computed = modifier.read(expression);
+          if(computed != null)
+          {
+            computed.withCondition(inCondition);
+            computed.withCondition(modifier.getCondition());
+            ioCombined.add(new Contribution<Modifier>(computed, this, null));
+          }
+          else
+            ioCombined.add
+              (new Contribution<Modifier>
+               (modifier.as(Integer.valueOf(expression.replace('+', '0')),
+                            modifier.getType(), modifier.getCondition(), null),
+                this, null));
+        }
+        else
+          ioCombined.add(new Contribution<Modifier>(modifier, this, null));
       }
     }
   }

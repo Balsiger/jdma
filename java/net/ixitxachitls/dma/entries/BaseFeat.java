@@ -32,6 +32,7 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Expression;
@@ -577,6 +578,40 @@ public class BaseFeat extends BaseEntry
    * @param       ioContributions the list of contributions to add to
    *
    */
+
+  public void collect(String inName, Combined ioCombined,
+                      Parameters inParameters)
+  {
+    super.collect(inName, ioCombined);
+
+    for(Multiple multiple : m_effects)
+    {
+      if(inName.equalsIgnoreCase(multiple.get(1).toString())
+         || inName.equalsIgnoreCase(multiple.get(0).toString()))
+      {
+        Modifier modifier = (Modifier)multiple.get(2);
+        if(modifier.getExpression() instanceof Expression.Expr)
+        {
+          String expression =
+            computeExpressions(((Expression.Expr)modifier.getExpression())
+                               .getText(), inParameters);
+
+          Modifier computed = modifier.read(expression);
+          if (computed != null)
+            ioCombined.add(new Contribution<Modifier>(computed, this, null));
+          else
+            ioCombined.add
+              (new Contribution<Modifier>
+               (modifier.as(Integer.valueOf(expression.replace('+', '0')),
+                            modifier.getType(), modifier.getCondition(), null),
+                this, null));
+        }
+        else
+          ioCombined.add(new Contribution<Modifier>(modifier, this, null));
+      }
+    }
+  }
+
   @SuppressWarnings("unchecked")
   //@Override
   public void addContributions

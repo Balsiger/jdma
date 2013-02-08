@@ -1307,7 +1307,6 @@ public class AbstractEntry extends ValueGroup
    */
   public @Nonnull FormattedText dmaValues()
   {
-    System.out.println("dma values: " + formatValues());
     return new FormattedText(formatValues() + ".");
   }
 

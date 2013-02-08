@@ -1253,7 +1253,7 @@
     {if $postfix}{$postfix}{sp}{/if}
   {else}
     {if def($value)}
-      {if $value.isDefined}
+      {if $value.isDefined and not def($value.isCombined)}
         {if $prefix}{$prefix}{sp}{/if}
         {$value |print}
         {if $postfix}{$postfix}{sp}{/if}
@@ -1267,7 +1267,7 @@
         {/call}
       {/if}
     {else}
-      (no value)
+      (no value) [{$value}]
     {/if}
   {/if}
 {/template}

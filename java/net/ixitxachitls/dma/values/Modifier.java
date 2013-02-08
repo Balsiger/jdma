@@ -420,6 +420,20 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //----------------------------- hasCondition -----------------------------
+
+  /**
+   * Check if the modifier has a condition.
+   *
+   * @return      true if there is a condition, false if not
+   *
+   */
+  public boolean hasCondition()
+  {
+    return m_condition != null;
+  }
+
+  //........................................................................
   //-------------------------------- getNext -------------------------------
 
   /**

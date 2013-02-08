@@ -577,12 +577,15 @@
         {if not isFirst($base) or $combination.isDefined}
           {sp}|{sp}
         {/if}
-        <span class="windowed">
-          <span class="window base">
-            from {$base.names}
-          </span>
-          {$base.value |print}
-        </span>
+        <div class="base-entry">
+          <div class="base-value">
+            {$base.value |firstline}
+          </div>
+          :{sp}
+          <div class="base-name">
+            {$base.names}
+          </div>
+        </div>
       {/if}
     {/foreach}
   {else}
@@ -590,15 +593,21 @@
       <span class="window base">
         {if def($combination.bases)}
           {foreach $base in $combination.bases}
-            {if $base and $base.value}
-              <span class="base-value">{$base.value |print}</span>
-              {sp} from {$base.names}
-              <br />
-            {elseif $base.expression}
-              {$base.expression} from {$base.names}
-            {else}
-              undefined value from {$base.names}
-            {/if}
+          <div class="base-entry">
+            <div class="base-value">
+              {if $base and $base.value}
+                {$base.value |firstline}
+              {elseif $base.expression}
+                {$base.expression} from {$base.names}
+              {else}
+                undefined value from {$base.names}
+              {/if}
+              </div>
+              :{sp}
+              <div class="base-name">
+                {$base.names}
+              </div>
+            </div>
           {/foreach}
         {/if}
       </span>
@@ -785,29 +794,31 @@
               {param remarkComment: $value.remark.comment /}
             {/call}
           {/if}
-          {foreach $val in $value.values}
-            <span class="windowed">
-              <div class="window base">
-                {foreach $node in $val.second}
-                  <div class="base-entry">
-                    <div class="base-value">
-                      {$node.value |firstline}
+          {if def($value.values)}
+            {foreach $val in $value.values}
+              <span class="windowed">
+                <div class="window base">
+                  {foreach $node in $val.second}
+                    <div class="base-entry">
+                      <div class="base-value">
+                        {$node.value |firstline}
+                      </div>
+                      :{sp}
+                      <div class="base-name">
+                        {$node.entry.name}
+                        {if def($node.description)}
+                          {sp}({$node.description})
+                        {/if}
+                      </div>
                     </div>
-                    :{sp}
-                    <div class="base-name">
-                      {$node.entry.name}
-                      {if def($node.description)}
-                        {sp}({$node.description})
-                      {/if}
-                    </div>
-                  </div>
-                {/foreach}
-              </div>
-              {$val.first |print}{sp}
-            </span>
-          {/foreach}
-          {if $value.hasModifiers}
-            {$value.modifier |print}
+                  {/foreach}
+                </div>
+                {$val.first |print}{sp}
+              </span>
+            {/foreach}
+            {if $value.hasModifiers}
+              {$value.modifier |print}
+            {/if}
           {/if}
           {if $postfix}{$postfix}{sp}{/if}
         {/if}
