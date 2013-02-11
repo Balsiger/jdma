@@ -46,6 +46,7 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Percent;
 import net.ixitxachitls.dma.values.Value;
+import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
@@ -126,9 +127,10 @@ public class BaseMagic extends BaseExtension<BaseItem>
   /** A general modifier to a value. */
   @Key("modifier")
   @DM
-  protected Multiple m_modifier = new Multiple
-    (new Multiple.Element(new Name(), false),
-     new Multiple.Element(new Modifier(), false, ": ", null));
+  protected ValueList<Multiple> m_modifier = new ValueList<Multiple>
+    (", ", new Multiple
+     (new Multiple.Element(new Name(), false),
+      new Multiple.Element(new Modifier(), false, ": ", null)));
 
   //........................................................................
 
@@ -190,9 +192,10 @@ public class BaseMagic extends BaseExtension<BaseItem>
     }
 
     System.out.println("magic " + inName + ": " + m_modifier.get(0));
-    if(inName.equals(((Name)m_modifier.get(0)).get()))
-      ioCombined.add(new Contribution<Modifier>((Modifier)m_modifier.get(1),
-                                                m_entry, "magic"));
+    for(Multiple modifier : m_modifier)
+      if(inName.equals(((Name)modifier.get(0)).get()))
+        ioCombined.add(new Contribution<Modifier>((Modifier)modifier.get(1),
+                                                  m_entry, "magic"));
   }
 
   //........................................................................

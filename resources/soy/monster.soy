@@ -546,6 +546,10 @@
             {/if}
           {/foreach}
         {/if}
+        {if (len($entry.attacks.primary) or len($entry.attacks.secondary))
+          and len($entry.attacks.weapons)}
+          {sp}and{sp}
+        {/if}
         {foreach $weapon in $entry.attacks.weapons}
           {foreach $attack in $weapon.attacks}
             +{$attack |print}

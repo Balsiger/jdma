@@ -3458,8 +3458,11 @@ public class Monster extends CampaignEntry<BaseMonster>
         ("conditions in base attack are not supported");
 
     List<Long> baseAttacks = Lists.newArrayList();
-    for(long attack = baseAttackNumber.getMinValue(); attack > 0; attack -= 5)
-      baseAttacks.add(attack);
+    if (baseAttackNumber.getMinValue() == 0)
+      baseAttacks.add(0L);
+    else
+      for(long attack = baseAttackNumber.getMinValue(); attack > 0; attack -= 5)
+        baseAttacks.add(attack);
 
     boolean weaponFinesse = hasFeat("Weapon Finesse");
 
@@ -3655,8 +3658,9 @@ public class Monster extends CampaignEntry<BaseMonster>
     }
 
     // Magic weapon bonuses
-    Map<String, Modifier> modifiers = inItem.collectModifiers("attack");
-    for(Map.Entry<String, Modifier> entry : modifiers.entrySet())
+    System.out.println("collected attack: " + inItem.collect("attack"));
+    ModifiedNumber modifier = inItem.collect("attack").modifier();
+    for(Map.Entry<String, Modifier> entry : modifier.getModifiers().entrySet())
       modified.withModifier(entry.getValue(), entry.getKey());
 
     return modified;
