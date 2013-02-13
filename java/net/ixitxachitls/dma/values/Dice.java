@@ -420,6 +420,9 @@ public class Dice extends Value<Dice>
     result.m_dice = m_number > 0 ? m_dice : inValue.m_dice;
     result.m_modifier = m_modifier + inValue.m_modifier;
 
+    if(-result.m_modifier > m_number * m_dice)
+      result.m_modifier = -m_number * m_dice + 1;
+
     return result;
   }
 

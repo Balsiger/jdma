@@ -157,6 +157,22 @@ public class Parameters extends Value<Parameters>
   }
 
   //........................................................................
+  //------------------------------- getValue -------------------------------
+
+  /**
+   * Get the value for the given name.
+   *
+   * @param       inName the name of value to get
+   *
+   * @return      the value for the name, if any
+   *
+   */
+  public boolean hasValue(@Nonnull String inName)
+  {
+    return m_values.containsKey(inName.toLowerCase(Locale.US));
+  }
+
+  //........................................................................
   //------------------------------ getSummary ------------------------------
 
   /**

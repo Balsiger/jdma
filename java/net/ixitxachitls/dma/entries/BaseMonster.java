@@ -1629,7 +1629,7 @@ public class BaseMonster extends BaseEntry
           .withParameter("Range", new Distance(), Parameters.Type.MAX)
           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Summary", new Name(), Parameters.Type.ADD)
-          .withParameter("Level", new Number(1, 100), Parameters.Type.ADD)
+          .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
           .withParameter("Value", new Number(1, 100), Parameters.Type.ADD)
           .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
           .withParameter("Dice", new Dice(), Parameters.Type.ADD)
@@ -1662,7 +1662,7 @@ public class BaseMonster extends BaseEntry
           .withParameter("Range", new Distance(), Parameters.Type.MAX)
           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Summary", new Name(), Parameters.Type.ADD)
-          .withParameter("Level", new Number(1, 100), Parameters.Type.ADD)
+          .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
           .withParameter("Racial",
                          new Number(-50, 50, true), Parameters.Type.ADD)
           .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)

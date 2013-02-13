@@ -2333,11 +2333,6 @@ public class BaseSpell extends BaseEntry
     if(inParameters == null || !inParameters.isDefined())
       return summary;
 
-    Value dc = inParameters.getValue("dc");
-    if(dc != null)
-      inParameters = inParameters.asValues
-        (ImmutableMap.of("dc", "" + (Integer.valueOf(dc.toString()) + 1)));
-
     summary = computeExpressions(summary, inParameters);
 
     Value notes = inParameters != null ? inParameters.getValue("Notes") : null;

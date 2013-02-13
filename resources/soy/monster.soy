@@ -546,8 +546,7 @@
             {/if}
           {/foreach}
         {/if}
-        {if (len($entry.attacks.primary) or len($entry.attacks.secondary))
-          and len($entry.attacks.weapons)}
+        {if len($entry.attacks.primary) and len($entry.attacks.weapons)}
           {sp}and{sp}
         {/if}
         {foreach $weapon in $entry.attacks.weapons}
@@ -555,10 +554,15 @@
             +{$attack |print}
             {if not isLast($attack)}/{/if}
           {/foreach}
-          {sp}{$weapon.style |print}
+          {sp}
+          {call dma.value.newcombined}
+            {param entry: $entry /}
+            {param value: $weapon.style /}
+          {/call}
           {sp}(
-          {call dma.value.combined}
-            {param combination: $weapon.damage /}
+          {call dma.value.newcombined}
+            {param entry: $entry /}
+            {param value: $weapon.damage /}
           {/call}
           {if def($weapon.critical)}
             {sp}/ {$weapon.critical |print}
@@ -611,6 +615,12 @@
         </span>
         , grapple +{$entry.attacks.grapple |print})
       {/param}
+    {/call}
+    {call dma.entry.overviewValue}
+      {param prefix: 'Reach' /}
+      {param postfix: ';' /}
+      {param entry: $entry /}
+      {param value: $entry.reach /}
     {/call}
     <div class="par">
     {call dma.entry.overviewValue}

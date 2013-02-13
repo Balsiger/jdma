@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
@@ -57,6 +57,7 @@ import net.ixitxachitls.util.ArrayIterator;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 @Immutable
 public class Modifier extends Value<Modifier>
 {
@@ -107,7 +108,7 @@ public class Modifier extends Value<Modifier>
     COMPETENCE("competence", false);
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Flag if the value stacks with others of its kind. */
     private boolean m_stacks;
@@ -119,7 +120,7 @@ public class Modifier extends Value<Modifier>
      *                 if not
      *
      */
-    private Type(@Nonnull String inName, boolean inStacks)
+    private Type(String inName, boolean inStacks)
     {
       m_name = ValueGroup.constant("product.part", inName);
       m_stacks = inStacks;
@@ -131,7 +132,7 @@ public class Modifier extends Value<Modifier>
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -142,7 +143,7 @@ public class Modifier extends Value<Modifier>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
         return m_name;
     }
@@ -199,7 +200,7 @@ public class Modifier extends Value<Modifier>
    * @param       inType        the type of the modifier
    *
    */
-  public Modifier(int inValue, @Nonnull Type inType)
+  public Modifier(int inValue, Type inType)
   {
     m_value = inValue;
     m_type  = inType;
@@ -263,7 +264,7 @@ public class Modifier extends Value<Modifier>
    * @return      this modifier for chaining
    *
    */
-  public @Nonnull Modifier withNext(@Nullable Modifier inNext)
+  public Modifier withNext(@Nullable Modifier inNext)
   {
     m_next = inNext;
 
@@ -280,7 +281,7 @@ public class Modifier extends Value<Modifier>
   private int m_value = 0;
 
   /** The type of the modifier. */
-  private @Nonnull Type m_type = Type.GENERAL;
+  private Type m_type = Type.GENERAL;
 
   /** The flag if defined or not. */
   private boolean m_defined = false;
@@ -400,7 +401,7 @@ public class Modifier extends Value<Modifier>
    * @return      the requested type
    *
    */
-  public @Nonnull Type getType()
+  public Type getType()
   {
     return m_type;
   }
@@ -456,7 +457,7 @@ public class Modifier extends Value<Modifier>
    * @return      a list of the modifiers found
    *
    */
-  public @Nonnull List<String> getBase()
+  public List<String> getBase()
   {
     List<String> result = new ArrayList<String>();
     return addBase(result);
@@ -473,7 +474,7 @@ public class Modifier extends Value<Modifier>
    * @return      the complete list
    *
    */
-  private @Nonnull List<String> addBase(@Nonnull List<String> ioBases)
+  private List<String> addBase(List<String> ioBases)
   {
     if(!isDefined())
       return ioBases;
@@ -499,7 +500,7 @@ public class Modifier extends Value<Modifier>
    * @return      true if the modifier is still useful, false else
    *
    */
-  public boolean stackOrMore(@Nonnull Modifier inOther)
+  public boolean stackOrMore(Modifier inOther)
   {
     if(stacks() || inOther.stacks())
       return true;
@@ -529,7 +530,7 @@ public class Modifier extends Value<Modifier>
    * @return      true if the modifier is still useful, false else
    *
    */
-  public boolean stackOrMore(@Nonnull List<Modifier> inOthers)
+  public boolean stackOrMore(List<Modifier> inOthers)
   {
     // penalties always stack!
     if(m_value < 0)
@@ -555,7 +556,7 @@ public class Modifier extends Value<Modifier>
    * @return      true if the modifier is still useful, false else
    *
    */
-  public boolean stackOrMore(@Nonnull Modifier ... inOthers)
+  public boolean stackOrMore(Modifier ... inOthers)
   {
     // penalties always stack!
     if(m_value < 0)
@@ -636,7 +637,7 @@ public class Modifier extends Value<Modifier>
    */
   @Override
   @Deprecated
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     int value = getValue();
     return new Command(value >= 0 ? "+" : "", value, " (", formatList(), ")");
@@ -651,7 +652,7 @@ public class Modifier extends Value<Modifier>
    * @return  the command for printing the list
    *
    */
-  private @Nonnull Command formatList()
+  private Command formatList()
   {
     List<Object> commands = new ArrayList<Object>();
 
@@ -691,7 +692,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -733,7 +734,7 @@ public class Modifier extends Value<Modifier>
    * @return      the new value
    *
    */
-  public @Nonnull Modifier as(int inValue, @Nonnull Type inType)
+  public Modifier as(int inValue, Type inType)
   {
     return as(inValue, inType, null, null);
   }
@@ -752,9 +753,8 @@ public class Modifier extends Value<Modifier>
    * @return      the new value
    *
    */
-  public @Nonnull Modifier as(int inValue, @Nonnull Type inType,
-                              @Nullable Condition inCondition,
-                              @Nullable Modifier inNext)
+  public Modifier as(int inValue, Type inType, Condition inCondition,
+                     Modifier inNext)
   {
     Modifier modifier = create();
 
@@ -778,7 +778,7 @@ public class Modifier extends Value<Modifier>
    * @return      the new value
    *
    */
-  public @Nonnull Modifier as(@Nullable Modifier inNext)
+  public Modifier as(@Nullable Modifier inNext)
   {
     if(m_next == null)
       return as(m_value, m_type, m_condition, inNext);
@@ -787,6 +787,34 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //-------------------------------- retype --------------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public Modifier retype(Type inType)
+  {
+    Modifier modifier = create();
+
+    modifier.m_value = m_value;
+    modifier.m_type = inType;
+    modifier.m_defined = true;
+    modifier.m_condition = m_condition;
+    if (m_next == null)
+      modifier.m_next = null;
+    else
+      modifier.m_next = m_next.retype(inType);
+
+    return modifier;
+  }
+
+  //........................................................................
+
   //-------------------------------- doRead --------------------------------
 
   /**
@@ -798,7 +826,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     try
     {
@@ -847,7 +875,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
-  public @Nonnull Modifier add(@Nonnull Modifier inValue)
+  public Modifier add(Modifier inValue)
   {
     int value = m_value;
     if(m_type == inValue.m_type &&
@@ -887,7 +915,7 @@ public class Modifier extends Value<Modifier>
    *             any
    *
    */
-  public @Nullable Modifier ignore(@Nonnull Type ... inTypes)
+  public @Nullable Modifier ignore(Type ... inTypes)
   {
     for(Type type : inTypes)
       if(m_type == type && m_value >= 0)

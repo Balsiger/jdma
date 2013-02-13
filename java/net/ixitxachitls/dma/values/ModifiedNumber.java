@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.util.Strings;
@@ -55,6 +55,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 @Immutable
 public class ModifiedNumber extends BaseNumber<ModifiedNumber>
 {
@@ -113,13 +114,13 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    *
    */
   public ModifiedNumber
-    (@Nonnull List<Contribution<? extends Value>> inContributions)
+    (List<Contribution<? extends Value>> inContributions)
   {
     this(0, inContributions);
   }
 
   public ModifiedNumber
-    (int base, @Nonnull List<Contribution<? extends Value>> inContributions)
+    (int base, List<Contribution<? extends Value>> inContributions)
   {
     this(base, true);
 
@@ -176,8 +177,7 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    * @return   the modified number for chaining
    *
    */
-  public @Nonnull ModifiedNumber withModifier(@Nonnull Modifier inModifier,
-                                              @Nonnull String inName)
+  public ModifiedNumber withModifier(Modifier inModifier, String inName)
   {
     if(!inModifier.isDefined())
       return this;
@@ -327,7 +327,7 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(m_total == null)
       return "" + m_number;
@@ -365,7 +365,7 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    * @return
    *
    */
-  public @Nonnull ModifiedNumber ignore(Modifier.Type ... inTypes)
+  public ModifiedNumber ignore(Modifier.Type ... inTypes)
   {
     ModifiedNumber modified = new ModifiedNumber(get(), m_sign);
     for (Map.Entry<String, Modifier> entry : m_modifiers.entrySet())

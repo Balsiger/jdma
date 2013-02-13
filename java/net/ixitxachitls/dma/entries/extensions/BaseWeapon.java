@@ -401,16 +401,10 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //........................................................................
   //----- style ------------------------------------------------------------
 
-  /** The formatter for styles. */
-  protected static final Formatter<EnumSelection<Style>>
-    s_styleFormatter = new  LinkFormatter<EnumSelection<Style>>
-    (link(BaseItem.TYPE, Index.Path.WEAPON_STYLES));
-
   /** The style of the weapon (for a medium character). */
   @Key("weapon style")
   protected @Nonnull EnumSelection<Style> m_style =
-    new EnumSelection<Style>(Style.class).withFormatter(s_styleFormatter)
-    .withTemplate("link", "weaponstyles");
+    new EnumSelection<Style>(Style.class).withTemplate("link", "weaponstyles");
 
   static
   {

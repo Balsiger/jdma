@@ -3379,7 +3379,12 @@ public class Monster extends CampaignEntry<BaseMonster>
   {
     Combined armor = collect("armor class");
     armor.add(new Contribution<Number>(new Number(10, 10, 10), this, "base"));
-    armor.add(collect("natural armor"), "natural armor");
+
+    ModifiedNumber naturalArmor = collect("natural armor").modifier();
+    for(Modifier modifier : naturalArmor.getModifiers().values())
+      armor.add(new Contribution<Modifier>
+                (modifier.retype(Modifier.Type.NATURAL_ARMOR),
+                 this, "natural armor"));
 
     return armor;
   }
@@ -3477,6 +3482,17 @@ public class Monster extends CampaignEntry<BaseMonster>
       if(!item.hasExtension(Weapon.class))
         continue;
 
+      Combined style = new Combined("weapon style", item);
+      if(hasFeat("Rapid Shot"))
+        for(Value styleValue : style.valuesOnly())
+          if(styleValue instanceof EnumSelection
+             && ((EnumSelection)styleValue).getSelected()
+             == BaseWeapon.Style.RANGED)
+          {
+            baseAttacks.add(0, baseAttacks.get(0));
+            break;
+          }
+
       Map<String, Object> weapon = new HashMap<String, Object>();
       long maxAttacks =
         new Combined("max attacks", item).modifier().getMinValue();
@@ -3489,9 +3505,9 @@ public class Monster extends CampaignEntry<BaseMonster>
         attacks.add(weaponAttack(item, baseAttacks.get(i)));
 
       weapon.put("attacks", attacks);
-      weapon.put("style", new Combined("weapon style", item));
+      weapon.put("style", style);
       weapon.put("name", item.getDMName());
-      weapon.put("damage", new Combination<Multiple>(item, "damage"));
+      weapon.put("damage", new Combined("damage", item));
       weapon.put("critical", critical(item));
 
       weaponAttacks.add(weapon);
@@ -3658,7 +3674,6 @@ public class Monster extends CampaignEntry<BaseMonster>
     }
 
     // Magic weapon bonuses
-    System.out.println("collected attack: " + inItem.collect("attack"));
     ModifiedNumber modifier = inItem.collect("attack").modifier();
     for(Map.Entry<String, Modifier> entry : modifier.getModifiers().entrySet())
       modified.withModifier(entry.getValue(), entry.getKey());
@@ -3783,17 +3798,19 @@ public class Monster extends CampaignEntry<BaseMonster>
     List<Map<String, Object>> summaries = new ArrayList<Map<String, Object>>();
     for(String key : references.keySet())
     {
+      Parameters params = references.get(key).getParameters();
       summaries.add
         (new ImmutableMap.Builder<String, Object>()
          .put("name", references.get(key).getName())
-         .put("params", references.get(key).getParameters().getSummary())
+         .put("params", params.getSummary())
          .put("number", numbers.get(key))
          .put("summary", references.get(key).summary
-              (ImmutableMap.of("level", "" + getLevel(),
+              (ImmutableMap.of("level", ""
+                               + (params.getValue("level") != null
+                                  ? params.getValue("level") : getLevel()),
                                "class", "" + getSpellClass(),
                                "ability", "" + getSpellAbilityModifier
-                               (references.get(key).getParameters()
-                                .getValue("class")))))
+                               (params.getValue("class")))))
          .build());
     }
 

@@ -191,7 +191,6 @@ public class BaseMagic extends BaseExtension<BaseItem>
                                                   m_entry, "magic"));
     }
 
-    System.out.println("magic " + inName + ": " + m_modifier.get(0));
     for(Multiple modifier : m_modifier)
       if(inName.equals(((Name)modifier.get(0)).get()))
         ioCombined.add(new Contribution<Modifier>((Modifier)modifier.get(1),
