@@ -54,9 +54,17 @@
          onclick="util.link(event, \'{$navEntry.path|escapeJs}\')">
         {if def($navEntry.dmName)}
           {if $ij.isDM}
-            {$navEntry.dmName|escapeJs} ({$navEntry.name|escapeJs})
+            {if $navEntry.dmName}
+              {$navEntry.dmName|escapeJs} ({$navEntry.name|escapeJs})
+            {else}
+              {$navEntry.name|escapeJs}
+            {/if}
           {else}
-            {$navEntry.playerName|escapeJs} ({$navEntry.name|escapeJs})
+            {if $navEntry.playerName}
+              {$navEntry.playerName|escapeJs} ({$navEntry.name|escapeJs})
+            {else}
+              {$navEntry.name|escapeJs}
+            {/if}
           {/if}
         {else}
           {$navEntry.name}

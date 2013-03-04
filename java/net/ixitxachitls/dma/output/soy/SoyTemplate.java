@@ -365,6 +365,31 @@ public class SoyTemplate
   }
 
   //........................................................................
+  //----- IsListFunction ---------------------------------------------------
+
+  /** A plugin function to check if a value is a list. */
+  public static class IsListFunction implements SoyTofuFunction
+  {
+    @Override
+    public @Nonnull String getName()
+    {
+      return "isList";
+    }
+
+    @Override
+    public Set<Integer> getValidArgsSizes()
+    {
+      return ImmutableSet.of(1);
+    }
+
+    @Override
+    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    {
+      return BooleanData.forValue(inArgs.get(0) instanceof SoyListData);
+    }
+  }
+
+  //........................................................................
 
   //----- NumberDirective --------------------------------------------------
 
@@ -609,6 +634,7 @@ public class SoyTemplate
       soyFunctionsSetBinder.addBinding().to(LengthFunction.class);
       soyFunctionsSetBinder.addBinding().to(DefFunction.class);
       soyFunctionsSetBinder.addBinding().to(FormatNumberFunction.class);
+      soyFunctionsSetBinder.addBinding().to(IsListFunction.class);
       soyFunctionsSetBinder.addBinding().to(CamelFunction.class);
       soyFunctionsSetBinder.addBinding().to(CommandsFunction.class);
       soyFunctionsSetBinder.addBinding().to(ReferenceFunction.class);
@@ -747,7 +773,6 @@ public class SoyTemplate
   }
 
   //........................................................................
-
 
   //........................................................................
 

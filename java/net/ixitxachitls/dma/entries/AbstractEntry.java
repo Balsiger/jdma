@@ -3506,9 +3506,12 @@ public class AbstractEntry extends ValueGroup
     try
     {
       String value;
-
       if("(".equals(token))
         value = computeExpression(inExpression, inTokens);
+      else if("-".equals(token))
+        value = "-" + computeExpression(inExpression, inTokens);
+      else if("+".equals(token))
+        value = "+" + computeExpression(inExpression, inTokens);
       else
         value = token;
 
@@ -3532,7 +3535,10 @@ public class AbstractEntry extends ValueGroup
         return "" + (Integer.parseInt(value) * Integer.parseInt(operand));
 
       if("/".equals(operator))
-        return "" + (Integer.parseInt(value) / Integer.parseInt(operand));
+        if(Integer.parseInt(value) == 0)
+          return "0";
+        else
+          return "" + (Integer.parseInt(value) / Integer.parseInt(operand));
 
       if("^".equals(operator))
         return "" + (int)Math.pow(Integer.parseInt(value),

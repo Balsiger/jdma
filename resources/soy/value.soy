@@ -630,7 +630,7 @@
  * @param ifempty text to print if the value is empty
  */
 {template .withbase}
-  {if def($value.isCombined)}
+  {if def($value.isCombined) or not $value.isDefined}
     {call dma.value.newcombined}
       {param entry: $entry /}
       {param value: $value /}
@@ -794,7 +794,7 @@
               {param remarkComment: $value.remark.comment /}
             {/call}
           {/if}
-          {if def($value.values)}
+          {if isList($value.values)}
             {foreach $val in $value.values}
               <span class="windowed">
                 <div class="window base">

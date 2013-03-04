@@ -3287,9 +3287,28 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the compute modifier
    *
    */
-  public int abilityModifier(int inScore)
+  public int abilityModifier(long inScore)
   {
-    return (inScore / 2) - 5;
+    if(inScore < 0)
+      return 0;
+
+    return (int) (inScore / 2) - 5;
+  }
+
+  //........................................................................
+  //--------------------------- abilityModifier ----------------------------
+
+  /**
+   * Compute the ability modifier for the given score.
+   *
+   * @param       inScore the ability score to compute for
+   *
+   * @return      the compute modifier
+   *
+   */
+  public int abilityModifier(BaseMonster.Ability inAbility)
+  {
+    return abilityModifier(ability(inAbility).getMaxValue());
   }
 
   //........................................................................
@@ -3379,12 +3398,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   {
     Combined armor = collect("armor class");
     armor.add(new Contribution<Number>(new Number(10, 10, 10), this, "base"));
-
-    ModifiedNumber naturalArmor = collect("natural armor").modifier();
-    for(Modifier modifier : naturalArmor.getModifiers().values())
-      armor.add(new Contribution<Modifier>
-                (modifier.retype(Modifier.Type.NATURAL_ARMOR),
-                 this, "natural armor"));
+    armor.add(collect("natural armor"), "natural armor");
 
     return armor;
   }
@@ -3483,13 +3497,14 @@ public class Monster extends CampaignEntry<BaseMonster>
         continue;
 
       Combined style = new Combined("weapon style", item);
+      List<Long> baseAtks = new ArrayList<Long>(baseAttacks);
       if(hasFeat("Rapid Shot"))
         for(Value styleValue : style.valuesOnly())
           if(styleValue instanceof EnumSelection
              && ((EnumSelection)styleValue).getSelected()
              == BaseWeapon.Style.RANGED)
           {
-            baseAttacks.add(0, baseAttacks.get(0));
+            baseAtks.add(0, baseAtks.get(0));
             break;
           }
 
@@ -3501,8 +3516,8 @@ public class Monster extends CampaignEntry<BaseMonster>
         maxAttacks = Long.MAX_VALUE;
 
       List<ModifiedNumber> attacks = new ArrayList<ModifiedNumber>();
-      for(int i = 0; i < maxAttacks && i < baseAttacks.size(); i++)
-        attacks.add(weaponAttack(item, baseAttacks.get(i)));
+      for(int i = 0; i < maxAttacks && i < baseAtks.size(); i++)
+        attacks.add(weaponAttack(item, baseAtks.get(i)));
 
       weapon.put("attacks", attacks);
       weapon.put("style", style);
@@ -3533,8 +3548,10 @@ public class Monster extends CampaignEntry<BaseMonster>
     for(Value list : attacksValue.valuesOnly())
       for(Multiple attack : (ValueList<Multiple>)list)
       {
-        if(((EnumSelection<BaseMonster.AttackMode>)attack.get(1)).getSelected()
-           == BaseMonster.AttackMode.WEAPON)
+        BaseMonster.AttackMode attackMode =
+          ((EnumSelection<BaseMonster.AttackMode>)attack.get(1)).getSelected();
+
+        if(attackMode == BaseMonster.AttackMode.WEAPON)
           continue;
 
         boolean melee =
@@ -3542,7 +3559,7 @@ public class Monster extends CampaignEntry<BaseMonster>
            attack.get(2)).getSelected() == BaseMonster.AttackStyle.MELEE;
 
         BaseMonster.Ability keyAbility;
-        if(weaponFinesse || !melee)
+        if(weaponFinesse || !melee || attackMode.useDexterity())
           keyAbility = BaseMonster.Ability.DEXTERITY;
         else
           keyAbility = BaseMonster.Ability.STRENGTH;
@@ -3786,6 +3803,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       }
       else
       {
+        System.out.println("adding: " + name);
         references.put(name, existing.add(ref));
         if(number.isDefined())
           if(numbers.get(name) > 0)
@@ -3805,12 +3823,23 @@ public class Monster extends CampaignEntry<BaseMonster>
          .put("params", params.getSummary())
          .put("number", numbers.get(key))
          .put("summary", references.get(key).summary
-              (ImmutableMap.of("level", ""
-                               + (params.getValue("level") != null
-                                  ? params.getValue("level") : getLevel()),
-                               "class", "" + getSpellClass(),
-                               "ability", "" + getSpellAbilityModifier
-                               (params.getValue("class")))))
+              (ImmutableMap.<String, String>builder()
+               .put("level",
+                    "" + (params.hasValue("level")
+                          && params.getValue("level").isDefined()
+                          ? params.getValue("level") : getLevel()))
+               .put("class", "" + getSpellClass())
+               .put("str", "" + abilityModifier(BaseMonster.Ability.STRENGTH))
+               .put("dex", "" + abilityModifier(BaseMonster.Ability.DEXTERITY))
+               .put("con",
+                    "" + abilityModifier(BaseMonster.Ability.CONSTITUTION))
+               .put("int",
+                    "" + abilityModifier(BaseMonster.Ability.INTELLIGENCE))
+               .put("wis", "" + abilityModifier(BaseMonster.Ability.WISDOM))
+               .put("cha", "" + abilityModifier(BaseMonster.Ability.CHARISMA))
+               .put("ability",
+                    "" + getSpellAbilityModifier(params.getValue("class")))
+               .build()))
          .build());
     }
 
@@ -4099,6 +4128,7 @@ public class Monster extends CampaignEntry<BaseMonster>
              ? "" : " (capped for armor)")));
 
       Multiple minSize = new Combination<Multiple>(this, "size").min();
+      System.out.println("min size: " + minSize);
       if(minSize != null && minSize.isDefined())
       {
         BaseItem.Size size =
@@ -4401,8 +4431,7 @@ public class Monster extends CampaignEntry<BaseMonster>
         if(number == null)
           number = new ModifiedNumber(0, true);
 
-        number.withModifier(new Modifier((int)((Number)skill.get(1)).get()),
-                            group);
+        number.withModifier((Modifier)skill.get(1), group);
 
         perName.put(type, number);
       }

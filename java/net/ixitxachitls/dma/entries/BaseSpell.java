@@ -1049,7 +1049,8 @@ public class BaseSpell extends BaseEntry
   /** The range of the spell. */
   @Key("range")
   protected Union m_range =
-    new Union(new EnumSelection<Range>(Range.class), new Distance());
+    new Union(new EnumSelection<Range>(Range.class), new Distance())
+    .withEditType("name");
 
   static
   {
@@ -1106,7 +1107,7 @@ public class BaseSpell extends BaseEntry
           })), false),
       new Multiple.Element(new Selection(SPELL_DURATION_FLAGS), true),
       new Multiple.Element(new Text(), true),
-    });
+    }).withEditType("non-empty");
 
   static
   {

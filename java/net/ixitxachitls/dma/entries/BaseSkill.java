@@ -72,6 +72,12 @@ public class BaseSkill extends BaseEntry
     /** Religion. */
     RELIGION("Religion"),
 
+    /** Arcana. */
+    ARCANA("Arcana"),
+
+    /** Alchemy. */
+    ALCHEMY("Alchemy"),
+
     /** Any sub type. */
     ANY_ONE("Any One");
 

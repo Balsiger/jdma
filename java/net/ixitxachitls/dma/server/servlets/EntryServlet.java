@@ -269,19 +269,17 @@ public class EntryServlet extends PageServlet
       template = "dma.entry.container";
     }
 
-    data.put("content",
-             inRenderer.render
-             (template,
-              map("entry", new SoyEntry(entry),
-                  "first", current <= 0 ? "" : ids.get(0) + extension,
-                  "previous",
-                  current <= 0 ? "" : ids.get(current - 1) + extension,
-                  "list", "/" + entry.getType().getMultipleLink(),
-                  "next",
-                  current >= last ? "" : ids.get(current + 1) + extension,
-                  "last",
-                  current >= last ? "" : ids.get(last) + extension),
-              ImmutableSet.of(type.getName().replace(" ", ""))));
+    data.put
+      ("content",
+       inRenderer.render
+       (template,
+        map("entry", new SoyEntry(entry),
+            "first", current <= 0 ? "" : ids.get(0) + extension,
+            "previous", current <= 0 ? "" : ids.get(current - 1) + extension,
+            "list", "/" + entry.getType().getMultipleLink(),
+            "next", current >= last ? "" : ids.get(current + 1) + extension,
+            "last", current >= last ? "" : ids.get(last) + extension),
+        ImmutableSet.of(type.getName().replace(" ", ""))));
 
     return data;
   }

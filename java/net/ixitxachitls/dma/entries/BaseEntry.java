@@ -254,7 +254,7 @@ public class BaseEntry extends AbstractEntry
        ("autokey(base product/titles)[product]"), false),
       new Multiple.Element
       (new ValueList<Range>(new Range(0, Integer.MAX_VALUE), "/")
-       .withEditType("pages[pages]"), true, ": ", null)));
+       /*.withEditType("pages[pages]")*/, true, ": ", null)));
 
   //........................................................................
   //----- description ------------------------------------------------------

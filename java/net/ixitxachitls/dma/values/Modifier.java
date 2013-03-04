@@ -232,6 +232,24 @@ public class Modifier extends Value<Modifier>
   }
 
   //........................................................................
+  //--------------------------- withDefaultType ----------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public Modifier withDefaultType(Type inDefault)
+  {
+    m_defaultType = inDefault;
+
+    return this;
+  }
+
+  //........................................................................
 
   {
     withTemplate("modifier");
@@ -250,7 +268,7 @@ public class Modifier extends Value<Modifier>
   @Override
   public Modifier create()
   {
-    return super.create(new Modifier());
+    return super.create(new Modifier().withDefaultType(m_defaultType));
   }
 
   //........................................................................
@@ -282,6 +300,9 @@ public class Modifier extends Value<Modifier>
 
   /** The type of the modifier. */
   private Type m_type = Type.GENERAL;
+
+  /** The default type, if any. */
+  private Type m_defaultType = Type.GENERAL;
 
   /** The flag if defined or not. */
   private boolean m_defined = false;
@@ -838,7 +859,7 @@ public class Modifier extends Value<Modifier>
 
       // no type read, thus it is general
       if(m_type == null)
-        m_type = Type.GENERAL;
+        m_type = m_defaultType;
 
       ParseReader.Position pos = inReader.getPosition();
       if(inReader.expect("if"))

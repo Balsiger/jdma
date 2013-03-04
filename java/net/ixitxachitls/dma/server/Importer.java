@@ -465,12 +465,16 @@ public final class Importer
        ("m", "main", "Treat all images as main images."),
        new CommandLineParser.StringOption
        ("u", "username", "The username to connect with.",
-        "balsiger@ixitxachitls.net"));
+        "balsiger@ixitxachitls.net"),
+       new CommandLineParser.Flag
+       ("n", "nopassword", "Connect without a password."));
 
     String files = clp.parse(inArguments);
-    String password = new String(System.console().readPassword
-                                 ("password for " + clp.getString("username")
-                                  + ": "));
+    String password = "";
+    if(!clp.hasValue("nopassword"))
+      password = new String(System.console().readPassword
+                            ("password for " + clp.getString("username")
+                             + ": "));
 
     Importer importer =
       new Importer(clp.getString("host"), clp.getInteger("port"),

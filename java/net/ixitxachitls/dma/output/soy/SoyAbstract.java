@@ -219,8 +219,11 @@ public abstract class SoyAbstract extends SoyMapData
         ("first", convert(inName, ((Pair)inObject).first()),
          "second", convert(inName, ((Pair)inObject).second()));
 
-    if(inObject instanceof Long || inObject instanceof Integer)
+    if(inObject instanceof Long)
       return IntegerData.forValue(((Long)inObject).intValue());
+
+    if(inObject instanceof Integer)
+      return IntegerData.forValue(((Integer)inObject).intValue());
 
     if(inObject instanceof String)
       return StringData.forValue(inObject.toString());
@@ -253,10 +256,6 @@ public abstract class SoyAbstract extends SoyMapData
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
   }
-
-  //........................................................................
-
-  //--------------------------------------------------------- main/debugging
 
   //........................................................................
 }

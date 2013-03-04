@@ -186,6 +186,7 @@
     {param name: 'Reach' /}
     {param value: $entry.reach /}
   {/delcall}
+  {$entry.sepcial_attacks}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Special Attacks' /}
@@ -485,7 +486,7 @@
       {param prefix: 'Speed' /}
       {param postfix: ';' /}
       {param entry: $entry /}
-      {param value: $entry.speed /}
+      {param value: $entry.speed.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'AC' /}
@@ -634,19 +635,19 @@
       {param prefix: 'Fort' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.fortitude_save /}
+      {param value: $entry.fortitude_save.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Ref' /}
       {param postfix: ',' /}
       {param entry: $entry /}
-      {param value: $entry.reflex_save /}
+      {param value: $entry.reflex_save.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Will' /}
       {param postfix: ';' /}
       {param entry: $entry /}
-      {param value: $entry.will_save /}
+      {param value: $entry.will_save.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Str' /}
@@ -700,7 +701,7 @@
     <div id="boxes">
       {foreach $attack in $entry.special_attack_summaries}
         <div class="ability">
-          <div class="ability-title">
+          <div class="ability-title{if $attack.name == 'Spell'} spell{/if}">
             {if $attack.number > 0}
               <div class="ability-numbers">
                 {for $i in range($attack.number)}

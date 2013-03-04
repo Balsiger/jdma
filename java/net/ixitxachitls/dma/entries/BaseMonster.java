@@ -578,25 +578,28 @@ public class BaseMonster extends BaseEntry
     PACK("Pack"),
 
     /** Pair organization. */
-    PAIR("pair"),
+    PAIR("Pair"),
 
     /** Patrol organization. */
-    PATROL("patrol"),
+    PATROL("Patrol"),
 
     /** Slaver Brood organization. */
-    SLAVER_BROOD("slaver brood"),
+    SLAVER_BROOD("Slaver Brood"),
 
     /** Solitary organization. */
-    SOLITARY("solitary"),
+    SOLITARY("Solitary"),
 
     /** Squad organization. */
-    SQUAD("squad"),
+    SQUAD("Qquad"),
 
     /** Storm organization. */
-    STORM("storm"),
+    STORM("Storm"),
 
     /** Swarm organization. */
-    SWARM("Swarm");
+    SWARM("Swarm"),
+
+    /** Troupe organization. */
+    TROUPE("Troupe");
 
     /** The value's name. */
     private @Nonnull String m_name;
@@ -685,49 +688,59 @@ public class BaseMonster extends BaseEntry
   public enum AttackMode implements EnumSelection.Named
   {
     /** A tentacle attack. */
-    TENTACLE("Tentacle"),
+    TENTACLE("Tentacle", false),
 
     /** A claw attack. */
-    CLAW("Claw"),
+    CLAW("Claw", false),
 
     /** A bite attack. */
-    BITE("bite"),
+    BITE("bite", false),
 
     /** A fist attack. */
-    FIST("Fist"),
+    FIST("Fist", false),
 
     /** A quill attack. */
-    QUILL("Quill"),
+    QUILL("Quill", true),
 
     /** A weapon attack. */
-    WEAPON("Weapon"),
+    WEAPON("Weapon", false),
 
     /** A touch attack. */
-    TOUCH("Touch"),
+    TOUCH("Touch", true),
+
+    /** An incorporeal touch attack. */
+    INCORPOREAL_TOUCH("Incorporeal Touch", true),
 
     /** A slam attack. */
-    SLAM("Slam"),
+    SLAM("Slam", false),
 
     /** A sting attack. */
-    STING("Sting"),
+    STING("Sting", false),
+
+    /** A ray attack. */
+    RAY("Ray", true),
 
     /** A hoof attack. */
-    HOOF("Hoof"),
+    HOOF("Hoof", true),
 
     /** A snakes attack. */
-    SNAKES("Snakes");
+    SNAKES("Snakes", true);
 
     /** The value's name. */
     private @Nonnull String m_name;
+
+    /** Flag if to use dexterity when attacking. */
+    private boolean m_dexterity;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private AttackMode(@Nonnull String inName)
+    private AttackMode(@Nonnull String inName, boolean inDexterity)
     {
       m_name = constant("attack.mode", inName);
+      m_dexterity = inDexterity;
     }
 
     /** Get the name of the value.
@@ -748,6 +761,16 @@ public class BaseMonster extends BaseEntry
     public @Nonnull String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Check whether to use dexterity for attacking.
+     *
+     * @return true if using dexterity for attacking
+     */
+    public boolean useDexterity()
+    {
+      return m_dexterity;
     }
   };
 
@@ -854,6 +877,18 @@ public class BaseMonster extends BaseEntry
 
     /** Neutral Good. */
     NG("Neutral Good", "NG"),
+
+    /** Any chatic alignment. */
+    ANY_CHAOTIC("Any Chaotic", "AC"),
+
+    /** Any evil alignment. */
+    ANY_EVIL("Any Evil", "AE"),
+
+    /** Any good alignment. */
+    ANY_GOOD("Any Good", "AG"),
+
+    /** Any lawful alignment. */
+    ANY_LAWFUL("Any Lawful", "AL"),
 
     /** Any alignment. */
     ANY("Any", "A");
@@ -1397,7 +1432,8 @@ public class BaseMonster extends BaseEntry
 
   /** The natural armor of the monster. */
   @Key("natural armor")
-  protected Number m_natural = new Number(0, 1000, true);
+  protected Modifier m_natural = new Modifier(0, Modifier.Type.NATURAL_ARMOR)
+    .withDefaultType(Modifier.Type.NATURAL_ARMOR);
 
   static
   {
@@ -1630,6 +1666,7 @@ public class BaseMonster extends BaseEntry
           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Summary", new Name(), Parameters.Type.ADD)
           .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
+          .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
           .withParameter("Value", new Number(1, 100), Parameters.Type.ADD)
           .withParameter("Modifier", new Modifier(), Parameters.Type.ADD)
           .withParameter("Dice", new Dice(), Parameters.Type.ADD)
@@ -1638,10 +1675,17 @@ public class BaseMonster extends BaseEntry
                          (BaseSpell.SpellClass.class), Parameters.Type.ADD)
           .withParameter("Ability", new Number(0, 100), Parameters.Type.MAX)
           .withParameter("Type", new Name(), Parameters.Type.UNIQUE)
+          .withParameter("Duration", new Name(), Parameters.Type.ADD)
           .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Damage", new Damage(), Parameters.Type.ADD)
           .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
+          .withParameter("Str", new Number(-100, 100), Parameters.Type.ADD)
+          .withParameter("Dex", new Number(-100, 100), Parameters.Type.ADD)
+          .withParameter("Con", new Number(-100, 100), Parameters.Type.ADD)
+          .withParameter("Wis", new Number(-100, 100), Parameters.Type.ADD)
+          .withParameter("Int", new Number(-100, 100), Parameters.Type.ADD)
+          .withParameter("Cha", new Number(-100, 100), Parameters.Type.ADD)
           .withTemplate("reference", "/quality/"), false),
          new Multiple.Element(new Number(1, 100)
                               .withEditType("name[per day]"), true, "/", null)
@@ -1663,6 +1707,7 @@ public class BaseMonster extends BaseEntry
           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Summary", new Name(), Parameters.Type.ADD)
           .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
+          .withParameter("SpellLevel", new Number(0, 100), Parameters.Type.ADD)
           .withParameter("Racial",
                          new Number(-50, 50, true), Parameters.Type.ADD)
           .withParameter("Value", new Number(0, 100), Parameters.Type.ADD)
@@ -1690,8 +1735,8 @@ public class BaseMonster extends BaseEntry
                         new EnumSelection<BaseSkill.Subtype>
                         (BaseSkill.Subtype.class), Parameters.Type.UNIQUE),
          false),
-        new Multiple.Element(new Number(0, 100, true)
-                             .withEditType("number[modifier]"),
+        new Multiple.Element(new Modifier(0, Modifier.Type.GENERAL)
+                             .withEditType("modifier[modifier]"),
                              false, ": ", null),
       }));
 
@@ -2171,7 +2216,7 @@ public class BaseMonster extends BaseEntry
   }
 
   //........................................................................
-  //--------------------------- addContributions ---------------------------
+  //-------------------------------- collect -------------------------------
 
   @Override
   protected void collect(String inName, Combined ioCombined)
@@ -2201,7 +2246,6 @@ public class BaseMonster extends BaseEntry
       feat.collect(inName, ioCombined, reference.getParameters());
     }
   }
-
 
   /**
    * Add contributions for this entry to the given list.
@@ -2240,10 +2284,6 @@ public class BaseMonster extends BaseEntry
         continue;
 
       feat.addContributions(inName, ioContributions, reference.getParameters());
-    }
-
-    if("armor class".equals(inName))
-    {
     }
   }
 

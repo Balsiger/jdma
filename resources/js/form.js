@@ -96,6 +96,7 @@ form.validate = function()
  */
 form.checkValue = function(inType, inValue)
 {
+  window.console.log("check value", inType, inValue);
   switch(inType)
   {
     case 'any':
@@ -140,7 +141,10 @@ form.checkValue = function(inType, inValue)
       return check == "" + (10 - (sum % 10)) % 10;
 
     case 'number':
-    return inValue.match(/^\+?\d+$/);
+      return inValue.match(/^\+?\d+$/);
+
+    case 'modifier':
+    return inValue.match(/^[+-]?\d+(\s+[a-zA-Z]+)*$/);
 
     case 'price':
       return inValue.match(/^[^\d\s]+\s?\d+(\.\d\d)?$/);

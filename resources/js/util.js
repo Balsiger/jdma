@@ -408,22 +408,14 @@ util.niceDate = function(inSeconds)
  */
 util.parse = function(inText)
 {
-  window.console.log("parse", inText);
   var result = ['dummy']; // we have to have a dummy to pass by reference
   util._parse(result, inText);
   if(result.length == 1)
-  {
-    window.console.log("parsed empty");
     return '';
-  }
 
   if(result.length == 2 && !(result[1] instanceof Array))
-  {
-    window.console.log("parsed", result[1]);
     return result[1];
-  }
 
-  window.console.log("parsed", result.slice(1));
   return result.slice(1);
 };
 
@@ -436,7 +428,6 @@ util._parse = function(inResult, inText)
   }
 
   var text = inText.substring(2);
-  var count = 0;
   while(true)
   {
     text = util._parseNext(inResult, text);
@@ -445,9 +436,6 @@ util._parse = function(inResult, inText)
       break;
 
     text = text.substring(2);
-
-    if(count++ > 30)
-      break;
   }
 
   return text;
@@ -682,8 +670,6 @@ Function.prototype.bind = function()
 
 // install a handler to support back/forward actions
 $(window).bind('popstate', function(event) {
-    window.console.log("pop", event.originalEvent.state, event.originalEvent,
-                       location.pathname, location.search);
     if(event.originalEvent.state)
       util.link(event.originalEvent, location.pathname + location.search)
   });

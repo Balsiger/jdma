@@ -704,6 +704,11 @@ DIV.ability DIV.ability-title
   background-color: $color_Quality;
 }
 
+DIV.ability DIV.ability-title.spell
+{
+  background-color: $color_Spell;
+}
+
 DIV.ability DIV.ability-numbers
 {
   float: left;
