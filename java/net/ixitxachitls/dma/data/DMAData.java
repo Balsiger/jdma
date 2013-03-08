@@ -133,6 +133,14 @@ public interface DMAData
     {
       return m_icon;
     }
+
+    /**
+     * A string representation for printing.
+     */
+    public String toString()
+    {
+      return m_name + "/" + m_type + "=" + m_path;
+    }
   }
 
   //........................................................................

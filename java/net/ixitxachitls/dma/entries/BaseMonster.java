@@ -551,16 +551,19 @@ public class BaseMonster extends BaseEntry
     ANY("Any"),
 
     /** Band organization. */
-    BAND("band"),
+    BAND("Band"),
 
     /** Brood organization. */
-    BROOD("brood"),
+    BROOD("Brood"),
 
     /** Colony organization. */
-    COLONY("colony"),
+    COLONY("Colony"),
 
     /** Covey organization. */
-    COVEY("covey"),
+    COVEY("Covey"),
+
+    /** Flight organization. */
+    FLIGHT("Flight"),
 
     /** Flock organization. */
     FLOCK("Flock"),
@@ -570,6 +573,9 @@ public class BaseMonster extends BaseEntry
 
     /** Herd organization. */
     HERD("Herd"),
+
+    /** Infestation organization. */
+    INFESTATION("Infestation"),
 
     /** Nest organization. */
     NEST("Nest"),
@@ -597,6 +603,9 @@ public class BaseMonster extends BaseEntry
 
     /** Swarm organization. */
     SWARM("Swarm"),
+
+    /** Tangle organization. */
+    TANGLE("Tangle"),
 
     /** Troupe organization. */
     TROUPE("Troupe");
@@ -716,6 +725,9 @@ public class BaseMonster extends BaseEntry
 
     /** A sting attack. */
     STING("Sting", false),
+
+    /** A swarm attack. */
+    SWARM("Swarm", false),
 
     /** A ray attack. */
     RAY("Ray", true),
@@ -1679,6 +1691,7 @@ public class BaseMonster extends BaseEntry
           .withParameter("Initial", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Secondary", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Damage", new Damage(), Parameters.Type.ADD)
+          .withParameter("Incubation", new Name(), Parameters.Type.MIN)
           .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
           .withParameter("Str", new Number(-100, 100), Parameters.Type.ADD)
           .withParameter("Dex", new Number(-100, 100), Parameters.Type.ADD)

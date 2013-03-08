@@ -249,6 +249,41 @@ gui.toggleHighlight = function()
 }
 
 //..........................................................................
+//------------------------------- columnize --------------------------------
+
+/**
+ *
+ *
+ * @param
+ *
+ * @return
+ *
+ */
+gui.columnize = function(inContainer, inColumns)
+{
+  var columns = inContainer.children(".column");
+  inContainer.children(":not(.column)").each(function() {
+    gui._shortest(columns).append(this);
+  });
+}
+
+gui._shortest = function(inColumns)
+{
+  var shortest;
+  inColumns.each(function() {
+    var element = $(this);
+    if(!shortest)
+      shortest = element;
+    else
+      if(element.height() < shortest.height())
+        shortest = element;
+  });
+
+  return shortest;
+}
+
+//..........................................................................
+
 
 //----- Busy ---------------------------------------------------------------
 

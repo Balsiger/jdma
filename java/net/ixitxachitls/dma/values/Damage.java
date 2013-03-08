@@ -84,7 +84,25 @@ public class Damage extends Value<Damage>
     NONLETHAL("nonlethal"),
 
     /** Cold damage. */
-    COLD("cold");
+    COLD("cold"),
+
+    /** Strength damage. */
+    STR("Str"),
+
+    /** Strength damage. */
+    DEX("Dex"),
+
+    /** Strength damage. */
+    CON("Con"),
+
+    /** Strength damage. */
+    INT("Int"),
+
+    /** Strength damage. */
+    WIS("Wis"),
+
+    /** Strength damage. */
+    CHA("Cha");
 
     /** The value's name. */
     private String m_name;

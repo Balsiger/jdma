@@ -464,7 +464,17 @@ public class BaseEntry extends AbstractEntry
    */
   public @Nonnull String getShortDescription()
   {
-    return m_short.get();
+    String desc = m_short.get();
+
+    for(BaseEntry base : getBaseEntries())
+      if(base != null)
+        if (desc == null || desc.isEmpty())
+          desc = base.getShortDescription();
+        else
+          desc += " " + base.getShortDescription();
+
+
+    return desc;
   }
 
   //........................................................................

@@ -186,7 +186,6 @@
     {param name: 'Reach' /}
     {param value: $entry.reach /}
   {/delcall}
-  {$entry.sepcial_attacks}
   {delcall dma.entry.keyvalue}
     {param entry: $entry /}
     {param name: 'Special Attacks' /}
@@ -699,6 +698,9 @@
     {/foreach}
     <div class="par">
     <div id="boxes">
+      <div class="column"></div>
+      <div class="column"></div>
+      <div class="column"></div>
       {foreach $attack in $entry.special_attack_summaries}
         <div class="ability">
           <div class="ability-title{if $attack.name == 'Spell'} spell{/if}">
@@ -761,12 +763,13 @@
   {/foreach}
   {literal}
     <script>
-      $('#boxes').masonry({});
+      gui.columnize($('#boxes'), 3);
+
+      // Set the size and height of the images to use the full page.
       // We have to wait until we have a correct width/height
       setTimeout(function() {
         $('.page-image img').each(function(i) {
-          window.console.log($(this).height(), $(this).width());
-          if($(this).height() > $(this).width() * 1.4142)
+            if($(this).height() > $(this).width() * 1.4142)
             $(this).height("39cm"); // don't really know why this size works
           else
             $(this).width("100%");
