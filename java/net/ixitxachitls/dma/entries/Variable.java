@@ -341,7 +341,11 @@ public class Variable extends ValueHandle<Variable>
       StringReader string = new StringReader(inValue);
       ParseReader reader  = new ParseReader(string, "set");
 
-      Value value = get(inEntry).read(reader);
+      Value value = get(inEntry);
+      if(value == null)
+        return inValue;
+
+      value = value.read(reader);
 
       if(value == null)
         return inValue;

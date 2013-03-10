@@ -3568,7 +3568,8 @@ public class Monster extends CampaignEntry<BaseMonster>
         attacks.add(naturalAttack
                     (keyAbility,
                      inBaseAttacks.get(0)
-                     - ("secondary attacks".equals(inName) ? 5 : 0), false));
+                     - ("secondary attacks".equals(inName) ? 5 : 0), false,
+                    attackMode));
 
         Map<String, Object> single = Maps.newHashMap();
         single.put("attacks", attacks);
@@ -3669,7 +3670,8 @@ public class Monster extends CampaignEntry<BaseMonster>
           }
       }
 
-    ModifiedNumber modified = naturalAttack(keyAbility, inBaseAttack, true);
+    ModifiedNumber modified = naturalAttack(keyAbility, inBaseAttack, true,
+                                            BaseMonster.AttackMode.WEAPON);
 
     for(Pair<Reference, List<String>> feat : allFeats())
     {
@@ -3711,7 +3713,8 @@ public class Monster extends CampaignEntry<BaseMonster>
    *
    */
   public @Nonnull ModifiedNumber naturalAttack
-    (BaseMonster.Ability keyAbility, long inBaseAttack, boolean withWeapon)
+    (BaseMonster.Ability keyAbility, long inBaseAttack, boolean withWeapon,
+     BaseMonster.AttackMode attackMode)
   {
     ModifiedNumber modified = new ModifiedNumber(inBaseAttack);
 
@@ -3727,7 +3730,9 @@ public class Monster extends CampaignEntry<BaseMonster>
       (new Modifier(abilityModifier, Modifier.Type.ABILITY),
        keyAbility.getShort() + " of " + strength);
 
-    if(!withWeapon && hasFeat("weapon focus"))
+    if(!withWeapon &&
+       (hasFeat("weapon focus") || hasFeat("weapon focus [name " + attackMode
+                                           + "]")))
       modified.withModifier(new Modifier(+1, Modifier.Type.GENERAL),
                             "Weapon Focus");
 

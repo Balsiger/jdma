@@ -630,7 +630,7 @@
  * @param ifempty text to print if the value is empty
  */
 {template .withbase}
-  {if def($value.isCombined) or not $value.isDefined}
+  {if def($value.isCombined)}
     {call dma.value.newcombined}
       {param entry: $entry /}
       {param value: $value /}

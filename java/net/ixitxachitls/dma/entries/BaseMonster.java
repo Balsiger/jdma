@@ -736,7 +736,10 @@ public class BaseMonster extends BaseEntry
     HOOF("Hoof", true),
 
     /** A snakes attack. */
-    SNAKES("Snakes", true);
+    SNAKES("Snakes", true),
+
+    /** A web attack. */
+    WEB("Web", true);
 
     /** The value's name. */
     private @Nonnull String m_name;

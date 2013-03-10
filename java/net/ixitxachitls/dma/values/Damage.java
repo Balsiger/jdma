@@ -80,6 +80,9 @@ public class Damage extends Value<Damage>
     /** Holy damage. */
     HOLY("holy"),
 
+    /** Negative Energy damage. */
+    NEGATIVE_ENERGY("negative energy"),
+
     /** Nonlethal damage. */
     NONLETHAL("nonlethal"),
 
