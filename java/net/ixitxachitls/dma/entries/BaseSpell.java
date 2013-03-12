@@ -165,6 +165,9 @@ public class BaseSpell extends BaseEntry
   /** The possible spell schools (cf. PHB 172/173). */
   public enum Subschool implements EnumSelection.Named
   {
+    /** None. */
+    NONE("None"),
+
     /** Calling. */
     CALLING("Calling"),
 

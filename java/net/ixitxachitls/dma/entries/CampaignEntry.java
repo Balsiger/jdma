@@ -421,7 +421,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return      true if added, false if not
    *
    */
-  public boolean add(@Nonnull CampaignEntry inEntry)
+  public boolean add(@Nonnull CampaignEntry<? extends BaseEntry> inEntry)
   {
     Contents contents = (Contents)getExtension("contents");
     if(contents == null)

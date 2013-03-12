@@ -489,6 +489,9 @@ public class BaseMonster extends BaseEntry
     /** Infernal Battlefield of Acheron terrain. */
     INFENRAL_BATTLEFIELD_OF_ACHERON("Infernal Battlefield of Acheron"),
 
+    /** Infinite Layers of the Abyss terrain. */
+    INFINITE_LAYERS_OF_THE_ABYSS("Infinite Layers of the Abyss"),
+
     /** Elemental Plane of Air. */
     ELEMENTAL_PLANE_OF_AIR("Elemental Plane of Air"),
 
@@ -1678,6 +1681,7 @@ public class BaseMonster extends BaseEntry
          new Multiple.Element
          (new Reference<BaseQuality>(BaseQuality.TYPE)
           .withParameter("Range", new Distance(), Parameters.Type.MAX)
+          .withParameter("Increment", new Distance(), Parameters.Type.MAX)
           .withParameter("Name", new Name(), Parameters.Type.UNIQUE)
           .withParameter("Summary", new Name(), Parameters.Type.ADD)
           .withParameter("Level", new Number(0, 100), Parameters.Type.ADD)
@@ -1696,6 +1700,8 @@ public class BaseMonster extends BaseEntry
           .withParameter("Damage", new Damage(), Parameters.Type.ADD)
           .withParameter("Incubation", new Name(), Parameters.Type.MIN)
           .withParameter("DC", new Number(1, 100), Parameters.Type.MAX)
+          .withParameter("HP", new Number(1, 1000), Parameters.Type.MAX)
+          .withParameter("Burst", new Number(1, 100), Parameters.Type.MAX)
           .withParameter("Str", new Number(-100, 100), Parameters.Type.ADD)
           .withParameter("Dex", new Number(-100, 100), Parameters.Type.ADD)
           .withParameter("Con", new Number(-100, 100), Parameters.Type.ADD)

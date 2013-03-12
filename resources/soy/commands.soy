@@ -408,3 +408,16 @@
 {template .em}
   <emph>{$arg.0}</emph>
 {/template}
+
+/**
+ * Setting fractions.
+ *
+ * @param arg The arguments to the command.
+ * @param opt The optional arguments, if any
+ */
+{template .frac}
+  {if $opt and $opt.0}
+    {$opt.0}
+  {/if}
+  <sup>{$arg.0}</sup>&frasl;<sub>{$arg.1}</sub>
+{/template}
