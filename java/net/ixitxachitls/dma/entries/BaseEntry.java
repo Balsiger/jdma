@@ -308,6 +308,23 @@ public class BaseEntry extends AbstractEntry
 
   //-------------------------------------------------------------- accessors
 
+  //--------------------------------- getID --------------------------------
+
+  /**
+   * Get the ID of the entry. This can mainly be used for reference purposes.
+   * In this case, the lowercased name is equal to the id, which is not true
+   * for entries.
+   *
+   * @return      the requested id
+   *
+   */
+  // @Override
+  // public @Nonnull String getID()
+  // {
+  //   return super.getID().toLowerCase(Locale.US);
+  // }
+
+  //........................................................................
   //-------------------------------- getKey --------------------------------
 
   /**
@@ -320,7 +337,7 @@ public class BaseEntry extends AbstractEntry
   @SuppressWarnings("unchecked")
   public @Nonnull EntryKey<? extends BaseEntry> getKey()
   {
-    return new EntryKey(getName(), getType());
+    return new EntryKey(getID(), getType());
   }
 
   //........................................................................

@@ -239,6 +239,11 @@ admin.clearCache = function()
   util.ajax('/admin', { 'cache': 'clear' }, null, true);
 }
 
+admin.renameIds = function(inType)
+{
+  util.ajax('/admin', { 'ids': inType }, null, true);
+}
+
 //..........................................................................
 //----- jQuery extensions --------------------------------------------------
 //..........................................................................

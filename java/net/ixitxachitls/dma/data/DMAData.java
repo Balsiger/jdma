@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.data;
 import java.util.List;
 import java.util.SortedSet;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Multimap;
@@ -53,6 +53,7 @@ import net.ixitxachitls.dma.entries.AbstractType;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface DMAData
 {
   //----------------------------------------------------------------- nested
@@ -73,8 +74,7 @@ public interface DMAData
      * @param inIcon   the icon or thumbnail to show for the file
      *
      */
-    public File(@Nonnull String inName, @Nonnull String inType,
-                @Nonnull String inPath, @Nonnull String inIcon)
+    public File(String inName, String inType, String inPath, String inIcon)
     {
       m_name = inName;
       m_type = inType;
@@ -83,23 +83,23 @@ public interface DMAData
     }
 
     /** The name of the file. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The mime type of the file. */
-    private @Nonnull String m_type;
+    private String m_type;
 
     /** The url to display the file. */
-    private @Nonnull String m_path;
+    private String m_path;
 
     /** The url to display a thumbnail of the file. */
-    private @Nonnull String m_icon;
+    private String m_icon;
 
     /**
      * Get the name of the file.
      *
      * @return the name of the file (without path)
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -109,7 +109,7 @@ public interface DMAData
      *
      * @return the mime type
      */
-    public @Nonnull String getType()
+    public String getType()
     {
       return m_type;
     }
@@ -119,7 +119,7 @@ public interface DMAData
      *
      * @return the path to access the file
      */
-    public @Nonnull String getPath()
+    public String getPath()
     {
       return m_path;
     }
@@ -129,7 +129,7 @@ public interface DMAData
      *
      * @return the icon for the file
      */
-    public @Nonnull String getIcon()
+    public String getIcon()
     {
       return m_icon;
     }
@@ -163,11 +163,11 @@ public interface DMAData
    * @return   a map with id and type
    *
    */
-  public @Nonnull <T extends AbstractEntry> List<T>
-                     getEntries(@Nonnull AbstractType<T> inType,
-                                @Nullable AbstractEntry.EntryKey
-                                <? extends AbstractEntry> inParent,
-                                int inStart, int inSize);
+  public <T extends AbstractEntry> List<T>
+            getEntries(AbstractType<T> inType,
+                       @Nullable AbstractEntry.EntryKey
+                       <? extends AbstractEntry> inParent,
+                       int inStart, int inSize);
 
   //........................................................................
   //------------------------------ getOwners -------------------------------
@@ -194,8 +194,8 @@ public interface DMAData
    * @return      all the ids
    *
    */
-  public abstract @Nonnull List<String> getIDs
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+  public abstract List<String> getIDs
+    (AbstractType<? extends AbstractEntry> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent);
 
   //........................................................................
@@ -211,9 +211,9 @@ public interface DMAData
    * @return      the recent ids
    *
    */
-  public abstract @Nonnull <T extends AbstractEntry>
+  public abstract <T extends AbstractEntry>
     List<T> getRecentEntries
-      (@Nonnull AbstractType<T> inType,
+      (AbstractType<T> inType,
        @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent);
 
   //........................................................................
@@ -230,7 +230,7 @@ public interface DMAData
    *
    */
   public abstract @Nullable <T extends AbstractEntry> T getEntry
-                               (@Nonnull AbstractEntry.EntryKey<T> inKey);
+                               (AbstractEntry.EntryKey<T> inKey);
 
   //........................................................................
   //------------------------------- getEntry -------------------------------
@@ -249,9 +249,8 @@ public interface DMAData
    */
   @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> T
-                      getEntry(@Nonnull AbstractType<T> inType,
-                               @Nonnull String inKey,
-                               @Nonnull String inValue);
+                      getEntry(AbstractType<T> inType, String inKey,
+                               String inValue);
 
   //........................................................................
   //------------------------------ getEntries ------------------------------
@@ -271,9 +270,8 @@ public interface DMAData
    */
   @SuppressWarnings("unchecked") // casting return
   public abstract @Nullable <T extends AbstractEntry> List<T>
-                               getEntries(@Nonnull AbstractType<T> inType,
-                                          @Nonnull String inKey,
-                                          @Nonnull String inValue);
+                               getEntries(AbstractType<T> inType,
+                                          String inKey, String inValue);
 
   //........................................................................
   //--------------------------- getIndexEntries ----------------------------
@@ -293,10 +291,10 @@ public interface DMAData
    * @return   the entries matching the given index
    *
    */
-  public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+  public <T extends AbstractEntry> List<T> getIndexEntries
+    (String inIndex, AbstractType<T> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
-     @Nonnull String inGroup, int inStart, int inSize);
+     String inGroup, int inStart, int inSize);
 
   //........................................................................
   //---------------------------- getIndexNames -----------------------------
@@ -314,10 +312,10 @@ public interface DMAData
    * @return      a list with all the names
    *
    */
-  public @Nonnull SortedSet<String> getIndexNames
-    (@Nonnull String inIndex,
-     @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
-     @Nonnull String ... inFilters);
+  public SortedSet<String> getIndexNames
+    (String inIndex,
+     AbstractType<? extends AbstractEntry> inType, boolean inCached,
+     String ... inFilters);
 
   //........................................................................
   //------------------------------ getValues -------------------------------
@@ -333,8 +331,8 @@ public interface DMAData
    *
    */
   public abstract List<List<String>> getMultiValues
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull String ... inFields);
+    (AbstractType<? extends AbstractEntry> inType,
+     String ... inFields);
 
   //........................................................................
   //------------------------------ getValues -------------------------------
@@ -350,8 +348,8 @@ public interface DMAData
    *
    */
   public abstract SortedSet<String> getValues
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull String inField);
+    (AbstractType<? extends AbstractEntry> inType,
+     String inField);
 
   //........................................................................
 
@@ -386,8 +384,8 @@ public interface DMAData
    *
    */
   public abstract boolean remove
-    (@Nonnull String inID,
-     @Nonnull AbstractType<? extends AbstractEntry> inType);
+    (String inID,
+     AbstractType<? extends AbstractEntry> inType);
 
   //........................................................................
   //-------------------------------- remove --------------------------------
@@ -400,7 +398,7 @@ public interface DMAData
    * @return      true if removed, false if not
    *
    */
-  public abstract boolean remove(@Nonnull AbstractEntry.EntryKey inKey);
+  public abstract boolean remove(AbstractEntry.EntryKey inKey);
 
   //........................................................................
   //---------------------------------- update -------------------------------
@@ -414,7 +412,7 @@ public interface DMAData
    * @return      true if updated, false if there was an error
    *
    */
-  public boolean update(@Nonnull AbstractEntry inEntry);
+  public boolean update(AbstractEntry inEntry);
 
   //........................................................................
   //------------------------------- getFiles -------------------------------
@@ -427,7 +425,7 @@ public interface DMAData
    * @return   a list of all the files found
    *
    */
-  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry);
+  public List<File> getFiles(AbstractEntry inEntry);
 
   //........................................................................
   //------------------------------- rebuild --------------------------------
@@ -443,7 +441,8 @@ public interface DMAData
    * @return     the numbert of enties updated
    *
    */
-  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType);
+  public int rebuild(AbstractType<? extends AbstractEntry> inType);
+  public int rename(AbstractType<? extends AbstractEntry> inType, int inSize);
 
   //........................................................................
 
@@ -503,7 +502,7 @@ public interface DMAData
        *
        */
       @Override
-      public boolean update(@Nonnull AbstractEntry inEntry)
+      public boolean update(AbstractEntry inEntry)
       {
         addInternal(inEntry);
         return save();
@@ -517,7 +516,7 @@ public interface DMAData
        * @return      true if added, false if there was an error
        *
        */
-      public boolean add(@Nonnull AbstractEntry inEntry)
+      public boolean add(AbstractEntry inEntry)
       {
         addInternal(inEntry);
         return save();
@@ -543,8 +542,8 @@ public interface DMAData
        *
        */
       @Override
-      public @Nonnull List<String> getIDs
-        (@Nonnull AbstractType<? extends AbstractEntry> inType,
+      public List<String> getIDs
+        (AbstractType<? extends AbstractEntry> inType,
          @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
       {
         return m_ids;
@@ -560,9 +559,8 @@ public interface DMAData
        *
        */
       @Override
-      public @Nonnull SortedSet<String> getValues
-        (@Nonnull AbstractType<? extends AbstractEntry> inType,
-         @Nonnull String inField)
+      public SortedSet<String> getValues
+        (AbstractType<? extends AbstractEntry> inType, String inField)
       {
         return ImmutableSortedSet.of("Index-1", "Index-2", "Index-3");
       }

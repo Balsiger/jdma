@@ -25,6 +25,7 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -463,7 +464,7 @@ public class Product extends Entry<BaseProduct>
     if(inUser == null)
       return false;
 
-    return inUser.getName().equals(m_owner.get());
+    return inUser.getName().equalsIgnoreCase(m_owner.get());
   }
 
   //........................................................................
@@ -901,9 +902,9 @@ public class Product extends Entry<BaseProduct>
   @Override
   public @Nonnull EntryKey<Product> getKey()
   {
-    return new EntryKey<Product>(getName(), Product.TYPE,
-                        new EntryKey<BaseCharacter>(getOwner(),
-                                                    BaseCharacter.TYPE));
+    return new EntryKey<Product>
+      (getName(), Product.TYPE,
+       new EntryKey<BaseCharacter>(getOwner(), BaseCharacter.TYPE));
   }
 
   //........................................................................

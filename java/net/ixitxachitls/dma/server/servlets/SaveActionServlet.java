@@ -335,6 +335,7 @@ public class SaveActionServlet extends ActionServlet
         // We have to get the store for the entry before saving, as saving can
         // change the name.
         CampaignEntry store = stores.get(entry.getName());
+        System.out.println("saving entry: " + entry);
         if(entry.save())
         {
           saved.add(Encodings.escapeJS(entry.getType().toString()) + " "

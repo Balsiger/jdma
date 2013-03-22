@@ -18,10 +18,10 @@
   <!-- local valules -->
   <property file="build.properties.${os.name}" />
   <property file="build.properties" />
-  <property name="version" value="allip" />
+  <property name="version" value="astraldeva" />
 
   <!-- Google App Engine -->
-  <property name="gae.dir" location="../../appengine-java-sdk-1.7.5" />
+  <property name="gae.dir" location="../../appengine-java-sdk-1.7.6" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->

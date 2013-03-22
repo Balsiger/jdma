@@ -268,6 +268,47 @@ public class DataStore
   //----------------------------- getEntities ------------------------------
 
   /**
+   * Get all entities for the given type.
+   *
+   * @param    inType       the type of the entieties to get
+   * @param    inParent     the parent entity, if any
+   * @param    inSortField  an optional name of the field to sort by
+   * @param    inStart      the starting index of the entities to return
+   *                        (0 based)
+   * @param    inSize       the maximal number of entieties to return
+   *
+   * @return   a list with all the entries
+   *
+   */
+  public List<Entity> getEntitiesList(@Nonnull String inType,
+                                      @Nullable Key inParent,
+                                      @Nullable String inSortField,
+                                      int inStart, int inSize)
+  {
+    Query query;
+    if(inParent == null)
+      query = new Query(inType);
+    else
+      query = new Query(inType, inParent);
+
+    if(inSortField != null)
+      query.addSort(inSortField, Query.SortDirection.ASCENDING);
+
+    FetchOptions options =
+      FetchOptions.Builder.withOffset(inStart).limit(inSize);
+
+    Log.debug("gae: getting entities for " + inType
+              + (inParent != null ? " (" + inParent + ")" : "")
+              + (inSortField != null ? " sorted by " + inSortField : "")
+              + " from " + inStart + " size " + inSize);
+
+    return m_store.prepare(query).asList(options);
+  }
+
+  //........................................................................
+  //----------------------------- getEntities ------------------------------
+
+  /**
    * Get all the entities matching the given key/vallue pair(s).
    *
    * @param    inType    the type of entry to get

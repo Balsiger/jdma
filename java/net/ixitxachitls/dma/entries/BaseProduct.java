@@ -113,6 +113,7 @@ public class BaseProduct extends BaseEntry
         "Gale Force Nine",
         "Global Games Europe",
         "Goodman Games",
+        "Harper Collins",
         "Heel",
         "Henchman Publishing",
         "K&C",

@@ -57,7 +57,17 @@
 
   <h2>DMA Caches</h2>
 
-  <a onclick="admin.clearCache()">Clear all DMA caches</a>
+  <a onclick="admin.clearCache()">Clear all DMA caches</a><br />
+
+  <h2>DMA ID Renaming</h2>
+  <p>
+    <select onchange="admin.renameIds(this.value)">
+      <option value="">plese select</option>
+      {foreach $type in $types}
+        <option value="{$type}">{$type}</option>
+      {/foreach}
+    </select>
+  </p>
 
   <h2>Recent Events</h2>
 

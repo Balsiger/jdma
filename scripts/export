@@ -1,12 +1,12 @@
-java net.ixitxachitls.dma.server.Exporter -t "base character" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "base product" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "product" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "base quality" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "base feat" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "base spell" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "base item" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "item" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "base monster" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "monster" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
-java net.ixitxachitls.dma.server.Exporter -t "file" -h jdmaixit.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "base character" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "base product" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "product" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "base quality" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "base feat" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "base spell" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "base item" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "item" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "base monster" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "monster" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
+java net.ixitxachitls.dma.server.Exporter -t "file" -h jdmaixit-hrd.appspot.com -p 443 -u balsiger@ixitxachitls.net export-2012-12-16
 

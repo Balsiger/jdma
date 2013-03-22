@@ -26,13 +26,14 @@ package net.ixitxachitls.dma.data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -86,6 +87,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class DMADatastore implements DMAData
 {
   //--------------------------------------------------------- constructor(s)
@@ -110,16 +112,16 @@ public class DMADatastore implements DMAData
   //-------------------------------------------------------------- variables
 
   /** The access to the datastore. */
-  private @Nonnull DataStore m_data = new DataStore();
+  private DataStore m_data = new DataStore();
 
   /** The access to the datastore. */
-  private @Nonnull DatastoreService m_store;
+  private DatastoreService m_store;
 
   /** The blob store service. */
-  private @Nonnull BlobstoreService m_blobs;
+  private BlobstoreService m_blobs;
 
   /** The image service to serve images. */
-  private @Nonnull ImagesService m_image;
+  private ImagesService m_image;
 
   /** Joiner to join keys together. */
   private static final Joiner s_keyJoiner = Joiner.on(":");
@@ -131,7 +133,7 @@ public class DMADatastore implements DMAData
   private static final int s_maxRebuild = 1000;
 
   /** The cache for entries. */
-  private @Nonnull Map<AbstractEntry.EntryKey, AbstractEntry> m_entries =
+  private Map<AbstractEntry.EntryKey, AbstractEntry> m_entries =
     Maps.newHashMap();
 
   //........................................................................
@@ -153,7 +155,7 @@ public class DMADatastore implements DMAData
   @SuppressWarnings("unchecked")
   @Override
   public @Nullable <T extends AbstractEntry> T getEntry
-                      (@Nonnull AbstractEntry.EntryKey<T> inKey)
+                      (AbstractEntry.EntryKey<T> inKey)
   {
     AbstractEntry entry = m_entries.get(inKey);
 
@@ -161,7 +163,7 @@ public class DMADatastore implements DMAData
     {
       entry = convert(inKey.getID(), inKey.getType(),
                       m_data.getEntity(convert(inKey)));
-      m_entries.put(inKey, entry);
+      // m_entries.put(inKey, entry);
     }
 
     return (T)entry;
@@ -184,11 +186,11 @@ public class DMADatastore implements DMAData
    */
   @Override
   @SuppressWarnings("unchecked") // need to cast
-  public @Nonnull  <T extends AbstractEntry> List<T>
-                      getEntries(@Nonnull AbstractType<T> inType,
-                                 @Nullable AbstractEntry.EntryKey
-                                 <? extends AbstractEntry> inParent,
-                                 int inStart, int inSize)
+  public <T extends AbstractEntry> List<T> getEntries
+            (AbstractType<T> inType,
+             @Nullable AbstractEntry.EntryKey
+             <? extends AbstractEntry> inParent,
+             int inStart, int inSize)
   {
     List<T> entries = new ArrayList<T>();
     Iterable<Entity> entities =
@@ -218,10 +220,8 @@ public class DMADatastore implements DMAData
    */
   @Override
   @SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry> T
-                      getEntry(@Nonnull AbstractType<T> inType,
-                               @Nonnull String inKey,
-                               @Nonnull String inValue)
+  public @Nullable <T extends AbstractEntry> T getEntry
+                      (AbstractType<T> inType, String inKey, String inValue)
   {
     return (T)convert(m_data.getEntity(inType.toString(), inKey, inValue));
   }
@@ -243,10 +243,8 @@ public class DMADatastore implements DMAData
    */
   @Override
   @SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry> List<T>
-                      getEntries(@Nonnull AbstractType<T> inType,
-                                 @Nonnull String inKey,
-                                 @Nonnull String inValue)
+  public @Nullable <T extends AbstractEntry> List<T> getEntries
+                      (AbstractType<T> inType, String inKey, String inValue)
   {
     return (List<T>)
       convert(m_data.getEntities(inType.toString(), null, 0, 1000,
@@ -266,8 +264,8 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  public @Nonnull List<String> getIDs
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+  public List<String> getIDs
+    (AbstractType<? extends AbstractEntry> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
     return m_data.getIDs(inType.toString(), inType.getSortField(),
@@ -289,8 +287,8 @@ public class DMADatastore implements DMAData
    */
   @Override
   @SuppressWarnings("unchecked") // need to cast cache value
-  public @Nonnull  <T extends AbstractEntry> List<T> getRecentEntries
-    (@Nonnull AbstractType<T> inType,
+  public <T extends AbstractEntry> List<T> getRecentEntries
+    (AbstractType<T> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
     return (List<T>)
@@ -314,7 +312,8 @@ public class DMADatastore implements DMAData
   public Multimap<String, String> getOwners(String inID)
   {
     Multimap<String, String> owners = HashMultimap.create();
-    for(Entity entity : m_data.getIDs(Product.TYPE.toString(), "base", inID))
+    for(Entity entity : m_data.getIDs(Product.TYPE.toString(), "base",
+                                      inID.toLowerCase(Locale.US)))
       owners.put(entity.getKey().getParent().getName(),
                  entity.getKey().getName());
 
@@ -333,7 +332,7 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
+  public List<File> getFiles(AbstractEntry inEntry)
   {
     List<File> files = Lists.newArrayList();
     Set<String> names = Sets.newHashSet();
@@ -403,10 +402,10 @@ public class DMADatastore implements DMAData
    */
   @Override
   @SuppressWarnings("unchecked") // need to cast return value for generics
-  public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+  public <T extends AbstractEntry> List<T> getIndexEntries
+    (String inIndex, AbstractType<T> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
-     @Nonnull String inGroup, int inStart, int inSize)
+     String inGroup, int inStart, int inSize)
   {
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
@@ -443,10 +442,10 @@ public class DMADatastore implements DMAData
   @Override
   @Deprecated
   @SuppressWarnings("unchecked") // need to cast from property value
-  public @Nonnull SortedSet<String> getIndexNames
-    (@Nonnull String inIndex,
-     @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
-     @Nonnull String ... inFilters)
+  public SortedSet<String> getIndexNames
+    (String inIndex,
+     AbstractType<? extends AbstractEntry> inType, boolean inCached,
+     String ... inFilters)
   {
     SortedSet<String> names = new TreeSet<String>();
 
@@ -481,8 +480,7 @@ public class DMADatastore implements DMAData
    *
    */
   public List<List<String>> getMultiValues
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull String ... inFields)
+    (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
     return m_data.getMultiValues(inType.toString(), null, inFields);
   }
@@ -501,8 +499,7 @@ public class DMADatastore implements DMAData
    *
    */
   public SortedSet<String> getValues
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull String inField)
+    (AbstractType<? extends AbstractEntry> inType, String inField)
   {
     return m_data.getValues(inType.toString(), null, inField);
   }
@@ -519,7 +516,7 @@ public class DMADatastore implements DMAData
    *
    */
   public <T extends AbstractEntry> void uncacheEntry
-            (@Nonnull AbstractEntry.EntryKey<T> inKey)
+            (AbstractEntry.EntryKey<T> inKey)
   {
     m_entries.remove(inKey);
   }
@@ -575,11 +572,11 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  public boolean remove
-    (@Nonnull String inID,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
+  public boolean remove(String inID,
+                        AbstractType<? extends AbstractEntry> inType)
   {
-    return m_data.remove(KeyFactory.createKey(inType.toString(), inID));
+    return m_data.remove(KeyFactory.createKey(inType.toString(),
+                                              inID.toLowerCase(Locale.US)));
   }
 
   //........................................................................
@@ -594,7 +591,7 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  public boolean remove(@Nonnull AbstractEntry.EntryKey inKey)
+  public boolean remove(AbstractEntry.EntryKey inKey)
   {
     // also remove all blobs for this entry
     for(Entity entity : m_data.getEntities("file", convert(inKey), "__key__",
@@ -622,7 +619,7 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  public boolean update(@Nonnull AbstractEntry inEntry)
+  public boolean update(AbstractEntry inEntry)
   {
     if(inEntry.getName().equals(Entry.TEMPORARY) && inEntry instanceof Entry)
     {
@@ -631,6 +628,7 @@ public class DMADatastore implements DMAData
       ((Entry)inEntry).complete();
     }
 
+    //m_entries.put(inEntry.getKey(), inEntry);
     return m_data.update(convert(inEntry));
   }
 
@@ -645,7 +643,7 @@ public class DMADatastore implements DMAData
    * @return      true if saved, false if not
    *
    */
-  public boolean save(@Nonnull AbstractEntry inEntry)
+  public boolean save(AbstractEntry inEntry)
   {
     return update(inEntry);
   }
@@ -662,8 +660,8 @@ public class DMADatastore implements DMAData
    * @param  inKey   the key of the blob in the blobstore
    *
    */
-  public void addFile(@Nonnull AbstractEntry inEntry, @Nonnull String inName,
-                      @Nonnull String inType, @Nonnull BlobKey inKey)
+  public void addFile(AbstractEntry inEntry, String inName, String inType,
+                      BlobKey inKey)
   {
     Log.debug("adding file for " + inEntry.getType() + " " + inEntry.getName());
     // if a file with the same name is already there, we have to delete it first
@@ -697,7 +695,7 @@ public class DMADatastore implements DMAData
    * @param  inName  the name of the file
    *
    */
-  public void removeFile(@Nonnull AbstractEntry inEntry, @Nonnull String inName)
+  public void removeFile(AbstractEntry inEntry, String inName)
   {
     Key key = KeyFactory.createKey(convert(inEntry.getKey()), "file", inName);
 
@@ -721,7 +719,7 @@ public class DMADatastore implements DMAData
   //------------------------------- rebuild --------------------------------
 
   /**
-   * Rebuild the given types. This means mainly rebuilding the indexs. It is
+   * Rebuild the given type. This means mainly rebuilding the indexes. It is
    * accomplished by reading all entries and writing them back.
    *
    * NOTE: this produces a lot of datastore traffic.
@@ -732,7 +730,7 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  public int rebuild(AbstractType<? extends AbstractEntry> inType)
   {
     Log.debug("rebuilding data for " + inType);
 
@@ -742,6 +740,50 @@ public class DMADatastore implements DMAData
     {
       m_data.update(convert(convert(entity)));
       count++;
+    }
+
+    return count;
+  }
+
+  //........................................................................
+  //------------------------------- rebuild --------------------------------
+
+  /**
+   * Rebuild the given type. This means mainly rebuilding the indexes. It is
+   * accomplished by reading all entries and writing them back.
+   *
+   * NOTE: this produces a lot of datastore traffic.
+   *
+   * @param      inType  the type to rebuild for
+   *
+   * @return     the numbert of enties updated
+   *
+   */
+  @Override
+  @Deprecated // remove this once it has run over all base data
+    public int rename(AbstractType<? extends AbstractEntry> inType, int inSize)
+  {
+    Log.debug("renaming data for " + inType);
+
+    int count = 0;
+    for(int start = 0; count < inSize; start += inSize)
+    {
+      List<Entity> entities =
+        m_data.getEntitiesList(inType.toString(), null, null, start, inSize);
+
+      for(Entity entity : entities)
+      {
+        Key key = entity.getKey();
+        if(key.getName().toLowerCase().equals(key.getName()))
+          continue;
+
+        m_data.update(convert(convert(entity)));
+        m_data.remove(key);
+        count++;
+      }
+
+      if(entities.size() < inSize)
+        break;
     }
 
     return count;
@@ -771,9 +813,10 @@ public class DMADatastore implements DMAData
     AbstractEntry.EntryKey parent = inKey.getParent();
     if(parent != null)
       return KeyFactory.createKey(convert(parent), inKey.getType().toString(),
-                                  inKey.getID());
+                                  inKey.getID().toLowerCase(Locale.US));
     else
-      return KeyFactory.createKey(inKey.getType().toString(), inKey.getID());
+      return KeyFactory.createKey(inKey.getType().toString(),
+                                  inKey.getID().toLowerCase(Locale.US));
   }
 
   //........................................................................
@@ -788,7 +831,7 @@ public class DMADatastore implements DMAData
    *
    */
   @SuppressWarnings("unchecked") // not using proper types
-  public @Nonnull AbstractEntry.EntryKey convert(@Nonnull Key inKey)
+  public AbstractEntry.EntryKey convert(Key inKey)
   {
     Key parent = inKey.getParent();
 
@@ -807,18 +850,18 @@ public class DMADatastore implements DMAData
   /**
    * Convert the given datastore entity into a dma entry.
    *
-   * @param      inID   the id of the entry to get
-   * @param      inType   the type of the entry to get
+   * @param      inID     the id of the entry to convert
+   * @param      inType   the type of the entry to convert
    * @param      inEntity the entity to convert
    *
-   * @param      <T>      the type of the entry to get
+   * @param      <T>      the type of the entry to convert
    *
    * @return     the converted entry, if any
    *
    */
   @SuppressWarnings("unchecked") // need to cast value gotten
   public @Nullable <T extends AbstractEntry> T convert
-                      (@Nonnull String inID, @Nonnull AbstractType<T> inType,
+                      (String inID, AbstractType<T> inType,
                        @Nullable Entity inEntity)
   {
     if(inEntity == null)
@@ -880,7 +923,7 @@ public class DMADatastore implements DMAData
     // update extensions, if necessary
     entry.setupExtensions();
 
-    m_entries.put(entry.getKey(), entry);
+    //m_entries.put(entry.getKey(), entry);
     return entry;
   }
 
@@ -926,7 +969,7 @@ public class DMADatastore implements DMAData
    * @return     the entries found, if any
    *
    */
-  public @Nullable List<AbstractEntry> convert(@Nonnull List<Entity> inEntities)
+  public @Nullable List<AbstractEntry> convert(List<Entity> inEntities)
   {
     List<AbstractEntry> entries = new ArrayList<AbstractEntry>();
 
@@ -948,7 +991,7 @@ public class DMADatastore implements DMAData
    *
    */
   @SuppressWarnings("unchecked") // need to case to value list
-  public @Nonnull Entity convert(@Nonnull AbstractEntry inEntry)
+  public Entity convert(AbstractEntry inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
     for(Map.Entry<String, Value> value : inEntry.getAllValues().entrySet())

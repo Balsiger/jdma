@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -372,7 +373,8 @@ public class AbstractEntry extends ValueGroup
     this(inType);
 
     setName(inName);
-    addBase(inName);
+    // addBase(inName); // when creating new entries, default bases are not
+    //                  // preserved
     m_changed = false;
   }
 
@@ -530,7 +532,6 @@ public class AbstractEntry extends ValueGroup
 
   /** The name of the abstract entry. */
   @Key("name")
-  @NoStore
   @Note("Changing the name will not change any references to entries with "
         + "that name, thus leaving these references dangling. You will have "
         + "to update these manually.")
@@ -880,7 +881,8 @@ public class AbstractEntry extends ValueGroup
 
   /**
    * Get the ID of the entry. This can mainly be used for reference purposes.
-   * In this case, the name is equal to the id, which is not true for entries.
+   * In this case, the lowercased name is equal to the id, which is not true
+   * for entries.
    *
    * @return      the requested id
    *
@@ -3087,7 +3089,7 @@ public class AbstractEntry extends ValueGroup
     if(baseType instanceof Type)
       baseType = ((Type)baseType).getBaseType();
     else
-      if(inName.equals(getID()))
+      if(inName.equalsIgnoreCase(getID()))
         return;
 
     BaseEntry entry = (BaseEntry)

@@ -258,10 +258,35 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
+    String ids = request.getParam("ids");
+    if(ids != null)
+    {
+      // Set the output header.
+      inResponse.setHeader("Content-Type", "text/html");
+      inResponse.setHeader("Cache-Control", "max-age=0");
+
+      AbstractType<? extends AbstractEntry> type = AbstractType.getTyped(ids);
+      if(type == null)
+        return new TextError(HttpServletResponse.SC_BAD_REQUEST,
+                             "Invalid type '" + reset + "'.");
+
+      int size = DMADataFactory.get().rename(type, 100);
+
+      Log.event(user.getName(), "admin rename id",
+                size + "the ids of " + ids + " have been renamed.");
+
+      PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
+      writer.println("gui.info('" + size + " ids for " + ids
+                     + " have been renamed');");
+      writer.close();
+      return null;
+    }
+
     return super.handle(inRequest, inResponse);
   }
 
   //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions
