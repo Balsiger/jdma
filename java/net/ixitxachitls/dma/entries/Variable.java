@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.entries;
 import java.io.StringReader;
 import java.lang.reflect.Field;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.Value;
@@ -53,6 +53,7 @@ import net.ixitxachitls.input.ParseReader;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Variable extends ValueHandle<Variable>
 {
   //--------------------------------------------------------- constructor(s)
@@ -70,8 +71,8 @@ public class Variable extends ValueHandle<Variable>
    * @param       inPrintUndefined if printing the value when undefined
    *
    */
-  public Variable(@Nonnull String inKey, @Nonnull Field inField,
-                  boolean inStored, boolean inPrintUndefined)
+  public Variable(String inKey, Field inField, boolean inStored,
+                  boolean inPrintUndefined)
   {
     super(inKey);
 
@@ -87,7 +88,7 @@ public class Variable extends ValueHandle<Variable>
   //-------------------------------------------------------------- variables
 
   /** The field containing the value. */
-  protected @Nonnull Field m_field;
+  protected Field m_field;
 
   /** A flag denoting if the variable is to be stored (or computed). */
   protected boolean m_store;
@@ -109,7 +110,7 @@ public class Variable extends ValueHandle<Variable>
    * @return      the current value
    *
    */
-  public @Nullable Value get(@Nonnull Object inEntry)
+  public @Nullable Value<?> get(Object inEntry)
   {
     try
     {
@@ -135,7 +136,7 @@ public class Variable extends ValueHandle<Variable>
    *
    */
   @Override
-  public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
+  public @Nullable Object value(ValueGroup inEntry, boolean inDM)
   {
     return get(inEntry);
   }
@@ -154,7 +155,7 @@ public class Variable extends ValueHandle<Variable>
    */
   @Override
   @Deprecated
-  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
+  public @Nullable Object formatted(ValueGroup inEntry, boolean inDM)
   {
     return get(inEntry).format(!m_printUndefined);
   }
@@ -170,9 +171,9 @@ public class Variable extends ValueHandle<Variable>
    * @return      the current value as String
    *
      */
-  public @Nullable String getStringValue(@Nonnull Object inEntry)
+  public @Nullable String getStringValue(Object inEntry)
   {
-    Value result = get(inEntry);
+    Value<?> result = get(inEntry);
     if(result != null)
       return result.toString();
 
@@ -192,7 +193,7 @@ public class Variable extends ValueHandle<Variable>
    * @return      true if the variable is there, false if not
    *
    */
-  public boolean hasVariable(@Nonnull ValueGroup inEntry)
+  public boolean hasVariable(ValueGroup inEntry)
   {
     return true;
   }
@@ -208,9 +209,9 @@ public class Variable extends ValueHandle<Variable>
    * @return      true if there is a value, false else
    *
      */
-  public boolean hasValue(@Nonnull Object inEntry)
+  public boolean hasValue(Object inEntry)
   {
-    Value value = get(inEntry);
+    Value<?> value = get(inEntry);
 
     // if value is not set, we don't have to print anything
     if(value == null || !value.isDefined())
@@ -244,7 +245,7 @@ public class Variable extends ValueHandle<Variable>
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return "var " + m_key + " (" + (isEditable() ? "editable" : "not editable")
       + (isDMOnly() ? ", DM" : "") + ")";
@@ -267,10 +268,9 @@ public class Variable extends ValueHandle<Variable>
    * @return      true if read, false if not
    *
    */
-  public boolean read(@Nonnull ValueGroup inGroup,
-                      @Nonnull ParseReader inReader)
+  public boolean read(ValueGroup inGroup, ParseReader inReader)
   {
-    Value read = get(inGroup).read(inReader);
+    Value<?> read = get(inGroup).read(inReader);
 
     if(read == null)
       return false;
@@ -292,7 +292,7 @@ public class Variable extends ValueHandle<Variable>
    * @param       inValue the value to set to
    *
    */
-  public void set(@Nonnull Changeable inEntry, @Nonnull Value inValue)
+  public void set(Changeable inEntry, Value<?> inValue)
   {
     try
     {
@@ -322,8 +322,7 @@ public class Variable extends ValueHandle<Variable>
    *              all was used
    *
    */
-  public @Nullable String setFromString(@Nonnull Changeable inEntry,
-                                        @Nonnull String inValue)
+  public @Nullable String setFromString(Changeable inEntry, String inValue)
   {
     if(inValue.isEmpty())
       return inValue;
@@ -341,7 +340,7 @@ public class Variable extends ValueHandle<Variable>
       StringReader string = new StringReader(inValue);
       ParseReader reader  = new ParseReader(string, "set");
 
-      Value value = get(inEntry);
+      Value<?> value = get(inEntry);
       if(value == null)
         return inValue;
 
@@ -381,7 +380,7 @@ public class Variable extends ValueHandle<Variable>
       private boolean m_changed = false;
 
       /** Value field for testing. */
-      protected Value m_value = new Value.Test.TestValue();
+      protected Value<?> m_value = new Value.Test.TestValue();
 
       /** Change method for testing. */
       @Override

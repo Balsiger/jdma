@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -88,7 +88,7 @@ public abstract class DMAServlet extends BaseServlet
    * @return      this servlet for chaining
    *
    */
-  public @Nonnull DMAServlet withAccess(@Nonnull BaseCharacter.Group inGroup)
+  public DMAServlet withAccess(BaseCharacter.Group inGroup)
   {
     m_group = inGroup;
 
@@ -118,7 +118,7 @@ public abstract class DMAServlet extends BaseServlet
    * @return      true for access, false for not
    *
    */
-  protected boolean allows(@Nonnull DMARequest inRequest)
+  protected boolean allows(DMARequest inRequest)
   {
     // no access restriction defined
     if(m_group == null)
@@ -159,7 +159,7 @@ public abstract class DMAServlet extends BaseServlet
    *
    */
   public static @Nullable AbstractEntry.EntryKey<? extends AbstractEntry>
-    extractKey(@Nonnull String inPath)
+    extractKey(String inPath)
   {
     return AbstractEntry.EntryKey.fromString(inPath);
   }
@@ -170,19 +170,36 @@ public abstract class DMAServlet extends BaseServlet
   /**
    * Get the abstract entry associated with the given request.
    *
-   * @param       inPath    the path to the page
+   * @param       inRequest the request to get the entry for
    *
    * @return      the entry or null if it could not be found
    *
    */
-  public @Nullable AbstractEntry getEntry(@Nonnull String inPath)
+  public @Nullable AbstractEntry getEntry(DMARequest inRequest)
+  {
+    return getEntry(inRequest, inRequest.getRequestURI());
+  }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the abstract entry associated with the given path.
+   *
+   * @param       inRequest the request to get the entry for
+   * @param       inPath    the path to the entry
+   *
+   * @return      the entry or null if it could not be found
+   *
+   */
+  public @Nullable AbstractEntry getEntry(DMARequest inRequest, String inPath)
   {
     String path = inPath.replaceAll("\\.[^\\./\\\\]*$", "");
     AbstractEntry.EntryKey<? extends AbstractEntry> key = extractKey(path);
     if(key == null)
       return null;
 
-    return DMADataFactory.get().getEntry(key);
+    return inRequest.getEntry(key);
   }
 
   //........................................................................
@@ -206,9 +223,8 @@ public abstract class DMAServlet extends BaseServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle
-    (@Nonnull HttpServletRequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+  protected @Nullable SpecialResult handle(HttpServletRequest inRequest,
+                                           HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     if(inRequest instanceof DMARequest)
@@ -250,8 +266,7 @@ public abstract class DMAServlet extends BaseServlet
    *
    */
   protected abstract @Nullable SpecialResult handle
-    (@Nonnull DMARequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+    (DMARequest inRequest, HttpServletResponse inResponse)
     throws ServletException, IOException;
 
   //........................................................................
@@ -289,9 +304,8 @@ public abstract class DMAServlet extends BaseServlet
       DMAServlet servlet = new DMAServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle
-            (@Nonnull DMARequest inRequest,
-             @Nonnull HttpServletResponse inResponse)
+          protected SpecialResult handle(DMARequest inRequest,
+                                         HttpServletResponse inResponse)
           {
             handled.set(true);
             return null;
@@ -316,8 +330,7 @@ public abstract class DMAServlet extends BaseServlet
 
           @Override
           protected @Nullable SpecialResult handle
-            (@Nonnull DMARequest inRequest,
-             @Nonnull HttpServletResponse inResponse)
+            (DMARequest inRequest, HttpServletResponse inResponse)
           {
             return null;
           }
@@ -341,7 +354,7 @@ public abstract class DMAServlet extends BaseServlet
 
       for(int i = 0; i < tests.length; i += 3)
       {
-        AbstractEntry.EntryKey key = servlet.extractKey(tests[i + 1]);
+        AbstractEntry.EntryKey<?> key = DMAServlet.extractKey(tests[i + 1]);
         assertEquals(tests[i], tests[i + 2],
                      key == null ? null : key.toString());
       }

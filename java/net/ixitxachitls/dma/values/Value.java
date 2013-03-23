@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.values;
 import java.io.StringReader;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
@@ -62,7 +62,8 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class Value<T extends Value>
+@ParametersAreNonnullByDefault
+public abstract class Value<T extends Value<T>>
   implements Comparable<Object>, PublicCloneable
 {
   //--------------------------------------------------------- constructor(s)
@@ -89,7 +90,7 @@ public abstract class Value<T extends Value>
    * @return      a similar value, but without any contents
    *
    */
-  public abstract @Nonnull T create();
+  public abstract T create();
 
   //........................................................................
   //------------------------------- create ---------------------------------
@@ -103,7 +104,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T create(@Nonnull T inNew)
+  public T create(T inNew)
   {
     inNew.m_formatter = m_formatter;
     inNew.m_grouping = m_grouping;
@@ -131,7 +132,7 @@ public abstract class Value<T extends Value>
   @Override
   @SuppressWarnings("unchecked")
   @Deprecated // do we still need this??
-  public @Nonnull T clone()
+  public T clone()
   {
     try
     {
@@ -157,7 +158,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withFormatter(@Nonnull Formatter<T> inFormatter)
+  public T withFormatter(Formatter<T> inFormatter)
   {
     m_formatter = inFormatter;
 
@@ -176,7 +177,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withGrouping(@Nonnull Grouping<T, String> inGrouping)
+  public T withGrouping(Grouping<T, String> inGrouping)
   {
     m_grouping = inGrouping;
     return (T)this;
@@ -194,7 +195,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withEditType(@Nonnull String inType)
+  public T withEditType(String inType)
   {
     if(inType.isEmpty())
       throw new IllegalArgumentException("must have a type here");
@@ -216,7 +217,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withChoices(@Nonnull String inValues)
+  public T withChoices(String inValues)
   {
     m_choices = inValues;
 
@@ -235,7 +236,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withRelated(@Nonnull String inValues)
+  public T withRelated(String inValues)
   {
     m_related = inValues;
 
@@ -254,7 +255,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withIndexBase(@Nonnull String inBase)
+  public T withIndexBase(String inBase)
   {
     m_indexBase = inBase;
     return (T)this;
@@ -272,8 +273,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withIndexBase
-    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+  public T withIndexBase(AbstractType<? extends AbstractEntry> inType)
   {
     return withIndexBase("/" + inType.getMultipleLink() + "/");
   }
@@ -290,7 +290,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withExpression(@Nonnull Expression inExpression)
+  public T withExpression(Expression inExpression)
   {
     m_expression = inExpression;
 
@@ -309,7 +309,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withTemplate(@Nonnull String inTemplate)
+  public T withTemplate(String inTemplate)
   {
     m_template = inTemplate;
 
@@ -329,8 +329,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withTemplate(@Nonnull String inTemplate,
-                                 @Nonnull String ... inArguments)
+  public T withTemplate(String inTemplate, String ... inArguments)
   {
     m_template = inTemplate;
     m_templateArguments = ImmutableList.copyOf(inArguments);
@@ -345,7 +344,7 @@ public abstract class Value<T extends Value>
   //-------------------------------------------------------------- variables
 
   /** The text to use for undefined values. */
-  public static final @Nonnull String UNDEFINED =
+  public static final String UNDEFINED =
     Config.get("resource:values/undefined", "$undefined$");
 
   /** The hint for this value. */
@@ -361,7 +360,7 @@ public abstract class Value<T extends Value>
   protected @Nullable Grouping<T, String> m_grouping = null;
 
   /** The type to use for editing. */
-  protected @Nonnull String m_editType = "";
+  protected String m_editType = "";
 
   /** The values for editing the type. */
   protected @Nullable String m_choices = null;
@@ -420,7 +419,7 @@ public abstract class Value<T extends Value>
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return toString(true);
   }
@@ -436,7 +435,7 @@ public abstract class Value<T extends Value>
    * @return      a String representation for human reading
    *
    */
-  public @Nonnull String toString(boolean inAll)
+  public String toString(boolean inAll)
   {
     if(!isDefined())
       if(hasExpression())
@@ -459,7 +458,7 @@ public abstract class Value<T extends Value>
    * @return      a string representation.
    *
    */
-  protected abstract @Nonnull String doToString();
+  protected abstract String doToString();
 
   //........................................................................
 
@@ -487,7 +486,7 @@ public abstract class Value<T extends Value>
    *
    */
   @Override
-  public int compareTo(@Nonnull Object inOther)
+  public int compareTo(Object inOther)
   {
     int compared = toString().compareTo(inOther.toString());
     if(compared != 0 || !(inOther instanceof Value))
@@ -555,7 +554,7 @@ public abstract class Value<T extends Value>
    * @return  the printed value as a string.
    *
    */
-  public @Nonnull String print(@Nonnull AbstractEntry inEntry)
+  public String print(AbstractEntry inEntry)
   {
     return doPrint(inEntry);
   }
@@ -571,7 +570,7 @@ public abstract class Value<T extends Value>
    * @return      the string to be printed
    *
    */
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry)
+  protected String doPrint(AbstractEntry inEntry)
   {
     return toString(false);
   }
@@ -586,7 +585,8 @@ public abstract class Value<T extends Value>
    * @return      the command that can be printed
    *
    */
-  public @Nonnull Command format()
+  @Deprecated
+  public Command format()
   {
     return format(false, false);
   }
@@ -603,7 +603,8 @@ public abstract class Value<T extends Value>
    * @return      the command that can be printed
    *
    */
-  public @Nonnull Command format(boolean inIgnoreUndefined)
+  @Deprecated
+  public Command format(boolean inIgnoreUndefined)
   {
     return format(inIgnoreUndefined, false);
   }
@@ -622,8 +623,8 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull Command format(boolean inIgnoreUndefined,
-                                 boolean inIgnoreFormatter)
+  @Deprecated
+  public Command format(boolean inIgnoreUndefined, boolean inIgnoreFormatter)
   {
     Command command = null;
 
@@ -661,7 +662,8 @@ public abstract class Value<T extends Value>
    * @return      the command for setting the value
    *
    */
-  protected abstract @Nonnull Command doFormat();
+  @Deprecated
+  protected abstract Command doFormat();
 
   //........................................................................
 
@@ -676,7 +678,7 @@ public abstract class Value<T extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull String group()
+  public String group()
   {
     if(m_grouping != null)
       return m_grouping.group((T)this);
@@ -694,7 +696,7 @@ public abstract class Value<T extends Value>
    * @return      a string denoting the group this value is in
    *
    */
-  protected @Nonnull String doGroup()
+  protected String doGroup()
   {
     return this.toString(false);
   }
@@ -709,7 +711,7 @@ public abstract class Value<T extends Value>
    * @return      a string representing the type to use for editing
    *
    */
-  public @Nonnull String getEditType()
+  public String getEditType()
   {
     return m_editType;
   }
@@ -828,7 +830,7 @@ public abstract class Value<T extends Value>
    * @return   the computed value
    *
    */
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("template".equals(inKey))
       if(m_template != null)
@@ -856,7 +858,7 @@ public abstract class Value<T extends Value>
    * @return      the added values
    *
    */
-  public @Nonnull T add(@Nonnull T inValue)
+  public T add(T inValue)
   {
     throw new UnsupportedOperationException
       ("cannot add " + getClass() + " for " + this);
@@ -873,7 +875,7 @@ public abstract class Value<T extends Value>
    * @return      the subtracted values
    *
    */
-  public @Nonnull T subtract(@Nonnull T inValue)
+  public T subtract(T inValue)
   {
     throw new UnsupportedOperationException("cannot subtract from "
                                             + getClass());
@@ -890,7 +892,7 @@ public abstract class Value<T extends Value>
    * @return      the multiplied value
    *
    */
-  public @Nonnull T multiply(@Nonnull T inMultiplier)
+  public T multiply(T inMultiplier)
    {
      throw new UnsupportedOperationException("cannot multiply " + getClass());
    }
@@ -906,7 +908,7 @@ public abstract class Value<T extends Value>
    * @return      the divided value
    *
    */
-  public @Nonnull T divide(@Nonnull T inDivisor)
+  public T divide(T inDivisor)
   {
     throw new UnsupportedOperationException("cannot divide " + getClass());
   }
@@ -922,7 +924,7 @@ public abstract class Value<T extends Value>
    * @return      the multiple value.
    *
    */
-  public @Nonnull T multiply(long inValue)
+  public T multiply(long inValue)
   {
     throw new UnsupportedOperationException("multiplication for " + getClass());
   }
@@ -938,7 +940,7 @@ public abstract class Value<T extends Value>
    * @return      the divided value.
    *
    */
-  public @Nonnull T divide(long inValue)
+  public T divide(long inValue)
   {
     throw new UnsupportedOperationException("division for " + getClass());
   }
@@ -954,7 +956,7 @@ public abstract class Value<T extends Value>
    * @return      the maximum value (usually one of the values)
    *
    */
-  public @Nonnull T max(@Nonnull T inValue)
+  public T max(T inValue)
   {
     throw new UnsupportedOperationException("cannot compute max for "
                                             + getClass());
@@ -971,7 +973,7 @@ public abstract class Value<T extends Value>
    * @return      the minimal value (usually one of the values)
    *
    */
-  public @Nonnull T min(@Nonnull T inValue)
+  public T min(T inValue)
   {
     throw new UnsupportedOperationException("cannot compute min for "
                                             + getClass());
@@ -989,7 +991,7 @@ public abstract class Value<T extends Value>
    * @return      the value read, if any
    *
    */
-  public @Nullable T read(@Nonnull String inText)
+  public @Nullable T read(String inText)
   {
     StringReader string = new StringReader(inText);
     ParseReader reader  = new ParseReader(string, "set");
@@ -1009,7 +1011,7 @@ public abstract class Value<T extends Value>
    * @return      the value read
    *
    */
-  public @Nullable T read(@Nonnull ParseReader inReader)
+  public @Nullable T read(ParseReader inReader)
   {
     T result = create();
 
@@ -1053,7 +1055,7 @@ public abstract class Value<T extends Value>
    * @return      true if a valid value was read, false else
    *
    */
-  protected abstract boolean doRead(@Nonnull ParseReader inReader);
+  protected abstract boolean doRead(ParseReader inReader);
 
   //........................................................................
 
@@ -1076,8 +1078,7 @@ public abstract class Value<T extends Value>
      * @param inValue the value to read into
      *
      */
-    public static void readTest(@Nonnull String []inTests,
-                                @Nonnull Value inValue)
+    public static void readTest(String []inTests, Value<?> inValue)
     {
       if(inTests.length % 4 != 0)
         throw new IllegalArgumentException("quadruplets of input test strings "
@@ -1088,7 +1089,7 @@ public abstract class Value<T extends Value>
         ParseReader reader =
           new ParseReader(new java.io.StringReader(inTests[i + 1]), "test");
 
-        Value value = inValue.read(reader);
+        Value<?> value = inValue.read(reader);
 
         if(inTests[i + 2] == null)
           assertNull(i / 4 + ": " + inTests[i]
@@ -1123,8 +1124,7 @@ public abstract class Value<T extends Value>
      * @param inValue the value to read into
      *
      */
-//     public static void setTest(@Nonnull String []inTests,
-//                                @Nonnull Value inValue)
+//     public static void setTest(String []inTests, Value inValue)
 //     {
 //       if(inTests.length % 4 != 0)
 //       throw new IllegalArgumentException("quadruplets of input test strings "
@@ -1161,10 +1161,10 @@ public abstract class Value<T extends Value>
      *
      */
     @SuppressWarnings("unchecked")
-    public static void createTest(@Nonnull Value inValue)
+    public static void createTest(Value<?> inValue)
     {
       // create a new value
-      Value newValue = inValue.create();
+      Value<?> newValue = inValue.create();
 
       assertEquals("new not undefined", false, newValue.isDefined());
       assertEquals("new not undefined", UNDEFINED, newValue.toString());
@@ -1180,7 +1180,7 @@ public abstract class Value<T extends Value>
                    inValue.m_choices, newValue.m_choices);
 
       // clone the value
-      Value clone = inValue.clone();
+      Value<?> clone = inValue.clone();
 
       assertEquals("clone not defined", true, clone.isDefined());
       assertEquals("not correctly cloned", 0, inValue.compareTo(clone));
@@ -1208,7 +1208,7 @@ public abstract class Value<T extends Value>
       private boolean m_defined = false;
 
       @Override
-	protected boolean doRead(@Nonnull ParseReader inReader)
+	protected boolean doRead(ParseReader inReader)
       {
         m_defined = inReader.expect("guru");
         return m_defined;
@@ -1220,7 +1220,7 @@ public abstract class Value<T extends Value>
       }
 
       @Override
-	public @Nonnull Command doFormat()
+	public Command doFormat()
       {
         return new Command("guru");
       }
@@ -1232,7 +1232,7 @@ public abstract class Value<T extends Value>
       }
 
       @Override
-	public @Nonnull String doToString()
+	public String doToString()
       {
         return "guru";
       }

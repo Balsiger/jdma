@@ -133,7 +133,7 @@ public class DMADatastore implements DMAData
   private static final int s_maxRebuild = 1000;
 
   /** The cache for entries. */
-  private Map<AbstractEntry.EntryKey, AbstractEntry> m_entries =
+  private Map<AbstractEntry.EntryKey<?>, AbstractEntry> m_entries =
     Maps.newHashMap();
 
   //........................................................................
@@ -591,7 +591,7 @@ public class DMADatastore implements DMAData
    *
    */
   @Override
-  public boolean remove(AbstractEntry.EntryKey inKey)
+  public boolean remove(AbstractEntry.EntryKey<?> inKey)
   {
     // also remove all blobs for this entry
     for(Entity entity : m_data.getEntities("file", convert(inKey), "__key__",
@@ -805,12 +805,15 @@ public class DMADatastore implements DMAData
    * @return      the converted key
    *
    */
-  public @Nullable Key convert(@Nullable AbstractEntry.EntryKey inKey)
+  @SuppressWarnings("unchecked")
+  public @Nullable <T extends AbstractEntry> Key convert
+                      (@Nullable AbstractEntry.EntryKey<T> inKey)
   {
     if(inKey == null)
       return null;
 
-    AbstractEntry.EntryKey parent = inKey.getParent();
+    AbstractEntry.EntryKey<T> parent =
+      (AbstractEntry.EntryKey<T>)inKey.getParent();
     if(parent != null)
       return KeyFactory.createKey(convert(parent), inKey.getType().toString(),
                                   inKey.getID().toLowerCase(Locale.US));
@@ -831,17 +834,19 @@ public class DMADatastore implements DMAData
    *
    */
   @SuppressWarnings("unchecked") // not using proper types
-  public AbstractEntry.EntryKey convert(Key inKey)
+  public <T extends AbstractEntry> AbstractEntry.EntryKey<T> convert(Key inKey)
   {
     Key parent = inKey.getParent();
 
     if(parent != null)
-      return new AbstractEntry.EntryKey(inKey.getName(),
-                                        AbstractType.getTyped(inKey.getKind()),
-                                        convert(parent));
+      return new AbstractEntry.EntryKey<T>
+        (inKey.getName(),
+         (AbstractType<T>)AbstractType.getTyped(inKey.getKind()),
+         convert(parent));
 
-    return new AbstractEntry.EntryKey(inKey.getName(),
-                                      AbstractType.getTyped(inKey.getKind()));
+    return new AbstractEntry.EntryKey<T>
+      (inKey.getName(),
+       (AbstractType<T>)AbstractType.getTyped(inKey.getKind()));
   }
 
   //........................................................................
@@ -994,12 +999,12 @@ public class DMADatastore implements DMAData
   public Entity convert(AbstractEntry inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
-    for(Map.Entry<String, Value> value : inEntry.getAllValues().entrySet())
+    for(Map.Entry<String, Value<?>> value : inEntry.getAllValues().entrySet())
     {
       if(value.getValue() instanceof ValueList)
       {
         List<String> values = new ArrayList<String>();
-        for(Value item : ((ValueList<Value>)value.getValue()))
+        for(Value<?> item : ((ValueList<Value<?>>)value.getValue()))
           values.add(item.toString());
         entity.setProperty(m_data.toPropertyName(value.getKey()), values);
       }

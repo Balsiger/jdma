@@ -323,7 +323,7 @@
     <javac srcdir="${source.dir}" destdir="${classes.dir}"
            deprecation="${warnings.deprecation}"
            debug="on" optimize="on" encoding="utf-8"
-           debuglevel="lines,vars,source" source="1.5">
+           debuglevel="lines,vars,source" source="1.7">
       <classpath>
         <path refid="classpath" />
       </classpath>

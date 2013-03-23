@@ -41,7 +41,6 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -157,6 +156,7 @@ public class AbstractEntry extends ValueGroup
    *
    * @param     <T> the type of the entry represented by this key
    */
+  @ParametersAreNonnullByDefault
   public static class EntryKey<T extends AbstractEntry>
   {
     /**
@@ -166,7 +166,7 @@ public class AbstractEntry extends ValueGroup
      * @param inType the type of the entry
      *
      */
-    public EntryKey(@Nonnull String inID, @Nonnull AbstractType<T> inType)
+    public EntryKey(String inID, AbstractType<T> inType)
     {
       m_id = inID;
       m_type = inType;
@@ -180,8 +180,8 @@ public class AbstractEntry extends ValueGroup
      * @param inParent the parent key for the entry
      *
      */
-    public EntryKey(@Nonnull String inID, @Nonnull AbstractType<T> inType,
-                    @Nonnull EntryKey<? extends AbstractEntry> inParent)
+    public EntryKey(String inID, AbstractType<T> inType,
+                    EntryKey<? extends AbstractEntry> inParent)
     {
       this(inID, inType);
 
@@ -189,20 +189,20 @@ public class AbstractEntry extends ValueGroup
     }
 
     /** The entry key. */
-    private @Nonnull AbstractType<T> m_type;
+    private AbstractType<T> m_type;
 
     /** The entry id. */
-    private @Nonnull String m_id;
+    private String m_id;
 
     /** The parent key, if any. */
-    private @Nullable EntryKey m_parent;
+    private @Nullable EntryKey<?> m_parent;
 
     /**
      * Get the id of the entry represented by this key.
      *
      * @return the entry id
      */
-    public @Nonnull String getID()
+    public String getID()
     {
       return m_id;
     }
@@ -213,7 +213,7 @@ public class AbstractEntry extends ValueGroup
      * @return the type
      *
      */
-    public @Nonnull AbstractType<T> getType()
+    public AbstractType<T> getType()
     {
       return m_type;
     }
@@ -224,7 +224,7 @@ public class AbstractEntry extends ValueGroup
      * @return the parent key or null if there is no parent
      *
      */
-    public @Nullable EntryKey getParent()
+    public @Nullable EntryKey<?> getParent()
     {
       return m_parent;
     }
@@ -236,7 +236,7 @@ public class AbstractEntry extends ValueGroup
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return (m_parent != null ? m_parent : "") + "/" + m_type + "/" + m_id;
     }
@@ -248,8 +248,8 @@ public class AbstractEntry extends ValueGroup
      *
      * @return  the converted key
      */
-    public static @Nullable EntryKey<? extends AbstractEntry> fromString
-      (@Nonnull String inText)
+    public static @Nullable EntryKey<? extends AbstractEntry>
+      fromString(String inText)
     {
       String []paths = inText.split("/");
       if(paths == null || paths.length == 0)
@@ -268,26 +268,26 @@ public class AbstractEntry extends ValueGroup
      *
      */
     @SuppressWarnings("unchecked") // creating wildard type
-    private static @Nullable EntryKey<? extends AbstractEntry>
-    fromString(@Nonnull String []inPaths, int inIndex)
+    private static @Nullable <T extends AbstractEntry> EntryKey<T>
+    fromString(String []inPaths, int inIndex)
     {
       if(inPaths.length <= inIndex || inIndex < 1)
         return null;
 
       String id = inPaths[inIndex--].replace("%20", " ");
-      AbstractType<? extends AbstractEntry> type =
+      AbstractType<T> type = (AbstractType<T>)
         AbstractType.getTyped(inPaths[inIndex].replace("%20", " "));
 
       if(type == null)
         return null;
 
-      EntryKey<? extends AbstractEntry> parent =
+      EntryKey<?> parent =
         fromString(inPaths, inIndex - 1);
 
       if(parent == null)
-        return new EntryKey(id, type);
+        return new EntryKey<T>(id, type);
 
-      return new EntryKey(id, type, parent);
+      return new EntryKey<T>(id, type, parent);
     }
 
     /**
@@ -309,7 +309,7 @@ public class AbstractEntry extends ValueGroup
       if(!(inOther instanceof EntryKey))
         return false;
 
-      EntryKey other = (EntryKey)inOther;
+      EntryKey<?> other = (EntryKey<?>)inOther;
       return m_id.equals(other.m_id) && m_type.equals(other.m_type)
         && ((m_parent == null && other.m_parent == null)
             || (m_parent != null && m_parent.equals(other.m_parent)));
@@ -341,7 +341,7 @@ public class AbstractEntry extends ValueGroup
    * @param  inType  the type of the entry
    *
    */
-  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  protected AbstractEntry(AbstractType<? extends AbstractEntry> inType)
   {
     m_type = inType;
 
@@ -367,8 +367,8 @@ public class AbstractEntry extends ValueGroup
    * @param       inType the type of the entry
    *
    */
-  protected AbstractEntry(@Nonnull String inName,
-                          @Nonnull AbstractType<? extends AbstractEntry> inType)
+  protected AbstractEntry(String inName,
+                          AbstractType<? extends AbstractEntry> inType)
   {
     this(inType);
 
@@ -401,8 +401,8 @@ public class AbstractEntry extends ValueGroup
    * @param       inBases the name of the base entries
    *
    */
-  protected AbstractEntry(@Nonnull AbstractType<? extends AbstractEntry> inType,
-                          @Nonnull String ... inBases)
+  protected AbstractEntry(AbstractType<? extends AbstractEntry> inType,
+                          String ... inBases)
   {
     this(inType);
 
@@ -422,9 +422,9 @@ public class AbstractEntry extends ValueGroup
    * @param       inBases the name of the base entries
    *
    */
-  protected AbstractEntry(@Nonnull String inName,
-                          @Nonnull AbstractType<? extends AbstractEntry> inType,
-                          @Nonnull String ... inBases)
+  protected AbstractEntry(String inName,
+                          AbstractType<? extends AbstractEntry> inType,
+                          String ... inBases)
   {
     this(inName, inType);
 
@@ -441,7 +441,7 @@ public class AbstractEntry extends ValueGroup
   //----- general values ---------------------------------------------------
 
    /** The entry type. */
-  protected @Nonnull AbstractType<? extends AbstractEntry> m_type;
+  protected AbstractType<? extends AbstractEntry> m_type;
 
   /** Flag if this entry has been changed but not saved. */
   protected boolean m_changed = false;
@@ -464,15 +464,15 @@ public class AbstractEntry extends ValueGroup
   private boolean m_computingExtension = false;
 
   /** The random generator. */
-  protected static final @Nonnull Random s_random = new Random();
+  protected static final Random s_random = new Random();
 
   /** The dashes to create comments. */
-  protected static final @Nonnull String s_hyphens =
+  protected static final String s_hyphens =
     "------------------------------------------------------------------------"
     + "-----";
 
   /** The dots to create comments. */
-  protected static final @Nonnull String s_dots =
+  protected static final String s_dots =
     "........................................................................"
     + "...";
 
@@ -497,7 +497,7 @@ public class AbstractEntry extends ValueGroup
     Config.get("resource:entries/comment.trailing.lines.max", 1);
 
   /** The name of the package for this class. */
-  protected static final @Nonnull String s_package =
+  protected static final String s_package =
     "net.ixitxachitls.dma.entries.";
 
   /** The maximal number of keywords to read for an entry. */
@@ -505,23 +505,23 @@ public class AbstractEntry extends ValueGroup
     Config.get("resource:entries/key.words", 2);
 
   /** The starter for the base name part. */
-  protected static final @Nonnull String s_baseStart =
+  protected static final String s_baseStart =
     Config.get("resource:entries/base.start", "[");
 
   /** The ending for the base name part. */
-  protected static final @Nonnull String s_baseEnd =
+  protected static final String s_baseEnd =
     Config.get("resource:entries/base.end", "]");
 
   /** The pattern to replace values in expressions. */
-  protected static final @Nonnull Pattern s_varPattern =
+  protected static final Pattern s_varPattern =
     Pattern.compile("\\$(\\w+)");
 
   /** The pattern for expressions. */
-  protected static final @Nonnull Pattern s_expPattern =
+  protected static final Pattern s_expPattern =
     Pattern.compile("\\[\\[(.*?)\\]\\]");
 
   /** All registered extension classes. */
-  protected static final @Nonnull
+  protected static final
     Set<Class<? extends AbstractExtension<? extends AbstractEntry>>>
     s_extensions =
     new HashSet<Class<? extends AbstractExtension<? extends AbstractEntry>>>();
@@ -535,17 +535,17 @@ public class AbstractEntry extends ValueGroup
   @Note("Changing the name will not change any references to entries with "
         + "that name, thus leaving these references dangling. You will have "
         + "to update these manually.")
-  protected BaseText<? extends BaseText> m_name = new Name();
+  protected BaseText<?> m_name = new Name();
 
   //........................................................................
   //----- comments ---------------------------------------------------------
 
   /** The leading comment(s) in front of the entry. */
-  protected @Nonnull Comment m_leadingComment =
+  protected Comment m_leadingComment =
     new Comment(s_maxLeadingComments, s_maxLeadingLines);
 
   /** The trailing comment(s) after the entry. */
-  protected @Nonnull Comment m_trailingComment =
+  protected Comment m_trailingComment =
     new Comment(s_maxTrailingComments, s_maxTrailingLines);
 
   //........................................................................
@@ -557,7 +557,7 @@ public class AbstractEntry extends ValueGroup
   /** The base names. */
   @Key("base")
   @PrintUndefined
-  protected @Nonnull ValueList<Name> m_base;
+  protected ValueList<Name> m_base;
 
   //........................................................................
 
@@ -566,9 +566,6 @@ public class AbstractEntry extends ValueGroup
   /** The file this entry will be written to. */
   @Deprecated
   protected @Nullable DMAFile m_file;
-
-//   /** The place this entry is stored in (not read). */
-//   protected Storage<AbstractEntry> m_storage = null;
 
   /** The starting position in the file (characters). */
   protected long m_startPos = 0;
@@ -582,112 +579,12 @@ public class AbstractEntry extends ValueGroup
   /** The ending position in the file (lines). */
   protected long m_endLine = 0;
 
-//   /** The possible ways of extracting a base value. */
-//   public enum Combine { FIRST, ADD, MODIFY, MINIMUM, MAXIMUM, };
-
-  //........................................................................
-
-  //----- combiners --------------------------------------------------------
-
-//   /** The combiner to keep the first defined value. */
-//   protected static final Combiner<String, String> COMBINER_KEEP_FIRST =
-//     new Combiner<String, String>()
-//     {
-//       public String combine(String inOld, String inNew)
-//       {
-//         // only keep the old value
-//         return inOld;
-//       }
-//     };
-
-//   protected static final Combiner<List<String>, String> COMBINER_LIST =
-//     new Combiner<List<String>, String>()
-//     {
-//       public List<String> combine(List<String> inOld, String inNew)
-//       {
-//         inOld.add(inNew);
-
-//         return inOld;
-//       }
-//     };
-
   //........................................................................
 
   static
   {
     extractVariables(AbstractEntry.class);
   }
-
-  //----- indices ----------------------------------------------------------
-
-  static
-  {
-//     // all the attachments
-//     s_indexes.add
-//       (new ExtractorIndex<ExtractorIndex>
-//        ("General", "Attachments", "attachments",
-//         new ExtractorIndex.Extractor()
-//         {
-//           public Object []get(AbstractEntry inEntry)
-//           {
-//             ArrayList<Object> values = new ArrayList<Object>();
-
-//             if(inEntry != null)
-//               for(Iterator<AbstractAttachment> i = inEntry.getAttachments();
-//                   i.hasNext(); )
-//                 values.add(i.next().getName());
-
-//             return values.toArray();
-//           }
-//         }, true, false));
-
-//     // the main index with all the types
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("Index", "Index", "index",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(inEntry == null)
-//                          return new Object [0];
-
-//                        return new Object []
-//                        { inEntry.getType().getMultiple().toLowerCase(), };
-//                     }
-//                    }, true, true));
-
-//     // the index with all the errors
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("General", "Errors", "errors",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(inEntry == null || inEntry.m_errors == null
-//                           || inEntry.m_errors.size() == 0)
-//                          return null;
-
-//                        return new Object [] { "index" };
-//                     }
-//                    }, true, false).withDataSource(Index.DataSource.dm));
-
-//     // the index with all the files
-//     s_indexes.add(new ExtractorIndex<ExtractorIndex>
-//                   ("General", "Files", "files",
-//                    new ExtractorIndex.Extractor()
-//                    {
-//                      public Object []get(AbstractEntry inEntry)
-//                      {
-//                        if(inEntry == null || inEntry.m_storage == null)
-//                          return new Object [0];
-
-//                        return new Object []
-//                        { inEntry.m_storage.getStorageName() };
-//                     }
-//                    }, false, false));
-  }
-
-  //........................................................................
 
   //........................................................................
 
@@ -703,9 +600,9 @@ public class AbstractEntry extends ValueGroup
    */
   @SuppressWarnings("unchecked")
   @Override
-  public @Nonnull EntryKey<? extends AbstractEntry> getKey()
+  public <T extends AbstractEntry> EntryKey<T> getKey()
   {
-    return new EntryKey(getName(), getType());
+    return new EntryKey<T>(getName(), (AbstractType<T>)getType());
   }
 
   //........................................................................
@@ -744,7 +641,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nonnull String getName()
+  public String getName()
   {
     if(m_name.isDefined())
       return m_name.get();
@@ -765,7 +662,7 @@ public class AbstractEntry extends ValueGroup
    * @return      A string of form 'base1:base2:entry|base3:base4:entry'
    *
    */
-  public @Nonnull String getQualifiedName()
+  public String getQualifiedName()
   {
 //     List<String> names = new ArrayList<String>();
 
@@ -824,7 +721,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nonnull List<BaseEntry> getBaseEntries()
+  public List<BaseEntry> getBaseEntries()
   {
     if(m_baseEntries == null)
     {
@@ -871,7 +768,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested name
    *
    */
-  public @Nonnull String getRefName()
+  public String getRefName()
   {
     return getName();
   }
@@ -889,7 +786,7 @@ public class AbstractEntry extends ValueGroup
    */
   @Override
   @Deprecated
-  public @Nonnull String getID()
+  public String getID()
   {
     return getName();
   }
@@ -904,9 +801,10 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nonnull AbstractType<? extends AbstractEntry> getType()
+  @SuppressWarnings("unchecked") // cast
+  public <T extends AbstractEntry> AbstractType<T> getType()
   {
-    return m_type;
+    return (AbstractType<T>)m_type;
   }
 
   //........................................................................
@@ -919,7 +817,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nonnull String getEditType()
+  public String getEditType()
   {
     return m_type.toString();
   }
@@ -953,9 +851,9 @@ public class AbstractEntry extends ValueGroup
    *
    */
   public boolean hasExtension
-    (@Nonnull Class<? extends AbstractExtension> inExtension)
+    (Class<? extends AbstractExtension<?>> inExtension)
   {
-    for(AbstractExtension extension : m_extensions.values())
+    for(AbstractExtension<?> extension : m_extensions.values())
       if(inExtension.isAssignableFrom(extension.getClass()))
          return true;
 
@@ -976,7 +874,7 @@ public class AbstractEntry extends ValueGroup
    * @undefined   IllegalArgumentException if no extension given
    *
    */
-  public boolean hasExtension(@Nonnull String inExtension)
+  public boolean hasExtension(String inExtension)
   {
     return m_extensions.keySet().contains(inExtension);
   }
@@ -992,7 +890,7 @@ public class AbstractEntry extends ValueGroup
    * @return  the extension found, if any
    *
    */
-  public @Nullable AbstractExtension getExtension(@Nonnull String inName)
+  public @Nullable AbstractExtension<?> getExtension(String inName)
   {
     return m_extensions.get(inName);
   }
@@ -1010,10 +908,10 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nullable <T extends AbstractExtension> T
-    getExtension(@Nonnull Class<T> inExtension)
+  public @Nullable <T extends AbstractExtension<?>> T
+    getExtension(Class<T> inExtension)
   {
-    for(AbstractExtension extension : m_extensions.values())
+    for(AbstractExtension<?> extension : m_extensions.values())
       if(inExtension.isAssignableFrom(extension.getClass()))
          return (T)extension;
 
@@ -1067,7 +965,7 @@ public class AbstractEntry extends ValueGroup
    * @return      an iterator over all errors or null if none
    *
    */
-  public @Nonnull Iterator<BaseError> getErrors()
+  public Iterator<BaseError> getErrors()
   {
     if(m_errors == null)
       return new EmptyIterator<BaseError>();
@@ -1270,7 +1168,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the associated files
    *
    */
-  public @Nonnull List<DMAData.File> getFiles()
+  public List<DMAData.File> getFiles()
   {
     if(m_files == null)
       m_files = DMADataFactory.get().getFiles(this);
@@ -1307,7 +1205,7 @@ public class AbstractEntry extends ValueGroup
    * @return
    *
    */
-  public @Nonnull FormattedText dmaValues()
+  public FormattedText dmaValues()
   {
     return new FormattedText(formatValues() + ".");
   }
@@ -1343,7 +1241,7 @@ public class AbstractEntry extends ValueGroup
       if(base != null)
         base.collect(inName, ioCombined);
 
-    for(AbstractExtension extension : m_extensions.values())
+    for(AbstractExtension<?> extension : m_extensions.values())
       extension.collect(inName, ioCombined);
   }
 
@@ -1355,7 +1253,7 @@ public class AbstractEntry extends ValueGroup
    * @return      a multi map of values per index name
    *
    */
-  public @Nonnull Multimap<Index.Path, String> computeIndexValues()
+  public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = HashMultimap.create();
     for(AbstractExtension<? extends AbstractEntry> extension
@@ -1472,7 +1370,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public int compareTo(@Nonnull AbstractEntry inOther)
+  public int compareTo(AbstractEntry inOther)
   {
     return getID().compareTo(inOther.getID());
   }
@@ -1490,7 +1388,7 @@ public class AbstractEntry extends ValueGroup
    *             given entry, false else
    *
    */
-  public boolean isBasedOn(@Nonnull BaseEntry inBase)
+  public boolean isBasedOn(BaseEntry inBase)
   {
     if(m_baseEntries == null)
       return false;
@@ -1515,7 +1413,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked")
-  public boolean isValueIn(@Nonnull String inValue, @Nonnull String inKey)
+  public boolean isValueIn(String inValue, String inKey)
   {
     if(super.isValueIn(inValue, inKey))
       return true;
@@ -1541,8 +1439,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nullable Boolean isValue(@Nonnull String inValue,
-                                   @Nonnull String inKey)
+  public @Nullable Boolean isValue(String inValue, String inKey)
   {
     Boolean result = super.isValue(inValue, inKey);
     if(result != null)
@@ -1572,7 +1469,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -1617,7 +1514,7 @@ public class AbstractEntry extends ValueGroup
    * @return      a String with a representation of all values
    *
    */
-  protected @Nonnull String formatValues()
+  protected String formatValues()
   {
     StringBuilder result = new StringBuilder();
 
@@ -1639,9 +1536,9 @@ public class AbstractEntry extends ValueGroup
    * @return      a map with all values by key
    *
    */
-  public Map<String, Value> getAllValues()
+  public Map<String, Value<?>> getAllValues()
   {
-    Map<String, Value> values = new HashMap<String, Value>();
+    Map<String, Value<?>> values = new HashMap<String, Value<?>>();
 
     Variables vars = getVariables();
 
@@ -1654,7 +1551,7 @@ public class AbstractEntry extends ValueGroup
          && !hasExtension(((ExtensionVariable)var).getExtension()))
         continue;
 
-      Value value = var.get(this);
+      Value<?> value = var.get(this);
 
       // We don't store this if we don't have a value.
       if(value == null) // || (!value.isDefined() && !value.hasExpression()))
@@ -1668,184 +1565,6 @@ public class AbstractEntry extends ValueGroup
 
   //........................................................................
 
-  //--------------------------------- print --------------------------------
-
-  /**
-   * Get the print object for printing this entry.
-   *
-   * @param       inDM   true if set for DM, false for player
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-//   public Command print(boolean inDM)
-//   {
-//     Print print = printValues(inDM, true);
-
-//     ArrayList<Object> result = new ArrayList<Object>();
-
-//     result.add(new Divider("center", new Command(commands.icons.toArray())));
-//     result.addAll(commands.header);
-//     result.addAll(commands.pre);
-//     result.addAll(commands.images);
-
-//     result.add(new Table("description", "f" + "Illustrations: ".length()
-//                          + ":L(desc-label);100:L(desc-text)",
-//                          commands.values.toArray()));
-//     result.add(new Divider("clear", ""));
-//     result.addAll(commands.post);
-
-//     if(commands.temp != null) {
-//       result.clear();
-//       result.addAll(commands.temp);
-//     }
-
-//     return new Divider(commands.type, new Command(result.toArray()));
-//     return null;
-//   }
-
-  //........................................................................
-  //------------------------- getShortPrintCommand -------------------------
-
-  /**
-   * Print the item to the document in a short way.
-   *
-   * @param       inDM   true if set for DM, false for player
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-//   public Command getShortPrintCommand(boolean inDM)
-//   {
-//     PrintCommand commands = shortPrintCommand(inDM);
-
-//     ArrayList<Object> result = new ArrayList<Object>();
-
-//     commands.values.addAll(commands.iconValues);
-
-//     result.addAll(commands.shortHeader);
-//     result.addAll(commands.pre);
-//     result.add(new Table("description", "f" + "Illustrations: ".length()
-//                          + ":L(desc-label);100:L(desc-text)",
-//                          commands.values.toArray()));
-//     result.add(new Divider("clear", ""));
-
-//     if(commands.temp != null)
-//       result.addAll(commands.temp);
-
-//     return new Divider(commands.type, new Command(result.toArray()));
-//   }
-
-  //........................................................................
-  //------------------------------ printValues -----------------------------
-
-  /**
-   * Collect the values for printing.
-   *
-   * @param       inDM       true if setting for dm, false if not
-   * @param       inEditable true if values are editable, false if not
-   *
-   * @return      the print object representing the values to print
-   *
-   */
-//   private @Nonnull Print printValues(boolean inDM, boolean inEditable)
-//   {
-//     Print values = new Print();
-
-//     commands.type = "abstract entry";
-
-    // images
-//     values.add("image", getType().getMultipleDir() + "/" + getID(), false,
-//                false, false, "images");
-
-//     String baseDir;
-//     if(isBase())
-//       baseDir = getType().getMultipleDir();
-//     else
-//       baseDir = ((Entry)this).getBaseType().getMultipleDir();
-
-//     for(String name : getBaseNames())
-//       commands.addValue("image", baseDir + "/" + name,
-//                         false, false, false, "images");
-
-//     Object name = createValueCommand(m_name, "name", inEditable);
-
-//     if(getType().getBaseType() != null && inDM || getType() == Product.TYPE)
-//       name = new Link(name,
-//                       "/entry/" + getType().getLink()
-//                       + "/" + getID());
-
-// //     // attachments
-// //     ValueList<SimpleText> attachments =
-// //       new ValueList<SimpleText>(new SimpleText());
-// //     for(String attachment : m_attachments.keySet())
-// //       attachments.add(new SimpleText(attachment));
-
-// //     commands.addValue("attachment", attachments, true, true, false,
-// //                       "attachments");
-
-
-//     commands.addValue("scripts", new Script
-//                       ("gui.addAction('Report', "
-//                        + "function() { "
-//                        + "document.location=\"mailto:dma@ixitxachitls.net?"
-//                        + "subject=Error Report for entry [" + getName()
-//                        + "]\" }, 'Send an error report about this page.');\n"
-//                        + "gui.addAction('Edit', gui.editAll, "
-//                        + "'Edit all the values on the page. "
-//                        + "Double-click or right-click to edit a single "
-//                        + "value.');\n"
-//                        + "gui.addAction('Save', "
-//                        + "function() { save('base', '" + m_type.toString()
-//                        + "'); }, "
-//                        + "'Save all the changes made.', 'save', 'hidden');\n"
-//                        + "gui.addAction('Reload', "
-//                        + "function() { "
-//                        + "reloadEntry('" + getID() + "', '" + m_type + "');"
-//                        + "}, 'Reload the current entry only, base entries "
-//                        + "will not be reloaded!');\n"), false, false, false,
-//                       "scripts");
-
-//     List<Object> subcommands = new ArrayList<Object>();
-//     if(m_baseEntries != null)
-//     {
-//       Iterator<String> names = m_baseNames.iterator();
-//       Iterator<BaseEntry> entries = m_baseEntries.iterator();
-
-//       while(true)
-//       {
-//         BaseEntry entry     = entries.next();
-//         String    entryName = names.next();
-
-//         if(entryName == null && entry == null)
-//           continue;
-
-//         if(entry == null)
-//           subcommands.add(new Link(entryName,
-//                                    "/entry/" + getType().getLink()
-//                                    + "/" + entryName));
-//         else
-//           subcommands.add(new Link(entryName,
-//                                    "/entry/" + entry.getType().getLink()
-//                                    + "/" + entry.getID()));
-
-//         if(names.hasNext() && entries.hasNext())
-//           subcommands.add(", ");
-//         else
-//           break;
-//       }
-//     }
-
-//   commands.addValue("base", new Command(subcommands.toArray()), false, true,
-//                       false, "bases");
-
-//     // file
-//     if(m_storage != null)
-
-//     return values;
-//   }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -1858,12 +1577,13 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  @Deprecated
+  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
   {
     if(inKey.contains(":"))
     {
       String []parts = inKey.split(":");
-      AbstractExtension extension = getExtension(parts[0]);
+      AbstractExtension<?> extension = getExtension(parts[0]);
       if(extension != null)
         return extension.computeValue(parts[1], inDM);
     }
@@ -1879,7 +1599,7 @@ public class AbstractEntry extends ValueGroup
     if("desc".equals(inKey))
     {
       List<Object> commands = new ArrayList<Object>();
-      ValueHandle subtitle = computeValue("subtitle", inDM);
+      ValueHandle<?> subtitle = computeValue("subtitle", inDM);
       if(subtitle != null)
         commands.add(subtitle.format(this, inDM, true));
 
@@ -1892,68 +1612,10 @@ public class AbstractEntry extends ValueGroup
                                 null, "desc");
     }
 
-    // if("image".equals(inKey))
-    // {
-    //   AbstractType<? extends AbstractEntry> type = getType();
-
-    //   for(DMAData.File file : getFiles())
-    //     if("main".equals(file.getName()))
-    //       return new FormattedValue
-    //         (new ImageLink(file.getIcon() + "=s300", "main",
-    //                        file.getPath(), "main")
-    //          .withID("file-main"), "main", "image")
-    //         .withEditable(true)
-    //         .withEditType("image");
-
-    //   return new FormattedValue
-    //     (new ImageLink("/icons/" + type.getMultipleLink()
-    //                    + "-dummy.png", "main",
-    //                    "/icons/" + type.getMultipleLink()
-    //                    + "-dummy.png", "main")
-    //      .withID("file-main"), "main", "image")
-    //     .withEditable(true)
-    //     .withEditType("image");
-    // }
-
     if("clear".equals(inKey))
       // we need a non empty string here, because when parsing trailing empty
       // arguments are ignored.
       return new FormattedValue(new Divider("clear", " "), null, "clear");
-
-    // if("files".equals(inKey))
-    // {
-    //   List<Command> commands = new ArrayList<Command>();
-    //   boolean first = true;
-    //   for(DMAData.File file : getFiles())
-    //   {
-    //     if(first && "main".equals(file.getName()))
-    //     {
-    //       first = false;
-    //       continue;
-    //     }
-
-    //     String uri;
-    //     if(file.getType().startsWith("image/"))
-    //       uri = file.getIcon() + "=s50";
-    //     else if("application/pdf".equals(file.getType()))
-    //       uri = "/icons/pdf.png";
-    //     else
-    //     {
-    //       Log.warning("unknown file '" + file + "' ignored");
-    //       continue;
-    //     }
-
-    //     commands.add(new Divider("file", new ImageLink(uri, file.getName(),
-    //                                                    file.getPath(),
-    //                                                    "file")));
-    //   }
-
-    //   return new FormattedValue
-    //     (new Divider("files", "files", new Command(commands)), "files", "files")
-    //     .withPlural("files")
-    //     .withEditable(true)
-    //     .withEditType("files");
-    // }
 
     if("errors".equals(inKey))
     {
@@ -2060,7 +1722,7 @@ public class AbstractEntry extends ValueGroup
                          + "||incomplete||light||magic||multiple||multiuse"
                          + "||timed||weapon||wearable");
 
-    ValueHandle value = super.computeValue(inKey, inDM);
+    ValueHandle<?> value = super.computeValue(inKey, inDM);
     if(value != null)
       return value;
 
@@ -2087,7 +1749,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("extensions".equals(inKey))
     {
@@ -2111,7 +1773,7 @@ public class AbstractEntry extends ValueGroup
     }
 
     // check extensions for a value
-    for(AbstractExtension extension : m_extensions.values())
+    for(AbstractExtension<?> extension : m_extensions.values())
     {
       Object value = extension.compute(inKey);
       if(value != null)
@@ -2171,7 +1833,7 @@ public class AbstractEntry extends ValueGroup
    * @return      the path to read this entry
    *
    */
-  public @Nonnull String getPath()
+  public String getPath()
   {
     return "/" + getType().getLink() + "/" + getName();
   }
@@ -2185,7 +1847,7 @@ public class AbstractEntry extends ValueGroup
    * @return      an array with pairs for caption and link per navigation entry
    *
    */
-  public @Nonnull String [] getNavigation()
+  public String [] getNavigation()
   {
     return new String [] {
       getType().getLink(), "/" + getType().getMultipleLink(),
@@ -2202,26 +1864,12 @@ public class AbstractEntry extends ValueGroup
    * @return      an array with pairs for caption and link per navigation entry
    *
    */
-  public @Nonnull String [] getListNavigation()
+  public String [] getListNavigation()
   {
     return new String [] {
       getType().getMultipleLink(), "/" + getType().getMultipleLink(),
     };
   }
-
-  //........................................................................
-  //------------------------- getShortDescription --------------------------
-
-  /**
-   * Get the short description of the entry.
-   *
-   * @return      the short description
-   *
-   */
-  //public @Nonnull String getShortDescription()
-  // {
-  //   return "";
-  // }
 
   //........................................................................
   //------------------------------- canEdit --------------------------------
@@ -2235,7 +1883,7 @@ public class AbstractEntry extends ValueGroup
    * @return      true if the value can be edited by the user, false if not
    *
    */
-  public boolean canEdit(@Nonnull String inKey, @Nonnull BaseCharacter inUser)
+  public boolean canEdit(String inKey, BaseCharacter inUser)
   {
     return inUser != null && inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
@@ -2251,7 +1899,7 @@ public class AbstractEntry extends ValueGroup
    * @return      true if the entry can be seen, false if not
    *
    */
-  public boolean isShownTo(@Nonnull BaseCharacter inUser)
+  public boolean isShownTo(BaseCharacter inUser)
   {
     return true;
   }
@@ -2270,8 +1918,8 @@ public class AbstractEntry extends ValueGroup
    * @return      the created key
    *
    */
-  public static @Nonnull <T extends AbstractEntry> EntryKey<T>
-    createKey(@Nonnull String inID, @Nonnull AbstractType<T> inType)
+  public static <T extends AbstractEntry> EntryKey<T>
+    createKey(String inID, AbstractType<T> inType)
   {
     return new EntryKey<T>(inID, inType);
   }
@@ -2294,16 +1942,17 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked")
-  public static @Nonnull <T extends AbstractEntry> EntryKey<T>
-    createKey(@Nonnull String inID, @Nonnull AbstractType<T> inType,
-              @Nullable String inParentID,
-              @Nullable AbstractType<? extends AbstractEntry> inParentType)
+  public static <T extends AbstractEntry, U extends AbstractEntry>
+    EntryKey<T> createKey
+    (String inID, AbstractType<T> inType,
+     @Nullable String inParentID,
+     @Nullable AbstractType<T> inParentType)
   {
     if(inParentID == null || inParentType == null)
       return createKey(inID, inType);
 
     return new EntryKey<T>(inID, inType,
-                           new EntryKey(inParentID, inParentType));
+                           new EntryKey<T>(inParentID, inParentType));
   }
 
   //........................................................................
@@ -2317,18 +1966,18 @@ public class AbstractEntry extends ValueGroup
    * @param       <V>           the real type of the value combined
    *
    */
-  @Override
-  public <V extends Value> void
-            adjustCombination(@Nonnull String inName,
-                              Combination<V> ioCombination)
-  {
-    // now ask all the extensions if they want to contribute something
-    for(AbstractExtension<? extends AbstractEntry> extension
-          : m_extensions.values())
-      extension.adjustCombination(inName, ioCombination);
+  // @Override
+  // public <V extends Value<?>> void
+  //           adjustCombination(String inName,
+  //                             Combination<V> ioCombination)
+  // {
+  //   // now ask all the extensions if they want to contribute something
+  //   for(AbstractExtension<? extends AbstractEntry> extension
+  //         : m_extensions.values())
+  //     extension.adjustCombination(inName, ioCombination);
 
-    super.adjustCombination(inName, ioCombination);
-  }
+  //   super.adjustCombination(inName, ioCombination);
+  // }
 
   //........................................................................
   //---------------------------- addModifiers ------------------------------
@@ -2341,8 +1990,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public void addModifiers(@Nonnull String inName,
-                           @Nonnull Map<String, Modifier> ioModifiers)
+  public void addModifiers(String inName, Map<String, Modifier> ioModifiers)
   {
     // add the modifiers from all base values
     for(BaseEntry base : getBaseEntries())
@@ -2373,8 +2021,7 @@ public class AbstractEntry extends ValueGroup
    */
   @Override
   public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions)
+    (String inName, List<Contribution<? extends Value<?>>> ioContributions)
   {
     super.addContributions(inName, ioContributions);
 
@@ -2382,7 +2029,7 @@ public class AbstractEntry extends ValueGroup
       if(base != null)
         base.addContributions(inName, ioContributions);
 
-    for(AbstractExtension extension : m_extensions.values())
+    for(AbstractExtension<?> extension : m_extensions.values())
       extension.addContributions(inName, ioContributions);
   }
 
@@ -2404,7 +2051,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @Override
-  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  public @Nullable String set(String inKey, String inText)
   {
     // we have to treat the name specially, as it is not a readable value
     if("name".equals(inKey))
@@ -2465,7 +2112,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked") // cast for name
-  public void setName(@Nonnull String inName)
+  public void setName(String inName)
   {
     m_name = m_name.as(inName);
     m_leadingComment = m_leadingComment.as("#----- " + m_name + "\n\n");
@@ -2484,7 +2131,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inComment the new comment
    *
    */
-  public void setLeadingComment(@Nonnull Comment inComment)
+  public void setLeadingComment(Comment inComment)
   {
     m_leadingComment = inComment;
   }
@@ -2498,7 +2145,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inComment the new comment
    *
    */
-  public void setTrailingComment(@Nonnull Comment inComment)
+  public void setTrailingComment(Comment inComment)
   {
     m_trailingComment = inComment;
   }
@@ -2512,7 +2159,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inKey the new key of the entry
    *
    */
-  public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
+  public void updateKey(EntryKey<? extends AbstractEntry> inKey)
   {
     // nothing to do here
   }
@@ -2527,7 +2174,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inOwner the owning entry
    *
    */
-  public void setOwner(@Nonnull AbstractEntry inOwner)
+  public void setOwner(AbstractEntry inOwner)
   {
     // abstract entries don't have an owner
   }
@@ -2635,7 +2282,7 @@ public class AbstractEntry extends ValueGroup
    */
   public void setupExtensions()
   {
-    for(AbstractExtension extension : m_extensions.values())
+    for(AbstractExtension<?> extension : m_extensions.values())
       for(String name
             : AbstractExtension.getAutoExtensions(extension.getClass()))
       {
@@ -2655,7 +2302,7 @@ public class AbstractEntry extends ValueGroup
         if(base == null)
           continue;
 
-        for(AbstractExtension extension : base.m_extensions.values())
+        for(AbstractExtension<?> extension : base.m_extensions.values())
           for(String name
                 : AbstractExtension.getAutoExtensions(extension.getClass()))
             if(!name.startsWith("base "))
@@ -2676,7 +2323,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked") // calling complete on base type
-  public static @Nullable AbstractEntry read(@Nonnull ParseReader inReader)
+  public static @Nullable AbstractEntry read(ParseReader inReader)
   {
     if(inReader.isAtEnd())
       return null;
@@ -2808,7 +2455,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked") // cast for name
-  protected boolean readEntry(@Nonnull ParseReader inReader)
+  protected boolean readEntry(ParseReader inReader)
   {
     if(inReader.isAtEnd())
       return false;
@@ -2848,7 +2495,7 @@ public class AbstractEntry extends ValueGroup
     //......................................................................
     //----- name -----------------------------------------------------------
 
-    BaseText<? extends BaseText> name = m_name.read(inReader);
+    BaseText<?> name = m_name.read(inReader);
     if(name != null)
       m_name = name;
 
@@ -2892,7 +2539,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inReader   the reader to read from
    *
    */
-  protected void readValues(@Nonnull ParseReader inReader)
+  protected void readValues(ParseReader inReader)
   {
     Variables variables = getVariables();
     while(!inReader.isAtEnd() && !inReader.expect(s_delimiter))
@@ -2938,7 +2585,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nullable AbstractExtension addExtension(@Nonnull String inName)
+  public @Nullable AbstractExtension<?> addExtension(String inName)
   {
     if(m_extensions.containsKey(inName) || inName.isEmpty())
       return null;
@@ -2959,13 +2606,13 @@ public class AbstractEntry extends ValueGroup
 
     try
     {
-      Class cls = Class.forName(Classes.toClassName
-                                (name,
-                                 "net.ixitxachitls.dma.entries.extensions"));
+      Class<?> cls = Class.forName(Classes.toClassName
+                                   (name,
+                                    "net.ixitxachitls.dma.entries.extensions"));
 
       // can't use the generic class type here, because generic class arrays
       // cannot be built
-      AbstractExtension extension = null;
+      AbstractExtension<?> extension = null;
 
       // find the constructor to use (getConstructor does not acceptably treat
       // derivations, unfortunately)
@@ -2975,7 +2622,7 @@ public class AbstractEntry extends ValueGroup
       for(int i = 0; i < names.length; i++)
         arguments[i + 1] = names[i];
 
-      loop : for(Constructor constructor : cls.getConstructors())
+      loop : for(Constructor<?> constructor : cls.getConstructors())
       {
         Class<?> []types = constructor.getParameterTypes();
 
@@ -3037,8 +2684,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   public void addExtension
-    (@Nonnull String inName,
-     @Nonnull AbstractExtension<? extends AbstractEntry> inExtension)
+    (String inName, AbstractExtension<? extends AbstractEntry> inExtension)
   {
     m_extensions.put(inName, inExtension);
   }
@@ -3052,7 +2698,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inNames the names of the extensions to add
    *
    */
-  protected void addExtensions(@Nonnull List<String> inNames)
+  protected void addExtensions(List<String> inNames)
   {
     addExtensions(inNames.iterator());
   }
@@ -3066,7 +2712,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inNames the names of the extensions to add
    *
    */
-  protected void addExtensions(@Nonnull Iterator<String> inNames)
+  protected void addExtensions(Iterator<String> inNames)
   {
     for(Iterator<String> i = inNames; i.hasNext(); )
       addExtension(i.next());
@@ -3083,7 +2729,7 @@ public class AbstractEntry extends ValueGroup
    *
    */
   @SuppressWarnings("unchecked") // need to cast to base entry
-  public void addBase(@Nonnull String inName)
+  public void addBase(String inName)
   {
     AbstractType<? extends AbstractEntry> baseType = getType().getBaseType();
     if(baseType instanceof Type)
@@ -3172,7 +2818,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inFile the file to add to
    *
    */
-  public void addTo(@Nonnull DMAFile inFile)
+  public void addTo(DMAFile inFile)
   {
     if(m_file != null)
     {
@@ -3241,7 +2887,7 @@ public class AbstractEntry extends ValueGroup
    * @param       inError the error to add
    *
    */
-  public void addError(@Nonnull BaseError inError)
+  public void addError(BaseError inError)
   {
     if(m_errors == null)
       m_errors = new ArrayList<BaseError>();
@@ -3258,12 +2904,12 @@ public class AbstractEntry extends ValueGroup
    * @param       inError the error to remove
    *
    */
-  protected void removeError(@Nonnull BaseError inError)
+  protected void removeError(BaseError inError)
   {
     if(m_errors == null)
       return;
 
-    for(Iterator i = m_errors.iterator(); i.hasNext(); )
+    for(Iterator<BaseError> i = m_errors.iterator(); i.hasNext(); )
       if(i.next() == inError)
         i.remove();
 
@@ -3325,8 +2971,8 @@ public class AbstractEntry extends ValueGroup
    * @return      the computed string
    *
    */
-  public @Nonnull String computeExpressions(@Nonnull String inText,
-                                            @Nullable Parameters inParameters)
+  public String computeExpressions(String inText,
+                                   @Nullable Parameters inParameters)
   {
     // TODO: make this more generic and move it to a separate class
     String text = inText;
@@ -3337,7 +2983,7 @@ public class AbstractEntry extends ValueGroup
       Matcher matcher = s_varPattern.matcher(text);
       while(matcher.find())
       {
-        Value value = inParameters.getValue(matcher.group(1));
+        Value<?> value = inParameters.getValue(matcher.group(1));
         if(value != null && value.isDefined())
           matcher.appendReplacement(result, value.toString().replace('$', '_'));
       }
@@ -3579,9 +3225,9 @@ public class AbstractEntry extends ValueGroup
                           (AbstractEntry.class)) {
           @SuppressWarnings("unchecked")
           @Override
-          public @Nonnull EntryKey<AbstractEntry> getKey()
+          public <T extends AbstractEntry> EntryKey<T> getKey()
           {
-            return new EntryKey("guru", BaseEntry.TYPE);
+            return new EntryKey<T>("guru", (AbstractType<T>)BaseEntry.TYPE);
           }
         };
 

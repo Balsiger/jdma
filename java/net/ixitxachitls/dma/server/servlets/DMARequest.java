@@ -27,14 +27,16 @@ package net.ixitxachitls.dma.server.servlets;
 // import java.io.InputStreamReader;
 // import java.net.URLDecoder;
 import java.util.Collection;
+import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
 import org.easymock.EasyMock;
@@ -65,6 +67,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 // from base class
+@ParametersAreNonnullByDefault
 public class DMARequest extends HttpServletRequestWrapper
 {
   //--------------------------------------------------------- constructor(s)
@@ -78,8 +81,8 @@ public class DMARequest extends HttpServletRequestWrapper
    * @param       inParams  the parameters to the request (URL & post)
    *
    */
-  public DMARequest(@Nonnull HttpServletRequest inRequest,
-                    @Nonnull Multimap<String, String> inParams)
+  public DMARequest(HttpServletRequest inRequest,
+                    Multimap<String, String> inParams)
   {
     super(inRequest);
 
@@ -107,7 +110,7 @@ public class DMARequest extends HttpServletRequestWrapper
   }
 
   /** The URL and post parameters. */
-  private @Nonnull Multimap<String, String> m_params;
+  private Multimap<String, String> m_params;
 
   /** Flag if the user has been extracted. */
   private boolean m_extractedUser = false;
@@ -117,6 +120,10 @@ public class DMARequest extends HttpServletRequestWrapper
 
   /** The user override for doing the request, if any. */
   private @Nullable BaseCharacter m_userOverride = null;
+
+  /** The cached entries for the request. */
+  private Map<AbstractEntry.EntryKey<?>, AbstractEntry> m_entries =
+    Maps.newHashMap();
 
   /** The player for the request, if any. */
 //   private Character m_player = null;
@@ -129,7 +136,7 @@ public class DMARequest extends HttpServletRequestWrapper
     Config.get("resource:html/product.page", 50);
 
   /** The attribute to use for the original path. */
-  public static final @Nonnull String ORIGINAL_PATH = "originalPath";
+  public static final String ORIGINAL_PATH = "originalPath";
 
   //........................................................................
 
@@ -217,7 +224,7 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      true if the parameter is there, false if not
    *
    */
-  public boolean hasParam(@Nonnull String inName)
+  public boolean hasParam(String inName)
   {
     return getParam(inName) != null;
   }
@@ -276,7 +283,7 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      the value of the parameter or null if not found
    *
    */
-  public @Nullable String getParam(@Nonnull String inName)
+  public @Nullable String getParam(String inName)
   {
     Collection<String> values = m_params.get(inName);
 
@@ -298,7 +305,7 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      the value of the parameter or null if not found
    *
    */
-  public @Nullable int getParam(@Nonnull String inName, int inDefault)
+  public @Nullable int getParam(String inName, int inDefault)
   {
     String value = getParam(inName);
 
@@ -324,7 +331,7 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      all the parameters
    *
    */
-  public @Nonnull Multimap<String, String> getParams()
+  public Multimap<String, String> getParams()
   {
     return m_params;
   }
@@ -338,7 +345,7 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return      the start index for pagination, starting with 0
    *
    */
-  public @Nonnull int getStart()
+  public int getStart()
   {
     return getParam("start", 0);
   }
@@ -456,13 +463,37 @@ public class DMARequest extends HttpServletRequestWrapper
    * @return  the original path
    *
    */
-  public @Nonnull String getOriginalPath()
+  public String getOriginalPath()
   {
     Object path = getAttribute(ORIGINAL_PATH);
     if(path != null)
       return path.toString();
 
     return getRequestURI();
+  }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get a cached entry from the request.
+   *
+   * @param       inKey the key of the entry to get
+   *
+   * @return      the entry found or null if none stored
+   *
+   */
+  @SuppressWarnings("unchecked") // need to cast result
+  public @Nullable <T extends AbstractEntry> T
+                      getEntry(AbstractEntry.EntryKey<T> inKey)
+  {
+    AbstractEntry entry = m_entries.get(inKey);
+    if(entry == null) {
+      entry = DMADataFactory.get().getEntry(inKey);
+      m_entries.put(inKey, entry);
+    }
+
+    return (T)entry;
   }
 
   //........................................................................

@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
@@ -61,7 +61,8 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class AbstractType<T extends AbstractEntry>
+@ParametersAreNonnullByDefault
+public class AbstractType<T extends AbstractEntry>
   implements Comparable<AbstractType<? extends AbstractEntry>>,
   java.io.Serializable
 {
@@ -75,7 +76,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @param       inClass the class represented by this type
    *
    */
-  public AbstractType(@Nonnull Class<T> inClass)
+  public AbstractType(Class<T> inClass)
   {
     this(inClass, Classes.fromClassName(inClass) + "s");
   }
@@ -90,7 +91,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @param       inMultiple the name to use for multiple entries of the type
    *
    */
-  public AbstractType(@Nonnull Class<T> inClass, @Nonnull String inMultiple)
+  public AbstractType(Class<T> inClass, String inMultiple)
   {
     m_name      = Classes.fromClassName(inClass).toLowerCase(Locale.US);
     m_class     = inClass;
@@ -129,8 +130,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the type for chaining
    *
    */
-  public @Nonnull AbstractType<T> withLink(@Nonnull String inLink,
-                                           @Nonnull String inMultipleLink)
+  public AbstractType<T> withLink(String inLink, String inMultipleLink)
   {
     m_link = inLink;
     m_multipleLink = inMultipleLink;
@@ -151,7 +151,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the type for chaining
    *
    */
-  public @Nonnull AbstractType<T> withSort(@Nonnull String inSort)
+  public AbstractType<T> withSort(String inSort)
   {
     m_sort = inSort;
 
@@ -165,22 +165,22 @@ public abstract class AbstractType<T extends AbstractEntry>
   //-------------------------------------------------------------- variables
 
   /** the name of the type. */
-  private @Nonnull String m_name;
+  private String m_name;
 
   /** the name for multiple instances of the type. */
-  private @Nonnull String m_multiple;
+  private String m_multiple;
 
   /** the class for the type. */
-  private @Nonnull Class m_class;
+  private Class<T> m_class;
 
   /** The class name without package. */
-  private @Nonnull String m_className;
+  private String m_className;
 
   /** The link to use to reference an entry of this type. */
-  private @Nonnull String m_link;
+  private String m_link;
 
   /** The link to use to reference multiple entries of this type. */
-  private @Nonnull String m_multipleLink;
+  private String m_multipleLink;
 
   /** The field to be used for sorting. */
   private @Nullable String m_sort = null;
@@ -216,7 +216,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the link
    *
    */
-  public @Nonnull String getLink()
+  public String getLink()
   {
     return m_link;
   }
@@ -230,7 +230,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the class name
    *
    */
-  public @Nonnull String getName()
+  public String getName()
   {
     return m_name;
   }
@@ -244,7 +244,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the class name
    *
    */
-  public @Nonnull String getClassName()
+  public String getClassName()
   {
     return m_className;
   }
@@ -258,7 +258,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the multiple name
    *
    */
-  public @Nonnull String getMultiple()
+  public String getMultiple()
   {
     return m_multiple;
   }
@@ -272,7 +272,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the multiple name
    *
    */
-  public @Nonnull String getMultipleLink()
+  public String getMultipleLink()
   {
     return m_multipleLink;
   }
@@ -286,7 +286,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    * @return      the multiple name as directory reference
    *
    */
-  public @Nonnull String getMultipleDir()
+  public String getMultipleDir()
   {
     return m_multiple.replaceAll(" ", "");
   }
@@ -303,8 +303,8 @@ public abstract class AbstractType<T extends AbstractEntry>
    *
    */
   @Deprecated
-  public static @Nullable AbstractType<? extends AbstractEntry>
-    get(@Nonnull String inName)
+  public static @Nullable
+    AbstractType<? extends AbstractEntry>get(String inName)
   {
     return s_types.get(inName);
   }
@@ -321,7 +321,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    *
    */
   public static @Nullable AbstractType<? extends AbstractEntry>
-    getLinked(@Nonnull String inName)
+    getLinked(String inName)
   {
     return s_types.get(inName);
   }
@@ -338,7 +338,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    *
    */
   public static @Nullable AbstractType<? extends AbstractEntry>
-    getTyped(@Nonnull String inName)
+    getTyped(String inName)
   {
     return s_typedTypes.get(inName);
   }
@@ -426,7 +426,7 @@ public abstract class AbstractType<T extends AbstractEntry>
    *
    */
   @Override
-public int hashCode()
+  public int hashCode()
   {
     return m_name.hashCode();
   }
@@ -441,7 +441,7 @@ public int hashCode()
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     return m_name;
   }
@@ -512,12 +512,12 @@ public @Nonnull String toString()
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nullable T create(@Nonnull String inID)
+  public @Nullable T create(String inID)
   {
     try
     {
       // create the object
-      return (T)m_class.getConstructor(String.class).newInstance(inID);
+      return m_class.getConstructor(String.class).newInstance(inID);
     }
     catch(java.lang.NoSuchMethodException e)
     {
@@ -565,7 +565,7 @@ public @Nonnull String toString()
        *
        * @param inClass the class of the type
        */
-      public TestType(@Nonnull Class<T> inClass)
+      public TestType(Class<T> inClass)
       {
         super(inClass);
       }
@@ -576,7 +576,7 @@ public @Nonnull String toString()
        * @param inClass the class of the type
        * @param inMultiple the text for multiple types
        */
-      public TestType(@Nonnull Class<T> inClass, String inMultiple)
+      public TestType(Class<T> inClass, String inMultiple)
       {
         super(inClass, inMultiple);
       }

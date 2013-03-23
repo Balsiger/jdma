@@ -36,8 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
@@ -80,6 +80,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class ValueGroup implements Changeable
 {
   //----------------------------------------------------------------- nested
@@ -221,17 +222,17 @@ public abstract class ValueGroup implements Changeable
   Config.get("resource:entries/key.indent", 2);
 
   /** The random generator. */
-  protected static final @Nonnull Random s_random = new Random();
+  protected static final Random s_random = new Random();
 
   /** All the variables for each individual derived class. */
-  protected static final @Nonnull Map<Class, Variables> s_variables =
-    new HashMap<Class, Variables>();
+  protected static final Map<Class<?>, Variables> s_variables =
+    new HashMap<Class<?>, Variables>();
 
   /** An empty set of values for all unknown classes. */
-  private static final @Nonnull Variables s_emptyVariables = new Variables();
+  private static final Variables s_emptyVariables = new Variables();
 
   /** All the indexes. */
-  protected static final @Nonnull Multimap<String, Index> s_indexes =
+  protected static final Multimap<String, Index> s_indexes =
     ArrayListMultimap.create();
 
   // TODO: make this not static and move to campaign.
@@ -258,7 +259,7 @@ public abstract class ValueGroup implements Changeable
    * @return      all the variables
    *
    */
-  public @Nonnull Variables getVariables()
+  public Variables getVariables()
   {
     Variables result = getVariables(this.getClass());
 
@@ -279,7 +280,7 @@ public abstract class ValueGroup implements Changeable
    * @return      all the variables
    *
    */
-  public static @Nullable Variables getVariables(@Nonnull Class inClass)
+  public static @Nullable Variables getVariables(Class<?> inClass)
   {
     return s_variables.get(inClass);
   }
@@ -295,7 +296,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the value for the key
    *
    */
-  public @Nullable Variable getVariable(@Nonnull String inKey)
+  public @Nullable Variable getVariable(String inKey)
   {
     return getVariables().getVariable(inKey);
   }
@@ -311,7 +312,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the value for the key
    *
    */
-  public @Nullable Value getValue(@Nonnull String inKey)
+  public @Nullable Value<?> getValue(String inKey)
   {
     Variable var = getVariable(inKey);
 
@@ -330,7 +331,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the requested name
    *
    */
-  public abstract @Nonnull AbstractType<? extends AbstractEntry> getType();
+  public abstract <T extends AbstractEntry> AbstractType<T> getType();
 
   //........................................................................
   //----------------------------- getEditType ------------------------------
@@ -341,7 +342,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the requested name
    *
    */
-  public abstract @Nonnull String getEditType();
+  public abstract String getEditType();
 
   //........................................................................
   //--------------------------------- link ---------------------------------
@@ -355,9 +356,8 @@ public abstract class ValueGroup implements Changeable
    * @return   a string for linking to the path
    *
    */
-  protected static @Nonnull String link
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull Index.Path inPath)
+  protected static String link
+    (AbstractType<? extends AbstractEntry> inType, Index.Path inPath)
   {
     return "/" + inType.getMultipleLink() + "/" + inPath.getPath() + "/";
   }
@@ -371,7 +371,7 @@ public abstract class ValueGroup implements Changeable
    * @return   the key for the entry
    *
    */
-  public @Nonnull AbstractEntry.EntryKey<? extends AbstractEntry> getKey()
+  public <T extends AbstractEntry> AbstractEntry.EntryKey<T> getKey()
   {
     throw new UnsupportedOperationException("must be derived");
   }
@@ -440,9 +440,9 @@ public abstract class ValueGroup implements Changeable
    *              not
    *
    */
-  public boolean matches(@Nonnull String inKey, @Nonnull String inValue)
+  public boolean matches(String inKey, String inValue)
   {
-    Value value = getValue(inKey);
+    Value<?> value = getValue(inKey);
     if(value == null)
       return false;
 
@@ -462,9 +462,9 @@ public abstract class ValueGroup implements Changeable
    *
    */
   @SuppressWarnings("unchecked")
-  public boolean isValueIn(@Nonnull String inValue, @Nonnull String inKey)
+  public boolean isValueIn(String inValue, String inKey)
   {
-    Value value = getValue(inKey);
+    Value<?> value = getValue(inKey);
     if(value == null)
       return false;
 
@@ -475,7 +475,7 @@ public abstract class ValueGroup implements Changeable
       return false;
     }
 
-    for(Value v : (ValueList<Value>)value)
+    for(Value<?> v : (ValueList<Value<?>>)value)
       if(inValue.equalsIgnoreCase(v.toString()))
         return true;
 
@@ -496,10 +496,9 @@ public abstract class ValueGroup implements Changeable
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nullable Boolean isValue(@Nonnull String inValue,
-                                   @Nonnull String inKey)
+  public @Nullable Boolean isValue(String inValue, String inKey)
   {
-    Value value = getValue(inKey);
+    Value<?> value = getValue(inKey);
     if(value == null || !value.isDefined())
       return null;
 
@@ -536,7 +535,7 @@ public abstract class ValueGroup implements Changeable
     *
     * @return      the name
     */
-  public abstract @Nonnull String getName();
+  public abstract String getName();
 
   //........................................................................
   //--------------------------------- getID --------------------------------
@@ -548,7 +547,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the requested id
    *
    */
-  public abstract @Nonnull String getID();
+  public abstract String getID();
 
   //........................................................................
   //------------------------------- getIndex -------------------------------
@@ -563,8 +562,7 @@ public abstract class ValueGroup implements Changeable
    *
    */
   public static @Nullable Index getIndex
-    (@Nonnull String inPath,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
+    (String inPath, AbstractType<? extends AbstractEntry> inType)
   {
     if(s_indexes.get(inPath) == null)
       return null;
@@ -600,7 +598,7 @@ public abstract class ValueGroup implements Changeable
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPrint()
+  protected Print getPrint()
   {
     return getPagePrint();
   }
@@ -614,7 +612,7 @@ public abstract class ValueGroup implements Changeable
    * @return the print for page printing
    *
    */
-  protected @Nonnull Print getPagePrint()
+  protected Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -628,7 +626,7 @@ public abstract class ValueGroup implements Changeable
    * @return the print for list entry
    *
    */
-  protected @Nonnull ListPrint getListPrint()
+  protected ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -642,7 +640,7 @@ public abstract class ValueGroup implements Changeable
    * @return the print for list entry
    *
    */
-  public @Nonnull String getListFormat()
+  public String getListFormat()
   {
     return getListPrint().getFormat();
   }
@@ -658,7 +656,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the command representing this item in a list
    *
    */
-  public @Nonnull Object printPage(@Nullable BaseCharacter inUser)
+  public Object printPage(@Nullable BaseCharacter inUser)
   {
     return getPagePrint().print(this, inUser);
   }
@@ -674,7 +672,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the command representing this item in a list
    *
    */
-  public @Nonnull Object print(@Nullable BaseCharacter inUser)
+  public Object print(@Nullable BaseCharacter inUser)
   {
     return getPrint().print(this, inUser);
   }
@@ -693,8 +691,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the command representing this item in a list
    *
    */
-  public @Nonnull List<Object> printList(@Nonnull String inKey,
-                                         @Nullable BaseCharacter inUser)
+  public List<Object> printList(String inKey, @Nullable BaseCharacter inUser)
   {
     return getListPrint().print(inKey, this, inUser);
   }
@@ -711,7 +708,7 @@ public abstract class ValueGroup implements Changeable
    * @return   the computed value
    *
    */
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     return getValue(inKey);
   }
@@ -728,7 +725,7 @@ public abstract class ValueGroup implements Changeable
    * @return    a value handle ready for printing
    *
    */
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
   {
     // use _ to denote using a variable name
     if(inKey.startsWith("_"))
@@ -748,9 +745,9 @@ public abstract class ValueGroup implements Changeable
    * @param       <V>           the real type of the values combined
    *
    */
-  public <V extends Value> void
-            adjustCombination(@Nonnull String inName,
-                              Combination<V> ioCombination)
+  @Deprecated
+  public <V extends Value<?>> void adjustCombination
+            (String inName, Combination<V> ioCombination)
   {
     // nothing to do
   }
@@ -766,7 +763,7 @@ public abstract class ValueGroup implements Changeable
    * @return      a mapping between location and modifier found
    *
    */
-  public Map<String, Modifier> collectModifiers(@Nonnull String inName)
+  public Map<String, Modifier> collectModifiers(String inName)
   {
     Map<String, Modifier> modifiers = new HashMap<String, Modifier>();
 
@@ -785,8 +782,7 @@ public abstract class ValueGroup implements Changeable
    * @param       ioModifers    the map of modifiers
    *
    */
-  public void addModifiers(@Nonnull String inName,
-                           @Nonnull Map<String, Modifier> inModifiers)
+  public void addModifiers(String inName, Map<String, Modifier> inModifiers)
   {
     // nothing to do
   }
@@ -817,10 +813,10 @@ public abstract class ValueGroup implements Changeable
    * @return
    *
    */
-  public @Nonnull List<Contribution<? extends Value>> collectContributions
-    (@Nonnull String inName)
+  public List<Contribution<? extends Value<?>>>
+                             collectContributions(String inName)
   {
-    List<Contribution<? extends Value>> contributions = Lists.newArrayList();
+    List<Contribution<? extends Value<?>>> contributions = Lists.newArrayList();
 
     addContributions(inName, contributions);
 
@@ -838,8 +834,7 @@ public abstract class ValueGroup implements Changeable
    *
    */
   public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions)
+    (String inName, List<Contribution<? extends Value<?>>> ioContributions)
   {
     // Value v = getValue(inName);
     // if(v != null && v.isDefined())
@@ -864,111 +859,6 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
-  //------------------------------- getCommand -----------------------------
-
-//   /**
-//    * Print the item to the document, in the general section.
-//    *
-//    * @param       inValues  all the values used for printing
-//    * @param       inCommand the command template to use for printing
-//    * @param       inDM      true if setting for dm, false if not
-//    *
-//    * @return      the command representing this item in a list
-//    *
-//    */
-//   public Command getCommand(PrintCommand inValues, Command inCommand,
-//                             boolean inDM)
-//   {
-//     return inCommand.transform(new ValueTransformer(inValues, inDM));
-//   }
-
-  //........................................................................
-
-  //--------------------------- createValueLabel ---------------------------
-
-  /**
-   * Create the command for a label of a value.
-   *
-   * @param       inKey the key of the value to create the label for
-   *
-   * @return      a window command for the label
-   *
-   */
-//   protected @Nonnull Window createValueLabel(@Nonnull String inKey)
-//   {
-//     return new Window(new Bold(Encodings.toWordUpperCase(inKey) + ":"),
-//                       Config.get("resource:help/labels/" + inKey,
-//                                  "please add " + inKey
-//                                  + " to help/labels.config"));
-//   }
-
-  //........................................................................
-  //--------------------- createHighlightedValueLabel ----------------------
-
-  /**
-   * Create the command for a label of a value.
-   *
-   * @param       inKey the key of the value to create the label for
-   * @param       inID  the id for highlighting
-   *
-   * @return      a window command for the label
-   *
-   */
-//  protected @Nonnull Window createHighlightedValueLabel(@Nonnull String inKey,
-//                                                         @Nonnull String inID)
-//   {
-//    return new Window(new Bold(new ID("highlight-" + inID,
-//                                     Encodings.toWordUpperCase(inKey) + ":")),
-//                       Config.get("resource:help/labels/" + inKey,
-//                                  "please add " + inKey
-//                                  + " to help/labels.config"));
-//   }
-
-  //........................................................................
-  //-------------------------- createValueCommand ---------------------------
-
-  /**
-   * Create the command for a value.
-   *
-   * @param       inValue    the value to add
-   * @param       inKey      the key of the value added
-   * @param       inEditable true if editable, false if not
-   *
-   * @return      the command to print the value
-   *
-   */
-//   protected @Nonnull Command createValueCommand(@Nonnull Value inValue,
-//                                                 @Nonnull String inKey,
-//                                                 boolean inEditable)
-//   {
-//     return createValueCommand(inValue, inKey, null, null, inEditable);
-//   }
-
-  //........................................................................
-  //-------------------------- createValueCommand --------------------------
-
-  /**
-   * Create the command for a value.
-   *
-   * @param       inValue    the value to add
-   * @param       inKey      the key of the value added
-   * @param       inType     the edit type of the value
-   * @param       inScript   any script code to associate with editable
-   * @param       inEditable true if the value can be edited, false if not
-   *
-   * @return      the command to print the value
-   *
-   */
-//   public @Nonnull Command createValueCommand(@Nonnull Value inValue,
-//                                              @Nonnull String inKey,
-//                                     @Nullable String inType,
-//                                              @Nullable String inScript,
-//                                     boolean inEditable)
-//   {
-//   }
-
-  //........................................................................
-
   //----------------------------- formatValues -----------------------------
 
   /**
@@ -982,8 +872,7 @@ public abstract class ValueGroup implements Changeable
    * @return      true if at least one value was printed, false else
    *
    */
-  protected boolean formatValues(@Nonnull StringBuilder inAppend,
-                                 boolean inFirst,
+  protected boolean formatValues(StringBuilder inAppend, boolean inFirst,
                                  int inKeyWidth)
   {
     Variables variables = getVariables();
@@ -997,7 +886,7 @@ public abstract class ValueGroup implements Changeable
       if(!var.hasVariable(this))
         continue;
 
-      Value value = var.get(this);
+      Value<?> value = var.get(this);
 
       // We don't store this if we don't have a value.
       if(value == null || (!value.isDefined() && !value.hasExpression()))
@@ -1052,7 +941,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the part of the string that could not be parsed
    *
    */
-  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  public @Nullable String set(String inKey, String inText)
   {
     Variable variable = getVariable(inKey);
 
@@ -1075,8 +964,7 @@ public abstract class ValueGroup implements Changeable
    * @return      true if read, faluse if not
    *
    */
-  protected boolean readVariable(@Nonnull ParseReader inReader,
-                                 @Nonnull Variable inVariable)
+  protected boolean readVariable(ParseReader inReader, Variable inVariable)
   {
     return inVariable.read(this, inReader);
   }
@@ -1094,8 +982,7 @@ public abstract class ValueGroup implements Changeable
    *
    */
   @SuppressWarnings("unchecked") // casting class for variable creation
-  protected static @Nonnull
-    List<Variable> extractClassVariables(@Nonnull Class inClass)
+  protected static List<Variable> extractClassVariables(Class<?> inClass)
   {
     List<Variable> variables = new ArrayList<Variable>();
 
@@ -1148,7 +1035,7 @@ public abstract class ValueGroup implements Changeable
     }
 
     // add all the variables of the parent class, if any
-    Class superClass = inClass.getSuperclass();
+    Class<?> superClass = inClass.getSuperclass();
 
     if(superClass != null)
     {
@@ -1173,7 +1060,7 @@ public abstract class ValueGroup implements Changeable
    * @param       inClass the class to extract from
    *
    */
-  protected static void extractVariables(@Nonnull Class inClass)
+  protected static void extractVariables(Class<?> inClass)
   {
     if(s_variables.containsKey(inClass))
       return;
@@ -1191,8 +1078,8 @@ public abstract class ValueGroup implements Changeable
    * @param       inExtensionClass the extension class to extract from
    *
    */
-  protected static void extractVariables(@Nonnull Class inEntryClass,
-                                         @Nonnull Class inExtensionClass)
+  protected static void extractVariables(Class<?> inEntryClass,
+                                         Class<?> inExtensionClass)
   {
     Variables variables = s_variables.get(inEntryClass);
 
@@ -1220,7 +1107,7 @@ public abstract class ValueGroup implements Changeable
    * @param    inIndex the index to add
    *
    */
-  protected static void addIndex(@Nonnull Index inIndex)
+  protected static void addIndex(Index inIndex)
   {
     s_indexes.put(inIndex.getPath(), inIndex);
   }
@@ -1328,8 +1215,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the value as it is in the configuration
    *
    */
-  public static @Nonnull String constant(@Nonnull String inGroup,
-                                         @Nonnull String inName)
+  public static String constant(String inGroup, String inName)
   {
     return constant(inGroup, inName, inName);
   }
@@ -1347,9 +1233,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the value as it is in the configuration
    *
    */
-  public static @Nonnull String constant(@Nonnull String inGroup,
-                                         @Nonnull String inName,
-                                         @Nonnull String inDefault)
+  public static String constant(String inGroup, String inName, String inDefault)
   {
     return Config.get("resource:" + CURRENT + "/" + inGroup + "."
                       + inName, inDefault);
@@ -1368,8 +1252,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the value as it is in the configuration
    *
    */
-  public static int constant(@Nonnull String inGroup, @Nonnull String inName,
-                             int inDefault)
+  public static int constant(String inGroup, String inName, int inDefault)
   {
     return Config.get("resource:" + CURRENT + "/" + inGroup + "."
                       + inName, inDefault);
@@ -1388,8 +1271,7 @@ public abstract class ValueGroup implements Changeable
    * @return      the value as it is in the configuration
    *
    */
-  public static boolean constant(@Nonnull String inGroup,
-                                 @Nonnull String inName,
+  public static boolean constant(String inGroup, String inName,
                                  boolean inDefault)
   {
     return Config.get("resource:" + CURRENT + "/" + inGroup + "."
@@ -1411,9 +1293,9 @@ public abstract class ValueGroup implements Changeable
    *
    */
   @SuppressWarnings("unchecked") // need to cast for type
-  public @Nullable <T extends Value>
-                      T sum(@Nonnull String inKey,
-                            @Nonnull List<? extends ValueGroup> inEntries)
+  @Deprecated
+  public @Nullable <T extends Value<T>>
+                      T sum(String inKey, List<? extends ValueGroup> inEntries)
   {
     T total = null;
     for(ValueGroup entry : inEntries)
@@ -1444,10 +1326,9 @@ public abstract class ValueGroup implements Changeable
    * @param     inPostfix the object to add after the value
    *
    */
-  public @Nonnull void maybeAddValue(@Nonnull List<Object> ioList,
-                                     @Nonnull String inKey, boolean inDM,
-                                     @Nullable Object inPrefix,
-                                     @Nullable Object inPostfix)
+  public void maybeAddValue(List<Object> ioList, String inKey, boolean inDM,
+                            @Nullable Object inPrefix,
+                            @Nullable Object inPostfix)
   {
     Object value = computeValue(inKey, inDM).format(this, inDM, true);
     if(value != null && !value.toString().isEmpty())
@@ -1474,8 +1355,8 @@ public abstract class ValueGroup implements Changeable
    * @return      the modified number for the value
    *
    */
-  public @Nonnull ModifiedNumber modified(@Nonnull String inName,
-                                          Modifier.Type ... inIgnore)
+  @Deprecated
+  public ModifiedNumber modified(String inName, Modifier.Type ... inIgnore)
   {
     Combination<Number> combination = new Combination<Number>(this, inName);
 
@@ -1514,8 +1395,7 @@ public abstract class ValueGroup implements Changeable
      * @return      a string representation of the desired command or argument
      *
      */
-    protected @Nonnull String extract(@Nonnull Object inCommand,
-                                      int ... inIndexes)
+    protected String extract(Object inCommand, int ... inIndexes)
     {
       return extract(inCommand, inIndexes, 0);
     }
@@ -1537,8 +1417,7 @@ public abstract class ValueGroup implements Changeable
      * @return      a string representation of the desired command or argument
      *
      */
-    protected @Nonnull String extract(@Nonnull Object inCommand,
-                                      int []inIndexes, int inStart)
+    protected String extract(Object inCommand, int []inIndexes, int inStart)
     {
       if(inStart >= inIndexes.length)
         return inCommand.toString();
@@ -1562,31 +1441,31 @@ public abstract class ValueGroup implements Changeable
     //......................................................................
 
     /** A simple implementation of a value group for testing. */
-    public static class TestGroup extends ValueGroup
+    public static class TestGroup extends AbstractEntry
     {
       /** The change state. */
       protected boolean m_changed = false;
 
       /** A simple value. */
       @Key("simple value")
-      protected Value m_value = new Value.Test.TestValue();
+      protected Value<?> m_value = new Value.Test.TestValue();
 
       /** A value for dms only. */
       @Key(value = "dm value")
       @DM
       @Plural("dms value")
       @NoStore
-      protected Value m_dmValue = new Value.Test.TestValue();
+      protected Value<?> m_dmValue = new Value.Test.TestValue();
 
       /** A value for players only. */
       @Key("player value")
       @PlayerOnly
-      protected Value m_playerValue = new Value.Test.TestValue();
+      protected Value<?> m_playerValue = new Value.Test.TestValue();
 
       /** A player editable value. */
       @Key("player editable")
       @PlayerEdit
-      protected Value m_playerEditableValue = new Value.Test.TestValue();
+      protected Value<?> m_playerEditableValue = new Value.Test.TestValue();
 
       /** Set the change state.
        *
@@ -1603,6 +1482,7 @@ public abstract class ValueGroup implements Changeable
        * @return the id
        */
       @Override
+      @Deprecated
       public String getID()
       {
         return "Test-ID";
@@ -1624,25 +1504,10 @@ public abstract class ValueGroup implements Changeable
        */
       @SuppressWarnings("unchecked") // unchecked creation
       @Override
-      public @Nonnull AbstractType<? extends AbstractEntry> getType()
+      public <T extends AbstractEntry> AbstractType<T> getType()
       {
-        return new BaseType(this.getClass());
+        return new AbstractType<T>((Class<T>)this.getClass());
       }
-
-      /** Combine all base results.
-       *
-       * @param inName the name of the value
-       * @param inDM true if formatting for the dm
-       * @param inInline true to format the value inline
-       * @return the combined value
-       */
-      // @Override
-      // public @Nonnull Command combineBaseValues(@Nonnull String inName,
-      //                                           boolean inDM,
-      //                                           boolean inInline)
-      // {
-      //   throw new UnsupportedOperationException("not implemented");
-      // }
 
       /**
        * Compute the maximal base value.
@@ -1650,8 +1515,8 @@ public abstract class ValueGroup implements Changeable
        * @param       inName the name of the value to add up
        * @return      the maximal base value found
        */
-      public @Nullable Pair<Value, BaseEntry>
-        maximalBaseValue(@Nonnull String inName)
+      public @Nullable Pair<Value<?>, BaseEntry>
+        maximalBaseValue(String inName)
       {
         throw new UnsupportedOperationException("not implemented");
       }
@@ -1662,8 +1527,8 @@ public abstract class ValueGroup implements Changeable
        * @param       inName the name of the value to add up
        * @return      the minimal base value found
        */
-      public @Nullable Pair<Value, BaseEntry>
-        minimalBaseValue(@Nonnull String inName)
+      public @Nullable Pair<Value<?>, BaseEntry>
+        minimalBaseValue(String inName)
       {
         throw new UnsupportedOperationException("not implemented");
       }
@@ -1674,7 +1539,7 @@ public abstract class ValueGroup implements Changeable
        * @return      the requested name
        */
       @Override
-      public @Nonnull String getEditType()
+      public String getEditType()
       {
         return "dummy";
       }

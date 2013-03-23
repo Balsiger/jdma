@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import java.lang.reflect.Field;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.Changeable;
@@ -53,6 +53,7 @@ import net.ixitxachitls.dma.values.Value;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class ExtensionVariable extends Variable
 {
   //--------------------------------------------------------- constructor(s)
@@ -71,10 +72,9 @@ public class ExtensionVariable extends Variable
    * @param       inPrintUndefined if printing the value when undefined
    *
    */
-  public ExtensionVariable
-    (@Nonnull Class<? extends AbstractExtension> inExtension,
-     @Nonnull String inKey, @Nonnull Field inField,
-     boolean inStored, boolean inPrintUndefined)
+  public ExtensionVariable(Class<? extends AbstractExtension<?>> inExtension,
+                           String inKey, Field inField, boolean inStored,
+                           boolean inPrintUndefined)
   {
     super(inKey, inField, inStored, inPrintUndefined);
 
@@ -88,7 +88,7 @@ public class ExtensionVariable extends Variable
   //-------------------------------------------------------------- variables
 
   /** The extension class for this variable. */
-  protected @Nonnull Class<? extends AbstractExtension> m_extension;
+  protected Class<? extends AbstractExtension<?>> m_extension;
 
   //........................................................................
 
@@ -105,12 +105,12 @@ public class ExtensionVariable extends Variable
    *
    */
   @Override
-  public @Nullable Value get(@Nonnull Object inEntry)
+  public @Nullable Value<?> get(Object inEntry)
   {
-    AbstractExtension extension = null;
+    AbstractExtension<?> extension = null;
 
     if(inEntry instanceof AbstractExtension)
-      extension = (AbstractExtension)inEntry;
+      extension = (AbstractExtension<?>)inEntry;
     else if(inEntry instanceof AbstractEntry)
       extension = ((AbstractEntry)inEntry).getExtension(m_extension);
 
@@ -121,7 +121,7 @@ public class ExtensionVariable extends Variable
 
     try
     {
-      return (Value)m_field.get(extension);
+      return (Value<?>)m_field.get(extension);
     }
     catch(java.lang.IllegalAccessException e)
     {
@@ -139,7 +139,7 @@ public class ExtensionVariable extends Variable
    * @return   the class of the extension
    *
    */
-  public @Nonnull Class<? extends AbstractExtension> getExtension()
+  public Class<? extends AbstractExtension<?>> getExtension()
   {
     return m_extension;
   }
@@ -156,7 +156,7 @@ public class ExtensionVariable extends Variable
    *
    */
   @Override
-  public boolean hasVariable(@Nonnull ValueGroup inEntry)
+  public boolean hasVariable(ValueGroup inEntry)
   {
     if(inEntry instanceof AbstractEntry)
       return ((AbstractEntry)inEntry).hasExtension(m_extension);
@@ -175,7 +175,7 @@ public class ExtensionVariable extends Variable
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return "extension " + super.toString();
   }
@@ -197,7 +197,7 @@ public class ExtensionVariable extends Variable
    *
    */
   @Override
-  public void set(@Nonnull Changeable inEntry, @Nonnull Value inValue)
+  public void set(Changeable inEntry, Value<?> inValue)
   {
     if(!(inEntry instanceof AbstractEntry))
     {
@@ -207,7 +207,7 @@ public class ExtensionVariable extends Variable
 
     try
     {
-      AbstractExtension extension =
+      AbstractExtension<?> extension =
         ((AbstractEntry)inEntry).getExtension(m_extension);
       if(extension == null)
         super.set(inEntry, inValue);

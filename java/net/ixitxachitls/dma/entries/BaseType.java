@@ -28,8 +28,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 
@@ -53,6 +53,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class BaseType<T extends BaseEntry> extends AbstractType<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -65,7 +66,7 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    * @param       inClass the class represented by this type
    *
    */
-  public BaseType(@Nonnull Class<T> inClass)
+  public BaseType(Class<T> inClass)
   {
     super(inClass);
   }
@@ -80,7 +81,7 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    * @param       inMultiple the name to use for multiple entries of the type
    *
    */
-  public BaseType(@Nonnull Class<T> inClass, @Nonnull String inMultiple)
+  public BaseType(Class<T> inClass, String inMultiple)
   {
     super(inClass, inMultiple);
   }
@@ -98,8 +99,7 @@ public class BaseType<T extends BaseEntry> extends AbstractType<T>
    *
    */
   @Override
-public @Nonnull BaseType<T> withLink(@Nonnull String inLink,
-                                       @Nonnull String inMultipleLink)
+  public BaseType<T> withLink(String inLink, String inMultipleLink)
   {
     super.withLink(inLink, inMultipleLink);
 
@@ -118,7 +118,7 @@ public @Nonnull BaseType<T> withLink(@Nonnull String inLink,
    *
    */
   @Override
-public @Nonnull BaseType<T> withSort(@Nonnull String inSort)
+  public BaseType<T> withSort(String inSort)
   {
     super.withSort(inSort);
 
@@ -153,8 +153,7 @@ public @Nonnull BaseType<T> withSort(@Nonnull String inSort)
    *              found.
    *
    */
-  public static @Nullable BaseType<? /*extends BaseEntry*/>
-    getType(String inName)
+  public static @Nullable BaseType<?> getType(String inName)
   {
     return s_types.get(inName);
   }
@@ -168,8 +167,7 @@ public @Nonnull BaseType<T> withSort(@Nonnull String inSort)
    * @return      all the non-base types
    *
    */
-  public static @Nonnull
-    Collection<BaseType<?/* extends BaseEntry*/>> getTypes()
+  public static Collection<BaseType<?>> getTypes()
   {
     return Collections.unmodifiableCollection(s_types.values());
   }

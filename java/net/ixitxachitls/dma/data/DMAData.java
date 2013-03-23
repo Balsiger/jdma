@@ -398,7 +398,7 @@ public interface DMAData
    * @return      true if removed, false if not
    *
    */
-  public abstract boolean remove(AbstractEntry.EntryKey inKey);
+  public abstract boolean remove(AbstractEntry.EntryKey<?> inKey);
 
   //........................................................................
   //---------------------------------- update -------------------------------

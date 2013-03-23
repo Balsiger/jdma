@@ -122,7 +122,7 @@ public class EntryServlet extends PageServlet
    */
   public boolean isPublic(DMARequest inRequest)
   {
-    AbstractEntry entry = getEntry(inRequest.getRequestURI());
+    AbstractEntry entry = getEntry(inRequest);
     return entry != null && entry.isBase();
   }
 
@@ -170,7 +170,7 @@ public class EntryServlet extends PageServlet
     else if(summary)
       path = path.substring(0, path.length() - 8);
 
-    AbstractEntry entry = getEntry(path);
+    AbstractEntry entry = getEntry(inRequest, path);
     if(entry != null && !entry.isShownTo(inRequest.getUser()))
     {
       data.put("content", inRenderer.render
@@ -302,7 +302,7 @@ public class EntryServlet extends PageServlet
                                                     SoyRenderer inRenderer)
   {
     BaseCharacter user = inRequest.getUser();
-    AbstractEntry entry = getEntry(inRequest.getRequestURI());
+    AbstractEntry entry = getEntry(inRequest);
 
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
@@ -438,7 +438,8 @@ public class EntryServlet extends PageServlet
           private static final long serialVersionUID = 1L;
 
           @Override
-          public @Nullable AbstractEntry getEntry(String inPath)
+          public @Nullable AbstractEntry getEntry(DMARequest inRequest,
+                                                  String inPath)
           {
             return inEntry;
           }
@@ -609,30 +610,31 @@ public class EntryServlet extends PageServlet
       EasyMock.replay(m_request, m_response);
 
       assertEquals("simple", "id",
-                   servlet.extractKey("/just/some/base entry/id").getID());
+                   extractKey("/just/some/base entry/id").getID());
 
-      assertNull("simple", servlet.extractKey("guru/id"));
+      assertNull("simple", extractKey("guru/id"));
       assertEquals("simple", "id.txt-some",
-                   servlet.extractKey("/just/some/base entry/id.txt-some")
+                   extractKey("/just/some/base entry/id.txt-some")
                    .getID());
-      assertNull("simple", servlet.extractKey("id"));
+      assertNull("simple", extractKey("id"));
 
       assertEquals("entry", "test",
-                   servlet.getEntry("/just/some/base entry/test").getName());
+                   servlet.getEntry(m_request, "/just/some/base entry/test")
+                   .getName());
       assertEquals("entry", "test",
-                   servlet.getEntry("/base entry/test").getName());
-      assertNull("entry", servlet.getEntry("test"));
-      assertNull("entry", servlet.getEntry(""));
-      assertNull("entry", servlet.getEntry("test/"));
-      assertNull("entry", servlet.getEntry("test/guru"));
+                   servlet.getEntry(m_request, "/base entry/test").getName());
+      assertNull("entry", servlet.getEntry(m_request, "test"));
+      assertNull("entry", servlet.getEntry(m_request, ""));
+      assertNull("entry", servlet.getEntry(m_request, "test/"));
+      assertNull("entry", servlet.getEntry(m_request, "test/guru"));
 
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.extractKey("/base entry/test").getType());
+                   extractKey("/base entry/test").getType());
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.extractKey("/just/some/base entry/test").getType());
+                   extractKey("/just/some/base entry/test").getType());
       assertEquals("type", net.ixitxachitls.dma.entries.BaseEntry.TYPE,
-                   servlet.extractKey("/base entry/test").getType());
-      assertNull("type", servlet.extractKey(""));
+                   extractKey("/base entry/test").getType());
+      assertNull("type", extractKey(""));
 
       EasyMock.verify(m_request, m_response);
     }
