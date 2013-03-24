@@ -197,6 +197,11 @@ DIV.subtitletext, DIV.subtitletext A
   background-image: url('/icons/icons-hover.png');
 }
 
+.sprite.disabled:hover
+{
+  background-image: url('/icons/icons.png');
+}
+
 .sprite.large
 {
   background-image: url('/icons/icons-large.png');

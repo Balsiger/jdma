@@ -24,6 +24,7 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -243,7 +244,7 @@ public class EntryServlet extends PageServlet
     AbstractType<? extends AbstractEntry> type = entry.getType();
     List<String> ids = DMADataFactory.get().getIDs(type, null);
 
-    int current = ids.indexOf(entry.getName());
+    int current = ids.indexOf(entry.getName().toLowerCase(Locale.US));
     int last = ids.size() - 1;
 
     String template;
@@ -269,6 +270,7 @@ public class EntryServlet extends PageServlet
       template = "dma.entry.container";
     }
 
+    System.out.println("current: " + current + " / " + ids);
     data.put
       ("content",
        inRenderer.render
