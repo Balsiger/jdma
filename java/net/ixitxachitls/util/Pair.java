@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.util;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -46,6 +46,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Pair<T1, T2>
 {
   //--------------------------------------------------------- constructor(s)
@@ -121,7 +122,7 @@ public class Pair<T1, T2>
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     return "<" + m_first + ", " + m_second + ">";
   }

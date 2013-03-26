@@ -25,8 +25,8 @@ package net.ixitxachitls.util;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -47,6 +47,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class SingleIterator<T> implements Iterator<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -103,7 +104,7 @@ public boolean hasNext()
    *
    */
   @Override
-public @Nonnull T next()
+  public T next()
   {
     if(m_element == null)
       throw new java.util.NoSuchElementException("no more elements");
@@ -129,7 +130,7 @@ public @Nonnull T next()
    *
    */
   @Override
-public void remove()
+  public void remove()
   {
     throw new UnsupportedOperationException("removes are not allowed");
   }

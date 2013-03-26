@@ -25,7 +25,7 @@ package net.ixitxachitls.util;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 
 //..........................................................................
@@ -48,6 +48,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class MultiIterator<T> implements Iterator<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -63,7 +64,7 @@ public class MultiIterator<T> implements Iterator<T>
    *
    */
   @SuppressWarnings("unchecked") // see below
-  public MultiIterator(@Nonnull Iterator<?> ... inIterators)
+  public MultiIterator(Iterator<?> ... inIterators)
   {
     // the following is VERY UGLY, but as far as I understood, there is no way
     // to create generic arrays... *sigh*
@@ -79,7 +80,7 @@ public class MultiIterator<T> implements Iterator<T>
   //-------------------------------------------------------------- variables
 
   /** The values iterated over. */
-  private @Nonnull Iterator<T> []m_iterators;
+  private Iterator<T> []m_iterators;
 
   /** The index of the current iterator used. */
   private int m_index = 0;

@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -89,8 +89,7 @@ public class TestCase extends org.junit.Assert
    * @param       inText    the text obtained
    *
    */
-  public void assertPattern(@Nonnull String inMessage,
-                            @Nonnull String inPattern, @Nonnull String inText)
+  public void assertPattern(String inMessage, String inPattern, String inText)
   {
     Matcher matcher =
       Pattern.compile(inPattern, Pattern.DOTALL).matcher(inText);
@@ -110,9 +109,8 @@ public class TestCase extends org.junit.Assert
    * @param    inExpected the objects expected
    *
    */
-  public void assertContentAnyOrder(@Nonnull String inMessage,
-                                    @Nonnull Iterable<?> inActual,
-                                    @Nonnull Object ... inExpected)
+  public void assertContentAnyOrder(String inMessage, Iterable<?> inActual,
+                                    Object ... inExpected)
   {
     List<Object> actual = new ArrayList<Object>();
     List<Object> expected = new ArrayList<Object>();
@@ -142,9 +140,8 @@ public class TestCase extends org.junit.Assert
    * @param    inExpected the objects expected
    *
    */
-  public void assertContent(@Nonnull String inMessage,
-                            @Nonnull Iterator<?> inActual,
-                            @Nonnull Object ... inExpected)
+  public void assertContent(String inMessage, Iterator<?> inActual,
+                            Object ... inExpected)
   {
     for(Object o : inExpected)
     {
@@ -177,9 +174,8 @@ public class TestCase extends org.junit.Assert
    * @param    inExpected the objects expected
    *
    */
-  public void assertContent(@Nonnull String inMessage,
-                            @Nonnull Iterable<?> inActual,
-                            @Nonnull Object ... inExpected)
+  public void assertContent(String inMessage, Iterable<?> inActual,
+                            Object ... inExpected)
   {
     assertContent(inMessage, inActual.iterator(), inExpected);
   }
@@ -195,9 +191,8 @@ public class TestCase extends org.junit.Assert
    * @param    inExpected the objects expected, as pairs of key/value
    *
    */
-  public void assertContent(@Nonnull String inMessage,
-                            @Nonnull Map<?, ?> inActual,
-                            @Nonnull Object ... inExpected)
+  public void assertContent(String inMessage, Map<?, ?> inActual,
+                            Object ... inExpected)
   {
     if(inActual.size() * 2 != inExpected.length)
       throw new org.junit.ComparisonFailure(inMessage, "" + inActual.size(),
@@ -231,32 +226,12 @@ public class TestCase extends org.junit.Assert
    * @param       inActual   the real value obtained
    *
    */
-   private void raiseFailure(@Nonnull String inMessage,
-                             @Nonnull List<?> inExpected,
-                             @Nonnull List<?> inActual)
+   private void raiseFailure(String inMessage, List<?> inExpected,
+                             List<?> inActual)
   {
     throw new org.junit.ComparisonFailure(inMessage, inExpected.toString(),
                                           inActual.toString());
   }
-
-  //........................................................................
-
-  //----------------------------- assertEquals -----------------------------
-
-  /**
-   * Check that the given object when converted to String matches the given
-   * string.
-   *
-   * @param       inMessage  the message
-   * @param       inExpected the expected string
-   * @param       inActual   the actual object computed
-   *
-   */
-//   public void assertEquals(String inMessage, String inExpected,
-//                            Object inActual)
-//   {
-//     assertEquals(inMessage, inExpected, inActual.toString());
-//   }
 
   //........................................................................
 
@@ -323,7 +298,7 @@ public class TestCase extends org.junit.Assert
    * @param       inEntry the entry to add
    *
    */
-  public void addEntry(@Nonnull AbstractEntry inEntry)
+  public void addEntry(AbstractEntry inEntry)
   {
     ((DMAData.Test.Data)DMADataFactory.get()).add(inEntry);
   }

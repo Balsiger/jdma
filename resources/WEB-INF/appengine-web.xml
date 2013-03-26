@@ -62,6 +62,6 @@
   </static-error-handlers>
 
   <admin-console>
-    <page name="DMA" url="/admin?user=Merlin" />
+    <page name="DMA" url="/admin" />
   </admin-console>
 </appengine-web-app>

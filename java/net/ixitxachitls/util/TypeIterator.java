@@ -25,7 +25,7 @@ package net.ixitxachitls.util;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 
 //..........................................................................
@@ -50,6 +50,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class TypeIterator<O, T extends O> implements Iterator<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -64,7 +65,7 @@ public class TypeIterator<O, T extends O> implements Iterator<T>
     *
     */
 
-  public TypeIterator(@Nonnull Iterator<O> inValues, @Nonnull Class<T> inType)
+  public TypeIterator(Iterator<O> inValues, Class<T> inType)
   {
     m_iterator = inValues;
     m_type     = inType;
@@ -77,13 +78,13 @@ public class TypeIterator<O, T extends O> implements Iterator<T>
   //-------------------------------------------------------------- variables
 
   /** The unterlying iterator. */
-  private @Nonnull Iterator<O> m_iterator;
+  private Iterator<O> m_iterator;
 
   /** The current element. */
   private T m_current;
 
   /** The type of the new destination iterator. */
-  private @Nonnull Class<T> m_type;
+  private Class<T> m_type;
 
   //........................................................................
 
@@ -134,7 +135,7 @@ public class TypeIterator<O, T extends O> implements Iterator<T>
    *
    */
   @Override
-public @Nonnull T next()
+  public T next()
   {
     if(!hasNext())
       throw new java.util.NoSuchElementException("already at end!");
@@ -160,7 +161,7 @@ public @Nonnull T next()
    *
    */
   @Override
-public void remove()
+  public void remove()
   {
     throw new UnsupportedOperationException("this iterator does no "
                                             + "support the removal of "

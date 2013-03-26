@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -50,6 +50,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class FileResource extends Resource
 {
   //--------------------------------------------------------- constructor(s)
@@ -63,7 +64,7 @@ public class FileResource extends Resource
    * @param    inURL  the url to the resource
    *
    */
-  FileResource(@Nonnull String inName, @Nullable URL inURL)
+  FileResource(String inName, @Nullable URL inURL)
   {
     super(inName, inURL);
   }
@@ -86,7 +87,7 @@ public class FileResource extends Resource
    *
    */
   @Override
-  public @Nonnull List<String> files()
+  public List<String> files()
   {
     List<String> result = new ArrayList<String>();
 
@@ -194,33 +195,6 @@ public class FileResource extends Resource
       assertFalse("writing", resource.write(output));
 
       m_logger.addExpected("WARNING: cannot obtain input stream for guru");
-    }
-
-    //......................................................................
-    //----- write ----------------------------------------------------------
-
-    /** The write Test. */
-    @org.junit.Test
-    public void writeHTML()
-    {
-      Resource resource =
-        new FileResource("/css/jdma.css",
-                         FileResource.class.getResource("/resource/css"));
-
-      ByteArrayOutputStream output = new ByteArrayOutputStream();
-      net.ixitxachitls.output.html.HTMLWriter writer =
-        new net.ixitxachitls.output.html.HTMLWriter
-        (new java.io.PrintWriter(output));
-
-      assertTrue("writing", resource.write(writer));
-      writer.close();
-      assertPattern("content", ".*A\\.Product:hover.*", output.toString());
-
-      // invalid resource
-      resource = new FileResource("guru", null);
-      assertFalse("writing", resource.write(writer));
-
-      m_logger.addExpected("WARNING: cannot obtain input stream for 'guru'");
     }
 
     //......................................................................

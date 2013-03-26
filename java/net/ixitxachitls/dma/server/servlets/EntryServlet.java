@@ -210,7 +210,6 @@ public class EntryServlet extends PageServlet
           entry = type.create(Entry.TEMPORARY + postfix);
           entry.updateKey(key);
 
-          entry.addBase(id);
           if(inRequest.hasParam("bases"))
             for(String base : inRequest.getParam("bases").split("\\s*,\\s*"))
               entry.addBase(base);
@@ -223,8 +222,6 @@ public class EntryServlet extends PageServlet
                   : inRequest.getParam("extensions").split("\\s*,\\s*"))
               if(extension != null && !extension.isEmpty())
                 entry.addExtension(extension);
-          else
-            entry.addBase(id);
 
           if(entry instanceof Entry)
             ((Entry)entry).complete();
@@ -270,7 +267,6 @@ public class EntryServlet extends PageServlet
       template = "dma.entry.container";
     }
 
-    System.out.println("current: " + current + " / " + ids);
     data.put
       ("content",
        inRenderer.render

@@ -60,6 +60,7 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.indexes.Index;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
@@ -194,7 +195,7 @@ public class DMADatastore implements DMAData
   {
     List<T> entries = new ArrayList<T>();
     Iterable<Entity> entities =
-      m_data.getEntities(inType.toString(), convert(inParent),
+      m_data.getEntities(escapeType(inType.toString()), convert(inParent),
                          inType.getSortField(), inStart, inSize);
 
     for(Entity entity : entities)
@@ -223,7 +224,8 @@ public class DMADatastore implements DMAData
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractType<T> inType, String inKey, String inValue)
   {
-    return (T)convert(m_data.getEntity(inType.toString(), inKey, inValue));
+    return (T)convert(m_data.getEntity(escapeType(inType.toString()),
+                                       inKey, inValue));
   }
 
   //........................................................................
@@ -312,8 +314,8 @@ public class DMADatastore implements DMAData
   public Multimap<String, String> getOwners(String inID)
   {
     Multimap<String, String> owners = HashMultimap.create();
-    for(Entity entity : m_data.getIDs(Product.TYPE.toString(), "base",
-                                      inID.toLowerCase(Locale.US)))
+    for(Entity entity : m_data.getIDs(escapeType(Product.TYPE.toString()),
+                                      "base", inID.toLowerCase(Locale.US)))
       owners.put(entity.getKey().getParent().getName(),
                  entity.getKey().getName());
 
@@ -761,28 +763,39 @@ public class DMADatastore implements DMAData
    */
   @Override
   @Deprecated // remove this once it has run over all base data
-    public int rename(AbstractType<? extends AbstractEntry> inType, int inSize)
+    public int refresh(AbstractType<? extends AbstractEntry> inType,
+                       DMARequest inRequest)
   {
-    Log.debug("renaming data for " + inType);
+    Log.debug("refresh data for " + inType);
 
     int count = 0;
-    for(int start = 0; count < inSize; start += inSize)
+    int chunk = 10;
+    for(int start = 0; count < 10000; start += chunk)
     {
+      if(inRequest.timeIsRunningOut())
+        break;
+
       List<Entity> entities =
-        m_data.getEntitiesList(inType.toString(), null, null, start, inSize);
+        m_data.getEntitiesList(inType.toString(), null, null, start, chunk);
 
       for(Entity entity : entities)
       {
-        Key key = entity.getKey();
-        if(key.getName().toLowerCase().equals(key.getName()))
+        if(inRequest.timeIsRunningOut())
+          break;
+
+        Entity converted  = convert(convert(entity));
+        if (equals(entity, converted))
           continue;
 
-        m_data.update(convert(convert(entity)));
-        m_data.remove(key);
+        m_data.update(converted);
+
+        if (!entity.getKey().equals(converted.getKey()))
+          m_data.remove(entity.getKey());
+
         count++;
       }
 
-      if(entities.size() < inSize)
+      if(entities.size() < chunk)
         break;
     }
 
@@ -794,6 +807,37 @@ public class DMADatastore implements DMAData
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  private boolean equals(Entity first, Entity second)
+  {
+    if(!first.equals(second))
+      return false;
+
+    if(!propertyEquals(first, second))
+      return false;
+
+    return true;
+  }
+
+  private boolean propertyEquals(Entity first, Entity second)
+  {
+    for(Map.Entry<String, Object> entry : first.getProperties().entrySet())
+    {
+      if("change".equals(entry.getKey()))
+        continue;
+
+      if(entry.getValue() != null
+         && (!second.hasProperty(entry.getKey())
+             || !entry.getValue().equals(second.getProperty(entry.getKey()))))
+        return false;
+    }
+
+    for(String key : second.getProperties().keySet())
+      if(!first.hasProperty(key))
+        return false;
+
+    return true;
+  }
 
   //------------------------------- convert --------------------------------
 
@@ -815,10 +859,11 @@ public class DMADatastore implements DMAData
     AbstractEntry.EntryKey<T> parent =
       (AbstractEntry.EntryKey<T>)inKey.getParent();
     if(parent != null)
-      return KeyFactory.createKey(convert(parent), inKey.getType().toString(),
+      return KeyFactory.createKey(convert(parent),
+                                  escapeType(inKey.getType().toString()),
                                   inKey.getID().toLowerCase(Locale.US));
     else
-      return KeyFactory.createKey(inKey.getType().toString(),
+      return KeyFactory.createKey(escapeType(inKey.getType().toString()),
                                   inKey.getID().toLowerCase(Locale.US));
   }
 
@@ -841,12 +886,14 @@ public class DMADatastore implements DMAData
     if(parent != null)
       return new AbstractEntry.EntryKey<T>
         (inKey.getName(),
-         (AbstractType<T>)AbstractType.getTyped(inKey.getKind()),
+         (AbstractType<T>)AbstractType
+         .getTyped(escapeType(inKey.getKind())),
          convert(parent));
 
     return new AbstractEntry.EntryKey<T>
       (inKey.getName(),
-       (AbstractType<T>)AbstractType.getTyped(inKey.getKind()));
+       (AbstractType<T>)AbstractType
+       .getTyped(escapeType(inKey.getKind())));
   }
 
   //........................................................................
@@ -951,7 +998,7 @@ public class DMADatastore implements DMAData
     Key key = inEntity.getKey();
     String id = key.getName();
     AbstractType<? extends AbstractEntry> type =
-      AbstractType.getTyped(key.getKind());
+      AbstractType.getTyped(unescapeType(key.getKind()));
 
     if(type == null || id == null)
     {
@@ -1001,7 +1048,13 @@ public class DMADatastore implements DMAData
     Entity entity = new Entity(convert(inEntry.getKey()));
     for(Map.Entry<String, Value<?>> value : inEntry.getAllValues().entrySet())
     {
-      if(value.getValue() instanceof ValueList)
+      if("base".equals(value.getKey()))
+      {
+        List<String> values = new ArrayList<String>();
+        for(Value<?> item : ((ValueList<Value<?>>)value.getValue()))
+          values.add(item.toString().toLowerCase(Locale.US));
+        entity.setProperty(m_data.toPropertyName(value.getKey()), values);
+      } else if(value.getValue() instanceof ValueList)
       {
         List<String> values = new ArrayList<String>();
         for(Value<?> item : ((ValueList<Value<?>>)value.getValue()))
@@ -1045,6 +1098,28 @@ public class DMADatastore implements DMAData
                        inEntry.getExtensionNames());
 
     return entity;
+  }
+
+  //........................................................................
+
+  //---------------------------- escapeType -----------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public String escapeType(String inType)
+  {
+    return inType.replace(" ", "_");
+  }
+
+  public String unescapeType(String inType)
+  {
+    return inType.replace("_", " ");
   }
 
   //........................................................................

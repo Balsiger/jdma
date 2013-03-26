@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -53,6 +53,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class JarResource extends Resource
 {
   //--------------------------------------------------------- constructor(s)
@@ -66,7 +67,7 @@ public class JarResource extends Resource
    * @param    inURL  the url to the resource
    *
    */
-  JarResource(@Nonnull String inName, @Nullable URL inURL)
+  JarResource(String inName, @Nullable URL inURL)
   {
     super(inName, inURL);
   }
@@ -90,7 +91,7 @@ public class JarResource extends Resource
    *
    */
   @Override
-public @Nonnull List<String> files()
+  public List<String> files()
   {
     List<String> result = new ArrayList<String>();
 
@@ -103,7 +104,7 @@ public @Nonnull List<String> files()
         new JarFile(Strings.getPattern(m_url.getFile(), "^file:(.*)!"));
       String dir = Strings.getPattern(m_url.getFile(), "^file:.*!/(.+)");
 
-      for(java.util.Enumeration i = jar.entries(); i.hasMoreElements(); )
+      for(java.util.Enumeration<?> i = jar.entries(); i.hasMoreElements(); )
       {
         ZipEntry file = (ZipEntry)i.nextElement();
 

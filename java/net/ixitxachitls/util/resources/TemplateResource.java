@@ -27,8 +27,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Charsets;
@@ -54,6 +54,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class TemplateResource extends FileResource
 {
   //--------------------------------------------------------- constructor(s)
@@ -68,8 +69,7 @@ public class TemplateResource extends FileResource
    * @param    inPrefix the prefix into the config for template values
    *
    */
-  TemplateResource(@Nonnull String inName, @Nullable URL inURL,
-                   @Nonnull String inPrefix)
+  TemplateResource(String inName, @Nullable URL inURL, String inPrefix)
   {
     super(inName, inURL);
 
@@ -83,7 +83,7 @@ public class TemplateResource extends FileResource
   //-------------------------------------------------------------- variables
 
   /** The prefix into the config for template values. */
-  private @Nonnull String m_prefix;
+  private String m_prefix;
 
   /** The contents of the file (caching). */
   private @Nullable String m_content;
@@ -109,8 +109,7 @@ public class TemplateResource extends FileResource
    * @return      the templated resource for this name
    *
    */
-  public static @Nonnull Resource get(@Nonnull String inName,
-                                      @Nonnull String inPrefix)
+  public static Resource get(String inName, String inPrefix)
   {
     String name = inName;
     if(!name.startsWith("/"))
@@ -142,7 +141,7 @@ public class TemplateResource extends FileResource
    *
    */
   @Override
-  public @Nonnull String read()
+  public String read()
   {
     if(m_content == null)
     {
@@ -175,7 +174,7 @@ public class TemplateResource extends FileResource
    *
    */
   @Override
-  public boolean write(@Nonnull OutputStream inOutput)
+  public boolean write(OutputStream inOutput)
   {
     read();
 

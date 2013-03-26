@@ -48,7 +48,7 @@
   Resetting indexes for type:
   <p>
     <select onchange="admin.resetIndexes(this.value)">
-      <option value="">plese select</option>
+      <option value="">please select</option>
       {foreach $type in $types}
         <option value="{$type}">{$type}</option>
       {/foreach}
@@ -59,10 +59,10 @@
 
   <a onclick="admin.clearCache()">Clear all DMA caches</a><br />
 
-  <h2>DMA ID Renaming</h2>
+  <h2>DMA Entry Refresh</h2>
   <p>
-    <select onchange="admin.renameIds(this.value)">
-      <option value="">plese select</option>
+    <select onchange="admin.refresh(this.value)">
+      <option value="">please select</option>
       {foreach $type in $types}
         <option value="{$type}">{$type}</option>
       {/foreach}

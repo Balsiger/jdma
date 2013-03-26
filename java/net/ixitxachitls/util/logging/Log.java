@@ -33,8 +33,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.util.configuration.Config;
 
@@ -200,7 +200,7 @@ public final class Log
      *
      * @return a space delimited string of types
      */
-    public @Nonnull String types()
+    public String types()
     {
       StringBuffer result = new StringBuffer(this.toString() + "--");
       for(Type type : Type.values())
@@ -266,7 +266,7 @@ public final class Log
    * @return      an iterator over all log messages
    *
    */
-  public static @Nonnull Iterator<Message> getLast()
+  public static Iterator<Message> getLast()
   {
     return s_last.iterator();
   }
@@ -308,7 +308,7 @@ public final class Log
     * @return      true if newly added, false if another logger was replaced
     *
     */
-  public static boolean add(@Nonnull String inName, @Nonnull String inLogger)
+  public static boolean add(String inName, String inLogger)
   {
     if(inLogger.isEmpty())
       return false;
@@ -352,7 +352,7 @@ public final class Log
    * @param       inMessage the message to add
    *
    */
-  public static synchronized void addMessage(@Nonnull Message inMessage)
+  public static synchronized void addMessage(Message inMessage)
   {
     s_last.addFirst(inMessage);
 
@@ -387,7 +387,7 @@ public final class Log
     *                      printed as well)
     *
     */
-  public static void setLevel(@Nonnull Type inLevel)
+  public static void setLevel(Type inLevel)
   {
     s_level = inLevel;
   }
@@ -402,7 +402,7 @@ public final class Log
     *                      printed as well)
     *
     */
-  public static void setLevel(@Nonnull String inLevel)
+  public static void setLevel(String inLevel)
   {
     s_level = Type.valueOf(inLevel);
   }
@@ -471,7 +471,7 @@ public final class Log
     * @param       inMessage the message to print
     *
     */
-  public static void event(@Nonnull String inUser, @Nonnull String inType,
+  public static void event(String inUser, String inType,
                            @Nullable String inMessage)
   {
     print(inUser + " - " + inType + " - " + inMessage, Type.EVENT);
@@ -932,7 +932,7 @@ public final class Log
     * @see         #print
     *
     */
-  private static void print(@Nullable Object inMessage, @Nonnull Type inType)
+  private static void print(@Nullable Object inMessage, Type inType)
   {
     if(inType.compareTo(s_level) > 0)
       return;
@@ -942,31 +942,6 @@ public final class Log
     for(Iterator<Logger> i = s_loggers.values().iterator(); i.hasNext(); )
       i.next().print(inMessage, inType);
   }
-
-  //........................................................................
-  //-------------------------------- print ---------------------------------
-
-  /**
-    * Print a message to all the registered loggers using the given type.
-    *
-    * @param       inMessage the message to print
-    * @param       inType    the message type printed
-    *
-    * @see         #fatal
-    * @see         #error
-    * @see         #warning
-    * @see         #necessary
-    * @see         #important
-    * @see         #useful
-    * @see         #info
-    * @see         #complete
-    * @see         #print
-    *
-    */
-//   private static void print(@Nullable Object inMessage, @Nonnull Type inType)
-//   {
-//     print(inMessage.toString(), inType);
-//   }
 
   //........................................................................
 
@@ -1013,7 +988,7 @@ public final class Log
        * @param inClass the class to ban
        *
        */
-      public void banClass(@Nonnull Class inClass)
+      public void banClass(Class<?> inClass)
       {
         banClass(inClass.getName());
       }
@@ -1038,7 +1013,7 @@ public final class Log
        * @param inClass the class to log
        *
        */
-      public void logClass(@Nonnull Class inClass)
+      public void logClass(Class<?> inClass)
       {
         logClass(inClass.getName());
       }
@@ -1049,7 +1024,7 @@ public final class Log
        * @param inClass the class to log
        *
        */
-      public void logClass(@Nonnull String inClass)
+      public void logClass(String inClass)
       {
         m_logged.add(inClass);
       }
@@ -1062,7 +1037,7 @@ public final class Log
        *
        */
       @Override
-      public void print(@Nullable String inText, @Nonnull Type inType)
+      public void print(@Nullable String inText, Type inType)
       {
         StackTraceElement []stack = new Throwable().getStackTrace();
 
@@ -1096,7 +1071,7 @@ public final class Log
        *
        */
       @Override
-      public void print(@Nonnull Object inObject, @Nonnull Type inType)
+      public void print(Object inObject, Type inType)
       {
          print(inObject.toString(), inType);
       }

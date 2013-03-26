@@ -258,26 +258,27 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
-    String ids = request.getParam("ids");
-    if(ids != null)
+    String refresh = request.getParam("refresh");
+    if(refresh != null)
     {
       // Set the output header.
       inResponse.setHeader("Content-Type", "text/html");
       inResponse.setHeader("Cache-Control", "max-age=0");
 
-      AbstractType<? extends AbstractEntry> type = AbstractType.getTyped(ids);
+      AbstractType<? extends AbstractEntry> type =
+        AbstractType.getTyped(refresh);
       if(type == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
-                             "Invalid type '" + reset + "'.");
+                             "Invalid type '" + refresh + "'.");
 
-      int size = DMADataFactory.get().rename(type, 100);
+      int size = DMADataFactory.get().refresh(type, request);
 
-      Log.event(user.getName(), "admin rename id",
-                size + "the ids of " + ids + " have been renamed.");
+      Log.event(user.getName(), "admin refresh " + refresh,
+                size + "the entries of " + refresh + " have been refreshed.");
 
       PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
-      writer.println("gui.info('" + size + " ids for " + ids
-                     + " have been renamed');");
+      writer.println("gui.info('" + size + " entries for " + refresh
+                     + " have been refreshed');");
       writer.close();
       return null;
     }

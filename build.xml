@@ -97,7 +97,7 @@
     <pathelement location="${classes.dir}" />
     <pathelement location="${resources.dir}" />
     <!-- guava -->
-    <pathelement location="${lib.dir}/guava-13.0.jar" />
+    <pathelement location="${lib.dir}/guava-14.0-rc1.jar" />
     <!-- for testing -->
     <pathelement location="${lib.test.dir}/junit-4.8.2.jar" />
     <pathelement location="${lib.test.dir}/cglib-nodep-2.2.jar" />

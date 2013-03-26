@@ -240,7 +240,7 @@
   {if $ij.user}
     <script>
       if(confirm('The desired entry does not exist!\n\n' +
-          'Do you want to create a new entry with id \'{$id}\'?))
+          'Do you want to create a new entry with id \'{$id}\'?'))
         location.href = location.href.replace(/\?.*$/, '') + '?create';
     </script>
   {/if}

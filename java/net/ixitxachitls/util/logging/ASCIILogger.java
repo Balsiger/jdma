@@ -27,8 +27,8 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.output.WrapBuffer;
@@ -73,6 +73,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public class ASCIILogger implements Logger
 {
   //--------------------------------------------------------- constructor(s)
@@ -97,7 +98,7 @@ public class ASCIILogger implements Logger
    * @param       inStream the stream to print to
    *
    */
-  public ASCIILogger(@Nonnull OutputStream inStream)
+  public ASCIILogger(OutputStream inStream)
   {
     this(inStream, def_format, def_width);
   }
@@ -128,8 +129,7 @@ public class ASCIILogger implements Logger
    *                       width)
    *
    */
-  public ASCIILogger(@Nonnull OutputStream inStream, @Nonnull String inFormat,
-                     int inWidth)
+  public ASCIILogger(OutputStream inStream, String inFormat, int inWidth)
   {
     m_out    = inStream;
     m_format = inFormat;
@@ -145,10 +145,10 @@ public class ASCIILogger implements Logger
   //-------------------------------------------------------------- variables
 
   /** Where to print to, defaults to System.out. */
-  protected @Nonnull OutputStream m_out;
+  protected OutputStream m_out;
 
   /** The format to use for printing. */
-  private @Nonnull String m_format;
+  private String m_format;
 
   /** The default format for printing. */
   protected static final String def_format =
@@ -192,7 +192,7 @@ public class ASCIILogger implements Logger
    * @return      the wrap buffer created
    *
    */
-  protected @Nonnull WrapBuffer getWrapBuffer(int inWidth)
+  protected WrapBuffer getWrapBuffer(int inWidth)
   {
     return new WrapBuffer(inWidth);
   }
@@ -216,7 +216,7 @@ public class ASCIILogger implements Logger
    *
    */
   @Override
-public void print(@Nonnull String inText, Log.Type inType)
+public void print(String inText, Log.Type inType)
   {
     // set the text to write to together
     String text = format(inText,  inType, m_format) + '\n';
@@ -243,7 +243,7 @@ public void print(@Nonnull String inText, Log.Type inType)
    *
    */
   @Override
-public void print(@Nonnull Object inObject, Log.Type inType)
+public void print(Object inObject, Log.Type inType)
   {
     print(inObject.toString(), inType);
   }
@@ -262,9 +262,8 @@ public void print(@Nonnull Object inObject, Log.Type inType)
    * @return      the formatted string
    *
    */
-  protected String format(@Nullable String inMessage,
-                          @Nullable Log.Type inType,
-                          @Nonnull String inFormat)
+  protected String format(@Nullable String inMessage, @Nullable Log.Type inType,
+                          String inFormat)
   {
     return format(inMessage, inType, inFormat, new GregorianCalendar());
   }
@@ -285,7 +284,7 @@ public void print(@Nonnull Object inObject, Log.Type inType)
    *
    */
   private String format(@Nullable String inMessage, @Nullable Log.Type inType,
-                        @Nonnull String inFormat, @Nonnull Calendar inCurrent)
+                        String inFormat, Calendar inCurrent)
   {
     // replace the appropriate texts in the given string
     String result = inFormat;

@@ -29,7 +29,7 @@ import java.net.URLConnection;
 import java.util.Date;
 import java.util.Random;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 import org.easymock.EasyMock;
@@ -56,6 +56,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public class Analytics
 {
   //----------------------------------------------------------------- nested
@@ -150,24 +151,24 @@ public class Analytics
   //-------------------------------------------------------------- variables
 
   /** The id to use when contacting Google analytics. */
-  private static final @Nonnull String s_id =
+  private static final String s_id =
     Config.get("web/analytics.id", "UA-1524401-1");
 
   /** The thread to use for tracking information. */
-  private final @Nonnull Tracker m_tracker;
+  private final Tracker m_tracker;
 
   /** Flag if tracker has been initialized. */
   private boolean m_init = false;
 
   /** A random number generator. */
-  private static final @Nonnull Random s_random = new Random();
+  private static final Random s_random = new Random();
 
   /** The host name tracked. */
-  private static final @Nonnull String s_hostName =
+  private static final String s_hostName =
     Config.get("web/host.name", "www.ixitxachitls.net");
 
   /** The base url for tracking. */
-  private static final @Nonnull String s_baseURL =
+  private static final String s_baseURL =
     "http://www.google-analytics.com/__utm.gif"
     + "?utmwv=1" // Google analytics version (4.3?)
     + "&utmhn=" + Encodings.urlEncode(s_hostName) // host name
@@ -200,7 +201,7 @@ public class Analytics
    * @param       inPage  the name of the page tracked
    *
    */
-  public void track(@Nonnull String inTitle, @Nonnull String inPage)
+  public void track(String inTitle, String inPage)
   {
     init();
 
@@ -223,7 +224,7 @@ public class Analytics
    * @return       a string with the cookie informaiton
    *
    */
-  private @Nonnull String createCookie()
+  private String createCookie()
   {
     int cookie = s_random.nextInt(2147483647) + 1;
     int random = s_random.nextInt(2147483647) + 1;
@@ -251,8 +252,8 @@ public class Analytics
    * @param       inValue  the value for the event
    *
    */
-  public void event(@Nonnull String inObject, @Nonnull String inAction,
-                    @Nonnull String inLabel, @Nonnull String inValue)
+  public void event(String inObject, String inAction, String inLabel,
+                    String inValue)
   {
     init();
 

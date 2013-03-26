@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.util.logging;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -42,6 +42,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class EventLogger extends FileLogger
 {
   //--------------------------------------------------------- constructor(s)
@@ -66,7 +67,7 @@ public class EventLogger extends FileLogger
     * @param       inName the name of the file to write to
     *
     */
-  public EventLogger(@Nonnull String inName)
+  public EventLogger(String inName)
   {
     this(inName, def_format);
   }
@@ -81,7 +82,7 @@ public class EventLogger extends FileLogger
     * @param       inFormat the format to use for printing
     *
     */
-  public EventLogger(@Nonnull String inName, @Nonnull String inFormat)
+  public EventLogger(String inName, String inFormat)
   {
     super(inName, inFormat);
   }
@@ -111,7 +112,7 @@ public class EventLogger extends FileLogger
     *
     */
   @Override
-public void print(@Nonnull String inText, @Nonnull Log.Type inType)
+  public void print(String inText, Log.Type inType)
   {
     // don't print status messages to file logs
     if(inType != Log.Type.EVENT)

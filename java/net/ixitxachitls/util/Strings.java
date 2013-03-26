@@ -35,8 +35,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 import com.google.common.base.Joiner;
@@ -63,6 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public final class Strings
 {
   //--------------------------------------------------------- constructor(s)
@@ -139,7 +140,7 @@ public final class Strings
   private static final Pattern s_template = Pattern.compile("\\$(\\w+)");
 
   /** All the white spaces. */
-  private final static @Nonnull String s_whites =
+  private final static String s_whites =
     Config.get("resource:parser/white.spaces", " \t\r\n\f");
 
   /** The joiner to convert with newlines. */
@@ -168,7 +169,7 @@ public final class Strings
     * @return      the request String consisting of spaces only
     *
     */
-  public static @Nonnull String spaces(int inLength)
+  public static String spaces(int inLength)
   {
     if(inLength >= s_spaces.length())
       throw new IllegalArgumentException("given length to high, check code");
@@ -193,8 +194,7 @@ public final class Strings
     * @return      the object converted to a String or the default value
     *
     */
-  public static @Nonnull String toString(@Nullable Object inValue,
-                                         @Nonnull String inDefault)
+  public static String toString(@Nullable Object inValue, String inDefault)
   {
     if(inValue == null)
       return inDefault;
@@ -250,9 +250,8 @@ public final class Strings
     * @return      the object converted to a String or the default value
     *
     */
-  public static @Nonnull String toString(@Nullable Iterator inIterator,
-                                         @Nonnull String inDelimiter,
-                                         @Nonnull String inDefault)
+  public static String toString(@Nullable Iterator<?> inIterator,
+                                String inDelimiter, String inDefault)
   {
     if(inIterator == null)
       return inDefault;
@@ -283,9 +282,8 @@ public final class Strings
     * @return      the object converted to a String or the default value
     *
     */
-  public static @Nonnull String toString(@Nullable Iterable inIterable,
-                                         @Nonnull String inDelimiter,
-                                         @Nonnull String inDefault)
+  public static String toString(@Nullable Iterable<?> inIterable,
+                                String inDelimiter, String inDefault)
   {
     if(inIterable == null)
       return inDefault;
@@ -308,7 +306,7 @@ public final class Strings
     * @example     String matched = Files.getPattern("my text", "t.*t");
     *
     */
-  public static @Nullable String getPattern(@Nonnull String inText,
+  public static @Nullable String getPattern(String inText,
                                             @Nullable String inPattern)
   {
     if(inPattern == null)
@@ -339,8 +337,7 @@ public final class Strings
    * @return      the texts that matched
    *
    */
-  public static @Nonnull String []getPatterns(@Nonnull String inText,
-                                              @Nullable String inPattern)
+  public static String []getPatterns(String inText, @Nullable String inPattern)
   {
     if(inPattern == null)
       return new String [] { inText };
@@ -385,8 +382,7 @@ public final class Strings
    * @example     String replaced = Files.replaceTemplate("my text");
    *
    */
-  public static @Nonnull String replaceTemplates(@Nonnull String inText,
-                                                 @Nonnull String inPrefix)
+  public static String replaceTemplates(String inText, String inPrefix)
   {
     // check if we have a name
     Matcher matcher = s_template.matcher(inText);
@@ -424,8 +420,7 @@ public final class Strings
     * @return      the padded String
     *
     */
-  public static @Nonnull String pad(@Nonnull String inText, int inLength,
-                                    boolean inLeft)
+  public static String pad(String inText, int inLength, boolean inLeft)
   {
     if(inText.length() >= inLength)
       return inText;
@@ -451,7 +446,7 @@ public final class Strings
     * @return      the padded String
     *
     */
-  public static @Nonnull String pad(long inNumber, int inLength, boolean inLeft)
+  public static String pad(long inNumber, int inLength, boolean inLeft)
   {
     String text = Long.toString(inNumber);
 
@@ -478,8 +473,7 @@ public final class Strings
    * @return      the limited string
    *
    */
-  public static @Nonnull String limit(@Nonnull String inText, int inLength,
-                                      @Nonnull String inDelimiter)
+  public static String limit(String inText, int inLength, String inDelimiter)
   {
     int length = inText.indexOf(inDelimiter);
 
@@ -508,7 +502,7 @@ public final class Strings
    * @undefined   never
    *
    */
-  public static @Nonnull String format(long inNumber)
+  public static String format(long inNumber)
   {
     return s_number.format(inNumber);
   }
@@ -526,7 +520,7 @@ public final class Strings
    * @undefined   never
    *
    */
-  public static @Nonnull String format(double inNumber)
+  public static String format(double inNumber)
   {
     return s_number.format(inNumber);
   }
@@ -545,7 +539,7 @@ public final class Strings
    * @return      the trimmed text
    *
    */
-  public static @Nonnull String trim(@Nullable String inText)
+  public static String trim(@Nullable String inText)
   {
     if(inText == null || inText.length() == 0)
       return "";
@@ -569,7 +563,7 @@ public final class Strings
    * @return      the signed string
    *
    */
-  public static @Nonnull String signedNumber(long inNumber)
+  public static String signedNumber(long inNumber)
   {
     if(inNumber >= 0)
       return "+" + inNumber;
@@ -590,7 +584,7 @@ public final class Strings
     * @return      the switched name, in the form 'last, first'
     *
     */
-  public static @Nonnull String nameLF(@Nonnull String inName)
+  public static String nameLF(String inName)
   {
     String []parts = inName.split("\\s+");
 
@@ -617,7 +611,7 @@ public final class Strings
     * @return      the switched name, in the form 'first last'
     *
     */
-  public static @Nonnull String nameFL(@Nonnull String inName)
+  public static String nameFL(String inName)
   {
     String []parts = inName.split(",");
 
@@ -642,7 +636,7 @@ public final class Strings
     * @return      A string with the current date
     *
     */
-  public static @Nonnull String today()
+  public static String today()
   {
     SimpleDateFormat formatter = new SimpleDateFormat(DATE);
     formatter.setTimeZone(TimeZone.getTimeZone("Europe/Zurich"));
@@ -694,7 +688,7 @@ public final class Strings
     * @return      the formatted string
     *
     */
-  public static @Nonnull String formatNumber(long inNumber)
+  public static String formatNumber(long inNumber)
   {
     StringBuffer result = new StringBuffer("" + inNumber);
 
@@ -717,7 +711,7 @@ public final class Strings
    * @return      the given object or the empty string if null is given
    *
    */
-  public static @Nonnull Object handleNull(@Nullable Object inObject)
+  public static Object handleNull(@Nullable Object inObject)
   {
     if(inObject == null)
       return "";
@@ -738,8 +732,7 @@ public final class Strings
    * @return      the sorted list
    *
    */
-  public static @Nonnull List<String> sort(@Nonnull List<String> inList,
-                                           @Nonnull final String ... inOrder)
+  public static List<String> sort(List<String> inList, final String ... inOrder)
   {
     Collections.sort(inList, new Comparator<String>()
                      {
@@ -784,7 +777,7 @@ public final class Strings
    * @return      the sortable text
    *
    */
-  public static @Nonnull String sortable(@Nonnull String inText)
+  public static String sortable(String inText)
   {
     // check if we have a number
     Matcher matcher = Pattern.compile("(\\d+)").matcher(inText);
@@ -814,7 +807,7 @@ public final class Strings
    *              given, this can be empty)
    *
    */
-  public static @Nonnull String cssClasses(@Nonnull Object ... inClasses)
+  public static String cssClasses(Object ... inClasses)
   {
     List<String> classes = new java.util.ArrayList<String>();
 

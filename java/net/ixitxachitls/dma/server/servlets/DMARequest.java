@@ -28,6 +28,7 @@ package net.ixitxachitls.dma.server.servlets;
 // import java.net.URLDecoder;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Date;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -124,6 +125,9 @@ public class DMARequest extends HttpServletRequestWrapper
   /** The cached entries for the request. */
   private Map<AbstractEntry.EntryKey<?>, AbstractEntry> m_entries =
     Maps.newHashMap();
+
+  /** The date when the request was started. */
+  private Date m_start = new Date();
 
   /** The player for the request, if any. */
 //   private Character m_player = null;
@@ -494,6 +498,22 @@ public class DMARequest extends HttpServletRequestWrapper
     }
 
     return (T)entry;
+  }
+
+  //........................................................................
+  //--------------------------- timeIsRunningOUt ---------------------------
+
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public boolean timeIsRunningOut()
+  {
+    return new Date().getTime() - m_start.getTime() > 55 * 1000;
   }
 
   //........................................................................

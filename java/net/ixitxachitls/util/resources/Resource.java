@@ -35,8 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Files;
@@ -60,6 +60,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class Resource
 {
   //------------------------------------------------------------ constructor
@@ -73,7 +74,7 @@ public abstract class Resource
    * @param       inURL  the url to the resource
    *
    */
-  public Resource(@Nonnull String inName, @Nullable URL inURL)
+  public Resource(String inName, @Nullable URL inURL)
   {
     m_name = inName;
     m_url = inURL;
@@ -86,7 +87,7 @@ public abstract class Resource
   //-------------------------------------------------------------- variables
 
   /** The name of the resouce. */
-  protected @Nonnull String m_name;
+  protected String m_name;
 
   /** The url of the resource. */
   protected @Nullable URL m_url;
@@ -109,7 +110,7 @@ public abstract class Resource
    * @return    a list of filenames inside this resource.
    *
    */
-  public abstract @Nonnull List<String> files();
+  public abstract List<String> files();
 
   //........................................................................
   //------------------------------- toString -------------------------------
@@ -142,7 +143,7 @@ public abstract class Resource
    * @return      the resource for this name
    *
    */
-  public static @Nonnull Resource get(@Nonnull String inName)
+  public static Resource get(String inName)
   {
     String name = inName;
 
@@ -253,7 +254,7 @@ public abstract class Resource
    * @return      the contents as a string
    *
    */
-  public @Nonnull String read()
+  public String read()
   {
     InputStream input = getInput();
     if(input == null)
@@ -309,7 +310,7 @@ public abstract class Resource
    * @return      true if writing ok, false if not
    *
    */
-  public boolean write(@Nonnull OutputStream inOutput)
+  public boolean write(OutputStream inOutput)
   {
     InputStream input = getInput();
 
@@ -358,7 +359,7 @@ public abstract class Resource
    *
    */
   @Deprecated
-  public boolean write(@Nonnull HTMLWriter inWriter)
+  public boolean write(HTMLWriter inWriter)
   {
     InputStream inputStream = FileResource.class.getResourceAsStream(m_name);
 
@@ -416,8 +417,7 @@ public abstract class Resource
    * @param       inResource the resource to preset
    *
    */
-  public static synchronized void preset(@Nonnull String inName,
-                                         @Nonnull Resource inResource)
+  public static synchronized void preset(String inName, Resource inResource)
   {
     if(s_presets == null)
       s_presets = new HashMap<String, Resource>();
@@ -468,7 +468,7 @@ public abstract class Resource
        * @param inName  the name of the resource
        * @param inFiles the files to be returned
        */
-      public TestResource(@Nonnull String inName, @Nonnull String ... inFiles)
+      public TestResource(String inName, String ... inFiles)
       {
         super("test", null);
 
@@ -478,19 +478,19 @@ public abstract class Resource
       }
 
       /** The name of the resource. */
-      private @Nonnull String m_name;
+      private String m_name;
 
       /** The files represented. */
-      private @Nonnull List<String> m_files = new java.util.ArrayList<String>();
+      private List<String> m_files = new java.util.ArrayList<String>();
 
       @Override
-      public @Nonnull List<String> files()
+      public List<String> files()
       {
         return new ArrayList<String>(m_files);
       }
 
       @Override
-      public boolean hasResource(@Nonnull String inName)
+      public boolean hasResource(String inName)
       {
         return m_name.equals(inName.substring(0, m_name.length()))
           && m_files.contains(inName.substring(m_name.length() + 1));

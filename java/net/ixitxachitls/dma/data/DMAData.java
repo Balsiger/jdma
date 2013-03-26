@@ -34,6 +34,7 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 
 //..........................................................................
 
@@ -442,7 +443,8 @@ public interface DMAData
    *
    */
   public int rebuild(AbstractType<? extends AbstractEntry> inType);
-  public int rename(AbstractType<? extends AbstractEntry> inType, int inSize);
+  public int refresh(AbstractType<? extends AbstractEntry> inType,
+                     DMARequest inRequest);
 
   //........................................................................
 

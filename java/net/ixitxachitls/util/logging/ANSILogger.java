@@ -27,7 +27,7 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.output.WrapBuffer;
 import net.ixitxachitls.util.Strings;
@@ -70,6 +70,7 @@ import net.ixitxachitls.util.Strings;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class ANSILogger extends ASCIILogger
 {
   //--------------------------------------------------------- constructor(s)
@@ -94,7 +95,7 @@ public class ANSILogger extends ASCIILogger
    * @param       inStream the stream to print to
    *
    */
-  public ANSILogger(@Nonnull OutputStream inStream)
+  public ANSILogger(OutputStream inStream)
   {
     super(inStream);
   }
@@ -239,7 +240,7 @@ public class ANSILogger extends ASCIILogger
    *
    */
   @Override
-protected @Nonnull WrapBuffer getWrapBuffer(int inWidth)
+  protected WrapBuffer getWrapBuffer(int inWidth)
   {
     return new WrapBuffer(inWidth, s_ignore);
   }
@@ -260,7 +261,7 @@ protected @Nonnull WrapBuffer getWrapBuffer(int inWidth)
    * @param       inFormat the format to use for this type
    *
    */
-  public void setFormat(@Nonnull Log.Type inType, @Nonnull String inFormat)
+  public void setFormat(Log.Type inType, String inFormat)
   {
     m_formats[inType.ordinal()] = inFormat;
   }
@@ -281,7 +282,7 @@ protected @Nonnull WrapBuffer getWrapBuffer(int inWidth)
    *
    */
   @Override
-public void print(@Nonnull String inText, @Nonnull Log.Type inType)
+  public void print(String inText, Log.Type inType)
   {
     // set the text to write to together
     String text;

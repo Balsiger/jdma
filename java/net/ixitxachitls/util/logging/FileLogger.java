@@ -26,8 +26,8 @@ package net.ixitxachitls.util.logging;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.util.configuration.Config;
 
@@ -88,7 +88,7 @@ public class FileLogger extends ASCIILogger
    * @param       inName the name of the file to write to
    *
    */
-  public FileLogger(@Nonnull String inName)
+  public FileLogger(String inName)
   {
     this(inName, def_format);
   }
@@ -103,7 +103,7 @@ public class FileLogger extends ASCIILogger
    * @param       inFormat the format to use for printing
    *
    */
-  public FileLogger(@Nonnull String inName, @Nonnull String inFormat)
+  public FileLogger(String inName, String inFormat)
   {
     super(System.out, inFormat, def_width);
 
@@ -120,10 +120,10 @@ public class FileLogger extends ASCIILogger
   //-------------------------------------------------------------- variables
 
   /** The name of the file to log to. */
-  private @Nonnull String m_name;
+  private String m_name;
 
   /** The format for the file name to use. */
-  protected @Nonnull String m_nameFormat;
+  protected String m_nameFormat;
 
   /** The output stream to write to. */
   private @Nullable FileOutputStream m_file;
@@ -195,7 +195,7 @@ public class FileLogger extends ASCIILogger
    *
    */
   @Override
-public void print(@Nonnull String inText, @Nonnull Log.Type inType)
+  public void print(String inText, Log.Type inType)
   {
     // don't print status messages to file logs
     if(inType == Log.Type.STATUS)

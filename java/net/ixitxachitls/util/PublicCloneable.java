@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.util;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -49,6 +49,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface PublicCloneable extends Cloneable
 {
   //-------------------------------------------------------------- accessors
@@ -62,7 +63,7 @@ public interface PublicCloneable extends Cloneable
    * @return      the cloned object
    *
    */
-  public @Nonnull Object clone();
+  public Object clone();
 
   //........................................................................
 
