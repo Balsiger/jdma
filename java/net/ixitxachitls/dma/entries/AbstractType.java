@@ -611,7 +611,7 @@ public class AbstractType<T extends AbstractEntry>
                    + "\n"
                    + "base entry guru =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              guru.\n"
                    + "\n"
                    + "#.....\n",
                    entry.toString());
