@@ -852,7 +852,8 @@ public abstract class ValueGroup implements Changeable
    * @return
    *
    */
-  protected void collect(String inName, Combined ioCombined)
+  protected <T extends Value<T>> void collect(String inName,
+                                              Combined<T> ioCombined)
   {
     // nothing to do here
   }
@@ -982,7 +983,7 @@ public abstract class ValueGroup implements Changeable
    *
    */
   @SuppressWarnings("unchecked") // casting class for variable creation
-  protected static List<Variable> extractClassVariables(Class<?> inClass)
+  protected static List<Variable>extractClassVariables(Class<?> inClass)
   {
     List<Variable> variables = new ArrayList<Variable>();
 
@@ -1011,7 +1012,8 @@ public abstract class ValueGroup implements Changeable
         Variable variable;
         if(AbstractExtension.class.isAssignableFrom(inClass))
           variable =
-            new ExtensionVariable(inClass,
+            new ExtensionVariable((Class<? extends AbstractExtension<?>>)
+                                  inClass,
                                   key.value(), field,
                                   noStore == null || !noStore.value(),
                                   printUndefined == null
@@ -1078,8 +1080,9 @@ public abstract class ValueGroup implements Changeable
    * @param       inExtensionClass the extension class to extract from
    *
    */
-  protected static void extractVariables(Class<?> inEntryClass,
-                                         Class<?> inExtensionClass)
+  protected static void
+    extractVariables(Class<?> inEntryClass,
+                     Class<? extends AbstractExtension<?>> inExtensionClass)
   {
     Variables variables = s_variables.get(inEntryClass);
 
@@ -1307,7 +1310,7 @@ public abstract class ValueGroup implements Changeable
       if(total == null)
         total = value;
       else
-        total = (T)total.add(value);
+        total = total.add(value);
     }
 
     return total;

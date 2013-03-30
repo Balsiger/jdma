@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Multimap;
@@ -65,6 +65,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class SaveActionServlet extends ActionServlet
 {
   //----------------------------------------------------------------- nested
@@ -81,15 +82,14 @@ public class SaveActionServlet extends ActionServlet
      * @param inOwner       the owner of the entry/entries
      *
      */
-    public Changes(@Nonnull AbstractEntry.EntryKey inKey,
-                   @Nonnull AbstractEntry inOwner)
+    public Changes(AbstractEntry.EntryKey<?> inKey, AbstractEntry inOwner)
     {
       m_key = inKey;
       m_owner = inOwner;
     }
 
     /** The key of the entry/entries changed. */
-    protected @Nonnull AbstractEntry.EntryKey m_key;
+    protected AbstractEntry.EntryKey<?> m_key;
 
     /** The owner of the entry/entries changed. */
     protected @Nullable AbstractEntry m_owner;
@@ -110,8 +110,7 @@ public class SaveActionServlet extends ActionServlet
     protected @Nullable String m_store;
 
     /** A map with all the changed values. */
-    protected @Nonnull Map<String, String>m_values =
-      new HashMap<String, String>();
+    protected Map<String, String>m_values = new HashMap<String, String>();
 
     /**
      * Convert to a human readable string for debugging.
@@ -120,7 +119,7 @@ public class SaveActionServlet extends ActionServlet
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_key + " (" + (m_owner == null ? "no owner" : m_owner.getName())
         + "/" + m_file + (m_multiple ? ", multiple" : ", single") + "):"
@@ -134,7 +133,7 @@ public class SaveActionServlet extends ActionServlet
      * @param inValue the value to change to
      *
      */
-    public void set(@Nonnull String inKey, @Nonnull String inValue)
+    public void set(String inKey, String inValue)
     {
       if("file".equals(inKey))
         m_file = inValue;
@@ -173,7 +172,7 @@ public class SaveActionServlet extends ActionServlet
      *
      */
     @SuppressWarnings("unchecked")
-    public @Nonnull Set<AbstractEntry> entries(@Nonnull List<String> ioErrors)
+    public Set<AbstractEntry> entries(List<String> ioErrors)
     {
       Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
       if(m_multiple)
@@ -266,12 +265,13 @@ public class SaveActionServlet extends ActionServlet
    */
   @Override
   @SuppressWarnings("unchecked")
-  protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
-                                     @Nonnull HttpServletResponse inResponse)
+  protected String doAction(DMARequest inRequest,
+                            HttpServletResponse inResponse)
   {
     List<String> errors = new ArrayList<String>();
     Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
-    Map<String, CampaignEntry> stores = new HashMap<String, CampaignEntry>();
+    Map<String, CampaignEntry<?>> stores =
+      new HashMap<String, CampaignEntry<?>>();
     for(Changes change : preprocess(inRequest, inRequest.getParams(), errors))
       for(AbstractEntry entry : change.entries(errors))
       {
@@ -311,8 +311,8 @@ public class SaveActionServlet extends ActionServlet
                 Log.warning("Cannot find entry for storage: " + change.m_store);
               else
               {
-                CampaignEntry store =
-                  (CampaignEntry)DMADataFactory.get().getEntry(key);
+                CampaignEntry<?> store =
+                  (CampaignEntry<?>)DMADataFactory.get().getEntry(key);
                 if(store != null)
                   stores.put(entry.getName(), store);
               }
@@ -334,14 +334,13 @@ public class SaveActionServlet extends ActionServlet
       {
         // We have to get the store for the entry before saving, as saving can
         // change the name.
-        CampaignEntry store = stores.get(entry.getName());
-        System.out.println("saving entry: " + entry);
+        CampaignEntry<?> store = stores.get(entry.getName());
         if(entry.save())
         {
           saved.add(Encodings.escapeJS(entry.getType().toString()) + " "
                     + Encodings.escapeJS(entry.getName()));
 
-          if(store != null && store.add((CampaignEntry)entry))
+          if(store != null && store.add((CampaignEntry<?>)entry))
             path = Encodings.toJSString(store.getPath());
         }
         else
@@ -376,10 +375,9 @@ public class SaveActionServlet extends ActionServlet
    * @return      a collection of all changes requested
    *
    */
-  private Collection<Changes> preprocess
-    (@Nonnull DMARequest inRequest,
-     @Nonnull Multimap<String, String> inParams,
-     @Nonnull List<String> ioErrors)
+  private Collection<Changes> preprocess(DMARequest inRequest,
+                                         Multimap<String, String> inParams,
+                                         List<String> ioErrors)
   {
     Map<AbstractEntry.EntryKey<? extends AbstractEntry>, Changes> changes =
       new HashMap<AbstractEntry.EntryKey<? extends AbstractEntry>, Changes>();

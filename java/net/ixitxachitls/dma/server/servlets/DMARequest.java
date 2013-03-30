@@ -491,13 +491,10 @@ public class DMARequest extends HttpServletRequestWrapper
   public @Nullable <T extends AbstractEntry> T
                       getEntry(AbstractEntry.EntryKey<T> inKey)
   {
-    AbstractEntry entry = m_entries.get(inKey);
-    if(entry == null) {
-      entry = DMADataFactory.get().getEntry(inKey);
-      m_entries.put(inKey, entry);
-    }
+    if(!m_entries.containsKey(inKey))
+      m_entries.put(inKey, DMADataFactory.get().getEntry(inKey));
 
-    return (T)entry;
+    return (T)m_entries.get(inKey);
   }
 
   //........................................................................

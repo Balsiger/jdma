@@ -1222,9 +1222,9 @@ public class AbstractEntry extends ValueGroup
    * @return
    *
    */
-  public Combined collect(String inName)
+  public <T extends Value<T>> Combined<T> collect(String inName)
   {
-    Combined combined = new Combined(inName, this);
+    Combined<T> combined = new Combined<T>(inName, this);
     collect(inName, combined);
 
     return combined;
@@ -1233,7 +1233,8 @@ public class AbstractEntry extends ValueGroup
   //........................................................................
 
   @Override
-  protected void collect(String inName, Combined ioCombined)
+  protected <T extends Value<T>> void collect(String inName,
+                                              Combined<T> ioCombined)
   {
     super.collect(inName, ioCombined);
 

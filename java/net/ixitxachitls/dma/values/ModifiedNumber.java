@@ -113,37 +113,40 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    * @return
    *
    */
-  public ModifiedNumber
-    (List<Contribution<? extends Value>> inContributions)
-  {
-    this(0, inContributions);
-  }
+  // public ModifiedNumber
+  //   (List<Contribution<? extends Value<?>>> inContributions)
+  // {
+  //   this(0, inContributions);
+  // }
 
-  public ModifiedNumber
-    (int base, List<Contribution<? extends Value>> inContributions)
+  public static <T extends Value<T>> ModifiedNumber
+    create(int base, List<Contribution<T>> inContributions)
   {
-    this(base, true);
+    ModifiedNumber number = new ModifiedNumber(base, true);
 
-    for(Contribution<? extends Value> contribution : inContributions)
+    for(Contribution<T> contribution : inContributions)
     {
-      Value value = contribution.getValue();
+      T value = contribution.getValue();
       String text = contribution.getDescription();
 
       if(value instanceof Number)
-        withModifier(new Modifier((int)((Number)value).get()), text);
+        number.withModifier(new Modifier((int)((Number)value).get()), text);
       else if(value instanceof Modifier)
-        withModifier((Modifier)value, text);
+        number.withModifier((Modifier)value, text);
       else if(value instanceof ModifiedNumber)
       {
-        withModifier(new Modifier((int)((ModifiedNumber)value).get()), text);
+        number.withModifier(new Modifier((int)((ModifiedNumber)value).get()),
+                            text);
         for(Map.Entry<String, Modifier> modifier
               : ((ModifiedNumber)value).m_modifiers.entrySet())
-          withModifier(modifier.getValue(), modifier.getKey());
+          number.withModifier(modifier.getValue(), modifier.getKey());
       }
       else
         throw new UnsupportedOperationException("cannot modifiy number with "
                                                 + value.getClass());
     }
+
+    return number;
   }
 
   //........................................................................

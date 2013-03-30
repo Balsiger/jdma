@@ -147,7 +147,7 @@
   (interactive)
   (beginning-of-buffer)
   (insert "/******************************************************************************\n"
-          " * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler\n"
+          " * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler\n"
           " * All rights reserved\n"
           " *\n"
           " * This file is part of Dungeon Master Assistant.\n"

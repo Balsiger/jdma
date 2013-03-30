@@ -426,69 +426,22 @@ public class BaseQuality extends BaseEntry
   }
 
   //........................................................................
-  //--------------------------- addContributions ---------------------------
+  //-------------------------------- collect -------------------------------
 
   /**
-   * Add contributions for this entry to the given list.
+   * Collect a name value.
    *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions to add to
+   * @param       inName          the name of the value to collect
+   * @param       ioCombined      the value collected so far (to add to)
+   * @param       inParameters    the parameters for collecting values
+   * @param       inCondition     the condition for collecting
    *
    */
   @SuppressWarnings("unchecked")
-  //@Override
-  public void addContributions
-    (String inName,
-     List<Contribution<? extends Value>> ioContributions,
-     // TODO: remove the parameters and handle this in a quality!
-     Parameters inParameters,
-     @Nullable Condition inCondition)
-  {
-    addContributions(inName, ioContributions);
-
-    for(Multiple multiple : m_effects)
-    {
-      Affects affects = ((EnumSelection<Affects>)multiple.get(0)).getSelected();
-      if(("fortitude save".equals(inName) && affects == Affects.FORTITUDE_SAVE)
-         || ("reflex save".equals(inName) && affects == Affects.REFLEX_SAVE)
-         || ("will save".equals(inName) && affects == Affects.WILL_SAVE)
-         || (affects == Affects.SKILL
-             && inName.equals(computeExpressions(multiple.get(1).toString(),
-                                                 inParameters)))
-         || (affects == Affects.DAMAGE && "damage".equals(inName))
-         || (affects == Affects.ATTACK && "attack".equals(inName)))
-      {
-        Modifier modifier = (Modifier)multiple.get(2);
-        modifier.withCondition(inCondition);
-        if(modifier.getExpression() instanceof Expression.Expr)
-        {
-          String expression =
-            computeExpressions(((Expression.Expr)modifier.getExpression())
-                               .getText(), inParameters);
-
-          Modifier computed = modifier.read(expression);
-          if(computed != null)
-          {
-            computed.withCondition(inCondition);
-            computed.withCondition(modifier.getCondition());
-            ioContributions.add(new Contribution(computed, this, null));
-          }
-          else
-            ioContributions.add
-              (new Contribution
-               (modifier.as(Integer.valueOf(expression.replace('+', '0')),
-                            modifier.getType(), modifier.getCondition(), null),
-                this, null));
-        }
-        else
-          ioContributions.add(new Contribution(modifier, this, null));
-      }
-    }
-  }
-
-  protected void collect(String inName, Combined ioCombined,
-                         Parameters inParameters,
-                         @Nullable Condition inCondition)
+  protected <T extends Value<T>> void
+               collect(String inName, Combined<T> ioCombined,
+                       Parameters inParameters,
+                       @Nullable Condition<?> inCondition)
   {
     super.collect(inName, ioCombined);
 

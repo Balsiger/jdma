@@ -615,7 +615,7 @@ public String toString()
                    + "\n"
                    + "base entry test =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name             test.\n"
                    + "\n"
                    + "#.....\n",
                    file.m_entries.get(0).toString());

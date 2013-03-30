@@ -27,7 +27,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -92,6 +91,7 @@ public class BaseMonster extends BaseEntry
   //----- monster type -----------------------------------------------------
 
   /** The possible monster types in the game. */
+  @ParametersAreNonnullByDefault
   public enum MonsterType implements EnumSelection.Named
   {
     /** Aberration. */
@@ -140,14 +140,14 @@ public class BaseMonster extends BaseEntry
     VERMIN("Vermin");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the enum value.
      *
      * @param inName the name of the value
      *
      */
-    private MonsterType(@Nonnull String inName)
+    private MonsterType(String inName)
     {
       m_name = constant("monster.type", inName);
     }
@@ -157,7 +157,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -167,7 +167,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -177,6 +177,7 @@ public class BaseMonster extends BaseEntry
   //----- monster subtype --------------------------------------------------
 
   /** The possible monster sub types in the game. */
+  @ParametersAreNonnullByDefault
   public enum MonsterSubtype implements EnumSelection.Named
   {
     /** None. */
@@ -258,14 +259,14 @@ public class BaseMonster extends BaseEntry
     WATER("Water");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the enum value.
      *
      * @param inName the name of the value
      *
      */
-    private MonsterSubtype(@Nonnull String inName)
+    private MonsterSubtype(String inName)
     {
       m_name = constant("monster.type", inName);
     }
@@ -275,7 +276,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -285,7 +286,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -295,6 +296,7 @@ public class BaseMonster extends BaseEntry
   //----- movement mode ----------------------------------------------------
 
   /** The possible movement modes in the game. */
+  @ParametersAreNonnullByDefault
   public enum MovementMode implements EnumSelection.Named
   {
     /** Burrowing movement. */
@@ -313,14 +315,14 @@ public class BaseMonster extends BaseEntry
     RUN("");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the enum value.
      *
      * @param inName the name of the value
      *
      */
-    private MovementMode(@Nonnull String inName)
+    private MovementMode(String inName)
     {
       m_name = constant("movement.mode", inName);
     }
@@ -330,7 +332,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -340,7 +342,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -350,6 +352,7 @@ public class BaseMonster extends BaseEntry
   //----- maneuverability --------------------------------------------------
 
   /** The possible movement modes in the game. */
+  @ParametersAreNonnullByDefault
   public enum Maneuverability implements EnumSelection.Named
   {
     /** Perfect maneuverability. */
@@ -371,14 +374,14 @@ public class BaseMonster extends BaseEntry
     NONE("");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the enum value.
      *
      * @param inName the name of the value
      *
      */
-    private Maneuverability(@Nonnull String inName)
+    private Maneuverability(String inName)
     {
       m_name = constant("maneuverability", inName);
     }
@@ -388,7 +391,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -398,7 +401,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -408,6 +411,7 @@ public class BaseMonster extends BaseEntry
   //----- climate ----------------------------------------------------------
 
   /** The possible climates in the game. */
+  @ParametersAreNonnullByDefault
   public enum Climate implements EnumSelection.Named
   {
     /** Warm climate. */
@@ -430,7 +434,7 @@ public class BaseMonster extends BaseEntry
      * @param inName the name of the value
      *
      */
-    private Climate(@Nonnull String inName)
+    private Climate(String inName)
     {
       m_name = constant("climate", inName);
     }
@@ -440,7 +444,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -450,7 +454,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -460,6 +464,7 @@ public class BaseMonster extends BaseEntry
   //----- terrain ----------------------------------------------------------
 
   /** The possible terrains in the game. */
+  @ParametersAreNonnullByDefault
   public enum Terrain implements EnumSelection.Named
   {
     /** Forest terrain. */
@@ -511,14 +516,14 @@ public class BaseMonster extends BaseEntry
     ANY("Any");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the enum value.
      *
      * @param inName the name of the value
      *
      */
-    private Terrain(@Nonnull String inName)
+    private Terrain(String inName)
     {
       m_name = constant("terrain", inName);
     }
@@ -528,7 +533,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -538,7 +543,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -548,6 +553,7 @@ public class BaseMonster extends BaseEntry
   //----- organization -----------------------------------------------------
 
   /** The possible terrains in the game. */
+  @ParametersAreNonnullByDefault
   public enum Organization implements EnumSelection.Named
   {
     /** Any organization. */
@@ -614,14 +620,14 @@ public class BaseMonster extends BaseEntry
     TROUPE("Troupe");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the enum value.
      *
      * @param inName the name of the value
      *
      */
-    private Organization(@Nonnull String inName)
+    private Organization(String inName)
     {
       m_name = constant("organization", inName);
     }
@@ -631,7 +637,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -641,7 +647,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -651,6 +657,7 @@ public class BaseMonster extends BaseEntry
   //----- attack style -----------------------------------------------------
 
   /** The possible attack styles in the game. */
+  @ParametersAreNonnullByDefault
   public enum AttackStyle implements EnumSelection.Named
   {
     /** A melee attack. */
@@ -660,14 +667,14 @@ public class BaseMonster extends BaseEntry
     RANGED("ranged");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private AttackStyle(@Nonnull String inName)
+    private AttackStyle(String inName)
     {
       m_name = constant("attack.style", inName);
     }
@@ -677,7 +684,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -687,7 +694,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -697,6 +704,7 @@ public class BaseMonster extends BaseEntry
   //----- attack mode -----------------------------------------------------
 
   /** The possible attack styles in the game. */
+  @ParametersAreNonnullByDefault
   public enum AttackMode implements EnumSelection.Named
   {
     /** A tentacle attack. */
@@ -745,7 +753,7 @@ public class BaseMonster extends BaseEntry
     WEB("Web", true);
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Flag if to use dexterity when attacking. */
     private boolean m_dexterity;
@@ -755,7 +763,7 @@ public class BaseMonster extends BaseEntry
      * @param inName       the name of the value
      *
      */
-    private AttackMode(@Nonnull String inName, boolean inDexterity)
+    private AttackMode(String inName, boolean inDexterity)
     {
       m_name = constant("attack.mode", inName);
       m_dexterity = inDexterity;
@@ -766,7 +774,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -776,7 +784,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -796,6 +804,7 @@ public class BaseMonster extends BaseEntry
   //----- treasure ---------------------------------------------------------
 
   /** The possible sizes in the game. */
+  @ParametersAreNonnullByDefault
   public enum Treasure implements EnumSelection.Named
   {
     /** No treasure at all. */
@@ -814,7 +823,7 @@ public class BaseMonster extends BaseEntry
     QUADRUPLE("quadruple standard", 4);
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The multiplier for treasures. */
     private int m_multiplier;
@@ -825,7 +834,7 @@ public class BaseMonster extends BaseEntry
      * @param inMultiplier how much treasure we get
      *
      */
-    private Treasure(@Nonnull String inName, int inMultiplier)
+    private Treasure(String inName, int inMultiplier)
     {
       m_name      = constant("skill.modifier", inName);
       m_multiplier    = inMultiplier;
@@ -836,7 +845,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -847,7 +856,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -867,6 +876,7 @@ public class BaseMonster extends BaseEntry
   //----- alignment --------------------------------------------------------
 
   /** The possible sizes in the game. */
+  @ParametersAreNonnullByDefault
   public enum Alignment implements EnumSelection.Named, EnumSelection.Short
   {
     /** Lawful Evil. */
@@ -912,10 +922,10 @@ public class BaseMonster extends BaseEntry
     ANY("Any", "A");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
@@ -923,7 +933,7 @@ public class BaseMonster extends BaseEntry
      * @param inShort     the short name of the value
      *
      */
-    private Alignment(@Nonnull String inName, @Nonnull String inShort)
+    private Alignment(String inName, String inShort)
     {
       m_name      = constant("alignment",       inName);
       m_short     = constant("alignment.short", inShort);
@@ -934,7 +944,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -944,7 +954,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -954,7 +964,7 @@ public class BaseMonster extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -964,6 +974,7 @@ public class BaseMonster extends BaseEntry
   //----- alignment status -------------------------------------------------
 
   /** The possible alignment modifiers in the game. */
+  @ParametersAreNonnullByDefault
   public enum AlignmentStatus implements EnumSelection.Named
   {
     /** Always. */
@@ -976,14 +987,14 @@ public class BaseMonster extends BaseEntry
     OFTEN("Often");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName      the name of the value
      *
      */
-    private AlignmentStatus(@Nonnull String inName)
+    private AlignmentStatus(String inName)
     {
       m_name = constant("alignment.status", inName);
     }
@@ -993,7 +1004,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -1003,7 +1014,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -1013,6 +1024,7 @@ public class BaseMonster extends BaseEntry
   //----- language ---------------------------------------------------------
 
   /** The possible sizes in the game. */
+  @ParametersAreNonnullByDefault
   public enum Language implements EnumSelection.Named
   {
     /** Aboleth. */
@@ -1088,14 +1100,14 @@ public class BaseMonster extends BaseEntry
     NONE("-");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private Language(@Nonnull String inName)
+    private Language(String inName)
     {
       m_name = constant("language", inName);
     }
@@ -1105,7 +1117,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -1115,7 +1127,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -1125,6 +1137,7 @@ public class BaseMonster extends BaseEntry
   //----- language modifier ------------------------------------------------
 
   /** The possible sizes in the game. */
+  @ParametersAreNonnullByDefault
   public enum LanguageModifier implements EnumSelection.Named
   {
     /** Automatic. */
@@ -1140,14 +1153,14 @@ public class BaseMonster extends BaseEntry
     UNDERSTAND("Understand");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private LanguageModifier(@Nonnull String inName)
+    private LanguageModifier(String inName)
     {
       m_name = constant("language.modifier", inName);
     }
@@ -1157,7 +1170,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -1167,7 +1180,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -1177,6 +1190,7 @@ public class BaseMonster extends BaseEntry
   //----- save ------------------------------------------------------------
 
   /** The possible sizes in the game. */
+  @ParametersAreNonnullByDefault
   public enum Save implements EnumSelection.Named, EnumSelection.Short
   {
     /** Fortitude. */
@@ -1189,10 +1203,10 @@ public class BaseMonster extends BaseEntry
     WISDOM("Wisdom", "Wis");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
@@ -1200,7 +1214,7 @@ public class BaseMonster extends BaseEntry
      * @param inShort      the short name of the value
      *
      */
-    private Save(@Nonnull String inName, @Nonnull String inShort)
+    private Save(String inName, String inShort)
     {
       m_name = constant("save.name", inName);
       m_short = constant("save.short", inShort);
@@ -1211,7 +1225,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -1221,7 +1235,7 @@ public class BaseMonster extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -1231,7 +1245,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -1241,6 +1255,7 @@ public class BaseMonster extends BaseEntry
   //----- ability ---------------------------------------------------------
 
   /** The possible sizes in the game. */
+  @ParametersAreNonnullByDefault
   public enum Ability implements EnumSelection.Named, EnumSelection.Short
   {
     /** Strength. */
@@ -1265,10 +1280,10 @@ public class BaseMonster extends BaseEntry
     NONE("None", "-");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
@@ -1276,7 +1291,7 @@ public class BaseMonster extends BaseEntry
      * @param inShort      the short name of the value
      *
      */
-    private Ability(@Nonnull String inName, @Nonnull String inShort)
+    private Ability(String inName, String inShort)
     {
       m_name = constant("ability.name", inName);
       m_short = constant("ability.short", inShort);
@@ -1287,7 +1302,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -1297,7 +1312,7 @@ public class BaseMonster extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -1307,7 +1322,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -1600,7 +1615,7 @@ public class BaseMonster extends BaseEntry
 
   /** The monster's attacks. */
   @Key("secondary attacks")
-  protected ValueList m_secondaryAttacks = m_primaryAttacks;
+  protected ValueList<Multiple> m_secondaryAttacks = m_primaryAttacks;
 
   //........................................................................
   //----- space ------------------------------------------------------------
@@ -1719,6 +1734,7 @@ public class BaseMonster extends BaseEntry
   /** The special qualities. */
   @Key("special qualities")
   @WithBases
+  @SuppressWarnings("rawtypes") // raw condition
   protected ValueList<Multiple> m_specialQualities = new ValueList<Multiple>
     (", ",
      new Multiple(new Multiple.Element []
@@ -1767,7 +1783,9 @@ public class BaseMonster extends BaseEntry
 
   /** The feats. */
   @Key("feats")
-  protected ValueList<Reference> m_feats = new ValueList<Reference>
+  @SuppressWarnings("unchecked") // unchecked generic array creation
+  protected ValueList<Reference<BaseFeat>> m_feats =
+    new ValueList<Reference<BaseFeat>>
     (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
      .withParameter("Name", new Name(), Parameters.Type.UNIQUE));
 
@@ -2200,7 +2218,7 @@ public class BaseMonster extends BaseEntry
    *
    */
   @SuppressWarnings("unchecked") // need to cast multiple part
-  public @Nonnull List<Reference<BaseQuality>> collectSpecialQualities()
+  public List<Reference<BaseQuality>> collectSpecialQualities()
   {
     List<Reference<BaseQuality>> qualities = Lists.newArrayList();
 
@@ -2227,9 +2245,9 @@ public class BaseMonster extends BaseEntry
    * @param       ioFeats the feats store
    *
    */
-  public void collectFeats(@Nonnull Multimap<Reference, String> ioFeats)
+  public void collectFeats(Multimap<Reference<BaseFeat>, String> ioFeats)
   {
-    for(Reference feat : m_feats)
+    for(Reference<BaseFeat> feat : m_feats)
       ioFeats.put(feat, getName());
 
     for(BaseEntry base : getBaseEntries())
@@ -2241,7 +2259,9 @@ public class BaseMonster extends BaseEntry
   //-------------------------------- collect -------------------------------
 
   @Override
-  protected void collect(String inName, Combined ioCombined)
+  @SuppressWarnings("unchecked")
+  protected <T extends Value<T>> void collect(String inName,
+                                              Combined<T> ioCombined)
   {
     super.collect(inName, ioCombined);
 
@@ -2254,7 +2274,7 @@ public class BaseMonster extends BaseEntry
       if(quality == null)
         continue;
 
-      Condition condition = (Condition)multiple.get(1);
+      Condition<?> condition = (Condition<?>)multiple.get(1);
       quality.collect(inName, ioCombined, reference.getParameters(),
                       condition.isDefined() ? condition : null);
     }
@@ -2266,46 +2286,6 @@ public class BaseMonster extends BaseEntry
         continue;
 
       feat.collect(inName, ioCombined, reference.getParameters());
-    }
-  }
-
-  /**
-   * Add contributions for this entry to the given list.
-   *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions to add to
-   *
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions)
-  {
-    super.addContributions(inName, ioContributions);
-
-    for(Multiple multiple : m_specialQualities)
-    {
-      Reference<BaseQuality> reference =
-        (Reference<BaseQuality>)multiple.get(0);
-      BaseQuality quality = reference.getEntry();
-
-      if(quality == null)
-        continue;
-
-      Condition condition = (Condition)multiple.get(1);
-      quality.addContributions(inName, ioContributions,
-                               reference.getParameters(),
-                               condition.isDefined() ? condition : null);
-    }
-
-    for(Reference<BaseFeat> reference : m_feats)
-    {
-      BaseFeat feat = reference.getEntry();
-      if(feat == null)
-        continue;
-
-      feat.addContributions(inName, ioContributions, reference.getParameters());
     }
   }
 
@@ -2420,7 +2400,7 @@ public class BaseMonster extends BaseEntry
    * @return      true if the quality is there, false if not
    *
    */
-  public boolean hasQuality(@Nonnull String inQuality)
+  public boolean hasQuality(String inQuality)
   {
     for(Multiple value : m_specialQualities)
       if(value.toString().equalsIgnoreCase(inQuality))
@@ -2449,9 +2429,9 @@ public class BaseMonster extends BaseEntry
    * @return      true if the quality is there, false if not
    *
    */
-  public boolean hasFeat(@Nonnull String inFeat)
+  public boolean hasFeat(String inFeat)
   {
-    for(Reference value : m_feats)
+    for(Reference<BaseFeat> value : m_feats)
       if(value.toString().equalsIgnoreCase(inFeat))
         return true;
 
@@ -2567,32 +2547,6 @@ public class BaseMonster extends BaseEntry
 
   //........................................................................
 
-  //------------------------------ printCommand ----------------------------
-
-  /**
-   * Print the item to the document, in the general section.
-   *
-   * @param       inDM       true if set for DM, false for player
-   * @param       inEditable true if values are editable, false if not
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  // public PrintCommand printCommand(final boolean inDM, boolean inEditable)
-  // {
-  //   final PrintCommand commands = super.printCommand(inDM, inEditable);
-
-  //   commands.type = "monster";
-
-  //   commands.temp = new ArrayList<Object>();
-  //   commands.temp.add(PAGE_COMMAND.transform(new ValueTransformer(commands,
-  //                                                                 inDM)));
-
-  //   return commands;
-  // }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -2637,6 +2591,7 @@ public class BaseMonster extends BaseEntry
    *
    */
   @Override
+  @SuppressWarnings("unchecked") // casting
   public Multimap<Index.Path, String> computeIndexValues()
   {
     Multimap<Index.Path, String> values = super.computeIndexValues();
@@ -2644,7 +2599,7 @@ public class BaseMonster extends BaseEntry
     values.put(Index.Path.SIZES, m_size.group());
     values.put(Index.Path.TYPES, m_monsterType.get(0).group());
 
-    for(Value value : ((ValueList<? extends Value>)m_monsterType.get(1)))
+    for(Value<?> value : ((ValueList<? extends Value<?>>)m_monsterType.get(1)))
       values.put(Index.Path.SUBTYPES, value.group());
 
     values.put(Index.Path.HDS, "" + m_hitDice.getNumber());

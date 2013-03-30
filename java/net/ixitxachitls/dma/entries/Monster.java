@@ -709,7 +709,9 @@ public class Monster extends CampaignEntry<BaseMonster>
 
   /** The feats. */
   @Key("feats")
-  protected ValueList<Reference> m_feats = new ValueList<Reference>
+  @SuppressWarnings("unchecked") // generic array creation
+  protected ValueList<Reference<BaseFeat>> m_feats =
+    new ValueList<Reference<BaseFeat>>
     (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
      .withParameter("Name", new Name(), Parameters.Type.UNIQUE));
 
@@ -1242,7 +1244,12 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public int getCombinedConstitution()
   {
-    return (int)new Combination<Number>(this, "constitution").max().get();
+    Combined<Number> combinedCon = collect("constitution");
+    Number con = combinedCon.max();
+    if(con != null)
+      return (int)con.get();
+
+    return 0;
   }
 
   //........................................................................
@@ -1313,11 +1320,12 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the armor class
    *
    */
-  public Combined armorClass()
+  public Combined<Modifier> armorClass()
   {
-    Combined armor = collect("armor class");
+    Combined<Modifier> armor = collect("armor class");
     armor.add(new Contribution<Number>(new Number(10, 10, 10), this, "base"));
-    armor.add(collect("natural armor"), "natural armor");
+    Combined<Modifier> naturalArmor = collect("natural armor");
+    armor.add(naturalArmor, "natural armor");
 
     return armor;
   }
@@ -1364,7 +1372,8 @@ public class Monster extends CampaignEntry<BaseMonster>
       if(item == null)
         continue;
 
-      Number maxDex = new Combination<Number>(item, "max dexterity").min();
+      Combined<Number> combinedMaxDex = item.collect("max dexterity");
+      Number maxDex = combinedMaxDex.min();
       if(maxDex != null && maxDex.isDefined() && maxDex.get() < max)
         max = (int)maxDex.get();
     }
@@ -1389,7 +1398,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public Map<String, Object> attacks()
   {
-    Combined baseAttack = new Combined("base attack", this);
+    Combined<Number> baseAttack = collect("base attack");
     ModifiedNumber baseAttackNumber = baseAttack.modifier();
     if(baseAttackNumber.hasConditions())
       throw new UnsupportedOperationException
@@ -1415,10 +1424,11 @@ public class Monster extends CampaignEntry<BaseMonster>
       if(!item.hasExtension(Weapon.class))
         continue;
 
-      Combined style = new Combined("weapon style", item);
+      Combined<EnumSelection<BaseWeapon.Style>> style =
+        item.collect("weapon style");
       List<Long> baseAtks = new ArrayList<Long>(baseAttacks);
       if(hasFeat("Rapid Shot"))
-        for(Value styleValue : style.valuesOnly())
+        for(Value<?> styleValue : style.valuesOnly())
           if(styleValue instanceof EnumSelection
              && ((EnumSelection)styleValue).getSelected()
              == BaseWeapon.Style.RANGED)
@@ -1428,8 +1438,7 @@ public class Monster extends CampaignEntry<BaseMonster>
           }
 
       Map<String, Object> weapon = new HashMap<String, Object>();
-      long maxAttacks =
-        new Combined("max attacks", item).modifier().getMinValue();
+      long maxAttacks = item.collect("max attacks").modifier().getMinValue();
 
       if(maxAttacks <= 0)
         maxAttacks = Long.MAX_VALUE;
@@ -1441,7 +1450,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       weapon.put("attacks", attacks);
       weapon.put("style", style);
       weapon.put("name", item.getDMName());
-      weapon.put("damage", new Combined("damage", item));
+      weapon.put("damage", collect("damage"));
       weapon.put("critical", critical(item));
 
       weaponAttacks.add(weapon);
@@ -1457,14 +1466,15 @@ public class Monster extends CampaignEntry<BaseMonster>
       .build();
   }
 
+  @SuppressWarnings("unchecked") // casting
   private List<Map<String, Object>> attacks(String inName, boolean inSecondary,
                                             List<Long> inBaseAttacks)
   {
     boolean weaponFinesse = hasFeat("Weapon Finesse");
-    Combined attacksValue = new Combined(inName, this);
+    Combined<Number> attacksValue = collect(inName);
 
     List<Map<String, Object>> result = Lists.newArrayList();
-    for(Value list : attacksValue.valuesOnly())
+    for(Value<?> list : attacksValue.valuesOnly())
       for(Multiple attack : (ValueList<Multiple>)list)
       {
         BaseMonster.AttackMode attackMode =
@@ -1518,8 +1528,11 @@ public class Monster extends CampaignEntry<BaseMonster>
   @SuppressWarnings("unchecked")
   public @Nonnull ModifiedNumber grapple()
   {
-    long baseAttack =
-      new Combination<Number>(this, "base attack").total().get();
+    Combined<Number> combinedAttack = collect("base attack");
+    Number combinedAttackTotal = combinedAttack.total();
+    long baseAttack = 0;
+    if (combinedAttackTotal != null)
+      baseAttack = combinedAttackTotal.get();
 
     ModifiedNumber grapple = new ModifiedNumber(baseAttack);
     ModifiedNumber strength = ability(BaseMonster.Ability.STRENGTH);
@@ -1527,16 +1540,19 @@ public class Monster extends CampaignEntry<BaseMonster>
       (new Modifier(abilityModifier((int)strength.getMaxValue()),
                     Modifier.Type.ABILITY), "Str of " + strength);
 
-    Multimap<Multiple, String> sizesPerGroup =
-      new Combination<Multiple>(this, "size").valuesPerGroup();
+    Combined<Multiple> combinedSize = collect("size");
+    List<Pair<Multiple, String>> sizesPerGroup =
+      combinedSize.valuesWithDescriptions();
+
     BaseItem.Size size = BaseItem.Size.MEDIUM;
     String group = "default";
-    for(Multiple multiple : sizesPerGroup.keySet())
-      if(((EnumSelection<BaseItem.Size>)multiple.get(0)).getSelected()
+    for(Pair<Multiple, String> sizeGroup : sizesPerGroup)
+      if(((EnumSelection<BaseItem.Size>)sizeGroup.first().get(0)).getSelected()
          .isBigger(size))
       {
-        size = ((EnumSelection<BaseItem.Size>)multiple.get(0)).getSelected();
-        group = Strings.COMMA_JOINER.join(sizesPerGroup.get(multiple));
+        size = ((EnumSelection<BaseItem.Size>)sizeGroup.first().get(0))
+          .getSelected();
+        group = sizeGroup.second();
       }
 
     grapple.withModifier(new Modifier(size.grapple()), size.toString());
@@ -1562,13 +1578,14 @@ public class Monster extends CampaignEntry<BaseMonster>
   {
     // Strength bonus (or dexterity)
     BaseMonster.Ability keyAbility = BaseMonster.Ability.STRENGTH;
-
-    if(!new Combination<EnumSelection<BaseWeapon.Style>>
-       (inItem, "weapon style").total().getSelected().isMelee())
+    Combined<EnumSelection<BaseWeapon.Style>> weaponStyle =
+      collect("weapon style");
+    EnumSelection<BaseWeapon.Style> weaponStyleMin = weaponStyle.min();
+    if(weaponStyleMin != null && !weaponStyle.min().getSelected().isMelee())
       keyAbility = BaseMonster.Ability.DEXTERITY;
     else
       // Somehow handle this in the feat!
-      for(Pair<Reference, List<String>> feat : allFeats())
+      for(Pair<Reference<BaseFeat>, List<String>> feat : allFeats())
       {
         Name name = (Name)feat.first().getParameters().getValue("Name");
         if(name != null)
@@ -1593,7 +1610,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       naturalAttack(keyAbility, inBaseAttack, true,
                     BaseMonster.AttackMode.WEAPON);
 
-    for(Pair<Reference, List<String>> feat : allFeats())
+    for(Pair<Reference<BaseFeat>, List<String>> feat : allFeats())
     {
       Name name = (Name)feat.first().getParameters().getValue("Name");
       if(name != null)
@@ -1672,11 +1689,11 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      a map of feats to the names they were found in
    *
    */
-  public List<Pair<Reference, List<String>>> allFeats()
+  public List<Pair<Reference<BaseFeat>, List<String>>> allFeats()
   {
-    Multimap<Reference, String> feats = HashMultimap.create();
+    Multimap<Reference<BaseFeat>, String> feats = HashMultimap.create();
 
-    for(Reference feat : m_feats)
+    for(Reference<BaseFeat> feat : m_feats)
       feats.put(feat, getName());
 
     for(BaseEntry base : getBaseEntries())
@@ -1685,14 +1702,14 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     // we have to convert to a real map manuall, as soy can't handle the
     // multimap to map conversion
-    List<Pair<Reference, List<String>>> result = Lists.newArrayList();
-    for(Reference ref : feats.keySet())
+    List<Pair<Reference<BaseFeat>, List<String>>> result = Lists.newArrayList();
+    for(Reference<BaseFeat> ref : feats.keySet())
     {
       List<String> names = Lists.newArrayList();
       for(String name : feats.get(ref))
         names.add(name);
 
-      result.add(new Pair<Reference, List<String>>(ref, names));
+      result.add(new Pair<Reference<BaseFeat>, List<String>>(ref, names));
     }
 
     return result;
@@ -1710,33 +1727,32 @@ public class Monster extends CampaignEntry<BaseMonster>
   @SuppressWarnings("unchecked") // casting reference
   public @Nonnull List<Map<String, Object>> specialAttackSummaries()
   {
-    Combination<ValueList<Multiple>> attacks =
-      new Combination<ValueList<Multiple>>(this, "special attacks");
+    Combined<ValueList<Multiple>> attacks = collect("special attacks");
 
     Map<String, Reference<BaseQuality>> references = Maps.newHashMap();
     Map<String, Long> numbers = Maps.newHashMap();
-    for(Multiple attack : attacks.total())
-    {
-      Reference<BaseQuality> ref = (Reference)attack.get(0);
-      String name = ref.getFullName();
-      Number number = (Number)attack.get(1);
-      Reference<BaseQuality> existing = references.get(name);
-      if(existing == null)
+    for(ValueList<Multiple> attackList : attacks.valuesOnly())
+      for(Multiple attack : attackList)
       {
-        references.put(name, ref);
-        numbers.put(name, number.isDefined() ? number.get() : -1);
+        Reference<BaseQuality> ref = (Reference)attack.get(0);
+        String name = ref.getFullName();
+        Number number = (Number)attack.get(1);
+        Reference<BaseQuality> existing = references.get(name);
+        if(existing == null)
+        {
+          references.put(name, ref);
+          numbers.put(name, number.isDefined() ? number.get() : -1);
+        }
+        else
+        {
+          references.put(name, existing.add(ref));
+          if(number.isDefined())
+            if(numbers.get(name) > 0)
+              numbers.put(name, numbers.get(name) + number.get());
+            else
+              numbers.put(name, number.get());
+        }
       }
-      else
-      {
-        System.out.println("adding: " + name);
-        references.put(name, existing.add(ref));
-        if(number.isDefined())
-          if(numbers.get(name) > 0)
-            numbers.put(name, numbers.get(name) + number.get());
-          else
-            numbers.put(name, number.get());
-      }
-    }
 
     List<Map<String, Object>> summaries = new ArrayList<Map<String, Object>>();
     for(String key : references.keySet())
@@ -1783,30 +1799,30 @@ public class Monster extends CampaignEntry<BaseMonster>
   @SuppressWarnings("unchecked") // casting reference
   public @Nonnull List<Map<String, Object>> specialQualitySummaries()
   {
-    Combination<ValueList<Multiple>> qualities =
-      new Combination<ValueList<Multiple>>(this, "special qualities");
+    Combined<ValueList<Multiple>> qualities = collect("special qualities");
 
     List<Map<String, Object>> summaries = new ArrayList<Map<String, Object>>();
-    for(Multiple quality : qualities.total())
-    {
-      summaries.add(new ImmutableMap.Builder<String, Object>()
-                    .put("name", ((Reference)quality.get(0)).getName())
-                    .put("params",
-                         ((Reference)quality.get(0)).getParameters()
-                         .getSummary())
-                    .put("condition",
-                         quality.get(1).isDefined() ? quality.get(1) : "")
-                    .put("number", ((Number)quality.get(2)).isDefined()
-                         ? ((Number)quality.get(2)).get() : -1)
-                    .put("summary",
-                         ((Reference<BaseQuality>)quality.get(0))
-                         .summary(ImmutableMap.of
-                                  ("level", "" + getLevel(),
-                                   "class", "" + getSpellClass(),
-                                   "ability", "" + getSpellAbilityModifier
-                                   (null))))
-                    .build());
-    }
+    for(ValueList<Multiple> list : qualities.valuesOnly())
+      for(Multiple quality : list)
+      {
+        summaries.add(new ImmutableMap.Builder<String, Object>()
+                      .put("name", ((Reference)quality.get(0)).getName())
+                      .put("params",
+                           ((Reference)quality.get(0)).getParameters()
+                           .getSummary())
+                      .put("condition",
+                           quality.get(1).isDefined() ? quality.get(1) : "")
+                      .put("number", ((Number)quality.get(2)).isDefined()
+                           ? ((Number)quality.get(2)).get() : -1)
+                      .put("summary",
+                           ((Reference<BaseQuality>)quality.get(0))
+                           .summary(ImmutableMap.of
+                                    ("level", "" + getLevel(),
+                                     "class", "" + getSpellClass(),
+                                     "ability", "" + getSpellAbilityModifier
+                                     (null))))
+                      .build());
+      }
 
     return summaries;
   }
@@ -1825,20 +1841,20 @@ public class Monster extends CampaignEntry<BaseMonster>
   public List<Map<String, Object>> allSkills()
   {
     List<Map<String, Object>> skills = Lists.newArrayList();
-    Map<String, Map<Value, ModifiedNumber>> ranks = skillRanks();
+    Map<String, Map<Value<?>, ModifiedNumber>> ranks = skillRanks();
     List<Reference<BaseQuality>> qualities = collectSpecialQualities();
 
     for(BaseSkill skill :
           DMADataFactory.get().getEntries(BaseSkill.TYPE, null, 0, 1000))
     {
-      Map<Value, ModifiedNumber> perName = ranks.get(skill.getName());
+      Map<Value<?>, ModifiedNumber> perName = ranks.get(skill.getName());
       if(perName == null)
       {
         perName = Maps.newHashMap();
         perName.put(null, null);
       }
 
-      for(Value type : perName.keySet())
+      for(Value<?> type : perName.keySet())
       {
         ModifiedNumber modifier = perName.get(type);
 
@@ -1869,7 +1885,7 @@ public class Monster extends CampaignEntry<BaseMonster>
                : collectModifiers(skill.getName()).entrySet())
           modifier.withModifier(entry.getValue(), entry.getKey());
 
-        for(Contribution<? extends Value> contribution
+        for(Contribution<? extends Value<?>> contribution
               : collectContributions(skill.getName()))
           modifier.withModifier((Modifier)contribution.getValue(),
                                 contribution.getDescription());
@@ -1954,26 +1970,19 @@ public class Monster extends CampaignEntry<BaseMonster>
   // }
 
   //........................................................................
-  //--------------------------- addContributions ---------------------------
+  //------------------------------- collect --------------------------------
 
   /**
-   * Add contributions for this entry to the given list.
+   * Collect a combined value
    *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions to add to
+   * @param       inName          the name of the value to combine
+   * @param       ioContributions the combination to combine into
    *
    */
+  @Override
   @SuppressWarnings("unchecked")
-  @Override
-  public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions)
-  {
-    super.addContributions(inName, ioContributions);
-  }
-
-  @Override
-  protected void collect(String inName, Combined ioCombined)
+  protected <T extends Value<T>> void collect(String inName,
+                                              Combined<T> ioCombined)
   {
     super.collect(inName, ioCombined);
 
@@ -2025,9 +2034,9 @@ public class Monster extends CampaignEntry<BaseMonster>
       {
         int bonus = abilityModifier(constitution);
 
-        for(Pair<Value, List<Combined.Node>> value : ioCombined.values())
+        for(Value<?> value : ioCombined.valuesOnly())
         {
-          int level =+ ((Dice)value.first()).getNumber();
+          int level =+ ((Dice)value).getNumber();
           ioCombined.add
             (new Contribution<Modifier>(new Modifier(level * bonus,
                                                      Modifier.Type.GENERAL),
@@ -2052,8 +2061,8 @@ public class Monster extends CampaignEntry<BaseMonster>
           + (abilityModifier((int)dexterity.getMaxValue()) == modifier
              ? "" : " (capped for armor)")));
 
-      Multiple minSize = new Combination<Multiple>(this, "size").min();
-      System.out.println("min size: " + minSize);
+      Combined<Multiple> combinedSize = collect("size");
+      Multiple minSize = combinedSize.min();
       if(minSize != null && minSize.isDefined())
       {
         BaseItem.Size size =
@@ -2120,7 +2129,9 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     improvedCritical =
       hasFeat("improved critical [name " + item.getName() + "]");
-    Critical critical = new Combination<Critical>(item, "critical").total();
+
+    Combined<Critical> combined = collect("critical");
+    Critical critical = combined.max();
     if(critical == null)
       if(improvedCritical)
         return new Critical(19, 20, 2);
@@ -2172,12 +2183,12 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public int getLevel()
   {
-    Combined hitDice = collect("hit dice");
+    Combined<Dice> hitDice = collect("hit dice");
 
     int level = 0;
-    for(Pair<Value, List<Combined.Node>> value : hitDice.values())
-      if(value.first() instanceof Dice)
-        level += ((Dice)value.first()).getNumber();
+    for(Value<?> value : hitDice.valuesOnly())
+      if(value instanceof Dice)
+        level += ((Dice)value).getNumber();
 
     return level;
   }
@@ -2206,7 +2217,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    *
    */
   @SuppressWarnings("unchecked")
-  public int getSpellAbilityModifier(@Nullable Value inClassParam)
+  public int getSpellAbilityModifier(@Nullable Value<?> inClassParam)
   {
     BaseMonster.Ability ability;
     BaseSpell.SpellClass spellClass;
@@ -2273,7 +2284,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    */
   public boolean hasFeat(@Nonnull String inName)
   {
-    for(Reference feat : m_feats)
+    for(Reference<BaseFeat> feat : m_feats)
       if(feat.toString().equalsIgnoreCase(inName))
         return true;
 
@@ -2329,23 +2340,23 @@ public class Monster extends CampaignEntry<BaseMonster>
    *
    */
   @SuppressWarnings("unchecked")
-  public Map<String, Map<Value, ModifiedNumber>> skillRanks()
+  public Map<String, Map<Value<?>, ModifiedNumber>> skillRanks()
   {
-    Combination<ValueList<Multiple>> skills =
-      new Combination<ValueList<Multiple>>(this, "class skills");
+    Combined<ValueList<Multiple>> skills = (Combined<ValueList<Multiple>>)
+      collect("class skills");
 
-    Map<String, Map<Value, ModifiedNumber>> ranks = Maps.newHashMap();
+    Map<String, Map<Value<?>, ModifiedNumber>> ranks = Maps.newHashMap();
 
-    for(Map.Entry<ValueList<Multiple>, String> entry :
-          skills.valuesPerGroup().entries())
+    for(Pair<ValueList<Multiple>, String> pair
+          : skills.valuesWithDescriptions())
     {
-      String group = entry.getValue();
-      for(Multiple skill : entry.getKey())
+      String group = pair.second();
+      for(Multiple skill : pair.first())
       {
         Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));
         String name = ref.getName();
-        Value type = ref.getParameters().getValue("subtype");
-        Map<Value, ModifiedNumber> perName = ranks.get(name);
+        Value<?> type = ref.getParameters().getValue("subtype");
+        Map<Value<?>, ModifiedNumber> perName = ranks.get(name);
         if(perName == null)
         {
           perName = Maps.newHashMap();
@@ -2366,9 +2377,9 @@ public class Monster extends CampaignEntry<BaseMonster>
     {
       Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));
       String name = ref.getName();
-      Value type = ref.getParameters().getValue("subtype");
+      Value<?> type = ref.getParameters().getValue("subtype");
 
-      Map<Value, ModifiedNumber> perName = ranks.get(name);
+      Map<Value<?>, ModifiedNumber> perName = ranks.get(name);
       if(perName == null)
       {
         perName = Maps.newHashMap();
@@ -2464,7 +2475,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   @SuppressWarnings("unchecked")
   public BaseItem.Size getSize()
   {
-    Multiple size = new Combination<Multiple>(this, "size").min();
+    Multiple size = (Multiple)collect("size").min();
     if(size == null)
       return BaseItem.Size.MEDIUM;
 

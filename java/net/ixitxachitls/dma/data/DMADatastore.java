@@ -133,7 +133,11 @@ public class DMADatastore implements DMAData
   /** The maximal number of entries to rebuild in one pass. */
   private static final int s_maxRebuild = 1000;
 
-  /** The cache for entries. */
+  /**
+   * The cache for entries (does not properly work if more than one instance
+   * is running at a time, but AbstractEntries are currently not serializable
+   * so we can't use Memcache).
+   */
   private Map<AbstractEntry.EntryKey<?>, AbstractEntry> m_entries =
     Maps.newHashMap();
 
@@ -164,7 +168,7 @@ public class DMADatastore implements DMAData
     {
       entry = convert(inKey.getID(), inKey.getType(),
                       m_data.getEntity(convert(inKey)));
-      // m_entries.put(inKey, entry);
+      m_entries.put(inKey, entry);
     }
 
     return (T)entry;
@@ -630,7 +634,7 @@ public class DMADatastore implements DMAData
       ((Entry)inEntry).complete();
     }
 
-    //m_entries.put(inEntry.getKey(), inEntry);
+    m_entries.put(inEntry.getKey(), inEntry);
     return m_data.update(convert(inEntry));
   }
 
@@ -975,7 +979,7 @@ public class DMADatastore implements DMAData
     // update extensions, if necessary
     entry.setupExtensions();
 
-    //m_entries.put(entry.getKey(), entry);
+    m_entries.put(entry.getKey(), entry);
     return entry;
   }
 
