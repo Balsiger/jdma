@@ -615,7 +615,7 @@ public String toString()
                    + "\n"
                    + "base entry test =\n"
                    + "\n"
-                   + "  name             test.\n"
+                   + "  name              test.\n"
                    + "\n"
                    + "#.....\n",
                    file.m_entries.get(0).toString());
@@ -624,7 +624,7 @@ public String toString()
                    + "\n"
                    + "base entry test2 =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              test2.\n"
                    + "\n"
                    + "#.....\n",
                    file.m_entries.get(1).toString());
@@ -637,14 +637,14 @@ public String toString()
                    + "\n"
                    + "base entry test =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              test.\n"
                    + "\n"
                    + "#.....\n"
                    + "#----- test2\n"
                    + "\n"
                    + "base entry test2 =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              test2.\n"
                    + "\n"
                    + "#.....\n",
                    writer.toString());
@@ -665,21 +665,21 @@ public String toString()
                    + "\n"
                    + "base entry test =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              test.\n"
                    + "\n"
                    + "#.....\n"
                    + "#----- test2\n"
                    + "\n"
                    + "base entry test2 =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              test2.\n"
                    + "\n"
                    + "#.....\n"
                    + "#----- guru\n"
                    + "\n"
                    + "base entry guru =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              guru.\n"
                    + "\n"
                    + "#.....\n",
                    writer.toString());
@@ -697,14 +697,14 @@ public String toString()
                    + "\n"
                    + "base entry test =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              test.\n"
                    + "\n"
                    + "#.....\n"
                    + "#----- test2\n"
                    + "\n"
                    + "base entry test2 =\n"
                    + "\n"
-                   + ".\n"
+                   + "  name              test2.\n"
                    + "\n"
                    + "#.....\n",
                    writer.toString());
