@@ -1356,7 +1356,8 @@ public class BaseEntry extends AbstractEntry
                    + "  categories        dagger,\n"
                    + "                    weapon,\n"
                    + "                    guru,\n"
-                   + "                    test.\n"
+                   + "                    test;\n"
+                   + "  name              test.\n"
                    + "\n"
                    + "#.....\n",
                    entry.toString());

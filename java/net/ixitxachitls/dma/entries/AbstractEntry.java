@@ -3554,7 +3554,7 @@ public class AbstractEntry extends ValueGroup
                          + "\n"
                          + "  # just some test\n"
                          + "\n"
-                         + "abstract entry test = .\n"
+                         + "base entry test = .\n"
                          + "# some other text\n"
                          + "# as end comment\n"
                          + "\n"
@@ -3573,7 +3573,7 @@ public class AbstractEntry extends ValueGroup
                    + "\n"
                    + "base entry test =\n"
                    + "\n"
-                   + "  name test.\n"
+                   + "  name              test.\n"
                    + "# some other text\n",
                    entry.toString());
     }

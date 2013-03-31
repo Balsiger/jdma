@@ -59,11 +59,6 @@ import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.conditions.Condition;
-//import net.ixitxachitls.dma.values.aux.Group;
-//import net.ixitxachitls.dma.values.conditions.Condition;
-//import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-//import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
-//import net.ixitxachitls.dma.values.formatters.ValueFormatter;
 import net.ixitxachitls.input.ParseReader;
 
 //..........................................................................
@@ -1814,8 +1809,8 @@ public class BaseMonster extends BaseEntry
   protected ValueList<Multiple> m_organizations =
     new ValueList<Multiple>(", ", new Multiple(new Multiple.Element []
       {
-        new Multiple.Element(new EnumSelection<Organization>(Organization.ANY),
-                             false),
+        new Multiple.Element(new EnumSelection<Organization>
+                             (Organization.class), false),
         new Multiple.Element(new Dice().withEditType("dice[number]"), true),
         new Multiple.Element(new ValueList<Multiple>
                              (", ",
@@ -3873,8 +3868,8 @@ public class BaseMonster extends BaseEntry
       + "                    Listen: +11, Spot: +11, Swim: 0;\n"
       + "  feats             Alertness, Combat Casting, Iron Will;\n"
       + "  environment       underground;\n"
-      + "  organization      solitary, brood (1d3+1), \n"
-      + "                    slaver brood (1d3+1 plus 1d6+6 skum);\n"
+      + "  organization      solitary, brood 1d3+1, \n"
+      + "                    slaver brood 1d3+1 plus 1d6+6 skum;\n"
       + "  challenge rating  7;\n"
       + "  treasure          double standard;\n"
       + "  alignment         usually lawful evil;\n"
@@ -3902,10 +3897,6 @@ public class BaseMonster extends BaseEntry
     @org.junit.Test
     public void testRead()
     {
-      //net.ixitxachitls.util.logging.Log.add("out",
-      //                                      new net.ixitxachitls.util.logging
-      //                                      .ANSILogger());
-
       String result =
       "#----- Aboleth\n"
       + "\n"
@@ -3915,7 +3906,7 @@ public class BaseMonster extends BaseEntry
       + "  type              Aberration (Aquatic);\n"
       + "  hit dice          8d8;\n"
       + "  speed             10 ft, Swim 60 ft;\n"
-      + "  natural armor     +7;\n"
+      + "  natural armor     +7 natural armor;\n"
       + "  base attack       +6;\n"
       + "  strength          26;\n"
       + "  dexterity         12;\n"
@@ -3925,14 +3916,15 @@ public class BaseMonster extends BaseEntry
       + "  charisma          17;\n"
       + "  primary attacks   4 Tentacle melee (1d6 plus slime);\n"
       + "  special attacks   enslave, psionics, slime;\n"
-      + "  special qualities darkvision [Range 60 ft], mucus cloud, breathe "
-      + "water, breathe no air, good swimmer [Racial +8];\n"
-      + "  class skills      Concentration: +11, Knowledge [Subtype Any One]:"
-      + " +11, Listen: +11, Spot: +11, Swim: +0;\n"
+      + "  special qualities darkvision [range 60 ft], mucus cloud, breathe "
+      + "water, breathe no air, good swimmer [racial +8];\n"
+      + "  class skills      Concentration: +11 general, "
+      + "Knowledge [subtype Any One]: +11 general, Listen: +11 general, "
+      + "Spot: +11 general, Swim: +0 general;\n"
       + "  feats             Alertness, Combat Casting, Iron Will;\n"
       + "  environment       Underground;\n"
-      + "  organization      solitary, brood (1d3 +1), slaver brood (1d3 +1 "
-      + "plus 1d6 +6 skum);\n"
+      + "  organization      Solitary, Brood 1d3 +1, Slaver Brood 1d3 +1 "
+      + "plus 1d6 +6 skum;\n"
       + "  challenge rating  7;\n"
       + "  treasure          double standard;\n"
       + "  alignment         Usually Lawful Evil;\n"
@@ -3948,206 +3940,18 @@ public class BaseMonster extends BaseEntry
       + "  worlds            Generic;\n"
       + "  references        WTC 17755: 8-9;\n"
       + "  description       \"description\";\n"
-      + "  short description \"short description\".\n"
+      + "  short description \"short description\";\n"
+      + "  name              Aboleth.\n"
       + "\n"
       + "#.....\n";
 
       AbstractEntry entry = createBaseMonster();
-
-      //System.out.println("read entry:\n'" + entry + "'");
 
       assertNotNull("base item should have been read", entry);
       assertEquals("base item name does not match", "Aboleth",
                    entry.getName());
       assertEquals("base item does not match", result, entry.toString());
     }
-
-    //......................................................................
-    //----- print ----------------------------------------------------------
-
-    /** Test raw printing. */
-    // public void testPrint()
-    // {
-    //   ParseReader reader =
-    //     new ParseReader(new java.io.StringReader(s_text), "test");
-
-    //   AbstractEntry entry = BaseMonster.read(reader);
-
-    //   m_logger.verify();
-
-    //   // title and icons
-    //   String result =
-    //     "\\toc{Aboleth}"
-    //     + "\\page{\\title[title][\\link[BaseMonsters/index]{(base monster)}]"
-    //     + "{Aboleth}}"
-    //     + "{\\icon{worlds/Generic.png}{world: Generic}"
-    //     + "{../index/worlds/\\worduppercase{Generic}.html}{highlight}"
-    //     + "\\icon{sizes/6Huge-Long.png}"
-    //     + "{size: Huge (Long)}"
-    //     + "{../index/monstersizes/6Huge-Long.html}{highlight}"
-    //     + "\\icon{monstertypes/Aberration.png}"
-    //     + "{type: Aberration}"
-    //     + "{../index/monstertypes/Aberration.html}{highlight}"
-    //     + "\\icon{monstersubtypes/Aquatic.png}"
-    //     + "{subtype: Aquatic}"
-    //     + "{../index/monstersubtypes/Aquatic.html}{highlight}"
-    //     + "}";
-
-    //   // files
-    //   result += "{\\files[WTC 17755]{BaseMonsters/Aboleth}}";
-
-    //   // files 2
-    //   result += "{\\files[~WTC 17755]{BaseMonsters/Aboleth}}";
-
-    //   // description table
-    //   result += "{\\table[description]{30:L(desc-label);70:L(desc-text)}"
-    //     + "{null}{null}"
-    //     + "{\\nopictures{\\bold{World:}}}"
-    //     + "{\\nopictures{\\link[index/worlds/Generic]{Generic}}}"
-    //     + "{\\nopictures{\\bold{Size:}}}"
-    //     + "{\\nopictures{Huge (Long)}}"
-    //     + "{\\nopictures{\\bold{Type:}}}"
-    //     + "{\\nopictures{Aberration (Aquatic)}}"
-    //     + "{\\divider{desc-width}{\\window{\\bold{Hit Dice:}}{"
-    //     + Config.get("resource:help/label.hit.dice", (String)null)
-    //     + "}}}{\\link[index/monsterhitdices/8]{8}d"
-    //     + "\\link[index/monsterdices/8]{8}}"
-    //     + "{\\window{\\bold{CR:}}{"
-    //     + Config.get("resource:help/label.cr", (String)null)
-    //     + "}}{\\link[index/crs/007]{7}}"
-    //     + "{\\window{\\bold{Level Adj.:}}{"
-    //     + Config.get("resource:help/label.level.adjustment", (String)null)
-    //     + "}}{\\link[index/leveladjustments/-]{-}}"
-    //     + "{\\window{\\bold{Alignment:}}{"
-    //     + Config.get("resource:help/label.alignment", (String)null)
-    //     + "}}{\\link[index/monsteralignments/Usually Lawful Evil]"
-    //     + "[]{Usually Lawful Evil}}"
-    //     + "{\\window{\\bold{Environment:}}{"
-    //     + Config.get("resource:help/label.environment", (String)null)
-    //     + "}}{ \\link[index/terrains/Underground]{Underground} }"
-    //     + "{\\window{\\bold{Speed:}}{"
-    //     + Config.get("resource:help/label.speed", (String)null)
-    //     + "}}{ \\link[index/speeds/10 ft]{\\window{\\span{unit}{10 ft}}"
-    //     + "{\\table{#inline#1:L,,;100:L}{Total:}{10 ft}{}{}{Metric:}"
-    //     + "{\\span{unit}{4 m}}}}"
-    //     + ", \\link[index/movementmodes/Swim]{Swim} "
-    //     + "\\link[index/speeds/60 ft]{\\window{\\span{unit}{60 ft}}"
-    //     + "{\\table{#inline#1:L,,;100:L}{Total:}{60 ft}{}{}{Metric:}"
-    //     + "{\\span{unit}{24 m}}}}}"
-    //     + "{\\window{\\bold{Base Attack:}}{"
-    //     + Config.get("resource:help/label.base.attack", (String)null)
-    //     + "}}{\\link[index/baseattacks/+6]{+6}}"
-    //     + "{\\window{\\italic{\\bold{Space/Reach:}}}{"
-    //     + Config.get("resource:help/label.space", (String)null)
-    //     + "}}{\\color{error}{$undefined$}/\\color{error}{$undefined$}}"
-    //     + "{\\window{\\bold{Organization:}}{"
-    //     + Config.get("resource:help/label.organization", (String)null)
-    //     + "}}{\\link[index/organizations/Solitary]{Solitary}, "
-    //     + "\\link[index/organizations/Brood]{Brood} (1d3 +1), "
-    //     + "\\link[index/organizations/Slaver Brood]{Slaver Brood} "
-    //     + "(1d3 +1 plus 1d6 +6 \\link[BaseMonsters/skum]{skum})}"
-    //     + "{\\window{\\bold{Treasure:}}{"
-    //     + Config.get("resource:help/label.treasure", (String)null)
-    //     + "}}{\\link[index/treasures/2Double Standard]{Double Standard}}"
-    //     + "{\\window{\\bold{Advancement:}}{"
-    //     + Config.get("resource:help/label.advancement", (String)null)
-    //     + "}}{9-16 HD (Huge), 17-24 HD (Gargantuan)}"
-    //     + "{\\window{\\bold{Languages:}}{"
-    //     + Config.get("resource:help/label.languages", (String)null)
-    //     + "}}{ \\link[index/languages/Aboleth]{Aboleth},  "
-    //     + "\\link[index/languages/Undercommon]{Undercommon},  "
-    //     + "\\link[index/languages/Aquan]{Aquan}}"
-    //     + "{\\window{\\bold{Sp. Attacks:}}{"
-    //     + Config.get("resource:help/label.special.attacks", (String)null)
-    //     + "}}{\\link[BaseQualitys/enslave]{enslave}, "
-    //     + "\\link[BaseQualitys/psionics]{psionics}, "
-    //     + "\\link[BaseQualitys/slime]{slime}}"
-    //     + "{\\window{\\bold{Sp. Qualities:}}{"
-    //     + Config.get("resource:help/label.special.qualities", (String)null)
-    //     + "}}{\\link[BaseQualitys/darkvision]{darkvision} (Range "
-    //    + "\\window{\\span{unit}{60 ft}}{\\table{#inline#1:L,,;100:L}{Total:}"
-    //     + "{60 ft}{}{}{Metric:}{\\span{unit}{24 m}}}), "
-    //     + "\\link[BaseQualitys/mucus cloud]{mucus cloud}, "
-    //     + "\\link[BaseQualitys/breathe water]{breathe water}, "
-    //     + "\\link[BaseQualitys/breathe no air]{breathe no air}, "
-    //     + "\\link[BaseQualitys/good swimmer]{good swimmer} (Racial +8)}"
-    //     + "{\\window{\\bold{Abilities:}}{"
-    //     + Config.get("resource:help/label.abilities", (String)null)
-    //     + "}}{Str \\link[index/strengths/26]{26} (+8), "
-    //     + "Dex \\link[index/dexterities/12]{12} (+1), "
-    //     + "Con \\link[index/constitutions/20]{20} (+5), "
-    //     + "Int \\link[index/intelligences/15]{15} (+2), "
-    //     + "Wis \\link[index/wisdoms/17]{17} (+3), "
-    //     + "Cha \\link[index/charismas/17]{17} (+3)}"
-    //     + "{\\window{\\bold{Class Skills:}}{"
-    //     + Config.get("resource:help/label.skills", (String)null)
-    //     + "}}{\\link[BaseSkills/Concentration]{Concentration} +11, "
-    //     + "\\link[BaseSkills/Knowledge]{Knowledge} [Subtype Any One] +11, "
-    //     + "\\link[BaseSkills/Listen]{Listen} +11, "
-    //     + "\\link[BaseSkills/Spot]{Spot} +11, \\link[BaseSkills/Swim]{Swim} "
-    //     + "(44 skill points)}"
-    //     + "{\\window{\\bold{Feats:}}{"
-    //     + Config.get("resource:help/label.feats", (String)null)
-    //     + "}}{\\link[BaseFeats/Alertness]{Alertness}, "
-    //     + "\\link[BaseFeats/Combat Casting]{Combat Casting}, "
-    //     + "\\link[BaseFeats/Iron Will]{Iron Will}}"
-    //     + "{\\window{\\bold{References:}}{"
-    //     + Config.get("resource:help/label.references", (String)null)
-    //    + "}}{\\span{unit}{\\link[BaseProducts/WTC 17755]{WTC 17755} p. 8-9}}"
-    //     + "{\\window{\\bold{Monsters:}}{"
-    //     + Config.get("resource:help/label.monsters", (String)null)
-    //     + "}}{null}"
-    //     + "{null}{null}}"
-    //     + "{\\table[texts]{100:B}{\\par }"
-    //     + "{\\emph{\\textblock[desc]{encounter}}}"
-    //     + "{\\par }{\\textblock[desc]{description}}"
-    //   + "{\\right{\\scriptsize{\\italic{\\color{#AAAAAA}{Combat}}}}}{combat}"
-    //     + "{\\right{\\scriptsize{\\italic{\\color{#AAAAAA}{Tactics}}}}}"
-    //     + "{tactic}"
-    //     + "{\\right{\\scriptsize{\\italic{\\color{#AAAAAA}{Character}}}}}"
-    //     + "{character}"
-    //     + "{\\right{\\scriptsize{\\italic{\\color{#AAAAAA}{Reproduction}}}}}"
-    //     + "{reproduction}}"
-    //     + "{\\table[text]{100:L}{\\right{\\scriptsize{\\italic"
-    //     + "{\\color{#AAAAAA}{Feats}}}}}{null}"
-    //     + "{\\right{\\scriptsize{\\italic"
-    //     + "{\\color{#AAAAAA}{Skills}}}}}{null}"
-    //     + "{\\right{\\scriptsize{\\italic"
-    //     + "{\\color{#AAAAAA}{Special Qualities}}}}}{null}"
-    //     + "{\\right{\\scriptsize{\\italic"
-    //     + "{\\color{#AAAAAA}{Special Attacks}}}}}{null}}\\newpage ";
-
-    //   assertEquals("print commands",
-    //                result,
-    //                entry.getPrintCommand(false));
-    // }
-
-    //......................................................................
-    //----- shortPrint -----------------------------------------------------
-
-    /** Test short printing. */
-    // public void testShortPrint()
-    // {
-    //   ParseReader reader =
-    //     new ParseReader(new java.io.StringReader(s_text), "test");
-
-    //   AbstractEntry entry = BaseMonster.read(reader);
-
-    //   String result =
-    //     "\\title[label]{Aboleth (\\color{error}{$undefined$})}\n\n"
-    //     + "\\label{World}"
-    //     + "\\link[index/worlds/Generic]{Generic}"
-    //     + "\\label{Size}H (L)\\label{Type}Aberration (Aquatic)"
-    //     + "\\label{Hit Dice}\\link[index/monsterhitdices/8]{8}d"
-    //     + "\\link[index/monsterdices/8]{8}\\label{Speed} "
-    //     + "\\link[index/speeds/10 ft]{10 ft}, "
-    //     + "\\link[index/movementmodes/Swim]{Swim} "
-    //     + "\\link[index/speeds/60 ft]{60 ft}short description\n";
-
-    //   //System.out.println(entry.getShortPrintCommand().toString());
-    //   assertEquals("print commands",
-    //                result, entry.getPrintCommand(false));
-    // }
 
     //......................................................................
   }

@@ -577,7 +577,8 @@ public class BaseCharacter extends BaseEntry
                    + "  email             "
                    + "\"roger@acme.com <'Roger Rabbit'>\";\n"
                    + "  last action       \"today\";\n"
-                   + "  group             User.\n"
+                   + "  group             User;\n"
+                   + "  name              Me.\n"
                    + "\n"
                    + "#.....\n",
                    character.toString());

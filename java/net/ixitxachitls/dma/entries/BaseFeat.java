@@ -612,44 +612,6 @@ public class BaseFeat extends BaseEntry
     }
   }
 
-  @SuppressWarnings("unchecked")
-  //@Override
-  public void addContributions
-    (@Nonnull String inName,
-     @Nonnull List<Contribution<? extends Value>> ioContributions,
-     // TODO: remove the parameters and handle this in a quality!
-     @Nonnull Parameters inParameters)
-  {
-    addContributions(inName, ioContributions);
-
-    for(Multiple multiple : m_effects)
-    {
-      if(inName.equalsIgnoreCase(multiple.get(1).toString())
-         || inName.equalsIgnoreCase(multiple.get(0).toString()))
-      {
-        Modifier modifier = (Modifier)multiple.get(2);
-        if(modifier.getExpression() instanceof Expression.Expr)
-        {
-          String expression =
-            computeExpressions(((Expression.Expr)modifier.getExpression())
-                               .getText(), inParameters);
-
-          Modifier computed = modifier.read(expression);
-          if (computed != null)
-            ioContributions.add(new Contribution(computed, this, null));
-          else
-            ioContributions.add
-              (new Contribution
-               (modifier.as(Integer.valueOf(expression.replace('+', '0')),
-                            modifier.getType(), modifier.getCondition(), null),
-                this, null));
-        }
-        else
-          ioContributions.add(new Contribution(modifier, this, null));
-      }
-    }
-  }
-
   //........................................................................
 
   //........................................................................
@@ -723,7 +685,8 @@ public class BaseFeat extends BaseEntry
         + "  references        WTC 17524: 89;\n"
         + "  description       \"You have excellent body awareness and "
         + "coordination.\";\n"
-        + "  short description \"+2 bonus on Jump and Tumble checks\".\n"
+        + "  short description \"+2 bonus on Jump and Tumble checks\";\n"
+        + "  name              Acrobatic.\n"
         + "\n"
         + "#.....\n";
 
