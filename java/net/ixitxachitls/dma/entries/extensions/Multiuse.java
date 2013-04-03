@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Expression;
@@ -104,14 +105,14 @@ public class Multiuse extends Counted
 
   //------------------------------------------------- other member functions
 
-  //-------------------------- adjustCombination ---------------------------
+  //------------------------------- collect --------------------------------
 
   /**
    * Adjust the value for the given name for any special properites.
    *
-   * @param       inName        the name of the value to adjust
-   * @param       ioCombination the combinstaion to adjust
-   * @param       <V>           the real type of value being adjusted
+   * @param       inName      the name of the value to adjust
+   * @param       ioCombined  the combinstaion to adjust
+   * @param       <V>         the real type of value being collected
    *
    */
   @Override
@@ -134,7 +135,31 @@ public class Multiuse extends Counted
 
   //------------------------------------------------------------------- test
 
-  // no tests, see BaseItem for tests
+  /** The test. */
+  public static class Test extends ValueGroup.Test
+  {
+    //----- value ----------------------------------------------------------
+
+    /** The value Test. */
+    @org.junit.Test
+    public void value()
+    {
+      String text = "campaign campaign = base FR.\n"
+        + "item with multiuse item = value 100 gp; campaign FR / campaign; "
+        + "count 20.\n";
+
+      net.ixitxachitls.input.ParseReader reader =
+        new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
+                                               "container test");
+
+      addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
+      Item item = (Item)Item.read(reader);
+
+      assertEquals("value", 2000.0, item.getGoldValue(), 0.5);
+    }
+
+    //......................................................................
+  }
 
   //........................................................................
 }

@@ -52,7 +52,7 @@ import net.ixitxachitls.dma.entries.ValueGroup;
 //__________________________________________________________________________
 
 @Immutable
-public class Contribution<V>
+public class Contribution<V> implements Comparable<Contribution<V>>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -151,6 +151,46 @@ public class Contribution<V>
   public @Nonnull String getDescription()
   {
     return m_group.getName() + (m_text == null ? "" : " (" + m_text + ")");
+  }
+
+  //........................................................................
+  //------------------------------ compareTo -------------------------------
+
+  /**
+   * Compare this expression to the other one.
+   *
+   * @param       inOther the expression to compare to
+   *
+   * @return      <0 if this is smaller than the other, >0 if bigger, 0 if equal
+   *
+   */
+  public int compareTo(@Nullable Contribution<V> inOther)
+  {
+    if(inOther == null)
+      return +1;
+
+    V value = getValue();
+    V otherValue = inOther.getValue();
+
+    if (value instanceof Value<?> && !(otherValue instanceof Value<?>))
+      return +1;
+
+    if (!(value instanceof Value<?>) && otherValue instanceof Value<?>)
+      return -1;
+
+    if (value instanceof Expression && !(otherValue instanceof Expression))
+      return +1;
+
+    if (!(value instanceof Expression) && otherValue instanceof Expression)
+      return -1;
+
+    if (value instanceof Value<?>)
+      return ((Value<?>)value).compareTo(otherValue);
+
+    if (value instanceof Expression)
+      return ((Expression)value).compareTo((Expression)otherValue);
+
+    return 0;
   }
 
   //........................................................................
