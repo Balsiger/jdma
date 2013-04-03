@@ -64,6 +64,7 @@ public interface DMAData
   /**
    * A simple representation for a file associated with an entry.
    */
+  @ParametersAreNonnullByDefault
   public static class File
   {
     /**
@@ -459,6 +460,7 @@ public interface DMAData
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     /** A simple data class for testing. */
+    @ParametersAreNonnullByDefault
     public static class Data extends DMADatafiles
     {
       /**

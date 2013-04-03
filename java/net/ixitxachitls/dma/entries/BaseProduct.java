@@ -128,6 +128,7 @@ public class BaseProduct extends BaseEntry
         "Necromancer Games",
         "Open Mind Games",
         "Pegasus Press",
+        "Q-Workshop",
         "Rackham",
         "Ral Partha",
         "Reaper",
@@ -2995,7 +2996,8 @@ public class BaseProduct extends BaseEntry
         + "                    \\Product[WTC 11550]{Player's Handbook}, the\n"
         + "                    \\Product[WTC 11551]{Dungeon Master's\n"
         + "                    Guide}, and the \\Product[WTC 11552]{Monster "
-        + "Manual}.\".\n"
+        + "Manual}.\";\n"
+        + "  name              WTC 88567.\n"
         + "\n"
         + "#.....\n";
 

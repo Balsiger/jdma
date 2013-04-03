@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.Nullable;
 
 import net.ixitxachitls.dma.entries.FormattedValue;
@@ -37,7 +37,8 @@ import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Combined;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -62,6 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Composite extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -75,7 +77,7 @@ public class Composite extends Extension<Item>
    * @param       inName the name of the extension
    *
    */
-  public Composite(@Nonnull Item inEntry, @Nonnull String inName)
+  public Composite(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -128,36 +130,6 @@ public class Composite extends Extension<Item>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- getIncludes ------------------------------
 
   /**
@@ -166,7 +138,7 @@ public class Composite extends Extension<Item>
    * @return      the list with all the entries
    *
    */
-  public @Nonnull List<Item> getIncludes()
+  public List<Item> getIncludes()
   {
     List<Item> list = new ArrayList<Item>();
 
@@ -183,43 +155,6 @@ public class Composite extends Extension<Item>
   }
 
   //........................................................................
-  //---------------------------- addListCommands ---------------------------
-
-  /**
-   * Add the commands for printing this extension to a list.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   *
-   * @undefined   IllegalArgumentException if given commands are null
-   *
-   */
-  // public void addListCommands(ListCommand ioCommands, boolean inDM)
-  // {
-  //   if(ioCommands == null)
-  //     return;
-
-  //   super.addListCommands(ioCommands, inDM);
-
-  //   ioCommands.add(ListCommand.Type.NAME, " with ");
-  //   for(Iterator<Entry> i = getSubEntries().iterator(); i.hasNext(); )
-  //   {
-  //     Entry entry = i.next();
-
-  //     if(!(entry instanceof Item))
-  //       continue;
-
-  //     ioCommands.add(ListCommand.Type.NAME, ((Item)entry).getPlayerName());
-  //     ioCommands.add(ListCommand.Type.NAME,
-  //                    new Super(new Scriptsize("(" + ((Item)entry).getID())
-  //                              + ")"));
-
-  //     if(i.hasNext())
-  //       ioCommands.add(ListCommand.Type.NAME, ", ");
-  //   }
-  // }
-
-  //........................................................................
   //---------------------------- containedItems ----------------------------
 
   /**
@@ -230,7 +165,7 @@ public class Composite extends Extension<Item>
    * @return      a list with all the items
    *
    */
-  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
+  public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
     for(Name name : m_includes)
@@ -265,7 +200,7 @@ public class Composite extends Extension<Item>
    *
    */
   @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
   {
     if("include".equals(inKey))
     {
@@ -309,11 +244,10 @@ public class Composite extends Extension<Item>
   {
     if(!m_includes.isDefined())
     {
-      Combination <ValueList<ValueList<Name>>>base =
-        new Combination<ValueList<ValueList<Name>>>(m_entry, "contains");
+      Combined <ValueList<ValueList<Name>>>base = m_entry.collect("contains");
 
       List<Name> names = new ArrayList<Name>();
-      for(ValueList<ValueList<Name>> andList : base.values())
+      for(ValueList<ValueList<Name>> andList : base.valuesOnly())
         for(ValueList<Name> orList : andList)
         {
           String baseName = orList.get(s_random.nextInt(orList.size())).get();
@@ -354,123 +288,18 @@ public class Composite extends Extension<Item>
    */
   @Override
   @SuppressWarnings("unchecked")
-  public <V extends Value> void
-            adjustCombination(@Nonnull String inName,
-                              Combination<V> ioCombination)
+  public <V extends Value<V>> void collect(String inName,
+                                           Combined<V> ioCombined)
   {
     if("value".equals(inName) || "weight".equals(inName))
     {
       V total = sum(inName, getIncludes());
       if(total != null)
-        ioCombination.add(total, this);
+        ioCombined.addValue(new Contribution<V>(total, this, "composite"));
     }
 
-    super.adjustCombination(inName, ioCombination);
+    super.collect(inName, ioCombined);
   }
-
-  //........................................................................
-  //----------------------------- modifyValue ------------------------------
-
-  /**
-    *
-    * Modify the given value with information from the current extension.
-    *
-    * @param       inType    the type of value to modify
-    * @param       inEntry   the entry to modify in
-    * @param       inValue   the value to modify, return in this object
-    * @param       inDynamic a flag denoting if dynamic modifiers should be
-    *                        returned
-    *
-    * @return      the newly computed value (or null if no value to use)
-    *
-    * @undefined   never
-    *
-    * @algorithm   nothing done here
-    *
-    * @derivation  necessary if real modifications are desired
-    *
-    * @example     see Item
-    *
-    * @bugs
-    * @to_do
-    *
-    * @keywords    modify . value
-    *
-    */
-  // TODO: remove
-//   public Modifier modifyValue(PropertyKey inType, AbstractEntry inEntry,
-//                               Value inValue, boolean inDynamic)
-//   {
-//     if(inDynamic)
-//     {
-//       if(inType == PropertyKey.getKey("weight"))
-//       {
-//         // add the weight of all the includeds
-//         Weight weight = new Weight();
-
-//         for(Iterator<Value> i = m_includes.iterator(); i.hasNext(); )
-//           weight.add(((Item)((EntryValue)i.next()).get()).getWeight());
-
-//         return new Modifier(Modifier.Type.ADD, weight);
-//       }
-
-//       if(inType == PropertyKey.getKey("value"))
-//       {
-//         // add the weight of all the includeds
-//         Money value = new Money();
-
-//         for(Iterator<Value> i = m_includes.iterator(); i.hasNext(); )
-//           value.add(((Item)((EntryValue)i.next()).get()).getValue());
-
-//         return new Modifier(Modifier.Type.ADD, value);
-//       }
-
-//       if(inType == PropertyKey.getKey("hardness"))
-//       {
-//         // determine the maximal hardness
-//         long max = 0;
-
-//         for(Iterator<Value> i = m_includes.iterator(); i.hasNext(); )
-//           max = Math.max(max,
-//                          ((Number)((Item)((EntryValue)i.next()).get())
-//                           .getValue("hardness")).get());
-
-//         return new Modifier(Modifier.Type.MAX, max);
-//       }
-
-//       if(inType == PropertyKey.getKey("break DC"))
-//       {
-//         // determine the maximal break DC
-//         long max = 0;
-
-//         for(Iterator<Value> i = m_includes.iterator(); i.hasNext(); )
-//         {
-//           Item item = (Item)((EntryValue)i.next()).get();
-
-//           if(item.getValue("break DC").isDefined())
-//             max =
-//               Math.max(max, ((Number)
-//                              (item.getValue("break DC"))).get());
-//         }
-
-//         return new Modifier(Modifier.Type.MAX, max);
-//       }
-
-//       if(inType == PropertyKey.getKey("hp"))
-//       {
-//         // add all hitpoints
-//         Number hp = new Number(0, 0, 100000);
-
-//         for(Iterator<Value> i = m_includes.iterator(); i.hasNext(); )
-//           hp.addTo(((Item)((EntryValue)i.next()).get())
-//                    .getValue("hp"));
-
-//         return new Modifier(Modifier.Type.ADD, hp);
-//       }
-//     }
-
-//     return super.modifyValue(inType, inEntry, inValue, inDynamic);
-//   }
 
   //........................................................................
 

@@ -23,10 +23,11 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Combined;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.Value;
 
@@ -47,6 +48,7 @@ import net.ixitxachitls.dma.values.Value;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Multiple extends Counted
 {
   //--------------------------------------------------------- constructor(s)
@@ -60,7 +62,7 @@ public class Multiple extends Counted
    * @param       inName the name of the extension
    *
    */
-  public Multiple(@Nonnull Item inEntry, @Nonnull String inName)
+  public Multiple(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -108,20 +110,21 @@ public class Multiple extends Counted
   /**
    * Adjust the value for the given name for any special properites.
    *
-   * @param       inName        the name of the value to adjust
-   * @param       ioCombination the combinstaion to adjust
-   * @param       <V>           the real type of value being adjusted
+   * @param       inName      the name of the value to adjust
+   * @param       ioCombined  the combined value to adjust
+   * @param       <V>         the real type of value being adjusted
    *
    */
   @Override
-  public <V extends Value> void
-            adjustCombination(@Nonnull String inName,
-                              Combination<V> ioCombination)
+  public <V extends Value<V>> void collect(String inName,
+                                           Combined<V> ioCombined)
   {
     if("value".equals(inName) || "weight".equals(inName))
-      ioCombination.add(new Expression.Factor(m_count.get(), 1), this);
+      ioCombined.addExpression(new Contribution<Expression>
+                               (new Expression.Factor(m_count.get(), 1),
+                                this, "multiple"));
 
-    super.adjustCombination(inName, ioCombination);
+    super.collect(inName, ioCombined);
   }
 
   //........................................................................

@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -66,6 +66,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class AbstractExtension<T extends AbstractEntry>
   extends ValueGroup
 {
@@ -80,7 +81,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @param       inName   the name of the extension
    *
    */
-  public AbstractExtension(@Nonnull T inEntry, @Nonnull String inName)
+  public AbstractExtension(T inEntry, String inName)
   {
     m_name = inName;
     m_entry = inEntry;
@@ -97,8 +98,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @param       inName   the name for this extension
    *
    */
-  // public AbstractExtension(@Nonnull T inEntry, @Nonnull String inTag,
-  // @Nonnull String inName)
+  // public AbstractExtension(T inEntry, String inTag, String inName)
   // {
   // this(inEntry, inName);
   //   m_tag   = inTag;
@@ -111,13 +111,13 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   //-------------------------------------------------------------- variables
 
   /** The name of the extension. */
-  protected @Nonnull String m_name;
+  protected String m_name;
 
   /** The tag of the extension, if any. */
   // protected String m_tag  = null;
 
   /** The entry this extension is associated with. */
-  protected @Nonnull T m_entry;
+  protected T m_entry;
 
   /** A flag denoting if the extension is complete or not. */
   // protected boolean m_complete = false;
@@ -127,9 +127,9 @@ public abstract class AbstractExtension<T extends AbstractEntry>
     Config.get("resource:html/dir.extensions", "extensions");
 
   /** All the possible auto extensions for each class (if any). */
-  protected static final Map<Class<? extends AbstractExtension>, String []>
+  protected static final Map<Class<? extends AbstractExtension<?>>, String []>
     s_autoExtensions =
-    new HashMap<Class<? extends AbstractExtension>, String []>();
+    new HashMap<Class<? extends AbstractExtension<?>>, String []>();
 
   //........................................................................
 
@@ -165,7 +165,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      the value the field has in this object, if any
    *
    */
-  public @Nullable Value getValue(@Nonnull Field inField)
+  public @Nullable Value<?> getValue(Field inField)
   {
     if(inField == null)
       throw new IllegalArgumentException("must have a field here");
@@ -191,7 +191,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-  public @Nonnull AbstractType<? extends AbstractEntry> getType()
+  public <T extends AbstractEntry> AbstractType<T> getType()
   {
     return m_entry.getType();
   }
@@ -207,7 +207,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    */
   @SuppressWarnings("unchecked")
   @Override
-  public @Nonnull AbstractEntry.EntryKey<? extends AbstractEntry> getKey()
+  public AbstractEntry.EntryKey<? extends AbstractEntry> getKey()
   {
     return m_entry.getKey();
   }
@@ -222,61 +222,10 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-  public @Nonnull String getEditType()
+  public String getEditType()
   {
     return m_entry.getEditType();
   }
-
-  //........................................................................
-  //--------------------------- addPrintCommands ---------------------------
-
-  /**
-   * Add the commands for printing this extension to the given print command.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   * @param       inEditable flag if values editable or not
-   *
-   */
-  // public void addPrintCommands(@MayBeNull PrintCommand ioCommands,
-  //                              boolean inDM, boolean inEditable)
-  // {
-  //   if(ioCommands == null)
-  //     return;
-
-  //   ioCommands.addValue("extension", getName(), false, false, false,
-  //                       "extensions");
-  // }
-
-  //........................................................................
-  //---------------------------- addListCommands ---------------------------
-
-  /**
-   * Add the commands for printing this extension to a list.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   *
-   */
-  // public void addListCommands(ListCommand ioCommands, boolean inDM)
-  // {
-  //   // nothing to do here yet
-  // }
-
-  //........................................................................
-  //-------------------------- addSummaryCommand ---------------------------
-
-  /**
-   * Add the extensions value to the summary command list.
-   *
-   * @param       ioCommands the commands so far, will add here
-   * @param       inDM       true if setting for the dm
-   *
-   */
-  // public void addSummaryCommands(List<Object> ioCommands, boolean inDM)
-  // {
-  //   // nothing to do here
-  // }
 
   //........................................................................
 
@@ -290,7 +239,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      the list with all the entries or null if none
    *
    */
-  public @Nullable List<Entry> getSubEntries(boolean inDeep)
+  public @Nullable List<Entry<?>> getSubEntries(boolean inDeep)
   {
     return null;
   }
@@ -305,7 +254,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      the entry or base entry this one is attached to
    *
    */
-  public @Nonnull T getEntry()
+  public T getEntry()
   {
     return m_entry;
   }
@@ -317,10 +266,9 @@ public abstract class AbstractExtension<T extends AbstractEntry>
     * Get the name of the extension.
     *
     * @return      the name
-    *
     */
   @Override
-  public @Nonnull String getName()
+  public String getName()
   {
     return m_name;
   }
@@ -333,7 +281,6 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * tag, if any.
    *
    * @return      the id
-   *
    */
   @Override
   @Deprecated
@@ -357,8 +304,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      an iterator with all the names of the extensions
    *
    */
-  public static @Nonnull List<String>
-    getAutoExtensions(Class<? extends AbstractExtension> inClass)
+  public static List<String> getAutoExtensions(Class<?> inClass)
   {
     String []names = s_autoExtensions.get(inClass);
     if(names == null)
@@ -411,40 +357,10 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   public abstract void computeIndexValues
-    (@Nonnull Multimap<Index.Path, String> ioValues);
+    (Multimap<Index.Path, String> ioValues);
 
   //........................................................................
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    ValueHandle value = super.computeValue(inKey, inDM);
-    if(value != null)
-      return value;
-
-    // the value is not defined for this extension, but might be defined in a
-    // base
-    // String key;
-    // if(inKey.startsWith("_"))
-    //   key = inKey.substring(1);
-    // else
-    //   key = inKey;
-
-    return null;
-  }
-
-  //........................................................................
-  //------------------------------- toString -------------------------------
+ //------------------------------- toString -------------------------------
 
   /**
    * Return a humand readable version of the value for debugging.
@@ -453,7 +369,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return m_name + " (for " + m_entry.getName() + ")";
   }
@@ -576,8 +492,8 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    *
    */
   protected static void setAutoExtensions
-    (@Nonnull Class<? extends AbstractExtension> inClass,
-     @Nonnull String ... inAbstractExtensions)
+    (Class<? extends AbstractExtension<?>> inClass,
+     String ... inAbstractExtensions)
   {
     if(inAbstractExtensions.length == 0)
       throw new IllegalArgumentException("must have extensions here");

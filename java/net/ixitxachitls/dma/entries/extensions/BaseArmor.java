@@ -395,7 +395,8 @@ public class BaseArmor extends BaseExtension<BaseItem>
     super.collect(inName, ioCombined);
 
     if("armor class".equals(inName) && m_bonus.isDefined())
-      ioCombined.add(new Contribution<Modifier>(m_bonus, m_entry, "armor"));
+      ioCombined.addModifier(new Contribution<Modifier>(m_bonus, m_entry,
+                                                        "armor"));
   }
 
   //........................................................................

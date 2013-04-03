@@ -329,6 +329,7 @@ public abstract class ValueGroup implements Changeable
    * Get the type of the entry.
    *
    * @return      the requested name
+   * @param       <T> the type of the entry the type is for
    *
    */
   public abstract <T extends AbstractEntry> AbstractType<T> getType();
@@ -763,6 +764,7 @@ public abstract class ValueGroup implements Changeable
    * @return      a mapping between location and modifier found
    *
    */
+  @Deprecated
   public Map<String, Modifier> collectModifiers(String inName)
   {
     Map<String, Modifier> modifiers = new HashMap<String, Modifier>();
@@ -782,6 +784,7 @@ public abstract class ValueGroup implements Changeable
    * @param       ioModifers    the map of modifiers
    *
    */
+  @Deprecated
   public void addModifiers(String inName, Map<String, Modifier> inModifiers)
   {
     // nothing to do
@@ -813,6 +816,7 @@ public abstract class ValueGroup implements Changeable
    * @return
    *
    */
+  @Deprecated
   public List<Contribution<? extends Value<?>>>
                              collectContributions(String inName)
   {
@@ -833,6 +837,7 @@ public abstract class ValueGroup implements Changeable
    * @param       ioContributions the list of contributions to add to
    *
    */
+  @Deprecated
   public void addContributions
     (String inName, List<Contribution<? extends Value<?>>> ioContributions)
   {
@@ -845,11 +850,10 @@ public abstract class ValueGroup implements Changeable
   //------------------------------- collect --------------------------------
 
   /**
+   * Collect the named value from all possible sources.
    *
-   *
-   * @param
-   *
-   * @return
+   * @param   inName     the name of the value to collect
+   * @param   ioCombined the combined value to collect into (can be changed)
    *
    */
   protected <T extends Value<T>> void collect(String inName,

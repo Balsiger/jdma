@@ -73,15 +73,31 @@ public abstract class SoyAbstract extends SoyMapData
 {
   //----------------------------------------------------------------- nested
 
+  /**
+   * An undefined value that can still be dereferenced, resulting in another
+   * undefined value.
+   */
   @Immutable
   @ParametersAreNonnullByDefault
   public static class Undefined extends SoyAbstract
   {
+    /**
+     * Create the undefined value with the given name.
+     *
+     * @param inName the name of the value
+     */
     public Undefined(String inName)
     {
       super(inName, null);
     }
 
+    /**
+     * Get the named value.
+     *
+     * @param  inName the name of the value to get
+     *
+     * @return the value with the given name
+     */
     @Override
     public SoyData getSingle(String inName)
     {
@@ -92,6 +108,11 @@ public abstract class SoyAbstract extends SoyMapData
       return new Undefined(m_name + "." + inName);
     }
 
+    /**
+     * Convert the undefined value to a human readable string.
+     *
+     * @return the string conversion
+     */
     @Override
     public String toString()
     {
@@ -99,10 +120,20 @@ public abstract class SoyAbstract extends SoyMapData
     }
   }
 
+  /**
+   * A wrapper for a soy value calling a method with the given name or
+   * returning an undefined value.
+   */
   @Immutable
   @ParametersAreNonnullByDefault
   public static class SoyWrapper extends SoyAbstract
   {
+    /** Create the wrapper.
+     *
+     * @param inName  the name of the value
+     * @param inValue the object in which to call the method
+     * @param inEntry the entry the value comes from
+     */
     public SoyWrapper(String inName, Object inValue, AbstractEntry inEntry)
     {
       super(inName, inEntry);
@@ -110,8 +141,17 @@ public abstract class SoyAbstract extends SoyMapData
       m_value = inValue;
     }
 
+    /** The object in which to call the method. */
     private Object m_value;
 
+    /**
+     * Get a single, named value.
+     *
+     * @param  inName the name of the value to get
+     *
+     * @return the value returned by the name method call or undefined if not
+     *         found
+     */
     @Override
     public SoyData getSingle(String inName)
     {
@@ -127,7 +167,13 @@ public abstract class SoyAbstract extends SoyMapData
 
   //--------------------------------------------------------- constructor(s)
 
-  public SoyAbstract(@Nonnull String inName, @Nonnull AbstractEntry inEntry)
+  /**
+   * Create the abstract soy value.
+   *
+   * @param inName  the name of the sou value
+   * @param inEntry the entry in which to evaluate the values
+   */
+  public SoyAbstract(String inName, AbstractEntry inEntry)
   {
     m_name = inName;
     m_entry = inEntry;
@@ -138,10 +184,10 @@ public abstract class SoyAbstract extends SoyMapData
   //-------------------------------------------------------------- variables
 
   /** The name of the value. */
-  protected final @Nonnull String m_name;
+  protected final String m_name;
 
   /** The entry with the data. */
-  protected final @Nonnull AbstractEntry m_entry;
+  protected final AbstractEntry m_entry;
 
   //........................................................................
 
@@ -160,14 +206,13 @@ public abstract class SoyAbstract extends SoyMapData
   /**
    * Convert the given object into a soy value.
    *
+   * @param       inName   the name of the object to convert
    * @param       inObject the object to convert
    *
    * @return      the converted object
-   *
    */
   @SuppressWarnings("unchecked")
-  protected @Nonnull SoyData convert(@Nonnull String inName,
-                                     @Nonnull Object inObject)
+  protected SoyData convert(String inName, Object inObject)
   {
     if(inObject instanceof Value)
       return new SoyValue(inName, (Value)inObject, m_entry);
@@ -253,9 +298,9 @@ public abstract class SoyAbstract extends SoyMapData
   //------------------------------------------------------------------- test
 
   /** The tests. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
-  {
-  }
+  // public static class Test extends net.ixitxachitls.util.test.TestCase
+  // {
+  // }
 
   //........................................................................
 }

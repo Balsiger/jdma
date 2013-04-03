@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -55,7 +55,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
-public class BaseText<T extends BaseText> extends Value<T>
+public class BaseText<T extends BaseText<T>> extends Value<T>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -100,7 +100,7 @@ public class BaseText<T extends BaseText> extends Value<T>
   @Override
   @SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
-  public @Nonnull T create()
+  public T create()
   {
     return (T)new BaseText();
   }
@@ -115,17 +115,17 @@ public class BaseText<T extends BaseText> extends Value<T>
   protected @Nullable String m_text = null;
 
   /** The delimiters for ending the text. */
-  protected static final @Nonnull String s_nameDelimiters =
+  protected static final String s_nameDelimiters =
     Config.get("resource:values/name.delimiter.simple",
                "\":,.;=[]{}|()/");
 
   /** The delimiters for ending the text after a space. */
-  protected static final @Nonnull String s_nameSpaceDelimiters =
+  protected static final String s_nameSpaceDelimiters =
     Config.get("resource:values/name.delimiter.simple.space",
                "-*%$#@~!");
 
   /** The pattern for the delimiters (escaped). */
-  protected static final @Nonnull String s_nameDelimPattern =
+  protected static final String s_nameDelimPattern =
     Config.get("resource:values/name.delimiter.simple.pattern",
                "\":,.;=\\[\\]\\{\\}\\|\\(\\)\\/");
 
@@ -159,7 +159,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry)
+  protected String doPrint(AbstractEntry inEntry)
   {
     if(m_text == null)
       return "";
@@ -177,7 +177,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     return new BaseCommand(m_text);
   }
@@ -192,7 +192,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     return m_text.replaceAll("([" + s_nameDelimPattern + "])", "\\\\$1");
   }
@@ -251,7 +251,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    * @return      a new value with the given value set
    *
    */
-  public T as(@Nonnull String inText)
+  public T as(String inText)
   {
     T result = create();
 
@@ -272,7 +272,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-  public @Nonnull T add(@Nonnull T inValue)
+  public T add(T inValue)
   {
     String text = "";
     if(m_text != null)
@@ -302,7 +302,7 @@ public class BaseText<T extends BaseText> extends Value<T>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text =
@@ -333,7 +333,7 @@ public class BaseText<T extends BaseText> extends Value<T>
     @SuppressWarnings("unchecked") // need to cast
     public void testInit()
     {
-      BaseText<BaseText> text = new BaseText<BaseText>();
+      BaseText text = new BaseText();
 
       // undefined value
       assertEquals("not undefined at start", false, text.isDefined());
@@ -369,13 +369,13 @@ public class BaseText<T extends BaseText> extends Value<T>
                    text.get());
 
       // add something to the text
-      BaseText added = text.add(new BaseText<BaseText>("more text"));
+      BaseText added = text.add(new BaseText("more text"));
       assertEquals("added", "just some \\\" test more text", added.toString());
       assertEquals("added",
                    "\\baseCommand{just some \" test more text}",
                    added.format().toString());
 
-      added = text.add(new BaseText<BaseText>(" and more"));
+      added = text.add(new BaseText(" and more"));
       assertEquals("added", "just some \\\" test and more", added.toString());
       assertEquals("added", "\\baseCommand{just some \" test and more}",
                    added.format().toString());
@@ -413,7 +413,7 @@ public class BaseText<T extends BaseText> extends Value<T>
           "hint 4", "{* some text", null, "{* some text",
         };
 
-      Value.Test.readTest(texts, new BaseText<BaseText>());
+      Value.Test.readTest(texts, new BaseText());
     }
 
     //......................................................................

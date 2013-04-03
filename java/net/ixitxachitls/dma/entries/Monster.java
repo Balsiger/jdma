@@ -1323,7 +1323,8 @@ public class Monster extends CampaignEntry<BaseMonster>
   public Combined<Modifier> armorClass()
   {
     Combined<Modifier> armor = collect("armor class");
-    armor.add(new Contribution<Number>(new Number(10, 10, 10), this, "base"));
+    armor.addModifier(new Contribution<Modifier>(new Modifier(10), this,
+                                                 "base"));
     Combined<Modifier> naturalArmor = collect("natural armor");
     armor.add(naturalArmor, "natural armor");
 
@@ -1458,7 +1459,7 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     return new ImmutableMap.Builder<String, Object>()
       .put("base", baseAttacks)
-      .put("bases", baseAttack.values())
+      .put("bases", baseAttack.valuesWithDescriptions())
       .put("primary", attacks("primary attacks", false, baseAttacks))
       .put("secondary", attacks("secondary attacks", true, baseAttacks))
       .put("weapons", weaponAttacks)
@@ -2002,10 +2003,9 @@ public class Monster extends CampaignEntry<BaseMonster>
           ("cannot handle conditional values for abiliies for saves");
 
       if(ability.getMaxValue() >= 0)
-        ioCombined.add
-          (new Contribution<Number>
-           (new Number(abilityModifier((int)ability.getMaxValue()),
-                       -100, 100),
+        ioCombined.addModifier
+          (new Contribution<Modifier>
+           (new Modifier(abilityModifier((int)ability.getMaxValue())),
             this, saveAbility.getShort() + " of " + ability.getMaxValue()));
     }
 
@@ -2037,7 +2037,7 @@ public class Monster extends CampaignEntry<BaseMonster>
         for(Value<?> value : ioCombined.valuesOnly())
         {
           int level =+ ((Dice)value).getNumber();
-          ioCombined.add
+          ioCombined.addModifier
             (new Contribution<Modifier>(new Modifier(level * bonus,
                                                      Modifier.Type.GENERAL),
                                         this,
@@ -2054,7 +2054,7 @@ public class Monster extends CampaignEntry<BaseMonster>
       ModifiedNumber dexterity = ability(BaseMonster.Ability.DEXTERITY);
       int modifier = dexterityModifierForAC();
 
-      ioCombined.add
+      ioCombined.addModifier
         (new Contribution<Modifier>
          (new Modifier(modifier, Modifier.Type.ABILITY),
           this, "Dex of " + dexterity
@@ -2069,7 +2069,7 @@ public class Monster extends CampaignEntry<BaseMonster>
           ((EnumSelection<BaseItem.Size>)minSize.get(0)).getSelected();
 
         if(size.modifier() != 0)
-          ioCombined.add
+          ioCombined.addModifier
             (new Contribution<Modifier>(new Modifier(size.modifier(),
                                                      Modifier.Type.GENERAL),
                                         this, "size"));

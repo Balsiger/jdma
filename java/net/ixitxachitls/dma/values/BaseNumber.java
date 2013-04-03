@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -52,7 +52,8 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class BaseNumber<T extends BaseNumber> extends Value<T>
+@ParametersAreNonnullByDefault
+public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -179,11 +180,11 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
   protected boolean m_sign = false;
 
   /** The grouping. */
-  public static final @Nonnull Grouping<BaseNumber, String> s_grouping =
+  public static final Grouping<? extends BaseNumber, String> s_grouping =
     new Group<BaseNumber, Long, String>(new Group.Extractor<BaseNumber, Long>()
       {
         @Override
-        public @Nonnull Long extract(@Nonnull BaseNumber inValue)
+        public Long extract(BaseNumber inValue)
         {
           return inValue.m_number;
         }
@@ -210,7 +211,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @Override
-  public int compareTo(@Nonnull Object inOther)
+  public int compareTo(Object inOther)
   {
     if(inOther instanceof BaseNumber)
       return (int)(m_number - ((BaseNumber)inOther).m_number);
@@ -272,7 +273,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     return new Command(toString());
   }
@@ -287,7 +288,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(m_sign && m_number >= 0)
       return "+" + m_number;
@@ -360,7 +361,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    */
   @Override
   @SuppressWarnings("unchecked") // have to cast
-  public @Nonnull T add(@Nonnull T inValue)
+  public T add(T inValue)
   {
     T result = create();
 
@@ -384,7 +385,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @Override
-  public T subtract(@Nonnull T inValue)
+  public T subtract(T inValue)
   {
     T result = create();
 
@@ -489,7 +490,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
    *
    */
   @Override
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -538,7 +539,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
     @org.junit.Test
     public void init()
     {
-      BaseNumber<BaseNumber> number = new BaseNumber<BaseNumber>(10, 20);
+      BaseNumber number = new BaseNumber(10, 20);
 
       // undefined value
       assertFalse("not undefined at start", number.isDefined());
@@ -550,7 +551,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
                    number.format().toString());
 
       // now with some number
-      number = new BaseNumber<BaseNumber>(10, 0, 20);
+      number = new BaseNumber(10, 0, 20);
 
       assertEquals("not defined after setting", true, number.isDefined());
       assertEquals("value not correctly gotten", 10, number.get());
@@ -561,7 +562,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       assertEquals("max", 20, number.getMax());
       assertEquals("min", 0, number.getMin());
 
-      BaseNumber<BaseNumber> number2 = new BaseNumber<BaseNumber>(522, 0, 1000);
+      BaseNumber number2 = new BaseNumber(522, 0, 1000);
       assertEquals("group", "750", number2.group());
 
       // comparisons
@@ -570,7 +571,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       assertTrue("<", number.compareTo(number2) < 0);
 
       // signs
-      number = new BaseNumber<BaseNumber>(0, 0, 20, true);
+      number = new BaseNumber(0, 0, 20, true);
 
       assertEquals("sign", "+0", number.toString());
 
@@ -638,7 +639,7 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
     @SuppressWarnings("unchecked")
     public void compute()
     {
-      BaseNumber<BaseNumber> number = new BaseNumber<BaseNumber>(2, 20);
+      BaseNumber number = new BaseNumber(2, 20);
 
       // not initialized
       number = number.multiply(3);
@@ -669,10 +670,10 @@ public class BaseNumber<T extends BaseNumber> extends Value<T>
       number = number.add(number);
       assertEquals("add", 4, number.get());
 
-      number = number.subtract(new BaseNumber<BaseNumber>(3, 0, 10));
+      number = number.subtract(new BaseNumber(3, 0, 10));
       assertEquals("subtract", 2, number.get());
 
-      number = number.add(new BaseNumber<BaseNumber>(50, 0, 100));
+      number = number.add(new BaseNumber(50, 0, 100));
       assertEquals("add", 20, number.get());
 
       m_logger.addExpected("WARNING: number 30 too high, adjusted to 20");

@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import net.ixitxachitls.dma.entries.extensions.Composite;
@@ -37,6 +37,7 @@ import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Number;
@@ -71,6 +72,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Item extends CampaignEntry<BaseItem>
 {
   //--------------------------------------------------------- constructor(s)
@@ -95,7 +97,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @param       inName the name of the base item and the item
    *
    */
-  public Item(@Nonnull String inName)
+  public Item(String inName)
   {
     super(inName, TYPE, BASE_TYPE);
   }
@@ -113,7 +115,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @undefined   never
    *
    */
-  public Item(@Nonnull Campaign inCampaign, @Nonnull String ... inBases)
+  public Item(Campaign inCampaign, String ... inBases)
   {
     super(TYPE, BASE_TYPE, inCampaign, inBases);
   }
@@ -143,17 +145,17 @@ public class Item extends CampaignEntry<BaseItem>
   //-------------------------------------------------------------- variables
 
   /** The type of this entry. */
-  public static final @Nonnull Type<Item> TYPE =
+  public static final Type<Item> TYPE =
     new Type<Item>(Item.class, BaseItem.TYPE);
 
   /** The type of the base entry to this entry. */
-  public static final @Nonnull BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
+  public static final BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
 
   //----- hp ---------------------------------------------------------------
 
   /** The actual number of hit points the item currently has. */
   @Key("hp")
-  protected @Nonnull Number m_hp = new Number(0, 10000);
+  protected Number m_hp = new Number(0, 10000);
 
   //........................................................................
   //----- value ------------------------------------------------------------
@@ -161,38 +163,21 @@ public class Item extends CampaignEntry<BaseItem>
   /** The total value of the item. */
   @Key("value")
   @DM
-  protected @Nonnull Money m_value = new Money();
+  protected Money m_value = new Money();
 
   //........................................................................
-  //----- short description ------------------------------------------------
-
-  /** The short description text for this entry. */
-  // @Key("short description")
-  // @NoStore
-  // protected @Nonnull Text m_short = new Text()
-  //   .withEditType("string[short description]");
-
-  //........................................................................
-  //----- description ------------------------------------------------------
-
-  /** The descriptive text for this entry. */
-  // @Key("description")
-  // @NoStore
-  // protected @Nonnull Text m_description = new FormattedText();
-
-  //...........................................................................
   //----- appearance -------------------------------------------------------
 
   /** The appearance text for this entry. */
   @Key("appearance")
-  protected @Nonnull FormattedText m_appearance = new FormattedText();
+  protected FormattedText m_appearance = new FormattedText();
 
   //...........................................................................
   //----- player notes --------------------------------------------------
 
   /** The player notes of the item. */
   @Key("player notes")
-  protected @Nonnull Text m_playerNotes = new Text();
+  protected Text m_playerNotes = new Text();
 
   //........................................................................
   //----- player name ------------------------------------------------------
@@ -200,16 +185,7 @@ public class Item extends CampaignEntry<BaseItem>
   /** The name from the player for the item. */
   @Key("player name")
   @PlayerEdit
-  protected @Nonnull Text m_playerName = new Text();
-
-  //........................................................................
-  //----- weight -----------------------------------------------------------
-
-  /** The total weight of the item. */
-  // @Key("weight")
-  // @NoStored
-  // @NoPlayerEditable
-  // protected @Nonnull Weight m_weight = Weight();
+  protected Text m_playerName = new Text();
 
   //........................................................................
   //----- dm notes ---------------------------------------------------------
@@ -217,18 +193,7 @@ public class Item extends CampaignEntry<BaseItem>
   /** The DM notes of the item. */
   @Key("dm notes")
   @DM
-  protected @Nonnull Text m_dmNotes = new Text();
-
-  //........................................................................
-  //----- qualities --------------------------------------------------------
-
-  /** The items' special qualities. */
-  // @Key(value="qualities")
-  // @DM
-  // @SuppressWarnings("unchecked") // array creation
-  // protected ValueList<EntryValue<Quality>> m_qualities =
-  //   new ValueList<EntryValue<Quality>>(", ",
-  //                                 new EntryValue<Quality>(new Quality()));
+  protected Text m_dmNotes = new Text();
 
   //........................................................................
 
@@ -236,24 +201,6 @@ public class Item extends CampaignEntry<BaseItem>
   {
     extractVariables(Item.class);
   }
-
-  //----- printing commands ------------------------------------------------
-
-
-  // public static Command LIST_COMMAND_DM = new Command(new Object []
-  // {
-  //   new Scriptsize(new Left(new Command(new Object []
-  //     {
-  //       new Color("dm-notes", "&{incomplete}"),
-  //       new Linebreak(),
-  //       "$description",
-  //       new Linebreak(),
-  //       new Linebreak(),
-  //     }))),
-  //   "${deep contents}",
-  // });
-
-  //........................................................................
 
   //........................................................................
 
@@ -295,9 +242,10 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the weight
    *
    */
-  public @Nonnull Weight getTotalWeight()
+  public Weight getTotalWeight()
   {
-    return new Combination<Weight>(this, "weight").total();
+    Combined<Weight> value = collect("weight");
+    return value.total();
   }
 
   //........................................................................
@@ -312,15 +260,7 @@ public class Item extends CampaignEntry<BaseItem>
    */
   public double getGoldValue()
   {
-    if(m_value.isDefined())
-      return m_value.getAsGold().getValue();
-
-    Money total = new Combination<Money>(this, "value").total();
-
-    if(total == null)
-      return 0;
-
-    return total.getAsGold().getValue();
+    return getValue().getAsGold().getValue();
   }
 
   //........................................................................
@@ -332,9 +272,10 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the value
    *
    */
-  public @Nonnull Money getValue()
+  public Money getValue()
   {
-    return new Combination<Money>(this, "value").total();
+    Combined<Money> value = collect("value");
+    return value.total();
   }
 
   //........................................................................
@@ -430,20 +371,6 @@ public class Item extends CampaignEntry<BaseItem>
   // }
 
   //........................................................................
-  //---------------------------- getDescription ----------------------------
-
-  /**
-   * Get the description of the item.
-   *
-   * @return      the requested description
-   *
-   */
-  // public @Nonnull String getDescription()
-  // {
-  //   return m_description.get();
-  // }
-
-  //........................................................................
   //---------------------------- getAppearance ----------------------------
 
   /**
@@ -452,7 +379,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the requested appearance
    *
    */
-  public @Nonnull String getAppearance()
+  public String getAppearance()
   {
     return m_appearance.get();
   }
@@ -466,7 +393,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the requested notes
    *
    */
-  public @Nonnull String getPlayerNotes()
+  public String getPlayerNotes()
   {
     return m_playerNotes.get();
   }
@@ -480,7 +407,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the requested notes
    *
    */
-  public @Nonnull String getDMNotes()
+  public String getDMNotes()
   {
     return m_dmNotes.get();
   }
@@ -495,7 +422,7 @@ public class Item extends CampaignEntry<BaseItem>
    *
    */
   @Override
-  public @Nonnull String getPlayerName()
+  public String getPlayerName()
   {
     if(m_playerName.isDefined())
       return m_playerName.get();
@@ -517,7 +444,7 @@ public class Item extends CampaignEntry<BaseItem>
    *
    */
   @Override
-  public @Nonnull String getDMName()
+  public String getDMName()
   {
     List<String> parts = new ArrayList<String>();
 
@@ -543,36 +470,6 @@ public class Item extends CampaignEntry<BaseItem>
   }
 
   //........................................................................
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //.........................................................................
   //--------------------------- containedItems -----------------------------
 
   /**
@@ -583,7 +480,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      a list of all contained items
    *
    */
-  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
+  public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
 
@@ -624,7 +521,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return   the compute value
    *
    */
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("dmName".equals(inKey))
       return getDMName();
@@ -865,7 +762,7 @@ public class Item extends CampaignEntry<BaseItem>
    *
    */
   @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
   {
     if("name".equals(inKey))
     {
@@ -949,7 +846,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return   the command to format the name
    *
    */
-  public @Nonnull Object getNameCommand(boolean inDM)
+  public Object getNameCommand(boolean inDM)
   {
     if(!inDM)
       return new Color("Item", computeValue("player name", inDM)

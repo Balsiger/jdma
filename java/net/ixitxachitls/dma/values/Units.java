@@ -29,8 +29,8 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -60,7 +60,8 @@ import net.ixitxachitls.util.ArrayIterator;
 //__________________________________________________________________________
 
 @Immutable
-public class Units<T extends Units> extends Value<T>
+@ParametersAreNonnullByDefault
+public class Units<T extends Units<T>> extends Value<T>
 {
   //----------------------------------------------------------------- nested
 
@@ -70,6 +71,7 @@ public class Units<T extends Units> extends Value<T>
    *  This class store a single unit description, but no value.
    */
   @Immutable
+  @ParametersAreNonnullByDefault
   public static class Unit
   {
     //-------------------------------- Unit --------------------------------
@@ -90,7 +92,7 @@ public class Units<T extends Units> extends Value<T>
      * @param       inDefinition the definition of the unit
      *
      */
-    public Unit(@Nonnull String inDefinition)
+    public Unit(String inDefinition)
     {
       String []parts = inDefinition.split("\\s*:\\s*");
 
@@ -140,9 +142,8 @@ public class Units<T extends Units> extends Value<T>
      * @param       inDivisor    the divisor to get to the base value
      *
      */
-    public Unit(@Nonnull String inUnit, @Nullable String inUnits,
-                int inMultiplier, int inDivisor,
-                @Nonnull String ... inOther)
+    public Unit(String inUnit, @Nullable String inUnits,
+                int inMultiplier, int inDivisor, String ... inOther)
     {
       if(inMultiplier <= 0)
         throw new IllegalArgumentException("the multiplier must be positive");
@@ -170,7 +171,7 @@ public class Units<T extends Units> extends Value<T>
     private int m_divisor;
 
     /** The name of the unit. */
-    private @Nonnull String m_unit;
+    private String m_unit;
 
     /** The plural name of the unit. */
     protected @Nullable String m_units;
@@ -244,7 +245,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the converted value
      *
      */
-    public @Nonnull Rational getAsBase(@Nonnull Rational inValue)
+    public Rational getAsBase(Rational inValue)
     {
       Rational result = inValue;
 
@@ -268,7 +269,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the convertd value as String
      *
      */
-    public String toString(@Nonnull Rational inValue)
+    public String toString(Rational inValue)
     {
       if(inValue.isNull())
           return "0 " + m_unit;
@@ -290,7 +291,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the convert value as a command
      *
      */
-    public Command format(@Nonnull Rational inValue)
+    public Command format(Rational inValue)
     {
       if(inValue.isNull())
         return new Command("0 " + m_unit);
@@ -313,7 +314,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       StringBuilder other = new StringBuilder();
       if(m_other != null)
@@ -352,7 +353,7 @@ public class Units<T extends Units> extends Value<T>
      * @param       inDefinition the definition String to parse
      *
      */
-    public Set(@Nonnull String inDefinition)
+    public Set(String inDefinition)
     {
       String []intro = inDefinition.split("\\s*=\\s*");
 
@@ -435,8 +436,7 @@ public class Units<T extends Units> extends Value<T>
      *                           units with a conversion factor of 1/1
      *
      */
-    public Set(@Nonnull String inName, int inMultiplier, int inDivisor,
-               @Nonnull Unit ... inUnits)
+    public Set(String inName, int inMultiplier, int inDivisor, Unit ... inUnits)
     {
       if(inUnits.length <= 0)
         throw new IllegalArgumentException("units must be given");
@@ -485,10 +485,10 @@ public class Units<T extends Units> extends Value<T>
     //......................................................................
 
     /** The name of the set. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** All the possible units. */
-    protected @Nonnull Unit []m_units;
+    protected Unit []m_units;
 
     /** The base unit. */
     private int m_base = -1;
@@ -500,8 +500,7 @@ public class Units<T extends Units> extends Value<T>
     private int m_divisor;
 
     /** All the unit names understood. */
-    private @Nonnull Map<String, Integer> m_names =
-      new Hashtable<String, Integer>();
+    private Map<String, Integer> m_names = new Hashtable<String, Integer>();
 
     //------------------------------- equals -------------------------------
 
@@ -568,7 +567,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the index of the unit found, or -1 if none was found
      *
      */
-    public int expectUnit(@Nonnull ParseReader inReader)
+    public int expectUnit(ParseReader inReader)
     {
       String key = inReader.expect(m_names.keySet().iterator());
 
@@ -601,8 +600,8 @@ public class Units<T extends Units> extends Value<T>
      * @return      the complete values
      *
      */
-    public @Nonnull Rational []convert(@Nonnull Rational inNormalized,
-                                       int inLevel, boolean inSimplify)
+    public Rational []convert(Rational inNormalized, int inLevel,
+                              boolean inSimplify)
     {
       Rational total = inNormalized;
       total = total.multiply(m_multiplier);
@@ -633,7 +632,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the simplified values
      *
      */
-    public @Nonnull Rational []simplify(@Nonnull Rational inTotal, int inLevel)
+    public Rational []simplify(Rational inTotal, int inLevel)
     {
       Rational []result = new Rational[m_units.length];
       Rational rest = inTotal;
@@ -695,7 +694,7 @@ public class Units<T extends Units> extends Value<T>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       StringBuffer result = new StringBuffer(m_name);
 
@@ -725,7 +724,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the requested name
      *
      */
-    public @Nonnull String getBaseUnit()
+    public String getBaseUnit()
     {
       return m_units[m_base].m_units;
     }
@@ -741,7 +740,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the converted value
      *
      */
-    public @Nonnull Rational getAsBase(@Nonnull Rational []inValues)
+    public Rational getAsBase(Rational []inValues)
     {
       Rational result = new Rational(0);
 
@@ -763,7 +762,7 @@ public class Units<T extends Units> extends Value<T>
      * @return      the format user for printing this set with the given values
      *
      */
-    protected @Nonnull Command format(@Nonnull Rational []inValues)
+    protected Command format(Rational []inValues)
     {
       assert inValues.length == m_units.length
         : "number of units and values don't match";
@@ -806,7 +805,7 @@ public class Units<T extends Units> extends Value<T>
    *                              relegated to the next smaller unit
    *
    */
-  public Units(@Nonnull String inDefinition, int inSimplifyLevel)
+  public Units(String inDefinition, int inSimplifyLevel)
   {
     m_sets = parseDefinition(inDefinition);
     m_simplifyLevel = inSimplifyLevel;
@@ -824,7 +823,7 @@ public class Units<T extends Units> extends Value<T>
    *                              relegated to the next smaller unit
    *
    */
-  public Units(@Nonnull Set []inSets, int inSimplifyLevel)
+  public Units(Set []inSets, int inSimplifyLevel)
   {
     if(inSets.length <= 0)
       throw new IllegalArgumentException("at least one set must be given");
@@ -851,8 +850,8 @@ public class Units<T extends Units> extends Value<T>
    * @undefined   IllegalArgumentException if set null
    *
    */
-  public Units(@Nonnull Rational []inValues, @Nonnull Set []inSets,
-               @Nonnull Set inSet, int inSimplifyLevel)
+  public Units(Rational []inValues, Set []inSets, Set inSet,
+               int inSimplifyLevel)
   {
     if(inSets.length <= 0)
         throw new IllegalArgumentException("at least one set must be given");
@@ -898,7 +897,7 @@ public class Units<T extends Units> extends Value<T>
   //-------------------------------------------------------------- variables
 
   /** The sets used in for this units. */
-  protected @Nonnull Set []m_sets;
+  protected Set []m_sets;
 
   /** The values of each unit. */
   protected @Nullable Rational []m_values;
@@ -936,7 +935,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      the total value in base units
    *
    */
-  public @Nonnull Rational getAsBase()
+  public Rational getAsBase()
   {
     if(!isDefined())
       return new Rational();
@@ -953,7 +952,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      the name of the base unit
    *
    */
-  public @Nonnull String getBaseUnit()
+  public String getBaseUnit()
   {
     if(!isDefined())
       return Value.UNDEFINED;
@@ -972,7 +971,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     ArrayList<Object> table = new ArrayList<Object>();
 
@@ -1011,7 +1010,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      the command to print all unit values
    *
    */
-  protected @Nonnull Command formatUnits()
+  protected Command formatUnits()
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 
@@ -1065,7 +1064,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(m_set == null)
       return "$undefined$";
@@ -1098,7 +1097,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      the converted string
    *
    */
-  protected @Nonnull String singleUnitToString(int inIndex)
+  protected String singleUnitToString(int inIndex)
   {
     if(inIndex < 0 || inIndex >= m_values.length)
       throw new IllegalArgumentException("invalid index given");
@@ -1140,7 +1139,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @SuppressWarnings("unchecked") // must cast this on return
-  public @Nonnull T toSet(int inSet, boolean inSimplify)
+  public T toSet(int inSet, boolean inSimplify)
   {
     if(inSet < 0 || inSet >= m_sets.length)
       throw new IllegalArgumentException("invalid set given");
@@ -1171,7 +1170,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @Override
-  public int compareTo(@Nonnull Object inOther)
+  public int compareTo(Object inOther)
   {
     if(this == inOther)
       return 0;
@@ -1210,7 +1209,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      the newly created value
    *
    */
-  public T as(@Nonnull Rational []inValues, int inSet)
+  public T as(Rational []inValues, int inSet)
   {
     if(inSet < 0 || inSet >= m_sets.length)
       throw new IllegalArgumentException("invalid set specified");
@@ -1243,7 +1242,7 @@ public class Units<T extends Units> extends Value<T>
    */
   @Override
   @SuppressWarnings("unchecked") // have to cast this on return
-  public @Nonnull T add(@Nonnull T inOther)
+  public T add(T inOther)
   {
     if(!inOther.isDefined())
       return (T)this;
@@ -1305,7 +1304,7 @@ public class Units<T extends Units> extends Value<T>
    */
   @Override
   @SuppressWarnings("unchecked") // need to cast
-  public @Nonnull T subtract(@Nonnull T inOther)
+  public T subtract(T inOther)
   {
     // check the equality of types
     if(m_sets.length != inOther.m_sets.length)
@@ -1394,7 +1393,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public T multiply(@Nonnull Rational inValue)
+  public T multiply(Rational inValue)
   {
     if(m_values == null)
       return (T)this;
@@ -1451,7 +1450,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public T divide(@Nonnull Rational inValue)
+  public T divide(Rational inValue)
   {
     T result = create();
     result.m_values = new Rational[m_values.length];
@@ -1499,7 +1498,7 @@ public class Units<T extends Units> extends Value<T>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     int i = readSingleUnit(inReader);
     if(i < 0)
@@ -1522,7 +1521,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      the number of the unit read or -1 if none read
    *
    */
-  protected int readSingleUnit(@Nonnull ParseReader inReader)
+  protected int readSingleUnit(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
     Rational read = new Rational().read(inReader);
@@ -1590,7 +1589,7 @@ public class Units<T extends Units> extends Value<T>
    * @return      all the parsed sets
    *
    */
-  protected static @Nonnull Set []parseDefinition(@Nonnull String inDefinition)
+  protected static Set []parseDefinition(String inDefinition)
   {
     String []sets = inDefinition.split("\\.");
 
@@ -1773,7 +1772,7 @@ public class Units<T extends Units> extends Value<T>
     @SuppressWarnings("unchecked")
     public void add()
     {
-      Units<Units> unit = new Units<Units>(s_sets, 1);
+      Units unit = new Units(s_sets, 1);
 
       unit = unit.add(new Units(new Rational []
         { new Rational(1), new Rational(5), null, new Rational(1, 2) }, s_sets,
@@ -1798,7 +1797,7 @@ public class Units<T extends Units> extends Value<T>
     @SuppressWarnings("unchecked")
     public void subtract()
     {
-      Units<Units> unit = new Units<Units>(s_sets, 1);
+      Units unit = new Units(s_sets, 1);
 
       unit = unit.add(new Units(new Rational []
         { new Rational(1), new Rational(5), null, new Rational(1, 2) }, s_sets,
@@ -1826,7 +1825,7 @@ public class Units<T extends Units> extends Value<T>
     @SuppressWarnings("unchecked")
     public void multiply()
     {
-      Units<Units> value = new Units<Units>(new Rational []
+      Units value = new Units(new Rational []
         {
           new Rational(1),
           new Rational(5),
@@ -1852,7 +1851,7 @@ public class Units<T extends Units> extends Value<T>
     @SuppressWarnings("unchecked")
     public void divide()
     {
-      Units<Units> value = new Units<Units>(new Rational []
+      Units value = new Units(new Rational []
         {
           new Rational(1),
           new Rational(5),
@@ -1877,7 +1876,7 @@ public class Units<T extends Units> extends Value<T>
     @org.junit.Test
     public void compare()
     {
-      Units<Units> low = new Units<Units>(new Rational []
+      Units low = new Units(new Rational []
         {
           new Rational(1),
           new Rational(5),
@@ -1887,7 +1886,7 @@ public class Units<T extends Units> extends Value<T>
 
       assertEquals("compare low", 0, low.compareTo(low));
 
-      Units<Units> high = new Units<Units>(new Rational []
+      Units high = new Units(new Rational []
         {
           new Rational(1),
           new Rational(5),
@@ -1900,7 +1899,7 @@ public class Units<T extends Units> extends Value<T>
       assertTrue("compare low - high", low.compareTo(high) < 0);
       assertTrue("compare high - low", high.compareTo(low) > 0);
 
-      Units<Units> set = new Units<Units>(new Rational []
+      Units set = new Units(new Rational []
         {
           new Rational(1),
           null,

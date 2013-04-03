@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -53,7 +53,8 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class Decimal<T extends Decimal> extends BaseNumber<T>
+@ParametersAreNonnullByDefault
+public class Decimal<T extends Decimal<T>> extends BaseNumber<T>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -108,8 +109,8 @@ public class Decimal<T extends Decimal> extends BaseNumber<T>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // this only works if derivations override this
-  public @Nonnull T create()
+  @SuppressWarnings("unchecked") // this only works if derivations override this
+  public T create()
   {
     return (T)new Decimal(m_min, m_max, m_precision);
   }
@@ -125,7 +126,7 @@ public class Decimal<T extends Decimal> extends BaseNumber<T>
   protected int m_precision = 100;
 
   /** Nulls for padding. */
-  protected static final @Nonnull String s_nulls = "00000000000000000";
+  protected static final String s_nulls = "00000000000000000";
 
   /** The decimal point. */
   protected static final char s_delimiter =
@@ -159,7 +160,7 @@ public class Decimal<T extends Decimal> extends BaseNumber<T>
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected String doToString()
   {
     return format(m_number, m_precision);
   }
@@ -181,7 +182,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -259,7 +260,7 @@ public boolean doRead(@Nonnull ParseReader inReader)
    * @return      a string with the formatted value
    *
    */
-  protected static @Nonnull String format(long inValue, int inPrecision)
+  protected static String format(long inValue, int inPrecision)
   {
     String precision = Integer.toString(inPrecision);
     String decimals  = Strings.pad(inValue % inPrecision,

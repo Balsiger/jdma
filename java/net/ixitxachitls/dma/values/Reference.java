@@ -56,7 +56,7 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
-public class Reference<T extends BaseEntry> extends Value<Reference>
+public class Reference<T extends BaseEntry> extends Value<Reference<T>>
 {
   //--------------------------------------------------------- constructor(s)
 

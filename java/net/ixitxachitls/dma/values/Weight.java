@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -48,6 +48,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Weight extends Units<Weight>
 {
   //--------------------------------------------------------- constructor(s)
@@ -140,7 +141,7 @@ public class Weight extends Units<Weight>
   //-------------------------------------------------------------- variables
 
   /** The definition of the units for weights. */
-  private static @Nonnull String s_definition =
+  private static String s_definition =
     Config.get("/game.weight",
                "1/1    : Pounds =    1/1    : lb|lbs : pounds|pound,"
                + "                     1/16   : oz     : ounces|ounce."
@@ -151,10 +152,10 @@ public class Weight extends Units<Weight>
                + "2500/1 : Carat  =    1/1    : ct : carats|carat.");
 
   /** The sets of available units. */
-  private static @Nonnull Set []s_sets = parseDefinition(s_definition);
+  private static Set []s_sets = parseDefinition(s_definition);
 
   /** The grouping. */
-  protected static final @Nonnull Group<Weight, Long, String> s_grouping =
+  protected static final Group<Weight, Long, String> s_grouping =
     new Group<Weight, Long, String>(new Group.Extractor<Weight, Long>()
       {
         @Override
@@ -234,7 +235,7 @@ public class Weight extends Units<Weight>
    *              150 ct =     1 ounce
    *
    */
-  public @Nonnull Rational getAsPounds()
+  public Rational getAsPounds()
   {
     if(!isDefined())
       return new Rational(0);
@@ -262,7 +263,7 @@ public class Weight extends Units<Weight>
    *                5 ct =       1 gram
    *
    */
-  public @Nonnull Rational getAsKilograms()
+  public Rational getAsKilograms()
   {
     if(!isDefined())
       return new Rational(0);
@@ -290,7 +291,7 @@ public class Weight extends Units<Weight>
    *                1  g =       5 carats
    *
    */
-  public @Nonnull Rational getAsCarats()
+  public Rational getAsCarats()
   {
     if(!isDefined())
       return new Rational(0);
@@ -311,7 +312,7 @@ public class Weight extends Units<Weight>
    * @return      the corresponding metric value.
    *
    */
-  public @Nonnull Weight asMetric()
+  public Weight asMetric()
   {
     if(m_set == m_sets[1])
       return this;
@@ -367,8 +368,8 @@ public class Weight extends Units<Weight>
    *
    */
   // @Override
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
+  // public Map<String, Object> collectData(AbstractEntry inEntry,
+  //                                        SoyRenderer inRenderer)
   // {
   //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
@@ -393,7 +394,7 @@ public class Weight extends Units<Weight>
    *
    */
   @Override
-  protected @Nonnull String doGroup()
+  protected String doGroup()
   {
     return s_grouping.group(this);
   }
@@ -416,9 +417,9 @@ public class Weight extends Units<Weight>
    * @return      the new metric value
    *
    */
-  public @Nonnull Weight asMetric(@Nullable Rational inTons,
-                                  @Nullable Rational inKilos,
-                                  @Nullable Rational inGrams)
+  public Weight asMetric(@Nullable Rational inTons,
+                         @Nullable Rational inKilos,
+                         @Nullable Rational inGrams)
   {
     return as(new Rational [] { inTons, inKilos, inGrams }, 1);
   }
@@ -435,8 +436,8 @@ public class Weight extends Units<Weight>
    * @return      the new pound value
    *
    */
-  public @Nonnull Weight asPounds(@Nullable Rational inPounds,
-                                  @Nullable Rational inOunces)
+  public Weight asPounds(@Nullable Rational inPounds,
+                         @Nullable Rational inOunces)
   {
     return as(new Rational [] { inPounds, inOunces }, 0);
   }
@@ -452,7 +453,7 @@ public class Weight extends Units<Weight>
    * @return      the new carat value
    *
    */
-  public @Nonnull Weight asCarats(@Nonnull Rational inCarats)
+  public Weight asCarats(Rational inCarats)
   {
     return as(new Rational [] { inCarats }, 2);
   }

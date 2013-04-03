@@ -270,7 +270,11 @@ public class Variable extends ValueHandle<Variable>
    */
   public boolean read(ValueGroup inGroup, ParseReader inReader)
   {
-    Value<?> read = get(inGroup).read(inReader);
+    Value<?> read = get(inGroup);
+    if(read == null)
+      return false;
+
+    read = read.read(inReader);
 
     if(read == null)
       return false;

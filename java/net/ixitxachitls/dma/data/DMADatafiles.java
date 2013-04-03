@@ -31,8 +31,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -47,6 +47,7 @@ import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.Product;
 import net.ixitxachitls.dma.entries.Type;
+import net.ixitxachitls.dma.server.servlets.DMARequest;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -83,7 +84,7 @@ public class DMADatafiles implements DMAData
    * @param       inFiles the default files to read data from
    *
    */
-  public DMADatafiles(@Nonnull String inPath, @Nullable String ... inFiles)
+  public DMADatafiles(String inPath, @Nullable String ... inFiles)
   {
     m_path = inPath;
 
@@ -100,17 +101,17 @@ public class DMADatafiles implements DMAData
   //-------------------------------------------------------------- variables
 
   /** The path from where to load the files. */
-  protected @Nonnull String m_path;
+  protected String m_path;
 
   /** The name of the files read. */
-  protected @Nonnull List<String> m_names = new ArrayList<String>();
+  protected List<String> m_names = new ArrayList<String>();
 
   /** The files for all the data. */
-  protected @Nonnull ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();
+  protected ArrayList<DMAFile> m_files = new ArrayList<DMAFile>();
 
   /** All the entries, by type and by id. */
-  protected @Nonnull HashMap<AbstractType<? extends AbstractEntry>,
-                           NavigableMap<String, AbstractEntry>> m_entries =
+  protected HashMap<AbstractType<? extends AbstractEntry>,
+                    NavigableMap<String, AbstractEntry>> m_entries =
     new HashMap<AbstractType<? extends AbstractEntry>,
                                NavigableMap<String, AbstractEntry>>();
 
@@ -129,7 +130,7 @@ public class DMADatafiles implements DMAData
    * @return      the path to the files.
    *
    */
-  public @Nonnull String getPath()
+  public String getPath()
   {
     return m_path;
   }
@@ -147,7 +148,7 @@ public class DMADatafiles implements DMAData
    *
    */
   @SuppressWarnings("unchecked") // need to cast
-  public @Nonnull <T extends AbstractEntry> NavigableMap<String, T>
+  public <T extends AbstractEntry> NavigableMap<String, T>
     getEntries(AbstractType<T> inType)
   {
     NavigableMap<String, AbstractEntry> entries = m_entries.get(inType);
@@ -178,8 +179,8 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-@SuppressWarnings("unchecked") // need to cast
-  public @Nonnull <T extends AbstractEntry> List<T>
+  @SuppressWarnings("unchecked") // need to cast
+  public <T extends AbstractEntry> List<T>
                      getEntries(AbstractType<T> inType,
                                 AbstractEntry.EntryKey<? extends AbstractEntry>
                                 inParent, int inStart, int inSize)
@@ -216,11 +217,9 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-@SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry> List<T>
-                      getEntries(@Nonnull AbstractType<T> inType,
-                                 @Nonnull String inKey,
-                                 @Nonnull String inValue)
+  @SuppressWarnings("unchecked") // casting return
+  public @Nullable <T extends AbstractEntry> List<T> getEntries
+                      (AbstractType<T> inType, String inKey, String inValue)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -238,8 +237,8 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  public @Nonnull List<String> getIDs
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
+  public List<String> getIDs
+    (AbstractType<? extends AbstractEntry> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
     throw new UnsupportedOperationException("not yet implemented");
@@ -265,10 +264,10 @@ public class DMADatafiles implements DMAData
    */
   @Override
   @SuppressWarnings("unchecked") // need to cast return value for generics
-  public @Nonnull <T extends AbstractEntry> List<T> getIndexEntries
-    (@Nonnull String inIndex, @Nonnull AbstractType<T> inType,
+  public <T extends AbstractEntry> List<T> getIndexEntries
+    (String inIndex, AbstractType<T> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
-     @Nonnull String inGroup, int inStart, int inSize)
+     String inGroup, int inStart, int inSize)
   {
     throw
       new UnsupportedOperationException("has not been implemented for files");
@@ -291,10 +290,9 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  public @Nonnull SortedSet<String> getIndexNames
-    (@Nonnull String inIndex,
-     @Nonnull AbstractType<? extends AbstractEntry> inType, boolean inCached,
-     @Nonnull String ... inFilters)
+  public SortedSet<String> getIndexNames
+    (String inIndex, AbstractType<? extends AbstractEntry> inType,
+     boolean inCached, String ... inFilters)
   {
     throw
       new UnsupportedOperationException("has not been implemented for files");
@@ -314,8 +312,7 @@ public class DMADatafiles implements DMAData
    *
    */
   public List<List<String>> getMultiValues
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull String ... inFields)
+    (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -334,8 +331,7 @@ public class DMADatafiles implements DMAData
    *
    */
   public SortedSet<String> getValues
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull String inField)
+    (AbstractType<? extends AbstractEntry> inType, String inField)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -365,8 +361,8 @@ public class DMADatafiles implements DMAData
    * @return     true if the entry is already there, false if not
    *
    */
-  public boolean hasEntry(@Nonnull String inID,
-                          @Nonnull AbstractType<? extends AbstractEntry> inType)
+  public boolean hasEntry(String inID,
+                          AbstractType<? extends AbstractEntry> inType)
   {
 
     NavigableMap<String, ? extends AbstractEntry> entries = getEntries(inType);
@@ -382,7 +378,7 @@ public class DMADatafiles implements DMAData
    * @return      the repository with all the base data
    *
    */
-  public @Nonnull DMAData getBaseData()
+  public DMAData getBaseData()
   {
     return this;
   }
@@ -398,7 +394,7 @@ public class DMADatafiles implements DMAData
    * @return      the user specific data
    *
    */
-  public @Nonnull DMAData getUserData(@Nonnull BaseCharacter inUser)
+  public DMAData getUserData(BaseCharacter inUser)
   {
     DMADatafiles data =
       new DMADatafiles(Files.concatenate(getPath(),
@@ -426,7 +422,7 @@ public class DMADatafiles implements DMAData
    * @return      a set of all the entry types
    *
    */
-  public @Nonnull Set<AbstractType<? extends AbstractEntry>> getTypes()
+  public Set<AbstractType<? extends AbstractEntry>> getTypes()
   {
     return m_entries.keySet();
   }
@@ -443,8 +439,7 @@ public class DMADatafiles implements DMAData
    * @return      a list of names that can be used for storage
    *
    */
-  public @Nonnull List<String> files
-    (@Nonnull AbstractType<? extends AbstractEntry> inType)
+  public List<String> files(AbstractType<? extends AbstractEntry> inType)
   {
     return m_names;
   };
@@ -460,7 +455,7 @@ public class DMADatafiles implements DMAData
    * @return      the name of the file the entry is stored in, if any
    *
    */
-  public @Nullable String getFilename(@Nonnull AbstractEntry inEntry)
+  public @Nullable String getFilename(AbstractEntry inEntry)
   {
     for(DMAFile file : m_files)
     {
@@ -483,7 +478,7 @@ public class DMADatafiles implements DMAData
    * @return      the file found or null if not found
    *
    */
-  public @Nullable DMAFile getFile(@Nonnull String inName)
+  public @Nullable DMAFile getFile(String inName)
   {
     for(DMAFile file : m_files)
       if(file.getStorageName().equals(inName))
@@ -527,7 +522,7 @@ public class DMADatafiles implements DMAData
    */
   @Override
   public @Nullable <T extends AbstractEntry> T getEntry
-                      (@Nonnull AbstractEntry.EntryKey<T> inKey)
+                      (AbstractEntry.EntryKey<T> inKey)
   {
     NavigableMap<String, T> entries = getEntries(inKey.getType());
     T entry = entries.get(inKey.getID());
@@ -561,10 +556,8 @@ public class DMADatafiles implements DMAData
    */
   @Override
 @SuppressWarnings("unchecked") // casting return
-  public @Nullable <T extends AbstractEntry> T
-                      getEntry(@Nonnull AbstractType<T> inType,
-                               @Nonnull String inKey,
-                               @Nonnull String inValue)
+  public @Nullable <T extends AbstractEntry> T getEntry
+                      (AbstractType<T> inType, String inKey, String inValue)
   {
     NavigableMap<String, T> entries = getEntries(inType);
     for(T entry : entries.values())
@@ -588,8 +581,8 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  public @Nonnull <T extends AbstractEntry> List<T> getRecentEntries
-    (@Nonnull AbstractType<T> inType,
+  public <T extends AbstractEntry> List<T> getRecentEntries
+    (AbstractType<T> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent)
   {
     throw new UnsupportedOperationException("not implemented");
@@ -623,7 +616,7 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     StringBuilder result =
       new StringBuilder("path " + m_path + ", files " + m_names);
@@ -656,8 +649,8 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  public boolean remove(@Nonnull String inID,
-                        @Nonnull AbstractType<? extends AbstractEntry> inType)
+  public boolean remove(String inID,
+                        AbstractType<? extends AbstractEntry> inType)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -673,7 +666,7 @@ public class DMADatafiles implements DMAData
    * @return      true if removed, false if not
    *
    */
-  public boolean remove(@Nonnull AbstractEntry.EntryKey inKey)
+  public boolean remove(AbstractEntry.EntryKey inKey)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -717,7 +710,7 @@ public class DMADatafiles implements DMAData
    * @return      true if loaded, false if already there
    *
    */
-  public boolean addFile(@Nonnull String inFile)
+  public boolean addFile(String inFile)
   {
     if(m_names.contains(inFile))
       return false;
@@ -737,7 +730,7 @@ public class DMADatafiles implements DMAData
    * @param    inPath the path to the directory to load files from
    *
    */
-  public void addAllFiles(@Nonnull String inPath)
+  public void addAllFiles(String inPath)
   {
     Resource path = Resource.get(Files.concatenate(m_path, inPath));
 
@@ -761,7 +754,7 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  public boolean update(@Nonnull AbstractEntry inEntry)
+  public boolean update(AbstractEntry inEntry)
   {
     if(hasEntry(inEntry.getName(), inEntry.getType()))
       return save();
@@ -781,7 +774,7 @@ public class DMADatafiles implements DMAData
    * @return    true if added, false if there was an error
    *
    */
-  public boolean add(@Nonnull AbstractEntry inEntry, boolean inSave)
+  public boolean add(AbstractEntry inEntry, boolean inSave)
   {
     return add(inEntry, computeFile(inEntry), inSave);
   }
@@ -799,8 +792,7 @@ public class DMADatafiles implements DMAData
    * @return    true if added, false if there was an error
    *
    */
-  public boolean add(@Nonnull AbstractEntry inEntry, @Nonnull String inFile,
-                     boolean inSave)
+  public boolean add(AbstractEntry inEntry, String inFile, boolean inSave)
   {
     DMAFile file = getFile(inFile);
     if(file == null)
@@ -831,7 +823,7 @@ public class DMADatafiles implements DMAData
    * @param       inEntry the entry to add
    *
    */
-  protected void addInternal(@Nonnull AbstractEntry inEntry)
+  protected void addInternal(AbstractEntry inEntry)
   {
     NavigableMap<String, AbstractEntry> entries =
       m_entries.get(inEntry.getType());
@@ -883,7 +875,7 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
+  public List<File> getFiles(AbstractEntry inEntry)
   {
     String baseType = null;
     String []baseNames = null;
@@ -944,9 +936,8 @@ public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
    * @return      true if removed, false if not
    *
    */
-  public boolean removeEntry
-    (@Nonnull String inID,
-     @Nonnull AbstractType<? extends AbstractEntry> inType)
+  public boolean removeEntry(String inID,
+                             AbstractType<? extends AbstractEntry> inType)
   {
     AbstractEntry entry = getEntries(inType).remove(inID);
     if(entry == null)
@@ -974,7 +965,26 @@ public @Nonnull List<File> getFiles(@Nonnull AbstractEntry inEntry)
    * @return     the numbert of enties updated
    */
   @Override
-public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
+  public int rebuild(AbstractType<? extends AbstractEntry> inType)
+  {
+    throw new UnsupportedOperationException("not implemented for files");
+  }
+
+  //........................................................................
+  //------------------------------- refresh --------------------------------
+
+  /**
+   * Refresh the given entries of the given type.
+   *
+   * NOTE: this produces a lot of datastore traffic.
+   *
+   * @param      inType  the type to refresh
+   *
+   * @return     the numbert of enties updated
+   */
+  @Override
+  public int refresh(AbstractType<? extends AbstractEntry> inType,
+                     DMARequest inRequest)
   {
     throw new UnsupportedOperationException("not implemented for files");
   }
@@ -1028,7 +1038,7 @@ public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
    * @return      the name of the file to store in
    *
    */
-  public @Nonnull String computeFile(@Nonnull AbstractEntry inEntry)
+  public String computeFile(AbstractEntry inEntry)
   {
     AbstractType<? extends AbstractEntry> type = inEntry.getType();
     String dir = type.getMultipleDir();
@@ -1159,8 +1169,7 @@ public int rebuild(@Nonnull AbstractType<? extends AbstractEntry> inType)
    * @return      a sublist for the given range
    *
    */
-  public @Nonnull <T> List<T> sublist(@Nonnull List<T> inList, int inStart,
-                                      int inEnd)
+  public <T> List<T> sublist(List<T> inList, int inStart, int inEnd)
   {
     if(inList.isEmpty())
       return inList;

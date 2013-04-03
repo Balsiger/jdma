@@ -187,14 +187,14 @@ public class BaseMagic extends BaseExtension<BaseItem>
     {
       if(((EnumSelection<BaseMonster.Ability>)m_ability.get(0)).getSelected()
          == BaseMonster.Ability.DEXTERITY)
-        ioCombined.add(new Contribution<Modifier>((Modifier)m_ability.get(1),
-                                                  m_entry, "magic"));
+        ioCombined.addModifier(new Contribution<Modifier>
+                               ((Modifier)m_ability.get(1), m_entry, "magic"));
     }
 
     for(Multiple modifier : m_modifier)
       if(inName.equals(((Name)modifier.get(0)).get()))
-        ioCombined.add(new Contribution<Modifier>((Modifier)modifier.get(1),
-                                                  m_entry, "magic"));
+        ioCombined.addModifier(new Contribution<Modifier>
+                               ((Modifier)modifier.get(1), m_entry, "magic"));
   }
 
   //........................................................................

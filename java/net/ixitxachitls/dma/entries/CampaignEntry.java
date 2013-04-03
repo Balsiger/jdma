@@ -177,8 +177,8 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
       throw new IllegalStateException("expected campaign '" + m_campaign
                                       + "' not found");
 
-    return new EntryKey<Character>(getName(), (Type<Character>)getType(),
-                                   campaign.getKey());
+    return new EntryKey<AbstractEntry>(getName(), getType(),
+                                       campaign.getKey());
   }
 
   //........................................................................

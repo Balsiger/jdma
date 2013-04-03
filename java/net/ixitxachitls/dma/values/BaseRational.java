@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.values;
 
 import java.math.BigInteger;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -53,13 +53,13 @@ import net.ixitxachitls.output.commands.Frac;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class BaseRational<T extends BaseRational> extends Value<T>
+public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
 {
   //--------------------------------------------------------- constructor(s)
 
   //----------------------------- BaseRational -----------------------------
 
-  /**
+  /**s
    * Construct an undefined rational.
    *
    */
@@ -103,7 +103,7 @@ public abstract class BaseRational<T extends BaseRational> extends Value<T>
    *
    */
   @Override
-public abstract @Nonnull T create();
+  public abstract T create();
 
   //........................................................................
 
@@ -267,7 +267,7 @@ public abstract @Nonnull T create();
    * @return      a String representation of the nominator
    *
    */
-  protected @Nonnull String getNominatorString()
+  protected String getNominatorString()
   {
     return "" + m_nominator;
   }
@@ -281,7 +281,7 @@ public abstract @Nonnull T create();
    * @return      a String representation of the denominator
    *
    */
-  protected @Nonnull String getDenominatorString()
+  protected String getDenominatorString()
   {
     return "" + m_denominator;
   }
@@ -297,7 +297,7 @@ public abstract @Nonnull T create();
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(!hasFraction())
       return (m_negative ? "-" : "") +  m_leader;
@@ -379,7 +379,7 @@ public abstract @Nonnull T create();
    *              value > 0, if it is above it and 0 if it is equal
    *
    */
-  public int compare(@Nonnull BaseRational<T> inValue)
+  public int compare(BaseRational<T> inValue)
   {
     return compare(inValue.m_leader);
   }
@@ -407,7 +407,7 @@ public abstract @Nonnull T create();
    *
    */
   @SuppressWarnings("unchecked") // have to cast this
-  protected @Nonnull T reduce()
+  protected T reduce()
   {
     // nothing to do if not defined
     if(!isDefined())
@@ -580,7 +580,7 @@ public abstract @Nonnull T create();
    */
   @Override
   @SuppressWarnings("unchecked") // have to cast reduced
-  public T add(@Nonnull T inValue)
+  public T add(T inValue)
   {
     long nominator1 = m_leader * m_denominator + m_nominator;
     if(m_negative)
@@ -636,8 +636,8 @@ public abstract @Nonnull T create();
    *
    */
   @Override
-@SuppressWarnings("unchecked") // have to cast reduced
-  public T subtract(@Nonnull T inValue)
+  @SuppressWarnings("unchecked") // have to cast reduced
+  public T subtract(T inValue)
   {
     long nominator1 = m_leader * m_denominator + m_nominator;
     if(m_negative)
@@ -722,8 +722,8 @@ public abstract @Nonnull T create();
    *
    */
   @Override
-@SuppressWarnings("unchecked") // must cast reduced
-  public T divide(@Nonnull T inValue)
+  @SuppressWarnings("unchecked") // must cast reduced
+  public T divide(T inValue)
   {
     T result = create();
     result.m_nominator =
@@ -777,7 +777,7 @@ public abstract @Nonnull T create();
    *
    */
   @Override
-public T multiply(@Nonnull T inValue)
+  public T multiply(T inValue)
   {
     m_nominator    = (m_leader * m_denominator + m_nominator)
       * (inValue.m_leader * inValue.m_denominator + inValue.m_nominator);
@@ -803,7 +803,7 @@ public T multiply(@Nonnull T inValue)
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     if(!readNominator(inReader))
       return false;
@@ -854,7 +854,7 @@ public T multiply(@Nonnull T inValue)
    * @return      true if read, false if not
    *
    */
-  public boolean readLeader(@Nonnull ParseReader inReader)
+  public boolean readLeader(ParseReader inReader)
   {
     try
     {
@@ -879,7 +879,7 @@ public T multiply(@Nonnull T inValue)
    * @return      true if read, false if not
    *
    */
-  protected boolean readNominator(@Nonnull ParseReader inReader)
+  protected boolean readNominator(ParseReader inReader)
   {
     try
     {
@@ -903,7 +903,7 @@ public T multiply(@Nonnull T inValue)
    * @return      true if read, false if not
    *
    */
-  protected boolean readDenominator(@Nonnull ParseReader inReader)
+  protected boolean readDenominator(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 

@@ -596,20 +596,15 @@
           +{$entry.attacks.base[0]}
           <span class="window base">
             {foreach $base in $entry.attacks.bases}
-              {foreach $node in $base.second}
-                <div class="base-entry">
-                  <div class="base-value">
-                    {$node.value |firstline}
-                  </div>
-                  :{sp}
-                  <div class="base-name">
-                    {$node.entry.name}
-                    {if def($node.description)}
-                      {sp}({$node.description})
-                    {/if}
-                  </div>
+              <div class="base-entry">
+                <div class="base-value">
+                  {$base.first |firstline}
                 </div>
-              {/foreach}
+                :{sp}
+                <div class="base-name">
+                  {$base.second}
+                </div>
+              </div>
             {/foreach}
           </span>
         </span>

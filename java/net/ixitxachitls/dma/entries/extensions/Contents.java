@@ -28,13 +28,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Item;
+import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Combined;
+import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
@@ -59,6 +62,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Contents extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -72,7 +76,7 @@ public class Contents extends Extension<Item>
    * @param       inName the name of the extension
    *
    */
-  public Contents(@Nonnull Item inEntry, @Nonnull String inName)
+  public Contents(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -120,90 +124,6 @@ public class Contents extends Extension<Item>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-  //---------------------------- getStorageName ----------------------------
-
-  /**
-   * Get the name of the file.
-   *
-   * @return      the name of the file (without 'unnecessary path' info)
-   *
-   */
-  // public String getStorageName()
-  // {
-  //   return m_entry.getStorage().getStorageName() + ":" + getName();
-  // }
-
-  //........................................................................
-  //----------------------------- getStorageID -----------------------------
-
-  /**
-   * Get the id of the storage or null if none (usually if not an value group).
-   *
-   * @return      the id of the storage or null
-   *
-   */
-  // public String getStorageID()
-  // {
-  //   return m_entry.getID();
-  // }
-
-  //........................................................................
-
-  //---------------------------- addListCommands ---------------------------
-
-  /**
-   * Add the commands for printing this extension to a list.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   *
-   * @undefined   IllegalArgumentException if given commands are null
-   *
-   */
-  //public void addListCommands(@MayBeNull ListCommand ioCommands, boolean inDM)
-  // {
-  //   if(ioCommands == null)
-  //     return;
-
-  //   ArrayList<Object> commands = new ArrayList<Object>();
-
-  //   for(AbstractEntry entry : getSubEntries(false))
-  //     ioCommands.add(ListCommand.Type.CONTENTS,
-  //                 entry.getListCommands(inDM).get(ListCommand.Type.GENERAL));
-  // }
-
-  //........................................................................
-
   //-------------------------------- accept --------------------------------
 
   /**
@@ -247,113 +167,6 @@ public class Contents extends Extension<Item>
   // }
 
   //........................................................................
-
-  //--------------------------- addPrintCommands ---------------------------
-
-  /**
-   * Add the commands for printing this extension to the given print command.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   * @param       inEditable flag if values editable or not
-   *
-   * @undefined   IllegalArgumentException if given commands are null
-   *
-   */
-  // public void addPrintCommands(@MayBeNull PrintCommand ioCommands,
-  //                              boolean inDM, boolean inEditable)
-  // {
-  //   if(ioCommands == null)
-  //     return;
-
-  //   super.addPrintCommands(ioCommands, inDM, inEditable);
-
-  //   Weight weight = new Weight();
-  //   Money value = new Money();
-  //   for(Entry entry : getSubEntries(false))
-  //     if(entry instanceof Item)
-  //     {
-  //       weight.addTo(((Item)entry).getWeight());
-  //       value.addTo(((Item)entry).getValue());
-  //     }
-
-  //   weight.simplify();
-  //   value.simplify();
-
-  //   ioCommands.appendValue("weight", new Command(new Object []
-  //     {
-  //       new Linebreak(),
-  //       new Tiny(new Command(new Object []
-  //         {
-  //           "(contents ",
-  //           weight,
-  //           ")",
-  //         })),
-  //     }));
-
-  //   ioCommands.appendValue("value", new Command(new Object []
-  //     {
-  //       new Linebreak(),
-  //       new Tiny(new Command(new Object []
-  //         {
-  //           " (contents ",
-  //           value,
-  //           ")",
-  //         })),
-  //     }));
-
-  //   List<Command> deepContents = new ArrayList<Command>();
-  //   for(AbstractEntry entry : getSubEntries(false))
-  //     deepContents.add(entry.getCommand(entry.printCommand(inDM, false),
-  //                                       inDM ? Item.LIST_COMMAND_DM
-  //                                       : Item.LIST_COMMAND, inDM));
-
-  //   ioCommands.addValue("deep contents", new Command(new Object []
-  //     {
-  //       new Indent(new Command(deepContents.toArray())),
-  //       new Par(),
-  //     }),
-  //                       false, false, false, "deep contents");
-
-  //   ioCommands.addExtensionValue(m_contents, "contents", "contents",
-  //                                 inEditable);
-
-  //   List<BaseContainer> bases = getBases(BaseContainer.class);
-  //   if(bases.size() > 0)
-  //   {
-  //     ioCommands.addExtensionValue(bases.get(0).m_capacity, "capacity",
-  //                                   "capacity", false);
-  //     ioCommands.addExtensionValue(bases.get(0).m_state, "state", "state",
-  //                                   false);
-  //   }
-  //   else
-  //   {
-  //     Log.warning("could not find base for contents extension");
-  //   }
-  // }
-
-  //........................................................................
-  //-------------------------- addSummaryCommand ---------------------------
-
-  /**
-   * Add the extensions value to the summary command list.
-   *
-   * @param       ioCommands the commands so far, will add here
-   * @param       inDM       true if setting for dm
-   *
-   */
-  // public void addSummaryCommands(List<Object> ioCommands, boolean inDM)
-  // {
-  //   ioCommands.add(new Linebreak());
-
-  //   for(EntryValue<Item> value : m_contents)
-  //   {
-  //     ioCommands.add(value.get().getSummaryCommand(inDM));
-  //     ioCommands.add(new Linebreak());
-  //   }
-  // }
-
-  //........................................................................
   //---------------------------- containedItems ----------------------------
 
   /**
@@ -364,7 +177,7 @@ public class Contents extends Extension<Item>
    * @return      a list with all the items
    *
    */
-  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
+  public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
     for(Name name : m_contents)
@@ -402,7 +215,7 @@ public class Contents extends Extension<Item>
    * @return      true if added, false if not
    *
    */
-  public boolean add(@Nonnull CampaignEntry inEntry)
+  public boolean add(CampaignEntry<? extends BaseEntry> inEntry)
   {
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();
@@ -512,7 +325,7 @@ public class Contents extends Extension<Item>
 
   //------------------------------------------------- other member functions
 
-  //-------------------------- adjustCombination ---------------------------
+  //------------------------------- collect --------------------------------
 
   /**
    * Adjust the value for the given name for any special properites.
@@ -524,9 +337,8 @@ public class Contents extends Extension<Item>
    */
   @Override
   @SuppressWarnings("unchecked")
-  public <V extends Value> void
-            adjustCombination(@Nonnull String inName,
-                              Combination<V> ioCombination)
+  public <V extends Value<V>> void collect(String inName,
+                                           Combined<V> ioCombined)
   {
     if("value".equals(inName))
     {
@@ -549,7 +361,7 @@ public class Contents extends Extension<Item>
       }
 
       if(total != null)
-        ioCombination.add((V)total, this);
+        ioCombined.addValue(new Contribution<V>((V)total, this, "contents"));
     }
 
     if("weight".equals(inName))
@@ -567,82 +379,17 @@ public class Contents extends Extension<Item>
           continue;
 
         if(total == null)
-            total = value;
+          total = value;
         else
           total = total.add(value);
       }
 
       if(total != null)
-        ioCombination.add((V)total, this);
+        ioCombined.addValue(new Contribution<V>((V)total, this, "contents"));
     }
 
-    super.adjustCombination(inName, ioCombination);
+    super.collect(inName, ioCombined);
  }
-
-  //........................................................................
-  //----------------------------- modifyValue ------------------------------
-
-  /**
-    *
-    * Modify the given value with information from the current extension.
-    *
-    * @param       inType    the type of value to modify
-    * @param       inEntry   the entry to modify in
-    * @param       inValue   the value to modify, return in this object
-    * @param       inDynamic a flag denoting if dynamic modifiers should be
-    *                        returned
-    *
-    * @return      the newly computed value (or null if no value to use)
-    *
-    * @undefined   never
-    *
-    * @algorithm   nothing done here
-    *
-    * @derivation  necessary if real modifications are desired
-    *
-    * @example     see Item
-    *
-    * @bugs
-    * @to_do
-    *
-    * @keywords    modify . value
-    *
-    */
-  // TODO: fix these tests
-//   @SuppressWarnings("unchecked")
-//   public Modifier modifyValue(PropertyKey inType, AbstractEntry inEntry,
-//                               Value inValue, boolean inDynamic)
-//   {
-//     if(inDynamic)
-//     {
-//       if(inType == BaseContainer.CAPACITY)
-//       {
-//         if(inEntry instanceof Item)
-//         {
-//           Pair<ValueGroup, Variable> pair =
-//             inEntry.getVariable(Item.USER_SIZE.toString());
-
-//           if(pair.first() != null && pair.second() != null)
-//           {
-//             BaseItem.Size size =
-//               ((EnumSelection<BaseItem.Size>)
-//                pair.second().get(pair.first())).getSelected();
-
-//             if(size.isBigger(BaseItem.Size.MEDIUM))
-//               return new Modifier(Modifier.Type.MULTIPLY,
-//                                   (int)Math.pow
-//                                 (4, size.difference(BaseItem.Size.MEDIUM)));
-//             else
-//               return new Modifier(Modifier.Type.DIVIDE,
-//                                   (int)Math.pow
-//                                 (4, BaseItem.Size.MEDIUM.difference(size)));
-//           }
-//         }
-//       }
-//     }
-
-//     return super.modifyValue(inType, inEntry, inValue, inDynamic);
-//   }
 
   //........................................................................
 
@@ -650,173 +397,131 @@ public class Contents extends Extension<Item>
 
   //------------------------------------------------------------------- test
 
-    //----- container ------------------------------------------------------
+  /** The test. */
+  public static class Test extends ValueGroup.Test
+  {
+    //----- empty container ------------------------------------------------
 
     /** Testing container. */
-    public void testContainer()
+    @org.junit.Test
+    public void emptyContainer()
     {
-      // TODO: does not work anymore, as it is added to the campaign
-//       // no contents in container
-//       String text =
-//         "item with contents Container = \n"
-//         + "   hp 2;\n"
-//         + "   contents .\n";
+      // no contents in container
+      String text =
+        "item with contents Container = \n"
+        + "   hp 2;\n"
+        + "   contents .\n";
 
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(text), "container test");
+      net.ixitxachitls.input.ParseReader reader =
+        new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
+                                               "container test");
 
-//       Item item = (Item)Item.read(reader, new Campaign("Test", "tst"));
+      Item item = (Item)Item.read(reader);
 
-//       assertNotNull("item should have been read", item);
-//       assertEquals("container text",
-//                    "item with contents Container =\n"
-//                    + "\n"
-//                    + "  hp           2;\n"
-//                    + "  user size    Medium-size.\n",
-//                    item.toString());
-
-      // now with some items in the container
-//       String text =
-//         "item with contents Container = \n"
-//         + "   hp 2;\n"
-//         + "   contents item guru., item guru2 = hp 3..\n";
-
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(text), "container test");
-
-//       Item item = (Item)Item.read(reader, new BaseCampaign("Test"));
-
-//       assertNotNull("item should have been read", item);
-//       assertEquals("container text",
-//                    "item with contents Container =\n"
-//                    + "\n"
-//                    + "  contents     item guru =\n"
-//                    + "\n"
-//                    + "  user size    Medium-size;\n"
-//                    + "  id           tst-1.\n"
-//                    + "\n"
-//                    + ", item guru2 =\n"
-//                    + "\n"
-//                    + "  hp           3;\n"
-//                    + "  user size    Medium-size;\n"
-//                    + "  id           tst-2.\n"
-//                    + "\n"
-//                    + ";\n"
-//                    + "  hp           2;\n"
-//                    + "  user size    Medium-size.\n",
-//                    item.toString());
-
-//       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-//                                   + "(base name 'Container').*");
-//       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-//                                   + "(base name 'guru').*");
-//       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-//                                   + "(base name 'guru2').*");
-
-//       // adding stuff to the container
-//       Item subItem = null;
-//         for(Iterator<AbstractExtension> i = item.getExtensions();
-//             i.hasNext(); )
-//       {
-//         AbstractExtension extension = i.next();
-
-//         if(extension instanceof
-//            net.ixitxachitls.dma.entries.extensions.Contents)
-//         {
-//           ParseReader subReader =
-//           new ParseReader(new java.io.StringReader(s_text), "container add");
-
-//           subItem = (Item)Item.read(subReader, new BaseCampaign("Test"));
-
-//           assertTrue(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                       extension).accept(subItem));
-//           assertTrue(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                       extension).add(subItem));
-//           assertFalse(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                       extension).add(subItem));
-//           assertFalse(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                       extension).accept(subItem));
-
-//           break;
-//         }
-//       }
-
-//       assertEquals("added",
-//                    "item with contents Container =\n"
-//                    + "\n"
-//                    + "  contents     item guru =\n"
-//                    + "\n"
-//                    + "  user size    Medium-size;\n"
-//                    + "  id           tst-1.\n"
-//                    + "\n"
-//                    + ", item guru2 =\n"
-//                    + "\n"
-//                    + "  hp           3;\n"
-//                    + "  user size    Medium-size;\n"
-//                    + "  id           tst-2.\n"
-//                    + "\n"
-//                    + ", #------ Winter Blanket "
-//                    + "----------------------------------------\n"
-//                    + "\n"
-//                    + "item Winter Blanket =\n"
-//                    + "\n"
-//                    + "  hp           1;\n"
-//                    + "  user size    Small.\n"
-//                    + "\n"
-//                    + "#..............."
-//                    + "...............................................\n"
-//                    + "\n"
-//                    + ";\n"
-//                    + "  hp           2;\n"
-//                    + "  user size    Medium-size.\n", item.toString());
-
-//       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-//                                   + "(base name 'Winter Blanket').*");
-
-//       // removing item again
-//       for(Iterator<AbstractExtension> i = item.getExtensions();
-//           i.hasNext(); )
-//       {
-//         AbstractExtension extension = i.next();
-
-//         if(extension instanceof
-//            net.ixitxachitls.dma.entries.extensions.Contents)
-//         {
-//           assertFalse(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                        extension).accept(subItem));
-//           assertTrue(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                       extension).remove(subItem));
-//           assertFalse(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                        extension).remove(subItem));
-//           assertTrue(((net.ixitxachitls.dma.entries.extensions.Contents)
-//                       extension).accept(subItem));
-//         }
-//       }
-
-//       assertEquals("removed",
-//                    "item with contents Container =\n"
-//                    + "\n"
-//                    + "  contents     item guru =\n"
-//                    + "\n"
-//                    + "  user size    Medium-size;\n"
-//                    + "  id           tst-1.\n"
-//                    + "\n"
-//                    + ", item guru2 =\n"
-//                    + "\n"
-//                    + "  hp           3;\n"
-//                    + "  user size    Medium-size;\n"
-//                    + "  id           tst-2.\n"
-//                    + "\n"
-//                    + ";\n"
-//                    + "  hp           2;\n"
-//                    + "  user size    Medium-size.\n", item.toString());
-
-//       // check if it accepts
-
+      assertNotNull("item should have been read", item);
+      assertEquals("container text",
+                   "#----- Container\n"
+                   + "\n"
+                   + "item with contents Container =\n"
+                   + "\n"
+                   + "  hp           2;\n"
+                   + "  name         Container.\n"
+                   + "\n"
+                   + "#.....\n",
+                   item.toString());
     }
 
     //......................................................................
-  // no tests, see BaseItem for tests
+    //----- contents -------------------------------------------------------
+
+    /** The contents Test. */
+    @org.junit.Test
+    public void contents()
+    {
+      // now with some items in the container
+      String text =
+        "item with contents Container = contents item1, item2.";
+
+      net.ixitxachitls.input.ParseReader reader =
+        new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
+                                               "container test");
+      Item item = (Item)Item.read(reader);
+
+      assertNotNull("item should have been read", item);
+      assertEquals("container text",
+                   "#----- Container\n"
+                   + "\n"
+                   + "item with contents Container =\n"
+                   + "\n"
+                   + "  name         Container;\n"
+                   + "  contents     item1,\n"
+                   + "               item2.\n"
+                   + "\n"
+                   + "#.....\n",
+                   item.toString());
+    }
+
+    //......................................................................
+    //----- value ----------------------------------------------------------
+
+    /** The value Test. */
+    @org.junit.Test
+    public void value()
+    {
+      String text = "campaign campaign = base FR.\n"
+        + "item item1 = value 100 gp; campaign FR / campaign.\n"
+        + "item item2 = value 250 gp; campaign FR / campaign.\n"
+        + "item with contents container = value 25 gp; campaign FR / campaign; "
+        + "contents item1, item2.\n";
+
+      net.ixitxachitls.input.ParseReader reader =
+        new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
+                                               "container test");
+
+      addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
+      addEntry(Item.read(reader));
+      addEntry(Item.read(reader));
+
+      Item container = (Item)Item.read(reader);
+
+      assertEquals("value", 375.0, container.getGoldValue(), 0.5);
+    }
+
+    //......................................................................
+    //----- weight ---------------------------------------------------------
+
+    /** The value Test. */
+    @org.junit.Test
+    public void weight()
+    {
+      String text = "campaign campaign = base FR.\n"
+        + "base item base_item1 = weight 5 lb.\n"
+        + "item item1 = base base_item1; campaign FR / campaign.\n"
+        + "base item base_item2 = weight 10 lb.\n"
+        + "item item2 = base base_item2; campaign FR / campaign.\n"
+        + "base item base_container = weight 1 lb.\n"
+        + "item with contents container = base base_container; "
+        + "campaign FR / campaign; contents item1, item2.\n";
+
+      net.ixitxachitls.input.ParseReader reader =
+        new net.ixitxachitls.input.ParseReader(new java.io.StringReader(text),
+                                               "container test");
+
+      addEntry(net.ixitxachitls.dma.entries.Campaign.read(reader));
+      addEntry(net.ixitxachitls.dma.entries.BaseItem.read(reader));
+      addEntry(Item.read(reader));
+      addEntry(net.ixitxachitls.dma.entries.BaseItem.read(reader));
+      addEntry(Item.read(reader));
+      addEntry(net.ixitxachitls.dma.entries.BaseCampaign.read(reader));
+
+      Item container = (Item)Item.read(reader);
+
+      assertEquals("weight", 16.0,
+                   container.getTotalWeight().getAsPounds().getValue(), 0.5);
+    }
+
+    //......................................................................
+  }
 
   //........................................................................
 }

@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values.conditions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.FormattedText;
@@ -51,7 +51,8 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
-public class Condition<T extends Condition> extends Value<T>
+@ParametersAreNonnullByDefault
+public class Condition<T extends Condition<T>> extends Value<T>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -76,7 +77,7 @@ public class Condition<T extends Condition> extends Value<T>
    * @param       inDescription - a description of the condition
    *
    */
-  public Condition(@Nonnull String inDescription)
+  public Condition(String inDescription)
   {
     m_description = m_description.as(inDescription);
 
@@ -127,7 +128,7 @@ public class Condition<T extends Condition> extends Value<T>
    * @return      the requested description
    *
    */
-  public @Nonnull String getDescription()
+  public String getDescription()
   {
     return m_description.get();
   }
@@ -141,7 +142,7 @@ public class Condition<T extends Condition> extends Value<T>
    * @return      the requested string
    *
    */
-  public @Nonnull String doToString()
+  public String doToString()
   {
     return m_description.toString();
   }
@@ -232,7 +233,7 @@ public class Condition<T extends Condition> extends Value<T>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     FormattedText description = m_description.read(inReader);
     if (description == null)

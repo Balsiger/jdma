@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -72,6 +72,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
+@ParametersAreNonnullByDefault
 public class BaseItem extends BaseEntry
 {
   //----------------------------------------------------------------- nested
@@ -641,7 +642,7 @@ public class BaseItem extends BaseEntry
    * @param       inName the name of the base item
    *
    */
-  public BaseItem(@Nonnull String inName)
+  public BaseItem(String inName)
   {
     super(inName, TYPE);
   }
@@ -656,7 +657,7 @@ public class BaseItem extends BaseEntry
    * @param       inBases the base items this one is based upon
    *
    */
-  // public BaseItem(@Nonnull String inName, @Nonnull BaseItem ... inBases)
+  // public BaseItem(String inName, BaseItem ... inBases)
   // {
   //   super(inName, TYPE, inBases);
   // }
@@ -676,7 +677,7 @@ public class BaseItem extends BaseEntry
   /** The total standard value of the base item. */
   @Key("value")
   @DM
-  protected @Nonnull Money m_value = new Money();
+  protected Money m_value = new Money();
 
   static
   {
@@ -810,7 +811,7 @@ public class BaseItem extends BaseEntry
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         @Override
-        public @Nonnull Long extract(@Nonnull Distance inValue)
+        public Long extract(Distance inValue)
         {
           return (long)(inValue.getAsFeet().getValue() * 240);
         }
@@ -991,11 +992,11 @@ public class BaseItem extends BaseEntry
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nullable Value getValue(@Nonnull String inKey)
+  public @Nullable Value<?> getValue(String inKey)
   {
     if("hp".equals(inKey))
     {
-      Value hp = super.getValue(inKey);
+      Value<?> hp = super.getValue(inKey);
       if(hp.isDefined() || !m_substance.isDefined())
         return hp;
 
@@ -1019,7 +1020,7 @@ public class BaseItem extends BaseEntry
    * @return      the weight
    *
    */
-  public @Nonnull Weight getWeight()
+  public Weight getWeight()
   {
     return m_weight;
   }
@@ -1033,7 +1034,7 @@ public class BaseItem extends BaseEntry
    * @return      the value
    *
    */
-  public @Nonnull Money getValue()
+  public Money getValue()
   {
     return m_value;
   }
@@ -1047,7 +1048,7 @@ public class BaseItem extends BaseEntry
    * @return      the size, as enum value
    *
    */
-  public @Nonnull Size getSize()
+  public Size getSize()
   {
     return m_size.getSelected();
   }
@@ -1075,7 +1076,7 @@ public class BaseItem extends BaseEntry
    * @return      the requested name
    *
    */
-  public @Nonnull String getPlayerName()
+  public String getPlayerName()
   {
     if(m_playerName.isDefined())
       return m_playerName.get();
@@ -1099,7 +1100,7 @@ public class BaseItem extends BaseEntry
     if(m_appearances.isDefined())
     {
       int total = 0;
-      for(Value value : m_appearances)
+      for(Value<?> value : m_appearances)
         total += (int)Math.pow(BaseItem.Probability.FACTOR,
                                ((EnumSelection)((Multiple)value).get(0))
                                .getSelected().ordinal());
@@ -1111,7 +1112,7 @@ public class BaseItem extends BaseEntry
       for(Iterator<Multiple> i = m_appearances.iterator(); i.hasNext(); )
       {
         Multiple multiple = i.next();
-        EnumSelection value = (EnumSelection)multiple.get(0);
+        EnumSelection<?> value = (EnumSelection<?>)multiple.get(0);
 
         random -= (int)Math.pow(BaseItem.Probability.FACTOR,
                                 value.getSelected().ordinal());
@@ -1178,7 +1179,7 @@ public class BaseItem extends BaseEntry
    *
    */
   @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
   {
     if("hp".equals(inKey) && !m_hp.isDefined() && m_substance.isDefined())
       return new FormattedValue(new Span("computed", getHP()),
@@ -1247,7 +1248,7 @@ public class BaseItem extends BaseEntry
    * @return      true if set, false if not
    *
    */
-  // public boolean setSize(@Nonnull Size inSize)
+  // public boolean setSize(Size inSize)
   // {
   //   return m_size.set(inSize);
   // }

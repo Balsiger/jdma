@@ -598,16 +598,18 @@ public class BaseFeat extends BaseEntry
 
           Modifier computed = modifier.read(expression);
           if (computed != null)
-            ioCombined.add(new Contribution<Modifier>(computed, this, null));
+            ioCombined.addModifier(new Contribution<Modifier>(computed, this,
+                                                              null));
           else
-            ioCombined.add
+            ioCombined.addModifier
               (new Contribution<Modifier>
                (modifier.as(Integer.valueOf(expression.replace('+', '0')),
                             modifier.getType(), modifier.getCondition(), null),
                 this, null));
         }
         else
-          ioCombined.add(new Contribution<Modifier>(modifier, this, null));
+          ioCombined.addModifier(new Contribution<Modifier>(modifier, this,
+                                                            null));
       }
     }
   }

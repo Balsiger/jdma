@@ -802,7 +802,8 @@ public class BaseSkill extends BaseEntry
         + "  worlds            Generic;\n"
         + "  references        WTC 17524: 67;\n"
         + "  description       \"The long description.\";\n"
-        + "  short description \"Estimate the value of objects.\".\n"
+        + "  short description \"Estimate the value of objects.\";\n"
+        + "  name              Appraise.\n"
         + "\n"
         + "#.....\n";
 

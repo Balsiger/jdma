@@ -45,6 +45,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMAData;
@@ -106,48 +107,6 @@ public class AbstractEntry extends ValueGroup
   implements Comparable<AbstractEntry>
 {
   //----------------------------------------------------------------- nested
-
-  //------------------------------- allows -------------------------------
-
-  /**
-   * Check if this type allows access by the given access level.
-   *
-   * @param       inLevel the level to check for
-   *
-   * @return      true if allowed, false if not
-   *
-   * @undefined   never
-   *
-   */
-  //     public boolean allows(BaseCharacter.Group inLevel)
-  //     {
-  //       if(m_access == null)
-  //         return true;
-
-  //       return m_access.allows(inLevel);
-  //     }
-
-  //......................................................................
-
-  //---------------------------- withAccess ------------------------------
-
-  /**
-   * Set the access level of this type.
-   *
-   * @param       inAccess the access level
-   *
-   * @return      this object
-   *
-   */
-  // TODO: clean up comments
-  //     protected Type withAccess(BaseCharacter.Group inAccess)
-  //     {
-  //       m_access = inAccess;
-
-  //       return this;
-  //     }
-
-  //......................................................................
 
   //----- EntryKey ---------------------------------------------------------
 
@@ -346,12 +305,7 @@ public class AbstractEntry extends ValueGroup
     m_type = inType;
 
     // we have to init this here, as we need to have the type set
-    m_base = new ValueList<Name>
-      (new Name()
-       .withTemplate("entrylink")
-       .withFormatter(new LinkFormatter<Name>
-                      ("/" + getType().getBaseType().getLink()
-                       + "/")));
+    m_base = new ValueList<Name>(new Name().withTemplate("entrylink"));
 
     setupExtensions();
   }
@@ -455,7 +409,7 @@ public class AbstractEntry extends ValueGroup
     new TreeMap<String, AbstractExtension<? extends AbstractEntry>>();
 
   /** The base entries for this entry, in the same order as the names. */
-  protected @Nullable List<BaseEntry> m_baseEntries = null;
+  protected @Nullable List<BaseEntry> m_baseEntries = Lists.newArrayList();
 
   /** The files for this entry. */
   private @Nullable List<DMAData.File> m_files = null;
@@ -723,7 +677,7 @@ public class AbstractEntry extends ValueGroup
   @Override
   public List<BaseEntry> getBaseEntries()
   {
-    if(m_baseEntries == null)
+    if(m_baseEntries.isEmpty())
     {
       m_baseEntries = new ArrayList<BaseEntry>();
 
