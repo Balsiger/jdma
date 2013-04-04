@@ -794,24 +794,19 @@
               {param remarkComment: $value.remark.comment /}
             {/call}
           {/if}
-          {if isList($value.values)}
-            {foreach $val in $value.values}
+          {if isList($value.valuesWithDescriptions)}
+            {foreach $val in $value.valuesWithDescriptions}
               <span class="windowed">
                 <div class="window base">
-                  {foreach $node in $val.second}
-                    <div class="base-entry">
-                      <div class="base-value">
-                        {$node.value |firstline}
-                      </div>
-                      :{sp}
-                      <div class="base-name">
-                        {$node.entry.name}
-                        {if def($node.description)}
-                          {sp}({$node.description})
-                        {/if}
-                      </div>
+                  <div class="base-entry">
+                    <div class="base-value">
+                      {$val.first |firstline}
                     </div>
-                  {/foreach}
+                    :{sp}
+                    <div class="base-name">
+                      {$val.second}
+                    </div>
+                  </div>
                 </div>
                 {$val.first |print}{sp}
               </span>

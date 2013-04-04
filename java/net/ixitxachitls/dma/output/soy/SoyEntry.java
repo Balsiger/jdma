@@ -148,8 +148,9 @@ public class SoyEntry extends SoyAbstract
                                   "name", file.getName(),
                                   "type", file.getType()));
 
+      System.out.println("main: " + main + ", data " + data + "/" + files);
       return new SoyMapData("main",
-                            main == null ? UndefinedData.INSTANCE
+                            main == null ? new SoyAbstract.Undefined("main")
                             : new SoyMapData("path", main.getPath(),
                                              "icon", main.getIcon(),
                                              "name", main.getName(),

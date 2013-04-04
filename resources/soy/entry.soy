@@ -382,7 +382,7 @@
     {param key: $entry.key /}
     {param type: 'image'/}
     {param content}
-      {if $entry.files.main}
+      {if def($entry.files.main)}
         {call dma.page.link}
           {param url: $entry.files.main.path /}
           {param tooltip: 'Main' /}
