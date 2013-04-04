@@ -33,12 +33,13 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.collect.Iterators;
+
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Span;
 import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.commands.Window;
-import net.ixitxachitls.util.ArrayIterator;
 
 //..........................................................................
 
@@ -922,7 +923,7 @@ public class Units<T extends Units<T>> extends Value<T>
    */
   public Iterator<Rational> getValues()
   {
-    return new ArrayIterator<Rational>(m_values);
+    return Iterators.forArray(m_values);
   }
 
   //........................................................................

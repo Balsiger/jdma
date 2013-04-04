@@ -32,6 +32,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
+import com.google.common.collect.Lists;
+
 import net.ixitxachitls.dma.entries.extensions.Composite;
 import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.output.ListPrint;
@@ -764,14 +766,14 @@ public class Item extends CampaignEntry<BaseItem>
   @Override
   public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
   {
-    if("name".equals(inKey))
-    {
-      return new FormattedValue
-        (new Command(getNameCommand(inDM), " (", getName(), ")"), getName(),
-         "name")
-        .withEditable(true)
-        .withEditType("name");
-    }
+    // if("name".equals(inKey))
+    // {
+    //   return new FormattedValue
+    //     (new Command(getNameCommand(inDM), " (", getName(), ")"), getName(),
+    //      "name")
+    //     .withEditable(true)
+    //     .withEditType("name");
+    // }
 
     if("itemlist".equals(inKey))
     {
@@ -846,13 +848,9 @@ public class Item extends CampaignEntry<BaseItem>
    * @return   the command to format the name
    *
    */
-  public Object getNameCommand(boolean inDM)
+  public String computeFullName()
   {
-    if(!inDM)
-      return new Color("Item", computeValue("player name", inDM)
-                       .format(this, inDM, false));
-
-    String name = null;
+    List<String> names = Lists.newArrayList();
     for(BaseEntry base : getBaseEntries())
     {
       if(base == null)
@@ -861,23 +859,20 @@ public class Item extends CampaignEntry<BaseItem>
       String baseName = base.getName();
       List<String> synonyms = base.getSynonyms();
       if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
-        baseName = synonyms.get(0);
-
-      if(name == null)
-        name = baseName;
+        names.add(synonyms.get(0));
       else
-        name += " " + baseName;
+        names.add(base.getName());
     }
 
-    if(name == null)
+    String name;
+    if(names.isEmpty())
       name = getName();
+    else
+      name = Strings.SPACE_JOINER.join(names);
 
     String playerName = m_playerName.get();
-    boolean hasPlayerName =
-      m_playerName.isDefined() && !name.equals(playerName);
-
-    if(hasPlayerName)
-      return new Command(playerName, new Super(name));
+    if (m_playerName.isDefined() && !name.equals(m_playerName.get()))
+      return m_playerName.get() + " (" + name + ")";
 
     return name;
   }
@@ -1321,7 +1316,7 @@ public class Item extends CampaignEntry<BaseItem>
    */
   public void identify()
   {
-    m_playerName = m_playerName.as(getNameCommand(true).toString());
+    m_playerName = m_playerName.as(computeFullName());
   }
 
   //........................................................................

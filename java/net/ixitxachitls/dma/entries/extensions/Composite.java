@@ -199,33 +199,33 @@ public class Composite extends Extension<Item>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
-  {
-    if("include".equals(inKey))
-    {
-      // we have to add the links here as we can't do it at construction time
-      // as the campaign might not yet be available
-      List<Object> commands = new ArrayList<Object>();
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
+  // {
+  //   if("include".equals(inKey))
+  //   {
+  //     // we have to add the links here as we can't do it at construction time
+  //     // as the campaign might not yet be available
+  //     List<Object> commands = new ArrayList<Object>();
 
-      for(Name name : m_includes)
-      {
-        if(!commands.isEmpty())
-          commands.add(", ");
+  //     for(Name name : m_includes)
+  //     {
+  //       if(!commands.isEmpty())
+  //         commands.add(", ");
 
-        Item item = m_entry.getCampaign().getItem(name.get());
-        String url = m_entry.getCampaign().getPath() + "/item/" + name;
-        if(item != null)
-          commands.add(new Link(item.getNameCommand(inDM), url));
-        else
-          commands.add(new Link(name, url));
-      }
+  //       Item item = m_entry.getCampaign().getItem(name.get());
+  //       String url = m_entry.getCampaign().getPath() + "/item/" + name;
+  //       if(item != null)
+  //         commands.add(new Link(item.getNameCommand(inDM), url));
+  //       else
+  //         commands.add(new Link(name, url));
+  //     }
 
-      return new FormattedValue(new Command(commands), m_includes, "include");
-    }
+  //     return new FormattedValue(new Command(commands), m_includes, "include");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
 

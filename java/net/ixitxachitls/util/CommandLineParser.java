@@ -30,8 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -57,6 +57,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class CommandLineParser
 {
   //----------------------------------------------------------------- nested
@@ -65,6 +66,7 @@ public class CommandLineParser
 
   /** The representation of a single command line option. */
   @ThreadSafe
+  @ParametersAreNonnullByDefault
   public abstract static class Option
   {
     //------------------------------- Option -------------------------------
@@ -78,7 +80,7 @@ public class CommandLineParser
      *
      */
     public Option(@Nullable String inShort, @Nullable String inLong,
-                  @Nonnull String inDescription)
+                  String inDescription)
     {
       if(inShort == null && inLong == null)
         throw new IllegalArgumentException("must have at least a long or "
@@ -100,7 +102,7 @@ public class CommandLineParser
     protected @Nullable String m_long;
 
     /** The description. */
-    protected @Nonnull String m_description;
+    protected String m_description;
 
     //......................................................................
 
@@ -140,7 +142,7 @@ public class CommandLineParser
      * @return the option description
      *
      */
-    public @Nonnull String getDescription()
+    public String getDescription()
     {
       return m_description;
     }
@@ -155,7 +157,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       if(m_long != null)
         return m_long;
@@ -175,7 +177,7 @@ public class CommandLineParser
      * @return the index of the next argument to parse
      *
      */
-    public abstract int parse(@Nonnull String []inArguments, int inIndex);
+    public abstract int parse(String []inArguments, int inIndex);
 
     //......................................................................
     //------------------------------ hasValue ------------------------------
@@ -196,6 +198,7 @@ public class CommandLineParser
 
   /** A command line option representing a flag value. */
   @ThreadSafe
+  @ParametersAreNonnullByDefault
   public static class Flag extends Option
   {
     //-------------------------------- Flag --------------------------------
@@ -209,7 +212,7 @@ public class CommandLineParser
      *
      */
     public Flag(@Nullable String inShort, @Nullable String inLong,
-                @Nonnull String inDescription)
+                String inDescription)
     {
       super(inShort, inLong, inDescription);
     }
@@ -232,7 +235,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       if(m_present)
         return s_longStart + super.toString();
@@ -253,7 +256,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    public synchronized int parse(String []inArguments, int inIndex)
     {
       m_present = true;
 
@@ -284,6 +287,7 @@ public class CommandLineParser
 
   /** An option with an integer value. */
   @NotThreadSafe
+  @ParametersAreNonnullByDefault
   public static class IntegerOption extends Option
   {
     //--------------------------- IntegerOption ----------------------------
@@ -298,8 +302,7 @@ public class CommandLineParser
      *
      */
     public IntegerOption(@Nullable String inShort, @Nullable String inLong,
-                         @Nonnull String inDescription,
-                         @Nullable Integer inDefault)
+                         String inDescription, @Nullable Integer inDefault)
     {
       super(inShort, inLong, inDescription);
 
@@ -327,7 +330,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    public synchronized int parse(String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
       {
@@ -411,6 +414,7 @@ public class CommandLineParser
 
   /** An option with a string value. */
   @NotThreadSafe
+  @ParametersAreNonnullByDefault
   public static class StringOption extends Option
   {
     //---------------------------- StringOption ----------------------------
@@ -425,8 +429,7 @@ public class CommandLineParser
      *
      */
     public StringOption(@Nullable String inShort, @Nullable String inLong,
-                        @Nonnull String inDescription,
-                        @Nullable String inDefault)
+                        String inDescription, @Nullable String inDefault)
     {
       super(inShort, inLong, inDescription);
 
@@ -454,7 +457,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    public synchronized int parse(String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
         m_value = inArguments[inIndex];
@@ -503,7 +506,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -519,6 +522,7 @@ public class CommandLineParser
 
   /** An option with a string value. */
   @ThreadSafe
+  @ParametersAreNonnullByDefault
   public static class StringListOption extends Option
   {
     //-------------------------- StringListOption --------------------------
@@ -533,8 +537,7 @@ public class CommandLineParser
      *
      */
     public StringListOption(@Nullable String inShort, @Nullable String inLong,
-                            @Nonnull String inDescription,
-                            @Nonnull String []inDefault)
+                            String inDescription, String []inDefault)
     {
       super(inShort, inLong, inDescription);
 
@@ -599,7 +602,7 @@ public class CommandLineParser
      * @return      the value given or the default value
      *
      */
-    public @Nonnull String []get()
+    public String []get()
     {
       if(m_values != null)
         return Arrays.copyOf(m_values, m_values.length);
@@ -617,7 +620,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + s_commaJoiner.join(m_values);
@@ -633,6 +636,7 @@ public class CommandLineParser
 
   /** An option with an enumeration value. */
   @ThreadSafe
+  @ParametersAreNonnullByDefault
   public static class EnumOption extends Option
   {
     //----------------------------- EnumOption -----------------------------
@@ -647,7 +651,7 @@ public class CommandLineParser
      *
      */
     public EnumOption(@Nullable String inShort, @Nullable String inLong,
-                      @Nonnull String inDescription, @Nullable Enum inDefault)
+                      String inDescription, @Nullable Enum<?> inDefault)
     {
       super(inShort, inLong, inDescription);
 
@@ -659,7 +663,7 @@ public class CommandLineParser
     //------------------------------------------------------------ variables
 
     /** The value stored. */
-    private @Nullable Enum m_value;
+    private @Nullable Enum<?> m_value;
 
     //......................................................................
 
@@ -676,10 +680,10 @@ public class CommandLineParser
      */
     @Override
     @SuppressWarnings("unchecked")
-    public synchronized int parse(@Nonnull String []inArguments, int inIndex)
+    public synchronized int parse(String []inArguments, int inIndex)
     {
       if(inArguments.length > inIndex)
-        m_value = m_value.valueOf(m_value.getClass(), inArguments[inIndex]);
+        m_value = Enum.valueOf(m_value.getClass(), inArguments[inIndex]);
       else
         Log.error("expected one of the possible values");
 
@@ -710,7 +714,7 @@ public class CommandLineParser
      * @return      the value given or the default value
      *
      */
-    public synchronized @Nullable Enum get()
+    public synchronized @Nullable Enum<?> get()
     {
       if(m_value != null)
         return m_value;
@@ -730,7 +734,7 @@ public class CommandLineParser
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       if(hasValue())
         return s_longStart + m_long + "=" + m_value;
@@ -755,7 +759,7 @@ public class CommandLineParser
    * @param       inOptions the command line options to recognize
    *
    */
-  public CommandLineParser(@Nonnull Option ... inOptions)
+  public CommandLineParser(Option ... inOptions)
   {
     // add the standard options
     add(new Flag("h", "help",    "Show all command line options and quit."));
@@ -772,20 +776,19 @@ public class CommandLineParser
   //-------------------------------------------------------------- variables
 
   /** The short ids and its options. */
-  private @Nonnull Map<String, Option> m_shorts =
-    new HashMap<String, Option>();
+  private Map<String, Option> m_shorts = new HashMap<String, Option>();
 
   /** The long ids and its options. */
-  private @Nonnull Map<String, Option> m_longs = new HashMap<String, Option>();
+  private Map<String, Option> m_longs = new HashMap<String, Option>();
 
   /** The start of a short option. */
-  private static final @Nonnull String s_shortStart = "-";
+  private static final String s_shortStart = "-";
 
   /** The start of a long option. */
-  private static final @Nonnull String s_longStart = "--";
+  private static final String s_longStart = "--";
 
   /** A space joiner. */
-  private static final @Nonnull Joiner s_spaceJoiner = Joiner.on(' ');
+  private static final Joiner s_spaceJoiner = Joiner.on(' ');
 
   //........................................................................
 
@@ -801,7 +804,7 @@ public class CommandLineParser
    * @return      true if a value was given or a default was set
    *
    */
-  public boolean hasValue(@Nonnull String inName)
+  public boolean hasValue(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -821,7 +824,7 @@ public class CommandLineParser
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     List<String> result = new ArrayList<String>();
     for(Option option : m_longs.values())
@@ -840,7 +843,7 @@ public class CommandLineParser
    * @return      the help string
    *
    */
-  public @Nonnull String help()
+  public String help()
   {
     StringBuilder result = new StringBuilder();
 
@@ -886,7 +889,7 @@ public class CommandLineParser
    * @return      the integer value
    *
    */
-  public int getInteger(@Nonnull String inName)
+  public int getInteger(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -912,7 +915,7 @@ public class CommandLineParser
    * @return      the string value
    *
    */
-  public @Nullable String getString(@Nonnull String inName)
+  public @Nullable String getString(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -938,7 +941,7 @@ public class CommandLineParser
    * @return      the string list value
    *
    */
-  public @Nullable String []getStringList(@Nonnull String inName)
+  public @Nullable String []getStringList(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -965,7 +968,7 @@ public class CommandLineParser
    * @return      the string value
    *
    */
-  public @Nullable Enum getEnum(@Nonnull String inName)
+  public @Nullable Enum<?> getEnum(String inName)
   {
     Option option = m_longs.get(inName);
 
@@ -993,7 +996,7 @@ public class CommandLineParser
    * @return      the integer value
    *
    */
-  public int get(@Nonnull String inName, int inDefault)
+  public int get(String inName, int inDefault)
   {
     Option option = m_longs.get(inName);
 
@@ -1024,7 +1027,7 @@ public class CommandLineParser
    * @return      the string value
    *
    */
-  public @Nonnull String get(@Nonnull String inName, @Nonnull String inDefault)
+  public String get(String inName, String inDefault)
   {
     Option option = m_longs.get(inName);
 
@@ -1055,8 +1058,7 @@ public class CommandLineParser
    * @return      the string value
    *
    */
-  public @Nonnull String []get(@Nonnull String inName,
-                               @Nonnull String []inDefault)
+  public String []get(String inName, String []inDefault)
   {
     Option option = m_longs.get(inName);
 
@@ -1087,7 +1089,7 @@ public class CommandLineParser
    * @return      the string value
    *
    */
-  public @Nonnull Enum get(@Nonnull String inName, @Nonnull Enum inDefault)
+  public Enum<?> get(String inName, Enum<?> inDefault)
   {
     Option option = m_longs.get(inName);
 
@@ -1119,7 +1121,7 @@ public class CommandLineParser
    * @param       inOption the option to add
    *
    */
-  public void add(@Nonnull Option inOption)
+  public void add(Option inOption)
   {
     String shrt = inOption.getShort();
     String lng  = inOption.getLong();
@@ -1148,7 +1150,7 @@ public class CommandLineParser
    *              everything was parsed
    *
    */
-  public @Nullable String parse(@Nonnull String ... inArguments)
+  public @Nullable String parse(String ... inArguments)
   {
     StringBuilder rest = new StringBuilder();
 
@@ -1175,8 +1177,7 @@ public class CommandLineParser
    * @return      the next argument to read
    *
    */
-  private int parse(@Nonnull String []inArguments, int inIndex,
-                    @Nonnull StringBuilder  ioRest)
+  private int parse(String []inArguments, int inIndex, StringBuilder  ioRest)
   {
     if(inIndex >= inArguments.length)
       return inIndex;

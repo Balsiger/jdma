@@ -164,101 +164,27 @@ public class Counted extends Extension<Item>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if(inDM && "summary".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      commands.add(new Symbol("\u2736"));
-      maybeAddValue(commands, "count", inDM, null, null);
-      maybeAddValue(commands, "unit", inDM, " ", null);
-
-      return new FormattedValue(new Command(commands), null, "summary");
-    }
-
-    if("list".equals(inKey))
-      return new FormattedValue
-        (new Command(m_entry.getNameCommand(inDM),
-                     new Count(m_count.get(), m_count.get(),
-                               computeValue("unit", inDM)
-                               .format(this, inDM, true))), null, "list");
-
-    return super.computeValue(inKey, inDM);
-  }
-
-  //........................................................................
-  //--------------------------- addListCommands ----------------------------
-
-  /**
-    *
-    * Add the commands for printing this extension to a list.
-    *
-    * @param       ioCommands the commands to add to
-    * @param       inDM   true if printing for dm, false else
-    *
-    */
-  //public void addListCommands(@MayBeNull ListCommand ioCommands, boolean inDM)
+  // @Override
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   // {
-  //   if(ioCommands == null)
-  //     return;
-
-  //   ioCommands.add(ListCommand.Type.COUNTED,
-  //                  new Command(new Object []
-  //     {
-  //       new Bold(new Color("subtitle", m_entry.getPlayerName())),
-  //       new Super(new Scriptsize("(" + m_entry.getID() + ")")),
-  //     }));
-
-  //   List<BaseCounted> bases = getBases(BaseCounted.class);
-
-  // if(bases == null || bases.size() == 0 || !bases.get(0).m_count.isDefined())
-  //     ioCommands.add(ListCommand.Type.COUNTED,
-  //                    new Count(m_count.get(), m_count.get(), ""));
-  //   else
-  //     ioCommands.add(ListCommand.Type.COUNTED,
-  //                  new Count(m_count.get(), bases.get(0).m_count.get(), ""));
-  // }
-
-  //........................................................................
-
-  //-------------------------- addSummaryCommand ---------------------------
-
-  /**
-   * Add the extensions value to the summary command list.
-   *
-   * @param       ioCommands the commands so far, will add here
-   * @param       inDM       true if setting for dm
-   *
-   */
-  // public void addSummaryCommands(List<Object> ioCommands, boolean inDM)
-  // {
-  //   ioCommands.add(", ");
-  //   ioCommands.add(m_count.format(false));
-  //   ioCommands.add(" ");
-
-  //   if(getBases(BaseCounted.class).size() > 0)
+  //   if(inDM && "summary".equals(inKey))
   //   {
-  //     BaseCounted base = getBases(BaseCounted.class).get(0);
+  //     List<Object> commands = new ArrayList<Object>();
+  //     commands.add(new Symbol("\u2736"));
+  //     maybeAddValue(commands, "count", inDM, null, null);
+  //     maybeAddValue(commands, "unit", inDM, " ", null);
 
-  //     if(base != null)
-  //     {
-  //       BaseCounted.Unit unit = base.m_unit.getSelected();
-
-  //       if(unit != null)
-  //       {
-  //         if(m_count.get() == 1)
-  //           ioCommands.add(unit.getName());
-  //         else
-  //           ioCommands.add(unit.getMultiple());
-  //       }
-  //     }
+  //     return new FormattedValue(new Command(commands), null, "summary");
   //   }
-  //   else
-  //     if(m_count.get() == 1)
-  //       ioCommands.add("time");
-  //     else
-  //       ioCommands.add("times");
+
+  //   if("list".equals(inKey))
+  //     return new FormattedValue
+  //       (new Command(m_entry.getNameCommand(inDM),
+  //                    new Count(m_count.get(), m_count.get(),
+  //                              computeValue("unit", inDM)
+  //                              .format(this, inDM, true))), null, "list");
+
+  //   return super.computeValue(inKey, inDM);
   // }
 
   //........................................................................

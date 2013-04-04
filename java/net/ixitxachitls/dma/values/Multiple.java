@@ -27,16 +27,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterators;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.util.ArrayIterator;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -59,6 +59,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Multiple extends Value<Multiple>
   implements Iterable<Multiple.Element>
 {
@@ -71,6 +72,7 @@ public class Multiple extends Value<Multiple>
    *
    */
   @Immutable
+  @ParametersAreNonnullByDefault
   public static class Element
   {
     //------------------------------ Element -------------------------------
@@ -82,7 +84,7 @@ public class Multiple extends Value<Multiple>
      * @param       inOptional true if the element if optional, false if not
      *
      */
-    public Element(@Nonnull Value inValue, boolean inOptional)
+    public Element(Value<?> inValue, boolean inOptional)
     {
       this(inValue, inOptional, null, null);
     }
@@ -99,7 +101,7 @@ public class Multiple extends Value<Multiple>
      * @param       inTail     the string required after the element
      *
      */
-    public Element(@Nonnull Value inValue, boolean inOptional,
+    public Element(Value<?> inValue, boolean inOptional,
                    @Nullable String inFront, @Nullable String inTail)
     {
       m_value    = inValue;
@@ -127,7 +129,7 @@ public class Multiple extends Value<Multiple>
 
 
     /** The value itself. */
-    private @Nonnull Value m_value;
+    private Value<?> m_value;
 
     /** The flag if the value is optional. */
     private boolean m_optional;
@@ -146,7 +148,7 @@ public class Multiple extends Value<Multiple>
      * @return      the current value
      *
      */
-    public @Nonnull Value get()
+    public Value<?> get()
     {
       return m_value;
     }
@@ -203,7 +205,7 @@ public class Multiple extends Value<Multiple>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       if(!m_value.isDefined() && isOptional())
         return "";
@@ -237,7 +239,7 @@ public class Multiple extends Value<Multiple>
    * @param       inElements  the elements of the value
    *
    */
-  public Multiple(@Nonnull Element ... inElements)
+  public Multiple(Element ... inElements)
   {
     m_elements = new Element[inElements.length];
 
@@ -276,7 +278,7 @@ public class Multiple extends Value<Multiple>
    * @param       inValues  the nested values
    *
    */
-  public Multiple(@Nonnull Value ... inValues)
+  public Multiple(Value<?> ... inValues)
   {
     m_elements = new Element[inValues.length];
 
@@ -304,7 +306,7 @@ public class Multiple extends Value<Multiple>
    *
    */
   @Override
-  public @Nonnull Multiple create()
+  public Multiple create()
   {
     Element []elements = new Element[m_elements.length];
 
@@ -321,14 +323,14 @@ public class Multiple extends Value<Multiple>
   //-------------------------------------------------------------- variables
 
   /** The elements of the multiple. */
-  protected @Nonnull Element []m_elements;
+  protected Element []m_elements;
 
   /** The standard delimiter between multiple entries. */
   protected static final char s_delimiter =
     Config.get("resource:values/multiple.delimiter", ' ');
 
   /** The joiner for editing values. */
-  protected static final @Nonnull Joiner s_editJoiner =
+  protected static final Joiner s_editJoiner =
     Joiner.on(Config.get("resource:entries/edit.multiple.delimiter", "#|"));
 
   //........................................................................
@@ -370,7 +372,7 @@ public class Multiple extends Value<Multiple>
    * @return      the edit type as an encoded string
    *
    */
-  protected @Nonnull String createEditType(Element ... inElements)
+  protected String createEditType(Element ... inElements)
   {
     StringBuilder builder = new StringBuilder();
     for(Element element : inElements)
@@ -400,7 +402,7 @@ public class Multiple extends Value<Multiple>
    * @return      the requested value
    *
    */
-  public @Nonnull Element getElement(int inIndex)
+  public Element getElement(int inIndex)
   {
     if(inIndex < 0 || inIndex > m_elements.length)
       throw new IllegalArgumentException("invalid index '" + inIndex
@@ -420,7 +422,7 @@ public class Multiple extends Value<Multiple>
    * @return      the value of the element
    *
    */
-  public @Nonnull Value get(int inIndex)
+  public Value<?> get(int inIndex)
   {
     return getElement(inIndex).get();
   }
@@ -437,9 +439,9 @@ public class Multiple extends Value<Multiple>
    *
    */
   @Override
-public @Nullable Iterator<Element> iterator()
+  public @Nullable Iterator<Element> iterator()
   {
-    return new ArrayIterator<Element>(m_elements);
+    return Iterators.forArray(m_elements);
   }
 
   //........................................................................
@@ -506,7 +508,7 @@ public boolean isDefined()
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     StringBuilder result = new StringBuilder();
 
@@ -549,7 +551,7 @@ public boolean isDefined()
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 
@@ -583,7 +585,7 @@ public boolean isDefined()
    * @return  the printed value as a string.
    *
    */
-  protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry)
+  protected String doPrint(AbstractEntry inEntry)
   {
     StringBuilder builder = new StringBuilder();
 
@@ -617,7 +619,7 @@ public boolean isDefined()
    *
    */
   @Override
-  public @Nonnull String getChoices()
+  public String getChoices()
   {
     ArrayList<String> list = new ArrayList<String>();
 
@@ -653,7 +655,7 @@ public boolean isDefined()
    * @return      true if set, false if values not valid
    *
    */
-  public @Nonnull Multiple as(@Nonnull Value ... inValues)
+  public Multiple as(Value ... inValues)
   {
     Multiple result = create();
 
@@ -686,7 +688,7 @@ public boolean isDefined()
    *
    */
   @Override
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(ParseReader inReader)
   {
     for(int i = 0; i < m_elements.length; i++)
     {
@@ -737,7 +739,7 @@ public boolean isDefined()
    */
   @Override
   @SuppressWarnings("unchecked")
-  public @Nonnull Multiple add(@Nonnull Multiple inValue)
+  public Multiple add(Multiple inValue)
   {
     Multiple result = create();
 
@@ -747,7 +749,7 @@ public boolean isDefined()
 
     for(int i = 0; i < result.m_elements.length; i++)
       result.m_elements[i].m_value =
-        m_elements[i].m_value.add(inValue.m_elements[i].m_value);
+        ((Value)m_elements[i].m_value).add(inValue.m_elements[i].m_value);
 
     return result;
   }

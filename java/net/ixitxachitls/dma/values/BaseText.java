@@ -388,6 +388,7 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
 
     /** Testing reading. */
     @org.junit.Test
+    @SuppressWarnings("rawtype,unchecked")
     public void testRead()
     {
       // name test

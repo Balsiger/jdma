@@ -31,10 +31,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.NotThreadSafe;
+
+import com.google.common.collect.Iterators;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -98,7 +100,7 @@ public class ParseReader
      * @param       inBuffer   the back buffer at the position
      *
      */
-    protected Position(long inPosition, long inLine, @Nonnull String inBuffer)
+    protected Position(long inPosition, long inLine, String inBuffer)
     {
       assert inPosition >  0    : "position must be positive";
       assert inLine     >  0    : "line number must be positive";
@@ -119,7 +121,7 @@ public class ParseReader
     private long m_line;
 
     /** The text in the back buffer at the current position. */
-    private @Nonnull String m_buffer;
+    private String m_buffer;
 
     //......................................................................
 
@@ -162,7 +164,7 @@ public class ParseReader
      * @return      the back buffer at the position
      *
      */
-    private @Nonnull String getBuffer()
+    private String getBuffer()
     {
       return m_buffer;
     }
@@ -179,7 +181,7 @@ public class ParseReader
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return "(pos = " + m_position + ", line = " + m_line + ", back = '"
         + m_buffer + "')";
@@ -207,7 +209,7 @@ public class ParseReader
     *                                            opened cannot be found
     *
     */
-  public ParseReader(@Nonnull String inName)
+  public ParseReader(String inName)
     throws java.io.FileNotFoundException
   {
     open(inName);
@@ -225,7 +227,7 @@ public class ParseReader
    * @param       inName   the name of the document to parse
    *
    */
-  public ParseReader(@Nonnull Reader inReader, @Nonnull String inName)
+  public ParseReader(Reader inReader, String inName)
   {
     open(inReader, inName);
   }
@@ -261,19 +263,19 @@ public class ParseReader
   private List<BaseError> m_errors = new ArrayList<BaseError>();
 
   /** The put back buffer to store characters that were put back. */
-  protected @Nonnull StringBuilder m_back = new StringBuilder();
+  protected StringBuilder m_back = new StringBuilder();
 
   /** All the white spaces. */
-  protected final static @Nonnull String s_whites =
+  protected final static String s_whites =
     Config.get("resource:parser/white.spaces", " \t\r\n\f");
 
   /** The word boundaries. */
-  protected final static @Nonnull String s_boundaries =
+  protected final static String s_boundaries =
     Config.get("resource:parser/word.boundaries.extension",
                " \t\r\n\f.,;:'\"/?=+-()*&^%$#@!~{}][<>");
 
   /** Text to print for infinite high or low values. */
-  private static final @Nonnull String s_infinity = "Infinity";
+  private static final String s_infinity = "Infinity";
 
   /** The maximal size of a buffer. */
   private static final int s_maxBufferSize =
@@ -384,7 +386,7 @@ public class ParseReader
    * @exception   ReadException a word could not be read
    *
    */
-  public @Nonnull String readWord() throws ReadException
+  public String readWord() throws ReadException
   {
     return readWord(s_boundaries);
   }
@@ -403,7 +405,7 @@ public class ParseReader
    * @exception   ReadException a word could not be read
    *
    */
-  public @Nonnull String readWord(@Nonnull String inBoundaries)
+  public String readWord(String inBoundaries)
     throws ReadException
   {
     // do preprocessing, i.e. white space over reading
@@ -746,7 +748,7 @@ public class ParseReader
    * @return      the position as Position object
    *
    */
-  public @Nonnull Position getPosition()
+  public Position getPosition()
   {
     return new Position(m_position, m_newlines, m_back.toString());
   }
@@ -813,7 +815,7 @@ public class ParseReader
    * @return      the characters up to the delimiter (or up to the end)
    *
    */
-  public @Nonnull String read(char inDelimiter)
+  public String read(char inDelimiter)
   {
     StringBuilder result = new StringBuilder();
 
@@ -838,7 +840,7 @@ public class ParseReader
    * @return      the text read
    *
    */
-  public @Nonnull String read(@Nonnull String inDelimiters)
+  public String read(String inDelimiters)
   {
     return read(inDelimiters, null);
   }
@@ -859,8 +861,7 @@ public class ParseReader
    * @undefined   never
    *
    */
-  public @Nonnull String read(@Nonnull String inDelimiters,
-                              @Nullable String inSpaceDelimiters)
+  public String read(String inDelimiters, @Nullable String inSpaceDelimiters)
   {
     StringBuilder result = new StringBuilder();
 
@@ -896,7 +897,7 @@ public class ParseReader
    * @return      the characters read
    *
    */
-  public @Nonnull String read(long inMax)
+  public String read(long inMax)
   {
     StringBuilder result = new StringBuilder();
 
@@ -920,7 +921,7 @@ public class ParseReader
    * @return      the complete line
    *
    */
-  public @Nonnull String readLine()
+  public String readLine()
   {
     StringBuilder line = new StringBuilder();
     for(int c = read(); c != -1; c = read())
@@ -1017,7 +1018,7 @@ public class ParseReader
    *              if none was found
    *
    */
-  public char ignore(@Nonnull String inDelimiters)
+  public char ignore(String inDelimiters)
   {
     for(int c = read(); c != -1; c = read())
       if(inDelimiters.indexOf((char)c) >= 0)
@@ -1040,7 +1041,7 @@ public class ParseReader
    * @return      true if text was found and read, false otherwise
    *
    */
-  public boolean expect(@Nonnull String inText)
+  public boolean expect(String inText)
   {
     return expectCase(inText, false);
   }
@@ -1057,7 +1058,7 @@ public class ParseReader
    * @return      the number of the text found, or -1 if none was found
    *
    */
-  public int expect(@Nonnull String []inTexts)
+  public int expect(String []inTexts)
   {
     return expectCase(inTexts, false);
   }
@@ -1077,7 +1078,7 @@ public class ParseReader
    * @return      the number of the array found in, or -1 if none was found
    *
    */
-  public int expect(@Nonnull String [][]inTexts)
+  public int expect(String [][]inTexts)
   {
     return expectCase(inTexts, false);
   }
@@ -1095,7 +1096,7 @@ public class ParseReader
    * @return      the object found, or null if none was found
    *
    */
-  public @Nullable <T> T expect(@Nonnull Iterator<T> inTexts)
+  public @Nullable <T> T expect(Iterator<T> inTexts)
   {
     return expectCase(inTexts, false);
   }
@@ -1242,7 +1243,7 @@ public class ParseReader
    * @return      the number of the array found in, or -1 if none was found
    *
    */
-  public int expectCase(@Nonnull String [][]inTexts, boolean inIgnoreCase)
+  public int expectCase(String [][]inTexts, boolean inIgnoreCase)
   {
     for(int i = 0; i < inTexts.length; i++)
     {
@@ -1272,8 +1273,7 @@ public class ParseReader
    * @return      the object found, or null if none was found
    *
    */
-  public @Nullable <T> T expectCase(@Nonnull Iterator<T> inTexts,
-                                    boolean inIgnoreCase)
+  public @Nullable <T> T expectCase(Iterator<T> inTexts, boolean inIgnoreCase)
   {
     while(inTexts.hasNext())
     {
@@ -1300,7 +1300,7 @@ public class ParseReader
    * @return      the object found, or null if none was found
    *
    */
-  public @Nullable <T> T expectCase(@Nonnull Iterable<T> inTexts,
+  public @Nullable <T> T expectCase(Iterable<T> inTexts,
                                     boolean inIgnoreCase)
   {
     for(T element : inTexts)
@@ -1363,8 +1363,7 @@ public class ParseReader
    * @return      the error containing all information about the error
    *
    */
-  public ParseError error(@Nonnull Position inPosition,
-                          @Nonnull String inErrorNumber,
+  public ParseError error(Position inPosition, String inErrorNumber,
                           @Nullable String inText)
   {
     if(inText == null)
@@ -1428,8 +1427,7 @@ public class ParseReader
    * @param       inText        an context specific error text
    *
    */
-  public void logError(@Nonnull Position inPosition,
-                       @Nonnull String inErrorNumber,
+  public void logError(Position inPosition, String inErrorNumber,
                        @Nullable String inText)
   {
     if(!m_logErrors)
@@ -1453,8 +1451,7 @@ public class ParseReader
    * @param       inText        an context specific error text
    *
    */
-  public void logWarning(@Nonnull Position inPosition,
-                         @Nonnull String inErrorNumber,
+  public void logWarning(Position inPosition, String inErrorNumber,
                          @Nullable String inText)
   {
     if(!m_logErrors)
@@ -1500,7 +1497,7 @@ public class ParseReader
    * @exception   java.io.FileNotFoundException if the file could not be found
    *
    */
-  public void open(@Nonnull String inName) throws java.io.FileNotFoundException
+  public void open(String inName) throws java.io.FileNotFoundException
   {
     // determine the input buffer size (add 1 in case the buffer is empty)
     int size = Math.min((int)(new File(inName)).length(), s_maxBufferSize) + 1;
@@ -1519,7 +1516,7 @@ public class ParseReader
    * @param       inName   the name of the buffer read
    *
    */
-  public void open(@Nonnull Reader inReader, @Nonnull String inName)
+  public void open(Reader inReader, String inName)
   {
     // check if already open
     if(isOpen())
@@ -1681,7 +1678,7 @@ public class ParseReader
    * @return      the white spaces skipped
    *
    */
-  protected @Nonnull String skipWhites()
+  protected String skipWhites()
   {
     StringBuilder result = new StringBuilder();
 
@@ -1704,7 +1701,7 @@ public class ParseReader
    * @param       inPosition the position to go to
    *
    */
-  public void seek(@Nonnull Position inPosition)
+  public void seek(Position inPosition)
   {
     // set the internal values
     m_position = inPosition.getPosition();
@@ -1734,7 +1731,7 @@ public class ParseReader
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     Position pos = getPosition();
 
@@ -2006,8 +2003,8 @@ public class ParseReader
       assertFalse(reader.expect('a'));
       assertEquals(-1,    reader.expect(new String[]{"a", "b", "c"}));
       assertEquals("word",
-                   reader.expect(new net.ixitxachitls.util.ArrayIterator<String>
-                                 ("one", "two", "tree", "word", "four")));
+                   reader.expect(Iterators.forArray("one", "two", "tree",
+                                                    "word", "four")));
 
       // try expecting white spaces
       assertTrue("space", reader.expect("guru"));

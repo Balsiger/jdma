@@ -546,261 +546,166 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("wealth".equals(inKey) && inDM)
-    {
-      Money wealth = totalWealth();
-      double current = wealth.getAsGold().getValue();
-      int low = wealthPerLevel((int)m_level.get() - 1);
-      int high = wealthPerLevel((int)m_level.get() + 1);
-      int goal = wealthPerLevel((int)m_level.get());
-
-      Object command = (int)wealth.getAsGold().getValue() + " gp";
-
-      if(current <= low)
-        command = new Window(new Color("error", command),
-                            "Total wealth is way too low, should be "
-                            + Strings.format(goal) + " gp for level "
-                            + m_level);
-      else
-        if(current <= (goal + low) / 2.0)
-          command = new Window(new Color("warning", command),
-                              "Total wealth is a little too low, should be "
-                              + Strings.format(goal) + " gp for level "
-                              + m_level);
-        else
-          if(current >= high)
-            command = new Window(new Color("error", command),
-                                "Total wealth is a way too high, should be "
-                                + Strings.format(goal) + " gp for level "
-                                + m_level);
-          else
-            if(current >= (goal + high) / 2.0)
-              command = new Window(new Color("warning", command),
-                                  "Total wealth is a little too high, "
-                                  + "should be " + Strings.format(goal)
-                                  + " gp for level " + m_level);
-
-      return new FormattedValue(command, null, "wealth");
-    }
-
-    if("itemlist".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      for(Name name : m_items)
-      {
-        Item item = getCampaign().getItem(name.get());
-        commands.add(item.computeValue("itemlist", inDM)
-                     .format(item, inDM, true));
-      }
-
-      return new FormattedValue(new Columns("2", new Command(commands)),
-                                null, "itemlist");
-    }
-
-    if("countedlist".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      for(Item item : containedItems(true).values())
-      {
-        ValueHandle value = item.computeValue("counted:list", inDM);
-        if (value != null && !value.value(item, inDM).toString().isEmpty())
-          commands.addAll(((Command)value.format(item, inDM, true))
-                          .getArguments());
-
-        value = item.computeValue("multiple:list", inDM);
-        if (value != null && !value.value(item, inDM).toString().isEmpty())
-          commands.addAll(((Command)value.format(item, inDM, true))
-                          .getArguments());
-
-        value = item.computeValue("multiuse:list", inDM);
-        if (value != null && !value.value(item, inDM).toString().isEmpty())
-          commands.addAll(((Command)value.format(item, inDM, true))
-                          .getArguments());
-      }
-
-      return new FormattedValue(new Table("colored",
-                                          "30:L(name)[Name];70:L(count)[Count]",
-                                          new Command(commands)),
-                                null, "countedlist");
-    }
-
-    if("timedlist".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      for(Item item : containedItems(true).values())
-      {
-        ValueHandle value = item.computeValue("timed:list", inDM);
-        if (value == null || value.value(item, inDM).toString().isEmpty())
-          continue;
-
-        commands.addAll(((Command)value.format(item, inDM, true))
-                        .getArguments());
-      }
-
-      return new FormattedValue(new Table("colored",
-                                          "30:L(name)[Name];70:L(count)[Count]",
-                                          new Command(commands)),
-                                null, "timedlist");
-    }
-
-    if("items".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-
-      for(Name name : m_items)
-      {
-        if(!commands.isEmpty())
-          commands.add(", ");
-
-        Item item = getCampaign().getItem(name.get());
-        String url = getCampaign().getPath() + "/item/" + name;
-        if(item != null)
-          commands.add(new Link(item.getNameCommand(inDM), url));
-        else
-          commands.add(new Link(name, url));
-      }
-
-      if(inDM)
-      {
-        commands.add(" | ");
-        commands.add(new Link("Add", "javascript:item.create("
-                              + Encodings.toJSString(getCampaign().getPath())
-                              + ", "
-                              + Encodings.toJSString
-                              (getCampaign().getEditType() + "/"
-                               + TYPE.getLink()
-                               + "/" + getName()) + ");\""));
-      }
-
-      return new FormattedValue(new Command(commands), m_items, "items")
-        .withPlural("items");
-    }
-
-    if("weight".equals(inKey))
-      return new FormattedValue(totalWeight().format(), "", "weight");
-
-    if(inDM && "as pdf dm".equals(inKey))
-      return new FormattedValue
-        (new Divider("doc-link doc-link-icon",
-                     new Icon("doc-pdf.png", "DM", getName() + ".pdf")),
-         null, "as dm pdf");
-
-    if(inDM && "as pdf".equals(inKey))
-      return new FormattedValue
-        (new ImageLink("/icons/doc-pdf.png", getName(),
-                       getName() + ".pdf?user="
-                       + getBaseEntries().get(0).getName(), "doc-link"),
-         null, "as pdf");
-
-    if(inDM && "do mail".equals(inKey))
-      return new FormattedValue
-        (new ImageLink("/icons/mail.png", "Mail PDF",
-                       "/actions/mail" + getPath(), "doc-link doc-link-mail"),
-         null, "do mail");
-
-    return super.computeValue(inKey, inDM);
-  }
-
-  //........................................................................
-
-  //------------------------------ printCommand ----------------------------
-
-  /**
-   * Print the item to the document, in the general section.
-   *
-   * @param       inDM   true if set for DM, false for player
-   * @param       inEditable true if values are editable, false if not
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  // public PrintCommand printCommand(boolean inDM, boolean inEditable)
+  // @Override
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
   // {
-  //   // determine the dm for the campaign this user is in
-  //   String email = "";
-  //   BaseCharacter dm = getDM();
-
-  //   if(dm != null)
-  //     email = dm.m_email.get();
-  //   else
-  //     Log.warning("could not find DM for character " + getName());
-
-  //   commands.pre.add
-  //     (new Divider
-  //      ("title",
-  //       new Command(new Object[]
-  //         {
-  //           new Icon("pdf.png", "item list",
-  //                    "/pdf/items/" + getID() + ".pdf"),
-  //           inDM ? new Icon("pdf.png", "item list (DM)",
-  //                           "/pdf/dm/items/" + getID() + ".pdf")
-  //           : "",
-  //           inDM ? new Icon("mail.png",
-  //                           "mail item list to user",
-  //                           "js:mail("
-  //                           + "'" + email + "', "
-  //                           + "'Itemliste "
-  //                           + getName().replaceAll("\'", "\\\\'") + "', "
-  //                           + "'Hi " + getName().replaceAll("\'", "\\\\'")
-  //                           + ",\\\\n\\\\nAttached you find your "
-  //                           + "current list of items. Please "
-  //                           + "report any inconsistencies as "
-  //                           + "usual.\\\\n\\\\n"
-  //                           + "Your Dungeon Master', "
-  //                           + "{ user: '" + getID() + "', "
-  //                           + "type: 'items'})")
-  //           : "",
-  //         })));
-
-  //   commands.post.add(new Divider("item-desc", "item-desc", null));
-  //   commands.post.add("<table id='items-table' class='items'>");
-  //   commands.post.add("<tr id='item-" + getID() + "' class='item-container'>"
-  //                      + "<td>Items of " + getName() + "</td><td></td>"
-  //                      + "</tr>\n");
-
-  //   for(Entry entry : getPossessions(true))
+  //   if("wealth".equals(inKey) && inDM)
   //   {
-  //     if(entry instanceof Item)
-  //     {
-  //       String child;
+  //     Money wealth = totalWealth();
+  //     double current = wealth.getAsGold().getValue();
+  //     int low = wealthPerLevel((int)m_level.get() - 1);
+  //     int high = wealthPerLevel((int)m_level.get() + 1);
+  //     int goal = wealthPerLevel((int)m_level.get());
 
-  //       Item item = (Item)entry;
-  //       String id = item.getStorage().getStorageID();
-  //       if(id != null)
-  //         child = "child-of-item-" + id;
+  //     Object command = (int)wealth.getAsGold().getValue() + " gp";
+
+  //     if(current <= low)
+  //       command = new Window(new Color("error", command),
+  //                           "Total wealth is way too low, should be "
+  //                           + Strings.format(goal) + " gp for level "
+  //                           + m_level);
+  //     else
+  //       if(current <= (goal + low) / 2.0)
+  //         command = new Window(new Color("warning", command),
+  //                             "Total wealth is a little too low, should be "
+  //                             + Strings.format(goal) + " gp for level "
+  //                             + m_level);
   //       else
-  //         child = "";
+  //         if(current >= high)
+  //           command = new Window(new Color("error", command),
+  //                               "Total wealth is a way too high, should be "
+  //                               + Strings.format(goal) + " gp for level "
+  //                               + m_level);
+  //         else
+  //           if(current >= (goal + high) / 2.0)
+  //             command = new Window(new Color("warning", command),
+  //                                 "Total wealth is a little too high, "
+  //                                 + "should be " + Strings.format(goal)
+  //                                 + " gp for level " + m_level);
 
-  //       if(entry.hasAttachment(Contents.class))
-  //         child += " item-container";
-  //       else
-  //         child += " item";
-
-  //       commands.post.add("<tr id='item-" + item.getID() + "' "
-  //                         + "class='" + child + "' "
-  //                         + "onclick='$p(\"item-desc\").innerHTML = "
-  //                         + "ajax(\"/entry/item/" + item.getID()
-  //                         + "?body&short\", null, null);"
-  //                         + "'>"
-  //                         + "<td><span class='item-name'>" + item.getName()
-  //                         + "</span></td>"
-  //                         + "<td>" + item.getWeight() + "</td>"
-  //                         + "</tr>\n");
-  //     }
+  //     return new FormattedValue(command, null, "wealth");
   //   }
-  //   commands.post.add("</table>");
-  //   commands.post.add(new Divider("clear", null));
 
-  //   commands.post.add(new Script("setupTreeTable('items-table', 'item', "
-  //                                + "'item-container');"));
+  //   if("itemlist".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     for(Name name : m_items)
+  //     {
+  //       Item item = getCampaign().getItem(name.get());
+  //       commands.add(item.computeValue("itemlist", inDM)
+  //                    .format(item, inDM, true));
+  //     }
 
-  //   return commands;
+  //     return new FormattedValue(new Columns("2", new Command(commands)),
+  //                               null, "itemlist");
+  //   }
+
+  //   if("countedlist".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     for(Item item : containedItems(true).values())
+  //     {
+  //       ValueHandle value = item.computeValue("counted:list", inDM);
+  //       if (value != null && !value.value(item, inDM).toString().isEmpty())
+  //         commands.addAll(((Command)value.format(item, inDM, true))
+  //                         .getArguments());
+
+  //       value = item.computeValue("multiple:list", inDM);
+  //       if (value != null && !value.value(item, inDM).toString().isEmpty())
+  //         commands.addAll(((Command)value.format(item, inDM, true))
+  //                         .getArguments());
+
+  //       value = item.computeValue("multiuse:list", inDM);
+  //       if (value != null && !value.value(item, inDM).toString().isEmpty())
+  //         commands.addAll(((Command)value.format(item, inDM, true))
+  //                         .getArguments());
+  //     }
+
+  //     return new FormattedValue(new Table("colored",
+  //                                         "30:L(name)[Name];70:L(count)[Count]",
+  //                                         new Command(commands)),
+  //                               null, "countedlist");
+  //   }
+
+  //   if("timedlist".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     for(Item item : containedItems(true).values())
+  //     {
+  //       ValueHandle value = item.computeValue("timed:list", inDM);
+  //       if (value == null || value.value(item, inDM).toString().isEmpty())
+  //         continue;
+
+  //       commands.addAll(((Command)value.format(item, inDM, true))
+  //                       .getArguments());
+  //     }
+
+  //     return new FormattedValue(new Table("colored",
+  //                                         "30:L(name)[Name];70:L(count)[Count]",
+  //                                         new Command(commands)),
+  //                               null, "timedlist");
+  //   }
+
+  //   if("items".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+
+  //     for(Name name : m_items)
+  //     {
+  //       if(!commands.isEmpty())
+  //         commands.add(", ");
+
+  //       Item item = getCampaign().getItem(name.get());
+  //       String url = getCampaign().getPath() + "/item/" + name;
+  //       if(item != null)
+  //         commands.add(new Link(item.getNameCommand(inDM), url));
+  //       else
+  //         commands.add(new Link(name, url));
+  //     }
+
+  //     if(inDM)
+  //     {
+  //       commands.add(" | ");
+  //       commands.add(new Link("Add", "javascript:item.create("
+  //                             + Encodings.toJSString(getCampaign().getPath())
+  //                             + ", "
+  //                             + Encodings.toJSString
+  //                             (getCampaign().getEditType() + "/"
+  //                              + TYPE.getLink()
+  //                              + "/" + getName()) + ");\""));
+  //     }
+
+  //     return new FormattedValue(new Command(commands), m_items, "items")
+  //       .withPlural("items");
+  //   }
+
+  //   if("weight".equals(inKey))
+  //     return new FormattedValue(totalWeight().format(), "", "weight");
+
+  //   if(inDM && "as pdf dm".equals(inKey))
+  //     return new FormattedValue
+  //       (new Divider("doc-link doc-link-icon",
+  //                    new Icon("doc-pdf.png", "DM", getName() + ".pdf")),
+  //        null, "as dm pdf");
+
+  //   if(inDM && "as pdf".equals(inKey))
+  //     return new FormattedValue
+  //       (new ImageLink("/icons/doc-pdf.png", getName(),
+  //                      getName() + ".pdf?user="
+  //                      + getBaseEntries().get(0).getName(), "doc-link"),
+  //        null, "as pdf");
+
+  //   if(inDM && "do mail".equals(inKey))
+  //     return new FormattedValue
+  //       (new ImageLink("/icons/mail.png", "Mail PDF",
+  //                      "/actions/mail" + getPath(), "doc-link doc-link-mail"),
+  //        null, "do mail");
+
+  //   return super.computeValue(inKey, inDM);
   // }
 
   //........................................................................
+
   //------------------------------- getIcon --------------------------------
 
   /**
@@ -872,70 +777,6 @@ public class Character extends CampaignEntry<BaseCharacter>
 
     return super.compute(inKey);
   }
-
-  //........................................................................
-  //------------------------- createItemsDocument --------------------------
-
-  /**
-   * Create a pdf document with all the users item.
-   *
-   * @param       inDM true if generating for dm, false if not
-   *
-   * @return      the pdf document
-   *
-   */
-  // public PDFDocument createItemsDocument(boolean inDM)
-  // {
-  //   // print all item information for available items
-  //   document.add(new Title(title));
-
-  //----- overview -------------------------------------------------------
-
-  //----- counted & multiple ---------------------------------------------
-
-  //   commands.clear();
-  //   for(Entry<?> entry : allPossessions)
-  //     addTypedCommand(commands, inDM, entry,
-  //                     ValueGroup.ListCommand.Type.COUNTED);
-
-  //   if(!commands.isEmpty())
-  //     document.add(new Table("colored", "30:L(name)[Name];"
-  //                            + "70:L(number)[Number]",
-  //                            commands.toArray(new Object[0])));
-
-  //   //......................................................................
-
-  //   document.add(new Par());
-
-  // //----- light ----------------------------------------------------------
-
-  //   commands.clear();
-  //   for(Entry<?> entry : allPossessions)
-  //  addTypedCommand(commands, inDM, entry, ValueGroup.ListCommand.Type.LIGHT);
-
-  //   if(!commands.isEmpty())
-  //     document.add(new Table("colored", "60:L(name)[Name];20:L(bright)"
-  //                            + "[Bright];20:L(shadowy)[Shadowy]",
-  //                            commands.toArray(new Object[0])));
-
-  //   //......................................................................
-
-  //   document.add(new Par());
-
-  //   //----- time ----------------------------------------------------------
-
-  //   commands.clear();
-  //   for(Entry<?> entry : allPossessions)
-  //  addTypedCommand(commands, inDM, entry, ValueGroup.ListCommand.Type.TIMED);
-
-  //   if(!commands.isEmpty())
-  //     document.add(new Table("colored", "60:L(name)[Name];20:L(time)[Time]",
-  //                            commands.toArray(new Object[0])));
-
-  //   //......................................................................
-
-  //   return document;
-  // }
 
   //........................................................................
 

@@ -23,15 +23,16 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import com.google.common.collect.Iterators;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Span;
 import net.ixitxachitls.output.commands.Window;
-import net.ixitxachitls.util.ArrayIterator;
 
 //..........................................................................
 
@@ -50,6 +51,7 @@ import net.ixitxachitls.util.ArrayIterator;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Remark
 {
   //----------------------------------------------------------------- nested
@@ -57,6 +59,7 @@ public class Remark
   //----- Type -------------------------------------------------------------
 
   /** The remark types. */
+  @ParametersAreNonnullByDefault
   public enum Type
   {
     /** A house rule. */
@@ -86,7 +89,7 @@ public class Remark
      * @param       inDescription the description of the type
      *
      */
-    private Type(@Nonnull String inKey, @Nonnull String inDescription)
+    private Type(String inKey, String inDescription)
     {
       m_key         = inKey;
       m_description = inDescription;
@@ -97,10 +100,10 @@ public class Remark
     //---------------------------------------------------------- variables
 
     /** The key to be read. */
-    private @Nonnull String m_key;
+    private String m_key;
 
     /** The description. */
-    private @Nonnull String m_description;
+    private String m_description;
 
     //......................................................................
 
@@ -112,7 +115,7 @@ public class Remark
      * @return      the description
      *
      */
-    public @Nonnull String getDescription()
+    public String getDescription()
     {
       return m_description;
     }
@@ -127,7 +130,7 @@ public class Remark
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_key;
     }
@@ -150,7 +153,7 @@ public class Remark
    * @param       inComment the comment associated with the remark
    *
    */
-  public Remark(@Nonnull Type inType, @Nullable String inComment)
+  public Remark(Type inType, @Nullable String inComment)
   {
     m_type    = inType;
     m_comment = inComment;
@@ -163,7 +166,7 @@ public class Remark
   //-------------------------------------------------------------- variables
 
   /** The type of the remark. */
-  private @Nonnull Type m_type;
+  private Type m_type;
 
   /** The comment. */
   private @Nullable String m_comment;
@@ -189,7 +192,7 @@ public class Remark
    * @return      the type of the remark
    *
    */
-  public @Nonnull Type getType()
+  public Type getType()
   {
     return m_type;
   }
@@ -219,7 +222,7 @@ public class Remark
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return s_start + m_type.toString()
       + (m_comment == null ? "" : s_comment + m_comment) + s_end;
@@ -236,7 +239,7 @@ public class Remark
    * @return      the command that can be printed
    *
    */
-  public @Nonnull Command format(@Nonnull Object inContents)
+  public Command format(Object inContents)
   {
     if(m_comment == null)
       return new Span(m_type.name(),
@@ -266,7 +269,7 @@ public class Remark
    * @return      the Remark read or null if none was found
    *
    */
-  public static @Nullable Remark read(@Nonnull ParseReader inReader)
+  public static @Nullable Remark read(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -277,7 +280,7 @@ public class Remark
       return null;
     }
 
-    Type type = inReader.expect(new ArrayIterator<Type>(Type.values()));
+    Type type = inReader.expect(Iterators.forArray(Type.values()));
     if(type == null)
     {
       inReader.seek(pos);

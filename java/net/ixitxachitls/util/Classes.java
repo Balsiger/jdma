@@ -25,8 +25,8 @@ package net.ixitxachitls.util;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
@@ -87,8 +87,7 @@ public final class Classes
     * @return      the converted name
     *
     */
-  public static @Nonnull String toClassName
-    (@Nonnull String inName, @Nullable String inPackage)
+  public static String toClassName(String inName, @Nullable String inPackage)
   {
     // trim white spaces
     inName = inName.trim().replaceAll("\\s+", " ");
@@ -134,7 +133,7 @@ public final class Classes
     *              package)
     *
     */
-  public static @Nonnull String fromClassName(@Nonnull Class inClass)
+  public static String fromClassName(Class<?> inClass)
   {
     String name = inClass.getName();
 
@@ -157,7 +156,7 @@ public final class Classes
     * @undefined   if given class is null
     *
     */
-  public static @Nonnull String getPackage(@Nonnull Class inClass)
+  public static String getPackage(Class<?> inClass)
   {
     String name = inClass.getName();
 
@@ -178,9 +177,8 @@ public final class Classes
    * @return    the method found
    *
    */
-  public static @Nullable Method getMethod(@Nonnull Class<?> inClass,
-                                           @Nonnull String inName,
-                                           @Nonnull Class<?> ... inArguments)
+  public static @Nullable Method getMethod(Class<?> inClass, String inName,
+                                           Class<?> ... inArguments)
   {
     Class<?> current = inClass;
     Method method = null;
@@ -213,9 +211,8 @@ public final class Classes
    * @return      the result of the method, or null if something failed
    *
    */
-  public static @Nullable Object callMethod(@Nonnull String inName,
-                                            @Nonnull Object inObject,
-                                            @Nonnull Object ... inArguments)
+  public static @Nullable Object callMethod(String inName, Object inObject,
+                                            Object ... inArguments)
   {
     Class<?> []arguments = new Class<?>[inArguments.length];
     for(int i = 0; i < inArguments.length; i++)

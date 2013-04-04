@@ -141,9 +141,6 @@ public class Name extends BaseText<Name>
       assertEquals("not undefined at start", false, text.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    text.toString());
-      assertEquals("undefined value not correct",
-                   "\\color{error}{$undefined$}",
-                   text.format().toString());
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some text
@@ -152,8 +149,6 @@ public class Name extends BaseText<Name>
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \\= test",
                    text.toString());
-      assertEquals("value not correctly gotten", "just some = test",
-                   text.format().toString());
       assertEquals("value not correctly converted", "just some = test",
                    text.get());
 
@@ -161,8 +156,6 @@ public class Name extends BaseText<Name>
       text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
-      assertEquals("value not correctly gotten", "just some \" test",
-                   text.format().toString());
       assertEquals("value not correctly gotten", "just some \\\" test",
                    text.toString());
       assertEquals("value not correctly converted", "just some \" test",
@@ -171,13 +164,9 @@ public class Name extends BaseText<Name>
       // add something to the text
       Name added = text.add(new Name("more text"));
       assertEquals("added", "just some \\\" test more text", added.toString());
-      assertEquals("added", "just some \" test more text",
-                   added.format().toString());
 
       added = text.add(new Name(" and more"));
       assertEquals("added", "just some \\\" test and more", added.toString());
-      assertEquals("added", "just some \" test and more",
-                   added.format().toString());
 
       Value.Test.createTest(text);
     }

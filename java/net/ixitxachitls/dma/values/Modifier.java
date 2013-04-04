@@ -31,6 +31,8 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.collect.Iterators;
+
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.conditions.And;
 import net.ixitxachitls.dma.values.conditions.Condition;
@@ -38,7 +40,6 @@ import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Emph;
 import net.ixitxachitls.output.commands.Window;
-import net.ixitxachitls.util.ArrayIterator;
 
 //..........................................................................
 
@@ -855,7 +856,7 @@ public class Modifier extends Value<Modifier>
 
       m_defined = true;
 
-      m_type = inReader.expect(new ArrayIterator<Type>(m_type.values()));
+      m_type = inReader.expect(Iterators.forArray(m_type.values()));
 
       // no type read, thus it is general
       if(m_type == null)

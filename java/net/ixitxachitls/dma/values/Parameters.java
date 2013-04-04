@@ -29,8 +29,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -89,8 +89,7 @@ public class Parameters extends Value<Parameters>
    * @return
    *
    */
-  public Parameters with(@Nonnull String inName, @Nonnull Value inValue,
-                         @Nonnull Type inType)
+  public Parameters with(String inName, Value<?> inValue, Type inType)
   {
     m_values.put(inName.toLowerCase(Locale.US), inValue);
     m_types.put(inName.toLowerCase(Locale.US), inType);
@@ -112,7 +111,7 @@ public class Parameters extends Value<Parameters>
   public Parameters create()
   {
     Parameters result = new Parameters();
-    for(Map.Entry<String, Value> entry : m_values.entrySet())
+    for(Map.Entry<String, Value<?>> entry : m_values.entrySet())
       result.with(entry.getKey(), entry.getValue().create(),
                   m_types.get(entry.getKey()));
 
@@ -126,10 +125,10 @@ public class Parameters extends Value<Parameters>
   //-------------------------------------------------------------- variables
 
   /** The values read or stored. */
-  protected @Nonnull Map<String, Value> m_values = Maps.newHashMap();;
+  protected Map<String, Value<?>> m_values = Maps.newHashMap();;
 
   /** The type of the values stored. */
-  protected @Nonnull Map<String, Type> m_types = Maps.newHashMap();
+  protected Map<String, Type> m_types = Maps.newHashMap();
 
   /** The joiner for printing the map values. */
   private static final Joiner s_joiner = Joiner.on(", ");
@@ -151,7 +150,7 @@ public class Parameters extends Value<Parameters>
    * @return      the value for the name, if any
    *
    */
-  public @Nullable Value getValue(@Nonnull String inName)
+  public @Nullable Value<?> getValue(String inName)
   {
     return m_values.get(inName.toLowerCase(Locale.US));
   }
@@ -167,7 +166,7 @@ public class Parameters extends Value<Parameters>
    * @return      the value for the name, if any
    *
    */
-  public boolean hasValue(@Nonnull String inName)
+  public boolean hasValue(String inName)
   {
     return m_values.containsKey(inName.toLowerCase(Locale.US));
   }
@@ -181,7 +180,7 @@ public class Parameters extends Value<Parameters>
    * @return    the parameters summary
    *
    */
-  public @Nonnull String getSummary()
+  public String getSummary()
   {
     if(getValue("summary") != null && getValue("summary").isDefined())
       return getValue("summary").toString();
@@ -205,7 +204,7 @@ public class Parameters extends Value<Parameters>
    * @return
    *
    */
-  public @Nonnull String getUniques()
+  public String getUniques()
   {
     List<String> uniques = Lists.newArrayList();
 
@@ -299,10 +298,10 @@ public class Parameters extends Value<Parameters>
    * @return      a string representation.
    *
    */
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     List<String> values = new ArrayList<String>();
-    for(Map.Entry<String, Value> entry : m_values.entrySet())
+    for(Map.Entry<String, Value<?>> entry : m_values.entrySet())
     {
       if (!entry.getValue().isDefined())
         continue;
@@ -325,7 +324,7 @@ public class Parameters extends Value<Parameters>
    */
   public boolean isDefined()
   {
-    for(Value value : m_values.values())
+    for(Value<?> value : m_values.values())
       if(value.isDefined())
         return true;
 
@@ -348,7 +347,7 @@ public class Parameters extends Value<Parameters>
    * @return      true if read, false if not
    *
    */
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     boolean found = false;
 
@@ -356,7 +355,7 @@ public class Parameters extends Value<Parameters>
     for(String key = inReader.expectCase(m_values.keySet(), true); key != null;
         key = inReader.expectCase(m_values.keySet(), true))
     {
-      Value value = getValue(key).read(inReader);
+      Value<?> value = getValue(key).read(inReader);
       if(value == null)
       {
         inReader.seek(pos);
@@ -389,20 +388,19 @@ public class Parameters extends Value<Parameters>
    * @return      the copied parameter
    *
    */
-  public @Nonnull Parameters asValues
-    (@Nullable Map<String, String> inParameters)
+  public Parameters asValues(@Nullable Map<String, String> inParameters)
   {
     if(inParameters == null || inParameters.isEmpty())
       return this;
 
     Parameters result = new Parameters();
-    for(Map.Entry<String, Value> entry : m_values.entrySet())
+    for(Map.Entry<String, Value<?>> entry : m_values.entrySet())
       result.with(entry.getKey(), entry.getValue(),
                   m_types.get(entry.getKey()));
 
     for(Map.Entry<String, String> entry : inParameters.entrySet())
     {
-      Value value = result.getValue(entry.getKey());
+      Value<?> value = result.getValue(entry.getKey());
       if(value == null)
       {
         Log.warning("cannot find parameter for " + entry.getKey());
@@ -433,7 +431,7 @@ public class Parameters extends Value<Parameters>
    * @return
    *
    */
-  public @Nonnull Parameters add(@Nonnull Parameters inParameters)
+  public Parameters add(Parameters inParameters)
   {
     Parameters result = new Parameters();
     for(String key : m_values.keySet())
@@ -456,8 +454,7 @@ public class Parameters extends Value<Parameters>
   }
 
   @SuppressWarnings("unchecked")
-  private @Nonnull Value add(@Nonnull Value inFirst, @Nullable Value inSecond,
-                             @Nonnull Type inType)
+  private Value<?> add(Value inFirst, @Nullable Value<?> inSecond, Type inType)
   {
     if(inSecond == null || !inSecond.isDefined())
       return inFirst;
