@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.values;
 
 import java.util.Random;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -50,6 +50,7 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Dice extends Value<Dice>
 {
   //--------------------------------------------------------- constructor(s)
@@ -126,7 +127,7 @@ public class Dice extends Value<Dice>
   private int m_modifier;
 
   /** The random generator. */
-  private static final @Nonnull Random s_random = new Random();
+  private static final Random s_random = new Random();
 
   //........................................................................
 
@@ -278,7 +279,7 @@ public class Dice extends Value<Dice>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     String dice = m_number + "d" + m_dice;
 
@@ -316,7 +317,7 @@ public class Dice extends Value<Dice>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     return new Command(toString());
   }
@@ -338,7 +339,7 @@ public class Dice extends Value<Dice>
    *
    */
   @Override
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(ParseReader inReader)
   {
     int number = 0;
     int dice = 0;
@@ -404,7 +405,7 @@ public class Dice extends Value<Dice>
    *
    */
   @Override
-  public @Nonnull Dice add(@Nonnull Dice inValue)
+  public Dice add(Dice inValue)
   {
     if(!isDefined())
       return inValue;
@@ -582,8 +583,6 @@ public class Dice extends Value<Dice>
       assertEquals("not undefined at start", false, dice.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    dice.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   dice.format(false).toString());
 
       // now with some dice
       dice = new Dice(1, 6, -2);
@@ -591,8 +590,6 @@ public class Dice extends Value<Dice>
       assertEquals("not defined after setting", true, dice.isDefined());
       assertEquals("value not correctly converted", "1d6 -2",
                    dice.toString());
-      assertEquals("value not correctly converted", "1d6 -2",
-                   dice.format(false).toString());
 
       assertEquals("dice",      6, dice.getDice());
       assertEquals("number",    1, dice.getNumber());
@@ -622,14 +619,14 @@ public class Dice extends Value<Dice>
           "simple", "1d6 +2", "1d6 +2",  null,
           "whites", "\n   2  \n d  8 \n -2 ", "2d8 -2", " ",
           "dice", "3d12", "3d12",  null,
-          "modifier", "+3", "+3",  null,
+          "modifier", "+3", "3",  null,
           "modifier", "-5", "-5",  null,
           "negative", "2d10 -8", "2d10 -8", null,
           "invalid", "a", null, "a",
           "empty", "", null, null,
-          "delimiter 1", "1e5 +2", "+1", "e5 +2",
-          "delimiter 2", "1ea", "+1", "ea",
-          "delimiter 3", "1min", "+1", "min",
+          "delimiter 1", "1e5 +2", "1", "e5 +2",
+          "delimiter 2", "1ea", "1", "ea",
+          "delimiter 3", "1min", "1", "min",
           "too much", "1d6 +e", "1d6 +2147483647", "e",
           "too low 1", "-1d3 +3", null, "-1d3 +3",
           "too low 2", "1d-3 -2", null, "1d-3 -2",

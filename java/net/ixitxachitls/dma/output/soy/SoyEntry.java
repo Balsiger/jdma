@@ -296,7 +296,7 @@ public class SoyEntry extends SoyAbstract
                    soyEntry.getSingle("dma").toString());
       assertEquals("errors", "[]",
                    soyEntry.getSingle("errors").toString());
-      assertEquals("worlds", "{}",
+      assertEquals("worlds", "",
                    soyEntry.getSingle("worlds").toString());
     }
 

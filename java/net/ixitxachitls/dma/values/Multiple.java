@@ -807,14 +807,14 @@ public boolean isDefined()
 
       assertEquals("format", "frontgurutail hia",
                    multiple.format(true).toString());
-      assertNull("edit values", multiple.getChoices());
+      assertEquals("edit values", "~~~~", multiple.getChoices());
 
       // assign some edit values to elements
       multiple.get(0).withChoices("1");
       multiple.get(1).withChoices("2");
       multiple.get(2).withChoices("3");
 
-      assertEquals("edit values", "1::2::3", multiple.getChoices());
+      assertEquals("edit values", "1~~2~~3", multiple.getChoices());
 
       Value.Test.createTest(multiple);
     }

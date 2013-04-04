@@ -456,9 +456,9 @@ public class Combined<T extends Value<T>>
   //------------------------------------------------------------------- test
 
   /** The tests. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
-  {
-  }
+  // public static class Test extends net.ixitxachitls.util.test.TestCase
+  // {
+  // }
 
   //........................................................................
 }

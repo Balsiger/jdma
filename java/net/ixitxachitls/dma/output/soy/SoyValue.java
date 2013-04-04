@@ -42,7 +42,7 @@ import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.BaseNumber;
-import net.ixitxachitls.dma.values.Combination;
+// import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
@@ -85,7 +85,7 @@ public class SoyValue extends SoyAbstract
    * @param    inEntry    the entry for the value
    *
    */
-  public SoyValue(String inName, Value inValue, AbstractEntry inEntry)
+  public SoyValue(String inName, Value<?> inValue, AbstractEntry inEntry)
   {
     this(inName, inValue, inEntry, true);
   }
@@ -102,7 +102,7 @@ public class SoyValue extends SoyAbstract
    * @param    inEditable true if the value can be edited, false if not
    *
    */
-  public SoyValue(String inName, Value inValue,
+  public SoyValue(String inName, Value<?> inValue,
                   AbstractEntry inEntry, boolean inEditable)
   {
     super(inName, inEntry);
@@ -118,7 +118,7 @@ public class SoyValue extends SoyAbstract
   //-------------------------------------------------------------- variables
 
   /** The real value. */
-  protected final Value m_value;
+  protected final Value<?> m_value;
 
   /** The command renderer for rendering values. */
   public static final SoyRenderer COMMAND_RENDERER =
@@ -128,7 +128,7 @@ public class SoyValue extends SoyAbstract
   protected final boolean m_editable;
 
   /** The combination for this value, if any needed yet. */
-  protected @Nullable SoyCombination m_combination = null;
+  // protected @Nullable SoyCombination m_combination = null;
 
   //........................................................................
 
@@ -216,16 +216,16 @@ public class SoyValue extends SoyAbstract
       if("raw".equals(inName))
         return StringData.forValue(m_value.toString(false));
 
-      if("combine".equals(inName))
-      {
-        if(m_combination == null)
-          m_combination =
-            new SoyCombination(m_name,
-                               new Combination<Value>(m_entry, m_name)
-                               /*.withIgnoreTop()*/, m_value, m_entry);
+      // if("combine".equals(inName))
+      // {
+      //   if(m_combination == null)
+      //     m_combination =
+      //       new SoyCombination(m_name,
+      //                          new Combination<Value<?>>(m_entry, m_name)
+      //                          /*.withIgnoreTop()*/, m_value, m_entry);
 
-        return m_combination;
-      }
+      //   return m_combination;
+      // }
 
       if("name".equals(inName))
         return StringData.forValue(m_name);
@@ -262,7 +262,7 @@ public class SoyValue extends SoyAbstract
       if("list".equals(inName) && m_value instanceof ValueList)
       {
         List<SoyValue> values = new ArrayList<SoyValue>();
-        for (Value value : (ValueList<Value>)m_value)
+        for (Value<?> value : (ValueList<Value<?>>)m_value)
           values.add(new SoyValue(m_name, value, m_entry));
 
         return new SoyListData(values);
@@ -381,8 +381,10 @@ public class SoyValue extends SoyAbstract
                    soyValue.getSingle("raw").toString());
       assertEquals("print", "just a name",
                    soyValue.getSingle("print").toString());
-      assertEquals("combine", "total , min {}, max {}, bases []",
-                   soyValue.getSingle("combine").toString());
+      assertEquals("combined",
+                   "combined test (test entry): test entry = null [], "
+                   + "modifiers [], values [], expressions []",
+                   soyValue.getSingle("combined").toString());
       assertEquals("name", "test",
                    soyValue.getSingle("name").toString());
       assertEquals("type", "string",
@@ -399,8 +401,10 @@ public class SoyValue extends SoyAbstract
                    soyValue.getSingle("isDefined").toString());
       assertEquals("expression", "",
                    soyValue.getSingle("expression").toString());
-      assertNull("list", soyValue.getSingle("list"));
-      assertNull("multi", soyValue.getSingle("multi"));
+      assertEquals("list", "(undefined test.list)",
+                   soyValue.getSingle("list").toString());
+      assertEquals("multi", "(undefined test.multi)",
+                   soyValue.getSingle("multi").toString());
     }
 
     //......................................................................

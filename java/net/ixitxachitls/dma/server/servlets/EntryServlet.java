@@ -602,8 +602,13 @@ public class EntryServlet extends PageServlet
     @org.junit.Test
     public void path()
     {
-      addEntry(new net.ixitxachitls.dma.entries.BaseEntry("test"));
+      BaseEntry entry = new net.ixitxachitls.dma.entries.BaseEntry("test");
+      addEntry(entry);
       EntryServlet servlet = new EntryServlet();
+
+      EasyMock.expect(m_request.getEntry
+                      (DMAServlet.extractKey("/base entry/test")))
+        .andStubReturn(entry);
 
       EasyMock.replay(m_request, m_response);
 

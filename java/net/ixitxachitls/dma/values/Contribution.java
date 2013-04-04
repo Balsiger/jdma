@@ -225,9 +225,9 @@ public class Contribution<V> implements Comparable<Contribution<V>>
   //------------------------------------------------------------------- test
 
   /** The tests. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
-  {
-  }
+  // public static class Test extends net.ixitxachitls.util.test.TestCase
+  // {
+  // }
 
   //........................................................................
 }

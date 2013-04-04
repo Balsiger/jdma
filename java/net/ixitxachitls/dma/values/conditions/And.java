@@ -194,9 +194,9 @@ public class And extends Condition<And>
   //------------------------------------------------------------------- test
 
   /** The test. */
-  public static class Test extends net.ixitxachitls.util.test.TestCase
-  {
-  }
+  // public static class Test extends net.ixitxachitls.util.test.TestCase
+  // {
+  // }
 
   //........................................................................
 }

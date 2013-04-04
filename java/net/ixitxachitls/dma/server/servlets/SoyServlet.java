@@ -214,7 +214,7 @@ public class SoyServlet extends DMAServlet
   protected @Nonnull Map<String, Object> collectData
     (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
   {
-    return s_template.map("oldcontent", "");
+    return SoyTemplate.map("oldcontent", "");
   }
 
   //........................................................................
@@ -236,7 +236,7 @@ public class SoyServlet extends DMAServlet
     BaseCharacter user = inRequest.getUser();
     UserService userService = UserServiceFactory.getUserService();
 
-    return s_template.map
+    return SoyTemplate.map
       ("user", user == null ? "" : new SoyEntry(user),
        "isPublic", isPublic(inRequest),
        "originalPath", inRequest.getOriginalPath(),
@@ -265,7 +265,7 @@ public class SoyServlet extends DMAServlet
    */
   public @Nonnull Map<String, Object> map(Object ... inData)
   {
-    return s_template.map(inData);
+    return SoyTemplate.map(inData);
   }
 
   //........................................................................
@@ -331,6 +331,8 @@ public class SoyServlet extends DMAServlet
                    + "userOverride=, "
                    + "logoutURL=/_ah/logout?continue=path, "
                    + "isAdmin=false, "
+                   + "originalPath=path, "
+                   + "isPublic=true, "
                    + "user=, "
                    + "loginURL=/_ah/login?continue=path}",
                    servlet.collectInjectedData

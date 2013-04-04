@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
@@ -161,7 +161,7 @@ public class Damage extends Value<Damage>
     withTemplate("damage");
   }
 
-  public Damage(@Nonnull Dice inDice)
+  public Damage(Dice inDice)
   {
     m_base = inDice;
   }
@@ -178,7 +178,7 @@ public class Damage extends Value<Damage>
    *
    */
   @Override
-  public @Nonnull Damage create()
+  public Damage create()
   {
     return super.create(new Damage());
   }
@@ -190,10 +190,10 @@ public class Damage extends Value<Damage>
   //-------------------------------------------------------------- variables
 
   /** The base damage. */
-  protected @Nonnull Dice m_base = new Dice();
+  protected Dice m_base = new Dice();
 
   /** The kind of base damage, if any. */
-  protected @Nonnull EnumSelection<Type> m_type =
+  protected EnumSelection<Type> m_type =
     new EnumSelection<Type>(Type.class);
 
   /** Additional damages, if any. */
@@ -302,7 +302,7 @@ public class Damage extends Value<Damage>
    * @param       ioTypes the list to add the damages to
    *
    */
-  // public void addDamages(@Nonnull Set<String> ioTypes)
+  // public void addDamages(Set<String> ioTypes)
   // {
   //   if(m_other != null)
   //     m_other.addDamages(ioTypes);
@@ -319,7 +319,7 @@ public class Damage extends Value<Damage>
    * @param       ioTypes the list to add the types to
    *
    */
-  // public void addDamageTypes(@Nonnull Set<String> ioTypes)
+  // public void addDamageTypes(Set<String> ioTypes)
   // {
   //   if(m_other != null)
   //     m_other.addDamageTypes(ioTypes);
@@ -339,37 +339,37 @@ public class Damage extends Value<Damage>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     java.util.List<Object> commands = new ArrayList<Object>();
 
-    Object command = m_base.format(false);
-    if(m_indexBase != null)
-      command = new Link(command, m_indexBase + "damages/" + m_base.getNumber()
-                         + "d" + m_base.getDice());
+    // Object command = m_base.format(false);
+    // if(m_indexBase != null)
+    //   command = new Link(command, m_indexBase + "damages/" + m_base.getNumber()
+    //                      + "d" + m_base.getDice());
 
-    commands.add(command);
+    // commands.add(command);
 
-    if(m_type.isDefined())
-    {
-      commands.add(" ");
-      command = m_type.format(false);
-      if(m_indexBase != null)
-        command = new Link(command, m_indexBase + "damagetypes/" + m_type);
-      commands.add(command);
-    }
+    // if(m_type.isDefined())
+    // {
+    //   commands.add(" ");
+    //   command = m_type.format(false);
+    //   if(m_indexBase != null)
+    //     command = new Link(command, m_indexBase + "damagetypes/" + m_type);
+    //   commands.add(command);
+    // }
 
-    if(m_effect != null)
-    {
-      commands.add(" plus ");
-      commands.add(m_effect);
-    }
+    // if(m_effect != null)
+    // {
+    //   commands.add(" plus ");
+    //   commands.add(m_effect);
+    // }
 
-    if(m_other != null)
-    {
-      commands.add(", ");
-      commands.add(m_other.format(false));
-    }
+    // if(m_other != null)
+    // {
+    //   commands.add(", ");
+    //   commands.add(m_other.format(false));
+    // }
 
     return new Command(commands.toArray());
   }
@@ -426,7 +426,7 @@ public class Damage extends Value<Damage>
    *
    */
   @Override
-  protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(ParseReader inReader)
   {
     // read the base damage
     if(!m_base.doRead(inReader))
@@ -482,7 +482,7 @@ public class Damage extends Value<Damage>
    *
    */
   @Override
-  public @Nonnull Damage add(@Nonnull Damage inValue)
+  public Damage add(Damage inValue)
   {
     String effect = m_effect;
     if(inValue.m_effect != null)
@@ -521,7 +521,7 @@ public class Damage extends Value<Damage>
    * @return    the newly created value
    *
    */
-  public Damage as(@Nonnull Dice inDice, EnumSelection<Type> inType)
+  public Damage as(Dice inDice, EnumSelection<Type> inType)
   {
     return as(inDice, inType, null);
   }
@@ -539,7 +539,7 @@ public class Damage extends Value<Damage>
    * @return    the newly created value
    *
    */
-  public Damage as(@Nonnull Dice inDice, EnumSelection<Type> inType,
+  public Damage as(Dice inDice, EnumSelection<Type> inType,
                    @Nullable Damage inOther)
   {
     Damage damage = create();
@@ -565,7 +565,7 @@ public class Damage extends Value<Damage>
    * @return    the newly created value
    *
    */
-  public Damage as(@Nonnull Dice inDice, EnumSelection<Type> inType,
+  public Damage as(Dice inDice, EnumSelection<Type> inType,
                    @Nullable Damage inOther, @Nullable String inEffect)
   {
     Damage damage = create();
@@ -602,8 +602,6 @@ public class Damage extends Value<Damage>
       assertFalse("not undefined at start", damage.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    damage.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   damage.format(false).toString());
 
       // define the value, otherwise the following test will fail
       damage.m_base = new Dice(2, 10, +0);
@@ -645,7 +643,7 @@ public class Damage extends Value<Damage>
           "modifier", "1d6 +3", "1d6 +3", null,
           "whites", "\n   1   \nd  3    \n+2 ", "1d3 +2", " ",
           "modifier only", "-13", "-13", null,
-          "positive only", "+13", "+13", null,
+          "positive only", "+13", "13", null,
           "type", "1d6 +2 fire", "1d6 +2 fire", null,
           "other", "1d6, 1d3", "1d6, 1d3", null,
           "other types", "1d6, 1d3 fire", "1d6, 1d3 fire", null,
@@ -662,7 +660,7 @@ public class Damage extends Value<Damage>
 
           "invalid", "a", null, "a",
           "empty", "", null, null,
-          "other", "42a", "+42", "a",
+          "other", "42a", "42", "a",
         };
 
       Value.Test.readTest(tests, new Damage());
