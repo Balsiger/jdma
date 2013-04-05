@@ -56,6 +56,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class TestCase extends org.junit.Assert
 {
   //--------------------------------------------------------- constructor(s)
@@ -65,12 +66,6 @@ public class TestCase extends org.junit.Assert
 
   /** The mock logger to test logging statements. */
   protected Log.Test.MockLogger m_logger;
-
-  /** The number of errors occurred. */
-  protected int m_errors = 0;
-
-  /** The number of failures occurred. */
-  protected int m_failures = 0;
 
   /** The name of the test logger. */
   private static final String s_logger = "test";

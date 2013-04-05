@@ -24,6 +24,7 @@
 package net.ixitxachitls.util.resources;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,10 +99,10 @@ public class JarResource extends Resource
     if(m_url == null)
       return result;
 
+    JarFile jar = null;
     try
     {
-      JarFile jar =
-        new JarFile(Strings.getPattern(m_url.getFile(), "^file:(.*)!"));
+      jar = new JarFile(Strings.getPattern(m_url.getFile(), "^file:(.*)!"));
       String dir = Strings.getPattern(m_url.getFile(), "^file:.*!/(.+)");
 
       for(java.util.Enumeration<?> i = jar.entries(); i.hasMoreElements(); )
@@ -116,6 +117,7 @@ public class JarResource extends Resource
         result.add(file.getName().substring(dir.length() + 1));
       }
 
+
       return result;
     }
     catch(java.io.IOException e)
@@ -124,6 +126,18 @@ public class JarResource extends Resource
                   + Strings.getPattern(m_url.getFile(), ":(.*)!") + "'");
 
       return result;
+    }
+    finally
+    {
+      try
+      {
+        if(jar != null)
+          jar.close();
+      }
+      catch(IOException e)
+      {
+        Log.warning("could not close jar file '" + m_url.getFile() + "'");
+      }
     }
   }
 

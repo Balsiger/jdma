@@ -27,21 +27,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.util.logging.Log;
 import net.ixitxachitls.util.Strings;
+import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -62,6 +60,7 @@ import net.ixitxachitls.util.Strings;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Parameters extends Value<Parameters>
 {
   //--------------------------------------------------------- constructor(s)
@@ -70,8 +69,6 @@ public class Parameters extends Value<Parameters>
 
   /**
    * Construct the parameters object.
-   *
-   * @param       inValues the key value pairs for the paramers.
    *
    */
   public Parameters()
@@ -82,12 +79,13 @@ public class Parameters extends Value<Parameters>
   //--------------------------------- with ---------------------------------
 
   /**
+   * Add a value to the parameters.
    *
+   * @param   inName  the name of the parameter value
+   * @param   inValue the parameter value
+   * @param   inType  the type describing how to combine values
    *
-   * @param
-   *
-   * @return
-   *
+   * @return  the parameters for chaining
    */
   public Parameters with(String inName, Value<?> inValue, Type inType)
   {
@@ -106,7 +104,6 @@ public class Parameters extends Value<Parameters>
    * that is still undefined.
    *
    * @return      a similar list, but without any contents
-   *
    */
   public Parameters create()
   {
@@ -148,7 +145,6 @@ public class Parameters extends Value<Parameters>
    * @param       inName the name of value to get
    *
    * @return      the value for the name, if any
-   *
    */
   public @Nullable Value<?> getValue(String inName)
   {
@@ -164,7 +160,6 @@ public class Parameters extends Value<Parameters>
    * @param       inName the name of value to get
    *
    * @return      the value for the name, if any
-   *
    */
   public boolean hasValue(String inName)
   {
@@ -178,7 +173,6 @@ public class Parameters extends Value<Parameters>
    * Get a summary for the parameters.
    *
    * @return    the parameters summary
-   *
    */
   public String getSummary()
   {
@@ -197,12 +191,9 @@ public class Parameters extends Value<Parameters>
   //------------------------------ getUniques ------------------------------
 
   /**
+   * Create a string with all the unique parameter values.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return  a string with all the unique values
    */
   public String getUniques()
   {
@@ -218,54 +209,12 @@ public class Parameters extends Value<Parameters>
 
   //........................................................................
 
-  //---------------------------- getKeyValues ------------------------------
-
-  /**
-   * Get all the defined key value pairs.
-   *
-   * @return      the defined key/value pairs
-   *
-   */
-  // public Map<String, Value> getKeyValues()
-  // {
-  //   Map<String, Value> result = new TreeMap<String, Value>();
-
-  //   for(int i = 0; i < m_values.length; i++)
-  //     if(m_values[i].isDefined())
-  //       result.put(m_keys[i], m_values[i]);
-
-  //   return result;
-  // }
-
-  //........................................................................
-  //--------------------------- getLCKeyValues -----------------------------
-
-  /**
-   * Get all the defined lower case key value pairs.
-   *
-   * @return      the defined key/value pairs
-   *
-   */
-  // public Map<String, Value> getLCKeyValues()
-  // {
-  //   Map<String, Value> result = new TreeMap<String, Value>();
-
-  //   for(Map.Entry<String, Value> entry : m_values.sint i = 0; i < m_values.length; i++)
-  //     if(m_values[i].isDefined())
-  //       result.put(m_keys[i].toLowerCase(), m_values[i]);
-
-  //   return result;
-  // }
-
-  //........................................................................
-
   //------------------------------- doFormat -------------------------------
 
   /**
    * Really to the formatting.
    *
    * @return      the command for setting the value
-   *
    */
   protected Command doFormat()
   {
@@ -296,7 +245,6 @@ public class Parameters extends Value<Parameters>
    * instead call toString().
    *
    * @return      a string representation.
-   *
    */
   protected String doToString()
   {
@@ -320,7 +268,6 @@ public class Parameters extends Value<Parameters>
    * Check if the value is defined or not.
    *
    * @return      true if the value is defined, false if not
-   *
    */
   public boolean isDefined()
   {
@@ -345,7 +292,6 @@ public class Parameters extends Value<Parameters>
    * @param       inReader the reader to read from
    *
    * @return      true if read, false if not
-   *
    */
   public boolean doRead(ParseReader inReader)
   {
@@ -381,12 +327,11 @@ public class Parameters extends Value<Parameters>
   //------------------------------- asValues -------------------------------
 
   /**
-   * Create a new parameter value with the given values for parameters
+   * Create a new parameter value with the given values for parameters.
    *
    * @param       inParameters the parameter values to use
    *
    * @return      the copied parameter
-   *
    */
   public Parameters asValues(@Nullable Map<String, String> inParameters)
   {
@@ -424,12 +369,11 @@ public class Parameters extends Value<Parameters>
   //--------------------------------- add ----------------------------------
 
   /**
+   * Adds the current and given parameters into a new set of parameters.
    *
+   * @param    inParameters  the parameters to add
    *
-   * @param
-   *
-   * @return
-   *
+   * @return   new parameters with all the added values
    */
   public Parameters add(Parameters inParameters)
   {
@@ -453,8 +397,22 @@ public class Parameters extends Value<Parameters>
     return result;
   }
 
+  //........................................................................
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the value given values together.
+   *
+   * @param   inFirst   the first value to add
+   * @param   inSecond  the second value to add
+   * @param   inType    the type of parameter value, denoting whot to combine
+   *                    them
+   *
+   * @return  the addition of the two values, according to type
+   */
   @SuppressWarnings("unchecked")
-  private Value<?> add(Value inFirst, @Nullable Value<?> inSecond, Type inType)
+  private Value<?> add(Value<?> inFirst, @Nullable Value<?> inSecond,
+                       Type inType)
   {
     if(inSecond == null || !inSecond.isDefined())
       return inFirst;
@@ -465,16 +423,16 @@ public class Parameters extends Value<Parameters>
     switch(inType)
     {
       case UNIQUE: return inFirst;
-      case ADD:    return inFirst.add(inSecond);
-      case MIN:    return inFirst.min(inSecond);
-      case MAX:    return inFirst.max(inSecond);
+      case ADD:    return ((Value)inFirst).add((Value)inSecond);
+      case MIN:    return ((Value)inFirst).min((Value)inSecond);
+      case MAX:    return ((Value)inFirst).max((Value)inSecond);
+      default: assert false : "should never happen";
     }
 
     return inFirst;
   }
 
   //........................................................................
-
 
   //........................................................................
 

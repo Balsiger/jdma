@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.values;
 
 import java.lang.reflect.Method;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -55,12 +55,13 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
-public class EnumSelection<T extends Enum<T>>
-  extends Value<EnumSelection<T>>
+@ParametersAreNonnullByDefault
+public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
 {
   //----------------------------------------------------------------- nested
 
   /** The interface for all specially named enumeration values. */
+  @ParametersAreNonnullByDefault
   public interface Named
   {
     /** Get the name of the value.
@@ -68,7 +69,7 @@ public class EnumSelection<T extends Enum<T>>
      * @return the name of the value
      *
      */
-    public @Nonnull String getName();
+    public String getName();
   }
 
   /** The interface for all enumeration values with short names. */
@@ -79,7 +80,7 @@ public class EnumSelection<T extends Enum<T>>
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort();
+    public String getShort();
   }
 
   //........................................................................
@@ -95,7 +96,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @SuppressWarnings("unchecked")
-  public EnumSelection(@Nonnull T inSelected)
+  public EnumSelection(T inSelected)
   {
     // have to cast here, don't know how to do it otherwise
     m_enum     = (Class<? extends T>)inSelected.getClass();
@@ -113,7 +114,7 @@ public class EnumSelection<T extends Enum<T>>
    * @param       inEnum   the class with all the enums
    *
    */
-  public EnumSelection(@Nonnull Class<? extends T> inEnum)
+  public EnumSelection(Class<? extends T> inEnum)
   {
     m_enum = inEnum;
 
@@ -132,8 +133,7 @@ public class EnumSelection<T extends Enum<T>>
    * @param       inMultiple   the multiple strings to look for (if any)
    *
    */
-  protected EnumSelection(@Nonnull Class<? extends T> inEnum,
-                          @Nonnull T []inSelections,
+  protected EnumSelection(Class<? extends T> inEnum, T []inSelections,
                           @Nullable String []inSimple,
                           @Nullable String [][]inMultiple)
   {
@@ -155,7 +155,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-  public @Nonnull EnumSelection<T> create()
+  public EnumSelection<T> create()
   {
     return super.create(new EnumSelection<T>(m_enum, m_selections,
                                              m_simpleSelections,
@@ -169,13 +169,13 @@ public class EnumSelection<T extends Enum<T>>
   //-------------------------------------------------------------- variables
 
   /** The enumeration class. */
-  protected @Nonnull Class<? extends T> m_enum;
+  protected Class<? extends T> m_enum;
 
   /** The currently selected enumeration value. */
   protected @Nullable T m_selected = null;
 
   /** All the possible enum values. */
-  protected @Nonnull T []m_selections;
+  protected T []m_selections;
 
   /** The possible strings for simple enums. */
   protected @Nullable String []m_simpleSelections;
@@ -228,7 +228,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-  public @Nonnull String getChoices()
+  public String getChoices()
   {
     return Strings.toString(m_selections, "||", "");
   }
@@ -244,7 +244,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     return new Command(m_selected);
   }
@@ -259,7 +259,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-  public @Nonnull String doToString()
+  public String doToString()
   {
     if(m_selected instanceof Named)
       return ((Named)m_selected).getName();
@@ -297,7 +297,7 @@ public class EnumSelection<T extends Enum<T>>
    */
   @Override
   @SuppressWarnings("unchecked")
-  public int compareTo(@Nonnull Object inOther)
+  public int compareTo(Object inOther)
   {
     if(!(inOther instanceof EnumSelection))
       return super.compareTo(inOther);
@@ -364,7 +364,7 @@ public class EnumSelection<T extends Enum<T>>
    * @return      a new selection with the given value
    *
    */
-  public EnumSelection<T> as(@Nonnull T inValue)
+  public EnumSelection<T> as(T inValue)
   {
     EnumSelection<T> result = create();
     result.m_selected = inValue;
@@ -384,7 +384,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     int selected;
     if(m_multiSelections != null)
@@ -413,7 +413,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-  public @Nonnull EnumSelection<T> max(@Nonnull EnumSelection<T> inValue)
+  public EnumSelection<T> max(EnumSelection<T> inValue)
   {
     EnumSelection<T> result = create();
 
@@ -438,7 +438,7 @@ public class EnumSelection<T extends Enum<T>>
    *
    */
   @Override
-  public @Nonnull EnumSelection<T> min(@Nonnull EnumSelection<T> inValue)
+  public EnumSelection<T> min(EnumSelection<T> inValue)
   {
     EnumSelection<T> result = create();
 

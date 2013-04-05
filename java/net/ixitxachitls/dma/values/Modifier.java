@@ -212,14 +212,15 @@ public class Modifier extends Value<Modifier>
   //---------------------------- withCondition -----------------------------
 
   /**
+   * Sets the condition for the modifier. Setting a null condition will
+   * clear any existing condition.
    *
+   * @param    inCondition an optional condition
    *
-   * @param
-   *
-   * @return
+   * @return   the condition for chaining
    *
    */
-  public Modifier withCondition(@Nullable Condition inCondition)
+  public Modifier withCondition(@Nullable Condition<?> inCondition)
   {
     if(inCondition == null)
       return this;
@@ -236,12 +237,11 @@ public class Modifier extends Value<Modifier>
   //--------------------------- withDefaultType ----------------------------
 
   /**
+   * Sets the default type.
    *
+   * @param   inDefault the default type to use if none is given
    *
-   * @param
-   *
-   * @return
-   *
+   * @return  the modifier for chaining
    */
   public Modifier withDefaultType(Type inDefault)
   {
@@ -309,7 +309,7 @@ public class Modifier extends Value<Modifier>
   private boolean m_defined = false;
 
   /** The condition for the modifier, if any. */
-  private @Nullable Condition m_condition;
+  private @Nullable Condition<?> m_condition;
 
   /** A next modifier, if any. */
   private @Nullable Modifier m_next;
@@ -437,7 +437,7 @@ public class Modifier extends Value<Modifier>
    * @return      the requested condition
    *
    */
-  public @Nullable Condition getCondition()
+  public @Nullable Condition<?> getCondition()
   {
     return m_condition;
   }
@@ -634,12 +634,9 @@ public class Modifier extends Value<Modifier>
   //-------------------------------- isZero --------------------------------
 
   /**
+   * Checks whether the modifier represents a zero value.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return   true if the modifier represents 0, false if not
    */
   public boolean isZero()
   {
@@ -775,7 +772,7 @@ public class Modifier extends Value<Modifier>
    * @return      the new value
    *
    */
-  public Modifier as(int inValue, Type inType, Condition inCondition,
+  public Modifier as(int inValue, Type inType, Condition<?> inCondition,
                      Modifier inNext)
   {
     Modifier modifier = create();
@@ -812,12 +809,11 @@ public class Modifier extends Value<Modifier>
   //-------------------------------- retype --------------------------------
 
   /**
+   * Create a new modifier with the same values but a new type.
    *
+   * @param    inType the new type of the modifier
    *
-   * @param
-   *
-   * @return
-   *
+   * @return   the modifier with the new type
    */
   public Modifier retype(Type inType)
   {
@@ -848,6 +844,7 @@ public class Modifier extends Value<Modifier>
    *
    */
   @Override
+  @SuppressWarnings("rawtypes")
   public boolean doRead(ParseReader inReader)
   {
     try
@@ -856,7 +853,7 @@ public class Modifier extends Value<Modifier>
 
       m_defined = true;
 
-      m_type = inReader.expect(Iterators.forArray(m_type.values()));
+      m_type = inReader.expect(Iterators.forArray(Type.values()));
 
       // no type read, thus it is general
       if(m_type == null)
@@ -900,9 +897,9 @@ public class Modifier extends Value<Modifier>
   public Modifier add(Modifier inValue)
   {
     int value = m_value;
-    if(m_type == inValue.m_type &&
-       ((m_condition != null && m_condition.equals(inValue.m_condition))
-        || m_condition == null && inValue.m_condition == null))
+    if(m_type == inValue.m_type
+       && ((m_condition != null && m_condition.equals(inValue.m_condition))
+           || m_condition == null && inValue.m_condition == null))
     {
       Modifier next;
       if(m_next == null)
@@ -986,29 +983,17 @@ public class Modifier extends Value<Modifier>
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("output", "+2 dodge", value.toString());
-      assertEquals("print",
-                   "+2 (\\window{+2 dodge}"
-                   + "{this modifier stacks with similar ones})",
-                   value.format(true).toString());
 
       value = new Modifier(0);
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("output", "+0 general", value.toString());
-      assertEquals("output",
-                   "+0 (\\window{+0 general}"
-                   + "{this modifier stacks with similar ones})",
-                   value.format(true).toString());
 
       // now with some value
       value = new Modifier(-5, Type.ARMOR);
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("output", "-5 armor", value.toString());
-      assertEquals("output",
-                   "-5 (\\window{-5 armor}"
-                   + "{this modifier stacks with similar ones})",
-                   value.format(true).toString());
 
       Value.Test.createTest(value);
 

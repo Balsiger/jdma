@@ -180,7 +180,7 @@ public class TemplateResource extends FileResource
 
     try
     {
-      inOutput.write(m_content.getBytes());
+      inOutput.write(m_content.getBytes(Charsets.UTF_8));
     }
     catch(java.io.IOException e)
     {

@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.values;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -56,6 +56,7 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Reference<T extends BaseEntry> extends Value<Reference<T>>
 {
   //--------------------------------------------------------- constructor(s)
@@ -87,7 +88,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @param       inText           the text to store
    *
    */
-  public Reference(BaseType<T>inType, @Nonnull String inText)
+  public Reference(BaseType<T>inType, String inText)
   {
     m_type = inType;
     m_name = new Name(inText);
@@ -109,9 +110,8 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return      the object for chaining
    *
    */
-  public Reference<T> withParameter(@Nonnull String inName,
-                                    @Nonnull Value inValue,
-                                    @Nonnull Parameters.Type inType)
+  public Reference<T> withParameter(String inName, Value<?> inValue,
+                                    Parameters.Type inType)
   {
     if(m_parameters == null)
       m_parameters = new Parameters();
@@ -132,23 +132,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return      the object for chaining
    *
    */
-  // public Reference<T> withParameters(@Nonnull Map<String, Value> inParameters)
-  // {
-  //   return withParameters(new Parameters(inParameters));
-  // }
-
-  //........................................................................
-  //---------------------------- withParameters ----------------------------
-
-  /**
-   * Add parameters to the object. Should only be called when constructing.
-   *
-   * @param       inParameters     the parameters to the reference
-   *
-   * @return      the object for chaining
-   *
-   */
-  public Reference<T> withParameters(@Nonnull Parameters inParameters)
+  public Reference<T> withParameters(Parameters inParameters)
   {
     m_parameters = inParameters;
 
@@ -169,7 +153,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   @Override
   @SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
-  public @Nonnull Reference create()
+  public Reference create()
   {
     if(m_parameters == null)
       return super.create(new Reference<T>(m_type));
@@ -191,10 +175,10 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   private @Nullable T m_entry;
 
   /** The type of entry referenced. */
-  private @Nonnull BaseType<T> m_type;
+  private BaseType<T> m_type;
 
   /** The name of the refernce. */
-  private @Nonnull Name m_name;
+  private Name m_name;
 
   /** The parameters for the reference, if any. */
   private @Nullable Parameters m_parameters;
@@ -211,7 +195,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return  the name of the reference (without parameters)
    *
    */
-  public @Nonnull String getName()
+  public String getName()
   {
     return m_name.get();
   }
@@ -220,14 +204,12 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   //----------------------------- getFullName ------------------------------
 
   /**
+   * Get the full name for the reference, including available unique parameters.
    *
-   *
-   * @param
-   *
-   * @return
+   * @return the requested full name
    *
    */
-  public @Nonnull String getFullName()
+  public String getFullName()
   {
     if(m_parameters == null)
       return getName();
@@ -260,12 +242,13 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   /**
    * Get the summary for the reference.
    *
-   * @param       a map with all the parameters to use for the reference
+   * @param       inParameters  a map with all the parameters to use for the
+   *                            reference
    *
    * @return      the string with the summary
    *
    */
-  public @Nonnull String summary(@Nullable Map<String, String> inParameters)
+  public String summary(@Nullable Map<String, String> inParameters)
   {
     resolve();
     if(m_entry == null)
@@ -274,7 +257,17 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
     return m_entry.getSummary(m_parameters.asValues(inParameters));
   }
 
-  public @Nonnull String summary() {
+  //........................................................................
+  //------------------------------- summary --------------------------------
+
+  /**
+   * Get the summary for the reference.
+   *
+   * @return      the string with the summary
+   *
+   */
+  public String summary()
+  {
     resolve();
     if(m_entry == null)
       return "(unknown)";
@@ -308,7 +301,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     // resolve();
     // if(m_product == null)
@@ -330,8 +323,8 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return      the string to be printed
    *
    */
-  // protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
-  //                                   @Nonnull SoyRenderer inRenderer)
+  // protected String doPrint(AbstractEntry inEntry,
+  //                          SoyRenderer inRenderer)
   // {
   //   resolve();
   //   if(m_product == null)
@@ -354,8 +347,8 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
     *
     */
    // @Override
-   // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-   //                                        @Nonnull SoyRenderer inRenderer)
+   // public Map<String, Object> collectData(AbstractEntry inEntry,
+   //                                        SoyRenderer inRenderer)
    // {
    //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
    //   data.put("id", get());
@@ -392,7 +385,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return      a string representation.
    *
    */
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(m_parameters == null || !m_parameters.isDefined())
       return m_name.toString();
@@ -429,7 +422,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return      a string denoting the group this value is in
    *
    */
-  protected @Nonnull String doGroup()
+  protected String doGroup()
   {
     return m_name.toString();
   }
@@ -476,12 +469,12 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   /**
    * Add the given reference to this one, if possible.
    *
-   * @param
+   * @param    inOther  the reference to add
    *
-   * @return
+   * @return   the additional of the current and given reference.
    *
    */
-  public @Nonnull Reference<T> add(@Nonnull Reference<T> inOther)
+  public Reference<T> add(Reference<T> inOther)
   {
     if(!getName().equals(inOther.getName()))
       throw new IllegalStateException("cannot add references with different "
@@ -511,7 +504,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     Name name = m_name.read(inReader);
     if(name == null)

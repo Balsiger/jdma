@@ -23,19 +23,16 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.concurrent.Immutable;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.Strings;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -95,7 +92,6 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
 
   /**
    * Construct the number object as undefined.
-   *
    */
   public ModifiedNumber()
   {
@@ -103,26 +99,21 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   }
 
   //........................................................................
-  //---------------------------- ModifiedNumber ----------------------------
+  //-------------------------------- create --------------------------------
 
   /**
+   * Create a new modified number.
    *
+   * @param   inBase           the base value for the number
+   * @param   inContributions  the various modifications to the number
+   * @param   <T>              the value type contributed
    *
-   * @param
-   *
-   * @return
-   *
+   * @return  a newly created modified number
    */
-  // public ModifiedNumber
-  //   (List<Contribution<? extends Value<?>>> inContributions)
-  // {
-  //   this(0, inContributions);
-  // }
-
   public static <T extends Value<T>> ModifiedNumber
-    create(int base, List<Contribution<T>> inContributions)
+    create(int inBase, List<Contribution<T>> inContributions)
   {
-    ModifiedNumber number = new ModifiedNumber(base, true);
+    ModifiedNumber number = new ModifiedNumber(inBase, true);
 
     for(Contribution<T> contribution : inContributions)
     {
@@ -244,7 +235,7 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   //----------------------------- getModifiers -----------------------------
 
   /**
-   * Get all the invididual modifiers by name
+   * Get all the invididual modifiers by name.
    *
    * @return all the modifiers
    *
@@ -307,12 +298,9 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   //-------------------------------- isZero --------------------------------
 
   /**
+   * Check if the modified number represent zero.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return  true if it is zero, false if no.
    */
   public boolean isZero()
   {
@@ -346,8 +334,8 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
         return "" + (m_number + min);
 
     if(m_sign)
-      return Strings.signedNumber(m_number + min) + "-" +
-        Strings.signedNumber(m_number + max);
+      return Strings.signedNumber(m_number + min) + "-"
+        + Strings.signedNumber(m_number + max);
 
     return (m_number + min) + "-" + (m_number + max);
   }
@@ -361,11 +349,12 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   //-------------------------------- ignore --------------------------------
 
   /**
+   * Creates a new modified number with all the given types ignored
+   * (i.e. removed).
    *
+   * @param    inTypes the types to ignore
    *
-   * @param
-   *
-   * @return
+   * @return   a newly created modified number with the given types ignored
    *
    */
   public ModifiedNumber ignore(Modifier.Type ... inTypes)

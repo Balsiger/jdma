@@ -53,6 +53,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
+@ParametersAreNonnullByDefault
 public final class Log
 {
   //----------------------------------------------------------------- nested

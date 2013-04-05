@@ -38,6 +38,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Charsets;
+
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.logging.Log;
@@ -261,7 +263,7 @@ public abstract class Resource
       return "(invalid resource for '" + m_name + "')\n";
 
     BufferedReader reader =
-      new BufferedReader(new InputStreamReader(input));
+      new BufferedReader(new InputStreamReader(input, Charsets.UTF_8));
 
     StringBuilder buffer = new StringBuilder();
 
@@ -370,7 +372,7 @@ public abstract class Resource
     }
 
     BufferedReader input =
-      new BufferedReader(new InputStreamReader(inputStream));
+      new BufferedReader(new InputStreamReader(inputStream, Charsets.UTF_8));
 
     try
     {

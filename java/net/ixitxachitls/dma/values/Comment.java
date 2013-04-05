@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -50,6 +50,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Comment extends Value<Comment>
 {
   //--------------------------------------------------------- constructor(s)
@@ -85,7 +86,7 @@ public class Comment extends Value<Comment>
    *                       any number)
    *
    */
-  public Comment(@Nonnull String inString, int inMax, int inLines)
+  public Comment(String inString, int inMax, int inLines)
   {
     this(inMax, inLines);
 
@@ -107,7 +108,7 @@ public class Comment extends Value<Comment>
    *
    */
   @Override
-public @Nonnull Comment create()
+  public Comment create()
   {
     return new Comment(m_maxComments, m_maxLines);
   }
@@ -128,7 +129,7 @@ public @Nonnull Comment create()
   private int m_maxLines = -1;
 
   /** The string used to start the comment. */
-  private static final @Nonnull String s_starter =
+  private static final String s_starter =
     Config.get("resource:values/comment.starter", "#");
 
   //........................................................................
@@ -144,7 +145,7 @@ public @Nonnull Comment create()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_lines != null;
   }
@@ -174,7 +175,7 @@ public boolean isDefined()
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     return new Command(m_lines);
   }
@@ -189,7 +190,7 @@ protected @Nonnull Command doFormat()
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected String doToString()
   {
     return m_lines;
   }
@@ -239,7 +240,7 @@ protected @Nonnull String doToString()
    * @return      true if it is a comment, false if not
    *
    */
-  protected static boolean check(@Nonnull String inText)
+  protected static boolean check(String inText)
   {
     String []lines = inText.split("\n");
 
@@ -270,7 +271,7 @@ protected @Nonnull String doToString()
    * @return      a new comment with the given value
    *
    */
-  public Comment as(@Nonnull String inText)
+  public Comment as(String inText)
   {
     if(!check(inText))
       return this;
@@ -293,7 +294,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     if(m_maxComments == 0)
       return false;
@@ -393,9 +394,6 @@ public boolean doRead(@Nonnull ParseReader inReader)
                    "  " + s_starter + " a default value", comment.toString());
       assertEquals("lines", "  " + s_starter + " a default value",
                    comment.get());
-      assertEquals("format", "  " + s_starter + " a default value",
-                   comment.format().toString());
-
 
       Value.Test.createTest(comment);
 

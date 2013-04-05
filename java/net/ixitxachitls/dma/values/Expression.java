@@ -161,6 +161,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the type of value computed
      *
      * @return      the computed, adjusted value, if any
      *
@@ -255,6 +256,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the type of value computed
      *
      * @return      the compute, adjusted value
      *
@@ -333,6 +335,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the type of value computed
      *
      * @return      the compute, adjusted value
      *
@@ -415,6 +418,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the type of value computed
      *
      * @return      the compute, adjusted value
      *
@@ -488,6 +492,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the type of value computed
      *
      * @return      the compute, adjusted value
      *
@@ -595,6 +600,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the type of value computed
      *
      * @return      the compute, adjusted value
      *
@@ -771,6 +777,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the type of value computed
      *
      * @return      the compute, adjusted value
      *
@@ -806,7 +813,11 @@ public abstract class Expression implements Comparable<Expression>
   @ParametersAreNonnullByDefault
   public static class Expr extends Expression
   {
-    /** Create the magic item expression. */
+    /**
+     * Create the magic item expression.
+     *
+     * @param  inText the exrepssion text
+     */
     public Expr(String inText)
     {
       super(10);
@@ -826,6 +837,11 @@ public abstract class Expression implements Comparable<Expression>
       return "[expr(" + m_text + ")]";
     }
 
+    /**
+     * Get the text for the expression.
+     *
+     * @return the expression text
+     */
     public String getText()
     {
       return m_text;
@@ -853,6 +869,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the value type to compute
      *
      * @return      the compute, adjusted value
      *
@@ -922,6 +939,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the value type to compute
      *
      * @return      the compute, adjusted value
      *
@@ -1005,6 +1023,7 @@ public abstract class Expression implements Comparable<Expression>
      * @param       inEntry   the entry to compute for
      * @param       inValue   the value to compute from
      * @param       ioShared  shared data for all expressions
+     * @param       <T>       the value type to compute
      *
      * @return      the compute, adjusted value
      *
@@ -1253,6 +1272,7 @@ public abstract class Expression implements Comparable<Expression>
    * @param       inEntry   the entry to compute for
    * @param       inValue   the value to compute from
    * @param       ioShared  shared data for all expressions
+   * @param       <T>       the value type to compute
    *
    * @return      the compute, adjusted value
    *

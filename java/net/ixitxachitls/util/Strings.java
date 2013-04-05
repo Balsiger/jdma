@@ -558,7 +558,7 @@ public final class Strings
   /**
    * Print the number with a plus sign if it is not negative.
    *
-   * @param       the number to print
+   * @param       inNumber the number to print
    *
    * @return      the signed string
    *
@@ -892,8 +892,6 @@ public final class Strings
                                     "empty"));
       assertEquals("empty array", "",
                    Strings.toString(new String [0], ", ", "default"));
-      assertEquals("empty array", "default",
-                   Strings.toString((String [])null, ", ", "default"));
     }
 
     //......................................................................

@@ -340,21 +340,22 @@ public abstract class BaseServlet extends HttpServlet
 
   //-------------------------------------------------------------- variables
 
-  /** The data format for http dates. */
-  protected static final SimpleDateFormat s_httpTime =
-    new SimpleDateFormat("EEE',' dd MMM yyyy HH:mm:ss 'GMT'");
-
-  static
-  {
-    // set the timezone of the format to greenwich mean time
-    s_httpTime.setTimeZone(new SimpleTimeZone(0, "GMT"));
-  }
-
   /** The data of the startup. */
   protected static final Date s_startupDate = new Date();
 
   /** The startup time of the server. */
-  protected static final String s_startup = s_httpTime.format(s_startupDate);
+  protected static final String s_startup;
+
+  static
+  {
+    SimpleDateFormat s_httpTime =
+      new SimpleDateFormat("EEE',' dd MMM yyyy HH:mm:ss 'GMT'");
+
+    // set the timezone of the format to greenwich mean time
+    s_httpTime.setTimeZone(new SimpleTimeZone(0, "GMT"));
+
+    s_startup = s_httpTime.format(s_startupDate);
+  }
 
   //........................................................................
 

@@ -64,6 +64,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class FileLogger extends ASCIILogger
 {
   //--------------------------------------------------------- constructor(s)
@@ -295,7 +296,8 @@ public class FileLogger extends ASCIILogger
       {
         try
         {
-          input.close();
+          if(input != null)
+            input.close();
         }
         catch(java.io.IOException e)
         {

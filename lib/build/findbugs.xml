@@ -12,6 +12,36 @@
   </Match>
 
   <Match>
+    <Class name="~net\.ixitxachitls\.util\.resources\.TemplateResource\$Test.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.util\.resources\.JarResource\$Test.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.util\.resources\.FileResource\$Test.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.util\.logging\.FileLogger\$Test.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.util\.logging\.EventLogger\$Test.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.util\.logging\.ASCIILogger\$Test.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
     <Class name="~net\.ixitxachitls\.dma\.values\.Value\$Test.*" />
     <Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
   </Match>

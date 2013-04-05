@@ -29,6 +29,8 @@ import java.util.GregorianCalendar;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Charsets;
+
 import net.ixitxachitls.output.WrapBuffer;
 import net.ixitxachitls.util.Strings;
 
@@ -294,7 +296,7 @@ public class ANSILogger extends ASCIILogger
 
     try
     {
-      m_out.write(text.getBytes());
+      m_out.write(text.getBytes(Charsets.UTF_8));
       m_out.flush();
     }
     catch(java.io.IOException e)

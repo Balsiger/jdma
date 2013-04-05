@@ -31,9 +31,10 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
+import com.google.common.base.Charsets;
+
 import net.ixitxachitls.output.WrapBuffer;
 import net.ixitxachitls.util.Strings;
-
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -216,14 +217,14 @@ public class ASCIILogger implements Logger
    *
    */
   @Override
-public void print(String inText, Log.Type inType)
+  public void print(String inText, Log.Type inType)
   {
     // set the text to write to together
     String text = format(inText,  inType, m_format) + '\n';
 
     try
     {
-      m_out.write(text.getBytes());
+      m_out.write(text.getBytes(Charsets.UTF_8));
       m_out.flush();
     }
     catch(java.io.IOException e)

@@ -343,7 +343,6 @@ public class Multiple extends Value<Multiple>
    * Convert the given value into a String for editing.
    *
    * @return      the object converted to a String
-   *
    */
   @Override
   public String getEditValue()
@@ -365,12 +364,11 @@ public class Multiple extends Value<Multiple>
   //---------------------------- createEditType ----------------------------
 
   /**
-   * Create the type for editing this value
+   * Create the type for editing this value.
    *
    * @param       inElements the elements to create the edit type for
    *
    * @return      the edit type as an encoded string
-   *
    */
   protected String createEditType(Element ... inElements)
   {

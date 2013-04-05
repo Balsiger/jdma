@@ -74,6 +74,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class ParseReader
 {
   //----------------------------------------------------------------- nested

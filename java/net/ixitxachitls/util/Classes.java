@@ -28,7 +28,6 @@ import java.lang.reflect.Method;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -47,6 +46,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public final class Classes
 {
   //--------------------------------------------------------- constructor(s)

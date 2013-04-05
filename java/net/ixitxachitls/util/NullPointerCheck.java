@@ -38,11 +38,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  *
  * @file          NullPointerCheck.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
- * @to_do         with a bit more understanding of the antlr library and tree
- *                structure the method's speed could possibly be improved
- *                considerably
- *
  */
 
 //..........................................................................
@@ -65,10 +60,9 @@ public class NullPointerCheck extends Check
     * Get the tokens that should be considered for this check (METHOD_DEF).
     *
     * @return      an array with all the tokens to consider
-    *
     */
   @Override
-public int[] getDefaultTokens()
+  public int[] getDefaultTokens()
   {
     return new int [] { TokenTypes.METHOD_DEF, };
   }
@@ -88,10 +82,9 @@ public int[] getDefaultTokens()
     * Visit the token from the walker to make the checks.
     *
     * @param       inAST the node in the tree to check
-    *
     */
   @Override
-public void visitToken(DetailAST inAST)
+  public void visitToken(DetailAST inAST)
   {
     if(inAST == null)
       throw new IllegalArgumentException("must have a node here");
@@ -118,16 +111,15 @@ public void visitToken(DetailAST inAST)
           continue;
 
         // ignore parameters that are @Nonnull
-        if(param.branchContains(TokenTypes.ANNOTATION))
-          for(DetailAST child = param.getFirstChild(); child != null;
-              child = child.getNextSibling())
-            if(child.getType() == TokenTypes.MODIFIERS)
-              for(DetailAST modifier = child.getFirstChild(); modifier != null;
-                  modifier = modifier.getNextSibling())
-                if(modifier.getType() == TokenTypes.ANNOTATION)
-                  if(modifier.findFirstToken(TokenTypes.IDENT).getText()
-                     .equals("Nonnull"))
-                    return;
+        if(hasAnnotation(param, "Nonnull"))
+          return;
+
+        // ignore parameters that are in a @ParametersAreNonnullByDefault and
+        // don't have @Nullable
+        if(!hasAnnotation(param, "Nullable")
+           && parentHasAnnotation(param, "ParametersAreNonnullByDefault"))
+          return;
+
 
         String parameter = param.findFirstToken(TokenTypes.IDENT).getText();
 
@@ -301,6 +293,56 @@ public void visitToken(DetailAST inAST)
 
     // nothing found
     return 0;
+  }
+
+  //........................................................................
+  //------------------------- parentHasAnnotation --------------------------
+
+  /**
+   * Check if any of the parents has the given annotation.
+   *
+   * @param   inNode        the node the start checking from
+   * @param   inAnnotation  the name of the anntoation to look for
+   *
+   * @return  true if the annotation is found in any parent, false if not
+   */
+  private boolean parentHasAnnotation(DetailAST inNode, String inAnnotation)
+  {
+    for(DetailAST parent = inNode.getParent(); parent != null;
+        parent = parent.getParent())
+      if(hasAnnotation(parent, inAnnotation))
+        return true;
+
+    return false;
+  }
+
+  //........................................................................
+  //---------------------------- hasAnnotation -----------------------------
+
+  /**
+   * Check if the given node has he name annotation.
+   *
+   * @param inNode        the node the check in
+   * @param inAnnotation  the name of the annotation to look for
+   *
+   * @return true if the annotation is found, false if not
+   */
+  private boolean hasAnnotation(DetailAST inNode, String inAnnotation)
+  {
+    if(inNode.branchContains(TokenTypes.ANNOTATION))
+      for(DetailAST child = inNode.getFirstChild(); child != null;
+              child = child.getNextSibling())
+            if(child.getType() == TokenTypes.MODIFIERS)
+              for(DetailAST modifier = child.getFirstChild(); modifier != null;
+                  modifier = modifier.getNextSibling())
+                if(modifier.getType() == TokenTypes.ANNOTATION)
+                {
+                  DetailAST first = modifier.findFirstToken(TokenTypes.IDENT);
+                  if(first != null && inAnnotation.equals(first.getText()))
+                    return true;
+                }
+
+    return false;
   }
 
   //........................................................................

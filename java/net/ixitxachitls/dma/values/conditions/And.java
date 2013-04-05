@@ -25,13 +25,11 @@ package net.ixitxachitls.dma.values.conditions;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-
-import net.ixitxachitls.dma.values.Value;
 
 //..........................................................................
 
@@ -51,6 +49,7 @@ import net.ixitxachitls.dma.values.Value;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class And extends Condition<And>
 {
   //--------------------------------------------------------- constructor(s)
@@ -73,12 +72,12 @@ public class And extends Condition<And>
   //---------------------------------- And ---------------------------------
 
   /**
-   * The constructor with a condition description.
+   * The constructor with the conditions to and.
    *
-   * @param       inDescription - a description of the condition
+   * @param       inConditions - the conditions to and
    *
    */
-  public And(@Nonnull Condition ... inConditions)
+  public And(Condition ... inConditions)
   {
     m_conditions = Lists.newArrayList(inConditions);
   }
@@ -171,7 +170,7 @@ public class And extends Condition<And>
    * @return      the requested string
    *
    */
-  public @Nonnull String doToString()
+  public String doToString()
   {
     List<String> strings = Lists.newArrayList();
 
