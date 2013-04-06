@@ -85,6 +85,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseProduct extends BaseEntry
 {
   //----------------------------------------------------------------- nested

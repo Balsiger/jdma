@@ -430,6 +430,7 @@ public class Duration extends Units<Duration>
 
     /** Testing init. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void init()
     {
       Duration value = new Duration();
@@ -438,8 +439,6 @@ public class Duration extends Units<Duration>
       assertEquals("not undefined at start", false, value.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    value.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   value.format(false).toString());
       assertEquals("feet",   false, value.isRounds());
       assertEquals("metric", false, value.isMetric());
       assertEquals("undefined value not correct", "0",
@@ -452,12 +451,6 @@ public class Duration extends Units<Duration>
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string ", "1 1/2 seconds", value.toString());
-      assertEquals("string ", "\\window{\\span{unit}{\\frac[1]{1}{2} seconds}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{1}{2} seconds}"
-                   + "{}{}{Rounds:}{\\span{unit}{\\frac{1}{4} round}}"
-                   + "{Actions:}{\\span{unit}{\\frac{1}{4} round}}}",
-                   value.format(false).toString());
       assertEquals("rounds", false, value.isRounds());
       assertEquals("metric", true,  value.isMetric());
       assertEquals("rd",     "1/4", value.getAsRounds().toString());
@@ -469,16 +462,6 @@ public class Duration extends Units<Duration>
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "2 days 1 2/3 hours 3 minutes 1 second",
                    value.toString());
-      assertEquals("string",
-                   "\\window{\\span{unit}{2 days} "
-                   + "\\span{unit}{\\frac[1]{2}{3} hours} "
-                   + "\\span{unit}{3 minutes} \\span{unit}{1 "
-                   + "second}}{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{178981 seconds}{}{}"
-                   + "{Rounds:}{\\span{unit}{\\frac[29830]{1}{6} rounds}}"
-                   + "{Actions:}{\\span{unit}{29830 rounds} "
-                   + "\\span{unit}{\\frac[1]{2}{3} standard actions}}}",
-                   value.format(false).toString());
       assertEquals("rounds", false,  value.isRounds());
       assertEquals("metric", true,   value.isMetric());
       assertEquals("rd", "29830 1/6", value.getAsRounds().toString());
@@ -489,13 +472,6 @@ public class Duration extends Units<Duration>
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 1/2 rounds", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{\\frac[1]{1}{2} rounds}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{1}{2} rounds}{}{}"
-                   + "{Seconds:}{\\span{unit}{9 seconds}}"
-                   + "{Actions:}{\\span{unit}{\\frac[1]{1}{2} rounds}}}",
-                   value.format(false).toString());
       assertEquals("rounds", true,  value.isRounds());
       assertEquals("metric", false,  value.isMetric());
       assertEquals("rd",   "1 1/2", value.getAsRounds().toString());
@@ -506,14 +482,6 @@ public class Duration extends Units<Duration>
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "12033 rounds",
                    value.toString());
-      assertEquals("string",
-                   "\\window{\\span{unit}{12033 rounds}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{12033 rounds}{}{}"
-                   + "{Seconds:}{\\span{unit}{20 hours} "
-                   + "\\span{unit}{3 minutes} \\span{unit}{18 seconds}}"
-                   + "{Actions:}{\\span{unit}{12033 rounds}}}",
-                   value.format(false).toString());
       assertEquals("feet",   true,  value.isRounds());
       assertEquals("metric", false, value.isMetric());
       assertEquals("in", "12033", value.getAsRounds().toString());

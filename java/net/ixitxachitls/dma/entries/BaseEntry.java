@@ -75,6 +75,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseEntry extends AbstractEntry
 {
   //----------------------------------------------------------------- nested

@@ -663,7 +663,10 @@ public abstract class Value<T extends Value<T>>
    *
    */
   @Deprecated
-  protected abstract Command doFormat();
+  protected Command doFormat()
+  {
+    throw new UnsupportedOperationException("no more supported");
+  }
 
   //........................................................................
 

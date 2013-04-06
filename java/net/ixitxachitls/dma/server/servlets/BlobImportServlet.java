@@ -125,7 +125,7 @@ public void doPost(@Nonnull HttpServletRequest inRequest,
     try
     {
       String keyName = request.getParam("key");
-      AbstractEntry.EntryKey key = DMAServlet.extractKey(keyName);
+      AbstractEntry.EntryKey<?> key = DMAServlet.extractKey(keyName);
 
       if(key == null)
       {

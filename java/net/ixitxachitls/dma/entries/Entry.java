@@ -23,24 +23,14 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-import java.util.TreeSet;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.Extension;
-import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.ID;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -60,6 +50,7 @@ import net.ixitxachitls.util.Strings;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class Entry<B extends BaseEntry> extends AbstractEntry
 {
   //--------------------------------------------------------- constructor(s)
@@ -74,9 +65,8 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    * @param       inBaseType the type of the base entry to this one
    *
    */
-  protected Entry(@Nonnull String inName,
-                  @Nonnull Type<? extends Entry> inType,
-                  @Nonnull BaseType<? extends BaseEntry> inBaseType)
+  protected Entry(String inName, Type<? extends Entry<?>> inType,
+                  BaseType<? extends BaseEntry> inBaseType)
   {
     super(inName, inType);
 
@@ -93,8 +83,8 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    * @param       inBaseType the type of the base entry to this one
    *
    */
-  protected Entry(@Nonnull Type<? extends Entry> inType,
-                  @Nonnull BaseType<? extends BaseEntry> inBaseType)
+  protected Entry(Type<? extends Entry<?>> inType,
+                  BaseType<? extends BaseEntry> inBaseType)
   {
     super(inType);
 
@@ -129,10 +119,9 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    * @param       inBases    the base entries to use
    *
    */
-  protected Entry(@Nonnull String inName,
-                  @Nonnull Type<? extends Entry> inType,
-                  @Nonnull BaseType<? extends BaseEntry> inBaseType,
-                  @Nonnull String ... inBases)
+  protected Entry(String inName, Type<? extends Entry<?>> inType,
+                  BaseType<? extends BaseEntry> inBaseType,
+                  String ... inBases)
   {
     super(inName, inType, inBases);
 
@@ -150,9 +139,9 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    * @param       inBases    the names of base entries to use
    *
    */
-  protected Entry(@Nonnull Type<? extends Entry> inType,
-                  @Nonnull BaseType<? extends BaseEntry> inBaseType,
-                  @Nonnull String ... inBases)
+  protected Entry(Type<? extends Entry<?>> inType,
+                  BaseType<? extends BaseEntry> inBaseType,
+                  String ... inBases)
   {
     super(inType, inBases);
 
@@ -166,14 +155,15 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   //-------------------------------------------------------------- variables
 
   /** The type of the base entry. */
-  protected @Nonnull BaseType<? extends BaseEntry> m_baseType;
+  protected BaseType<? extends BaseEntry> m_baseType;
 
   /** The type of the base to this entry. */
   public static final BaseType<BaseEntry> BASE_TYPE =
     BaseEntry.TYPE;
 
   /** The type of this entry. */
-  public static final Type<? extends Entry> TYPE =
+  @SuppressWarnings("rawtypes")
+  public static final Type<Entry> TYPE =
     new Type<Entry>(Entry.class, BaseEntry.TYPE);
 
   /** The name of a temporary entry. */
@@ -212,35 +202,35 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("categories".equals(inKey))
-    {
-      Set<String> categories = new TreeSet<String>();
-      for(BaseEntry base : getBaseEntries())
-        if(base != null)
-          categories.addAll(base.getCategories());
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
+  // {
+  //   if("categories".equals(inKey))
+  //   {
+  //     Set<String> categories = new TreeSet<String>();
+  //     for(BaseEntry base : getBaseEntries())
+  //       if(base != null)
+  //         categories.addAll(base.getCategories());
 
-      List<Object> commands = new ArrayList<Object>();
-      for(String category : categories)
-      {
-        if(!commands.isEmpty())
-          commands.add(", ");
+  //     List<Object> commands = new ArrayList<Object>();
+  //     for(String category : categories)
+  //     {
+  //       if(!commands.isEmpty())
+  //         commands.add(", ");
 
-        commands.add(new Link(category,
-                              link(getType(),
-                                   Index.Path.CATEGORIES)
-                              + category.toLowerCase(Locale.US)));
-      }
+  //       commands.add(new Link(category,
+  //                             link(getType(),
+  //                                  Index.Path.CATEGORIES)
+  //                             + category.toLowerCase(Locale.US)));
+  //     }
 
-      return new FormattedValue
-        (new Command(commands), Strings.toString(categories, ", ", ""),
-         "categories");
-    }
+  //     return new FormattedValue
+  //       (new Command(commands), Strings.toString(categories, ", ", ""),
+  //        "categories");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
 
@@ -678,7 +668,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    * @return      the requested id
    *
    */
-  // public @Nonnull String getID()
+  // public String getID()
   // {
   //   if(!m_id.isDefined())
   //     randomID();
@@ -916,7 +906,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    *
    */
   @Override
-  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  public @Nullable String set(String inKey, String inText)
   {
     String rest = super.set(inKey, inText);
 
@@ -1158,7 +1148,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
    *
    */
   // @Override
-  // public @Nullable AbstractExtension getExtension(@Nonnull String inName)
+  // public @Nullable AbstractExtension getExtension(String inName)
   // {
   //   AbstractExtension extension = m_extensions.get(inName);
   //   if(extension != null)
@@ -1195,7 +1185,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
     }
 
     setupExtensions();
-    for(AbstractExtension extension : m_extensions.values())
+    for(AbstractExtension<?> extension : m_extensions.values())
       if(extension instanceof Extension)
         ((Extension)extension).complete();
   }

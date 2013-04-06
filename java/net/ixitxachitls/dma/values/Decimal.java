@@ -112,7 +112,7 @@ public class Decimal<T extends Decimal<T>> extends BaseNumber<T>
   @SuppressWarnings("unchecked") // this only works if derivations override this
   public T create()
   {
-    return (T)new Decimal(m_min, m_max, m_precision);
+    return (T)new Decimal<T>(m_min, m_max, m_precision);
   }
 
   //........................................................................
@@ -309,6 +309,7 @@ public class Decimal<T extends Decimal<T>> extends BaseNumber<T>
 
     /** Testing inits. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void init()
     {
       Decimal value = new Decimal(10, 200, 100);
@@ -336,6 +337,7 @@ public class Decimal<T extends Decimal<T>> extends BaseNumber<T>
 
     /** Testing conversion. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void convert()
     {
       Value value = new Decimal(4200, 0, 5000, 100);
@@ -352,6 +354,7 @@ public class Decimal<T extends Decimal<T>> extends BaseNumber<T>
 
     /** Testing reading. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void read()
     {
       String []tests =

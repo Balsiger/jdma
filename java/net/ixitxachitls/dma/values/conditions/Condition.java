@@ -101,7 +101,7 @@ public class Condition<T extends Condition<T>> extends Value<T>
   @Override
   public T create()
   {
-    return super.create((T)new Condition());
+    return super.create((T)new Condition<T>());
   }
 
   //........................................................................
@@ -259,6 +259,7 @@ public class Condition<T extends Condition<T>> extends Value<T>
 
     /** Test init. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void testInit()
     {
       Condition value = new Condition();
@@ -286,6 +287,7 @@ public class Condition<T extends Condition<T>> extends Value<T>
 
     /** Test reading. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void testRead()
     {
       String []tests =

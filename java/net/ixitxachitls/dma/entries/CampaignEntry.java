@@ -34,7 +34,6 @@ import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.Contents;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Strings;
 
 //..........................................................................
@@ -72,7 +71,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    */
   protected CampaignEntry(@Nonnull String inName,
-                          @Nonnull Type<? extends Entry> inType,
+                          @Nonnull Type<? extends Entry<?>> inType,
                           @Nonnull BaseType<? extends BaseEntry> inBaseType)
   {
     super(inName, inType, inBaseType);
@@ -88,7 +87,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inBaseType the type of the base entry to this one
    *
    */
-  protected CampaignEntry(@Nonnull Type<? extends Entry> inType,
+  protected CampaignEntry(@Nonnull Type<? extends Entry<?>> inType,
                           @Nonnull BaseType<? extends BaseEntry> inBaseType)
   {
     super(inType, inBaseType);
@@ -107,14 +106,14 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inBases        the base items to take values from
    *
    */
-  public CampaignEntry(@Nonnull Type<? extends Entry> inType,
+  public CampaignEntry(@Nonnull Type<? extends Entry<?>> inType,
                        @Nonnull BaseType<? extends BaseEntry> inBaseType,
                        @Nonnull Campaign inCampaign,
                        @Nonnull String ... inBases)
   {
     super(inType, inBaseType, inBases);
 
-    EntryKey key = inCampaign.getKey();
+    EntryKey<?> key = inCampaign.getKey();
     m_campaign =
       m_campaign.as(((Name)m_campaign.get(0)).as(key.getParent().getID()),
                     ((Name)m_campaign.get(1)).as(key.getID()));
@@ -148,7 +147,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   //........................................................................
 
   /** The cached parent entry, if any. */
-  private @Nullable CampaignEntry m_cachedParent;
+  private @Nullable CampaignEntry<?> m_cachedParent;
 
   static
   {
@@ -226,10 +225,10 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return      the campaign entry that includes this one
    *
    */
-  public @Nullable CampaignEntry getParent()
+  public @Nullable CampaignEntry<?> getParent()
   {
     if(m_cachedParent == null && m_parent.isDefined())
-      m_cachedParent = (CampaignEntry)DMADataFactory.get().getEntry
+      m_cachedParent = (CampaignEntry<?>)DMADataFactory.get().getEntry
         (EntryKey.fromString(m_parent.get()));
 
     return m_cachedParent;
@@ -333,17 +332,18 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("campaign".equals(inKey))
-      return new FormattedValue(new Link(m_campaign.get(1),
-                                         "/campaign/" + m_campaign.get(0)
-                                         + "/" + m_campaign.get(1)),
-                                null, "campign");
+  // @Override
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // boolean inDM)
+  // {
+  //   if("campaign".equals(inKey))
+  //     return new FormattedValue(new Link(m_campaign.get(1),
+  //                                        "/campaign/" + m_campaign.get(0)
+  //                                        + "/" + m_campaign.get(1)),
+  //                               null, "campign");
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //------------------------------- compute --------------------------------
@@ -364,11 +364,11 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 
     if("navigation".equals(inKey))
     {
-      List<CampaignEntry> list = new ArrayList<CampaignEntry>();
+      List<CampaignEntry<?>> list = new ArrayList<CampaignEntry<?>>();
 
       list.add(this);
 
-      for(CampaignEntry parent = getParent(); parent != null;
+      for(CampaignEntry<?> parent = getParent(); parent != null;
           parent = parent.getParent())
         list.add(parent);
 
@@ -398,7 +398,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return
    *
    */
-  public void setParent(@Nullable EntryKey inParent)
+  public void setParent(@Nullable EntryKey<?> inParent)
   {
     if(inParent != null)
       m_parent = m_parent.as(inParent.toString());
@@ -474,11 +474,11 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   @Override
   public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
   {
-    EntryKey parent = inKey.getParent();
+    EntryKey<?> parent = inKey.getParent();
     if(parent == null)
       return;
 
-    EntryKey parentParent = parent.getParent();
+    EntryKey<?> parentParent = parent.getParent();
     if(parentParent == null)
       return;
 

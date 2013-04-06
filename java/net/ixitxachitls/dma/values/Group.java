@@ -54,7 +54,7 @@ import net.ixitxachitls.util.Grouping;
 //__________________________________________________________________________
 
 @Immutable
-public class Group<T extends Value, S extends Comparable<S>, U>
+public class Group<T extends Value<?>, S extends Comparable<S>, U>
   implements Grouping<T, U>, Comparator<U>
 {
   //----------------------------------------------------------------- nested
@@ -65,7 +65,7 @@ public class Group<T extends Value, S extends Comparable<S>, U>
    * @param K the type of values to extract from
    * @param V the type of grouping value extracted
    */
-  public interface Extractor<K extends Value, V extends Comparable<V>>
+  public interface Extractor<K extends Value<?>, V extends Comparable<V>>
   {
     //------------------------------ extract -------------------------------
 

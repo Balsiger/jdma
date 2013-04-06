@@ -27,7 +27,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Grouping;
 import net.ixitxachitls.util.logging.Log;
 
@@ -155,7 +154,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
                                  // derivation for this to work
   public T create()
   {
-    return super.create((T)new BaseNumber(m_min, m_max, m_sign));
+    return super.create((T)new BaseNumber<T>(m_min, m_max, m_sign));
   }
 
   //........................................................................
@@ -180,11 +179,12 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
   protected boolean m_sign = false;
 
   /** The grouping. */
-  public static final Grouping<? extends BaseNumber, String> s_grouping =
-    new Group<BaseNumber, Long, String>(new Group.Extractor<BaseNumber, Long>()
+  public static final Grouping<? extends BaseNumber<?>, String> s_grouping =
+    new Group<BaseNumber<?>, Long, String>
+    (new Group.Extractor<BaseNumber<?>, Long>()
       {
         @Override
-        public Long extract(BaseNumber inValue)
+        public Long extract(BaseNumber<?> inValue)
         {
           return inValue.m_number;
         }
@@ -264,21 +264,6 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    return new Command(toString());
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
@@ -537,6 +522,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
 
     /** Test of init. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void init()
     {
       BaseNumber number = new BaseNumber(10, 20);
@@ -547,8 +533,6 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
                    number.toString());
       assertEquals("undefined value not correct", 15, number.get());
       assertEquals("group", "$undefined$", number.group());
-      assertEquals("format", "\\color{error}{$undefined$}",
-                   number.format().toString());
 
       // now with some number
       number = new BaseNumber(10, 0, 20);
@@ -557,7 +541,6 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
       assertEquals("value not correctly gotten", 10, number.get());
       assertEquals("value not correctly converted", "10", number.toString());
       assertEquals("group", "10", number.group());
-      assertEquals("format", "10", number.format().toString());
 
       assertEquals("max", 20, number.getMax());
       assertEquals("min", 0, number.getMin());
@@ -583,6 +566,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
 
     /** Testing reading. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void read()
     {
       String []tests =
@@ -615,6 +599,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
 
     /** Testing setting. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void set()
     {
       BaseNumber number = new BaseNumber(10, 20);
@@ -636,7 +621,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
 
     /** Value computations. */
     @org.junit.Test
-    @SuppressWarnings("unchecked")
+      @SuppressWarnings({ "unchecked", "rawtypes" })
     public void compute()
     {
       BaseNumber number = new BaseNumber(2, 20);

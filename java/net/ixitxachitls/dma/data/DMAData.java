@@ -138,7 +138,10 @@ public interface DMAData
 
     /**
      * A string representation for printing.
+     *
+     * @return the string
      */
+    @Override
     public String toString()
     {
       return m_name + "/" + m_type + "=" + m_path;
