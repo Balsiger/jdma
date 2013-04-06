@@ -265,7 +265,7 @@ public class Multiple extends Value<Multiple>
     }
 
     m_editType = createEditType(m_elements);
-    withTemplate("multiple", delimList.toArray(new String [0]));
+    withTemplate("multiple", delimList.toArray(new String [delimList.size()]));
   }
 
   //........................................................................

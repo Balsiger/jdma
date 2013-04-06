@@ -23,9 +23,6 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -39,9 +36,8 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Number;
+import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.conditions.Condition;
@@ -397,6 +393,14 @@ public class BaseQuality extends BaseEntry
     return result;
   }
 
+  /**
+   * Compute the modifier base on an expression.
+   *
+   * @param   inModifier    the modifier to compute from
+   * @param   inParameters  parameters to adjust computation
+   *
+   * @return  the modifier with evaluated expressions
+   */
   private @Nullable Modifier computeModifierExpression
     (Modifier inModifier, Parameters inParameters)
   {
@@ -435,7 +439,7 @@ public class BaseQuality extends BaseEntry
    * @param       ioCombined      the value collected so far (to add to)
    * @param       inParameters    the parameters for collecting values
    * @param       inCondition     the condition for collecting
-   *
+   * @param       <T>             the type of value collected
    */
   @SuppressWarnings("unchecked")
   protected <T extends Value<T>> void
@@ -503,7 +507,10 @@ public class BaseQuality extends BaseEntry
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
-    return inUser != null && inUser.hasAccess(BaseCharacter.Group.DM);
+    if(inUser == null)
+      return false;
+
+    return inUser.hasAccess(BaseCharacter.Group.DM);
   }
 
   //........................................................................

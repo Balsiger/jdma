@@ -36,7 +36,6 @@ import com.google.appengine.api.utils.SystemProperty;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.server.servlets.BaseServlet;
@@ -51,9 +50,7 @@ import net.ixitxachitls.util.logging.Log;
  *
  *
  * @file          DMAServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................
@@ -61,6 +58,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public abstract class DMAServlet extends BaseServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -190,7 +188,6 @@ public abstract class DMAServlet extends BaseServlet
    * @param       inPath    the path to the entry
    *
    * @return      the entry or null if it could not be found
-   *
    */
   public @Nullable AbstractEntry getEntry(DMARequest inRequest, String inPath)
   {
@@ -325,17 +322,6 @@ public abstract class DMAServlet extends BaseServlet
     @org.junit.Test
     public void extractKey()
     {
-      DMAServlet servlet = new DMAServlet() {
-          private static final long serialVersionUID = 1L;
-
-          @Override
-          protected @Nullable SpecialResult handle
-            (DMARequest inRequest, HttpServletResponse inResponse)
-          {
-            return null;
-          }
-        };
-
       String [] tests =
       {
         "empty", "", null,

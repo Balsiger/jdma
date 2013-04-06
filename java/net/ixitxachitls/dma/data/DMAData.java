@@ -355,8 +355,6 @@ public interface DMAData
 
   //........................................................................
 
-  public abstract void clearCache();
-
   //------------------------------ isChanged -------------------------------
 
   /**
@@ -374,6 +372,14 @@ public interface DMAData
 
   //----------------------------------------------------------- manipulators
 
+  //------------------------------ clearCache ------------------------------
+
+  /**
+   * Clear the cache of entries.
+   */
+  public abstract void clearCache();
+
+  //........................................................................
   //-------------------------------- remove --------------------------------
 
   /**
@@ -433,7 +439,7 @@ public interface DMAData
   //------------------------------- rebuild --------------------------------
 
   /**
-   * Rebuild the given types. This means mainly rebuilding the indexs. It is
+   * Rebuild the given type. This means mainly rebuilding the indexs. It is
    * accomplished by reading all entries and writing them back.
    *
    * NOTE: this produces a lot of datastore traffic.
@@ -444,6 +450,22 @@ public interface DMAData
    *
    */
   public int rebuild(AbstractType<? extends AbstractEntry> inType);
+
+  //........................................................................
+  //------------------------------- refresh --------------------------------
+
+  /**
+   * Refresh the given type, by reading the entries and checking if they
+   * changed from their saved state.
+   *
+   * NOTE: this produces a lot of datastore traffic.
+   *
+   * @param      inType    the type to rebuild for
+   * @param      inRequest the request for the refresh
+   *
+   * @return     the numbert of enties updated
+   *
+   */
   public int refresh(AbstractType<? extends AbstractEntry> inType,
                      DMARequest inRequest);
 

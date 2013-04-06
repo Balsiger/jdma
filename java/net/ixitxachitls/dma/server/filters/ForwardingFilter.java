@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.server.filters;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -55,7 +55,6 @@ import net.ixitxachitls.util.logging.Log;
  * The filter to forward paths of a given pattern to a new path.
  *
  * @file          ForwardFilter.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
@@ -64,6 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class ForwardingFilter implements Filter
 {
   //--------------------------------------------------------- constructor(s)
@@ -90,7 +90,7 @@ public class ForwardingFilter implements Filter
    *
    */
   @Override
-  public void init(@Nonnull FilterConfig inConfig)
+  public void init(FilterConfig inConfig)
   {
     m_config = inConfig;
 
@@ -121,10 +121,10 @@ public class ForwardingFilter implements Filter
   //-------------------------------------------------------------- variables
 
   /** The filter configuration. */
-  private @Nonnull FilterConfig m_config;
+  private @Nullable FilterConfig m_config;
 
   /** The filter mappings. */
-  private @Nonnull Multimap<String, String> m_mappings =
+  private Multimap<String, String> m_mappings =
     LinkedListMultimap.create();
 
   //........................................................................
@@ -148,9 +148,8 @@ public class ForwardingFilter implements Filter
     *
     */
   @Override
-  public void doFilter(@Nonnull ServletRequest inRequest,
-                       @Nonnull ServletResponse inResponse,
-                       @Nonnull FilterChain inChain)
+  public void doFilter(ServletRequest inRequest, ServletResponse inResponse,
+                       FilterChain inChain)
     throws ServletException, IOException
   {
     if(!(inRequest instanceof HttpServletRequest))
@@ -183,7 +182,7 @@ public class ForwardingFilter implements Filter
    * @return   the path to forward to
    *
    */
-  public @Nullable String computeForward(@Nonnull HttpServletRequest inRequest)
+  public @Nullable String computeForward(HttpServletRequest inRequest)
   {
     String uri = inRequest.getRequestURI();
 

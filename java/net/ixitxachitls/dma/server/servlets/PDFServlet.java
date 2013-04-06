@@ -46,6 +46,7 @@ import com.google.appengine.api.conversion.Conversion;
 import com.google.appengine.api.conversion.ConversionResult;
 import com.google.appengine.api.conversion.ConversionService;
 import com.google.appengine.api.conversion.ConversionServiceFactory;
+import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -151,7 +152,8 @@ public abstract class PDFServlet extends SoyServlet
 
       // Create a conversion request from HTML to PDF.
       List<Asset> assets = new ArrayList<Asset>();
-      assets.add(new Asset("text/html", content.getBytes(), "pdf conversion"));
+      assets.add(new Asset("text/html", content.getBytes(Charsets.UTF_8),
+                           "pdf conversion"));
 
       // Determine all image assets.
       Matcher matcher =
@@ -249,8 +251,7 @@ public abstract class PDFServlet extends SoyServlet
           if(input != null)
             input.close();
 
-          if(output != null)
-            output.close();
+          output.close();
         }
       }
       catch(java.io.IOException e)

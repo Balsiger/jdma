@@ -34,7 +34,6 @@ import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.ValueGroup;
-import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
@@ -330,9 +329,9 @@ public class Contents extends Extension<Item>
   /**
    * Adjust the value for the given name for any special properites.
    *
-   * @param       inName        the name of the value to adjust
-   * @param       ioCombination the combinstaion to adjust
-   * @param       <V>           the real type of values combined
+   * @param       inName      the name of the value to adjust
+   * @param       ioCombined  the combined value collect into
+   * @param       <V>         the real type of values combined
    *
    */
   @Override

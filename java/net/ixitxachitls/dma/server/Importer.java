@@ -45,6 +45,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.tools.remoteapi.RemoteApiInstaller;
 import com.google.appengine.tools.remoteapi.RemoteApiOptions;
+import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 
 import net.ixitxachitls.dma.data.DMADatafiles;
@@ -367,7 +368,8 @@ public final class Importer
 
         // Get the response
         BufferedReader rd = new BufferedReader(new InputStreamReader
-                                               (connection.getInputStream()));
+                                               (connection.getInputStream(),
+                                               Charsets.UTF_8));
         try
         {
           String line = rd.readLine();

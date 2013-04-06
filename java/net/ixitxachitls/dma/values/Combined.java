@@ -34,7 +34,6 @@ import com.google.common.collect.Lists;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 
@@ -46,9 +45,9 @@ import net.ixitxachitls.util.Strings;
  * A value combined from different base values.
  *
  * @file          Combined.java
+ * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
- * @author        Peter Balsiger
- *
+ * @param         <T> the type of values combined
  */
 
 //..........................................................................
@@ -61,9 +60,21 @@ public class Combined<T extends Value<T>>
 {
   //------------------------------------------------------------------- Node
 
+  /**
+   * A node storing the collected value for an entry in the derivation chain.
+   */
   @ParametersAreNonnullByDefault
-  public static class Node<U extends Value<U>>
+  private static class Node<U extends Value<U>>
   {
+    //-------------------------------- Node --------------------------------
+
+    /**
+     * Create the node.
+     *
+     * @param       inValue       the value collected, if any
+     * @param       inEntry       the entry where the value came from
+     * @param       inDescription the description of the value collected
+     */
     public Node(@Nullable U inValue, AbstractEntry inEntry,
                 String inDescription)
     {
@@ -72,6 +83,15 @@ public class Combined<T extends Value<T>>
       m_description = inDescription;
     }
 
+    //......................................................................
+    //-------------------------------- Node --------------------------------
+
+    /**
+     * Create a node without a description.
+     *
+     * @param       inValue the value to build from
+     * @param       inEntry the entry to build from
+     */
     public Node(@Nullable U inValue, AbstractEntry inEntry)
     {
       m_value = inValue;
@@ -79,11 +99,29 @@ public class Combined<T extends Value<T>>
       m_description = null;
     }
 
+    //......................................................................
+
+    /** The value of this node. */
     private final @Nullable U m_value;
+
+    /** The entry the value for this node came from. */
     private final AbstractEntry m_entry;
+
+    /** The description, if any, for this value. */
     private final @Nullable String m_description;
+
+    /** The children of this node. */
     private final List<Node<U>> m_children = Lists.newArrayList();
 
+    //---------------------------- asDescribed -----------------------------
+
+    /**
+     * Create a new node from this one with a changed description.
+     *
+     * @param   inDescription the new description
+     *
+     * @return  the newly created node
+     */
     public Node<U> asDescribed(String inDescription)
     {
       String description = getDescription();
@@ -100,36 +138,83 @@ public class Combined<T extends Value<T>>
       return result;
     }
 
+    //......................................................................
+
+    //------------------------------ addChild ------------------------------
+
+    /**
+     * Add a child to this node.
+     *
+     * @param       inNode the child node to add
+     */
     public void addChild(Node<U> inNode)
     {
       m_children.add(inNode);
     }
 
+    //......................................................................
+    //------------------------------ getValue ------------------------------
+
+    /**
+     * Get the value of this node, if any.
+     *
+     * @return      the value, if any
+     */
     public @Nullable U getValue()
     {
       return m_value;
     }
 
+    //......................................................................
+    //------------------------------ getEntry ------------------------------
+
+    /**
+     * Get the entry this node represents and got its value from.
+     *
+     * @return      the entry the value came from
+     */
     public AbstractEntry getEntry()
     {
       return m_entry;
     }
 
+    //......................................................................
+    //--------------------------- getDescription ---------------------------
+
+    /**
+     * Get the description for this nodes value, if any.
+     *
+     * @return  the description, if any
+     *
+     */
     public @Nullable String getDescription()
     {
       return m_description;
     }
 
-    public @Nullable U getTopValue()
-    {
-      return m_value;
-    }
+    //......................................................................
 
+    //------------------------------ toString ------------------------------
+
+    /**
+     * Convert to string for debugging.
+     *
+     * @return      the converted string
+     */
+    @Override
     public String toString()
     {
       return m_entry.getName() + " = " + m_value + " " + m_children;
     }
 
+    //......................................................................
+    //------------------------------- values -------------------------------
+
+    /**
+     * Get all the values collected by this node and all its children.
+     *
+     * @return  a list of value node list pairs
+     */
     @SuppressWarnings("unchecked") // generic array creation?
     public List<Pair<U, List<Node<U>>>> values()
     {
@@ -172,12 +257,22 @@ public class Combined<T extends Value<T>>
 
       return values;
     }
+
+    //......................................................................
   }
 
   //........................................................................
 
   //--------------------------------------------------------- constructor(s)
 
+  //------------------------------- Combined -------------------------------
+
+  /**
+   * Create a combined value.
+   *
+   * @param       inName   the name of the combined value
+   * @param       inEntry  the entry to combine from
+   */
   public Combined(String inName, AbstractEntry inEntry)
   {
     m_name = inName;
@@ -186,14 +281,26 @@ public class Combined<T extends Value<T>>
   }
 
   //........................................................................
+  //........................................................................
 
   //-------------------------------------------------------------- variables
 
+  /** The name of the collected value. */
   private final String m_name;
+
+  /** The entry the values are collected from. */
   private final AbstractEntry m_entry;
+
+  /** The root node with the collected values. */
   private final @Nullable Node<T> m_root;
+
+  /** The contributed values. */
   private final List<Contribution<T>> m_values = Lists.newArrayList();
+
+  /** The contributed modifiers. */
   private final List<Contribution<Modifier>> m_modifiers = Lists.newArrayList();
+
+  /** The contributed expression. */
   private final List<Contribution<Expression>> m_expressions =
     Lists.newArrayList();
 
@@ -201,6 +308,61 @@ public class Combined<T extends Value<T>>
 
   //-------------------------------------------------------------- accessors
 
+  //------------------------------- getName --------------------------------
+
+  /**
+   * Get the name of the combined value.
+   *
+   * @return      the name
+   */
+  public String getName()
+  {
+    return m_name;
+  }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the entry this value is combined from.
+   *
+   * @return  the entry
+   */
+  public AbstractEntry getEntry()
+  {
+    return m_entry;
+  }
+
+  //........................................................................
+  //----------------------------- getTopValue ------------------------------
+
+  /**
+   * Get the top most value. This is the value that of the top most entry in
+   * the derivation hiearachy of entries.
+   *
+   * @return  the top value, if any
+   */
+  public @Nullable T getTopValue()
+  {
+    if(m_root != null)
+      return m_root.getValue();
+
+    return null;
+  }
+
+  //........................................................................
+
+  //---------------------------- collectValues -----------------------------
+
+  /**
+   * Collect all nodes with all the values from the given entry.
+   *
+   * @param      inName   the name of the value to collect
+   * @param      inEntry  the entry to get the values from
+   *
+   * @return     a node with the value information
+   *
+   */
   @SuppressWarnings("unchecked") // need to cast
   private Node<T> collectValues(String inName, AbstractEntry inEntry)
   {
@@ -229,39 +391,40 @@ public class Combined<T extends Value<T>>
     return root;
   }
 
-  public String getName()
+  //........................................................................
+  //-------------------------------- values --------------------------------
+
+  /**
+   * Get all the values stored.
+   *
+   * @return  the values as a list of pairs with a value and a list of nodes
+   *          where the value was added from
+   */
+  private List<Pair<T, List<Node<T>>>> values()
   {
-    return m_name;
+    if(m_root == null)
+      return Lists.newArrayList();
+
+    List<Pair<T, List<Node<T>>>> values = m_root.values();
+
+    if(m_modifiers.isEmpty() || values.size() == 0)
+      return values;
+
+    // We will add the last values to the modifiers.
+    if(values.get(values.size() - 1).first().getClass() == Number.class)
+      values.remove(values.size() - 1);
+
+    return values;
   }
 
-  public AbstractEntry getEntry()
-  {
-    return m_entry;
-  }
+  //........................................................................
+  //------------------------------ valuesOnly ------------------------------
 
-  public String toString()
-  {
-    return m_name + " (" + m_entry.getName() + "): " + m_root
-      + ", modifiers " + m_modifiers
-      + ", values " + m_values
-      + ", expressions " + m_expressions;
-  }
-
-  public void addValue(Contribution<T> inContribution)
-  {
-    m_values.add(inContribution);
-  }
-
-  public void addModifier(Contribution<Modifier> inContribution)
-  {
-    m_modifiers.add(inContribution);
-  }
-
-  public void addExpression(Contribution<Expression> inContribution)
-  {
-    m_expressions.add(inContribution);
-  }
-
+  /**
+   * Get the values and only the values stored.
+   *
+   * @return  a list of the values, either collected or contributed.
+   */
   public List<T> valuesOnly()
   {
     List<T> values = Lists.newArrayList();
@@ -275,40 +438,14 @@ public class Combined<T extends Value<T>>
     return values;
   }
 
-  @SuppressWarnings("unchecked")
-  public @Nullable T min()
-  {
-    T min = null;
-    for (Pair<T, List<Node<T>>> value : values())
-      if(min == null)
-        min = value.first();
-      else if(value.first().compareTo(min) < 0)
-        min = value.first();
+  //........................................................................
+  //------------------------ valuesWithDescriptions ------------------------
 
-    min = computeExpressions(min);
-    if(min instanceof Units)
-      min = (T)((Units)min).simplify();
-
-    return min;
-  }
-
-  @SuppressWarnings("unchecked")
-  public @Nullable T max()
-  {
-    T max = null;
-    for (Pair<T, List<Node<T>>> value : values())
-      if(max == null)
-        max = value.first();
-      else if(value.first().compareTo(max) > 0)
-        max = value.first();
-
-    max = computeExpressions(max);
-    if(max instanceof Units)
-      max = (T)((Units)max).simplify();
-
-    return max;
-  }
-
+  /**
+   * Get all values with descriptions where they came from.
+   *
+   * @return      a list of value and description pairs
+   */
   public List<Pair<T, String>> valuesWithDescriptions()
   {
     List<Pair<T, String>> values = Lists.newArrayList();
@@ -333,6 +470,14 @@ public class Combined<T extends Value<T>>
     return values;
   }
 
+  //........................................................................
+  //-------------------------------- total ---------------------------------
+
+  /**
+   * Compute the total of all values stored.
+   *
+   * @return      the total value, if any
+   */
   @SuppressWarnings("unchecked")
   public @Nullable T total()
   {
@@ -350,36 +495,64 @@ public class Combined<T extends Value<T>>
     return total;
   }
 
-  private List<Pair<T, List<Node<T>>>> values()
+  //........................................................................
+  //--------------------------------- min ----------------------------------
+
+  /**
+   * Compute the minimal value.
+   *
+   * @return      the minimal of all available values
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable T min()
   {
-    if(m_root == null)
-      return Lists.newArrayList();
+    T min = null;
+    for (Pair<T, List<Node<T>>> value : values())
+      if(min == null)
+        min = value.first();
+      else if(value.first().compareTo(min) < 0)
+        min = value.first();
 
-    List<Pair<T, List<Node<T>>>> values = m_root.values();
+    min = computeExpressions(min);
+    if(min instanceof Units)
+      min = (T)((Units)min).simplify();
 
-    if(m_modifiers.isEmpty() || values.size() == 0)
-      return values;
-
-    // We will add the last values to the modifiers.
-    if(values.get(values.size() - 1).first().getClass() == Number.class)
-      values.remove(values.size() - 1);
-
-    return values;
+    return min;
   }
 
-  public void add(Combined<T> inCombined, String inDescription)
-  {
-    if (inCombined.m_root != null)
-      m_root.addChild(inCombined.m_root.asDescribed(inDescription));
+  //........................................................................
+  //--------------------------------- max ----------------------------------
 
-    m_modifiers.addAll(inCombined.m_modifiers);
+  /**
+   * Compute the maximal value.
+   *
+   * @return  the maximal value, if any
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable T max()
+  {
+    T max = null;
+    for (Pair<T, List<Node<T>>> value : values())
+      if(max == null)
+        max = value.first();
+      else if(value.first().compareTo(max) > 0)
+        max = value.first();
+
+    max = computeExpressions(max);
+    if(max instanceof Units)
+      max = (T)((Units)max).simplify();
+
+    return max;
   }
 
-  public boolean hasModifiers()
-  {
-    return !m_modifiers.isEmpty();
-  }
+  //........................................................................
+  //------------------------------- modifier -------------------------------
 
+  /**
+   * Get the modifiers for the value as a modified number.
+   *
+   * @return  all the modifiers
+   */
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public ModifiedNumber modifier()
   {
@@ -401,22 +574,114 @@ public class Combined<T extends Value<T>>
     return ModifiedNumber.create(0, modifiers);
   }
 
-  public @Nullable T getTopValue()
-  {
-    if(m_root != null)
-      return m_root.getTopValue();
+  //........................................................................
 
-    return null;
+  //----------------------------- hasModifiers -----------------------------
+
+  /**
+   * Check whether the combined value has any modifiers.
+   *
+   * @return      true if there are modifiers, false if not
+   */
+  public boolean hasModifiers()
+  {
+    return !m_modifiers.isEmpty();
   }
 
+  //........................................................................
+  //------------------------------ isEditable ------------------------------
+
+  /**
+   * Determine whether the combined value can be edited or not.
+   *
+   * @return      true if the value is editable, false if not
+   */
   public boolean isEditable()
   {
-    return m_root != null && m_root.getTopValue() != null;
+    return m_root != null && m_root.getValue() != null;
   }
 
   //........................................................................
 
+  //------------------------------- toString -------------------------------
+
+  /**
+   * Convert the combined value to a string for debugging.
+   *
+   * @return      the converted string
+   */
+  @Override
+  public String toString()
+  {
+    return m_name + " (" + m_entry.getName() + "): " + m_root
+      + ", modifiers " + m_modifiers
+      + ", values " + m_values
+      + ", expressions " + m_expressions;
+  }
+
+  //........................................................................
+
+  //........................................................................
+
   //----------------------------------------------------------- manipulators
+
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add another combined value to this one.
+   *
+   * @param       inCombined    the combined value to add
+   * @param       inDescription the description of the value that is added
+   */
+  public void add(Combined<T> inCombined, String inDescription)
+  {
+    if (inCombined.m_root != null)
+      m_root.addChild(inCombined.m_root.asDescribed(inDescription));
+
+    m_modifiers.addAll(inCombined.m_modifiers);
+  }
+
+  //........................................................................
+  //------------------------------- addValue -------------------------------
+
+  /**
+   * Add a contributed value to the combined value.
+   *
+   * @param       inContribution the contributed value to add
+   */
+  public void addValue(Contribution<T> inContribution)
+  {
+    m_values.add(inContribution);
+  }
+
+  //........................................................................
+  //----------------------------- addModifier ------------------------------
+
+  /**
+   * Add a modifier to the combined value.
+   *
+   * @param       inContribution the contribution with the modifier
+   */
+  public void addModifier(Contribution<Modifier> inContribution)
+  {
+    m_modifiers.add(inContribution);
+  }
+
+  //........................................................................
+  //---------------------------- addExpression -----------------------------
+
+  /**
+   * Add an expression.
+   *
+   * @param       inContribution the contribution with the expression
+   */
+  public void addExpression(Contribution<Expression> inContribution)
+  {
+    m_expressions.add(inContribution);
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------- other member functions

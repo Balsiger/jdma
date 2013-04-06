@@ -135,8 +135,9 @@ public class SoyServlet extends DMAServlet
    * Checks whether the current page is public or requires some kind of
    * login.
    *
-   * @return      true if public, false if login is required
+   * @param       inRequest the request for the page
    *
+   * @return      true if public, false if login is required
    */
   public boolean isPublic(DMARequest inRequest)
   {

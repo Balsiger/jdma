@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.values;
 
 import java.util.ArrayList;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -51,6 +51,7 @@ import net.ixitxachitls.output.commands.Link;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Critical extends BaseNumber<Critical>
 {
   //--------------------------------------------------------- constructor(s)
@@ -126,7 +127,7 @@ public class Critical extends BaseNumber<Critical>
   //-------------------------------------------------------------- variables
 
   /** The threat range value. */
-  protected @Nonnull Range m_threat;
+  protected Range m_threat;
 
   //........................................................................
 
@@ -140,7 +141,7 @@ public class Critical extends BaseNumber<Critical>
    * @return      the threat range
    *
    */
-  public @Nonnull Range getThreatRange()
+  public Range getThreatRange()
   {
     return m_threat;
   }
@@ -170,7 +171,7 @@ public class Critical extends BaseNumber<Critical>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(m_number == 1)
       return "None";
@@ -198,7 +199,7 @@ public class Critical extends BaseNumber<Critical>
    *
    */
   @Override
-protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     if(m_number == 1)
       if(m_indexBase != null)
@@ -244,7 +245,7 @@ protected @Nonnull Command doFormat()
    */
   @Override
   @SuppressWarnings("unchecked") // have to cast
-  public @Nonnull Critical add(@Nonnull Critical inValue)
+  public Critical add(Critical inValue)
   {
     return super.add(inValue);
   }
@@ -352,7 +353,7 @@ protected @Nonnull Command doFormat()
    *
    */
   @Override
-protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(ParseReader inReader)
   {
     if(inReader.expect("none"))
     {
@@ -376,14 +377,12 @@ protected boolean doRead(@Nonnull ParseReader inReader)
   //------------------------------- doubled --------------------------------
 
   /**
+   * Double the thread range for the crictical.
    *
-   *
-   * @param
-   *
-   * @return
+   * @return  a new cricitcal with doubled thread range
    *
    */
-  public @Nonnull Critical doubled()
+  public Critical doubled()
   {
     Critical doubled = create();
     doubled.m_threat = m_threat.as(2 * m_threat.getStart() - m_threat.getEnd(),

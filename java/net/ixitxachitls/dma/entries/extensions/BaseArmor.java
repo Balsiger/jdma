@@ -23,18 +23,12 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Distance;
@@ -384,13 +378,12 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /**
    * Add current contributions to the given list.
    *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions collected
+   * @param       inName     the name of the value to collect
+   * @param       ioCombined the combined value to collect into
    *
    */
   @Override
-  public void collect
-    (String inName, Combined ioCombined)
+  public void collect(String inName, Combined ioCombined)
   {
     super.collect(inName, ioCombined);
 

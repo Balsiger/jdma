@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries.extensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -38,8 +37,6 @@ import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Combination;
-import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Symbol;

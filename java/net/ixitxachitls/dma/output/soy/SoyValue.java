@@ -23,12 +23,9 @@
 
 package net.ixitxachitls.dma.output.soy;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
@@ -42,14 +39,12 @@ import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.BaseNumber;
-// import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -127,19 +122,25 @@ public class SoyValue extends SoyAbstract
   /** A flag if the value can be edited. */
   protected final boolean m_editable;
 
-  /** The combination for this value, if any needed yet. */
-  // protected @Nullable SoyCombination m_combination = null;
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
-  //-------------------------------- print ---------------------------------
+  //------------------------------- toString -------------------------------
 
+  /**
+   * Convert the soy value to a string for debugging.
+   *
+   * @return  the converted string
+   */
+  @Override
   public String toString()
   {
     return print();
   }
+
+  //........................................................................
+  //-------------------------------- print ---------------------------------
 
   /**
    * Print the value to soy.
@@ -216,17 +217,6 @@ public class SoyValue extends SoyAbstract
       if("raw".equals(inName))
         return StringData.forValue(m_value.toString(false));
 
-      // if("combine".equals(inName))
-      // {
-      //   if(m_combination == null)
-      //     m_combination =
-      //       new SoyCombination(m_name,
-      //                          new Combination<Value<?>>(m_entry, m_name)
-      //                          /*.withIgnoreTop()*/, m_value, m_entry);
-
-      //   return m_combination;
-      // }
-
       if("name".equals(inName))
         return StringData.forValue(m_name);
 
@@ -280,7 +270,7 @@ public class SoyValue extends SoyAbstract
       if("number".equals(inName) && m_value instanceof BaseNumber)
         return IntegerData.forValue((int)((BaseNumber)m_value).get());
 
-      if("remark".equals(inName) && m_value != null)
+      if("remark".equals(inName))
       {
         Remark remark = m_value.getRemark();
         if (remark != null)

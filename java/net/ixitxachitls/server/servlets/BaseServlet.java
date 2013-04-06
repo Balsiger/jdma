@@ -26,9 +26,6 @@ package net.ixitxachitls.server.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.SimpleTimeZone;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -51,9 +48,7 @@ import net.ixitxachitls.util.logging.Log;
  * This is the base for all servlets used in the DMA web server.
  *
  * @file          BaseServlet.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................
@@ -76,7 +71,6 @@ public abstract class BaseServlet extends HttpServlet
      * @param inResponse the response to send back to.
      *
      * @throws IOException if something does wrong
-     *
      */
     public void send(@Nonnull HttpServletResponse inResponse)
       throws IOException;
@@ -103,7 +97,6 @@ public abstract class BaseServlet extends HttpServlet
      *
      * @param inCode     the error code for the error
      * @param inMessage  the error message
-     *
      */
     public TextError(int inCode, @Nonnull String inMessage)
     {
@@ -126,7 +119,6 @@ public abstract class BaseServlet extends HttpServlet
      * @param inResponse the response to send back to.
      *
      * @throws IOException if something does wrong
-     *
      */
     @Override
     public void send(@Nonnull HttpServletResponse inResponse)
@@ -161,7 +153,6 @@ public abstract class BaseServlet extends HttpServlet
      * @param inCode    the error code
      * @param inTitle   the errro title
      * @param inMessage the error message
-     *
      */
     public HTMLError(int inCode, @Nonnull String inTitle,
                      @Nonnull String inMessage)
@@ -183,7 +174,6 @@ public abstract class BaseServlet extends HttpServlet
      * @param inResponse the response to send back to.
      *
      * @throws IOException if something does wrong
-     *
      */
     @Override
     public void send(@Nonnull HttpServletResponse inResponse)
@@ -213,7 +203,6 @@ public abstract class BaseServlet extends HttpServlet
      * Convert to a string for debugging.
      *
      * @return the string representation
-     *
      */
     @Override
     public @Nonnull String toString()
@@ -241,7 +230,6 @@ public abstract class BaseServlet extends HttpServlet
      * @param inResponse the response to send back to.
      *
      * @throws IOException if something does wrong
-     *
      */
     @Override
     public void send(@Nonnull HttpServletResponse inResponse)
@@ -257,7 +245,6 @@ public abstract class BaseServlet extends HttpServlet
      * Convert to a string for debugging.
      *
      * @return the string representation
-     *
      */
     @Override
     public @Nonnull String toString()
@@ -277,7 +264,6 @@ public abstract class BaseServlet extends HttpServlet
      * Create the special result.
      *
      * @param inDestination the destination to redirect to
-     *
      */
     public Redirect(@Nonnull String inDestination)
     {
@@ -293,7 +279,6 @@ public abstract class BaseServlet extends HttpServlet
      * @param inResponse the response to send back to.
      *
      * @throws IOException if something does wrong
-     *
      */
     @Override
     public void send(@Nonnull HttpServletResponse inResponse)
@@ -328,7 +313,6 @@ public abstract class BaseServlet extends HttpServlet
 
   /**
    * Create the base handler.
-   *
    */
   public BaseServlet()
   {
@@ -339,24 +323,6 @@ public abstract class BaseServlet extends HttpServlet
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The data of the startup. */
-  protected static final Date s_startupDate = new Date();
-
-  /** The startup time of the server. */
-  protected static final String s_startup;
-
-  static
-  {
-    SimpleDateFormat s_httpTime =
-      new SimpleDateFormat("EEE',' dd MMM yyyy HH:mm:ss 'GMT'");
-
-    // set the timezone of the format to greenwich mean time
-    s_httpTime.setTimeZone(new SimpleTimeZone(0, "GMT"));
-
-    s_startup = s_httpTime.format(s_startupDate);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -374,7 +340,6 @@ public abstract class BaseServlet extends HttpServlet
    *
    * @throws      ServletException general error when processing the page
    * @throws      IOException      writing to the page failed
-   *
    */
   @Override
   public void doGet(@Nonnull HttpServletRequest inRequest,
@@ -427,7 +392,6 @@ public abstract class BaseServlet extends HttpServlet
    *
    * @throws      ServletException general error when processing the page
    * @throws      IOException writing to page failed
-   *
    */
   public void handleAndCheck(@Nonnull HttpServletRequest inRequest,
                              @Nonnull HttpServletResponse inResponse)
@@ -452,7 +416,6 @@ public abstract class BaseServlet extends HttpServlet
    *
    * @throws      ServletException general error when processing the page
    * @throws      IOException      writing to the page failed
-   *
    */
   protected abstract @Nullable SpecialResult handle
     (@Nonnull HttpServletRequest inRequest,

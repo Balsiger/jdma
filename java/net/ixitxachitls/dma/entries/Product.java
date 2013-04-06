@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -941,7 +940,7 @@ public class Product extends Entry<BaseProduct>
 
     // we compute the owner here, as we don't want to get all ids if we don't
     // have to
-    if("owner".equals(inKey) && m_owner != null)
+    if("owner".equals(inKey))
     {
       String users = Strings.toString(DMADataFactory.get()
                                       .getIDs(BaseCharacter.TYPE, null), "||",

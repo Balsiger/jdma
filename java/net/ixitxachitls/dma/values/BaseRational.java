@@ -53,6 +53,7 @@ import net.ixitxachitls.output.commands.Frac;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
 {
   //--------------------------------------------------------- constructor(s)

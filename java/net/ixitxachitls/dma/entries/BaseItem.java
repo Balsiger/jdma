@@ -34,8 +34,6 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -47,13 +45,8 @@ import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.Buffer;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Span;
-import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 

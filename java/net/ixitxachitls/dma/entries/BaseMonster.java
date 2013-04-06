@@ -30,18 +30,15 @@ import java.util.Set;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
 import net.ixitxachitls.dma.values.Distance;
-import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.LongFormattedText;
@@ -753,10 +750,11 @@ public class BaseMonster extends BaseEntry
     /** Flag if to use dexterity when attacking. */
     private boolean m_dexterity;
 
-    /** Create the name.
+    /**
+     * Create the name.
      *
      * @param inName       the name of the value
-     *
+     * @param inDexterity  whether dexterity is used for the attack
      */
     private AttackMode(String inName, boolean inDexterity)
     {
@@ -827,7 +825,6 @@ public class BaseMonster extends BaseEntry
      *
      * @param inName       the name of the value
      * @param inMultiplier how much treasure we get
-     *
      */
     private Treasure(String inName, int inMultiplier)
     {
@@ -838,7 +835,6 @@ public class BaseMonster extends BaseEntry
     /** Get the name of the value.
      *
      * @return the name of the value
-     *
      */
     public String getName()
     {
@@ -846,11 +842,11 @@ public class BaseMonster extends BaseEntry
     }
 
     /**
-     * Convert to a string
+     * Convert to a string.
      *
      * @return the name of the value
-     *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -2417,11 +2413,11 @@ public class BaseMonster extends BaseEntry
   //-------------------------------- hasFeat -------------------------------
 
   /**
-   * Determine if the monster has the given quality.
+   * Determine if the monster has the given feat.
    *
-   * @param       inQuality the quality to look for
+   * @param       inFeat the feat to look for
    *
-   * @return      true if the quality is there, false if not
+   * @return      true if the feat is there, false if not
    *
    */
   public boolean hasFeat(String inFeat)
@@ -2537,7 +2533,10 @@ public class BaseMonster extends BaseEntry
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
-    return inUser != null && inUser.hasAccess(BaseCharacter.Group.DM);
+    if(inUser == null)
+      return false;
+
+    return inUser.hasAccess(BaseCharacter.Group.DM);
   }
 
   //........................................................................

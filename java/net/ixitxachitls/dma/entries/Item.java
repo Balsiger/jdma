@@ -30,14 +30,11 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 import com.google.common.collect.Lists;
 
 import net.ixitxachitls.dma.entries.extensions.Composite;
 import net.ixitxachitls.dma.entries.extensions.Contents;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.FormattedText;
@@ -52,7 +49,6 @@ import net.ixitxachitls.output.commands.Indent;
 import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.output.commands.Scriptsize;
 import net.ixitxachitls.output.commands.Small;
-import net.ixitxachitls.output.commands.Super;
 import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -843,10 +839,7 @@ public class Item extends CampaignEntry<BaseItem>
   /**
    * Get a command to format the name of the item.
    *
-   * @param    inDM true if formatting for the dm, false if not
-   *
    * @return   the command to format the name
-   *
    */
   public String computeFullName()
   {
@@ -856,7 +849,6 @@ public class Item extends CampaignEntry<BaseItem>
       if(base == null)
         continue;
 
-      String baseName = base.getName();
       List<String> synonyms = base.getSynonyms();
       if(!synonyms.isEmpty() && synonyms.get(0).indexOf(',') < 0)
         names.add(synonyms.get(0));
@@ -870,7 +862,6 @@ public class Item extends CampaignEntry<BaseItem>
     else
       name = Strings.SPACE_JOINER.join(names);
 
-    String playerName = m_playerName.get();
     if (m_playerName.isDefined() && !name.equals(m_playerName.get()))
       return m_playerName.get() + " (" + name + ")";
 
@@ -1193,7 +1184,6 @@ public class Item extends CampaignEntry<BaseItem>
    * the value and the appearance here and let the base class handle the rest.
    *
    */
-  @OverridingMethodsMustInvokeSuper
   public void complete()
   {
     super.complete();

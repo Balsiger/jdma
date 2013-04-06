@@ -23,10 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
@@ -40,10 +38,9 @@ import net.ixitxachitls.dma.entries.ValueGroup;
  * dma value.
  *
  * @file          Contribution.java
- *
  * @author        balsiger@ixitxachits.net (Peter Balsiger)
  *
- * @param         V the value the contribution stores
+ * @param         <V> the value the contribution stores
  *
  */
 
@@ -52,6 +49,7 @@ import net.ixitxachitls.dma.entries.ValueGroup;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Contribution<V> implements Comparable<Contribution<V>>
 {
   //--------------------------------------------------------- constructor(s)
@@ -63,10 +61,9 @@ public class Contribution<V> implements Comparable<Contribution<V>>
    *
    * @param    inValue the value contributed
    * @param    inGroup the group (entry, extension) contributing the value
-   *
+   * @param    inText  the text describing why the value was contributed
    */
-  public Contribution(@Nonnull V inValue, @Nonnull ValueGroup inGroup,
-                      @Nonnull String inText)
+  public Contribution(V inValue, ValueGroup inGroup, String inText)
   {
     m_value = inValue;
     m_group = inGroup;
@@ -80,13 +77,13 @@ public class Contribution<V> implements Comparable<Contribution<V>>
   //-------------------------------------------------------------- variables
 
   /** The value contributed. */
-  private @Nonnull V m_value;
+  private V m_value;
 
   /** The group contributing the value. */
-  private @Nonnull ValueGroup m_group;
+  private ValueGroup m_group;
 
   /** The text describing the contribution. */
-  private @Nonnull String m_text;
+  private String m_text;
 
   //........................................................................
 
@@ -98,9 +95,8 @@ public class Contribution<V> implements Comparable<Contribution<V>>
    * Get the value contributed.
    *
    * @return  the value
-   *
    */
-  public @Nonnull V getValue()
+  public V getValue()
   {
     return m_value;
   }
@@ -109,14 +105,11 @@ public class Contribution<V> implements Comparable<Contribution<V>>
   //------------------------------- getGroup -------------------------------
 
   /**
+   * Get the entry (or extension) that contributed the value.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return  the entry
    */
-  public @Nonnull ValueGroup getGroup()
+  public ValueGroup getGroup()
   {
     return m_group;
   }
@@ -125,12 +118,9 @@ public class Contribution<V> implements Comparable<Contribution<V>>
   //------------------------------- getText --------------------------------
 
   /**
+   * Get the text given with the value.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return  the text
    */
   public @Nullable String getText()
   {
@@ -141,14 +131,11 @@ public class Contribution<V> implements Comparable<Contribution<V>>
   //---------------------------- getDescription ----------------------------
 
   /**
+   * Get the description (group and text) for the contribution.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return  the description
    */
-  public @Nonnull String getDescription()
+  public String getDescription()
   {
     return m_group.getName() + (m_text == null ? "" : " (" + m_text + ")");
   }
@@ -194,18 +181,47 @@ public class Contribution<V> implements Comparable<Contribution<V>>
   }
 
   //........................................................................
+  //-------------------------------- equals --------------------------------
+
+  /**
+   * Check if the two objects are equal.
+   *
+   * @param       inOther the object to compare with
+   *
+   * @return      true if the objects are equal, false if not
+   *
+   */
+  @Override
+  public boolean equals(Object inOther)
+  {
+    return super.equals(inOther);
+  }
+
+  //........................................................................
+  //------------------------------- hashCode -------------------------------
+
+  /**
+   * Compute the hash code.
+   *
+   * @return      the hash code
+   */
+  @Override
+  public int hashCode()
+  {
+    return super.hashCode();
+  }
+
+  //........................................................................
 
   //------------------------------- toString -------------------------------
 
   /**
+   * Convert to a string for debugging.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return the converted string
    */
-  public @Nonnull String toString()
+  @Override
+  public String toString()
   {
     return m_group.getName() + (m_text == null ? "" : " (" + m_text + ")")
       + ": " + m_value;

@@ -444,7 +444,8 @@ public class PDFDocument extends ITextDocument
       }
       finally
       {
-        reader.close();
+        if(reader != null)
+          reader.close();
       }
       assertTrue("delete", tmp.delete());
     }

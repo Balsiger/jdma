@@ -5,7 +5,7 @@
  * This file is part of Dungeon Master Assistant.
  *
  * Dungeon Master Assistant is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as published by
+1 * modify it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
@@ -34,9 +34,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
+
+import com.google.common.base.Charsets;
 
 import net.ixitxachitls.output.actions.Action;
 import net.ixitxachitls.output.commands.BaseCommand;
@@ -66,6 +68,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class Document
 {
   //----------------------------------------------------------------- nested
@@ -88,7 +91,7 @@ public class Document
      * @param       inText   the text for this entry
      *
      */
-    protected Footnote(@Nonnull String inMarker, @Nonnull Object inText)
+    protected Footnote(String inMarker, Object inText)
     {
       m_marker = inMarker;
       m_text   = inText;
@@ -97,10 +100,10 @@ public class Document
     //......................................................................
 
     /** The marker to use for this footnote entry. */
-    private @Nonnull String m_marker;
+    private String m_marker;
 
     /** The text of the footnote entry. */
-    private @Nonnull Object m_text;
+    private Object m_text;
 
     //----------------------------- getMarker ------------------------------
 
@@ -110,7 +113,7 @@ public class Document
      * @return      the marker
      *
      */
-    public @Nonnull String getMarker()
+    public String getMarker()
     {
       return m_marker;
     }
@@ -124,7 +127,7 @@ public class Document
      * @return      the text
      *
      */
-    public @Nonnull Object getText()
+    public Object getText()
     {
       return m_text;
     }
@@ -171,7 +174,7 @@ public class Document
     //......................................................................
 
     /** The buffer for storage. */
-    private @Nonnull Buffer m_buffer;
+    private Buffer m_buffer;
 
     //-------------------------- getKnownActions ---------------------------
 
@@ -244,7 +247,7 @@ public class Document
      *
      */
     @Override
-    public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
+    public void setAlignment(Buffer.Alignment inAlignment)
     {
       assert m_buffer instanceof WrapBuffer
         : "setAlignment() can only be called using a wrapping buffer";
@@ -296,7 +299,7 @@ public class Document
      * @return      the length of the given line
      *
      */
-    public int getLength(@Nonnull String inText)
+    public int getLength(String inText)
     {
       assert m_buffer instanceof WrapBuffer
         : "getLength() can only be called using a wrapping buffer";
@@ -315,7 +318,7 @@ public class Document
      *
      */
     @Override
-    public void addError(@Nonnull BaseError inError)
+    public void addError(BaseError inError)
     {
       Document.this.addError(inError);
     }
@@ -361,7 +364,7 @@ public class Document
   //-------------------------------------------------------------- variables
 
   /** The buffer for storage. */
-  protected @Nonnull Buffer m_buffer = new SimpleBuffer();
+  protected Buffer m_buffer = new SimpleBuffer();
 
   /** The current counter value. */
   protected int m_counter = 0;
@@ -373,22 +376,21 @@ public class Document
   protected boolean m_dm = false;
 
   /** The known actions. */
-  private static @Nonnull HashMap<String, Action> s_actions =
+  private static HashMap<String, Action> s_actions =
     new HashMap<String, Action>();
 
   /** The errors found. */
-  protected @Nonnull Set<BaseError> m_errors = new LinkedHashSet<BaseError>();
+  protected Set<BaseError> m_errors = new LinkedHashSet<BaseError>();
 
   /** The footnote texts. */
-  protected @Nonnull ArrayList<Footnote> m_footnotes =
+  protected ArrayList<Footnote> m_footnotes =
     new ArrayList<Footnote>();
 
   /** The footer texts. */
-  protected @Nonnull ArrayList<Object> m_footer = new ArrayList<Object>();
+  protected ArrayList<Object> m_footer = new ArrayList<Object>();
 
   /** The documents attributes. */
-  protected @Nonnull Map<String, String> m_attributes =
-    new HashMap<String, String>();
+  protected Map<String, String> m_attributes = new HashMap<String, String>();
 
   static
   {
@@ -447,7 +449,7 @@ public class Document
    * @return      a hash map with all the known converters
    *
    */
-  protected @Nonnull Map<String, Action> getKnownActions()
+  protected Map<String, Action> getKnownActions()
   {
     return s_actions;
   }
@@ -461,7 +463,7 @@ public class Document
    * @return      the buffer of this document
    *
    */
-   protected @Nonnull Buffer getBuffer()
+   protected Buffer getBuffer()
    {
      return m_buffer;
    }
@@ -524,7 +526,7 @@ public class Document
    * @return      the value of the attribute, if any
    *
    */
-  public @Nullable String getAttribute(@Nonnull String inName)
+  public @Nullable String getAttribute(String inName)
   {
     return m_attributes.get(inName);
   }
@@ -554,7 +556,7 @@ public class Document
    * @return      the desired document
    *
    */
-  public @Nonnull SubDocument createSubDocument()
+  public SubDocument createSubDocument()
   {
     return new SubDocument();
   }
@@ -570,7 +572,7 @@ public class Document
    * @return      the desired document
    *
    */
-  public @Nonnull SubDocument createSubDocument(int inWidth)
+  public SubDocument createSubDocument(int inWidth)
   {
     return new SubDocument(inWidth);
   }
@@ -588,7 +590,7 @@ public class Document
    *              command should be ignored
    *
    */
-  public @Nullable Action convert(@Nonnull Command inCommand)
+  public @Nullable Action convert(Command inCommand)
   {
     if(inCommand instanceof BaseCommand)
     {
@@ -627,7 +629,7 @@ public class Document
    * @return      the converted result
    *
    */
-  public @Nonnull String convert(@Nullable Object inCommand)
+  public String convert(@Nullable Object inCommand)
   {
     if(inCommand == null)
       return "";
@@ -654,7 +656,7 @@ public class Document
    * @return      true if stored, false if not
    *
    */
-  public boolean save(@Nonnull String inFileName)
+  public boolean save(String inFileName)
   {
     FileWriter file = null;
     try
@@ -701,11 +703,11 @@ public class Document
    * @return      true if writtenn, false if not
    *
    */
-  public boolean  write(@Nonnull OutputStream inOutput)
+  public boolean  write(OutputStream inOutput)
   {
     try
     {
-      inOutput.write(toString().getBytes());
+      inOutput.write(toString().getBytes(Charsets.UTF_8));
     }
     catch(java.io.IOException e)
     {
@@ -740,7 +742,7 @@ public class Document
    * @return      The complete contents of the document.
    *
    */
-  public @Nonnull String getFooter()
+  public String getFooter()
   {
     Document sub = createSubDocument();
 
@@ -764,7 +766,7 @@ public class Document
    * @param       inObject the object to add
    *
    */
-  public void add(@Nonnull Object inObject)
+  public void add(Object inObject)
   {
     if(inObject instanceof BaseCommand)
       add((BaseCommand)inObject);
@@ -783,7 +785,7 @@ public class Document
    * @param       inObject the object to add
    *
    */
-  public void add(@Nonnull List<? extends Object> inObject)
+  public void add(List<? extends Object> inObject)
   {
     for(Object object : inObject)
       add(object);
@@ -798,7 +800,7 @@ public class Document
    * @param       inText the text to add
    *
    */
-  public void add(@Nonnull String inText)
+  public void add(String inText)
   {
     getBuffer().append(inText);
   }
@@ -812,7 +814,7 @@ public class Document
    * @param       inCommand the command to add
    *
    */
-  public void add(@Nonnull Command inCommand)
+  public void add(Command inCommand)
   {
     Action action = convert(inCommand);
 
@@ -832,7 +834,7 @@ public class Document
    * @param       inCommand the command to add
    *
    */
-  public void add(@Nonnull BaseCommand inCommand)
+  public void add(BaseCommand inCommand)
   {
     Action action = convert(inCommand);
 
@@ -853,7 +855,7 @@ public class Document
    * @param       inObject the object to add
    *
    */
-  public void addFootnote(@Nonnull String inMarker, @Nonnull Object inObject)
+  public void addFootnote(String inMarker, Object inObject)
   {
     m_footnotes.add(new Footnote(inMarker, inObject));
   }
@@ -867,7 +869,7 @@ public class Document
    * @param       inObject the object to add as footer
    *
    */
-  public void addFooter(@Nonnull Object inObject)
+  public void addFooter(Object inObject)
   {
     m_footer.add(inObject);
   }
@@ -882,7 +884,7 @@ public class Document
    * @param       inAlignment the new alignment
    *
    */
-  public void setAlignment(@Nonnull Buffer.Alignment inAlignment)
+  public void setAlignment(Buffer.Alignment inAlignment)
   {
     // nothing done
   }
@@ -909,7 +911,7 @@ public class Document
    * @param       inValue the value of the attribute
    *
    */
-  public void setAttribute(@Nonnull String inName, @Nullable String inValue)
+  public void setAttribute(String inName, @Nullable String inValue)
   {
     m_attributes.put(inName, inValue);
   }
@@ -924,7 +926,7 @@ public class Document
    * @param       inError the error to add (null errors are ignored)
    *
    */
-  public void addError(@Nonnull BaseError inError)
+  public void addError(BaseError inError)
   {
     m_errors.add(inError);
   }
@@ -938,7 +940,7 @@ public class Document
    * @param       inErrors the errosr to add
    *
    */
-  public void addErrors(@Nonnull List<BaseError> inErrors)
+  public void addErrors(List<BaseError> inErrors)
   {
     m_errors.addAll(inErrors);
   }
@@ -958,7 +960,7 @@ public class Document
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     String page = getBuffer().getContents();
 

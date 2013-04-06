@@ -32,7 +32,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 
 import org.easymock.EasyMock;
 
@@ -118,8 +117,9 @@ public class EntryServlet extends PageServlet
    * Checks whether the current page is public or requires some kind of
    * login.
    *
-   * @return      true if public, false if login is required
+   * @param       inRequest the request for the page
    *
+   * @return      true if public, false if login is required
    */
   public boolean isPublic(DMARequest inRequest)
   {
@@ -413,9 +413,9 @@ public class EntryServlet extends PageServlet
      * @throws Exception should not happen
      */
     public EntryServlet createServlet
-      (String inPath, final AbstractEntry inEntry,
-       final AbstractType<? extends AbstractEntry> inType,
-       final String inID, boolean inCreate) throws Exception
+      (String inPath, final @Nullable AbstractEntry inEntry,
+       @Nullable final AbstractType<? extends AbstractEntry> inType,
+       @Nullable final String inID, boolean inCreate) throws Exception
     {
       m_response.setHeader("Content-Type", "text/html");
       m_response.setHeader("Cache-Control", "max-age=0");

@@ -71,6 +71,7 @@ import net.ixitxachitls.util.resources.Resource;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class DMADatafiles implements DMAData
 {
   //--------------------------------------------------------- constructor(s)
@@ -977,7 +978,8 @@ public class DMADatafiles implements DMAData
    *
    * NOTE: this produces a lot of datastore traffic.
    *
-   * @param      inType  the type to refresh
+   * @param      inType    the type to refresh
+   * @param      inRequest the original request for the refresh
    *
    * @return     the numbert of enties updated
    */

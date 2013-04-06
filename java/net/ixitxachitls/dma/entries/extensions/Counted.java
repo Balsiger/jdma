@@ -23,22 +23,12 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueHandle;
-import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Count;
-import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -48,15 +38,14 @@ import net.ixitxachitls.output.commands.Symbol;
  * This is the counted extension for all the entries.
  *
  * @file          Counted.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Counted extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -70,28 +59,12 @@ public class Counted extends Extension<Item>
    * @param       inName the name of the extension
    *
    */
-  public Counted(@Nonnull Item inEntry, @Nonnull String inName)
+  public Counted(Item inEntry, String inName)
   {
     super(inEntry, inName);
 
     init();
   }
-
-  //........................................................................
-  //------------------------------- Counted ------------------------------
-
-  /**
-   * Default constructor.
-   *
-   * @param       inEntry the entry attached to
-   * @param       inTag   the tag name for this instance
-   * @param       inName  the name of the extension
-   *
-   */
-  // public Counted(Item inEntry, String inTag, String inName)
-  // {
-  //   super(inEntry, inTag, inName);
-  // }
 
   //........................................................................
 
@@ -122,73 +95,6 @@ public class Counted extends Extension<Item>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  // {
-  //   if(inDM && "summary".equals(inKey))
-  //   {
-  //     List<Object> commands = new ArrayList<Object>();
-  //     commands.add(new Symbol("\u2736"));
-  //     maybeAddValue(commands, "count", inDM, null, null);
-  //     maybeAddValue(commands, "unit", inDM, " ", null);
-
-  //     return new FormattedValue(new Command(commands), null, "summary");
-  //   }
-
-  //   if("list".equals(inKey))
-  //     return new FormattedValue
-  //       (new Command(m_entry.getNameCommand(inDM),
-  //                    new Count(m_count.get(), m_count.get(),
-  //                              computeValue("unit", inDM)
-  //                              .format(this, inDM, true))), null, "list");
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -229,57 +135,9 @@ public class Counted extends Extension<Item>
 
   //........................................................................
 
-
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //----------------------------- modifyValue ------------------------------
-
-  /**
-    *
-    * Modify the given value with information from the current extension.
-    *
-    * @param       inType    the type of value to modify
-    * @param       inEntry   the entry to modify in
-    * @param       inValue   the value to modify, return in this object
-    * @param       inDynamic a flag denoting if dynamic modifiers should be
-    *                        returned
-    *
-    * @return      the newly computed value (or null if no value to use)
-    *
-    * @undefined   never
-    *
-    * @algorithm   nothing done here
-    *
-    * @derivation  necessary if real modifications are desired
-    *
-    * @example     see Item
-    *
-    * @bugs
-    * @to_do
-    *
-    * @keywords    modify . value
-    *
-    */
-//   public Modifier modifyValue(PropertyKey inType, AbstractEntry inEntry,
-//                               Value inValue, boolean inDynamic)
-//   {
-//     if(inValue == null || !inValue.isDefined())
-//       return null;
-
-//     if(m_count.isDefined() && inDynamic && inType == BaseCounted.UNIT)
-//       if(m_count.get() != 1)
-//         return
-//           new Modifier(Modifier.Type.FIXED,
-//                        new Selection(Global.COUNT_UNITS_PLURAL,
-//                                      ((Selection)inValue).getSelected()));
-
-//     return super.modifyValue(inType, inEntry, inValue, inDynamic);
-//   }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test

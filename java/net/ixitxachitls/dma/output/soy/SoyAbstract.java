@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2002-2007 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fredy 'Mythos' Dobler
  * All rights reserved
  *
  * This file is part of Dungeon Master Assistant.
@@ -23,18 +23,15 @@
 
 package net.ixitxachitls.dma.output.soy;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.Multimap;
 import com.google.template.soy.data.SoyData;
-import com.google.template.soy.data.SoyDataException;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
@@ -43,11 +40,9 @@ import com.google.template.soy.data.restricted.StringData;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Pair;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -56,10 +51,8 @@ import net.ixitxachitls.util.logging.Log;
 /**
  * An abstract soy value.
  *
- *
  * @file          SoyAbstract.java
- *
- * @author        Peter Balsiger
+ * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
 
@@ -161,6 +154,18 @@ public abstract class SoyAbstract extends SoyMapData
 
       return new Undefined(m_name + "." + inName);
     }
+
+    @Override
+    public boolean equals(Object inOther)
+    {
+      return super.equals(inOther);
+    }
+
+    @Override
+    public int hashCode()
+    {
+      return super.hashCode();
+    }
   }
 
   //........................................................................
@@ -170,10 +175,10 @@ public abstract class SoyAbstract extends SoyMapData
   /**
    * Create the abstract soy value.
    *
-   * @param inName  the name of the sou value
+   * @param inName  the name of the soy value
    * @param inEntry the entry in which to evaluate the values
    */
-  public SoyAbstract(String inName, AbstractEntry inEntry)
+  public SoyAbstract(String inName, @Nullable AbstractEntry inEntry)
   {
     m_name = inName;
     m_entry = inEntry;
@@ -223,17 +228,7 @@ public abstract class SoyAbstract extends SoyMapData
     if(inObject instanceof Combined)
       return new SoyCombined((Combined)inObject);
 
-    if(inObject instanceof Combination)
-    {
-      Combination<? extends Value> combination =
-        (Combination<? extends Value>)inObject;
-
-      return new SoyCombination(combination.getName(), combination,
-                                combination.getTopValue(),
-                                combination.getEntry());
-    }
-
-    if(inObject instanceof Collection)
+    if(inObject instanceof List)
     {
       SoyListData list = new SoyListData();
       for(Object element : (List)inObject)

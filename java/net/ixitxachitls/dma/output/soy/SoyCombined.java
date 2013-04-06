@@ -24,9 +24,7 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -40,21 +38,14 @@ import com.google.template.soy.data.restricted.BooleanData;
 import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.BaseNumber;
-import net.ixitxachitls.dma.entries.Entries;
-import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Expression;
-import net.ixitxachitls.dma.values.FormattedText;
-import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -86,11 +77,7 @@ public class SoyCombined extends SoyValue
   /**
    * Create the soy combination value.
    *
-   * @param    inName        the name of the value
-   * @param    inCombination the combination representing the value
-   * @param    inValue       the base value
-   * @param    inEntry       the entry witht the value
-   *
+   * @param    inCombined    the combined value
    */
   public SoyCombined(Combined inCombined)
   {
@@ -195,7 +182,7 @@ public class SoyCombined extends SoyValue
       if("number".equals(inName) && top instanceof BaseNumber)
         return IntegerData.forValue((int)((BaseNumber)top).get());
 
-      if("remark".equals(inName) && top != null)
+      if("remark".equals(inName))
       {
         Remark remark = top.getRemark();
         if (remark != null)

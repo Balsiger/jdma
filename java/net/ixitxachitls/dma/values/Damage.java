@@ -32,7 +32,6 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
 
 //..........................................................................
 
@@ -53,6 +52,7 @@ import net.ixitxachitls.output.commands.Link;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Damage extends Value<Damage>
 {
   //----------------------------------------------------------------- nested
@@ -134,7 +134,6 @@ public class Damage extends Value<Damage>
     /** Convert to a string.
      *
      * @return the name of the value
-     *
      */
     @Override
     public String toString()
@@ -153,7 +152,6 @@ public class Damage extends Value<Damage>
 
   /**
    * Construct the damage object as undefined.
-   *
    */
   public Damage()
   {
@@ -161,12 +159,22 @@ public class Damage extends Value<Damage>
     withTemplate("damage");
   }
 
+  //........................................................................
+  //-------------------------------- Damage --------------------------------
+
+  /**
+   * Create a damage from the given dice.
+   *
+   * @param       inDice the dice for the base damage
+   */
   public Damage(Dice inDice)
   {
     m_base = inDice;
   }
 
+
   //........................................................................
+
 
   //-------------------------------- create --------------------------------
 
@@ -175,7 +183,6 @@ public class Damage extends Value<Damage>
    * that is still undefined.
    *
    * @return      a similar list, but without any contents
-   *
    */
   @Override
   public Damage create()
@@ -345,7 +352,7 @@ public class Damage extends Value<Damage>
 
     // Object command = m_base.format(false);
     // if(m_indexBase != null)
-    //   command = new Link(command, m_indexBase + "damages/" + m_base.getNumber()
+    // command = new Link(command, m_indexBase + "damages/" + m_base.getNumber()
     //                      + "d" + m_base.getDice());
 
     // commands.add(command);
@@ -441,7 +448,7 @@ public class Damage extends Value<Damage>
     {
       m_effect = inReader.read("),").trim().replaceAll("\\s+", " ");
 
-      if(m_effect == null || m_effect.length() == 0)
+      if(m_effect.length() == 0)
       {
         m_effect = null;
 

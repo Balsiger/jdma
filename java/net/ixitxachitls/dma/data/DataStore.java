@@ -26,11 +26,10 @@ package net.ixitxachitls.dma.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedSet;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -47,7 +46,6 @@ import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Maps;
 
 import net.ixitxachitls.util.logging.Log;
 
@@ -69,8 +67,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
-import com.google.appengine.api.datastore.KeyFactory;
-
+@ParametersAreNonnullByDefault
 public class DataStore
 {
   //--------------------------------------------------------- constructor(s)
@@ -95,13 +92,13 @@ public class DataStore
   //-------------------------------------------------------------- variables
 
   /** The access to the datastore. */
-  private @Nonnull DatastoreService m_store;
+  private DatastoreService m_store;
 
   /** The blob store service. */
-  private @Nonnull BlobstoreService m_blobs;
+  private BlobstoreService m_blobs;
 
   /** The image service to serve images. */
-  private @Nonnull ImagesService m_image;
+  private ImagesService m_image;
 
   /** The cache for indexes. */
   private static MemcacheService s_cacheEntity =
@@ -161,7 +158,7 @@ public class DataStore
    * @return      the entity found, if any
    *
    */
-  public @Nullable Entity getEntity(@Nonnull Key inKey)
+  public @Nullable Entity getEntity(Key inKey)
   {
     Entity entity = (Entity)s_cacheEntity.get(inKey);
 
@@ -197,9 +194,7 @@ public class DataStore
    * @return      the entity found, if any
    *
    */
-  public @Nullable Entity getEntity(@Nonnull String inType,
-                                    @Nonnull String inKey,
-                                    @Nonnull String inValue)
+  public @Nullable Entity getEntity(String inType, String inKey, String inValue)
   {
     Entity entity = (Entity)
       s_cacheByValue.get(inKey + "--" + inValue);
@@ -239,7 +234,7 @@ public class DataStore
    * @return   a list with all the entries
    *
    */
-  public Iterable<Entity> getEntities(@Nonnull String inType,
+  public Iterable<Entity> getEntities(String inType,
                                       @Nullable Key inParent,
                                       @Nullable String inSortField,
                                       int inStart, int inSize)
@@ -280,7 +275,7 @@ public class DataStore
    * @return   a list with all the entries
    *
    */
-  public List<Entity> getEntitiesList(@Nonnull String inType,
+  public List<Entity> getEntitiesList(String inType,
                                       @Nullable Key inParent,
                                       @Nullable String inSortField,
                                       int inStart, int inSize)
@@ -321,10 +316,8 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull List<Entity> getEntities(@Nonnull String inType,
-                                           @Nullable Key inParent,
-                                           int inStart, int inSize,
-                                           @Nonnull String ... inFilters)
+  public List<Entity> getEntities(String inType, @Nullable Key inParent,
+                                  int inStart, int inSize, String ... inFilters)
   {
     Log.debug("getting multiple " + inType + " with "
               + Arrays.toString(inFilters));
@@ -383,9 +376,7 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull List<Entity> getIDs(@Nonnull String inType,
-                                      @Nonnull String inKey,
-                                      @Nonnull String inValue)
+  public List<Entity> getIDs(String inType, String inKey, String inValue)
   {
     String key = inType + "--" + inKey + "=" + inValue;
     List<Entity> ids = (List<Entity>)s_cacheIDsByValue.get(key);
@@ -426,9 +417,8 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull List<String> getIDs(@Nonnull String inType,
-                                      @Nullable String inSortField,
-                                      @Nullable Key inParent)
+  public List<String> getIDs(String inType, @Nullable String inSortField,
+                             @Nullable Key inParent)
   {
     List<String> ids = (List<String>)s_cacheIDs.get(inType);
 
@@ -472,7 +462,7 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked") // cache
-  public List<Entity> getRecentEntities(@Nonnull String inType, int inSize,
+  public List<Entity> getRecentEntities(String inType, int inSize,
                                         @Nullable Key inParent)
   {
     String key = inType + (inParent != null ? inParent.toString() : "");
@@ -515,9 +505,9 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked")
-  public List<List<String>> getMultiValues(@Nonnull String inType,
+  public List<List<String>> getMultiValues(String inType,
                                            @Nullable Key inParent,
-                                           @Nonnull String ... inFields)
+                                           String ... inFields)
   {
     List<List<String>> records = (List<List<String>>)s_cacheMultiValues.get
       (inType + ":" + Arrays.toString(inFields));
@@ -566,9 +556,8 @@ public class DataStore
    *
    */
   @SuppressWarnings("unchecked")
-  public SortedSet<String> getValues(@Nonnull String inType,
-                                     @Nullable Key inParent,
-                                     @Nonnull String inField)
+  public SortedSet<String> getValues(String inType, @Nullable Key inParent,
+                                     String inField)
   {
     SortedSet<String> values =
       (SortedSet<String>)s_cacheValues.get(inType + ":" + inField);
@@ -615,7 +604,7 @@ public class DataStore
    * @return    true if removed, false on error
    *
    */
-  public boolean remove(@Nonnull Key inKey)
+  public boolean remove(Key inKey)
   {
     Log.debug("removing entity " + inKey);
 
@@ -651,7 +640,7 @@ public class DataStore
    * @return  true if successfully updated, false if not
    *
    */
-  public boolean update(@Nonnull Entity inEntity)
+  public boolean update(Entity inEntity)
   {
     Log.debug("Storing data for " + inEntity.getKey());
 
@@ -691,7 +680,7 @@ public class DataStore
    * @return   the converted name
    *
    */
-  protected @Nonnull String toPropertyName(@Nonnull String inName)
+  protected String toPropertyName(String inName)
   {
     return inName.replaceAll(" ", "_");
   }
@@ -708,7 +697,7 @@ public class DataStore
    * @return   the converted name
    *
    */
-  protected @Nonnull String fromPropertyName(@Nonnull String inName)
+  protected String fromPropertyName(String inName)
   {
     return inName.replaceAll("_", " ");
   }

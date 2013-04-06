@@ -47,13 +47,13 @@ import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.output.ListPrint;
+import net.ixitxachitls.dma.output.Print;
+import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.ModifiedNumber;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
@@ -368,6 +368,8 @@ public abstract class ValueGroup implements Changeable
 
   /**
    * Get the key uniqueliy identifying this entry.
+   *
+   * @param    <T> the type of entry getting the key for
    *
    * @return   the key for the entry
    *
@@ -781,7 +783,7 @@ public abstract class ValueGroup implements Changeable
    * Add current modifiers to the given map.
    *
    * @param       inName        the name of the value to modify
-   * @param       ioModifers    the map of modifiers
+   * @param       inModifiers   the map of modifiers
    *
    */
   @Deprecated
@@ -809,12 +811,11 @@ public abstract class ValueGroup implements Changeable
   //------------------------- collectContributions -------------------------
 
   /**
+   * Collect contributions. To be deleted
    *
+   * @param   inName the name of the value to collect
    *
-   * @param
-   *
-   * @return
-   *
+   * @return  the list of collected contributions
    */
   @Deprecated
   public List<Contribution<? extends Value<?>>>
@@ -854,6 +855,7 @@ public abstract class ValueGroup implements Changeable
    *
    * @param   inName     the name of the value to collect
    * @param   ioCombined the combined value to collect into (can be changed)
+   * @param   <T>        the type of value being collected
    *
    */
   protected <T extends Value<T>> void collect(String inName,
@@ -1356,8 +1358,8 @@ public abstract class ValueGroup implements Changeable
   /**
    * Compute the modified number for the name value.
    *
-   * @param       the name of the value to compute
-   * @param       the type of modifiers to ignore for the value
+   * @param       inName    the name of the value to compute
+   * @param       inIgnore  the type of modifiers to ignore for the value
    *
    * @return      the modified number for the value
    *
@@ -1451,7 +1453,7 @@ public abstract class ValueGroup implements Changeable
     public static class TestGroup extends AbstractEntry
     {
       /** The change state. */
-      protected boolean m_changed = false;
+      protected boolean m_testChanged = false;
 
       /** A simple value. */
       @Key("simple value")
@@ -1481,10 +1483,11 @@ public abstract class ValueGroup implements Changeable
       @Override
       public void changed(boolean inState)
       {
-        m_changed = inState;
+        m_testChanged = inState;
       }
 
-      /** Get the id of the group.
+      /**
+       * Get the id of the group.
        *
        * @return the id
        */
@@ -1495,7 +1498,8 @@ public abstract class ValueGroup implements Changeable
         return "Test-ID";
       }
 
-      /** Get the name of the group.
+      /**
+       * Get the name of the group.
        *
        * @return the name
        */
@@ -1505,8 +1509,10 @@ public abstract class ValueGroup implements Changeable
         return "Test-Name";
       }
 
-      /** Get the type of the group.
+      /**
+       * Get the type of the group.
        *
+       * @param  <T> the type of entry
        * @return the type
        */
       @SuppressWarnings("unchecked") // unchecked creation
@@ -1627,9 +1633,9 @@ public abstract class ValueGroup implements Changeable
       assertFalse("base", group.isBase());
       assertEquals("value", "guru", group.getValue("simple value").toString());
       assertNull("value", group.getValue("invalid"));
-      assertTrue("changed", group.m_changed);
+      assertTrue("changed", group.m_testChanged);
       group.changed(false);
-      assertFalse("changed", group.m_changed);
+      assertFalse("changed", group.m_testChanged);
     }
 
     //......................................................................

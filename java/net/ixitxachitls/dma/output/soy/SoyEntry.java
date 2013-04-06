@@ -24,34 +24,24 @@
 package net.ixitxachitls.dma.output.soy;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.Multimap;
 import com.google.template.soy.data.SoyData;
-import com.google.template.soy.data.SoyDataException;
 import com.google.template.soy.data.SoyListData;
 import com.google.template.soy.data.SoyMapData;
 import com.google.template.soy.data.restricted.BooleanData;
-import com.google.template.soy.data.restricted.IntegerData;
 import com.google.template.soy.data.restricted.StringData;
-import com.google.template.soy.data.restricted.UndefinedData;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.values.Combination;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Classes;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.errors.BaseError;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 

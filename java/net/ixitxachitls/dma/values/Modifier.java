@@ -772,8 +772,9 @@ public class Modifier extends Value<Modifier>
    * @return      the new value
    *
    */
-  public Modifier as(int inValue, Type inType, Condition<?> inCondition,
-                     Modifier inNext)
+  public Modifier as(int inValue, Type inType,
+                     @Nullable Condition<?> inCondition,
+                     @Nullable Modifier inNext)
   {
     Modifier modifier = create();
 

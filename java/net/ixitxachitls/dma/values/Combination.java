@@ -29,8 +29,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.TreeSet;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -65,6 +65,7 @@ import net.ixitxachitls.output.commands.Linebreak;
 //__________________________________________________________________________
 
 @Deprecated
+@ParametersAreNonnullByDefault
 public class Combination<V extends Value>
 {
   //--------------------------------------------------------- constructor(s)
@@ -78,7 +79,7 @@ public class Combination<V extends Value>
    * @param  inName  the name of the value to combine
    *
    */
-  public Combination(@Nonnull ValueGroup inEntry, @Nonnull String inName)
+  public Combination(ValueGroup inEntry, String inName)
   {
     m_entry = inEntry;
     m_name = inName;
@@ -94,7 +95,7 @@ public class Combination<V extends Value>
    * @return      this value for chaining
    *
    */
-  public @Nonnull Combination withIgnoreTop()
+  public Combination withIgnoreTop()
   {
     m_ignoreTop = true;
 
@@ -108,10 +109,10 @@ public class Combination<V extends Value>
   //-------------------------------------------------------------- variables
 
   /** The entry to extract values from. */
-  private @Nonnull ValueGroup m_entry;
+  private ValueGroup m_entry;
 
   /** The name of the value to combine. */
-  private @Nonnull String m_name;
+  private String m_name;
 
   /** Flag if the top level value should be ignored. */
   private boolean m_ignoreTop = false;
@@ -147,7 +148,7 @@ public class Combination<V extends Value>
    * @return      the name of the combined value
    *
    */
-  public @Nonnull String getName()
+  public String getName()
   {
     return m_name;
   }
@@ -192,7 +193,7 @@ public class Combination<V extends Value>
    * @return      a list with all the values
    *
    */
-  public @Nonnull Collection<V> values()
+  public Collection<V> values()
   {
     combine();
     return Collections.unmodifiableCollection(m_values.keys());
@@ -223,7 +224,7 @@ public class Combination<V extends Value>
    * @return      a list with all the expressions
    *
    */
-  public @Nonnull Collection<Expression> expressions()
+  public Collection<Expression> expressions()
   {
     combine();
     return Collections.unmodifiableCollection(m_expressions.keys());
@@ -262,7 +263,7 @@ public class Combination<V extends Value>
       combine();
 
       for(V value : m_values.keySet())
-        for(String name : m_values.get(value))
+        for(int i = 0; i < m_values.size(); i++)
         {
           if(m_total == null)
             m_total = value;
@@ -342,7 +343,7 @@ public class Combination<V extends Value>
    * @return      the computed summary
    *
    */
-  public @Nonnull Command summary()
+  public Command summary()
   {
     combine();
 
@@ -452,8 +453,7 @@ public class Combination<V extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nullable V getAnyValue(@Nonnull ValueGroup inEntry,
-                                 @Nonnull String inName)
+  public @Nullable V getAnyValue(ValueGroup inEntry, String inName)
   {
     V value = (V)inEntry.getValue(m_name);
     if(value != null)
@@ -482,7 +482,7 @@ public class Combination<V extends Value>
    * @return      the string representation
    *
    */
-  public @Nonnull String toString()
+  public String toString()
   {
     combine();
     return "combination of " + m_name + " in " + m_entry.getName() + ": "
@@ -502,7 +502,7 @@ public class Combination<V extends Value>
    *
    */
   @SuppressWarnings("unchecked")
-  private @Nonnull String toString(Multimap inMap)
+  private String toString(Multimap inMap)
   {
     StringBuilder builder = new StringBuilder();
 

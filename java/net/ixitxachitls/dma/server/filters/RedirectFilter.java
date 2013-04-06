@@ -25,7 +25,8 @@ package net.ixitxachitls.dma.server.filters;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -48,15 +49,14 @@ import net.ixitxachitls.util.logging.Log;
  * The filter to redirect paths of a given pattern to a new path.
  *
  * @file          RedirectFilter.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class RedirectFilter implements Filter
 {
   //--------------------------------------------------------- constructor(s)
@@ -65,7 +65,6 @@ public abstract class RedirectFilter implements Filter
 
   /**
    * Create the filter.
-   *
    */
   public RedirectFilter()
   {
@@ -80,10 +79,9 @@ public abstract class RedirectFilter implements Filter
    * Initialize the filter.
    *
    * @param       inConfig the filter configuration
-   *
    */
   @Override
-  public void init(@Nonnull FilterConfig inConfig)
+  public void init(FilterConfig inConfig)
   {
     m_config = inConfig;
   }
@@ -108,7 +106,7 @@ public abstract class RedirectFilter implements Filter
   //-------------------------------------------------------------- variables
 
   /** The filter configuration. */
-  private @Nonnull FilterConfig m_config;
+  private @Nullable FilterConfig m_config;
 
   //........................................................................
 
@@ -131,9 +129,8 @@ public abstract class RedirectFilter implements Filter
     *
     */
   @Override
-  public void doFilter(@Nonnull ServletRequest inRequest,
-                       @Nonnull ServletResponse inResponse,
-                       @Nonnull FilterChain inChain)
+  public void doFilter(ServletRequest inRequest, ServletResponse inResponse,
+                       FilterChain inChain)
     throws ServletException, IOException
   {
     if(!(inRequest instanceof HttpServletRequest))
@@ -161,8 +158,7 @@ public abstract class RedirectFilter implements Filter
    * @return   the path to redirect to
    *
    */
-  public abstract @Nonnull String
-    computeRedirect(@Nonnull HttpServletRequest inRequest);
+  public abstract String computeRedirect(HttpServletRequest inRequest);
 
   //........................................................................
 
@@ -190,8 +186,8 @@ public abstract class RedirectFilter implements Filter
     {
       RedirectFilter filter = new RedirectFilter() {
         @Override
-        public @Nonnull String
-            computeRedirect(@Nonnull HttpServletRequest inRequest)
+        public String
+            computeRedirect(HttpServletRequest inRequest)
           {
             return "redirect";
           }

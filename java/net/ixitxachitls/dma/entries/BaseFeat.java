@@ -23,10 +23,8 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -42,7 +40,6 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 
@@ -62,6 +59,7 @@ import net.ixitxachitls.input.ParseReader;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseFeat extends BaseEntry
 {
   //----------------------------------------------------------------- nested
@@ -90,14 +88,14 @@ public class BaseFeat extends BaseEntry
     FIGHTER("Fighter");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName     the name of the value
      *
      */
-    private Type(@Nonnull String inName)
+    private Type(String inName)
     {
       m_name = constant("feat.type", inName);
     }
@@ -108,7 +106,7 @@ public class BaseFeat extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -119,7 +117,7 @@ public class BaseFeat extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -151,7 +149,7 @@ public class BaseFeat extends BaseEntry
     * @param       inName the name of the base item
     *
     */
-  public BaseFeat(@Nonnull String inName)
+  public BaseFeat(String inName)
   {
     super(inName, TYPE);
   }
@@ -546,7 +544,10 @@ public class BaseFeat extends BaseEntry
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
-    return inUser != null && inUser.hasAccess(BaseCharacter.Group.DM);
+    if(inUser == null)
+      return false;
+
+    return inUser.hasAccess(BaseCharacter.Group.DM);
   }
 
   //........................................................................
@@ -574,11 +575,10 @@ public class BaseFeat extends BaseEntry
   /**
    * Add contributions for this entry to the given list.
    *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions to add to
-   *
+   * @param       inName          the name of the value to collect
+   * @param       ioCombined      the combined value to collect into
+   * @param       inParameters    parameters to adjust values
    */
-
   public void collect(String inName, Combined ioCombined,
                       Parameters inParameters)
   {

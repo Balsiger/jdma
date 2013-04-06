@@ -12,33 +12,88 @@
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.util\.resources\.TemplateResource\$Test.*" />
+    <Class name="~.*\$Test.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.util\.resources\.JarResource\$Test.*" />
+    <Class name="~net\.ixitxachitls\.output\.Document\.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.util\.resources\.FileResource\$Test.*" />
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.SoyServlet\.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.util\.logging\.FileLogger\$Test.*" />
+    <Class name="~net\.ixitxachitls\.input\.ParseReader\.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.util\.logging\.EventLogger\$Test.*" />
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.JSONServlet\.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.util\.logging\.ASCIILogger\$Test.*" />
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobUploadServlet\.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobImportServlet\.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AdminServlet\.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.ActionServlet\.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.values\.conditions\.Condition\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.entries\.extensions\.(Counted|Contents)\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.entries\.(Product|Monster|Item|Character|CampaignEntry)\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.entries\.Monster\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.entries\.extensions\.(Contents|Composite)\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.DMARequest\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.SaveActionServlet\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+  </Match>
+
+  <Match>
+    <Class name="~net\.ixitxachitls\..*\$Test\.*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
 
   <Match>
@@ -57,12 +112,12 @@
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.output\.actions\.html\.Table.*" />
+    <Class name="~net\.ixitxachitls\.output\.actions\.itext\.Table.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.output\.actions\.itext\.Table.*" />
+    <Class name="~net\.ixitxachitls\.output\.actions\.html\.Table.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 

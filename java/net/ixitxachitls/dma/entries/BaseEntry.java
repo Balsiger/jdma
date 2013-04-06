@@ -500,10 +500,9 @@ public class BaseEntry extends AbstractEntry
   /**
    * Get a summary for the entry, using the given parameters.
    *
-   * @param       inParameters
+   * @param       inParameters  the parameters to parametrize the summary
    *
    * @return      the string with the summary
-   *
    */
   public @Nonnull String getSummary(@Nullable Parameters inParameters)
   {

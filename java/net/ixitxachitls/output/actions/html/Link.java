@@ -176,7 +176,7 @@ public void execute(@Nonnull Document inDocument,
       String dir = Files.path(name);
       name = dir + Files.encodeName(name.substring(dir.length()));
     }
-    else if(m_extension != null)
+    else
     {
       name += m_extension;
     }

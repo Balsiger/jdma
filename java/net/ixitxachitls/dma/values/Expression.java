@@ -86,9 +86,6 @@ public abstract class Expression implements Comparable<Expression>
     /** Flag if class values were already computed or not. */
     private boolean m_class = false;
 
-    /** Parameters, if any. */
-    private Parameters m_parameters = null;
-
     /**
      * Convert to a string.
      *
@@ -98,8 +95,7 @@ public abstract class Expression implements Comparable<Expression>
     public String toString()
     {
       return "magic armor " + m_magicArmor + ", magic weapon " + m_magicWeapon
-        + ", magic ammunition " + m_magicAmmunition
-        + ", parameters " + m_parameters;
+        + ", magic ammunition " + m_magicAmmunition;
     }
   }
 

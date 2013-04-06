@@ -94,7 +94,8 @@ public class Weight extends Units<Weight>
    * @param       inGrams number of metric grams
    *
    */
-  public Weight(Rational inTons, Rational inKilos, Rational inGrams)
+  public Weight(@Nullable Rational inTons, @Nullable Rational inKilos,
+                @Nullable Rational inGrams)
   {
     super(new Rational [] { inTons, inKilos, inGrams }, s_sets, s_sets[1], 5);
 

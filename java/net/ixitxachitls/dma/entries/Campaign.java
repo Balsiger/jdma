@@ -524,11 +524,11 @@ public class Campaign extends CampaignEntry<BaseCampaign>
 
     if("items".equals(inKey))
     {
-      List<Character> characters =
-        DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
+      // List<Character> characters =
+      //   DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
       List<Multiple> list = new ArrayList<Multiple>();
 
-      Map<String, Item> owned = new HashMap<String, Item>();
+      // Map<String, Item> owned = new HashMap<String, Item>();
       // for(Character character : characters)
       // {
       //   Map<String, Item> contained = character.containedItems(true);
@@ -568,7 +568,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
       //                                    false),
       //               new Multiple.Element(new Name(getPath() + "/"
       //                                             + Item.TYPE.getLink() + "/"
-      //                                             + item.getName()), false)));
+      //                                           + item.getName()), false)));
       //   }
 
       //   if(items.size() < 100 || list.size() > 5)
@@ -673,7 +673,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
     //         commands.add(", ");
 
     //       commands.add(new Link(item.getNameCommand(inDM), getPath() + "/"
-    //                             + Item.TYPE.getLink() + "/" + item.getName()));
+    //                           + Item.TYPE.getLink() + "/" + item.getName()));
     //     }
 
     //     if(items.size() < 100)

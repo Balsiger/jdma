@@ -41,7 +41,6 @@ import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.Entry;
 import net.ixitxachitls.dma.entries.ValueGroup;
-import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.Variables;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Value;
@@ -187,6 +186,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   /**
    * Get the type of the entry.
    *
+   * @param       <T> the type of entry to get the type for
    * @return      the requested name
    *
    */

@@ -300,20 +300,19 @@ public class Table extends BaseCommand
       else
         format.append(":" + Buffer.Alignment.left.getShort());
 
-      if(inDelimiters != null)
-        if(inDelimiters.length > (i * 2))
+      if(inDelimiters.length > (i * 2))
+      {
+        format.append(",");
+        if(inDelimiters[i * 2] != null)
+          format.append(inDelimiters[i * 2]);
+
+        if(inDelimiters.length > (i * 2 + 1))
         {
           format.append(",");
-          if(inDelimiters[i * 2] != null)
-            format.append(inDelimiters[i * 2]);
-
-          if(inDelimiters.length > (i * 2 + 1))
-          {
-            format.append(",");
-            if(inDelimiters[i * 2 + 1] != null)
-              format.append(inDelimiters[i * 2 + 1]);
-          }
+          if(inDelimiters[i * 2 + 1] != null)
+            format.append(inDelimiters[i * 2 + 1]);
         }
+      }
 
       if(i + 1 < inLengths.length)
         format.append(";");

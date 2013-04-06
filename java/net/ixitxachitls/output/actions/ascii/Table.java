@@ -24,7 +24,6 @@
 package net.ixitxachitls.output.actions.ascii;
 
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -369,9 +368,6 @@ public class Table extends Action
   /** The delimiter for the table in-betweens. */
   protected static final char s_part =
     Config.get("resource:commands/table.part", ',');
-
-  /** The stack with all the column information. */
-  protected final Stack m_columns = new Stack();
 
   //........................................................................
 

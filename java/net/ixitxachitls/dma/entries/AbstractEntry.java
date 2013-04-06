@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -55,7 +54,6 @@ import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.BaseText;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Comment;
 import net.ixitxachitls.dma.values.Contribution;
@@ -65,7 +63,6 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
@@ -222,6 +219,7 @@ public class AbstractEntry extends ValueGroup
      *
      * @param    inPaths the paths pieces
      * @param    inIndex the index to start from with computation (descaending)
+     * @param    <T>     the type of entry to create the key for
      *
      * @return   the key for the path part or null if not found
      *
@@ -549,6 +547,8 @@ public class AbstractEntry extends ValueGroup
   /**
    * Get the key uniqueliy identifying this entry.
    *
+   * @param    <T> the type of entry to get the key for
+   *
    * @return   the key for the entry
    *
    */
@@ -750,6 +750,8 @@ public class AbstractEntry extends ValueGroup
 
   /**
    * Get the type of the entry.
+   *
+   * @param       <T>  the type of entry to get the type for
    *
    * @return      the requested name
    *
@@ -1152,12 +1154,9 @@ public class AbstractEntry extends ValueGroup
   //--------------------------------- dma ----------------------------------
 
   /**
+   * Compute and return the dma representation of the entry.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @return  the entry dma formatted
    */
   public FormattedText dmaValues()
   {
@@ -1169,11 +1168,12 @@ public class AbstractEntry extends ValueGroup
   //------------------------------- collect --------------------------------
 
   /**
+   * Collect the name value.
    *
+   * @param   inName the name of the value to collect
+   * @param   <T>    the type of value to collect
    *
-   * @param
-   *
-   * @return
+   * @return  the combined value collected.
    *
    */
   public <T extends Value<T>> Combined<T> collect(String inName)
@@ -1890,14 +1890,13 @@ public class AbstractEntry extends ValueGroup
    * @param       inType       the type of the id
    * @param       inParentID   the id of parent entry, if any
    * @param       inParentType the type of the parent entry, if any
-   *
-   * @param       <T> the type of entries to create for
+   * @param       <T>          the type of entries to create for
    *
    * @return      the created key
    *
    */
   @SuppressWarnings("unchecked")
-  public static <T extends AbstractEntry, U extends AbstractEntry>
+  public static <T extends AbstractEntry>
     EntryKey<T> createKey
     (String inID, AbstractType<T> inType,
      @Nullable String inParentID,
@@ -1941,7 +1940,7 @@ public class AbstractEntry extends ValueGroup
    * Add current modifiers to the given map.
    *
    * @param       inName        the name of the value to modify
-   * @param       ioModifers    the map of modifiers
+   * @param       ioModifiers   the map of modifiers
    *
    */
   @Override
@@ -2920,11 +2919,10 @@ public class AbstractEntry extends ValueGroup
    * Compute the expressions embedded in the given string and replace all
    * possible variables.
    *
-   * @param       inText   the text to replace in
-   * @param       inValues a map with all the values to replace.
+   * @param       inText       the text to replace in
+   * @param       inParameters the parameters for parametrizing expressions
    *
    * @return      the computed string
-   *
    */
   public String computeExpressions(String inText,
                                    @Nullable Parameters inParameters)
@@ -2960,6 +2958,13 @@ public class AbstractEntry extends ValueGroup
     return result.toString();
   }
 
+  /**
+   * Evaluate the given expression.
+   *
+   * @param  inExpression the expression to evaluate
+   *
+   * @return the evaluated expression
+   */
   private String computeExpression(String inExpression)
   {
     inExpression = inExpression.replaceAll("[ \t\n\f\r]", "");
@@ -2970,6 +2975,14 @@ public class AbstractEntry extends ValueGroup
     return computeExpression(inExpression, tokens);
   }
 
+  /**
+   * Compute expression from the given tokens.
+   *
+   * @param  inExpression the expression to compute
+   * @param  inTokens     tokens following the expression
+   *
+   * @return the evaluated expression
+   */
   private String computeExpression(String inExpression,
                                    StringTokenizer inTokens)
   {
@@ -3042,7 +3055,8 @@ public class AbstractEntry extends ValueGroup
       ranges.add(current);
       Collections.reverse(ranges);
 
-      for(String range : ranges) {
+      for(String range : ranges)
+      {
         String []parts = range.split(":\\s*");
         if(parts.length != 2)
           continue;
@@ -3090,7 +3104,8 @@ public class AbstractEntry extends ValueGroup
       }
       options.add(current);
 
-      for(String option : options) {
+      for(String option : options)
+      {
         String []parts = option.split(":\\s*");
         if(parts.length != 2)
           continue;

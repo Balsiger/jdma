@@ -23,21 +23,13 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -46,15 +38,12 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.Document;
-import net.ixitxachitls.util.Grouping;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -74,6 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseSpell extends BaseEntry
 {
   //----------------------------------------------------------------- nested
@@ -111,10 +101,10 @@ public class BaseSpell extends BaseEntry
     UNIVERSAL("Universal", "Univ");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
@@ -122,7 +112,7 @@ public class BaseSpell extends BaseEntry
      * @param inShort      the short name of the value
      *
      */
-    private School(@Nonnull String inName, @Nonnull String inShort)
+    private School(String inName, String inShort)
     {
       m_name = constant("school.name", inName);
       m_short = constant("school.short", inShort);
@@ -133,7 +123,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -143,7 +133,7 @@ public class BaseSpell extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -153,7 +143,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -204,6 +194,7 @@ public class BaseSpell extends BaseEntry
     /** Glamer. */
     GLAMER("Glamer"),
 
+    /** A figment. */
     FIGMENT_GLAMER("Figment, Glamer"),
 
     /** Pattern. */
@@ -216,17 +207,14 @@ public class BaseSpell extends BaseEntry
     SHADOW("Shadow");
 
     /** The value's name. */
-    private @Nonnull String m_name;
-
-    /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private Subschool(@Nonnull String inName)
+    private Subschool(String inName)
     {
       m_name = constant("subschool.name", inName);
     }
@@ -236,7 +224,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -246,7 +234,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -325,17 +313,17 @@ public class BaseSpell extends BaseEntry
     SEE_TEXT("See Text");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private Descriptor(@Nonnull String inName)
+    private Descriptor(String inName)
     {
       m_name = constant("descriptor.name", inName);
     }
@@ -345,7 +333,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -355,7 +343,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -461,10 +449,10 @@ public class BaseSpell extends BaseEntry
     Water("Water", "Water");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
@@ -472,7 +460,7 @@ public class BaseSpell extends BaseEntry
      * @param inShort      the short name of the value
      *
      */
-    private SpellClass(@Nonnull String inName, @Nonnull String inShort)
+    private SpellClass(String inName, String inShort)
     {
       m_name = constant("spellclass.name", inName);
       m_short = constant("spellclass.short", inShort);
@@ -483,7 +471,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -493,7 +481,7 @@ public class BaseSpell extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -503,7 +491,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -540,10 +528,10 @@ public class BaseSpell extends BaseEntry
     EXPERIENCE_POINTS("Experience Points", "XP");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The value's short name. */
-    private @Nonnull String m_short;
+    private String m_short;
 
     /** Create the name.
      *
@@ -551,7 +539,7 @@ public class BaseSpell extends BaseEntry
      * @param inShort      the short name of the value
      *
      */
-    private Components(@Nonnull String inName, @Nonnull String inShort)
+    private Components(String inName, String inShort)
     {
       m_name = constant("school.name", inName);
       m_short = constant("school.short", inShort);
@@ -562,7 +550,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -572,7 +560,7 @@ public class BaseSpell extends BaseEntry
      * @return the short name of the value
      *
      */
-    public @Nonnull String getShort()
+    public String getShort()
     {
       return m_short;
     }
@@ -582,7 +570,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -637,14 +625,14 @@ public class BaseSpell extends BaseEntry
     ONE_MILE_PER_LEVEL("1 mile/level");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private Range(@Nonnull String inName)
+    private Range(String inName)
     {
       m_name = constant("range.name", inName);
     }
@@ -654,7 +642,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -664,7 +652,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -683,14 +671,14 @@ public class BaseSpell extends BaseEntry
     SPREAD("Spread");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private Effect(@Nonnull String inName)
+    private Effect(String inName)
     {
       m_name = constant("effect.name", inName);
     }
@@ -700,7 +688,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -710,7 +698,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -720,7 +708,7 @@ public class BaseSpell extends BaseEntry
   //----- spell durations --------------------------------------------------
 
   /** The possible spell durations (cf. PHB 176). */
-  public static final String []SPELL_DURATIONS =
+  static final String []SPELL_DURATIONS =
     Config.get("/game/spell.durations", new String []
       {
         "Instantaneous or concentration (up to 1 round/level)",
@@ -787,7 +775,7 @@ public class BaseSpell extends BaseEntry
   //----- levels -----------------------------------------------------------
 
   /** The possible level measurements. */
-  public static final String []LEVELS =
+  static final String []LEVELS =
     Config.get("/game/levels", new String []
       {
         "level",
@@ -799,7 +787,7 @@ public class BaseSpell extends BaseEntry
   //----- spell durations --------------------------------------------------
 
   /** The possible spell duration. */
-  public static final String []SPELL_DURATION_FLAGS =
+  static final String []SPELL_DURATION_FLAGS =
     Config.get("/game/spell.duration.flags", new String []
       {
         "(D)",
@@ -809,7 +797,7 @@ public class BaseSpell extends BaseEntry
   //----- saving throws ----------------------------------------------------
 
   /** The possible spell saving throws (PHB p. 176/177). */
-  public static final String []SAVING_THROWS =
+  static final String []SAVING_THROWS =
     Config.get("/game/saving.throws", new String []
       {
         "Negates",
@@ -868,7 +856,7 @@ public class BaseSpell extends BaseEntry
   //----- spell resistance -------------------------------------------------
 
   /** The possible spell resistances. */
-  public static final String []SPELL_RESISTANCES =
+  static final String []SPELL_RESISTANCES =
     Config.get("/game/spell.resistance", new String []
       {
         "No and Yes (Object)",
@@ -915,7 +903,7 @@ public class BaseSpell extends BaseEntry
    *
    * @param       inName the name of the base item
    */
-  public BaseSpell(@Nonnull String inName)
+  public BaseSpell(String inName)
   {
     super(inName, TYPE);
   }
@@ -1177,7 +1165,7 @@ public class BaseSpell extends BaseEntry
    * @return      the string with the summary
    *
    */
-  public @Nonnull String getSummary(@Nonnull String ... inParameters)
+  public String getSummary(String ... inParameters)
   {
     SpellClass kind = null;
     int level = 1;
@@ -1233,7 +1221,7 @@ public class BaseSpell extends BaseEntry
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull String getSummary(@Nullable SpellClass inKind, int inLevel,
+  public String getSummary(@Nullable SpellClass inKind, int inLevel,
                                     int inDC)
   {
     String summary = m_summary.get();
@@ -1268,12 +1256,11 @@ public class BaseSpell extends BaseEntry
   /**
    * Get a summary for the entry, using the given parameters.
    *
-   * @param       inParameters
+   * @param       inParameters  the parameters to modify the summary
    *
    * @return      the string with the summary
-   *
    */
-  public @Nonnull String getSummary(@Nullable Parameters inParameters)
+  public String getSummary(@Nullable Parameters inParameters)
   {
     String summary = m_summary.get();
 
@@ -1330,8 +1317,8 @@ public class BaseSpell extends BaseEntry
     for(Multiple material : m_material)
       values.put(Index.Path.MATERIALS, material.group());
 
-    for(EnumSelection<Subschool> subschool :
-          (ValueList<EnumSelection<Subschool>>)m_school.get(1))
+    for(EnumSelection<Subschool> subschool
+          : (ValueList<EnumSelection<Subschool>>)m_school.get(1))
       values.put(Index.Path.SUBSCHOOLS, subschool.group());
 
     return values;
@@ -1350,8 +1337,11 @@ public class BaseSpell extends BaseEntry
    *
    */
   @Override
-  public boolean isDM(@Nonnull BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
+    if(inUser == null)
+      return false;
+
     return inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
 

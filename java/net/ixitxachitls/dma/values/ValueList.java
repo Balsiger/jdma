@@ -30,8 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -62,6 +62,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class ValueList<T extends Value>
   extends Value<ValueList<T>> implements Iterable<T>
 {
@@ -77,7 +78,7 @@ public class ValueList<T extends Value>
    *                     are to be stored in the list
    *
    */
-  public ValueList(@Nonnull T inType)
+  public ValueList(T inType)
   {
     this(inType, s_delimiter);
   }
@@ -94,7 +95,7 @@ public class ValueList<T extends Value>
    * @param       inDelimiter the delimiter used between the elements
    *
    */
-  public ValueList(@Nonnull T inType, @Nonnull String inDelimiter)
+  public ValueList(T inType, String inDelimiter)
   {
     m_type      = inType;
     m_delimiter = inDelimiter;
@@ -114,7 +115,7 @@ public class ValueList<T extends Value>
    * @param       inValues the beginning values of the list
    *
    */
-  public ValueList(@Nonnull java.util.List<? extends T> inValues)
+  public ValueList(java.util.List<? extends T> inValues)
   {
     this(inValues, s_delimiter);
   }
@@ -129,8 +130,7 @@ public class ValueList<T extends Value>
    * @param       inDelimiter the delimiter used between the elements
    *
    */
-  public ValueList(@Nonnull java.util.List<? extends T> inValues,
-                   @Nonnull String inDelimiter)
+  public ValueList(java.util.List<? extends T> inValues, String inDelimiter)
   {
     if(inValues.size() <= 0)
       throw new IllegalArgumentException("at least one value must be given");
@@ -156,7 +156,7 @@ public class ValueList<T extends Value>
    * @param       inValues the beginning values of the list
    *
    */
-  public ValueList(@Nonnull T ... inValues)
+  public ValueList(T ... inValues)
   {
     this(s_delimiter, inValues);
   }
@@ -173,7 +173,7 @@ public class ValueList<T extends Value>
    * @undefined   IllegalArgumentException if not types are given
    *
    */
-  public ValueList(@Nonnull String inDelimiter, T ... inValues)
+  public ValueList(String inDelimiter, T ... inValues)
   {
     if(inValues.length <= 0)
       throw new IllegalArgumentException("at least one value must be given");
@@ -203,7 +203,7 @@ public class ValueList<T extends Value>
    */
   @Override
   @SuppressWarnings("unchecked") // casting result
-  public @Nonnull ValueList<T> create()
+  public ValueList<T> create()
   {
     // the value is added to the list if it is defined !
     ValueList result;
@@ -223,23 +223,23 @@ public class ValueList<T extends Value>
 
   /** The place holder type value denoting what kind of values are to be
    * stored. */
-  protected @Nonnull T m_type;
+  protected T m_type;
 
   /** The values themselves. */
   protected @Nullable ArrayList<T> m_values = null;
 
   /** The delimiter to use between the elements. */
-  protected @Nonnull String m_delimiter = s_delimiter;
+  protected String m_delimiter = s_delimiter;
 
   /** The joiner to join the elements. */
   protected Joiner m_joiner;
 
   /** The standard delimiter to use. */
-  protected static final @Nonnull String s_delimiter =
+  protected static final String s_delimiter =
     Config.get("resource:values/list.delimiter", ",\n");
 
   /** The joiner for editing values. */
-  protected static final @Nonnull Joiner s_editJoiner =
+  protected static final Joiner s_editJoiner =
     Joiner.on(Config.get("resource:entries/edit.multiple.delimiter", "#|"));
 
   //........................................................................
@@ -255,7 +255,7 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-  public @Nonnull String getEditValue()
+  public String getEditValue()
   {
     List<String> result = new ArrayList<String>();
 
@@ -349,34 +349,11 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     // we know this is defined
     return m_joiner.join(m_values);
   }
-
-  //........................................................................
-  //------------------------------- doPrint --------------------------------
-
-  /**
-   * Generate a string representation of the value for printing.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return  the printed value as a string.
-   *
-   */
-  // protected @Nonnull String doPrint(@Nonnull AbstractEntry inEntry,
-  //                                   @Nonnull SoyRenderer inRenderer)
-  // {
-  //   List<String> printed = new ArrayList<String>();
-  //   if(m_values != null)
-  //     for(T element : m_values)
-  //       printed.add(element.print(inEntry, inRenderer));
-
-  //   return m_joiner.join(printed);
-  // }
 
   //........................................................................
 
@@ -404,7 +381,7 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-  protected @Nonnull Command doFormat()
+  protected Command doFormat()
   {
     ArrayList<Object> commands = new ArrayList<Object>();
 
@@ -449,7 +426,7 @@ public class ValueList<T extends Value>
    * @return      the delimiter between items
    *
    */
-  public @Nonnull String getDelimiter()
+  public String getDelimiter()
   {
     return m_delimiter;
   }
@@ -485,7 +462,7 @@ public class ValueList<T extends Value>
    * @return    the newly created value list
    *
    */
-  public @Nonnull ValueList<T> as(@Nonnull List<T> inValues)
+  public ValueList<T> as(List<T> inValues)
   {
     ValueList<T> result = create();
 
@@ -509,7 +486,7 @@ public class ValueList<T extends Value>
    * @return    the newly created value list
    *
    */
-  public @Nonnull ValueList<T> asAppended(@Nonnull T ... inValues)
+  public ValueList<T> asAppended(T ... inValues)
   {
     if(inValues.length == 0)
       return this;
@@ -538,7 +515,7 @@ public class ValueList<T extends Value>
    *
    */
   @Deprecated
-  protected boolean append(@Nonnull T inValue)
+  protected boolean append(T inValue)
   {
     if(!inValue.isDefined())
       return false;
@@ -563,7 +540,7 @@ public class ValueList<T extends Value>
    *
    */
   @Deprecated
-  protected boolean insert(int inIndex, @Nonnull T inValue)
+  protected boolean insert(int inIndex, T inValue)
   {
     if(!inValue.isDefined())
       return false;
@@ -586,7 +563,7 @@ public class ValueList<T extends Value>
    *
    */
   @Deprecated
-  protected boolean remove(@Nonnull T inValue)
+  protected boolean remove(T inValue)
   {
     return m_values.remove(inValue);
   }
@@ -676,7 +653,7 @@ public class ValueList<T extends Value>
    * @return      the added values
    *
    */
-  public @Nonnull ValueList<T> add(@Nonnull ValueList<T> inValue)
+  public ValueList<T> add(ValueList<T> inValue)
   {
     List<T> values = new ArrayList<T>();
     Set<String> added = new HashSet<String>();
@@ -715,7 +692,7 @@ public class ValueList<T extends Value>
    * @return      the result of the addition
    *
    */
-  // public @Nonnull ValueList<T> add(ValueList<T> inValue)
+  // public ValueList<T> add(ValueList<T> inValue)
   // {
   //   ValueList<T> result = this.create();
 
@@ -741,8 +718,8 @@ public class ValueList<T extends Value>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // comparing values of the raw type
-  public @Nonnull ValueList<T> subtract(@Nonnull ValueList<T> inValue)
+  @SuppressWarnings("unchecked") // comparing values of the raw type
+  public ValueList<T> subtract(ValueList<T> inValue)
   {
     ValueList<T> result = create();
 
@@ -768,7 +745,7 @@ public class ValueList<T extends Value>
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 

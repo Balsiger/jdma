@@ -140,7 +140,7 @@ public final class ServerUtils
                                   + "name=\"(.*?)\"(?:;\\s+"
                                   + "filename=\"(.*?)\")?");
 
-            if(form != null && form.length > 0)
+            if(form.length > 0)
             {
               if(form.length > 1 && form[1] != null)
               {
@@ -195,7 +195,7 @@ public final class ServerUtils
           String key   = param;
           String value = "";
 
-          if(parts != null && parts.length == 2)
+          if(parts.length == 2)
           {
             key   = parts[0];
             value = parts[1];
@@ -231,15 +231,13 @@ public final class ServerUtils
   {
 
     /** The AppEngine TestHelper for the UserService. */
-    protected LocalServiceTestHelper m_localServiceTestHelper;
+    protected LocalServiceTestHelper m_localServiceTestHelper =
+      new LocalServiceTestHelper(new LocalUserServiceTestConfig());
 
     @Override
     public void setUpTest()
     {
       super.setUpTest();
-      m_localServiceTestHelper = new LocalServiceTestHelper(
-                                     new LocalUserServiceTestConfig());
-      m_localServiceTestHelper.setEnvIsAdmin(false);
       m_localServiceTestHelper.setEnvIsLoggedIn(true);
       m_localServiceTestHelper.setEnvEmail("test@test.net");
       m_localServiceTestHelper.setEnvAuthDomain("test");

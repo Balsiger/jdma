@@ -220,14 +220,14 @@ public void execute(@Nonnull Document inDocument,
 
         String leader  = columns[i].getLeader();
 
-        if(leader != null && !leader.equals("|"))
+        if(!leader.equals("|"))
             inDocument.add(leader);
 
         inDocument.add(new Bold(columns[i].getTitle()));
 
         String trailer = columns[i].getTrailer();
 
-        if(trailer != null && !trailer.equals("|"))
+        if(!trailer.equals("|"))
             inDocument.add(trailer);
 
         inDocument.add("</cell>");
@@ -279,14 +279,14 @@ public void execute(@Nonnull Document inDocument,
 
       String leader  = columns[i % columns.length].getLeader();
 
-      if(leader != null && !leader.equals("|"))
+      if(!leader.equals("|"))
         inDocument.add(leader);
 
       inDocument.add(inArguments.get(i + 1));
 
       String trailer = columns[i % columns.length].getTrailer();
 
-      if(trailer != null && !trailer.equals("|"))
+      if(!trailer.equals("|"))
         inDocument.add(trailer);
 
       inDocument.add("</cell>");

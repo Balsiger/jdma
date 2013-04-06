@@ -37,7 +37,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -62,11 +61,9 @@ import com.google.template.soy.tofu.restricted.SoyTofuFunction;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -565,6 +562,12 @@ public class SoyTemplate
       return false;
     }
 
+    /**
+     * Get the first line of the given string.
+     *
+     * @param  inText the text to get from
+     * @return the first line of the text
+     */
     private String firstLine(String inText)
     {
       String line = Strings.getPattern(inText, "(.*?)\n");

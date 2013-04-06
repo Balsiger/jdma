@@ -55,6 +55,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class BaseText<T extends BaseText<T>> extends Value<T>
 {
   //--------------------------------------------------------- constructor(s)

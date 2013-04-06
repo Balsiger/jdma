@@ -43,19 +43,9 @@ import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
-import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Columns;
 import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Icon;
-import net.ixitxachitls.output.commands.ImageLink;
-import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.output.commands.OverlayIcon;
-import net.ixitxachitls.output.commands.Table;
-import net.ixitxachitls.output.commands.Window;
-import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Pair;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -547,7 +537,8 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   // @Override
-  // public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // boolean inDM)
   // {
   //   if("wealth".equals(inKey) && inDM)
   //   {
@@ -622,7 +613,7 @@ public class Character extends CampaignEntry<BaseCharacter>
   //     }
 
   //     return new FormattedValue(new Table("colored",
-  //                                         "30:L(name)[Name];70:L(count)[Count]",
+  //                                      "30:L(name)[Name];70:L(count)[Count]",
   //                                         new Command(commands)),
   //                               null, "countedlist");
   //   }
@@ -641,7 +632,7 @@ public class Character extends CampaignEntry<BaseCharacter>
   //     }
 
   //     return new FormattedValue(new Table("colored",
-  //                                         "30:L(name)[Name];70:L(count)[Count]",
+  //                                      "30:L(name)[Name];70:L(count)[Count]",
   //                                         new Command(commands)),
   //                               null, "timedlist");
   //   }
@@ -698,7 +689,7 @@ public class Character extends CampaignEntry<BaseCharacter>
   //   if(inDM && "do mail".equals(inKey))
   //     return new FormattedValue
   //       (new ImageLink("/icons/mail.png", "Mail PDF",
-  //                      "/actions/mail" + getPath(), "doc-link doc-link-mail"),
+  //                    "/actions/mail" + getPath(), "doc-link doc-link-mail"),
   //        null, "do mail");
 
   //   return super.computeValue(inKey, inDM);

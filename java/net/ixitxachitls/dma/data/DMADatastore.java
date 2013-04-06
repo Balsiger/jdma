@@ -514,12 +514,10 @@ public class DMADatastore implements DMAData
   //----------------------------- uncacheEntry -----------------------------
 
   /**
+   * Remove the entry with the given key from the cache.
    *
-   *
-   * @param
-   *
-   * @return
-   *
+   * @param      inKey the key of the entry to remove
+   * @param      <T>   the type of entry to uncache
    */
   public <T extends AbstractEntry> void uncacheEntry
             (AbstractEntry.EntryKey<T> inKey)
@@ -760,7 +758,8 @@ public class DMADatastore implements DMAData
    *
    * NOTE: this produces a lot of datastore traffic.
    *
-   * @param      inType  the type to rebuild for
+   * @param      inType    the type to rebuild for
+   * @param      inRequest the original request
    *
    * @return     the numbert of enties updated
    *
@@ -812,36 +811,62 @@ public class DMADatastore implements DMAData
 
   //------------------------------------------------- other member functions
 
-  private boolean equals(Entity first, Entity second)
+  //-------------------------------- equals --------------------------------
+
+  /**
+   * Check whether the two given entities are equal.
+   *
+   * @param       inFirst   the first entity to check
+   * @param       inSecond  the second entity to check
+   *
+   * @return      true if the entities are equal, false if not
+   *
+   */
+  private boolean equals(Entity inFirst, Entity inSecond)
   {
-    if(!first.equals(second))
+    if(!inFirst.equals(inSecond))
       return false;
 
-    if(!propertyEquals(first, second))
+    if(!propertyEquals(inFirst, inSecond))
       return false;
 
     return true;
   }
 
-  private boolean propertyEquals(Entity first, Entity second)
+  //........................................................................
+
+  //---------------------------- propertyEquals ----------------------------
+
+  /**
+   * Check if the two given entities have equal properties.
+   *
+   * @param       inFirst  the first entity
+   * @param       inSecond the second entity
+   *
+   * @return      true if all the properties are equals, false if not
+   *
+   */
+  private boolean propertyEquals(Entity inFirst, Entity inSecond)
   {
-    for(Map.Entry<String, Object> entry : first.getProperties().entrySet())
+    for(Map.Entry<String, Object> entry : inFirst.getProperties().entrySet())
     {
       if("change".equals(entry.getKey()))
         continue;
 
       if(entry.getValue() != null
-         && (!second.hasProperty(entry.getKey())
-             || !entry.getValue().equals(second.getProperty(entry.getKey()))))
+         && (!inSecond.hasProperty(entry.getKey())
+             || !entry.getValue().equals(inSecond.getProperty(entry.getKey()))))
         return false;
     }
 
-    for(String key : second.getProperties().keySet())
-      if(!first.hasProperty(key))
+    for(String key : inSecond.getProperties().keySet())
+      if(!inFirst.hasProperty(key))
         return false;
 
     return true;
   }
+
+  //........................................................................
 
   //------------------------------- convert --------------------------------
 
@@ -849,6 +874,7 @@ public class DMADatastore implements DMAData
    * Convert the given entry key into a corresponding entity key.
    *
    * @param       inKey the key to convert
+   * @param       <T>   the type of entry to convert
    *
    * @return      the converted key
    *
@@ -878,6 +904,7 @@ public class DMADatastore implements DMAData
    * Convert the given entry key into a corresponding entity key.
    *
    * @param       inKey the key to convert
+   * @param       <T>   the type of entry to convert
    *
    * @return      the converted key
    *
@@ -1058,7 +1085,8 @@ public class DMADatastore implements DMAData
         for(Value<?> item : ((ValueList<Value<?>>)value.getValue()))
           values.add(item.toString().toLowerCase(Locale.US));
         entity.setProperty(m_data.toPropertyName(value.getKey()), values);
-      } else if(value.getValue() instanceof ValueList)
+      }
+      else if(value.getValue() instanceof ValueList)
       {
         List<String> values = new ArrayList<String>();
         for(Value<?> item : ((ValueList<Value<?>>)value.getValue()))
@@ -1109,18 +1137,28 @@ public class DMADatastore implements DMAData
   //---------------------------- escapeType -----------------------------
 
   /**
+   * Escape the given type for storage. This means to replace spaces with
+   * underscores.
    *
+   * @param   inType the type to escape
    *
-   * @param
-   *
-   * @return
-   *
+   * @return  the escaped type
    */
   public String escapeType(String inType)
   {
     return inType.replace(" ", "_");
   }
 
+  //........................................................................
+  //----------------------------- unsecapeType -----------------------------
+
+  /**
+   * Unescape the type from data storage. This replaces underscores with spaces.
+   *
+   * @param    inType type to unescape
+   *
+   * @return   the unescaped type
+   */
   public String unescapeType(String inType)
   {
     return inType.replace("_", " ");

@@ -671,7 +671,10 @@ public class BaseSkill extends BaseEntry
   @Override
   public boolean isDM(@Nullable BaseCharacter inUser)
   {
-    return inUser != null && inUser.hasAccess(BaseCharacter.Group.DM);
+    if (inUser == null)
+      return false;
+
+    return inUser.hasAccess(BaseCharacter.Group.DM);
   }
 
   //........................................................................

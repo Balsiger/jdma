@@ -36,11 +36,8 @@ import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
-import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //..........................................................................
 
