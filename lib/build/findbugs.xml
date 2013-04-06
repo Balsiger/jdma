@@ -1,13 +1,14 @@
 <!-- Bugs to be excluded for reporting. -->
 
 <FindBugsFilter>
+
   <Match>
-    <Class name="~net\.ixitxachitls\..*\$Test\$.*" />
+    <Class name="~net.ixitxachitls..*\$Test\$.*" />
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.util\.AsyncExecutor\$Test\$.*" />
+    <Class name="~net.ixitxachitls.util.AsyncExecutor\$Test\$.*" />
     <Bug pattern="SP_SPIN_ON_FIELD" />
   </Match>
 
@@ -17,264 +18,264 @@
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.output\.Document\.*" />
+    <Class name="~net.ixitxachitls.(dma.server.servlets.SoyServlet|output.Document).*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.SoyServlet\.*" />
+    <Class name="~net.ixitxachitls.input.ParseReader.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.input\.ParseReader\.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.JSONServlet.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.JSONServlet\.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.BlobUploadServlet.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobUploadServlet\.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.BlobImportServlet.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobImportServlet\.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.AdminServlet.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AdminServlet\.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.ActionServlet.*" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.ActionServlet\.*" />
-    <Bug pattern="DM_DEFAULT_ENCODING" />
-  </Match>
-
-  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.values\.conditions\.Condition\.*" />
+    <Class name="~net.ixitxachitls.dma.values.conditions.Condition.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.entries\.extensions\.(Counted|Contents)\.*" />
+    <Class name="~net.ixitxachitls.dma.entries.extensions.(Counted|Contents).*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.entries\.(Product|Monster|Item|Character|CampaignEntry)\.*" />
+    <Class name="~net.ixitxachitls.dma.data.DMADatafiles.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.entries\.Monster\.*" />
+    <Class name="~net.ixitxachitls.dma.entries.(BaseMonster|BaseCharacter|AbstractEntry|AbstractType|Product|Monster|Item|Character|CampaignEntry).*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+  </Match>
+
+  <Match>
+    <Class name="~net.ixitxachitls.dma.entries.Monster.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.entries\.extensions\.(Contents|Composite)\.*" />
+    <Class name="~net.ixitxachitls.dma.entries.extensions.(Contents|Composite).*" />
     <Bug pattern="BC_UNCONFIRMED_CAST" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.DMARequest\.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.DMARequest.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.SaveActionServlet\.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.SaveActionServlet.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\..*\$Test\.*" />
+    <Class name="~net.ixitxachitls..*\$Test.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.values\.Value\$Test.*" />
+    <Class name="~net.ixitxachitls.dma.values.Value\$Test.*" />
     <Bug pattern="ES_COMPARING_STRINGS_WITH_EQ" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.output\.Document\$Test.*" />
+    <Class name="~net.ixitxachitls.output.Document\$Test.*" />
     <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.entries\.TaggedVariables.*" />
+    <Class name="~net.ixitxachitls.dma.entries.TaggedVariables.*" />
     <Bug pattern="UR_UNINIT_READ_CALLED_FROM_SUPER_CONSTRUCTOR" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.output\.actions\.itext\.Table.*" />
+    <Class name="~net.ixitxachitls.output.actions.itext.Table.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.output\.actions\.html\.Table.*" />
+    <Class name="~net.ixitxachitls.output.actions.html.Table.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.output\.html\.HTMLDocument.*" />
+    <Class name="~net.ixitxachitls.dma.output.html.HTMLDocument.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.output\.ascii\.ASCIIDocument.*" />
+    <Class name="~net.ixitxachitls.dma.output.ascii.ASCIIDocument.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.output\.pdf\.ITextDocument.*" />
+    <Class name="~net.ixitxachitls.dma.output.pdf.ITextDocument.*" />
     <Bug pattern="NM_SAME_SIMPLE_NAME_AS_SUPERCLASS" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AbstractEntryServlet.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.AbstractEntryServlet.*" />
     <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryListServlet.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.EntryListServlet.*" />
     <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
   </Match>
 
   <!-- allow m_group to be mutable, as it is only set at construction time -->
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.DMAServlet.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.DMAServlet.*" />
     <Bug pattern="MSF_MUTABLE_SERVLET_FIELD, MTIA_SUSPECT_SERVLET_INSTANCE_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.output\.pdf\.PDFDocument\$Test.*" />
+    <Class name="~net.ixitxachitls.dma.output.pdf.PDFDocument\$Test.*" />
     <Bug pattern="OS_OPEN_STREAM_EXCEPTION_PATH" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AbstractEntryPDFServlet.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.AbstractEntryPDFServlet.*" />
     <Bug pattern="UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.values\.Group.*" />
+    <Class name="~net.ixitxachitls.dma.values.Group.*" />
     <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE" />
   </Match>
 
   <!-- we don't really need them to be serializable, just use in the servlet -->
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.data\.UserData.*" />
+    <Class name="~net.ixitxachitls.dma.data.UserData.*" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.data\.CampaignData.*" />
+    <Class name="~net.ixitxachitls.dma.data.CampaignData.*" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.data\.DMAData.*" />
+    <Class name="~net.ixitxachitls.dma.data.DMAData.*" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.server\.servlets\.FileServlet.*" />
+    <Class name="~net.ixitxachitls.server.servlets.FileServlet.*" />
     <Bug pattern="MTIA_SUSPECT_SERVLET_INSTANCE_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.SaveActionServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.SaveActionServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.LibraryServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.LibraryServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.IndexServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.IndexServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.EntryServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryListServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.EntryListServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryPDFServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.EntryPDFServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobUploadServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.BlobUploadServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.BlobServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.BlobImportServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.BlobImportServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.AdminServlet" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.AdminServlet" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
   <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.Autocomplete" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.Autocomplete" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.Exporter.*" />
+    <Class name="~net.ixitxachitls.dma.server.Exporter.*" />
     <Bug pattern="DLS_DEAD_LOCAL_STORE" />
   </Match>
 
  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.EntryListServlet\$Test\$.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.EntryListServlet\$Test\$.*" />
     <Bug pattern="SE_BAD_FIELD" />
   </Match>
 
  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.DMARequest" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.DMARequest" />
     <Bug pattern="RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE" />
   </Match>
 
  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.entries\.AbstractEntry" />
+    <Class name="~net.ixitxachitls.dma.entries.AbstractEntry" />
     <Bug pattern="NP_BOOLEAN_RETURN_NULL" />
   </Match>
 
  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.entries\.ValueGroup" />
+    <Class name="~net.ixitxachitls.dma.entries.ValueGroup" />
     <Bug pattern="NP_BOOLEAN_RETURN_NULL" />
   </Match>
 
  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.data\.DMAFile" />
+    <Class name="~net.ixitxachitls.dma.data.DMAFile" />
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
  <Match>
-    <Class name="~net\.ixitxachitls\.dma\.server\.servlets\.LibraryServlet.*" />
+    <Class name="~net.ixitxachitls.dma.server.servlets.LibraryServlet.*" />
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
   </Match>
 

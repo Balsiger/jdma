@@ -208,7 +208,7 @@ public class AbstractEntry extends ValueGroup
       fromString(String inText)
     {
       String []paths = inText.split("/");
-      if(paths == null || paths.length == 0)
+      if(paths.length == 0)
         return null;
 
       return fromString(paths, paths.length - 1);

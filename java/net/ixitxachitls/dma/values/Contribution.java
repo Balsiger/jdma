@@ -63,7 +63,7 @@ public class Contribution<V> implements Comparable<Contribution<V>>
    * @param    inGroup the group (entry, extension) contributing the value
    * @param    inText  the text describing why the value was contributed
    */
-  public Contribution(V inValue, ValueGroup inGroup, String inText)
+  public Contribution(V inValue, ValueGroup inGroup, @Nullable String inText)
   {
     m_value = inValue;
     m_group = inGroup;
@@ -83,7 +83,7 @@ public class Contribution<V> implements Comparable<Contribution<V>>
   private ValueGroup m_group;
 
   /** The text describing the contribution. */
-  private String m_text;
+  private @Nullable String m_text;
 
   //........................................................................
 

@@ -81,8 +81,6 @@ public class DataStore
   public DataStore()
   {
     m_store = DatastoreServiceFactory.getDatastoreService();
-    m_blobs = BlobstoreServiceFactory.getBlobstoreService();
-    m_image = ImagesServiceFactory.getImagesService();
   }
 
   //........................................................................
@@ -93,12 +91,6 @@ public class DataStore
 
   /** The access to the datastore. */
   private DatastoreService m_store;
-
-  /** The blob store service. */
-  private BlobstoreService m_blobs;
-
-  /** The image service to serve images. */
-  private ImagesService m_image;
 
   /** The cache for indexes. */
   private static MemcacheService s_cacheEntity =

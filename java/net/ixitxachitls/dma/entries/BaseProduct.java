@@ -30,8 +30,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
@@ -92,7 +92,7 @@ public class BaseProduct extends BaseEntry
   //----- producers --------------------------------------------------------
 
   /** The producers of products. */
-  private static final @Nonnull String []PRODUCERS =
+  private static final String []PRODUCERS =
     Config.get("/game/product.producers", new String []
       {
         "WTC",
@@ -199,7 +199,7 @@ public class BaseProduct extends BaseEntry
     STICKER("Sticker");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /**
      * Create the name.
@@ -207,7 +207,7 @@ public class BaseProduct extends BaseEntry
      * @param inName     the name of the value
      *
      */
-    private Part(@Nonnull String inName)
+    private Part(String inName)
     {
       m_name = constant("product.part", inName);
     }
@@ -219,7 +219,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -231,7 +231,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
         return m_name;
     }
@@ -258,7 +258,7 @@ public class BaseProduct extends BaseEntry
     MIXED("Mixed");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /**
      * Create the name.
@@ -266,7 +266,7 @@ public class BaseProduct extends BaseEntry
      * @param inName     the name of the value
      *
      */
-    private Layout(@Nonnull String inName)
+    private Layout(String inName)
     {
       m_name = constant("product.layout", inName);
     }
@@ -278,7 +278,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -290,7 +290,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
         return m_name;
     }
@@ -399,7 +399,7 @@ public class BaseProduct extends BaseEntry
     XXVC("XXVC", null);
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The group of styles, if any. */
     private @Nullable String m_group;
@@ -411,7 +411,7 @@ public class BaseProduct extends BaseEntry
      * @param inGroup    the group (if any) to use when sorting by system.
      *
      */
-    private System(@Nonnull String inName, @Nullable String inGroup)
+    private System(String inName, @Nullable String inGroup)
     {
       m_name  = constant("system.name",  inName);
       if(inGroup != null)
@@ -425,7 +425,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -448,7 +448,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -461,7 +461,7 @@ public class BaseProduct extends BaseEntry
      * @return the enum value found or null if not found
      *
      */
-    public static @Nullable System valueOfIgnoreCase(@Nonnull String inName)
+    public static @Nullable System valueOfIgnoreCase(String inName)
     {
       // check ignoring case
       try
@@ -539,7 +539,7 @@ public class BaseProduct extends BaseEntry
     SPECIAL_BOOK("Special Book", "Others");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The group of styles, if any. */
     private @Nullable String m_group = null;
@@ -550,7 +550,7 @@ public class BaseProduct extends BaseEntry
      * @param inGroup    the group used for sorting
      *
      */
-    private ProductType(@Nonnull String inName, @Nullable String inGroup)
+    private ProductType(String inName, @Nullable String inGroup)
     {
       m_name  = constant("product.type.name",  inName);
       if(inGroup != null)
@@ -564,7 +564,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -633,7 +633,7 @@ public class BaseProduct extends BaseEntry
     STICKER("Sticker", null);
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The group of styles, if any. */
     private @Nullable String m_group;
@@ -644,7 +644,7 @@ public class BaseProduct extends BaseEntry
      * @param inGroup    the group to use for sorting
      *
      */
-    private Style(@Nonnull String inName, @Nullable String inGroup)
+    private Style(String inName, @Nullable String inGroup)
     {
       m_name  = constant("product.style.name",  inName);
       if(inGroup != null)
@@ -658,7 +658,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -701,7 +701,7 @@ public class BaseProduct extends BaseEntry
     ALL("All");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /**
      * Create the name.
@@ -709,7 +709,7 @@ public class BaseProduct extends BaseEntry
      * @param inName     the name of the value
      *
      */
-    private Audience(@Nonnull String inName)
+    private Audience(String inName)
     {
       m_name = constant("audiences", inName);
     }
@@ -721,7 +721,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -733,7 +733,7 @@ public class BaseProduct extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -765,7 +765,7 @@ public class BaseProduct extends BaseEntry
    * @param       inName the name of the base product
    *
    */
-  public BaseProduct(@Nonnull String inName)
+  public BaseProduct(String inName)
   {
     super(inName, TYPE);
   }
@@ -796,7 +796,7 @@ public class BaseProduct extends BaseEntry
 
   /** The title of the product. */
   @Key("title")
-  protected @Nonnull Text m_title =
+  protected Text m_title =
     new Text().withEditType("string[title]").withRelated("leader");
 
   //........................................................................
@@ -804,7 +804,7 @@ public class BaseProduct extends BaseEntry
 
   /** The leader of the product, any 'a', 'the' and the like. */
   @Key("leader")
-  protected @Nonnull Text m_leader =
+  protected Text m_leader =
     new Text("").withEditType("string[leader]").withRelated("title");
 
   //........................................................................
@@ -812,14 +812,14 @@ public class BaseProduct extends BaseEntry
 
   /** The sub title of the product. */
   @Key("subtitle")
-  protected @Nonnull Text m_subtitle = new Text();
+  protected Text m_subtitle = new Text();
 
   //........................................................................
   //----- notes ------------------------------------------------------------
 
   /** Notes about the product. */
   @Key("notes")
-  protected @Nonnull Text m_notes = new Text();
+  protected Text m_notes = new Text();
 
   //........................................................................
   //----- authors ----------------------------------------------------------
@@ -842,7 +842,7 @@ public class BaseProduct extends BaseEntry
 
   /** All the authors of the product. */
   @Key("author")
-  protected @Nonnull ValueList<Multiple> m_authors =
+  protected ValueList<Multiple> m_authors =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text().withFormatter(s_personFormatter)
@@ -870,7 +870,7 @@ public class BaseProduct extends BaseEntry
 
   /** All the editors of the product. */
   @Key("editor")
-  protected @Nonnull ValueList<Multiple> m_editors =
+  protected ValueList<Multiple> m_editors =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
@@ -892,7 +892,7 @@ public class BaseProduct extends BaseEntry
 
   /** All the cover artists. */
   @Key("cover")
-  protected @Nonnull ValueList<Multiple> m_cover =
+  protected ValueList<Multiple> m_cover =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
@@ -914,7 +914,7 @@ public class BaseProduct extends BaseEntry
 
   /** The cartographers for the product. */
   @Key("cartography")
-  protected @Nonnull ValueList<Multiple> m_cartographers =
+  protected ValueList<Multiple> m_cartographers =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
@@ -936,7 +936,7 @@ public class BaseProduct extends BaseEntry
 
   /** The illustration artists for the product. */
   @Key("illustrations")
-  protected @Nonnull ValueList<Multiple> m_illustrators =
+  protected ValueList<Multiple> m_illustrators =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
@@ -958,7 +958,7 @@ public class BaseProduct extends BaseEntry
 
   /** The typographers for this product. */
   @Key("typography")
-  protected @Nonnull ValueList<Multiple> m_typographers =
+  protected ValueList<Multiple> m_typographers =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
@@ -980,7 +980,7 @@ public class BaseProduct extends BaseEntry
 
   /** All the mangers and other people involved in the product creation. */
   @Key("management")
-  protected @Nonnull ValueList<Multiple> m_managers =
+  protected ValueList<Multiple> m_managers =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
@@ -1005,7 +1005,7 @@ public class BaseProduct extends BaseEntry
 
   /** The date (month and year) the product was released. */
   @Key("date")
-  protected @Nonnull Date m_date = new Date()
+  protected Date m_date = new Date()
     .withFormatter(s_dateFormatter)
     .withTemplate("link", "dates");
 
@@ -1019,14 +1019,14 @@ public class BaseProduct extends BaseEntry
 
   /** The product's ISBN number, if it has one. */
   @Key("ISBN")
-  protected @Nonnull ISBN m_isbn = new ISBN();
+  protected ISBN m_isbn = new ISBN();
 
   //........................................................................
   //----- isbn 13 ----------------------------------------------------------
 
   /** The product's ISBN 13 number, if it has one. */
   @Key("ISBN13")
-  protected @Nonnull ISBN13 m_isbn13 = new ISBN13();
+  protected ISBN13 m_isbn13 = new ISBN13();
 
   //........................................................................
   //----- pages ------------------------------------------------------------
@@ -1040,7 +1040,7 @@ public class BaseProduct extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         @Override
-        public Long extract(@Nonnull Number inValue)
+        public Long extract(Number inValue)
         {
           return inValue.get();
         }
@@ -1053,7 +1053,7 @@ public class BaseProduct extends BaseEntry
   /** The total number of pages of the product. */
   @SuppressWarnings("unchecked")
   @Key("pages")
-  protected @Nonnull Number m_pages =
+  protected Number m_pages =
     new Number(0, Integer.MAX_VALUE).withFormatter(s_pageFormatter)
     .withGrouping(s_pageGroup)
     .withTemplate("link", "pages");
@@ -1072,7 +1072,7 @@ public class BaseProduct extends BaseEntry
 
   /** The game system of the product. */
   @Key("system")
-  protected @Nonnull EnumSelection<System> m_system =
+  protected EnumSelection<System> m_system =
     new EnumSelection<System>(System.class)
     .withFormatter(s_systemFormatter)
     .withTemplate("link", "systems");
@@ -1092,7 +1092,7 @@ public class BaseProduct extends BaseEntry
 
   /** The intended audience of the product. */
   @Key("audience")
-  protected @Nonnull EnumSelection<Audience> m_audience =
+  protected EnumSelection<Audience> m_audience =
     new EnumSelection<Audience>(Audience.class)
     .withFormatter(s_audienceFormatter)
     .withTemplate("link", "audiences");
@@ -1112,7 +1112,7 @@ public class BaseProduct extends BaseEntry
 
   /** The type of product. */
   @Key("product type")
-  protected @Nonnull EnumSelection<ProductType> m_productType =
+  protected EnumSelection<ProductType> m_productType =
     new EnumSelection<ProductType>(ProductType.class)
     .withFormatter(s_typeFormatter)
     .withTemplate("link", "types");
@@ -1131,7 +1131,7 @@ public class BaseProduct extends BaseEntry
 
   /** The style of the product, its general outlook. */
   @Key("style")
-  protected @Nonnull EnumSelection<Style> m_style =
+  protected EnumSelection<Style> m_style =
     new EnumSelection<Style>(Style.class)
     .withFormatter(s_styleFormatter)
     .withTemplate("link", "styles");
@@ -1150,7 +1150,7 @@ public class BaseProduct extends BaseEntry
 
   /** The name of the company that produced the product. */
   @Key("producer")
-  protected @Nonnull Selection m_producer =
+  protected Selection m_producer =
     new Selection(PRODUCERS)
     .withFormatter(s_producerFormatter)
     .withTemplate("link", "producers");
@@ -1165,14 +1165,14 @@ public class BaseProduct extends BaseEntry
 
   /** The volume of the product for multi volume products. */
   @Key("volume")
-  protected @Nonnull Name m_volume = new Name().withEditType("name[volume]");
+  protected Name m_volume = new Name().withEditType("name[volume]");
 
   //........................................................................
   //----- number -----------------------------------------------------------
 
   /** The number of the series. */
   @Key("number")
-  protected @Nonnull Name m_number = new Name().withEditType("name[number]");
+  protected Name m_number = new Name().withEditType("name[number]");
 
   //........................................................................
   //----- series -----------------------------------------------------------
@@ -1184,7 +1184,7 @@ public class BaseProduct extends BaseEntry
   /** The name of the series, even multiple if necessary, this product belongs
    *  to. */
   @Key("series")
-  protected @Nonnull ValueList<Name> m_series =
+  protected ValueList<Name> m_series =
     new ValueList<Name>(new Name().withEditType("name[series]")
                         .withFormatter(s_seriesFormatter)
                         .withTemplate("link", "series"));
@@ -1206,7 +1206,7 @@ public class BaseProduct extends BaseEntry
     new Group<Price, Long, String>(new Group.Extractor<Price, Long>()
       {
         @Override
-        public Long extract(@Nonnull Price inValue)
+        public Long extract(Price inValue)
         {
           return inValue.get();
         }
@@ -1216,7 +1216,7 @@ public class BaseProduct extends BaseEntry
 
   /** This is the price of the series. */
   @Key("price")
-  protected @Nonnull Price m_price =
+  protected Price m_price =
     new Price(0, 1000 * 100).withGrouping(s_priceGrouping)
     .withFormatter(s_priceFormatter)
     .withTemplate("link", "prices");
@@ -1236,7 +1236,7 @@ public class BaseProduct extends BaseEntry
   /** The contents of the product, what kind of individual components it has,
    *  if any. */
   @Key("contents")
-  protected @Nonnull ValueList<Multiple> m_contents =
+  protected ValueList<Multiple> m_contents =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new EnumSelection<Part>(Part.class)
                              .withFormatter(s_partFormatter)
@@ -1262,7 +1262,7 @@ public class BaseProduct extends BaseEntry
   /** The requirements of this product, which products are required to use this
    * one. */
   @Key("requirements")
-  protected @Nonnull Multiple m_requirements =
+  protected Multiple m_requirements =
     new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new ValueList<Reference>
@@ -1286,7 +1286,7 @@ public class BaseProduct extends BaseEntry
 
   /** The layout of the product. */
   @Key("layout")
-  protected @Nonnull EnumSelection<Layout> m_layout =
+  protected EnumSelection<Layout> m_layout =
     new EnumSelection<Layout>(Layout.class)
     .withTemplate("link", "layouts");
 
@@ -1325,7 +1325,7 @@ public class BaseProduct extends BaseEntry
    *
    */
   @Override
-  protected @Nonnull Print getPagePrint()
+  protected Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -1340,7 +1340,7 @@ public class BaseProduct extends BaseEntry
    *
    */
   @Override
-  protected @Nonnull ListPrint getListPrint()
+  protected ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -1354,7 +1354,7 @@ public class BaseProduct extends BaseEntry
    * @return      the audience
    *
    */
-  public @Nonnull Audience getAudience()
+  public Audience getAudience()
   {
     return m_audience.getSelected();
   }
@@ -1368,7 +1368,7 @@ public class BaseProduct extends BaseEntry
    * @return      the date
    *
    */
-  public @Nonnull String getDate()
+  public String getDate()
   {
     return m_date.toString();
   }
@@ -1382,7 +1382,7 @@ public class BaseProduct extends BaseEntry
    * @return      the requested leader
    *
    */
-  public @Nonnull String getLeader()
+  public String getLeader()
   {
     return m_leader.get();
   }
@@ -1396,7 +1396,7 @@ public class BaseProduct extends BaseEntry
    * @return      the series number
    *
    */
-  public @Nonnull String getNumber()
+  public String getNumber()
   {
     return m_number.get();
   }
@@ -1441,7 +1441,7 @@ public class BaseProduct extends BaseEntry
    * @return      the series
    *
    */
-  public @Nonnull String getSeries()
+  public String getSeries()
   {
     return m_series.toString();
   }
@@ -1469,7 +1469,7 @@ public class BaseProduct extends BaseEntry
    * @return      the style
    *
    */
-  public @Nonnull Style getStyle()
+  public Style getStyle()
   {
     return m_style.getSelected();
   }
@@ -1483,7 +1483,7 @@ public class BaseProduct extends BaseEntry
    * @return      the producer
    *
    */
-  public @Nonnull String getProducer()
+  public String getProducer()
   {
     return m_producer.toString();
   }
@@ -1497,7 +1497,7 @@ public class BaseProduct extends BaseEntry
    * @return      the system
    *
    */
-  public @Nonnull System getSystem()
+  public System getSystem()
   {
     return m_system.getSelected();
   }
@@ -1511,7 +1511,7 @@ public class BaseProduct extends BaseEntry
    * @return      the requested title
    *
    */
-  public @Nonnull String getTitle()
+  public String getTitle()
   {
     return m_title.get();
   }
@@ -1525,13 +1525,12 @@ public class BaseProduct extends BaseEntry
    * @return      the requested title
    *
    */
-  public @Nonnull String getFullTitle()
+  public String getFullTitle()
   {
-    if(m_title == null || !m_title.isDefined())
+    if(!m_title.isDefined())
       return "";
 
-    if(m_leader == null || !m_title.isDefined()
-       || !m_leader.isDefined())
+    if(!m_title.isDefined() || !m_leader.isDefined())
       return m_title.get();
 
     return m_leader.get() + " " + m_title.get();
@@ -1546,7 +1545,7 @@ public class BaseProduct extends BaseEntry
    * @return      the type
    *
    */
-  public @Nonnull ProductType getProductType()
+  public ProductType getProductType()
   {
     return m_productType.getSelected();
   }
@@ -1560,7 +1559,7 @@ public class BaseProduct extends BaseEntry
    * @return      the volume
    *
    */
-  public @Nonnull String getVolume()
+  public String getVolume()
   {
     return m_volume.get();
   }
@@ -1576,7 +1575,7 @@ public class BaseProduct extends BaseEntry
    *
    */
   @Override
-  public @Nonnull String getRefName()
+  public String getRefName()
   {
     if(!m_title.isDefined())
       return super.getRefName();
@@ -1601,8 +1600,7 @@ public class BaseProduct extends BaseEntry
   {
     List<String> result = super.getCategories();
 
-    if(getProductType() != null)
-      result.add(getProductType().toString());
+    result.add(getProductType().toString());
 
     return result;
   }
@@ -1620,8 +1618,8 @@ public class BaseProduct extends BaseEntry
    * @return   the set of persons given
    *
    */
-  public @Nonnull Set<? super String>
-    collectPersons(@Nonnull Set<? super String> ioNames)
+  public Set<? super String>
+    collectPersons(Set<? super String> ioNames)
   {
     for(ValueList<Multiple> list : categoryLists().values())
     {
@@ -1656,8 +1654,8 @@ public class BaseProduct extends BaseEntry
    * @return   the set of jobs given
    *
    */
-  public @Nonnull Set<? super String>
-    collectJobs(@Nonnull Set<? super String> ioJobs)
+  public Set<? super String>
+    collectJobs(Set<? super String> ioJobs)
   {
     for(Map.Entry<String, ValueList<Multiple>> list
           : categoryLists().entrySet())
@@ -1720,7 +1718,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if it matches, false if not
    *
    */
-//   public boolean matches(@Nonnull String inPattern)
+//   public boolean matches(String inPattern)
 //   {
 //     if(super.matches(inPattern))
 //       return true;
@@ -1766,7 +1764,7 @@ public class BaseProduct extends BaseEntry
   //  * @return      true if it matches, false if not
   //  *
   //  */
-  // public boolean matches(@Nonnull String inKey, @Nonnull String inValue)
+  // public boolean matches(String inKey, String inValue)
   // {
   //   if("jobs".equalsIgnoreCase(inKey))
   //   {
@@ -1806,7 +1804,7 @@ public class BaseProduct extends BaseEntry
    *
    */
   @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
   {
     if("name".equals(inKey))
       return new FormattedValue
@@ -1858,7 +1856,7 @@ public class BaseProduct extends BaseEntry
    * @return   the compute value
    *
    */
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("owners".equals(inKey))
     {
@@ -1978,7 +1976,7 @@ public class BaseProduct extends BaseEntry
    *
    */
   @Override
-  public @Nullable String set(@Nonnull String inKey, @Nonnull String inText)
+  public @Nullable String set(String inKey, String inText)
   {
     String []parts = Strings.getPatterns(inKey, "(.*?)/(.*)");
 
@@ -2007,7 +2005,7 @@ public class BaseProduct extends BaseEntry
    * @param       inNew  the new name of the job
    *
    */
-  public void renameJob(@Nonnull String inOld, @Nonnull String inNew)
+  public void renameJob(String inOld, String inNew)
   {
     m_authors = renameJob(m_authors, inOld, inNew);
     m_editors = renameJob(m_editors, inOld, inNew);
@@ -2031,9 +2029,8 @@ public class BaseProduct extends BaseEntry
    * @return      the changed list
    *
    */
-  private @Nonnull ValueList<Multiple>
-    renameJob(@Nonnull ValueList<Multiple> inList, @Nonnull String inOld,
-              @Nonnull String inNew)
+  private ValueList<Multiple>
+    renameJob(ValueList<Multiple> inList, String inOld, String inNew)
   {
     List<Multiple> list = new ArrayList<Multiple>();
     for(Multiple person : inList)
@@ -2061,7 +2058,7 @@ public class BaseProduct extends BaseEntry
    * @param       inNew  the new name of the person
    *
    */
-  public void renamePerson(@Nonnull String inOld, @Nonnull String inNew)
+  public void renamePerson(String inOld, String inNew)
   {
     m_authors = renamePerson(m_authors, inOld, inNew);
     m_editors = renamePerson(m_editors, inOld, inNew);
@@ -2085,9 +2082,8 @@ public class BaseProduct extends BaseEntry
    * @return      the changed list
    *
    */
-  private @Nonnull ValueList<Multiple>
-    renamePerson(@Nonnull ValueList<Multiple> inList, @Nonnull String inOld,
-                 @Nonnull String inNew)
+  private ValueList<Multiple>
+    renamePerson(ValueList<Multiple> inList, String inOld, String inNew)
   {
     List<Multiple> list = new ArrayList<Multiple>();
     for(Multiple person : inList)
@@ -2117,7 +2113,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-  public boolean setAudience(@Nonnull Audience inAudience)
+  public boolean setAudience(Audience inAudience)
   {
     m_audience = m_audience.as(inAudience);
     return true;
@@ -2134,7 +2130,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-  public boolean setCover(@Nonnull ValueList<Multiple> inCover)
+  public boolean setCover(ValueList<Multiple> inCover)
   {
     m_cover = inCover;
     return true;
@@ -2151,7 +2147,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setDate(@Nonnull String inDate)
+//   public boolean setDate(String inDate)
 //   {
 //     return m_date.setFromString(inDate) == null;
 //   }
@@ -2167,7 +2163,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setLeader(@Nonnull String inLeader)
+//   public boolean setLeader(String inLeader)
 //   {
 //     if(inLeader == null)
 //       return false;
@@ -2188,7 +2184,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setNumber(@Nonnull String inNumber)
+//   public boolean setNumber(String inNumber)
 //   {
 //     if(inNumber == null)
 //       return false;
@@ -2233,8 +2229,8 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-// public boolean setISBN(@Nonnull String inGroup, @Nonnull String inPublisher,
-//                          @Nonnull String inTitle, int inCheck)
+// public boolean setISBN(String inGroup, String inPublisher,
+//                          String inTitle, int inCheck)
 //   {
 //     return m_isbn.set(inGroup, inPublisher, inTitle, inCheck);
 //   }
@@ -2254,8 +2250,8 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setISBN13(@Nonnull String inG13, @Nonnull String inGroup,
-//                         @Nonnull String inPublisher, @Nonnull String inTitle,
+//   public boolean setISBN13(String inG13, String inGroup,
+//                         String inPublisher, String inTitle,
 //                            int inCheck)
 //   {
 //     return m_isbn13.set(inG13, inGroup, inPublisher, inTitle, inCheck);
@@ -2273,7 +2269,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setPrice(@Nonnull String inCurrency, long inNumber)
+//   public boolean setPrice(String inCurrency, long inNumber)
 //   {
 //     return m_price.set(inCurrency, inNumber);
 //   }
@@ -2289,7 +2285,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addSeries(@Nonnull String inSeries)
+//   public boolean addSeries(String inSeries)
 //   {
 //     Text series = m_series.newElement();
 
@@ -2312,8 +2308,8 @@ public class BaseProduct extends BaseEntry
    *
    */
 //   @SuppressWarnings("unchecked") // need to cast the enum selection
-//   public boolean addContents(@Nonnull Part inPart,
-//                              @Nonnull String inDescription, int inNumber)
+//   public boolean addContents(Part inPart,
+//                              String inDescription, int inNumber)
 //   {
 //     if(inNumber <= 0)
 //       return false;
@@ -2339,7 +2335,7 @@ public class BaseProduct extends BaseEntry
    *
    */
 //   @SuppressWarnings("unchecked") // Multiple value cast
-//   public boolean addRequirement(@Nonnull String inRequirement)
+//   public boolean addRequirement(String inRequirement)
 //   {
 //   ValueList<Text> list = (ValueList<Text>)m_requirements.get(0).getMutable();
 
@@ -2362,7 +2358,7 @@ public class BaseProduct extends BaseEntry
    *
    */
 //   @SuppressWarnings("unchecked") // multiple value cast
-//   public boolean addOptionalRequirement(@Nonnull String inRequirement)
+//   public boolean addOptionalRequirement(String inRequirement)
 //   {
 //   ValueList<Text> list = (ValueList<Text>)m_requirements.get(1).getMutable();
 
@@ -2383,7 +2379,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setStyle(@Nonnull Style inStyle)
+//   public boolean setStyle(Style inStyle)
 //   {
 //     if(inStyle == null)
 //       return false;
@@ -2402,7 +2398,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setProducer(@Nonnull String inProducer)
+//   public boolean setProducer(String inProducer)
 //   {
 //     if(inProducer == null)
 //       return false;
@@ -2421,7 +2417,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setSystem(@Nonnull System inSystem)
+//   public boolean setSystem(System inSystem)
 //   {
 //     return m_system.set(inSystem);
 //   }
@@ -2437,7 +2433,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setLayout(@Nonnull Layout inLayout)
+//   public boolean setLayout(Layout inLayout)
 //   {
 //     return m_layout.set(inLayout);
 //   }
@@ -2453,7 +2449,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not (because of error)
    *
    */
-//   public boolean setTitle(@Nonnull String inTitle)
+//   public boolean setTitle(String inTitle)
 //   {
 //     m_title.set(inTitle);
 
@@ -2471,7 +2467,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not (because of error)
    *
    */
-//   public boolean setNotes(@Nonnull String inNotes)
+//   public boolean setNotes(String inNotes)
 //   {
 //     m_notes.set(inNotes);
 
@@ -2489,7 +2485,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not (because of error)
    *
    */
-//   public boolean setSubtitle(@Nonnull String inSubtitle)
+//   public boolean setSubtitle(String inSubtitle)
 //   {
 //     m_subtitle.set(inSubtitle);
 
@@ -2507,7 +2503,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setProductType(@Nonnull ProductType inType)
+//   public boolean setProductType(ProductType inType)
 //   {
 //     return m_productType.set(inType);
 //   }
@@ -2523,7 +2519,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if set, false if not
    *
    */
-//   public boolean setVolume(@Nonnull String inVolume)
+//   public boolean setVolume(String inVolume)
 //   {
 //     m_volume.set(inVolume);
 
@@ -2542,7 +2538,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addAuthor(@Nonnull String inAuthor, @Nonnull String inJob)
+//   public boolean addAuthor(String inAuthor, String inJob)
 //   {
 //     Multiple author = m_authors.newElement();
 
@@ -2566,7 +2562,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addEditor(@Nonnull String inEditor, @Nonnull String inJob)
+//   public boolean addEditor(String inEditor, String inJob)
 //   {
 //     Multiple editor = m_editors.newElement();
 
@@ -2590,7 +2586,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addCover(@Nonnull String inCover, @Nonnull String inJob)
+//   public boolean addCover(String inCover, String inJob)
 //   {
 //     Multiple cover = m_cover.newElement();
 
@@ -2616,8 +2612,8 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addCartographer(@Nonnull String inCartographer,
-//                                  @Nonnull String inJob)
+//   public boolean addCartographer(String inCartographer,
+//                                  String inJob)
 //   {
 //     Multiple cartographer = m_cartographers.newElement();
 
@@ -2641,8 +2637,8 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addIllustrator(@Nonnull String inIllustrator,
-//                                 @Nonnull String inJob)
+//   public boolean addIllustrator(String inIllustrator,
+//                                 String inJob)
 //   {
 //     if(inIllustrator == null)
 //       return false;
@@ -2671,8 +2667,8 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addTypographer(@Nonnull String inTypographer,
-//                                 @Nonnull String inJob)
+//   public boolean addTypographer(String inTypographer,
+//                                 String inJob)
 //   {
 //     Multiple typographer = m_typographers.newElement();
 
@@ -2697,7 +2693,7 @@ public class BaseProduct extends BaseEntry
    * @return      true if added, false if not
    *
    */
-//   public boolean addManager(@Nonnull String inManager, @Nonnull String inJob)
+//   public boolean addManager(String inManager, String inJob)
 //   {
 //     Multiple manager = m_managers.newElement();
 
@@ -2726,10 +2722,8 @@ public class BaseProduct extends BaseEntry
    * @param       inList   the list with the values
    *
    */
-  protected static void addJobs(@Nonnull Set<String> ioStore,
-                                @Nonnull String inKey,
-                                @Nonnull String inPerson,
-                                @Nonnull ValueList<Multiple> inList)
+  protected static void addJobs(Set<String> ioStore, String inKey,
+                                String inPerson, ValueList<Multiple> inList)
   {
     for(Multiple person : inList)
     {
@@ -2764,10 +2758,8 @@ public class BaseProduct extends BaseEntry
    * @param       inList  the list with the values
    *
    */
-  protected static void addPersons(@Nonnull Set<String> ioStore,
-                                   @Nonnull String inKey,
-                                   @Nonnull String inJob,
-                                   @Nonnull ValueList<Multiple> inList)
+  protected static void addPersons(Set<String> ioStore, String inKey,
+                                   String inJob, ValueList<Multiple> inList)
   {
     for(Multiple person : inList)
     {

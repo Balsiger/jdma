@@ -1272,8 +1272,7 @@ public class BaseSpell extends BaseEntry
 
     summary = computeExpressions(summary, inParameters);
 
-    Value<?> notes =
-      inParameters != null ? inParameters.getValue("Notes") : null;
+    Value<?> notes = inParameters.getValue("Notes");
     if(notes != null)
       summary += " (" + notes + ")";
 

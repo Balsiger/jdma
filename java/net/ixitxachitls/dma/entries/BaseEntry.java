@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -153,7 +153,7 @@ public class BaseEntry extends AbstractEntry
    * @param   inType the type of the entry
    *
    */
-  protected BaseEntry(@Nonnull AbstractType<? extends BaseEntry> inType)
+  protected BaseEntry(AbstractType<? extends BaseEntry> inType)
   {
     super(inType);
 
@@ -169,7 +169,7 @@ public class BaseEntry extends AbstractEntry
    * @param       inName     the name of the entry
    *
    */
-  public BaseEntry(@Nonnull String inName)
+  public BaseEntry(String inName)
   {
     this(inName, TYPE);
   }
@@ -184,8 +184,7 @@ public class BaseEntry extends AbstractEntry
    * @param       inType     the type of the entry
    *
    */
-  protected BaseEntry(@Nonnull String inName,
-                      @Nonnull AbstractType<? extends BaseEntry> inType)
+  protected BaseEntry(String inName, AbstractType<? extends BaseEntry> inType)
   {
     super(inName, inType);
 
@@ -204,8 +203,8 @@ public class BaseEntry extends AbstractEntry
    * @undefined   never
    *
    */
-//   protected BaseEntry(@Nonnull String inName, @Nonnull Type inType,
-//                       @Nonnull BaseEntry ... inBases)
+//   protected BaseEntry(String inName, Type inType,
+//                       BaseEntry ... inBases)
 //   {
 //     super(inName, inType, inBases);
 //   }
@@ -319,7 +318,7 @@ public class BaseEntry extends AbstractEntry
    *
    */
   // @Override
-  // public @Nonnull String getID()
+  // public String getID()
   // {
   //   return super.getID().toLowerCase(Locale.US);
   // }
@@ -335,7 +334,7 @@ public class BaseEntry extends AbstractEntry
    */
   @Override
   @SuppressWarnings("unchecked")
-  public @Nonnull EntryKey<? extends BaseEntry> getKey()
+  public EntryKey<? extends BaseEntry> getKey()
   {
     return new EntryKey(getID(), getType());
   }
@@ -368,7 +367,7 @@ public class BaseEntry extends AbstractEntry
    *              be the base to the current object
    *
    */
-//   public boolean matches(@Nonnull BaseEntry inBase)
+//   public boolean matches(BaseEntry inBase)
 //   {
 //     // only matches if the types match
 //     if(getType() != inBase.getType())
@@ -426,7 +425,7 @@ public class BaseEntry extends AbstractEntry
    * @return      true if the category is present, false if not
    *
    */
-  public boolean hasCategory(@Nonnull String inCategory)
+  public boolean hasCategory(String inCategory)
   {
     for(Name text : m_categories)
       if(text.get().equalsIgnoreCase(inCategory))
@@ -446,7 +445,7 @@ public class BaseEntry extends AbstractEntry
    * @return      true if the entry has a synonym, false if not
    *
    */
-  public boolean hasSynonym(@Nonnull String inName)
+  public boolean hasSynonym(String inName)
   {
     for(Text text : m_synonyms)
       if(text.get().equalsIgnoreCase(inName))
@@ -479,7 +478,7 @@ public class BaseEntry extends AbstractEntry
    * @return      the selection containing the selected world
    *
    */
-  public @Nonnull String getShortDescription()
+  public String getShortDescription()
   {
     String desc = m_short.get();
 
@@ -504,19 +503,16 @@ public class BaseEntry extends AbstractEntry
    *
    * @return      the string with the summary
    */
-  public @Nonnull String getSummary(@Nullable Parameters inParameters)
+  public String getSummary(@Nullable Parameters inParameters)
   {
     String summary = getShortDescription();
-
-    if(summary == null)
-      return "(none)";
 
     if(inParameters == null || !inParameters.isDefined())
       return summary;
 
     summary = computeExpressions(summary, inParameters);
 
-    Value notes = inParameters != null ? inParameters.getValue("Notes") : null;
+    Value notes = inParameters.getValue("Notes");
     if(notes != null)
       summary += " (" + notes + ")";
 
@@ -572,7 +568,7 @@ public class BaseEntry extends AbstractEntry
    * @return      a list of the reference ids
    *
    */
-  public @Nonnull List<String> getReferenceIDs()
+  public List<String> getReferenceIDs()
   {
     List<String> ids = new ArrayList<String>();
     for(Multiple reference : m_references)
@@ -628,7 +624,7 @@ public class BaseEntry extends AbstractEntry
    * @return      the base product referenced, if found
    *
    */
-  protected @Nullable BaseProduct resolveReference(@Nonnull String inName)
+  protected @Nullable BaseProduct resolveReference(String inName)
   {
     return DMADataFactory.get().getEntry(createKey(inName, BaseProduct.TYPE));
   }
@@ -656,7 +652,7 @@ public class BaseEntry extends AbstractEntry
    * @return      the synonyms
    *
    */
-  public @Nonnull List<String> getSynonyms()
+  public List<String> getSynonyms()
   {
     List<String> result = new ArrayList<String>();
 
@@ -676,7 +672,7 @@ public class BaseEntry extends AbstractEntry
    * @return      the references
    *
    */
-  public @Nonnull List<String> getReferences()
+  public List<String> getReferences()
   {
     List<String> result = new ArrayList<String>();
 
@@ -800,7 +796,7 @@ public class BaseEntry extends AbstractEntry
    *
    */
   @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
+  public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
   {
     if("categories".equals(inKey))
     {
@@ -1202,7 +1198,7 @@ public class BaseEntry extends AbstractEntry
    * @return      true if read successfully, false else
    *
    */
-//   protected boolean readEntry(@Nonnull ParseReader inReader)
+//   protected boolean readEntry(ParseReader inReader)
 //   {
 //     // TODO: remove this!
 //     if(inReader.expect("based on"))
