@@ -666,7 +666,7 @@ public class DMADatafiles implements DMAData
    * @return      true if removed, false if not
    *
    */
-  public boolean remove(AbstractEntry.EntryKey inKey)
+  public boolean remove(AbstractEntry.EntryKey<?> inKey)
   {
     throw new UnsupportedOperationException("not implemented");
   }
@@ -837,7 +837,7 @@ public class DMADatafiles implements DMAData
     String name = inEntry.getName();
     if(inEntry instanceof Entry)
     {
-      Entry entry = (Entry)inEntry;
+      Entry<?> entry = (Entry<?>)inEntry;
 
       if(Config.get("web.data.datastore", true) && entries.containsKey(name))
       {

@@ -179,7 +179,7 @@ public class PDFDocument extends ITextDocument
     {
       // using UJAC and iText
       // document properties (...don't know yet...)
-      Map properties = new HashMap();
+      Map<Object, Object> properties = new HashMap<Object, Object>();
 
       String text = super.toString();
 

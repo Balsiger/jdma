@@ -612,7 +612,7 @@ public @Nonnull String toString()
       BaseCommand command = null;
       try
       {
-        java.lang.Class commandClass =
+        java.lang.Class<?> commandClass =
           java.lang.Class.forName(s_package + className);
 
         command = (BaseCommand)commandClass.newInstance();

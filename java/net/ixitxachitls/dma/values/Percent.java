@@ -177,8 +177,6 @@ public class Percent extends BaseNumber<Percent>
       assertFalse("not undefined at start", percent.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    percent.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   percent.format(false).toString());
       assertEquals("undefined value not correct", 50, percent.get());
 
       // now with some percent
@@ -187,8 +185,6 @@ public class Percent extends BaseNumber<Percent>
       assertEquals("not defined after setting", true, percent.isDefined());
       assertEquals("value not correctly gotten", 10, percent.get());
       assertEquals("value not correctly converted", "10%", percent.toString());
-      assertEquals("value not correctly converted", "10%",
-                   percent.format(false).toString());
 
       assertEquals("max", 100, percent.getMax());
       assertEquals("min", 0, percent.getMin());

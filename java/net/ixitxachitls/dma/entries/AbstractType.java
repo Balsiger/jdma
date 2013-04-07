@@ -482,7 +482,7 @@ public class AbstractType<T extends AbstractEntry>
   {
     try
     {
-      return (T)m_class.newInstance();
+      return m_class.newInstance();
     }
     catch(java.lang.InstantiationException e)
     {

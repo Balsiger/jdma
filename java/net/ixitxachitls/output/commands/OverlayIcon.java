@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.output.commands;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.Pair;
@@ -47,6 +47,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class OverlayIcon extends BaseCommand
 {
   //--------------------------------------------------------- constructor(s)
@@ -64,10 +65,11 @@ public class OverlayIcon extends BaseCommand
    *                          overlays
    *
    */
-  public OverlayIcon(@Nonnull Object inName,
-                     @Nonnull Object inCaption,
-                     @Nonnull Object inLink, boolean inHighlight,
-                     @Nonnull Pair<String, Object> ... inOverlays)
+  @SuppressWarnings("unchecked")
+  public OverlayIcon(Object inName,
+                     Object inCaption,
+                     Object inLink, boolean inHighlight,
+                     Pair<String, Object> ... inOverlays)
   {
     this();
 

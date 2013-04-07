@@ -23,11 +23,10 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -49,6 +48,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Range extends BaseNumber<Range>
 {
   //--------------------------------------------------------- constructor(s)
@@ -109,7 +109,7 @@ public class Range extends BaseNumber<Range>
    *
    */
   @Override
-public @Nonnull Range create()
+  public Range create()
   {
     return new Range(m_min, m_max);
   }
@@ -156,24 +156,6 @@ public @Nonnull Range create()
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-protected @Nonnull Command doFormat()
-  {
-    if(m_number != m_end)
-      return new Command(m_number + "-" + m_end);
-
-    return super.doFormat();
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
@@ -250,7 +232,7 @@ public boolean isDefined()
    *
    */
   @Override
-protected boolean doRead(@Nonnull ParseReader inReader)
+  protected boolean doRead(ParseReader inReader)
   {
     if(!super.doRead(inReader))
       return false;
@@ -349,8 +331,6 @@ protected boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("not undefined at start", false, range.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    range.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   range.format(false).toString());
       assertEquals("undefined value not correct", 15, range.getStart());
       assertEquals("undefined value not correct", 15, range.getEnd());
 
@@ -361,8 +341,6 @@ protected boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("value not correctly gotten", 11, range.getStart());
       assertEquals("value not correctly gotten", 20, range.getEnd());
       assertEquals("value not correctly converted", "11-20", range.toString());
-      assertEquals("value not correctly converted", "11-20",
-                   range.format(false).toString());
 
       // now with some range
       range = new Range(10, 10, 0, 20);
@@ -371,8 +349,6 @@ protected boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("value not correctly gotten", 10, range.getStart());
       assertEquals("value not correctly gotten", 10, range.getEnd());
       assertEquals("value not correctly converted", "10", range.toString());
-      assertEquals("value not correctly converted", "10",
-                   range.format(false).toString());
 
       range = new Range(11, 20, 0, 20);
 

@@ -29,8 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Frac;
 
 //..........................................................................
 
@@ -316,35 +314,6 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
   }
 
   //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    if(!hasFraction())
-      return new Command((m_negative ? "-" : "") +  m_leader);
-
-    if(isRealFraction())
-      return new Command(new Object []
-        {
-          m_negative ? "-" : "",
-          new Frac(m_leader, getNominatorString(), getDenominatorString()),
-        });
-
-    if(m_leader == 0)
-      return new Command((m_negative ? "- " : "") + getNominatorString());
-
-    return new Command((m_negative ? "- " : "") + m_leader + " "
-                       + getNominatorString());
-  }
-
-  //........................................................................
 
   //------------------------------- compare --------------------------------
 
@@ -580,7 +549,6 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // have to cast reduced
   public T add(T inValue)
   {
     long nominator1 = m_leader * m_denominator + m_nominator;
@@ -606,7 +574,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
     else
       result.m_negative = false;
 
-    return (T)result.reduce();
+    return result.reduce();
   }
 
   //........................................................................
@@ -637,7 +605,6 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // have to cast reduced
   public T subtract(T inValue)
   {
     long nominator1 = m_leader * m_denominator + m_nominator;
@@ -663,7 +630,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
     else
       result.m_negative = false;
 
-    return (T)result.reduce();
+    return result.reduce();
   }
 
   //........................................................................
@@ -693,7 +660,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
    * @return      a new value representing the division
    *
    */
-  @SuppressWarnings("unchecked") // must cast reduced
+  @SuppressWarnings("unchecked")
   public T divide(long inValue)
   {
     if(inValue == 0)
@@ -708,7 +675,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
     result.m_leader = 0;
     result.m_negative = inValue < 0 ? !m_negative : m_negative;
 
-    return (T)result.reduce();
+    return result.reduce();
   }
 
   //........................................................................
@@ -723,7 +690,6 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // must cast reduced
   public T divide(T inValue)
   {
     T result = create();
@@ -735,7 +701,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
     result.m_leader = 0;
     result.m_negative = inValue.m_negative ? !m_negative : m_negative;
 
-    return (T)result.reduce();
+    return result.reduce();
   }
 
   //........................................................................
@@ -750,7 +716,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // have to cast this
+  @SuppressWarnings("unchecked")
   public T multiply(long inValue)
   {
     if(inValue == 1)
@@ -763,7 +729,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
     result.m_negative = (inValue < 0 && !m_negative)
       || (inValue >= 0 && m_negative);
 
-    return (T)result.reduce();
+    return result.reduce();
   }
 
   //........................................................................

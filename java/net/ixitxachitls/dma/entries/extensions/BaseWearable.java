@@ -34,8 +34,6 @@ import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Duration;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //..........................................................................
 
@@ -170,16 +168,10 @@ public class BaseWearable extends BaseExtension<BaseItem>
 
   //----- slot -------------------------------------------------------------
 
-  /** The formatter for light failure. */
-  protected static final Formatter<EnumSelection<Slot>>
-    s_slotFormatter = new LinkFormatter<EnumSelection<Slot>>
-    (link(BaseItem.TYPE, Index.Path.SLOTS));
-
   /** The slot where the item can be worn. */
   @Key("slot")
   protected @Nonnull EnumSelection<Slot> m_slot =
     new EnumSelection<Slot>(Slot.class)
-    .withFormatter(s_slotFormatter)
     .withTemplate("link", "slots");
 
   static
@@ -190,17 +182,12 @@ public class BaseWearable extends BaseExtension<BaseItem>
   //........................................................................
   //----- don --------------------------------------------------------------
 
-  /** The formatter for donning it. */
-  protected static final Formatter<Duration> s_donFormatter =
-    new LinkFormatter<Duration>(link(BaseItem.TYPE, Index.Path.DONS));
-
   /** How much time it takes to don the armor. */
   @Key("don")
   protected @Nonnull Multiple m_don = new Multiple(new Multiple.Element []
     {
-      new Multiple.Element(new Duration().withFormatter(s_donFormatter), false,
-                           null, "/"),
-      new Multiple.Element(new Duration().withFormatter(s_donFormatter), false),
+      new Multiple.Element(new Duration(), false, null, "/"),
+      new Multiple.Element(new Duration(), false),
     });
 
   static
@@ -211,14 +198,9 @@ public class BaseWearable extends BaseExtension<BaseItem>
   //........................................................................
   //----- remove -----------------------------------------------------------
 
-  /** The formatter for donning it. */
-  protected static final Formatter<Duration> s_removeFormatter =
-    new LinkFormatter<Duration>(link(BaseItem.TYPE, Index.Path.REMOVES));
-
   /** How much time it takes to don the armor. */
   @Key("remove")
-  protected @Nonnull Duration m_remove =
-    new Duration().withFormatter(s_removeFormatter);
+  protected @Nonnull Duration m_remove = new Duration();
 
   static
   {

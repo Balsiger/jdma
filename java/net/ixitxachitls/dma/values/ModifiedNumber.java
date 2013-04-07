@@ -196,6 +196,29 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   }
 
   //........................................................................
+  //--------------------------------- with ---------------------------------
+
+  /**
+   * Add the given modified number to this one and return it.
+   *
+   * @param       inNumber the modified number to add
+   *
+   * @return      this object for chaining
+   *
+   */
+  public ModifiedNumber with(ModifiedNumber inNumber)
+  {
+    // base
+    m_number += inNumber.m_number;
+
+    m_total = null;
+    m_modifiers.putAll(inNumber.m_modifiers);
+
+    return this;
+  }
+
+  //........................................................................
+
 
   {
     withTemplate("modifiednumber");

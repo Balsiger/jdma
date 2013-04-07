@@ -35,21 +35,12 @@ import com.google.common.collect.Lists;
 
 import net.ixitxachitls.dma.entries.extensions.Composite;
 import net.ixitxachitls.dma.entries.extensions.Contents;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Weight;
-import net.ixitxachitls.output.commands.Bold;
-import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Indent;
-import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Scriptsize;
-import net.ixitxachitls.output.commands.Small;
-import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -759,82 +750,82 @@ public class Item extends CampaignEntry<BaseItem>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
-  {
-    // if("name".equals(inKey))
-    // {
-    //   return new FormattedValue
-    //     (new Command(getNameCommand(inDM), " (", getName(), ")"), getName(),
-    //      "name")
-    //     .withEditable(true)
-    //     .withEditType("name");
-    // }
+  // @Override
+  // public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
+  // {
+  //   // if("name".equals(inKey))
+  //   // {
+  //   //   return new FormattedValue
+  // //     (new Command(getNameCommand(inDM), " (", getName(), ")"), getName(),
+  //   //      "name")
+  //   //     .withEditable(true)
+  //   //     .withEditType("name");
+  //   // }
 
-    if("itemlist".equals(inKey))
-    {
-      List<Object> item = new ArrayList<Object>();
-      item.add(new Small(new Bold(computeValue("name", inDM)
-                                  .format(this, inDM, true))));
-      item.add(new Scriptsize(computeValue("weight", inDM)
-                              .format(this, inDM, true)));
-      item.add(new Scriptsize(new Command(computeValue("appearance", inDM)
-                                          .format(this, inDM, true),
-                                          computeValue("player notes", inDM)
-                                          .format(this, inDM, true))));
+  //   if("itemlist".equals(inKey))
+  //   {
+  //     List<Object> item = new ArrayList<Object>();
+  //     item.add(new Small(new Bold(computeValue("name", inDM)
+  //                                 .format(this, inDM, true))));
+  //     item.add(new Scriptsize(computeValue("weight", inDM)
+  //                             .format(this, inDM, true)));
+  //     item.add(new Scriptsize(new Command(computeValue("appearance", inDM)
+  //                                         .format(this, inDM, true),
+  //                                         computeValue("player notes", inDM)
+  //                                         .format(this, inDM, true))));
 
-      if(inDM)
-      {
-        item.add(new Scriptsize(computeValue("value", inDM)
-                                .format(this, inDM, true)));
+  //     if(inDM)
+  //     {
+  //       item.add(new Scriptsize(computeValue("value", inDM)
+  //                               .format(this, inDM, true)));
 
-        List<Object> values = new ArrayList<Object>();
-        maybeAddValue(values, "size", inDM, null, ";");
-        maybeAddValue(values, "hp", inDM, " ", ";");
-        maybeAddValue(values, "break DC", inDM, " break DC", ";");
-        maybeAddValue(values, "counted:summary", inDM, " ", ";");
-        maybeAddValue(values, "wearable:summary", inDM, " ", ";");
-        maybeAddValue(values, "timed:summary", inDM, " ", ";");
-        maybeAddValue(values, "light:summary", inDM, " ", ";");
-        maybeAddValue(values, "weapon:summary", inDM, " ", ";");
-        maybeAddValue(values, "armor:summary", inDM, " ", ";");
-        maybeAddValue(values, "incomplete:summary", inDM, " ", ";");
+  //       List<Object> values = new ArrayList<Object>();
+  //       maybeAddValue(values, "size", inDM, null, ";");
+  //       maybeAddValue(values, "hp", inDM, " ", ";");
+  //       maybeAddValue(values, "break DC", inDM, " break DC", ";");
+  //       maybeAddValue(values, "counted:summary", inDM, " ", ";");
+  //       maybeAddValue(values, "wearable:summary", inDM, " ", ";");
+  //       maybeAddValue(values, "timed:summary", inDM, " ", ";");
+  //       maybeAddValue(values, "light:summary", inDM, " ", ";");
+  //       maybeAddValue(values, "weapon:summary", inDM, " ", ";");
+  //       maybeAddValue(values, "armor:summary", inDM, " ", ";");
+  //       maybeAddValue(values, "incomplete:summary", inDM, " ", ";");
 
-        item.add(new Scriptsize
-                 (new Command(new Color("subtitle",
-                                        computeValue("short description", true)
-                                        .format(this, true, true)),
-                              " ",
-                              new Color("dm-notes",
-                                        computeValue("dm notes", true)
-                                        .format(this, true, true)),
-                              new Linebreak(),
-                              new Command(values))));
-      }
+  //       item.add(new Scriptsize
+  //                (new Command(new Color("subtitle",
+  //                                     computeValue("short description", true)
+  //                                       .format(this, true, true)),
+  //                             " ",
+  //                             new Color("dm-notes",
+  //                                       computeValue("dm notes", true)
+  //                                       .format(this, true, true)),
+  //                             new Linebreak(),
+  //                             new Command(values))));
+  //     }
 
-      Command command = new Table("keep", "85:L;15:R", new Command(item));
+  //     Command command = new Table("keep", "85:L;15:R", new Command(item));
 
-      List<Object> nested = new ArrayList<Object>();
-      for(Map.Entry<String, Item> entry : containedItems(false).entrySet())
-      {
-        if(entry.getValue() == null)
-          nested.add(entry.getKey());
-        else
-          nested.add(entry.getValue().computeValue("itemlist", inDM)
-                     .format(entry.getValue(), inDM, true));
-      }
+  //     List<Object> nested = new ArrayList<Object>();
+  //     for(Map.Entry<String, Item> entry : containedItems(false).entrySet())
+  //     {
+  //       if(entry.getValue() == null)
+  //         nested.add(entry.getKey());
+  //       else
+  //         nested.add(entry.getValue().computeValue("itemlist", inDM)
+  //                    .format(entry.getValue(), inDM, true));
+  //     }
 
-      if(!nested.isEmpty())
-        command = new Command(command, new Indent(new Command(nested)));
+  //     if(!nested.isEmpty())
+  //       command = new Command(command, new Indent(new Command(nested)));
 
-      return new FormattedValue(command, null, "itemlist");
-    }
+  //     return new FormattedValue(command, null, "itemlist");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
-  //---------------------------- getNameCommand ----------------------------
+  //---------------------------- computeFullName ---------------------------
 
   /**
    * Get a command to format the name of the item.
@@ -1190,7 +1181,8 @@ public class Item extends CampaignEntry<BaseItem>
 
     if(!m_hp.isDefined())
     {
-      Number total = new Combination<Number>(this, "hp").total();
+      Combined<Number> combinedHp = collect("hp");
+      Number total = combinedHp.total();
       if(total != null)
       {
         m_hp = m_hp.as(total.get());
@@ -1205,7 +1197,8 @@ public class Item extends CampaignEntry<BaseItem>
 
       // correct the random value with the computation from the value in
       // relation to the base value
-      Money total = new Combination<Money>(this, "value").total();
+      Combined<Money> combinedValue = collect("value");
+      Money total = combinedValue.total();
       double itemValue = getGoldValue();
       double baseValue = m_value.isDefined() || total == null ? itemValue
         : total.getAsGold().getValue();

@@ -746,7 +746,7 @@ public class Document
   {
     Document sub = createSubDocument();
 
-    for(Iterator i = m_footer.iterator(); i.hasNext(); )
+    for(Iterator<Object> i = m_footer.iterator(); i.hasNext(); )
       sub.add(i.next());
 
     return sub.toString();
@@ -972,9 +972,9 @@ public class Document
       Object []notes = new Object[m_footnotes.size() * 2];
 
       int j = 0;
-      for(Iterator i = m_footnotes.iterator(); i.hasNext(); )
+      for(Iterator<Footnote> i = m_footnotes.iterator(); i.hasNext(); )
       {
-        Footnote note = (Footnote)i.next();
+        Footnote note = i.next();
 
         notes[j++] = note.getMarker() + ")";
         notes[j++] = note.getText();

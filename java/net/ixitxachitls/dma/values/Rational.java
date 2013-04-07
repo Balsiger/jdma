@@ -369,7 +369,6 @@ public @Nonnull Rational reduce()
       assertEquals("undefined nominator", 0, rational.getNominator());
       assertEquals("undefined denominator", 0, rational.getDenominator());
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "", rational.format(true).toString());
 
       // now with some rational
       rational = new Rational(1, 2);
@@ -381,7 +380,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 1, rational.getNominator());
       assertEquals("denominator", 2, rational.getDenominator());
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac{1}{2}", rational.format(true).toString());
 
       // now with some rational
       rational = new Rational(1, 2, 3);
@@ -393,8 +391,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 2, rational.getNominator());
       assertEquals("denominator", 3, rational.getDenominator());
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new Rational(1, -2, -3);
@@ -406,8 +402,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 2, rational.getNominator());
       assertEquals("denominator", 3, rational.getDenominator());
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new Rational(-1, 2, 3);
@@ -419,8 +413,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 2, rational.getNominator());
       assertEquals("denominator", 3, rational.getDenominator());
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new Rational(-1, -2, 3);
@@ -432,8 +424,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 2, rational.getNominator());
       assertEquals("denominator", 3, rational.getDenominator());
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new Rational(1, -2, 3);
@@ -445,7 +435,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 1, rational.getNominator());
       assertEquals("denominator", 3, rational.getDenominator());
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac{1}{3}", rational.format(true).toString());
 
       // how about some negative
       rational = new Rational(1, -4, 3);
@@ -457,7 +446,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 1, rational.getNominator());
       assertEquals("denominator", 3, rational.getDenominator());
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac{1}{3}", rational.format(true).toString());
 
       // how about some negative
       rational = new Rational(0, -1, 3);
@@ -469,7 +457,6 @@ public @Nonnull Rational reduce()
       assertEquals("nominator", 1, rational.getNominator());
       assertEquals("denominator", 3, rational.getDenominator());
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac{1}{3}", rational.format(true).toString());
 
       Value.Test.createTest(rational);
     }

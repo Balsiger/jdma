@@ -464,7 +464,7 @@ public abstract class ValueGroup implements Changeable
    * @return      true if it is in, false if it is not
    *
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public boolean isValueIn(String inValue, String inKey)
   {
     Value<?> value = getValue(inKey);
@@ -478,7 +478,7 @@ public abstract class ValueGroup implements Changeable
       return false;
     }
 
-    for(Value<?> v : (ValueList<Value<?>>)value)
+    for(Object v : (ValueList)value)
       if(inValue.equalsIgnoreCase(v.toString()))
         return true;
 
@@ -748,12 +748,12 @@ public abstract class ValueGroup implements Changeable
    * @param       <V>           the real type of the values combined
    *
    */
-  @Deprecated
-  public <V extends Value<?>> void adjustCombination
-            (String inName, Combination<V> ioCombination)
-  {
-    // nothing to do
-  }
+  // @Deprecated
+  // public <V extends Value<?>> void adjustCombination
+  //           (String inName, Combination<V> ioCombination)
+  // {
+  //   // nothing to do
+  // }
 
   //........................................................................
   //--------------------------- collectModifiers ---------------------------
@@ -856,7 +856,6 @@ public abstract class ValueGroup implements Changeable
    * @param   inName     the name of the value to collect
    * @param   ioCombined the combined value to collect into (can be changed)
    * @param   <T>        the type of value being collected
-   *
    */
   protected <T extends Value<T>> void collect(String inName,
                                               Combined<T> ioCombined)
@@ -1302,14 +1301,14 @@ public abstract class ValueGroup implements Changeable
    *
    */
   @SuppressWarnings("unchecked") // need to cast for type
-  @Deprecated
   public @Nullable <T extends Value<T>>
                       T sum(String inKey, List<? extends ValueGroup> inEntries)
   {
     T total = null;
     for(ValueGroup entry : inEntries)
     {
-      T value = new Combination<T>(entry, inKey).total();
+      Combined<T> combined = ((AbstractEntry)entry).collect(inKey);
+      T value = combined.total();
       if(value == null || !value.isDefined())
         continue;
 

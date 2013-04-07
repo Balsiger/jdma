@@ -23,12 +23,11 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
@@ -48,6 +47,7 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Union extends Value<Union>
 {
   //--------------------------------------------------------- constructor(s)
@@ -60,7 +60,7 @@ public class Union extends Value<Union>
    * @param       inValues all the possible values that can be read
    *
    */
-  public Union(@Nonnull Value ... inValues)
+  public Union(Value ... inValues)
   {
     this(-1, inValues);
   }
@@ -75,7 +75,7 @@ public class Union extends Value<Union>
    * @param       inValues all the possible values that can be read
    *
    */
-  public Union(int inIndex, @Nonnull Value ... inValues)
+  public Union(int inIndex, Value ... inValues)
   {
     if(inValues.length < 2)
       throw new IllegalArgumentException("must have at least two values here");
@@ -112,7 +112,7 @@ public class Union extends Value<Union>
   //-------------------------------------------------------------- variables
 
   /** The possible values store here. */
-  private @Nonnull Value []m_values;
+  private Value []m_values;
 
   /** The index of the value actually read. */
   private int m_index;
@@ -129,7 +129,7 @@ public class Union extends Value<Union>
    * @return      the value read (or null if none)
    *
    */
-  public @Nullable Value get()
+  public @Nullable Value<?> get()
   {
     if(m_index < 0 || m_index >= m_values.length)
       return null;
@@ -161,7 +161,7 @@ public class Union extends Value<Union>
    *
    */
   @Override
-  public @Nonnull String getEditValue()
+  public String getEditValue()
   {
     if(isDefined())
       return m_values[m_index].getEditValue();
@@ -179,7 +179,7 @@ public class Union extends Value<Union>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(isDefined())
       return m_values[m_index].toString();
@@ -199,7 +199,7 @@ public class Union extends Value<Union>
   @Override
   public boolean isArithmetic()
   {
-    for(Value value : m_values)
+    for(Value<?> value : m_values)
       if(!value.isArithmetic())
         return false;
 
@@ -219,20 +219,6 @@ public class Union extends Value<Union>
   public boolean isDefined()
   {
     return m_index >= 0;
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  protected Command doFormat()
-  {
-    return m_values[m_index].format(false);
   }
 
   //........................................................................
@@ -272,12 +258,12 @@ public class Union extends Value<Union>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     for(int i = 0; i < m_values.length; i++)
     {
       ParseReader.Position pos = inReader.getPosition();
-      Value value = m_values[i].read(inReader);
+      Value<?> value = m_values[i].read(inReader);
       if(value != null)
       {
         m_values[i] = value;

@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -48,6 +48,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Volume extends Units<Volume>
 {
   //--------------------------------------------------------- constructor(s)
@@ -101,8 +102,9 @@ public class Volume extends Units<Volume>
    *              given)
    *
    */
-  public Volume(Rational inGallons, Rational inQuarts, Rational inPints,
-                Rational inCups, Rational inOunces)
+  public Volume(@Nullable Rational inGallons, @Nullable Rational inQuarts,
+                @Nullable Rational inPints, @Nullable Rational inCups,
+                @Nullable Rational inOunces)
   {
     super(new Rational [] { inGallons, inQuarts, inPints, inCups, inOunces },
           s_sets, s_sets[2], 5);
@@ -124,7 +126,8 @@ public class Volume extends Units<Volume>
    *              given)
    *
    */
-  public Volume(Rational inLiter, Rational inDeciLiter, Rational inCentiLiter)
+  public Volume(@Nullable Rational inLiter, @Nullable Rational inDeciLiter,
+                @Nullable Rational inCentiLiter)
   {
     super(new Rational [] { inLiter, inDeciLiter, inCentiLiter, }, s_sets,
           s_sets[3], 5);
@@ -172,7 +175,7 @@ public class Volume extends Units<Volume>
                + "                1/100 : cl : centiliter|centiliters.");
 
   /** The sets with the possible units. */
-  private static @Nonnull Set []s_sets = parseDefinition(s_definition);
+  private static Set []s_sets = parseDefinition(s_definition);
 
   //........................................................................
 
@@ -229,7 +232,7 @@ public class Volume extends Units<Volume>
    * @return      the inches
    *
    */
-  public @Nonnull Rational getAsFeet()
+  public Rational getAsFeet()
   {
     if(!isDefined())
       return new Rational(0);
@@ -249,7 +252,7 @@ public class Volume extends Units<Volume>
    * @return      the inches
    *
    */
-  public @Nonnull Rational getAsMeters()
+  public Rational getAsMeters()
   {
     if(!isDefined())
       return new Rational(0);
@@ -269,7 +272,7 @@ public class Volume extends Units<Volume>
    * @return      the liquid value
    *
    */
-  public @Nonnull Rational getAsGallons()
+  public Rational getAsGallons()
   {
     if(!isDefined())
       return new Rational(0);
@@ -289,7 +292,7 @@ public class Volume extends Units<Volume>
    * @return      the liters value
    *
    */
-  public @Nonnull Rational getAsLiters()
+  public Rational getAsLiters()
   {
     if(!isDefined())
       return new Rational(0);
@@ -310,7 +313,7 @@ public class Volume extends Units<Volume>
    * @return      the corresponding metric value.
    *
    */
-  public @Nonnull Volume asMetric()
+  public Volume asMetric()
   {
     if(m_set == m_sets[1])
       return this;
@@ -327,7 +330,7 @@ public class Volume extends Units<Volume>
    * @return      the corresponding feet value.
    *
    */
-  public @Nonnull Volume asFeet()
+  public Volume asFeet()
   {
     if(m_set == m_sets[0])
       return this;
@@ -344,7 +347,7 @@ public class Volume extends Units<Volume>
    * @return      the corresponding feet value.
    *
    */
-  public @Nonnull Volume asGallons()
+  public Volume asGallons()
   {
     if(m_set == m_sets[2])
       return this;
@@ -361,7 +364,7 @@ public class Volume extends Units<Volume>
    * @return      the corresponding feet value.
    *
    */
-  public @Nonnull Volume asLiters()
+  public Volume asLiters()
   {
     if(m_set == m_sets[3])
       return this;
@@ -371,39 +374,6 @@ public class Volume extends Units<Volume>
 
   //........................................................................
 
-  //----------------------------- collectData ------------------------------
-
-  /**
-   * Collect the data available for printing the value.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the data as a map
-   *
-   */
-  // @Override
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
-  // {
-  //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
-
-  //   data.put("metric", isMetric());
-  //   data.put("feet", isFeet());
-  //   data.put("liquid", isLiquid());
-  //   data.put("asfeet",
-  //            new SoyValue("as feet", asFeet(), inEntry, inRenderer));
-  //   data.put("asmetric",
-  //            new SoyValue("as metric", asMetric(), inEntry, inRenderer));
-  //   data.put("asgallons",
-  //            new SoyValue("as gallons", asGallons(), inEntry, inRenderer));
-  //   data.put("asliters",
-  //            new SoyValue("as liters", asLiters(), inEntry, inRenderer));
-
-  //   return data;
-  // }
-
-  //........................................................................
   //------------------------------- doGroup --------------------------------
 
   /**
@@ -413,7 +383,7 @@ public class Volume extends Units<Volume>
    *
    */
   @Override
-public @Nonnull String doGroup()
+  public String doGroup()
   {
     if(isLiquid())
     {
@@ -507,8 +477,8 @@ public @Nonnull String doGroup()
    * @return      the volume as metric
    *
    */
-  public @Nonnull Volume asMetric(@Nullable Rational inCubicMeters,
-                                  @Nullable Rational inCubicCentimeters)
+  public Volume asMetric(@Nullable Rational inCubicMeters,
+                         @Nullable Rational inCubicCentimeters)
   {
     return as(new Rational [] { inCubicMeters, inCubicCentimeters }, 1);
   }
@@ -525,8 +495,8 @@ public @Nonnull String doGroup()
    * @return      the volume as feet
    *
    */
-  public @Nonnull Volume asFeet(@Nullable Rational inCubicFeet,
-                                @Nullable Rational inCubicInches)
+  public Volume asFeet(@Nullable Rational inCubicFeet,
+                       @Nullable Rational inCubicInches)
   {
     return as(new Rational [] { inCubicFeet, inCubicInches }, 0);
   }
@@ -546,11 +516,11 @@ public @Nonnull String doGroup()
    * @return      the volume as gallons
    *
    */
-  public @Nonnull Volume asGallons(@Nullable Rational inGallons,
-                                   @Nullable Rational inQuarts,
-                                   @Nullable Rational inPints,
-                                   @Nullable Rational inCups,
-                                   @Nullable Rational inOunces)
+  public Volume asGallons(@Nullable Rational inGallons,
+                          @Nullable Rational inQuarts,
+                          @Nullable Rational inPints,
+                          @Nullable Rational inCups,
+                          @Nullable Rational inOunces)
   {
     return as(new Rational [] { inGallons, inQuarts, inPints, inCups,
                                 inOunces }, 2);
@@ -569,9 +539,9 @@ public @Nonnull String doGroup()
    * @return      the volume as liters
    *
    */
-  public @Nonnull Volume asLiters(@Nullable Rational inLiters,
-                                  @Nullable Rational inDeziLiters,
-                                  @Nullable Rational inCentiLiters)
+  public Volume asLiters(@Nullable Rational inLiters,
+                         @Nullable Rational inDeziLiters,
+                         @Nullable Rational inCentiLiters)
   {
     return as(new Rational [] { inLiters, inDeziLiters, inCentiLiters }, 3);
   }
@@ -600,8 +570,6 @@ public @Nonnull String doGroup()
       assertEquals("not undefined at start", false, value.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    value.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   value.format(false).toString());
       assertEquals("feet",   false, value.isFeet());
       assertEquals("metric", false, value.isMetric());
       assertEquals("undefined value not correct", "0",
@@ -618,16 +586,6 @@ public @Nonnull String doGroup()
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string ", "1 1/2 cu dm", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{\\frac[1]{1}{2} cu dm}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac{3}{2000} cu m}{}{}"
-                   + "{Feet:}{\\span{unit}{\\frac[64]{4}{5} cu in}}"
-                   + "{Gallons:}{\\span{unit}{1 quart} "
-                   + "\\span{unit}{\\frac{1}{2} cup}}"
-                   + "{Liters:}{\\span{unit}{1 l} "
-                   + "\\span{unit}{\\frac[1]{1}{4} dl}}}",
-                   value.format(false).toString());
       assertEquals("feet",   false,  value.isFeet());
       assertEquals("metric", true,   value.isMetric());
       assertEquals("metric", false,   value.isLiquid());
@@ -641,18 +599,6 @@ public @Nonnull String doGroup()
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 2/3 cu ft 2 cu in", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{\\frac[1]{2}{3} cu ft} "
-                   + "\\span{unit}{2 cu in}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{577}{864} cu ft}{}{}"
-                   + "{Metric:}{\\span{unit}{\\frac[66]{77}{108} cu dm}}"
-                   + "{Gallons:}{\\span{unit}{12 gallons} "
-                   + "\\span{unit}{2 quarts} "
-                   + "\\span{unit}{\\frac[1]{1}{9} ounces}}"
-                   + "{Liters:}{\\span{unit}{50 l} "
-                   + "\\span{unit}{\\frac[3]{17}{36} cl}}}",
-                   value.format(false).toString());
       assertEquals("feet",   true,  value.isFeet());
       assertEquals("metric", false, value.isMetric());
       assertEquals("metric", false,   value.isLiquid());
@@ -668,17 +614,6 @@ public @Nonnull String doGroup()
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 gallon 1 1/2 quarts 2/3 pint 4 cups",
                    value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{1 gallon} "
-                   + "\\span{unit}{\\frac[1]{1}{2} quarts} "
-                   + "\\span{unit}{\\frac{2}{3} pint} \\span{unit}{4 cups}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{17}{24} gallons}{}{}"
-                   + "{Feet:}{\\span{unit}{\\frac[393]{3}{5} cu in}}"
-                   + "{Metric:}{\\span{unit}{\\frac[9]{1}{9} cu dm}}"
-                   + "{Liters:}{\\span{unit}{6 l} "
-                   + "\\span{unit}{\\frac[8]{1}{3} dl}}}",
-                   value.format(false).toString());
       assertEquals("feet",   true,  value.isFeet());
       assertEquals("metric", false,  value.isMetric());
       assertEquals("metric", true,   value.isLiquid());
@@ -691,16 +626,6 @@ public @Nonnull String doGroup()
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 l 3 1/4 dl", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{1 l} "
-                   + "\\span{unit}{\\frac[3]{1}{4} dl}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{13}{40} l}{}{}"
-                   + "{Feet:}{\\span{unit}{\\frac[76]{8}{25} cu in}}"
-                   + "{Metric:}{\\span{unit}{\\frac[1]{23}{30} cu dm}}"
-                   + "{Gallons:}{\\span{unit}{1 quart} \\span{unit}{1 cup} "
-                   + "\\span{unit}{\\frac[2]{2}{5} ounces}}}",
-                   value.format(false).toString());
       assertEquals("feet",   false, value.isFeet());
       assertEquals("metric", true,  value.isMetric());
       assertEquals("metric", true,   value.isLiquid());

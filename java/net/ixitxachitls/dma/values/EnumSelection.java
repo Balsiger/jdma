@@ -30,7 +30,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -235,21 +234,6 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    return new Command(m_selected);
-  }
-
-  //........................................................................
   //------------------------------- toString -------------------------------
 
   /**
@@ -538,8 +522,6 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
       assertEquals("not undefined at start", false, selection.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    selection.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   selection.format(false).toString());
       assertNull("undefined value not correct", selection.getSelected());
 
       // now with some selection
@@ -550,8 +532,6 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
                    selection.getSelected());
       assertEquals("value not correctly converted", "three",
                    selection.toString());
-      assertEquals("value not correctly converted", "three",
-                   selection.format(false).toString());
       assertEquals("sorted", "02-three", selection.getSorted());
       assertEquals("edit values", "one||two||three||four",
                    selection.getChoices());

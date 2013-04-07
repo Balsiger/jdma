@@ -23,23 +23,12 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -58,6 +47,7 @@ import net.ixitxachitls.output.commands.Symbol;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Armor extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -73,7 +63,7 @@ public class Armor extends Extension<Item>
    * @undefined   never
    *
    */
-  public Armor(@Nonnull Item inEntry, @Nonnull String inName)
+  public Armor(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -102,11 +92,6 @@ public class Armor extends Extension<Item>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%{AC bonus} %{armor type} %<{max dexterity} %{check penalty} "
-              + "%{arcane failure} %speed");
-
   static
   {
     extractVariables(Item.class, Armor.class);
@@ -116,36 +101,6 @@ public class Armor extends Extension<Item>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -157,27 +112,28 @@ public class Armor extends Extension<Item>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if(inDM && "summary".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      commands.add(new Linebreak());
-      commands.add(new Symbol("\u2602"));
-      maybeAddValue(commands, "armor type", inDM, null, " ");
-      maybeAddValue(commands, "AC bonus", inDM, null, null);
-      maybeAddValue(commands, "max dexterity", inDM, ", max Dex ", null);
-      maybeAddValue(commands, "check penalty", inDM, ", checks ", null);
-      maybeAddValue(commands, "arcane failure", inDM, ", arcane failure ",
-                    null);
-      maybeAddValue(commands, "speed", inDM, ", speed ", null);
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey,
+  // boolean inDM)
+  // {
+  //   if(inDM && "summary".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     commands.add(new Linebreak());
+  //     commands.add(new Symbol("\u2602"));
+  //     maybeAddValue(commands, "armor type", inDM, null, " ");
+  //     maybeAddValue(commands, "AC bonus", inDM, null, null);
+  //     maybeAddValue(commands, "max dexterity", inDM, ", max Dex ", null);
+  //     maybeAddValue(commands, "check penalty", inDM, ", checks ", null);
+  //     maybeAddValue(commands, "arcane failure", inDM, ", arcane failure ",
+  //                   null);
+  //     maybeAddValue(commands, "speed", inDM, ", speed ", null);
 
-      return new FormattedValue(new Command(commands), null, "summary");
-    }
+  //     return new FormattedValue(new Command(commands), null, "summary");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //------------------------- computeIndexValues ---------------------------
@@ -189,7 +145,7 @@ public class Armor extends Extension<Item>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
   }

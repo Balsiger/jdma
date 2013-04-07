@@ -23,12 +23,11 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
@@ -50,6 +49,7 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class ISBN extends Value<ISBN>
 {
   //--------------------------------------------------------- constructor(s)
@@ -74,7 +74,7 @@ public class ISBN extends Value<ISBN>
    * @param       inNumber the ISBN number
    *
    */
-  public ISBN(@Nonnull String inNumber)
+  public ISBN(String inNumber)
   {
     this();
 
@@ -112,8 +112,7 @@ public class ISBN extends Value<ISBN>
    *                          automatically)
    *
    */
-  public ISBN(@Nonnull String inGroup, @Nonnull String inPublisher,
-              @Nonnull String inTitle, int inCheck)
+  public ISBN(String inGroup, String inPublisher, String inTitle, int inCheck)
   {
     this();
 
@@ -204,21 +203,6 @@ public boolean isDefined()
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-protected Command doFormat()
-  {
-    return new Command(toString());
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
@@ -228,7 +212,7 @@ protected Command doFormat()
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected String doToString()
   {
     return m_group + '-' + m_publisher + '-' + m_title + '-'
       + (m_check > 9 ? 'X' : (char)(m_check + '0'));
@@ -300,7 +284,7 @@ protected @Nonnull String doToString()
    * @return      a String with the stored title
    *
    */
-  public @Nonnull String getUnformatted()
+  public String getUnformatted()
   {
     return m_group + m_publisher + m_title
       + (m_check == 10 ? "X" : "" + m_check);
@@ -325,7 +309,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos;
 
@@ -390,9 +374,7 @@ public boolean doRead(@Nonnull ParseReader inReader)
    *              ISBN algorithm</A>
    *
    */
-  public static int compute(@Nonnull String inGroup,
-                            @Nonnull String inPublisher,
-                            @Nonnull String inTitle)
+  public static int compute(String inGroup, String inPublisher, String inTitle)
   {
     if(inGroup.length() + inPublisher.length() + inTitle.length() != 9)
       return -1;

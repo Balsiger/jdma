@@ -579,7 +579,7 @@ public class BaseFeat extends BaseEntry
    * @param       ioCombined      the combined value to collect into
    * @param       inParameters    parameters to adjust values
    */
-  public void collect(String inName, Combined ioCombined,
+  public void collect(String inName, Combined<?> ioCombined,
                       Parameters inParameters)
   {
     super.collect(inName, ioCombined);

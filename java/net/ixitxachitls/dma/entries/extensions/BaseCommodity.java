@@ -23,19 +23,15 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Area;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.Group;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //..........................................................................
 
@@ -45,7 +41,6 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
  * This is the commodity extension for all the entries.
  *
  * @file          BaseCommodity.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
  *
  */
@@ -54,6 +49,7 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseCommodity extends BaseExtension<BaseItem>
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +63,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
    * @param       inName the name of the extension
    *
    */
-  public BaseCommodity(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseCommodity(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -94,22 +90,14 @@ public class BaseCommodity extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%area %length");
-
   //----- area -------------------------------------------------------------
-
-  /** The formatter for types. */
-  protected static final Formatter<Area> s_areaFormatter =
-    new LinkFormatter<Area>(link(BaseItem.TYPE, Index.Path.AREAS));
 
   /** The grouping for max dex. */
   protected static final Group<Area, Long, String> s_areaGrouping =
     new Group<Area, Long, String>(new Group.Extractor<Area, Long>()
       {
         @Override
-        public Long extract(@Nonnull Area inValue)
+        public Long extract(Area inValue)
         {
           return (long)inValue.getAsFeet().getValue() * 144;
         }
@@ -120,7 +108,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
 
   /** The area for this commodity. */
   @Key("area")
-  protected @Nonnull Area m_area = new Area().withFormatter(s_areaFormatter)
+  protected Area m_area = new Area()
     .withGrouping(s_areaGrouping)
     .withTemplate("link", Index.Path.AREAS.getPath());
 
@@ -131,10 +119,6 @@ public class BaseCommodity extends BaseExtension<BaseItem>
 
   //........................................................................
   //----- length -----------------------------------------------------------
-
-  /** The formatter for types. */
-  protected static final Formatter<Distance> s_lengthFormatter =
-    new LinkFormatter<Distance>(link(BaseItem.TYPE, Index.Path.LENGTHS));
 
   /** The grouping for max dex. */
   protected static final Group<Distance, Long, String> s_lengthGrouping =
@@ -156,8 +140,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
 
   /** The length of this commodity. */
   @Key("length")
-  protected @Nonnull Distance m_length = new Distance()
-    .withFormatter(s_lengthFormatter)
+  protected Distance m_length = new Distance()
     .withGrouping(s_lengthGrouping);
 
   static
@@ -177,36 +160,6 @@ public class BaseCommodity extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //------------------------- computeIndexValues ---------------------------
 
   /**
@@ -216,7 +169,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
 

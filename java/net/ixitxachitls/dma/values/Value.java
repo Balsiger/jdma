@@ -34,10 +34,7 @@ import com.google.common.collect.ImmutableList;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
-import net.ixitxachitls.dma.values.formatters.Formatter;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Grouping;
 import net.ixitxachitls.util.PublicCloneable;
 import net.ixitxachitls.util.configuration.Config;
@@ -106,7 +103,6 @@ public abstract class Value<T extends Value<T>>
   @SuppressWarnings("unchecked")
   public T create(T inNew)
   {
-    inNew.m_formatter = m_formatter;
     inNew.m_grouping = m_grouping;
     inNew.m_editType = m_editType;
     inNew.m_choices = m_choices;
@@ -147,25 +143,6 @@ public abstract class Value<T extends Value<T>>
 
   //........................................................................
 
-  //---------------------------- withFormatter -----------------------------
-
-  /**
-   * Set a formatter for this value.
-   *
-   * @param       inFormatter to formatter to use when printing the value
-   *
-   * @return      the value itself (to allow new T().setFormatter())
-   *
-   */
-  @SuppressWarnings("unchecked")
-  public T withFormatter(Formatter<T> inFormatter)
-  {
-    m_formatter = inFormatter;
-
-    return (T)this;
-  }
-
-  //........................................................................
   //----------------------------- withGrouping -----------------------------
 
   /**
@@ -173,7 +150,7 @@ public abstract class Value<T extends Value<T>>
    *
    * @param       inGrouping to grouping to use when printing the value
    *
-   * @return      the value itself (to allow new T().setFormatter())
+   * @return      the value itself
    *
    */
   @SuppressWarnings("unchecked")
@@ -191,7 +168,7 @@ public abstract class Value<T extends Value<T>>
    *
    * @param       inType the type to set to
    *
-   * @return      the value itself (to allow new T().setFormatter())
+   * @return      the value itself
    *
    */
   @SuppressWarnings("unchecked")
@@ -213,7 +190,7 @@ public abstract class Value<T extends Value<T>>
    *
    * @param       inValues the edit values to use
    *
-   * @return      the value itself (to allow new T().setFormatter())
+   * @return      the value itself
    *
    */
   @SuppressWarnings("unchecked")
@@ -232,7 +209,7 @@ public abstract class Value<T extends Value<T>>
    *
    * @param       inValues the related values to use
    *
-   * @return      the value itself (to allow new T().setFormatter())
+   * @return      the value itself
    *
    */
   @SuppressWarnings("unchecked")
@@ -352,9 +329,6 @@ public abstract class Value<T extends Value<T>>
 
   /** The expression for value computation, if any. */
   protected @Nullable Expression m_expression = null;
-
-  /** The formatter for the value. */
-  protected @Nullable Formatter<T> m_formatter = null;
 
   /** A grouping of the values, if any. */
   protected @Nullable Grouping<T, String> m_grouping = null;
@@ -570,102 +544,10 @@ public abstract class Value<T extends Value<T>>
    * @return      the string to be printed
    *
    */
+  @Deprecated // ??
   protected String doPrint(AbstractEntry inEntry)
   {
     return toString(false);
-  }
-
-  //........................................................................
-
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @return      the command that can be printed
-   *
-   */
-  @Deprecated
-  public Command format()
-  {
-    return format(false, false);
-  }
-
-  //........................................................................
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @param       inIgnoreUndefined true if undefined values should be returned
-   *                                as empty
-   *
-   * @return      the command that can be printed
-   *
-   */
-  @Deprecated
-  public Command format(boolean inIgnoreUndefined)
-  {
-    return format(inIgnoreUndefined, false);
-  }
-
-  //........................................................................
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @param       inIgnoreUndefined true if undefined values should be returned
-   *                                as empty
-   * @param       inIgnoreFormatter true if set formattter should be ignored
-   *
-   * @return      the command that can be printed
-   *
-   */
-  @SuppressWarnings("unchecked")
-  @Deprecated
-  public Command format(boolean inIgnoreUndefined, boolean inIgnoreFormatter)
-  {
-    Command command = null;
-
-    if(!isDefined())
-      if(hasExpression())
-        return new Command(m_expression);
-      else
-        if(inIgnoreUndefined)
-          command = new Command(new Object[0]);
-        else
-          command = new Color("error", UNDEFINED);
-    else
-    {
-      if(!inIgnoreFormatter && m_formatter != null)
-        command = m_formatter.format((T)this);
-      else
-        command = doFormat();
-
-      if(hasExpression())
-        command = new Command(m_expression, " ", command);
-    }
-
-    if(m_remark != null)
-      command = m_remark.format(command);
-
-    return command;
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Deprecated
-  protected Command doFormat()
-  {
-    throw new UnsupportedOperationException("no more supported");
   }
 
   //........................................................................
@@ -1173,8 +1055,6 @@ public abstract class Value<T extends Value<T>>
       assertEquals("new not undefined", UNDEFINED, newValue.toString());
       assertEquals("new not same class",
                    inValue.getClass(), newValue.getClass());
-      assertEquals("new value not same formatter",
-                   inValue.m_formatter, newValue.m_formatter);
       assertEquals("new value not same group",
                    inValue.m_grouping, newValue.m_grouping);
       assertEquals("new value not same edit type",
@@ -1211,7 +1091,7 @@ public abstract class Value<T extends Value<T>>
       private boolean m_defined = false;
 
       @Override
-	protected boolean doRead(ParseReader inReader)
+      protected boolean doRead(ParseReader inReader)
       {
         m_defined = inReader.expect("guru");
         return m_defined;
@@ -1223,13 +1103,7 @@ public abstract class Value<T extends Value<T>>
       }
 
       @Override
-	public Command doFormat()
-      {
-        return new Command("guru");
-      }
-
-      @Override
-	public boolean isDefined()
+      public boolean isDefined()
       {
         return m_defined;
       }
@@ -1241,7 +1115,7 @@ public abstract class Value<T extends Value<T>>
       }
 
       @Override
-	public TestValue create()
+      public TestValue create()
       {
         TestValue copy = this.clone();
         copy.reset();
@@ -1271,44 +1145,6 @@ public abstract class Value<T extends Value<T>>
       readTest(tests, new TestValue());
 
       createTest(new TestValue(true));
-    }
-
-    //......................................................................
-    //----- formatting -----------------------------------------------------
-
-    /** The formatting Test. */
-    @org.junit.Test
-    public void formatting()
-    {
-      TestValue value = new TestValue();
-
-      assertEquals("undefined", new Color("error", UNDEFINED),
-                   value.format(false));
-      assertEquals("undefined", new Command(new Object [0]),
-                   value.format(true));
-
-      value = new TestValue(true);
-      assertEquals("defined", new Command("guru"),
-                   value.format(false));
-      assertEquals("defined", new Command("guru"),
-                   value.format(true));
-
-
-      StringReader string = new StringReader("{*} guru");
-      ParseReader reader = new ParseReader(string, "test");
-      value = new TestValue().read(reader);
-      assertEquals("defined, remark",
-                   new net.ixitxachitls.output.commands.Span
-                   ("HOUSE_RULE",
-                    new net.ixitxachitls.output.commands.Window
-                    (new Command("guru"), "House Rule")),
-                   value.format(false));
-      assertEquals("defined, remark",
-                   new net.ixitxachitls.output.commands.Span
-                   ("HOUSE_RULE",
-                    new net.ixitxachitls.output.commands.Window
-                    (new Command("guru"), "House Rule")),
-                   value.format(true));
     }
 
     //......................................................................

@@ -34,18 +34,15 @@ import com.google.common.base.Joiner;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.entries.ValueHandle;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.output.commands.Color;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Divider;
 import net.ixitxachitls.output.commands.Section;
 import net.ixitxachitls.output.commands.Value;
-import net.ixitxachitls.output.commands.Window;
 import net.ixitxachitls.util.Encodings;
 
 //..........................................................................
@@ -111,7 +108,7 @@ public abstract class AbstractPrint
    *
    */
   protected abstract @Nonnull Object
-    printExtension(@Nonnull AbstractExtension inExtension,
+    printExtension(@Nonnull AbstractExtension<?> inExtension,
                    @Nonnull BaseCharacter inUser);
 
   //........................................................................
@@ -180,7 +177,8 @@ public abstract class AbstractPrint
           {
             case '$':
               // A simple, directly printed value
-              ValueHandle handle = compute(inEntry, name, inEntry.isDM(inUser));
+              ValueHandle<?> handle =
+                compute(inEntry, name, inEntry.isDM(inUser));
               if(handle != null)
               {
                 Object formatted =
@@ -223,7 +221,7 @@ public abstract class AbstractPrint
 
             case '#':
 
-              AbstractExtension extension = null;
+              AbstractExtension<?> extension = null;
               if(inEntry instanceof AbstractEntry)
                 extension = ((AbstractEntry)inEntry).getExtension(name);
 
@@ -262,37 +260,37 @@ public abstract class AbstractPrint
    * @return      the computed value or null if not found
    *
    */
-  public @Nullable ValueHandle compute(@Nonnull ValueGroup inEntry,
-                                       @Nonnull String inName, boolean inDM)
+  public @Nullable ValueHandle<?> compute(@Nonnull ValueGroup inEntry,
+                                          @Nonnull String inName, boolean inDM)
   {
-    String name = inName.substring(1);
-    switch(inName.charAt(0))
-    {
-      case '&':
-      case '+':
-        throw new UnsupportedOperationException("not yet implemented");
+    // String name = inName.substring(1);
+    // switch(inName.charAt(0))
+    // {
+      // case '&':
+      // case '+':
+      //   throw new UnsupportedOperationException("not yet implemented");
 
-      case '>':
-        Combination combination = new Combination(inEntry, name);
-        if(combination.max() == null)
-          return null;
+      // case '>':
+      //   Combination combination = new Combination(inEntry, name);
+      //   if(combination.max() == null)
+      //     return null;
 
-        return new FormattedValue(new Window(combination.max().format(),
-                                             combination.summary(), "", "base"),
-                                  "", name);
+      //   return new FormattedValue(new Window(combination.max().format(),
+      //                                     combination.summary(), "", "base"),
+      //                             "", name);
 
-      case '<':
-        combination = new Combination(inEntry, name);
-        if(combination.min() == null)
-          return null;
+      // case '<':
+      //   combination = new Combination(inEntry, name);
+      //   if(combination.min() == null)
+      //     return null;
 
-        return new FormattedValue(new Window(combination.min().format(),
-                                             combination.summary(), "", "base"),
-                                  "", name);
+      //   return new FormattedValue(new Window(combination.min().format(),
+      //                                     combination.summary(), "", "base"),
+      //                             "", name);
 
-      default:
+      // default:
         return inEntry.computeValue(inName, inDM);
-    }
+    // }
   }
 
   //........................................................................

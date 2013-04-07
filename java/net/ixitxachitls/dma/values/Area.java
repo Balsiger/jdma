@@ -301,8 +301,6 @@ public class Area extends Units<Area>
       assertEquals("not undefined at start", false, value.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    value.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   value.format(false).toString());
       assertEquals("feet",   false, value.isFeet());
       assertEquals("metric", false, value.isMetric());
       assertEquals("undefined value not correct", "0",
@@ -315,12 +313,6 @@ public class Area extends Units<Area>
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string ", "1 1/2 sq cm", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{\\frac[1]{1}{2} sq cm}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac{3}{20000} sq m}{}{}"
-                   + "{Feet:}{\\span{unit}{\\frac{27}{50} sq in}}}",
-                   value.format(false).toString());
       assertEquals("feet",   false,  value.isFeet());
       assertEquals("metric", true,   value.isMetric());
       assertEquals("m",       "3/20000", value.getAsMeters().toString());
@@ -330,14 +322,6 @@ public class Area extends Units<Area>
 
        assertEquals("not defined at start", true, value.isDefined());
        assertEquals("string", "1 2/3 sq ft 2 sq in", value.toString());
-       assertEquals("print",
-                    "\\window{\\span{unit}{\\frac[1]{2}{3} sq ft} "
-                    + "\\span{unit}{2 sq in}}"
-                    + "{\\table{#inline#1:L,,;100:L}"
-                    + "{Total:}{\\frac[1]{49}{72} sq ft}{}{}"
-                    + "{Metric:}{\\span{unit}{6 sq dm} "
-                    + "\\span{unit}{\\frac[72]{2}{9} sq cm}}}",
-                    value.format(false).toString());
        assertEquals("feet",   true,  value.isFeet());
        assertEquals("metric", false, value.isMetric());
        assertEquals("m", "121/1800", value.getAsMeters().toString());
@@ -350,15 +334,6 @@ public class Area extends Units<Area>
        assertEquals("not defined at start", true, value.isDefined());
        assertEquals("string", "1 sq yd 1 1/2 sq ft 2/3 sq in",
                     value.toString());
-       assertEquals("print",
-                    "\\window{\\span{unit}{1 sq yd} "
-                    + "\\span{unit}{\\frac[1]{1}{2} sq ft} "
-                    + "\\span{unit}{\\frac{2}{3} sq in}}"
-                    + "{\\table{#inline#1:L,,;100:L}"
-                    + "{Total:}{\\frac[10]{109}{216} sq ft}{}{}"
-                    + "{Metric:}{\\span{unit}{42 sq dm} "
-                    + "\\span{unit}{\\frac[1]{23}{27} sq cm}}}",
-                    value.format(false).toString());
        assertEquals("feet",   true,  value.isFeet());
        assertEquals("metric", false,  value.isMetric());
        assertEquals("m",  "2269/5400", value.getAsMeters().toString());
@@ -370,15 +345,6 @@ public class Area extends Units<Area>
        assertEquals("not defined at start", true, value.isDefined());
        assertEquals("string", "1 sq m 3 1/4 sq dm 2/3 sq cm",
                     value.toString());
-       assertEquals("print",
-                    "\\window{\\span{unit}{1 sq m} "
-                    + "\\span{unit}{\\frac[3]{1}{4} sq dm} "
-                    + "\\span{unit}{\\frac{2}{3} sq cm}}"
-                    + "{\\table{#inline#1:L,,;100:L}"
-                    + "{Total:}{\\frac[1]{977}{30000} sq m}{}{}"
-                    + "{Feet:}{\\span{unit}{2 sq yd} \\span{unit}{7 sq ft} "
-                    + "\\span{unit}{\\frac[117]{6}{25} sq in}}}",
-                    value.format(false).toString());
        assertEquals("feet",   false, value.isFeet());
        assertEquals("metric", true,  value.isMetric());
        assertEquals("in", "25 977/1200", value.getAsFeet().toString());

@@ -34,9 +34,7 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterators;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -540,39 +538,6 @@ public boolean isDefined()
   }
 
   //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @return      the command that can be printed
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    ArrayList<Object> commands = new ArrayList<Object>();
-
-    for(int i = 0; i < m_elements.length; i++)
-    {
-      if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
-        if(m_elements[i].m_front != null)
-          commands.add(m_elements[i].m_front);
-        else
-          if(i > 0)
-            commands.add(" ");
-
-      commands.add(get(i).format(m_elements[i].isOptional()));
-
-      if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
-        if(m_elements[i].m_tail != null)
-          commands.add(m_elements[i].m_tail);
-    }
-
-    return new Command(commands);
-  }
-
-  //........................................................................
   //------------------------------- doPrint --------------------------------
 
   /**
@@ -583,28 +548,28 @@ public boolean isDefined()
    * @return  the printed value as a string.
    *
    */
-  protected String doPrint(AbstractEntry inEntry)
-  {
-    StringBuilder builder = new StringBuilder();
+  // protected String doPrint(AbstractEntry inEntry)
+  // {
+  //   StringBuilder builder = new StringBuilder();
 
-    for(int i = 0; i < m_elements.length; i++)
-    {
-      if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
-        if(m_elements[i].m_front != null)
-          builder.append(m_elements[i].m_front);
-        else
-          if(i > 0)
-            builder.append(" ");
+  //   for(int i = 0; i < m_elements.length; i++)
+  //   {
+  //     if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
+  //       if(m_elements[i].m_front != null)
+  //         builder.append(m_elements[i].m_front);
+  //       else
+  //         if(i > 0)
+  //           builder.append(" ");
 
-      builder.append(get(i).print(inEntry));
+  //     builder.append(get(i).print(inEntry));
 
-      if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
-        if(m_elements[i].m_tail != null)
-          builder.append(m_elements[i].m_tail);
-    }
+  //     if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
+  //       if(m_elements[i].m_tail != null)
+  //         builder.append(m_elements[i].m_tail);
+  //   }
 
-    return builder.toString();
-  }
+  //   return builder.toString();
+  // }
 
   //........................................................................
   //------------------------------ getChoices ------------------------------
@@ -703,7 +668,7 @@ public boolean isDefined()
           // we now need a value here
           mandatory = true;
 
-      Value value = m_elements[i].m_value.read(inReader);
+      Value<?> value = m_elements[i].m_value.read(inReader);
 
       if(value == null && mandatory)
         // value is required here
@@ -768,6 +733,7 @@ public boolean isDefined()
 
     /** Testing init. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void init()
     {
       Multiple multiple = new Multiple(new Element []
@@ -783,7 +749,6 @@ public boolean isDefined()
       assertFalse("undefined", multiple.get(0).isDefined());
       assertFalse("undefined", multiple.get(1).isDefined());
       assertFalse("undefined", multiple.get(2).isDefined());
-      assertEquals("format", "", multiple.format(true).toString());
 
       multiple =
         new Multiple(new Element(new Name(), true),
@@ -803,8 +768,6 @@ public boolean isDefined()
       assertTrue("undefined", multiple.get(1).isDefined());
       assertTrue("undefined", multiple.get(2).isDefined());
 
-      assertEquals("format", "frontgurutail hia",
-                   multiple.format(true).toString());
       assertEquals("edit values", "~~~~", multiple.getChoices());
 
       // assign some edit values to elements

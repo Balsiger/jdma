@@ -46,7 +46,6 @@ import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Span;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -1171,31 +1170,31 @@ public class BaseItem extends BaseEntry
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
-  {
-    if("hp".equals(inKey) && !m_hp.isDefined() && m_substance.isDefined())
-      return new FormattedValue(new Span("computed", getHP()),
-                                Value.UNDEFINED, "hp")
-        .withDM(true)
-        .withEditable(true);
+  // @Override
+  // public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
+  // {
+  //   if("hp".equals(inKey) && !m_hp.isDefined() && m_substance.isDefined())
+  //     return new FormattedValue(new Span("computed", getHP()),
+  //                               Value.UNDEFINED, "hp")
+  //       .withDM(true)
+  //       .withEditable(true);
 
-    if("hardness".equals(inKey) && !m_hardness.isDefined()
-       && m_substance.isDefined())
-      return new FormattedValue(new Span("computed", getHardness()),
-                                Value.UNDEFINED, "hardness")
-        .withPlural("hardnesses")
-        .withDM(true)
-        .withEditable(true);
+  //   if("hardness".equals(inKey) && !m_hardness.isDefined()
+  //      && m_substance.isDefined())
+  //     return new FormattedValue(new Span("computed", getHardness()),
+  //                               Value.UNDEFINED, "hardness")
+  //       .withPlural("hardnesses")
+  //       .withDM(true)
+  //       .withEditable(true);
 
-    if("player name".equals(inKey) && !m_playerName.isDefined())
-      return new FormattedValue(new Span("computed", getPlayerName()),
-                                Value.UNDEFINED, "player name")
-        .withDM(true)
-        .withEditable(true);
+  //   if("player name".equals(inKey) && !m_playerName.isDefined())
+  //     return new FormattedValue(new Span("computed", getPlayerName()),
+  //                               Value.UNDEFINED, "player name")
+  //       .withDM(true)
+  //       .withEditable(true);
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //-------------------------- computeIndexValues --------------------------

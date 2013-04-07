@@ -27,7 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Combination;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Number;
 
 //..........................................................................
@@ -124,7 +124,8 @@ public class Counted extends Extension<Item>
   {
     if(!m_count.isDefined())
     {
-      Number total = new Combination<Number>(this, "count").total();
+      Combined<Number> combinedCount = m_entry.collect("count");
+      Number total = combinedCount.total();
       if(total != null)
       {
         m_count = m_count.as(total.get());

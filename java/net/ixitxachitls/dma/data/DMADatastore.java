@@ -1073,7 +1073,7 @@ public class DMADatastore implements DMAData
    * @return     the entry found, if any
    *
    */
-  @SuppressWarnings("unchecked") // need to case to value list
+  @SuppressWarnings({ "unchecked", "rawtypes" }) // need to case to value list
   public Entity convert(AbstractEntry inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));
@@ -1082,14 +1082,14 @@ public class DMADatastore implements DMAData
       if("base".equals(value.getKey()))
       {
         List<String> values = new ArrayList<String>();
-        for(Value<?> item : ((ValueList<Value<?>>)value.getValue()))
+        for(Object item : ((ValueList)value.getValue()))
           values.add(item.toString().toLowerCase(Locale.US));
         entity.setProperty(m_data.toPropertyName(value.getKey()), values);
       }
       else if(value.getValue() instanceof ValueList)
       {
         List<String> values = new ArrayList<String>();
-        for(Value<?> item : ((ValueList<Value<?>>)value.getValue()))
+        for(Object item : ((ValueList)value.getValue()))
           values.add(item.toString());
         entity.setProperty(m_data.toPropertyName(value.getKey()), values);
       }

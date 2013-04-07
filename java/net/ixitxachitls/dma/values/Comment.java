@@ -28,7 +28,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -163,21 +162,6 @@ public class Comment extends Value<Comment>
   public @Nullable String get()
   {
     return m_lines;
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    return new Command(m_lines);
   }
 
   //........................................................................

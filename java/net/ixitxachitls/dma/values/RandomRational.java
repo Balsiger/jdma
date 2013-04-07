@@ -142,7 +142,7 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    */
   @Override
-public @Nonnull RandomRational create()
+  public @Nonnull RandomRational create()
   {
     return super.create(new RandomRational());
   }
@@ -710,7 +710,6 @@ protected void resetNominator()
       assertEquals("undefined nominator", 0, rational.m_nominator);
       assertEquals("undefined denominator", 0, rational.m_denominator);
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "", rational.format(true).toString());
 
       // now with some rational
       rational = new RandomRational(1, 2);
@@ -722,7 +721,6 @@ protected void resetNominator()
       assertEquals("nominator", 1, rational.m_nominator);
       assertEquals("denominator", 2, rational.m_denominator);
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac{1}{2}", rational.format(true).toString());
       assertEquals("min", "1/2", rational.getMin().toString());
       assertEquals("max", "1/2", rational.getMin().toString());
 
@@ -736,8 +734,6 @@ protected void resetNominator()
       assertEquals("nominator", 2, rational.m_nominator);
       assertEquals("denominator", 3, rational.m_denominator);
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new RandomRational(1, -2, -3);
@@ -749,8 +745,6 @@ protected void resetNominator()
       assertEquals("nominator", 2, rational.m_nominator);
       assertEquals("denominator", 3, rational.m_denominator);
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new RandomRational(-1, 2, 3);
@@ -762,8 +756,6 @@ protected void resetNominator()
       assertEquals("nominator", 2, rational.m_nominator);
       assertEquals("denominator", 3, rational.m_denominator);
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new RandomRational(-1, -2, 3);
@@ -775,8 +767,6 @@ protected void resetNominator()
       assertEquals("nominator", 2, rational.m_nominator);
       assertEquals("denominator", 3, rational.m_denominator);
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac[1]{2}{3}",
-                   rational.format(true).toString());
 
       // how about some negative
       rational = new RandomRational(1, -2, 3);
@@ -788,7 +778,6 @@ protected void resetNominator()
       assertEquals("nominator", 1, rational.m_nominator);
       assertEquals("denominator", 3, rational.m_denominator);
       assertFalse("negative", rational.isNegative());
-      assertEquals("format", "\\frac{1}{3}", rational.format(true).toString());
 
       // how about some negative
       rational = new RandomRational(1, -4, 3);
@@ -800,7 +789,6 @@ protected void resetNominator()
       assertEquals("nominator", 1, rational.m_nominator);
       assertEquals("denominator", 3, rational.m_denominator);
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac{1}{3}", rational.format(true).toString());
 
       // how about some negative
       rational = new RandomRational(0, -1, 3);
@@ -812,7 +800,6 @@ protected void resetNominator()
       assertEquals("nominator", 1, rational.m_nominator);
       assertEquals("denominator", 3, rational.m_denominator);
       assertTrue("negative", rational.isNegative());
-      assertEquals("format", "-\\frac{1}{3}", rational.format(true).toString());
 
       // now with some random rational
       rational = new RandomRational(0, 1, 1, new Dice(1, 2, 0),
@@ -821,8 +808,6 @@ protected void resetNominator()
       assertEquals("not defined after sestting", true,
                    rational.isDefined());
       assertEquals("output", "1d2/2d4 -2", rational.toString());
-      assertEquals("format", "\\frac{1d2}{2d4 -2}",
-                   rational.format(true).toString());
       assertEquals("min", "1/6", rational.getMin().toString());
       assertEquals("max", "2", rational.getMax().toString());
 
@@ -832,8 +817,6 @@ protected void resetNominator()
       assertEquals("not defined after setting", true,
                    rational.isDefined());
       assertEquals("output", "2/1d4 +5", rational.toString());
-      assertEquals("format", "\\frac{2}{1d4 +5}",
-                   rational.format(true).toString());
       assertEquals("min", "2/9", rational.getMin().toString());
       assertEquals("max", "1/3", rational.getMax().toString());
 
@@ -843,8 +826,6 @@ protected void resetNominator()
       assertEquals("not defined after setting", true,
                    rational.isDefined());
       assertEquals("output", "5d6 +2/3", rational.toString());
-      assertEquals("format", "\\frac{5d6 +2}{3}",
-                   rational.format(true).toString());
       assertEquals("min", "2 1/3", rational.getMin().toString());
       assertEquals("max", "10 2/3", rational.getMax().toString());
 
@@ -854,7 +835,6 @@ protected void resetNominator()
       assertEquals("not defined after setting", true,
                    rational.isDefined());
       assertEquals("output", "5d6 +2", rational.toString());
-      assertEquals("format", "5d6 +2", rational.format(true).toString());
       assertEquals("min", "7", rational.getMin().toString());
       assertEquals("max", "32", rational.getMax().toString());
 

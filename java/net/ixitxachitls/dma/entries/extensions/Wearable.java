@@ -23,19 +23,9 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueHandle;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -54,6 +44,7 @@ import net.ixitxachitls.output.commands.Symbol;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Wearable extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +58,7 @@ public class Wearable extends Extension<Item>
    * @param       inName  the name of the extension
    *
    */
-  public Wearable(@Nonnull Item inEntry, @Nonnull String inName)
+  public Wearable(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -94,20 +85,6 @@ public class Wearable extends Extension<Item>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%slot %don %remove");
-
-  //----- user size --------------------------------------------------------
-
-  // /** The size of items of this kind. */
-  // @Key("user size")
-  // protected EnumSelection<BaseItem.Size> m_userSize =
-  //   new EnumSelection<BaseItem.Size>(BaseItem.Size.class);
-
-  //........................................................................
-
   static
   {
     extractVariables(Item.class, Wearable.class);
@@ -117,36 +94,6 @@ public class Wearable extends Extension<Item>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -158,22 +105,23 @@ public class Wearable extends Extension<Item>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("summary".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      commands.add(new Symbol("\u269c"));
-      maybeAddValue(commands, "slot", inDM, " ", null);
-      maybeAddValue(commands, "don", inDM, ", don ", null);
-      maybeAddValue(commands, "remove", inDM, ", remove ", null);
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey,
+  // boolean inDM)
+  // {
+  //   if("summary".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     commands.add(new Symbol("\u269c"));
+  //     maybeAddValue(commands, "slot", inDM, " ", null);
+  //     maybeAddValue(commands, "don", inDM, ", don ", null);
+  //     maybeAddValue(commands, "remove", inDM, ", remove ", null);
 
-      return new FormattedValue(new Command(commands), null, "summary");
-    }
+  //     return new FormattedValue(new Command(commands), null, "summary");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //------------------------------ getUserSize -----------------------------
@@ -184,7 +132,7 @@ public class Wearable extends Extension<Item>
    * @return      the user size
    *
    */
-  // public @Nonnull BaseItem.Size getUserSize()
+  // public BaseItem.Size getUserSize()
   // {
   //   return m_userSize.getSelected();
   // }
@@ -205,7 +153,7 @@ public class Wearable extends Extension<Item>
    * @return      true if set, false on error
    *
    */
-  // public boolean setUserSize(@Nonnull BaseItem.Size inSize)
+  // public boolean setUserSize(BaseItem.Size inSize)
   // {
   //   if(!m_userSize.set(inSize))
   //     return false;

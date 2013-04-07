@@ -73,7 +73,7 @@
   </Match>
 
   <Match>
-    <Class name="~net.ixitxachitls.dma.entries.Monster.*" />
+    <Class name="~net.ixitxachitls.dma.entries.(Monster|extensions.Counted).*" />
     <Bug pattern="BC_UNCONFIRMED_CAST" />
   </Match>
 

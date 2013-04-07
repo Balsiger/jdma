@@ -37,7 +37,6 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.base.Joiner;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.EmptyIterator;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -63,7 +62,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class ValueList<T extends Value>
+public class ValueList<T extends Value<T>>
   extends Value<ValueList<T>> implements Iterable<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -156,6 +155,7 @@ public class ValueList<T extends Value>
    * @param       inValues the beginning values of the list
    *
    */
+  @SuppressWarnings("unchecked")
   public ValueList(T ... inValues)
   {
     this(s_delimiter, inValues);
@@ -173,6 +173,7 @@ public class ValueList<T extends Value>
    * @undefined   IllegalArgumentException if not types are given
    *
    */
+  @SuppressWarnings("unchecked") // heap pollution?
   public ValueList(String inDelimiter, T ... inValues)
   {
     if(inValues.length <= 0)
@@ -206,13 +207,13 @@ public class ValueList<T extends Value>
   public ValueList<T> create()
   {
     // the value is added to the list if it is defined !
-    ValueList result;
+    ValueList<T> result;
     if(!m_type.isDefined())
-      result = super.create(new ValueList(m_type, m_delimiter));
+      result = super.create(new ValueList<T>(m_type, m_delimiter));
     else
-      result = super.create(new ValueList(m_type.create(), m_delimiter));
+      result = super.create(new ValueList<T>(m_delimiter, m_type.create()));
 
-    return (ValueList<T>)result;
+    return result;
   }
 
   //........................................................................
@@ -335,7 +336,7 @@ public class ValueList<T extends Value>
   @SuppressWarnings("unchecked") // casting
   public T newElement()
   {
-    return (T)m_type.create();
+    return m_type.create();
   }
 
   //........................................................................
@@ -369,34 +370,6 @@ public class ValueList<T extends Value>
   public boolean isDefined()
   {
     return m_values != null;
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @return      the command that can be printed
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    ArrayList<Object> commands = new ArrayList<Object>();
-
-    boolean first = true;
-    for(Iterator<T> i = m_values.iterator(); i.hasNext(); )
-    {
-      if(!first)
-        commands.add(m_delimiter);
-      else
-        first = false;
-
-      commands.add(i.next().format(false));
-    }
-
-    return new Command(commands);
   }
 
   //........................................................................
@@ -486,6 +459,7 @@ public class ValueList<T extends Value>
    * @return    the newly created value list
    *
    */
+  @SuppressWarnings("unchecked") // heap pollution?
   public ValueList<T> asAppended(T ... inValues)
   {
     if(inValues.length == 0)
@@ -584,7 +558,7 @@ public class ValueList<T extends Value>
     if(m_values != null)
       return false;
 
-    m_values = (ArrayList<T>)new ArrayList<Value>();
+    m_values = (ArrayList<T>)new ArrayList<Value<?>>();
 
     return true;
   }
@@ -752,7 +726,7 @@ public class ValueList<T extends Value>
     do
     {
       // create a new value
-      T value = (T)m_type.read(inReader);
+      T value = m_type.read(inReader);
 
       // read it
       if(value == null)
@@ -793,7 +767,7 @@ public class ValueList<T extends Value>
   @SuppressWarnings("unchecked") // casting cloned value
   public T createElement()
   {
-    return (T)m_type.create();
+    return m_type.create();
   }
 
   //........................................................................
@@ -822,8 +796,6 @@ public class ValueList<T extends Value>
       assertEquals("undefined value not correct", "$undefined$",
                    list.toString());
       assertEquals("size", 0, list.size());
-      assertEquals("format", "\\color{error}{$undefined$}",
-                   list.format(false).toString());
       assertNull("choices", list.getChoices());
 
       assertTrue("define", list.define());
@@ -841,8 +813,6 @@ public class ValueList<T extends Value>
 //       assertEquals("defined value not correct",
 //                    "\"Hello\",\n\"how are\",\n\"you\"", list.toStore());
       assertEquals("size", 3, list.size());
-      assertEquals("format", "Hello,\nhow are,\nyou",
-                   list.format(false).toString());
 
       assertEquals("1", "Hello",   list.get(0).toString());
       assertEquals("2", "how are", list.get(1).toString());
@@ -861,8 +831,6 @@ public class ValueList<T extends Value>
       assertEquals("defined value not correct", "Hello,\nhow are,\nyou",
                    list.toString());
       assertEquals("size", 3, list.size());
-      assertEquals("format", "Hello,\nhow are,\nyou",
-                   list.format(false).toString());
 
       assertEquals("new", "$undefined$", list.createElement().toString());
 

@@ -141,7 +141,7 @@ public class False extends Condition<False>
     @org.junit.Test
     public void testAll()
     {
-      Condition value = new False();
+      Condition<?> value = new False();
 
       // undefined value
       assertEquals("not undefined at start", false, value.isDefined());

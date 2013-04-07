@@ -29,7 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
@@ -305,21 +304,6 @@ public class Dice extends Value<Dice>
         return "" + m_modifier;
       else
         return dice + " " + m_modifier;
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    return new Command(toString());
   }
 
   //........................................................................

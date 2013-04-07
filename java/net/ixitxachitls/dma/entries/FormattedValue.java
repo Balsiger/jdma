@@ -45,6 +45,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
+@Deprecated // ??
 public class FormattedValue extends ValueHandle<FormattedValue>
 {
   //--------------------------------------------------------- constructor(s)
@@ -106,24 +107,6 @@ public class FormattedValue extends ValueHandle<FormattedValue>
   }
 
   //........................................................................
-  //------------------------------ formatted -------------------------------
-
-  /**
-   * Get the formatted value from the given entry.
-   *
-   * @param    inEntry the entry containing the value
-   * @param    inDM    true if getting the value for a DM
-   *
-   * @return   the value found or null if not found or not accessible
-   *
-   */
-  @Override
-  public @Nullable Object formatted(@Nonnull ValueGroup inEntry, boolean inDM)
-  {
-    return m_formatted;
-  }
-
-  //........................................................................
   //------------------------------- toString -------------------------------
 
   /**
@@ -157,6 +140,7 @@ public class FormattedValue extends ValueHandle<FormattedValue>
 
     /** The value Test. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void value()
     {
       ValueHandle formatted = new FormattedValue("formatted", "value", "key")
@@ -165,7 +149,6 @@ public class FormattedValue extends ValueHandle<FormattedValue>
         new net.ixitxachitls.dma.entries.BaseEntry("guru");
 
       assertEquals("value", "value", formatted.value(entry, true));
-      assertEquals("formatted", "formatted", formatted.formatted(entry, true));
     }
 
     //......................................................................

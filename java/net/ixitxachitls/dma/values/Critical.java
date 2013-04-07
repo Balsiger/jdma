@@ -23,14 +23,10 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.util.ArrayList;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
 
 //..........................................................................
 
@@ -187,44 +183,6 @@ public class Critical extends BaseNumber<Critical>
     result.append("x" + super.doToString());
 
     return result.toString();
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    if(m_number == 1)
-      if(m_indexBase != null)
-        return new Link("None", m_indexBase + "criticals/none");
-      else
-        return new Command("None");
-
-    java.util.List<Object> commands = new ArrayList<Object>();
-
-    if(m_threat.isDefined())
-    {
-      Object command = m_threat;
-      if(m_indexBase != null)
-        command = new Link(command, m_indexBase + "threats/" + command);
-      commands.add(command);
-      commands.add("/");
-    }
-
-    Object command = "x" + m_number;
-    if(m_indexBase != null)
-      command = new Link(command, m_indexBase + "criticals/" + command);
-
-    commands.add(command);
-
-    return new Command(commands.toArray());
   }
 
   //........................................................................
@@ -415,8 +373,6 @@ public class Critical extends BaseNumber<Critical>
       assertEquals("not undefined at start", false, critical.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    critical.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   critical.format(false).toString());
 
       // now with some critical
       critical = new Critical(19, 20, 3);
@@ -424,8 +380,6 @@ public class Critical extends BaseNumber<Critical>
       assertEquals("not defined after setting", true, critical.isDefined());
       assertEquals("value not correctly converted", "19-20/x3",
                    critical.toString());
-      assertEquals("value not correctly converted", "19-20/x3",
-                   critical.format(false).toString());
 
       // less values
       critical = new Critical(20, 20, 4);
@@ -433,8 +387,6 @@ public class Critical extends BaseNumber<Critical>
       assertEquals("not defined after setting", true, critical.isDefined());
       assertEquals("value not correctly converted", "20/x4",
                    critical.toString());
-      assertEquals("value not correctly converted", "20/x4",
-                   critical.format(false).toString());
 
       assertEquals("multiplier", 4, critical.getMultiplier());
       assertEquals("threat range", "20", critical.getThreatRange().toString());
@@ -445,8 +397,6 @@ public class Critical extends BaseNumber<Critical>
       assertEquals("not defined after setting", true, critical.isDefined());
       assertEquals("value not correctly converted", "x2",
                    critical.toString());
-      assertEquals("value not correctly converted", "x2",
-                   critical.format(false).toString());
 
       Value.Test.createTest(critical);
     }

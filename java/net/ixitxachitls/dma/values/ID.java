@@ -29,7 +29,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -110,23 +109,6 @@ public @Nonnull ID create()
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-protected @Nonnull Command doFormat()
-  {
-    return new Command(m_text);
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
@@ -252,9 +234,6 @@ public boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("not undefined at start", false, text.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    text.toString());
-      assertEquals("undefined value not correct",
-                   "\\color{error}{$undefined$}",
-                   text.format().toString());
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some text
@@ -263,8 +242,6 @@ public boolean doRead(@Nonnull ParseReader inReader)
       assertEquals("not defined after setting", true, text.isDefined());
       assertTrue("value not correctly gotten",
                  text.toString().matches("[A-Z]{" + s_digits + "}"));
-      assertTrue("value not correctly gotten",
-                 text.format().toString().matches("[A-Z]{" + s_digits + "}"));
       assertTrue("value not correctly converted",
                  text.get().matches("[A-Z]{" + s_digits + "}"));
 

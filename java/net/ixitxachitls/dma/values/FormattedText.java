@@ -27,8 +27,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.BaseCommand;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -139,23 +137,6 @@ public class FormattedText extends BaseText<FormattedText>
     return s_stringDelimiter
       + m_text.replaceAll("([" + s_stringDelimiter + "])", "\\\\$1")
       + s_stringDelimiter;
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected @Nonnull Command doFormat()
-  {
-    return new BaseCommand(m_text.replaceAll("\\s*(?:\n\n|\r\r)\\s*",
-                                             "\\\\par ")
-                           .replaceAll("\\s+", " ").trim());
   }
 
   //........................................................................

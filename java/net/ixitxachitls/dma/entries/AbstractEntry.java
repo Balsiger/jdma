@@ -56,27 +56,14 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Comment;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.FormattedText;
-import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Image;
-import net.ixitxachitls.output.commands.ImageLink;
-import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.output.commands.Par;
-import net.ixitxachitls.output.commands.Script;
-import net.ixitxachitls.output.commands.Title;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.EmptyIterator;
-import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
@@ -1535,158 +1522,158 @@ public class AbstractEntry extends ValueGroup
   @Deprecated
   public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
   {
-    if(inKey.contains(":"))
-    {
-      String []parts = inKey.split(":");
-      AbstractExtension<?> extension = getExtension(parts[0]);
-      if(extension != null)
-        return extension.computeValue(parts[1], inDM);
-    }
+    // if(inKey.contains(":"))
+    // {
+    //   String []parts = inKey.split(":");
+    //   AbstractExtension<?> extension = getExtension(parts[0]);
+    //   if(extension != null)
+    //     return extension.computeValue(parts[1], inDM);
+    // }
 
-    if("title".equals(inKey))
-    {
-      return new FormattedValue
-        (new Title(computeValue("name", inDM).format(this, inDM, true),
-                   "entrytitle"), computeValue("name", inDM).value(this, inDM),
-         "title");
-    }
+    // if("title".equals(inKey))
+    // {
+    //   return new FormattedValue
+    //     (new Title(computeValue("name", inDM).format(this, inDM, true),
+    //              "entrytitle"), computeValue("name", inDM).value(this, inDM),
+    //      "title");
+    // }
 
-    if("desc".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      ValueHandle<?> subtitle = computeValue("subtitle", inDM);
-      if(subtitle != null)
-        commands.add(subtitle.format(this, inDM, true));
+    // if("desc".equals(inKey))
+    // {
+    //   List<Object> commands = new ArrayList<Object>();
+    //   ValueHandle<?> subtitle = computeValue("subtitle", inDM);
+    //   if(subtitle != null)
+    //     commands.add(subtitle.format(this, inDM, true));
 
-      commands.add(computeValue("description", inDM).format(this, inDM, true));
-      commands.add(computeValue("short description", inDM)
-                   .format(this, inDM, true));
+    // commands.add(computeValue("description", inDM).format(this, inDM, true));
+    //   commands.add(computeValue("short description", inDM)
+    //                .format(this, inDM, true));
 
-      return new FormattedValue(new Divider("desc",
-                                            new Command(commands.toArray())),
-                                null, "desc");
-    }
+    //   return new FormattedValue(new Divider("desc",
+    //                                         new Command(commands.toArray())),
+    //                             null, "desc");
+    // }
 
-    if("clear".equals(inKey))
-      // we need a non empty string here, because when parsing trailing empty
-      // arguments are ignored.
-      return new FormattedValue(new Divider("clear", " "), null, "clear");
+    // if("clear".equals(inKey))
+    //   // we need a non empty string here, because when parsing trailing empty
+    //   // arguments are ignored.
+    //   return new FormattedValue(new Divider("clear", " "), null, "clear");
 
-    if("errors".equals(inKey))
-    {
-      Object value = null;
+    // if("errors".equals(inKey))
+    // {
+    //   Object value = null;
 
-      if(hasErrors())
-      {
-        ArrayList<Object>errors = new ArrayList<Object>();
-        for(Iterator<BaseError> i = m_errors.iterator(); i.hasNext(); )
-        {
-          errors.add(i.next().format());
+    //   if(hasErrors())
+    //   {
+    //     ArrayList<Object>errors = new ArrayList<Object>();
+    //     for(Iterator<BaseError> i = m_errors.iterator(); i.hasNext(); )
+    //     {
+    //       errors.add(i.next().format());
 
-          if(i.hasNext())
-            errors.add(new Linebreak());
-        }
+    //       if(i.hasNext())
+    //         errors.add(new Linebreak());
+    //     }
 
-        value = new Command(errors);
-      }
-      else
-        value = null;
+    //     value = new Command(errors);
+    //   }
+    //   else
+    //     value = null;
 
-      return new FormattedValue(value, null, "errors")
-        .withPlural("errors")
-        .withDM(true);
-    }
+    //   return new FormattedValue(value, null, "errors")
+    //     .withPlural("errors")
+    //     .withDM(true);
+    // }
 
-    if("as dma".equals(inKey))
-      return new FormattedValue(new ImageLink("/icons/doc-dma.png",
-                                              getName(), getName() + ".dma",
-                                              "doc-link"), null, "as dma")
-        .withDM(true);
+    // if("as dma".equals(inKey))
+    //   return new FormattedValue(new ImageLink("/icons/doc-dma.png",
+    //                                           getName(), getName() + ".dma",
+    //                                           "doc-link"), null, "as dma")
+    //     .withDM(true);
 
-    if("as pdf".equals(inKey))
-      return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
-                                              getName(), getName() + ".pdf",
-                                              "doc-link"), null, "as pdf");
+    // if("as pdf".equals(inKey))
+    //   return new FormattedValue(new ImageLink("/icons/doc-pdf.png",
+    //                                           getName(), getName() + ".pdf",
+    //                                           "doc-link"), null, "as pdf");
 
-    if("as text".equals(inKey))
-      return new FormattedValue(new ImageLink("/icons/doc-txt.png",
-                                              getName(), getName() + ".txt",
-                                              "doc-link"), null, "as text")
-        .withDM(true);
+    // if("as text".equals(inKey))
+    //   return new FormattedValue(new ImageLink("/icons/doc-txt.png",
+    //                                           getName(), getName() + ".txt",
+    //                                           "doc-link"), null, "as text")
+    //     .withDM(true);
 
-    if("label".equals(inKey))
-      return new FormattedValue
-        (new Image(Files.concatenate
-                   ("/icons/labels", getType().getClassName()) + ".png",
-                   "label"), null, "label");
+    // if("label".equals(inKey))
+    //   return new FormattedValue
+    //     (new Image(Files.concatenate
+    //                ("/icons/labels", getType().getClassName()) + ".png",
+    //                "label"), null, "label");
 
-    if("par".equals(inKey))
-      return new FormattedValue(new Par(), null, "par");
+    // if("par".equals(inKey))
+    //   return new FormattedValue(new Par(), null, "par");
 
-    if("listlink".equals(inKey))
-    {
-      // we have to add a wrapping div to host the id there; when we assing the
-      // body to the innerHTML of the page, script tags will be ignored and
-      // thus the id would be missing
-      String id = "linkrow-user-" + Encodings.toCSSString(getName());
-      return new FormattedValue
-        (new Divider(id, "", new Script
-                     ("util.linkRow(document.getElementById('" + id + "'), "
-                      + Encodings.toJSString(getPath()) + ");")),
-         null, "listlink");
-    }
+    // if("listlink".equals(inKey))
+    // {
+    // // we have to add a wrapping div to host the id there; when we assing the
+    //   // body to the innerHTML of the page, script tags will be ignored and
+    //   // thus the id would be missing
+    //   String id = "linkrow-user-" + Encodings.toCSSString(getName());
+    //   return new FormattedValue
+    //     (new Divider(id, "", new Script
+    //                  ("util.linkRow(document.getElementById('" + id + "'), "
+    //                   + Encodings.toJSString(getPath()) + ");")),
+    //      null, "listlink");
+    // }
 
-    if("base".equals(inKey))
-    {
-      String type;
-      if(this instanceof Entry)
-        type = ((Type)getType()).getBaseType().getLink();
-      else
-        type = getType().getLink();
+    // if("base".equals(inKey))
+    // {
+    //   String type;
+    //   if(this instanceof Entry)
+    //     type = ((Type)getType()).getBaseType().getLink();
+    //   else
+    //     type = getType().getLink();
 
-      List<Object> entries = new ArrayList<Object>();
-      List<Object> values = new ArrayList<Object>();
-      for(String entry : getBaseNames())
-      {
-        if(!entries.isEmpty())
-          entries.add(", ");
+    //   List<Object> entries = new ArrayList<Object>();
+    //   List<Object> values = new ArrayList<Object>();
+    //   for(String entry : getBaseNames())
+    //   {
+    //     if(!entries.isEmpty())
+    //       entries.add(", ");
 
-        entries.add(new Link(entry, "/" + type + "/" + entry));
-        values.add(entry);
-      }
+    //     entries.add(new Link(entry, "/" + type + "/" + entry));
+    //     values.add(entry);
+    //   }
 
-      return new FormattedValue(new Command(entries),
-                                Strings.toString(values, ", ", ""), "base")
-        .withDM(true)
-        .withEditable(true)
-        .withEditType("list(, )#name");
-    }
+    //   return new FormattedValue(new Command(entries),
+    //                             Strings.toString(values, ", ", ""), "base")
+    //     .withDM(true)
+    //     .withEditable(true)
+    //     .withEditType("list(, )#name");
+    // }
 
-    if("short description".equals(inKey))
-      return new FormattedValue
-        (new Divider("short-description",
-                     computeValue("_short description", inDM)
-                     .format(this, inDM, true)), null, "short-desc");
+    // if("short description".equals(inKey))
+    //   return new FormattedValue
+    //     (new Divider("short-description",
+    //                  computeValue("_short description", inDM)
+    //                  .format(this, inDM, true)), null, "short-desc");
 
-    if("extensions".equals(inKey))
-      return new FormattedValue(Strings.toString(m_extensions.keySet(), ", ",
-                                                 ""), null, "extensions")
-        .withEditable(true)
-        .withEditType("multiselection")
-        .withEditChoices("armor||commodity||composite||container||counted"
-                         + "||incomplete||light||magic||multiple||multiuse"
-                         + "||timed||weapon||wearable");
+    // if("extensions".equals(inKey))
+    //   return new FormattedValue(Strings.toString(m_extensions.keySet(), ", ",
+    //                                              ""), null, "extensions")
+    //     .withEditable(true)
+    //     .withEditType("multiselection")
+    //     .withEditChoices("armor||commodity||composite||container||counted"
+    //                      + "||incomplete||light||magic||multiple||multiuse"
+    //                      + "||timed||weapon||wearable");
 
-    ValueHandle<?> value = super.computeValue(inKey, inDM);
-    if(value != null)
-      return value;
+    // ValueHandle<?> value = super.computeValue(inKey, inDM);
+    // if(value != null)
+    //   return value;
 
-    // The value is not defined here, but might be in a base.
-    // String key;
-    // if(inKey.startsWith("_"))
-    //   key = inKey.substring(1);
-    // else
-    //   key = inKey;
+    // // The value is not defined here, but might be in a base.
+    // // String key;
+    // // if(inKey.startsWith("_"))
+    // //   key = inKey.substring(1);
+    // // else
+    // //   key = inKey;
 
     return null;
   }
@@ -1943,25 +1930,25 @@ public class AbstractEntry extends ValueGroup
    * @param       ioModifiers   the map of modifiers
    *
    */
-  @Override
-  public void addModifiers(String inName, Map<String, Modifier> ioModifiers)
-  {
-    // add the modifiers from all base values
-    for(BaseEntry base : getBaseEntries())
-    {
-      if(base == null)
-        continue;
+  // @Override
+  // public void addModifiers(String inName, Map<String, Modifier> ioModifiers)
+  // {
+  //   // add the modifiers from all base values
+  //   for(BaseEntry base : getBaseEntries())
+  //   {
+  //     if(base == null)
+  //       continue;
 
-      base.addModifiers(inName, ioModifiers);
-    }
+  //     base.addModifiers(inName, ioModifiers);
+  //   }
 
-    // now ask all the extensions if they want to contribute something
-    for(AbstractExtension<? extends AbstractEntry> extension
-          : m_extensions.values())
-      extension.addModifiers(inName, ioModifiers);
+  //   // now ask all the extensions if they want to contribute something
+  //   for(AbstractExtension<? extends AbstractEntry> extension
+  //         : m_extensions.values())
+  //     extension.addModifiers(inName, ioModifiers);
 
-    super.addModifiers(inName, ioModifiers);
-  }
+  //   super.addModifiers(inName, ioModifiers);
+  // }
 
   //........................................................................
   //--------------------------- addContributions ---------------------------
@@ -1973,19 +1960,19 @@ public class AbstractEntry extends ValueGroup
    * @param       ioContributions the list of contributions to add to
    *
    */
-  @Override
-  public void addContributions
-    (String inName, List<Contribution<? extends Value<?>>> ioContributions)
-  {
-    super.addContributions(inName, ioContributions);
+  // @Override
+  // public void addContributions
+  //   (String inName, List<Contribution<? extends Value<?>>> ioContributions)
+  // {
+  //   super.addContributions(inName, ioContributions);
 
-    for(BaseEntry base : getBaseEntries())
-      if(base != null)
-        base.addContributions(inName, ioContributions);
+  //   for(BaseEntry base : getBaseEntries())
+  //     if(base != null)
+  //       base.addContributions(inName, ioContributions);
 
-    for(AbstractExtension<?> extension : m_extensions.values())
-      extension.addContributions(inName, ioContributions);
-  }
+  //   for(AbstractExtension<?> extension : m_extensions.values())
+  //     extension.addContributions(inName, ioContributions);
+  // }
 
   //........................................................................
 

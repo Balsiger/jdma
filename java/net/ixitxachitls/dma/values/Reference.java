@@ -34,7 +34,6 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.BaseType;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
@@ -153,7 +152,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   @Override
   @SuppressWarnings("unchecked") // this only works if it is overriden in all
                                  // derivations
-  public Reference create()
+  public Reference<T> create()
   {
     if(m_parameters == null)
       return super.create(new Reference<T>(m_type));
@@ -292,89 +291,6 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    // resolve();
-    // if(m_product == null)
-    //   return new Command(getEditValue());
-
-    // return new Link(getEditValue(), "/product/" + m_product.getName());
-    return new Command("guru");
-  }
-
-  //........................................................................
-  //------------------------------- doPrint --------------------------------
-
-  /**
-   * Do the standard printing after handling templates.
-   *
-   * @param       inEntry    the entry this value is in
-   * @param       inRenderer the renderer to render sub values
-   *
-   * @return      the string to be printed
-   *
-   */
-  // protected String doPrint(AbstractEntry inEntry,
-  //                          SoyRenderer inRenderer)
-  // {
-  //   resolve();
-  //   if(m_product == null)
-  //     return getEditValue();
-
-  //   return inRenderer.render("dma.value.reference",
-  //                            collectData(inEntry, inRenderer));
-  // }
-
-  //........................................................................
-  //----------------------------- collectData ------------------------------
-
-   /**
-    * Collect the data available for printing the value.
-    *
-    * @param       inEntry    the entry this value is in
-    * @param       inRenderer the renderer to render sub values
-    *
-    * @return      the data as a map
-    *
-    */
-   // @Override
-   // public Map<String, Object> collectData(AbstractEntry inEntry,
-   //                                        SoyRenderer inRenderer)
-   // {
-   //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
-   //   data.put("id", get());
-
-   //   if(m_product != null)
-   //     data.put("name", inRenderer.renderCommands(m_product.getFullTitle()));
-
-   //   return data;
-   // }
-
-   //........................................................................
-  //----------------------------- getEditValue -----------------------------
-
-   /**
-    * Get the value to be used for editing.
-    *
-    * @return      the value for editing
-    *
-    */
-   // @Override
-   // public String getEditValue()
-   // {
-   //   return m_name.get();
-   // }
-
-   //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
@@ -558,9 +474,6 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
       assertEquals("not undefined at start", false, text.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    text.toString());
-      assertEquals("undefined value not correct",
-                   "\\color{error}{$undefined$}",
-                   text.format().toString());
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some text
@@ -569,8 +482,6 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \\= test",
                    text.toString());
-      assertEquals("value not correctly gotten", "just some = test",
-                   text.format().toString());
       assertEquals("value not correctly converted", "just some = test",
                    text.get());
 
@@ -578,8 +489,6 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
       text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
-      assertEquals("value not correctly gotten", "just some \" test",
-                   text.format().toString());
       assertEquals("value not correctly gotten", "just some \\\" test",
                    text.toString());
       assertEquals("value not correctly converted", "just some \" test",
@@ -588,13 +497,9 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
       // add something to the text
       Name added = text.add(new Name("more text"));
       assertEquals("added", "just some \\\" test more text", added.toString());
-      assertEquals("added", "just some \" test more text",
-                   added.format().toString());
 
       added = text.add(new Name(" and more"));
       assertEquals("added", "just some \\\" test and more", added.toString());
-      assertEquals("added", "just some \" test and more",
-                   added.format().toString());
 
       Value.Test.createTest(text);
     }

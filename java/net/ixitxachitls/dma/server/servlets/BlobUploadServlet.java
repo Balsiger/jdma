@@ -159,7 +159,7 @@ public class BlobUploadServlet extends BaseServlet
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "no key given");
 
-      AbstractEntry.EntryKey key = DMAServlet.extractKey(keyName);
+      AbstractEntry.EntryKey<?> key = DMAServlet.extractKey(keyName);
       if(key == null)
         return new TextError(HttpServletResponse.SC_BAD_REQUEST,
                              "invalid key given");

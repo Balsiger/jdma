@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -36,10 +35,6 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.Iterators;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Span;
-import net.ixitxachitls.output.commands.Table;
-import net.ixitxachitls.output.commands.Window;
 
 //..........................................................................
 
@@ -292,18 +287,18 @@ public class Units<T extends Units<T>> extends Value<T>
      * @return      the convert value as a command
      *
      */
-    public Command format(Rational inValue)
-    {
-      if(inValue.isNull())
-        return new Command("0 " + m_unit);
+    // public Command format(Rational inValue)
+    // {
+    //   if(inValue.isNull())
+    //     return new Command("0 " + m_unit);
 
-      return new Span("unit", new Command(new Object []
-        {
-          inValue.format(false),
-          " ",
-          inValue.isSingular() ? m_unit : m_units,
-        }));
-    }
+    //   return new Span("unit", new Command(new Object []
+    //     {
+    //       inValue.format(false),
+    //       " ",
+    //       inValue.isSingular() ? m_unit : m_units,
+    //     }));
+    // }
 
     //......................................................................
     //------------------------------ toString ------------------------------
@@ -763,27 +758,27 @@ public class Units<T extends Units<T>> extends Value<T>
      * @return      the format user for printing this set with the given values
      *
      */
-    protected Command format(Rational []inValues)
-    {
-      assert inValues.length == m_units.length
-        : "number of units and values don't match";
+    // protected Command format(Rational []inValues)
+    // {
+    //   assert inValues.length == m_units.length
+    //     : "number of units and values don't match";
 
-      ArrayList<Object> commands = new ArrayList<Object>();
+    //   ArrayList<Object> commands = new ArrayList<Object>();
 
-      for(int i = 0; i < m_units.length; i++)
-        if(inValues[i] != null && !inValues[i].isNull())
-        {
-          if(commands.size() > 0)
-            commands.add(" ");
+    //   for(int i = 0; i < m_units.length; i++)
+    //     if(inValues[i] != null && !inValues[i].isNull())
+    //     {
+    //       if(commands.size() > 0)
+    //         commands.add(" ");
 
-          commands.add(m_units[i].format(inValues[i]));
-        }
+    //       commands.add(m_units[i].format(inValues[i]));
+    //     }
 
-      if(commands.size() == 0)
-        return new Span("unit", "0 " + getBaseUnit());
+    //   if(commands.size() == 0)
+    //     return new Span("unit", "0 " + getBaseUnit());
 
-      return new Command(commands.toArray());
-    }
+    //   return new Command(commands.toArray());
+    // }
 
     //......................................................................
   }
@@ -888,7 +883,7 @@ public class Units<T extends Units<T>> extends Value<T>
                                  // overridden in all derivations
   public T create()
   {
-    return super.create((T)new Units(m_sets, m_simplifyLevel));
+    return super.create((T)new Units<T>(m_sets, m_simplifyLevel));
   }
 
   //........................................................................
@@ -963,75 +958,35 @@ public class Units<T extends Units<T>> extends Value<T>
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
+  // //----------------------------- formatUnits ------------------------------
 
-  /**
-   * Format the value for printing.
-   *
-   * @return      the command that can be printed
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    ArrayList<Object> table = new ArrayList<Object>();
+  // /**
+  //  * Format all the units for printing.
+  //  *
+  //  * @return      the command to print all unit values
+  //  *
+  //  */
+  // protected Command formatUnits()
+  // {
+  //   ArrayList<Object> commands = new ArrayList<Object>();
 
-    table.add("Total:");
-    table.add(new Command(new Object []
-      {
-        getAsBase().format(false),
-        " ",
-        getBaseUnit(),
-      }));
-    table.add("");
-    table.add("");
+  //   for(int i = 0; i < m_values.length; i++)
+  //   {
+  //     Command command = formatSingleUnit(i);
+  //     if(command == null)
+  //       continue;
 
-    for(int i = 0; i < m_sets.length; i++)
-    {
-      if(m_sets[i] == m_set)
-        continue;
+  //     if(commands.size() > 0)
+  //       commands.add(" ");
 
-      table.add(m_sets[i].m_name + ":");
+  //     commands.add(command);
+  //   }
 
-      Units converted = toSet(i, true);
-      table.add(converted.m_set.format(converted.m_values));
-    }
+  //   if(commands.size() == 0)
+  //     return new Span("unit", "0 " + getBaseUnit());
 
-    return new Window(formatUnits(),
-                      new Table("#inline#1:L,,;100:L",
-                                table.toArray(new Object[table.size()])));
-  }
-
-  //........................................................................
-  //----------------------------- formatUnits ------------------------------
-
-  /**
-   * Format all the units for printing.
-   *
-   * @return      the command to print all unit values
-   *
-   */
-  protected Command formatUnits()
-  {
-    ArrayList<Object> commands = new ArrayList<Object>();
-
-    for(int i = 0; i < m_values.length; i++)
-    {
-      Command command = formatSingleUnit(i);
-      if(command == null)
-        continue;
-
-      if(commands.size() > 0)
-        commands.add(" ");
-
-      commands.add(command);
-    }
-
-    if(commands.size() == 0)
-      return new Span("unit", "0 " + getBaseUnit());
-
-    return new Command(commands);
-  }
+  //   return new Command(commands);
+  // }
 
   //........................................................................
   //--------------------------- formatSingleUnit ---------------------------
@@ -1044,16 +999,16 @@ public class Units<T extends Units<T>> extends Value<T>
    * @return      the command to format the value or null if there is no value
    *
    */
-  protected @Nullable Command formatSingleUnit(int inIndex)
-  {
-    assert inIndex >= 0 && inIndex <= m_values.length;
+  // protected @Nullable Command formatSingleUnit(int inIndex)
+  // {
+  //   assert inIndex >= 0 && inIndex <= m_values.length;
 
-    if(m_values[inIndex] == null || !m_values[inIndex].isDefined()
-       || m_values[inIndex].isNull())
-      return null;
+  //   if(m_values[inIndex] == null || !m_values[inIndex].isDefined()
+  //      || m_values[inIndex].isNull())
+  //     return null;
 
-    return m_set.m_units[inIndex].format(m_values[inIndex]);
-  }
+  //   return m_set.m_units[inIndex].format(m_values[inIndex]);
+  // }
 
   //........................................................................
   //------------------------------ doToString ------------------------------
@@ -1286,7 +1241,7 @@ public class Units<T extends Units<T>> extends Value<T>
         if(m_sets[i] == result.m_set)
           break;
 
-      return add((T)inOther.toSet(i, true));
+      return add(inOther.toSet(i, true));
     }
 
     return result;
@@ -1345,7 +1300,7 @@ public class Units<T extends Units<T>> extends Value<T>
         if(m_sets[i] == m_set)
           break;
 
-      return subtract((T)inOther.toSet(i, true));
+      return subtract(inOther.toSet(i, true));
     }
 
     return result;
@@ -1406,7 +1361,7 @@ public class Units<T extends Units<T>> extends Value<T>
       if(m_values[i] != null)
         result.m_values[i] = m_values[i].multiply(inValue);
 
-    return (T)result.simplify();
+    return result.simplify();
   }
 
   //........................................................................
@@ -1460,7 +1415,7 @@ public class Units<T extends Units<T>> extends Value<T>
       if(m_values[i] != null)
         result.m_values[i] = m_values[i].divide(inValue);
 
-    return (T)result.simplify();
+    return result.simplify();
   }
 
   //........................................................................
@@ -1647,6 +1602,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing initializations. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void init()
     {
       Units value = new Units(s_sets, 1);
@@ -1687,13 +1643,6 @@ public class Units<T extends Units<T>> extends Value<T>
                    value.toSet(1, true).toString());
       assertEquals("convert double", "10 1/200 gurus",
                    value.toSet(1, false).toSet(2, true).toString());
-      assertEquals("output", "\\window{\\span{unit}{1 pp} "
-                   + "\\span{unit}{10 gps} \\span{unit}{1 cp}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[20]{1}{100} gps}"
-                   + "{}{}{my:}{\\span{unit}{\\frac[8]{1}{250} my sp}}"
-                   + "{guru:}{\\span{unit}{\\frac[10]{1}{200} gurus}}}",
-                   value.format(false).toString());
 
       // definition from string
       value = new Units("1/1 : official = 10/1   : pp|pps : platinum,"
@@ -1731,13 +1680,6 @@ public class Units<T extends Units<T>> extends Value<T>
                    value.toSet(1, true).toString());
       assertEquals("convert double", "10 1/200 gurus",
                    value.toSet(1, false).toSet(2, true).toString());
-      assertEquals("output", "\\window{\\span{unit}{1 pp} "
-                   + "\\span{unit}{10 gps} \\span{unit}{1 cp}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[20]{1}{100} gps}"
-                   + "{}{}{my:}{\\span{unit}{\\frac[8]{1}{250} my sp}}"
-                   + "{guru:}{\\span{unit}{\\frac[10]{1}{200} gurus}}}",
-                   value.format(false).toString());
     }
 
     //......................................................................
@@ -1745,6 +1687,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing reading. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void read()
     {
       String []tests =
@@ -1770,7 +1713,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing additions. */
     @org.junit.Test
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void add()
     {
       Units unit = new Units(s_sets, 1);
@@ -1795,7 +1738,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing subtractions. */
     @org.junit.Test
-    @SuppressWarnings("unchecked")
+      @SuppressWarnings({ "unchecked", "rawtypes" })
     public void subtract()
     {
       Units unit = new Units(s_sets, 1);
@@ -1823,7 +1766,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing multiplications. */
     @org.junit.Test
-    @SuppressWarnings("unchecked")
+      @SuppressWarnings({ "unchecked", "rawtypes" })
     public void multiply()
     {
       Units value = new Units(new Rational []
@@ -1849,7 +1792,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing divisions. */
     @org.junit.Test
-    @SuppressWarnings("unchecked")
+      @SuppressWarnings({ "unchecked", "rawtypes" })
     public void divide()
     {
       Units value = new Units(new Rational []
@@ -1875,6 +1818,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Comparing tests. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void compare()
     {
       Units low = new Units(new Rational []
@@ -1925,28 +1869,9 @@ public class Units<T extends Units<T>> extends Value<T>
         new Unit("sp", "sps", 1, 10, "silver", "silvers", "silver piece",
                  "silver pieces");
 
-      Rational value = new Rational(0);
       assertEquals("undefined",
                    "sp/sps/silver/silvers/silver piece/silver pieces *1/10",
                    unit.toString());
-      assertEquals("undefined", "0 sp",
-                   unit.format(value).toString());
-
-      value = new Rational(1, 2, 3);
-
-      assertEquals("set",
-                   "sp/sps/silver/silvers/silver piece/silver pieces "
-                   + "*1/10", unit.toString());
-      assertEquals("set", "\\span{unit}{\\frac[1]{2}{3} sps}",
-                   unit.format(value).toString());
-
-      value = new Rational(1);
-
-      assertEquals("set",
-                   "sp/sps/silver/silvers/silver piece/silver pieces "
-                   + "*1/10", unit.toString());
-      assertEquals("set", "\\span{unit}{1 sp}",
-                   unit.format(value).toString());
 
       // now a String defined unit
       unit = new Unit("2/3 : test|tests : other|still other|last");

@@ -23,11 +23,10 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -51,6 +50,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Date extends Value<Date>
 {
   //--------------------------------------------------------- constructor(s)
@@ -101,7 +101,7 @@ public class Date extends Value<Date>
    *
    */
   @Override
-public @Nonnull Date create()
+  public Date create()
   {
     return super.create(new Date());
   }
@@ -119,7 +119,7 @@ public @Nonnull Date create()
   private int m_year  = 0;
 
   /** Possible month strings. */
-  private static final @Nonnull String []MONTH_STRINGS =
+  private static final String []MONTH_STRINGS =
     Config.get("resource:default/month.names", new String []
       {
         "January", "February", "March", "April", "May", "June", "July",
@@ -127,7 +127,7 @@ public @Nonnull Date create()
       });
 
   /** Invalid month. */
-  private static final @Nonnull String s_invalid =
+  private static final String s_invalid =
     Config.get("resource:default/month.invalid", "<invalid>");
 
   //........................................................................
@@ -156,7 +156,7 @@ public @Nonnull Date create()
    * @return      the date stored
    *
    */
-  public @Nonnull String getMonthAsString()
+  public String getMonthAsString()
   {
     return convertToMonthString(m_month);
   }
@@ -208,21 +208,6 @@ public boolean isDefined()
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-protected Command doFormat()
-  {
-    return new Command(toString());
-  }
-
-  //........................................................................
   //----------------------------- convertValue -----------------------------
 
   /**
@@ -232,7 +217,7 @@ protected Command doFormat()
    *
    */
   @Override
-protected String doToString()
+  protected String doToString()
   {
     if(m_month > 0)
       return getMonthAsString() + ' ' + m_year;
@@ -254,7 +239,7 @@ protected String doToString()
    *
    */
   @Override
-  public int compareTo(@Nonnull Object inOther)
+  public int compareTo(Object inOther)
   {
     if(!(inOther instanceof Date))
       return super.compareTo(inOther);
@@ -294,7 +279,7 @@ protected String doToString()
     *
     */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     m_month = inReader.expectCase(MONTH_STRINGS, true) + 1;
 
@@ -326,7 +311,7 @@ public boolean doRead(@Nonnull ParseReader inReader)
    * @return      the String representation of the month
    *
    */
-  public static @Nonnull String convertToMonthString(int inMonth)
+  public static String convertToMonthString(int inMonth)
   {
     if(inMonth <= 0)
       return "";
@@ -381,6 +366,7 @@ public boolean doRead(@Nonnull ParseReader inReader)
 
     /** Testing converting. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void convert()
     {
       Value value = new Date(5, 1969);

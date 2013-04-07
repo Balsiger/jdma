@@ -38,8 +38,7 @@ import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Percent;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
+import net.ixitxachitls.dma.values.Value;
 
 //..........................................................................
 
@@ -172,16 +171,10 @@ public class BaseArmor extends BaseExtension<BaseItem>
   //........................................................................
   //----- type -------------------------------------------------------------
 
-  /** The formatter for types. */
-  protected static final Formatter<EnumSelection<ArmorTypes>> s_typeFormatter =
-    new LinkFormatter<EnumSelection<ArmorTypes>>
-    (link(BaseItem.TYPE, Index.Path.ARMOR_TYPES));
-
   /** The type of the armor. */
   @Key("armor type")
   protected EnumSelection<ArmorTypes> m_type =
      new EnumSelection<ArmorTypes>(ArmorTypes.class)
-    .withFormatter(s_typeFormatter)
     .withTemplate("link", Index.Path.ARMOR_TYPES.getPath());
 
   static
@@ -191,10 +184,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //........................................................................
   //----- maximum dexterity ------------------------------------------------
-
-  /** The formatter for max dex. */
-  protected static final Formatter<Number> s_maxDexFormatter =
-    new LinkFormatter<Number>(link(BaseItem.TYPE, Index.Path.MAX_DEXTERITIES));
 
   /** The grouping for max dex. */
   protected static final Group<Number, Long, String> s_maxDexGrouping =
@@ -215,7 +204,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
   @Key("max dexterity")
   @DM
   protected Number m_maxDex = new Number(0, 30, true)
-    .withFormatter(s_maxDexFormatter)
     .withGrouping(s_maxDexGrouping)
     .withTemplate("link", Index.Path.MAX_DEXTERITIES.getPath());
 
@@ -227,10 +215,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //........................................................................
   //----- check penalty ----------------------------------------------------
-
-  /** The formatter for the check penalty. */
-  protected static final Formatter<Number> s_penaltyFormatter =
-    new LinkFormatter<Number>(link(BaseItem.TYPE, Index.Path.CHECK_PENALTIES));
 
   /** The grouping for max dex. */
   protected static final Group<Number, Long, String> s_penaltyGrouping =
@@ -252,7 +236,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
   @Key("check penalty")
   @DM
   protected Number m_checkPenalty = new Number(-20, 0)
-    .withFormatter(s_penaltyFormatter)
     .withGrouping(s_penaltyGrouping)
     .withTemplate("link", Index.Path.CHECK_PENALTIES.getPath());
 
@@ -264,10 +247,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //........................................................................
   //----- arcane failure ---------------------------------------------------
-
-  /** The formatter for arcane failure. */
-  protected static final Formatter<Percent> s_arcaneFormatter =
-    new LinkFormatter<Percent>(link(BaseItem.TYPE, Index.Path.ARCANE_FAILURES));
 
   /** The grouping for arcane failure. */
   protected static final Group<Percent, Long, String> s_arcaneGrouping =
@@ -287,7 +266,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
   /** The arcane spell failure. */
   @Key("arcane failure")
   protected Percent m_arcane = new Percent()
-    .withFormatter(s_arcaneFormatter)
     .withGrouping(s_arcaneGrouping)
     .withTemplate("link", Index.Path.ARCANE_FAILURES.getPath());;
 
@@ -299,10 +277,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //........................................................................
   //----- speed ------------------------------------------------------------
-
-  /** The formatter for arcane failure. */
-  protected static final Formatter<Distance> s_speedFormatter =
-    new LinkFormatter<Distance>(link(BaseItem.TYPE, Index.Path.SPEEDS));
 
   /** The grouping for arcane failure. */
   protected static final Group<Distance, Long, String> s_speedGrouping =
@@ -322,11 +296,11 @@ public class BaseArmor extends BaseExtension<BaseItem>
   @Key("speed")
   protected Multiple m_speed = new Multiple(new Multiple.Element []
     {
-      new Multiple.Element(new Distance().withFormatter(s_speedFormatter)
+      new Multiple.Element(new Distance()
                            .withGrouping(s_speedGrouping)
                            .withEditType("name[30 ft base]"),
                            false, null, "/"),
-      new Multiple.Element(new Distance().withFormatter(s_speedFormatter)
+      new Multiple.Element(new Distance()
                            .withGrouping(s_speedGrouping)
                            .withEditType("name[20 ft base]"),
                            false),
@@ -380,10 +354,11 @@ public class BaseArmor extends BaseExtension<BaseItem>
    *
    * @param       inName     the name of the value to collect
    * @param       ioCombined the combined value to collect into
-   *
+   * @param   <T>        the type of value being collected
    */
   @Override
-  public void collect(String inName, Combined ioCombined)
+  public <T extends Value<T>> void collect(String inName,
+                                           Combined<T> ioCombined)
   {
     super.collect(inName, ioCombined);
 

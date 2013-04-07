@@ -35,9 +35,6 @@ import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.formatters.DelimFormatter;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //..........................................................................
 
@@ -104,10 +101,6 @@ public class BaseLight extends BaseExtension<BaseItem>
 
   //----- bright light -----------------------------------------------------
 
-  /** The formatter for light failure. */
-  protected static final Formatter<Multiple> s_lightFormatter =
-    new LinkFormatter<Multiple>("/items/lights/");
-
   /** The grouping for bright light. */
   protected static final Group<Multiple, Long, String> s_brightGrouping =
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
@@ -123,30 +116,14 @@ public class BaseLight extends BaseExtension<BaseItem>
         "50 ft bright", "100 ft bright", "250 ft bright", "infinite bright",
       }, "$undefined$");
 
-  /** The formatter to get a space (before). */
-  protected static final Formatter<Distance> s_spaceFormatterD =
-    new DelimFormatter<Distance>(" ", null);
-
-  /** The formatter for the space (before). */
-  protected static final Formatter<Distance> s_spaceFormatter =
-    new DelimFormatter<Distance>(" ", null);
-
-  /** The formatter to get a space (after). */
-  protected static final Formatter<Distance> s_spaceAfterFormatter =
-    new DelimFormatter<Distance>(null, " ");
-
   /** The light radius. */
   @Key("bright light")
   protected Multiple m_brightLight = new Multiple(new Multiple.Element []
     {
-      // we have to use a formatter for the distance, or distance will use
-      // its own formatter, which clashes with the index formatter given
-      // for the enclosing Multiple
-      new Multiple.Element(new Distance()
-                           .withFormatter(s_spaceAfterFormatter), false),
+      new Multiple.Element(new Distance(), false),
       new Multiple.Element(new EnumSelection<BaseItem.AreaShapes>
                            (BaseItem.AreaShapes.class), false),
-    }).withGrouping(s_brightGrouping).withFormatter(s_lightFormatter);
+    }).withGrouping(s_brightGrouping);
 
   static
   {
@@ -175,11 +152,10 @@ public class BaseLight extends BaseExtension<BaseItem>
   @Key("shadowy light")
   protected Multiple m_shadowyLight = new Multiple(new Multiple.Element []
     {
-      new Multiple.Element(new Distance().withFormatter(s_spaceAfterFormatter),
-                           false),
+      new Multiple.Element(new Distance(), false),
       new Multiple.Element(new EnumSelection<BaseItem.AreaShapes>
                            (BaseItem.AreaShapes.class), false),
-    }).withGrouping(s_shadowyGrouping).withFormatter(s_lightFormatter);
+    }).withGrouping(s_shadowyGrouping);
 
   //........................................................................
 

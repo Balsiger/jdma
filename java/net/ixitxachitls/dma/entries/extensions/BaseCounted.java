@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -33,8 +33,6 @@ import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Number;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //..........................................................................
 
@@ -53,6 +51,7 @@ import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseCounted extends BaseExtension<BaseItem>
 {
   //----------------------------------------------------------------- nested
@@ -145,7 +144,7 @@ public class BaseCounted extends BaseExtension<BaseItem>
    * @param       inName  the name of the extension
    *
    */
-  public BaseCounted(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseCounted(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -178,14 +177,9 @@ public class BaseCounted extends BaseExtension<BaseItem>
 
   //----- count ------------------------------------------------------------
 
-  /** The formatter for substances. */
-  protected static final Formatter<Number> s_countFormatter =
-    new LinkFormatter<Number>(link(BaseItem.TYPE, Index.Path.COUNTS));
-
   /** The base  count value. */
   @Key("count")
-  protected @Nonnull Number m_count =
-    new Number(1, 10000).withFormatter(s_countFormatter);
+  protected Number m_count = new Number(1, 10000);
 
   static
   {
@@ -195,15 +189,9 @@ public class BaseCounted extends BaseExtension<BaseItem>
   //........................................................................
   //----- unit -------------------------------------------------------------
 
-  /** The formatter for substances. */
-  protected static final Formatter<EnumSelection<Unit>> s_unitFormatter =
-    new LinkFormatter<EnumSelection<Unit>>
-    (link(BaseItem.TYPE, Index.Path.UNITS));
-
   /** The unit used for the things counted. */
   @Key("unit")
-  protected EnumSelection<Unit> m_unit = new EnumSelection<Unit>(Unit.class)
-    .withFormatter(s_unitFormatter);
+  protected EnumSelection<Unit> m_unit = new EnumSelection<Unit>(Unit.class);
 
   static
   {
@@ -231,7 +219,7 @@ public class BaseCounted extends BaseExtension<BaseItem>
    *
    */
   @Override
-  protected @Nonnull Print getPagePrint()
+  protected Print getPagePrint()
   {
     return s_pagePrint;
   }
@@ -246,7 +234,7 @@ public class BaseCounted extends BaseExtension<BaseItem>
    *
    */
   @Override
-  protected @Nonnull ListPrint getListPrint()
+  protected ListPrint getListPrint()
   {
     return s_listPrint;
   }
@@ -261,7 +249,7 @@ public class BaseCounted extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
 

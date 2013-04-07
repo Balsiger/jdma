@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -48,6 +48,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Distance extends Units<Distance>
 {
   //--------------------------------------------------------- constructor(s)
@@ -110,7 +111,7 @@ public Distance create()
   //-------------------------------------------------------------- variables
 
   /** The definition of distances. */
-  private static @Nonnull String s_definition =
+  private static String s_definition =
     Config.get("/game.distance",
                "1/1    : Feet =   5280/1   : mi : mile|miles,"
                + "                     1/1   : ft : foot|feet,"
@@ -120,7 +121,7 @@ public Distance create()
                + "                     1/100 : cm : centimeter|centimeters.");
 
   /** The sets with the possible units. */
-  private static @Nonnull Set []s_sets = parseDefinition(s_definition);
+  private static Set []s_sets = parseDefinition(s_definition);
 
   //........................................................................
 
@@ -163,7 +164,7 @@ public Distance create()
    * @return      the inches
    *
    */
-  public @Nonnull Rational getAsFeet()
+  public Rational getAsFeet()
   {
     if(!isDefined())
       return new Rational(0);
@@ -183,7 +184,7 @@ public Distance create()
    * @return      the inches
    *
    */
-  public @Nonnull Rational getAsMeters()
+  public Rational getAsMeters()
   {
     if(!isDefined())
       return new Rational(0);
@@ -204,7 +205,7 @@ public Distance create()
    * @return      the corresponding metric value.
    *
    */
-  public @Nonnull Distance asMetric()
+  public Distance asMetric()
   {
     if(m_set == m_sets[1])
       return this;
@@ -221,7 +222,7 @@ public Distance create()
    * @return      the corresponding feet value.
    *
    */
-  public @Nonnull Distance asFeet()
+  public Distance asFeet()
   {
     if(m_set == m_sets[0])
       return this;
@@ -243,8 +244,8 @@ public Distance create()
    *
    */
   // @Override
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
+  // public Map<String, Object> collectData(AbstractEntry inEntry,
+  //                                        SoyRenderer inRenderer)
   // {
   //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
@@ -368,9 +369,9 @@ public Distance create()
    * @return      a new object with the given value
    *
    */
-  public @Nonnull Distance setMetric(@Nullable Rational inKilometers,
-                                     @Nullable Rational inMeters,
-                                     @Nullable Rational inCentimeters)
+  public Distance setMetric(@Nullable Rational inKilometers,
+                            @Nullable Rational inMeters,
+                            @Nullable Rational inCentimeters)
   {
     return as(new Rational [] { inKilometers, inMeters, inCentimeters }, 1);
   }
@@ -388,9 +389,9 @@ public Distance create()
    * @return      a new object with the new values
    *
    */
-  public @Nonnull Distance asFeet(@Nullable Rational inMiles,
-                                  @Nullable Rational inFeet,
-                                  @Nullable Rational inInches)
+  public Distance asFeet(@Nullable Rational inMiles,
+                         @Nullable Rational inFeet,
+                         @Nullable Rational inInches)
   {
     return as(new Rational [] { inMiles, inFeet, inInches }, 0);
   }
@@ -419,8 +420,6 @@ public Distance create()
       assertEquals("not undefined at start", false, value.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    value.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   value.format(false).toString());
       assertEquals("feet",   false, value.isFeet());
       assertEquals("metric", false, value.isMetric());
       assertEquals("undefined value not correct", "0",
@@ -433,12 +432,6 @@ public Distance create()
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string ", "1 1/2 cm", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{\\frac[1]{1}{2} cm}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac{3}{200} m}{}{}"
-                   + "{Feet:}{\\span{unit}{\\frac{9}{20} in}}}",
-                   value.format(false).toString());
       assertEquals("feet",   false,  value.isFeet());
       assertEquals("metric", true,   value.isMetric());
       assertEquals("cm",   "3/200", value.getAsMeters().toString());
@@ -449,14 +442,6 @@ public Distance create()
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 mi 1 2/3 ft 2 in", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{1 mi} "
-                   + "\\span{unit}{\\frac[1]{2}{3} ft} \\span{unit}{2 in}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[5281]{5}{6} ft}{}{}"
-                   + "{Metric:}{\\span{unit}{2 km} \\span{unit}{112 m} "
-                   + "\\span{unit}{\\frac[73]{1}{3} cm}}}",
-                   value.format(false).toString());
       assertEquals("feet",   true,  value.isFeet());
       assertEquals("metric", false, value.isMetric());
       assertEquals("cm", "2112 11/15", value.getAsMeters().toString());
@@ -467,12 +452,6 @@ public Distance create()
 
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 1/2 m", value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{\\frac[1]{1}{2} m}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{1}{2} m}{}{}"
-                   + "{Feet:}{\\span{unit}{3 ft} \\span{unit}{9 in}}}",
-                   value.format(false).toString());
       assertEquals("feet",   false,  value.isFeet());
       assertEquals("metric", true,  value.isMetric());
       assertEquals("cm",  "1 1/2", value.getAsMeters().toString());
@@ -484,14 +463,6 @@ public Distance create()
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("string", "1 km 3 1/4 m 20 cm",
                    value.toString());
-      assertEquals("print",
-                   "\\window{\\span{unit}{1 km} "
-                   + "\\span{unit}{\\frac[3]{1}{4} m} \\span{unit}{20 cm}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1003]{9}{20} m}{}{}"
-                   + "{Feet:}{\\span{unit}{2508 ft} "
-                   + "\\span{unit}{\\frac[7]{1}{2} in}}}",
-                   value.format(false).toString());
       assertEquals("feet",   false, value.isFeet());
       assertEquals("metric", true,  value.isMetric());
       assertEquals("in", "2508 5/8", value.getAsFeet().toString());

@@ -40,11 +40,9 @@ import javax.annotation.concurrent.Immutable;
  * The type specification for an entry.
  *
  * @file          BaseType.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  * @param         <T> the type represented by this type spec
- *
  */
 
 //..........................................................................
@@ -52,7 +50,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
-public class Type<T extends Entry> extends AbstractType<T>
+public class Type<T extends Entry<?>> extends AbstractType<T>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -63,12 +61,13 @@ public class Type<T extends Entry> extends AbstractType<T>
    *
    * @param       inClass the class represented by this type
    * @param       inBase  the base class for the type
-   *
    */
-  public Type(@Nonnull Class<T> inClass,
+  @SuppressWarnings("unchecked") // We don't use Class<T> here, as this would
+                                 // not allow us to create Entry.TYPE properly.
+  public Type(@Nonnull Class<?> inClass,
               @Nonnull BaseType<? extends BaseEntry> inBase)
   {
-    super(inClass);
+    super((Class<T>)inClass);
 
     m_base = inBase;
   }
@@ -102,8 +101,8 @@ public class Type<T extends Entry> extends AbstractType<T>
   private @Nullable BaseType<? extends BaseEntry> m_base;
 
   /** All the non-base types available. */
-  private static final Map<String, Type<? extends Entry>> s_types =
-    new HashMap<String, Type<? extends Entry>>();
+  private static final Map<String, Type<? extends Entry<?>>> s_types =
+    new HashMap<String, Type<? extends Entry<?>>>();
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -130,7 +129,7 @@ public class Type<T extends Entry> extends AbstractType<T>
 
     if(inOther instanceof Type)
     {
-      Type other = (Type)inOther;
+      Type<?> other = (Type<?>)inOther;
 
       if(m_base != null && other.m_base == null)
         return -1;

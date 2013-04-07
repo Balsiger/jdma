@@ -454,11 +454,6 @@ public class Money extends Units<Money>
       assertEquals("total",    43.21, value.getAsGold().getValue(), 0.001);
       assertEquals("output", "4 pp 3 gp 2 sp 1 cp",
                    value.toString());
-      assertEquals("output", "\\window{\\span{unit}{4 pp} \\span{unit}{3 gp} "
-                   + "\\span{unit}{2 sp} \\span{unit}{1 cp}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[43]{21}{100} gp}{}{}}",
-                   value.format(false).toString());
 
       value =
         value.asStandard(new Rational(1, 2, 3), null, new Rational(5), null);

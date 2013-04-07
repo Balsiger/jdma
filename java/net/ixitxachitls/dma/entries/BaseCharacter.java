@@ -39,8 +39,6 @@ import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -397,37 +395,37 @@ public class BaseCharacter extends BaseEntry
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey,
-                                            boolean inDM)
-  {
-    if("products".equals(inKey))
-    {
-      List<Product> products = DMADataFactory.get()
-        .getRecentEntries(Product.TYPE, getKey());
+  // @Override
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  //                                           boolean inDM)
+  // {
+  //   if("products".equals(inKey))
+  //   {
+  //     List<Product> products = DMADataFactory.get()
+  //       .getRecentEntries(Product.TYPE, getKey());
 
-      List<Object> commands = new ArrayList<Object>();
-      boolean more = products.size() > MAX_PRODUCTS;
-      for(int i = 0; i < MAX_PRODUCTS && i < products.size(); i++)
-      {
-        if(i > 0)
-          commands.add(", ");
+  //     List<Object> commands = new ArrayList<Object>();
+  //     boolean more = products.size() > MAX_PRODUCTS;
+  //     for(int i = 0; i < MAX_PRODUCTS && i < products.size(); i++)
+  //     {
+  //       if(i > 0)
+  //         commands.add(", ");
 
-        Product product = products.get(i);
-        commands.add(new Link(product.getFullTitle(), product.getPath()));
-      }
+  //       Product product = products.get(i);
+  //       commands.add(new Link(product.getFullTitle(), product.getPath()));
+  //     }
 
-      if(more)
-        commands.add(" ... ");
+  //     if(more)
+  //       commands.add(" ... ");
 
-      commands.add("| ");
-      commands.add(new Link("view all", getPath() + "/products"));
+  //     commands.add("| ");
+  //     commands.add(new Link("view all", getPath() + "/products"));
 
-      return new FormattedValue(new Command(commands), null, "products");
-    }
+  //     return new FormattedValue(new Command(commands), null, "products");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //------------------------------- compute --------------------------------

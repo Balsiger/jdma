@@ -138,7 +138,7 @@ public class True extends Condition<True>
     @org.junit.Test
     public void testAll()
     {
-      Condition value = new True();
+      Condition<?> value = new True();
 
       // undefined value
       assertEquals("not undefined at start", false, value.isDefined());

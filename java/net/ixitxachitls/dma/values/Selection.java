@@ -25,11 +25,10 @@ package net.ixitxachitls.dma.values;
 
 import java.util.Arrays;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 
 //..........................................................................
@@ -51,6 +50,7 @@ import net.ixitxachitls.util.Strings;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Selection extends Value<Selection>
 {
   //--------------------------------------------------------- constructor(s)
@@ -64,7 +64,7 @@ public class Selection extends Value<Selection>
    * @param       inSelected   the selected value, starting from 0
    *
    */
-  public Selection(@Nonnull String []inSelections, int inSelected)
+  public Selection(String []inSelections, int inSelected)
   {
     m_selections = Arrays.copyOf(inSelections, inSelections.length);
     m_selected   = inSelected;
@@ -85,7 +85,7 @@ public class Selection extends Value<Selection>
    * @param       inSelections the selections valid for this value
    *
    */
-  public Selection(@Nonnull String []inSelections)
+  public Selection(String []inSelections)
   {
     this(inSelections, -1);
   }
@@ -102,7 +102,7 @@ public class Selection extends Value<Selection>
    * @undefined   IllegalArgumentException if invalid selection is given
    *
    */
-  public Selection(@Nonnull String []inSelections, @Nonnull String inSelected)
+  public Selection(String []inSelections, String inSelected)
   {
     this(inSelections, -1);
 
@@ -126,7 +126,7 @@ public class Selection extends Value<Selection>
    *
    */
   @Override
-@SuppressWarnings("unchecked") // this onlly works if this method is
+  @SuppressWarnings("unchecked") // this onlly works if this method is
                                  // overriden in all derivations
   public Selection create()
   {
@@ -140,7 +140,7 @@ public class Selection extends Value<Selection>
   //-------------------------------------------------------------- variables
 
   /** The possible selections. */
-  protected @Nonnull String []m_selections;
+  protected String []m_selections;
 
   /** The currently selected value. */
   protected int m_selected = -1;
@@ -171,28 +171,13 @@ public class Selection extends Value<Selection>
    * @return      all the possible values
    *
    */
-  public @Nonnull String []getSelections()
+  public String []getSelections()
   {
     return Arrays.copyOf(m_selections, m_selections.length);
   }
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-protected @Nonnull Command doFormat()
-  {
-    return new Command(toString());
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
@@ -202,7 +187,7 @@ protected @Nonnull Command doFormat()
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected String doToString()
   {
     if(m_selected >= 0)
       return m_selections[m_selected];
@@ -221,7 +206,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     return m_selected >= 0;
   }
@@ -253,7 +238,7 @@ public boolean isDefined()
    *
    */
   @Override
-public @Nonnull String getChoices()
+  public String getChoices()
   {
     return Strings.toString(m_selections, "||", "");
   }
@@ -323,7 +308,7 @@ public @Nonnull String getChoices()
    * @param       inValue the value to add to this one
    *
    */
-//   public @Nonnull T add(@Nonnull T inValue)
+//   public T add(T inValue)
 //   {
 //     if(isDefined())
 //       throw new IllegalStateException("cannot add to a defined value");
@@ -343,7 +328,7 @@ public @Nonnull String getChoices()
    * @return      true if multiplied, false if not
    *
    */
-//   public @Nonnull T multiply(long inValue)
+//   public T multiply(long inValue)
 //   {
 //     T result = create();
 
@@ -370,7 +355,7 @@ public @Nonnull String getChoices()
    * @return      true if divided, false if not
    *
    */
-//   public @Nonnull T divide(long inValue)
+//   public T divide(long inValue)
 //   {
 //     T result = create();
 
@@ -427,7 +412,7 @@ public @Nonnull String getChoices()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     m_selected = inReader.expectCase(m_selections, true);
 
@@ -449,7 +434,7 @@ public boolean doRead(@Nonnull ParseReader inReader)
    * @return      true if the value would be valid, false else
    *
    */
-  public boolean check(@Nonnull String inValue)
+  public boolean check(String inValue)
   {
     for(int i = 0; i < m_selections.length; i++)
       if(m_selections[i].equalsIgnoreCase(inValue))

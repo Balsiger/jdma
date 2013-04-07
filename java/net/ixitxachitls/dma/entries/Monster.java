@@ -1870,18 +1870,9 @@ public class Monster extends CampaignEntry<BaseMonster>
         // TODO: must be implemented
 
         // Skill modifiers from items (and other modifiers)
-        for (Map.Entry<String, Modifier> modifierEntry
-               : collectModifiers(skill.getName()).entrySet())
-          modifier.withModifier(modifierEntry.getValue(),
-                                modifierEntry.getKey());
-
-        for(Contribution<? extends Value<?>> contribution
-              : collectContributions(skill.getName()))
-          modifier.withModifier((Modifier)contribution.getValue(),
-                                contribution.getDescription());
+        modifier.with(collect(skill.getName()).modifier());
 
         Map<String, Object> values = Maps.newHashMap();
-
         values.put("entry", skill);
         values.put("subtype", entry.getKey());
         values.put("modifier", modifier);

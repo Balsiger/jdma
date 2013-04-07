@@ -43,9 +43,6 @@ import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Rational;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.dma.values.Weight;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.OverlayIcon;
-import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
@@ -707,29 +704,29 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      the command to display a character as an icon
    *
    */
-  @SuppressWarnings("unchecked") // pair array creation of var args
-  public Command getIcon(boolean inDM)
-  {
-    DMAData.File main = getMainFile();
-    String src;
-    if(main == null)
-      src = "character/person.png";
-    else
-      src = main.getIcon() + "=s100";
+  // @SuppressWarnings("unchecked") // pair array creation of var args
+  // public Command getIcon(boolean inDM)
+  // {
+  //   DMAData.File main = getMainFile();
+  //   String src;
+  //   if(main == null)
+  //     src = "character/person.png";
+  //   else
+  //     src = main.getIcon() + "=s100";
 
-    if(inDM)
-      return new OverlayIcon(src, getName(), getPath(), true,
-                             new Pair<String, Object>("right-bottom",
-                                                      "character/"
-                                                      + m_state.getSelected()),
-                             new Pair<String, Object>("left-top",
-                                                      "character/dm"));
-    else
-      return new OverlayIcon(src, getName(), getPath(), true,
-                             new Pair<String, Object>("right-bottom",
-                                                      "character/"
-                                                      + m_state.getSelected()));
-  }
+  //   if(inDM)
+  //     return new OverlayIcon(src, getName(), getPath(), true,
+  //                            new Pair<String, Object>("right-bottom",
+  //                                                     "character/"
+  //                                                   + m_state.getSelected()),
+  //                            new Pair<String, Object>("left-top",
+  //                                                     "character/dm"));
+  //   else
+  //     return new OverlayIcon(src, getName(), getPath(), true,
+  //                            new Pair<String, Object>("right-bottom",
+  //                                                     "character/"
+  //                                                 + m_state.getSelected()));
+  // }
 
   //........................................................................
   //------------------------------- compute --------------------------------
@@ -786,7 +783,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-  public boolean add(@Nonnull CampaignEntry inEntry)
+  public boolean add(@Nonnull CampaignEntry<?> inEntry)
   {
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();
@@ -818,11 +815,11 @@ public class Character extends CampaignEntry<BaseCharacter>
   @Override
   public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
   {
-    EntryKey parent = inKey.getParent();
+    EntryKey<?> parent = inKey.getParent();
     if(parent == null)
       return;
 
-    EntryKey parentParent = parent.getParent();
+    EntryKey<?> parentParent = parent.getParent();
     if(parentParent == null)
       return;
 

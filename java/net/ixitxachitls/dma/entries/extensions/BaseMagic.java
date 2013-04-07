@@ -33,6 +33,7 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
+import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 
 //..........................................................................
@@ -160,11 +161,13 @@ public class BaseMagic extends BaseExtension<BaseItem>
    *
    * @param       inName     the name of the value to contribute to
    * @param       ioCombined the list of contributions collected
+   * @param       <T>        the type of value being collected
    *
    */
-  @SuppressWarnings("unchecked")
   @Override
-  public void collect(String inName, Combined ioCombined)
+  @SuppressWarnings("unchecked")
+  public <T extends Value<T>> void collect(String inName,
+                                           Combined<T> ioCombined)
   {
     super.collect(inName, ioCombined);
 

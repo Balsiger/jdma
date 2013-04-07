@@ -23,16 +23,11 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.BaseItem;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-import net.ixitxachitls.dma.values.formatters.ListFormatter;
 
 //..........................................................................
 
@@ -51,6 +46,7 @@ import net.ixitxachitls.dma.values.formatters.ListFormatter;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseComposite extends BaseExtension<BaseItem>
 {
   //--------------------------------------------------------- constructor(s)
@@ -64,7 +60,7 @@ public class BaseComposite extends BaseExtension<BaseItem>
    * @param       inName  the name of the extension
    *
    */
-  public BaseComposite(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseComposite(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -93,32 +89,13 @@ public class BaseComposite extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%contains");
-
   //----- contains ---------------------------------------------------------
-
-  /** The formatter for contained items. */
-  protected static final Formatter<Name> s_containsFormatter =
-    new LinkFormatter<Name>("/item/");
-
-  /** The formatter for the outer list of contained items. */
-  protected static final Formatter<ValueList<ValueList<Name>>> s_andFormatter =
-    new ListFormatter<ValueList<ValueList<Name>>>(" and ");
-
-  /** The formatter for the outer list of contained items. */
-  protected static final Formatter<ValueList<Name>> s_orFormatter =
-    new ListFormatter<ValueList<Name>>(" or ");
 
   /** The items names that are together with this one. */
   @Key("contains")
   protected ValueList<ValueList<Name>> m_contains =
     new ValueList<ValueList<Name>>
-    (new ValueList<Name>(new Name().withFormatter(s_containsFormatter), "|")
-     .withFormatter(s_orFormatter))
-    .withFormatter(s_andFormatter)
-    .withTemplate("contains");
+    (new ValueList<Name>(new Name(), "|")).withTemplate("contains");
 
 
   //........................................................................
@@ -132,40 +109,6 @@ public class BaseComposite extends BaseExtension<BaseItem>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators

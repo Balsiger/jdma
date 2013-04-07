@@ -23,12 +23,11 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
@@ -49,6 +48,7 @@ import net.ixitxachitls.output.commands.Command;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class RandomDuration extends Duration
 {
   //--------------------------------------------------------- constructor(s)
@@ -91,7 +91,7 @@ public class RandomDuration extends Duration
    * @param       inRounds the number of rounds
    *
    */
-  public RandomDuration(@Nonnull Rational inRounds)
+  public RandomDuration(Rational inRounds)
   {
     super(inRounds);
   }
@@ -108,7 +108,7 @@ public class RandomDuration extends Duration
    *
    */
   @Override
-public @Nonnull RandomDuration create()
+  public RandomDuration create()
   {
     return (RandomDuration)super.create(new RandomDuration());
   }
@@ -137,7 +137,7 @@ public @Nonnull RandomDuration create()
    *
    */
   @Override
-  protected @Nonnull String singleUnitToString(int inIndex)
+  protected String singleUnitToString(int inIndex)
   {
     if(inIndex < 0 || m_dices == null || inIndex >= m_dices.length)
       return super.singleUnitToString(inIndex);
@@ -174,49 +174,6 @@ public @Nonnull RandomDuration create()
   }
 
   //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @return      the command that can be printed
-   *
-   */
-  @Override
-  protected @Nonnull Command doFormat()
-  {
-    if(!isRandom())
-      return super.doFormat();
-
-    return formatUnits();
-  }
-
-  //........................................................................
-  //--------------------------- formatSingleUnit ---------------------------
-
-  /**
-   * Format a single unit value, given by index.
-   *
-   * @param       inIndex the index of the unit value to format.
-   *
-   * @return      the command to format the value or null if there is no value
-   *
-   */
-  @Override
-  protected @Nullable Command formatSingleUnit(int inIndex)
-  {
-    assert inIndex >= 0 && inIndex <= m_values.length;
-
-    if(m_dices == null || m_dices[inIndex] == null)
-      return super.formatSingleUnit(inIndex);
-
-    if(m_values[inIndex].isOne())
-      return new Command(m_dices[inIndex].format(), " ",
-                         m_set.m_units[inIndex].m_units);
-
-    return new Command(m_dices[inIndex].format(), " * ",
-                       m_set.m_units[inIndex].format(m_values[inIndex]));
-  }
 
   //........................................................................
 
@@ -233,7 +190,7 @@ public @Nonnull RandomDuration create()
    *
    */
   @Override
-  protected int readSingleUnit(@Nonnull ParseReader inReader)
+  protected int readSingleUnit(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -283,8 +240,9 @@ public @Nonnull RandomDuration create()
 
   //........................................................................
 
-  //------------------------------------------------- other member functions
+  //........................................................................
 
+  //------------------------------------------------- other member functions
   //........................................................................
 
   //------------------------------------------------------------------- test

@@ -29,7 +29,6 @@ import javax.annotation.concurrent.Immutable;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
@@ -182,38 +181,6 @@ public class Condition<T extends Condition<T>> extends Value<T>
                                               + "implemented!");
 
     return Result.UNDEFINED;
-  }
-
-  //........................................................................
-
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Deprecated
-  protected Command doFormat()
-  {
-    return m_description.format(false);
-  }
-
-  //........................................................................
-
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @return      the command to use for printing
-   *
-   */
-  @Deprecated
-  public Command format()
-  {
-    return m_description.format(true);
   }
 
   //........................................................................

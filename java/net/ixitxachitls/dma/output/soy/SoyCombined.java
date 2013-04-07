@@ -79,7 +79,7 @@ public class SoyCombined extends SoyValue
    *
    * @param    inCombined    the combined value
    */
-  public SoyCombined(Combined inCombined)
+  public SoyCombined(Combined<?> inCombined)
   {
     super(inCombined.getName(), inCombined.getTopValue(),
           inCombined.getEntry());
@@ -94,7 +94,7 @@ public class SoyCombined extends SoyValue
   //-------------------------------------------------------------- variables
 
   /** The combination stored here. */
-  private final Combined m_combined;
+  private final Combined<?> m_combined;
 
   //........................................................................
 
@@ -110,6 +110,7 @@ public class SoyCombined extends SoyValue
    * @return the value found or null if not found
    */
   @Override
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   public @Nullable SoyData getSingle(@Nonnull String inName)
   {
     if("isCombined".equals(inName))
@@ -118,7 +119,7 @@ public class SoyCombined extends SoyValue
     if("name".equals(inName))
       return StringData.forValue(m_combined.getName());
 
-    Value top = m_combined.getEntry().getValue(m_combined.getName());
+    Value<?> top = m_combined.getEntry().getValue(m_combined.getName());
 
     if("isEditable".equals(inName))
       return BooleanData.forValue(top != null);
@@ -164,8 +165,8 @@ public class SoyCombined extends SoyValue
       if("list".equals(inName) && top instanceof ValueList)
       {
         List<SoyValue> values = new ArrayList<SoyValue>();
-        for (Value value : (ValueList<Value>)top)
-          values.add(new SoyValue(m_name, value, m_entry));
+        for (Object value : (ValueList)top)
+          values.add(new SoyValue(m_name, (Value)value, m_entry));
 
         return new SoyListData(values);
       }

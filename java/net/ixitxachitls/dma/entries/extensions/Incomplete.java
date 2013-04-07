@@ -23,22 +23,11 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueHandle;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -48,15 +37,14 @@ import net.ixitxachitls.output.commands.Symbol;
  * This is the timed extension for all the entries.
  *
  * @file          Incomplete.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Incomplete extends Extension<Entry<?>>
 {
   //--------------------------------------------------------- constructor(s)
@@ -70,7 +58,7 @@ public class Incomplete extends Extension<Entry<?>>
    * @param       inName the name of the extension
    *
    */
-  public Incomplete(@Nonnull Entry inEntry, @Nonnull String inName)
+  public Incomplete(Entry<?> inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -97,17 +85,13 @@ public class Incomplete extends Extension<Entry<?>>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%incomplete");
-
   //----- incomplete -------------------------------------------------------
 
   /** The time that is left for the item. */
   @Key("incomplete")
   @DM
   @WithBases
-  protected @Nonnull Text m_incomplete = new Text();
+  protected Text m_incomplete = new Text();
 
   //........................................................................
 
@@ -120,36 +104,6 @@ public class Incomplete extends Extension<Entry<?>>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -161,21 +115,21 @@ public class Incomplete extends Extension<Entry<?>>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if(inDM && "summary".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      commands.add(new Symbol("\u2639"));
-      maybeAddValue(commands, "incomplete", inDM, null, null);
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
+  // {
+  //   if(inDM && "summary".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     commands.add(new Symbol("\u2639"));
+  //     maybeAddValue(commands, "incomplete", inDM, null, null);
 
-      return new FormattedValue(new Color("dm-notes", new Command(commands)),
-                                null, "summary");
-    }
+  //     return new FormattedValue(new Color("dm-notes", new Command(commands)),
+  //                               null, "summary");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
 

@@ -163,8 +163,8 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
 
   /** The type of this entry. */
   @SuppressWarnings("rawtypes")
-  public static final Type<Entry> TYPE =
-    new Type<Entry>(Entry.class, BaseEntry.TYPE);
+  public static final Type<Entry<?>> TYPE =
+    new Type<Entry<?>>(Entry.class, BaseEntry.TYPE);
 
   /** The name of a temporary entry. */
   public static final String TEMPORARY = "TEMPORARY";

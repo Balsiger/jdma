@@ -23,19 +23,15 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
 import net.ixitxachitls.dma.values.Volume;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
 import net.ixitxachitls.util.Grouping;
 
 //..........................................................................
@@ -55,6 +51,7 @@ import net.ixitxachitls.util.Grouping;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseContainer extends BaseExtension<BaseItem>
 {
   //----------------------------------------------------------------- nested
@@ -77,14 +74,14 @@ public class BaseContainer extends BaseExtension<BaseItem>
     GASEOUS("gaseous");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName     the name of the value
      *
      */
-    private State(@Nonnull String inName)
+    private State(String inName)
     {
       m_name = constant("substance.state", inName);
     }
@@ -95,7 +92,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -106,7 +103,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -127,7 +124,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
    * @param       inName  the name of the extension
    *
    */
-  public BaseContainer(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseContainer(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -154,22 +151,14 @@ public class BaseContainer extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%capacity %state");
-
   //----- capacity ---------------------------------------------------------
-
-  /** The formatter for contained items. */
-  protected static final Formatter<Volume> s_capacityFormatter =
-    new LinkFormatter<Volume>(link(BaseItem.TYPE, Index.Path.CAPACITIES));
 
   /** The grouping for liquid capacities in 'feet'. */
   protected static final Group<Volume, Long, String> s_liquidLiterGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-        public Long extract(@Nonnull Volume inValue)
+        public Long extract(Volume inValue)
         {
           return (long)inValue.getAsLiters().getValue() * 100;
         }
@@ -184,7 +173,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-        public Long extract(@Nonnull Volume inValue)
+        public Long extract(Volume inValue)
         {
           return (long)inValue.getAsGallons().getValue() * 16;
         }
@@ -200,7 +189,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-        public Long extract(@Nonnull Volume inValue)
+        public Long extract(Volume inValue)
         {
           return (long)inValue.getAsFeet().getValue() * 1728;
         }
@@ -215,7 +204,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         @Override
-        public Long extract(@Nonnull Volume inValue)
+        public Long extract(Volume inValue)
         {
           return (long)inValue.getAsLiters().getValue() * 1000;
         }
@@ -230,7 +219,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Grouping<Volume, String>()
     {
       @Override
-      public String group(@Nonnull Volume inValue)
+      public String group(Volume inValue)
       {
         Volume volume = inValue;
 
@@ -249,8 +238,8 @@ public class BaseContainer extends BaseExtension<BaseItem>
 
   /** The container's capacity. */
   @Key("capacity")
-  protected @Nonnull Volume m_capacity = new Volume()
-    .withFormatter(s_capacityFormatter).withGrouping(s_capacityGrouping);
+  protected Volume m_capacity = new Volume()
+    .withGrouping(s_capacityGrouping);
 
   static
   {
@@ -261,16 +250,10 @@ public class BaseContainer extends BaseExtension<BaseItem>
   //........................................................................
   //----- state ------------------------------------------------------------
 
-  /** The formatter for the state. */
-  protected static final Formatter<EnumSelection<State>> s_stateFormatter =
-    new LinkFormatter<EnumSelection<State>>
-    (link(BaseItem.TYPE, Index.Path.STATES));
-
   /** The state of substances that can be put into the container. */
   @Key("state")
-  protected @Nonnull EnumSelection<State> m_state =
-     new EnumSelection<State>(State.class)
-    .withFormatter(s_stateFormatter);
+  protected EnumSelection<State> m_state =
+    new EnumSelection<State>(State.class);
 
   static
   {
@@ -289,36 +272,6 @@ public class BaseContainer extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //------------------------- computeIndexValues ---------------------------
 
   /**
@@ -328,7 +281,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
 

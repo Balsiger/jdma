@@ -195,7 +195,7 @@ public class SoyValue extends SoyAbstract
    * @return the value found or null if not found
    */
   @Override
-  @SuppressWarnings("unchecked") // need to case to value list
+  @SuppressWarnings({ "unchecked", "rawtypes" }) // need to case to value list
   public @Nullable SoyData getSingle(String inName)
   {
     if("isEditable".equals(inName))
@@ -252,8 +252,8 @@ public class SoyValue extends SoyAbstract
       if("list".equals(inName) && m_value instanceof ValueList)
       {
         List<SoyValue> values = new ArrayList<SoyValue>();
-        for (Value<?> value : (ValueList<Value<?>>)m_value)
-          values.add(new SoyValue(m_name, value, m_entry));
+        for (Object value : (ValueList)m_value)
+          values.add(new SoyValue(m_name, (Value)value, m_entry));
 
         return new SoyListData(values);
       }

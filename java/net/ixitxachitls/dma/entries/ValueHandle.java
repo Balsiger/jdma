@@ -23,12 +23,9 @@
 
 package net.ixitxachitls.dma.entries;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
-
-import net.ixitxachitls.dma.values.Value;
-import net.ixitxachitls.output.commands.Editable;
 
 //..........................................................................
 
@@ -50,7 +47,8 @@ import net.ixitxachitls.output.commands.Editable;
 //__________________________________________________________________________
 
 @Immutable
-public abstract class ValueHandle<T extends ValueHandle>
+@ParametersAreNonnullByDefault
+public abstract class ValueHandle<T extends ValueHandle<T>>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -62,7 +60,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @param       inKey            the key of the value
    *
    */
-  public ValueHandle(@Nonnull String inKey)
+  public ValueHandle(String inKey)
   {
     m_key = inKey;
     m_plural = m_key + "s";
@@ -81,7 +79,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withNote(@Nullable String inText)
+  public T withNote(@Nullable String inText)
   {
     m_note = inText;
     return (T)this;
@@ -99,7 +97,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withPlural(@Nullable String inPlural)
+  public T withPlural(@Nullable String inPlural)
   {
     if(inPlural == null)
       m_plural = m_key + "s";
@@ -121,7 +119,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withPlayerEditable(boolean inPlayer)
+  public T withPlayerEditable(boolean inPlayer)
   {
     m_playerEditable = inPlayer;
     return (T)this;
@@ -139,7 +137,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withPlayerOnly(boolean inPlayer)
+  public T withPlayerOnly(boolean inPlayer)
   {
     if(inPlayer && m_dm)
       throw new IllegalArgumentException("cannot set player only and dm");
@@ -160,7 +158,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withDM(boolean inDM)
+  public T withDM(boolean inDM)
   {
     if(inDM && m_player)
       throw new IllegalArgumentException("cannot set player only and dm");
@@ -181,7 +179,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withEditable(boolean inEditable)
+  public T withEditable(boolean inEditable)
   {
     m_editable = inEditable;
     return (T)this;
@@ -198,12 +196,12 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return      this object for chaining
    *
    */
-  public @Nonnull ValueHandle withEditType(@Nonnull String inType)
-  {
-    m_editType = inType;
+  // public ValueHandle<?> withEditType(String inType)
+  // {
+  //   m_editType = inType;
 
-    return this;
-  }
+  //   return this;
+  // }
 
   //........................................................................
   //---------------------------- withEditChoices ---------------------------
@@ -216,13 +214,13 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return      this object for chaining
    *
    */
-  @SuppressWarnings("unchecked")
-  public @Nonnull T withEditChoices(@Nonnull String inChoices)
-  {
-    m_editChoices = inChoices;
+  // @SuppressWarnings("unchecked")
+  // public T withEditChoices(String inChoices)
+  // {
+  //   m_editChoices = inChoices;
 
-    return (T)this;
-  }
+  //   return (T)this;
+  // }
 
   //........................................................................
   //------------------------------- withBases ------------------------------
@@ -236,7 +234,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    *
    */
   @SuppressWarnings("unchecked")
-  public @Nonnull T withBases(@Nonnull boolean inBases)
+  public T withBases(boolean inBases)
   {
     m_bases = inBases;
 
@@ -250,7 +248,7 @@ public abstract class ValueHandle<T extends ValueHandle>
   //-------------------------------------------------------------- variables
 
   /** The key for this variable. */
-  protected @Nonnull String m_key;
+  protected String m_key;
 
   /** A flag denoting if the value is for DMs only. */
   protected boolean m_dm = false;
@@ -268,20 +266,20 @@ public abstract class ValueHandle<T extends ValueHandle>
   protected boolean m_bases = false;
 
   /** A string with the plural of the key. */
-  protected @Nonnull String m_plural;
+  protected String m_plural;
 
   /** A string with a special note for editing. */
   protected @Nullable String m_note;
 
-  /** The edit type. */
-  protected @Nonnull String m_editType = "string";
+  // /** The edit type. */
+  // protected String m_editType = "string";
 
-  /** The edit choices. */
-  protected @Nonnull String m_editChoices = "";
+  // /** The edit choices. */
+  // protected String m_editChoices = "";
 
   //........................................................................
 
-  //-------------------------------------------------------------- accessors
+  //-------------------------------------------------------------- ACCESSORS
 
   //-------------------------------- format --------------------------------
 
@@ -295,52 +293,52 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the formatted value, usually either a String or a Command.
    *
    */
-  public @Nullable Object format(@Nonnull ValueGroup inEntry, boolean inDM,
+  public @Nullable Object format(ValueGroup inEntry, boolean inDM,
                                  boolean inEdit)
   {
     Object value = value(inEntry, inDM);
 
-    if(value == null)
-      return null;
+    return value;
+    // if(value == null)
+    //   return null;
 
-    if(inDM && isPlayerOnly() || !inDM && isDMOnly())
-      return null;
+    // if(inDM && isPlayerOnly() || !inDM && isDMOnly())
+    //   return null;
 
-    String type;
-    String choices;
-    String name;
-    Object formatted = formatted(inEntry, inDM);
-    String related;
-    String edit;
+    // String type;
+    // String choices;
+    // String name;
+    // Object formatted = formatted(inEntry, inDM);
+    // String related;
+    // String edit;
 
-    if(value instanceof Value)
-    {
-      type = ((Value)value).getEditType();
-      choices = ((Value)value).getChoices();
-      related = ((Value)value).getRelated();
-      edit = ((Value)value).getEditValue();
-    }
-    else
-    {
-      type = m_editType;
-      choices = m_editChoices;
-      related = "";
-      edit = value(inEntry, inDM).toString();
-    }
+    // if(value instanceof Value)
+    // {
+    //   type = ((Value)value).getEditType();
+    //   choices = ((Value)value).getChoices();
+    //   related = ((Value)value).getRelated();
+    //   edit = ((Value)value).getEditValue();
+    // }
+    // else
+    // {
+    //   type = m_editType;
+    //   choices = m_editChoices;
+    //   related = "";
+    //   edit = value(inEntry, inDM).toString();
+    // }
 
-    // TODO: fix this (have to deal with attachments here)!
-    assert inEntry instanceof AbstractEntry
-      : "temporarily need an abstract entry here, please fix";
+    // // TODO: fix this (have to deal with attachments here)!
+    // assert inEntry instanceof AbstractEntry
+    //   : "temporarily need an abstract entry here, please fix";
 
-    String note = m_note;
-    if(note == null)
-      note = "";
+    // String note = m_note;
+    // if(note == null)
+    //   note = "";
 
-    if(inEdit && m_editable && (inDM || m_playerEditable))
-      return new Editable(inEntry.getKey(), formatted, m_key, edit, type, note,
-                          choices, related);
-
-    return formatted;
+    // if(inEdit && m_editable && (inDM || m_playerEditable))
+    // return new Editable(inEntry.getKey(), formatted, m_key, edit, type, note,
+    //                       choices, related);
+    // return formatted;
   }
 
   //........................................................................
@@ -355,23 +353,8 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return   the value found or null if not found or not accessible
    *
    */
-  public abstract @Nullable Object value(@Nonnull ValueGroup inEntry,
+  public abstract @Nullable Object value(ValueGroup inEntry,
                                          boolean inDM);
-
-  //........................................................................
-  //------------------------------ formatted -------------------------------
-
-  /**
-   * Get the formatted value from the given entry.
-   *
-   * @param    inEntry the entry containing the value
-   * @param    inDM    true if getting the value for a DM
-   *
-   * @return   the value found or null if not found or not accessible
-   *
-   */
-  public abstract @Nullable Object formatted(@Nonnull ValueGroup inEntry,
-                                             boolean inDM);
 
   //........................................................................
 
@@ -383,7 +366,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return      the keyword
    *
    */
-  public @Nonnull String getKey()
+  public String getKey()
   {
     return m_key;
   }
@@ -397,7 +380,7 @@ public abstract class ValueHandle<T extends ValueHandle>
    * @return      a string with the plural
    *
    */
-  public @Nonnull String getPluralKey()
+  public String getPluralKey()
   {
     return m_plural;
   }
@@ -490,6 +473,7 @@ public abstract class ValueHandle<T extends ValueHandle>
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
     /** Simple value handle class for testing. */
+    @SuppressWarnings("rawtypes")
     public static class TestHandle extends ValueHandle
     {
       /**
@@ -499,7 +483,7 @@ public abstract class ValueHandle<T extends ValueHandle>
        * @param   inValue          the value to return for value()
        *
        */
-      TestHandle(@Nonnull String inKey, Object inValue)
+      TestHandle(String inKey, @Nullable Object inValue)
       {
         super(inKey);
 
@@ -507,18 +491,11 @@ public abstract class ValueHandle<T extends ValueHandle>
       }
 
       /** The value to return for value(). */
-      private Object m_value;
+      private @Nullable Object m_value;
 
       /** {@inheritDoc} */
       @Override
-      public Object value(ValueGroup inEntry, boolean inDM)
-      {
-        return m_value;
-      }
-
-      /** {@inheritDoc} */
-      @Override
-      public Object formatted(ValueGroup inEntry, boolean inDM)
+      public @Nullable Object value(ValueGroup inEntry, boolean inDM)
       {
         return m_value;
       }
@@ -528,6 +505,7 @@ public abstract class ValueHandle<T extends ValueHandle>
 
     /** The formatEditab Test. */
     @org.junit.Test
+    @SuppressWarnings("rawtypes")
     public void init()
     {
       ValueHandle handle = new TestHandle("test", null)
@@ -552,84 +530,61 @@ public abstract class ValueHandle<T extends ValueHandle>
     }
 
     //......................................................................
-    //----- format ---------------------------------------------------------
-
-    /** The formatEditab Test. */
-    @org.junit.Test
-    public void format()
-    {
-      net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test id");
-      ValueHandle handle = new TestHandle("test", "value")
-        .withDM(true)
-        .withEditable(true);
-      assertNull("null", handle.format(entry, false, false));
-
-      handle = new TestHandle("test", "value")
-        .withPlayerOnly(true)
-        .withEditable(true);
-      assertNull("player only for dm", handle.format(entry, true, false));
-
-      handle = new TestHandle("test", "value")
-        .withDM(true)
-        .withEditable(true);
-      assertNull("dm only for player", handle.format(entry, false, false));
-    }
-
-    //......................................................................
     //----- formatEditable -------------------------------------------------
 
     /** The formatEditab Test. */
-    @org.junit.Test
-    public void formatEditable()
-    {
-      net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test id");
-      ValueHandle handle = new TestHandle("test", "string value")
-        .withDM(true)
-        .withEditable(true);
+    // @org.junit.Test
+    // @SuppressWarnings("rawtypes")
+    // public void formatEditable()
+    // {
+    //   net.ixitxachitls.dma.entries.BaseEntry entry =
+    //     new net.ixitxachitls.dma.entries.BaseEntry("test id");
+    //   ValueHandle handle = new TestHandle("test", "string value")
+    //     .withDM(true)
+    //     .withEditable(true);
 
-      assertEquals("string value",
-                   "\\editable{/base entry/test id}{string value}{test}"
-                   + "{string value}{string}",
-                   handle.format(entry, true, true).toString());
+    //   assertEquals("string value",
+    //                "\\editable{/base entry/test id}{string value}{test}"
+    //                + "{string value}{string}",
+    //                handle.format(entry, true, true).toString());
 
-      handle =
-        new TestHandle("test", new net.ixitxachitls.dma.values.Name("name"))
-        .withDM(true)
-        .withEditable(true);
+    //   handle =
+    //     new TestHandle("test", new net.ixitxachitls.dma.values.Name("name"))
+    //     .withDM(true)
+    //     .withEditable(true);
 
-      assertEquals("name value",
-                   "\\editable{/base entry/test id}{name}{test}{name}{name}",
-                   handle.format(entry, true, true).toString());
-    }
+    //   assertEquals("name value",
+    //                "\\editable{/base entry/test id}{name}{test}{name}{name}",
+    //                handle.format(entry, true, true).toString());
+    // }
 
     //......................................................................
     //----- formatNoEdit ---------------------------------------------------
 
     /** The formatNoEdit Test. */
-    @org.junit.Test
-    public void formatNoEdit()
-    {
-      net.ixitxachitls.dma.entries.BaseEntry entry =
-        new net.ixitxachitls.dma.entries.BaseEntry("test id");
-      ValueHandle handle = new TestHandle("test", "value")
-        .withDM(true)
-        .withEditable(true);
-      assertEquals("string value", "value", handle.format(entry, true, false));
+    // @org.junit.Test
+    // @SuppressWarnings("rawtypes")
+    // public void formatNoEdit()
+    // {
+    //   net.ixitxachitls.dma.entries.BaseEntry entry =
+    //     new net.ixitxachitls.dma.entries.BaseEntry("test id");
+    //   ValueHandle handle = new TestHandle("test", "value")
+    //     .withDM(true)
+    //     .withEditable(true);
+    // assertEquals("string value", "value", handle.format(entry, true, false));
 
-      handle = new TestHandle("test", "value")
-        .withPlayerOnly(true)
-        .withEditable(true);
-      assertEquals("string value", "value", handle.format(entry, false, true));
+    //   handle = new TestHandle("test", "value")
+    //     .withPlayerOnly(true)
+    //     .withEditable(true);
+    // assertEquals("string value", "value", handle.format(entry, false, true));
 
-      handle =
-        new TestHandle("test", new net.ixitxachitls.dma.values.Name("name"))
-        .withPlayerOnly(true)
-        .withEditable(true);
-      assertEquals("name value", "name",
-                   handle.format(entry, false, true).toString());
-    }
+    //   handle =
+    //     new TestHandle("test", new net.ixitxachitls.dma.values.Name("name"))
+    //     .withPlayerOnly(true)
+    //     .withEditable(true);
+    //   assertEquals("name value", "name",
+    //                handle.format(entry, false, true).toString());
+    // }
 
     //......................................................................
   }

@@ -37,9 +37,6 @@ import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.conditions.And;
 import net.ixitxachitls.dma.values.conditions.Condition;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Emph;
-import net.ixitxachitls.output.commands.Window;
 
 //..........................................................................
 
@@ -645,63 +642,6 @@ public class Modifier extends Value<Modifier>
 
   //........................................................................
 
-
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  @Deprecated
-  protected Command doFormat()
-  {
-    int value = getValue();
-    return new Command(value >= 0 ? "+" : "", value, " (", formatList(), ")");
-  }
-
-  //........................................................................
-  //------------------------------ formatList ------------------------------
-
-  /**
-   * Format all the modifiers into a string list.
-   *
-   * @return  the command for printing the list
-   *
-   */
-  private Command formatList()
-  {
-    List<Object> commands = new ArrayList<Object>();
-
-    if(m_value >= 0)
-      commands.add("+");
-
-    commands.add(m_value);
-    commands.add(" ");
-    commands.add(m_type);
-
-    List<Object> desc = new ArrayList<Object>();
-
-    if(stacks())
-      desc.add("this modifier stacks with similar ones");
-    else
-    {
-      desc.add("this modifier does ");
-      desc.add(new Emph("not"));
-      desc.add(" stack with similar ones");
-    }
-
-    Command command = new Window(new Command(commands), new Command(desc));
-
-    if(m_next == null || !m_next.isDefined())
-      return command;
-
-    return new Command(command, " &nbsp;", m_next.formatList());
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**

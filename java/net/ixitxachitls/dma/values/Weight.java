@@ -483,8 +483,6 @@ public class Weight extends Units<Weight>
       assertEquals("not undefined at start", false, value.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    value.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   value.format(false).toString());
       assertEquals("pound",  false, value.isPound());
       assertEquals("metric", false, value.isMetric());
       assertEquals("carat",  false, value.isCarat());
@@ -501,13 +499,6 @@ public class Weight extends Units<Weight>
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "1 1/2 lbs",
                    value.toString());
-      assertEquals("undefined value not correct",
-                   "\\window{\\span{unit}{\\frac[1]{1}{2} lbs}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{1}{2} lbs}{}{}"
-                   + "{Metric:}{\\span{unit}{\\frac{3}{4} kg}}"
-                   + "{Carat:}{\\span{unit}{3750 ct}}}",
-                   value.format(false).toString());
       assertEquals("pound",  true,  value.isPound());
       assertEquals("metric", false, value.isMetric());
       assertEquals("carat",  false, value.isCarat());
@@ -523,13 +514,6 @@ public class Weight extends Units<Weight>
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "1 lb 3 oz",
                    value.toString());
-      assertEquals("undefined value not correct",
-                   "\\window{\\span{unit}{1 lb} \\span{unit}{3 oz}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{3}{16} lbs}{}{}"
-                   + "{Metric:}{\\span{unit}{\\frac[593]{3}{4} g}}"
-                   + "{Carat:}{\\span{unit}{\\frac[2968]{3}{4} ct}}}",
-                   value.format(false).toString());
       assertEquals("pound",  true,  value.isPound());
       assertEquals("metric", false, value.isMetric());
       assertEquals("carat",  false, value.isCarat());
@@ -546,13 +530,6 @@ public class Weight extends Units<Weight>
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "1 1/2 kg",
                    value.toString());
-      assertEquals("undefined value not correct",
-                   "\\window{\\span{unit}{\\frac[1]{1}{2} kg}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1]{1}{2} kg}{}{}"
-                   + "{Pounds:}{\\span{unit}{3 lbs}}{Carat:}"
-                   + "{\\span{unit}{7500 ct}}}",
-                   value.format(false).toString());
       assertEquals("pound",  false,  value.isPound());
       assertEquals("metric", true,  value.isMetric());
       assertEquals("carat",  false, value.isCarat());
@@ -569,15 +546,6 @@ public class Weight extends Units<Weight>
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "1 t 3 1/4 kg 20 g",
                    value.toString());
-      assertEquals("undefined value not correct",
-                   "\\window{\\span{unit}{1 t} "
-                   + "\\span{unit}{\\frac[3]{1}{4} kg} \\span{unit}{20 g}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[1003]{27}{100} kg}"
-                   + "{}{}{Pounds:}{\\span{unit}{2006 lbs} "
-                   + "\\span{unit}{\\frac[8]{16}{25} oz}}"
-                   + "{Carat:}{\\span{unit}{5016350 ct}}}",
-                   value.format(false).toString());
       assertEquals("pound",  false, value.isPound());
       assertEquals("metric", true,  value.isMetric());
       assertEquals("carat",  false, value.isCarat());
@@ -594,13 +562,6 @@ public class Weight extends Units<Weight>
       assertEquals("not defined at start", true, value.isDefined());
       assertEquals("undefined value not correct", "25 1/3 ct",
                    value.toString());
-      assertEquals("undefined value not correct",
-                   "\\window{\\span{unit}{\\frac[25]{1}{3} ct}}"
-                   + "{\\table{#inline#1:L,,;100:L}"
-                   + "{Total:}{\\frac[25]{1}{3} ct}{}{}"
-                   + "{Pounds:}{\\span{unit}{\\frac{304}{1875} oz}}{Metric:}"
-                   + "{\\span{unit}{\\frac[5]{1}{15} g}}}",
-                   value.format(false).toString());
       assertEquals("pound",  false, value.isPound());
       assertEquals("metric", false, value.isMetric());
       assertEquals("carat",  true,  value.isCarat());

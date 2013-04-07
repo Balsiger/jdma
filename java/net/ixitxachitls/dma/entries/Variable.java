@@ -78,7 +78,6 @@ public class Variable extends ValueHandle<Variable>
 
     m_field          = inField;
     m_store          = inStored;
-    m_printUndefined = inPrintUndefined;
   }
 
   //......................................................................
@@ -92,9 +91,6 @@ public class Variable extends ValueHandle<Variable>
 
   /** A flag denoting if the variable is to be stored (or computed). */
   protected boolean m_store;
-
-  /** Flag if printing the value even when undefined. */
-  protected boolean m_printUndefined;
 
   //........................................................................
 
@@ -139,25 +135,6 @@ public class Variable extends ValueHandle<Variable>
   public @Nullable Object value(ValueGroup inEntry, boolean inDM)
   {
     return get(inEntry);
-  }
-
-  //........................................................................
-  //----------------------------- formatted --------------------------------
-
-  /**
-   * Get the value of the variable given a specific entry.
-   *
-   * @param       inEntry the entry to get the value from
-   * @param       inDM    true if getting the value for a DM
-   *
-   * @return      the current value
-   *
-   */
-  @Override
-  @Deprecated
-  public @Nullable Object formatted(ValueGroup inEntry, boolean inDM)
-  {
-    return get(inEntry).format(!m_printUndefined);
   }
 
   //........................................................................

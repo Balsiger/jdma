@@ -29,8 +29,6 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.BaseCommand;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -103,7 +101,7 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
                                  // derivations
   public T create()
   {
-    return (T)new BaseText();
+    return (T)new BaseText<T>();
   }
 
   //........................................................................
@@ -160,27 +158,13 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
    *
    */
   @Override
+  @Deprecated // ??
   protected String doPrint(AbstractEntry inEntry)
   {
     if(m_text == null)
       return "";
 
     return m_text;
-  }
-
-  //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    return new BaseCommand(m_text);
   }
 
   //........................................................................
@@ -331,7 +315,7 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
 
     /** Testing init. */
     @org.junit.Test
-    @SuppressWarnings("unchecked") // need to cast
+    @SuppressWarnings({ "unchecked", "rawtypes" }) // need to cast
     public void testInit()
     {
       BaseText text = new BaseText();
@@ -340,9 +324,6 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
       assertEquals("not undefined at start", false, text.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    text.toString());
-      assertEquals("undefined value not correct",
-                   "\\color{error}{$undefined$}",
-                   text.format().toString());
       assertEquals("undefined value not correct", null, text.get());
 
       // now with some text
@@ -351,9 +332,6 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
       assertEquals("not defined after setting", true, text.isDefined());
       assertEquals("value not correctly gotten", "just some \\= test",
                    text.toString());
-      assertEquals("value not correctly gotten",
-                   "\\baseCommand{just some = test}",
-                   text.format().toString());
       assertEquals("value not correctly converted", "just some = test",
                    text.get());
 
@@ -361,9 +339,6 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
       text = text.as("just some \" test");
 
       assertEquals("not defined after setting", true, text.isDefined());
-      assertEquals("value not correctly gotten",
-                   "\\baseCommand{just some \" test}",
-                   text.format().toString());
       assertEquals("value not correctly gotten", "just some \\\" test",
                    text.toString());
       assertEquals("value not correctly converted", "just some \" test",
@@ -372,14 +347,9 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
       // add something to the text
       BaseText added = text.add(new BaseText("more text"));
       assertEquals("added", "just some \\\" test more text", added.toString());
-      assertEquals("added",
-                   "\\baseCommand{just some \" test more text}",
-                   added.format().toString());
 
       added = text.add(new BaseText(" and more"));
       assertEquals("added", "just some \\\" test and more", added.toString());
-      assertEquals("added", "\\baseCommand{just some \" test and more}",
-                   added.format().toString());
 
       Value.Test.createTest(text);
     }
@@ -389,7 +359,7 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
 
     /** Testing reading. */
     @org.junit.Test
-    @SuppressWarnings("rawtype,unchecked")
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testRead()
     {
       // name test

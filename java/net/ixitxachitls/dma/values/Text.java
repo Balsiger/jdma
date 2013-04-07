@@ -27,8 +27,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.BaseCommand;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -158,21 +156,6 @@ public class Text extends BaseText<Text>
   }
 
   //........................................................................
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected @Nonnull Command doFormat()
-  {
-    return new BaseCommand(m_text.replaceAll("[\n\f ]+", " "));
-  }
-
-  //........................................................................
 
   //........................................................................
 
@@ -257,7 +240,6 @@ public class Text extends BaseText<Text>
       assertEquals("undefined value not correct", "$undefined$",
                    text.toString());
       assertEquals("undefined value not correct", null, text.get());
-      assertEquals("format", "", text.format(true).toString());
 
       // now with some text
       text = text.as("just some \" test");

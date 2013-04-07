@@ -323,7 +323,7 @@ public final class Importer
       String type = types.getContentTypeFor(image);
       String name = Files.file(parts[parts.length - 1]);
       parts[parts.length - 1] = null;
-      AbstractEntry.EntryKey key =
+      AbstractEntry.EntryKey<?> key =
         DMAServlet.extractKey(PATH_JOINER.join(parts));
 
       if(key == null)
@@ -407,9 +407,8 @@ public final class Importer
    * Complete the entry and do all necessary housekeeping.
    *
    * @param   inEntry the entry to complete
-   *
    */
-  private void complete(@Nonnull Entry inEntry)
+  private void complete(@Nonnull Entry<?> inEntry)
   {
     inEntry.complete();
 

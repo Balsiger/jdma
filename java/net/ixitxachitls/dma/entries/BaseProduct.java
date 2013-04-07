@@ -55,15 +55,7 @@ import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-import net.ixitxachitls.dma.values.formatters.ListFormatter;
-import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.BaseCommand;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.output.commands.Subtitle;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 
@@ -825,38 +817,20 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- authors ----------------------------------------------------------
 
-  /** The formatter for a person. */
-  protected static final Formatter<Text> s_personFormatter =
-    new LinkFormatter<Text>(link(TYPE, Index.Path.PERSONS));
-
-  /** The formatter for a job. */
-  protected static final Formatter<Name> s_jobFormatter =
-    new LinkFormatter<Name>(link(TYPE, Index.Path.JOBS));
-
-  /** The formatter for a complete person. */
-  protected static final Formatter<Multiple> s_nameFormatter =
-    new MultipleFormatter<Multiple>(null, null, " (", ")");
-
-  /** The formatter for a complete person. */
-  protected static final Formatter<ValueList<Multiple>> s_listFormatter =
-    new ListFormatter<ValueList<Multiple>>("; ");
-
   /** All the authors of the product. */
   @Key("author")
   protected ValueList<Multiple> m_authors =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
-        (new Text().withFormatter(s_personFormatter)
+        (new Text()
          .withEditType("autostring(base product/author)[name]"),
          false),
         new Multiple.Element
-        (new Name().withFormatter(s_jobFormatter)
+        (new Name()
          .withEditType("autoname(base product/author/jobs|name)[job]")
          .withRelated("name"),
          true, " ", null) })
-                            .withFormatter(s_nameFormatter)
-                            .withTemplate("person"))
-    .withFormatter(s_listFormatter);
+                            .withTemplate("person"));
 
   static
   {
@@ -875,18 +849,14 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
-         .withFormatter(s_personFormatter)
          .withEditType
          ("autostring(base product/editor)[name]"),
          false),
         new Multiple.Element
         (new Name()
-         .withFormatter(s_jobFormatter)
          .withEditType("autoname(base product/editor/jobs|name)[job]"),
          true) })
-                            .withFormatter(s_nameFormatter)
-                            .withTemplate("person"))
-    .withFormatter(s_listFormatter);
+                            .withTemplate("person"));
 
   //........................................................................
   //----- cover ------------------------------------------------------------
@@ -897,18 +867,13 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
-         .withFormatter(s_personFormatter)
          .withEditType
          ("autostring(base product/cover)[name]"),
          false),
         new Multiple.Element
-        (new Name().
-         withFormatter(s_jobFormatter)
-         .withEditType
-         ("autoname(base product/cover/jobs|name)[job]"),
-         true) }).withFormatter(s_nameFormatter)
-                            .withTemplate("person"))
-    .withFormatter(s_listFormatter);
+        (new Name()
+         .withEditType("autoname(base product/cover/jobs|name)[job]"),
+         true) }).withTemplate("person"));
 
   //........................................................................
   //----- cartographers ----------------------------------------------------
@@ -919,18 +884,14 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
-         .withFormatter(s_personFormatter)
          .withEditType
          ("autostring(base product/cartography)[name]"),
          false),
         new Multiple.Element
         (new Name()
-         .withFormatter(s_jobFormatter)
          .withEditType
          ("autoname(base product/cartography/jobs|name)[job]"),
-         true) }).withFormatter(s_nameFormatter)
-                            .withTemplate("person"))
-    .withFormatter(s_listFormatter);
+         true) }).withTemplate("person"));
 
   //........................................................................
   //----- illustrators -----------------------------------------------------
@@ -941,18 +902,14 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
-         .withFormatter(s_personFormatter)
          .withEditType
          ("autostring(base product/illustrations)[name]"),
          false),
         new Multiple.Element
         (new Name()
-         .withFormatter(s_jobFormatter)
          .withEditType
          ("autoname(base product/illustrations/jobs|name)[job]"),
-         true) }).withFormatter(s_nameFormatter)
-                            .withTemplate("person"))
-    .withFormatter(s_listFormatter);
+         true) }).withTemplate("person"));
 
   //........................................................................
   //----- typographers -----------------------------------------------------
@@ -963,18 +920,14 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
-         .withFormatter(s_personFormatter)
          .withEditType
          ("autostring(base product/typography)[name]"),
          false),
         new Multiple.Element
         (new Name()
-         .withFormatter(s_jobFormatter)
          .withEditType
          ("autoname(base product/typography/jobs|name)[job]"),
-         true) }).withFormatter(s_nameFormatter)
-                            .withTemplate("person"))
-    .withFormatter(s_listFormatter);
+         true) }).withTemplate("person"));
 
   //........................................................................
   //----- managers ---------------------------------------------------------
@@ -985,29 +938,20 @@ public class BaseProduct extends BaseEntry
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element
         (new Text()
-         .withFormatter(s_personFormatter)
          .withEditType
          ("autostring(base product/management)[name]"), false),
         new Multiple.Element
         (new Name()
-         .withFormatter(s_jobFormatter)
          .withEditType
          ("autoname(base product/management/jobs|name)[job]"),
-         true) }).withFormatter(s_nameFormatter)
-                            .withTemplate("person"))
-    .withFormatter(s_listFormatter);
+         true) }).withTemplate("person"));
 
   //........................................................................
   //----- date -------------------------------------------------------------
 
-  /** The formatter for the date. */
-  protected static final Formatter<Date> s_dateFormatter =
-    new LinkFormatter<Date>(link(TYPE, Index.Path.DATES));
-
   /** The date (month and year) the product was released. */
   @Key("date")
   protected Date m_date = new Date()
-    .withFormatter(s_dateFormatter)
     .withTemplate("link", "dates");
 
   static
@@ -1032,10 +976,6 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- pages ------------------------------------------------------------
 
-  /** The formatter for the pages. */
-  protected static final Formatter<Number> s_pageFormatter =
-    new LinkFormatter<Number>(link(TYPE, Index.Path.PAGES));
-
   /** The grouping for the pages. */
   protected static final Group<Number, Long, String> s_pageGroup =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
@@ -1055,7 +995,7 @@ public class BaseProduct extends BaseEntry
   @SuppressWarnings("unchecked")
   @Key("pages")
   protected Number m_pages =
-    new Number(0, Integer.MAX_VALUE).withFormatter(s_pageFormatter)
+    new Number(0, Integer.MAX_VALUE)
     .withGrouping(s_pageGroup)
     .withTemplate("link", "pages");
 
@@ -1067,15 +1007,10 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- system -----------------------------------------------------------
 
-  /** The formatter for the system. */
-  protected static final Formatter<EnumSelection<System>> s_systemFormatter =
-    new LinkFormatter<EnumSelection<System>>("/product/systems/");
-
   /** The game system of the product. */
   @Key("system")
   protected EnumSelection<System> m_system =
     new EnumSelection<System>(System.class)
-    .withFormatter(s_systemFormatter)
     .withTemplate("link", "systems");
 
   static
@@ -1086,16 +1021,10 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- audience ---------------------------------------------------------
 
-  /** The formatter for the audience. */
-  protected static final Formatter<EnumSelection<Audience>>
-    s_audienceFormatter =
-    new LinkFormatter<EnumSelection<Audience>>("/product/audiences/");
-
   /** The intended audience of the product. */
   @Key("audience")
   protected EnumSelection<Audience> m_audience =
     new EnumSelection<Audience>(Audience.class)
-    .withFormatter(s_audienceFormatter)
     .withTemplate("link", "audiences");
 
   static
@@ -1106,16 +1035,10 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- type -------------------------------------------------------------
 
-  /** The formatter for the type. */
-  protected static final Formatter<EnumSelection<ProductType>>
-    s_typeFormatter =
-    new LinkFormatter<EnumSelection<ProductType>>(link(TYPE, Index.Path.TYPES));
-
   /** The type of product. */
   @Key("product type")
   protected EnumSelection<ProductType> m_productType =
     new EnumSelection<ProductType>(ProductType.class)
-    .withFormatter(s_typeFormatter)
     .withTemplate("link", "types");
 
   static
@@ -1126,15 +1049,10 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- style ------------------------------------------------------------
 
-  /** The formatter for the style. */
-  protected static final Formatter<EnumSelection<Style>> s_styleFormatter =
-    new LinkFormatter<EnumSelection<Style>>(link(TYPE, Index.Path.STYLES));
-
   /** The style of the product, its general outlook. */
   @Key("style")
   protected EnumSelection<Style> m_style =
     new EnumSelection<Style>(Style.class)
-    .withFormatter(s_styleFormatter)
     .withTemplate("link", "styles");
 
   static
@@ -1145,15 +1063,10 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- producer ---------------------------------------------------------
 
-  /** The formatter for the producer. */
-  protected static final Formatter<Selection> s_producerFormatter =
-    new LinkFormatter<Selection>("/product/producers/");
-
   /** The name of the company that produced the product. */
   @Key("producer")
   protected Selection m_producer =
     new Selection(PRODUCERS)
-    .withFormatter(s_producerFormatter)
     .withTemplate("link", "producers");
 
   static
@@ -1178,16 +1091,11 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- series -----------------------------------------------------------
 
-  /** The formatter for the series. */
-  protected static final Formatter<Name> s_seriesFormatter =
-    new LinkFormatter<Name>("/product/series/");
-
   /** The name of the series, even multiple if necessary, this product belongs
    *  to. */
   @Key("series")
   protected ValueList<Name> m_series =
     new ValueList<Name>(new Name().withEditType("name[series]")
-                        .withFormatter(s_seriesFormatter)
                         .withTemplate("link", "series"));
 
   static
@@ -1197,10 +1105,6 @@ public class BaseProduct extends BaseEntry
 
   //........................................................................
   //----- price ------------------------------------------------------------
-
-  /** The formatter for the price. */
-  protected static final Formatter<Price> s_priceFormatter =
-    new LinkFormatter<Price>("/product/prices/");
 
   /** The grouping for the pages. */
   protected static final Group<Price, Long, String> s_priceGrouping =
@@ -1219,7 +1123,6 @@ public class BaseProduct extends BaseEntry
   @Key("price")
   protected Price m_price =
     new Price(0, 1000 * 100).withGrouping(s_priceGrouping)
-    .withFormatter(s_priceFormatter)
     .withTemplate("link", "prices");
 
   static
@@ -1230,17 +1133,12 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- contents ---------------------------------------------------------
 
-  /** The formatter for the price. */
-  protected static final Formatter<EnumSelection<Part>> s_partFormatter =
-    new LinkFormatter<EnumSelection<Part>>("/product/parts/");
-
   /** The contents of the product, what kind of individual components it has,
    *  if any. */
   @Key("contents")
   protected ValueList<Multiple> m_contents =
     new ValueList<Multiple>(new Multiple(new Multiple.Element []
       { new Multiple.Element(new EnumSelection<Part>(Part.class)
-                             .withFormatter(s_partFormatter)
                              .withEditType("selection[part]"), false),
         new Multiple.Element(new Text()
                              .withEditType("string[description]"), true),
@@ -1256,34 +1154,25 @@ public class BaseProduct extends BaseEntry
   //........................................................................
   //----- requirements -----------------------------------------------------
 
-  /** The formatter for requirements. */
-  protected static final Formatter<Multiple> s_requirementsFormatter =
-    new MultipleFormatter<Multiple>(null, null, " optional ", null);
-
   /** The requirements of this product, which products are required to use this
    * one. */
   @Key("requirements")
   protected Multiple m_requirements =
     new Multiple(new Multiple.Element []
       { new Multiple.Element
-        (new ValueList<Reference>
+        (new ValueList<Reference<BaseProduct>>
          (new Reference<BaseProduct>(TYPE).withEditType
           ("autokey(base product/titles|system)[required]")), true),
         new Multiple.Element
-        (new ValueList<Reference>
+        (new ValueList<Reference<BaseProduct>>
          (new Reference<BaseProduct>(TYPE).withEditType
           ("autokey(base product/titles|system)[optional]")), true, " : ",
          null),
       })
-    .withFormatter(s_requirementsFormatter)
     .withTemplate("requirements");
 
   //........................................................................
   //----- layout -----------------------------------------------------------
-
-  /** The formatter for the layout. */
-  protected static final Formatter<Selection> s_layoutFormatter =
-    new LinkFormatter<Selection>("/product/layouts/");
 
   /** The layout of the product. */
   @Key("layout")
@@ -1804,46 +1693,46 @@ public class BaseProduct extends BaseEntry
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
-  {
-    if("name".equals(inKey))
-      return new FormattedValue
-        (new Command(computeValue("_leader", inDM).format(this, inDM, true),
-                     " ",
-                     computeValue("_title", inDM).format(this, inDM, true)),
-         m_leader.get() + " " + m_title.get(), "name")
-        .withEditable(false); // the leader and title are editable, but the
-                              // wrapper is not
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
+  // {
+  //   if("name".equals(inKey))
+  //     return new FormattedValue
+  //       (new Command(computeValue("_leader", inDM).format(this, inDM, true),
+  //                    " ",
+  //                    computeValue("_title", inDM).format(this, inDM, true)),
+  //        m_leader.get() + " " + m_title.get(), "name")
+  //       .withEditable(false); // the leader and title are editable, but the
+  //                             // wrapper is not
 
-    if("subtitle".equals(inKey))
-      return new FormattedValue
-        (new Subtitle(new BaseCommand(m_subtitle.get())),
-         m_subtitle, "subtitle")
-        .withEditable(true);
+  //   if("subtitle".equals(inKey))
+  //     return new FormattedValue
+  //       (new Subtitle(new BaseCommand(m_subtitle.get())),
+  //        m_subtitle, "subtitle")
+  //       .withEditable(true);
 
-    if("owners".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      for(Map.Entry<String, String> owner
-            : DMADataFactory.get().getOwners(this.getName()).entries())
-      {
-        if(!commands.isEmpty())
-          commands.add(", ");
+  //   if("owners".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     for(Map.Entry<String, String> owner
+  //           : DMADataFactory.get().getOwners(this.getName()).entries())
+  //     {
+  //       if(!commands.isEmpty())
+  //         commands.add(", ");
 
-        commands.add(new Link(owner.getKey(), "/user/" + owner.getKey()
-                              + "/product/" + owner.getValue()));
-      }
+  //       commands.add(new Link(owner.getKey(), "/user/" + owner.getKey()
+  //                             + "/product/" + owner.getValue()));
+  //     }
 
-      commands.add(" | ");
-      commands.add(new Link("add",
-                            "/user/me/product/" + getName() + "?create"));
-      return new FormattedValue(new Command(commands), null, "owners")
-        .withPlural("owners");
-    }
+  //     commands.add(" | ");
+  //     commands.add(new Link("add",
+  //                           "/user/me/product/" + getName() + "?create"));
+  //     return new FormattedValue(new Command(commands), null, "owners")
+  //       .withPlural("owners");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //------------------------------- compute --------------------------------
@@ -2724,7 +2613,8 @@ public class BaseProduct extends BaseEntry
    *
    */
   protected static void addJobs(Set<String> ioStore, String inKey,
-                                String inPerson, ValueList<Multiple> inList)
+                                @Nullable String inPerson,
+                                ValueList<Multiple> inList)
   {
     for(Multiple person : inList)
     {
@@ -2760,7 +2650,8 @@ public class BaseProduct extends BaseEntry
    *
    */
   protected static void addPersons(Set<String> ioStore, String inKey,
-                                   String inJob, ValueList<Multiple> inList)
+                                   @Nullable String inJob,
+                                   ValueList<Multiple> inList)
   {
     for(Multiple person : inList)
     {
@@ -3341,26 +3232,6 @@ public class BaseProduct extends BaseEntry
 //       }
 
 //       BaseCampaign.GLOBAL.m_bases.clear();
-//     }
-
-    //......................................................................
-    //----- format ---------------------------------------------------------
-
-    /** Check format for overview. */
-//     @org.junit.Test
-//     public void format()
-//     {
-//       BaseProduct product = new BaseProduct("format", new DMAData("path"));
-
-//       product.setSystem(System.DnD_3RD);
-//       product.setProducer("TSR");
-//       product.setProductType(ProductType.ADVENTURE);
-
-//       List<Object> list = FORMATTER.format("key", product);
-
-//       assertEquals("system", "D&D 3rd", extract(list.get(4), 1));
-//       assertEquals("producer", "TSR", extract(list.get(5), 1));
-//       assertEquals("type", "Adventure", extract(list.get(6), 1));
 //     }
 
     //......................................................................

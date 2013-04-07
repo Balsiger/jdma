@@ -34,8 +34,6 @@ import net.ixitxachitls.dma.output.ListPrint;
 import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
 
 //..........................................................................
 
@@ -223,28 +221,29 @@ public class BaseCampaign extends BaseEntry
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("campaigns".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      for(String name : DMADataFactory.get().getIDs(Campaign.TYPE, getKey()))
-      {
-        if(!commands.isEmpty())
-          commands.add(", ");
+  // @Override
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // boolean inDM)
+  // {
+  //   if("campaigns".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     for(String name : DMADataFactory.get().getIDs(Campaign.TYPE, getKey()))
+  //     {
+  //       if(!commands.isEmpty())
+  //         commands.add(", ");
 
-        commands.add(new Link(name, getPath() + "/" + name));
-      }
+  //       commands.add(new Link(name, getPath() + "/" + name));
+  //     }
 
-      commands.add(" | ");
-      commands.add(new Link("add", getPath() + "/" + getName() + "?create"));
-      return new FormattedValue(new Command(commands), null, "campaigns")
-        .withPlural("campaigns");
-    }
+  //     commands.add(" | ");
+  //     commands.add(new Link("add", getPath() + "/" + getName() + "?create"));
+  //     return new FormattedValue(new Command(commands), null, "campaigns")
+  //       .withPlural("campaigns");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
 

@@ -23,20 +23,9 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import net.ixitxachitls.dma.entries.FormattedValue;
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.entries.ValueHandle;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Symbol;
 
 //..........................................................................
 
@@ -55,6 +44,7 @@ import net.ixitxachitls.output.commands.Symbol;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Weapon extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -68,7 +58,7 @@ public class Weapon extends Extension<Item>
    * @param       inName  the name of the extension
    *
    */
-  public Weapon(@Nonnull Item inEntry, @Nonnull String inName)
+  public Weapon(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -95,11 +85,6 @@ public class Weapon extends Extension<Item>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%damage %splash %critical %{weapon type} %{weapon style} "
-              + "%proficiency %range %reach");
-
   static
   {
     extractVariables(Item.class, Weapon.class);
@@ -109,36 +94,6 @@ public class Weapon extends Extension<Item>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -150,27 +105,28 @@ public class Weapon extends Extension<Item>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if(inDM && "summary".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      commands.add(new Linebreak());
-      commands.add(new Symbol("\u2694"));
-      maybeAddValue(commands, "weaypon type", inDM, null, null);
-      maybeAddValue(commands, "proficiency", inDM, " ", null);
-      maybeAddValue(commands, "weapon style", inDM, " ", null);
-      maybeAddValue(commands, "damage", inDM, " ", null);
-      maybeAddValue(commands, "critical", inDM, " (critical ", ")");
-      maybeAddValue(commands, "range", inDM, ", range ", null);
-      maybeAddValue(commands, "reach", inDM, ", reach ", null);
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey,
+  // boolean inDM)
+  // {
+  //   if(inDM && "summary".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     commands.add(new Linebreak());
+  //     commands.add(new Symbol("\u2694"));
+  //     maybeAddValue(commands, "weaypon type", inDM, null, null);
+  //     maybeAddValue(commands, "proficiency", inDM, " ", null);
+  //     maybeAddValue(commands, "weapon style", inDM, " ", null);
+  //     maybeAddValue(commands, "damage", inDM, " ", null);
+  //     maybeAddValue(commands, "critical", inDM, " (critical ", ")");
+  //     maybeAddValue(commands, "range", inDM, ", range ", null);
+  //     maybeAddValue(commands, "reach", inDM, ", reach ", null);
 
-      return new FormattedValue(new Command(commands), null, "summary");
-    }
+  //     return new FormattedValue(new Command(commands), null, "summary");
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //---------------------------- addListCommands ---------------------------

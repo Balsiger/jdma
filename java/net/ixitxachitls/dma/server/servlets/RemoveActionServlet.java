@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -56,6 +56,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class RemoveActionServlet extends ActionServlet
 {
   //----------------------------------------------------------------- nested
@@ -72,15 +73,14 @@ public class RemoveActionServlet extends ActionServlet
      * @param inOwner       the owner of the entry/entries
      *
      */
-    public Changes(@Nonnull AbstractEntry.EntryKey inKey,
-                   @Nonnull AbstractEntry inOwner)
+    public Changes(AbstractEntry.EntryKey<?> inKey, AbstractEntry inOwner)
     {
       m_key = inKey;
       m_owner = inOwner;
     }
 
     /** The key of the entry/entries changed. */
-    protected @Nonnull AbstractEntry.EntryKey m_key;
+    protected AbstractEntry.EntryKey<?> m_key;
 
     /** The owner of the entry/entries changed. */
     protected @Nullable AbstractEntry m_owner;
@@ -101,7 +101,7 @@ public class RemoveActionServlet extends ActionServlet
     protected @Nullable String m_store;
 
     /** A map with all the changed values. */
-    protected @Nonnull Map<String, String>m_values =
+    protected Map<String, String>m_values =
       new HashMap<String, String>();
 
     /**
@@ -111,7 +111,7 @@ public class RemoveActionServlet extends ActionServlet
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_key + " (" + (m_owner == null ? "no owner" : m_owner.getName())
         + "/" + m_file + (m_multiple ? ", multiple" : ", single") + "):"
@@ -125,7 +125,7 @@ public class RemoveActionServlet extends ActionServlet
      * @param inValue the value to change to
      *
      */
-    public void set(@Nonnull String inKey, @Nonnull String inValue)
+    public void set(String inKey, String inValue)
     {
       if("file".equals(inKey))
         m_file = inValue;
@@ -164,7 +164,7 @@ public class RemoveActionServlet extends ActionServlet
      *
      */
     @SuppressWarnings("unchecked")
-    public @Nonnull Set<AbstractEntry> entries(@Nonnull List<String> ioErrors)
+    public Set<AbstractEntry> entries(List<String> ioErrors)
     {
       Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
       if(m_multiple)
@@ -257,8 +257,8 @@ public class RemoveActionServlet extends ActionServlet
    */
   @Override
   @SuppressWarnings("unchecked")
-  protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
-                                     @Nonnull HttpServletResponse inResponse)
+  protected String doAction(DMARequest inRequest,
+                            HttpServletResponse inResponse)
   {
     BaseCharacter user = inRequest.getUser();
 

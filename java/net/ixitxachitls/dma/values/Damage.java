@@ -23,15 +23,12 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.util.ArrayList;
-
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 
 //..........................................................................
 
@@ -337,51 +334,6 @@ public class Damage extends Value<Damage>
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected Command doFormat()
-  {
-    java.util.List<Object> commands = new ArrayList<Object>();
-
-    // Object command = m_base.format(false);
-    // if(m_indexBase != null)
-    // command = new Link(command, m_indexBase + "damages/" + m_base.getNumber()
-    //                      + "d" + m_base.getDice());
-
-    // commands.add(command);
-
-    // if(m_type.isDefined())
-    // {
-    //   commands.add(" ");
-    //   command = m_type.format(false);
-    //   if(m_indexBase != null)
-    //     command = new Link(command, m_indexBase + "damagetypes/" + m_type);
-    //   commands.add(command);
-    // }
-
-    // if(m_effect != null)
-    // {
-    //   commands.add(" plus ");
-    //   commands.add(m_effect);
-    // }
-
-    // if(m_other != null)
-    // {
-    //   commands.add(", ");
-    //   commands.add(m_other.format(false));
-    // }
-
-    return new Command(commands.toArray());
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**

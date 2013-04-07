@@ -26,8 +26,6 @@ package net.ixitxachitls.dma.values;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 
-import net.ixitxachitls.output.commands.Command;
-
 //..........................................................................
 
 //------------------------------------------------------------------- header
@@ -99,23 +97,6 @@ public class Name extends BaseText<Name>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   *
-   */
-  @Override
-  protected @Nonnull Command doFormat()
-  {
-    return new Command(m_text);
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators

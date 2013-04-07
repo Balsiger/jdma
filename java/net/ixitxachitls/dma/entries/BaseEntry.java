@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -44,14 +43,8 @@ import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-import net.ixitxachitls.dma.values.formatters.ListFormatter;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Encodings;
-import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
 
@@ -228,16 +221,7 @@ public class BaseEntry extends AbstractEntry
   /** The world. */
   @Key("worlds")
   protected ValueList<Selection> m_worlds = new ValueList<Selection>
-    (new Selection(WORLDS)
-     .withTemplate("link", "worlds")
-     .withFormatter(new LinkFormatter<Selection>
-                    ("/" + getType().getMultipleLink() + "/worlds/")));
-
-//   static
-//   {
-//     s_indexes.add(new KeyIndex<KeyIndex>("General", "Worlds", "worlds",
-//                                          "world", true, false));
-//   }
+    (new Selection(WORLDS).withTemplate("link", "worlds"));
 
   //........................................................................
   //----- references -------------------------------------------------------
@@ -276,15 +260,10 @@ public class BaseEntry extends AbstractEntry
   //........................................................................
   //----- synonyms ---------------------------------------------------------
 
-  /** The formatter for a synonym list. */
-  protected static final Formatter<ValueList<Text>> s_synonymListFormatter =
-    new ListFormatter<ValueList<Text>>("; ");
-
   /** The synonyms for this entry. */
   @Key("synonyms")
   @DM
-  protected ValueList<Text> m_synonyms =
-    new ValueList<Text>(new Text()).withFormatter(s_synonymListFormatter);
+  protected ValueList<Text> m_synonyms = new ValueList<Text>(new Text());
 
   //........................................................................
   //----- categories -------------------------------------------------------
@@ -292,10 +271,7 @@ public class BaseEntry extends AbstractEntry
   /** The categories. */
   @Key("categories")
   @DM
-  protected ValueList<Name> m_categories = new ValueList<Name>
-    (new Name().withFormatter
-     (new LinkFormatter<Name>("/" + getType().getMultipleLink()
-                              + "/categories/")));
+  protected ValueList<Name> m_categories = new ValueList<Name>(new Name());
 
   //........................................................................
 
@@ -325,23 +301,6 @@ public class BaseEntry extends AbstractEntry
   // }
 
   //........................................................................
-  //-------------------------------- getKey --------------------------------
-
-  /**
-   * Get the key uniqueliy identifying this entry.
-   *
-   * @return   the key
-   *
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  public EntryKey<? extends BaseEntry> getKey()
-  {
-    return new EntryKey(getID(), getType());
-  }
-
-  //........................................................................
-
   //-------------------------------- isBase --------------------------------
 
   /**
@@ -513,7 +472,7 @@ public class BaseEntry extends AbstractEntry
 
     summary = computeExpressions(summary, inParameters);
 
-    Value notes = inParameters.getValue("Notes");
+    Value<?> notes = inParameters.getValue("Notes");
     if(notes != null)
       summary += " (" + notes + ")";
 
@@ -796,32 +755,32 @@ public class BaseEntry extends AbstractEntry
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
-  {
-    if("categories".equals(inKey))
-    {
-      List<Object> commands = new ArrayList<Object>();
-      List<String> categories = getCategories();
-      for(String category : categories)
-      {
-        if(!commands.isEmpty())
-          commands.add(", ");
+  // @Override
+  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
+  // {
+  //   if("categories".equals(inKey))
+  //   {
+  //     List<Object> commands = new ArrayList<Object>();
+  //     List<String> categories = getCategories();
+  //     for(String category : categories)
+  //     {
+  //       if(!commands.isEmpty())
+  //         commands.add(", ");
 
-        commands.add(new Link(category,
-                              link(getType(),
-                                   Index.Path.CATEGORIES)
-                              + category.toLowerCase(Locale.US)));
-      }
+  //       commands.add(new Link(category,
+  //                             link(getType(),
+  //                                  Index.Path.CATEGORIES)
+  //                             + category.toLowerCase(Locale.US)));
+  //     }
 
-      return new FormattedValue
-        (new Command(commands), Strings.toString(categories, ", ", ""),
-         "categories")
-        .withEditable(true);
-    }
+  //     return new FormattedValue
+  //       (new Command(commands), Strings.toString(categories, ", ", ""),
+  //        "categories")
+  //       .withEditable(true);
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //-------------------------- computeIndexValues --------------------------

@@ -39,7 +39,6 @@ import com.google.common.collect.Multimaps;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.ValueGroup;
-import net.ixitxachitls.dma.entries.Variable;
 import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.output.commands.Linebreak;
 
@@ -66,7 +65,7 @@ import net.ixitxachitls.output.commands.Linebreak;
 
 @Deprecated
 @ParametersAreNonnullByDefault
-public class Combination<V extends Value>
+public class Combination<V extends Value<V>>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -95,7 +94,7 @@ public class Combination<V extends Value>
    * @return      this value for chaining
    *
    */
-  public Combination withIgnoreTop()
+  public Combination<V> withIgnoreTop()
   {
     m_ignoreTop = true;
 
@@ -268,7 +267,7 @@ public class Combination<V extends Value>
           if(m_total == null)
             m_total = value;
           else
-            m_total = (V)m_total.add(value);
+            m_total = m_total.add(value);
         }
 
       m_total = computeExpressions(m_total);
@@ -351,7 +350,7 @@ public class Combination<V extends Value>
 
     for(V value : m_values.keySet())
     {
-      commands.add(value.format());
+      // commands.add(value.format());
       commands.add(" from ");
       boolean first = true;
       for(String name : m_values.get(value))
@@ -501,7 +500,7 @@ public class Combination<V extends Value>
    * @return      the string representation
    *
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({ "unchecked", "rawtypes" })
   private String toString(Multimap inMap)
   {
     StringBuilder builder = new StringBuilder();
@@ -550,38 +549,38 @@ public class Combination<V extends Value>
   @SuppressWarnings("unchecked") // we just have to trust...
   private void combine(ValueGroup inEntry, boolean inIgnoreTop)
   {
-    V value = null;
-    if(!inIgnoreTop)
-    {
-      value = (V)inEntry.getValue(m_name);
-      if(value != null)
-      {
-        if(value.isDefined())
-          m_values.put(value, inEntry.getName());
+    // V value = null;
+    // if(!inIgnoreTop)
+    // {
+    //   value = (V)inEntry.getValue(m_name);
+    //   if(value != null)
+    //   {
+    //     if(value.isDefined())
+    //       m_values.put(value, inEntry.getName());
 
-        if(value.hasExpression())
-          m_expressions.put(value.getExpression(), inEntry);
-      }
-    }
+    //     if(value.hasExpression())
+    //       m_expressions.put(value.getExpression(), inEntry);
+    //   }
+    // }
 
-    Variable variable = inEntry.getVariable(m_name);
-    if(value == null || !value.isDefined()
-       || (variable != null && variable.isWithBases()))
-      for(BaseEntry base : inEntry.getBaseEntries())
-      {
-        if(base == null)
-          continue;
+    // Variable variable = inEntry.getVariable(m_name);
+    // if(value == null || !value.isDefined()
+    //    || (variable != null && variable.isWithBases()))
+    //   for(BaseEntry base : inEntry.getBaseEntries())
+    //   {
+    //     if(base == null)
+    //       continue;
 
-        value = (V)base.getValue(m_name);
-        if(value == null)
-          continue;
+    //     value = (V)base.getValue(m_name);
+    //     if(value == null)
+    //       continue;
 
-        combine(base, false);
-      }
+    //     combine(base, false);
+    //   }
 
-    // check if there is something that changes the value, we do it last to
-    // have previous computation available.
-    inEntry.adjustCombination(m_name, this);
+    // // check if there is something that changes the value, we do it last to
+    // // have previous computation available.
+    // inEntry.adjustCombination(m_name, this);
   }
 
   //........................................................................

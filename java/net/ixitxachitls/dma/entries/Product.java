@@ -38,13 +38,6 @@ import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.formatters.Formatter;
-import net.ixitxachitls.dma.values.formatters.LinkFormatter;
-import net.ixitxachitls.dma.values.formatters.MultipleFormatter;
-import net.ixitxachitls.output.commands.BaseCommand;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
-import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -279,40 +272,20 @@ public class Product extends Entry<BaseProduct>
   //........................................................................
   //----- owner ------------------------------------------------------------
 
-  /** The formatter for the owner. */
-  protected static final Formatter<Name> s_ownerFormatter =
-    new LinkFormatter<Name>("/user/");
-
   /** The owner of the copy. */
   @Key("owner")
-  protected @Nonnull Name m_owner = new Name().withFormatter(s_ownerFormatter);
+  protected @Nonnull Name m_owner = new Name();
 
   //........................................................................
   //----- status -----------------------------------------------------------
 
-  /** The formatter for the status. */
-  protected static final Formatter<EnumSelection<Status>> s_statusFormatter =
-    new LinkFormatter<EnumSelection<Status>>("/index/status/");
-
   /** The status of the copy, if its available or not. */
   @Key("status")
   protected EnumSelection<Status> m_status =
-    new EnumSelection<Status>(Status.class).withFormatter(s_statusFormatter);
-
-  static
-  {
-    // s_indexes.add(new KeyIndex<KeyIndex>("Product", "Status", "status",
-    //                                      "status", false, FORMATTER, FORMAT,
-    //                                      false, null)
-    //               .withDataSource(Index.DataSource.products));
-  }
+    new EnumSelection<Status>(Status.class);
 
   //........................................................................
   //----- condition --------------------------------------------------------
-
-  /** The formatter for a complete person. */
-  protected static final Formatter<Multiple> s_condFormatter =
-    new MultipleFormatter<Multiple>(null, null, " - ", null);
 
   /** The condition of the copy. */
   @Key("condition")
@@ -321,8 +294,7 @@ public class Product extends Entry<BaseProduct>
                            .withEditType("selection[condition]"),
                            false),
       new Multiple.Element(new Text()
-                           .withEditType("string[comment]"), true) })
-    .withFormatter(s_condFormatter);
+                           .withEditType("string[comment]"), true) });
 
   //........................................................................
 
@@ -899,6 +871,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
+  @SuppressWarnings("unchecked")
   public @Nonnull EntryKey<Product> getKey()
   {
     return new EntryKey<Product>
@@ -918,41 +891,42 @@ public class Product extends Entry<BaseProduct>
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean inDM)
-  {
-    if("name".equals(inKey) && m_baseEntries != null
-       && m_baseEntries.size() > 0)
-    {
-      BaseProduct base = (BaseProduct)m_baseEntries.get(0);
+  // @Override
+  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // boolean inDM)
+  // {
+  //   if("name".equals(inKey) && m_baseEntries != null
+  //      && m_baseEntries.size() > 0)
+  //   {
+  //     BaseProduct base = (BaseProduct)m_baseEntries.get(0);
 
-      if(base != null)
-        return new FormattedValue
-          (new Command(new Link(new BaseCommand(base.getFullTitle()),
-                                base.getPath()),
-                       " (",
-                       getName(),
-                       ")"), getName(), "name")
-          .withPlayerEditable(true)
-          .withEditable(true)
-          .withEditType("name");
-    }
+  //     if(base != null)
+  //       return new FormattedValue
+  //         (new Command(new Link(new BaseCommand(base.getFullTitle()),
+  //                               base.getPath()),
+  //                      " (",
+  //                      getName(),
+  //                      ")"), getName(), "name")
+  //         .withPlayerEditable(true)
+  //         .withEditable(true)
+  //         .withEditType("name");
+  //   }
 
-    // we compute the owner here, as we don't want to get all ids if we don't
-    // have to
-    if("owner".equals(inKey))
-    {
-      String users = Strings.toString(DMADataFactory.get()
-                                      .getIDs(BaseCharacter.TYPE, null), "||",
-                                      m_owner.get());
-      return new FormattedValue(m_owner, m_owner.get(), "owner")
-        .withDM(true)
-        .withEditable(true)
-        .withEditType("selection").withEditChoices(users);
-    }
+  //   // we compute the owner here, as we don't want to get all ids if we don't
+  //   // have to
+  //   if("owner".equals(inKey))
+  //   {
+  //     String users = Strings.toString(DMADataFactory.get()
+  //                                   .getIDs(BaseCharacter.TYPE, null), "||",
+  //                                     m_owner.get());
+  //     return new FormattedValue(m_owner, m_owner.get(), "owner")
+  //       .withDM(true)
+  //       .withEditable(true)
+  //       .withEditType("selection").withEditChoices(users);
+  //   }
 
-    return super.computeValue(inKey, inDM);
-  }
+  //   return super.computeValue(inKey, inDM);
+  // }
 
   //........................................................................
   //------------------------------- compute --------------------------------
@@ -1004,7 +978,7 @@ public class Product extends Entry<BaseProduct>
   @Override
   public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
   {
-    EntryKey parent = inKey.getParent();
+    EntryKey<?> parent = inKey.getParent();
     if(parent == null)
       return;
 
@@ -1267,45 +1241,6 @@ public class Product extends Entry<BaseProduct>
 //       assertEquals("edition", "2nd", extract(values, 10, 1, 2));
 //       assertEquals("printing", "Printing:", extract(values, 11, 1, 1));
 //       assertEquals("printing", "3rd", extract(values, 12, 1, 2));
-//     }
-
-//     //......................................................................
-//     //----- format ---------------------------------------------------------
-
-//     /** Check format for overview. */
-//     public void testFormat()
-//     {
-//       BaseProduct base = new BaseProduct("some product");
-
-//       base.setShortDescription("short");
-//       base.setWorld("Forgotten Realms");
-//       base.setSystem(BaseProduct.System.DnD_3RD);
-//       base.setProductType(BaseProduct.ProductType.ADVENTURE);
-//       base.setStyle(BaseProduct.Style.HARDCOVER);
-
-//       Product product = new Product(base);
-
-//       assertTrue("id", product.setID("test"));
-//       assertTrue("owner", product.setOwner("Merlin"));
-//       assertTrue("status", product.setStatus(Status.DESIRED2));
-//       assertTrue("edition", product.setEdition("2nd"));
-//       assertTrue("printing", product.setPrinting("3rd"));
-
-//       java.util.List<Object> list = FORMATTER.format("key", product);
-
-//       assertEquals("label", "label", extract(list.get(0), 0));
-//       assertEquals("label", "Product", extract(list.get(0), 1));
-//       assertEquals("title", "link", extract(list.get(1), 0));
-//     assertEquals("title", "/entry/product/test", extract(list.get(1), -1));
-//       assertEquals("title", "key", extract(list.get(1), 1));
-//       assertEquals("world", "short", extract(list.get(2)));
-//       assertEquals("world", "link", extract(list.get(3), 0));
-//       assertEquals("world", "/entry/baseproduct/some product",
-//                    extract(list.get(3), -1));
-//       assertEquals("world", "Forgotten Realms", extract(list.get(4)));
-//       assertEquals("system", "D&D 3rd", extract(list.get(5)));
-//       assertEquals("type", "Adventure", extract(list.get(6)));
-//       assertEquals("style", "Hardcover", extract(list.get(7)));
 //     }
 
 //     //......................................................................

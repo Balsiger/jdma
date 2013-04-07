@@ -77,7 +77,7 @@ public class And extends Condition<And>
    * @param       inConditions - the conditions to and
    *
    */
-  public And(Condition ... inConditions)
+  public And(Condition<?> ... inConditions)
   {
     m_conditions = Lists.newArrayList(inConditions);
   }
@@ -106,7 +106,7 @@ public class And extends Condition<And>
   //-------------------------------------------------------------- variables
 
   /** The conditions to and. */
-  private final List<Condition> m_conditions;
+  private final List<Condition<?>> m_conditions;
 
   /** The joiner to convert with newlines. */
   public static final Joiner AND_JOINER = Joiner.on(" and ");
@@ -129,7 +129,7 @@ public class And extends Condition<And>
   @Override
   public Result check(boolean inInteractive)
   {
-    for(Condition condition : m_conditions)
+    for(Condition<?> condition : m_conditions)
     {
       Result result = condition.check(inInteractive);
       if(result != Result.TRUE)
@@ -154,7 +154,7 @@ public class And extends Condition<And>
     if(m_conditions == null)
       return false;
 
-    for(Condition condition : m_conditions)
+    for(Condition<?> condition : m_conditions)
       if(!condition.isDefined())
         return false;
 
@@ -174,7 +174,7 @@ public class And extends Condition<And>
   {
     List<String> strings = Lists.newArrayList();
 
-    for(Condition condition : m_conditions)
+    for(Condition<?> condition : m_conditions)
       strings.add(condition.toString());
 
     return AND_JOINER.join(strings);

@@ -37,7 +37,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
 
@@ -209,34 +208,6 @@ public class Parameters extends Value<Parameters>
 
   //........................................................................
 
-  //------------------------------- doFormat -------------------------------
-
-  /**
-   * Really to the formatting.
-   *
-   * @return      the command for setting the value
-   */
-  protected Command doFormat()
-  {
-    // Map<String, Value> defined = getKeyValues();
-
-    // ArrayList<Object> commands = new ArrayList<Object>();
-
-    // for(Map.Entry<String, Value> entry : defined.entrySet())
-    // {
-    //   if(commands.size() > 0)
-    //     commands.add(", ");
-
-    //   commands.add(entry.getKey().toString());
-    //   commands.add(" ");
-    //   commands.add(entry.getValue().format(false));
-    // }
-
-    // return new Command(commands.toArray());
-    return new Command("guru");
-  }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
@@ -459,8 +430,6 @@ public class Parameters extends Value<Parameters>
       assertEquals("not undefined at start", false, parameters.isDefined());
       assertEquals("undefined value not correct", "$undefined$",
                    parameters.toString());
-      assertEquals("undefined value not correct", "\\color{error}{$undefined$}",
-                   parameters.format(false).toString());
 
       // now with some parameters
       parameters = new Parameters()
