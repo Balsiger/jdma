@@ -29,8 +29,6 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Distance;
@@ -331,11 +329,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%damage %splash %critical %{weapon type} %{weapon style} "
-              + "%proficiency %range %reach");
-
   //----- damage -----------------------------------------------------------
 
   /** The damage the weapon inflicts. */
@@ -495,12 +488,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  static
-  {
-    setAutoExtensions(BaseWeapon.class, "weapon", "wearable", "base wearable");
-    extractVariables(BaseItem.class, BaseWeapon.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -534,36 +521,6 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //------------------------- computeIndexValues ---------------------------
 
   /**

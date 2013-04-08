@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.values.LongFormattedText;
@@ -36,15 +36,14 @@ import net.ixitxachitls.dma.values.LongFormattedText;
  * This is the incomplete extension for all the entries.
  *
  * @file          BaseIncomplete.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseIncomplete extends BaseExtension<BaseEntry>
 {
   //--------------------------------------------------------- constructor(s)
@@ -58,7 +57,7 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
    * @param       inName  the name of the extension
    *
    */
-  public BaseIncomplete(@Nonnull BaseEntry inEntry, @Nonnull String inName)
+  public BaseIncomplete(BaseEntry inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -95,50 +94,13 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
 
   /** The incomplete radius. */
   @Key("incomplete")
-  protected @Nonnull LongFormattedText m_incomplete = new LongFormattedText();
+  protected LongFormattedText m_incomplete = new LongFormattedText();
 
   //........................................................................
-
-  static
-  {
-    setAutoExtensions(BaseIncomplete.class, "incomplete");
-  }
 
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  // @Override
-  // protected @Nonnull Print getPagePrint()
-  // {
-  //   return s_pagePrint;
-  // }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  // @Override
-  // protected @Nonnull ListPrint getListPrint()
-  // {
-  //   return s_listPrint;
-  // }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators

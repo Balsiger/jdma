@@ -38,8 +38,6 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
 import net.ixitxachitls.dma.values.Date;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -769,18 +767,6 @@ public class BaseProduct extends BaseEntry
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base product. */
-  public static final Print s_pagePrint =
-    new Print("");
-
-  /** The printer for printing in a list. */
-  public static final ListPrint s_listPrint =
-    new ListPrint("1:L(label);5:L(id)[ID];20(producttitle)[Title];"
-                  + "1:L(system)[System];1:L(worlds)[Worlds];"
-                  + "1:L(short)[Short Description]",
-                  "$label $listlink", null, "$name", "$system",
-                  "$worlds", "${short description}");
-
   /** The type of this entry. */
   public static final BaseType<BaseProduct> TYPE =
     new BaseType<BaseProduct>(BaseProduct.class).withSort("title");
@@ -1206,36 +1192,6 @@ public class BaseProduct extends BaseEntry
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- getAudience ------------------------------
 
   /**

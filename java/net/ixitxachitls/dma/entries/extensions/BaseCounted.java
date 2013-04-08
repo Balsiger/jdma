@@ -29,8 +29,6 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Number;
 
@@ -171,10 +169,6 @@ public class BaseCounted extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%count %unit");
-
   //----- count ------------------------------------------------------------
 
   /** The base  count value. */
@@ -200,46 +194,10 @@ public class BaseCounted extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  static
-  {
-    setAutoExtensions(BaseCounted.class, "counted");
-    extractVariables(BaseCounted.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //------------------------- computeIndexValues ---------------------------
 
   /**

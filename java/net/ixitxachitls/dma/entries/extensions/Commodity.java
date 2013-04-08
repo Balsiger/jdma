@@ -23,11 +23,9 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Number;
 
 //..........................................................................
@@ -47,6 +45,7 @@ import net.ixitxachitls.dma.values.Number;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Commodity extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -60,7 +59,7 @@ public class Commodity extends Extension<Item>
    * @param       inName the name of the extension
    *
    */
-  public Commodity(@Nonnull Item inEntry, @Nonnull String inName)
+  public Commodity(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -87,10 +86,6 @@ public class Commodity extends Extension<Item>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%amount %area %length");
-
   //----- amount -----------------------------------------------------------
 
   /** The amount of units of this commodity. */
@@ -107,77 +102,6 @@ public class Commodity extends Extension<Item>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-  //--------------------------- addPrintCommands ---------------------------
-
-  /**
-   * Add the commands for printing this extension to the given print command.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   * @param       inEditable flag if values editable or not
-   *
-   * @undefined   IllegalArgumentException if given commands are null
-   *
-   */
-  // public void addPrintCommands(@MayBeNull PrintCommand ioCommands,
-  //                              boolean inDM, boolean inEditable)
-  // {
-  //   if(ioCommands == null)
-  //     return;
-
-  //   super.addPrintCommands(ioCommands, inDM, inEditable);
-
-  //   BaseCommodity base = getBases(BaseCommodity.class).get(0);
-
-  //   if(base == null)
-  //     ioCommands.addExtensionValue(m_amount, "amount", "commodity",
-  //                                   inEditable);
-  //   else
-  //     ioCommands.addValue(createHighlightedValueLabel("amount", "commodity"),
-  //                         new Command(new Object []
-  //                           {
-  //                             createValueCommand(m_amount, "amount",
-  //                                                inEditable),
-  //                             " x ",
-  //                             base.m_area.isDefined()
-  //                             ? base.m_area.format(false)
-  //                             : base.m_length.format(false),
-  //                           }));
-  // }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators

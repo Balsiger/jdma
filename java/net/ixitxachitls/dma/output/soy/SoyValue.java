@@ -213,7 +213,6 @@ public class SoyValue extends SoyAbstract
         return StringData.forValue
           (Encodings.encodeHTMLAttribute(m_value.getEditValue()));
 
-
       if("raw".equals(inName))
         return StringData.forValue(m_value.toString(false));
 

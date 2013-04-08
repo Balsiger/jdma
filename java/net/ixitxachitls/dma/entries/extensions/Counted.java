@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Number;
 
@@ -71,13 +70,6 @@ public class Counted extends Extension<Item>
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%count %unit");
-
-  /** The empty print command. */
-  public static final Print s_emptyPrint = new Print("");
 
   //----- count ------------------------------------------------------------
 

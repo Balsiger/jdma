@@ -53,6 +53,21 @@
   </Match>
 
   <Match>
+    <Class name="~net.ixitxachitls.dma.entries.BaseEntry.*" />
+    <Bug pattern="MS_PKGPROTECT" />
+  </Match>
+
+  <Match>
+    <Class name="~net.ixitxachitls.server.servlets.ConfigServlet.*" />
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <Match>
+    <Class name="~net.ixitxachitls.dma.entries.BaseEntry.*" />
+    <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
+  </Match>
+
+  <Match>
     <Class name="~net.ixitxachitls.dma.values.conditions.Condition.*" />
     <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
   </Match>

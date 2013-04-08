@@ -40,20 +40,12 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.ExtensionVariable;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
-import net.ixitxachitls.dma.values.Combination;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
-import net.ixitxachitls.dma.values.ModifiedNumber;
-import net.ixitxachitls.dma.values.Modifier;
-import net.ixitxachitls.dma.values.Number;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
@@ -239,13 +231,6 @@ public abstract class ValueGroup implements Changeable
   /** The name of the current game. */
   public static final String CURRENT =
     Config.get("configuration", "default");
-
-  /** The print for printing a whole page entry. */
-  public static final Print s_pagePrint = new Print("$title");
-
-  /** The print for printing an entry in a list. */
-  public static final ListPrint s_listPrint =
-    new ListPrint("1:L(icon);20:L(name)[Name]", "$label", null);
 
   //........................................................................
 
@@ -593,113 +578,6 @@ public abstract class ValueGroup implements Changeable
 
   //........................................................................
 
-  //----------------------------- getPrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  protected Print getPrint()
-  {
-    return getPagePrint();
-  }
-
-  //........................................................................
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  protected Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  protected ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListFormat ----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  public String getListFormat()
-  {
-    return getListPrint().getFormat();
-  }
-
-  //........................................................................
-  //------------------------------- printPage ------------------------------
-
-  /**
-   * Print the entry into a command for adding to a document.
-   *
-   * @param       inUser  the user printing, if any
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  public Object printPage(@Nullable BaseCharacter inUser)
-  {
-    return getPagePrint().print(this, inUser);
-  }
-
-  //........................................................................
-  //--------------------------------- print --------------------------------
-
-  /**
-   * Print the entry into a command for adding to a document.
-   *
-   * @param       inUser  the user printing, if any
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  public Object print(@Nullable BaseCharacter inUser)
-  {
-    return getPrint().print(this, inUser);
-  }
-
-  //........................................................................
-  //------------------------------- printList ------------------------------
-
-  /**
-   * Print the entry into a command for adding to a document.
-   *
-   * @param       inKey   the key (name) for the entry to be printed (this is
-   *                      used when printing entries multiple times with synonym
-   *                      names)
-   * @param       inUser  the user printing, if any
-   *
-   * @return      the command representing this item in a list
-   *
-   */
-  public List<Object> printList(String inKey, @Nullable BaseCharacter inUser)
-  {
-    return getListPrint().print(inKey, this, inUser);
-  }
-
-  //........................................................................
   //------------------------------- compute --------------------------------
 
   /**
@@ -728,14 +606,14 @@ public abstract class ValueGroup implements Changeable
    * @return    a value handle ready for printing
    *
    */
-  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
-  {
-    // use _ to denote using a variable name
-    if(inKey.startsWith("_"))
-      return getVariable(inKey.substring(1));
+  // public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
+  // {
+  //   // use _ to denote using a variable name
+  //   if(inKey.startsWith("_"))
+  //     return getVariable(inKey.substring(1));
 
-    return getVariable(inKey);
-  }
+  //   return getVariable(inKey);
+  // }
 
   //........................................................................
   //----------------------------- adjustValue ------------------------------
@@ -766,15 +644,15 @@ public abstract class ValueGroup implements Changeable
    * @return      a mapping between location and modifier found
    *
    */
-  @Deprecated
-  public Map<String, Modifier> collectModifiers(String inName)
-  {
-    Map<String, Modifier> modifiers = new HashMap<String, Modifier>();
+  // @Deprecated
+  // public Map<String, Modifier> collectModifiers(String inName)
+  // {
+  //   Map<String, Modifier> modifiers = new HashMap<String, Modifier>();
 
-    addModifiers(inName, modifiers);
+  //   addModifiers(inName, modifiers);
 
-    return modifiers;
-  }
+  //   return modifiers;
+  // }
 
   //........................................................................
   //---------------------------- addModifiers ------------------------------
@@ -786,11 +664,11 @@ public abstract class ValueGroup implements Changeable
    * @param       inModifiers   the map of modifiers
    *
    */
-  @Deprecated
-  public void addModifiers(String inName, Map<String, Modifier> inModifiers)
-  {
-    // nothing to do
-  }
+  // @Deprecated
+  // public void addModifiers(String inName, Map<String, Modifier> inModifiers)
+  // {
+  //   // nothing to do
+  // }
 
   //........................................................................
 
@@ -817,16 +695,16 @@ public abstract class ValueGroup implements Changeable
    *
    * @return  the list of collected contributions
    */
-  @Deprecated
-  public List<Contribution<? extends Value<?>>>
-                             collectContributions(String inName)
-  {
-    List<Contribution<? extends Value<?>>> contributions = Lists.newArrayList();
+  // @Deprecated
+  // public List<Contribution<? extends Value<?>>>
+  //                            collectContributions(String inName)
+  // {
+  //List<Contribution<? extends Value<?>>> contributions = Lists.newArrayList();
 
-    addContributions(inName, contributions);
+  //   addContributions(inName, contributions);
 
-    return contributions;
-  }
+  //   return contributions;
+  // }
 
   //........................................................................
   //--------------------------- addContributions ---------------------------
@@ -838,14 +716,14 @@ public abstract class ValueGroup implements Changeable
    * @param       ioContributions the list of contributions to add to
    *
    */
-  @Deprecated
-  public void addContributions
-    (String inName, List<Contribution<? extends Value<?>>> ioContributions)
-  {
-    // Value v = getValue(inName);
-    // if(v != null && v.isDefined())
-    //   ioContributions.add(new Contribution<Value>(v, this, null));
-  }
+  // @Deprecated
+  // public void addContributions
+  //   (String inName, List<Contribution<? extends Value<?>>> ioContributions)
+  // {
+  //   // Value v = getValue(inName);
+  //   // if(v != null && v.isDefined())
+  //   //   ioContributions.add(new Contribution<Value>(v, this, null));
+  // }
 
   //........................................................................
   //------------------------------- collect --------------------------------
@@ -1334,22 +1212,22 @@ public abstract class ValueGroup implements Changeable
    * @param     inPostfix the object to add after the value
    *
    */
-  public void maybeAddValue(List<Object> ioList, String inKey, boolean inDM,
-                            @Nullable Object inPrefix,
-                            @Nullable Object inPostfix)
-  {
-    Object value = computeValue(inKey, inDM).format(this, inDM, true);
-    if(value != null && !value.toString().isEmpty())
-    {
-      if(inPrefix != null)
-        ioList.add(inPrefix);
+  // public void maybeAddValue(List<Object> ioList, String inKey, boolean inDM,
+  //                           @Nullable Object inPrefix,
+  //                           @Nullable Object inPostfix)
+  // {
+  //   Object value = computeValue(inKey, inDM).format(this, inDM, true);
+  //   if(value != null && !value.toString().isEmpty())
+  //   {
+  //     if(inPrefix != null)
+  //       ioList.add(inPrefix);
 
-      ioList.add(value);
+  //     ioList.add(value);
 
-      if(inPostfix != null)
-        ioList.add(inPostfix);
-    }
-  }
+  //     if(inPostfix != null)
+  //       ioList.add(inPostfix);
+  //   }
+  // }
 
   //........................................................................
   //------------------------------- convert --------------------------------
@@ -1363,21 +1241,21 @@ public abstract class ValueGroup implements Changeable
    * @return      the modified number for the value
    *
    */
-  @Deprecated
-  public ModifiedNumber modified(String inName, Modifier.Type ... inIgnore)
-  {
-    Combination<Number> combination = new Combination<Number>(this, inName);
+  // @Deprecated
+  // public ModifiedNumber modified(String inName, Modifier.Type ... inIgnore)
+  // {
+  //   Combination<Number> combination = new Combination<Number>(this, inName);
 
-    ModifiedNumber number = new ModifiedNumber(combination.total().get());
-    for(Map.Entry<String, Modifier> entry : collectModifiers(inName).entrySet())
-    {
-      Modifier modifier = entry.getValue().ignore(inIgnore);
-      if(modifier != null)
-        number.withModifier(modifier, entry.getKey());
-    }
+  //   ModifiedNumber number = new ModifiedNumber(combination.total().get());
+  //for(Map.Entry<String, Modifier> entry : collectModifiers(inName).entrySet())
+  //   {
+  //     Modifier modifier = entry.getValue().ignore(inIgnore);
+  //     if(modifier != null)
+  //       number.withModifier(modifier, entry.getKey());
+  //   }
 
-    return number;
-  }
+  //   return number;
+  // }
 
   //........................................................................
 

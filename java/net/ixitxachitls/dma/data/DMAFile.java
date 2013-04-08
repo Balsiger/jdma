@@ -38,8 +38,6 @@ import javax.annotation.Nonnull;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.Comment;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Link;
 import net.ixitxachitls.util.Files;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
@@ -206,20 +204,6 @@ public class DMAFile //implements Storage<AbstractEntry>
 
   //........................................................................
 
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @return      the command that can be printed
-   *
-   */
-  public Command format()
-  {
-    return new Link(getStorageName(), "/index/files/" + getStorageName());
-  }
-
-  //........................................................................
   //------------------------------- toString -------------------------------
 
   /**
@@ -229,7 +213,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    *
    */
   @Override
-public String toString()
+  public String toString()
   {
     return m_path + "/" + m_name + ": " + m_entries
       + " (" + m_lines + " lines, "
@@ -576,8 +560,6 @@ public String toString()
       assertEquals("lines", 0, file.getLines());
       assertFalse("changed", file.isChanged());
       assertFalse("read", file.wasRead());
-      assertEquals("format", "\\link[/index/files/test.dma]{test.dma}",
-                   file.format().toString());
       assertEquals("string",
                    "build/test/test.dma: [] (0 lines, not changed, not read)",
                    file.toString());

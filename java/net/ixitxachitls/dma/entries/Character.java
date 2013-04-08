@@ -34,8 +34,6 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableMap;
 
 import net.ixitxachitls.dma.data.DMAData;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
@@ -161,46 +159,6 @@ public class Character extends CampaignEntry<BaseCharacter>
   /** The type of this entry. */
   public static final Type<Character> TYPE =
     new Type<Character>(Character.class, BaseCharacter.TYPE);
-
-  /** The print for nicely printing an overview of the entry with all data. */
-  public static final Print s_print =
-    new Print("\\table{3:L;10:L}{$image}{"
-              + "$title "
-              + "\\par "
-              + "\\bold{Player: } $base \\linebreak "
-              + "\\bold{Campaign: } $campaign \\linebreak "
-              + "\\bold{Level: } $level \\linebreak "
-              + "\\bold{Total Wealth: } $wealth \\linebreak "
-              + "\\bold{Carried Weight: } $weight \\linebreak"
-              + "} "
-              + "\\par\\par "
-              + "\\title{Items} "
-              + "$itemlist "
-              + "\\title{Counted} "
-              + "$countedlist "
-              + "\\title{Timed} "
-              + "$timedlist ");
-
-  /** The print for printing a whole page entry. */
-  public static final Print s_pagePrint =
-    new Print("$image "
-              + "${do mail} ${as pdf dm} ${as pdf} ${as text} ${as dma} "
-              + "$title "
-              + "$clear "
-              + "$files "
-              + "\n"
-              + "$par "
-              + "%name %base %campaign "
-              + "%level %state %wealth %weight %items "
-              // admin
-              + "%errors"
-              );
-
-  /** The printer for printing in a list. */
-  public static final ListPrint s_listPrint =
-    new ListPrint("1:L(label);20:L(id)[ID];20(producttitle)[Title];"
-                  + "1:L(status)[Status];1:L(level)[Level]",
-                  "$label $listlink", null, "$name", "$status", "$level");
 
   //----- state ------------------------------------------------------------
 
@@ -474,51 +432,6 @@ public class Character extends CampaignEntry<BaseCharacter>
 
   //   return false;
   // }
-
-  //........................................................................
-
-  //----------------------------- getPrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  protected @Nonnull Print getPrint()
-  {
-    return s_print;
-  }
-
-  //........................................................................
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
 
   //........................................................................
 

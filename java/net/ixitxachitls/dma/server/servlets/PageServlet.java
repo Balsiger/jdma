@@ -24,8 +24,6 @@
 package net.ixitxachitls.dma.server.servlets;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -37,14 +35,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.easymock.EasyMock;
 
-import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
-import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Table;
 import net.ixitxachitls.output.html.HTMLBodyWriter;
-import net.ixitxachitls.output.html.HTMLDocument;
 import net.ixitxachitls.output.html.HTMLWriter;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.Files;
@@ -284,61 +277,61 @@ public class PageServlet extends SoyServlet
    * @param       inPageSize     the full size of the page
    *
    */
-  protected void format(@Nonnull HTMLWriter inWriter,
-                        @Nonnull List<? extends AbstractEntry> inEntries,
-                        @Nullable BaseCharacter inUser,
-                        int inStart, int inPageSize)
-  {
-    HTMLDocument document = new HTMLDocument("");
+  // protected void format(@Nonnull HTMLWriter inWriter,
+  //                       @Nonnull List<? extends AbstractEntry> inEntries,
+  //                       @Nullable BaseCharacter inUser,
+  //                       int inStart, int inPageSize)
+  // {
+  //   HTMLDocument document = new HTMLDocument("");
 
-    List<String> navigation = new ArrayList<String>();
-    if(inStart > 0)
-      if(inStart - inPageSize > 0)
-        navigation.add("<a href=\"?start="
-                       + (inStart - inPageSize)
-                       + "\"  onclick=\"return util.link(event, '?start="
-                       + (inStart - inPageSize) + "');\" "
-                       + "class=\"paginate-previous\">"
-                       + "&laquo; previous</a>");
-      else
-        navigation.add("<a href=\"\" "
-                       + "onclick=\"return util.link(event, '?');\" "
-                       + "class=\"paginate-previous\">"
-                       + "&laquo; previous</a>");
+  //   List<String> navigation = new ArrayList<String>();
+  //   if(inStart > 0)
+  //     if(inStart - inPageSize > 0)
+  //       navigation.add("<a href=\"?start="
+  //                      + (inStart - inPageSize)
+  //                      + "\"  onclick=\"return util.link(event, '?start="
+  //                      + (inStart - inPageSize) + "');\" "
+  //                      + "class=\"paginate-previous\">"
+  //                      + "&laquo; previous</a>");
+  //     else
+  //       navigation.add("<a href=\"\" "
+  //                      + "onclick=\"return util.link(event, '?');\" "
+  //                      + "class=\"paginate-previous\">"
+  //                      + "&laquo; previous</a>");
 
-    if(inEntries.size() > inPageSize)
-      navigation.add("<a href=\"?start="
-                     + (inStart + inPageSize) + "\" "
-                     + " onclick=\"return util.link(event, '?start="
-                     + (inStart + inPageSize) + "');\" "
-                     + "class=\"paginate-next\">"
-                     + "&raquo; next</a>");
+  //   if(inEntries.size() > inPageSize)
+  //     navigation.add("<a href=\"?start="
+  //                    + (inStart + inPageSize) + "\" "
+  //                    + " onclick=\"return util.link(event, '?start="
+  //                    + (inStart + inPageSize) + "');\" "
+  //                    + "class=\"paginate-next\">"
+  //                    + "&raquo; next</a>");
 
-    document.add(navigation);
+  //   document.add(navigation);
 
-    if(inEntries.isEmpty())
-      document.add(new Color("error", "No entries found!"));
-    else
-    {
-      String format = "";
-      List<Object> cells = new ArrayList<Object>();
-      for(AbstractEntry entry : inEntries)
-        if(entry != null)
-        {
-          if(format.isEmpty())
-            format = entry.getListFormat();
+  //   if(inEntries.isEmpty())
+  //     document.add(new Color("error", "No entries found!"));
+  //   else
+  //   {
+  //     String format = "";
+  //     List<Object> cells = new ArrayList<Object>();
+  //     for(AbstractEntry entry : inEntries)
+  //       if(entry != null)
+  //       {
+  //         if(format.isEmpty())
+  //           format = entry.getListFormat();
 
-          cells.addAll(entry.printList(entry.getName(), inUser));
-        }
-        else
-          Log.error("There were null entries in the index!");
+  //         cells.addAll(entry.printList(entry.getName(), inUser));
+  //       }
+  //       else
+  //         Log.error("There were null entries in the index!");
 
-      document.add(new Table("entrylist", format, new Command(cells)));
-    }
-    document.add(navigation);
+  //     document.add(new Table("entrylist", format, new Command(cells)));
+  //   }
+  //   document.add(navigation);
 
-    inWriter.add(document.toString());
-  }
+  //   inWriter.add(document.toString());
+  // }
 
   //........................................................................
   //------------------------------ writeIcon -------------------------------

@@ -262,12 +262,6 @@ public class BaseContainer extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  static
-  {
-    setAutoExtensions(BaseContainer.class, "contents");
-    extractVariables(BaseItem.class, BaseContainer.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors

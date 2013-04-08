@@ -100,12 +100,6 @@ public class BaseComposite extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  static
-  {
-    setAutoExtensions(BaseComposite.class, "composite");
-    extractVariables(BaseItem.class, BaseComposite.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors

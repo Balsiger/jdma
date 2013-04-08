@@ -26,13 +26,11 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
@@ -50,15 +48,14 @@ import net.ixitxachitls.util.configuration.Config;
  * An object of this class represents a real person associated with D&D.
  *
  * @file          BaseCharacter.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseCharacter extends BaseEntry
 {
   //----------------------------------------------------------------- nested
@@ -86,13 +83,13 @@ public class BaseCharacter extends BaseEntry
      * @param inName the name of the value
      *
      */
-    private Group(@Nonnull String inName)
+    private Group(String inName)
     {
       m_name = constant("group", inName);
     }
 
     /** The name of the group. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Get the name of the value.
      *
@@ -100,7 +97,7 @@ public class BaseCharacter extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -111,7 +108,7 @@ public class BaseCharacter extends BaseEntry
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -124,7 +121,7 @@ public class BaseCharacter extends BaseEntry
      *         current one
      *
      */
-    public boolean allows(@Nonnull Group inGroup)
+    public boolean allows(Group inGroup)
     {
       return this.ordinal() <= inGroup.ordinal();
     }
@@ -156,7 +153,7 @@ public class BaseCharacter extends BaseEntry
    * @param       inName the name of the base charcter to create
    *
    */
-  public BaseCharacter(@Nonnull String inName)
+  public BaseCharacter(String inName)
   {
     super(inName, TYPE);
   }
@@ -169,8 +166,7 @@ public class BaseCharacter extends BaseEntry
    * @param       inEmail the email address of the base character to create
    *
    */
-  public BaseCharacter(@Nonnull String inName,
-                       @Nonnull String inEmail)
+  public BaseCharacter(String inName, String inEmail)
   {
     this(inName);
     m_email = new Text(inEmail);
@@ -186,17 +182,6 @@ public class BaseCharacter extends BaseEntry
   public static final BaseType<BaseCharacter> TYPE =
     new BaseType<BaseCharacter>(BaseCharacter.class).withLink("user", "users");
 
-  /** The printer for printing the whole base character. */
-  public static final Print s_pagePrint = new Print("");
-
-  /** The printer for printing in a list. */
-  public static final ListPrint s_listPrint =
-    new ListPrint("1:L(label);20:L(name)[Name];20(name)[Real Name];"
-                  + "1:L(group)[Group];"
-                  + "1:L(action)[Last Action]",
-                  "$label $listlink", null, "${real name}", "$group",
-                  "${last action}");
-
   /** The number of recent products to show. */
   public static final int MAX_PRODUCTS =
     Config.get("entries/basecharacter.products", 5);
@@ -206,7 +191,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("real name")
   @DM
-  protected @Nonnull Text m_realName = new Text();
+  protected Text m_realName = new Text();
 
   //........................................................................
   //----- email ------------------------------------------------------------
@@ -214,7 +199,7 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("email")
   @DM
-  protected @Nonnull Text m_email = new Text();
+  protected Text m_email = new Text();
 
   //........................................................................
   //----- products ---------------------------------------------------------
@@ -228,14 +213,14 @@ public class BaseCharacter extends BaseEntry
   /** The files in the base campaign. */
   @Key("last action")
   @NoEdit
-  protected @Nonnull Text m_lastAction = new Text();
+  protected Text m_lastAction = new Text();
 
   //........................................................................
   //----- group ------------------------------------------------------------
 
   /** The access group of the user. */
   @Key("group")
-  protected @Nonnull EnumSelection<Group> m_group =
+  protected EnumSelection<Group> m_group =
     new EnumSelection<Group>(Group.class);
 
   //........................................................................
@@ -249,37 +234,6 @@ public class BaseCharacter extends BaseEntry
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
-
   //------------------------------- getGroup -------------------------------
 
   /**
@@ -289,7 +243,7 @@ public class BaseCharacter extends BaseEntry
     * @return      the group of the user
     *
     */
-  public @Nonnull Group getGroup()
+  public Group getGroup()
   {
     if(m_group.isDefined())
       return m_group.getSelected();
@@ -306,7 +260,7 @@ public class BaseCharacter extends BaseEntry
    * @return      the users email address.
    *
    */
-  public @Nonnull String getEMail()
+  public String getEMail()
   {
     return m_email.get();
   }
@@ -322,7 +276,7 @@ public class BaseCharacter extends BaseEntry
    * @return      true if enough access, false if not
    *
    */
-  public boolean hasAccess(@Nonnull Group inGroup)
+  public boolean hasAccess(Group inGroup)
   {
     return inGroup.allows(getGroup());
   }
@@ -396,7 +350,7 @@ public class BaseCharacter extends BaseEntry
    *
    */
   // @Override
-  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // public @Nullable ValueHandle computeValue(String inKey,
   //                                           boolean inDM)
   // {
   //   if("products".equals(inKey))
@@ -440,7 +394,7 @@ public class BaseCharacter extends BaseEntry
    *
    */
   @Override
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("products".equals(inKey))
     {
@@ -479,7 +433,7 @@ public class BaseCharacter extends BaseEntry
    *
    */
   @Override
-  protected boolean readEntry(@Nonnull ParseReader inReader)
+  protected boolean readEntry(ParseReader inReader)
   {
     return super.readEntry(inReader);
   }
@@ -493,7 +447,7 @@ public class BaseCharacter extends BaseEntry
    * @param inSelected the selected group
    *
    */
-  public void setGroup(@Nonnull Group inSelected)
+  public void setGroup(Group inSelected)
   {
     m_group = m_group.as(inSelected);
     changed();
@@ -508,7 +462,7 @@ public class BaseCharacter extends BaseEntry
    * @param inRealName the real name of the user
    *
    */
-  public void setRealName(@Nonnull String inRealName)
+  public void setRealName(String inRealName)
   {
     m_realName = m_realName.as(inRealName);
     changed();

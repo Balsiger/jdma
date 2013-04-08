@@ -150,12 +150,6 @@ public class BaseCommodity extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  static
-  {
-    setAutoExtensions(BaseCommodity.class, "commodity");
-    extractVariables(BaseItem.class, BaseCommodity.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors

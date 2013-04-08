@@ -32,7 +32,6 @@ import java.util.Random;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Name;
@@ -99,10 +98,6 @@ public class Composite extends Extension<Item>
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%include");
 
   /** The random generator. */
   private static final Random s_random = new Random();

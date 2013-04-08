@@ -23,14 +23,12 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -44,15 +42,14 @@ import net.ixitxachitls.dma.values.Multiple;
  * This is the light extension for all the entries.
  *
  * @file          BaseLight.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseLight extends BaseExtension<BaseItem>
 {
   //--------------------------------------------------------- constructor(s)
@@ -66,7 +63,7 @@ public class BaseLight extends BaseExtension<BaseItem>
    * @param       inName  the name of the extension
    *
    */
-  public BaseLight(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseLight(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -95,10 +92,6 @@ public class BaseLight extends BaseExtension<BaseItem>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%{bright light} %{shadowy light}");
-
   //----- bright light -----------------------------------------------------
 
   /** The grouping for bright light. */
@@ -106,7 +99,7 @@ public class BaseLight extends BaseExtension<BaseItem>
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
         @Override
-        public Long extract(@Nonnull Multiple inValue)
+        public Long extract(Multiple inValue)
         {
           return (long)((Distance)inValue.get(0)).getAsFeet().getValue();
         }
@@ -138,7 +131,7 @@ public class BaseLight extends BaseExtension<BaseItem>
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
         @Override
-        public Long extract(@Nonnull Multiple inValue)
+        public Long extract(Multiple inValue)
         {
           return (long)((Distance)inValue.get(0)).getAsFeet().getValue();
         }
@@ -159,46 +152,10 @@ public class BaseLight extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  static
-  {
-    setAutoExtensions(BaseLight.class, "light");
-    extractVariables(BaseItem.class, BaseLight.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //------------------------- computeIndexValues ---------------------------
 
   /**
@@ -208,7 +165,7 @@ public class BaseLight extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
 

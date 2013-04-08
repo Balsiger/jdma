@@ -313,12 +313,6 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //........................................................................
 
-  static
-  {
-    setAutoExtensions(BaseArmor.class, "armor", "wearable");
-    extractVariables(BaseItem.class, BaseArmor.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors

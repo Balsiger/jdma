@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.BaseItem;
 
@@ -35,15 +35,14 @@ import net.ixitxachitls.dma.entries.BaseItem;
  * This is the commodity extension for all the entries.
  *
  * @file          BaseMultiuse.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseMultiuse extends BaseCounted
 {
   //--------------------------------------------------------- constructor(s)
@@ -57,7 +56,7 @@ public class BaseMultiuse extends BaseCounted
    * @param       inName  the name of the extension
    *
    */
-  public BaseMultiuse(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseMultiuse(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -85,12 +84,6 @@ public class BaseMultiuse extends BaseCounted
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  static
-  {
-    setAutoExtensions(BaseMultiuse.class, "multiuse");
-    extractVariables(BaseItem.class, BaseMultiuse.class);
-  }
 
   //........................................................................
 

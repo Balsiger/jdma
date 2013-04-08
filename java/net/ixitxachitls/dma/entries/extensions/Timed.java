@@ -23,11 +23,9 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
-import net.ixitxachitls.dma.output.ListPrint;
-import net.ixitxachitls.dma.output.Print;
 import net.ixitxachitls.dma.values.Duration;
 
 //..........................................................................
@@ -47,6 +45,7 @@ import net.ixitxachitls.dma.values.Duration;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Timed extends Extension<Item>
 {
   //--------------------------------------------------------- constructor(s)
@@ -60,7 +59,7 @@ public class Timed extends Extension<Item>
    * @param       inName  the name of the extension
    *
    */
-  public Timed(@Nonnull Item inEntry, @Nonnull String inName)
+  public Timed(Item inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -89,10 +88,6 @@ public class Timed extends Extension<Item>
 
   //-------------------------------------------------------------- variables
 
-  /** The printer for printing the whole base item. */
-  public static final Print s_pagePrint =
-    new Print("%duration");
-
   //----- duration ---------------------------------------------------------
 
   /** The time that is left for the item. */
@@ -110,36 +105,6 @@ public class Timed extends Extension<Item>
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- getPagePrint -----------------------------
-
-  /**
-   * Get the print for a full page.
-   *
-   * @return the print for page printing
-   *
-   */
-  @Override
-  protected @Nonnull Print getPagePrint()
-  {
-    return s_pagePrint;
-  }
-
-  //........................................................................
-  //----------------------------- getListPrint -----------------------------
-
-  /**
-   * Get the print for a list entry.
-   *
-   * @return the print for list entry
-   *
-   */
-  @Override
-  protected @Nonnull ListPrint getListPrint()
-  {
-    return s_listPrint;
-  }
-
-  //........................................................................
   //----------------------------- computeValue -----------------------------
 
   /**
@@ -152,7 +117,7 @@ public class Timed extends Extension<Item>
    *
    */
   // @Override
-  //public @Nullable ValueHandle computeValue(@Nonnull String inKey, boolean
+  //public @Nullable ValueHandle computeValue(String inKey, boolean
   //inDM)
   // {
   //   if("duration".equals(inKey))
@@ -227,33 +192,6 @@ public class Timed extends Extension<Item>
   //                            base.m_duration.format(true),
   //                          })),
   //                      }));
-  // }
-
-  //........................................................................
-
-  //--------------------------- addPrintCommands ---------------------------
-
-  /**
-   * Add the commands for printing this extension to the given print command.
-   *
-   * @param       ioCommands the commands to add to
-   * @param       inDM       flag if setting for DM or not
-   * @param       inEditable flag if values editable or not
-   *
-   * @undefined   IllegalArgumentException if given commands are null
-   *
-   */
-  // public void addPrintCommands(@MayBeNull PrintCommand ioCommands,
-  //                              boolean inDM, boolean inEditable)
-  // {
-  //   if(ioCommands == null)
-  //     return;
-
-  //   super.addPrintCommands(ioCommands, inDM, inEditable);
-
-  //   if(inDM)
-  //     ioCommands.addExtensionValue(m_duration, "duration", "timed",
-  //                                   inDM && inEditable);
   // }
 
   //........................................................................

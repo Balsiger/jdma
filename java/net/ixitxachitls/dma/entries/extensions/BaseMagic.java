@@ -120,12 +120,6 @@ public class BaseMagic extends BaseExtension<BaseItem>
 
   //........................................................................
 
-
-  static
-  {
-    extractVariables(BaseItem.class, BaseMagic.class);
-  }
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors

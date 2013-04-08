@@ -491,7 +491,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @undefined   IllegalArgumentException if one of the arguments is null
    *
    */
-  protected static void setAutoExtensions
+  public static void setAutoExtensions
     (Class<? extends AbstractExtension<?>> inClass,
      String ... inAbstractExtensions)
   {

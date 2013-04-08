@@ -46,7 +46,6 @@ import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.configuration.Config;
-import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
 
@@ -214,7 +213,7 @@ public class BaseEntry extends AbstractEntry
     new BaseType<BaseEntry>(BaseEntry.class, "Base Entries");
 
   /** Flag if extensions are initialized. */
-  private static boolean s_extensionsInitialized = false;
+  protected static boolean s_extensionsInitialized = false;
 
   //----- world ------------------------------------------------------------
 
@@ -1196,51 +1195,11 @@ public class BaseEntry extends AbstractEntry
 
   /**
    * Ensure that extensions are properly initialized.
-   *
    */
-  private void ensureExtensions()
+  protected void ensureExtensions()
   {
-    // Since we have to prevent initialization loops, we load up extensions
-    // here in a non-static context.
     if(!s_extensionsInitialized)
-    {
       s_extensionsInitialized = true;
-      if(net.ixitxachitls.dma.entries.extensions.BaseWeapon.s_pagePrint == null)
-        Log.warning("could not properly initialize base weapon extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseWearable.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base wearable extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseLight.s_pagePrint == null)
-        Log.warning("could not properly initialize base light extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseTimed.s_pagePrint == null)
-        Log.warning("could not properly initialize base timed extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseArmor.s_pagePrint == null)
-        Log.warning("could not properly initialize base armor extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseCommodity.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base commodity extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseComposite.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base commodity extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseContainer.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base container extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseCounted.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base counted extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseIncomplete.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base incomplete extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseMultiple.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base multiple extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseMultiuse.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base multiuse extension");
-      if(net.ixitxachitls.dma.entries.extensions.BaseMagic.s_pagePrint
-         == null)
-        Log.warning("could not properly initialize base magic extension");
-    }
   }
 
   //........................................................................

@@ -32,7 +32,20 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
+import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
+import net.ixitxachitls.dma.entries.extensions.BaseArmor;
+import net.ixitxachitls.dma.entries.extensions.BaseCommodity;
+import net.ixitxachitls.dma.entries.extensions.BaseComposite;
+import net.ixitxachitls.dma.entries.extensions.BaseContainer;
+import net.ixitxachitls.dma.entries.extensions.BaseCounted;
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
+import net.ixitxachitls.dma.entries.extensions.BaseLight;
+import net.ixitxachitls.dma.entries.extensions.BaseMagic;
+import net.ixitxachitls.dma.entries.extensions.BaseMultiple;
+import net.ixitxachitls.dma.entries.extensions.BaseMultiuse;
+import net.ixitxachitls.dma.entries.extensions.BaseTimed;
+import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
+import net.ixitxachitls.dma.entries.extensions.BaseWearable;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
@@ -1565,6 +1578,50 @@ public class BaseItem extends BaseEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //--------------------------- ensureExtensions ---------------------------
+
+  /**
+   * Ensure that extensions are properly initialized.
+   *
+   */
+  @Override
+  protected void ensureExtensions()
+  {
+    // Since we have to prevent initialization loops, we load up extensions
+    // here in a non-static context.
+    if(!s_extensionsInitialized)
+    {
+      AbstractExtension.setAutoExtensions(BaseWeapon.class, "weapon",
+                                          "wearable", "base wearable");
+      extractVariables(BaseItem.class, BaseWeapon.class);
+      AbstractExtension.setAutoExtensions(BaseWearable.class, "wearable");
+      extractVariables(BaseItem.class, BaseWearable.class);
+      AbstractExtension.setAutoExtensions(BaseLight.class, "light");
+      extractVariables(BaseItem.class, BaseLight.class);
+      AbstractExtension.setAutoExtensions(BaseTimed.class, "timed");
+      extractVariables(BaseItem.class, BaseTimed.class);
+      AbstractExtension.setAutoExtensions(BaseArmor.class, "armor", "wearable");
+      extractVariables(BaseItem.class, BaseArmor.class);
+      AbstractExtension.setAutoExtensions(BaseCommodity.class, "commodity");
+      extractVariables(BaseItem.class, BaseCommodity.class);
+      AbstractExtension.setAutoExtensions(BaseComposite.class, "composite");
+      extractVariables(BaseItem.class, BaseComposite.class);
+      AbstractExtension.setAutoExtensions(BaseContainer.class, "contents");
+      extractVariables(BaseItem.class, BaseContainer.class);
+      AbstractExtension.setAutoExtensions(BaseCounted.class, "counted");
+      extractVariables(BaseCounted.class);
+      AbstractExtension.setAutoExtensions(BaseIncomplete.class, "incomplete");
+      AbstractExtension.setAutoExtensions(BaseMultiple.class, "multiple");
+      extractVariables(BaseItem.class, BaseMultiple.class);
+      AbstractExtension.setAutoExtensions(BaseMultiuse.class, "multiuse");
+      extractVariables(BaseItem.class, BaseMultiuse.class);
+      extractVariables(BaseItem.class, BaseMagic.class);
+    }
+
+    super.ensureExtensions();
+  }
+
   //........................................................................
 
   //------------------------------------------------------------------- test

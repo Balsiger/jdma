@@ -1518,10 +1518,10 @@ public class AbstractEntry extends ValueGroup
    * @return    a value handle ready for printing
    *
    */
-  @Override
-  @Deprecated
-  public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
-  {
+  // @Override
+  // @Deprecated
+  // public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
+  // {
     // if(inKey.contains(":"))
     // {
     //   String []parts = inKey.split(":");
@@ -1675,8 +1675,8 @@ public class AbstractEntry extends ValueGroup
     // // else
     // //   key = inKey;
 
-    return null;
-  }
+  //   return null;
+  // }
 
   //........................................................................
   //------------------------------- compute --------------------------------
