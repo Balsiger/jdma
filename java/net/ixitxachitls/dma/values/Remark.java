@@ -29,10 +29,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.Iterators;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Linebreak;
-import net.ixitxachitls.output.commands.Span;
-import net.ixitxachitls.output.commands.Window;
 
 //..........................................................................
 
@@ -229,31 +225,6 @@ public class Remark
   }
 
   //........................................................................
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the value for printing.
-   *
-   * @param       inContents the contents to format inside the remark
-   *
-   * @return      the command that can be printed
-   *
-   */
-  public Command format(Object inContents)
-  {
-    if(m_comment == null)
-      return new Span(m_type.name(),
-                      new Window(inContents, m_type.getDescription()));
-    else
-      return new Span(m_type.name(),
-                      new Window(inContents,
-                                 new Command(m_type.getDescription(),
-                                             ":",
-                                             new Linebreak(),
-                                             m_comment)));
-  }
-
-  //........................................................................
 
   //........................................................................
 
@@ -333,23 +304,12 @@ public class Remark
       assertEquals("first", Type.ESTIMATION, remark.getType());
       assertEquals("first", "just a test", remark.getComment());
       assertEquals("first", "{~,just a test}", remark.toString());
-      assertEquals("first",
-                   new Span("ESTIMATION",
-                            new Window("hello",
-                                       new Command("Estimation",
-                                                   ":",
-                                                   new Linebreak(),
-                                                   "just a test"))),
-                   remark.format("hello"));
 
       remark = Remark.read(reader);
 
       assertEquals("second", Type.HOUSE_RULE, remark.getType());
       assertNull("second", remark.getComment());
       assertEquals("second", "{*}", remark.toString());
-      assertEquals("second",
-                   new Span("HOUSE_RULE", new Window("hello", "House Rule")),
-                   remark.format("hello"));
 
       assertNull("last", Remark.read(reader));
     }

@@ -23,13 +23,9 @@
 
 package net.ixitxachitls.input;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.ixitxachitls.output.commands.Color;
-import net.ixitxachitls.output.commands.Command;
-import net.ixitxachitls.output.commands.Divider;
-import net.ixitxachitls.output.commands.Linebreak;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.errors.BaseError;
 
@@ -50,6 +46,7 @@ import net.ixitxachitls.util.errors.BaseError;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class ParseError extends BaseError
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +64,7 @@ public class ParseError extends BaseError
     * @param       inPost     the text just after the error
     *
     */
-  public ParseError(@Nonnull String inError, @Nullable String inMessage,
+  public ParseError(String inError, @Nullable String inMessage,
                     long inLine, @Nullable String inDocument,
                     @Nullable String inPre, @Nullable String inPost)
   {
@@ -92,10 +89,10 @@ public class ParseError extends BaseError
   //-------------------------------------------------------------- variables
 
   /** The number or ID of the error. */
-  private @Nonnull String m_errorNumber;
+  private String m_errorNumber;
 
   /** The error message itself. */
-  private @Nonnull String m_error;
+  private String m_error;
 
   /** The individual message to this error. */
   private @Nullable String m_parseMessage;
@@ -113,11 +110,11 @@ public class ParseError extends BaseError
   private @Nullable String m_document;
 
   /** The text to use for show cut text. */
-  private static final @Nonnull String s_dots =
+  private static final String s_dots =
     Config.get("resource:parser/error.dots", "...");
 
   /** The marker to use to show the error itself. */
-  private static final @Nonnull String s_mark =
+  private static final String s_mark =
     Config.get("resource:parser/error.mark", ">>>");
 
   //........................................................................
@@ -132,7 +129,7 @@ public class ParseError extends BaseError
    * @return      the requested error ID (as a string)
    *
    */
-  public @Nonnull String getErrorNumber()
+  public String getErrorNumber()
   {
     return m_errorNumber;
   }
@@ -146,7 +143,7 @@ public class ParseError extends BaseError
     * @return      the requested error message
     *
     */
-  public @Nonnull String getError()
+  public String getError()
   {
     return m_error;
   }
@@ -223,35 +220,6 @@ public class ParseError extends BaseError
 
   //.......................................................................
 
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the error for printing.
-   *
-   * @return      a string or command representing the error
-   *
-   */
-  @Override
-public Object format()
-  {
-    return new Command(new Color("error", m_errorNumber + ": " + m_error
-                                 + (m_parseMessage != null
-                                    ? " (" + m_parseMessage + ")" : "")),
-                       (m_line > 0 ? " on line " + m_line : ""),
-                       (m_document != null ? " in document '" + m_document
-                        + "'" : ""),
-                       new Linebreak(),
-                       (m_pre != null || m_post != null
-                        ? new Divider("snippet",
-                                      new Command((m_pre != null
-                                                   ? s_dots + m_pre : ""),
-                                                  new Color("error", s_mark),
-                                                  (m_post != null
-                                                   ? m_post + s_dots : "")))
-                        : ""));
-  }
-
-  //........................................................................
   //------------------------------- toString -------------------------------
 
   /**
@@ -262,7 +230,7 @@ public Object format()
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     return m_errorNumber + ": " + m_error
       + (m_parseMessage != null ? " (" + m_parseMessage + ")" : "")
@@ -285,7 +253,7 @@ public @Nonnull String toString()
    *
    */
   @Override
-public boolean equals(Object inOther)
+  public boolean equals(Object inOther)
   {
     if(inOther == null)
       return false;
