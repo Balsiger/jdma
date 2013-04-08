@@ -56,8 +56,7 @@ import net.ixitxachitls.util.Encodings;
  * base entries.
  *
  *
- * @file          SoyCombination.java
- *
+ * @file          SoyCombined.java
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  */
