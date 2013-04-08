@@ -38,7 +38,6 @@ import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.indexes.Index;
-import net.ixitxachitls.dma.output.ascii.ASCIIDocument;
 import net.ixitxachitls.dma.values.Date;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -1478,9 +1477,6 @@ public class BaseProduct extends BaseEntry
         if(name.isEmpty())
           continue;
 
-        if(name.indexOf('\\') >= 0)
-          name = ASCIIDocument.simpleConvert(name);
-
         ioNames.add(name);
       }
     }
@@ -1518,10 +1514,6 @@ public class BaseProduct extends BaseEntry
             continue;
 
           String job = ((Name)person.get(1)).get();
-
-          if(job.indexOf('\\') >= 0)
-            job = ASCIIDocument.simpleConvert(job);
-
           ioJobs.add(job);
         }
     }
@@ -2582,9 +2574,6 @@ public class BaseProduct extends BaseEntry
       {
         String name = ((Text)person.get(0)).get();
 
-        if(name.indexOf('\\') >= 0)
-          name = ASCIIDocument.simpleConvert(name);
-
         if(!name.equalsIgnoreCase(inPerson))
           continue;
       }
@@ -2623,10 +2612,6 @@ public class BaseProduct extends BaseEntry
       }
 
       String name = ((Text)person.get(0)).get();
-
-      if(name.indexOf('\\') >= 0)
-        name = ASCIIDocument.simpleConvert(name);
-
       ioStore.add(name);
     }
   }

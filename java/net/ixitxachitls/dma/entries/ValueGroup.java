@@ -49,7 +49,6 @@ import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.output.commands.BaseCommand;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
@@ -1267,65 +1266,6 @@ public abstract class ValueGroup implements Changeable
   /** The testing class. */
   public static class Test extends net.ixitxachitls.util.test.TestCase
   {
-    //------------------------------ extract -------------------------------
-
-    /**
-     * Extract a specific (sub)command from the given command.
-     *
-     * @param       inCommand the command to extract from
-     * @param       inIndexes the list of indexes to return; positive values
-     *              denote normal arguments, numbered from 1, negative argument
-     *              denote optional arguments, numbered from -1; 0 will
-     *              return the name of the command itself
-     *
-     * @return      a string representation of the desired command or argument
-     *
-     */
-    protected String extract(Object inCommand, int ... inIndexes)
-    {
-      return extract(inCommand, inIndexes, 0);
-    }
-
-    //......................................................................
-    //------------------------------ extract -------------------------------
-
-    /**
-     * Extract a specific (sub)command from the given command. This is the
-     * internal implementation for the recursion.
-     *
-     * @param       inCommand the command to extract from
-     * @param       inIndexes the list of indexes to return; positive values
-     *              denote normal arguments, numbered from 1, negative argument
-     *              denote optional arguments, numbered from -1; 0 will
-     *              return the name of the command itself
-     * @param       inStart the index to the inIndexes to start with.
-     *
-     * @return      a string representation of the desired command or argument
-     *
-     */
-    protected String extract(Object inCommand, int []inIndexes, int inStart)
-    {
-      if(inStart >= inIndexes.length)
-        return inCommand.toString();
-
-      int index = inIndexes[inStart];
-
-      if(index == 0)
-        if(inCommand instanceof BaseCommand)
-          return ((BaseCommand)inCommand).getName();
-        else
-          return "expected command, found '" + inCommand + "'";
-
-      if(index > 0)
-        return extract(((BaseCommand)inCommand).getArguments().get(index - 1),
-                       inIndexes, inStart + 1);
-
-      return extract(((BaseCommand)inCommand).getOptionals().get(-index - 1),
-                     inIndexes, inStart + 1);
-    }
-
-    //......................................................................
-
     /** A simple implementation of a value group for testing. */
     public static class TestGroup extends AbstractEntry
     {
