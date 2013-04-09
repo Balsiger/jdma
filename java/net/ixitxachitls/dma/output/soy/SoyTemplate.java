@@ -33,8 +33,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
@@ -89,6 +89,7 @@ import net.ixitxachitls.util.resources.Resource;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class SoyTemplate
 {
   //--------------------------------------------------------- constructor(s)
@@ -102,7 +103,7 @@ public class SoyTemplate
    *                      path and .soy extensions)
    *
    */
-  public SoyTemplate(@Nonnull String ... inFiles)
+  public SoyTemplate(String ... inFiles)
   {
     m_files.addAll(Arrays.asList(inFiles));
   }
@@ -127,7 +128,7 @@ public class SoyTemplate
     }
 
     @Override
-    public SoyData compute(@Nonnull List<SoyData> inArgs)
+    public SoyData compute(List<SoyData> inArgs)
     {
       AbstractEntry.EntryKey<? extends AbstractEntry> key =
         AbstractEntry.EntryKey.fromString(inArgs.get(0).toString());
@@ -158,7 +159,7 @@ public class SoyTemplate
   public static class IntegerFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "integer";
     }
@@ -170,7 +171,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return IntegerData.forValue(Integer.valueOf(inArgs.get(0).toString()));
     }
@@ -183,7 +184,7 @@ public class SoyTemplate
   public static class DefFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "def";
     }
@@ -195,7 +196,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       if(inArgs.get(0) == null
          || inArgs.get(0) instanceof SoyAbstract.Undefined)
@@ -212,7 +213,7 @@ public class SoyTemplate
   public static class LengthFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "len";
     }
@@ -224,7 +225,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       if(inArgs.get(0) instanceof SoyListData)
         return IntegerData.forValue(((SoyListData)inArgs.get(0)).length());
@@ -245,7 +246,7 @@ public class SoyTemplate
   public static class CamelFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "camel";
     }
@@ -257,7 +258,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return StringData.forValue
         (Encodings.toWordUpperCase(inArgs.get(0).toString()));
@@ -271,7 +272,7 @@ public class SoyTemplate
   public static class CommandsFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "commands";
     }
@@ -283,7 +284,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return StringData.forValue
         (COMMAND_RENDERER.renderCommands(inArgs.get(0).toString()));
@@ -297,7 +298,7 @@ public class SoyTemplate
   public static class ReferenceFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "reference";
     }
@@ -309,7 +310,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       BaseEntry entry = (BaseEntry)DMADataFactory.get().getEntry
         (AbstractEntry.EntryKey.fromString(inArgs.get(0).toString()));
@@ -338,7 +339,7 @@ public class SoyTemplate
   public static class FormatNumberFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "formatNumber";
     }
@@ -350,7 +351,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       if(inArgs.get(0) instanceof IntegerData)
         return StringData.forValue
@@ -368,7 +369,7 @@ public class SoyTemplate
   public static class IsListFunction implements SoyTofuFunction
   {
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return "isList";
     }
@@ -380,7 +381,7 @@ public class SoyTemplate
     }
 
     @Override
-    public @Nonnull SoyData computeForTofu(@Nonnull List<SoyData> inArgs)
+    public SoyData computeForTofu(List<SoyData> inArgs)
     {
       return BooleanData.forValue(inArgs.get(0) instanceof SoyListData);
     }
@@ -415,7 +416,7 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    public String apply(SoyData inValue, List<SoyData> inArgs)
     {
       return NumberFormat.getIntegerInstance(new Locale("de", "ch"))
         .format(Integer.valueOf(inValue.toString()));
@@ -450,7 +451,7 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    public String apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
         return ((SoyValue)inValue).print();
@@ -490,7 +491,7 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    public String apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
         return ((SoyValue)inValue).raw();
@@ -527,7 +528,7 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    public String apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
         return COMMAND_RENDERER.renderCommands(((SoyValue)inValue).raw());
@@ -578,7 +579,7 @@ public class SoyTemplate
     }
 
     @Override
-    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    public String apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
         return COMMAND_RENDERER.renderCommands
@@ -615,7 +616,7 @@ public class SoyTemplate
     }
 
     @Override
-    public String apply(@Nonnull SoyData inValue, @Nonnull List<SoyData> inArgs)
+    public String apply(SoyData inValue, List<SoyData> inArgs)
     {
       return inValue.toString().replace(" ", "-");
     }
@@ -659,7 +660,7 @@ public class SoyTemplate
   //-------------------------------------------------------------- variables
 
   /** The soy files for the template. */
-  private @Nonnull List<String> m_files = new ArrayList<String>();
+  private List<String> m_files = new ArrayList<String>();
 
   /** The compile template file set. */
   private @Nullable SoyTofu m_compiled = null;
@@ -679,7 +680,7 @@ public class SoyTemplate
   private Injector m_injector = createInjector();
 
   /** The command renderer for rendering values. */
-  public static final @Nonnull SoyRenderer COMMAND_RENDERER =
+  public static final SoyRenderer COMMAND_RENDERER =
     new SoyRenderer(new SoyTemplate("commands", "value", "page"));
 
 
@@ -700,10 +701,10 @@ public class SoyTemplate
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName,
-                                @Nullable Map<String, Object> inData,
-                                @Nullable Map<String, Object> inInjected,
-                                @Nullable Set<String> inDelegates)
+  public String render(String inName,
+                       @Nullable Map<String, Object> inData,
+                       @Nullable Map<String, Object> inInjected,
+                       @Nullable Set<String> inDelegates)
   {
     SoyMapData data = null;
     if(inData != null)
@@ -730,10 +731,10 @@ public class SoyTemplate
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName,
-                                @Nullable SoyMapData inData,
-                                @Nullable SoyMapData inInjected,
-                                @Nullable Set<String> inDelegates)
+  public String render(String inName,
+                       @Nullable SoyMapData inData,
+                       @Nullable SoyMapData inInjected,
+                       @Nullable Set<String> inDelegates)
   {
     compile();
 
@@ -770,7 +771,7 @@ public class SoyTemplate
    * @return      a string representation
    *
    */
-  public @Nonnull String toString()
+  public String toString()
   {
     return "files: " + m_files;
   }
@@ -885,7 +886,7 @@ public class SoyTemplate
    * @return   the converted map
    *
    */
-  public static @Nonnull Map<String, Object> map(@Nonnull Object ... inData)
+  public static Map<String, Object> map(Object ... inData)
   {
     assert inData.length % 2 == 0 : "invalid number of arguments";
 

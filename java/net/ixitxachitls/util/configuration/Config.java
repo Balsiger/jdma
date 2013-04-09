@@ -31,8 +31,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 //..........................................................................
@@ -61,6 +61,7 @@ import javax.annotation.concurrent.ThreadSafe;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public final class Config
 {
   //--------------------------------------------------------- constructor(s)
@@ -129,8 +130,8 @@ public final class Config
    *              none was found (guaranteed non null)
    *
    */
-  public static synchronized @Nonnull String get(@Nonnull String inKey,
-                                                  @Nullable String inDefault)
+  public static synchronized String get(String inKey,
+                                        @Nullable String inDefault)
   {
     String value = System.getProperty(inKey);
     if(value != null)
@@ -152,7 +153,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static int get(@Nonnull String inKey, int inDefault)
+  public static int get(String inKey, int inDefault)
   {
     return Integer.parseInt(get(inKey + s_int, "" + inDefault));
   }
@@ -169,7 +170,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static long get(@Nonnull String inKey, long inDefault)
+  public static long get(String inKey, long inDefault)
   {
     return Long.parseLong(get(inKey + s_long, "" + inDefault));
   }
@@ -186,7 +187,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static float get(@Nonnull String inKey, float inDefault)
+  public static float get(String inKey, float inDefault)
   {
     return Float.parseFloat(get(inKey + s_float, "" + inDefault));
   }
@@ -203,7 +204,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static double get(@Nonnull String inKey, double inDefault)
+  public static double get(String inKey, double inDefault)
   {
     return Double.parseDouble(get(inKey + s_double, "" + inDefault));
   }
@@ -220,7 +221,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static char get(@Nonnull String inKey, char inDefault)
+  public static char get(String inKey, char inDefault)
   {
     return get(inKey + s_char, "" + inDefault).charAt(0);
   }
@@ -237,7 +238,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static boolean get(@Nonnull String inKey, boolean inDefault)
+  public static boolean get(String inKey, boolean inDefault)
   {
     return Boolean.valueOf(get(inKey + s_boolean, "" + inDefault))
       .booleanValue();
@@ -255,7 +256,7 @@ public final class Config
    * @return      the requested string list
    *
    */
-  public static String []get(@Nonnull String inKey, @Nonnull String []inDefault)
+  public static String []get(String inKey, String []inDefault)
   {
     // if it does not yet exists, simply store and return it
     if(System.getProperty(inKey + s_list + "." + 0) == null)
@@ -285,8 +286,7 @@ public final class Config
    * @return      the requested integer array
    *
    */
-  public static @Nonnull int []get(@Nonnull String inKey,
-                                   @Nonnull int []inDefault)
+  public static int []get(String inKey, int []inDefault)
   {
     String []defaults = new String[inDefault.length];
     for(int i = 0; i < inDefault.length; i++)
@@ -314,8 +314,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static @Nonnull boolean []get(@Nonnull String inKey,
-                                       @Nonnull boolean []inDefault)
+  public static boolean []get(String inKey, boolean []inDefault)
   {
     String []defaults = new String[inDefault.length];
 
@@ -344,8 +343,7 @@ public final class Config
    * @return      the requested string
    *
    */
-  public static @Nonnull String [][]get(@Nonnull String inKey,
-                                        @Nonnull String [][]inDefault)
+  public static String [][]get(String inKey, String [][]inDefault)
   {
     // if it does not yet exists, simply store and return it
     if(System.getProperty(inKey + s_list + ".0.0") == null)
@@ -388,8 +386,7 @@ public final class Config
    * @return      the requested string, with patterns replaced
    *
    */
-  public static @Nonnull String getPattern(@Nonnull String inKey,
-                                           @Nullable String inDefault)
+  public static String getPattern(String inKey, @Nullable String inDefault)
   {
     String pattern = get(inKey, inDefault);
 
@@ -437,7 +434,7 @@ public final class Config
    * @param       inValue   the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, @Nonnull String inValue)
+  public static void set(String inKey, String inValue)
   {
     s_names.add(inKey);
     System.setProperty(inKey, inValue);
@@ -453,7 +450,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, int inValue)
+  public static void set(String inKey, int inValue)
   {
     set(inKey + s_int, "" + inValue);
   }
@@ -468,7 +465,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, long inValue)
+  public static void set(String inKey, long inValue)
   {
     set(inKey + s_long, "" + inValue);
   }
@@ -483,7 +480,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, float inValue)
+  public static void set(String inKey, float inValue)
   {
     set(inKey + s_float, "" + inValue);
   }
@@ -498,7 +495,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, double inValue)
+  public static void set(String inKey, double inValue)
   {
     set(inKey + s_double, "" + inValue);
   }
@@ -513,7 +510,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, char inValue)
+  public static void set(String inKey, char inValue)
   {
     set(inKey + s_char, "" + inValue);
   }
@@ -528,7 +525,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, boolean inValue)
+  public static void set(String inKey, boolean inValue)
   {
     set(inKey + s_boolean, "" + inValue);
   }
@@ -543,7 +540,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, @Nonnull String []inValue)
+  public static void set(String inKey, String []inValue)
   {
     // remove old values
     for(int i = 0; System.getProperty(inKey + s_list + "." + i) != null; i++)
@@ -563,7 +560,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, @Nonnull int []inValue)
+  public static void set(String inKey, int []inValue)
   {
     String []values = new String [inValue.length];
 
@@ -583,7 +580,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, @Nonnull boolean []inValue)
+  public static void set(String inKey, boolean []inValue)
   {
     String []values = new String [inValue.length];
 
@@ -603,7 +600,7 @@ public final class Config
    * @param       inValue the new value to set to
    *
    */
-  public static void set(@Nonnull String inKey, @Nonnull String [][]inValue)
+  public static void set(String inKey, String [][]inValue)
   {
     // clear existing values
     for(int i = 0; System.getProperty(inKey + s_list + "." + i + ".0") != null;

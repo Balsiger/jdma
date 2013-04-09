@@ -25,7 +25,7 @@ package net.ixitxachitls.util;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -46,6 +46,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface Identificator<T>
 {
   //-------------------------------------------------------------- accessors
@@ -60,7 +61,7 @@ public interface Identificator<T>
     * @return      the list of ids
     *
     */
-  public @Nonnull List<String> id(@Nonnull T inEntry);
+  public List<String> id(T inEntry);
 
   //........................................................................
 

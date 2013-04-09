@@ -28,7 +28,7 @@ import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
@@ -64,6 +64,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public final class ServerUtils
 {
   //--------------------------------------------------------- constructor(s)
@@ -103,8 +104,8 @@ public final class ServerUtils
    *              containing the parameter values.
    *
    */
-  public static @Nonnull Multimap<String, String>
-    extractParams(@Nonnull HttpServletRequest inRequest)
+  public static Multimap<String, String> extractParams
+    (HttpServletRequest inRequest)
   {
     Multimap<String, String> values = HashMultimap.create();
 
@@ -264,13 +265,13 @@ public final class ServerUtils
        * @param inContents The contents the stream will return.
        *
        */
-      public MockServletInputStream(@Nonnull String inContents)
+      public MockServletInputStream(String inContents)
       {
         m_contents = new java.io.ByteArrayInputStream(inContents.getBytes());
       }
 
       /** The contents of the stream. */
-      private @Nonnull java.io.ByteArrayInputStream m_contents;
+      private java.io.ByteArrayInputStream m_contents;
 
       /**
        * Read a character from the stream.
@@ -296,7 +297,7 @@ public final class ServerUtils
       }
 
       /** The text printed. */
-      private @Nonnull java.io.ByteArrayOutputStream m_contents =
+      private java.io.ByteArrayOutputStream m_contents =
         new java.io.ByteArrayOutputStream();
 
       /**

@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
@@ -48,6 +48,7 @@ import net.ixitxachitls.dma.output.soy.SoyRenderer;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class StaticPageServlet extends SoyServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -87,8 +88,8 @@ public class StaticPageServlet extends SoyServlet
    *           or maps or lists)
    *
    */
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     String path = inRequest.getRequestURI();
     Map<String, Object> map = super.collectData(inRequest, inRenderer);

@@ -26,7 +26,7 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -49,6 +49,7 @@ import com.google.common.base.Joiner;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public final class Entries
 {
   //--------------------------------------------------------- constructor(s)
@@ -96,7 +97,7 @@ public final class Entries
    * @return    a list of all the entries
    *
    */
-  public static List<String> names(@Nonnull Iterable<ValueGroup> inEntries)
+  public static List<String> names(Iterable<ValueGroup> inEntries)
   {
     List<String> names = new ArrayList<String>();
     for(ValueGroup entry : inEntries)
@@ -117,7 +118,7 @@ public final class Entries
    * @return      a comma separated string with all the names
    *
    */
-  public static String namesString(@Nonnull Iterable<ValueGroup> inEntries)
+  public static String namesString(Iterable<ValueGroup> inEntries)
   {
     return s_commaJoiner.join(names(inEntries));
   }

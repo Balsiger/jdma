@@ -25,7 +25,7 @@ package net.ixitxachitls.output.html;
 
 import java.io.PrintWriter;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import net.ixitxachitls.util.logging.Log;
@@ -49,6 +49,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class HTMLBodyWriter extends HTMLWriter
 {
   //--------------------------------------------------------- constructor(s)
@@ -61,7 +62,7 @@ public class HTMLBodyWriter extends HTMLWriter
    * @param     inWriter the writer to output to
    *
    */
-  public HTMLBodyWriter(@Nonnull PrintWriter inWriter)
+  public HTMLBodyWriter(PrintWriter inWriter)
   {
     super(inWriter);
 

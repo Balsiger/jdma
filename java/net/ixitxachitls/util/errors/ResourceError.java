@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.util.errors;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 //..........................................................................
@@ -45,6 +45,7 @@ import javax.annotation.concurrent.ThreadSafe;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public class ResourceError extends BaseError
 {
   //--------------------------------------------------------- constructor(s)
@@ -58,7 +59,7 @@ public class ResourceError extends BaseError
    * @param       inFile the name of the resource with the problem
    *
    */
-  public ResourceError(@Nonnull String inID, @Nonnull String inFile)
+  public ResourceError(String inID, String inFile)
   {
     this(inID, inFile, null);
   }
@@ -74,12 +75,12 @@ public class ResourceError extends BaseError
    * @param       inException the exception that occurred
    *
    */
-  public ResourceError(@Nonnull String inID, @Nonnull String inFile,
+  public ResourceError(String inID, String inFile,
                        @Nullable Exception inException)
   {
     super(inID, "resource file " + inFile, inException);
 
-    m_file = inFile;
+    // m_file = inFile;
   }
 
   //........................................................................
@@ -89,7 +90,7 @@ public class ResourceError extends BaseError
   //-------------------------------------------------------------- variables
 
   /** The resource with the error. */
-  private @Nonnull String m_file;
+  // private String m_file;
 
   //........................................................................
 
@@ -106,7 +107,7 @@ public class ResourceError extends BaseError
    *
    */
   @Override
-public boolean equals(Object inOther)
+  public boolean equals(Object inOther)
   {
     return super.equals(inOther);
   }

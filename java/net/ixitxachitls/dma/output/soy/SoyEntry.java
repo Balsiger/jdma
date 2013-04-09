@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.template.soy.data.SoyData;
@@ -62,6 +62,7 @@ import net.ixitxachitls.util.errors.BaseError;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class SoyEntry extends SoyAbstract
 {
   //--------------------------------------------------------- constructor(s)
@@ -74,7 +75,7 @@ public class SoyEntry extends SoyAbstract
    * @param       inEntry    the entry with the values
    *
    */
-  public SoyEntry(@Nonnull AbstractEntry inEntry)
+  public SoyEntry(AbstractEntry inEntry)
   {
     super(inEntry.getName(), inEntry);
   }
@@ -99,7 +100,7 @@ public class SoyEntry extends SoyAbstract
    * @return the value found or null if not found
    */
   @Override
-  public @Nullable SoyData getSingle(@Nonnull String inName)
+  public @Nullable SoyData getSingle(String inName)
   {
     if(inName.startsWith("extension_"))
       return BooleanData.forValue(m_entry.hasExtension(inName.substring(10)));
@@ -233,7 +234,7 @@ public class SoyEntry extends SoyAbstract
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return m_entry.getName() + " (soy)";
   }

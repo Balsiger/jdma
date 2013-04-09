@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.entries;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -57,6 +57,7 @@ import net.ixitxachitls.input.ParseReader;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseSkill extends BaseEntry
 {
   //----------------------------------------------------------------- nested
@@ -82,14 +83,14 @@ public class BaseSkill extends BaseEntry
     ANY_ONE("Any One");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private Subtype(@Nonnull String inName)
+    private Subtype(String inName)
     {
       m_name = constant("skill.subtype", inName);
     }
@@ -99,7 +100,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -109,7 +110,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -131,14 +132,14 @@ public class BaseSkill extends BaseEntry
     SUBTYPE_ONLY("Subtype Only");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName       the name of the value
      *
      */
-    private Restrictions(@Nonnull String inName)
+    private Restrictions(String inName)
     {
       m_name = constant("skill.restrictions", inName);
     }
@@ -148,7 +149,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -158,7 +159,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -225,7 +226,7 @@ public class BaseSkill extends BaseEntry
    * @param       inName the name of the base item
    *
    */
-  public BaseSkill(@Nonnull String inName)
+  public BaseSkill(String inName)
   {
     super(inName, TYPE);
   }

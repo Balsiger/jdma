@@ -29,8 +29,8 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -70,6 +70,7 @@ import net.ixitxachitls.output.html.JsonWriter;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Autocomplete extends JSONServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -123,9 +124,9 @@ public class Autocomplete extends JSONServlet
    */
   @Override
   @SuppressWarnings("unchecked") // need to cast from cache
-  protected synchronized void writeJson(@Nonnull DMARequest inRequest,
-                                        @Nonnull String inPath,
-                                        @Nonnull JsonWriter inWriter)
+  protected synchronized void writeJson(DMARequest inRequest,
+                                        String inPath,
+                                        JsonWriter inWriter)
   {
     // compute the index involved
     String []parts = inPath.replace("%20", " ").split("/");
@@ -176,7 +177,7 @@ public class Autocomplete extends JSONServlet
    * @return   true if the values match, false if not
    *
    */
-  private boolean match(@Nonnull String inName, @Nullable String inAuto)
+  private boolean match(String inName, @Nullable String inAuto)
   {
     if(inAuto == null || inAuto.isEmpty())
       return true;
@@ -205,7 +206,7 @@ public class Autocomplete extends JSONServlet
    * @return   the normalized name
    *
    */
-  private @Nonnull String normalize(@Nonnull String inName)
+  private String normalize(String inName)
   {
     return inName.replaceAll(" +", " ");
   }
@@ -221,9 +222,8 @@ public class Autocomplete extends JSONServlet
    * @param       inField the field with the autocomplete values
    *
    */
-  public @Nonnull void ensureCached
-    (@Nonnull AbstractType<? extends AbstractEntry> inType,
-     @Nonnull String inField)
+  public void ensureCached(AbstractType<? extends AbstractEntry> inType,
+                           String inField)
   {
     // Check if already cached.
     SortedSet<String> value = cached(inType.toString(), inField);
@@ -255,8 +255,7 @@ public class Autocomplete extends JSONServlet
    * @param       inKeys   the key parts to store with
    *
    */
-  public void cache(@Nonnull SortedSet<String> inValues,
-                    @Nonnull String ... inKeys)
+  public void cache(SortedSet<String> inValues, String ... inKeys)
   {
     s_cache.put(s_keyJoiner.join(inKeys), inValues);
   }
@@ -272,7 +271,7 @@ public class Autocomplete extends JSONServlet
    * @return  the cached value or null if not cached
    *
    */
-  public @Nullable SortedSet<String> cached(@Nonnull String ... inKeys)
+  public @Nullable SortedSet<String> cached(String ... inKeys)
   {
     return s_cache.get(s_keyJoiner.join(inKeys));
   }
@@ -290,9 +289,8 @@ public class Autocomplete extends JSONServlet
    * @return   a sorted set with the person names
    *
    */
-  private @Nonnull SortedSet<String> extractPersonsAndJobs
-    (@Nonnull SortedSet<String> inTexts, @Nonnull String inType,
-     @Nonnull String inField)
+  private SortedSet<String> extractPersonsAndJobs(SortedSet<String> inTexts,
+                                                  String inType, String inField)
   {
     SortedSet<String> persons = new TreeSet<String>();
     SortedSet<String> globalJobs = new TreeSet<String>();
@@ -369,9 +367,9 @@ public class Autocomplete extends JSONServlet
       Autocomplete servlet = new Autocomplete() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected void writeJson(@Nonnull DMARequest inRequest,
-                                   @Nonnull String inPath,
-                                   @Nonnull JsonWriter inWriter)
+          protected void writeJson(DMARequest inRequest,
+                                   String inPath,
+                                   JsonWriter inWriter)
           {
             inWriter.add(inPath);
           }

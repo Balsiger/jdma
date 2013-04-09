@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -54,6 +54,7 @@ import net.ixitxachitls.dma.values.Text;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Product extends Entry<BaseProduct>
 {
   //----------------------------------------------------------------- nested
@@ -73,7 +74,7 @@ public class Product extends Entry<BaseProduct>
     DESIRED3("desired 3");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /**
      * Create the name.
@@ -81,7 +82,7 @@ public class Product extends Entry<BaseProduct>
      * @param inName     the name of the value
      *
      */
-    private Status(@Nonnull String inName)
+    private Status(String inName)
     {
       m_name = constant("product.status", inName);
     }
@@ -92,7 +93,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -103,7 +104,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -133,7 +134,7 @@ public class Product extends Entry<BaseProduct>
     none("none");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /**
      * Create the name.
@@ -141,7 +142,7 @@ public class Product extends Entry<BaseProduct>
      * @param inName     the name of the value
      *
      */
-    private Condition(@Nonnull String inName)
+    private Condition(String inName)
     {
       m_name = constant("product.condition", inName);
     }
@@ -152,7 +153,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -163,7 +164,7 @@ public class Product extends Entry<BaseProduct>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -195,7 +196,7 @@ public class Product extends Entry<BaseProduct>
    * @param       inName the name of the base product
    *
    */
-  public Product(@Nonnull String inName)
+  public Product(String inName)
   {
     super(inName, TYPE, BASE_TYPE);
   }
@@ -234,21 +235,21 @@ public class Product extends Entry<BaseProduct>
 
   /** The edition of the copy. */
   @Key("edition")
-  protected @Nonnull Name m_edition = new Name();
+  protected Name m_edition = new Name();
 
   //........................................................................
   //----- printing ---------------------------------------------------------
 
   /** The printing of the copy. */
   @Key("printing")
-  protected @Nonnull Name m_printing = new Name();
+  protected Name m_printing = new Name();
 
   //........................................................................
   //----- owner ------------------------------------------------------------
 
   /** The owner of the copy. */
   @Key("owner")
-  protected @Nonnull Name m_owner = new Name();
+  protected Name m_owner = new Name();
 
   //........................................................................
   //----- status -----------------------------------------------------------
@@ -290,7 +291,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
-  public @Nonnull String getPath()
+  public String getPath()
   {
     return "/" + BaseCharacter.TYPE.getLink() + "/" + m_owner.get() + "/"
       + getType().getLink() + "/" + getName();
@@ -306,7 +307,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
-  public @Nonnull String [] getNavigation()
+  public String [] getNavigation()
   {
     return new String [] {
       BaseCharacter.TYPE.getLink(),
@@ -332,7 +333,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
-  public @Nonnull String [] getListNavigation()
+  public String [] getListNavigation()
   {
     return new String [] {
       BaseCharacter.TYPE.getLink(),
@@ -355,7 +356,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
-  public @Nonnull String getEditType()
+  public String getEditType()
   {
     return "/user/" + m_owner.get() + "/" + super.getEditType();
   }
@@ -737,7 +738,7 @@ public class Product extends Entry<BaseProduct>
    * @return      the requested title or null if undefined
    *
    */
-  public @Nonnull String getFullTitle()
+  public String getFullTitle()
   {
     for(BaseEntry base : getBaseEntries())
     {
@@ -816,7 +817,7 @@ public class Product extends Entry<BaseProduct>
    */
   @Override
   @SuppressWarnings("unchecked")
-  public @Nonnull EntryKey<Product> getKey()
+  public EntryKey<Product> getKey()
   {
     return new EntryKey<Product>
       (getName(), Product.TYPE,
@@ -836,7 +837,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   // @Override
-  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // public @Nullable ValueHandle computeValue(String inKey,
   // boolean inDM)
   // {
   //   if("name".equals(inKey) && m_baseEntries != null
@@ -884,7 +885,7 @@ public class Product extends Entry<BaseProduct>
    * @return   the compute value
    *
    */
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("navigation".equals(inKey))
     {
@@ -920,7 +921,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
-  public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
+  public void updateKey(EntryKey<? extends AbstractEntry> inKey)
   {
     EntryKey<?> parent = inKey.getParent();
     if(parent == null)
@@ -1001,7 +1002,7 @@ public class Product extends Entry<BaseProduct>
    *
    */
   @Override
-  public void setOwner(@Nonnull AbstractEntry inOwner)
+  public void setOwner(AbstractEntry inOwner)
   {
     if(inOwner instanceof BaseCharacter)
       setOwner((BaseCharacter)inOwner);
@@ -1018,7 +1019,7 @@ public class Product extends Entry<BaseProduct>
    * @return      true if set, false if not
    *
    */
-  public boolean setOwner(@Nonnull BaseCharacter inOwner)
+  public boolean setOwner(BaseCharacter inOwner)
   {
     m_owner = m_owner.as(inOwner.getName());
     return true;

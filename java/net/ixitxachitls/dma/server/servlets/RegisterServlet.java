@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.UserService;
@@ -52,6 +52,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class RegisterServlet extends ActionServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -94,8 +95,8 @@ public class RegisterServlet extends ActionServlet
    *
    */
   @Override
-protected @Nonnull String doAction(@Nonnull DMARequest inRequest,
-                                     @Nonnull HttpServletResponse inResponse)
+  protected String doAction(DMARequest inRequest,
+                            HttpServletResponse inResponse)
   {
     String username = inRequest.getParam("username");
     String realname = inRequest.getParam("realname");

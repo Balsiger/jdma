@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.server.servlets;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +54,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class ActionServlet extends DMAServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -93,8 +94,8 @@ public abstract class ActionServlet extends DMAServlet
    *                                happens
    */
   @Override
-  public void doGet(@Nonnull HttpServletRequest inRequest,
-                    @Nonnull HttpServletResponse inResponse)
+  public void doGet(HttpServletRequest inRequest,
+                    HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     Log.info("Denying " + inRequest.getMethod() + " request for "
@@ -122,9 +123,8 @@ public abstract class ActionServlet extends DMAServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle
-    (@Nonnull DMARequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+  protected @Nullable SpecialResult handle(DMARequest inRequest,
+                                           HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     // set the content type
@@ -168,8 +168,8 @@ public abstract class ActionServlet extends DMAServlet
     * @param       inMessage  the message to send back
     *
     */
-  protected void setMessage(@Nonnull HttpServletResponse inResponse,
-                            @Nonnull String inMessage)
+  protected void setMessage(HttpServletResponse inResponse,
+                            String inMessage)
   {
     Cookie cookie = new Cookie("INFO", inMessage);
     cookie.setPath("/");
@@ -191,8 +191,8 @@ public abstract class ActionServlet extends DMAServlet
    * @return      the javascript code to send back to the client
    *
    */
-  protected abstract String doAction(@Nonnull DMARequest inRequest,
-                                     @Nonnull HttpServletResponse inResponse);
+  protected abstract String doAction(DMARequest inRequest,
+                                     HttpServletResponse inResponse);
 
   //........................................................................
 
@@ -210,7 +210,7 @@ public abstract class ActionServlet extends DMAServlet
    * @return      javascript to send back to the client for failure
    *
    */
-  protected @Nonnull String fail(@Nonnull String inMessage)
+  protected String fail(String inMessage)
   {
     Log.warning(inMessage);
 
@@ -249,8 +249,8 @@ public abstract class ActionServlet extends DMAServlet
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected String doAction(@Nonnull DMARequest inRequest,
-                                    @Nonnull HttpServletResponse inResponse)
+          protected String doAction(DMARequest inRequest,
+                                    HttpServletResponse inResponse)
           {
             return "done";
           }
@@ -288,8 +288,8 @@ public abstract class ActionServlet extends DMAServlet
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected String doAction(@Nonnull DMARequest inRequest,
-                                    @Nonnull HttpServletResponse inResponse)
+          protected String doAction(DMARequest inRequest,
+                                    HttpServletResponse inResponse)
           {
             return "done";
           }
@@ -318,8 +318,8 @@ public abstract class ActionServlet extends DMAServlet
       ActionServlet servlet = new ActionServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected String doAction(@Nonnull DMARequest inRequest,
-                                    @Nonnull HttpServletResponse inResponse)
+          protected String doAction(DMARequest inRequest,
+                                    HttpServletResponse inResponse)
           {
             return "done";
           }
@@ -341,8 +341,8 @@ public abstract class ActionServlet extends DMAServlet
         {
           private static final long serialVersionUID = 1L;
           @Override
-          protected String doAction(@Nonnull DMARequest inRequest,
-                                    @Nonnull HttpServletResponse inResponse)
+          protected String doAction(DMARequest inRequest,
+                                    HttpServletResponse inResponse)
           {
             return "done";
           }

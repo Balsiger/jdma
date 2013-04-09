@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -44,6 +44,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class LongFormattedText extends FormattedText
 {
   //--------------------------------------------------------- constructor(s)
@@ -68,7 +69,7 @@ public class LongFormattedText extends FormattedText
    * @param       inText the text to store
    *
    */
-  public LongFormattedText(@Nonnull String inText)
+  public LongFormattedText(String inText)
   {
     super(inText);
   }
@@ -85,7 +86,7 @@ public class LongFormattedText extends FormattedText
    *
    */
   @Override
-  public @Nonnull LongFormattedText create()
+  public LongFormattedText create()
   {
     return (LongFormattedText)super.create(new LongFormattedText());
   }

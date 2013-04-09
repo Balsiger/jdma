@@ -31,7 +31,7 @@ import java.util.SortedSet;
 // import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 // import javax.servlet.http.HttpServletResponse;
 // import javax.servlet.http.HttpServletRequest;
 // import javax.servlet.http.HttpServletResponse;
@@ -63,6 +63,7 @@ import net.ixitxachitls.dma.output.soy.SoyRenderer;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class MainPageServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -125,8 +126,8 @@ public class MainPageServlet extends PageServlet
    *
    */
   @Override
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 

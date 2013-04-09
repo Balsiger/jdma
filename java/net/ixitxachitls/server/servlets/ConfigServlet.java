@@ -26,8 +26,8 @@ package net.ixitxachitls.server.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +52,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class ConfigServlet extends BaseServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -94,9 +95,8 @@ public class ConfigServlet extends BaseServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle
-    (@Nonnull HttpServletRequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+  protected @Nullable SpecialResult handle(HttpServletRequest inRequest,
+                                           HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     // Set the output header.

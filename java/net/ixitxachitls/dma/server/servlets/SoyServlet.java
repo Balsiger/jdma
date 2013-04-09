@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -64,6 +64,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class SoyServlet extends DMAServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -116,7 +117,7 @@ public class SoyServlet extends DMAServlet
    * @return    the name of the template
    *
    */
-  protected @Nonnull String getTemplateName(@Nonnull DMARequest inRequest)
+  protected String getTemplateName(DMARequest inRequest)
   {
     if(inRequest.isBodyOnly())
       return "dma.page.bodyOnly";
@@ -168,9 +169,8 @@ public class SoyServlet extends DMAServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle
-    (@Nonnull DMARequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+  protected @Nullable SpecialResult handle(DMARequest inRequest,
+                                           HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     if(isDev())
@@ -212,8 +212,8 @@ public class SoyServlet extends DMAServlet
    *           or maps or lists)
    *
    */
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     return SoyTemplate.map("oldcontent", "");
   }
@@ -231,8 +231,8 @@ public class SoyServlet extends DMAServlet
    *           or maps or lists)
    *
    */
-  protected @Nonnull Map<String, Object> collectInjectedData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectInjectedData
+    (DMARequest inRequest, SoyRenderer inRenderer)
   {
     BaseCharacter user = inRequest.getUser();
     UserService userService = UserServiceFactory.getUserService();
@@ -264,7 +264,7 @@ public class SoyServlet extends DMAServlet
    * @return   the converted map
    *
    */
-  public @Nonnull Map<String, Object> map(Object ... inData)
+  public Map<String, Object> map(Object ... inData)
   {
     return SoyTemplate.map(inData);
   }

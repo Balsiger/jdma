@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.input;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -43,6 +43,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class ReadException extends Exception
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +68,7 @@ public class ReadException extends Exception
    * @param       inMessage the message describing the exception
    *
    */
-  public ReadException(@Nonnull String inMessage)
+  public ReadException(String inMessage)
   {
     super(inMessage);
   }

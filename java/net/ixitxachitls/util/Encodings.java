@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.util.logging.Log;
 
@@ -51,6 +51,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public final class Encodings
 {
   //--------------------------------------------------------- constructor(s)
@@ -74,10 +75,10 @@ public final class Encodings
 
   /** The special escape characters that cannot be saved in a preferences
    *  file. */
-  private static final @Nonnull String s_escapes = "\t\f\r\n\u001B";
+  private static final String s_escapes = "\t\f\r\n\u001B";
 
   /** Marker used for replacements (should not otherwise appear in the text. */
-  private static final @Nonnull String s_marker  = "@#@";
+  private static final String s_marker  = "@#@";
 
   //........................................................................
 
@@ -94,7 +95,7 @@ public final class Encodings
     * @return      the encoded String
     *
     */
-  public static @Nonnull String encodeEscapes(@Nullable String inString)
+  public static String encodeEscapes(@Nullable String inString)
   {
     if(inString == null)
       return "";
@@ -127,7 +128,7 @@ public final class Encodings
     * @return      the decoded String
     *
     */
-  public static @Nonnull String decodeEscapes(@Nonnull String inString)
+  public static String decodeEscapes(String inString)
   {
     String []parts = inString.split(s_marker);
 
@@ -158,7 +159,7 @@ public final class Encodings
    * @return      the marked text
    *
    */
-  public static @Nonnull String markSpaces(@Nonnull String inText)
+  public static String markSpaces(String inText)
   {
     return inText.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r")
       .replaceAll("\t", "\\\\t").replaceAll("\f", "\\\\f").replaceAll(" ", "_");
@@ -178,8 +179,7 @@ public final class Encodings
    * @return      a list with all parsed tokens
    *
    */
-  public static @Nonnull List<String> tokenize(@Nonnull String inTemplate,
-                                               @Nonnull String inPattern)
+  public static List<String> tokenize(String inTemplate, String inPattern)
   {
     List<String> result = new ArrayList<String>();
 
@@ -222,7 +222,7 @@ public final class Encodings
    * @return      the url encoded text
    *
    */
-  public static @Nonnull String urlEncode(@Nonnull String inText)
+  public static String urlEncode(String inText)
   {
     try
     {
@@ -251,7 +251,7 @@ public final class Encodings
     * @example     String encoded = Encodings.encodeHTMLAttribute("\"");
     *
     */
-  public static @Nonnull String encodeHTMLAttribute(@Nonnull String inText)
+  public static String encodeHTMLAttribute(String inText)
   {
     return inText.replaceAll("\"", "&#34;").replaceAll("\'", "&#39;");
   }
@@ -267,7 +267,7 @@ public final class Encodings
    * @return      the converted text
    *
    */
-  public static @Nonnull String toJSString(@Nonnull String inText)
+  public static String toJSString(String inText)
   {
     //String text = HTMLDocument.simpleConvert(inText);
     // TODO: check if we need HTML conversion here and if this could be moved
@@ -286,7 +286,7 @@ public final class Encodings
    * @return      the converted text
    *
    */
-  public static @Nonnull String toCSSString(@Nonnull String inText)
+  public static String toCSSString(String inText)
   {
     return inText.replaceAll("\\W", "");
   }
@@ -303,7 +303,7 @@ public final class Encodings
     * @return      the converted text
     *
     */
-  public static @Nonnull String toCamelCase(@Nonnull String inText)
+  public static String toCamelCase(String inText)
   {
     if(inText.length() == 0)
       return inText;
@@ -337,7 +337,7 @@ public final class Encodings
     * @return      the converted text
     *
     */
-  public static @Nonnull String toWordUpperCase(@Nonnull String inText)
+  public static String toWordUpperCase(String inText)
   {
     if(inText.length() == 0)
       return inText;
@@ -371,7 +371,7 @@ public final class Encodings
    * @return   the escaped text
    *
    */
-  public static @Nonnull String escapeJS(@Nonnull String inText)
+  public static String escapeJS(String inText)
   {
     return inText.replaceAll("'", "\\\\'").replaceAll("\"", "\\\\\"")
       .replaceAll("\n", "\\\\n");

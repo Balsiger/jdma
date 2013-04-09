@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -64,6 +64,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class Character extends CampaignEntry<BaseCharacter>
                        //implements Storage<Item>
 {
@@ -84,14 +85,14 @@ public class Character extends CampaignEntry<BaseCharacter>
     DEAD("dead");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName     the name of the value
      *
      */
-    private State(@Nonnull String inName)
+    private State(String inName)
     {
       m_name = constant("character.state", inName);
     }
@@ -102,7 +103,7 @@ public class Character extends CampaignEntry<BaseCharacter>
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -113,7 +114,7 @@ public class Character extends CampaignEntry<BaseCharacter>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -145,7 +146,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @param    inName the name of the character to create
    *
    */
-  public Character(@Nonnull String inName)
+  public Character(String inName)
   {
     super(inName, TYPE, TYPE.getBaseType());
   }
@@ -232,7 +233,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      a list with all the items
    *
    */
-  public @Nonnull Map<String, Item> containedItems(boolean inDeep)
+  public Map<String, Item> containedItems(boolean inDeep)
   {
     Map<String, Item> items = new HashMap<String, Item>();
     for(Name name : m_items)
@@ -262,7 +263,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      true if the character possesses the item, false if not
    *
    */
-  public boolean possesses(@Nonnull String inItem)
+  public boolean possesses(String inItem)
   {
     return containedItems(true).containsKey(inItem);
   }
@@ -342,7 +343,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      the gp value of all items
    *
    */
-  public @Nonnull Money totalWealth()
+  public Money totalWealth()
   {
     Money total = new Money(0, 0, 0, 0);
 
@@ -369,7 +370,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    * @return      the lb value of all items
    *
    */
-  public @Nonnull Weight totalWeight()
+  public Weight totalWeight()
   {
     Weight total = new Weight(new Rational(0), null);
 
@@ -447,7 +448,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   // @Override
-  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // public @Nullable ValueHandle computeValue(String inKey,
   // boolean inDM)
   // {
   //   if("wealth".equals(inKey) && inDM)
@@ -654,7 +655,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("icon".equals(inKey))
     {
@@ -696,7 +697,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-  public boolean add(@Nonnull CampaignEntry<?> inEntry)
+  public boolean add(CampaignEntry<?> inEntry)
   {
     String name = inEntry.getName();
     List<Name> names = new ArrayList<Name>();
@@ -726,7 +727,7 @@ public class Character extends CampaignEntry<BaseCharacter>
    *
    */
   @Override
-  public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
+  public void updateKey(EntryKey<? extends AbstractEntry> inKey)
   {
     EntryKey<?> parent = inKey.getParent();
     if(parent == null)

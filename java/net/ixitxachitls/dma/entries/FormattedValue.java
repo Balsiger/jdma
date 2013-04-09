@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.entries;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 //..........................................................................
@@ -45,6 +45,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 @Deprecated // ??
 public class FormattedValue extends ValueHandle<FormattedValue>
 {
@@ -61,7 +62,7 @@ public class FormattedValue extends ValueHandle<FormattedValue>
    *
    */
   public FormattedValue(@Nullable Object inFormatted, @Nullable Object inValue,
-                        @Nonnull String inKey)
+                        String inKey)
   {
     super(inKey);
 
@@ -101,7 +102,7 @@ public class FormattedValue extends ValueHandle<FormattedValue>
    *
    */
   @Override
-  public @Nullable Object value(@Nonnull ValueGroup inEntry, boolean inDM)
+  public @Nullable Object value(ValueGroup inEntry, boolean inDM)
   {
     return m_value;
   }
@@ -116,7 +117,7 @@ public class FormattedValue extends ValueHandle<FormattedValue>
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return m_value + " (" + m_formatted + ")";
   }

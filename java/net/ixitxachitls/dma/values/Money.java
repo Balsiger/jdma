@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.configuration.Config;
@@ -47,6 +47,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Money extends Units<Money>
 {
   //--------------------------------------------------------- constructor(s)
@@ -121,7 +122,7 @@ public class Money extends Units<Money>
   //-------------------------------------------------------------- variables
 
   /** The unit definition. */
-  private static @Nonnull String s_definition =
+  private static String s_definition =
     Config.get("/rules/money.units",
                "1/1 : D&D = 10/1   : pp : "
                + "platinum|platinums|platinum piece|platinum pieces,"
@@ -132,7 +133,7 @@ public class Money extends Units<Money>
                + "copper|coppers|copper piece|copper pieces.");
 
   /** The set definition. */
-  private static @Nonnull Set []s_sets = parseDefinition(s_definition);
+  private static Set []s_sets = parseDefinition(s_definition);
 
   /** The type for the standard coins. */
   public enum Coin
@@ -174,7 +175,7 @@ public class Money extends Units<Money>
   }
 
   /** The grouping. */
-  protected static final @Nonnull Group<Money, Long, String> s_grouping =
+  protected static final Group<Money, Long, String> s_grouping =
     new Group<Money, Long, String>(new Group.Extractor<Money, Long>()
       {
         @Override
@@ -322,8 +323,8 @@ public class Money extends Units<Money>
    *
    */
   // @Override
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
+  // public Map<String, Object> collectData(AbstractEntry inEntry,
+  //                                        SoyRenderer inRenderer)
   // {
   //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
@@ -345,7 +346,7 @@ public class Money extends Units<Money>
    *
    */
   @Override
-  protected @Nonnull String doGroup()
+  protected String doGroup()
   {
     return s_grouping.group(this);
   }
@@ -369,10 +370,10 @@ public class Money extends Units<Money>
    * @return      a new money value
    *
    */
-  public @Nonnull Money asStandard(@Nullable Rational inPlatinum,
-                                   @Nullable Rational inGold,
-                                   @Nullable Rational inSilver,
-                                   @Nullable Rational inCopper)
+  public Money asStandard(@Nullable Rational inPlatinum,
+                          @Nullable Rational inGold,
+                          @Nullable Rational inSilver,
+                          @Nullable Rational inCopper)
   {
     return as(new Rational [] { inPlatinum, inGold, inSilver, inCopper }, 0);
   }
@@ -390,7 +391,7 @@ public class Money extends Units<Money>
    * @return      true if the coins were added, false if it was not possible.
    *
    */
-  public @Nonnull Money add(@Nonnull Coin inCoin, int inValue)
+  public Money add(Coin inCoin, int inValue)
   {
     // nothing defined yet, thus cannot subtract values
     if((m_values == null || m_values[inCoin.index()] == null) && inValue < 0)

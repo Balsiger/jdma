@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -54,6 +54,7 @@ import net.ixitxachitls.dma.values.Rational;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseWeapon extends BaseExtension<BaseItem>
 {
   //----------------------------------------------------------------- nested
@@ -300,7 +301,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
    * @param       inName  the name of the extension
    *
    */
-  public BaseWeapon(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseWeapon(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -333,7 +334,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The damage the weapon inflicts. */
   @Key("damage")
-  protected @Nonnull Damage m_damage = new Damage()
+  protected Damage m_damage = new Damage()
     .withIndexBase(BaseItem.TYPE);
 
   static
@@ -347,7 +348,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The damage the weapon inflicts. */
   @Key("secondary damage")
-  protected @Nonnull Damage m_secondaryDamage = new Damage()
+  protected Damage m_secondaryDamage = new Damage()
     .withIndexBase(BaseItem.TYPE);
 
   //........................................................................
@@ -355,7 +356,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The splash damage the weapon inflicts (if any). */
   @Key("splash")
-  protected @Nonnull Damage m_splash =
+  protected Damage m_splash =
     new Damage()
     .withIndexBase(BaseItem.TYPE)
     .withEditType("name[splash]");
@@ -378,7 +379,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The critical range. */
   @Key("critical")
-  protected @Nonnull Critical m_critical = new Critical()
+  protected Critical m_critical = new Critical()
     .withIndexBase(BaseItem.TYPE)
     .withTemplate("link", "criticals");
 
@@ -393,7 +394,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The style of the weapon (for a medium character). */
   @Key("weapon style")
-  protected @Nonnull EnumSelection<Style> m_style =
+  protected EnumSelection<Style> m_style =
     new EnumSelection<Style>(Style.class).withTemplate("link", "weaponstyles");
 
   static
@@ -406,7 +407,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The proficiency required for the weapon. */
   @Key("proficiency")
-  protected @Nonnull EnumSelection<Proficiency> m_proficiency =
+  protected EnumSelection<Proficiency> m_proficiency =
     new EnumSelection<Proficiency>(Proficiency.class)
     .withTemplate("link", "proficiencies");
 
@@ -438,7 +439,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The range increment, if any, for this weapon. */
   @Key("range increment")
-  protected @Nonnull Distance m_range =
+  protected Distance m_range =
     new Distance()
     .withGrouping(s_rangeGrouping)
     .withTemplate("link", "ranges");
@@ -484,7 +485,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   /** The maximal number of attacks per round. */
   @Key("max attacks")
-  protected @Nonnull Number m_maxAttacks = new Number(1, 10);
+  protected Number m_maxAttacks = new Number(1, 10);
 
   //........................................................................
 
@@ -500,7 +501,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
    * @return      the damage value
    *
    */
-  public @Nonnull Damage getDamage()
+  public Damage getDamage()
   {
     return m_damage;
   }
@@ -514,7 +515,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
    * @return      the secondary damage value
    *
    */
-  public @Nonnull Damage getSecondaryDamage()
+  public Damage getSecondaryDamage()
   {
     return m_secondaryDamage;
   }
@@ -530,7 +531,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
 

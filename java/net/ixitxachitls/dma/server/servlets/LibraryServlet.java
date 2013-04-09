@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -61,6 +61,7 @@ import net.ixitxachitls.util.Files;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class LibraryServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -107,8 +108,8 @@ public class LibraryServlet extends PageServlet
    *
    */
   @Override
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
@@ -132,8 +133,8 @@ public class LibraryServlet extends PageServlet
     for(List<Map<String, Object>> index : indexes.values())
       Collections.sort(index, new Comparator<Map<String, Object>>()
         {
-          public int compare(@Nonnull Map<String, Object> inFirst,
-                             @Nonnull Map<String, Object> inSecond)
+          public int compare(Map<String, Object> inFirst,
+                             Map<String, Object> inSecond)
           {
             return ((String)inFirst.get("title")).compareTo
               ((String)inSecond.get("title"));

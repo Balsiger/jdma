@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -49,6 +49,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class FormattedText extends BaseText<FormattedText>
 {
   //--------------------------------------------------------- constructor(s)
@@ -73,7 +74,7 @@ public class FormattedText extends BaseText<FormattedText>
    * @param       inText the text to store
    *
    */
-  public FormattedText(@Nonnull String inText)
+  public FormattedText(String inText)
   {
     super(inText);
   }
@@ -94,7 +95,7 @@ public class FormattedText extends BaseText<FormattedText>
    *
    */
   @Override
-  public @Nonnull FormattedText create()
+  public FormattedText create()
   {
     return super.create(new FormattedText());
   }
@@ -106,11 +107,11 @@ public class FormattedText extends BaseText<FormattedText>
   //-------------------------------------------------------------- variables
 
   /** The delimiters for ending the text. */
-  protected static final @Nonnull String s_nameDelimiters =
+  protected static final String s_nameDelimiters =
     Config.get("resource:values/name.delimiter", "\":,.;=[]{}|/");
 
   /** The pattern for the delimiters (escaped). */
-  protected static final @Nonnull String s_nameDelimPattern =
+  protected static final String s_nameDelimPattern =
     Config.get("resource:values/name.delimiter.pattern",
                "\":,.;=\\[\\]\\{\\}\\|");
 
@@ -132,7 +133,7 @@ public class FormattedText extends BaseText<FormattedText>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     return s_stringDelimiter
       + m_text.replaceAll("([" + s_stringDelimiter + "])", "\\\\$1")
@@ -159,7 +160,7 @@ public class FormattedText extends BaseText<FormattedText>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     // read and remove escapes for delimiters
     String text = null;

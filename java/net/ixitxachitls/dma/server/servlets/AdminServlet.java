@@ -30,8 +30,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class AdminServlet extends SoyServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -114,7 +115,7 @@ public class AdminServlet extends SoyServlet
    * @return    the name of the template
    *
    */
-  protected @Nonnull String getTemplateName(@Nonnull DMARequest inRequest)
+  protected String getTemplateName(DMARequest inRequest)
   {
     return "dma.admin.page";
   }
@@ -137,8 +138,8 @@ public class AdminServlet extends SoyServlet
    *           or maps or lists)
    *
    */
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
@@ -185,9 +186,8 @@ public class AdminServlet extends SoyServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle
-    (@Nonnull HttpServletRequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+  protected @Nullable SpecialResult handle(HttpServletRequest inRequest,
+                                           HttpServletResponse inResponse)
     throws IOException, javax.servlet.ServletException
   {
     if(!(inRequest instanceof DMARequest))

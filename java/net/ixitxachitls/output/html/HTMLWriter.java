@@ -29,8 +29,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.google.common.base.Joiner;
@@ -56,6 +56,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class HTMLWriter
 {
   //--------------------------------------------------------- constructor(s)
@@ -68,7 +69,7 @@ public class HTMLWriter
    * @param     inWriter the writer to output to
    *
    */
-  public HTMLWriter(@Nonnull PrintWriter inWriter)
+  public HTMLWriter(PrintWriter inWriter)
   {
     m_writer = inWriter;
   }
@@ -80,13 +81,13 @@ public class HTMLWriter
   //-------------------------------------------------------------- variables
 
   /** The writer to output to. */
-  protected @Nonnull PrintWriter m_writer;
+  protected PrintWriter m_writer;
 
   /** The writer containing the body. */
-  protected @Nonnull StringWriter m_body = new StringWriter();
+  protected StringWriter m_body = new StringWriter();
 
   /** The writer for the body. */
-  protected @Nonnull PrintWriter m_bodyWriter = new PrintWriter(m_body);
+  protected PrintWriter m_bodyWriter = new PrintWriter(m_body);
 
   /** The current stack of tags. */
   protected Deque<String> m_tags = new ArrayDeque<String>();
@@ -120,7 +121,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter begin(@Nonnull String inTag)
+  public HTMLWriter begin(String inTag)
   {
     indent();
     m_bodyWriter.print("<");
@@ -143,7 +144,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter attribute(@Nonnull String inName, @Nullable String inValue)
+  public HTMLWriter attribute(String inName, @Nullable String inValue)
   {
     if(!m_unclosed)
     {
@@ -174,7 +175,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter id(@Nonnull String inName)
+  public HTMLWriter id(String inName)
   {
     return attribute("id", inName);
   }
@@ -190,7 +191,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter tooltip(@Nonnull String inText)
+  public HTMLWriter tooltip(String inText)
   {
     return attribute("title", inText);
   }
@@ -206,7 +207,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter href(@Nonnull String inText)
+  public HTMLWriter href(String inText)
   {
     return attribute("href", inText);
   }
@@ -222,7 +223,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter src(@Nonnull String inText)
+  public HTMLWriter src(String inText)
   {
     return attribute("src", inText);
   }
@@ -238,7 +239,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter alt(@Nonnull String inText)
+  public HTMLWriter alt(String inText)
   {
     return attribute("alt", inText);
   }
@@ -254,7 +255,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter name(@Nonnull String inText)
+  public HTMLWriter name(String inText)
   {
     return attribute("name", inText);
   }
@@ -270,7 +271,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter value(@Nonnull String inText)
+  public HTMLWriter value(String inText)
   {
     return attribute("value", inText);
   }
@@ -286,7 +287,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter style(@Nonnull String inText)
+  public HTMLWriter style(String inText)
   {
     return attribute("style", inText);
   }
@@ -302,7 +303,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter onClick(@Nonnull String inText)
+  public HTMLWriter onClick(String inText)
   {
     return attribute("onclick", inText);
   }
@@ -318,7 +319,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter onSubmit(@Nonnull String inText)
+  public HTMLWriter onSubmit(String inText)
   {
     return attribute("onsubmit", inText);
   }
@@ -334,7 +335,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter onMouseOver(@Nonnull String inText)
+  public HTMLWriter onMouseOver(String inText)
   {
     return attribute("onmouseover", inText);
   }
@@ -350,7 +351,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter onMouseOut(@Nonnull String inText)
+  public HTMLWriter onMouseOut(String inText)
   {
     return attribute("onmouseout", inText);
   }
@@ -366,7 +367,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter onChange(@Nonnull String inText)
+  public HTMLWriter onChange(String inText)
   {
     return attribute("onchange", inText);
   }
@@ -382,7 +383,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter classes(@Nonnull String ... inNames)
+  public HTMLWriter classes(String ... inNames)
   {
     return attribute("class", s_spaceJoiner.join(inNames));
   }
@@ -398,7 +399,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter end(@Nonnull String inTag)
+  public HTMLWriter end(String inTag)
   {
     if(m_tags.size() > 0 && !m_tags.peek().equalsIgnoreCase(inTag))
       Log.warning("closing tag " + inTag + ", but expected " + m_tags.peek());
@@ -438,7 +439,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter comment(@Nonnull String inComment)
+  public HTMLWriter comment(String inComment)
   {
     indent();
     m_bodyWriter.print("<!-- ");
@@ -478,7 +479,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter add(@Nonnull String inText)
+  public HTMLWriter add(String inText)
   {
     indent();
     if("a".equalsIgnoreCase(m_tags.peek()))
@@ -500,7 +501,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter addHead(@Nonnull String inText)
+  public HTMLWriter addHead(String inText)
   {
     ensureHead();
     indent();
@@ -523,7 +524,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter addCSSFile(@Nonnull String inName)
+  public HTMLWriter addCSSFile(String inName)
   {
     ensureHead();
     m_writer.println("    <LINK rel=\"STYLESHEET\" type=\"text/css\" "
@@ -543,7 +544,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter addJSFile(@Nonnull String inName)
+  public HTMLWriter addJSFile(String inName)
   {
     ensureHead();
     m_writer.println("    <SCRIPT type=\"text/javascript\" "
@@ -565,7 +566,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter meta(@Nonnull String inName, @Nonnull String inContent,
+  public HTMLWriter meta(String inName, String inContent,
                          String ... inAttributes)
   {
     assert inAttributes.length % 2 == 0
@@ -596,7 +597,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter link(@Nonnull String inType, @Nonnull String inHRef)
+  public HTMLWriter link(String inType, String inHRef)
   {
     ensureHead();
     m_writer.println("    <LINK ref=\"" + inType + "\" href=\""
@@ -616,7 +617,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter script(@Nonnull String ... inLines)
+  public HTMLWriter script(String ... inLines)
   {
     ensureHTML();
     m_writer.println("    <SCRIPT type=\"text/javascript\">");
@@ -640,7 +641,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter headScript(@Nonnull String ... inLines)
+  public HTMLWriter headScript(String ... inLines)
   {
     ensureHead();
     m_writer.println("    <SCRIPT type=\"text/javascript\">");
@@ -664,7 +665,7 @@ public class HTMLWriter
    * @return      the writer for chaining
    *
    */
-  public HTMLWriter bodyScript(@Nonnull String ... inLines)
+  public HTMLWriter bodyScript(String ... inLines)
   {
     ensureHTML();
     indent();

@@ -25,8 +25,8 @@ package net.ixitxachitls.util;
 
 import java.io.Serializable;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -48,6 +48,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface Extractor<T, V> extends Serializable
 {
   //-------------------------------------------------------------- accessors
@@ -62,7 +63,7 @@ public interface Extractor<T, V> extends Serializable
    * @return      the extracted data
    *
    */
-  public @Nullable V get(@Nonnull T inObject);
+  public @Nullable V get(T inObject);
 
   //........................................................................
 

@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -62,6 +62,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BlobImportServlet extends HttpServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -98,8 +99,8 @@ public class BlobImportServlet extends HttpServlet
    *
    */
   @Override
-public void doPost(@Nonnull HttpServletRequest inRequest,
-                     @Nonnull HttpServletResponse inResponse)
+  public void doPost(HttpServletRequest inRequest,
+                     HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     if(!(inRequest instanceof DMARequest))

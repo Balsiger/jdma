@@ -23,7 +23,8 @@
 
 package net.ixitxachitls.output;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 
 //..........................................................................
@@ -45,6 +46,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class SimpleBuffer implements Buffer
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +69,7 @@ public class SimpleBuffer implements Buffer
   //-------------------------------------------------------------- variables
 
   /** The real buffer used. */
-  private @Nonnull StringBuilder m_buffer = new StringBuilder();
+  private StringBuilder m_buffer = new StringBuilder();
 
   //........................................................................
 
@@ -82,7 +84,7 @@ public class SimpleBuffer implements Buffer
    *
    */
   @Override
-public @Nonnull Buffer newBuffer()
+  public Buffer newBuffer()
   {
     return new SimpleBuffer();
   }
@@ -99,7 +101,7 @@ public @Nonnull Buffer newBuffer()
    *
    */
   @Override
-public @Nonnull Buffer newBuffer(int inWidth)
+  public Buffer newBuffer(int inWidth)
   {
     return newBuffer();
   }
@@ -115,7 +117,7 @@ public @Nonnull Buffer newBuffer(int inWidth)
    *
    */
   @Override
-public @Nonnull String getContents()
+  public String getContents()
   {
     return m_buffer.toString();
   }
@@ -131,7 +133,7 @@ public @Nonnull String getContents()
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     return m_buffer.toString();
   }
@@ -151,9 +153,10 @@ public @Nonnull String toString()
    *
    */
   @Override
-  public void append(@Nonnull Object inObject)
+  public void append(@Nullable Object inObject)
   {
-    m_buffer.append(inObject.toString());
+    if(inObject != null)
+      m_buffer.append(inObject.toString());
   }
 
   //........................................................................

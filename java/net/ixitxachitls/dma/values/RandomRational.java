@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -48,6 +48,7 @@ import net.ixitxachitls.input.ParseReader;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class RandomRational extends BaseRational<RandomRational>
 {
   //--------------------------------------------------------- constructor(s)
@@ -122,7 +123,8 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    */
   public RandomRational(long inLeader, long inNominator, long inDenominator,
-                        Dice inRandomNominator, Dice inRandomDenominator)
+                        @Nullable Dice inRandomNominator,
+                        @Nullable Dice inRandomDenominator)
   {
     this(inLeader, inNominator, inDenominator);
 
@@ -142,7 +144,7 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    */
   @Override
-  public @Nonnull RandomRational create()
+  public RandomRational create()
   {
     return super.create(new RandomRational());
   }
@@ -172,7 +174,7 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    */
   @Override
-  protected @Nonnull String getNominatorString()
+  protected String getNominatorString()
   {
     if(m_randomNominator == null)
       return super.getNominatorString();
@@ -194,7 +196,7 @@ public class RandomRational extends BaseRational<RandomRational>
    *
    */
   @Override
-  protected @Nonnull String getDenominatorString()
+  protected String getDenominatorString()
   {
     if(m_randomDenominator == null)
       return super.getDenominatorString();
@@ -308,7 +310,7 @@ public double getValue()
    *
    */
   @Override
-public boolean isOne()
+  public boolean isOne()
   {
     if(m_randomNominator != null || m_randomDenominator != null)
       return false;
@@ -326,7 +328,7 @@ public boolean isOne()
    *
    */
   @Override
-public boolean isNull()
+  public boolean isNull()
   {
     if(m_randomNominator != null || m_randomDenominator != null)
       return false;
@@ -344,7 +346,7 @@ public boolean isNull()
    *
    */
   @Override
-public boolean isRealFraction()
+  public boolean isRealFraction()
   {
     return super.isRealFraction() || m_randomDenominator != null;
   }
@@ -369,10 +371,9 @@ public boolean isRealFraction()
    * @return      the new value created
    *
    */
-  public @Nonnull RandomRational as(long inLeader, long inNominator,
-                                    long inDenominator,
-                                    @Nullable Dice inRandomNominator,
-                                    @Nullable Dice inRandomDenominator)
+  public RandomRational as(long inLeader, long inNominator, long inDenominator,
+                           @Nullable Dice inRandomNominator,
+                           @Nullable Dice inRandomDenominator)
   {
     RandomRational result = as(inLeader, inNominator, inDenominator);
     result.m_randomNominator   = inRandomNominator;
@@ -394,7 +395,7 @@ public boolean isRealFraction()
    *
    */
   @Override
-  public @Nonnull RandomRational add(RandomRational inValue)
+  public RandomRational add(RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot add random rationals");
   }
@@ -411,7 +412,7 @@ public boolean isRealFraction()
    *
    */
   @Override
-  public @Nonnull RandomRational add(long inValue)
+  public RandomRational add(long inValue)
   {
     throw new UnsupportedOperationException("cannot add random rationals");
   }
@@ -428,7 +429,7 @@ public boolean isRealFraction()
    *
    */
   @Override
-public @Nonnull RandomRational subtract(@Nonnull RandomRational inValue)
+  public RandomRational subtract(RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot subtract random rationals");
   }
@@ -445,7 +446,7 @@ public @Nonnull RandomRational subtract(@Nonnull RandomRational inValue)
    *
    */
   @Override
-public @Nonnull RandomRational subtract(long inValue)
+  public RandomRational subtract(long inValue)
   {
     throw new UnsupportedOperationException("cannot subtract random rationals");
   }
@@ -462,7 +463,7 @@ public @Nonnull RandomRational subtract(long inValue)
    *
    */
   @Override
-public @Nonnull RandomRational divide(long inValue)
+  public RandomRational divide(long inValue)
   {
     throw new UnsupportedOperationException("cannot divide random rationals");
   }
@@ -479,7 +480,7 @@ public @Nonnull RandomRational divide(long inValue)
    *
    */
   @Override
-public @Nonnull RandomRational divide(@Nonnull RandomRational inValue)
+  public RandomRational divide(RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot divide random rationals");
   }
@@ -496,7 +497,7 @@ public @Nonnull RandomRational divide(@Nonnull RandomRational inValue)
    *
    */
   @Override
-public @Nonnull RandomRational multiply(long inValue)
+  public RandomRational multiply(long inValue)
   {
     throw new UnsupportedOperationException("cannot multiply random rationals");
   }
@@ -513,7 +514,7 @@ public @Nonnull RandomRational multiply(long inValue)
    *
    */
   @Override
-public @Nonnull RandomRational multiply(@Nonnull RandomRational inValue)
+  public RandomRational multiply(RandomRational inValue)
   {
     throw new UnsupportedOperationException("cannot multiply random rationals");
   }
@@ -531,7 +532,7 @@ public @Nonnull RandomRational multiply(@Nonnull RandomRational inValue)
    *
    */
   // @Override
-  // public boolean doRead(@Nonnull ParseReader inReader)
+  // public boolean doRead(ParseReader inReader)
   // {
   //   if(!readNominator(inReader))
   //     return false;
@@ -566,7 +567,7 @@ public @Nonnull RandomRational multiply(@Nonnull RandomRational inValue)
    *
    */
   @Override
-protected boolean readNominator(@Nonnull ParseReader inReader)
+  protected boolean readNominator(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -602,7 +603,7 @@ protected boolean readNominator(@Nonnull ParseReader inReader)
    *
    */
   @Override
-protected boolean readDenominator(@Nonnull ParseReader inReader)
+  protected boolean readDenominator(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 
@@ -665,7 +666,7 @@ protected boolean readDenominator(@Nonnull ParseReader inReader)
    * @return      the Dice read or null if none found
    *
    */
-  private @Nullable Dice readDice(@Nonnull ParseReader inReader)
+  private @Nullable Dice readDice(ParseReader inReader)
   {
     return new Dice().read(inReader);
   }
@@ -678,7 +679,7 @@ protected boolean readDenominator(@Nonnull ParseReader inReader)
    *
    */
   @Override
-protected void resetNominator()
+  protected void resetNominator()
   {
     super.resetNominator();
     m_randomNominator = null;

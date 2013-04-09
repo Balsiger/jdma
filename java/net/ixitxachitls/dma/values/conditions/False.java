@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values.conditions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.values.Value;
@@ -46,6 +46,7 @@ import net.ixitxachitls.dma.values.Value;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class False extends Condition<False>
 {
   //--------------------------------------------------------- constructor(s)
@@ -72,7 +73,7 @@ public class False extends Condition<False>
    * @param       inDescription - a description of the condition
    *
    */
-  public False(@Nonnull String inDescription)
+  public False(String inDescription)
   {
     super(inDescription);
   }

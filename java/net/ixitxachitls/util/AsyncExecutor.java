@@ -27,7 +27,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.util.logging.Log;
@@ -42,9 +42,7 @@ import net.ixitxachitls.util.logging.Log;
  * @file          AsyncExecutor.java
  *
  * @author        balsiger@ixixachitls.net (Peter Balsiger)
- *
  * @param         <T> the type of objects to exchange with the executor
- *
  */
 
 //..........................................................................
@@ -52,6 +50,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public abstract class AsyncExecutor<T> extends Thread
 {
   //--------------------------------------------------------- constructor(s)
@@ -88,7 +87,7 @@ public abstract class AsyncExecutor<T> extends Thread
   protected boolean m_done = false;
 
   /** The queue to store the stuff to be tracked. */
-  private final @Nonnull BlockingQueue<T> m_queue;
+  private final BlockingQueue<T> m_queue;
 
   //........................................................................
 
@@ -125,7 +124,7 @@ public abstract class AsyncExecutor<T> extends Thread
    * @return      true if accepted, false if not
    *
    */
-  public boolean offer(@Nonnull T inValue, long inTimeout)
+  public boolean offer(T inValue, long inTimeout)
   {
     if(isDone())
       return false;
@@ -163,7 +162,7 @@ public abstract class AsyncExecutor<T> extends Thread
    * @param       inValue the value to execute with
    *
    */
-  public abstract void execute(@Nonnull T inValue);
+  public abstract void execute(T inValue);
 
   //........................................................................
 

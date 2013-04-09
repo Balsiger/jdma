@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -49,6 +49,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Duration extends Units<Duration>
 {
   //--------------------------------------------------------- constructor(s)
@@ -96,7 +97,7 @@ public class Duration extends Units<Duration>
    * @param       inRounds the number of rounds
    *
    */
-  public Duration(@Nonnull Rational inRounds)
+  public Duration(Rational inRounds)
   {
     super(new Rational [] { inRounds }, s_sets, s_sets[1], 5);
 
@@ -115,7 +116,7 @@ public class Duration extends Units<Duration>
    *
    */
   @Override
-  public @Nonnull Duration create()
+  public Duration create()
   {
     return super.create(new Duration());
   }
@@ -133,7 +134,7 @@ public class Duration extends Units<Duration>
    * values and having many of these values might fail, though.  Furthermore,
    * the number of seconds extracted from this value will probably be wrong.
    */
-  private static @Nonnull String s_definition =
+  private static String s_definition =
     Config.get("/rules/duration.units",
                "1/1    : Seconds = 86400/1 : day|days,"
                + "                    3600/1 : hour|hours|hour : hr|hrs,"
@@ -148,14 +149,14 @@ public class Duration extends Units<Duration>
                + "                    60/1 : minute|minutes : min|mins.");
 
   /** The sets of units for this value. */
-  private static final @Nonnull Set []s_sets = parseDefinition(s_definition);
+  private static final Set []s_sets = parseDefinition(s_definition);
 
   /** The grouping for durations (time). */
   protected static final Group<Duration, Long, String> s_timeGrouping =
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
         @Override
-        public Long extract(@Nonnull Duration inValue)
+        public Long extract(Duration inValue)
         {
           return (long)inValue.getAsSeconds().getValue();
         }
@@ -173,7 +174,7 @@ public class Duration extends Units<Duration>
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
         @Override
-        public Long extract(@Nonnull Duration inValue)
+        public Long extract(Duration inValue)
         {
           return (long)inValue.getAsRounds().getValue() * 10000;
         }
@@ -233,7 +234,7 @@ public class Duration extends Units<Duration>
    * @return      the rounds
    *
    */
-  public @Nonnull Rational getAsRounds()
+  public Rational getAsRounds()
   {
     if(!isDefined())
       return new Rational(0);
@@ -253,7 +254,7 @@ public class Duration extends Units<Duration>
    * @return      the seconds
    *
    */
-  public @Nonnull Rational getAsSeconds()
+  public Rational getAsSeconds()
   {
     if(!isDefined())
       return new Rational(0);
@@ -274,7 +275,7 @@ public class Duration extends Units<Duration>
    * @return      the corresponding metric value.
    *
    */
-  public @Nonnull Duration asMetric()
+  public Duration asMetric()
   {
     if(m_set == m_sets[0])
       return this;
@@ -291,7 +292,7 @@ public class Duration extends Units<Duration>
    * @return      the corresponding feet value.
    *
    */
-  public @Nonnull Duration asRounds()
+  public Duration asRounds()
   {
     if(m_set == m_sets[1])
       return this;
@@ -313,8 +314,8 @@ public class Duration extends Units<Duration>
    *
    */
   // @Override
-  // public Map<String, Object> collectData(@Nonnull AbstractEntry inEntry,
-  //                                        @Nonnull SoyRenderer inRenderer)
+  // public Map<String, Object> collectData(AbstractEntry inEntry,
+  //                                        SoyRenderer inRenderer)
   // {
   //   Map<String, Object> data = super.collectData(inEntry, inRenderer);
 
@@ -338,7 +339,7 @@ public class Duration extends Units<Duration>
    *
    */
   @Override
-  public @Nonnull String doGroup()
+  public String doGroup()
   {
     if(isMetric())
       return s_timeGrouping.group(this);
@@ -357,7 +358,7 @@ public class Duration extends Units<Duration>
    * @return   the computed value
    *
    */
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("isMetric".equals(inKey))
       return isMetric();
@@ -390,10 +391,10 @@ public class Duration extends Units<Duration>
    * @return      true if set, false if values invalid
    *
    */
-  public @Nonnull Duration asMetric(@Nullable Rational inDays,
-                                    @Nullable Rational inHours,
-                                    @Nullable Rational inMinutes,
-                                    @Nullable Rational inSeconds)
+  public Duration asMetric(@Nullable Rational inDays,
+                           @Nullable Rational inHours,
+                           @Nullable Rational inMinutes,
+                           @Nullable Rational inSeconds)
   {
     return as(new Rational [] { inDays, inHours, inMinutes, inSeconds }, 0);
   }
@@ -409,7 +410,7 @@ public class Duration extends Units<Duration>
    * @return      true if set, false if values invalid
    *
    */
-  public @Nonnull Duration asRounds(@Nonnull Rational inRounds)
+  public Duration asRounds(Rational inRounds)
   {
     return as(new Rational [] { inRounds }, 1);
   }

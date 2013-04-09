@@ -30,8 +30,8 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
@@ -70,6 +70,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class IndexServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -115,8 +116,8 @@ public class IndexServlet extends PageServlet
    *
    */
   @Override
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
@@ -246,8 +247,8 @@ public class IndexServlet extends PageServlet
    * @return A sorted map of index groups to indexs pages
    *
    */
-  public static @Nonnull SortedMap<String, List<String>>
-    nestedGroups(@Nonnull SortedSet<String> inValues)
+  public static SortedMap<String, List<String>> nestedGroups
+    (SortedSet<String> inValues)
   {
     SortedSetMultimap<String, String> groups = TreeMultimap.create();
     for(String value : inValues)
@@ -278,7 +279,7 @@ public class IndexServlet extends PageServlet
    * @return  true if nested groups are given, false if not
    *
    */
-  public static boolean isNested(@Nonnull SortedSet<String> inValues)
+  public static boolean isNested(SortedSet<String> inValues)
   {
     for(String value : inValues)
       if(value.contains("::"))

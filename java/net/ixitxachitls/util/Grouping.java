@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.util;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -45,6 +45,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface Grouping<T, G>
 {
   //-------------------------------------------------------------- accessors
@@ -59,7 +60,7 @@ public interface Grouping<T, G>
     * @return      the identification of the group
     *
     */
-  public G group(@Nonnull T inEntry);
+  public G group(T inEntry);
 
   //........................................................................
 

@@ -26,19 +26,15 @@ package net.ixitxachitls.dma.server.filters;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-//import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import net.ixitxachitls.dma.entries.BaseCampaign;
-//import net.ixitxachitls.dma.entries.BaseCharacter;
-//import net.ixitxachitls.dma.entries.Campaign;
 import net.ixitxachitls.dma.server.servlets.DMARequest;
 
 //..........................................................................
@@ -58,6 +54,7 @@ import net.ixitxachitls.dma.server.servlets.DMARequest;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class BaseFilter implements Filter
 {
   //----- nested -----------------------------------------------------------
@@ -85,7 +82,7 @@ public abstract class BaseFilter implements Filter
     protected int m_code;
 
     /** The text message of the error. */
-    protected @Nonnull String m_message;
+    protected String m_message;
 
     /**
      * Sent the error to the given response.
@@ -94,7 +91,7 @@ public abstract class BaseFilter implements Filter
      *
      * @throws IOException when writing fails
      */
-    public void send(@Nonnull HttpServletResponse inResponse) throws IOException
+    public void send(HttpServletResponse inResponse) throws IOException
     {
       inResponse.sendError(m_code, m_message);
     }
@@ -116,8 +113,7 @@ public abstract class BaseFilter implements Filter
      * @param   inMessage the message printed on the page
      *
      */
-    public HTMLError(int inCode, @Nonnull String inTitle,
-                     @Nonnull String inMessage)
+    public HTMLError(int inCode, String inTitle, String inMessage)
     {
       super(inCode, inMessage);
 
@@ -125,7 +121,7 @@ public abstract class BaseFilter implements Filter
     }
 
     /** The page title. */
-    private @Nonnull String m_title;
+    private String m_title;
 
     /**
      * Sent the error to the given response.
@@ -135,7 +131,7 @@ public abstract class BaseFilter implements Filter
      * @throws IOException when writing fails
      */
     @Override
-    public void send(@Nonnull HttpServletResponse inResponse) throws IOException
+    public void send(HttpServletResponse inResponse) throws IOException
     {
       inResponse.addHeader("Content-Type", "text/html");
 
@@ -182,11 +178,8 @@ public abstract class BaseFilter implements Filter
     *
     */
   @Override
-  public void init(@Nonnull FilterConfig inConfig)
+  public void init(FilterConfig inConfig)
   {
-  // m_users = (BaseCampaign)inConfig.getServletContext().getAttribute("users");
-    // m_campaigns =
-    //   (Campaign)inConfig.getServletContext().getAttribute("campaigns");
   }
 
   //........................................................................
@@ -239,9 +232,9 @@ public abstract class BaseFilter implements Filter
     *
     */
   @Override
-  public void doFilter(@Nonnull ServletRequest inRequest,
-                       @Nonnull ServletResponse inResponse,
-                       @Nonnull FilterChain inChain)
+  public void doFilter(ServletRequest inRequest,
+                       ServletResponse inResponse,
+                       FilterChain inChain)
     throws ServletException, IOException
   {
     if(!(inResponse instanceof HttpServletResponse))
@@ -275,9 +268,9 @@ public abstract class BaseFilter implements Filter
     * @throws      IOException      on errors for writing the contents
     *
     */
-  protected abstract Error doFilter(@Nonnull DMARequest inRequest,
-                                    @Nonnull HttpServletResponse inResponse,
-                                    @Nonnull FilterChain inChain)
+  protected abstract Error doFilter(DMARequest inRequest,
+                                    HttpServletResponse inResponse,
+                                    FilterChain inChain)
     throws ServletException, IOException;
 
   //........................................................................

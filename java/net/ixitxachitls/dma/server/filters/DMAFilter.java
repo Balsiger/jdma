@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.server.filters;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -58,6 +58,7 @@ import net.ixitxachitls.server.ServerUtils;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class DMAFilter implements Filter
 {
   //--------------------------------------------------------- constructor(s)
@@ -84,7 +85,7 @@ public class DMAFilter implements Filter
     *
     */
   @Override
-public void init(FilterConfig inConfig)
+  public void init(FilterConfig inConfig)
   {
     // nothing to do
   }
@@ -98,7 +99,7 @@ public void init(FilterConfig inConfig)
     *
     */
   @Override
-public void destroy()
+  public void destroy()
   {
     // nothing to do
   }
@@ -129,9 +130,9 @@ public void destroy()
     *
     */
   @Override
-public void doFilter(@Nonnull ServletRequest inRequest,
-                       @Nonnull ServletResponse inResponse,
-                       @Nonnull FilterChain inChain)
+  public void doFilter(ServletRequest inRequest,
+                       ServletResponse inResponse,
+                       FilterChain inChain)
     throws ServletException, IOException
   {
     if(inRequest instanceof HttpServletRequest)

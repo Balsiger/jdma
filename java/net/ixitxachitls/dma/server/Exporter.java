@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.datastore.DatastoreService;
@@ -77,6 +77,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public final class Exporter
 {
   //--------------------------------------------------------- constructor(s)
@@ -285,7 +286,7 @@ public final class Exporter
    * @return   the full path for the file, withouth filename
    *
    */
-  protected static @Nonnull String extractFilePath(@Nonnull Key inKey)
+  protected static String extractFilePath(Key inKey)
   {
     String id = inKey.getName();
     String type = inKey.getKind();

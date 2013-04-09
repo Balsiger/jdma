@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.Contents;
@@ -56,6 +56,7 @@ import net.ixitxachitls.util.Strings;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -70,9 +71,8 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inBaseType the type of the base entry to this one
    *
    */
-  protected CampaignEntry(@Nonnull String inName,
-                          @Nonnull Type<? extends Entry<?>> inType,
-                          @Nonnull BaseType<? extends BaseEntry> inBaseType)
+  protected CampaignEntry(String inName, Type<? extends Entry<?>> inType,
+                          BaseType<? extends BaseEntry> inBaseType)
   {
     super(inName, inType, inBaseType);
   }
@@ -87,8 +87,8 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inBaseType the type of the base entry to this one
    *
    */
-  protected CampaignEntry(@Nonnull Type<? extends Entry<?>> inType,
-                          @Nonnull BaseType<? extends BaseEntry> inBaseType)
+  protected CampaignEntry(Type<? extends Entry<?>> inType,
+                          BaseType<? extends BaseEntry> inBaseType)
   {
     super(inType, inBaseType);
   }
@@ -106,10 +106,10 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @param       inBases        the base items to take values from
    *
    */
-  public CampaignEntry(@Nonnull Type<? extends Entry<?>> inType,
-                       @Nonnull BaseType<? extends BaseEntry> inBaseType,
-                       @Nonnull Campaign inCampaign,
-                       @Nonnull String ... inBases)
+  public CampaignEntry(Type<? extends Entry<?>> inType,
+                       BaseType<? extends BaseEntry> inBaseType,
+                       Campaign inCampaign,
+                       String ... inBases)
   {
     super(inType, inBaseType, inBases);
 
@@ -168,7 +168,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    */
   @SuppressWarnings("unchecked")
   @Override
-  public @Nonnull EntryKey<? extends AbstractEntry> getKey()
+  public EntryKey<? extends AbstractEntry> getKey()
   {
     Campaign campaign = getCampaign();
 
@@ -190,7 +190,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    */
   @Override
-  public @Nonnull String getPath()
+  public String getPath()
   {
     return getCampaign().getPath() + super.getPath();
   }
@@ -244,7 +244,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    */
   @Override
-  public @Nonnull String getEditType()
+  public String getEditType()
   {
     return getCampaign().getEditType() + "/" + super.getEditType();
   }
@@ -258,7 +258,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return      the requested name
    *
    */
-  public @Nonnull String getPlayerName()
+  public String getPlayerName()
   {
     return getName();
   }
@@ -272,7 +272,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return the dm specific name
    *
    */
-  public @Nonnull String getDMName()
+  public String getDMName()
   {
     List<String> parts = new ArrayList<String>();
 
@@ -333,7 +333,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    */
   // @Override
-  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // public @Nullable ValueHandle computeValue(String inKey,
   // boolean inDM)
   // {
   //   if("campaign".equals(inKey))
@@ -357,7 +357,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return   the compute value
    *
    */
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("campaign".equals(inKey))
       return getCampaign();
@@ -421,7 +421,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return      true if added, false if not
    *
    */
-  public boolean add(@Nonnull CampaignEntry<? extends BaseEntry> inEntry)
+  public boolean add(CampaignEntry<? extends BaseEntry> inEntry)
   {
     Contents contents = (Contents)getExtension("contents");
     if(contents == null)
@@ -472,7 +472,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    *
    */
   @Override
-  public void updateKey(@Nonnull EntryKey<? extends AbstractEntry> inKey)
+  public void updateKey(EntryKey<? extends AbstractEntry> inKey)
   {
     EntryKey<?> parent = inKey.getParent();
     if(parent == null)

@@ -27,9 +27,9 @@ import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletResponse;
 
@@ -63,6 +63,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class PageServlet extends SoyServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -101,8 +102,8 @@ public class PageServlet extends SoyServlet
    *           or maps or lists)
    *
    */
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 
@@ -146,8 +147,8 @@ public class PageServlet extends SoyServlet
    *           or maps or lists)
    *
    */
-  protected @Nonnull Map<String, Object> collectInjectedData
-    (@Nonnull DMARequest inRequest, SoyRenderer inRenderer)
+  protected Map<String, Object> collectInjectedData
+    (DMARequest inRequest, SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectInjectedData(inRequest, inRenderer);
 
@@ -173,9 +174,8 @@ public class PageServlet extends SoyServlet
    *
    */
   @OverridingMethodsMustInvokeSuper
-  protected void writeHeader(@Nonnull HTMLWriter inWriter,
-                             @Nonnull String inPath,
-                             @Nonnull DMARequest inRequest)
+  protected void writeHeader(HTMLWriter inWriter, String inPath,
+                             DMARequest inRequest)
   {
   }
 
@@ -192,9 +192,8 @@ public class PageServlet extends SoyServlet
    *
    */
   @OverridingMethodsMustInvokeSuper
-  protected void writeBody(@Nonnull HTMLWriter inWriter,
-                           @Nullable String inPath,
-                           @Nonnull DMARequest inRequest)
+  protected void writeBody(HTMLWriter inWriter, @Nullable String inPath,
+                           DMARequest inRequest)
   {
     // nothing done here
   }
@@ -212,9 +211,8 @@ public class PageServlet extends SoyServlet
    *
    */
   @OverridingMethodsMustInvokeSuper
-  protected void writeFooter(@Nonnull HTMLWriter inWriter,
-                             @Nonnull String inPath,
-                             @Nonnull DMARequest inRequest)
+  protected void writeFooter(HTMLWriter inWriter, String inPath,
+                             DMARequest inRequest)
   {
   }
 
@@ -229,8 +227,7 @@ public class PageServlet extends SoyServlet
    * @param       inSections the sections and subsections to the current page
    *
    */
-  public void addNavigation(@Nonnull HTMLWriter inWriter,
-                            @Nonnull String ... inSections)
+  public void addNavigation(HTMLWriter inWriter, String ... inSections)
   {
     StringBuilder builder = new StringBuilder();
 
@@ -277,8 +274,8 @@ public class PageServlet extends SoyServlet
    * @param       inPageSize     the full size of the page
    *
    */
-  // protected void format(@Nonnull HTMLWriter inWriter,
-  //                       @Nonnull List<? extends AbstractEntry> inEntries,
+  // protected void format(HTMLWriter inWriter,
+  //                       List<? extends AbstractEntry> inEntries,
   //                       @Nullable BaseCharacter inUser,
   //                       int inStart, int inPageSize)
   // {
@@ -346,10 +343,8 @@ public class PageServlet extends SoyServlet
    * @param       inURL      the url to link to when clicking the icon
    *
    */
-  protected static void writeIcon(@Nonnull HTMLWriter inWriter,
-                                  @Nonnull String inIcon,
-                                  @Nonnull String inCaption,
-                                  @Nonnull String inURL)
+  protected static void writeIcon(HTMLWriter inWriter, String inIcon,
+                                  String inCaption, String inURL)
   {
     inWriter
       .begin("div").classes("caption-container")
@@ -376,9 +371,8 @@ public class PageServlet extends SoyServlet
    * @param    inMessage  the error message
    *
    */
-  protected static void writeError(@Nonnull HTMLWriter inWriter,
-                                   @Nonnull String inTitle,
-                                   @Nonnull String inMessage)
+  protected static void writeError(HTMLWriter inWriter, String inTitle,
+                                   String inMessage)
   {
     inWriter
       .title(inTitle)
@@ -426,9 +420,9 @@ public class PageServlet extends SoyServlet
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected void writeBody(@Nonnull HTMLWriter inWriter,
+          protected void writeBody(HTMLWriter inWriter,
                                    @Nullable String inPath,
-                                   @Nonnull DMARequest inRequest)
+                                   DMARequest inRequest)
           {
             super.writeBody(inWriter, inPath, inRequest);
             inWriter.add("This is the body.");
@@ -472,9 +466,9 @@ public class PageServlet extends SoyServlet
       PageServlet servlet = new PageServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected void writeBody(@Nonnull HTMLWriter inWriter,
+          protected void writeBody(HTMLWriter inWriter,
                                    @Nullable String inPath,
-                                   @Nonnull DMARequest inRequest)
+                                   DMARequest inRequest)
           {
             super.writeBody(inWriter, inPath, inRequest);
             inWriter.add("This is the body.");
@@ -564,7 +558,7 @@ public class PageServlet extends SoyServlet
     //       }
 
     //       @Override
-    //       public @Nonnull net.ixitxachitls.dma.entries.Variables
+    //       public net.ixitxachitls.dma.entries.Variables
     //         getVariables()
     //       {
     //         return ValueGroup.getVariables
@@ -581,7 +575,7 @@ public class PageServlet extends SoyServlet
     //       }
 
     //       @Override
-    //       public @Nonnull net.ixitxachitls.dma.entries.Variables
+    //       public net.ixitxachitls.dma.entries.Variables
     //         getVariables()
     //       {
     //         return ValueGroup.getVariables

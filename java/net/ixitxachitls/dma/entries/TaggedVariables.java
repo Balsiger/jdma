@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.entries;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 //..........................................................................
@@ -49,6 +49,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class TaggedVariables extends Variables
 {
   //--------------------------------------------------------- constructor(s)
@@ -62,8 +63,7 @@ public class TaggedVariables extends Variables
    * @param       inVariables the variables stored here
    *
    */
-  public TaggedVariables(@Nonnull String inTag,
-                         @Nonnull Variable ... inVariables)
+  public TaggedVariables(String inTag, Variable ... inVariables)
   {
     m_tag = inTag;
 
@@ -79,7 +79,7 @@ public class TaggedVariables extends Variables
   //-------------------------------------------------------------- variables
 
   /** The tag to use. */
-  private @Nonnull String m_tag;
+  private String m_tag;
 
   //........................................................................
 
@@ -94,7 +94,7 @@ public class TaggedVariables extends Variables
    *
    */
   @Override
-public @Nonnull String getPrefix()
+  public String getPrefix()
   {
     return m_tag + ":";
   }
@@ -111,7 +111,7 @@ public @Nonnull String getPrefix()
    *
    */
   @Override
-public @Nullable Variable getVariable(@Nonnull String inKey)
+  public @Nullable Variable getVariable(String inKey)
   {
     Variable var = super.getVariable(inKey);
     if(var != null)
@@ -131,7 +131,7 @@ public @Nullable Variable getVariable(@Nonnull String inKey)
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return super.toString() + " [tag " + m_tag + "]";
   }
@@ -151,7 +151,7 @@ public @Nullable Variable getVariable(@Nonnull String inKey)
    *
    */
   @Override
-  protected void add(@Nonnull Variable inVariable)
+  protected void add(Variable inVariable)
   {
     super.add(m_tag + ":" + inVariable.getKey(), inVariable);
   }
@@ -175,7 +175,7 @@ public @Nullable Variable getVariable(@Nonnull String inKey)
    * @undefined   null is returned if no values is given
    *
    */
-  public static Variables tag(@Nonnull String inTag, @Nonnull Variables inVars)
+  public static Variables tag(String inTag, Variables inVars)
   {
     TaggedVariables result = new TaggedVariables(inTag);
 

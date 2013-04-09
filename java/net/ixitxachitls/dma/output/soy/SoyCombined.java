@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.output.soy;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
@@ -110,7 +109,7 @@ public class SoyCombined extends SoyValue
    */
   @Override
   @SuppressWarnings({ "unchecked", "rawtypes" })
-  public @Nullable SoyData getSingle(@Nonnull String inName)
+  public @Nullable SoyData getSingle(String inName)
   {
     if("isCombined".equals(inName))
       return BooleanData.forValue(true);
@@ -249,7 +248,7 @@ public class SoyCombined extends SoyValue
    * @return      the string represenation
    *
    */
-  public @Nonnull String toString()
+  public String toString()
   {
     return "combined " + m_combined;
   }

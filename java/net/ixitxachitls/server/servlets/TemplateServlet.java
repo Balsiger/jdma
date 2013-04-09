@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.server.servlets;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +54,7 @@ import net.ixitxachitls.util.resources.TemplateResource;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public class TemplateServlet extends FileServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -81,8 +82,8 @@ public class TemplateServlet extends FileServlet
    *                             templates
    *
    */
-  public TemplateServlet(@Nonnull String inRoot, @Nullable String inType,
-                         @Nonnull String inPrefix)
+  public TemplateServlet(String inRoot, @Nullable String inType,
+                         String inPrefix)
   {
     super(inRoot, inType, false);
 
@@ -96,7 +97,7 @@ public class TemplateServlet extends FileServlet
   //-------------------------------------------------------------- variables
 
   /** The prefix into the configuration for template values. */
-  protected @Nonnull String m_prefix;
+  protected String m_prefix;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -116,7 +117,7 @@ public class TemplateServlet extends FileServlet
    *
    */
   @Override
-  protected @Nonnull Resource getResource(String inPath)
+  protected Resource getResource(String inPath)
   {
     return TemplateResource.get(inPath, m_prefix);
   }
@@ -136,7 +137,7 @@ public class TemplateServlet extends FileServlet
    *
    */
   @Override
-  public void init(@Nonnull ServletConfig inConfig)
+  public void init(ServletConfig inConfig)
   {
     super.init(inConfig);
 

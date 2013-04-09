@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -48,6 +48,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Price extends Decimal<Price>
 {
   //--------------------------------------------------------- constructor(s)
@@ -63,8 +64,7 @@ public class Price extends Decimal<Price>
    * @param       inMax      the maximally allowed number
    *
    */
-  public Price(@Nonnull String inCurrency, long inNumber, long inMin,
-               long inMax)
+  public Price(String inCurrency, long inNumber, long inMin, long inMax)
   {
     super(inNumber, inMin, inMax, 100);
 
@@ -102,7 +102,7 @@ public class Price extends Decimal<Price>
    *
    */
   @Override
-public @Nonnull Price create()
+  public Price create()
   {
     return super.create(new Price(m_min, m_max));
   }
@@ -114,7 +114,7 @@ public @Nonnull Price create()
   //-------------------------------------------------------------- variables
 
   /** The sign for the currency. */
-  private @Nonnull String m_currency =
+  private String m_currency =
     Config.get("resource:values/price.default.currency", "$");
 
   //........................................................................
@@ -129,7 +129,7 @@ public @Nonnull Price create()
    * @return      the currency symbol(s)
    *
    */
-  public @Nonnull String getCurrency()
+  public String getCurrency()
   {
     return m_currency;
   }
@@ -145,7 +145,7 @@ public @Nonnull Price create()
    *
    */
   @Override
-protected @Nonnull String doToString()
+  protected String doToString()
   {
     return m_currency + super.doToString();
   }
@@ -167,7 +167,7 @@ protected @Nonnull String doToString()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 

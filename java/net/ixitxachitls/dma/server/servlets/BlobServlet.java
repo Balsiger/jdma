@@ -25,8 +25,8 @@ package net.ixitxachitls.dma.server.servlets;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -55,6 +55,7 @@ import net.ixitxachitls.util.Strings;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BlobServlet extends BaseServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +68,7 @@ public class BlobServlet extends BaseServlet
   private static final long serialVersionUID = 1L;
 
   /** The blob store service. */
-  private @Nonnull BlobstoreService m_blobs =
+  private BlobstoreService m_blobs =
     BlobstoreServiceFactory.getBlobstoreService();
 
   //........................................................................
@@ -94,8 +95,8 @@ public class BlobServlet extends BaseServlet
    *
    */
   @Override
-  public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
-                                        @Nonnull HttpServletResponse inResponse)
+  public @Nullable SpecialResult handle(HttpServletRequest inRequest,
+                                        HttpServletResponse inResponse)
     throws IOException
   {
     String path = Strings.getPattern(inRequest.getPathInfo(), "/([^/]*)$");

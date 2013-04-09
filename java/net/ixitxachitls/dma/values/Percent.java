@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -47,6 +47,7 @@ import net.ixitxachitls.input.ParseReader;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Percent extends BaseNumber<Percent>
 {
   //--------------------------------------------------------- constructor(s)
@@ -115,7 +116,7 @@ public class Percent extends BaseNumber<Percent>
    *
    */
   @Override
-  protected @Nonnull String doToString()
+  protected String doToString()
   {
     return super.doToString() + "%";
   }
@@ -137,7 +138,7 @@ public class Percent extends BaseNumber<Percent>
    *
    */
   @Override
-  public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
 

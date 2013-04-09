@@ -35,8 +35,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
@@ -73,6 +73,7 @@ import net.ixitxachitls.util.resources.Resource;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public class FileServlet extends BaseServlet
 {
   //----------------------------------------------------------------- nested
@@ -91,7 +92,7 @@ public class FileServlet extends BaseServlet
      * @param inMimeType  the mime type
      *
      */
-    public Type(@Nonnull String inExtension, @Nonnull String inMimeType)
+    public Type(String inExtension, String inMimeType)
     {
       m_extension = inExtension;
       m_mimeType = inMimeType;
@@ -105,8 +106,7 @@ public class FileServlet extends BaseServlet
      * @param inImageFormat the image format for images
      *
      */
-    public Type(@Nonnull String inExtension, @Nonnull String inMimeType,
-                @Nonnull String inImageFormat)
+    public Type(String inExtension, String inMimeType, String inImageFormat)
     {
       this(inExtension, inMimeType);
 
@@ -114,10 +114,10 @@ public class FileServlet extends BaseServlet
     }
 
     /** The extension of the file. */
-    private @Nonnull String m_extension;
+    private String m_extension;
 
     /** The mime type of the file. */
-    private @Nonnull String m_mimeType;
+    private String m_mimeType;
 
     /** The image format, if any. */
     private @Nullable String m_imageFormat;
@@ -130,7 +130,7 @@ public class FileServlet extends BaseServlet
      *
      * @return the file extension
      */
-    public @Nonnull String getExtension()
+    public String getExtension()
     {
       return m_extension;
     }
@@ -140,7 +140,7 @@ public class FileServlet extends BaseServlet
      *
      * @return the file's mime type
      */
-    public @Nonnull String getMimeType()
+    public String getMimeType()
     {
       return m_mimeType;
     }
@@ -194,7 +194,7 @@ public class FileServlet extends BaseServlet
    * @param       inType         the type of the files to handle (e.g. return)
    *
    */
-  public FileServlet(@Nonnull String inRoot, @Nullable String inType)
+  public FileServlet(String inRoot, @Nullable String inType)
   {
     this(inRoot, inType, true);
   }
@@ -211,7 +211,7 @@ public class FileServlet extends BaseServlet
    * @param       inCache        true if caching is enabled, false if not
    *
    */
-  public FileServlet(@Nonnull String inRoot, @Nullable String inType,
+  public FileServlet(String inRoot, @Nullable String inType,
                      boolean inCache)
   {
     m_root = inRoot;
@@ -230,7 +230,7 @@ public class FileServlet extends BaseServlet
   //-------------------------------------------------------------- variables
 
   /** The root to the files to server. */
-  protected @Nonnull String m_root;
+  protected String m_root;
 
   /** The type of content to return. */
   protected @Nullable Type m_type;
@@ -239,7 +239,7 @@ public class FileServlet extends BaseServlet
   protected boolean m_handleModification;
 
   /** The possible type for different extensions. */
-  protected static final @Nonnull Map<String, Type> s_types =
+  protected static final Map<String, Type> s_types =
     new HashMap<String, Type>();
 
   // initialize the possible content types according to file extension
@@ -259,7 +259,7 @@ public class FileServlet extends BaseServlet
   private static final long serialVersionUID = 1L;
 
   /** The path to use for missign images. */
-  protected static final @Nonnull String s_missingImage =
+  protected static final String s_missingImage =
     Config.get("web/image.missing", "/icons/missing.png");
 
   /** The time of the startup of this servlet. */
@@ -279,7 +279,7 @@ public class FileServlet extends BaseServlet
    * @return      the requested resource
    *
    */
-  protected @Nonnull Resource getResource(String inPath)
+  protected Resource getResource(String inPath)
   {
     return Resource.get(inPath);
   }
@@ -308,8 +308,8 @@ public class FileServlet extends BaseServlet
    */
   @Override
   protected synchronized @Nullable SpecialResult handle
-    (@Nonnull HttpServletRequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+    (HttpServletRequest inRequest,
+     HttpServletResponse inResponse)
     throws IOException, ServletException
   {
     // check the given path for illegal relative stuff and add the root
@@ -439,7 +439,7 @@ public class FileServlet extends BaseServlet
    *
    */
   @Override
-public void init(@Nonnull ServletConfig inConfig)
+  public void init(ServletConfig inConfig)
   {
     // root
     String param = inConfig.getInitParameter("root");

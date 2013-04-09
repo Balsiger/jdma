@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -49,6 +49,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseExtension<T extends BaseEntry> extends AbstractExtension<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -62,7 +63,7 @@ public class BaseExtension<T extends BaseEntry> extends AbstractExtension<T>
    * @param       inName   the name of the extension
    *
    */
-  public BaseExtension(@Nonnull T inEntry, @Nonnull String inName)
+  public BaseExtension(T inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -101,7 +102,7 @@ public class BaseExtension<T extends BaseEntry> extends AbstractExtension<T>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     // nothing to do here
   }

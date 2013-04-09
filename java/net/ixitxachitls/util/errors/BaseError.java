@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.util.errors;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 import net.ixitxachitls.util.Classes;
@@ -38,9 +38,7 @@ import net.ixitxachitls.util.configuration.Config;
  * This is the base class for all errors.
  *
  * @file          BaseError.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................
@@ -48,6 +46,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public class BaseError
 {
   //--------------------------------------------------------- constructor(s)
@@ -60,7 +59,7 @@ public class BaseError
    * @param       inID the id of the error
    *
    */
-  public BaseError(@Nonnull String inID)
+  public BaseError(String inID)
   {
     this(inID, null, null);
   }
@@ -75,7 +74,7 @@ public class BaseError
    * @param       inSpecial the special text for this error
    *
    */
-  public BaseError(@Nonnull String inID, @Nullable String inSpecial)
+  public BaseError(String inID, @Nullable String inSpecial)
   {
     this(inID, inSpecial, null);
   }
@@ -91,7 +90,7 @@ public class BaseError
    * @param       inException an exception that happened
    *
    */
-  public BaseError(@Nonnull String inID, @Nullable String inSpecial,
+  public BaseError(String inID, @Nullable String inSpecial,
                    @Nullable Exception inException)
   {
     m_id        = inID;
@@ -116,7 +115,7 @@ public class BaseError
   //-------------------------------------------------------------- variables
 
   /** The ID of the error. */
-  private @Nonnull String m_id;
+  private String m_id;
 
   /** The special description text. */
   protected @Nullable String m_special = null;
@@ -125,13 +124,13 @@ public class BaseError
   protected @Nullable Exception m_exception = null;
 
   /** The error description. */
-  private @Nonnull String m_description;
+  private String m_description;
 
   /** The whole message text. */
-  protected @Nonnull String m_message;
+  protected String m_message;
 
   /** The default error description. */
-  protected static final @Nonnull String s_default =
+  protected static final String s_default =
     Config.get("resource:errors/default",
                "no definition found for this error");
 
@@ -203,7 +202,7 @@ public int hashCode()
    * @return      the text of the error message
    *
    */
-  public static @Nonnull String getMessage(@Nonnull String inID)
+  public static String getMessage(String inID)
   {
     return Config.get("resource:errors/" + inID,
                       "[" + inID + "] " + s_default);
@@ -241,7 +240,7 @@ public int hashCode()
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     return m_message;
   }

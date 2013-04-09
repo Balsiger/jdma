@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.output;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface Buffer
 {
   //----------------------------------------------------------------- nested
@@ -73,7 +74,7 @@ public interface Buffer
      * @param       inShort the short name for table definition
      *
      */
-    private Alignment(@Nonnull String inName, char inShort)
+    private Alignment(String inName, char inShort)
     {
       m_name  = inName;
       m_short = inShort;
@@ -82,7 +83,7 @@ public interface Buffer
     //......................................................................
 
     /** The name of the alignment. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** The short name of the alignment. */
     private char m_short;
@@ -96,7 +97,7 @@ public interface Buffer
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -155,7 +156,7 @@ public interface Buffer
    * @return      a String with the complete contents of the buffer
    *
    */
-  public @Nonnull String getContents();
+  public String getContents();
 
   //........................................................................
   //------------------------------ newBuffer -------------------------------
@@ -166,7 +167,7 @@ public interface Buffer
    * @return      a new buffer
    *
    */
-  public @Nonnull Buffer newBuffer();
+  public Buffer newBuffer();
 
   //........................................................................
   //------------------------------ newBuffer -------------------------------
@@ -179,7 +180,7 @@ public interface Buffer
    * @return      a new buffer
    *
    */
-  public @Nonnull Buffer newBuffer(int inWidth);
+  public Buffer newBuffer(int inWidth);
 
   //........................................................................
 

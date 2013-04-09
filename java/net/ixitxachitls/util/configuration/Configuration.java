@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.util.configuration;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -43,6 +43,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface Configuration
 {
   //-------------------------------------------------------------- accessors
@@ -58,7 +59,7 @@ public interface Configuration
    * @return      the requested string
    *
    */
-  public @Nonnull String get(@Nonnull String inKey, @Nullable String inDefault);
+  public String get(String inKey, @Nullable String inDefault);
 
   //........................................................................
   //-------------------------------- hasKey --------------------------------
@@ -74,7 +75,7 @@ public interface Configuration
    * @undefined   never
    *
    */
-  public boolean hasKey(@Nonnull String inKey);
+  public boolean hasKey(String inKey);
 
   //........................................................................
 
@@ -93,7 +94,7 @@ public interface Configuration
    * @return      true if save, false if not possible
    *
    */
-  public boolean set(@Nonnull String inKey, @Nonnull String inValue);
+  public boolean set(String inKey, String inValue);
 
   //........................................................................
 
@@ -107,7 +108,7 @@ public interface Configuration
    * @return      true if removed, false if not possible
    *
    */
-  public boolean remove(@Nonnull String inKey);
+  public boolean remove(String inKey);
 
   //........................................................................
 

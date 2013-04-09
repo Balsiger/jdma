@@ -29,8 +29,8 @@ import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -72,6 +72,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BlobUploadServlet extends BaseServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -97,12 +98,11 @@ public class BlobUploadServlet extends BaseServlet
   private static final long serialVersionUID = 1L;
 
   /** The blob store service. */
-  private @Nonnull BlobstoreService m_blobs =
+  private BlobstoreService m_blobs =
     BlobstoreServiceFactory.getBlobstoreService();
 
   /** The image service to serve images. */
-  private @Nonnull ImagesService m_image =
-    ImagesServiceFactory.getImagesService();
+  private ImagesService m_image = ImagesServiceFactory.getImagesService();
 
   //........................................................................
 
@@ -129,8 +129,8 @@ public class BlobUploadServlet extends BaseServlet
    */
   @SuppressWarnings("unchecked")
   @Override
-  public @Nullable SpecialResult handle(@Nonnull HttpServletRequest inRequest,
-                                        @Nonnull HttpServletResponse inResponse)
+  public @Nullable SpecialResult handle(HttpServletRequest inRequest,
+                                        HttpServletResponse inResponse)
     throws IOException
   {
     DMARequest request;

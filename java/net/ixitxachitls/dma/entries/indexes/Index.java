@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.entries.indexes;
 import java.io.Serializable;
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
@@ -53,6 +53,7 @@ import net.ixitxachitls.dma.entries.AbstractType;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Index implements Serializable, Comparable<Index>
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +68,7 @@ public class Index implements Serializable, Comparable<Index>
    * @param         inType      the type of entries served
    *
    */
-  public Index(@Nonnull Path inPath, @Nonnull String inTitle,
+  public Index(Path inPath, String inTitle,
                AbstractType<? extends AbstractEntry> inType)
   {
     m_path = inPath;
@@ -85,7 +86,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return  the index for chaining
    *
    */
-  public @Nonnull Index withImages()
+  public Index withImages()
   {
     m_images = true;
 
@@ -101,7 +102,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return  the index for chaining
    *
    */
-  public @Nonnull Index withoutPagination()
+  public Index withoutPagination()
   {
     m_paginated = false;
 
@@ -117,7 +118,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return  the index for chaining
    *
    */
-  public @Nonnull Index withEditable()
+  public Index withEditable()
   {
     m_editable = true;
 
@@ -139,7 +140,7 @@ public class Index implements Serializable, Comparable<Index>
    *
    */
   // @SuppressWarnings("unchecked")
-  // public @Nonnull Index<I> withAccess(@Nonnull BaseCharacter.Group inAccess)
+  // public Index<I> withAccess(BaseCharacter.Group inAccess)
   // {
   //   m_access = inAccess;
 
@@ -197,7 +198,7 @@ public class Index implements Serializable, Comparable<Index>
   //-------------------------------------------------------------- variables
 
   /** The prefix for index names. */
-  public static final @Nonnull String PREFIX = "index-";
+  public static final String PREFIX = "index-";
 
   /** The available index paths. */
   public enum Path
@@ -227,23 +228,23 @@ public class Index implements Serializable, Comparable<Index>
      *
      * @return the path to the index
      */
-    public @Nonnull String getPath()
+    public String getPath()
     {
       return toString().toLowerCase(Locale.US).replace("_", "");
     }
   }
 
   /** The joiner to put together the string for nested indexes. */
-  private static final @Nonnull Joiner s_joinGroups = Joiner.on("::");
+  private static final Joiner s_joinGroups = Joiner.on("::");
 
   /** The index path. */
-  private @Nonnull Path m_path;
+  private Path m_path;
 
   /** The index title. */
-  private @Nonnull String m_title;
+  private String m_title;
 
   /** The type of entries in this index. */
-  private @Nonnull AbstractType<? extends AbstractEntry> m_type;
+  private AbstractType<? extends AbstractEntry> m_type;
 
   /** Flag if showing images or not. */
   private boolean m_images = false;
@@ -274,7 +275,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the converted string
    *
    */
-  public static @Nonnull String groupsToString(@Nonnull String ... inGroups)
+  public static String groupsToString(String ... inGroups)
   {
     return s_joinGroups.join(inGroups);
   }
@@ -290,7 +291,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the individual groups
    *
    */
-  public static @Nonnull String [] stringToGroups(@Nonnull String inText)
+  public static String [] stringToGroups(String inText)
   {
     return inText.split("::");
   }
@@ -333,7 +334,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the title
    *
    */
-  public @Nonnull String getTitle()
+  public String getTitle()
   {
     return m_title;
   }
@@ -347,7 +348,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the identificator
    *
    */
-//   public @Nonnull Identificator<AbstractEntry> getIdentificator()
+//   public Identificator<AbstractEntry> getIdentificator()
 //   {
 //     return s_identificator;
 //   }
@@ -361,7 +362,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the formatter
    *
    */
-//   public @Nonnull Formatter getFormatter()
+//   public Formatter getFormatter()
 //   {
 //     return m_formatter;
 //   }
@@ -375,7 +376,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      the string with the format
    *
    */
-//   public @Nonnull String getFormat()
+//   public String getFormat()
 //   {
 //     return m_format;
 //   }
@@ -391,7 +392,7 @@ public class Index implements Serializable, Comparable<Index>
    * @return      true if allowed, false if not
    *
    */
-  // public boolean allows(@Nonnull BaseCharacter.Group inLevel)
+  // public boolean allows(BaseCharacter.Group inLevel)
   // {
   //   if(m_access == null)
   //     return true;
@@ -527,7 +528,7 @@ public int hashCode()
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     return m_title + " (" + m_path + "/" + m_type
       + (m_images ? " with images" : "")

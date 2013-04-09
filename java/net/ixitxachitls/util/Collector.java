@@ -25,7 +25,7 @@ package net.ixitxachitls.util;
 
 import java.io.Serializable;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -47,6 +47,7 @@ import javax.annotation.Nonnull;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public interface Collector<T, V> extends Serializable
 {
   //-------------------------------------------------------------- accessors
@@ -62,7 +63,7 @@ public interface Collector<T, V> extends Serializable
    * @return      the collected data
    *
    */
-  public @Nonnull V collect(@Nonnull V ioCollected, @Nonnull T inObject);
+  public V collect(V ioCollected, T inObject);
 
   //........................................................................
 

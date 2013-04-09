@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.values.Comment;
@@ -62,7 +62,8 @@ import net.ixitxachitls.util.resources.Resource;
 //__________________________________________________________________________
 
 // TODO: check commeted out code
-public class DMAFile //implements Storage<AbstractEntry>
+@ParametersAreNonnullByDefault
+public class DMAFile
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -75,7 +76,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @param       inPath      the path to the file
    *
    */
-  public DMAFile(@Nonnull String inName, @Nonnull String inPath)
+  public DMAFile(String inName, String inPath)
   {
     m_name = inName;
     m_path = inPath;
@@ -88,13 +89,13 @@ public class DMAFile //implements Storage<AbstractEntry>
   //-------------------------------------------------------------- variables
 
   /** The filename of the file read. */
-  private @Nonnull String m_name;
+  private String m_name;
 
   /** The base path to the file read. */
-  private @Nonnull String m_path;
+  private String m_path;
 
   /** The file level comment (if any). */
-  private @Nonnull Comment m_comment = new Comment(1, -1);
+  private Comment m_comment = new Comment(1, -1);
 
   /** The list of entries read from the file. */
   private List<AbstractEntry> m_entries = new ArrayList<AbstractEntry>();
@@ -115,7 +116,7 @@ public class DMAFile //implements Storage<AbstractEntry>
   private boolean m_readOnly = false;
 
   /** The path for the backup files. */
-  private static final @Nonnull String s_backupPath =
+  private static final String s_backupPath =
     Config.get("resource:web/dir.backup", "dma/Backups");
 
   //........................................................................
@@ -130,7 +131,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      the name of the file (without 'unnecessary path' info)
    *
    */
-  public @Nonnull String getStorageName()
+  public String getStorageName()
   {
     return m_name;
   }
@@ -159,7 +160,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      an immutable list with all the entries
    *
    */
-  public @Nonnull List<AbstractEntry> getEntries()
+  public List<AbstractEntry> getEntries()
   {
     return Collections.unmodifiableList(m_entries);
   }
@@ -272,7 +273,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      true if read without error, false else
    *
    */
-  protected synchronized boolean read(@Nonnull Reader inReader)
+  protected synchronized boolean read(Reader inReader)
   {
     ParseReader reader = new ParseReader(inReader, m_name);
 
@@ -411,7 +412,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @throws      java.io.IOException if writing failed
    *
    */
-  protected synchronized boolean write(@Nonnull Writer inWriter)
+  protected synchronized boolean write(Writer inWriter)
     throws java.io.IOException
   {
     if(m_comment.isDefined())
@@ -451,7 +452,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      true if added, false if not
    *
    */
-  protected boolean add(@Nonnull AbstractEntry inEntry, boolean inNew)
+  protected boolean add(AbstractEntry inEntry, boolean inNew)
   {
     inEntry.addTo(this);
 
@@ -476,7 +477,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      true if added, false if not
    *
    */
-  public boolean add(@Nonnull AbstractEntry inEntry)
+  public boolean add(AbstractEntry inEntry)
   {
     return add(inEntry, true);
   }
@@ -510,7 +511,7 @@ public class DMAFile //implements Storage<AbstractEntry>
    * @return      true if removed, false if not in file
    *
    */
-  public boolean remove(@Nonnull AbstractEntry inEntry)
+  public boolean remove(AbstractEntry inEntry)
   {
     boolean removed = m_entries.remove(inEntry);
 

@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.data;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
@@ -46,6 +46,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public final class DMADataFactory
 {
   //--------------------------------------------------------- constructor(s)
@@ -82,7 +83,7 @@ public final class DMADataFactory
    * @return      the repository with all the base data
    *
    */
-  public static synchronized @Nonnull DMAData get()
+  public static synchronized DMAData get()
   {
     if(s_base == null)
     {

@@ -25,7 +25,7 @@ package net.ixitxachitls.dma.values;
 
 import java.util.Random;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -49,6 +49,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class ID extends BaseText<ID>
 {
   //--------------------------------------------------------- constructor(s)
@@ -72,7 +73,7 @@ public class ID extends BaseText<ID>
    * @param       inText           the text to store
    *
    */
-  public ID(@Nonnull String inText)
+  public ID(String inText)
   {
     super(inText);
   }
@@ -89,7 +90,7 @@ public class ID extends BaseText<ID>
    *
    */
   @Override
-public @Nonnull ID create()
+  public ID create()
   {
     return super.create(new ID());
   }
@@ -104,7 +105,7 @@ public @Nonnull ID create()
   public static final int s_digits = Config.get("values.id.digits", 4);
 
   /** The random generator. */
-  protected static final @Nonnull Random s_random = new Random();
+  protected static final Random s_random = new Random();
 
   //........................................................................
 
@@ -128,7 +129,7 @@ public @Nonnull ID create()
    *
    */
   @Override
-  public ID as(@Nonnull String inText)
+  public ID as(String inText)
   {
     throw new UnsupportedOperationException("cannot set an id");
   }
@@ -145,7 +146,7 @@ public @Nonnull ID create()
    *
    */
   @Override
-  public @Nonnull ID add(@Nonnull ID inValue)
+  public ID add(ID inValue)
   {
     throw new UnsupportedOperationException("cannot add to id");
   }
@@ -186,7 +187,7 @@ public @Nonnull ID create()
    *
    */
   @Override
-public boolean doRead(@Nonnull ParseReader inReader)
+  public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
     char []read = new char[s_digits];

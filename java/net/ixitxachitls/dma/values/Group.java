@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.values;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.Grouping;
@@ -54,6 +54,7 @@ import net.ixitxachitls.util.Grouping;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Group<T extends Value<?>, S extends Comparable<S>, U>
   implements Grouping<T, U>, Comparator<U>
 {
@@ -76,7 +77,7 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
      * @return the value to compare with
      *
      */
-    public V extract(@Nonnull K inValue);
+    public V extract(K inValue);
 
     //......................................................................
   }
@@ -96,8 +97,8 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
    * @param       inUndefined the undefined value to use if none given
    *
    */
-  public Group(@Nonnull Extractor<T, S> inExtractor, @Nonnull S []inRanges,
-               @Nonnull U []inGroups, @Nonnull U inUndefined)
+  public Group(Extractor<T, S> inExtractor, S []inRanges,
+               U []inGroups, U inUndefined)
   {
     if(inRanges.length != inGroups.length - 1)
       throw new IllegalArgumentException("number of ranges and groups don't "
@@ -116,16 +117,16 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
   //-------------------------------------------------------------- variables
 
   /** The extractor to get the value. */
-  private @Nonnull Extractor<T, S> m_extractor;
+  private Extractor<T, S> m_extractor;
 
   /** The ranges to check for. */
-  private @Nonnull S []m_ranges;
+  private S []m_ranges;
 
   /** The values for each range. */
-  protected @Nonnull U []m_groups;
+  protected U []m_groups;
 
   /** The undefined value to use. */
-  private @Nonnull U m_undefined;
+  private U m_undefined;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -145,7 +146,7 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
    *
    */
   @Override
-  public @Nonnull U group(@Nonnull T inValue)
+  public U group(T inValue)
   {
     if(!inValue.isDefined())
       return m_undefined;
@@ -170,7 +171,7 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return Arrays.toString(m_groups);
   }
@@ -248,7 +249,7 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
           (new Extractor<Name, String>()
           {
             @Override
-            public String extract(@Nonnull Name inValue)
+            public String extract(Name inValue)
             {
               return inValue.get();
             }

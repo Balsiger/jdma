@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.server.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +56,7 @@ import net.ixitxachitls.output.html.JsonWriter;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public abstract class JSONServlet extends DMAServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -102,9 +103,8 @@ public abstract class JSONServlet extends DMAServlet
    *
    */
   @Override
-  protected @Nullable SpecialResult handle
-    (@Nonnull DMARequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+  protected @Nullable SpecialResult handle(DMARequest inRequest,
+                                           HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     // Set the output header.
@@ -133,9 +133,8 @@ public abstract class JSONServlet extends DMAServlet
    * @param       inWriter the writer to write to
    *
    */
-  protected abstract void writeJson(@Nonnull DMARequest inRequest,
-                                    @Nonnull String inPath,
-                                    @Nonnull JsonWriter inWriter);
+  protected abstract void writeJson(DMARequest inRequest, String inPath,
+                                    JsonWriter inWriter);
 
   //........................................................................
 
@@ -176,9 +175,8 @@ public abstract class JSONServlet extends DMAServlet
       JSONServlet servlet = new JSONServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected void writeJson(@Nonnull DMARequest inRequest,
-                                   @Nonnull String inPath,
-                                   @Nonnull JsonWriter inWriter)
+          protected void writeJson(DMARequest inRequest, String inPath,
+                                   JsonWriter inWriter)
           {
             inWriter.add(inPath);
           }

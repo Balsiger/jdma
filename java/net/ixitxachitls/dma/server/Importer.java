@@ -38,7 +38,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -88,6 +88,7 @@ import net.ixitxachitls.util.logging.Log;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public final class Importer
 {
   //--------------------------------------------------------- constructor(s)
@@ -107,9 +108,8 @@ public final class Importer
    * @throws IOException unable to install remove api
    *
    */
-  public Importer(@Nonnull String inHost, int inPort, int inWebPort,
-                  @Nonnull String inUserName, @Nonnull String inPassword,
-                  boolean inMain)
+  public Importer(String inHost, int inPort, int inWebPort,
+                  String inUserName, String inPassword, boolean inMain)
     throws IOException
   {
     m_host = inHost;
@@ -131,7 +131,7 @@ public final class Importer
   //-------------------------------------------------------------- variables
 
   /** The remove api installer. */
-  private @Nonnull RemoteApiInstaller m_installer;
+  private RemoteApiInstaller m_installer;
 
   /** A list of all files to import. */
   private List<String> m_files = new ArrayList<String>();
@@ -140,7 +140,7 @@ public final class Importer
   private DMADatafiles m_data = new DMADatafiles("./");
 
   /** The hostname to connect to. */
-  private @Nonnull String m_host;
+  private String m_host;
 
   /** The port of the web application. */
   private int m_webPort;
@@ -179,7 +179,7 @@ public final class Importer
    * @param       inFile the file or directory to import
    *
    */
-  public void add(@Nonnull String inFile)
+  public void add(String inFile)
   {
     File file = new File(inFile);
     if(file.isDirectory())
@@ -216,7 +216,7 @@ public final class Importer
    * @param       inFile the file to import
    *
    */
-  public void addFile(@Nonnull String inFile)
+  public void addFile(String inFile)
   {
     Log.important("adding file " + inFile);
 
@@ -408,7 +408,7 @@ public final class Importer
    *
    * @param   inEntry the entry to complete
    */
-  private void complete(@Nonnull Entry<?> inEntry)
+  private void complete(Entry<?> inEntry)
   {
     inEntry.complete();
 

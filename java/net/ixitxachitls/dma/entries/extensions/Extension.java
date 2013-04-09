@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -50,6 +50,7 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -63,7 +64,7 @@ public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
    * @param       inName   the name of the attachment
    *
    */
-  public Extension(@Nonnull T inEntry, @Nonnull String inName)
+  public Extension(T inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -102,7 +103,7 @@ public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     // nothing to do here
   }

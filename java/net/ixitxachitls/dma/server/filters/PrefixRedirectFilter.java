@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.server.filters;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,6 +49,7 @@ import net.ixitxachitls.util.Files;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class PrefixRedirectFilter extends RedirectFilter
 {
   //--------------------------------------------------------- constructor(s)
@@ -61,7 +62,7 @@ public class PrefixRedirectFilter extends RedirectFilter
    * @param inPrefix the prefix for the redirect
    *
    */
-  public PrefixRedirectFilter(@Nonnull String inPrefix)
+  public PrefixRedirectFilter(String inPrefix)
   {
     m_prefix = inPrefix;
   }
@@ -71,7 +72,7 @@ public class PrefixRedirectFilter extends RedirectFilter
   //-------------------------------------------------------------- variables
 
   /** The prefix. */
-  private @Nonnull String m_prefix;
+  private String m_prefix;
 
   //........................................................................
 
@@ -91,7 +92,7 @@ public class PrefixRedirectFilter extends RedirectFilter
    *
    */
   @Override
-  public @Nonnull String computeRedirect(@Nonnull HttpServletRequest inRequest)
+  public String computeRedirect(HttpServletRequest inRequest)
   {
     return Files.concatenate(m_prefix, inRequest.getRequestURI());
   }

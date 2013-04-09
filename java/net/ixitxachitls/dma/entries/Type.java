@@ -28,8 +28,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 //..........................................................................
@@ -50,6 +50,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Type<T extends Entry<?>> extends AbstractType<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -64,8 +65,7 @@ public class Type<T extends Entry<?>> extends AbstractType<T>
    */
   @SuppressWarnings("unchecked") // We don't use Class<T> here, as this would
                                  // not allow us to create Entry.TYPE properly.
-  public Type(@Nonnull Class<?> inClass,
-              @Nonnull BaseType<? extends BaseEntry> inBase)
+  public Type(Class<?> inClass, BaseType<? extends BaseEntry> inBase)
   {
     super((Class<T>)inClass);
 
@@ -83,8 +83,8 @@ public class Type<T extends Entry<?>> extends AbstractType<T>
    * @param       inMultiple the name to use for multiple entries of the type
    *
    */
-  public Type(@Nonnull Class<T> inClass, @Nonnull BaseType<BaseEntry> inBase,
-              @Nonnull String inMultiple)
+  public Type(Class<T> inClass, BaseType<BaseEntry> inBase,
+              String inMultiple)
   {
     super(inClass, inMultiple);
 
@@ -182,7 +182,7 @@ public class Type<T extends Entry<?>> extends AbstractType<T>
    * @return      all the non-base types
    *
    */
-  public static @Nonnull Collection<Type<?/* extends Entry*/>> getTypes()
+  public static Collection<Type<?>> getTypes()
   {
     return Collections.unmodifiableCollection(s_types.values());
   }

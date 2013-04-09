@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.util.Strings;
@@ -52,6 +52,7 @@ import net.ixitxachitls.util.Strings;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Variables implements Iterable<Variable>
 {
   //--------------------------------------------------------- constructor(s)
@@ -94,7 +95,7 @@ public class Variables implements Iterable<Variable>
   private int m_keyWidth  = 0;
 
   /** The keywords available, contains the variables again. */
-  private @Nonnull Map<String, Variable> m_variables =
+  private Map<String, Variable> m_variables =
     new LinkedHashMap<String, Variable>();
 
   //........................................................................
@@ -109,7 +110,7 @@ public class Variables implements Iterable<Variable>
    * @return      empty String
    *
    */
-  public @Nonnull String getPrefix()
+  public String getPrefix()
   {
     return "";
   }
@@ -125,7 +126,7 @@ public class Variables implements Iterable<Variable>
    * @return      the specific variable
    *
    */
-  public @Nullable Variable getVariable(@Nonnull String inKey)
+  public @Nullable Variable getVariable(String inKey)
   {
     return m_variables.get(inKey);
   }
@@ -154,7 +155,7 @@ public class Variables implements Iterable<Variable>
    * @return      iterator with the keywords
    *
    */
-  public @Nonnull Iterator<String> getKeywords()
+  public Iterator<String> getKeywords()
   {
     return m_variables.keySet().iterator();
   }
@@ -184,7 +185,7 @@ public class Variables implements Iterable<Variable>
    *
    */
   @Override
-  public @Nonnull String toString()
+  public String toString()
   {
     return Strings.toString(m_variables.entrySet().iterator(), ", ", "<empty>");
   }
@@ -204,7 +205,7 @@ public class Variables implements Iterable<Variable>
    * @param       inVariable the variable to add
    *
    */
-  protected void add(@Nonnull String inKey, @Nonnull Variable inVariable)
+  protected void add(String inKey, Variable inVariable)
   {
     if(inKey.length() >= m_keyWidth)
       m_keyWidth = inKey.length() + 1;
@@ -221,7 +222,7 @@ public class Variables implements Iterable<Variable>
    * @param       inVariable the variable to add
    *
    */
-  protected void add(@Nonnull Variable inVariable)
+  protected void add(Variable inVariable)
   {
     add(inVariable.getKey(), inVariable);
   }
@@ -235,7 +236,7 @@ public class Variables implements Iterable<Variable>
    * @param       inValues the variables to add
    *
    */
-  protected void add(@Nonnull Iterable<Variable> inValues)
+  protected void add(Iterable<Variable> inValues)
   {
     for(Variable var : inValues)
       if(var != null)

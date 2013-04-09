@@ -26,7 +26,7 @@ package net.ixitxachitls.output.html;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import net.ixitxachitls.util.Strings;
@@ -50,6 +50,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class JsonWriter
 {
   //--------------------------------------------------------- constructor(s)
@@ -62,7 +63,7 @@ public class JsonWriter
    * @param       inWriter the writer to actually write to in the end
    *
    */
-  public JsonWriter(@Nonnull PrintWriter inWriter)
+  public JsonWriter(PrintWriter inWriter)
   {
     m_writer = inWriter;
   }
@@ -74,7 +75,7 @@ public class JsonWriter
   //-------------------------------------------------------------- variables
 
   /** The writer to output to. */
-  protected @Nonnull PrintWriter m_writer;
+  protected PrintWriter m_writer;
 
   /** The nesting level for arrays. */
   protected int m_nestingLevel = 0;
@@ -103,7 +104,7 @@ public class JsonWriter
    * @return      the writer for chaining
    *
    */
-  public JsonWriter strings(@Nonnull Iterable<? extends Object> inStrings)
+  public JsonWriter strings(Iterable<? extends Object> inStrings)
   {
     startArray();
 
@@ -127,8 +128,7 @@ public class JsonWriter
    * @return      the writer for chaining
    *
    */
-  public JsonWriter strings(@Nonnull Map<? extends Object, ? extends Object>
-                            inStrings)
+  public JsonWriter strings(Map<? extends Object, ? extends Object> inStrings)
   {
     startArray();
 
@@ -155,7 +155,7 @@ public class JsonWriter
    * @return      the writer for chaining
    *
    */
-  public JsonWriter string(@Nonnull String inString)
+  public JsonWriter string(String inString)
   {
     add("\"").add(inString.replace("\"", "\\\"").replace("\\", "\\\\")
                   .replace("\n", "\\n").replace("\r", "\\r")).add("\"");
@@ -175,7 +175,7 @@ public class JsonWriter
    * @return      the writer for chaining
    *
    */
-  public JsonWriter value(@Nonnull String inKey, @Nonnull String inValue)
+  public JsonWriter value(String inKey, String inValue)
   {
     add(inKey).add(": ").add(inValue);
 
@@ -193,7 +193,7 @@ public class JsonWriter
    * @return      the writer for chaining
    *
    */
-  public JsonWriter add(@Nonnull String inText)
+  public JsonWriter add(String inText)
   {
     if(m_needsDelimiter)
     {

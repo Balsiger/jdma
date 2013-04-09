@@ -28,8 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.swing.ImageIcon;
 
@@ -47,9 +47,7 @@ import net.ixitxachitls.util.logging.Log;
  * This class contains some static file handling methods.
  *
  * @file          Files.java
- *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
@@ -57,6 +55,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public final class Files
 {
   //--------------------------------------------------------- constructor(s)
@@ -102,7 +101,7 @@ public final class Files
   private static final Set<String> s_pdfExtensions = ImmutableSet.of(".pdf");
 
   /** The filename part to use for thumbnails. */
-  private static final @Nonnull String s_thumbName =
+  private static final String s_thumbName =
     Config.get("file.thumbnail", "_thumbnail");
 
   //........................................................................
@@ -138,7 +137,7 @@ public final class Files
    * @return      the encoded name
    *
    */
-  public static @Nonnull String encodeName(@Nonnull String inName)
+  public static String encodeName(String inName)
   {
     return inName
       .replace(":", "-3A-")
@@ -185,7 +184,7 @@ public final class Files
    * @return      the decoded name
    *
    */
-  public static @Nonnull String decodeName(@Nonnull String inName)
+  public static String decodeName(String inName)
   {
     return inName
       .replace("-3A-", ":")
@@ -213,7 +212,7 @@ public final class Files
    * @return      the concatenation
    *
    */
-  public static @Nonnull String concatenate(@Nonnull String ... inParts)
+  public static String concatenate(String ... inParts)
   {
     return s_pathJoiner.join(inParts)
       .replaceAll(SEPARATOR + "{2,}", "" + SEPARATOR);
@@ -231,7 +230,7 @@ public final class Files
    *              returned as well)
    *
    */
-  public static @Nonnull String extension(@Nonnull String inName)
+  public static String extension(String inName)
   {
     int pos = inName.lastIndexOf(EXTENSION_SEPARATOR);
 
@@ -253,7 +252,7 @@ public final class Files
    * @return      the filename part
    *
    */
-  public static @Nonnull String file(@Nonnull String inName)
+  public static String file(String inName)
   {
     // check the path for both, unix styles and windows style, to allow right
     // treatment of unix files, like HTML names, under windows
@@ -277,7 +276,7 @@ public final class Files
    * @return      the path part, including the trailing separator
    *
    */
-  public static @Nonnull String path(@Nonnull String inName)
+  public static String path(String inName)
   {
     // we use both separators to be able to parse unix file names on windoooze
     // and vice versa
@@ -300,8 +299,7 @@ public final class Files
    *              read)
    *
    */
-  public static @Nonnull Pair<Integer, Integer> imageSize
-    (@Nonnull String inFile)
+  public static Pair<Integer, Integer> imageSize(String inFile)
   {
     // determine the pictures size (use ImageIcon to load it synchronously)
     ImageIcon image = new ImageIcon(inFile);
@@ -322,8 +320,7 @@ public final class Files
    * @return      the name of the backuped file or null if backup failed
    *
    */
-  public static @Nullable String backup(@Nonnull String inName,
-                                        @Nonnull String inDir)
+  public static @Nullable String backup(String inName, String inDir)
   {
     // check if the file exists
     File original = new File(inName);
@@ -366,7 +363,7 @@ public final class Files
    * @return      true if deleted, false if not
    *
    */
-  public static boolean deleteDirectory(@Nonnull String inDirectory)
+  public static boolean deleteDirectory(String inDirectory)
   {
     return deleteDirectory(new File(inDirectory));
   }
@@ -382,7 +379,7 @@ public final class Files
    * @return      true if deleted, false if not
    *
    */
-  public static boolean deleteDirectory(@Nonnull File inDirectory)
+  public static boolean deleteDirectory(File inDirectory)
   {
     if(!inDirectory.isDirectory())
     {
@@ -406,7 +403,7 @@ public final class Files
    * @return  ture if everything was deleted, false if not
    *
    */
-  private static boolean delete(@Nonnull File inFile)
+  private static boolean delete(File inFile)
   {
     if(inFile.isDirectory())
       for(File file : inFile.listFiles())
@@ -430,7 +427,7 @@ public final class Files
    * @return      true if a file exists, false else
    *
    */
-  public static boolean exists(@Nonnull String inName)
+  public static boolean exists(String inName)
   {
     return new File(inName).exists();
   }
@@ -448,7 +445,7 @@ public final class Files
    * @return      the relative root directory to the given sub dir
    *
    */
-  public static @Nonnull String relativeRoot(@Nonnull String inSubDir)
+  public static String relativeRoot(String inSubDir)
   {
     StringBuilder result = new StringBuilder();
 
@@ -472,7 +469,7 @@ public final class Files
    * @return     the name converted to a thumbnail
    *
    */
-  public static @Nonnull String asThumbnail(@Nonnull String inName)
+  public static String asThumbnail(String inName)
   {
     if(Files.isThumbnail(inName))
       return inName;
@@ -497,7 +494,7 @@ public final class Files
    * @return      the computed extension
    *
    */
-  public static @Nonnull String mimeExtension(@Nonnull String inType)
+  public static String mimeExtension(String inType)
   {
     return inType.substring(inType.lastIndexOf("/") + 1);
   }
@@ -515,7 +512,7 @@ public final class Files
    * @return   true if the extension matches an image, false if not
    *
    */
-  public static boolean isImage(@Nonnull String inName)
+  public static boolean isImage(String inName)
   {
     return s_imageExtensions.contains(extension(inName));
   }
@@ -532,7 +529,7 @@ public final class Files
    * @return   true if the extension matches a pdf, false if not
    *
    */
-  public static boolean isPDF(@Nonnull String inName)
+  public static boolean isPDF(String inName)
   {
     return s_pdfExtensions.contains(extension(inName));
   }
@@ -549,7 +546,7 @@ public final class Files
    * @return   true the name is for a thumbnail, false if not
    *
    */
-  public static boolean isThumbnail(@Nonnull String inName)
+  public static boolean isThumbnail(String inName)
   {
     return inName.matches(".+" + s_thumbName + "(\\..+|)");
   }
@@ -566,7 +563,7 @@ public final class Files
    * @return      true if it should be ignored, false it not
    *
    */
-  public static boolean isIgnored(@Nonnull String inName)
+  public static boolean isIgnored(String inName)
   {
     String file = Files.file(inName);
 

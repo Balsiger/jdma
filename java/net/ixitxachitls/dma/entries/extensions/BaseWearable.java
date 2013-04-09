@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Multimap;
 
@@ -50,6 +50,7 @@ import net.ixitxachitls.dma.values.Multiple;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseWearable extends BaseExtension<BaseItem>
 {
   //----------------------------------------------------------------- nested
@@ -83,14 +84,14 @@ public class BaseWearable extends BaseExtension<BaseItem>
     FEET("Feet");
 
     /** The value's name. */
-    private @Nonnull String m_name;
+    private String m_name;
 
     /** Create the name.
      *
      * @param inName     the name of the value
      *
      */
-    private Slot(@Nonnull String inName)
+    private Slot(String inName)
     {
       m_name = constant("body.slots", inName);
     }
@@ -101,7 +102,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
      *
      */
     @Override
-    public @Nonnull String getName()
+    public String getName()
     {
       return m_name;
     }
@@ -112,7 +113,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_name;
     }
@@ -133,7 +134,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
    * @param       inName the name of the extension
    *
    */
-  public BaseWearable(@Nonnull BaseItem inEntry, @Nonnull String inName)
+  public BaseWearable(BaseItem inEntry, String inName)
   {
     super(inEntry, inName);
   }
@@ -164,7 +165,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
 
   /** The slot where the item can be worn. */
   @Key("slot")
-  protected @Nonnull EnumSelection<Slot> m_slot =
+  protected EnumSelection<Slot> m_slot =
     new EnumSelection<Slot>(Slot.class)
     .withTemplate("link", "slots");
 
@@ -178,7 +179,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
 
   /** How much time it takes to don the armor. */
   @Key("don")
-  protected @Nonnull Multiple m_don = new Multiple(new Multiple.Element []
+  protected Multiple m_don = new Multiple(new Multiple.Element []
     {
       new Multiple.Element(new Duration(), false, null, "/"),
       new Multiple.Element(new Duration(), false),
@@ -194,7 +195,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
 
   /** How much time it takes to don the armor. */
   @Key("remove")
-  protected @Nonnull Duration m_remove = new Duration();
+  protected Duration m_remove = new Duration();
 
   static
   {
@@ -216,7 +217,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
    *
    */
   @Override
-  public void computeIndexValues(@Nonnull Multimap<Index.Path, String> ioValues)
+  public void computeIndexValues(Multimap<Index.Path, String> ioValues)
   {
     super.computeIndexValues(ioValues);
 

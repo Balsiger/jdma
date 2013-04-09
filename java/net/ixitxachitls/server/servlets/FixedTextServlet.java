@@ -25,8 +25,8 @@ package net.ixitxachitls.server.servlets;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,6 +53,7 @@ import org.easymock.EasyMock;
 //__________________________________________________________________________
 
 @ThreadSafe
+@ParametersAreNonnullByDefault
 public class FixedTextServlet extends BaseServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -68,7 +69,7 @@ public class FixedTextServlet extends BaseServlet
    * @undefined   IllegalArgumentException if title or text is null
    *
    */
-  public FixedTextServlet(@Nonnull String inText, int inCode)
+  public FixedTextServlet(String inText, int inCode)
   {
     this(null, inText, inCode);
   }
@@ -86,8 +87,7 @@ public class FixedTextServlet extends BaseServlet
    * @undefined   IllegalArgumentException if title or text is null
    *
    */
-  public FixedTextServlet(@Nullable String inTitle, @Nonnull String inText,
-                          int inCode)
+  public FixedTextServlet(@Nullable String inTitle, String inText, int inCode)
   {
     if (inTitle == null)
       m_error = new TextError(inCode, inText);
@@ -102,7 +102,7 @@ public class FixedTextServlet extends BaseServlet
   //-------------------------------------------------------------- variables
 
   /** The error with all the information. */
-  private @Nonnull SpecialResult m_error;
+  private SpecialResult m_error;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -128,8 +128,8 @@ public class FixedTextServlet extends BaseServlet
    *
    */
   @Override
-protected SpecialResult handle(@Nonnull HttpServletRequest inRequest,
-                                 @Nonnull HttpServletResponse inResponse)
+protected SpecialResult handle(HttpServletRequest inRequest,
+                               HttpServletResponse inResponse)
     throws IOException
   {
     return m_error;

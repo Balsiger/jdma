@@ -26,8 +26,8 @@ package net.ixitxachitls.dma.entries;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.values.Name;
@@ -51,6 +51,7 @@ import net.ixitxachitls.dma.values.ValueList;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class BaseCampaign extends BaseEntry
                           //implements CampaignData, Iterable<BaseEntry>
 {
@@ -76,7 +77,7 @@ public class BaseCampaign extends BaseEntry
    * @param       inName the name of the base item
    *
    */
-  public BaseCampaign(@Nonnull String inName)
+  public BaseCampaign(String inName)
   {
     super(inName, TYPE);
   }
@@ -116,7 +117,7 @@ public class BaseCampaign extends BaseEntry
    *
    */
   @Override
-  public @Nullable Object compute(@Nonnull String inKey)
+  public @Nullable Object compute(String inKey)
   {
     if("campaigns".equals(inKey))
     {
@@ -143,7 +144,7 @@ public class BaseCampaign extends BaseEntry
    *
    */
   // @Override
-  // public @Nullable ValueHandle computeValue(@Nonnull String inKey,
+  // public @Nullable ValueHandle computeValue(String inKey,
   // boolean inDM)
   // {
   //   if("campaigns".equals(inKey))
@@ -180,8 +181,11 @@ public class BaseCampaign extends BaseEntry
    *
    */
   @Override
-  public boolean isDM(@Nonnull BaseCharacter inUser)
+  public boolean isDM(@Nullable BaseCharacter inUser)
   {
+    if(inUser == null)
+      return false;
+
     return inUser.hasAccess(BaseCharacter.Group.ADMIN);
   }
 

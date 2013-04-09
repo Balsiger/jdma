@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 //..........................................................................
@@ -44,6 +44,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Name extends BaseText<Name>
 {
   //--------------------------------------------------------- constructor(s)
@@ -67,7 +68,7 @@ public class Name extends BaseText<Name>
    * @param       inText           the text to store
    *
    */
-  public Name(@Nonnull String inText)
+  public Name(String inText)
   {
     super(inText);
   }
@@ -84,7 +85,7 @@ public class Name extends BaseText<Name>
    *
    */
   @Override
-  public @Nonnull Name create()
+  public Name create()
   {
     return super.create(new Name());
   }

@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import net.ixitxachitls.util.Strings;
@@ -66,6 +66,7 @@ import net.ixitxachitls.util.Strings;
 //__________________________________________________________________________
 
 @NotThreadSafe
+@ParametersAreNonnullByDefault
 public class WrapBuffer implements Buffer
 {
   //--------------------------------------------------------- constructor(s)
@@ -96,7 +97,7 @@ public class WrapBuffer implements Buffer
    * @param       inIgnore the characters to ignored for line length counting
    *
    */
-  public WrapBuffer(int inWidth, @Nonnull String inIgnore)
+  public WrapBuffer(int inWidth, String inIgnore)
   {
     this(inWidth);
 
@@ -116,13 +117,13 @@ public class WrapBuffer implements Buffer
   private @Nullable String m_ignore = null;
 
   /** The actual lines in the buffer. */
-  private @Nonnull List<String> m_lines = new LinkedList<String>();
+  private List<String> m_lines = new LinkedList<String>();
 
   /** The current line of the buffer. */
-  private @Nonnull StringBuilder m_current = new StringBuilder();
+  private StringBuilder m_current = new StringBuilder();
 
   /** The alignment inside the current line of the buffer. */
-  private @Nonnull Alignment m_alignment = Alignment.left;
+  private Alignment m_alignment = Alignment.left;
 
   //........................................................................
 
@@ -170,7 +171,7 @@ public class WrapBuffer implements Buffer
    * @return      a String containing all the lines
    *
    */
-  public @Nonnull String getLines()
+  public String getLines()
   {
     StringBuilder result = new StringBuilder();
 
@@ -211,7 +212,7 @@ public class WrapBuffer implements Buffer
    * @return      the current alignment
    *
    */
-  public @Nonnull Alignment getAlignment()
+  public Alignment getAlignment()
   {
     return m_alignment;
   }
@@ -304,7 +305,7 @@ public class WrapBuffer implements Buffer
    *
    */
   @Override
-public @Nonnull Buffer newBuffer()
+  public Buffer newBuffer()
   {
     return new WrapBuffer(m_width, m_ignore);
   }
@@ -321,7 +322,7 @@ public @Nonnull Buffer newBuffer()
    *
    */
   @Override
-public @Nonnull Buffer newBuffer(int inWidth)
+  public Buffer newBuffer(int inWidth)
   {
     return new WrapBuffer(inWidth, m_ignore);
   }
@@ -337,7 +338,7 @@ public @Nonnull Buffer newBuffer(int inWidth)
    *
    */
   @Override
-public @Nonnull String getContents()
+  public String getContents()
   {
     StringBuilder result = new StringBuilder();
 
@@ -403,7 +404,7 @@ public @Nonnull String getContents()
     * @param       inText the text to add to the buffer
     *
     */
-  public void add(@Nonnull String inText)
+  public void add(String inText)
   {
     preprocess();
 
@@ -531,7 +532,7 @@ public @Nonnull String getContents()
    * @param       inAlignment the new alignment
    *
    */
-  public void setAlignment(@Nonnull Alignment inAlignment)
+  public void setAlignment(Alignment inAlignment)
   {
     m_alignment = inAlignment;
   }
@@ -739,7 +740,7 @@ public @Nonnull String getContents()
    *              none could be found
    *
    */
-  protected int findChar(@Nonnull String inChar, @Nonnull StringBuilder inText,
+  protected int findChar(String inChar, StringBuilder inText,
                          int inWidth, boolean inFirst)
   {
     if(inFirst)
@@ -783,7 +784,7 @@ public @Nonnull String getContents()
    * @return      an array containing all positions of spaces
    *
    */
-  public static @Nonnull int []findSpaces(@Nonnull StringBuilder inBuffer)
+  public static int []findSpaces(StringBuilder inBuffer)
   {
     int number = 0;
     for(int i = 0; i < inBuffer.length(); i++)
@@ -808,7 +809,7 @@ public @Nonnull String getContents()
    *
    */
   @Override
-public void endLine()
+  public void endLine()
   {
     // the line in the buffer is already ended, if it is empty; in that case we
     // don't need to end it again
@@ -827,7 +828,7 @@ public void endLine()
    *
    */
   @Override
-public @Nonnull String toString()
+  public String toString()
   {
     StringBuilder result = new StringBuilder("buffer has width " + m_width
                                              + " and alignment " + m_alignment

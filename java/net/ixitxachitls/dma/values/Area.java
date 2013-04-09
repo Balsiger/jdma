@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
@@ -48,6 +48,7 @@ import net.ixitxachitls.util.configuration.Config;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Area extends Units<Area>
 {
   //--------------------------------------------------------- constructor(s)
@@ -107,7 +108,7 @@ public class Area extends Units<Area>
   //-------------------------------------------------------------- variables
 
   /** The definition of areas. */
-  private static final @Nonnull String s_definition =
+  private static final String s_definition =
     Config.get("/game.area",
                "1/1  : Feet =   9/1    : sq yd : square yard|square yards,"
                + "                1/1    : sq ft : square foot|square feet,"
@@ -119,7 +120,7 @@ public class Area extends Units<Area>
                + "square centimeter|square centimeters.");
 
   /** The sets with the possible units. */
-  private static @Nonnull Set []s_sets = parseDefinition(s_definition);
+  private static Set []s_sets = parseDefinition(s_definition);
 
   //........................................................................
 
@@ -162,7 +163,7 @@ public class Area extends Units<Area>
    * @return      the inches
    *
    */
-  public @Nonnull Rational getAsFeet()
+  public Rational getAsFeet()
   {
     if(!isDefined())
       return new Rational(0);
@@ -182,7 +183,7 @@ public class Area extends Units<Area>
    * @return      the inches
    *
    */
-  public @Nonnull Rational getAsMeters()
+  public Rational getAsMeters()
   {
     if(!isDefined())
       return new Rational(0);
@@ -246,9 +247,9 @@ public class Area extends Units<Area>
    * @return      the value as metric
    *
    */
-  public @Nonnull Area asMetric(@Nullable Rational inSquareMeters,
-                                @Nullable Rational inSquareDecimeters,
-                                @Nullable Rational inSquareCentimeters)
+  public Area asMetric(@Nullable Rational inSquareMeters,
+                       @Nullable Rational inSquareDecimeters,
+                       @Nullable Rational inSquareCentimeters)
   {
     return as(new Rational [] { inSquareMeters, inSquareDecimeters,
                                 inSquareCentimeters }, 1);
@@ -269,9 +270,9 @@ public class Area extends Units<Area>
    * @undefined   never
    *
    */
-  public @Nonnull Area asFeet(@Nullable Rational inSquareYards,
-                              @Nullable Rational inSquareFeet,
-                              @Nullable Rational inSquareInches)
+  public Area asFeet(@Nullable Rational inSquareYards,
+                     @Nullable Rational inSquareFeet,
+                     @Nullable Rational inSquareInches)
   {
     return as(new Rational [] { inSquareYards, inSquareFeet,
                                 inSquareInches }, 0);

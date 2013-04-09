@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
@@ -61,6 +61,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class EntryListServlet extends PageServlet
 {
   //--------------------------------------------------------- constructor(s)
@@ -103,8 +104,8 @@ public class EntryListServlet extends PageServlet
    */
   @SuppressWarnings("unchecked") // need to cast
   public List<AbstractEntry>
-    getEntries(@Nonnull DMARequest inRequest, @Nonnull String inPath,
-               @Nonnull AbstractType<? extends AbstractEntry> inType,
+    getEntries(DMARequest inRequest, String inPath,
+               AbstractType<? extends AbstractEntry> inType,
                int inStart, int inSize)
   {
     return (List<AbstractEntry>)DMADataFactory.get()
@@ -130,8 +131,8 @@ public class EntryListServlet extends PageServlet
    *
    */
   @Override
-  protected @Nonnull Map<String, Object> collectData
-    (@Nonnull DMARequest inRequest, @Nonnull SoyRenderer inRenderer)
+  protected Map<String, Object> collectData(DMARequest inRequest,
+                                            SoyRenderer inRenderer)
   {
     Map<String, Object> data = super.collectData(inRequest, inRenderer);
 

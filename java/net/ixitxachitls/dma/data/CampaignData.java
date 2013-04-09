@@ -23,8 +23,8 @@
 
 package net.ixitxachitls.dma.data;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.BaseCampaign;
 
@@ -46,6 +46,7 @@ import net.ixitxachitls.dma.entries.BaseCampaign;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class CampaignData extends DMADatafiles
 {
   //--------------------------------------------------------- constructor(s)
@@ -61,12 +62,12 @@ public class CampaignData extends DMADatafiles
    * @param       inFiles    the default files to read data from
    *
    */
-  public CampaignData(@Nonnull BaseCampaign inCampaign, @Nonnull String inPath,
-                      @Nonnull DMAData inBaseData, @Nullable String ... inFiles)
+  public CampaignData(BaseCampaign inCampaign, String inPath,
+                      DMAData inBaseData, @Nullable String ... inFiles)
   {
     super(inPath, inFiles);
 
-    m_campaign = inCampaign;
+    // m_campaign = inCampaign;
     m_base = inBaseData;
   }
 
@@ -77,10 +78,10 @@ public class CampaignData extends DMADatafiles
   //-------------------------------------------------------------- variables
 
   /** The campaign for this data. */
-  private @Nonnull BaseCampaign m_campaign;
+  // private BaseCampaign m_campaign;
 
   /** All the available base data. */
-  private @Nonnull DMAData m_base;
+  private DMAData m_base;
 
   /** The id for serialization. */
   private static final long serialVersionUID = 1L;
@@ -98,7 +99,7 @@ public class CampaignData extends DMADatafiles
    *
    */
   @Override
-public @Nonnull DMAData getBaseData()
+  public DMAData getBaseData()
   {
     return m_base;
   }
@@ -119,7 +120,7 @@ public @Nonnull DMAData getBaseData()
    *
    */
   @Override
-public boolean read()
+  public boolean read()
   {
     boolean result = super.read();
 

@@ -27,8 +27,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -56,6 +56,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public abstract class BaseServlet extends HttpServlet
 {
   //----------------------------------------------------------------- nested
@@ -72,8 +73,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      * @throws IOException if something does wrong
      */
-    public void send(@Nonnull HttpServletResponse inResponse)
-      throws IOException;
+    public void send(HttpServletResponse inResponse) throws IOException;
 
     /**
      * Convert to a string for debugging.
@@ -82,7 +82,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-    public @Nonnull String toString();
+    public String toString();
   }
 
   //........................................................................
@@ -98,7 +98,7 @@ public abstract class BaseServlet extends HttpServlet
      * @param inCode     the error code for the error
      * @param inMessage  the error message
      */
-    public TextError(int inCode, @Nonnull String inMessage)
+    public TextError(int inCode, String inMessage)
     {
       m_code = inCode;
       m_message = inMessage;
@@ -108,7 +108,7 @@ public abstract class BaseServlet extends HttpServlet
     protected int m_code;
 
     /** The error message. */
-    protected @Nonnull String m_message;
+    protected String m_message;
 
     /** The id for serialization. */
     private static final long serialVersionUID = 1L;
@@ -121,8 +121,7 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      */
     @Override
-    public void send(@Nonnull HttpServletResponse inResponse)
-      throws IOException
+    public void send(HttpServletResponse inResponse) throws IOException
     {
       inResponse.sendError(m_code, m_message);
     }
@@ -134,7 +133,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_code + ": " + m_message;
     }
@@ -154,8 +153,7 @@ public abstract class BaseServlet extends HttpServlet
      * @param inTitle   the errro title
      * @param inMessage the error message
      */
-    public HTMLError(int inCode, @Nonnull String inTitle,
-                     @Nonnull String inMessage)
+    public HTMLError(int inCode, String inTitle, String inMessage)
     {
       super(inCode, inMessage);
 
@@ -163,7 +161,7 @@ public abstract class BaseServlet extends HttpServlet
     }
 
     /** The title for the error. */
-    protected @Nonnull String m_title;
+    protected String m_title;
 
     /** The id for serialization. */
     private static final long serialVersionUID = 1L;
@@ -176,7 +174,7 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      */
     @Override
-    public void send(@Nonnull HttpServletResponse inResponse)
+    public void send(HttpServletResponse inResponse)
       throws IOException
     {
       inResponse.addHeader("Content-Type", "text/html");
@@ -205,7 +203,7 @@ public abstract class BaseServlet extends HttpServlet
      * @return the string representation
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return m_code + ": " + m_title + "(" + m_message + ")";
     }
@@ -232,8 +230,7 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      */
     @Override
-    public void send(@Nonnull HttpServletResponse inResponse)
-      throws IOException
+    public void send(HttpServletResponse inResponse) throws IOException
     {
       inResponse.sendError(HttpServletResponse.SC_NOT_MODIFIED, "");
     }
@@ -247,7 +244,7 @@ public abstract class BaseServlet extends HttpServlet
      * @return the string representation
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return "not-modified";
     }
@@ -265,13 +262,13 @@ public abstract class BaseServlet extends HttpServlet
      *
      * @param inDestination the destination to redirect to
      */
-    public Redirect(@Nonnull String inDestination)
+    public Redirect(String inDestination)
     {
       m_destination = inDestination;
     }
 
     /** The destination to redirect to. */
-    private @Nonnull String m_destination;
+    private String m_destination;
 
     /**
      * Send the error to the given response.
@@ -281,8 +278,7 @@ public abstract class BaseServlet extends HttpServlet
      * @throws IOException if something does wrong
      */
     @Override
-    public void send(@Nonnull HttpServletResponse inResponse)
-      throws IOException
+    public void send(HttpServletResponse inResponse) throws IOException
     {
       inResponse.sendRedirect(m_destination);
     }
@@ -297,7 +293,7 @@ public abstract class BaseServlet extends HttpServlet
      *
      */
     @Override
-    public @Nonnull String toString()
+    public String toString()
     {
       return "redirect to " + m_destination;
     }
@@ -342,8 +338,8 @@ public abstract class BaseServlet extends HttpServlet
    * @throws      IOException      writing to the page failed
    */
   @Override
-  public void doGet(@Nonnull HttpServletRequest inRequest,
-                    @Nonnull HttpServletResponse inResponse)
+  public void doGet(HttpServletRequest inRequest,
+                    HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     Log.debug("Handling " + inRequest.getMethod() + " request for "
@@ -368,8 +364,8 @@ public abstract class BaseServlet extends HttpServlet
    *
    */
   @Override
-  public void doPost(@Nonnull HttpServletRequest inRequest,
-                     @Nonnull HttpServletResponse inResponse)
+  public void doPost(HttpServletRequest inRequest,
+                     HttpServletResponse inResponse)
     throws ServletException, IOException
   {
     Log.debug("Handling " + inRequest.getMethod() + " request for "
@@ -393,8 +389,8 @@ public abstract class BaseServlet extends HttpServlet
    * @throws      ServletException general error when processing the page
    * @throws      IOException writing to page failed
    */
-  public void handleAndCheck(@Nonnull HttpServletRequest inRequest,
-                             @Nonnull HttpServletResponse inResponse)
+  public void handleAndCheck(HttpServletRequest inRequest,
+                             HttpServletResponse inResponse)
     throws IOException, ServletException
   {
     SpecialResult result = handle(inRequest, inResponse);
@@ -418,8 +414,8 @@ public abstract class BaseServlet extends HttpServlet
    * @throws      IOException      writing to the page failed
    */
   protected abstract @Nullable SpecialResult handle
-    (@Nonnull HttpServletRequest inRequest,
-     @Nonnull HttpServletResponse inResponse)
+    (HttpServletRequest inRequest,
+     HttpServletResponse inResponse)
     throws ServletException, IOException;
 
   //........................................................................
@@ -455,9 +451,8 @@ public abstract class BaseServlet extends HttpServlet
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle
-            (@Nonnull HttpServletRequest inRequest,
-             @Nonnull HttpServletResponse inResponse)
+          protected SpecialResult handle(HttpServletRequest inRequest,
+                                         HttpServletResponse inResponse)
           {
             return new NotModified();
           }
@@ -494,9 +489,8 @@ public abstract class BaseServlet extends HttpServlet
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle
-            (@Nonnull HttpServletRequest inRequest,
-             @Nonnull HttpServletResponse inResponse)
+          protected SpecialResult handle(HttpServletRequest inRequest,
+                                         HttpServletResponse inResponse)
           {
             return new HTMLError(200, "title", "message");
           }
@@ -537,9 +531,8 @@ public abstract class BaseServlet extends HttpServlet
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle
-            (@Nonnull HttpServletRequest inRequest,
-             @Nonnull HttpServletResponse inResponse)
+          protected SpecialResult handle(HttpServletRequest inRequest,
+                                         HttpServletResponse inResponse)
           {
             return new TextError(123, "message");
           }
@@ -574,9 +567,8 @@ public abstract class BaseServlet extends HttpServlet
       BaseServlet servlet = new BaseServlet() {
           private static final long serialVersionUID = 1L;
           @Override
-          protected SpecialResult handle
-            (@Nonnull HttpServletRequest inRequest,
-             @Nonnull HttpServletResponse inResponse)
+          protected SpecialResult handle(HttpServletRequest inRequest,
+                                         HttpServletResponse inResponse)
           {
             handled.set(true);
             return null;

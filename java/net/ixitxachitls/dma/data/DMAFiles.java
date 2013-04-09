@@ -29,8 +29,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
@@ -57,6 +57,7 @@ import net.ixitxachitls.util.resources.Resource;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public final class DMAFiles
 {
   //--------------------------------------------------------- constructor(s)
@@ -78,15 +79,15 @@ public final class DMAFiles
   //-------------------------------------------------------------- variables
 
   /** The name of a default image. */
-  private static final @Nonnull String s_defaultImage =
+  private static final String s_defaultImage =
     Config.get("files.default.image", "dummy.png");
 
   /** The base path to all dma files. */
-  private static final @Nonnull String s_basePath =
+  private static final String s_basePath =
     Config.get("files.path.base", "/files");
 
   /** The directory with the icons. */
-  private static final @Nonnull String s_dirIcons =
+  private static final String s_dirIcons =
     Config.get("resource:html/dir.icons", "/icons");
 
   /** The special file names that we want to return first. */
@@ -110,10 +111,9 @@ public final class DMAFiles
    * @return      the name of the file to use for the given data
    *
    */
-  public static @Nonnull String mainImage(@Nonnull String inID,
-                                          @Nonnull String inType,
-                                          @Nullable String inBaseType,
-                                          @Nullable String ... inBaseIDs)
+  public static String mainImage(String inID, String inType,
+                                 @Nullable String inBaseType,
+                                 @Nullable String ... inBaseIDs)
   {
     String file = mainImage(inID, inType);
     if(file != null)
@@ -142,8 +142,7 @@ public final class DMAFiles
    * @return      the name of the file to use for the given data
    *
    */
-  private static @Nullable String mainImage(@Nonnull String inID,
-                                            @Nonnull String inType)
+  private static @Nullable String mainImage(String inID, String inType)
   {
    Resource resources =
      Resource.get(Files.concatenate(s_basePath, inType, inID));
@@ -192,10 +191,9 @@ public final class DMAFiles
    * @return      the names of the file to use for the given data
    *
    */
-  public static @Nonnull List<String> otherFiles(@Nonnull String inID,
-                                                 @Nonnull String inType,
-                                                 @Nullable String inBaseType,
-                                                 @Nullable String ... inBaseIDs)
+  public static List<String> otherFiles(String inID, String inType,
+                                        @Nullable String inBaseType,
+                                        @Nullable String ... inBaseIDs)
   {
     String main = mainImage(inID, inType, inBaseType, inBaseIDs);
 
@@ -225,10 +223,10 @@ public final class DMAFiles
    * @return      the names of the file to use for the given data
    *
    */
-  private static @Nonnull List<String> otherFiles(@Nonnull List<String> ioFiles,
-                                                  @Nonnull String inMain,
-                                                  @Nonnull String inID,
-                                                  @Nonnull String inType)
+  private static List<String> otherFiles(List<String> ioFiles,
+                                         String inMain,
+                                         String inID,
+                                         String inType)
   {
     Resource resources =
       Resource.get(Files.concatenate(s_basePath, inType, inID));
@@ -254,7 +252,7 @@ public final class DMAFiles
    * @return      the name of the default image, without leading path
    *
    */
-  public static @Nonnull String defaultImage(@Nonnull String inType)
+  public static String defaultImage(String inType)
   {
     return Files.concatenate(s_dirIcons, inType + "-" + s_defaultImage);
   }

@@ -31,8 +31,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.template.soy.data.SoyMapData;
 
@@ -56,6 +56,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class SoyRenderer
 {
   //--------------------------------------------------------- constructor(s)
@@ -68,7 +69,7 @@ public class SoyRenderer
    * @param   inTemplate the soy template that can be used for rendering.
    *
    */
-  public SoyRenderer(@Nonnull SoyTemplate inTemplate)
+  public SoyRenderer(SoyTemplate inTemplate)
   {
     m_template = inTemplate;
   }
@@ -80,7 +81,7 @@ public class SoyRenderer
   //-------------------------------------------------------------- variables
 
   /** The soy template. */
-  private @Nonnull SoyTemplate m_template;
+  private SoyTemplate m_template;
 
   /** The data to be used when rendering, if any. */
   private @Nullable SoyMapData m_data = null;
@@ -131,10 +132,10 @@ public class SoyRenderer
   protected static final char s_markEnd = '\006';
 
   /** The characters that are allowed in 'special character only commands'. */
-  private static final @Nonnull String s_special = "<>=!~*#$%@?+|";
+  private static final String s_special = "<>=!~*#$%@?+|";
 
   /** The commands associated with each special command string. */
-  private static final @Nonnull Map<String, String> s_specialNames =
+  private static final Map<String, String> s_specialNames =
     new HashMap<String, String>();
 
   static
@@ -207,10 +208,10 @@ public class SoyRenderer
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName,
-                                @Nullable Map<String, Object> inData,
-                                @Nullable Map<String, Object> inInjected,
-                                @Nullable Set<String> inDelegates)
+  public String render(String inName,
+                       @Nullable Map<String, Object> inData,
+                       @Nullable Map<String, Object> inInjected,
+                       @Nullable Set<String> inDelegates)
   {
     return m_template.render(inName, inData, inInjected, inDelegates);
   }
@@ -228,9 +229,9 @@ public class SoyRenderer
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName,
-                                @Nullable Map<String, Object> inData,
-                                @Nullable Set<String> inDelegates)
+  public String render(String inName,
+                       @Nullable Map<String, Object> inData,
+                       @Nullable Set<String> inDelegates)
   {
     SoyMapData data = null;
     if(inData != null)
@@ -251,8 +252,7 @@ public class SoyRenderer
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName,
-                                @Nullable Set<String> inDelegates)
+  public String render(String inName, @Nullable Set<String> inDelegates)
   {
     return m_template.render(inName, m_data, m_injected, inDelegates);
   }
@@ -268,7 +268,7 @@ public class SoyRenderer
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName)
+  public String render(String inName)
   {
     return m_template.render(inName, m_data, m_injected, null);
   }
@@ -286,9 +286,9 @@ public class SoyRenderer
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName,
-                                @Nullable Map<String, Object> inData,
-                                @Nullable Map<String, Object> inInjected)
+  public String render(String inName,
+                       @Nullable Map<String, Object> inData,
+                       @Nullable Map<String, Object> inInjected)
   {
     return m_template.render(inName, inData, inInjected, null);
   }
@@ -305,8 +305,7 @@ public class SoyRenderer
    * @return      the rendered template as a string
    *
    */
-  public @Nonnull String render(@Nonnull String inName,
-                                @Nullable Map<String, Object> inData)
+  public String render(String inName, @Nullable Map<String, Object> inData)
   {
     return m_template.render(inName, new SoyMapData(inData), m_injected, null);
   }
@@ -336,7 +335,7 @@ public class SoyRenderer
    * @return   the rendered text
    *
    */
-  public @Nonnull String renderCommands(@Nonnull String inText)
+  public String renderCommands(String inText)
   {
     if(inText.isEmpty())
       return inText;
@@ -496,11 +495,11 @@ public class SoyRenderer
    * @return      the text with all brackets replaced
    *
    */
-  protected static @Nonnull String markBrackets(@Nonnull String inText,
-                                                char inEscape,
-                                                char inStart, char inEnd,
-                                                char inMarkerStart,
-                                                char inMarkerEnd)
+  protected static String markBrackets(String inText,
+                                       char inEscape,
+                                       char inStart, char inEnd,
+                                       char inMarkerStart,
+                                       char inMarkerEnd)
   {
     assert inStart != '<' : "cannot replace '<' brackets";
     assert inEnd != '>' : "cannot replace '>' brackets";
@@ -559,7 +558,7 @@ public class SoyRenderer
    * @return      the replaced text
    *
    */
-  protected static @Nonnull String clean(@Nonnull String inText)
+  protected static String clean(String inText)
   {
     inText = inText.replaceAll(s_markArgStart + "<\\d+>", "" + s_argStart);
     inText = inText.replaceAll(s_markArgEnd + "<\\d+>", "" + s_argEnd);

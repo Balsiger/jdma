@@ -25,8 +25,8 @@ package net.ixitxachitls.util;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
 
@@ -48,6 +48,7 @@ import javax.annotation.Nullable;
 
 //__________________________________________________________________________
 
+@ParametersAreNonnullByDefault
 public class FilteredIterator<T> implements Iterator<T>
 {
   //--------------------------------------------------------- constructor(s)
@@ -61,8 +62,7 @@ public class FilteredIterator<T> implements Iterator<T>
    * @param       inFilter the filter to use
    *
    */
-  public FilteredIterator(@Nonnull Iterator<T> inValues,
-                          @Nonnull Filter<T> inFilter)
+  public FilteredIterator(Iterator<T> inValues, Filter<T> inFilter)
   {
     m_filter   = inFilter;
     m_iterator = inValues;
@@ -75,10 +75,10 @@ public class FilteredIterator<T> implements Iterator<T>
   //-------------------------------------------------------------- variables
 
   /** The filter. */
-  private @Nonnull Filter<T> m_filter;
+  private Filter<T> m_filter;
 
   /** The unterlying iterator. */
-  private @Nonnull Iterator<T> m_iterator;
+  private Iterator<T> m_iterator;
 
   /** The current element. */
   private @Nullable T m_next = null;

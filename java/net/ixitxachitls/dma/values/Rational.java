@@ -23,7 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 //..........................................................................
@@ -45,6 +45,7 @@ import javax.annotation.concurrent.Immutable;
 //__________________________________________________________________________
 
 @Immutable
+@ParametersAreNonnullByDefault
 public class Rational extends BaseRational<Rational>
 {
   //--------------------------------------------------------- constructor(s)
@@ -121,7 +122,7 @@ public class Rational extends BaseRational<Rational>
    *
    */
   @Override
-public @Nonnull Rational create()
+  public Rational create()
   {
     return super.create(new Rational());
   }
@@ -255,7 +256,7 @@ public @Nonnull Rational create()
    *              value > 0, if it is above it and 0 if it is equal
    *
    */
-  public int compare(@Nonnull Rational inValue)
+  public int compare(Rational inValue)
   {
     // reduce the fractions if possible
     Rational first = reduce();
@@ -304,7 +305,7 @@ public @Nonnull Rational create()
    *
    */
   @Override
-public @Nonnull Rational reduce()
+  public Rational reduce()
   {
     return super.reduce();
   }
