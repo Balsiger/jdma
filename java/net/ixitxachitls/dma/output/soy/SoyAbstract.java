@@ -245,7 +245,7 @@ public abstract class SoyAbstract extends SoyMapData
       SoyMapData map = new SoyMapData();
       Map<?, ?> input = (Map<?, ?>)inObject;
       for(Map.Entry<?, ?> entry : input.entrySet())
-        map.putSingle(entry.getKey().toString(),
+        map.putSingle(entry.getKey() == null ? "" : entry.getKey().toString(),
                       convert(inName, entry.getValue()));
 
       return map;

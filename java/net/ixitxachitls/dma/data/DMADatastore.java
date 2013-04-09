@@ -488,7 +488,7 @@ public class DMADatastore implements DMAData
   public List<List<String>> getMultiValues
     (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
-    return m_data.getMultiValues(inType.toString(), null, inFields);
+    return m_data.getMultiValues(escapeType(inType.toString()), null, inFields);
   }
 
   //........................................................................
@@ -507,7 +507,7 @@ public class DMADatastore implements DMAData
   public SortedSet<String> getValues
     (AbstractType<? extends AbstractEntry> inType, String inField)
   {
-    return m_data.getValues(inType.toString(), null, inField);
+    return m_data.getValues(escapeType(inType.toString()), null, inField);
   }
 
   //........................................................................
@@ -529,12 +529,7 @@ public class DMADatastore implements DMAData
   //------------------------------ clearCache ------------------------------
 
   /**
-   *
-   *
-   * @param
-   *
-   * @return
-   *
+   * Clear the cache of entires.
    */
   public void clearCache()
   {

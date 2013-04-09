@@ -184,14 +184,14 @@ public class Combined<T extends Value<T>>
     //--------------------------- getDescription ---------------------------
 
     /**
-     * Get the description for this nodes value, if any.
+     * Get the description (group and text) for the contribution.
      *
-     * @return  the description, if any
-     *
+     * @return  the description
      */
-    public @Nullable String getDescription()
+    public String getDescription()
     {
-      return m_description;
+      return m_entry.getName()
+        + (m_description == null ? "" : " (" + m_description + ")");
     }
 
     //......................................................................
