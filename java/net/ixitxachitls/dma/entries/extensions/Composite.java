@@ -33,7 +33,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
@@ -244,7 +243,7 @@ public class Composite extends Extension<Item>
     {
       V total = sum(inName, getIncludes());
       if(total != null)
-        ioCombined.addValue(new Contribution<V>(total, this, "composite"));
+        ioCombined.addValue(total, this, "composite");
     }
 
     super.collect(inName, ioCombined);

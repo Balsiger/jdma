@@ -110,35 +110,35 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    *
    * @return  a newly created modified number
    */
-  public static <T extends Value<T>> ModifiedNumber
-    create(int inBase, List<Contribution<T>> inContributions)
-  {
-    ModifiedNumber number = new ModifiedNumber(inBase, true);
+  // public static <T extends Value<T>> ModifiedNumber
+  //   create(int inBase, List<Contribution<T>> inContributions)
+  // {
+  //   ModifiedNumber number = new ModifiedNumber(inBase, true);
 
-    for(Contribution<T> contribution : inContributions)
-    {
-      T value = contribution.getValue();
-      String text = contribution.getDescription();
+  //   for(Contribution<T> contribution : inContributions)
+  //   {
+  //     T value = contribution.getValue();
+  //     String text = contribution.getDescription();
 
-      if(value instanceof Number)
-        number.withModifier(new Modifier((int)((Number)value).get()), text);
-      else if(value instanceof Modifier)
-        number.withModifier((Modifier)value, text);
-      else if(value instanceof ModifiedNumber)
-      {
-        number.withModifier(new Modifier((int)((ModifiedNumber)value).get()),
-                            text);
-        for(Map.Entry<String, Modifier> modifier
-              : ((ModifiedNumber)value).m_modifiers.entrySet())
-          number.withModifier(modifier.getValue(), modifier.getKey());
-      }
-      else
-        throw new UnsupportedOperationException("cannot modifiy number with "
-                                                + value.getClass());
-    }
+  //     if(value instanceof Number)
+  //       number.withModifier(new Modifier((int)((Number)value).get()), text);
+  //     else if(value instanceof Modifier)
+  //       number.withModifier((Modifier)value, text);
+  //     else if(value instanceof ModifiedNumber)
+  //     {
+  //       number.withModifier(new Modifier((int)((ModifiedNumber)value).get()),
+  //                           text);
+  //       for(Map.Entry<String, Modifier> modifier
+  //             : ((ModifiedNumber)value).m_modifiers.entrySet())
+  //         number.withModifier(modifier.getValue(), modifier.getKey());
+  //     }
+  //     else
+  //       throw new UnsupportedOperationException("cannot modifiy number with "
+  //                                               + value.getClass());
+  //   }
 
-    return number;
-  }
+  //   return number;
+  // }
 
   //........................................................................
 
@@ -218,7 +218,29 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   }
 
   //........................................................................
+  //------------------------------ withValue -------------------------------
 
+  /**
+   *
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public ModifiedNumber withValue(Value<?> inValue, String inDescription)
+  {
+    if(inValue instanceof Number)
+      withModifier(new Modifier((int)((Number)inValue).get()), inDescription);
+    else if(inValue instanceof Modifier)
+      withModifier((Modifier)inValue, inDescription);
+    else if(inValue instanceof ModifiedNumber)
+      with((ModifiedNumber)inValue);
+
+    return this;
+  }
+
+  //........................................................................
 
   {
     withTemplate("modifiednumber");

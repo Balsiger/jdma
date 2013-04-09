@@ -31,7 +31,6 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.entries.extensions.BaseIncomplete;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.FormattedText;
@@ -570,7 +569,7 @@ public class BaseFeat extends BaseEntry
   }
 
   //........................................................................
-  //--------------------------- addContributions ---------------------------
+  //-------------------------------- collect -------------------------------
 
   /**
    * Add contributions for this entry to the given list.
@@ -598,18 +597,15 @@ public class BaseFeat extends BaseEntry
 
           Modifier computed = modifier.read(expression);
           if (computed != null)
-            ioCombined.addModifier(new Contribution<Modifier>(computed, this,
-                                                              null));
+            ioCombined.addModifier(computed, this, null);
           else
             ioCombined.addModifier
-              (new Contribution<Modifier>
-               (modifier.as(Integer.valueOf(expression.replace('+', '0')),
-                            modifier.getType(), modifier.getCondition(), null),
-                this, null));
+              (modifier.as(Integer.valueOf(expression.replace('+', '0')),
+                           modifier.getType(), modifier.getCondition(), null),
+               this, null);
         }
         else
-          ioCombined.addModifier(new Contribution<Modifier>(modifier, this,
-                                                            null));
+          ioCombined.addModifier(modifier, this, null);
       }
     }
   }

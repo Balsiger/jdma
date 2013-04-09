@@ -43,7 +43,6 @@ import net.ixitxachitls.dma.entries.extensions.BaseWeapon;
 import net.ixitxachitls.dma.entries.extensions.Weapon;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Critical;
 import net.ixitxachitls.dma.values.Damage;
 import net.ixitxachitls.dma.values.Dice;
@@ -1300,8 +1299,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   public Combined<Modifier> armorClass()
   {
     Combined<Modifier> armor = collect("armor class");
-    armor.addModifier(new Contribution<Modifier>(new Modifier(10), this,
-                                                 "base"));
+    armor.addModifier(new Modifier(10), this, "base");
     Combined<Modifier> naturalArmor = collect("natural armor");
     armor.add(naturalArmor, "natural armor");
 
@@ -1984,9 +1982,8 @@ public class Monster extends CampaignEntry<BaseMonster>
 
       if(ability.getMaxValue() >= 0)
         ioCombined.addModifier
-          (new Contribution<Modifier>
-           (new Modifier(abilityModifier((int)ability.getMaxValue())),
-            this, saveAbility.getShort() + " of " + ability.getMaxValue()));
+          (new Modifier(abilityModifier((int)ability.getMaxValue())),
+            this, saveAbility.getShort() + " of " + ability.getMaxValue());
     }
 
     for(Name name : m_possessions)
@@ -2018,12 +2015,9 @@ public class Monster extends CampaignEntry<BaseMonster>
         {
           int level = ((Dice)value).getNumber();
           ioCombined.addModifier
-            (new Contribution<Modifier>(new Modifier(level * bonus,
-                                                     Modifier.Type.GENERAL),
-                                        this,
-                                        "Con of " + constitution
-                                        + " (" + (bonus > 0 ? "+" : "")
-                                        + bonus + " and level " + level + ")"));
+            (new Modifier(level * bonus, Modifier.Type.GENERAL),
+             this, "Con of " + constitution + " (" + (bonus > 0 ? "+" : "")
+             + bonus + " and level " + level + ")");
         }
       }
     }
@@ -2035,11 +2029,10 @@ public class Monster extends CampaignEntry<BaseMonster>
       int modifier = dexterityModifierForAC();
 
       ioCombined.addModifier
-        (new Contribution<Modifier>
-         (new Modifier(modifier, Modifier.Type.ABILITY),
-          this, "Dex of " + dexterity
-          + (abilityModifier((int)dexterity.getMaxValue()) == modifier
-             ? "" : " (capped for armor)")));
+        (new Modifier(modifier, Modifier.Type.ABILITY),
+         this, "Dex of " + dexterity
+         + (abilityModifier((int)dexterity.getMaxValue()) == modifier
+            ? "" : " (capped for armor)"));
 
       Combined<Multiple> combinedSize = collect("size");
       Multiple minSize = combinedSize.min();
@@ -2050,9 +2043,8 @@ public class Monster extends CampaignEntry<BaseMonster>
 
         if(size.modifier() != 0)
           ioCombined.addModifier
-            (new Contribution<Modifier>(new Modifier(size.modifier(),
-                                                     Modifier.Type.GENERAL),
-                                        this, "size"));
+            (new Modifier(size.modifier(), Modifier.Type.GENERAL), this,
+             "size");
 
       }
     }

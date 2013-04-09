@@ -28,7 +28,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.BaseMonster;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Modifier;
 import net.ixitxachitls.dma.values.Multiple;
@@ -169,14 +168,12 @@ public class BaseMagic extends BaseExtension<BaseItem>
     {
       if(((EnumSelection<BaseMonster.Ability>)m_ability.get(0)).getSelected()
          == BaseMonster.Ability.DEXTERITY)
-        ioCombined.addModifier(new Contribution<Modifier>
-                               ((Modifier)m_ability.get(1), m_entry, "magic"));
+        ioCombined.addModifier((Modifier)m_ability.get(1), m_entry, "magic");
     }
 
     for(Multiple modifier : m_modifier)
       if(inName.equals(((Name)modifier.get(0)).get()))
-        ioCombined.addModifier(new Contribution<Modifier>
-                               ((Modifier)modifier.get(1), m_entry, "magic"));
+        ioCombined.addModifier((Modifier)modifier.get(1), m_entry, "magic");
   }
 
   //........................................................................

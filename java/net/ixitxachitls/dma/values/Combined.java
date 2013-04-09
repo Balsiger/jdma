@@ -34,6 +34,8 @@ import com.google.common.collect.Lists;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.ValueGroup;
+import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 
@@ -262,6 +264,178 @@ public class Combined<T extends Value<T>>
   }
 
   //........................................................................
+  //----------------------------------------------------------- Contribution
+
+  @Immutable
+  @ParametersAreNonnullByDefault
+  private class Contribution<V> implements Comparable<Contribution<V>>
+  {
+    //--------------------------- Contribution ---------------------------
+
+    /**
+     * Create the contribution with a specific value.
+     *
+     * @param    inValue the value contributed
+     * @param    inGroup the group (entry, extension) contributing the value
+     * @param    inText  the text describing why the value was contributed
+     */
+    public Contribution(V inValue, ValueGroup inGroup, @Nullable String inText)
+    {
+      m_value = inValue;
+      m_group = inGroup;
+      m_text = inText;
+    }
+
+    //......................................................................
+
+    /** The value contributed. */
+    private V m_value;
+
+    /** The group contributing the value. */
+    private ValueGroup m_group;
+
+    /** The text describing the contribution. */
+    private @Nullable String m_text;
+
+    /**
+     * Get the value contributed.
+     *
+     * @return  the value
+     */
+    public V getValue()
+    {
+      return m_value;
+    }
+
+    //------------------------------ getGroup ------------------------------
+
+    /**
+     * Get the entry (or extension) that contributed the value.
+     *
+     * @return  the entry
+     */
+    public ValueGroup getGroup()
+    {
+      return m_group;
+    }
+
+    //......................................................................
+    //------------------------------ getText -------------------------------
+
+    /**
+     * Get the text given with the value.
+     *
+     * @return  the text
+     */
+    public @Nullable String getText()
+    {
+      return m_text;
+    }
+
+    //......................................................................
+    //--------------------------- getDescription ---------------------------
+
+    /**
+     * Get the description (group and text) for the contribution.
+     *
+     * @return  the description
+     */
+    public String getDescription()
+    {
+      return m_group.getName() + (m_text == null ? "" : " (" + m_text + ")");
+    }
+
+    //......................................................................
+    //----------------------------- compareTo ------------------------------
+
+    /**
+     * Compare this expression to the other one.
+     *
+     * @param       inOther the expression to compare to
+     *
+     * @return      <0 if this is smaller than the other, >0 if bigger, 0 if
+     *              equal
+     *
+     */
+    public int compareTo(@Nullable Contribution<V> inOther)
+    {
+      if(inOther == null)
+        return +1;
+
+      V value = getValue();
+      V otherValue = inOther.getValue();
+
+      if (value instanceof Value<?> && !(otherValue instanceof Value<?>))
+        return +1;
+
+      if (!(value instanceof Value<?>) && otherValue instanceof Value<?>)
+        return -1;
+
+      if (value instanceof Expression && !(otherValue instanceof Expression))
+        return +1;
+
+      if (!(value instanceof Expression) && otherValue instanceof Expression)
+        return -1;
+
+      if (value instanceof Value<?>)
+        return ((Value<?>)value).compareTo(otherValue);
+
+      if (value instanceof Expression)
+        return ((Expression)value).compareTo((Expression)otherValue);
+
+      return 0;
+    }
+
+    //......................................................................
+    //------------------------------- equals -------------------------------
+
+    /**
+     * Check if the two objects are equal.
+     *
+     * @param       inOther the object to compare with
+     *
+     * @return      true if the objects are equal, false if not
+     *
+     */
+    @Override
+    public boolean equals(Object inOther)
+    {
+      return super.equals(inOther);
+    }
+
+    //......................................................................
+    //------------------------------ hashCode ------------------------------
+
+    /**
+     * Compute the hash code.
+     *
+     * @return      the hash code
+     */
+    @Override
+    public int hashCode()
+    {
+      return super.hashCode();
+    }
+
+    //......................................................................
+    //------------------------------ toString ------------------------------
+
+    /**
+     * Convert to a string for debugging.
+     *
+     * @return the converted string
+     */
+    @Override
+    public String toString()
+    {
+      return m_group.getName() + (m_text == null ? "" : " (" + m_text + ")")
+        + ": " + m_value;
+    }
+
+    //......................................................................
+  }
+
+  //........................................................................
 
   //--------------------------------------------------------- constructor(s)
 
@@ -370,8 +544,7 @@ public class Combined<T extends Value<T>>
 
     T value = (T)inEntry.getValue(inName);
     if(value instanceof Modifier)
-      addModifier(new Contribution<Modifier>((Modifier)value, inEntry,
-                                             "collect"));
+      addModifier((Modifier)value, inEntry, "collect");
     else
       root = new Node<T>((T)inEntry.getValue(inName), inEntry);
 
@@ -556,22 +729,12 @@ public class Combined<T extends Value<T>>
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public ModifiedNumber modifier()
   {
-    List modifiers = Lists.newArrayList();
-    modifiers.addAll(m_modifiers);
-    List<Pair<T, List<Node<T>>>> values;
-    if (m_root != null)
-      values = m_root.values();
-    else
-      values = Lists.newArrayList();
+    ModifiedNumber modifier = new ModifiedNumber(0);
 
-    if(values.size() > 0
-       && values.get(values.size() - 1).first().getClass() == Number.class)
-      for(Node<T> node : values.get(values.size() - 1).second())
-        modifiers.add
-          (new Contribution<T>(node.getValue(), node.getEntry(),
-                               node.getDescription()));
+    for (Contribution<Modifier> contribution : m_modifiers)
+      modifier.withModifier(contribution.getValue(), contribution.getText());
 
-    return ModifiedNumber.create(0, modifiers);
+    return modifier;
   }
 
   //........................................................................
@@ -647,11 +810,14 @@ public class Combined<T extends Value<T>>
   /**
    * Add a contributed value to the combined value.
    *
-   * @param       inContribution the contributed value to add
+   * @param       inValue        the value to add
+   * @param       inGroup        the group the value came from
+   * @param       inDescription  a description of why the value was added
    */
-  public void addValue(Contribution<T> inContribution)
+  public void addValue(T inValue, ValueGroup inGroup,
+                       @Nullable String inDescription)
   {
-    m_values.add(inContribution);
+    m_values.add(new Contribution<T>(inValue, inGroup, inDescription));
   }
 
   //........................................................................
@@ -660,11 +826,15 @@ public class Combined<T extends Value<T>>
   /**
    * Add a modifier to the combined value.
    *
-   * @param       inContribution the contribution with the modifier
+   * @param       inModifier     the modifier to add
+   * @param       inGroup        the group the modifier came from
+   * @param       inDescription  a description of why the modifier was added
    */
-  public void addModifier(Contribution<Modifier> inContribution)
+  public void addModifier(Modifier inModifier, ValueGroup inGroup,
+                          @Nullable String inDescription)
   {
-    m_modifiers.add(inContribution);
+    m_modifiers.add(new Contribution<Modifier>(inModifier, inGroup,
+                                               inDescription));
   }
 
   //........................................................................
@@ -673,11 +843,15 @@ public class Combined<T extends Value<T>>
   /**
    * Add an expression.
    *
-   * @param       inContribution the contribution with the expression
+   * @param       inExpression   the expression to add
+   * @param       inGroup        the group the expression came from
+   * @param       inDescription  a description of why the expression was added
    */
-  public void addExpression(Contribution<Expression> inContribution)
+  public void addExpression(Expression inExpression, ValueGroup inGroup,
+                            @Nullable String inDescription)
   {
-    m_expressions.add(inContribution);
+    m_expressions.add(new Contribution<Expression>(inExpression, inGroup,
+                                                   inDescription));
   }
 
   //........................................................................

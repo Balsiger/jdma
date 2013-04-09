@@ -30,7 +30,6 @@ import com.google.common.collect.Multimap;
 import net.ixitxachitls.dma.entries.BaseItem;
 import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Distance;
 import net.ixitxachitls.dma.values.EnumSelection;
 import net.ixitxachitls.dma.values.Group;
@@ -357,8 +356,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     super.collect(inName, ioCombined);
 
     if("armor class".equals(inName) && m_bonus.isDefined())
-      ioCombined.addModifier(new Contribution<Modifier>(m_bonus, m_entry,
-                                                        "armor"));
+      ioCombined.addModifier(m_bonus, m_entry, "armor");
   }
 
   //........................................................................

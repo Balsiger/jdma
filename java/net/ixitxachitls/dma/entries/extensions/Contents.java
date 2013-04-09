@@ -35,7 +35,6 @@ import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Money;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Value;
@@ -355,7 +354,7 @@ public class Contents extends Extension<Item>
       }
 
       if(total != null)
-        ioCombined.addValue(new Contribution<V>((V)total, this, "contents"));
+        ioCombined.addValue((V)total, this, "contents");
     }
 
     if("weight".equals(inName))
@@ -379,7 +378,7 @@ public class Contents extends Extension<Item>
       }
 
       if(total != null)
-        ioCombined.addValue(new Contribution<V>((V)total, this, "contents"));
+        ioCombined.addValue((V)total, this, "contents");
     }
 
     super.collect(inName, ioCombined);

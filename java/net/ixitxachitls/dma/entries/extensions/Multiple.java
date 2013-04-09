@@ -28,7 +28,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.dma.values.Combined;
-import net.ixitxachitls.dma.values.Contribution;
 import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.dma.values.Value;
 
@@ -121,9 +120,8 @@ public class Multiple extends Counted
                                            Combined<V> ioCombined)
   {
     if("value".equals(inName) || "weight".equals(inName))
-      ioCombined.addExpression(new Contribution<Expression>
-                               (new Expression.Factor(m_count.get(), 1),
-                                this, "multiple"));
+      ioCombined.addExpression(new Expression.Factor(m_count.get(), 1),
+                               this, "multiple");
 
     super.collect(inName, ioCombined);
   }
