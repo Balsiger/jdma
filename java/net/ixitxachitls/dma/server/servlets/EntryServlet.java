@@ -249,7 +249,10 @@ public class EntryServlet extends PageServlet
     if(dma)
     {
       extension = ".dma";
-      template = "dma.entry.dmacontainer";
+      if(inRequest.hasParam("deep"))
+        template = "dma.entry.dmadeepcontainer";
+      else
+        template = "dma.entry.dmacontainer";
     }
     else if(print)
     {

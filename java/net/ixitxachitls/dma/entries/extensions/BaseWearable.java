@@ -177,7 +177,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
   //........................................................................
   //----- don --------------------------------------------------------------
 
-  /** How much time it takes to don the armor. */
+  /** How much time it takes to don the item. */
   @Key("don")
   protected Multiple m_don = new Multiple(new Multiple.Element []
     {
@@ -193,7 +193,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
   //........................................................................
   //----- remove -----------------------------------------------------------
 
-  /** How much time it takes to don the armor. */
+  /** How much time it takes to remove the item. */
   @Key("remove")
   protected Duration m_remove = new Duration();
 

@@ -149,8 +149,6 @@ public class BaseEntry extends AbstractEntry
   protected BaseEntry(AbstractType<? extends BaseEntry> inType)
   {
     super(inType);
-
-    ensureExtensions();
   }
 
   //........................................................................
@@ -180,8 +178,6 @@ public class BaseEntry extends AbstractEntry
   protected BaseEntry(String inName, AbstractType<? extends BaseEntry> inType)
   {
     super(inName, inType);
-
-    ensureExtensions();
   }
 
   //........................................................................
@@ -211,9 +207,6 @@ public class BaseEntry extends AbstractEntry
   /** The type of this entry. */
   public static final BaseType<BaseEntry> TYPE =
     new BaseType<BaseEntry>(BaseEntry.class, "Base Entries");
-
-  /** Flag if extensions are initialized. */
-  protected static boolean s_extensionsInitialized = false;
 
   //----- world ------------------------------------------------------------
 
@@ -1190,20 +1183,6 @@ public class BaseEntry extends AbstractEntry
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //--------------------------- ensureExtensions ---------------------------
-
-  /**
-   * Ensure that extensions are properly initialized.
-   */
-  protected void ensureExtensions()
-  {
-    if(!s_extensionsInitialized)
-      s_extensionsInitialized = true;
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test

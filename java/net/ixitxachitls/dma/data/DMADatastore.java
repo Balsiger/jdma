@@ -162,14 +162,12 @@ public class DMADatastore implements DMAData
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractEntry.EntryKey<T> inKey)
   {
-    AbstractEntry entry = m_entries.get(inKey);
+    if(m_entries.containsKey(inKey))
+      return (T)m_entries.get(inKey);
 
-    if(entry == null)
-    {
-      entry = convert(inKey.getID(), inKey.getType(),
-                      m_data.getEntity(convert(inKey)));
-      m_entries.put(inKey, entry);
-    }
+    AbstractEntry entry = convert(inKey.getID(), inKey.getType(),
+                                  m_data.getEntity(convert(inKey)));
+    m_entries.put(inKey, entry);
 
     return (T)entry;
   }

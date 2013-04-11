@@ -228,7 +228,6 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   }
 
   //........................................................................
-
   //---------------------------- getSubEntries -----------------------------
 
   /**

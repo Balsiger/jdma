@@ -1000,43 +1000,6 @@ public abstract class Value<T extends Value<T>>
     }
 
     //......................................................................
-    //----- setTest --------------------------------------------------------
-
-    /**
-     * A simple test routine for testing sets.
-     *
-     * @param inTests the note, test and return value triplets
-     * @param inValue the value to read into
-     *
-     */
-//     public static void setTest(String []inTests, Value inValue)
-//     {
-//       if(inTests.length % 4 != 0)
-//       throw new IllegalArgumentException("quadruplets of input test strings "
-//                                            + "must be given");
-
-//       for(int i = 0; i < inTests.length; i += 4)
-//       {
-//         String rest = inValue.setFromString(inTests[i + 1]);
-
-//         if(inTests[i + 2] == null)
-//           assertTrue(i / 4 + ": " + inTests[i]
-//                      + ", should not have been set",
-//                      rest == inTests[i + 1]);
-//         else
-//           assertEquals(i / 4 + ": " + inTests[i] + ", does not match",
-//                        inTests[i + 2], inValue.toString());
-
-//         if(inTests[i + 3] != null)
-//           assertEquals(i / 4 + ": " + inTests[i] + ", rest does not match",
-//                        inTests[i + 3], rest);
-//         else
-//           assertTrue(i / 4 + ": " + inTests[i] + ", still having rest '"
-//                      + rest + "'", rest.length() == 0);
-//       }
-//     }
-
-    //......................................................................
     //----- createTest -----------------------------------------------------
 
     /**

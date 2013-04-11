@@ -677,6 +677,9 @@ public class BaseItem extends BaseEntry
   public static final BaseType<BaseItem> TYPE =
     new BaseType<BaseItem>(BaseItem.class);
 
+  /** Flag if extensions are initialized. */
+  protected static boolean s_extensionsInitialized = false;
+
   //----- value ------------------------------------------------------------
 
   /** The total standard value of the base item. */
@@ -1592,6 +1595,8 @@ public class BaseItem extends BaseEntry
     // here in a non-static context.
     if(!s_extensionsInitialized)
     {
+      s_extensionsInitialized = true;
+
       AbstractExtension.setAutoExtensions(BaseWeapon.class, "weapon",
                                           "wearable", "base wearable");
       extractVariables(BaseItem.class, BaseWeapon.class);

@@ -35,6 +35,7 @@ import com.google.common.collect.Lists;
 
 import net.ixitxachitls.dma.entries.extensions.Composite;
 import net.ixitxachitls.dma.entries.extensions.Contents;
+import net.ixitxachitls.dma.entries.extensions.Incomplete;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.FormattedText;
 import net.ixitxachitls.dma.values.Money;
@@ -139,6 +140,9 @@ public class Item extends CampaignEntry<BaseItem>
 
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
+
+  /** Flag if extensions are initialized. */
+  protected static boolean s_extensionsInitialized = false;
 
   //----- hp ---------------------------------------------------------------
 
@@ -249,7 +253,11 @@ public class Item extends CampaignEntry<BaseItem>
    */
   public double getGoldValue()
   {
-    return getValue().getAsGold().getValue();
+    Money gold = getValue();
+    if (gold == null)
+      return 0;
+
+    return gold.getAsGold().getValue();
   }
 
   //........................................................................
@@ -261,7 +269,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return      the value
    *
    */
-  public Money getValue()
+  public @Nullable Money getValue()
   {
     Combined<Money> value = collect("value");
     return value.total();
@@ -1401,6 +1409,28 @@ public class Item extends CampaignEntry<BaseItem>
   //........................................................................
 
   //------------------------------------------------- other member functions
+
+  //--------------------------- ensureExtensions ---------------------------
+
+  /**
+   * Ensure that extensions are properly initialized.
+   *
+   */
+  @Override
+  protected void ensureExtensions()
+  {
+    // Since we have to prevent initialization loops, we load up extensions
+    // here in a non-static context.
+    if(!s_extensionsInitialized)
+    {
+      extractVariables(Item.class, Incomplete.class);
+    }
+
+    super.ensureExtensions();
+  }
+
+  //........................................................................
+
   //........................................................................
 
   //------------------------------------------------------------------- test

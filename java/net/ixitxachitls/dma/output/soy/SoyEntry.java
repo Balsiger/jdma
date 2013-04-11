@@ -154,6 +154,15 @@ public class SoyEntry extends SoyAbstract
     if("dma".equals(inName))
       return StringData.forValue(m_entry.toString());
 
+    if("deepdma".equals(inName))
+    {
+      StringBuffer buffer = new StringBuffer(m_entry.toString());
+      for(AbstractEntry dependency : m_entry.collectDependencies())
+        buffer.append(dependency.toString());
+
+      return StringData.forValue(buffer.toString());
+    }
+
     if("errors".equals(inName))
     {
       List<String> errors = new ArrayList<String>();

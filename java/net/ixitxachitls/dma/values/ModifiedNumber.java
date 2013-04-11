@@ -25,7 +25,6 @@ package net.ixitxachitls.dma.values;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -180,7 +179,7 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
     if(m_modifiers.containsKey(name))
     {
       int i = 1;
-      while(m_modifiers.containsKey(name + " (" + i + ")"))
+      while(m_modifiers.containsKey(name + " (" + i++ + ")"))
         ;
 
       name = name + " (" + i + ")";
@@ -221,12 +220,12 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   //------------------------------ withValue -------------------------------
 
   /**
+   * Setup the modified number with the given value.
    *
+   * @param    inValue       the value to setup with
+   * @param    inDescription the description for the value
    *
-   * @param
-   *
-   * @return
-   *
+   * @return   this modified number for chaining
    */
   public ModifiedNumber withValue(Value<?> inValue, String inDescription)
   {

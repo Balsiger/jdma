@@ -829,7 +829,11 @@ public abstract class ValueGroup implements Changeable
     Variable variable = getVariable(inKey);
 
     if(variable == null)
+    {
+      Log.warning("trying to set undefined variable " + inKey + " with "
+                  + inText + " in " + getName() + " [" + getClass() + "]");
       return inText;
+    }
 
     changed();
     return variable.setFromString(this, inText);

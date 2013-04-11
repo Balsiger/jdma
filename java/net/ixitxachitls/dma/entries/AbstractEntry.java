@@ -46,6 +46,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.data.DMADataFactory;
@@ -664,7 +665,7 @@ public class AbstractEntry extends ValueGroup
   @Override
   public List<BaseEntry> getBaseEntries()
   {
-    if(m_baseEntries.isEmpty())
+    if(m_baseEntries == null || m_baseEntries.isEmpty())
     {
       m_baseEntries = new ArrayList<BaseEntry>();
 
@@ -1151,7 +1152,31 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------- collectDependencies --------------------------
 
+  /**
+   * Collect the dependencies for this entry.
+   *
+   * @return      a list with all dependent entries
+   *
+   */
+  public Set<AbstractEntry> collectDependencies()
+  {
+    Set<AbstractEntry> entries = Sets.newHashSet();
+    for(BaseEntry base : getBaseEntries())
+      entries.add(base);
+
+    for(AbstractExtension<?> extension : m_extensions.values())
+    {
+      List<Entry<?>> subEntries = extension.getSubEntries(true);
+      if(subEntries != null)
+        entries.addAll(subEntries);
+    }
+
+    return entries;
+  }
+
+  //........................................................................
   //------------------------------- collect --------------------------------
 
   /**
@@ -1897,84 +1922,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //-------------------------- adjustCombination ---------------------------
-
-  /**
-   * Adjust the value for the given name for any special properites.
-   *
-   * @param       inName        the name of the value to adjust
-   * @param       ioCombination the combinstaion to adjust
-   * @param       <V>           the real type of the value combined
-   *
-   */
-  // @Override
-  // public <V extends Value<?>> void
-  //           adjustCombination(String inName,
-  //                             Combination<V> ioCombination)
-  // {
-  //   // now ask all the extensions if they want to contribute something
-  //   for(AbstractExtension<? extends AbstractEntry> extension
-  //         : m_extensions.values())
-  //     extension.adjustCombination(inName, ioCombination);
-
-  //   super.adjustCombination(inName, ioCombination);
-  // }
-
-  //........................................................................
-  //---------------------------- addModifiers ------------------------------
-
-  /**
-   * Add current modifiers to the given map.
-   *
-   * @param       inName        the name of the value to modify
-   * @param       ioModifiers   the map of modifiers
-   *
-   */
-  // @Override
-  // public void addModifiers(String inName, Map<String, Modifier> ioModifiers)
-  // {
-  //   // add the modifiers from all base values
-  //   for(BaseEntry base : getBaseEntries())
-  //   {
-  //     if(base == null)
-  //       continue;
-
-  //     base.addModifiers(inName, ioModifiers);
-  //   }
-
-  //   // now ask all the extensions if they want to contribute something
-  //   for(AbstractExtension<? extends AbstractEntry> extension
-  //         : m_extensions.values())
-  //     extension.addModifiers(inName, ioModifiers);
-
-  //   super.addModifiers(inName, ioModifiers);
-  // }
-
-  //........................................................................
-  //--------------------------- addContributions ---------------------------
-
-  /**
-   * Add contributions for this entry to the given list.
-   *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions to add to
-   *
-   */
-  // @Override
-  // public void addContributions
-  //   (String inName, List<Contribution<? extends Value<?>>> ioContributions)
-  // {
-  //   super.addContributions(inName, ioContributions);
-
-  //   for(BaseEntry base : getBaseEntries())
-  //     if(base != null)
-  //       base.addContributions(inName, ioContributions);
-
-  //   for(AbstractExtension<?> extension : m_extensions.values())
-  //     extension.addContributions(inName, ioContributions);
-  // }
-
-  //........................................................................
 
   //........................................................................
 
@@ -2223,6 +2170,8 @@ public class AbstractEntry extends ValueGroup
    */
   public void setupExtensions()
   {
+    ensureExtensions();
+
     for(AbstractExtension<?> extension : m_extensions.values())
       for(String name
             : AbstractExtension.getAutoExtensions(extension.getClass()))
@@ -2900,6 +2849,17 @@ public class AbstractEntry extends ValueGroup
 
   //------------------------------------------------- other member functions
 
+  //--------------------------- ensureExtensions ---------------------------
+
+  /**
+   * Ensure that extensions are properly initialized.
+   */
+  protected void ensureExtensions()
+  {
+    // nothing to do here
+  }
+
+  //........................................................................
   //-------------------------- computeExpressions --------------------------
 
   /**

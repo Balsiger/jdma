@@ -35,7 +35,6 @@ import com.google.common.collect.Lists;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.ValueGroup;
-import net.ixitxachitls.dma.values.Expression;
 import net.ixitxachitls.util.Pair;
 import net.ixitxachitls.util.Strings;
 
@@ -266,6 +265,11 @@ public class Combined<T extends Value<T>>
   //........................................................................
   //----------------------------------------------------------- Contribution
 
+  /**
+   * A contribution to a value.
+   *
+   * @param <V> the value type that is contributed
+   */
   @Immutable
   @ParametersAreNonnullByDefault
   private class Contribution<V> implements Comparable<Contribution<V>>

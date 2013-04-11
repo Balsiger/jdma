@@ -465,7 +465,7 @@ public class Multiple extends Value<Multiple>
    *
    */
   @Override
-public boolean isDefined()
+  public boolean isDefined()
   {
     for(int i = 0; i < m_elements.length; i++)
       if(!m_elements[i].isOptional() && !m_elements[i].m_value.isDefined())

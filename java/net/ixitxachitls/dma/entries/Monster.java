@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -1703,6 +1704,34 @@ public class Monster extends CampaignEntry<BaseMonster>
   }
 
   //........................................................................
+  //------------------------------ qualities -------------------------------
+
+  /**
+   * Collect all qualities used by this monster.
+   *
+   * @return  a list of references to all qualities
+   */
+  @SuppressWarnings("unchecked")
+  public List<Reference<BaseQuality>> qualities()
+  {
+    Combined<ValueList<Multiple>> attacks = collect("special attacks");
+    Combined<ValueList<Multiple>> qualities = collect("special qualities");
+
+    List<Reference<BaseQuality>> result = Lists.newArrayList();
+
+    for(ValueList<Multiple> qualityList : attacks.valuesOnly())
+      for(Multiple quality : qualityList)
+        result.add((Reference<BaseQuality>)quality.get(0));
+
+    for(ValueList<Multiple> qualityList : qualities.valuesOnly())
+      for(Multiple quality : qualityList)
+        result.add((Reference<BaseQuality>)quality.get(0));
+
+    return result;
+  }
+
+  //........................................................................
+
   //------------------------ specialAttackSummaries ------------------------
 
   /**
@@ -2139,6 +2168,40 @@ public class Monster extends CampaignEntry<BaseMonster>
     }
 
     return items;
+  }
+
+  //........................................................................
+  //------------------------- collectDependencies --------------------------
+
+  /**
+   * Collect the dependencies for this entry.
+   *
+   * @return      a list with all dependent entries
+   *
+   */
+  public Set<AbstractEntry> collectDependencies()
+  {
+    Set<AbstractEntry> entries = super.collectDependencies();
+
+    // qualities
+    for(Reference<BaseQuality> quality : qualities())
+      if(quality.getEntry() != null)
+        entries.add(quality.getEntry());
+
+    // feats
+    for(Pair<Reference<BaseFeat>, List<String>> feat : allFeats())
+      if(feat.first().getEntry() != null)
+        entries.add(feat.first().getEntry());
+
+    // items
+    for(Item item : containedItems(true).values())
+    {
+      entries.addAll(item.collectDependencies());
+      entries.add(item);
+    }
+
+
+    return entries;
   }
 
   //........................................................................
@@ -3803,341 +3866,6 @@ public class Monster extends CampaignEntry<BaseMonster>
 
 //       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
 //                                   + "(base name 'Achaierai').*");
-    }
-
-    //......................................................................
-    //----- print ----------------------------------------------------------
-
-    /** Testing printing. */
-    @org.junit.Test
-    public void print()
-    {
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(s_text), "test");
-
-//       Entry entry = (Entry)Monster.read(reader, new BaseCampaign("Test"));
-
-//       String result =
-//         "\\center{"
-//         + "\\icon{worlds/[no base entry].png}"
-//         + "{world: [no base entry]}"
-//         + "{../index/worlds/\\worduppercase{[no base entry]}.html}"
-//         + "{highlight}}\n"
-//         + "\\divider{main}{\\title{\\link[BaseMonsters/Achaierai]"
-//         + "[nocolor]{Achaierai}\\linebreak "
-//         + "\\tiny{\\link[Monsters/index]{(monster)}}}\n"
-//         + "\\color{error}{[no base entry]}\n"
-//         + "\\files{Achaierai}"
-//         + "\\table[description]{f15:L(desc-label);100:L(desc-text)}"
-//         + "{null}{null}"
-//         + "{null}{null}"
-//         + "{\\window{\\bold{Hit Points:}}{"
-//         + Config.get("resource:help/label.monster.hp", (String)null)
-//         + "}}{45 (, max 5000)}"
-//         + "{\\window{\\bold{Initiative:}}{"
-//         + Config.get("resource:help/label.initiative", (String)null)
-//         + "}}{\\link[index/initiatives/0][]{+0}}"
-//         + "{\\window{\\bold{Speed:}}{"
-//         + Config.get("resource:help/label.speed", (String)null)
-//         + "}}{\\color{error}{[no base entry]}}"
-//         + "{\\window{\\bold{Armor Class:}}{"
-//         + Config.get("resource:help/label.armor.class", (String)null)
-//         + "}}{\\link[index/acs/10][]{10}, "
-//         + "touch \\link[index/touchacs/10][]{10}, "
-//         + "flat-footed \\link[index/flatfootedacs/10][]{10}}"
-//         + "{\\window{\\bold{Base Attack:}}{"
-//         + Config.get("resource:help/label.base.attack", (String)null)
-//         + "}}{\\color{error}{[no base entry]}}"
-//         + "{\\window{\\bold{Grapple:}}{"
-//         + Config.get("resource:help/label.grapple", (String)null)
-//         + "}}{\\link[index/grapples/0][]{+0}}"
-//         + "{\\window{\\bold{Attack:}}{"
-//         + Config.get("resource:help/label.attack", (String)null)
-//         + "}}{\\color{error}{no base entry}}"
-//         + "{\\window{\\bold{Full Attack:}}{"
-//         + Config.get("resource:help/label.full.attack", (String)null)
-//         + "}}{\\color{error}{no base entry]}}"
-//         + "{\\window{\\bold{Space:}}{"
-//         + Config.get("resource:help/label.space", (String)null)
-//         + "}}{\\color{error}{[no base entry]}}"
-//         + "{\\window{\\bold{Reach:}}{"
-//         + Config.get("resource:help/label.reach", (String)null)
-//         + "}}{\\color{error}{[no base entry]}}"
-//         + "{\\window{\\bold{Special Attacks:}}{"
-//         + Config.get("resource:help/label.special.attacks", (String)null)
-//         + "}}{\\color{error}{$undefined$}}"
-//         + "{\\window{\\bold{Special Qualities:}}{"
-//         + Config.get("resource:help/label.special.qualities", (String)null)
-//         + "}}{\\color{error}{$undefined$}}"
-//         + "{\\window{\\bold{Saves:}}{"
-//         + Config.get("resource:help/label.saves", (String)null)
-//         + "}}{Fort +0, Ref +0, Will +0}"
-//         + "{\\window{\\bold{Skills:}}{"
-//         + Config.get("resource:help/label.skills", (String)null)
-//         + "}}{\\color{error}{$undefined$}}"
-//         + "{\\window{\\bold{Feats:}}{"
-//         + Config.get("resource:help/label.feats", (String)null)
-//         + "}}{\\color{error}{$undefined$}}"
-//         + "{\\window{\\bold{Money:}}{"
-//         + Config.get("resource:help/label.money", (String)null)
-//         + "}}{\\window{\\span{unit}{333 gp}}"
-//         + "{\\table{#inline#1:L,,;100:L}{Total:}{333 gp}}}"
-//         + "{\\window{\\bold{Possessions:}}{"
-//         + Config.get("resource:help/label.possessions", (String)null)
-//         + "}}{\\color{error}{$undefined$}}"
-//         + "{\\window{\\bold{References:}}{"
-//         + Config.get("resource:help/label.references", (String)null)
-//         + "}}{\\color{error}{*unknown variable*}}{null}{null}"
-//         + "\\divider{clear}{}}"
-//         + "\\nopictures{\\table{f15:L;100:L}"
-//         + "{\\bold{World:}}{\\color{error}{[no base entry]}}"
-//         + "}\n";
-
-//       //System.out.println(entry.getPrintCommand());
-//       assertEquals("print commands",
-//                    result,
-//                    entry.getCommand(new BaseCampaign("Test"),
-//                                     PrintType.print).toString());
-
-//       m_logger.addExpectedPattern("WARNING: base.not-found:.*"
-//                                   + "(base name 'Achaierai').*");
-    }
-
-    //......................................................................
-    //----- printComplete --------------------------------------------------
-
-    /** Testing printing. */
-    @org.junit.Test
-    public void pPrintComplete()
-    {
-//       BaseCampaign campaign = new BaseCampaign("Test");
-
-//       ParseReader reader =
-//         new ParseReader(new java.io.StringReader(s_base), "test");
-
-//       BaseEntry base = (BaseEntry)BaseMonster.read(reader, campaign);
-
-//       campaign.add(base);
-
-//       reader =
-//         new ParseReader(new java.io.StringReader(s_text), "test");
-
-//       Entry entry = (Entry)Monster.read(reader, campaign);
-
-//       campaign.add(entry);
-
-//       String result =
-//         "\\center{"
-//         + "\\icon{worlds/Generic.png}"
-//         + "{world: Generic}"
-//         + "{../index/worlds/\\worduppercase{Generic}.html}"
-//         + "{highlight}}\n"
-//         + "\\divider{main}{\\title{\\link[BaseMonsters/Achaierai]"
-//         + "[nocolor]{Achaierai}\\linebreak "
-//         + "\\tiny{\\link[Monsters/index]{(monster)}}}\n"
-//         + "\\textblock[desc]{description}\n"
-//         + "\\files{Achaierai}"
-//         + "\\table[description]{f15:L(desc-label);100:L(desc-text)}"
-//         + "{null}{null}"
-//         + "{null}{null}"
-//         + "{\\window{\\bold{Hit Points:}}{"
-//         + Config.get("resource:help/label.monster.hp", (String)null)
-//         + "}}{45 (\\window[ability, stacks]{+12 Con}{ability bonus"
-//         + "\\linebreak this modifier stacks with similar ones}, max "
-//         + (((Monster)entry).m_maxHP.get()) + ")}"
-//         + "{\\window{\\bold{Initiative:}}{"
-//         + Config.get("resource:help/label.initiative", (String)null)
-//         + "}}{\\link[index/initiatives/1][]{+1 (\\window[ability, stacks]"
-//         + "{+1 Dex}{ability bonus\\linebreak this modifier stacks with "
-//         + "similar ones})}}"
-//         + "{\\window{\\bold{Speed:}}{"
-//         + Config.get("resource:help/label.speed", (String)null)
-//         + "}}{ \\link[index/speeds/50 ft]{\\window{\\span{unit}{50 ft}}"
-//         + "{\\table{#inline#1:L,,;100:L}{Total:}{50 ft}{}{}{Metric:}"
-//         + "{\\span{unit}{20 m}}}}}"
-//         + "{\\window{\\bold{Armor Class:}}{"
-//         + Config.get("resource:help/label.armor.class", (String)null)
-//         + "}}{\\link[index/acs/20][]{20 "
-//         + "(\\window[natural armor, does not stack]{+10 Natural Armor}"
-//         + "{natural armor bonus\\linebreak this modifier does \\emph{not} "
-//         + "stack with similar ones}, "
-//       + "\\window[general, stacks]{-1 Size}{general penalty\\linebreak this "
-//         + "modifier stacks with similar ones}, "
-//         + "\\window[ability, stacks]{+1 Dex}{ability bonus"
-//         + "\\linebreak this modifier stacks with similar ones})}, "
-//         + "touch \\link[index/touchacs/10][]{10 "
-//         + "(\\window[ability, stacks]{+1 Dex}{ability bonus"
-//         + "\\linebreak this modifier stacks with similar ones}, "
-//         + "\\window[size, stacks]{-1 Size}{size penalty\\linebreak this "
-//         + "modifier stacks with similar ones})}, "
-//         + "flat-footed \\link[index/flatfootedacs/19][]{19 "
-//         + "(\\window[natural armor, does not stack]{+10 Natural Armor}"
-//         + "{natural armor bonus\\linebreak this modifier does \\emph{not} "
-//         + "stack with similar ones}, "
-//         + "\\window[size, stacks]{-1 Size}{size penalty\\linebreak this "
-//         + "modifier stacks with similar ones})}}"
-//         + "{\\window{\\bold{Base Attack:}}{"
-//         + Config.get("resource:help/label.base.attack", (String)null)
-//         + "}}{\\link[index/baseattacks/+6]{+6}}"
-//         + "{\\window{\\bold{Grapple:}}{"
-//         + Config.get("resource:help/label.grapple", (String)null)
-//         + "}}{\\link[index/grapples/14][]{+14 (\\window[ability, stacks]"
-//         + "{+4 Str}{ability bonus\\linebreak this modifier stacks with "
-//         + "similar ones}, \\window[size, does not stack]{+4 Size}"
-//         + "{size bonus\\linebreak this modifier does \\emph{not} stack with "
-//         + "similar ones})}}"
-//         + "{\\window{\\bold{Attack:}}{"
-//         + Config.get("resource:help/label.attack", (String)null)
-//         + "}}{ or " // TODO
-//         + "\\link[index/attackmodes/Claw][]{Claw} +9 (\\window[ability, "
-//         + "stacks]{+4 Str}{ability bonus\\linebreak this modifier stacks "
-//         + "with similar ones}, \\window[size, stacks]{-1 Size}{size penalty"
-//         + "\\linebreak this modifier stacks with similar ones}) "
-//         + "\\link[index/attackstyles/Melee][]{Melee} "
-//         + "(\\link[index/damages/2d6][]{2d6}+4 (\\window[ability, stacks]"
-//         + "{+4 Str}{ability bonus\\linebreak this modifier stacks with "
-//         + "similar ones}))}"
-//         + "{\\window{\\bold{Full Attack:}}{"
-//         + Config.get("resource:help/label.full.attack", (String)null)
-//       + "}}{2 \\link[index/attackmodes/Claw][]{Claw} +9 (\\window[ability, "
-//         + "stacks]{+4 Str}{ability bonus\\linebreak this modifier stacks "
-//         + "with similar ones}, \\window[size, stacks]{-1 Size}{size penalty"
-//         + "\\linebreak this modifier stacks with similar ones}) "
-//         + "\\link[index/attackstyles/Melee][]{Melee} "
-//         + "(\\link[index/damages/2d6][]{2d6}+4 (\\window[ability, stacks]"
-//         + "{+4 Str}{ability bonus\\linebreak this modifier stacks with "
-//         + "similar ones})) and \\link[index/attackmodes/Bite][]{Bite} +4 "
-//         + "(\\window[ability, stacks]{+4 Str}{ability bonus\\linebreak this "
-//         + "modifier stacks with similar ones}, \\window[size, stacks]"
-//         + "{-1 Size}{size penalty\\linebreak this modifier stacks with "
-//         + "similar ones}) \\link[index/attackstyles/Melee][]{Melee} "
-//         + "(\\link[index/damages/4d6][]{4d6}+2 (\\window[ability, stacks]"
-//         + "{+2 Str}{ability bonus\\linebreak this modifier stacks with "
-//         + "similar ones}))}"
-//         + "{\\window{\\bold{Space:}}{"
-//         + Config.get("resource:help/label.space", (String)null)
-//         + "}}{\\span{computed}{\\link[index/spaces/10]"
-//         + "{\\window{\\span{unit}{10 ft}}{\\table{#inline#1:L,,;100:L}"
-//         + "{Total:}{10 ft}{}{}{Metric:}{\\span{unit}{4 m}}}}}}"
-//         + "{\\window{\\bold{Reach:}}{"
-//         + Config.get("resource:help/label.reach", (String)null)
-//         + "}}{\\span{computed}{\\link[index/reaches/10]"
-//         + "{\\window{\\span{unit}{10 ft}}{\\table{#inline#1:L,,;100:L}"
-//         + "{Total:}{10 ft}{}{}{Metric:}{\\span{unit}{4 m}}}}}}"
-//         + "{\\window{\\bold{Special Attacks:}}{"
-//         + Config.get("resource:help/label.special.attacks", (String)null)
-//         + "}}{\\link[BaseQualitys/Black cloud][]{Black cloud}}"
-//         + "{\\window{\\bold{Special Qualities:}}{"
-//         + Config.get("resource:help/label.special.qualities", (String)null)
-//         + "}}{\\link[BaseQualitys/Darkvision][]{Darkvision} [60 ft], "
-//         + "\\link[BaseQualitys/No Soul][]{No Soul}, "
-//         + "\\link[BaseQualitys/Does Not Eat][]{Does Not Eat}, "
-//         + "\\link[BaseQualitys/Does Not Sleep][]{Does Not Sleep}, "
-//         + "\\link[BaseQualitys/Affected As Evil][]{Affected As Evil}, "
-//         + "\\link[BaseQualitys/Weapons Evil][]{Weapons Evil}, "
-//         + "\\link[BaseQualitys/Affected as Lawful][]{Affected as Lawful}, "
-//         + "\\link[BaseQualitys/Weapons Lawful][]{Weapons Lawful}}"
-//         + "{\\window{\\bold{Saves:}}{"
-//         + Config.get("resource:help/label.saves", (String)null)
-//         + "}}{Fort +7 (\\window[ability, stacks]{+2 Con}"
-//         + "{ability bonus\\linebreak this modifier stacks with similar "
-//         + "ones}), Ref +6 (\\window[ability, stacks]{+1 Dex}{ability bonus"
-//         + "\\linebreak this modifier stacks with similar ones}), Will +7 "
-//         + "(\\window[ability, stacks]{+2 Wis}{ability bonus\\linebreak this "
-//         + "modifier stacks with similar ones})}"
-//         + "{\\window{\\bold{Skills:}}{"
-//         + Config.get("resource:help/label.skills", (String)null)
-//         + "}}{\\link[BaseSkills/Balance][bold]{Balance} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Climb][bold]{Climb} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Diplomacy][bold]{Diplomacy} +0 "
-//         + "(\\window[general, stacks]{+0 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Hide][bold]{Hide} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Jump][bold]{Jump} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Listen][bold]{Listen} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Move Silently][bold]{Move Silently} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Sense Motive][bold]{Sense Motive} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones}), "
-//         + "\\link[BaseSkills/Spot][bold]{Spot} +9 "
-//         + "(\\window[general, stacks]{+9 Ranks}{general bonus\\linebreak "
-//         + "this modifier stacks with similar ones})}"
-//         + "{\\window{\\bold{Feats:}}{"
-//         + Config.get("resource:help/label.feats", (String)null)
-//         + "}}{\\link[BaseFeats/Dodge][nocolor]{Dodge}, "
-//         + "\\link[BaseFeats/Mobility][nocolor]{Mobility}, "
-//         + "\\link[BaseFeats/Spring Attack][nocolor]{Spring Attack}}"
-//         + "{\\window{\\bold{Money:}}{"
-//         + Config.get("resource:help/label.money", (String)null)
-//         + "}}{\\window{\\span{unit}{333 gp}}"
-//         + "{\\table{#inline#1:L,,;100:L}{Total:}{333 gp}}}"
-//         + "{\\window{\\bold{Possessions:}}{"
-//         + Config.get("resource:help/label.possessions", (String)null)
-//         + "}}{\\color{error}{$undefined$}}"
-//         + "{\\window{\\bold{References:}}{"
-//         + Config.get("resource:help/label.references", (String)null)
-//       + "}}{\\span{unit}{\\link[BaseProducts/WTC 17755]{WTC 17755} p. 9-10}}"
-//         + "{null}{null}"
-//         + "\\divider{clear}{}}"
-//         + "\\nopictures{\\table{f15:L;100:L}"
-//         + "{\\bold{World:}}{\\link[index/worlds/Generic]{Generic}}"
-//         + "}\n";
-
-//       //System.out.println(entry.getPrintCommand());
-//       assertEquals("print commands",
-//                    result,
-//                    entry.getCommand(new BaseCampaign("Test"),
-//                                     PrintType.print)
-//                    .toString());
-
-//       m_logger.addExpected("WARNING: could not obtain feat 'Dodge' from "
-//                            + "campaign");
-//       m_logger.addExpected("WARNING: could not obtain feat 'Mobility' from "
-//                            + "campaign");
-//       m_logger.addExpected("WARNING: could not obtain feat 'Spring Attack' "
-//                            + "from campaign");
-//       m_logger.addExpected("WARNING: could not find base for 'Balance'");
-//       m_logger.addExpected("WARNING: could not find base for 'Climb'");
-//       m_logger.addExpected("WARNING: could not find base for 'Diplomacy'");
-//       m_logger.addExpected("WARNING: could not find base for 'Hide'");
-//       m_logger.addExpected("WARNING: could not find base for 'Jump'");
-//       m_logger.addExpected("WARNING: could not find base for 'Listen'");
-//     m_logger.addExpected("WARNING: could not find base for 'Move Silently'");
-//     m_logger.addExpected("WARNING: could not find base for 'Sense Motive'");
-//       m_logger.addExpected("WARNING: could not find base for 'Spot'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Black cloud'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Darkvision'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'No Soul'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Does Not Eat'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Does Not Sleep'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Affected As Evil'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Weapons Evil'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Affected as Lawful'");
-//       m_logger.addExpected("WARNING: could not find base quality for "
-//                            + "'Weapons Lawful'");
-//       m_logger.addExpected("WARNING: could not find base for 'Dodge'");
-//       m_logger.addExpected("WARNING: could not find base for 'Mobility'");
-//     m_logger.addExpected("WARNING: could not find base for 'Spring Attack'");
     }
 
     //......................................................................
