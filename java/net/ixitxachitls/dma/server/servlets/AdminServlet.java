@@ -283,6 +283,12 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
+    String upgrade = request.getParam("upgrade");
+    if(upgrade != null)
+    {
+      return null;
+    }
+
     return super.handle(inRequest, inResponse);
   }
 

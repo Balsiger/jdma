@@ -98,23 +98,28 @@ public final class Importer
   /**
    * Prevent instantiation.
    *
-   * @param   inHost     the host to connect to
-   * @param   inPort     the port to use for the remove api
-   * @param   inWebPort  the port to use for web access
-   * @param   inUserName the username to connect to the remote api
-   * @param   inPassword the password to connect to the remote api
-   * @param   inMain     if true, treal all images imported as main images
+   * @param   inHost       the host to connect to
+   * @param   inPort       the port to use for the remove api
+   * @param   inWebPort    the port to use for web access
+   * @param   inUserName   the username to connect to the remote api
+   * @param   inPassword   the password to connect to the remote api
+   * @param   inMain       if true, treat all images imported as main images
+   * @param   inIndividual if true, store each entry after reading instead of
+   *                       in batch (slower and more expensive, but can
+   *                       properly find bases)
    *
    * @throws IOException unable to install remove api
    *
    */
   public Importer(String inHost, int inPort, int inWebPort,
-                  String inUserName, String inPassword, boolean inMain)
+                  String inUserName, String inPassword, boolean inMain,
+                  boolean inIndividual)
     throws IOException
   {
     m_host = inHost;
     m_webPort = inWebPort;
     m_mainImages = inMain;
+    m_individual = inIndividual;
 
     RemoteApiOptions options = new RemoteApiOptions()
       .server(inHost, inPort)
@@ -147,6 +152,9 @@ public final class Importer
 
   /** If true, all images read as treated as main images. */
   private boolean m_mainImages;
+
+  /** If true, read and store each entry individually (no batch). */
+  private boolean m_individual;
 
   /** Joiner for paths. */
   public static final Joiner PATH_JOINER = Joiner.on('/').skipNulls();
@@ -262,12 +270,16 @@ public final class Importer
         if(entry instanceof Entry)
           complete((Entry)entry);
 
-        entities.add(dmaStore.convert(entry));
+        if(m_individual)
+          store.put(dmaStore.convert(entry));
+        else
+          entities.add(dmaStore.convert(entry));
         Log.important("importing " + type + " " + entry.getName());
       }
 
     Log.important("storing entities in datastore");
-    store.put(entities);
+    if(!entities.isEmpty())
+      store.put(entities);
 
     int last = 0;
     while(last != errors.size())
@@ -277,7 +289,10 @@ public final class Importer
       {
         AbstractEntry entry = i.next();
         if(!entry.ensureBaseEntries())
+        {
+          System.out.println("setting back " + entry.getName());
           continue;
+        }
 
         if(entry instanceof Entry)
           complete((Entry)entry);
@@ -468,6 +483,8 @@ public final class Importer
        ("u", "username", "The username to connect with.",
         "balsiger@ixitxachitls.net"),
        new CommandLineParser.Flag
+       ("i", "individual", "Individually store entries."),
+       new CommandLineParser.Flag
        ("n", "nopassword", "Connect without a password."));
 
     String files = clp.parse(inArguments);
@@ -480,7 +497,7 @@ public final class Importer
     Importer importer =
       new Importer(clp.getString("host"), clp.getInteger("port"),
                    clp.getInteger("webport"), clp.getString("username"),
-                   password, clp.hasValue("main"));
+                   password, clp.hasValue("main"), clp.hasValue("individual"));
 
     try
     {

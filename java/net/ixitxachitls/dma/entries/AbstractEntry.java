@@ -693,6 +693,7 @@ public class AbstractEntry extends ValueGroup
     for(BaseEntry base : getBaseEntries())
       if(base == null)
       {
+        System.out.println(m_base + " / " + m_baseEntries);
         m_baseEntries = null;
         return false;
       }
@@ -1164,7 +1165,10 @@ public class AbstractEntry extends ValueGroup
   {
     Set<AbstractEntry> entries = Sets.newHashSet();
     for(BaseEntry base : getBaseEntries())
+    {
+      entries.addAll(base.collectDependencies());
       entries.add(base);
+    }
 
     for(AbstractExtension<?> extension : m_extensions.values())
     {
@@ -2042,7 +2046,7 @@ public class AbstractEntry extends ValueGroup
   //------------------------------ updateKey -------------------------------
 
   /**
-   * Update the any values that are related to the key with new data.
+   * Update the values that are related to the key with new data.
    *
    * @param       inKey the new key of the entry
    *

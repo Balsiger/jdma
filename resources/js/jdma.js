@@ -237,12 +237,12 @@ admin.resetIndexes = function(inType)
 admin.clearCache = function()
 {
   util.ajax('/admin', { 'cache': 'clear' }, null, true);
-}
+};
 
 admin.refresh = function(inType)
 {
   util.ajax('/admin', { 'refresh': inType }, null, true);
-}
+};
 
 //..........................................................................
 //----- jQuery extensions --------------------------------------------------

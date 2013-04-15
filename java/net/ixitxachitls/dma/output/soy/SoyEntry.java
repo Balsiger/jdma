@@ -40,6 +40,8 @@ import com.google.template.soy.data.restricted.StringData;
 import net.ixitxachitls.dma.data.DMAData;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
+import net.ixitxachitls.dma.entries.Campaign;
+import net.ixitxachitls.dma.entries.CampaignEntry;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.errors.BaseError;
 
@@ -156,10 +158,23 @@ public class SoyEntry extends SoyAbstract
 
     if("deepdma".equals(inName))
     {
-      StringBuffer buffer = new StringBuffer(m_entry.toString());
+      StringBuffer buffer = new StringBuffer();
+      if (m_entry instanceof CampaignEntry)
+      {
+        Campaign campaign = ((CampaignEntry)m_entry).getCampaign();
+        if(campaign != null)
+        {
+          for(AbstractEntry dependency : campaign.collectDependencies())
+            buffer.append(dependency.toString());
+
+          buffer.append(campaign.toString());
+        }
+      }
+
       for(AbstractEntry dependency : m_entry.collectDependencies())
         buffer.append(dependency.toString());
 
+      buffer.append(m_entry.toString());
       return StringData.forValue(buffer.toString());
     }
 

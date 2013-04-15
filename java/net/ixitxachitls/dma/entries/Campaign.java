@@ -183,6 +183,20 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   }
 
   //........................................................................
+  //----------------------------- getCampaign ------------------------------
+
+  /**
+   * Get the campaign this character is in.
+   *
+   * @return      the Campaign for this character
+   *
+   */
+  public Campaign getCampaign()
+  {
+    return this;
+  }
+
+  //........................................................................
 
   //----------------------------- getFilenames -----------------------------
 
