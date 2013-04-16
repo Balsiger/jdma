@@ -26,21 +26,163 @@
 {namespace dma.entry.item}
 
 /**
+ * The contents part of the page.
+ *
+ * @param entry The entry rendered.
+ */
+{deltemplate dma.entry.page}
+  {if $entry.isBase}
+    {call dma.navigation.navigation}
+      {param entries:
+          [[ 'label': $entry.type.link, 'url': '/' + $entry.type.multilink ],
+          [ 'label': $entry.name, 'url': $entry.path ]] /}
+    {/call}
+  {else}
+    {call dma.navigation.entryNavigation}
+      {param entry: $entry /}
+    {/call}
+  {/if}
+  {delcall dma.card}
+    {param entry: $entry /}
+  {/delcall}
+
+
+  <div class="leading">
+    {delcall dma.entry.files.main}
+      {param entry: $entry /}
+    {/delcall}
+    <div class="entrytitle">
+      <div class="title-actions">
+        {if $ij.isDM}
+          <script>
+            gui.addAction('delete', 'Delete',
+                           function() {lb}
+                               if(confirm('Do you really want to delete this?'))
+                                 util.ajax('/actions/remove',
+                                   {lb} key: '{$entry.key |escapeJs}' {rb},
+                                   null,
+                                   true);
+                           {rb});
+          </script>
+          {call dma.page.link}
+            {param url: $entry.name + '.summary' /}
+            {param text}
+              <div class="caption-container">
+                <div class="summary sprite large"></div>
+                <div>summary</div>
+              </div>
+            {/param}
+          {/call}
+          {call dma.page.link}
+            {param url: $entry.name + '.dma' /}
+            {param text}
+              <div class="caption-container">
+                <div class="document sprite large"></div>
+                <div>dma</div>
+              </div>
+            {/param}
+          {/call}
+        {/if}
+        {call dma.page.link}
+          {param url: $entry.name + '.print' /}
+          {param text}
+            <div class="caption-container">
+              <div class="print sprite large"></div>
+              <div>print</div>
+            </div>
+          {/param}
+        {/call}
+      </div>
+      {delcall dma.entry.title}
+        {param entry: $entry /}
+      {/delcall}
+      <div class="description">
+        {call dma.value.withbase}
+          {param canEdit: $ij.isDM /}
+          {param entry: $entry /}
+          {param value: $entry.description /}
+          {param ifempty: '(no description)' /}
+        {/call}
+      </div>
+      <div class="short-description">
+        {call dma.value.withbase}
+          {param canEdit: $ij.isDM /}
+          {param entry: $entry /}
+          {param value: $entry.short_description /}
+          {param ifempty: '(no short description)' /}
+        {/call}
+      </div>
+    </div>
+  </div>
+  <div id="files" class="files">
+    {call dma.value.editable}
+      {param canEdit: $ij.isDM /}
+      {param name: 'files' /}
+      {param value: 'files' /}
+      {param key: $entry.key /}
+      {param type: 'files' /}
+      {param content}
+        <div id="files" class="files">
+          {foreach $file in $entry.files.other}
+            <div class="file">
+              <img src="{if $file.type == 'application/pdf'}/icons/pdf.png
+                        {else}{$file.icon}=s50{/if}" alt="{$file.name}"
+                   class="image file"
+                   onclick="util.link(event, '{$file.icon}')" />
+            </div>
+          {ifempty}
+            <div class="nofiles"></div>
+          {/foreach}
+        </div>
+      {/param}
+    {/call}
+  </div>
+  <div class="values clear">
+    {delcall dma.entry.values}
+      {param entry: $entry /}
+    {/delcall}
+  </div>
+{/deltemplate}
+
+/**
  * The entry title.
  *
  * @param entry The entry rendered.
  */
-{deltemplate dma.entry.title}
-  <h1>
-    {call dma.value.editable}
-      {param canEdit: $ij.isDM or $ij.isOwner /}
-      {param name: 'name' /}
-      {param value: $entry.name /}
-      {param key: $entry.key /}
-      {param type: 'name' /}
-      {param content: $ij.isDM ? $entry.dmName : $entry.playerName /}
-    {/call}
-  </h1>
+{deltemplate dma.card}
+  <div class="item card">
+    <div class="actions">
+      <div class="sprite white delete" title="permanently delete this"></div>
+    </div>
+    <div class="title">
+      {call dma.value.editable}
+        {param canEdit: $ij.isDM or $ij.isOwner /}
+        {param name: 'name' /}
+        {param value: $entry.name /}
+        {param key: $entry.key /}
+        {param type: 'name' /}
+        {param content}
+          {if $ij.isDM}
+            {$entry.dmName}
+          {else}
+            {$entry.playerName}
+          {/if}
+            {sp}({$entry.name})
+          {/param}
+      {/call}
+    </div>
+    <div class="contents">
+/*
+      {call dma.value.withbase}
+        {param entry: $entry /}
+        {param value: $entry.guru /}
+        {param canEdit: not $noedit and ($ij.isDM or $ij.isOwner) /}
+        {param note: $note /}
+      {/call}
+*/
+    </div>
+  </div>
+
   {call dma.page.title}
     {param title: $ij.isDM ? $entry.dmName : $entry.playerName /}
   {/call}

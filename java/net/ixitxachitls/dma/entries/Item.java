@@ -416,13 +416,14 @@ public class Item extends CampaignEntry<BaseItem>
    * Get the name of the entry as given to the plaer.
    *
    * @return      the requested name
-   *
    */
   @Override
   public String getPlayerName()
   {
-    if(m_playerName.isDefined())
-      return m_playerName.get();
+    Combined<Text> combinedPlayerName = collect("player name");
+    Text playerName = combinedPlayerName.total();
+    if(playerName != null && playerName.isDefined())
+      return playerName.get();
 
     for(BaseEntry base : getBaseEntries())
       if(base != null)
@@ -438,7 +439,6 @@ public class Item extends CampaignEntry<BaseItem>
    * Get the name of the item for DMs.
    *
    * @return the dm specific name
-   *
    */
   @Override
   public String getDMName()

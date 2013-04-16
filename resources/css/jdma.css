@@ -192,6 +192,11 @@ DIV.subtitletext, DIV.subtitletext A
   cursor:           pointer;
 }
 
+.sprite.white
+{
+  background-image: url('/icons/icons-white.png');
+}
+
 .sprite:hover
 {
   background-image: url('/icons/icons-hover.png');
@@ -326,10 +331,15 @@ DIV.remove
   background-position: -182px;
 }
 
-DIV.delete.sprite
+DIV.delete.sprite.large
 {
   background-position: -86px;
   width: 38px;
+}
+
+DIV.delete.white.sprite
+{
+  background-position: -168px;
 }
 
 /******************************************************************************
@@ -628,6 +638,40 @@ IMG.item-image
   width: 15px;
   height: 15px;
   margin-right: 5px;
+}
+
+/* item */
+DIV.item.card
+{
+  background-color: $color_Item;
+  width: 500px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 6px -3px;
+  position: relative;
+}
+
+DIV.card DIV.title
+{
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+  border-bottom: 1px solid;
+}
+
+DIV.card DIV.actions
+{
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+
+DIV.card DIV.contents
+{
+  background-color: white;
+  margin: 10px;
+  padding: 5px;
+  min-height: 50px;
 }
 
 /******************************************************************************

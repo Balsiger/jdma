@@ -254,7 +254,7 @@ public class SoyValue extends SoyAbstract
         for (Object value : (ValueList)m_value)
           values.add(new SoyValue(m_name, (Value)value, m_entry));
 
-        return new SoyListData(values);
+         return new SoyListData(values);
       }
 
       if("multi".equals(inName) && m_value instanceof Multiple)

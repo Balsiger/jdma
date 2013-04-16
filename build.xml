@@ -56,6 +56,7 @@
   <property name="test.classes"         value="**/*$Test.class" />
   <property name="bugs.classes"         value="${classes.dir}" />
 
+
   <!-- for checkstyle -->
   <path id="checkstyle.classpath">
     <pathelement location="${classes.dir}" />
@@ -215,6 +216,7 @@
         <include name="**/*.png" />
         <include name="**/*.gif" />
         <include name="**/*.jpeg" />
+        <exclude name="icons.png" />
       </fileset>
     </copy>
     <copy todir="${classes.dir}/dma" flatten="false">
@@ -334,7 +336,7 @@
     </copy>
   </target>
 
-  <target name="gae" depends="compile"
+  <target name="gae" depends="compile,icons"
       description="Starts the development server.">
     <dev_appserver war="${war.dir}" port="8888">
       <options>
@@ -345,7 +347,7 @@
     </dev_appserver>
   </target>
 
-  <target name="gae-debug" depends="compile"
+  <target name="gae-debug" depends="compile,icons"
       description="Starts the development server.">
     <dev_appserver war="${war.dir}" port="8888">
       <options>
@@ -355,7 +357,7 @@
     </dev_appserver>
   </target>
 
-  <target name="gae-update" depends="compile"
+  <target name="gae-update" depends="compile,icons"
           description="Uploads the application to App Engine.">
     <replace file="${war.dir}/WEB-INF/appengine-web.xml"
              token="&lt;application&gt;jdmaixit-dev&lt;/application&gt;"
@@ -734,6 +736,37 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
          update="false">
       <zipfileset dir="${files-int.dir}" prefix="files-internal"/>
     </jar>
+  </target>
+
+  <!-- recolor icons -->
+  <target name="iconchanges">
+      <uptodate property="noiconchanges"
+                targetfile="build/war/icons/icons.png">
+         <srcfiles file="resources/icons/icons.png" />
+      </uptodate>
+   </target>
+
+  <target name="icons" depends="prepare,iconchanges"
+          description="created colored icons" unless="noiconchanges">
+    <exec executable="/opt/local/bin/convert">
+      <arg line="( resources/icons/icons.png -alpha extract ) -background white -alpha shape build/war/icons/icons-white.png" />
+    </exec>
+    <exec executable="/opt/local/bin/convert">
+      <arg line="( resources/icons/icons.png -alpha extract ) -background #00006a -alpha shape build/war/icons/icons.png" />
+    </exec>
+    <exec executable="/opt/local/bin/convert">
+      <arg line="( resources/icons/icons.png -alpha extract ) -background #d66a00 -alpha shape build/war/icons/icons-hover.png" />
+    </exec>
+
+    <exec executable="/opt/local/bin/convert">
+      <arg line="( resources/icons/icons-large.png -alpha extract ) -background white -alpha shape build/war/icons/icons-large-white.png" />
+    </exec>
+    <exec executable="/opt/local/bin/convert">
+      <arg line="( resources/icons/icons-large.png -alpha extract ) -background #00006a -alpha shape build/war/icons/icons-large.png" />
+    </exec>
+    <exec executable="/opt/local/bin/convert">
+      <arg line="( resources/icons/icons-large.png -alpha extract ) -background #d66a00 -alpha shape build/war/icons/icons-large-hover.png" />
+    </exec>
   </target>
 
 </project>

@@ -62,13 +62,15 @@
     {param entry: $entry /}
     {param name: 'Characters' /}
     {param content}
-      {foreach $character in $entry.characters.list}
-        {call dma.page.link}
-          {param url: $character.multi.1.print /}
-          {param text: $character.multi.0.raw /}
-        {/call}
-        {if not isLast($character)}, {/if}
-      {/foreach}
+      {if def($entry.characters)}
+        {foreach $character in $entry.characters.list}
+          {call dma.page.link}
+            {param url: $character.multi.1.print /}
+            {param text: $character.multi.0.raw /}
+          {/call}
+          {if not isLast($character)}, {/if}
+        {/foreach}
+      {/if}
     {/param}
     {param access: 'user' /}
   {/delcall}

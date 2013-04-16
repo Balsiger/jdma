@@ -264,6 +264,9 @@ public class Campaign extends CampaignEntry<BaseCampaign>
                                                 + Character.TYPE.getLink() + "/"
                                                 + character), false)));
 
+      if (list.isEmpty())
+        return null;
+
       return new ValueList<Multiple>(list);
     }
 
