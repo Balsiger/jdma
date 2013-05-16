@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -71,7 +72,7 @@ public class Multiple extends Value<Multiple>
    */
   @Immutable
   @ParametersAreNonnullByDefault
-  public static class Element
+  public static class Element implements Serializable
   {
     //------------------------------ Element -------------------------------
 
@@ -213,6 +214,32 @@ public class Multiple extends Value<Multiple>
         result.append(m_front);
 
       result.append(m_value.toString());
+
+      if(m_tail != null)
+        result.append(m_tail);
+
+      return result.toString();
+    }
+
+    //........................................................................
+    //------------------------------ toString ------------------------------
+
+    /**
+     * Convert the value to a short string.
+     *
+     * @return      a String representation
+     *
+     */
+    public String toShortString()
+    {
+      if(!m_value.isDefined() && isOptional())
+        return "";
+
+      StringBuilder result = new StringBuilder();
+      if(m_front != null)
+        result.append(m_front);
+
+      result.append(m_value.toShortString());
 
       if(m_tail != null)
         result.append(m_tail);
@@ -538,38 +565,46 @@ public class Multiple extends Value<Multiple>
   }
 
   //........................................................................
-  //------------------------------- doPrint --------------------------------
+  //----------------------------- toShortString ----------------------------
 
   /**
-   * Generate a string representation of the value for printing.
+   * Convert the value to a short string.
    *
-   * @param       inEntry    the entry this value is in
-   *
-   * @return  the printed value as a string.
+   * @return      a short String representation
    *
    */
-  // protected String doPrint(AbstractEntry inEntry)
-  // {
-  //   StringBuilder builder = new StringBuilder();
+  public String toShortString()
+  {
+    StringBuilder result = new StringBuilder();
 
-  //   for(int i = 0; i < m_elements.length; i++)
-  //   {
-  //     if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
-  //       if(m_elements[i].m_front != null)
-  //         builder.append(m_elements[i].m_front);
-  //       else
-  //         if(i > 0)
-  //           builder.append(" ");
+    boolean delim = false;
 
-  //     builder.append(get(i).print(inEntry));
+    for(int i = 0; i < m_elements.length; i++)
+    {
+      if(m_elements[i].isOptional() && !m_elements[i].get().isDefined())
+        continue;
 
-  //     if(!m_elements[i].isOptional() || m_elements[i].get().isDefined())
-  //       if(m_elements[i].m_tail != null)
-  //         builder.append(m_elements[i].m_tail);
-  //   }
+      String element = m_elements[i].toShortString();
 
-  //   return builder.toString();
-  // }
+      if(element.length() > 0)
+      {
+        if(delim)
+        {
+          if(m_elements[i].m_front == null)
+            result.append(" ");
+
+          delim = false;
+        }
+
+        result.append(element);
+
+        if(m_elements[i].m_tail == null)
+          delim = true;
+      }
+    }
+
+    return result.toString();
+  }
 
   //........................................................................
   //------------------------------ getChoices ------------------------------

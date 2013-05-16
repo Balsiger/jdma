@@ -309,32 +309,6 @@ public class BaseQuality extends BaseEntry
 
   //........................................................................
 
-  //----- printing commands ------------------------------------------------
-
-  /** The command for printing on a page. */
-  // public static Command PAGE_COMMAND = new Command(new Object []
-  //   {
-  //     new Divider("center", "#^world #attachment #+categories #type"),
-  //     "${title}",
-  //     new Textblock(new Command(new Object []
-  //       {
-  //         "${description}",
-  //         new Linebreak(),
-  //         new Hrule(),
-  //         "${short description}",
-  //       }), "desc"),
-  //     new Table("description", "f" + "Illustrations: ".length()
-  //               + ":L(desc-label);100:L(desc-text)",
-  //               new Command("%effects %qualifier"
-  //                           // incomplete
-  //                           + "%incomplete "
-  //                           // admin
-  //                           + "%{+references} %file")),
-  //     new Divider("clear", "$scripts"),
-  //   });
-
-  //........................................................................
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors

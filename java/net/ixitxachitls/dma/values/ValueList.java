@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -35,6 +37,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.EmptyIterator;
@@ -233,7 +236,7 @@ public class ValueList<T extends Value<T>>
   protected String m_delimiter = s_delimiter;
 
   /** The joiner to join the elements. */
-  protected Joiner m_joiner;
+  protected transient Joiner m_joiner;
 
   /** The standard delimiter to use. */
   protected static final String s_delimiter =
@@ -354,6 +357,24 @@ public class ValueList<T extends Value<T>>
   {
     // we know this is defined
     return m_joiner.join(m_values);
+  }
+
+  //........................................................................
+  //----------------------------- toShortString ----------------------------
+
+  /**
+   * Convert the value to a short string.
+   *
+   * @return      a short String representation
+   *
+   */
+  public String toShortString()
+  {
+    List<String> strings = Lists.newArrayList();
+    for(Value<?> value : m_values)
+      strings.add(value.toShortString());
+
+    return m_joiner.join(strings);
   }
 
   //........................................................................
@@ -754,6 +775,21 @@ public class ValueList<T extends Value<T>>
   }
 
   //........................................................................
+  //------------------------------ readObject ------------------------------
+
+  /**
+   * Read the object from the given stream. This is necesasry to recreated the
+   * joiner that is not serializable.
+   *
+   * @param   inStream the stream to read from
+   */
+  private Object readResolve() throws ObjectStreamException
+  {
+    m_joiner = Joiner.on(m_delimiter);
+    return this;
+  }
+
+  //........................................................................
 
   //---------------------------- createElement -----------------------------
 
@@ -771,7 +807,6 @@ public class ValueList<T extends Value<T>>
   }
 
   //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test

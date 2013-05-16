@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -68,7 +69,7 @@ public class Units<T extends Units<T>> extends Value<T>
    */
   @Immutable
   @ParametersAreNonnullByDefault
-  public static class Unit
+  public static class Unit implements Serializable
   {
     //-------------------------------- Unit --------------------------------
 
@@ -277,28 +278,29 @@ public class Units<T extends Units<T>> extends Value<T>
     }
 
     //......................................................................
-    //------------------------------ format --------------------------------
+    //---------------------------- toShortString ---------------------------
 
     /**
-     * Format the value for printing.
+     * Convert the given value with the unit into a short String for printing.
      *
      * @param       inValue the value to print
      *
-     * @return      the convert value as a command
+     * @return      the converted value as String
      *
      */
-    // public Command format(Rational inValue)
-    // {
-    //   if(inValue.isNull())
-    //     return new Command("0 " + m_unit);
+    public String toShortString(Rational inValue)
+    {
+      String unit;
+      if(m_other != null && m_other.length > 0)
+        unit = m_other[0];
+      else
+        unit = m_unit;
 
-    //   return new Span("unit", new Command(new Object []
-    //     {
-    //       inValue.format(false),
-    //       " ",
-    //       inValue.isSingular() ? m_unit : m_units,
-    //     }));
-    // }
+      if(inValue.isNull())
+          return "0 " + unit;
+
+      return inValue.toString() + " " + unit;
+    }
 
     //......................................................................
     //------------------------------ toString ------------------------------
@@ -332,7 +334,7 @@ public class Units<T extends Units<T>> extends Value<T>
    *
    */
   @Immutable
-  public static class Set
+  public static class Set implements Serializable
   {
     //-------------------------------- Set ---------------------------------
 
@@ -958,65 +960,12 @@ public class Units<T extends Units<T>> extends Value<T>
 
   //........................................................................
 
-  // //----------------------------- formatUnits ------------------------------
-
-  // /**
-  //  * Format all the units for printing.
-  //  *
-  //  * @return      the command to print all unit values
-  //  *
-  //  */
-  // protected Command formatUnits()
-  // {
-  //   ArrayList<Object> commands = new ArrayList<Object>();
-
-  //   for(int i = 0; i < m_values.length; i++)
-  //   {
-  //     Command command = formatSingleUnit(i);
-  //     if(command == null)
-  //       continue;
-
-  //     if(commands.size() > 0)
-  //       commands.add(" ");
-
-  //     commands.add(command);
-  //   }
-
-  //   if(commands.size() == 0)
-  //     return new Span("unit", "0 " + getBaseUnit());
-
-  //   return new Command(commands);
-  // }
-
-  //........................................................................
-  //--------------------------- formatSingleUnit ---------------------------
-
-  /**
-   * Format a single unit value, given by index.
-   *
-   * @param       inIndex the index of the unit value to format.
-   *
-   * @return      the command to format the value or null if there is no value
-   *
-   */
-  // protected @Nullable Command formatSingleUnit(int inIndex)
-  // {
-  //   assert inIndex >= 0 && inIndex <= m_values.length;
-
-  //   if(m_values[inIndex] == null || !m_values[inIndex].isDefined()
-  //      || m_values[inIndex].isNull())
-  //     return null;
-
-  //   return m_set.m_units[inIndex].format(m_values[inIndex]);
-  // }
-
-  //........................................................................
   //------------------------------ doToString ------------------------------
 
   /**
-   * Convert the value to a string, depending on the given kind.
+   * Convert the value to a string.
    *
-   * @return      a String representation, depending on the kind given
+   * @return      a String representation
    *
    */
   @Override
@@ -1062,6 +1011,60 @@ public class Units<T extends Units<T>> extends Value<T>
       return "";
 
     return m_set.m_units[inIndex].toString(m_values[inIndex]);
+  }
+
+  //........................................................................
+  //----------------------------- toShortString ----------------------------
+
+  /**
+   * Convert the value to a short string.
+   *
+   * @return      a short String representation
+   *
+   */
+  @Override
+  public String toShortString()
+  {
+    if(m_set == null)
+      return "$undefined$";
+
+    StringBuilder result = new StringBuilder();
+
+    for(int i = 0; i < m_set.m_units.length; i++)
+    {
+      String single = singleUnitToShortString(i);
+      if(!single.isEmpty())
+        result.append(single + " ");
+    }
+
+    String end = result.toString().trim();
+
+    if(end.length() == 0)
+      return "0 " + m_set.getBaseUnit();
+
+    return end;
+  }
+
+  //........................................................................
+  //------------------------ singleUnitToShortString -----------------------
+
+  /**
+   * Convert a single unit to a short string.
+   *
+   * @param       inIndex the index of the unit to print
+   *
+   * @return      the converted string
+   *
+   */
+  protected String singleUnitToShortString(int inIndex)
+  {
+    if(inIndex < 0 || inIndex >= m_values.length)
+      throw new IllegalArgumentException("invalid index given");
+
+    if(m_values[inIndex] == null || m_values[inIndex].isNull())
+      return "";
+
+    return m_set.m_units[inIndex].toShortString(m_values[inIndex]);
   }
 
   //........................................................................
@@ -1221,7 +1224,7 @@ public class Units<T extends Units<T>> extends Value<T>
       : Arrays.copyOf(m_values, m_values.length);
 
     // first the easy one, the same sets
-    if(result.m_set == inOther.m_set)
+    if(result.m_set.equals(inOther.m_set))
     {
       for(int i = 0; i < result.m_values.length; i++)
         if(inOther.m_values[i] != null)

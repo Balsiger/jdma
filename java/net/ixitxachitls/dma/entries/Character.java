@@ -184,6 +184,7 @@ public class Character extends CampaignEntry<BaseCharacter>
   protected Number m_level = new Number(1, 1, 100);
 
   //........................................................................
+
   //----- wealth -----------------------------------------------------------
 
   /** The standard wealth per level in gold pieces. */

@@ -725,7 +725,8 @@ public class BaseItem extends BaseEntry
 
   /** The size of items of this kind. */
   @Key("size")
-  protected EnumSelection<Size> m_size = new EnumSelection<Size>(Size.class)
+  protected EnumSelection<Size> m_size =
+    new EnumSelection<Size>(Size.class)
     .withTemplate("link", Index.Path.SIZES.getPath());
 
   static

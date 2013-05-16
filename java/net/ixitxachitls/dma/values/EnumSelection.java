@@ -234,7 +234,7 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
 
   //........................................................................
 
-  //------------------------------- toString -------------------------------
+  //------------------------------ doToString ------------------------------
 
   /**
    * Convert the value to a string.
@@ -245,6 +245,27 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
   @Override
   public String doToString()
   {
+    if(m_selected instanceof Named)
+      return ((Named)m_selected).getName();
+
+    return m_selected.toString();
+  }
+
+  //........................................................................
+  //----------------------------- toShortString ----------------------------
+
+  /**
+   * Convert the value to a short string.
+   *
+   * @return      a short String representation
+   *
+   */
+  @Override
+  public String toShortString()
+  {
+    if(m_selected instanceof Short)
+      return ((Short)m_selected).getShort();
+
     if(m_selected instanceof Named)
       return ((Named)m_selected).getName();
 
@@ -332,7 +353,27 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
 
   //----------------------------------------------------------- manipulators
 
-  // immutable!
+  //--------------------------------- add ----------------------------------
+
+  /**
+   * Add the current and given value and return it. The current value is not
+   * changed.
+   *
+   * @param       inValue the value to add to this one
+   *
+   * @return      the added values
+   *
+   */
+  @Override
+  public EnumSelection<T> add(EnumSelection<T> inValue)
+  {
+    if(equals(inValue))
+      return this;
+
+    return super.add(inValue);
+  }
+
+  //........................................................................
 
   //........................................................................
 

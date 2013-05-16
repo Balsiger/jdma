@@ -45,7 +45,7 @@
       <div id="page" class="page">
         {$content|noAutoescape}
       </div>
-      <div id="footer-spacer"></div>
+    <div id="footer-spacer"></div>
     </div>
     {call .footer data="all" /}
   </body>
@@ -73,11 +73,9 @@
  * The template for body only.
  *
  * @param content The page content
- * @param oldcontent The old page content
  */
 {template .bodyOnly}
   {$content|noAutoescape}
-  {$oldcontent|noAutoescape}
 {/template}
 
 /**
@@ -274,11 +272,11 @@
 /**
  * A 'dynamic' link.
  *
- * @param url The url to link to
- * @param js The javascript to execute on click, if any
+ * @param? url The url to link to
+ * @param? js The javascript to execute on click, if any
  * @param text The text of the link
- * @param tooltip The tolltip text
- * @param class The css class
+ * @param? tooltip The tolltip text
+ * @param? class The css class
  *
  */
 {template .link}

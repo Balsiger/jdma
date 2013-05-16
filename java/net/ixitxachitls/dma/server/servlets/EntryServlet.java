@@ -32,6 +32,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
 
 import org.easymock.EasyMock;
 
@@ -279,7 +280,8 @@ public class EntryServlet extends PageServlet
             "previous", current <= 0 ? "" : ids.get(current - 1) + extension,
             "list", "/" + entry.getType().getMultipleLink(),
             "next", current >= last ? "" : ids.get(current + 1) + extension,
-            "last", current >= last ? "" : ids.get(last) + extension),
+            "last", current >= last ? "" : ids.get(last) + extension,
+            "variant", type.getName().replace(" ", "")),
         ImmutableSet.of(type.getName().replace(" ", ""))));
 
     return data;
@@ -312,6 +314,15 @@ public class EntryServlet extends PageServlet
     data.put("isDM", user != null && (entry == null || entry.isDM(user)));
 
     data.put("isOwner", user != null && (entry == null || entry.isOwner(user)));
+
+    Map<String, Object> params = Maps.newHashMap();
+    for(String param : inRequest.getParams().keySet())
+      if(inRequest.getParam(param).isEmpty())
+        params.put(param, true);
+      else
+        params.put(param, inRequest.getParam(param));
+
+    data.put("params", params);
 
     return data;
   }

@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -214,20 +215,22 @@ public class Combined<T extends Value<T>>
     /**
      * Get all the values collected by this node and all its children.
      *
+     * @param   inIgnoreTop ignore the top most value and only return bases
+     *
      * @return  a list of value node list pairs
      */
     @SuppressWarnings("unchecked") // generic array creation?
-    public List<Pair<U, List<Node<U>>>> values()
+    public List<Pair<U, List<Node<U>>>> values(boolean inIgnoreTop)
     {
       List<Pair<U, List<Node<U>>>> values = Lists.newArrayList();
 
-      if(m_value != null && m_value.isDefined())
+      if(!inIgnoreTop && m_value != null && m_value.isDefined())
         values.add(new Pair<U, List<Node<U>>>(m_value,
                                               Lists.newArrayList(this)));
       else
         for(Node<U> child : m_children)
           valueLoop:
-          for(Pair<U, List<Node<U>>> value : child.values())
+          for(Pair<U, List<Node<U>>> value : child.values(false))
           {
             for(int i = 0; i < values.size(); i++)
             {
@@ -459,7 +462,8 @@ public class Combined<T extends Value<T>>
   }
 
   //........................................................................
-  //........................................................................
+
+ //........................................................................
 
   //-------------------------------------------------------------- variables
 
@@ -582,7 +586,7 @@ public class Combined<T extends Value<T>>
     if(m_root == null)
       return Lists.newArrayList();
 
-    List<Pair<T, List<Node<T>>>> values = m_root.values();
+    List<Pair<T, List<Node<T>>>> values = m_root.values(false);
 
     if(m_modifiers.isEmpty() || values.size() == 0)
       return values;
@@ -623,26 +627,26 @@ public class Combined<T extends Value<T>>
    *
    * @return      a list of value and description pairs
    */
-  public List<Pair<T, String>> valuesWithDescriptions()
+  public List<Pair<T, List<Pair<T, String>>>> valuesWithDescriptions()
   {
-    List<Pair<T, String>> values = Lists.newArrayList();
+    List<Pair<T, List<Pair<T, String>>>> values = Lists.newArrayList();
     for(Pair<T, List<Node<T>>> value : values())
     {
-      List<String> descriptions = Lists.newArrayList();
+      List<Pair<T, String>> descriptions = Lists.newArrayList();
       for(Node<T> node : value.second())
-      {
-        String description = node.getDescription();
-        if(description != null)
-          descriptions.add(description);
-      }
+        descriptions.add(new Pair<T, String>(node.getValue(),
+                                             node.getDescription()));
 
-      values.add(new Pair<T, String>
-                 (value.first(),
-                  Strings.COMMA_JOINER.join(descriptions)));
+      values.add(new Pair<T, List<Pair<T, String>>>(value.first(),
+                                                    descriptions));
     }
 
     for(Contribution<T> value : m_values)
-      values.add(new Pair<T, String>(value.getValue(), value.getDescription()));
+      values.add(new Pair<T, List<Pair<T, String>>>
+                 (value.getValue(),
+                  ImmutableList.of(new Pair<T, String>
+                                   (value.getValue(),
+                                    value.getDescription()))));
 
     return values;
   }
@@ -664,6 +668,31 @@ public class Combined<T extends Value<T>>
         total = value;
       else
         total = total.add(value);
+
+    total = computeExpressions(total);
+    if(total instanceof Units)
+      total = (T)((Units)total).simplify();
+
+    return total;
+  }
+
+  //........................................................................
+  //--------------------------------- base ---------------------------------
+
+  /**
+   * Compute the total base value, ignoring the top value.
+   *
+   * @return      the total base value, if any
+   */
+  @SuppressWarnings("unchecked")
+  public @Nullable T base()
+  {
+    T total = null;
+    for (Pair<T, List<Node<T>>> value : m_root.values(true))
+      if(total == null)
+        total = value.first();
+      else
+        total = total.add(value.first());
 
     total = computeExpressions(total);
     if(total instanceof Units)
@@ -769,6 +798,25 @@ public class Combined<T extends Value<T>>
   }
 
   //........................................................................
+  //------------------------------- hasValue -------------------------------
+
+  /**
+   * Check if there is a value at all here.
+   *
+   * @return      true if there is a value, false if not.
+   *
+   */
+  public boolean hasValue()
+  {
+    for(T value : valuesOnly())
+      if(value.isDefined())
+        return true;
+
+    return false;
+  }
+
+  //........................................................................
+
 
   //------------------------------- toString -------------------------------
 
@@ -821,7 +869,10 @@ public class Combined<T extends Value<T>>
   public void addValue(T inValue, ValueGroup inGroup,
                        @Nullable String inDescription)
   {
-    m_values.add(new Contribution<T>(inValue, inGroup, inDescription));
+    if(m_root != null)
+      m_root.addChild(new Node<T>(inValue, inGroup.getEntry(), inDescription));
+    else
+      m_values.add(new Contribution<T>(inValue, inGroup, inDescription));
   }
 
   //........................................................................

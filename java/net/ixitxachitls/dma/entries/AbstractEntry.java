@@ -23,6 +23,11 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -89,7 +94,7 @@ import net.ixitxachitls.util.logging.Log;
 
 @ParametersAreNonnullByDefault
 public class AbstractEntry extends ValueGroup
-  implements Comparable<AbstractEntry>
+  implements Comparable<AbstractEntry>, Serializable
 {
   //----------------------------------------------------------------- nested
 
@@ -395,10 +400,10 @@ public class AbstractEntry extends ValueGroup
     new TreeMap<String, AbstractExtension<? extends AbstractEntry>>();
 
   /** The base entries for this entry, in the same order as the names. */
-  protected @Nullable List<BaseEntry> m_baseEntries = Lists.newArrayList();
+  protected List<BaseEntry> m_baseEntries = Lists.newArrayList();
 
   /** The files for this entry. */
-  private @Nullable List<DMAData.File> m_files = null;
+  protected transient @Nullable List<DMAData.File> m_files = null;
 
   /** Flag if computing extension values. */
   private boolean m_computingExtension = false;
@@ -592,6 +597,18 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the entry associated with this group.
+   *
+   * @return  the associated entry
+   */
+  public AbstractEntry getEntry() {
+    return this;
+  }
+
+  //........................................................................
   //-------------------------- getQualifiedName ----------------------------
 
   /**
@@ -665,7 +682,7 @@ public class AbstractEntry extends ValueGroup
   @Override
   public List<BaseEntry> getBaseEntries()
   {
-    if(m_baseEntries == null || m_baseEntries.isEmpty())
+    if(m_baseEntries.isEmpty())
     {
       m_baseEntries = new ArrayList<BaseEntry>();
 
@@ -776,9 +793,16 @@ public class AbstractEntry extends ValueGroup
    * @return      the requested names
    *
    */
-  public List<String> getExtensionNames()
+  public Set<String> getExtensionNames()
   {
-    return new ArrayList<String>(m_extensions.keySet());
+    Set<String> extensions = Sets.newHashSet();
+    extensions.addAll(m_extensions.keySet());
+
+    for(BaseEntry base : getBaseEntries())
+      if(base != null)
+        extensions.addAll(base.getExtensionNames());
+
+    return extensions;
   }
 
   //........................................................................
@@ -864,22 +888,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //------------------------------ getStorage ------------------------------
-
-  /**
-   * Get the storage space this entry is stored in.
-   *
-   * @return      the storage containing this entry
-   *
-   * @undefined   may return null if this entry is not stored (yet)
-   *
-   */
-//   public Storage<AbstractEntry> getStorage()
-//   {
-//     return m_storage;
-//   }
-
-  //........................................................................
   //---------------------------- getQuantifiers ----------------------------
 
   /**
@@ -919,177 +927,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-  //----------------------------- getBaseValue -----------------------------
-
-  /**
-   * Get a value from any of the bases.
-   *
-   * @param       inExtractor the extractor to get the values
-   * @param       inOrdinal   the extractor to get a value for sorting
-   *
-   * @return      the requested value or null if not found or undefined
-   *
-   */
-//   @MayReturnNull
-//   @SuppressWarnings("unchecked") // having to cast base entry to given T
-//   protected <T extends BaseEntry, V>
-//     V getBaseValue(Extractor<T, V> inExtractor,
-//                    @MayBeNull Combiner<V, V> inCombiner)
-//   {
-//     if(m_baseEntries == null)
-//       return null;
-
-//     V result = null;
-
-//     for(BaseEntry base : m_baseEntries)
-//     {
-//       if(base == null)
-//         continue;
-
-//       try
-//       {
-//         V temp = inExtractor.get((T)base);
-
-//         if(temp != null)
-//           if(result == null)
-//             result = temp;
-//         else
-//           if(inCombiner != null)
-//             result = inCombiner.combine(result, temp);
-//           else
-//             Log.warning("requested value not unique");
-//       }
-//       catch(ClassCastException e)
-//       {
-//         Log.error("Could not properly cast base '" + base.getName() + "': "
-//                   + e);
-//         throw e;
-//       }
-//     }
-
-//     return result;
-//   }
-
-  //........................................................................
-  //----------------------------- getBaseValue -----------------------------
-
-  /**
-   * Get a value from the base(s).
-   *
-   * @param       inName     the name of the value to get
-   * @param       inCombine  how to combine multiple values to the final one
-   * @param       inDM       true if setting for dm, false else
-   *
-   * @return      the value found or null for none
-   *
-   */
-//   public Value getBaseValue(String inName, Combine inCombine, boolean inDM)
-//   {
-//     return getBaseValue(inName, inCombine, inDM, null);
-//   }
-
-  //........................................................................
-  //----------------------------- getBaseValue -----------------------------
-
-  /**
-   * Get a value from the base(s).
-   *
-   * @param       inName     the name of the value to get
-   * @param       inCombine  how to combine multiple values to the final one
-   * @param       inDM       true if setting for dm, false else
-   * @param       inStart    the value to start from, if any.
-   *
-   * @return      the value found or null for none
-   *
-   */
-//   public Value getBaseValue(String inName, Combine inCombine, boolean inDM,
-//                             @MayBeNull Value inStart)
-//   {
-//     Value result = null;
-
-//     if(inStart != null)
-//       result = inStart.clone();
-
-//     if(m_baseEntries == null)
-//       return result;
-
-//     boolean checkDM = !inDM;
-//     for(BaseEntry base : m_baseEntries)
-//     {
-//       if(base == null)
-//         continue;
-
-//       if(checkDM)
-//       {
-//         Pair<ValueGroup, Variable> var = base.getVariable(inName);
-
-//         if(var == null)
-//           return null;
-
-//         if(var.second().isDMOnly())
-//           return null;
-
-//         // Only check once
-//         checkDM = false;
-//       }
-
-//       Value<? extends Value> value =
-//         base.getBaseValue(inName, inCombine, inDM, base.getValue(inName));
-
-//       if(value == null || !value.isDefined())
-//         continue;
-
-//       if(inCombine == Combine.FIRST)
-//         return value;
-
-//       if(result == null)
-//         result = value.clone();
-
-//       if(inCombine == Combine.MINIMUM || inCombine == Combine.MAXIMUM)
-//       {
-//         int compare = value.compareTo(result);
-
-//         if(compare < 0 && inCombine == Combine.MINIMUM)
-//           result = value;
-//         else
-//           if(compare > 0 && inCombine == Combine.MAXIMUM);
-//       }
-//       else
-//       {
-//         if(inCombine == Combine.MODIFY)
-//         {
-//           if(!(result instanceof Modifiable))
-//           {
-//             Value old = result;
-//             result = new Modifiable<Value>(old.getBase());
-//             addToModifiable((Modifiable<?>)result, old, base.getName());
-//           }
-
-//           addToModifiable((Modifiable<?>)result, value, base.getName());
-//         }
-//         else if(inCombine == Combine.ADD)
-//         {
-//           if(result instanceof Modifiable)
-//             addToModifiable((Modifiable<?>)result, value, base.getName());
-//           else
-//             if(result instanceof SimpleText)
-//             {
-//               ((SimpleText)value).set
-//                 ("\\par\\right{\\scriptsize{\\italic{\\color{color-light}{"
-//                  + base.getName() + ":}}}}"
-//                  + ((SimpleText)value).get());
-//               result.addTo(value);
-//             }
-//             else
-//               result.addTo(value);
-//         }
-//       }
-//     }
-
-//     return result;
-//   }
-
-  //........................................................................
   //------------------------------- getFile --------------------------------
 
   /**
@@ -1098,11 +935,11 @@ public class AbstractEntry extends ValueGroup
    * @return      the file stored in, if any
    *
    */
-  @Deprecated
-  public @Nullable DMAFile getFile()
-  {
-    return m_file;
-  }
+  // @Deprecated
+  // public @Nullable DMAFile getFile()
+  // {
+  //   return m_file;
+  // }
 
   //........................................................................
   //------------------------------- getFiles -------------------------------
@@ -1116,7 +953,10 @@ public class AbstractEntry extends ValueGroup
   public List<DMAData.File> getFiles()
   {
     if(m_files == null)
+    {
       m_files = DMADataFactory.get().getFiles(this);
+      DMADataFactory.get().cacheEntry(this);
+    }
 
     return m_files;
   }
@@ -1725,7 +1565,7 @@ public class AbstractEntry extends ValueGroup
     if("extensions".equals(inKey))
     {
       List<Name> values = new ArrayList<Name>();
-      for (String extension : m_extensions.keySet())
+      for (String extension : getExtensionNames())
         values.add(new Name(extension).withTemplate("extension"));
 
       ValueList<Name> list;
@@ -3126,7 +2966,6 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test

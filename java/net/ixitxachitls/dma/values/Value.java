@@ -23,6 +23,11 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.List;
 
@@ -61,7 +66,7 @@ import net.ixitxachitls.util.configuration.Config;
 @Immutable
 @ParametersAreNonnullByDefault
 public abstract class Value<T extends Value<T>>
-  implements Comparable<Object>, PublicCloneable
+  implements Comparable<Object>, PublicCloneable, Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -435,6 +440,20 @@ public abstract class Value<T extends Value<T>>
   protected abstract String doToString();
 
   //........................................................................
+  //----------------------------- toShortString ----------------------------
+
+  /**
+   * Convert the value to a short string.
+   *
+   * @return      a short String representation
+   *
+   */
+  public String toShortString()
+  {
+    return toString();
+  }
+
+  //........................................................................
 
   //------------------------------ isDefined -------------------------------
 
@@ -544,7 +563,6 @@ public abstract class Value<T extends Value<T>>
    * @return      the string to be printed
    *
    */
-  @Deprecated // ??
   protected String doPrint(AbstractEntry inEntry)
   {
     return toString(false);

@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.util;
 
+import java.io.Serializable;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 //..........................................................................
@@ -46,7 +48,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public interface Grouping<T, G>
+public interface Grouping<T, G> extends Serializable
 {
   //-------------------------------------------------------------- accessors
 

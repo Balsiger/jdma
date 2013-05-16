@@ -643,35 +643,346 @@ IMG.item-image
 /* item */
 DIV.item.card
 {
-  background-color: $color_Item;
   width: 500px;
-  border-radius: 10px;
-  box-shadow: 5px 5px 6px -3px;
   position: relative;
+  padding: 5px;
+  display: inline-block;
+  margin: 0 2px 2px 0;
+}
+
+DIV.card DIV.header
+{
+  background-color: $color_Item;
+  color: white;
+  padding: 10px;
 }
 
 DIV.card DIV.title
 {
-  color: white;
   font-weight: bold;
   text-align: center;
-  padding: 5px;
-  border-bottom: 1px solid;
+  display: inline-block;
+  width: 100%;
+}
+
+DIV.card DIV.title SPAN.subtitle
+{
+  font-size: 10px;
 }
 
 DIV.card DIV.actions
 {
-  position: absolute;
-  top: 5px;
+  top: 12px;
   left: 10px;
+  display: inline-block;
+  width: 15%;
+}
+
+DIV.card DIV.extensions
+{
+  top: 12px;
+  right: 12px;
+  text-align: right;
+  color: white;
+  font-size: 6px;
+  line-height: 16px;
+  position: absolute;
+  width: 17%;
 }
 
 DIV.card DIV.contents
 {
-  background-color: white;
-  margin: 10px;
-  padding: 5px;
+  border: 1px solid $color_Item;
   min-height: 50px;
+}
+
+DIV.card DIV.top-block
+{
+  background-color: white;
+  padding: 5px 10px 10px 10px;
+}
+
+DIV.card DIV.contents DIV.image.main
+{
+  width: 90px;
+  height: 100px;
+  display: inline-block;
+  margin: 0 10px 10px 0;
+}
+
+DIV.card DIV.contents IMG.image.main
+{
+  border: none;
+  box-shadow: none;
+}
+
+DIV.card DIV.contents DIV.statistics
+{
+  display: inline-block;
+  width: 67%;
+  vertical-align: top;
+  padding-top: 10px;
+}
+
+DIV.card DIV.contents DIV.statistics-line,
+DIV.card DIV.contents DIV.statistics-lines
+{
+  clear: both;
+  font-size: 12px;
+}
+
+DIV.card DIV.contents DIV.statistics-line > DIV,
+DIV.card DIV.contents DIV.statistics-lines > DIV
+{
+  margin: 0;
+  min-height: 20px;
+}
+
+DIV.card DIV.contents DIV.statistics-lines > DIV
+{
+  width: 33%;
+  float: left;
+}
+
+DIV.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+1)
+{
+  text-align: left;
+}
+
+DIV.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+2)
+{
+  text-align: center;
+}
+
+DIV.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n)
+{
+  text-align: right;
+}
+
+DIV.card DIV.contents DIV.statistics-line DIV.value
+{
+  display: inline-block;
+  width: 234px;
+  margin: 0 0 3px 3px;
+}
+
+DIV.card DIV.contents DIV.stack {
+  font-size: 9px;
+  display: -webkit-inline-flex;
+  -webkit-flex-direction: column;
+  float: none !important; /* clashes with general div style */
+  vertical-align: middle;
+  width: auto !important; /* clashes with general div style */
+  white-space: nowrap;
+  margin: -3px 0 -3px 0;
+}
+
+DIV.card DIV.contents DIV.statistics-line SPAN.stack SPAN:nth-child(2n+1)
+{
+}
+
+DIV.card DIV.contents DIV.statistics-line SPAN.stack SPAN:nth-child(2n)
+{
+}
+
+DIV.card DIV.bottom-block
+{
+  padding: 10px;
+  background-color: #eaeaea;
+}
+
+DIV.card DIV.incomplete
+{
+  font-size: 12px;
+  color: #800;
+}
+
+DIV.card DIV.appearance
+{
+  font-size: 14px;
+  margin: 5px 0 5px 0;
+  font-style: italic;
+  color: $color_Item;
+}
+
+DIV.card DIV.substance SPAN.value
+{
+  font-size: 13px;
+}
+
+DIV.card DIV.description
+{
+  font-style: italic;
+  font-size: 12px;
+  margin-top: 10px;
+  text-align: justify;
+}
+
+DIV.card DIV.dm-notes.block,
+DIV.card DIV.player-notes.block {
+  display: block;
+}
+
+DIV.card DIV.dm-notes
+{
+  font-size: 12px;
+  color: #009;
+  font-style: italic;
+  display: inline-block;
+}
+
+DIV.card DIV.player-notes
+{
+  font-size: 12px;
+  color: #090;
+  font-style: italic;
+  display: inline-block;
+}
+
+DIV.references
+{
+  font-size: 8px;
+  text-align: center;
+}
+
+DIV.item.small.card
+{
+  width: 348px;
+  vertical-align: top;
+}
+
+DIV.small.card DIV.actions
+{
+  position: absolute;
+  margin-top: -5px;
+}
+
+DIV.small.card DIV.header
+{
+  padding: 5px;
+}
+
+DIV.small.card DIV.title
+{
+  color: white;
+  font-size: 11px;
+  width: 100%;
+}
+
+DIV.small.card DIV.title SPAN.subtitle
+{
+  font-size: 9px;
+}
+
+DIV.small.card DIV.contents
+{
+  padding: 5px;
+  background-color: white;
+}
+
+DIV.small.card DIV.contents DIV.image.main
+{
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  margin: 0 10px 10px 0;
+}
+
+DIV.small.card DIV.contents IMG.image.main
+{
+  margin: 0;
+}
+
+DIV.small.card DIV.contents DIV.statistics
+{
+  width: 275px;
+  padding-top: 0;
+}
+
+DIV.small.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+1)
+{
+  text-align: left;
+}
+
+DIV.small.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+2)
+{
+  text-align: center;
+}
+
+DIV.small.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n)
+{
+  text-align: right;
+}
+
+DIV.small.card DIV.contents
+{
+  font-size: 12px;
+}
+
+DIV.small.card DIV.contents DIV.appearance
+{
+  font-size: 12px;
+}
+
+DIV.small.card DIV.short-description
+{
+  margin-top: 0;
+  color: black;
+  min-height: auto;
+}
+
+DIV.item.tiny.card
+{
+  width: 180px;
+  vertical-align: top;
+  padding: 3px;
+  cursor: pointer;
+}
+
+DIV.item.tiny.card DIV.contents
+{
+  background-color: white;
+  margin: 3px;
+  min-height: auto;
+  overflow: scroll;
+  height: 35px;
+}
+
+
+DIV.item.tiny.card IMG.image.main
+{
+  max-height: 25px;
+  max-width: 25px;
+  margin: 0;
+}
+
+DIV.item.tiny.card DIV.title
+{
+  font-size: 11px;
+  display: inline-block;
+  width: 139px;
+  text-align: left;
+  padding: 5px 0 0 0;
+  vertical-align: top;
+  line-height: normal;
+}
+
+DIV.item.tiny.card DIV.content
+{
+  margin-bottom: 10px;
+}
+
+.card-inline
+{
+  padding: 0;
+  background-color: transparent;
+  margin: 0;
+  border: none;
+}
+
+.card-inline .ui-dialog-titlebar
+{
+  display: none;
 }
 
 /******************************************************************************
@@ -924,6 +1235,14 @@ TABLE.entrylist TD.short
 .list-extensions
 {
   white-space: nowrap;
+}
+
+DIV.extension-symbol
+{
+  font-size: 200%;
+  display: inline-block;
+  vertical-align: top;
+  line-height: 50%;
 }
 
 /******************************************************************************
@@ -1570,26 +1889,27 @@ DIV.window.base
   border-radius: 3px;
   font-size: small;
   white-space: nowrap;
+  overflow: visible;
 }
 
-DIV.base-entry
+TR.base-entry
 {
   height: 15px;
   overflow: hidden;
   vertical-align: bottom;
+  text-align: left;
 }
 
-DIV.base-value
+TD.base-value
 {
-  width: 400px;
-  display: inline-block;
   height: 15px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  padding-right: 20px;
 }
 
-DIV.base-name
+TD.base-name
 {
   display: inline-block;
   height: 13px;
@@ -1924,3 +2244,23 @@ BODY.print
   padding: 10px;
 }
 
+.flexbox
+{
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex-1
+{
+  -webkit-flex: 1;
+}
+
+.flex-2
+{
+  -webkit-flex: 2;
+}
+
+.flex-3
+{
+  -webkit-flex: 3;
+}

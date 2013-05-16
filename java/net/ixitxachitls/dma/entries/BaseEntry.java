@@ -247,7 +247,8 @@ public class BaseEntry extends AbstractEntry
   @Key("short description")
   @WithBases
   @PrintUndefined
-  protected Text m_short = new Text().withEditType("string[short description]");
+  protected Text m_short =
+    new Text().withEditType("string[short description]");
 
   //........................................................................
   //----- synonyms ---------------------------------------------------------
@@ -255,7 +256,8 @@ public class BaseEntry extends AbstractEntry
   /** The synonyms for this entry. */
   @Key("synonyms")
   @DM
-  protected ValueList<Text> m_synonyms = new ValueList<Text>(new Text());
+  protected ValueList<Text> m_synonyms =
+    new ValueList<Text>(new Text());
 
   //........................................................................
   //----- categories -------------------------------------------------------
@@ -263,7 +265,8 @@ public class BaseEntry extends AbstractEntry
   /** The categories. */
   @Key("categories")
   @DM
-  protected ValueList<Name> m_categories = new ValueList<Name>(new Name());
+  protected ValueList<Name> m_categories =
+    new ValueList<Name>(new Name());
 
   //........................................................................
 

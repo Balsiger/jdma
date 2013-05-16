@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -65,7 +66,7 @@ public interface DMAData
    * A simple representation for a file associated with an entry.
    */
   @ParametersAreNonnullByDefault
-  public static class File
+  public static class File //implements Serializable
   {
     /**
      * Create the file with all its data.
@@ -355,6 +356,17 @@ public interface DMAData
   public abstract SortedSet<String> getValues
     (AbstractType<? extends AbstractEntry> inType,
      String inField);
+
+  //........................................................................
+  //------------------------------ cacheEntry ------------------------------
+
+  /**
+   * Caches the given entry (or updates what is in the cache).
+   * Does _NOT_ change what is stored in the data store.
+   *
+   * @param       inEntry the entry to cache
+   */
+  public void cacheEntry(AbstractEntry inEntry);
 
   //........................................................................
 

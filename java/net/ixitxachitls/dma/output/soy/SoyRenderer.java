@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.template.soy.data.SoyMapData;
 
 import net.ixitxachitls.util.configuration.Config;
@@ -237,7 +238,19 @@ public class SoyRenderer
     if(inData != null)
       data = new SoyMapData(inData);
 
-    return m_template.render(inName, data, m_injected, inDelegates);
+    try
+    {
+      return m_template.render(inName, data, m_injected, inDelegates);
+    }
+    catch(Exception e)
+    {
+      // In case there is an error, we always want to recompile on dev.
+      if(SystemProperty.environment.value()
+         == SystemProperty.Environment.Value.Development)
+        recompile();
+
+      throw e;
+    }
   }
 
   //........................................................................

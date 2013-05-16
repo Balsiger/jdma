@@ -37,33 +37,39 @@
  *
  */
 {template .container}
-  {call .navigation}
-    {param first: $first /}
-    {param previous: $previous /}
-    {param list: $list /}
-    {param next: $next /}
-    {param last: $last /}
-  {/call}
-  {delcall dma.entry.page}
-    {param entry: $entry /}
-  {/delcall}
-  {call .navigation}
-    {param first: $first /}
-    {param previous: $previous /}
-    {param list: $list /}
-    {param next: $next /}
-    {param last: $last /}
-  {/call}
-  {literal}
-  <script>
-    $(document).ready(function()
-    {
-      $('DIV.files IMG.image')
-        .mouseover(util.replaceMainImage)
-        .mouseout(util.restoreMainImage);
-    });
-  </script>
-  {/literal}
+  {if $ij.params.card and $ij.params.body}
+    {delcall dma.entry.page}
+      {param entry: $entry /}
+    {/delcall}
+  {else}
+    {call .navigation}
+      {param first: $first /}
+      {param previous: $previous /}
+      {param list: $list /}
+      {param next: $next /}
+      {param last: $last /}
+    {/call}
+    {delcall dma.entry.page}
+      {param entry: $entry /}
+    {/delcall}
+    {call .navigation}
+      {param first: $first /}
+      {param previous: $previous /}
+      {param list: $list /}
+      {param next: $next /}
+      {param last: $last /}
+    {/call}
+    {literal}
+    <script>
+      $(document).ready(function()
+      {
+        $('DIV.files IMG.image')
+          .mouseover(util.replaceMainImage)
+          .mouseout(util.restoreMainImage);
+      });
+    </script>
+    {/literal}
+  {/if}
 {/template}
 
 /**
@@ -383,6 +389,7 @@
  * The main image of an entry.
  *
  * @param entry The entry formatted.
+ * @param? size The size of the image
  */
 {deltemplate dma.entry.files.main}
   {call dma.value.editable}
@@ -397,8 +404,8 @@
           {param url: $entry.files.main.path /}
           {param tooltip: 'Main' /}
           {param text}
-            <img src="{$entry.files.main.icon}=s300" alt="Main"
-              class="image main" id="file=-main" />
+            <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}300{/if}"
+              alt="Main" class="image main" id="file=-main" />
           {/param}
         {/call}
       {else}
@@ -407,13 +414,35 @@
           {param tooltip: 'Main' /}
           {param text}
             <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
-            class="image main" id="file=-main" />
+            class="image main" id="file=-main"
+            {if $size}
+              {sp}style="max-width: {$size}px; max-height: {$size}px;"
+            {/if} />
           {/param}
         {/call}
       {/if}
     {/param}
   {/call}
 {/deltemplate}
+
+/**
+ * Template for the main icon.
+ *
+ * @param entry The entry to use.
+ * @param? size The size of the image
+ */
+{template .simplemainfile}
+  {if def($entry.files.main)}
+    <img src="{$entry.files.main.icon}=s{if $size}{$size}{else}300{/if}"
+      alt="Main" class="image main" id="file=-main" />
+  {else}
+    <img src="/icons/{$entry.type.multilink}-dummy.png" alt="Main"
+    class="image main" id="file=-main"
+    {if $size}
+      {sp}style="max-width: {$size}px; max-height: {$size}px;"
+    {/if} />
+  {/if}
+{/template}
 
 /**
  * The entry title.
@@ -441,12 +470,12 @@
  *
  * @param entry The entry rendered.
  * @param name The name of the value.
- * @param value The value to print.
- * @param withoutbase true if setting without base, false if setting with
- * @param content The content if not using a value.
- * @param access One of dm, owner, admin.
- * @param noedit If given, value cannot be edited
- * @param note The not to be displayed on edit, if any
+ * @param? value The value to print.
+ * @param? withoutbase true if setting without base, false if setting with
+ * @param? content The content if not using a value.
+ * @param? access One of dm, owner, admin.
+ * @param? noedit If given, value cannot be edited
+ * @param? note The not to be displayed on edit, if any
  */
 {deltemplate dma.entry.keyvalue}
   {if not $access
@@ -579,9 +608,9 @@
  * Template for a list entry value.
  *
  * @param style The style to set the value
- * @param value The value to set to
+ * @param? value The value to set to
  * @param entry The entry rendered
- * @param content The content to set, if no value given
+ * @param? content The content to set, if no value given
  */
 {template .listentryvalue}
   <td class="list-{$style}">
@@ -1218,12 +1247,13 @@
 /**
  * Print the value with the given pre and post fix.
  *
- * @param prefix      the prefix for the value
- * @param postfix     the postfix for the value
- * @param value       the vaue to print
- * @param content     formatted content instead of a value
- * @param combination a combination value to print (instead of value or content)
- * @param dm          if printing only for dm
+ * @param? prefix      the prefix for the value
+ * @param? postfix     the postfix for the value
+ * @param? value       the vaue to print
+ * @param? content     formatted content instead of a value
+ * @param? combination a combination value to print (instead of value or
+                       content)
+ * @param? dm          if printing only for dm
  */
 {template .overviewValue}
   {if $dm}

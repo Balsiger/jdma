@@ -53,7 +53,6 @@ import net.ixitxachitls.dma.values.ValueList;
 
 @ParametersAreNonnullByDefault
 public class BaseCampaign extends BaseEntry
-                          //implements CampaignData, Iterable<BaseEntry>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -91,10 +90,6 @@ public class BaseCampaign extends BaseEntry
   /** The type of this entry. */
   public static final BaseType<BaseCampaign> TYPE =
     new BaseType<BaseCampaign>(BaseCampaign.class);
-
-  //----- campaigns --------------------------------------------------------
-
-  //........................................................................
 
   static
   {

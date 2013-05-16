@@ -127,7 +127,6 @@ public class PageServlet extends SoyServlet
 
     writer.close();
 
-    data.put("oldcontent", buffer.toString());
     if(!data.containsKey("content"))
       data.put("content", "No new content defined, yet.");
 
@@ -262,75 +261,6 @@ public class PageServlet extends SoyServlet
 
   //------------------------------------------------- other member functions
 
-  //-------------------------------- format --------------------------------
-
-  /**
-   * Format the given list of entries.
-   *
-   * @param       inWriter       the write to write to
-   * @param       inEntries      the entries to be written
-   * @param       inUser         the user for which to format, if any
-   * @param       inStart        the start index of the entries to print
-   * @param       inPageSize     the full size of the page
-   *
-   */
-  // protected void format(HTMLWriter inWriter,
-  //                       List<? extends AbstractEntry> inEntries,
-  //                       @Nullable BaseCharacter inUser,
-  //                       int inStart, int inPageSize)
-  // {
-  //   HTMLDocument document = new HTMLDocument("");
-
-  //   List<String> navigation = new ArrayList<String>();
-  //   if(inStart > 0)
-  //     if(inStart - inPageSize > 0)
-  //       navigation.add("<a href=\"?start="
-  //                      + (inStart - inPageSize)
-  //                      + "\"  onclick=\"return util.link(event, '?start="
-  //                      + (inStart - inPageSize) + "');\" "
-  //                      + "class=\"paginate-previous\">"
-  //                      + "&laquo; previous</a>");
-  //     else
-  //       navigation.add("<a href=\"\" "
-  //                      + "onclick=\"return util.link(event, '?');\" "
-  //                      + "class=\"paginate-previous\">"
-  //                      + "&laquo; previous</a>");
-
-  //   if(inEntries.size() > inPageSize)
-  //     navigation.add("<a href=\"?start="
-  //                    + (inStart + inPageSize) + "\" "
-  //                    + " onclick=\"return util.link(event, '?start="
-  //                    + (inStart + inPageSize) + "');\" "
-  //                    + "class=\"paginate-next\">"
-  //                    + "&raquo; next</a>");
-
-  //   document.add(navigation);
-
-  //   if(inEntries.isEmpty())
-  //     document.add(new Color("error", "No entries found!"));
-  //   else
-  //   {
-  //     String format = "";
-  //     List<Object> cells = new ArrayList<Object>();
-  //     for(AbstractEntry entry : inEntries)
-  //       if(entry != null)
-  //       {
-  //         if(format.isEmpty())
-  //           format = entry.getListFormat();
-
-  //         cells.addAll(entry.printList(entry.getName(), inUser));
-  //       }
-  //       else
-  //         Log.error("There were null entries in the index!");
-
-  //     document.add(new Table("entrylist", format, new Command(cells)));
-  //   }
-  //   document.add(navigation);
-
-  //   inWriter.add(document.toString());
-  // }
-
-  //........................................................................
   //------------------------------ writeIcon -------------------------------
 
   /**

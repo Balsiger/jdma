@@ -23,14 +23,24 @@
 
 package net.ixitxachitls.dma.entries;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.Extension;
+import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.ID;
+import net.ixitxachitls.dma.values.Multiple;
+import net.ixitxachitls.dma.values.Reference;
+import net.ixitxachitls.dma.values.ValueList;
 
 //..........................................................................
 
@@ -163,48 +173,40 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
 
   //-------------------------------------------------------------- accessors
 
-  //----------------------------- computeValue -----------------------------
+  //---------------------------- fullReferences ----------------------------
 
   /**
-   * Get a value for printing.
+   * Get the references of this entry with full information for printing.
    *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
+   * @return      a list with the references and all values
    *
    */
-  // @Override
-  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
-  // {
-  //   if("categories".equals(inKey))
-  //   {
-  //     Set<String> categories = new TreeSet<String>();
-  //     for(BaseEntry base : getBaseEntries())
-  //       if(base != null)
-  //         categories.addAll(base.getCategories());
+  @SuppressWarnings("unchecked")
+  public List<Map<String, Object>> fullReferences()
+  {
+    List<Map<String, Object>> references = Lists.newArrayList();
 
-  //     List<Object> commands = new ArrayList<Object>();
-  //     for(String category : categories)
-  //     {
-  //       if(!commands.isEmpty())
-  //         commands.add(", ");
+    Combined<ValueList<Multiple>> combinedRefs = collect("references");
+    for(Multiple ref : combinedRefs.total())
+    {
+      Map<String, Object> values = Maps.newHashMap();
+      Reference<BaseProduct> reference = (Reference<BaseProduct>)ref.get(0);
+      BaseProduct product = reference.getEntry();
+      Object pages = ref.get(1);
 
-  //       commands.add(new Link(category,
-  //                             link(getType(),
-  //                                  Index.Path.CATEGORIES)
-  //                             + category.toLowerCase(Locale.US)));
-  //     }
+      if(product != null)
+        values.put("title", product.getFullTitle());
 
-  //     return new FormattedValue
-  //       (new Command(commands), Strings.toString(categories, ", ", ""),
-  //        "categories");
-  //   }
+      values.put("id", reference);
+      values.put("pages", pages);
+      references.add(values);
+    }
 
-  //   return super.computeValue(inKey, inDM);
-  // }
+    return references;
+  }
 
   //........................................................................
+
   //------------------------------- randomID -------------------------------
 
   /**

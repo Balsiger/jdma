@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.entries.extensions;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,7 +68,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 @ParametersAreNonnullByDefault
 public abstract class AbstractExtension<T extends AbstractEntry>
-  extends ValueGroup
+  extends ValueGroup implements Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -211,6 +212,19 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   {
     return m_entry.getKey();
   }
+
+  //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the entry associated with this extension.
+   *
+   * @return  the associated entry
+   */
+  // public AbstractEntry getEntry()
+  // {
+  //   return m_entry;
+  // }
 
   //........................................................................
   //----------------------------- getEditType ------------------------------

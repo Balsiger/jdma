@@ -199,6 +199,31 @@ function ready()
 }
 
 //..........................................................................
+//-------------------------------- details ---------------------------------
+
+/**
+ * Load and show the details for the given entry.
+ *
+ * @param    inPath the key of the entry to show
+ *
+ */
+function details(inPath)
+{
+  var dialog = $('<div class="details-card"/>')
+    .html("Loading...")
+    .dialog({
+      modal: true,
+      width: 600,
+      resizable: false,
+      dialogClass: 'card-inline'
+      });
+
+  util.ajax(inPath + '?body&card', null, function(html) {
+      dialog.html(html);
+    });
+}
+
+//..........................................................................
 
 //----- admin --------------------------------------------------------------
 

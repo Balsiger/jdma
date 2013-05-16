@@ -47,6 +47,8 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
@@ -133,13 +135,13 @@ public class DMADatastore implements DMAData
   /** The maximal number of entries to rebuild in one pass. */
   private static final int s_maxRebuild = 1000;
 
-  /**
-   * The cache for entries (does not properly work if more than one instance
-   * is running at a time, but AbstractEntries are currently not serializable
-   * so we can't use Memcache).
-   */
-  private Map<AbstractEntry.EntryKey<?>, AbstractEntry> m_entries =
-    Maps.newHashMap();
+  /** The cache for entries. */
+  private static MemcacheService s_entryCache =
+    MemcacheServiceFactory.getMemcacheService("entry");
+
+  /** The cache for entries by field. */
+  private static MemcacheService s_fieldEntryCache =
+    MemcacheServiceFactory.getMemcacheService("field-entry");
 
   //........................................................................
 
@@ -162,12 +164,14 @@ public class DMADatastore implements DMAData
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractEntry.EntryKey<T> inKey)
   {
-    if(m_entries.containsKey(inKey))
-      return (T)m_entries.get(inKey);
-
-    AbstractEntry entry = convert(inKey.getID(), inKey.getType(),
-                                  m_data.getEntity(convert(inKey)));
-    m_entries.put(inKey, entry);
+    Log.debug("gae: getting entry for " + inKey);
+    AbstractEntry entry = (AbstractEntry)s_entryCache.get(inKey.toString());
+    if(entry == null)
+    {
+      entry = convert(inKey.getID(), inKey.getType(),
+                      m_data.getEntity(convert(inKey)));
+      s_entryCache.put(inKey.toString(), entry);
+    }
 
     return (T)entry;
   }
@@ -226,8 +230,17 @@ public class DMADatastore implements DMAData
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractType<T> inType, String inKey, String inValue)
   {
-    return (T)convert(m_data.getEntity(escapeType(inType.toString()),
+    Log.debug("Getting entry for " + inKey + "=" + inValue);
+    Object entry = s_fieldEntryCache.get(inKey + "=" + inValue);
+    if (entry == null)
+    {
+      entry = convert(m_data.getEntity(escapeType(inType.toString()),
                                        inKey, inValue));
+
+      s_fieldEntryCache.put(inKey + "=" + inValue, entry);
+    }
+
+    return (T)entry;
   }
 
   //........................................................................
@@ -509,6 +522,20 @@ public class DMADatastore implements DMAData
   }
 
   //........................................................................
+  //------------------------------ cacheEntry ------------------------------
+
+  /**
+   * Caches the given entry (or updates what is in the cache).
+   * Does _NOT_ change what is stored in the data store.
+   *
+   * @param       inEntry the entry to cache
+   */
+  public void cacheEntry(AbstractEntry inEntry)
+  {
+    s_entryCache.put(inEntry.getKey().toString(), inEntry);
+  }
+
+  //........................................................................
   //----------------------------- uncacheEntry -----------------------------
 
   /**
@@ -520,7 +547,7 @@ public class DMADatastore implements DMAData
   public <T extends AbstractEntry> void uncacheEntry
             (AbstractEntry.EntryKey<T> inKey)
   {
-    m_entries.remove(inKey);
+    s_entryCache.delete(inKey.toString());
   }
 
   //........................................................................
@@ -531,7 +558,7 @@ public class DMADatastore implements DMAData
    */
   public void clearCache()
   {
-    m_entries.clear();
+    s_entryCache.clearAll();
   }
 
   //........................................................................
@@ -625,7 +652,7 @@ public class DMADatastore implements DMAData
       ((Entry)inEntry).complete();
     }
 
-    m_entries.put(inEntry.getKey(), inEntry);
+    s_entryCache.put(inEntry.getKey().toString(), inEntry);
     return m_data.update(convert(inEntry));
   }
 
@@ -943,7 +970,7 @@ public class DMADatastore implements DMAData
     if(inEntity == null)
       return null;
 
-    T entry = (T)m_entries.get(convert(inEntity.getKey()));
+    T entry = (T)s_entryCache.get(convert(inEntity.getKey()).toString());
     if (entry != null)
       return entry;
 
@@ -999,7 +1026,7 @@ public class DMADatastore implements DMAData
     // update extensions, if necessary
     entry.setupExtensions();
 
-    m_entries.put(entry.getKey(), entry);
+    s_entryCache.put(entry.getKey().toString(), entry);
     return entry;
   }
 

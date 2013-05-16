@@ -86,11 +86,6 @@ public class DMARequest extends HttpServletRequestWrapper
 
     m_params = inParams;
 
-    // Clear the cache in the datastore as it is dangerous and we want to
-    // limit it to a single request. Since the datastore is static, we assume
-    // that each instance only run one thread concurrently.
-    DMADataFactory.get().clearCache();
-
 //     extractCampaign(inRequest);
 //     extractDM(inRequest);
 //     extractPlayer(inRequest);

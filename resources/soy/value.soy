@@ -29,13 +29,13 @@
  *
  * @param entry The entry to print for
  * @param value The value to print
- * @param canEdit True if the value can be edited, false if not
- * @param related Other related values to edit together
- * @param content Content for printing the value, uses .print if not given
- * @param note Text to be displayed when editing
- * @param prefix The prefix to the value, if any
- * @param postfix The postfix to the value, if any
- * @param ifempty The text to print if the value is empty
+ * @param? canEdit True if the value can be edited, false if not
+ * @param? related Other related values to edit together
+ * @param? content Content for printing the value, uses .print if not given
+ * @param? note Text to be displayed when editing
+ * @param? prefix The prefix to the value, if any
+ * @param? postfix The postfix to the value, if any
+ * @param? ifempty The text to print if the value is empty
  *
  */
 {template .value}
@@ -52,12 +52,12 @@
       {param ifempty: $ifempty /}
       {param content}
         {if $content}
-          {if $prefix}{$prefix}{sp}{/if}
+          {if $prefix}{$prefix}/*{sp}*/{/if}
           {$content}
-          {if $postfix}{$postfix}{sp}{/if}
+          {if $postfix}{$postfix}/*{sp}*/{/if}
         {else}
           {if $value.isDefined}
-            {if $prefix}{$prefix}{sp}{/if}
+            {if $prefix}{$prefix}/*{sp}*/{/if}
             {if def($value.remark)}
               {call dma.value.remark}
                 {param value: $value /}
@@ -67,11 +67,11 @@
             {else}
               {$value |print}
             {/if}
-            {if $postfix}{$postfix}{sp}{/if}
+            {if $postfix}{$postfix}/*{sp}*/{/if}
           {elseif $value.hasExpression}
-            {if $prefix}{$prefix}{sp}{/if}
+            {if $prefix}{$prefix}/*{sp}*/{/if}
             {$value.getExpression}
-            {if $postfix}{$postfix}{sp}{/if}
+            {if $postfix}{$postfix}/*{sp}*/{/if}
           {/if}
         {/if}
       {/param}
@@ -92,16 +92,16 @@
 /**
  * An editable value.
  *
- * @param canEdit If the value can be edited at all
+ * @param? canEdit If the value can be edited at all
  * @param name The name of the value
  * @param value The value as it can be edited
  * @param key The key of the entry being edited
  * @param type The type of value edited
- * @param related The related values, if any
- * @param choices The possible choices for the value, if any
- * @param content The formatted value edited as it is displayed
- * @param note Text to be displayed when editing
- * @param ifempty The text to print if empty
+ * @param? related The related values, if any
+ * @param? choices The possible choices for the value, if any
+ * @param? content The formatted value edited as it is displayed
+ * @param? note Text to be displayed when editing
+ * @param? ifempty The text to print if empty
  *
  */
 {template .editable}
@@ -452,42 +452,164 @@
  * @param value The value rendered.
  */
 {template .extension}
-  <span title="{$value}" class="extension-symbol">
-    {switch $value}
-      {case 'armor'}
-        {literal}&#x2602;{/literal}
-      {case 'counted'}
-        {literal}&#x2736;{/literal}
-      {case 'incomplete'}
-        {literal}&#x2639;{/literal}
-      {case 'light'}
-        {literal}&#x263c;{/literal}
-      {case 'commodity'}
-        {literal}&#x25a4;{/literal}
-      {case 'timed'}
-        {literal}&#x27f3;{/literal}
-      {case 'weapon'}
-        {literal}&#x2694;{/literal}
-      {case 'wearable'}
-        {literal}&#x269c;{/literal}
-      {case 'composite'}
-        {literal}&#x2384;{/literal}
-      {case 'multiple'}
-        {literal}&#x2a35;{/literal}
-      {case 'multiuse'}
-        {literal}&#x2a34;{/literal}
-      {case 'container'}
-        {literal}&#x2a4f;{/literal}
-      {case 'composite'}
-        {literal}&#x2295;{/literal}
-      {case 'contents'}
-        {literal}&#x25c8;{/literal}
-      {case 'magic'}
-        {literal}&#x2734;{/literal}
-      {default}
-        {$value}
-    {/switch}
-  </span>
+  {switch $value}
+    {case 'value'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#xa4;' /}
+        {param space: 1 /}
+      {/call}
+    {case 'hp'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2665;' /}
+      {/call}
+    {case 'weight'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x10137;' /}
+      {/call}
+    {case 'size'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x21a8;' /}
+        {param size: 100 /}
+        {param space: 2 /}
+      {/call}
+    {case 'hardness'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x1d34d;' /}
+        {param size: 150 /}
+        {param space: 1 /}
+      {/call}
+    {case 'break'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#xa6;' /}
+        {param size: 150 /}
+        {param space: 2 /}
+      {/call}
+    {case 'substance'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x269b;' /}
+      {/call}
+    {case 'wearable'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x269c;' /}
+        {param space: 1 /}
+      {/call}
+    {case 'multiuse'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2a34;' /}
+        {param size: 150 /}
+        {param space: 1 /}
+      {/call}
+    {case 'multiple'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2a35;' /}
+        {param size: 150 /}
+        {param space: 1 /}
+      {/call}
+    {case 'counted'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2736;' /}
+        {param size: 150 /}
+        {param space: 2 /}
+      {/call}
+    {case 'light'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x263c;' /}
+        {param size: 150 /}
+        {param space: 2 /}
+      {/call}
+    {case 'timed'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x27f3;' /}
+        {param size: 150 /}
+      {/call}
+    {case 'commodity'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x25a4;' /}
+        {param size: 150 /}
+        {param space: 2 /}
+      {/call}
+    {case 'weapon'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2694;' /}
+      {/call}
+    {case 'armor'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2602;' /}
+        {param size: 150 /}
+      {/call}
+    {case 'incomplete'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2639;' /}
+        {param size: 150 /}
+      {/call}
+    {case 'composite'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2384;' /}
+      {/call}
+    {case 'container'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2a4f;' /}
+      {/call}
+    {case 'composite'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2295;' /}
+      {/call}
+    {case 'contents'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x25c8;' /}
+      {/call}
+    {case 'magic'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2734;' /}
+      {/call}
+    {case 'notes'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x270e;' /}
+      {/call}
+    {default}
+      {$value}
+  {/switch}
+{/template}
+
+/**
+ * Format the given symbol as an extension symbol.
+ *
+ * @param value The name of the symbol.
+ * @param symbol The symbol to set.
+ * @param? space The px to add as top margin.
+ * @param? size The size in percent of the symbol.
+ */
+{template .extensionsymbol}
+  <div title="{$value}" class="extension-symbol"
+    {if $space or $size} style="
+      {if $space}margin-top: {$space}px;{/if}
+      {if $size} font-size: {$size}%;{/if}
+    "{/if}>
+    {$symbol}
+  </div>
 {/template}
 
 /**
@@ -506,132 +628,20 @@
 {/template}
 
 /**
- * Formatting a combination value.
- *
- * @param combination the combination value
- * @param entry the entry printed
- * @param value the value printed
- * @param canEdit the value can be edited
- * @param note The note to display on edit, if any
- * @param prefix The prefix to the value, if any
- * @param postfix The postfix to the value, if any
- * @param ifempty The text to print if the value is empty
- */
-{template .combination}
-  {if def($combination.total) and len($combination.bases) > 0}
-    {call dma.value.value}
-      {param entry: $entry /}
-      {param value: $value /}
-      {param canEdit: $canEdit /}
-      {param note: $note /}
-      {param prefix: $prefix /}
-      {param postfix: $postfix /}
-      {param content}
-        {if $ij.isDM}
-          {call dma.value.combined}
-            {param combination: $combination /}
-          {/call}
-        {else}
-          {$combination.total |print}
-        {/if}
-      {/param}
-    {/call}
-  {else}
-    {call dma.value.value}
-      {param entry: $entry /}
-      {param value: $value /}
-      {param canEdit: $canEdit /}
-      {param prefix: $prefix /}
-      {param postfix: $postfix /}
-      {param ifempty: $ifempty /}
-    {/call}
-  {/if}
-{/template}
-
-/**
- * Format a combination value, withtout editing.
- *
- * @param combination
- */
-{template .combined}
-  {if def($combination.bases) and $combination.bases[0].isLongText}
-    <div class="longtext">
-      {if $combination.top.isDefined}
-        {$combination.top |print}
-      {/if}
-      {foreach $base in $combination.bases}
-        {if $base.value.isDefined}
-          <div class="base-title">
-            <span class="base-text">from {$base.names}</span>
-          </div>
-          {$base.value |print}
-        {/if}
-      {/foreach}
-    </div>
-  {elseif def($combination.bases) and $combination.bases[0].isText}
-    {if $combination.top.isDefined}
-      {$combination.top |print}
-    {/if}
-    {foreach $base in $combination.bases}
-      {if $base.value.isDefined}
-        {if not isFirst($base) or $combination.isDefined}
-          {sp}|{sp}
-        {/if}
-        <div class="base-entry">
-          <div class="base-value">
-            {$base.value |firstline}
-          </div>
-          :{sp}
-          <div class="base-name">
-            {$base.names}
-          </div>
-        </div>
-      {/if}
-    {/foreach}
-  {else}
-    <span class="windowed">
-      <span class="window base">
-        {if def($combination.bases)}
-          {foreach $base in $combination.bases}
-          <div class="base-entry">
-            <div class="base-value">
-              {if $base and $base.value}
-                {$base.value |firstline}
-              {elseif $base.expression}
-                {$base.expression} from {$base.names}
-              {else}
-                undefined value from {$base.names}
-              {/if}
-              </div>
-              :{sp}
-              <div class="base-name">
-                {$base.names}
-              </div>
-            </div>
-          {/foreach}
-        {/if}
-      </span>
-      <span class="value-combination">
-        {$combination.total |print}
-      </span>
-    </span>
-  {/if}
-{/template}
-
-/**
  * Print a value including it's base value.
  *
  * @param entry the entry to render
  * @param value the value rendered
- * @param canEdit the value can be edited
- * @param note Text to be displayed when editing
- * @param prefix the prefix for the value
- * @param postfix the postfix for the value
- * @param ifempty text to print if the value is empty
+ * @param? canEdit the value can be edited
+ * @param? note Text to be displayed when editing
+ * @param? prefix the prefix for the value
+ * @param? postfix the postfix for the value
+ * @param? ifempty text to print if the value is empty
+ * @param? short print as a short value
  */
 {template .withbase}
   {if def($value.isCombined)}
-    {call dma.value.newcombined}
+    {call dma.value.combined}
       {param entry: $entry /}
       {param value: $value /}
       {param canEdit: $canEdit /}
@@ -639,9 +649,10 @@
       {param prefix: $prefix /}
       {param postfix: $postfix /}
       {param ifempty: $ifempty /}
+      {param short: $short /}
     {/call}
   {else}
-    {call dma.value.newcombined}
+    {call dma.value.combined}
       {param entry: $entry /}
       {param value: $value.combined /}
       {param canEdit: $canEdit /}
@@ -649,6 +660,7 @@
       {param prefix: $prefix /}
       {param postfix: $postfix /}
       {param ifempty: $ifempty /}
+      {param short: $short /}
     {/call}
   {/if}
 {/template}
@@ -759,15 +771,16 @@
  *
  * @param entry The entry to print for
  * @param value The value to print
- * @param canEdit True if the value can be edited, false if not
- * @param related Other related values to edit together
- * @param content Content for printing the value, uses .print if not given
- * @param note Text to be displayed when editing
- * @param prefix The prefix to the value, if any
- * @param postfix The postfix to the value, if any
- * @param ifempty The text to print if the value is empty
+ * @param? canEdit True if the value can be edited, false if not
+ * @param? related Other related values to edit together
+ * @param? content Content for printing the value, uses .print if not given
+ * @param? note Text to be displayed when editing
+ * @param? prefix The prefix to the value, if any
+ * @param? postfix The postfix to the value, if any
+ * @param? ifempty The text to print if the value is empty
+ * @param? short Print as a short value
  */
-{template .newcombined}
+{template .combined}
   {if $value}
     {call .editable}
       {param canEdit: $canEdit and (not $value or $value.isEditable) /}
@@ -782,11 +795,11 @@
       {param ifempty: $ifempty /}
       {param content}
         {if $content}
-          {if $prefix}{$prefix}{sp}{/if}
+          {if $prefix}{$prefix}{/if}
           {$content}
-          {if $postfix}{$postfix}{sp}{/if}
+          {if $postfix}{$postfix}{/if}
         {else}
-          {if $prefix}{$prefix}{sp}{/if}
+          {if $prefix and $value.hasValue}{$prefix}{/if}
           {if def($value.remark)}
             {call dma.value.remark}
               {param value: $value /}
@@ -798,24 +811,32 @@
             {foreach $val in $value.valuesWithDescriptions}
               <span class="windowed">
                 <div class="window base">
-                  <div class="base-entry">
-                    <div class="base-value">
-                      {$val.first |firstline}
-                    </div>
-                    :{sp}
-                    <div class="base-name">
-                      {$val.second}
-                    </div>
-                  </div>
+                  <table class="bases">
+                    {foreach $desc in $val.second}
+                      <tr class="base-entry">
+                        <td class="base-value">
+                          {$desc.first |firstline}
+                        </td>
+                        <td class="base-name">
+                          {$desc.second}
+                        </td>
+                      </tr>
+                    {/foreach}
+                  </table>
                 </div>
-                {$val.first |print}{sp}
+                {if $short}
+                  {$val.first.short}
+                {else}
+                  {$val.first |print}
+                {/if}
+                {if not isLast($val)}{sp}{/if}
               </span>
             {/foreach}
             {if $value.hasModifiers}
               {$value.modifier |print}
             {/if}
           {/if}
-          {if $postfix}{$postfix}{sp}{/if}
+          {if $postfix and $value.hasValue}{$postfix}{/if}
         {/if}
       {/param}
     {/call}

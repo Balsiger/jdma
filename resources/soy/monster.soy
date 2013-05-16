@@ -301,10 +301,9 @@
     {param name: 'Possesions' /}
     {param content}
       {foreach $item in $entry.possesions.list}
-        {call dma.entry.itemreference}
-          {param item: entry($entry.campaign.key + '/item/'
-              + $item.print) /}
-        {/call}
+        {delcall dma.card.tiny variant="'item'"}
+          {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
+        {/delcall}
       {ifempty}
         No items stored.
       {/foreach}
@@ -555,12 +554,12 @@
             {if not isLast($attack)}/{/if}
           {/foreach}
           {sp}
-          {call dma.value.newcombined}
+          {call dma.value.combined}
             {param entry: $entry /}
             {param value: $weapon.style /}
           {/call}
           {sp}(
-          {call dma.value.newcombined}
+          {call dma.value.combined}
             {param entry: $entry /}
             {param value: $weapon.damage /}
           {/call}
@@ -691,6 +690,7 @@
         {if not isLast($skill)}, {/if}
       {/if}
     {/foreach}
+
     <div class="par">
     <div id="boxes">
       <div class="column"></div>
@@ -739,9 +739,9 @@
         </div>
       {/foreach}
       {foreach $item in $entry.possesions.list}
-        {call dma.entry.itemsummary}
-          {param item: entry($entry.campaign.key + '/item/' + $item.print) /}
-        {/call}
+        {delcall dma.card.small variant="'item'"}
+          {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
+        {/delcall}
       {/foreach}
     </div>
   </div>

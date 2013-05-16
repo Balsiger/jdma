@@ -135,18 +135,19 @@ public class Duration extends Units<Duration>
    * the number of seconds extracted from this value will probably be wrong.
    */
   private static String s_definition =
-    Config.get("/rules/duration.units",
-               "1/1    : Seconds = 86400/1 : day|days,"
-               + "                    3600/1 : hour|hours|hour : hr|hrs,"
-               + "                      60/1 : minute|minutes  : min|mins,"
-               + "                       1/1 : second|seconds  : sec|secs."
-               + "1/6    : Rounds =      1/1 : round|rounds    : rd|rds."
-               + "1/6    : Actions =     1/1 : round|rounds    : rd|rds,"
-               + "                    1/10 : standard action|standard actions,"
-               + "                   1/100 : move action|move actions,"
-               + "                  1/1000 : swift action|swift actions,"
-               + "                 1/10000 : free action|free actions,"
-               + "                    60/1 : minute|minutes : min|mins.");
+    Config.get
+    ("/rules/duration.units",
+     "1/1    : Seconds = 86400/1 : day|days : d|ds,"
+     + "                  3600/1 : hour|hours|hour : h|hr|hrs,"
+     + "                    60/1 : minute|minutes  : m|min|mins,"
+     + "                     1/1 : second|seconds  : s|sec|secs."
+     + "1/6    : Rounds =    1/1 : round|rounds    : r|rd|rds."
+     + "1/6    : Actions =   1/1 : round|rounds    : r|rd|rds,"
+     + "                    1/10 : standard action|standard actions : st,"
+     + "                   1/100 : move action|move actions         : mo,"
+     + "                  1/1000 : swift action|swift actions       : sw,"
+     + "                 1/10000 : free action|free actions         : fr,"
+     + "                    60/1 : minute|minutes : m|min|mins.");
 
   /** The sets of units for this value. */
   private static final Set []s_sets = parseDefinition(s_definition);

@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ import net.ixitxachitls.util.logging.Log;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public abstract class Expression implements Comparable<Expression>
+public abstract class Expression implements Comparable<Expression>, Serializable
 {
   //----------------------------------------------------------------- nested
 

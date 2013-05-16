@@ -641,59 +641,6 @@ public class Monster extends CampaignEntry<BaseMonster>
   }
 
   //........................................................................
-  //----- strength ---------------------------------------------------------
-
-  /** The monster's Strength. */
-  @Key("strength")
-  protected Number m_strength = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- dexterity --------------------------------------------------------
-
-  /** The monster's Dexterity. */
-  @Key("dexterity")
-  protected Number m_dexterity = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- constitution -----------------------------------------------------
-
-  /** The monster's Constitution. */
-  @Key("constitution")
-  protected Number m_constitution = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- intelligence -----------------------------------------------------
-
-  /** The monster's Intelligence. */
-  @Key("intelligence")
-  protected Number m_intelligence = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- wisdom -----------------------------------------------------------
-
-  /** The monster's Wisdom. */
-  @Key("wisdom")
-  protected Number m_wisdom = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- charisma ---------------------------------------------------------
-
-  /** The monster's Charisma. */
-  @Key("charisma")
-  protected Number m_charisma = new Number(-1, 100, false);
-
-  //........................................................................
-  //----- feats ------------------------------------------------------------
-
-  /** The feats. */
-  @Key("feats")
-  @SuppressWarnings("unchecked") // generic array creation
-  protected ValueList<Reference<BaseFeat>> m_feats =
-    new ValueList<Reference<BaseFeat>>
-    (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
-     .withParameter("Name", new Name(), Parameters.Type.UNIQUE));
-
-  //........................................................................
 
   //........................................................................
 
@@ -774,7 +721,61 @@ public class Monster extends CampaignEntry<BaseMonster>
 
   /** The possessions value. */
   @Key("possesions")
-  protected ValueList<Name> m_possessions = new ValueList<Name>(new Name());
+  protected ValueList<Name> m_possessions =
+    new ValueList<Name>(new Name());
+
+  //........................................................................
+  //----- strength ---------------------------------------------------------
+
+  /** The monster's Strength. */
+  @Key("strength")
+  protected Number m_strength = new Number(-1, 100, false);
+
+  //........................................................................
+  //----- dexterity --------------------------------------------------------
+
+  /** The monster's Dexterity. */
+  @Key("dexterity")
+  protected Number m_dexterity = new Number(-1, 100, false);
+
+  //........................................................................
+  //----- constitution -----------------------------------------------------
+
+  /** The monster's Constitution. */
+  @Key("constitution")
+  protected Number m_constitution = new Number(-1, 100, false);
+
+  //........................................................................
+  //----- intelligence -----------------------------------------------------
+
+  /** The monster's Intelligence. */
+  @Key("intelligence")
+  protected Number m_intelligence = new Number(-1, 100, false);
+
+  //........................................................................
+  //----- wisdom -----------------------------------------------------------
+
+  /** The monster's Wisdom. */
+  @Key("wisdom")
+  protected Number m_wisdom = new Number(-1, 100, false);
+
+  //........................................................................
+  //----- charisma ---------------------------------------------------------
+
+  /** The monster's Charisma. */
+  @Key("charisma")
+  protected Number m_charisma = new Number(-1, 100, false);
+
+  //........................................................................
+  //----- feats ------------------------------------------------------------
+
+  /** The feats. */
+  @Key("feats")
+  @SuppressWarnings("unchecked") // generic array creation
+  protected ValueList<Reference<BaseFeat>> m_feats =
+    new ValueList<Reference<BaseFeat>>
+    (", ", new Reference<BaseFeat>(BaseFeat.TYPE)
+     .withParameter("Name", new Name(), Parameters.Type.UNIQUE));
 
   //........................................................................
 
@@ -1530,12 +1531,12 @@ public class Monster extends CampaignEntry<BaseMonster>
                     Modifier.Type.ABILITY), "Str of " + strength);
 
     Combined<Multiple> combinedSize = collect("size");
-    List<Pair<Multiple, String>> sizesPerGroup =
+    List<Pair<Multiple, List<Pair<Multiple, String>>>> sizesPerGroup =
       combinedSize.valuesWithDescriptions();
 
     BaseItem.Size size = BaseItem.Size.MEDIUM;
     String group = "default";
-    for(Pair<Multiple, String> sizeGroup : sizesPerGroup)
+    for(Pair<Multiple, List<Pair<Multiple, String>>> sizeGroup : sizesPerGroup)
       if(((EnumSelection<BaseItem.Size>)sizeGroup.first().get(0)).getSelected()
          .isBigger(size))
         size = ((EnumSelection<BaseItem.Size>)sizeGroup.first().get(0))
@@ -2380,10 +2381,15 @@ public class Monster extends CampaignEntry<BaseMonster>
 
     Map<String, Map<Value<?>, ModifiedNumber>> ranks = Maps.newHashMap();
 
-    for(Pair<ValueList<Multiple>, String> pair
+    for(Pair<ValueList<Multiple>, List<Pair<ValueList<Multiple>, String>>> pair
           : skills.valuesWithDescriptions())
     {
-      String group = pair.second();
+      String group = "";
+      for(Pair<ValueList<Multiple>, String> groupValue : pair.second())
+        if(group.isEmpty())
+          group = groupValue.second();
+        else
+          group += ", " + groupValue.second();
       for(Multiple skill : pair.first())
       {
         Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));

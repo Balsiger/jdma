@@ -364,6 +364,16 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
+  //------------------------------- getEntry -------------------------------
+
+  /**
+   * Get the entry associated with this group.
+   *
+   * @return  the associated entry
+   */
+  public abstract AbstractEntry getEntry();
+
+  //........................................................................
 
   //-------------------------------- isBase --------------------------------
 
@@ -1203,65 +1213,6 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
-  //---------------------------- maybeAddValue -----------------------------
-
-  /**
-   * Add the value for the given key to the list if it is not null.
-   *
-   * @param     ioList    the list to add to
-   * @param     inKey     the key of the value to add
-   * @param     inDM      true if adding for DM, false if not
-   * @param     inPrefix  the object to add before the value
-   * @param     inPostfix the object to add after the value
-   *
-   */
-  // public void maybeAddValue(List<Object> ioList, String inKey, boolean inDM,
-  //                           @Nullable Object inPrefix,
-  //                           @Nullable Object inPostfix)
-  // {
-  //   Object value = computeValue(inKey, inDM).format(this, inDM, true);
-  //   if(value != null && !value.toString().isEmpty())
-  //   {
-  //     if(inPrefix != null)
-  //       ioList.add(inPrefix);
-
-  //     ioList.add(value);
-
-  //     if(inPostfix != null)
-  //       ioList.add(inPostfix);
-  //   }
-  // }
-
-  //........................................................................
-  //------------------------------- convert --------------------------------
-
-  /**
-   * Compute the modified number for the name value.
-   *
-   * @param       inName    the name of the value to compute
-   * @param       inIgnore  the type of modifiers to ignore for the value
-   *
-   * @return      the modified number for the value
-   *
-   */
-  // @Deprecated
-  // public ModifiedNumber modified(String inName, Modifier.Type ... inIgnore)
-  // {
-  //   Combination<Number> combination = new Combination<Number>(this, inName);
-
-  //   ModifiedNumber number = new ModifiedNumber(combination.total().get());
-  //for(Map.Entry<String, Modifier> entry : collectModifiers(inName).entrySet())
-  //   {
-  //     Modifier modifier = entry.getValue().ignore(inIgnore);
-  //     if(modifier != null)
-  //       number.withModifier(modifier, entry.getKey());
-  //   }
-
-  //   return number;
-  // }
-
-  //........................................................................
-
 
   //........................................................................
 

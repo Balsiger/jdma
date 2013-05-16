@@ -23,6 +23,7 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -56,7 +57,7 @@ import net.ixitxachitls.util.Grouping;
 @Immutable
 @ParametersAreNonnullByDefault
 public class Group<T extends Value<?>, S extends Comparable<S>, U>
-  implements Grouping<T, U>, Comparator<U>
+  implements Grouping<T, U>, Comparator<U>, Serializable
 {
   //----------------------------------------------------------------- nested
 
@@ -67,6 +68,7 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
    * @param V the type of grouping value extracted
    */
   public interface Extractor<K extends Value<?>, V extends Comparable<V>>
+    extends Serializable
   {
     //------------------------------ extract -------------------------------
 

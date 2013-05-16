@@ -1384,7 +1384,8 @@ public class BaseMonster extends BaseEntry
   /** The monster type and subtype. */
   @Key("type")
   @SuppressWarnings("unchecked") // unchecked generic array creation
-  protected Multiple m_monsterType = new Multiple(new Multiple.Element []
+  protected Multiple m_monsterType =
+    new Multiple(new Multiple.Element []
     {
       new Multiple.Element(new EnumSelection<MonsterType>(MonsterType.HUMANOID),
                            false),
@@ -1456,7 +1457,8 @@ public class BaseMonster extends BaseEntry
 
   /** The natural armor of the monster. */
   @Key("natural armor")
-  protected Modifier m_natural = new Modifier(0, Modifier.Type.NATURAL_ARMOR)
+  protected Modifier m_natural =
+    new Modifier(0, Modifier.Type.NATURAL_ARMOR)
     .withDefaultType(Modifier.Type.NATURAL_ARMOR);
 
   static
@@ -1680,7 +1682,8 @@ public class BaseMonster extends BaseEntry
   /** The special attacks. */
   @Key("special attacks")
   @WithBases
-  protected ValueList<Multiple> m_specialAttacks = new ValueList<Multiple>
+  protected ValueList<Multiple> m_specialAttacks =
+    new ValueList<Multiple>
     (", ",
      new Multiple(new Multiple.Element []
        {
@@ -1726,7 +1729,8 @@ public class BaseMonster extends BaseEntry
   @Key("special qualities")
   @WithBases
   @SuppressWarnings("rawtypes") // raw condition
-  protected ValueList<Multiple> m_specialQualities = new ValueList<Multiple>
+  protected ValueList<Multiple> m_specialQualities =
+    new ValueList<Multiple>
     (", ",
      new Multiple(new Multiple.Element []
        {
@@ -1785,7 +1789,8 @@ public class BaseMonster extends BaseEntry
 
   /** The environment. */
   @Key("environment")
-  protected Multiple m_environment = new Multiple(new Multiple.Element []
+  protected Multiple m_environment =
+    new Multiple(new Multiple.Element []
     {
       new Multiple.Element(new EnumSelection<Climate>(Climate.ANY), true),
       new Multiple.Element(new EnumSelection<Terrain>(Terrain.ANY), false),
@@ -1862,7 +1867,8 @@ public class BaseMonster extends BaseEntry
 
   /** The monster's alignment. */
   @Key("alignment")
-  protected Multiple m_alignment = new Multiple(new Multiple.Element []
+  protected Multiple m_alignment =
+    new Multiple(new Multiple.Element []
     {
       new Multiple.Element(new EnumSelection<AlignmentStatus>
                            (AlignmentStatus.class), false),
@@ -1966,7 +1972,8 @@ public class BaseMonster extends BaseEntry
 
   /** The monsters reproduction. */
   @Key("reproduction")
-  protected LongFormattedText m_reproduction = new LongFormattedText();
+  protected LongFormattedText m_reproduction =
+    new LongFormattedText();
 
   //........................................................................
   //----- possessions ------------------------------------------------------

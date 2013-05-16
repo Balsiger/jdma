@@ -264,7 +264,8 @@ public class Product extends Entry<BaseProduct>
 
   /** The condition of the copy. */
   @Key("condition")
-  protected Multiple m_condition = new Multiple(new Multiple.Element []
+  protected Multiple m_condition =
+    new Multiple(new Multiple.Element []
     { new Multiple.Element(new EnumSelection<Condition>(Condition.class)
                            .withEditType("selection[condition]"),
                            false),

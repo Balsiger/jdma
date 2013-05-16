@@ -265,6 +265,9 @@ public class FileServlet extends BaseServlet
   /** The time of the startup of this servlet. */
   protected static final long s_startupTime = new Date().getTime();
 
+  /** Flag whether we encountered an shift-reload like file load. */
+  private static boolean s_reloaded = false;
+
   //........................................................................
 
   //-------------------------------------------------------------- accessors
@@ -336,6 +339,9 @@ public class FileServlet extends BaseServlet
         // use them here
         if(modified + 1000 >= s_startupTime)
           return new NotModified();
+
+        if(modified < 0)
+          s_reloaded = true;
       }
       catch(IllegalArgumentException e)
       {
@@ -429,6 +435,13 @@ public class FileServlet extends BaseServlet
   }
 
   //........................................................................
+
+  public static boolean wasReloaded()
+  {
+    boolean reloaded = s_reloaded;
+    s_reloaded = false;
+    return reloaded;
+  }
 
   //--------------------------------- init ---------------------------------
 

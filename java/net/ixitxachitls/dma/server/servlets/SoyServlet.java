@@ -43,6 +43,7 @@ import net.ixitxachitls.dma.output.soy.SoyEntry;
 import net.ixitxachitls.dma.output.soy.SoyRenderer;
 import net.ixitxachitls.dma.output.soy.SoyTemplate;
 import net.ixitxachitls.dma.output.soy.SoyValue;
+import net.ixitxachitls.server.servlets.FileServlet;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -92,7 +93,7 @@ public class SoyServlet extends DMAServlet
   /** The template to render a page. */
   protected static final SoyTemplate s_template =
      new SoyTemplate("page", "errors", "about", "main", "navigation", "entry",
-                     "commands", "value", "admin",
+                     "commands", "value", "admin", "cards",
                      "basecharacter", "character",
                      "baseproduct", "product",
                      "baseitem", "item",
@@ -173,7 +174,7 @@ public class SoyServlet extends DMAServlet
                                            HttpServletResponse inResponse)
     throws ServletException, IOException
   {
-    if(isDev())
+    if(FileServlet.wasReloaded() && isDev())
     {
       Log.important("recompiling soy templates on dev");
       s_template.recompile();
@@ -215,7 +216,7 @@ public class SoyServlet extends DMAServlet
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {
-    return SoyTemplate.map("oldcontent", "");
+    return SoyTemplate.map();
   }
 
   //........................................................................

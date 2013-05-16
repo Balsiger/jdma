@@ -21,7 +21,7 @@
   <property name="version" value="astraldeva" />
 
   <!-- Google App Engine -->
-  <property name="gae.dir" location="../../appengine-java-sdk-1.7.7" />
+  <property name="gae.dir" location="../../appengine-java-sdk-1.8.0" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->
@@ -109,7 +109,7 @@
     <pathelement location="${lib.test.dir}/appengine-api-stubs.jar" />
     <pathelement location="${lib.test.dir}/appengine-testing.jar" />
     <!-- soy -->
-    <pathelement location="${lib.dir}/soy-latest.jar" />
+    <pathelement location="${lib.dir}/soy-2012-12-21.jar" />
     <!-- itext -->
     <!-- not compatible with ujac
     <pathelement location="${lib.dir}/iText-5.0.6.jar" /> -->
@@ -217,6 +217,7 @@
         <include name="**/*.gif" />
         <include name="**/*.jpeg" />
         <exclude name="icons.png" />
+        <exclude name="icons-large.png" />
       </fileset>
     </copy>
     <copy todir="${classes.dir}/dma" flatten="false">
@@ -343,6 +344,7 @@
         <arg value="--jvm_flag=-Xmx1024m"/>
         <arg value="--jvm_flag=-Dappengine.user.timezone.impl=UTC"/>
         <arg value="--jvm_flag=-Dappengine.user.timezone=UTC"/>
+        <arg value="--jvm_flag=-Dsun.io.serialization.extendedDebugInfo=true"/>
       </options>
     </dev_appserver>
   </target>
@@ -740,11 +742,12 @@ depends="dist-source,dist-bin,dist-resources,dist-files,dist-files-internal,dist
 
   <!-- recolor icons -->
   <target name="iconchanges">
-      <uptodate property="noiconchanges"
-                targetfile="build/war/icons/icons.png">
-         <srcfiles file="resources/icons/icons.png" />
-      </uptodate>
-   </target>
+    <uptodate property="noiconchanges"
+              targetfile="build/war/icons/icons.png">
+      <srcfiles file="resources/icons/icons.png" />
+      <srcfiles file="resources/icons/icons-large.png" />
+    </uptodate>
+  </target>
 
   <target name="icons" depends="prepare,iconchanges"
           description="created colored icons" unless="noiconchanges">

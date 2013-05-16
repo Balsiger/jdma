@@ -58,42 +58,47 @@ public class BaseWearable extends BaseExtension<BaseItem>
   //----- slots ------------------------------------------------------------
 
   /** The available body slots (cf. ). */
-  public enum Slot implements EnumSelection.Named
+  public enum Slot implements EnumSelection.Named, EnumSelection.Short
   {
     /** On the head. */
-    HEAD("Head"),
+    HEAD("Head", "He"),
     /** Around the neck. */
-    NECK("Neck"),
+    NECK("Neck", "N"),
     /** On the torso only. */
-    TORSO("Torso"),
+    TORSO("Torso", "T"),
     /** On the whole body. */
-    BODY("Body"),
+    BODY("Body", "B"),
     /** Around the waits. */
-    WAIST("Waist"),
+    WAIST("Waist", "Wa"),
     /** On the shoulders. */
-    SHOULDERS("Shoulders"),
+    SHOULDERS("Shoulders", "S"),
     /** On both hands. */
-    HANDS("Hands"),
+    HANDS("Hands", "Hs"),
     /** On a hand. */
-    HAND("Hand"),
+    HAND("Hand", "Ha"),
     /** On a finger. */
-    FINGER("Finger"),
+    FINGER("Finger", "F"),
     /** On one or both wrists. */
-    WRISTS("Wrists"),
+    WRISTS("Wrists", "Wr"),
     /** One one or both of the feet. */
-    FEET("Feet");
+    FEET("Feet", "F");
 
     /** The value's name. */
     private String m_name;
 
+    /** The value's short name. */
+    private String m_short;
+
     /** Create the name.
      *
      * @param inName     the name of the value
+     * @param inShor     the short name of the value
      *
      */
-    private Slot(String inName)
+    private Slot(String inName, String inShort)
     {
       m_name = constant("body.slots", inName);
+      m_short = constant("body.slots.short", inShort);
     }
 
     /** Get the name of the value.
@@ -116,6 +121,16 @@ public class BaseWearable extends BaseExtension<BaseItem>
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the short name of the value.
+     *
+     * @return the short name of the value
+     */
+    public String getShort()
+    {
+      return m_short;
     }
   };
 

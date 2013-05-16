@@ -43,6 +43,7 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
+import net.ixitxachitls.dma.values.Units;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Encodings;
 
@@ -170,6 +171,7 @@ public class SoyValue extends SoyAbstract
   }
 
   //........................................................................
+
   //--------------------------------- raw ----------------------------------
 
   /**
@@ -215,6 +217,9 @@ public class SoyValue extends SoyAbstract
 
       if("raw".equals(inName))
         return StringData.forValue(m_value.toString(false));
+
+      if("short".equals(inName))
+        return StringData.forValue(m_value.toShortString());
 
       if("name".equals(inName))
         return StringData.forValue(m_name);

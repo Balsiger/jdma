@@ -311,7 +311,14 @@ public class Variable extends ValueHandle<Variable>
     String rest;
     if(inValue.startsWith(Value.UNDEFINED))
     {
-      set(inEntry, get(inEntry).create());
+      Value value = get(inEntry);
+      if(value == null)
+      {
+        System.out.println("cannot get value for " + this + " in " + inEntry);
+        return inValue;
+      }
+
+      set(inEntry, value.create());
 
       rest = inValue.substring(Value.UNDEFINED.length());
     }

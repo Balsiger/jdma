@@ -416,10 +416,17 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(SoyData inValue, List<SoyData> inArgs)
+    public SoyData applyForTofu(SoyData inValue, List<SoyData> inArgs)
     {
-      return NumberFormat.getIntegerInstance(new Locale("de", "ch"))
-        .format(Integer.valueOf(inValue.toString()));
+      return StringData.forValue
+        (NumberFormat.getIntegerInstance(new Locale("de", "ch"))
+         .format(Integer.valueOf(inValue.toString())));
+    }
+
+    @Override
+    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
+    {
+      return apply(inValue, inArgs);
     }
   }
 
@@ -451,15 +458,15 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(SoyData inValue, List<SoyData> inArgs)
+    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
-        return ((SoyValue)inValue).print();
+        return StringData.forValue(((SoyValue)inValue).print());
 
       if(inValue == null)
-        return "(null)";
+        return StringData.forValue("(null)");
 
-      return inValue.toString();
+      return inValue;
     }
   }
 
@@ -491,12 +498,12 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(SoyData inValue, List<SoyData> inArgs)
+    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
-        return ((SoyValue)inValue).raw();
+        return StringData.forValue(((SoyValue)inValue).raw());
 
-      return inValue.toString();
+      return inValue;
     }
   }
 
@@ -528,12 +535,13 @@ public class SoyTemplate
 
 
     @Override
-    public String apply(SoyData inValue, List<SoyData> inArgs)
+    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
-        return COMMAND_RENDERER.renderCommands(((SoyValue)inValue).raw());
+        return StringData.forValue
+          (COMMAND_RENDERER.renderCommands(((SoyValue)inValue).raw()));
 
-      return inValue.toString();
+      return inValue;
     }
   }
 
@@ -579,13 +587,14 @@ public class SoyTemplate
     }
 
     @Override
-    public String apply(SoyData inValue, List<SoyData> inArgs)
+    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
       if(inValue instanceof SoyValue)
-        return COMMAND_RENDERER.renderCommands
-          (firstLine(((SoyValue)inValue).raw()));
+        return StringData.forValue
+          (COMMAND_RENDERER.renderCommands
+           (firstLine(((SoyValue)inValue).raw())));
 
-      return firstLine(inValue.toString());
+      return StringData.forValue(firstLine(inValue.toString()));
     }
   }
 
@@ -616,9 +625,9 @@ public class SoyTemplate
     }
 
     @Override
-    public String apply(SoyData inValue, List<SoyData> inArgs)
+    public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
-      return inValue.toString().replace(" ", "-");
+      return StringData.forValue(inValue.toString().replace(" ", "-"));
     }
   }
 
@@ -789,6 +798,11 @@ public class SoyTemplate
    * nested rendering (i.e. render a new template for inclusing in the one
    * currently rendered).
    *
+   * Note, this requires to make
+   * com.google.template.soy.shared.internal.GuiceSimpleScope.scopedValuesTl
+   * and com.google.template.soy.tofu.internal.BaseTofu.apiCallScope to be made
+   * public in the original soy source.
+   *
    * @return      the scope removed, if any
    *
    */
@@ -847,7 +861,7 @@ public class SoyTemplate
     if(m_compiled != null)
       return;
 
-    Log.important("compiling soy templates");
+    Log.important("compiling soy templates: " + m_files);
 
     // Bundle the Soy files for your project into a SoyFileSet.
     SoyFileSet.Builder files = m_injector.getInstance(SoyFileSet.Builder.class);

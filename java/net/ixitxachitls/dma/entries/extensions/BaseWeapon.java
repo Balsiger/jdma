@@ -62,46 +62,50 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //----- types ------------------------------------------------------------
 
   /** The possible weapon types. */
-  public enum Type implements EnumSelection.Named
+  public enum Type implements EnumSelection.Named, EnumSelection.Short
   {
     /** A piercing OR slashing weapon. */
-    PIERCING_OR_SLASHING("Piercing or Slashing"),
+    PIERCING_OR_SLASHING("Piercing or Slashing", "P or S"),
 
     /** A bludeoning OR piercing weapon. */
-    BLUDGEONING_OR_PIERCING("Bludgeoning or Piercing"),
+    BLUDGEONING_OR_PIERCING("Bludgeoning or Piercing", "B or P"),
 
     /** A bludeoning AND piercing weapon. */
-    BLUDGEONING_AND_PIERCING("Bludgeoning and Piercing"),
+    BLUDGEONING_AND_PIERCING("Bludgeoning and Piercing", "B and P"),
 
     /** A slashing OR piercing weapon. */
-    SLASHING_OR_PIERCING("Slashing or Piercing"),
+    SLASHING_OR_PIERCING("Slashing or Piercing", "S or P"),
 
     /** A slashing weapon. */
-    SLASHING("Slashing"),
+    SLASHING("Slashing", "S"),
 
     /** A bludgeoning weapon. */
-    BLUDGEONING("Bludgeoning"),
+    BLUDGEONING("Bludgeoning", "B"),
 
     /** A piercing weapon. */
-    PIERCING("Piercing"),
+    PIERCING("Piercing", "P"),
 
     /** A grenade. */
-    GRENADE("Grenade"),
+    GRENADE("Grenade", "G"),
 
     /** No type. */
-    NONE("None");
+    NONE("None", "N");
 
     /** The value's name. */
     private String m_name;
+
+    /** The value's short name. */
+    private String m_short;
 
     /** Create the name.
      *
      * @param inName     the name of the value
      *
      */
-    private Type(String inName)
+    private Type(String inName, String inShort)
     {
       m_name = constant("weapon.types", inName);
+      m_short = constant("wepon.types.short", inShort);
     }
 
     /** Get the name of the value.
@@ -115,15 +119,25 @@ public class BaseWeapon extends BaseExtension<BaseItem>
       return m_name;
     }
 
-    /** Get the name of the value.
+    /**
+     * Get the name of the value.
      *
      * @return the name of the value
-     *
      */
     @Override
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the short name of the value.
+     *
+     * @return the short name of the value
+     */
+    public String getShort()
+    {
+      return m_short;
     }
   };
 
@@ -131,37 +145,40 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //----- styles -----------------------------------------------------------
 
   /** The possible weapon styles. */
-  public enum Style implements EnumSelection.Named
+  public enum Style implements EnumSelection.Named, EnumSelection.Short
   {
     /** A two-handed melee weapon. */
-    TWOHANDED_MELEE("Two-Handed Melee", true, 0),
+    TWOHANDED_MELEE("Two-Handed Melee", "Two", true, 0),
 
     /** A one-handed melee weapon. */
-    ONEANDED_MELEE("One-Handed Melee", true, -1),
+    ONEANDED_MELEE("One-Handed Melee", "One", true, -1),
 
     /** A light melee weapon. */
-    LIGHT_MELEE("Light Melee", true, -2),
+    LIGHT_MELEE("Light Melee", "Light", true, -2),
 
     /** An unarmed 'weapon'. */
-    UNARMED("Unarmed", true, 0),
+    UNARMED("Unarmed", "Unarmed", true, 0),
 
     /** A ranged touch weapon. */
-    RANGED_TOUCH("Ranged Touch", false, 0),
+    RANGED_TOUCH("Ranged Touch", "Touch R", false, 0),
 
     /** A ranged weapon. */
-    RANGED("Ranged", false, 0),
+    RANGED("Ranged", "Ranged", false, 0),
 
     /** A thrown touch weapon. */
-    THROWN_TOUCH("Thrown Touch", false, 0),
+    THROWN_TOUCH("Thrown Touch", "Touch T", false, 0),
 
     /** A thrown weapon. */
-    THROWN("Thrown", false, 0),
+    THROWN("Thrown", "Thrown", false, 0),
 
     /** A touch weapon. */
-    TOUCH("Touch", true, 0);
+    TOUCH("Touch", "Touch", true, 0);
 
     /** The value's name. */
     private String m_name;
+
+    /** The value's short name. */
+    private String m_short;
 
     /** Flag if this is a range or melee weapon. */
     private boolean m_melee;
@@ -173,13 +190,16 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      * Create the name.
      *
      * @param inName           the name of the value
+     * @param inShort          the short name of the value
      * @param inMelee          true if this is a melee weapon, false for ranged
      * @param inSizeDifference the number of steps between this and medium
      *
      */
-    private Style(String inName, boolean inMelee, int inSizeDifference)
+    private Style(String inName, String inShort, boolean inMelee,
+                  int inSizeDifference)
     {
       m_name           = constant("weapon.types", inName);
+      m_short          = constant("weapon.types.short", inShort);
       m_melee          = inMelee;
       m_sizeDifference = inSizeDifference;
     }
@@ -206,6 +226,16 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     public String toString()
     {
       return m_name;
+    }
+
+    /**
+     * Get the short name of the value.
+     *
+     * @return the short name of the value
+     */
+    public String getShort()
+    {
+      return m_short;
     }
 
     /**

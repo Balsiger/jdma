@@ -1445,7 +1445,8 @@ public class BaseProduct extends BaseEntry
   {
     List<String> result = super.getCategories();
 
-    result.add(getProductType().toString());
+    if(getProductType() != null)
+      result.add(getProductType().toString());
 
     return result;
   }

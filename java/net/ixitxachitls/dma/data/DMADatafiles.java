@@ -1191,6 +1191,19 @@ public class DMADatafiles implements DMAData
   }
 
   //........................................................................
+  //------------------------------ cacheEntry ------------------------------
+
+  /**
+   * Caches the given entry (or updates what is in the cache).
+   * Does _NOT_ change what is stored in the data store.
+   *
+   * @param       inEntry the entry to cache
+   */
+  public void cacheEntry(AbstractEntry inEntry)
+  {
+  }
+
+  //........................................................................
 
   //........................................................................
 

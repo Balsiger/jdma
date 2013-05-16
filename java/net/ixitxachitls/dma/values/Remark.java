@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.dma.values;
 
+import java.io.Serializable;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -48,7 +50,7 @@ import net.ixitxachitls.input.ParseReader;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Remark
+public class Remark implements Serializable
 {
   //----------------------------------------------------------------- nested
 
