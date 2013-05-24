@@ -52,12 +52,12 @@
       {param ifempty: $ifempty /}
       {param content}
         {if $content}
-          {if $prefix}{$prefix}/*{sp}*/{/if}
+          {if $prefix}{$prefix}{/if}
           {$content}
-          {if $postfix}{$postfix}/*{sp}*/{/if}
+          {if $postfix}{$postfix}{/if}
         {else}
           {if $value.isDefined}
-            {if $prefix}{$prefix}/*{sp}*/{/if}
+            {if $prefix}{$prefix}{/if}
             {if def($value.remark)}
               {call dma.value.remark}
                 {param value: $value /}
@@ -67,19 +67,19 @@
             {else}
               {$value |print}
             {/if}
-            {if $postfix}{$postfix}/*{sp}*/{/if}
+            {if $postfix}{$postfix}{/if}
           {elseif $value.hasExpression}
-            {if $prefix}{$prefix}/*{sp}*/{/if}
+            {if $prefix}{$prefix}{/if}
             {$value.getExpression}
-            {if $postfix}{$postfix}/*{sp}*/{/if}
+            {if $postfix}{$postfix}{/if}
           {/if}
         {/if}
       {/param}
     {/call}
   {elseif $content}
-    {if $prefix}{$prefix}{sp}{/if}
+    {if $prefix}{$prefix}{/if}
     {$content}
-    {if $postfix}{$postfix}{sp}{/if}
+    {if $postfix}{$postfix}{/if}
   {else}
     {if $ifempty}
       {$ifempty}

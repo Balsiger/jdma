@@ -164,10 +164,10 @@ public class DMADatastore implements DMAData
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractEntry.EntryKey<T> inKey)
   {
-    Log.debug("gae: getting entry for " + inKey);
     AbstractEntry entry = (AbstractEntry)s_entryCache.get(inKey.toString());
     if(entry == null)
     {
+      Log.debug("gae: getting entry for " + inKey);
       entry = convert(inKey.getID(), inKey.getType(),
                       m_data.getEntity(convert(inKey)));
       s_entryCache.put(inKey.toString(), entry);

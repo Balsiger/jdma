@@ -210,8 +210,8 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
     // base
     m_number += inNumber.m_number;
 
-    m_total = null;
-    m_modifiers.putAll(inNumber.m_modifiers);
+    for (Map.Entry<String, Modifier> entry : inNumber.m_modifiers.entrySet())
+      withModifier(entry.getValue(), entry.getKey());
 
     return this;
   }

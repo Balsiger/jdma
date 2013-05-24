@@ -301,7 +301,7 @@
     {param name: 'Possesions' /}
     {param content}
       {foreach $item in $entry.possesions.list}
-        {delcall dma.card.tiny variant="'item'"}
+        {delcall dma.card.tiny.item}
           {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
         {/delcall}
       {ifempty}
@@ -443,7 +443,7 @@
     <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'CR' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.challenge_rating.combined /}
     {/call}
@@ -452,13 +452,13 @@
       {param value: $entry.__size /}
     {/call}
     {call dma.entry.overviewValue}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.__type /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'HD' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.hit_dice.combined /}
     {/call}
@@ -468,46 +468,46 @@
       {param value: $entry.hp /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: ' of' /}
-      {param postfix: ';' /}
+      {param prefix: ' of ' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.hp /}
     {/call}
     <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'Init' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.initiative /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Speed' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.speed.combined /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'AC' /}
-      {param postfix: ',' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.armorClass /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'touch' /}
-      {param postfix: ',' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.armorClassTouch /}
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'flat-footed' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.armorClassFlatFooted /}
     {/call}
     <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'Atk' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param content}
         {foreach $primary in $entry.attacks.primary}
@@ -612,69 +612,69 @@
     {/call}
     {call dma.entry.overviewValue}
       {param prefix: 'Reach' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.reach /}
     {/call}
     <div class="par">
     {call dma.entry.overviewValue}
       {param prefix: 'AL' /}
-      {param postfix: ';' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.alignment /}
     {/call}
     SV{sp}
     {call dma.entry.overviewValue}
-      {param prefix: 'Fort' /}
-      {param postfix: ',' /}
+      {param prefix: 'Fort ' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.fortitude_save.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Ref' /}
-      {param postfix: ',' /}
+      {param prefix: 'Ref ' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.reflex_save.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Will' /}
-      {param postfix: ';' /}
+      {param prefix: 'Will ' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.will_save.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Str' /}
-      {param postfix: ',' /}
+      {param prefix: 'Str ' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.strength.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Dex' /}
-      {param postfix: ',' /}
+      {param prefix: 'Dex ' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.dexterity.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Con' /}
-      {param postfix: ',' /}
+      {param prefix: 'Con ' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.constitution.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Int' /}
-      {param postfix: ',' /}
+      {param prefix: 'Int ' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.intelligence.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Wis' /}
-      {param postfix: ',' /}
+      {param prefix: 'Wis ' /}
+      {param postfix: ', ' /}
       {param entry: $entry /}
       {param value: $entry.wisdom.combined /}
     {/call}
     {call dma.entry.overviewValue}
-      {param prefix: 'Cha' /}
-      {param postfix: ';' /}
+      {param prefix: 'Cha ' /}
+      {param postfix: '; ' /}
       {param entry: $entry /}
       {param value: $entry.charisma.combined /}
     {/call}
@@ -723,6 +723,12 @@
         </div>
       {/foreach}
       {foreach $feat in $entry.allFeats}
+        {call dma.card.feat}
+          {param entry: entry('base feat/' + $feat.first.getName) /}
+          {param summary: $feat.first.parameters.summary /}
+          {param description: $feat.first.summary /}
+        {/call}
+        /*
         <div class="feat">
           <span class="windowed">
             <span class="window base">
@@ -737,16 +743,17 @@
           </span>
           <div class="feat-text">{commands($feat.first.summary)}</div>
         </div>
+        */
       {/foreach}
       {foreach $item in $entry.possesions.list}
-        {delcall dma.card.small variant="'item'"}
+        {call dma.card.item_small}
           {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
-        {/delcall}
+        {/call}
       {/foreach}
     </div>
   </div>
   <div class="clear"></div>
-  {if $entry.files.main}
+  {if def($entry.files.main)}
     <div class="page-image">
       <img src="{$entry.files.main.icon}" alt="{$entry.files.main.name}">
     </div>

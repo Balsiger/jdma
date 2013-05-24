@@ -32,17 +32,17 @@
  */
 {deltemplate dma.entry.page}
   {if $ij.params.card}
-    {delcall dma.card.normal variant="'item'"}
+    {call dma.card.item}
       {param entry: $entry /}
-    {/delcall}
+    {/call}
   {elseif $ij.params.smallcard}
-    {delcall dma.card.small variant="'item'"}
+    {call dma.card.item_small}
       {param entry: $entry /}
-    {/delcall}
+    {/call}
   {elseif $ij.params.tinycard}
-    {delcall dma.card.tiny variant="'item'"}
+    {call dma.card.item_tiny}
       {param entry: $entry /}
-    {/delcall}
+    {/call}
   {else}
     {if $entry.isBase}
       {call dma.navigation.navigation}

@@ -640,21 +640,32 @@ IMG.item-image
   margin-right: 5px;
 }
 
-/* item */
-DIV.item.card
+/******************************************************************************
+ * Cards
+ *****************************************************************************/
+
+DIV.card
 {
   width: 500px;
   position: relative;
-  padding: 5px;
   display: inline-block;
   margin: 0 2px 2px 0;
 }
 
 DIV.card DIV.header
 {
-  background-color: $color_Item;
   color: white;
   padding: 10px;
+}
+
+DIV.card.item DIV.header
+{
+  background-color: $color_Item;
+}
+
+DIV.card.feat DIV.header
+{
+  background-color: $color_Feat;
 }
 
 DIV.card DIV.title
@@ -680,20 +691,24 @@ DIV.card DIV.actions
 
 DIV.card DIV.extensions
 {
-  top: 12px;
-  right: 12px;
+  top: 9px;
+  right: 9px;
   text-align: right;
   color: white;
   font-size: 6px;
-  line-height: 16px;
+  line-height: 14px;
   position: absolute;
   width: 17%;
 }
 
-DIV.card DIV.contents
+DIV.item.card DIV.contents
 {
   border: 1px solid $color_Item;
-  min-height: 50px;
+}
+
+DIV.feat.card DIV.contents
+{
+  border: 1px solid $color_Feat;
 }
 
 DIV.card DIV.top-block
@@ -845,9 +860,9 @@ DIV.references
   text-align: center;
 }
 
-DIV.item.small.card
+DIV.small.card
 {
-  width: 348px;
+  width: 358px;
   vertical-align: top;
 }
 
@@ -1037,7 +1052,6 @@ DIV.summary DIV.combat DIV.base-title
 }
 
 #boxes DIV.ability,
-#boxes DIV.feat,
 #boxes DIV.item-summary
 {
   margin: 1px;

@@ -1298,6 +1298,7 @@
         {$value |print}
         {if $postfix}{$postfix}{sp}{/if}
       {else}
+        with base
         {call dma.value.withbase}
           {param entry: $entry /}
           {param value: $value /}

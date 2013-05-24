@@ -2390,6 +2390,7 @@ public class Monster extends CampaignEntry<BaseMonster>
           group = groupValue.second();
         else
           group += ", " + groupValue.second();
+
       for(Multiple skill : pair.first())
       {
         Reference<BaseSkill> ref = ((Reference<BaseSkill>)skill.get(0));

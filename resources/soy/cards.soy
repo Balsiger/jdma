@@ -29,7 +29,7 @@
  *
  * @param entry The entry rendered.
  */
-{deltemplate dma.card.tiny variant="'item'"}
+{template .item_tiny}
   <div class="item card tiny" onclick="details('{$entry.path}')">
     <div class="contents">
       {delcall dma.entry.files.main}
@@ -46,14 +46,14 @@
       </div>
     </div>
   </div>
-{/deltemplate}
+{/template}
 
 /**
  * The small item card.
  *
  * @param entry The entry rendered.
  */
-{deltemplate dma.card.small variant="'item'"}
+{template .item_small}
   <div class="item card small">
     <div class="header">
       <div class="actions">
@@ -85,7 +85,7 @@
         {/call}
       </div>
 
-      {delcall dma.card.statistics variant="'item'"}
+      {delcall dma.card.statistics.item}
         {param entry: $entry /}
       {/delcall}
 
@@ -106,14 +106,14 @@
 
    </div>
   </div>
-{/deltemplate}
+{/template}
 
 /**
  * The item card.
  *
  * @param entry The entry rendered.
  */
-{deltemplate dma.card.normal variant="'item'"}
+{template .item}
   <div class="item card">
     <div class="header">
       <div class="actions">
@@ -249,14 +249,14 @@
   {call dma.page.title}
     {param title: $ij.isDM ? $entry.dmName : $entry.playerName /}
   {/call}
-{/deltemplate}
+{/template}
 
 /**
  * Statistics values in the card.
  *
  * @param entry The entry shown.
  */
-{deltemplate dma.card.statistics variant="'item'"}
+{template .item_statistics}
   <div class="statistics">
     <div class="statistics-lines">
       <div class="value ">
@@ -561,4 +561,40 @@
       </div>
     {/if}
   </div>
-{/deltemplate}
+{/template}
+
+/**
+ * Small feature card.
+ *
+ * @param entry Feat set.
+ * @param? summary Summary of the specific feat.
+ * @param? description Description of the feat
+ */
+{template .feat}
+  <div class="feat card small">
+    <div class="header">
+      <div class="title">
+        {$entry.name}{if $summary} {$summary}{/if}
+      </div>
+
+      <div class="extensions">
+        {$entry.extensions |print}
+      </div>
+    </div>
+
+    <div class="contents">
+      /* No image for now, as it is currently always the same.
+      <div class="image main">
+        {call dma.entry.simplemainfile}
+          {param entry: $entry /}
+          {param size: 50 /}
+        {/call}
+      </div>
+      */
+
+     <div class="short-description">
+       {$description}
+     </div>
+   </div>
+  </div>
+{/template}

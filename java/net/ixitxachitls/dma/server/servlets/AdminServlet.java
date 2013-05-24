@@ -36,9 +36,13 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
+import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -286,10 +290,49 @@ public class AdminServlet extends SoyServlet
     String upgrade = request.getParam("upgrade");
     if(upgrade != null)
     {
-      return null;
+      // DMADatastore store = ((DMADatastore)DMADataFactory.get());
+
+      // int count = 0;
+      // int i;
+      // for(i = 0; count < 500; i += 100)
+      // {
+      //   Iterable<Entity> entities =
+      //     store.m_data.getEntities("file", null, null, i, 100);
+      //   if(!entities.iterator().hasNext())
+      //     break;
+
+      //   for(Entity entity : entities)
+      //   {
+      //     Entity upgraded = new Entity(upgradeKey(entity.getKey()));
+      //     upgraded.setPropertiesFrom(entity);
+      //     if (!upgraded.getKey().equals(entity.getKey()))
+      //     {
+      //       store.m_data.m_store.put(upgraded);
+      //       store.m_data.m_store.delete(entity.getKey());
+      //       System.out.println("entity: " + entity);
+      //       System.out.println("upgraded: " + upgraded);
+      //       count++;
+      //     }
+      //   }
+      // }
+
+      // PrintWriter writer = new PrintWriter(inResponse.getOutputStream());
+      // writer.println("gui.info('" + count
+      // + " entities upgraded (" + i +"')");
+      // writer.close();
     }
 
     return super.handle(inRequest, inResponse);
+  }
+
+  private Key upgradeKey(Key key)
+  {
+    String kind = key.getKind().replace(" ", "_").toLowerCase();
+    String name = key.getName().toLowerCase();
+    if(key.getParent() == null)
+      return KeyFactory.createKey(kind, name);
+
+    return KeyFactory.createKey(upgradeKey(key.getParent()), kind, name);
   }
 
   //........................................................................
