@@ -301,9 +301,9 @@
     {param name: 'Possesions' /}
     {param content}
       {foreach $item in $entry.possesions.list}
-        {delcall dma.card.tiny.item}
+        {call dma.card.item_tiny}
           {param entry: entry($entry.campaign.key + '/item/' + $item.print) /}
-        {/delcall}
+        {/call}
       {ifempty}
         No items stored.
       {/foreach}
