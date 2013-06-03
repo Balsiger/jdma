@@ -2730,6 +2730,10 @@ public class AbstractEntry extends ValueGroup
         Value<?> value = inParameters.getValue(matcher.group(1));
         if(value != null && value.isDefined())
           matcher.appendReplacement(result, value.toString().replace('$', '_'));
+        else
+          matcher.appendReplacement(result,
+                                    "\\\\color{error}{&#x24;" + matcher.group(1)
+                                    + "}");
       }
 
       matcher.appendTail(result);
@@ -2966,6 +2970,7 @@ public class AbstractEntry extends ValueGroup
   }
 
   //........................................................................
+
   //........................................................................
 
   //------------------------------------------------------------------- test

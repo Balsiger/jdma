@@ -598,3 +598,71 @@
    </div>
   </div>
 {/template}
+
+/**
+ * Small feature card.
+ *
+ * @param entry Quality set.
+ * @param name The name of the quality.
+ * @param? summary Summary of the specific feat.
+ * @param? description Description of the feat
+ */
+{template .quality}
+  {if $entry.name}
+    <div class="quality card small">
+      <div class="header">
+        <div class="title">
+          {$entry.name}{if $summary} {$summary}{/if}
+        </div>
+
+        <div class="extensions">
+          {$entry.extensions |print}
+        </div>
+      </div>
+
+      <div class="contents">
+        /* No image for now, as it is currently always the same.
+         <div class="image main">
+           {call dma.entry.simplemainfile}
+             {param entry: $entry /}
+             {param size: 50 /}
+           {/call}
+         </div>
+         */
+
+        <div class="short-description">
+          {commands($description)}
+        </div>
+      </div>
+    </div>
+  {else}
+    {call .invalid}
+      {param entry: $entry /}
+      {param name: $name /}
+      {param type: 'quality' /}
+    {/call}
+  {/if}
+{/template}
+
+/**
+ * Set a card for an invalid entry.
+ *
+ * @param entry The invalid entry.
+ * @param name The name of the entry.
+ * @param type The type of the card.
+ */
+{template .invalid}
+    <div class="{$type} invalid card small">
+    <div class="header">
+      <div class="title">
+        Invalid: {$name}
+      </div>
+    </div>
+
+    <div class="contents">
+     <div class="short-description">
+       Entry {$entry} not found!
+     </div>
+   </div>
+  </div>
+{/template}

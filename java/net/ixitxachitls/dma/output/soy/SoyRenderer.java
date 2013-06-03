@@ -470,6 +470,7 @@ public class SoyRenderer
         // we assume the template does not exist, thus let's just add an error
         builder.append("<div class=\"error\">" + name + ": " + e.getMessage()
                        + "</div>");
+        e.printStackTrace(System.err);
       }
 
       // if no arguments were found, then skip the character directly following

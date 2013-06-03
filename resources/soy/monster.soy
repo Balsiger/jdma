@@ -697,30 +697,20 @@
       <div class="column"></div>
       <div class="column"></div>
       {foreach $attack in $entry.special_attack_summaries}
-        <div class="ability">
-          <div class="ability-title{if $attack.name == 'Spell'} spell{/if}">
-            {if $attack.number > 0}
-              <div class="ability-numbers">
-                {for $i in range($attack.number)}
-                  <div class="ability-number"></div>
-                {/for}
-              </div>
-            {/if}
-            {$attack.name}{if $attack.params} &ndash; {$attack.params}{/if}
-          </div>
-          <div class="ability-text">{commands($attack.summary)}</div>
-        </div>
+        {call dma.card.quality}
+          {param name: $attack.name /}
+          {param entry: entry('base quality/' + $attack.name) /}
+          {param summary: $attack.params /}
+          {param description: $attack.summary /}
+        {/call}
       {/foreach}
       {foreach $quality in $entry.special_quality_summaries}
-        <div class="ability">
-          <div class="ability-title">
-            {$quality.name} {$quality.params}
-            {if $quality.condition}
-              <br /><em>if {$quality.condition |print}</em>
-            {/if}
-          </div>
-          <div class="ability-text">{commands($quality.summary)}</div>
-        </div>
+        {call dma.card.quality}
+          {param name: $quality.name /}
+          {param entry: entry('base quality/' + $quality.name) /}
+          {param summary: $quality.params /}
+          {param description: $quality.summary /}
+        {/call}
       {/foreach}
       {foreach $feat in $entry.allFeats}
         {call dma.card.feat}
@@ -728,22 +718,6 @@
           {param summary: $feat.first.parameters.summary /}
           {param description: $feat.first.summary /}
         {/call}
-        /*
-        <div class="feat">
-          <span class="windowed">
-            <span class="window base">
-              from{sp}
-              {foreach $base in $feat.second}
-                {$base}{if not isLast($base)},{sp}{/if}
-              {/foreach}
-            </span>
-            <div class="feat-title">
-              {$feat.first.getName} {$feat.first.parameters.summary}
-            </div>
-          </span>
-          <div class="feat-text">{commands($feat.first.summary)}</div>
-        </div>
-        */
       {/foreach}
       {foreach $item in $entry.possesions.list}
         {call dma.card.item_small}

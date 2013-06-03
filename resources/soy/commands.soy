@@ -194,7 +194,7 @@
     {param text: $arg.1 /}
     {param class: camel($arg.0) /}
   {/call}
-  {sp}({reference('base ' + $arg.0 + '/' + $arg.1, $opt)})
+  :{sp}{reference('base ' + $arg.0 + '/' + $arg.1, $opt)}
 {/template}
 
 /**
@@ -420,4 +420,13 @@
     {$opt.0}
   {/if}
   <sup>{$arg.0}</sup>&frasl;<sub>{$arg.1}</sub>
+{/template}
+
+/**
+ * Color some text.
+ *
+ * @param arg The arguments to the command.
+ */
+{template .color}
+  <span class="color {$arg.0}">{$arg.1}</span>
 {/template}

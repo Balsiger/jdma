@@ -46,6 +46,7 @@ import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
+import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -918,6 +919,8 @@ public class BaseSpell extends BaseEntry
   public static final BaseType<BaseSpell> TYPE =
     new BaseType<BaseSpell>(BaseSpell.class);
 
+  private static final long serialVersionUID = 1L;
+
   //----- school -----------------------------------------------------------
 
   /** The total standard value of the base item. */
@@ -1260,23 +1263,387 @@ public class BaseSpell extends BaseEntry
    *
    * @return      the string with the summary
    */
+  @SuppressWarnings("unchecked")
   public String getSummary(@Nullable Parameters inParameters)
   {
-    String summary = m_summary.get();
+    long casterLevel = -1;
+    long spellLevel = -1;
+    if(inParameters != null && inParameters.hasValue("level"))
+      casterLevel = Integer.parseInt(inParameters.getValue("level").toString());
 
-    if(summary == null || summary.isEmpty())
-      return "(no summary)";
+    String spellClass = "";
+    if(inParameters != null && inParameters.hasValue("class"))
+      spellClass = inParameters.getValue("class").toString();
 
-    if(inParameters == null || !inParameters.isDefined())
-      return summary;
+    for(Multiple spellLevelValue : m_level)
+    {
+      long level = ((Number)spellLevelValue.get(1)).get();
+      if(spellClass.equals(((EnumSelection<SpellClass>)spellLevelValue.get(0))
+                           .getSelected().toString()))
+      {
+        spellLevel = level;
+        break;
+      }
+      else
+        if(spellLevel < 0)
+          spellLevel = level;
+        else
+          spellLevel = Math.max(spellLevel, level);
+    }
 
-    summary = computeExpressions(summary, inParameters);
+    if(casterLevel < 0 && spellLevel >= 0)
+      casterLevel = spellLevel * 2 - 1;
+
+    long ability = Long.MIN_VALUE;
+    if(inParameters != null && inParameters.hasValue("ability"))
+      try
+      {
+        ability = Integer.parseInt(inParameters.getValue("ability").toString());
+      }
+      catch(NumberFormatException e) {}
+
+    StringBuilder summary = new StringBuilder();
+
+    summary.append(getShortDescription());
+    summary.append(" ");
+    summary.append(m_school);
+    if(m_descriptor.isDefined())
+    {
+      summary.append(" [");
+      summary.append(m_descriptor);
+      summary.append("]");
+    }
+
+    summary.append(", level ");
+    summary.append(spellLevel);
+    summary.append(" (caster ");
+    summary.append(casterLevel);
+    summary.append(")");
+
+    if(!m_castingTime.isStandardAction())
+      summary.append(", CT " + m_castingTime.toShortString());
+
+    summary.append(", range ");
+    if(casterLevel >= 0 && m_range.isDefined()
+       && m_range.get() instanceof EnumSelection)
+      switch(((EnumSelection<Range>)m_range.get()).getSelected())
+      {
+        case PERSONAL_OR_TOUCH:
+        case PERSONAL_AND_TOUCH:
+        case PERSONAL:
+        case TOUCH:
+        case UNLIMITED:
+        case SEE_TEXT:
+        case ANYWHERE_WITHIN_AREA_WARDED:
+          summary.append(m_range);
+          break;
+
+        case PERSONAL_OR_CLOSE:
+          summary.append("Personal or "
+                            + (25 + (casterLevel / 2) * 5) + " ft");
+          break;
+
+        case CLOSE:
+          summary.append((25 + (casterLevel / 2) * 5) + " ft");
+          break;
+
+        case MEDIUM:
+          summary.append((100 + casterLevel * 10) + " ft");
+          break;
+
+        case LONG:
+          summary.append((400 + casterLevel * 40) + " ft");
+          break;
+
+        case FOURTY_FEET_PER_LEVEL:
+          summary.append((40 * casterLevel) + " ft");
+          break;
+
+        case UP_TO_TEN_FEET_PER_LEVEL:
+          summary.append((10 * casterLevel) + " ft");
+          break;
+
+        case ONE_MILE_PER_LEVEL:
+          summary.append(casterLevel + " mi");
+          break;
+      }
+    else
+      summary.append(m_range);
+
+    if(m_effect.isDefined())
+    {
+      summary.append(", ");
+      if(m_effect.get(0).isDefined())
+      {
+        summary.append(m_effect.get(0));
+        summary.append(" ");
+      }
+      if(m_effect.get(1).isDefined())
+      {
+        summary.append(m_effect.get(1));
+        summary.append(" ");
+      }
+
+      summary.append(((Text)m_effect.get(2)).get());
+    }
+
+    if(m_target.isDefined())
+    {
+      summary.append(", ");
+      summary.append(m_target.get());
+    }
+
+    if(m_area.isDefined())
+    {
+      summary.append(", ");
+      summary.append(m_area.get());
+    }
+
+    if(m_duration.isDefined())
+    {
+      summary.append(", duration ");
+
+      if(casterLevel < 0)
+        summary.append(m_duration);
+      else
+      {
+        System.out.println("duration: " + m_duration.get(0));
+        System.out.println(getName() + ": "
+                           + ((Union)m_duration.get(0)).get().getClass());
+        System.out.println("level: " + casterLevel + " / " + spellLevel);
+        String prefix = "";
+        Duration duration = null;
+        if(((Union)m_duration.get(0)).get() instanceof Selection)
+        {
+          switch(((Union)m_duration.get(0)).get().toString())
+          {
+            case "Instantaneous or concentration (up to 1 round/level)":
+              prefix = "Instantaneous or concentration up to ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Instantaneous or 1 round/level":
+              prefix = "Instantaneous or ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Permanent until triggered, then 1 round/level":
+              prefix = "Permanent until triggered, then ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Permanent or until discharged until released or 1d4 "
+              + "days + one day/level":
+              prefix = "Permanent or until dischargred or until released or "
+                + "1d4 days + ";
+              duration = Duration.DAY.multiply(casterLevel);
+              break;
+
+            case "Concentration (up to 1 round/level) or instantaneous":
+              prefix = "Instantaneous or Contentration up to ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Concentration up to 1 round/level":
+              prefix = "Concentration up to ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Concentration + 1 round/level":
+              prefix = "Contentration + ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Concentration + 1 hour/level":
+              prefix = "Concentration + ";
+              duration = Duration.HOUR.multiply(casterLevel);
+              break;
+
+            case "Concentration up to 1 min/level":
+              prefix = "Concentration up to ";
+              duration = Duration.MINUTE.multiply(casterLevel);
+              break;
+
+            case "Concentration up to 10 min/level":
+              prefix ="Concentration up to ";
+              duration = Duration.MINUTE.multiply(10 * casterLevel);
+              break;
+
+            case "One round per three levels":
+              duration = Duration.ROUND.multiply(casterLevel / 3);
+              break;
+
+            case "One hour/level or until discharged":
+              prefix = "Until discharged or ";
+              duration = Duration.HOUR.multiply(casterLevel);
+              break;
+
+            case "One round/level or One round":
+              prefix = "One round or ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Until landing or 1 round/level":
+              prefix = "Until landing or ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "10 min/level or until used":
+              prefix = "Until used or ";
+              duration = Duration.MINUTE.multiply(10 * casterLevel);
+              break;
+
+            case "10 min/level or until discharged":
+              prefix = "Until discharged or ";
+              duration = Duration.MINUTE.multiply(10 * casterLevel);
+              break;
+
+            case "One day/level or until discharged":
+              prefix = "Until discharged or ";
+              duration = Duration.DAY.multiply(casterLevel);
+              break;
+
+            case "One hour/level or until you return to your body":
+              prefix = "Until you return to your body or ";
+              duration = Duration.HOUR.multiply(casterLevel);
+              break;
+
+            case "One round + 1 round per three levels":
+              duration =
+                Duration.ROUND.multiply(casterLevel).add(Duration.ROUND);
+              break;
+
+            case "1 round/level (D) and concentration + 3 rounds":
+              prefix = "Concentration + 3 rounds after ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "1 hour/caster level or until discharged, then 1 round/caster "
+              + "level":
+              prefix = Duration.HOUR.multiply(casterLevel)
+                + " or until discharged, then ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "One Usage per two levels":
+              prefix = (casterLevel / 2) + " usages";
+              break;
+
+            case "1 round/level or 1 round":
+              prefix = "1 round or ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Until expended or 10 min/level":
+              prefix = "Until expended or ";
+              duration = Duration.MINUTE.multiply(casterLevel);
+              break;
+
+            case "1 hour/level or until completed":
+              prefix = "Until completed or ";
+              duration = Duration.HOUR.multiply(casterLevel);
+              break;
+
+            case "1 hour/level or until expended":
+              prefix = "Until expended or ";
+              duration = Duration.HOUR.multiply(casterLevel);
+              break;
+
+            case "1 round/level or until all beams are exhausted":
+              prefix = "Until all beams are exhausted or ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "Up to 1 round/level":
+              prefix = "Up to ";
+              duration = Duration.ROUND.multiply(casterLevel);
+              break;
+
+            case "No more than 1 hour/level or until discharged (destination "
+              + "is reached)":
+              prefix = "Until descharged (destination is reached) or no more "
+                + "than ";
+              duration = Duration.HOUR.multiply(casterLevel);
+              break;
+
+            default:
+              prefix = m_duration.get(0).toString();
+          }
+        }
+        else
+        {
+          Multiple durationValue = (Multiple)((Union)m_duration.get(0)).get();
+          duration = (Duration)durationValue.get(0);
+
+          if(durationValue.get(1).isDefined())
+            switch(durationValue.get(1).toString())
+            {
+              case "level":
+                duration = duration.multiply(casterLevel);
+                break;
+
+              case "2 level":
+                duration = duration.multiply(casterLevel / 2);
+                break;
+
+              case "3 level":
+                duration = duration.multiply(casterLevel / 3);
+                break;
+            }
+
+          if(durationValue.get(2).isDefined())
+            duration = duration.add((Duration)durationValue.get(2));
+        }
+
+        summary.append(prefix);
+        if(duration != null)
+          summary.append(duration);
+
+        if(m_duration.get(1).isDefined())
+        {
+          summary.append(" ");
+          summary.append(m_duration.get(1));
+        }
+        if(m_duration.get(2).isDefined())
+        {
+          summary.append(" ");
+          summary.append(((Text)m_duration.get(2)).get());
+        }
+      }
+    }
+
+    if(m_savingThrow.isDefined())
+    {
+      summary.append(", save ");
+      summary.append(m_savingThrow);
+
+      if(spellLevel >= 0)
+      {
+        long dc = 0;
+        String save = m_savingThrow.toString();
+        if(save.matches(".*\b(Will|Reflex|Fortitude)\b.*"))
+          dc = 10 + spellLevel + ability;
+
+        if(dc > 0)
+          summary.append(" DC " + dc);
+      }
+    }
+
+    summary.append(", SR ");
+    summary.append(m_resistance);
+    summary.append(" (");
+    summary.append(Strings.COMMA_JOINER.join(getReferences()));
+    summary.append(")");
 
     Value<?> notes = inParameters.getValue("Notes");
     if(notes != null)
-      summary += " (" + notes + ")";
+    {
+      summary.append(" (");
+      summary.append(notes);
+      summary.append(")");
+    }
 
-    return summary;
+    return summary.toString();
   }
 
   //........................................................................

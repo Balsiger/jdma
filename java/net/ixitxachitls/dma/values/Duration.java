@@ -127,6 +127,8 @@ public class Duration extends Units<Duration>
 
   //-------------------------------------------------------------- variables
 
+  private static final long serialVersionUID = 1L;
+
   /** The definition of the unit value.
    *
    * The action values have a divider of 1/10 each, although this is not really
@@ -156,6 +158,8 @@ public class Duration extends Units<Duration>
   protected static final Group<Duration, Long, String> s_timeGrouping =
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Duration inValue)
         {
@@ -174,6 +178,8 @@ public class Duration extends Units<Duration>
   protected static final Group<Duration, Long, String> s_roundGrouping =
     new Group<Duration, Long, String>(new Group.Extractor<Duration, Long>()
       {
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Duration inValue)
         {
@@ -193,6 +199,16 @@ public class Duration extends Units<Duration>
           "45 minutes", "1 hour", "2 hours", "4 hours", "6 hours", "12 hours",
           "1 day", "very long",
         }, "$undefined$");
+
+  public static final Duration ROUND = new Duration(Rational.ONE);
+  public static final Duration SECOND =
+    new Duration(null, null, null, Rational.ONE);
+  public static final Duration MINUTE =
+    new Duration(null, null, Rational.ONE, null);
+  public static final Duration HOUR =
+    new Duration(null, Rational.ONE, null, null);
+  public static final Duration DAY =
+    new Duration(Rational.ONE, null, null, null);
 
   //........................................................................
 
@@ -223,6 +239,26 @@ public class Duration extends Units<Duration>
   public boolean isRounds()
   {
     return m_set == m_sets[1];
+  }
+
+  //........................................................................
+  //--------------------------- isStandardAction ---------------------------
+
+  /**
+   * Determines if the duration represents a standard action.
+   *
+   * @param
+   *
+   * @return
+   *
+   */
+  public boolean isStandardAction()
+  {
+    if(m_set != m_sets[2])
+      return false;
+
+    Rational base = getAsBase();
+    return base.getNominator() == 1 && base.getDenominator() == 10;
   }
 
   //........................................................................

@@ -668,6 +668,11 @@ DIV.card.feat DIV.header
   background-color: $color_Feat;
 }
 
+DIV.card.quality DIV.header
+{
+  background-color: $color_Quality;
+}
+
 DIV.card DIV.title
 {
   font-weight: bold;
@@ -709,6 +714,16 @@ DIV.item.card DIV.contents
 DIV.feat.card DIV.contents
 {
   border: 1px solid $color_Feat;
+}
+
+DIV.quality.card DIV.contents
+{
+  border: 1px solid $color_Quality;
+}
+
+DIV.invalid.card DIV.contents
+{
+  border: 1px solid red;
 }
 
 DIV.card DIV.top-block
@@ -946,7 +961,7 @@ DIV.small.card DIV.short-description
   min-height: auto;
 }
 
-DIV.item.tiny.card
+DIV.tiny.card
 {
   width: 180px;
   vertical-align: top;
@@ -954,7 +969,7 @@ DIV.item.tiny.card
   cursor: pointer;
 }
 
-DIV.item.tiny.card DIV.contents
+DIV.tiny.card DIV.contents
 {
   background-color: white;
   margin: 3px;
@@ -964,14 +979,14 @@ DIV.item.tiny.card DIV.contents
 }
 
 
-DIV.item.tiny.card IMG.image.main
+DIV.tiny.card IMG.image.main
 {
   max-height: 25px;
   max-width: 25px;
   margin: 0;
 }
 
-DIV.item.tiny.card DIV.title
+DIV.tiny.card DIV.title
 {
   font-size: 11px;
   display: inline-block;
@@ -982,7 +997,7 @@ DIV.item.tiny.card DIV.title
   line-height: normal;
 }
 
-DIV.item.tiny.card DIV.content
+DIV.tiny.card DIV.content
 {
   margin-bottom: 10px;
 }
