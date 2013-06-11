@@ -1,5 +1,14 @@
 /* The main CSS file for jDMA. */
 
+@font-face {
+  font-family: symbola;
+  src: url('/fonts/Symbola.ttf');
+}
+
+.symbola {
+ font-family: symbola;
+}
+
 /******************************************************************************
  * general page layout
  *****************************************************************************/
@@ -646,7 +655,7 @@ IMG.item-image
 
 DIV.card
 {
-  width: 500px;
+  width: 700px;
   position: relative;
   display: inline-block;
   margin: 0 2px 2px 0;
@@ -666,6 +675,11 @@ DIV.card.item DIV.header
 DIV.card.feat DIV.header
 {
   background-color: $color_Feat;
+}
+
+DIV.card.spell DIV.header
+{
+  background-color: $color_Spell;
 }
 
 DIV.card.quality DIV.header
@@ -716,6 +730,11 @@ DIV.feat.card DIV.contents
   border: 1px solid $color_Feat;
 }
 
+DIV.spell.card DIV.contents
+{
+  border: 1px solid $color_Spell;
+}
+
 DIV.quality.card DIV.contents
 {
   border: 1px solid $color_Quality;
@@ -749,7 +768,7 @@ DIV.card DIV.contents IMG.image.main
 DIV.card DIV.contents DIV.statistics
 {
   display: inline-block;
-  width: 67%;
+  width: 575px;
   vertical-align: top;
   padding-top: 10px;
 }
@@ -771,7 +790,26 @@ DIV.card DIV.contents DIV.statistics-lines > DIV
 DIV.card DIV.contents DIV.statistics-lines > DIV
 {
   width: 33%;
+  display: inline-block;
   float: left;
+}
+
+DIV.card DIV.contents TABLE.stat-value
+{
+  width: 33%;
+  display: inline-block;
+  font-size: 12px;
+  vertical-align: top;
+}
+
+DIV.card DIV.contents TABLE.stat-value TR
+{
+  vertical-align: top;
+}
+
+DIV.card DIV.contents TABLE.stat-value TR TD.stat-label
+{
+  width: 25px;
 }
 
 DIV.card DIV.contents DIV.statistics-lines > DIV:nth-child(3n+1)
@@ -869,10 +907,11 @@ DIV.card DIV.player-notes
   display: inline-block;
 }
 
-DIV.references
+DIV.card DIV.references
 {
   font-size: 8px;
   text-align: center;
+  margin-top: 5px;
 }
 
 DIV.small.card
@@ -1269,9 +1308,15 @@ TABLE.entrylist TD.short
 DIV.extension-symbol
 {
   font-size: 200%;
-  display: inline-block;
-  vertical-align: top;
   line-height: 50%;
+}
+
+DIV.extension-symbol,
+DIV.extension-symbol-text
+{
+  color: #aaa;
+  vertical-align: top;
+  display: inline-block;
 }
 
 /******************************************************************************

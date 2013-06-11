@@ -268,6 +268,17 @@
  * @param entry The entry rendered.
  */
 {deltemplate dma.entry.page}
+  {call dma.entry.default_page}
+    {param entry: $entry /}
+  {/call}
+{/deltemplate}
+
+/**
+ * The default contents part of the page.
+ *
+ * @param entry The entry rendered.
+ */
+{template .default_page}
   {if $entry.isBase}
     {call dma.navigation.navigation}
       {param entries:
@@ -374,7 +385,7 @@
       {param entry: $entry /}
     {/delcall}
   </div>
-{/deltemplate}
+{/template}
 
 /**
  * The values for the entry.

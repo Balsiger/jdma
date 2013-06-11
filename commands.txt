@@ -22,17 +22,17 @@ java net.ixitxachitls.dma.server.Importer "resources/files/base\ character" "res
 java net.ixitxachitls.dma.server.Importer "resources/files/base\ monster" --main -n
 
 # import default data
-java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma
-java net.ixitxachitls.dma.server.Importer dma/BaseCampaigns
-java net.ixitxachitls.dma.server.Importer "dma/Campaigns/Forgotten\ Realms.dma"
-java net.ixitxachitls.dma.server.Importer dma/Characters
-java net.ixitxachitls.dma.server.Importer dma/BaseItems dma/BaseProducts dma/BaseQualities dma/BaseFeats dma/BaseSkills dma/BaseMonsters
-java net.ixitxachitls.dma.server.Importer dma/Items dma/Products
-java net.ixitxachitls.dma.server.Importer "resources/files/base\ product/WTC\ 88567"
-java net.ixitxachitls.dma.server.Importer "resources/files/base\ monster/Aboleth" --main
+java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma -n
+java net.ixitxachitls.dma.server.Importer dma/BaseCampaigns -n
+java net.ixitxachitls.dma.server.Importer "dma/Campaigns/Forgotten\ Realms.dma" -n
+java net.ixitxachitls.dma.server.Importer dma/Characters -n
+java net.ixitxachitls.dma.server.Importer dma/BaseItems dma/BaseProducts dma/BaseQualities dma/BaseFeats dma/BaseSkills dma/BaseMonsters -n
+java net.ixitxachitls.dma.server.Importer dma/Items dma/Products -n
+java net.ixitxachitls.dma.server.Importer "resources/files/base\ product/WTC\ 88567" -n
+java net.ixitxachitls.dma.server.Importer "resources/files/base\ monster/Aboleth" --main -n
 
 
 # import items
-java net.ixitxachitls.dma.server.Importer "dma/Characters/Characters.dma" "dma/Items/City\ of\ the\ Spider\ Queen.dma" "dma/BaseItems/WTC\ 17752.dma" "dma/BaseItems/WTC\ 17524.dma" "dma/BaseItems/WTC\ 1076272.dma"
+java net.ixitxachitls.dma.server.Importer "dma/Characters/Characters.dma" "dma/Items/City\ of\ the\ Spider\ Queen.dma" "dma/BaseItems/WTC\ 17752.dma" "dma/BaseItems/WTC\ 17524.dma" "dma/BaseItems/WTC\ 1076272.dma" -nx
 
 

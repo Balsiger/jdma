@@ -26,6 +26,31 @@
 {namespace dma.entry.basespell}
 
 /**
+ * The contents part of the page.
+ *
+ * @param entry The entry rendered.
+ */
+{deltemplate dma.entry.page}
+  {if $ij.params.card}
+    {call dma.card.spell}
+      {param entry: $entry /}
+    {/call}
+  {elseif $ij.params.smallcard}
+    {call dma.card.spell_small}
+      {param entry: $entry /}
+    {/call}
+  {elseif $ij.params.tinycard}
+    {call dma.card.spell_tiny}
+      {param entry: $entry /}
+    {/call}
+  {else}
+    {call dma.entry.default_page}
+      {param entry: $entry /}
+    {/call}
+  {/if}
+{/deltemplate}
+
+/**
  * The values for the entry.
  *
  * @param entry The entry rendered

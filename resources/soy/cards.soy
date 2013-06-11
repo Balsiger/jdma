@@ -85,9 +85,9 @@
         {/call}
       </div>
 
-      {delcall dma.card.statistics.item}
+      {call .item_statistics}
         {param entry: $entry /}
-      {/delcall}
+      {/call}
 
       <div class="appearance">
         {call dma.value.withbase}
@@ -159,9 +159,9 @@
           {/delcall}
         </div>
 
-        {delcall dma.card.statistics}
+        {call .item_statistics}
           {param entry: $entry /}
-        {/delcall}
+        {/call}
       </div>
 
       <div class="bottom-block">
@@ -645,6 +645,179 @@
 {/template}
 
 /**
+ * Spell card.
+ *
+ * @param entry Spell set.
+ */
+{template .spell}
+  <div class="spell card">
+    <div class="header">
+      <div class="title">
+        {$entry.name}
+      </div>
+
+      <div class="extensions">
+        {$entry.extensions |print}
+      </div>
+    </div>
+
+    <div class="contents">
+      <div class="top-block">
+        <div class="align-center size-tiny">
+          {$entry.base}
+        </div>
+
+        <div class="image main">
+          {call dma.entry.simplemainfile}
+            {param entry: $entry /}
+            {param size: 50 /}
+          {/call}
+        </div>
+
+        {call .spell_statistics}
+          {param entry: $entry /}
+        {/call}
+      </div>
+
+      <div class="bottom-block">
+        {if $entry.extension_incomplete and $ij.isDM}
+          <div class="incomplete">
+            {call dma.value.extension}
+              {param value: 'incomplete' /}
+            {/call}
+            {sp}
+            {call dma.value.withbase}
+              {param value: $entry.incomplete /}
+              {param entry: $entry /}
+              {param canEdit: $ij.isDM /}
+            {/call}
+          </div>
+        {/if}
+        <div class="description">
+          {call dma.value.withbase}
+            {param entry: $entry /}
+            {param value: $entry.description.combined /}
+          {/call}
+        </div>
+        <div class="references">
+          {foreach $reference in $entry.full_references}
+            {if $reference.title}
+              {$reference.title} ({$reference.id |print})
+            {else}
+              {$reference.id |print}
+            {/if}
+            {sp}
+            p. {$reference.pages |print}
+            {if not isLast($reference)}
+              ,{sp}
+            {/if}
+          {/foreach}
+        </div>
+       </div>
+     </div>
+   </div>
+  </div>
+{/template}
+
+/**
+ * The statistics for a spell.
+ *
+ * @param entry The spell.
+ */
+{template .spell_statistics}
+  <div class="statistics">
+      {call .statvalue}
+        {param label: 'school' /}
+        {param contents}
+          {call dma.value.withbase}
+            {param entry: $entry /}
+            {param value: $entry.school /}
+          {/call}
+          {if $entry.descriptor.isDefined}
+            {sp}[{$entry.descriptor}]
+          {/if}
+        {/param}
+      {/call}
+      {call .statvalue}
+        {param label: 'level' /}
+        {param entry: $entry /}
+        {param value: $entry.level /}
+      {/call}
+      {call .statvalue}
+        {param label: 'casting-time' /}
+        {param entry: $entry /}
+        {param value: $entry.casting_time /}
+      {/call}
+      {call .statvalue}
+        {param label: 'range' /}
+        {param entry: $entry /}
+        {param value: $entry.range /}
+      {/call}
+      {if $entry.duration.isDefined}
+        {call .statvalue}
+          {param label: 'duration' /}
+          {param entry: $entry /}
+          {param value: $entry.duration /}
+        {/call}
+      {/if}
+      {if $entry.target.isDefined}
+        {call .statvalue}
+          {param label: 'target' /}
+          {param entry: $entry /}
+          {param value: $entry.target /}
+        {/call}
+      {/if}
+      {if $entry.area.isDefined}
+        {call .statvalue}
+          {param label: 'target' /}
+          {param entry: $entry /}
+          {param value: $entry.area /}
+        {/call}
+      {/if}
+      {call .statvalue}
+        {param label: 'components' /}
+        {param entry: $entry /}
+        {param value: $entry.components /}
+      {/call}
+      {if $entry.material.isDefined}
+        {call .statvalue}
+          {param label: 'substance' /}
+          {param entry: $entry /}
+          {param value: $entry.material /}
+        {/call}
+      {/if}
+      {if $entry.focus.isDefined}
+        {call .statvalue}
+          {param label: 'focus' /}
+          {param entry: $entry /}
+          {param value: $entry.focus /}
+        {/call}
+      {/if}
+      {if $entry.effect.isDefined}
+        {call .statvalue}
+          {param label: 'effect' /}
+          {param entry: $entry /}
+          {param value: $entry.effect /}
+        {/call}
+      {/if}
+      {if $entry.saving_throw.isDefined}
+        {call .statvalue}
+          {param label: 'SV' /}
+          {param entry: $entry /}
+          {param value: $entry.saving_throw /}
+        {/call}
+      {/if}
+      {if $entry.spell_resistance.isDefined}
+        {call .statvalue}
+          {param label: 'SR' /}
+          {param entry: $entry /}
+          {param value: $entry.spell_resistance /}
+        {/call}
+      {/if}
+  </div>
+{/template}
+
+/**
  * Set a card for an invalid entry.
  *
  * @param entry The invalid entry.
@@ -665,4 +838,34 @@
      </div>
    </div>
   </div>
+{/template}
+
+/**
+ * A statistics value with label and text.
+ *
+ * @param label The label to set.
+ * @param? entry The entry with the value.
+ * @param? value The value to print.
+ * @param? contents The contents to set instead of the value given.
+ */
+{template .statvalue}
+  <table class="stat-value">
+    <tr>
+      <td class="stat-label">
+        {call dma.value.extension}
+          {param value: $label /}
+        {/call}
+      </td>
+      <td class="stat-text">
+        {if $contents}
+          {$contents}
+        {else}
+          {call dma.value.withbase}
+            {param entry: $entry /}
+            {param value: $value /}
+          {/call}
+        {/if}
+      </td>
+    </tr>
+  </table>
 {/template}

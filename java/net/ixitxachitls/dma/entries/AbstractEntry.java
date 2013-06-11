@@ -50,6 +50,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
@@ -63,8 +64,10 @@ import net.ixitxachitls.dma.values.BaseText;
 import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.Comment;
 import net.ixitxachitls.dma.values.FormattedText;
+import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
+import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
@@ -1018,6 +1021,39 @@ public class AbstractEntry extends ValueGroup
     }
 
     return entries;
+  }
+
+  //........................................................................
+  //---------------------------- fullReferences ----------------------------
+
+  /**
+   * Get the references of this entry with full information for printing.
+   *
+   * @return      a list with the references and all values
+   *
+   */
+  @SuppressWarnings("unchecked")
+  public List<Map<String, Object>> fullReferences()
+  {
+    List<Map<String, Object>> references = Lists.newArrayList();
+
+    Combined<ValueList<Multiple>> combinedRefs = collect("references");
+    for(Multiple ref : combinedRefs.total())
+    {
+      Map<String, Object> values = Maps.newHashMap();
+      Reference<BaseProduct> reference = (Reference<BaseProduct>)ref.get(0);
+      BaseProduct product = reference.getEntry();
+      Object pages = ref.get(1);
+
+      if(product != null)
+        values.put("title", product.getFullTitle());
+
+      values.put("id", reference);
+      values.put("pages", pages);
+      references.add(values);
+    }
+
+    return references;
   }
 
   //........................................................................

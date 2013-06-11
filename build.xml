@@ -21,7 +21,8 @@
   <property name="version" value="astraldeva" />
 
   <!-- Google App Engine -->
-  <property name="gae.dir" location="../../appengine-java-sdk-1.8.0" />
+  <property name="gae.version" value="1.8.0" />
+  <property name="gae.dir" location="../../appengine-java-sdk-${gae.version}" />
   <import file="${gae.dir}/config/user/ant-macros.xml" />
 
   <!-- constants for the directory structure -->
@@ -61,7 +62,6 @@
   <path id="checkstyle.classpath">
     <pathelement location="${classes.dir}" />
     <pathelement location="${lib.build.dir}/checkstyle-5.6-all.jar"  />
-    <pathelement location="${lib.dir}/servlet-api-2.5.jar" />
     <pathelement location="${lib.dir}/servlet-api-3.0.jar" />
   </path>
 
@@ -105,7 +105,7 @@
     <pathelement location="${lib.test.dir}/objenesis-1.2.jar" />
     <pathelement location="${lib.test.dir}/easymock-3.0.jar" />
     <pathelement location="${lib.test.dir}/test.jar" />
-    <pathelement location="${lib.test.dir}/appengine-api-labs.jar" />
+    <pathelement location="${lib.test.dir}/appengine-api-labs-${gae.version}.jar" />
     <pathelement location="${lib.test.dir}/appengine-api-stubs.jar" />
     <pathelement location="${lib.test.dir}/appengine-testing.jar" />
     <!-- soy -->
@@ -150,7 +150,7 @@
       <include name="shared/**/*.jar" />
     </fileset>
     <pathelement location="${lib.dir}/appengine-remote-api.jar" />
-    <pathelement location="${lib.dir}/appengine-api.jar" />
+    <pathelement location="${lib.dir}/appengine-api-1.0-sdk-${gae.version}.jar" />
   </path>
 
   <!-- define also as property for printing -->
@@ -234,7 +234,7 @@
              overwrite="Yes" />
     <symlink link="${classes.dir}/css" resource="${resources.dir}/css"
              overwrite="Yes" />
-    <symlink link="${classes.dir}/fonts" resource="${resources.dir}/fonts"
+    <symlink link="${war.dir}/fonts" resource="${resources.dir}/fonts"
              overwrite="Yes" />
     <symlink link="${classes.dir}/icons" resource="${resources.dir}/icons"
              overwrite="Yes" />

@@ -589,8 +589,91 @@
         {param value: $value /}
         {param symbol: '&#x270e;' /}
       {/call}
+    {case 'school'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x1f393;' /}
+        {param style: 'symbola' /}
+      {/call}
+    {case 'casting-time'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x23f3;' /}
+        {param style: 'symbola' /}
+        {param size: 130 /}
+      {/call}
+    {case 'level'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x1f522;' /}
+        {param style: 'symbola' /}
+        {param size: 120 /}
+        {param space: 2 /}
+      {/call}
+    {case 'range'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x20d5;' /}
+        {param space: 5 /}
+      {/call}
+    {case 'target'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x1f3af;' /}
+        {param style: 'symbola' /}
+        {param size: 140 /}
+        {param space: 3 /}
+      {/call}
+    {case 'area'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x1f3af;' /}
+        {param style: 'symbola' /}
+        {param size: 140 /}
+      {/call}
+    {case 'components'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2699;' /}
+        {param style: 'symbola' /}
+        {param size: 140 /}
+        {param space: 3 /}
+      {/call}
+    {case 'focus'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x1f64f;' /}
+        {param style: 'symbola' /}
+      {/call}
+    {case 'duration'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x23f3;' /}
+        {param style: 'symbola' /}
+        {param size: 130 /}
+      {/call}
+    {case 'saving-throw'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x1f512;' /}
+        {param style: 'symbola' /}
+        {param size: 150 /}
+      {/call}
+    {case 'effect'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x29d0;' /}
+      {/call}
+    {case 'spell-resistance'}
+      {call .extensionsymbol}
+        {param value: $value /}
+        {param symbol: '&#x2602;' /}
+        {param size: 150 /}
+      {/call}
     {default}
-      {$value}
+      <div class="extension-symbol-text">
+        {$value}
+      </div>
   {/switch}
 {/template}
 
@@ -601,9 +684,10 @@
  * @param symbol The symbol to set.
  * @param? space The px to add as top margin.
  * @param? size The size in percent of the symbol.
+ * @param? style The style to use for the symbol.
  */
 {template .extensionsymbol}
-  <div title="{$value}" class="extension-symbol"
+  <div title="{$value}" class="extension-symbol{if $style} {$style}{/if}"
     {if $space or $size} style="
       {if $space}margin-top: {$space}px;{/if}
       {if $size} font-size: {$size}%;{/if}

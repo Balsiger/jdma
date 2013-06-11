@@ -194,6 +194,9 @@
     {param text: $arg.1 /}
     {param class: camel($arg.0) /}
   {/call}
+  <A class="{camel($arg.0)}" onclick="details('/{$arg.0}/{$arg.1}')">
+    {$arg.1}
+  </A>
   :{sp}{reference('base ' + $arg.0 + '/' + $arg.1, $opt)}
 {/template}
 
