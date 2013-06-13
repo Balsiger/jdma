@@ -70,6 +70,11 @@ public class Item extends CampaignEntry<BaseItem>
   //------------------------------- Item --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * This is the internal, default constructor.
    *
    */
@@ -518,6 +523,7 @@ public class Item extends CampaignEntry<BaseItem>
    * @return   the compute value
    *
    */
+  @Override
   public @Nullable Object compute(String inKey)
   {
     if("dmName".equals(inKey))
@@ -936,6 +942,7 @@ public class Item extends CampaignEntry<BaseItem>
    * the value and the appearance here and let the base class handle the rest.
    *
    */
+  @Override
   public void complete()
   {
     super.complete();

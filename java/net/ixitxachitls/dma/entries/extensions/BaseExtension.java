@@ -57,6 +57,11 @@ public class BaseExtension<T extends BaseEntry> extends AbstractExtension<T>
   //---------------------------- BaseExtension ----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry  the entry attached to

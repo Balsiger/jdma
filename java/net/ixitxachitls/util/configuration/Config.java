@@ -84,9 +84,6 @@ public final class Config
 
   //-------------------------------------------------------------- variables
 
-  /** The postfix for String values. */
-  private static final String s_string = null;
-
   /** The postfix for integer values. */
   private static final String s_int = ":int";
 

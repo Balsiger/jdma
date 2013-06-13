@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -63,6 +61,11 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   //--------------------------------------------------------- constructor(s)
 
   //------------------------------- Campaign -------------------------------
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * This is the internal default constructor.
@@ -100,16 +103,9 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   /** The type of the base entry to this entry. */
   public static final BaseType<BaseCampaign> BASE_TYPE = BaseCampaign.TYPE;
 
-  /** The base types stored in the campaign. */
-  private final SortedSet<AbstractType<?>> m_types =
-    new TreeSet<AbstractType<?>>();
-
   /** The files read for this campaign. */
   private final Map<String, DMAFile> m_dmaFiles =
     new HashMap<String, DMAFile>();
-
-  /** The number of lines read. */
-  private int m_lines = 0;
 
   //----- dm ---------------------------------------------------------------
 
@@ -137,7 +133,6 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    *
    */
   @Override
-  @SuppressWarnings("unchecked")
   public EntryKey<Campaign> getKey()
   {
     List<String> names = getBaseNames();
@@ -159,6 +154,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @return      a String with the name
    *
    */
+  @Override
   public String getDMName()
   {
     return m_dm.get();
@@ -175,7 +171,6 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @return      the item found or null if not found
    *
    */
-  @SuppressWarnings("unchecked")
   public @Nullable Item getItem(String inName)
   {
     return DMADataFactory.get().getEntry
@@ -191,6 +186,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @return      the Campaign for this character
    *
    */
+  @Override
   public Campaign getCampaign()
   {
     return this;
@@ -249,6 +245,7 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @return   the compute value
    *
    */
+  @Override
   public @Nullable Object compute(String inKey)
   {
     if("characters".equals(inKey))

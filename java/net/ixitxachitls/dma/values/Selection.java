@@ -58,6 +58,11 @@ public class Selection extends Value<Selection>
   //------------------------------ Selection -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the selection object.
    *
    * @param       inSelections the selections valid for this value
@@ -126,8 +131,6 @@ public class Selection extends Value<Selection>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // this onlly works if this method is
-                                 // overriden in all derivations
   public Selection create()
   {
     return super.create(new Selection(m_selections));

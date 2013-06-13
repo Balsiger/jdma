@@ -56,6 +56,11 @@ public class RandomDuration extends Duration
   //--------------------------- RandomDuration -----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the duration object with an undefined value.
    *
    */

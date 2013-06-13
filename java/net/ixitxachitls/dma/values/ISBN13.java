@@ -57,6 +57,11 @@ public class ISBN13 extends Value<ISBN13>
   //-------------------------------- ISBN13 ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the ISBN13 object with an undefined value.
    *
    */

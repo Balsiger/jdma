@@ -75,6 +75,11 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   //-------------------------- AbstractExtension --------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry  the entry attached to
@@ -187,12 +192,12 @@ public abstract class AbstractExtension<T extends AbstractEntry>
   /**
    * Get the type of the entry.
    *
-   * @param       <T> the type of entry to get the type for
+   * @param       <S> the type of entry to get the type for
    * @return      the requested name
    *
    */
   @Override
-  public <T extends AbstractEntry> AbstractType<T> getType()
+  public <S extends AbstractEntry> AbstractType<S> getType()
   {
     return m_entry.getType();
   }
@@ -267,6 +272,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
    * @return      the entry or base entry this one is attached to
    *
    */
+  @Override
   public T getEntry()
   {
     return m_entry;

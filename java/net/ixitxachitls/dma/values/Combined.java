@@ -37,7 +37,6 @@ import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseEntry;
 import net.ixitxachitls.dma.entries.ValueGroup;
 import net.ixitxachitls.util.Pair;
-import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -321,6 +320,7 @@ public class Combined<T extends Value<T>>
      *
      * @return  the entry
      */
+    @SuppressWarnings("unused")
     public ValueGroup getGroup()
     {
       return m_group;
@@ -364,6 +364,7 @@ public class Combined<T extends Value<T>>
      *              equal
      *
      */
+    @Override
     public int compareTo(@Nullable Contribution<V> inOther)
     {
       if(inOther == null)
@@ -759,7 +760,7 @@ public class Combined<T extends Value<T>>
    *
    * @return  all the modifiers
    */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ "rawtypes" })
   public ModifiedNumber modifier()
   {
     ModifiedNumber modifier = new ModifiedNumber(0);

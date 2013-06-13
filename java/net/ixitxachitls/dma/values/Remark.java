@@ -56,6 +56,11 @@ public class Remark implements Serializable
 
   //----- Type -------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The remark types. */
   @ParametersAreNonnullByDefault
   public enum Type

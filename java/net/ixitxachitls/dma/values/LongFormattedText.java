@@ -52,6 +52,11 @@ public class LongFormattedText extends FormattedText
   //--------------------------------- Text ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the text object with an undefined value.
    *
    */

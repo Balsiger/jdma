@@ -65,6 +65,11 @@ public class BaseQuality extends BaseEntry
 
   //----- effect types -----------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible spell components (cf. PHB 174). */
   public enum EffectType implements EnumSelection.Named, EnumSelection.Short
   {
@@ -100,6 +105,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -110,6 +116,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -120,6 +127,7 @@ public class BaseQuality extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -185,6 +193,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -195,6 +204,7 @@ public class BaseQuality extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -205,6 +215,7 @@ public class BaseQuality extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;

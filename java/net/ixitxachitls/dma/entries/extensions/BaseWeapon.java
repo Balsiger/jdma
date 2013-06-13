@@ -61,6 +61,11 @@ public class BaseWeapon extends BaseExtension<BaseItem>
 
   //----- types ------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible weapon types. */
   public enum Type implements EnumSelection.Named, EnumSelection.Short
   {
@@ -135,6 +140,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      * @return the short name of the value
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -233,6 +239,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
      *
      * @return the short name of the value
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -454,6 +461,11 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   protected static final Group<Distance, Long, String> s_rangeGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
     {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       @Override
       public Long extract(Distance inValue)
       {
@@ -486,6 +498,11 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   protected static final Group<Distance, Long, String> s_reachGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Distance inValue)
         {

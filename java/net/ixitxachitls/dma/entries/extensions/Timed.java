@@ -53,6 +53,11 @@ public class Timed extends Extension<Item>
   //--------------------------------- Timed -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the entry attached to

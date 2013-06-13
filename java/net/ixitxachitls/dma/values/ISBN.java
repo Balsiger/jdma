@@ -57,6 +57,11 @@ public class ISBN extends Value<ISBN>
   //--------------------------------- ISBN ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the ISBN object with an undefined value.
    *
    */

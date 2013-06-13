@@ -61,6 +61,11 @@ public class Product extends Entry<BaseProduct>
 
   //----- status -----------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The product status. */
   public enum Status implements EnumSelection.Named
   {
@@ -886,6 +891,7 @@ public class Product extends Entry<BaseProduct>
    * @return   the compute value
    *
    */
+  @Override
   public @Nullable Object compute(String inKey)
   {
     if("navigation".equals(inKey))

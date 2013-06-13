@@ -82,6 +82,11 @@ public class BaseMonster extends BaseEntry
 
   //----- monster type -----------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible monster types in the game. */
   @ParametersAreNonnullByDefault
   public enum MonsterType implements EnumSelection.Named
@@ -149,6 +154,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -159,6 +165,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -268,6 +275,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -278,6 +286,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -324,6 +333,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -334,6 +344,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -383,6 +394,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -393,6 +405,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -436,6 +449,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -446,6 +460,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -525,6 +540,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -535,6 +551,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -629,6 +646,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -639,6 +657,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -676,6 +695,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -686,6 +706,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -767,6 +788,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -777,6 +799,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -836,6 +859,7 @@ public class BaseMonster extends BaseEntry
      *
      * @return the name of the value
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -935,6 +959,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -945,6 +970,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -955,6 +981,7 @@ public class BaseMonster extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -995,6 +1022,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -1005,6 +1033,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -1108,6 +1137,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -1118,6 +1148,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -1161,6 +1192,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -1171,6 +1203,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -1216,6 +1249,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -1226,6 +1260,7 @@ public class BaseMonster extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -1236,6 +1271,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -1293,6 +1329,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -1303,6 +1340,7 @@ public class BaseMonster extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -1313,6 +1351,7 @@ public class BaseMonster extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -1621,6 +1660,12 @@ public class BaseMonster extends BaseEntry
   protected static final Group<Distance, Long, String> s_spaceGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+        @Override
         public Long extract(Distance inValue)
         {
           if(inValue == null)
@@ -1654,6 +1699,12 @@ public class BaseMonster extends BaseEntry
   protected static final Group<Distance, Long, String> s_reachGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
+        @Override
         public Long extract(Distance inValue)
         {
           if(inValue == null)

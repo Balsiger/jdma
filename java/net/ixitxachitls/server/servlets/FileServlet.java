@@ -130,6 +130,7 @@ public class FileServlet extends BaseServlet
      *
      * @return the file extension
      */
+    @SuppressWarnings("unused")
     public String getExtension()
     {
       return m_extension;

@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.io.ObjectInputStream;
 import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +70,11 @@ public class ValueList<T extends Value<T>>
   //--------------------------------------------------------- constructor(s)
 
   //------------------------------- ValueList -------------------------------
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * Construct the list undefined. If the given value is defined, it is used
@@ -336,7 +340,6 @@ public class ValueList<T extends Value<T>>
    * @undefined   never
    *
    */
-  @SuppressWarnings("unchecked") // casting
   public T newElement()
   {
     return m_type.create();
@@ -368,6 +371,7 @@ public class ValueList<T extends Value<T>>
    * @return      a short String representation
    *
    */
+  @Override
   public String toShortString()
   {
     List<String> strings = Lists.newArrayList();
@@ -648,6 +652,7 @@ public class ValueList<T extends Value<T>>
    * @return      the added values
    *
    */
+  @Override
   public ValueList<T> add(ValueList<T> inValue)
   {
     List<T> values = new ArrayList<T>();
@@ -713,7 +718,6 @@ public class ValueList<T extends Value<T>>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // comparing values of the raw type
   public ValueList<T> subtract(ValueList<T> inValue)
   {
     ValueList<T> result = create();
@@ -739,7 +743,6 @@ public class ValueList<T extends Value<T>>
    *
    */
   @Override
-  @SuppressWarnings("unchecked")
   public boolean doRead(ParseReader inReader)
   {
     ParseReader.Position pos = inReader.getPosition();
@@ -800,7 +803,6 @@ public class ValueList<T extends Value<T>>
    * @return      a similar value, but without any contents
    *
    */
-  @SuppressWarnings("unchecked") // casting cloned value
   public T createElement()
   {
     return m_type.create();

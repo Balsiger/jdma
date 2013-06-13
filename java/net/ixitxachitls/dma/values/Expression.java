@@ -65,6 +65,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
 
   //----- Shared -----------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** A class to share data when computing expressions. */
   @ParametersAreNonnullByDefault
   public static class Shared
@@ -107,6 +112,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class MagicArmor extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the magic armor expression.
      *
@@ -163,6 +173,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the computed, adjusted value, if any
      *
      */
+    @Override
     @SuppressWarnings("unchecked")
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
@@ -192,6 +203,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class Factor extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the factor expression.
      *
@@ -258,6 +274,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
+    @Override
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
                          Shared ioShared)
@@ -278,6 +295,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class Addition extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the factor expression.
      *
@@ -337,7 +359,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
-    @SuppressWarnings("unchecked")
+    @Override
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
                          Shared ioShared)
@@ -368,6 +390,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class Equal extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the equal expression.
      *
@@ -420,6 +447,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
+    @Override
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
                          Shared ioShared)
@@ -439,6 +467,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class ByClass extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the by class expression.
      *
@@ -494,7 +527,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
-    @SuppressWarnings("unchecked")
+    @Override
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
                          Shared ioShared)
@@ -519,6 +552,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class Switch extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the switch expression.
      *
@@ -602,7 +640,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
-    @SuppressWarnings("unchecked") // adding
+    @Override
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
                          Shared ioShared)
@@ -670,6 +708,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class MagicItem extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /** Create the magic item expression. */
     public MagicItem()
     {
@@ -779,6 +822,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
+    @Override
     @SuppressWarnings("unchecked")
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
@@ -810,6 +854,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class Expr extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the magic item expression.
      *
@@ -871,7 +920,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
-    @SuppressWarnings("unchecked")
+    @Override
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
                          Shared ioShared)
@@ -887,6 +936,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class MagicWeapon extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the magic weapon expression.
      *
@@ -941,6 +995,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
+    @Override
     @SuppressWarnings("unchecked")
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
@@ -971,6 +1026,11 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   @ParametersAreNonnullByDefault
   public static class MagicAmmunition extends Expression
   {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     /**
      * Create the magic ammunition expression.
      *
@@ -1025,6 +1085,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
      * @return      the compute, adjusted value
      *
      */
+    @Override
     @SuppressWarnings("unchecked")
     public @Nullable <T extends Value<T>> Value<T> compute
                         (ValueGroup inEntry, @Nullable Value<T> inValue,
@@ -1152,6 +1213,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
    * @return      <0 if this is smaller than the other, >0 if bigger, 0 if equal
    *
    */
+  @Override
   public int compareTo(@Nullable Expression inOther)
   {
     if(inOther == null)

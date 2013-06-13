@@ -59,6 +59,11 @@ public class EnumSelection<T extends Enum<T>> extends Value<EnumSelection<T>>
 {
   //----------------------------------------------------------------- nested
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The interface for all specially named enumeration values. */
   @ParametersAreNonnullByDefault
   public interface Named

@@ -53,6 +53,11 @@ public class Commodity extends Extension<Item>
   //------------------------------- Commodity ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the item attached to

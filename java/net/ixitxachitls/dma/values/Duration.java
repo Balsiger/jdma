@@ -395,6 +395,7 @@ public class Duration extends Units<Duration>
    * @return   the computed value
    *
    */
+  @Override
   public @Nullable Object compute(String inKey)
   {
     if("isMetric".equals(inKey))

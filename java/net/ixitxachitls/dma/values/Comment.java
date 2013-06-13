@@ -57,6 +57,11 @@ public class Comment extends Value<Comment>
   //------------------------------- Comment --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the comment object with an empty value.
    *
    * @param       inMax    the maximal number of disjoint comments to

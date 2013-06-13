@@ -55,6 +55,12 @@ public class Money extends Units<Money>
   //------------------------------- Money --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+
+  /**
    * Construct the money object with an undefined value.
    *
    */
@@ -178,6 +184,11 @@ public class Money extends Units<Money>
   protected static final Group<Money, Long, String> s_grouping =
     new Group<Money, Long, String>(new Group.Extractor<Money, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Money inValue)
         {

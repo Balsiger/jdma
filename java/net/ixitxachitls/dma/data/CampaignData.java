@@ -84,6 +84,7 @@ public class CampaignData extends DMADatafiles
   private DMAData m_base;
 
   /** The id for serialization. */
+  @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
 
   //........................................................................

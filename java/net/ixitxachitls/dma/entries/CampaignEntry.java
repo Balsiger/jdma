@@ -64,6 +64,11 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
   //---------------------------- CampaignEntry -----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * The complete and 'default' constructor.
    *
    * @param       inName     the name of the entry
@@ -357,6 +362,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
    * @return   the compute value
    *
    */
+  @Override
   public @Nullable Object compute(String inKey)
   {
     if("campaign".equals(inKey))

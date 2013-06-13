@@ -88,6 +88,7 @@ public class StaticPageServlet extends SoyServlet
    *           or maps or lists)
    *
    */
+  @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {

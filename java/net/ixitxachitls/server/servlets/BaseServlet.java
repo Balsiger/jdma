@@ -63,6 +63,11 @@ public abstract class BaseServlet extends HttpServlet
 
   //----- SpecialResult ----------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The interface for special return values. */
   public interface SpecialResult
   {

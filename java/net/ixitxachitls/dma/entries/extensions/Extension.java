@@ -58,6 +58,11 @@ public abstract class Extension<T extends Entry<?>> extends AbstractExtension<T>
   //------------------------------ Attachment ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry  the entry attached to

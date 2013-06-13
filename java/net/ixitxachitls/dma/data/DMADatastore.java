@@ -49,10 +49,8 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
@@ -126,14 +124,9 @@ public class DMADatastore implements DMAData
   /** The image service to serve images. */
   private ImagesService m_image;
 
-  /** Joiner to join keys together. */
-  private static final Joiner s_keyJoiner = Joiner.on(":");
-
   /** The id for serialization. */
+  @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
-
-  /** The maximal number of entries to rebuild in one pass. */
-  private static final int s_maxRebuild = 1000;
 
   /** The cache for entries. */
   private static MemcacheService s_entryCache =
@@ -496,6 +489,7 @@ public class DMADatastore implements DMAData
    *              in the order they were specificed
    *
    */
+  @Override
   public List<List<String>> getMultiValues
     (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
@@ -515,6 +509,7 @@ public class DMADatastore implements DMAData
    *              in the order they were specificed
    *
    */
+  @Override
   public SortedSet<String> getValues
     (AbstractType<? extends AbstractEntry> inType, String inField)
   {
@@ -530,6 +525,7 @@ public class DMADatastore implements DMAData
    *
    * @param       inEntry the entry to cache
    */
+  @Override
   public void cacheEntry(AbstractEntry inEntry)
   {
     s_entryCache.put(inEntry.getKey().toString(), inEntry);
@@ -556,6 +552,7 @@ public class DMADatastore implements DMAData
   /**
    * Clear the cache of entires.
    */
+  @Override
   public void clearCache()
   {
     s_entryCache.clearAll();
@@ -1002,7 +999,6 @@ public class DMADatastore implements DMAData
       if(value == null)
         continue;
 
-      String text;
       String rest;
       if(value instanceof Text)
         rest = entry.set(name, ((Text)value).getValue());
@@ -1093,7 +1089,7 @@ public class DMADatastore implements DMAData
    * @return     the entry found, if any
    *
    */
-  @SuppressWarnings({ "unchecked", "rawtypes" }) // need to case to value list
+  @SuppressWarnings({ "rawtypes" }) 
   public Entity convert(AbstractEntry inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));

@@ -51,6 +51,11 @@ public class Number extends BaseNumber<Number>
   //-------------------------------- Number --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the number object using real values.
    *
    * @param       inNumber the number inside this value
@@ -123,8 +128,6 @@ public class Number extends BaseNumber<Number>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // this method has to be overriden in
-                                 // derivation for this to work
   public Number create()
   {
     return super.create(new Number(m_min, m_max, m_sign));

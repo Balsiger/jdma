@@ -63,6 +63,11 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   //------------------------------ Reference -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the reference object.
    *
    * @param   inType the type of entry referenced
@@ -150,8 +155,6 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // this only works if it is overriden in all
-                                 // derivations
   public Reference<T> create()
   {
     if(m_parameters == null)
@@ -301,6 +304,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return      a string representation.
    *
    */
+  @Override
   protected String doToString()
   {
     if(m_parameters == null || !m_parameters.isDefined())
@@ -338,6 +342,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return      a string denoting the group this value is in
    *
    */
+  @Override
   protected String doGroup()
   {
     return m_name.toString();
@@ -390,6 +395,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @return   the additional of the current and given reference.
    *
    */
+  @Override
   public Reference<T> add(Reference<T> inOther)
   {
     if(!getName().equals(inOther.getName()))

@@ -60,6 +60,11 @@ public class BaseCharacter extends BaseEntry
 {
   //----------------------------------------------------------------- nested
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible groups for a character. */
   public enum Group implements EnumSelection.Named
   {

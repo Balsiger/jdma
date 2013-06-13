@@ -67,6 +67,11 @@ public class Multiple extends Value<Multiple>
   //----- Element ----------------------------------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * An element of the multiple value.
    *
    */
@@ -75,6 +80,11 @@ public class Multiple extends Value<Multiple>
   public static class Element implements Serializable
   {
     //------------------------------ Element -------------------------------
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * Create the multiple element.
@@ -573,6 +583,7 @@ public class Multiple extends Value<Multiple>
    * @return      a short String representation
    *
    */
+  @Override
   public String toShortString()
   {
     StringBuilder result = new StringBuilder();

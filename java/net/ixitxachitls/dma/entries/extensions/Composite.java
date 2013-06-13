@@ -63,6 +63,11 @@ public class Composite extends Extension<Item>
   //------------------------------- Composite ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the item attached to
@@ -235,7 +240,6 @@ public class Composite extends Extension<Item>
    *
    */
   @Override
-  @SuppressWarnings("unchecked")
   public <V extends Value<V>> void collect(String inName,
                                            Combined<V> ioCombined)
   {

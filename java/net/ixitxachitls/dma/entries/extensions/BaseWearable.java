@@ -57,6 +57,11 @@ public class BaseWearable extends BaseExtension<BaseItem>
 
   //----- slots ------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The available body slots (cf. ). */
   public enum Slot implements EnumSelection.Named, EnumSelection.Short
   {
@@ -128,6 +133,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
      *
      * @return the short name of the value
      */
+    @Override
     public String getShort()
     {
       return m_short;

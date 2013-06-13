@@ -63,6 +63,11 @@ public class Modifier extends Value<Modifier>
 
   //----- type -------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The modifiers type. */
   public enum Type implements EnumSelection.Named
   {

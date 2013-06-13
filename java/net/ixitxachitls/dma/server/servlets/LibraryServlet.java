@@ -133,6 +133,7 @@ public class LibraryServlet extends PageServlet
     for(List<Map<String, Object>> index : indexes.values())
       Collections.sort(index, new Comparator<Map<String, Object>>()
         {
+          @Override
           public int compare(Map<String, Object> inFirst,
                              Map<String, Object> inSecond)
           {

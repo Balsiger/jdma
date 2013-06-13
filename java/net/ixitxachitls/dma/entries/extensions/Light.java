@@ -52,6 +52,11 @@ public class Light extends Extension<Item>
   //--------------------------------- Light --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the entry attached to

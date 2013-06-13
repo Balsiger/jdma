@@ -58,6 +58,11 @@ public class BaseContainer extends BaseExtension<BaseItem>
 
   //----- states -----------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible sizes in the game. */
   public enum State implements EnumSelection.Named
   {
@@ -157,6 +162,11 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_liquidLiterGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Volume inValue)
         {
@@ -172,6 +182,11 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_liquidFeetGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Volume inValue)
         {
@@ -188,6 +203,11 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_solidFeetGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Volume inValue)
         {
@@ -203,6 +223,11 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Group<Volume, Long, String> s_solidMeterGrouping =
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Volume inValue)
         {
@@ -218,6 +243,11 @@ public class BaseContainer extends BaseExtension<BaseItem>
   protected static final Grouping<Volume, String> s_capacityGrouping =
     new Grouping<Volume, String>()
     {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       @Override
       public String group(Volume inValue)
       {

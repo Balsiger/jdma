@@ -57,6 +57,11 @@ public class ID extends BaseText<ID>
   //--------------------------------- ID ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the text object with an undefined value.
    *
    */

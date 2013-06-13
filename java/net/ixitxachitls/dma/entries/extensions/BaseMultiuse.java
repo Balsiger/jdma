@@ -50,6 +50,11 @@ public class BaseMultiuse extends BaseCounted
   //----------------------------- BaseMultiuse ----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the base item attached to

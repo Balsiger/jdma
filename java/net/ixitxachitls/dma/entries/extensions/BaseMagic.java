@@ -63,6 +63,11 @@ public class BaseMagic extends BaseExtension<BaseItem>
   //------------------------------- BaseMagic -----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the entry associated with this extension

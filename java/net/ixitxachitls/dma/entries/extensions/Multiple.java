@@ -56,6 +56,11 @@ public class Multiple extends Counted
   //------------------------------- Multiple ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the entry attached to

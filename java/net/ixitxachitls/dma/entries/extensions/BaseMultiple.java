@@ -50,6 +50,11 @@ public class BaseMultiple extends BaseCounted
   //----------------------------- BaseMultiple ----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the base item attached to

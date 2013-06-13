@@ -67,6 +67,11 @@ public class Contents extends Extension<Item>
   //-------------------------------- Contents ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the item attached to

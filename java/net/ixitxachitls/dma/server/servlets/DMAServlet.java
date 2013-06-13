@@ -66,6 +66,11 @@ public abstract class DMAServlet extends BaseServlet
   //------------------------------ DMAServlet ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Cerate the dma servlet.
    *
    */

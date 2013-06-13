@@ -44,9 +44,9 @@ import net.ixitxachitls.dma.values.Union;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
+import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.configuration.Config;
 import net.ixitxachitls.util.logging.Log;
-import net.ixitxachitls.util.Strings;
 
 //..........................................................................
 
@@ -124,6 +124,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -134,6 +135,7 @@ public class BaseSpell extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -144,6 +146,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -225,6 +228,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -235,6 +239,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -317,6 +322,7 @@ public class BaseSpell extends BaseEntry
     private String m_name;
 
     /** The value's short name. */
+    @SuppressWarnings("unused")
     private String m_short;
 
     /** Create the name.
@@ -334,6 +340,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -344,6 +351,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -472,6 +480,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -482,6 +491,7 @@ public class BaseSpell extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -492,6 +502,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -551,6 +562,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -561,6 +573,7 @@ public class BaseSpell extends BaseEntry
      * @return the short name of the value
      *
      */
+    @Override
     public String getShort()
     {
       return m_short;
@@ -571,6 +584,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -643,6 +657,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -653,6 +668,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -689,6 +705,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -699,6 +716,7 @@ public class BaseSpell extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -1263,6 +1281,7 @@ public class BaseSpell extends BaseEntry
    *
    * @return      the string with the summary
    */
+  @Override
   @SuppressWarnings("unchecked")
   public String getSummary(@Nullable Parameters inParameters)
   {

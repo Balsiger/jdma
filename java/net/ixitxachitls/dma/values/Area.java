@@ -56,6 +56,11 @@ public class Area extends Units<Area>
   //------------------------------ Area --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the area object with an undefined value.
    *
    */

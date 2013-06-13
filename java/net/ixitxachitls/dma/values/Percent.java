@@ -55,6 +55,11 @@ public class Percent extends BaseNumber<Percent>
   //------------------------------- Percent --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the percent object using real values.
    *
    * @param       inPercent the percent inside this value

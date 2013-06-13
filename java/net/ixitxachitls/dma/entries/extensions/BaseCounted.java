@@ -56,6 +56,11 @@ public class BaseCounted extends BaseExtension<BaseItem>
 
   //----- units -------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible counting unites in the game. */
   public enum Unit implements EnumSelection.Named
   {

@@ -59,6 +59,11 @@ public class BaseCampaign extends BaseEntry
   //---------------------------- BaseCampaign ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * This is the internal, default constructor for an undefined value.
    *
    */

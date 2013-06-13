@@ -54,6 +54,11 @@ public class True extends Condition<True>
   //--------------------------------- True ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the condition object with an undefined value.
    *
    */
@@ -87,6 +92,7 @@ public class True extends Condition<True>
    * @return      a similar text, but without any contents
    *
    */
+  @Override
   public True create()
   {
     return super.create(new True());

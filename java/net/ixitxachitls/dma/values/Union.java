@@ -55,6 +55,11 @@ public class Union extends Value<Union>
   //-------------------------------- Union ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the value selection object with a undefined value.
    *
    * @param       inValues all the possible values that can be read
@@ -100,6 +105,7 @@ public class Union extends Value<Union>
    * @undefined   never
    *
    */
+  @Override
   public Union create()
   {
     return super.create(new Union(m_values));
@@ -216,6 +222,7 @@ public class Union extends Value<Union>
    * @return      true if the value is defined, false if not
    *
    */
+  @Override
   public boolean isDefined()
   {
     return m_index >= 0;

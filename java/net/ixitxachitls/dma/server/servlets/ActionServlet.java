@@ -62,6 +62,11 @@ public abstract class ActionServlet extends DMAServlet
   //---------------------------- ActionServlet -----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Create the servlet for actions.
    *
    */

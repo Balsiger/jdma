@@ -56,6 +56,11 @@ public class BaseTimed extends BaseExtension<BaseItem>
   //------------------------------- BaseTimed ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the base item attached to

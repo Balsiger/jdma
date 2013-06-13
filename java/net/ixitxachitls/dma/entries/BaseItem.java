@@ -84,6 +84,11 @@ public class BaseItem extends BaseEntry
 
   //----- size -------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible sizes in the game. */
   public enum Size implements EnumSelection.Named, EnumSelection.Short
   {
@@ -741,6 +746,11 @@ public class BaseItem extends BaseEntry
   protected static final Group<Number, Long, String> s_hardnessGroup =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Number inValue)
         {
@@ -772,6 +782,11 @@ public class BaseItem extends BaseEntry
   protected static final Group<Number, Long, String> s_hpGroup =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       @Override
       public Long extract(Number inValue)
       {
@@ -819,6 +834,11 @@ public class BaseItem extends BaseEntry
   protected static final Group<Distance, Long, String> s_thicknessGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Distance inValue)
         {
@@ -858,6 +878,11 @@ public class BaseItem extends BaseEntry
   protected static final Group<Number, Long, String> s_breakGrouping =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       @Override
       public Long extract(Number inValue)
       {
@@ -1000,6 +1025,7 @@ public class BaseItem extends BaseEntry
    * @return      the value for the key
    *
    */
+  @Override
   @SuppressWarnings("unchecked")
   public @Nullable Value<?> getValue(String inKey)
   {

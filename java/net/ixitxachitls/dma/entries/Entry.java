@@ -23,24 +23,13 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.extensions.AbstractExtension;
 import net.ixitxachitls.dma.entries.extensions.Extension;
-import net.ixitxachitls.dma.values.Combined;
 import net.ixitxachitls.dma.values.ID;
-import net.ixitxachitls.dma.values.Multiple;
-import net.ixitxachitls.dma.values.Reference;
-import net.ixitxachitls.dma.values.ValueList;
 
 //..........................................................................
 
@@ -66,6 +55,11 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
   //--------------------------------------------------------- constructor(s)
 
   //-------------------------------- Entry ---------------------------------
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * The complete and 'default' constructor.

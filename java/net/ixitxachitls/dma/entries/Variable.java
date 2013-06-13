@@ -365,6 +365,7 @@ public class Variable extends ValueHandle<Variable>
     public static class TestObject implements Changeable
     {
       /** Changed field for testing. */
+      @SuppressWarnings("unused")
       private boolean m_changed = false;
 
       /** Value field for testing. */

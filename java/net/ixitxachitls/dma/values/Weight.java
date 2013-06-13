@@ -56,6 +56,11 @@ public class Weight extends Units<Weight>
   //------------------------------- Weight --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the weight object with an undefined value.
    *
    */
@@ -159,6 +164,11 @@ public class Weight extends Units<Weight>
   protected static final Group<Weight, Long, String> s_grouping =
     new Group<Weight, Long, String>(new Group.Extractor<Weight, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Weight inValue)
         {

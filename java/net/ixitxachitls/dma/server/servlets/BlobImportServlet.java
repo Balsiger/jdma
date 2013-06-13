@@ -136,7 +136,6 @@ public class BlobImportServlet extends HttpServlet
       else
       {
         DMADatastore store = (DMADatastore)DMADataFactory.get();
-        @SuppressWarnings("unchecked")
         AbstractEntry entry = store.getEntry(key);
 
         if(entry == null)

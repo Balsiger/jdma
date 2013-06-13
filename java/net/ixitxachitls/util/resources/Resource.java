@@ -95,6 +95,7 @@ public abstract class Resource
   protected @Nullable URL m_url;
 
   /** The id for serialization. */
+  @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
 
   /** Special presets, mainly for testing. */

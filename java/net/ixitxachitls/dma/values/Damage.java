@@ -56,6 +56,11 @@ public class Damage extends Value<Damage>
 
   //----- type -------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible damage types. */
   public enum Type implements EnumSelection.Named
   {

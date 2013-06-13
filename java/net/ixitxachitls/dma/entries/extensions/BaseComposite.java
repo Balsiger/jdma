@@ -54,6 +54,11 @@ public class BaseComposite extends BaseExtension<BaseItem>
   //----------------------------- BaseComposite ----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the base item attached to

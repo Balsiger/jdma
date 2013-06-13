@@ -57,6 +57,11 @@ public class And extends Condition<And>
   //---------------------------------- And ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the condition object with an undefined value.
    *
    * @undefined   never
@@ -170,6 +175,7 @@ public class And extends Condition<And>
    * @return      the requested string
    *
    */
+  @Override
   public String doToString()
   {
     List<String> strings = Lists.newArrayList();

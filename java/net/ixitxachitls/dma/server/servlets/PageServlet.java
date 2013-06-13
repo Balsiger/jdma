@@ -102,6 +102,7 @@ public class PageServlet extends SoyServlet
    *           or maps or lists)
    *
    */
+  @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {
@@ -146,6 +147,7 @@ public class PageServlet extends SoyServlet
    *           or maps or lists)
    *
    */
+  @Override
   protected Map<String, Object> collectInjectedData
     (DMARequest inRequest, SoyRenderer inRenderer)
   {

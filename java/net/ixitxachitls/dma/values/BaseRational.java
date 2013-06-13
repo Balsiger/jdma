@@ -58,6 +58,11 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
 
   //----------------------------- BaseRational -----------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /**s
    * Construct an undefined rational.
    *
@@ -660,6 +665,7 @@ public abstract class BaseRational<T extends BaseRational<T>> extends Value<T>
    * @return      a new value representing the division
    *
    */
+  @Override
   @SuppressWarnings("unchecked")
   public T divide(long inValue)
   {

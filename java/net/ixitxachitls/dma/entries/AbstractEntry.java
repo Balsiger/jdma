@@ -23,10 +23,6 @@
 
 package net.ixitxachitls.dma.entries;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
@@ -102,6 +98,11 @@ public class AbstractEntry extends ValueGroup
   //----------------------------------------------------------------- nested
 
   //----- EntryKey ---------------------------------------------------------
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * The key for an entry for storage.
@@ -409,7 +410,7 @@ public class AbstractEntry extends ValueGroup
   protected transient @Nullable List<DMAData.File> m_files = null;
 
   /** Flag if computing extension values. */
-  private boolean m_computingExtension = false;
+//  private boolean m_computingExtension = false;
 
   /** The random generator. */
   protected static final Random s_random = new Random();
@@ -607,6 +608,7 @@ public class AbstractEntry extends ValueGroup
    *
    * @return  the associated entry
    */
+  @Override
   public AbstractEntry getEntry() {
     return this;
   }
@@ -1259,7 +1261,7 @@ public class AbstractEntry extends ValueGroup
    * @return      true if it is in, false if it is not
    *
    */
-  @SuppressWarnings("unchecked")
+  @Override
   public boolean isValueIn(String inValue, String inKey)
   {
     if(super.isValueIn(inValue, inKey))
@@ -1285,7 +1287,7 @@ public class AbstractEntry extends ValueGroup
    *              invalid
    *
    */
-  @SuppressWarnings("unchecked")
+  @Override
   public @Nullable Boolean isValue(String inValue, String inKey)
   {
     Boolean result = super.isValue(inValue, inKey);
@@ -1787,7 +1789,6 @@ public class AbstractEntry extends ValueGroup
    * @return      the created key
    *
    */
-  @SuppressWarnings("unchecked")
   public static <T extends AbstractEntry>
     EntryKey<T> createKey
     (String inID, AbstractType<T> inType,
@@ -1879,7 +1880,6 @@ public class AbstractEntry extends ValueGroup
    * @param       inName the new name
    *
    */
-  @SuppressWarnings("unchecked") // cast for name
   public void setName(String inName)
   {
     m_name = m_name.as(inName);
@@ -2224,7 +2224,6 @@ public class AbstractEntry extends ValueGroup
    * @return      true if read successfully, false else
    *
    */
-  @SuppressWarnings("unchecked") // cast for name
   protected boolean readEntry(ParseReader inReader)
   {
     if(inReader.isAtEnd())
@@ -2354,7 +2353,6 @@ public class AbstractEntry extends ValueGroup
    *              not found)
    *
    */
-  @SuppressWarnings("unchecked")
   public @Nullable AbstractExtension<?> addExtension(String inName)
   {
     if(m_extensions.containsKey(inName) || inName.isEmpty())
@@ -3024,6 +3022,11 @@ public class AbstractEntry extends ValueGroup
         new AbstractEntry("just a test",
                           new AbstractType.Test.TestType<AbstractEntry>
                           (AbstractEntry.class)) {
+          /**
+                             * 
+                             */
+                            private static final long serialVersionUID = 1L;
+
           @SuppressWarnings("unchecked")
           @Override
           public <T extends AbstractEntry> EntryKey<T> getKey()

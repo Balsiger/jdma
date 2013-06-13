@@ -103,7 +103,6 @@ public final class ServerUtils
    *              containing the parameter values.
    *
    */
-  @SuppressWarnings("unchecked")
   public static Multimap<String, String> extractParams
     (HttpServletRequest inRequest)
   {

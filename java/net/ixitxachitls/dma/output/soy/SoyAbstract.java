@@ -216,7 +216,6 @@ public abstract class SoyAbstract extends SoyMapData
    *
    * @return      the converted object
    */
-  @SuppressWarnings("unchecked")
   protected SoyData convert(String inName, Object inObject)
   {
     if(inObject instanceof Value)

@@ -60,6 +60,11 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
   //---------------------------- ModifiedNumber ----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the number object using real values.
    *
    * @param       inNumber    the number inside this value
@@ -151,8 +156,6 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // this method has to be overriden in
-                                 // derivation for this to work
   public ModifiedNumber create()
   {
     return super.create(new ModifiedNumber());
@@ -370,7 +373,6 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
     int min = m_total.getMinValue();
     int max = m_total.getMaxValue();
 
-    String prefix;
     if(min == max)
       if(m_sign)
         return Strings.signedNumber(m_number + min);

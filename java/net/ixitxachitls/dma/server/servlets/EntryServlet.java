@@ -122,6 +122,7 @@ public class EntryServlet extends PageServlet
    *
    * @return      true if public, false if login is required
    */
+  @Override
   public boolean isPublic(DMARequest inRequest)
   {
     AbstractEntry entry = getEntry(inRequest);
@@ -345,45 +346,6 @@ public class EntryServlet extends PageServlet
     /** The output of the test. */
     private net.ixitxachitls.server.ServerUtils.Test.MockServletOutputStream
       m_output = null;
-
-    /** Expected text for the dummy navigation. */
-    private static final String s_navigation = "<div class=\"entry-nav\">"
-      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"first sprite disabled\"></div>"
-      + "</a>"
-      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"previous sprite disabled\"></div>"
-      + "</a>"
-      + "<a href=\"/entrys\" class=\"link\" "
-      + "onclick=\"return util.link(event, '/entrys');\">"
-      + "<div class=\"index sprite\"></div>"
-      + "</a>"
-      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"next sprite disabled\"></div>"
-      + "</a>"
-      + "<a href=\"\" class=\"link\" onclick=\"return util.link(event, '');\">"
-      + "<div class=\"last sprite disabled\"></div>"
-      + "</a>"
-      + "<a href=\"javascript:createEntry()\" class=\"link\" "
-      + "onclick=\"return util.link(event, 'javascript:createEntry()');\">"
-      + "<div class=\"add sprite\"></div>"
-      + "</a>"
-      + "<a href=\"javascript:removeEntry('guru')\" class=\"link\" "
-      + "onclick=\"return util.link(event, "
-      + "'javascript:removeEntry('guru')');\">"
-      + "<div class=\"remove sprite\"></div></a>"
-      + "</div>";
-
-    /** Exepcted test for the image script. */
-    private static final String s_imageScript =
-      "    <SCRIPT type=\"text/javascript\">\n"
-      + "      $(document).ready(function ()\n"
-      + "      {\n"
-      + "        $('DIV.files IMG.image')"
-      + ".mouseover(util.replaceMainImage)"
-      + ".mouseout(util.restoreMainImage)\n"
-      + "      });\n"
-      + "    </SCRIPT>\n";
 
     //----- setUp ----------------------------------------------------------
 

@@ -65,6 +65,11 @@ public class BaseFeat extends BaseEntry
 
   //----- type -------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible areas to affect (cf. PHB 175). */
   public enum Type implements EnumSelection.Named
   {

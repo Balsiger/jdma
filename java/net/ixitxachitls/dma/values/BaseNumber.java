@@ -59,6 +59,11 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
   //------------------------------ BaseNumber ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the number object using real values.
    *
    * @param       inBaseNumber the number inside this value
@@ -183,6 +188,11 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
     new Group<BaseNumber<?>, Long, String>
     (new Group.Extractor<BaseNumber<?>, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(BaseNumber<?> inValue)
         {
@@ -345,7 +355,6 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // have to cast
   public T add(T inValue)
   {
     T result = create();
@@ -422,6 +431,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
    * @return      true if divided, false if not
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // casting
   public T divide(long inValue)
   {

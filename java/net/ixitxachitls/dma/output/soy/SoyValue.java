@@ -43,7 +43,6 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Remark;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
-import net.ixitxachitls.dma.values.Units;
 import net.ixitxachitls.util.Classes;
 import net.ixitxachitls.util.Encodings;
 
@@ -197,7 +196,7 @@ public class SoyValue extends SoyAbstract
    * @return the value found or null if not found
    */
   @Override
-  @SuppressWarnings({ "unchecked", "rawtypes" }) // need to case to value list
+  @SuppressWarnings({ "rawtypes" }) // need to case to value list
   public @Nullable SoyData getSingle(String inName)
   {
     if("isEditable".equals(inName))

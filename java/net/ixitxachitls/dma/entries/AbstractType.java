@@ -477,7 +477,6 @@ public class AbstractType<T extends AbstractEntry>
    * @return      an empty, undefined entry of the type.
    *
    */
-  @SuppressWarnings("unchecked") // need to cast
   public @Nullable T create()
   {
     try
@@ -511,7 +510,6 @@ public class AbstractType<T extends AbstractEntry>
    * @return      an empty, undefined entry of the type.
    *
    */
-  @SuppressWarnings("unchecked") // need to cast
   public @Nullable T create(String inID)
   {
     try

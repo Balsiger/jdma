@@ -780,6 +780,7 @@ public class SoyTemplate
    * @return      a string representation
    *
    */
+  @Override
   public String toString()
   {
     return "files: " + m_files;

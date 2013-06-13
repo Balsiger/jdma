@@ -56,6 +56,11 @@ public class Volume extends Units<Volume>
   //------------------------------ Volume --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the volume object with an undefined value.
    *
    */

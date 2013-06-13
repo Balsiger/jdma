@@ -87,6 +87,11 @@ public class Monster extends CampaignEntry<BaseMonster>
 
   //----- Line -----------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The class represents a single line in the treasure table (DMG 52/53). */
   private static class Line
   {
@@ -200,6 +205,7 @@ public class Monster extends CampaignEntry<BaseMonster>
      * @return the converted string
      *
      */
+    @Override
     public String toString()
     {
       return m_start + "-" + m_end + ": " + m_number + "d" + m_dice + "x"
@@ -240,6 +246,7 @@ public class Monster extends CampaignEntry<BaseMonster>
        * @return the converted string
        *
        */
+      @Override
       public String toString()
       {
         return m_name;
@@ -340,6 +347,7 @@ public class Monster extends CampaignEntry<BaseMonster>
      * @return the string
      *
      */
+    @Override
     public String toString()
     {
       return m_start + "-" + m_end + ": " + m_number + "d" + m_dice + " "
@@ -396,7 +404,6 @@ public class Monster extends CampaignEntry<BaseMonster>
      *
      * @return the generated items
      */
-    @SuppressWarnings(value = "unchecked")
     protected Item []roll(int inBonus)
     {
       assert inBonus >= 0 : "bonus must not be negative";
@@ -490,6 +497,7 @@ public class Monster extends CampaignEntry<BaseMonster>
      * @return the object converted to a string
      *
      */
+    @Override
     public String toString()
     {
       return m_start + "-" + m_end + ": " + m_number + "d" + m_dice + " "
@@ -624,6 +632,7 @@ public class Monster extends CampaignEntry<BaseMonster>
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -634,6 +643,7 @@ public class Monster extends CampaignEntry<BaseMonster>
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -1535,7 +1545,6 @@ public class Monster extends CampaignEntry<BaseMonster>
       combinedSize.valuesWithDescriptions();
 
     BaseItem.Size size = BaseItem.Size.MEDIUM;
-    String group = "default";
     for(Pair<Multiple, List<Pair<Multiple, String>>> sizeGroup : sizesPerGroup)
       if(((EnumSelection<BaseItem.Size>)sizeGroup.first().get(0)).getSelected()
          .isBigger(size))
@@ -1855,7 +1864,6 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      the skills information
    *
    */
-  @SuppressWarnings("unchecked")
   public List<Map<String, Object>> allSkills()
   {
     List<Map<String, Object>> skills = Lists.newArrayList();
@@ -2180,6 +2188,7 @@ public class Monster extends CampaignEntry<BaseMonster>
    * @return      a list with all dependent entries
    *
    */
+  @Override
   public Set<AbstractEntry> collectDependencies()
   {
     Set<AbstractEntry> entries = super.collectDependencies();

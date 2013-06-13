@@ -52,6 +52,11 @@ public class Wearable extends Extension<Item>
   //-------------------------------- Wearable -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the entry this extension is attached to

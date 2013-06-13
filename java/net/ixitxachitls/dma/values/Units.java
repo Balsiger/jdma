@@ -65,6 +65,11 @@ public class Units<T extends Units<T>> extends Value<T>
   //----- Unit -------------------------------------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    *  This class store a single unit description, but no value.
    */
   @Immutable
@@ -72,6 +77,11 @@ public class Units<T extends Units<T>> extends Value<T>
   public static class Unit implements Serializable
   {
     //-------------------------------- Unit --------------------------------
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * Create the unit object from the given definition string.
@@ -337,6 +347,11 @@ public class Units<T extends Units<T>> extends Value<T>
   public static class Set implements Serializable
   {
     //-------------------------------- Set ---------------------------------
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     /**
      * Create the set from the given definition String.
@@ -1262,7 +1277,6 @@ public class Units<T extends Units<T>> extends Value<T>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // need to cast
   public T subtract(T inOther)
   {
     // check the equality of types
@@ -1378,6 +1392,7 @@ public class Units<T extends Units<T>> extends Value<T>
    * @return      a new object containig the result of the division
    *
    */
+  @Override
   @SuppressWarnings("unchecked") // need to cast this
   public T divide(long inValue)
   {
@@ -1408,7 +1423,6 @@ public class Units<T extends Units<T>> extends Value<T>
    * @return      a new result containing the result of the division
    *
    */
-  @SuppressWarnings("unchecked") // need to cast
   public T divide(Rational inValue)
   {
     T result = create();
@@ -1769,7 +1783,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing multiplications. */
     @org.junit.Test
-      @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "rawtypes" })
     public void multiply()
     {
       Units value = new Units(new Rational []
@@ -1795,7 +1809,7 @@ public class Units<T extends Units<T>> extends Value<T>
 
     /** Testing divisions. */
     @org.junit.Test
-      @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "rawtypes" })
     public void divide()
     {
       Units value = new Units(new Rational []

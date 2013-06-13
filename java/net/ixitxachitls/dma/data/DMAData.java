@@ -23,7 +23,6 @@
 
 package net.ixitxachitls.dma.data;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.SortedSet;
 
@@ -253,7 +252,6 @@ public interface DMAData
    * @return     the entry found, if any
    *
    */
-  @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> T
                       getEntry(AbstractType<T> inType, String inKey,
                                String inValue);
@@ -274,7 +272,6 @@ public interface DMAData
    * @return     the entries found
    *
    */
-  @SuppressWarnings("unchecked") // casting return
   public abstract @Nullable <T extends AbstractEntry> List<T>
                                getEntries(AbstractType<T> inType,
                                           String inKey, String inValue);
@@ -610,6 +607,7 @@ public interface DMAData
       private boolean m_saved = false;
 
       /** The id for serialization. */
+      @SuppressWarnings("unused")
       private static final long serialVersionUID = 1L;
     }
 

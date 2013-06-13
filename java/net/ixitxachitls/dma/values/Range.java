@@ -56,6 +56,11 @@ public class Range extends BaseNumber<Range>
   //-------------------------------- Range --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the range object with real values.
    *
    * @param       inStart the starting value

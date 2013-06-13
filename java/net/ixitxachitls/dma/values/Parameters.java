@@ -67,6 +67,11 @@ public class Parameters extends Value<Parameters>
   //----------------------------- Parameters -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the parameters object.
    *
    */
@@ -104,6 +109,7 @@ public class Parameters extends Value<Parameters>
    *
    * @return      a similar list, but without any contents
    */
+  @Override
   public Parameters create()
   {
     Parameters result = new Parameters();
@@ -217,6 +223,7 @@ public class Parameters extends Value<Parameters>
    *
    * @return      a string representation.
    */
+  @Override
   protected String doToString()
   {
     List<String> values = new ArrayList<String>();
@@ -240,6 +247,7 @@ public class Parameters extends Value<Parameters>
    *
    * @return      true if the value is defined, false if not
    */
+  @Override
   public boolean isDefined()
   {
     for(Value<?> value : m_values.values())
@@ -264,6 +272,7 @@ public class Parameters extends Value<Parameters>
    *
    * @return      true if read, false if not
    */
+  @Override
   public boolean doRead(ParseReader inReader)
   {
     boolean found = false;
@@ -346,6 +355,7 @@ public class Parameters extends Value<Parameters>
    *
    * @return   new parameters with all the added values
    */
+  @Override
   public Parameters add(Parameters inParameters)
   {
     Parameters result = new Parameters();

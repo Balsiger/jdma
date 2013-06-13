@@ -55,6 +55,11 @@ public class Armor extends Extension<Item>
   //--------------------------------- Armor -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the item attached to

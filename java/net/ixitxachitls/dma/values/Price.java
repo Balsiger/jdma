@@ -56,6 +56,11 @@ public class Price extends Decimal<Price>
   //------------------------------- Price --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the price object with all the values.
    *
    * @param       inCurrency the currency symbol to use

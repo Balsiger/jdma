@@ -61,6 +61,11 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
   //------------------------------- BaseText -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the text object with an undefined value.
    *
    */
@@ -359,7 +364,7 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
 
     /** Testing reading. */
     @org.junit.Test
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "rawtypes" })
     public void testRead()
     {
       // name test

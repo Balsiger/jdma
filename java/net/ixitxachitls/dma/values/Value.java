@@ -23,10 +23,6 @@
 
 package net.ixitxachitls.dma.values;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.List;
@@ -73,6 +69,11 @@ public abstract class Value<T extends Value<T>>
   //-------------------------------- Value ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * This is an empty default constructor.
    *
    */
@@ -105,7 +106,6 @@ public abstract class Value<T extends Value<T>>
    * @return      the created value
    *
    */
-  @SuppressWarnings("unchecked")
   public T create(T inNew)
   {
     inNew.m_grouping = m_grouping;
@@ -254,7 +254,6 @@ public abstract class Value<T extends Value<T>>
    * @return      the value itself for chaining
    *
    */
-  @SuppressWarnings("unchecked")
   public T withIndexBase(AbstractType<? extends AbstractEntry> inType)
   {
     return withIndexBase("/" + inType.getMultipleLink() + "/");
@@ -1026,7 +1025,6 @@ public abstract class Value<T extends Value<T>>
      * @param inValue the value to test
      *
      */
-    @SuppressWarnings("unchecked")
     public static void createTest(Value<?> inValue)
     {
       // create a new value
@@ -1060,6 +1058,11 @@ public abstract class Value<T extends Value<T>>
     // CHECKSTYLE:OFF
     public static class TestValue extends Value<TestValue>
     {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       public TestValue()
       {
       }

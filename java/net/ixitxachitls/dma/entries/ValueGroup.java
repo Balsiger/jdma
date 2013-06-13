@@ -458,7 +458,7 @@ public abstract class ValueGroup implements Changeable
    * @return      true if it is in, false if it is not
    *
    */
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ "rawtypes" })
   public boolean isValueIn(String inValue, String inKey)
   {
     Value<?> value = getValue(inKey);
@@ -492,7 +492,6 @@ public abstract class ValueGroup implements Changeable
    *              invalid
    *
    */
-  @SuppressWarnings("unchecked")
   public @Nullable Boolean isValue(String inValue, String inKey)
   {
     Value<?> value = getValue(inKey);
@@ -1191,7 +1190,6 @@ public abstract class ValueGroup implements Changeable
    * @return  the sum of all the value or null if no values found
    *
    */
-  @SuppressWarnings("unchecked") // need to cast for type
   public @Nullable <T extends Value<T>>
                       T sum(String inKey, List<? extends ValueGroup> inEntries)
   {
@@ -1224,6 +1222,11 @@ public abstract class ValueGroup implements Changeable
     /** A simple implementation of a value group for testing. */
     public static class TestGroup extends AbstractEntry
     {
+      /**
+       * 
+       */
+      private static final long serialVersionUID = 1L;
+
       /** The change state. */
       protected boolean m_testChanged = false;
 

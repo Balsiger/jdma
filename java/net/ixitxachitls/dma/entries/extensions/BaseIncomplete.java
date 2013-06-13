@@ -51,6 +51,11 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
   //----------------------------- BaseIncomplete ---------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the base entry attached to

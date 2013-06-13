@@ -74,6 +74,11 @@ public class BaseEntry extends AbstractEntry
 
   //----- worlds -----------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The game worlds (this is configurable and thus not an enum). */
   private static final String []WORLDS =
     Config.get("/game/worlds", new String []

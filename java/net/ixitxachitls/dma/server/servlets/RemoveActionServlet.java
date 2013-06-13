@@ -23,20 +23,12 @@
 
 package net.ixitxachitls.dma.server.servlets;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.BaseCharacter;
-import net.ixitxachitls.util.Encodings;
 import net.ixitxachitls.util.logging.Log;
 
 //..........................................................................
@@ -64,154 +56,154 @@ public class RemoveActionServlet extends ActionServlet
   /**
    * Storage for the change information for one or multiple entries.
    */
-  private static class Changes
-  {
-    /**
-     * Create a change for one or multiple entries.
-     *
-     * @param inKey         the key to the entry
-     * @param inOwner       the owner of the entry/entries
-     *
-     */
-    public Changes(AbstractEntry.EntryKey<?> inKey, AbstractEntry inOwner)
-    {
-      m_key = inKey;
-      m_owner = inOwner;
-    }
-
-    /** The key of the entry/entries changed. */
-    protected AbstractEntry.EntryKey<?> m_key;
-
-    /** The owner of the entry/entries changed. */
-    protected @Nullable AbstractEntry m_owner;
-
-    /** The file for the entry/entries. */
-    protected @Nullable String m_file;
-
-    /** Flag if creating a new value or not. */
-    protected boolean m_create = false;
-
-    /** The extensions for the entry, if any. */
-    protected @Nullable String []m_extensions;
-
-    /** A flag if multiple entries are affected by the change. */
-    protected boolean m_multiple = false;
-
-    /** The path to store the created entry after creation, if any. */
-    protected @Nullable String m_store;
-
-    /** A map with all the changed values. */
-    protected Map<String, String>m_values =
-      new HashMap<String, String>();
-
-    /**
-     * Convert to a human readable string for debugging.
-     *
-     * @return the converted string
-     *
-     */
-    @Override
-    public String toString()
-    {
-      return m_key + " (" + (m_owner == null ? "no owner" : m_owner.getName())
-        + "/" + m_file + (m_multiple ? ", multiple" : ", single") + "):"
-        + m_values;
-    }
-
-    /**
-     * Set a value in the change for a given key.
-     *
-     * @param inKey   the key of the value to change
-     * @param inValue the value to change to
-     *
-     */
-    public void set(String inKey, String inValue)
-    {
-      if("file".equals(inKey))
-        m_file = inValue;
-      else if("create".equals(inKey))
-        m_create = true;
-      else if("extensions".equals(inKey))
-      {
-        m_extensions = inValue.split("\\s*,\\s*");
-        // also set it as a normal value for existing entries
-        m_values.put(inKey, inValue);
-      }
-      else
-        m_values.put(inKey, inValue);
-
-      if(inKey.indexOf("=") >= 0)
-        m_multiple = true;
-    }
-
-    /**
-     * Set the path to store this entry after creation, if any.
-     *
-     * @param  inStore the name of the entry to store in
-     */
-    public void store(@Nullable String inStore)
-    {
-      if(inStore != null)
-        m_store = inStore;
-    }
-
-    /**
-     * Figure out the affected entries.
-     *
-     * @param ioErrors the errors encountered, will be adjusted
-     *
-     * @return a set with all the entries affected by this change
-     *
-     */
-    @SuppressWarnings("unchecked")
-    public Set<AbstractEntry> entries(List<String> ioErrors)
-    {
-      Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
-      if(m_multiple)
-      {
-        assert m_values.size() == 1 : "Only expected a single value to change";
-        String []parts = m_values.keySet().iterator().next().split("/");
-        String index = parts[0];
-        String value = parts[1];
-        entries.addAll(DMADataFactory.get().getIndexEntries(index,
-                                                            m_key.getType(),
-                                                            m_key.getParent(),
-                                                            value, 0, 0));
-      }
-      else
-      {
-        AbstractEntry entry = DMADataFactory.get().getEntry(m_key);
-
-        if(entry == null && m_create)
-        {
-          // create a new entry for filling out
-          Log.event(m_owner.getName(), "create",
-                    "creating " + m_key.getType() + " entry '" + m_key.getID()
-                    + "'");
-
-          entry = m_key.getType().create(m_key.getID());
-          if(entry != null)
-            entry.updateKey(m_key);
-
-          // setting up extensions first
-          if(m_extensions != null)
-            for(String extension : m_extensions)
-              entry.addExtension(extension);
-        }
-
-        if(entry == null)
-        {
-          String error = "could not find " + m_key + " for saving";
-          Log.warning(error);
-          ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
-        }
-        else
-          entries.add(entry);
-      }
-
-      return entries;
-    }
-  }
+//  private static class Changes
+//  {
+//    /**
+//     * Create a change for one or multiple entries.
+//     *
+//     * @param inKey         the key to the entry
+//     * @param inOwner       the owner of the entry/entries
+//     *
+//     */
+//    public Changes(AbstractEntry.EntryKey<?> inKey, AbstractEntry inOwner)
+//    {
+//      m_key = inKey;
+//      m_owner = inOwner;
+//    }
+//
+//    /** The key of the entry/entries changed. */
+//    protected AbstractEntry.EntryKey<?> m_key;
+//
+//    /** The owner of the entry/entries changed. */
+//    protected @Nullable AbstractEntry m_owner;
+//
+//    /** The file for the entry/entries. */
+//    protected @Nullable String m_file;
+//
+//    /** Flag if creating a new value or not. */
+//    protected boolean m_create = false;
+//
+//    /** The extensions for the entry, if any. */
+//    protected @Nullable String []m_extensions;
+//
+//    /** A flag if multiple entries are affected by the change. */
+//    protected boolean m_multiple = false;
+//
+//    /** The path to store the created entry after creation, if any. */
+//    protected @Nullable String m_store;
+//
+//    /** A map with all the changed values. */
+//    protected Map<String, String>m_values =
+//      new HashMap<String, String>();
+//
+//    /**
+//     * Convert to a human readable string for debugging.
+//     *
+//     * @return the converted string
+//     *
+//     */
+//    @Override
+//    public String toString()
+//    {
+//      return m_key + " (" + (m_owner == null ? "no owner" : m_owner.getName())
+//        + "/" + m_file + (m_multiple ? ", multiple" : ", single") + "):"
+//        + m_values;
+//    }
+//
+//    /**
+//     * Set a value in the change for a given key.
+//     *
+//     * @param inKey   the key of the value to change
+//     * @param inValue the value to change to
+//     *
+//     */
+//    public void set(String inKey, String inValue)
+//    {
+//      if("file".equals(inKey))
+//        m_file = inValue;
+//      else if("create".equals(inKey))
+//        m_create = true;
+//      else if("extensions".equals(inKey))
+//      {
+//        m_extensions = inValue.split("\\s*,\\s*");
+//        // also set it as a normal value for existing entries
+//        m_values.put(inKey, inValue);
+//      }
+//      else
+//        m_values.put(inKey, inValue);
+//
+//      if(inKey.indexOf("=") >= 0)
+//        m_multiple = true;
+//    }
+//
+//    /**
+//     * Set the path to store this entry after creation, if any.
+//     *
+//     * @param  inStore the name of the entry to store in
+//     */
+//    public void store(@Nullable String inStore)
+//    {
+//      if(inStore != null)
+//        m_store = inStore;
+//    }
+//
+//    /**
+//     * Figure out the affected entries.
+//     *
+//     * @param ioErrors the errors encountered, will be adjusted
+//     *
+//     * @return a set with all the entries affected by this change
+//     *
+//     */
+//    @SuppressWarnings("unchecked")
+//    public Set<AbstractEntry> entries(List<String> ioErrors)
+//    {
+//      Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
+//      if(m_multiple)
+//      {
+//        assert m_values.size() == 1 : "Only expected a single value to change";
+//        String []parts = m_values.keySet().iterator().next().split("/");
+//        String index = parts[0];
+//        String value = parts[1];
+//        entries.addAll(DMADataFactory.get().getIndexEntries(index,
+//                                                            m_key.getType(),
+//                                                            m_key.getParent(),
+//                                                            value, 0, 0));
+//      }
+//      else
+//      {
+//        AbstractEntry entry = DMADataFactory.get().getEntry(m_key);
+//
+//        if(entry == null && m_create)
+//        {
+//          // create a new entry for filling out
+//          Log.event(m_owner.getName(), "create",
+//                    "creating " + m_key.getType() + " entry '" + m_key.getID()
+//                    + "'");
+//
+//          entry = m_key.getType().create(m_key.getID());
+//          if(entry != null)
+//            entry.updateKey(m_key);
+//
+//          // setting up extensions first
+//          if(m_extensions != null)
+//            for(String extension : m_extensions)
+//              entry.addExtension(extension);
+//        }
+//
+//        if(entry == null)
+//        {
+//          String error = "could not find " + m_key + " for saving";
+//          Log.warning(error);
+//          ioErrors.add("gui.alert(" + Encodings.toJSString(error) + ");");
+//        }
+//        else
+//          entries.add(entry);
+//      }
+//
+//      return entries;
+//    }
+//  }
 
   //........................................................................
 
@@ -256,7 +248,6 @@ public class RemoveActionServlet extends ActionServlet
    *
    */
   @Override
-  @SuppressWarnings("unchecked")
   protected String doAction(DMARequest inRequest,
                             HttpServletResponse inResponse)
   {

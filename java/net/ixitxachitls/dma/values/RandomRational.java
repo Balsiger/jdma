@@ -56,6 +56,11 @@ public class RandomRational extends BaseRational<RandomRational>
   //---------------------------- RandomRational ----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the rational object with an undefined value.
    *
    */

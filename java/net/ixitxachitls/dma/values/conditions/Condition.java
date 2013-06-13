@@ -58,6 +58,11 @@ public class Condition<T extends Condition<T>> extends Value<T>
   //------------------------------- Condition ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the condition object with an undefined value.
    *
    */
@@ -141,6 +146,7 @@ public class Condition<T extends Condition<T>> extends Value<T>
    * @return      the requested string
    *
    */
+  @Override
   public String doToString()
   {
     return m_description.toString();

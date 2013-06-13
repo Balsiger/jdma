@@ -58,6 +58,11 @@ public class Date extends Value<Date>
   //--------------------------------- Date ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the date object with an undefined value.
    *
    */

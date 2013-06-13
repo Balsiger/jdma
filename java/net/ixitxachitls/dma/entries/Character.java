@@ -72,6 +72,11 @@ public class Character extends CampaignEntry<BaseCharacter>
 
   //----- state -------------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The character state. */
   public enum State implements EnumSelection.Named
   {

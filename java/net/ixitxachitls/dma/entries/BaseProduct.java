@@ -81,6 +81,11 @@ public class BaseProduct extends BaseEntry
 
   //----- producers --------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The producers of products. */
   private static final String []PRODUCERS =
     Config.get("/game/product.producers", new String []
@@ -965,6 +970,11 @@ public class BaseProduct extends BaseEntry
   protected static final Group<Number, Long, String> s_pageGroup =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Number inValue)
         {
@@ -977,7 +987,6 @@ public class BaseProduct extends BaseEntry
         "500+", }, "$undefined");
 
   /** The total number of pages of the product. */
-  @SuppressWarnings("unchecked")
   @Key("pages")
   protected Number m_pages =
     new Number(0, Integer.MAX_VALUE)
@@ -1095,6 +1104,11 @@ public class BaseProduct extends BaseEntry
   protected static final Group<Price, Long, String> s_priceGrouping =
     new Group<Price, Long, String>(new Group.Extractor<Price, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Price inValue)
         {
@@ -1695,6 +1709,7 @@ public class BaseProduct extends BaseEntry
    * @return   the compute value
    *
    */
+  @Override
   public @Nullable Object compute(String inKey)
   {
     if("owners".equals(inKey))

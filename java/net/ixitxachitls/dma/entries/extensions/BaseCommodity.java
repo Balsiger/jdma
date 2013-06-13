@@ -57,6 +57,11 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   //----------------------------- BaseCommodity ----------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the base item attached to
@@ -96,6 +101,11 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   protected static final Group<Area, Long, String> s_areaGrouping =
     new Group<Area, Long, String>(new Group.Extractor<Area, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Area inValue)
         {
@@ -124,6 +134,11 @@ public class BaseCommodity extends BaseExtension<BaseItem>
   protected static final Group<Distance, Long, String> s_lengthGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Distance inValue)
         {

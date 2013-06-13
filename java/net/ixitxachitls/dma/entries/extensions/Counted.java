@@ -52,6 +52,11 @@ public class Counted extends Extension<Item>
   //------------------------------- Counted ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the entry attached to

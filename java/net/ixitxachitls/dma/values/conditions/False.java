@@ -54,6 +54,11 @@ public class False extends Condition<False>
   //--------------------------------- False --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the condition object with an undefined value.
    *
    * @undefined   never

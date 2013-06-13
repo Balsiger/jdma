@@ -127,7 +127,6 @@ public class BlobUploadServlet extends BaseServlet
    * @throws IOException if problems reading the blob
    *
    */
-  @SuppressWarnings("unchecked")
   @Override
   public @Nullable SpecialResult handle(HttpServletRequest inRequest,
                                         HttpServletResponse inResponse)
@@ -165,7 +164,6 @@ public class BlobUploadServlet extends BaseServlet
                              "invalid key given");
 
       DMADatastore store = (DMADatastore)DMADataFactory.get();
-      @SuppressWarnings("unchecked")
       AbstractEntry entry = store.getEntry(key);
 
       if(entry == null)

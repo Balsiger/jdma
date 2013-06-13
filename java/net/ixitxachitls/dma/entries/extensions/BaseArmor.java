@@ -63,6 +63,11 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //----- armor types ------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible areas to affect (cf. PHB 175). */
   public enum ArmorTypes implements EnumSelection.Named
   {
@@ -188,6 +193,11 @@ public class BaseArmor extends BaseExtension<BaseItem>
   protected static final Group<Number, Long, String> s_maxDexGrouping =
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Number inValue)
         {
@@ -220,6 +230,11 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Number, Long, String>
     (new Group.Extractor<Number, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Number inValue)
         {
@@ -252,6 +267,11 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Percent, Long, String>
     (new Group.Extractor<Percent, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Percent inValue)
         {
@@ -281,6 +301,11 @@ public class BaseArmor extends BaseExtension<BaseItem>
   protected static final Group<Distance, Long, String> s_speedGrouping =
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Distance inValue)
         {

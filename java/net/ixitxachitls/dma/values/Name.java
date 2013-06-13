@@ -52,6 +52,11 @@ public class Name extends BaseText<Name>
   //--------------------------------- Name ---------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the text object with an undefined value.
    *
    */

@@ -56,6 +56,11 @@ public class Distance extends Units<Distance>
   //------------------------------ Distance --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the distance object with an undefined value.
    *
    */

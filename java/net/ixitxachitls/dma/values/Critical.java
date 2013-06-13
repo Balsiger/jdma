@@ -55,6 +55,11 @@ public class Critical extends BaseNumber<Critical>
   //------------------------------- Critical -------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the critical object using real values.
    *
    * @param       inLow        the low threat value
@@ -202,7 +207,6 @@ public class Critical extends BaseNumber<Critical>
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // have to cast
   public Critical add(Critical inValue)
   {
     return super.add(inValue);

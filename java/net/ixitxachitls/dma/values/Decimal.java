@@ -61,6 +61,11 @@ public class Decimal<T extends Decimal<T>> extends BaseNumber<T>
   //------------------------------- Decimal --------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Construct the decimal object, undefined.
    *
    * @param       inMin       the minimally allowed number (again to divide)

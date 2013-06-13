@@ -26,7 +26,6 @@ package net.ixitxachitls.dma.entries.extensions;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.entries.Entry;
-import net.ixitxachitls.dma.entries.Item;
 import net.ixitxachitls.dma.values.Text;
 
 //..........................................................................
@@ -50,6 +49,11 @@ public class Incomplete extends Extension<Entry<?>>
   //--------------------------------------------------------- constructor(s)
 
   //------------------------------- Incomplete -----------------------------
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
 
   /**
    * Default constructor.

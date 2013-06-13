@@ -36,13 +36,9 @@ import javax.annotation.concurrent.Immutable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.data.DMADatastore;
 import net.ixitxachitls.dma.entries.AbstractEntry;
 import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.dma.entries.BaseCharacter;
@@ -119,6 +115,7 @@ public class AdminServlet extends SoyServlet
    * @return    the name of the template
    *
    */
+  @Override
   protected String getTemplateName(DMARequest inRequest)
   {
     return "dma.admin.page";
@@ -142,6 +139,7 @@ public class AdminServlet extends SoyServlet
    *           or maps or lists)
    *
    */
+  @Override
   protected Map<String, Object> collectData(DMARequest inRequest,
                                             SoyRenderer inRenderer)
   {
@@ -325,15 +323,15 @@ public class AdminServlet extends SoyServlet
     return super.handle(inRequest, inResponse);
   }
 
-  private Key upgradeKey(Key key)
-  {
-    String kind = key.getKind().replace(" ", "_").toLowerCase();
-    String name = key.getName().toLowerCase();
-    if(key.getParent() == null)
-      return KeyFactory.createKey(kind, name);
-
-    return KeyFactory.createKey(upgradeKey(key.getParent()), kind, name);
-  }
+//  private Key upgradeKey(Key key)
+//  {
+//    String kind = key.getKind().replace(" ", "_").toLowerCase();
+//    String name = key.getName().toLowerCase();
+//    if(key.getParent() == null)
+//      return KeyFactory.createKey(kind, name);
+//
+//    return KeyFactory.createKey(upgradeKey(key.getParent()), kind, name);
+//  }
 
   //........................................................................
 

@@ -117,6 +117,7 @@ public class DMADatafiles implements DMAData
                                NavigableMap<String, AbstractEntry>>();
 
   /** The id for serialization. */
+  @SuppressWarnings("unused")
   private static final long serialVersionUID = 1L;
 
   //........................................................................
@@ -218,7 +219,6 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> List<T> getEntries
                       (AbstractType<T> inType, String inKey, String inValue)
   {
@@ -264,7 +264,6 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-  @SuppressWarnings("unchecked") // need to cast return value for generics
   public <T extends AbstractEntry> List<T> getIndexEntries
     (String inIndex, AbstractType<T> inType,
      @Nullable AbstractEntry.EntryKey<? extends AbstractEntry> inParent,
@@ -312,6 +311,7 @@ public class DMADatafiles implements DMAData
    *              in the order they were specificed
    *
    */
+  @Override
   public List<List<String>> getMultiValues
     (AbstractType<? extends AbstractEntry> inType, String ... inFields)
   {
@@ -331,6 +331,7 @@ public class DMADatafiles implements DMAData
    *              in the order they were specificed
    *
    */
+  @Override
   public SortedSet<String> getValues
     (AbstractType<? extends AbstractEntry> inType, String inField)
   {
@@ -343,6 +344,7 @@ public class DMADatafiles implements DMAData
   /**
    * Clear the cache.
    */
+  @Override
   public void clearCache()
   {
     // nothing to do
@@ -555,7 +557,6 @@ public class DMADatafiles implements DMAData
    *
    */
   @Override
-@SuppressWarnings("unchecked") // casting return
   public @Nullable <T extends AbstractEntry> T getEntry
                       (AbstractType<T> inType, String inKey, String inValue)
   {
@@ -666,6 +667,7 @@ public class DMADatafiles implements DMAData
    * @return      true if removed, false if not
    *
    */
+  @Override
   public boolean remove(AbstractEntry.EntryKey<?> inKey)
   {
     throw new UnsupportedOperationException("not implemented");
@@ -681,7 +683,6 @@ public class DMADatafiles implements DMAData
    *         errors
    *
    */
-  @SuppressWarnings("unchecked") // cast for entry.getType() in put
   public boolean read()
   {
     boolean result = true;
@@ -1199,6 +1200,7 @@ public class DMADatafiles implements DMAData
    *
    * @param       inEntry the entry to cache
    */
+  @Override
   public void cacheEntry(AbstractEntry inEntry)
   {
   }

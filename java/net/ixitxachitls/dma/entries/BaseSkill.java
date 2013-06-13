@@ -64,6 +64,11 @@ public class BaseSkill extends BaseEntry
 
   //----- subtype ----------------------------------------------------------
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
   /** The possible sizes in the game. */
   public enum Subtype implements EnumSelection.Named
   {
@@ -100,6 +105,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -110,6 +116,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -149,6 +156,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;
@@ -159,6 +167,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String toString()
     {
       return m_name;
@@ -195,6 +204,7 @@ public class BaseSkill extends BaseEntry
      * @return the name of the value
      *
      */
+    @Override
     public String getName()
     {
       return m_name;

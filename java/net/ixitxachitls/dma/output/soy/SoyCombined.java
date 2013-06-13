@@ -108,7 +108,7 @@ public class SoyCombined extends SoyValue
    * @return the value found or null if not found
    */
   @Override
-  @SuppressWarnings({ "unchecked", "rawtypes" })
+  @SuppressWarnings({ "rawtypes" })
   public @Nullable SoyData getSingle(String inName)
   {
     if("isCombined".equals(inName))
@@ -248,6 +248,7 @@ public class SoyCombined extends SoyValue
    * @return      the string represenation
    *
    */
+  @Override
   public String toString()
   {
     return "combined " + m_combined;

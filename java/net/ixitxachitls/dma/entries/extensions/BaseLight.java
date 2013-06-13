@@ -57,6 +57,11 @@ public class BaseLight extends BaseExtension<BaseItem>
   //------------------------------- BaseLight ------------------------------
 
   /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
    * Default constructor.
    *
    * @param       inEntry the base item attached to
@@ -98,6 +103,11 @@ public class BaseLight extends BaseExtension<BaseItem>
   protected static final Group<Multiple, Long, String> s_brightGrouping =
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Multiple inValue)
         {
@@ -130,6 +140,11 @@ public class BaseLight extends BaseExtension<BaseItem>
   protected static final Group<Multiple, Long, String> s_shadowyGrouping =
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
+        /**
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+
         @Override
         public Long extract(Multiple inValue)
         {

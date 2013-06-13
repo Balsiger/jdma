@@ -35,9 +35,9 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.Multimap;
-
 import org.easymock.EasyMock;
+
+import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -171,7 +171,6 @@ public class SaveActionServlet extends ActionServlet
      * @return a set with all the entries affected by this change
      *
      */
-    @SuppressWarnings("unchecked")
     public Set<AbstractEntry> entries(List<String> ioErrors)
     {
       Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
@@ -264,7 +263,6 @@ public class SaveActionServlet extends ActionServlet
    *
    */
   @Override
-  @SuppressWarnings("unchecked")
   protected String doAction(DMARequest inRequest,
                             HttpServletResponse inResponse)
   {
