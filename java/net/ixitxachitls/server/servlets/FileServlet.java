@@ -44,9 +44,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.common.collect.Multimap;
-
 import org.easymock.EasyMock;
+
+import com.google.common.collect.Multimap;
 
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.Files;

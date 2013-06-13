@@ -134,13 +134,6 @@
     <servlet-class>net.ixitxachitls.dma.server.servlets.MainPageServlet</servlet-class>
   </servlet>
 
-  <servlet>
-    <display-name>Remote API Servlet</display-name>
-    <servlet-name>RemoteApiServlet</servlet-name>
-    <servlet-class>com.google.apphosting.utils.remoteapi.RemoteApiServlet</servlet-class>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-
   <servlet-mapping>
     <servlet-name>config</servlet-name>
     <url-pattern>/configuration</url-pattern>

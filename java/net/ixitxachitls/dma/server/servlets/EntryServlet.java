@@ -31,10 +31,10 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
+import org.easymock.EasyMock;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
-
-import org.easymock.EasyMock;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
@@ -613,6 +613,7 @@ public class EntryServlet extends PageServlet
     //----- path -----------------------------------------------------------
 
     /** The path Test. */
+    @SuppressWarnings("unchecked")
     @org.junit.Test
     public void path()
     {
@@ -621,7 +622,8 @@ public class EntryServlet extends PageServlet
       EntryServlet servlet = new EntryServlet();
 
       EasyMock.expect(m_request.getEntry
-                      (DMAServlet.extractKey("/base entry/test")))
+                      ((AbstractEntry.EntryKey<BaseEntry>)
+                          DMAServlet.extractKey("/base entry/test")))
         .andStubReturn(entry);
 
       EasyMock.replay(m_request, m_response);

@@ -2376,8 +2376,7 @@ public class Monster extends CampaignEntry<BaseMonster>
   @SuppressWarnings("unchecked")
   public Map<String, Map<Value<?>, ModifiedNumber>> skillRanks()
   {
-    Combined<ValueList<Multiple>> skills = (Combined<ValueList<Multiple>>)
-      collect("class skills");
+    Combined<ValueList<Multiple>> skills = collect("class skills");
 
     Map<String, Map<Value<?>, ModifiedNumber>> ranks = Maps.newHashMap();
 
@@ -2515,7 +2514,8 @@ public class Monster extends CampaignEntry<BaseMonster>
   @SuppressWarnings("unchecked")
   public BaseItem.Size getSize()
   {
-    Multiple size = (Multiple)collect("size").min();
+    Combined<Multiple> combined = collect("size");
+    Multiple size = combined.min();
     if(size == null)
       return BaseItem.Size.MEDIUM;
 

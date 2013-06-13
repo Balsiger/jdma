@@ -345,6 +345,8 @@
         <arg value="--jvm_flag=-Dappengine.user.timezone.impl=UTC"/>
         <arg value="--jvm_flag=-Dappengine.user.timezone=UTC"/>
         <arg value="--jvm_flag=-Dsun.io.serialization.extendedDebugInfo=true"/>
+        <arg value="--jvm_flag=-Xdebug"/>
+        <arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,address=8889,server=y,suspend=n"/>
       </options>
     </dev_appserver>
   </target>

@@ -34,13 +34,12 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
+import org.easymock.EasyMock;
+
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.appengine.tools.development.testing.
-       LocalUserServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-
-import org.easymock.EasyMock;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;
@@ -104,6 +103,7 @@ public final class ServerUtils
    *              containing the parameter values.
    *
    */
+  @SuppressWarnings("unchecked")
   public static Multimap<String, String> extractParams
     (HttpServletRequest inRequest)
   {
@@ -114,8 +114,8 @@ public final class ServerUtils
        && !inRequest.getServletPath().startsWith("/_ah/"))
     {
       // read parameters from the parameter map
-      for(Map.Entry<String, String []> entry
-            : inRequest.getParameterMap().entrySet())
+      Map<String, String []> params = inRequest.getParameterMap();
+      for(Map.Entry<String, String []> entry : params.entrySet())
         values.putAll(entry.getKey(), Arrays.asList(entry.getValue()));
 
       if(values.isEmpty())
