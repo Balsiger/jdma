@@ -81,9 +81,7 @@ public class BaseProduct extends BaseEntry
 
   //----- producers --------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The producers of products. */
@@ -971,7 +969,7 @@ public class BaseProduct extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -1105,7 +1103,7 @@ public class BaseProduct extends BaseEntry
     new Group<Price, Long, String>(new Group.Extractor<Price, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

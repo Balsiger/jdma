@@ -61,9 +61,7 @@ public abstract class ActionServlet extends DMAServlet
 
   //---------------------------- ActionServlet -----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

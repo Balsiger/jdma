@@ -61,9 +61,7 @@ public class Product extends Entry<BaseProduct>
 
   //----- status -----------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The product status. */

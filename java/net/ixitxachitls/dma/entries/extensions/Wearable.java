@@ -51,9 +51,7 @@ public class Wearable extends Extension<Item>
 
   //-------------------------------- Wearable -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

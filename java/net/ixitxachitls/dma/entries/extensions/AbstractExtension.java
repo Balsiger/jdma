@@ -74,9 +74,7 @@ public abstract class AbstractExtension<T extends AbstractEntry>
 
   //-------------------------- AbstractExtension --------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

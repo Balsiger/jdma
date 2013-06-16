@@ -110,12 +110,6 @@
     <pathelement location="${lib.test.dir}/appengine-testing.jar" />
     <!-- soy -->
     <pathelement location="${lib.dir}/soy-2012-12-21.jar" />
-    <!-- itext -->
-    <!-- not compatible with ujac
-    <pathelement location="${lib.dir}/iText-5.0.6.jar" /> -->
-    <pathelement location="${lib.dir}/iText.jar" />
-    <pathelement location="${lib.dir}/ujac.jar" />
-    <pathelement location="${lib.dir}/commons-logging-1.1.1.jar" />
     <!-- jetty -->
     <pathelement location="${lib.dir}/jetty-continuation-${jetty.version}.jar"/>
     <pathelement location="${lib.dir}/jetty-http-${jetty.version}.jar" />

@@ -66,9 +66,7 @@ public class Contents extends Extension<Item>
 
   //-------------------------------- Contents ------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

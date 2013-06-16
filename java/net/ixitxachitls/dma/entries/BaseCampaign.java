@@ -58,9 +58,7 @@ public class BaseCampaign extends BaseEntry
 
   //---------------------------- BaseCampaign ------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

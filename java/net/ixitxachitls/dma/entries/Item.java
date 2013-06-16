@@ -69,9 +69,7 @@ public class Item extends CampaignEntry<BaseItem>
 
   //------------------------------- Item --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

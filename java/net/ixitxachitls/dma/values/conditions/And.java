@@ -56,9 +56,7 @@ public class And extends Condition<And>
 
   //---------------------------------- And ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

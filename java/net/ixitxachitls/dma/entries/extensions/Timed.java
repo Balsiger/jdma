@@ -52,9 +52,7 @@ public class Timed extends Extension<Item>
 
   //--------------------------------- Timed -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

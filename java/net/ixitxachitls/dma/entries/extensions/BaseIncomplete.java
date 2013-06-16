@@ -50,9 +50,7 @@ public class BaseIncomplete extends BaseExtension<BaseEntry>
 
   //----------------------------- BaseIncomplete ---------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

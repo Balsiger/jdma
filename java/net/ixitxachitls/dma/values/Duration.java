@@ -127,6 +127,7 @@ public class Duration extends Units<Duration>
 
   //-------------------------------------------------------------- variables
 
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The definition of the unit value.
@@ -200,13 +201,22 @@ public class Duration extends Units<Duration>
           "1 day", "very long",
         }, "$undefined$");
 
+  /** A single round. */
   public static final Duration ROUND = new Duration(Rational.ONE);
+
+  /** A single second. */
   public static final Duration SECOND =
     new Duration(null, null, null, Rational.ONE);
+
+  /** A single minute. */
   public static final Duration MINUTE =
     new Duration(null, null, Rational.ONE, null);
+
+  /** A single hour. */
   public static final Duration HOUR =
     new Duration(null, Rational.ONE, null, null);
+
+  /** A single day. */
   public static final Duration DAY =
     new Duration(Rational.ONE, null, null, null);
 
@@ -247,10 +257,7 @@ public class Duration extends Units<Duration>
   /**
    * Determines if the duration represents a standard action.
    *
-   * @param
-   *
-   * @return
-   *
+   * @return true if the duration represents a standard action, false if not
    */
   public boolean isStandardAction()
   {

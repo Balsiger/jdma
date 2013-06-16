@@ -66,9 +66,7 @@ public class Parameters extends Value<Parameters>
 
   //----------------------------- Parameters -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -404,9 +402,9 @@ public class Parameters extends Value<Parameters>
     switch(inType)
     {
       case UNIQUE: return inFirst;
-      case ADD:    return ((Value)inFirst).add((Value)inSecond);
-      case MIN:    return ((Value)inFirst).min((Value)inSecond);
-      case MAX:    return ((Value)inFirst).max((Value)inSecond);
+      case ADD:    return ((Value)inFirst).add(inSecond);
+      case MIN:    return ((Value)inFirst).min(inSecond);
+      case MAX:    return ((Value)inFirst).max(inSecond);
       default: assert false : "should never happen";
     }
 

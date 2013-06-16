@@ -56,9 +56,7 @@ public class ID extends BaseText<ID>
 
   //--------------------------------- ID ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -79,7 +79,7 @@ public class TaggedVariables extends Variables
   //-------------------------------------------------------------- variables
 
   /** The tag to use. */
-  private String m_tag;
+  private String m_tag = "";
 
   //........................................................................
 

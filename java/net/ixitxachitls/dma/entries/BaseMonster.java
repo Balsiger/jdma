@@ -82,9 +82,7 @@ public class BaseMonster extends BaseEntry
 
   //----- monster type -----------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible monster types in the game. */
@@ -1661,7 +1659,7 @@ public class BaseMonster extends BaseEntry
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -1700,7 +1698,7 @@ public class BaseMonster extends BaseEntry
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

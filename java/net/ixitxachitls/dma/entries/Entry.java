@@ -56,9 +56,7 @@ public abstract class Entry<B extends BaseEntry> extends AbstractEntry
 
   //-------------------------------- Entry ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

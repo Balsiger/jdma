@@ -34,12 +34,12 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
-import org.easymock.EasyMock;
-
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.util.Strings;
 import net.ixitxachitls.util.logging.Log;

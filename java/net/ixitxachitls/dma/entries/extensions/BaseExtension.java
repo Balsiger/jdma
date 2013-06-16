@@ -56,9 +56,7 @@ public class BaseExtension<T extends BaseEntry> extends AbstractExtension<T>
 
   //---------------------------- BaseExtension ----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -51,9 +51,7 @@ public class Light extends Extension<Item>
 
   //--------------------------------- Light --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

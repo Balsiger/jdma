@@ -84,9 +84,7 @@ public class BaseItem extends BaseEntry
 
   //----- size -------------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible sizes in the game. */
@@ -747,7 +745,7 @@ public class BaseItem extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -783,7 +781,7 @@ public class BaseItem extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
       /**
-       * 
+       *
        */
       private static final long serialVersionUID = 1L;
 
@@ -835,7 +833,7 @@ public class BaseItem extends BaseEntry
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -879,7 +877,7 @@ public class BaseItem extends BaseEntry
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
     {
       /**
-       * 
+       *
        */
       private static final long serialVersionUID = 1L;
 

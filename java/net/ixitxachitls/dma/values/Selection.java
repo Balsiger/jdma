@@ -57,9 +57,7 @@ public class Selection extends Value<Selection>
 
   //------------------------------ Selection -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

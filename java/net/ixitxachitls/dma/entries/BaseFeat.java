@@ -65,9 +65,7 @@ public class BaseFeat extends BaseEntry
 
   //----- type -------------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible areas to affect (cf. PHB 175). */

@@ -65,9 +65,7 @@ public class BaseQuality extends BaseEntry
 
   //----- effect types -----------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible spell components (cf. PHB 174). */

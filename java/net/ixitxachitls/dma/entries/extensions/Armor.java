@@ -54,9 +54,7 @@ public class Armor extends Extension<Item>
 
   //--------------------------------- Armor -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

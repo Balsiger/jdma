@@ -56,9 +56,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
 
   //----------------------------- BaseCommodity ----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -102,7 +100,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
     new Group<Area, Long, String>(new Group.Extractor<Area, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -135,7 +133,7 @@ public class BaseCommodity extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

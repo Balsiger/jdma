@@ -55,9 +55,7 @@ public class Weight extends Units<Weight>
 
   //------------------------------- Weight --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -165,7 +163,7 @@ public class Weight extends Units<Weight>
     new Group<Weight, Long, String>(new Group.Extractor<Weight, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

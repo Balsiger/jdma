@@ -161,7 +161,7 @@ public class RemoveActionServlet extends ActionServlet
 //      Set<AbstractEntry> entries = new HashSet<AbstractEntry>();
 //      if(m_multiple)
 //      {
-//        assert m_values.size() == 1 : "Only expected a single value to change";
+//       assert m_values.size() == 1 : "Only expected a single value to change";
 //        String []parts = m_values.keySet().iterator().next().split("/");
 //        String index = parts[0];
 //        String value = parts[1];

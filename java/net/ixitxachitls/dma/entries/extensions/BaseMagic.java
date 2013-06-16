@@ -62,9 +62,7 @@ public class BaseMagic extends BaseExtension<BaseItem>
 
   //------------------------------- BaseMagic -----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

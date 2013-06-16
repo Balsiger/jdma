@@ -46,6 +46,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class NullPointerCheck extends Check
 {
+
   //--------------------------------------------------------- constructor(s)
   //........................................................................
 

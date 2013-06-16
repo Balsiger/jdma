@@ -55,9 +55,7 @@ public class Multiuse extends Counted
 
   //------------------------------- Multiuse ------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

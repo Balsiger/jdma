@@ -55,9 +55,7 @@ public class Price extends Decimal<Price>
 
   //------------------------------- Price --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

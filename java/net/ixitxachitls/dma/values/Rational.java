@@ -133,7 +133,10 @@ public class Rational extends BaseRational<Rational>
 
   //-------------------------------------------------------------- variables
 
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
+
+  /** A standard rational for 1. */
   public static final Rational ONE = new Rational(1);
 
   //........................................................................

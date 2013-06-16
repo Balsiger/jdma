@@ -60,9 +60,7 @@ public class BaseText<T extends BaseText<T>> extends Value<T>
 
   //------------------------------- BaseText -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

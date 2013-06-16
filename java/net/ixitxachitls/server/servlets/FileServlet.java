@@ -44,9 +44,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.easymock.EasyMock;
-
 import com.google.common.collect.Multimap;
+
+import org.easymock.EasyMock;
 
 import net.ixitxachitls.server.ServerUtils;
 import net.ixitxachitls.util.Files;
@@ -437,6 +437,11 @@ public class FileServlet extends BaseServlet
 
   //........................................................................
 
+  /**
+   * Check whether the page was reloaded.
+   *
+   * @return true if the page was reloaded, false if it was loaded normally
+   */
   public static boolean wasReloaded()
   {
     boolean reloaded = s_reloaded;

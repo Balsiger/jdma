@@ -100,7 +100,7 @@ public class AbstractEntry extends ValueGroup
   //----- EntryKey ---------------------------------------------------------
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
@@ -609,7 +609,8 @@ public class AbstractEntry extends ValueGroup
    * @return  the associated entry
    */
   @Override
-  public AbstractEntry getEntry() {
+  public AbstractEntry getEntry()
+  {
     return this;
   }
 
@@ -3023,7 +3024,7 @@ public class AbstractEntry extends ValueGroup
                           new AbstractType.Test.TestType<AbstractEntry>
                           (AbstractEntry.class)) {
           /**
-                             * 
+                             *
                              */
                             private static final long serialVersionUID = 1L;
 

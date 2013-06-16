@@ -56,9 +56,7 @@ public class BaseCounted extends BaseExtension<BaseItem>
 
   //----- units -------------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible counting unites in the game. */

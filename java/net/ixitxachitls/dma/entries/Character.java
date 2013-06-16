@@ -72,9 +72,7 @@ public class Character extends CampaignEntry<BaseCharacter>
 
   //----- state -------------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The character state. */

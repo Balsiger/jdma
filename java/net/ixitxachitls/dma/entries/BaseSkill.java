@@ -64,9 +64,7 @@ public class BaseSkill extends BaseEntry
 
   //----- subtype ----------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible sizes in the game. */

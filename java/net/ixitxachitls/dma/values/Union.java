@@ -54,9 +54,7 @@ public class Union extends Value<Union>
 
   //-------------------------------- Union ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

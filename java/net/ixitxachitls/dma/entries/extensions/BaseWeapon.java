@@ -62,7 +62,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
   //----- types ------------------------------------------------------------
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
@@ -105,6 +105,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     /** Create the name.
      *
      * @param inName     the name of the value
+     * @param inShort    the short name of the value
      *
      */
     private Type(String inName, String inShort)
@@ -462,7 +463,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
     {
       /**
-       * 
+       *
        */
       private static final long serialVersionUID = 1L;
 
@@ -499,7 +500,7 @@ public class BaseWeapon extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

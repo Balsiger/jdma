@@ -58,7 +58,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
   //----- slots ------------------------------------------------------------
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
@@ -97,7 +97,7 @@ public class BaseWearable extends BaseExtension<BaseItem>
     /** Create the name.
      *
      * @param inName     the name of the value
-     * @param inShor     the short name of the value
+     * @param inShort    the short name of the value
      *
      */
     private Slot(String inName, String inShort)

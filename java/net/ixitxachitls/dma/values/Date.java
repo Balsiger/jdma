@@ -57,9 +57,7 @@ public class Date extends Value<Date>
 
   //--------------------------------- Date ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -1089,7 +1089,7 @@ public class DMADatastore implements DMAData
    * @return     the entry found, if any
    *
    */
-  @SuppressWarnings({ "rawtypes" }) 
+  @SuppressWarnings({ "rawtypes" })
   public Entity convert(AbstractEntry inEntry)
   {
     Entity entity = new Entity(convert(inEntry.getKey()));

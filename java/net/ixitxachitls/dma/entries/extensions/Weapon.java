@@ -51,9 +51,7 @@ public class Weapon extends Extension<Item>
 
   //--------------------------------- Weapon -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

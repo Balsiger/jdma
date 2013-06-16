@@ -87,9 +87,7 @@ public class Monster extends CampaignEntry<BaseMonster>
 
   //----- Line -----------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The class represents a single line in the treasure table (DMG 52/53). */

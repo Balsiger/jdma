@@ -62,9 +62,7 @@ public class Composite extends Extension<Item>
 
   //------------------------------- Composite ------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -63,9 +63,7 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 
   //---------------------------- CampaignEntry -----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

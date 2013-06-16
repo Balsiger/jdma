@@ -56,9 +56,7 @@ public class Comment extends Value<Comment>
 
   //------------------------------- Comment --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

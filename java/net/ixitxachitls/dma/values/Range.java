@@ -55,9 +55,7 @@ public class Range extends BaseNumber<Range>
 
   //-------------------------------- Range --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

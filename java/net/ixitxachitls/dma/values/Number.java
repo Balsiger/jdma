@@ -50,9 +50,7 @@ public class Number extends BaseNumber<Number>
 
   //-------------------------------- Number --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

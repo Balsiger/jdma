@@ -59,9 +59,7 @@ public class ModifiedNumber extends BaseNumber<ModifiedNumber>
 
   //---------------------------- ModifiedNumber ----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

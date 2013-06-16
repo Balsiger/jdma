@@ -54,9 +54,7 @@ public class Critical extends BaseNumber<Critical>
 
   //------------------------------- Critical -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

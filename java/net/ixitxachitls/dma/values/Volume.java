@@ -55,9 +55,7 @@ public class Volume extends Units<Volume>
 
   //------------------------------ Volume --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

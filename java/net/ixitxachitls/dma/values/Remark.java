@@ -56,9 +56,7 @@ public class Remark implements Serializable
 
   //----- Type -------------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The remark types. */

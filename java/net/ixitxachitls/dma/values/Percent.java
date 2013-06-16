@@ -54,9 +54,7 @@ public class Percent extends BaseNumber<Percent>
 
   //------------------------------- Percent --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -66,9 +66,7 @@ public class Multiple extends Value<Multiple>
 
   //----- Element ----------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -82,7 +80,7 @@ public class Multiple extends Value<Multiple>
     //------------------------------ Element -------------------------------
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 

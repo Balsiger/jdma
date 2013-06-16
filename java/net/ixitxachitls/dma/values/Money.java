@@ -54,9 +54,7 @@ public class Money extends Units<Money>
 
   //------------------------------- Money --------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
 
@@ -185,7 +183,7 @@ public class Money extends Units<Money>
     new Group<Money, Long, String>(new Group.Extractor<Money, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

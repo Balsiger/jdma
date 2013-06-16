@@ -937,6 +937,7 @@ public class BaseSpell extends BaseEntry
   public static final BaseType<BaseSpell> TYPE =
     new BaseType<BaseSpell>(BaseSpell.class);
 
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   //----- school -----------------------------------------------------------
@@ -1319,7 +1320,10 @@ public class BaseSpell extends BaseEntry
       {
         ability = Integer.parseInt(inParameters.getValue("ability").toString());
       }
-      catch(NumberFormatException e) {}
+      catch(NumberFormatException e)
+      {
+        // just ignore it
+      }
 
     StringBuilder summary = new StringBuilder();
 
@@ -1384,6 +1388,9 @@ public class BaseSpell extends BaseEntry
 
         case ONE_MILE_PER_LEVEL:
           summary.append(casterLevel + " mi");
+          break;
+
+        default:
           break;
       }
     else
@@ -1484,7 +1491,7 @@ public class BaseSpell extends BaseEntry
               break;
 
             case "Concentration up to 10 min/level":
-              prefix ="Concentration up to ";
+              prefix = "Concentration up to ";
               duration = Duration.MINUTE.multiply(10 * casterLevel);
               break;
 
@@ -1607,6 +1614,9 @@ public class BaseSpell extends BaseEntry
 
               case "3 level":
                 duration = duration.multiply(casterLevel / 3);
+                break;
+
+              default:
                 break;
             }
 

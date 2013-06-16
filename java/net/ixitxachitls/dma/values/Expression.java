@@ -65,9 +65,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
 
   //----- Shared -----------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** A class to share data when computing expressions. */
@@ -113,7 +111,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class MagicArmor extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -204,7 +202,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class Factor extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -296,7 +294,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class Addition extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -391,7 +389,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class Equal extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -468,7 +466,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class ByClass extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -553,7 +551,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class Switch extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -709,7 +707,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class MagicItem extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -855,7 +853,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class Expr extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -937,7 +935,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class MagicWeapon extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -1011,7 +1009,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
         return (T)value;
 
       if(!(inValue instanceof Money))
-        return (T)inValue;
+        return inValue;
 
       return inValue.add((T)value);
     }
@@ -1027,7 +1025,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
   public static class MagicAmmunition extends Expression
   {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -1101,7 +1099,7 @@ public abstract class Expression implements Comparable<Expression>, Serializable
         return (T)value;
 
       if(!(inValue instanceof Money))
-        return (T)inValue;
+        return inValue;
 
       return inValue.add((T)value);
     }

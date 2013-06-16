@@ -65,7 +65,7 @@ public class Units<T extends Units<T>> extends Value<T>
   //----- Unit -------------------------------------------------------------
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
@@ -78,9 +78,7 @@ public class Units<T extends Units<T>> extends Value<T>
   {
     //-------------------------------- Unit --------------------------------
 
-    /**
-     * 
-     */
+    /** The serial version id. */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -349,7 +347,7 @@ public class Units<T extends Units<T>> extends Value<T>
     //-------------------------------- Set ---------------------------------
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 

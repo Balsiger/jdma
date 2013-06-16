@@ -8,7 +8,7 @@
   </Match>
 
   <Match>
-    <Class name="~net.ixitxachitls.util.AsyncExecutor\$Test\$.*" />
+    <Class name="~net.ixitxachitls.util.AsyncExecutor\$Test.*" />
     <Bug pattern="SP_SPIN_ON_FIELD" />
   </Match>
 

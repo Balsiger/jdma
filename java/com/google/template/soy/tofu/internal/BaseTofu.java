@@ -1,3 +1,4 @@
+// CHECKSTYLE:OFF
 /*
  * Copyright 2008 Google Inc.
  *
@@ -15,6 +16,12 @@
  */
 
 package com.google.template.soy.tofu.internal;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -45,12 +52,6 @@ import com.google.template.soy.soytree.TemplateNode;
 import com.google.template.soy.soytree.TemplateRegistry;
 import com.google.template.soy.tofu.SoyTofu;
 import com.google.template.soy.tofu.SoyTofuException;
-
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.Nullable;
 
 
 /**
@@ -522,3 +523,4 @@ public class BaseTofu implements SoyTofu {
   }
 
 }
+// CHECKSTYLE_ON

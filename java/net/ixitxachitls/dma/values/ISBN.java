@@ -56,9 +56,7 @@ public class ISBN extends Value<ISBN>
 
   //--------------------------------- ISBN ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -58,9 +58,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
 
   //----- states -----------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible sizes in the game. */
@@ -163,7 +161,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -183,7 +181,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -204,7 +202,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -224,7 +222,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Group<Volume, Long, String>(new Group.Extractor<Volume, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -244,7 +242,7 @@ public class BaseContainer extends BaseExtension<BaseItem>
     new Grouping<Volume, String>()
     {
       /**
-       * 
+       *
        */
       private static final long serialVersionUID = 1L;
 

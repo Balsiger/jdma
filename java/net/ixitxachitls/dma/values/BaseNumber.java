@@ -58,9 +58,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
 
   //------------------------------ BaseNumber ------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -189,7 +187,7 @@ public class BaseNumber<T extends BaseNumber<T>> extends Value<T>
     (new Group.Extractor<BaseNumber<?>, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

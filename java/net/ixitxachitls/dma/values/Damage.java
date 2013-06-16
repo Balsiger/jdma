@@ -56,9 +56,7 @@ public class Damage extends Value<Damage>
 
   //----- type -------------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible damage types. */

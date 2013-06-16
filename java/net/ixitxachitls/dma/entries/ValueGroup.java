@@ -1222,9 +1222,7 @@ public abstract class ValueGroup implements Changeable
     /** A simple implementation of a value group for testing. */
     public static class TestGroup extends AbstractEntry
     {
-      /**
-       * 
-       */
+      /** The serial version id. */
       private static final long serialVersionUID = 1L;
 
       /** The change state. */

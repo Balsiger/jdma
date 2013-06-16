@@ -72,7 +72,7 @@ public class ValueList<T extends Value<T>>
   //------------------------------- ValueList -------------------------------
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
 
@@ -784,7 +784,8 @@ public class ValueList<T extends Value<T>>
    * Read the object from the given stream. This is necesasry to recreated the
    * joiner that is not serializable.
    *
-   * @param   inStream the stream to read from
+   * @return  the object read
+   * @throws  ObjectStreamException when something fails
    */
   private Object readResolve() throws ObjectStreamException
   {

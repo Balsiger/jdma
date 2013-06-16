@@ -53,9 +53,7 @@ public class True extends Condition<True>
 
   //--------------------------------- True ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

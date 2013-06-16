@@ -74,9 +74,7 @@ public class BaseEntry extends AbstractEntry
 
   //----- worlds -----------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The game worlds (this is configurable and thus not an enum). */

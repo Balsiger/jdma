@@ -62,9 +62,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
 
   //------------------------------ Reference -------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

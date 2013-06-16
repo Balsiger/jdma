@@ -51,9 +51,7 @@ public class LongFormattedText extends FormattedText
 
   //--------------------------------- Text ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

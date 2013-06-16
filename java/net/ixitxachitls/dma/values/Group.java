@@ -250,9 +250,7 @@ public class Group<T extends Value<?>, S extends Comparable<S>, U>
         Group<Name, String, String> group = new Group<Name, String, String>
           (new Extractor<Name, String>()
           {
-            /**
-             * 
-             */
+            /** The serial version id. */
             private static final long serialVersionUID = 1L;
 
             @Override

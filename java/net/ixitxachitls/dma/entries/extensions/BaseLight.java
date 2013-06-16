@@ -56,9 +56,7 @@ public class BaseLight extends BaseExtension<BaseItem>
 
   //------------------------------- BaseLight ------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -104,7 +102,7 @@ public class BaseLight extends BaseExtension<BaseItem>
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -141,7 +139,7 @@ public class BaseLight extends BaseExtension<BaseItem>
     new Group<Multiple, Long, String>(new Group.Extractor<Multiple, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

@@ -50,9 +50,7 @@ public class Incomplete extends Extension<Entry<?>>
 
   //------------------------------- Incomplete -----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -51,9 +51,7 @@ public class Counted extends Extension<Item>
 
   //------------------------------- Counted ------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

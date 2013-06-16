@@ -63,9 +63,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
 
   //----- armor types ------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible areas to affect (cf. PHB 175). */
@@ -194,7 +192,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Number, Long, String>(new Group.Extractor<Number, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -231,7 +229,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     (new Group.Extractor<Number, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -268,7 +266,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     (new Group.Extractor<Percent, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -302,7 +300,7 @@ public class BaseArmor extends BaseExtension<BaseItem>
     new Group<Distance, Long, String>(new Group.Extractor<Distance, Long>()
       {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 

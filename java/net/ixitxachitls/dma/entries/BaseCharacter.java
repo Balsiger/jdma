@@ -60,9 +60,7 @@ public class BaseCharacter extends BaseEntry
 {
   //----------------------------------------------------------------- nested
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The possible groups for a character. */

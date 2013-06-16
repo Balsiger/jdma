@@ -68,9 +68,7 @@ public abstract class Value<T extends Value<T>>
 
   //-------------------------------- Value ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -1059,7 +1057,7 @@ public abstract class Value<T extends Value<T>>
     public static class TestValue extends Value<TestValue>
     {
       /**
-       * 
+       *
        */
       private static final long serialVersionUID = 1L;
 

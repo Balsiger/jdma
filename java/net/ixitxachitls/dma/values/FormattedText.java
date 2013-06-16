@@ -56,9 +56,7 @@ public class FormattedText extends BaseText<FormattedText>
 
   //--------------------------------- Text ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

@@ -63,9 +63,7 @@ public class Modifier extends Value<Modifier>
 
   //----- type -------------------------------------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /** The modifiers type. */

@@ -56,9 +56,7 @@ public class Dice extends Value<Dice>
 
   //--------------------------------- Dice ---------------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**

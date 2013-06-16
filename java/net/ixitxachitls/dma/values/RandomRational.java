@@ -55,9 +55,7 @@ public class RandomRational extends BaseRational<RandomRational>
 
   //---------------------------- RandomRational ----------------------------
 
-  /**
-   * 
-   */
+  /** The serial version id. */
   private static final long serialVersionUID = 1L;
 
   /**
