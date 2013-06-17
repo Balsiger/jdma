@@ -126,10 +126,7 @@ public class Combined<T extends Value<T>>
     public Node<U> asDescribed(String inDescription)
     {
       String description = getDescription();
-      if(description == null)
-        description = inDescription;
-      else
-        description += ", " + inDescription;
+      description += ", " + inDescription;
 
       Node<U> result = new Node<U>(getValue(), getEntry(), description);
 

@@ -514,7 +514,7 @@ public class AbstractEntry extends ValueGroup
 
   /** The file this entry will be written to. */
   @Deprecated
-  protected @Nullable DMAFile m_file;
+  protected transient @Nullable DMAFile m_file;
 
   /** The starting position in the file (characters). */
   protected long m_startPos = 0;

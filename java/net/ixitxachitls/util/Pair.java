@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.util;
 
+import java.io.Serializable;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -47,7 +49,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 //__________________________________________________________________________
 
 @ParametersAreNonnullByDefault
-public class Pair<T1, T2>
+public class Pair<T1, T2> implements Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -73,6 +75,9 @@ public class Pair<T1, T2>
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** The serial version id. */
+  private static final long serialVersionUID = 1L;
 
   /** The first value stored in the pair. */
   @Nullable private T1 m_first;

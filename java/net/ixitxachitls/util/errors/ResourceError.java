@@ -89,6 +89,9 @@ public class ResourceError extends BaseError
 
   //-------------------------------------------------------------- variables
 
+  /** Default serial version id. */
+  private static final long serialVersionUID = 1L;
+
   /** The resource with the error. */
   // private String m_file;
 

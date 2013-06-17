@@ -56,7 +56,9 @@ import net.ixitxachitls.util.Grouping;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Group<T extends Value<?>, S extends Comparable<S>, U>
+public class Group<T extends Value<?>,
+                   S extends Comparable<S> & Serializable,
+                   U extends Serializable>
   implements Grouping<T, U>, Comparator<U>, Serializable
 {
   //----------------------------------------------------------------- nested

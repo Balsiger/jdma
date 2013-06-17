@@ -294,5 +294,33 @@
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON" />
   </Match>
 
+ <Match>
+    <Class name="~com.google.*" />
+  </Match>
+
+ <Match>
+    <Class name="~net.ixitxachitls..*\$Test.*" />
+  </Match>
+
+ <Match>
+    <Class name="~net.ixitxachitls..*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST_OF_RETURN_VALUE" />
+  </Match>
+
+ <Match>
+    <Class name="~net.ixitxachitls..*" />
+    <Bug pattern="BC_UNCONFIRMED_CAST" />
+  </Match>
+
+ <Match>
+    <Class name="~net.ixitxachitls.dma.entries.BaseItem.*" />
+    <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD" />
+  </Match>
+
+ <Match>
+    <Class name="~net.ixitxachitls.dma.values.Group.*" />
+    <Bug pattern="SE_BAD_FIELD" />
+  </Match>
+
 </FindBugsFilter>
 

@@ -23,6 +23,8 @@
 
 package net.ixitxachitls.util.errors;
 
+import java.io.Serializable;
+
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.ThreadSafe;
@@ -47,11 +49,14 @@ import net.ixitxachitls.util.configuration.Config;
 
 @ThreadSafe
 @ParametersAreNonnullByDefault
-public class BaseError
+public class BaseError implements Serializable
 {
   //--------------------------------------------------------- constructor(s)
 
   //------------------------------ BaseError -------------------------------
+
+  /** The serial version id. */
+  private static final long serialVersionUID = 1L;
 
   /**
    * Create a base error.

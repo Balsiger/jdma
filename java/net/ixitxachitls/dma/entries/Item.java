@@ -145,7 +145,7 @@ public class Item extends CampaignEntry<BaseItem>
   public static final BaseType<BaseItem> BASE_TYPE = BaseItem.TYPE;
 
   /** Flag if extensions are initialized. */
-  protected static boolean s_extensionsInitialized = false;
+  private static boolean s_extensionsInitialized = false;
 
   //----- hp ---------------------------------------------------------------
 

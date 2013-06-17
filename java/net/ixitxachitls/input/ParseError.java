@@ -37,9 +37,7 @@ import net.ixitxachitls.util.errors.BaseError;
  * A parsing error.
  *
  * @file          ParseError.java
- *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
  */
 
 //..........................................................................
@@ -87,6 +85,9 @@ public class ParseError extends BaseError
   //........................................................................
 
   //-------------------------------------------------------------- variables
+
+  /** Default serial version id. */
+  private static final long serialVersionUID = 1L;
 
   /** The number or ID of the error. */
   private String m_errorNumber;

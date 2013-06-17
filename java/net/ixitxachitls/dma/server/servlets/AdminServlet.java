@@ -285,9 +285,9 @@ public class AdminServlet extends SoyServlet
       return null;
     }
 
-    String upgrade = request.getParam("upgrade");
-    if(upgrade != null)
-    {
+//    String upgrade = request.getParam("upgrade");
+//    if(upgrade != null)
+//    {
       // DMADatastore store = ((DMADatastore)DMADataFactory.get());
 
       // int count = 0;
@@ -318,7 +318,7 @@ public class AdminServlet extends SoyServlet
       // writer.println("gui.info('" + count
       // + " entities upgraded (" + i +"')");
       // writer.close();
-    }
+//    }
 
     return super.handle(inRequest, inResponse);
   }

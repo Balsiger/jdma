@@ -426,7 +426,7 @@ public class SoyTemplate
     @Override
     public SoyData apply(SoyData inValue, List<SoyData> inArgs)
     {
-      return apply(inValue, inArgs);
+      return applyForTofu(inValue, inArgs);
     }
   }
 

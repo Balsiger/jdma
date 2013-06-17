@@ -1664,7 +1664,8 @@ public class BaseSpell extends BaseEntry
     summary.append(Strings.COMMA_JOINER.join(getReferences()));
     summary.append(")");
 
-    Value<?> notes = inParameters.getValue("Notes");
+    Value<?> notes =
+        inParameters != null ? inParameters.getValue("Notes") : null;
     if(notes != null)
     {
       summary.append(" (");

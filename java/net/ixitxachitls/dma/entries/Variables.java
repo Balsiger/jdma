@@ -72,6 +72,15 @@ public class Variables implements Iterable<Variable>
   }
 
   //........................................................................
+
+  /**
+   * Default constructor for derivations. This is necessary as the constructor
+   * above calls add().
+   */
+  protected Variables()
+  {
+  }
+
   //------------------------------- Variables ------------------------------
 
   /**

@@ -208,7 +208,7 @@ public class BaseCharacter extends BaseEntry
   //----- products ---------------------------------------------------------
 
   /** All the products for this user. */
-  protected @Nullable DMAData m_productData = null;
+  protected transient @Nullable DMAData m_productData = null;
 
   //........................................................................
   //----- last action ------------------------------------------------------

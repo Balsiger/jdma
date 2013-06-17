@@ -681,7 +681,7 @@ public class BaseItem extends BaseEntry
     new BaseType<BaseItem>(BaseItem.class);
 
   /** Flag if extensions are initialized. */
-  protected static boolean s_extensionsInitialized = false;
+  private static boolean s_extensionsInitialized = false;
 
   //----- value ------------------------------------------------------------
 

@@ -24,15 +24,12 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
-import net.ixitxachitls.dma.data.DMAFile;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.ValueList;
@@ -102,8 +99,8 @@ public class Campaign extends CampaignEntry<BaseCampaign>
   public static final BaseType<BaseCampaign> BASE_TYPE = BaseCampaign.TYPE;
 
   /** The files read for this campaign. */
-  private final Map<String, DMAFile> m_dmaFiles =
-    new HashMap<String, DMAFile>();
+//  private final transient Map<String, DMAFile> m_dmaFiles =
+//    new HashMap<String, DMAFile>();
 
   //----- dm ---------------------------------------------------------------
 
@@ -202,15 +199,15 @@ public class Campaign extends CampaignEntry<BaseCampaign>
    * @undefined   never
    *
    */
-  public List<String> getFilenames()
-  {
-    ArrayList<String> files = new ArrayList<String>();
-
-    for(DMAFile file : m_dmaFiles.values())
-      files.add(file.getStorageName());
-
-    return files;
-  }
+//  public List<String> getFilenames()
+//  {
+//    ArrayList<String> files = new ArrayList<String>();
+//
+//    for(DMAFile file : m_dmaFiles.values())
+//      files.add(file.getStorageName());
+//
+//    return files;
+//  }
 
   //........................................................................
 
