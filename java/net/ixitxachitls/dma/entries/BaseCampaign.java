@@ -130,42 +130,6 @@ public class BaseCampaign extends BaseEntry
   }
 
   //........................................................................
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle computeValue(String inKey,
-  // boolean inDM)
-  // {
-  //   if("campaigns".equals(inKey))
-  //   {
-  //     List<Object> commands = new ArrayList<Object>();
-  //     for(String name : DMADataFactory.get().getIDs(Campaign.TYPE, getKey()))
-  //     {
-  //       if(!commands.isEmpty())
-  //         commands.add(", ");
-
-  //       commands.add(new Link(name, getPath() + "/" + name));
-  //     }
-
-  //     commands.add(" | ");
-  //     commands.add(new Link("add", getPath() + "/" + getName() + "?create"));
-  //     return new FormattedValue(new Command(commands), null, "campaigns")
-  //       .withPlural("campaigns");
-  //   }
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
 
   //--------------------------------- isDM ---------------------------------
 

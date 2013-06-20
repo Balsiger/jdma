@@ -1200,45 +1200,7 @@ public class BaseItem extends BaseEntry
 
   //........................................................................
 
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
-  // {
-  //   if("hp".equals(inKey) && !m_hp.isDefined() && m_substance.isDefined())
-  //     return new FormattedValue(new Span("computed", getHP()),
-  //                               Value.UNDEFINED, "hp")
-  //       .withDM(true)
-  //       .withEditable(true);
-
-  //   if("hardness".equals(inKey) && !m_hardness.isDefined()
-  //      && m_substance.isDefined())
-  //     return new FormattedValue(new Span("computed", getHardness()),
-  //                               Value.UNDEFINED, "hardness")
-  //       .withPlural("hardnesses")
-  //       .withDM(true)
-  //       .withEditable(true);
-
-  //   if("player name".equals(inKey) && !m_playerName.isDefined())
-  //     return new FormattedValue(new Span("computed", getPlayerName()),
-  //                               Value.UNDEFINED, "player name")
-  //       .withDM(true)
-  //       .withEditable(true);
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
-  //-------------------------- computeIndexValues --------------------------
+ //-------------------------- computeIndexValues --------------------------
 
   /**
    * Get all the values for all the indexes.

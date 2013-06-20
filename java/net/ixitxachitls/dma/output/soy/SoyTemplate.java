@@ -875,6 +875,7 @@ public class SoyTemplate
         name = "soy/" + file + ".soy";
 
       File pureFile = new File(name);
+      String classpath = System.getProperty("java.class.path");
       if(pureFile.canRead())
         files.add(pureFile);
       else

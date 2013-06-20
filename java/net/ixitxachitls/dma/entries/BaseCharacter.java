@@ -340,51 +340,6 @@ public class BaseCharacter extends BaseEntry
   }
 
   //........................................................................
-
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle computeValue(String inKey,
-  //                                           boolean inDM)
-  // {
-  //   if("products".equals(inKey))
-  //   {
-  //     List<Product> products = DMADataFactory.get()
-  //       .getRecentEntries(Product.TYPE, getKey());
-
-  //     List<Object> commands = new ArrayList<Object>();
-  //     boolean more = products.size() > MAX_PRODUCTS;
-  //     for(int i = 0; i < MAX_PRODUCTS && i < products.size(); i++)
-  //     {
-  //       if(i > 0)
-  //         commands.add(", ");
-
-  //       Product product = products.get(i);
-  //       commands.add(new Link(product.getFullTitle(), product.getPath()));
-  //     }
-
-  //     if(more)
-  //       commands.add(" ... ");
-
-  //     commands.add("| ");
-  //     commands.add(new Link("view all", getPath() + "/products"));
-
-  //     return new FormattedValue(new Command(commands), null, "products");
-  //   }
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
   //------------------------------- compute --------------------------------
 
   /**

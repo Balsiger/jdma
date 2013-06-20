@@ -409,7 +409,7 @@ public class PageServlet extends SoyServlet
 
       assertNull("handle", servlet.handle(request, response));
       assertEquals("content",
-                   "No new content defined, yet.    This is the body.\n\n",
+                   "No new content defined, yet.\n",
                    output.toString());
 
       output.close();

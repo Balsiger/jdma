@@ -603,82 +603,6 @@ public abstract class ValueGroup implements Changeable
   }
 
   //........................................................................
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Format a value for printing.
-   *
-   * @param     inKey the key of the value to format
-   * @param     inDM  true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // public @Nullable ValueHandle<?> computeValue(String inKey, boolean inDM)
-  // {
-  //   // use _ to denote using a variable name
-  //   if(inKey.startsWith("_"))
-  //     return getVariable(inKey.substring(1));
-
-  //   return getVariable(inKey);
-  // }
-
-  //........................................................................
-  //----------------------------- adjustValue ------------------------------
-
-  /**
-   * Adjust the value for the given name for any special properites.
-   *
-   * @param       inName        the name of the value to adjust
-   * @param       ioCombination the combinstaion to adjust
-   * @param       <V>           the real type of the values combined
-   *
-   */
-  // @Deprecated
-  // public <V extends Value<?>> void adjustCombination
-  //           (String inName, Combination<V> ioCombination)
-  // {
-  //   // nothing to do
-  // }
-
-  //........................................................................
-  //--------------------------- collectModifiers ---------------------------
-
-  /**
-   * collect the modifiers for the named value.
-   *
-   * @param       inName the name of the value to collect
-   *
-   * @return      a mapping between location and modifier found
-   *
-   */
-  // @Deprecated
-  // public Map<String, Modifier> collectModifiers(String inName)
-  // {
-  //   Map<String, Modifier> modifiers = new HashMap<String, Modifier>();
-
-  //   addModifiers(inName, modifiers);
-
-  //   return modifiers;
-  // }
-
-  //........................................................................
-  //---------------------------- addModifiers ------------------------------
-
-  /**
-   * Add current modifiers to the given map.
-   *
-   * @param       inName        the name of the value to modify
-   * @param       inModifiers   the map of modifiers
-   *
-   */
-  // @Deprecated
-  // public void addModifiers(String inName, Map<String, Modifier> inModifiers)
-  // {
-  //   // nothing to do
-  // }
-
-  //........................................................................
 
   //---------------------------- getBaseEntries ----------------------------
 
@@ -692,46 +616,6 @@ public abstract class ValueGroup implements Changeable
   {
     return new ArrayList<BaseEntry>();
   }
-
-  //........................................................................
-  //------------------------- collectContributions -------------------------
-
-  /**
-   * Collect contributions. To be deleted
-   *
-   * @param   inName the name of the value to collect
-   *
-   * @return  the list of collected contributions
-   */
-  // @Deprecated
-  // public List<Contribution<? extends Value<?>>>
-  //                            collectContributions(String inName)
-  // {
-  //List<Contribution<? extends Value<?>>> contributions = Lists.newArrayList();
-
-  //   addContributions(inName, contributions);
-
-  //   return contributions;
-  // }
-
-  //........................................................................
-  //--------------------------- addContributions ---------------------------
-
-  /**
-   * Add contributions for this entry to the given list.
-   *
-   * @param       inName          the name of the value to contribute to
-   * @param       ioContributions the list of contributions to add to
-   *
-   */
-  // @Deprecated
-  // public void addContributions
-  //   (String inName, List<Contribution<? extends Value<?>>> ioContributions)
-  // {
-  //   // Value v = getValue(inName);
-  //   // if(v != null && v.isDefined())
-  //   //   ioContributions.add(new Contribution<Value>(v, this, null));
-  // }
 
   //........................................................................
   //------------------------------- collect --------------------------------

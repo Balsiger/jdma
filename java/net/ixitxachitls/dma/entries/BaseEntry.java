@@ -282,23 +282,6 @@ public class BaseEntry extends AbstractEntry
 
   //-------------------------------------------------------------- accessors
 
-  //--------------------------------- getID --------------------------------
-
-  /**
-   * Get the ID of the entry. This can mainly be used for reference purposes.
-   * In this case, the lowercased name is equal to the id, which is not true
-   * for entries.
-   *
-   * @return      the requested id
-   *
-   */
-  // @Override
-  // public String getID()
-  // {
-  //   return super.getID().toLowerCase(Locale.US);
-  // }
-
-  //........................................................................
   //-------------------------------- isBase --------------------------------
 
   /**
@@ -479,45 +462,6 @@ public class BaseEntry extends AbstractEntry
 
   //........................................................................
 
-  //------------------------- getRefSummaryCommand -------------------------
-
-  /**
-   * Get the command for printing a reference summary.
-   *
-   * @param       inParameters optional parametrs to further specifiy the entry
-   *
-   * @return      the command for printing a reference
-   *
-   */
-//   public Command getRefSummaryCommand(String ... inParameters)
-//   {
-//     return new Command(new Object []
-//       {
-//         new Super(getReference(false)),
-//         " (",
-//         getSummary(inParameters),
-//         ")",
-//       });
-//   }
-
-  //........................................................................
-
-  //------------------------------ getSummary ------------------------------
-
-  /**
-   * Get a summary for the entry.
-   *
-   * @param       inParameters optional parametrs to further specifiy the entry
-   *
-   * @return      the string with the summary
-   *
-   */
-//   public String getSummary(String ... inParameters)
-//   {
-//     return getShortDescription();
-//   }
-
-  //........................................................................
   //--------------------------- getReferenceIDs ----------------------------
 
   /**
@@ -538,40 +482,6 @@ public class BaseEntry extends AbstractEntry
 
   //........................................................................
 
-  //----------------------------- getReference -----------------------------
-
-  /**
-   * Get the reference(s) for this entry.
-   *
-   * @param       inFull if true, get all references, if false only the first
-   *                     one
-   *
-   * @return      a string with the reference
-   *
-   */
-//   @SuppressWarnings("unchecked")
-//   public String getReference(boolean inFull)
-//   {
-//     List <String> references = new ArrayList<String>();
-
-//     for(Multiple reference : m_references.getHigh())
-//     {
-//       String text = resolveReference(((Text)reference.get(0).get()).get());
-//       ValueList<Range> pages = (ValueList<Range>)reference.get(1).get();
-
-//       if(pages.isDefined())
-//         text += " p. " + pages;
-
-//       references.add(text);
-
-//       if(!inFull)
-//         break;
-//     }
-
-//     return Strings.toString(references, ", ", "");
-//   }
-
-  //........................................................................
   //--------------------------- resolveReference ---------------------------
 
   /**
@@ -586,20 +496,6 @@ public class BaseEntry extends AbstractEntry
   {
     return DMADataFactory.get().getEntry(createKey(inName, BaseProduct.TYPE));
   }
-
-  //........................................................................
-  //---------------------------- getDescription ----------------------------
-
-  /**
-   * Get the description of the product.
-   *
-   * @return      the description
-   *
-   */
-//   public String getDescription()
-//   {
-//     return m_description.get();
-//   }
 
   //........................................................................
   //------------------------------ getSynonyms -----------------------------
@@ -679,108 +575,6 @@ public class BaseEntry extends AbstractEntry
   }
 
   //........................................................................
-  //---------------------------- getProbability ----------------------------
-
-  /**
-   * Get the probability of the base entry. This method is primarily used in
-   * derivations to support probability values in that case.
-   *
-   * @return      always 1 (will be changed in derivation)
-   *
-   */
-//   public int getProbability()
-//   {
-//     return 1;
-//   }
-
-  //........................................................................
-  //------------------------ getReqEntryAttachments ------------------------
-
-  /**
-   * Get a list of all attachments required by this entry (and all its own
-   * attachments).
-   *
-   * @return      a list with all attachments or null if no attachments
-   *              required
-   *
-   * @undefined   can return null
-   *
-   */
-//   protected Iterator<String> getReqEntryAttachments()
-//   {
-//     ArrayList<Iterator<String>> attachments =
-//       new ArrayList<Iterator<String>>();
-
-//     for(Iterator<AbstractAttachment> i = m_attachments.values().iterator();
-//         i.hasNext(); )
-//     {
-//       Iterator<String> auto =
-//         AbstractAttachment.getAutoAttachments(i.next().getClass());
-
-//       if(auto != null)
-//         attachments.add(auto);
-//     }
-
-//     return
-//       new MultiIterator<String>(attachments.toArray(new Iterator [0]));
-//   }
-
-  //........................................................................
-  //------------------------------- getBased -------------------------------
-
-  /**
-   * Get the base entry this one is based upon, if any.
-   *
-   * @return      the base entry or null
-   *
-   */
-//   @MayReturnNull
-//   public BaseEntry getBased()
-//   {
-//     return m_base;
-//   }
-
-  //........................................................................
-
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
-  // {
-  //   if("categories".equals(inKey))
-  //   {
-  //     List<Object> commands = new ArrayList<Object>();
-  //     List<String> categories = getCategories();
-  //     for(String category : categories)
-  //     {
-  //       if(!commands.isEmpty())
-  //         commands.add(", ");
-
-  //       commands.add(new Link(category,
-  //                             link(getType(),
-  //                                  Index.Path.CATEGORIES)
-  //                             + category.toLowerCase(Locale.US)));
-  //     }
-
-  //     return new FormattedValue
-  //       (new Command(commands), Strings.toString(categories, ", ", ""),
-  //        "categories")
-  //       .withEditable(true);
-  //   }
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
   //-------------------------- computeIndexValues --------------------------
 
   /**
@@ -807,80 +601,11 @@ public class BaseEntry extends AbstractEntry
   }
 
   //........................................................................
-  //----------------------------- printCommand -----------------------------
-
-  /**
-   * Create the print command for printing this entry. This is an internal
-   * method for more efficient creation. From the outside, use
-   * <CODE>getPrintCommand()</CODE> instead.
-   *
-   * @param       inDM       true if set for DM, false for player
-   * @param       inEditable true if values are editable, false if not
-   *
-   * @return      an object with the individual parts to set on the page
-   *
-   * @undefined   never
-   *
-   */
-//   public PrintCommand printCommand(boolean inDM, boolean inEditable)
-//   {
-//     PrintCommand commands = super.printCommand(inDM, inEditable);
-
-//     // values
-//     commands.addValue(m_categories, "categories", inEditable);
-//     commands.addValue(m_synonyms, "synonyms", inEditable);
-//     commands.addValue(m_references, "references", inEditable);
-
-//     // now the attachments
-//     for(Iterator<AbstractAttachment> i = getAttachments(); i.hasNext(); )
-//       i.next().addPrintCommands(commands, inDM, inEditable);
-
-
-//     commands.pre.add(new Textblock(new Command(new Object []
-//       {
-//         createValueCommand(m_description, "description", inEditable),
-//         new Linebreak(),
-//         new Hrule(),
-//         createValueCommand(m_short, "short description", inEditable),
-//       }), "desc"));
-
-//     commands.pre.add(new net.ixitxachitls.output.commands.Files
-//                      (getType().getMultipleDir() + "/" + getName()));
-
-//     commands.post.add(new Script
-//                       ("gui.addAction('Save', "
-//                        + "function() { save('base', '" + m_type.toString()
-//                        + "'); }, "
-//                     + "'Save all the changes made.', 'save', 'hidden');\n"));
-
-//     return commands;
-//   }
-
-  //........................................................................
 
   //........................................................................
 
   //----------------------------------------------------------- manipulators
 
-  //-------------------------------- setWorld ------------------------------
-
-  /**
-   * Set the world of the base entry.
-   *
-   * @param       inWorld the world to set to
-   *
-   * @return      true if set, false if not
-   *
-   */
-//   public boolean setWorld(String inWorld)
-//   {
-//     if(inWorld == null)
-//       return false;
-
-//     return m_world.setSelected(inWorld);
-//   }
-
-  //........................................................................
   //------------------------------ setDescription --------------------------
 
   /**

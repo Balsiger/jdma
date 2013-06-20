@@ -26,6 +26,7 @@ package net.ixitxachitls.dma.output.soy;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -295,14 +296,24 @@ public class SoyEntry extends SoyAbstract
                    soyEntry.getSingle("key").toString());
       assertEquals("path", "/entry/test entry",
                    soyEntry.getSingle("path").toString());
-      assertEquals("type", "{multidir: BaseEntries, link: entry, "
-                   + "name: base entry, multi: Base Entries, "
-                   + "multilink: entrys, css: base-entry}",
-                   soyEntry.getSingle("type").toString());
-      assertEquals("files", "{other: [], "
-                   + "main: {icon: /icons/BaseEntries-dummy.png, name: main, "
-                   + "path: /icons/BaseEntries-dummy.png, type: image/png}}",
-                   soyEntry.getSingle("files").toString());
+      assertStringContent("type",
+                          ((SoyMapData)soyEntry.getSingle("type")).asMap(),
+                          "multidir", "BaseEntries",
+                          "link", "entry",
+                          "name", "base entry",
+                          "multi", "Base Entries",
+                          "multilink", "entrys",
+                          "css", "base-entry");
+
+      Map<String, SoyData> files =
+          ((SoyMapData)soyEntry.getSingle("files")).asMap();
+      assertEquals("files, other", files.get("other").toString(), "[]");
+      assertStringContent("files, main",
+                          ((SoyMapData)files.get("main")).asMap(),
+                          "icon", "/icons/BaseEntries-dummy.png",
+                          "name", "main",
+                          "path", "/icons/BaseEntries-dummy.png",
+                          "type", "image/png");
       assertEquals("name", "test entry",
                    soyEntry.getSingle("name").toString());
       assertEquals("dma", "#----- test entry\n\n"

@@ -324,31 +324,6 @@ public abstract class CampaignEntry<T extends BaseEntry> extends Entry<T>
 
   //........................................................................
 
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle computeValue(String inKey,
-  // boolean inDM)
-  // {
-  //   if("campaign".equals(inKey))
-  //     return new FormattedValue(new Link(m_campaign.get(1),
-  //                                        "/campaign/" + m_campaign.get(0)
-  //                                        + "/" + m_campaign.get(1)),
-  //                               null, "campign");
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
   //------------------------------- compute --------------------------------
 
   /**

@@ -513,9 +513,9 @@ public class FileServlet extends BaseServlet
         .andReturn(0L);
       response.setHeader("Cache-Control", "max-age=86400");
       response.setDateHeader(EasyMock.eq("Last-Modified"),
-                             EasyMock.gt(new Date().getTime()));
+                             EasyMock.gt(new Date().getTime() - 10000));
       response.setDateHeader(EasyMock.eq("Expires"),
-                             EasyMock.gt(new Date().getTime()));
+                             EasyMock.gt(new Date().getTime() - 10000));
       response.setHeader("Content-Type", "text/plain");
       EasyMock.expect(response.getOutputStream()).andReturn(output);
       EasyMock.replay(request, response);

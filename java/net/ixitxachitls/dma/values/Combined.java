@@ -867,7 +867,8 @@ public class Combined<T extends Value<T>>
   public void addValue(T inValue, ValueGroup inGroup,
                        @Nullable String inDescription)
   {
-    if(m_root != null)
+    if(m_root != null
+        && (m_root.m_value == null || !m_root.m_value.isDefined()))
       m_root.addChild(new Node<T>(inValue, inGroup.getEntry(), inDescription));
     else
       m_values.add(new Contribution<T>(inValue, inGroup, inDescription));

@@ -651,6 +651,8 @@ public class SaveActionServlet extends ActionServlet
 
       assertEquals("name", "test", entry.getName());
 
+      m_logger.addExpected("WARNING: trying to set undefined variable guru "
+          + "with guru in test [class net.ixitxachitls.dma.entries.BaseEntry]");
       m_logger.addExpected("WARNING: Could not fully parse guru value for "
                            + "/base entry/test: 'guru'");
       EasyMock.verify(request, response, user);

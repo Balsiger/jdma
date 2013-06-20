@@ -518,7 +518,7 @@ public abstract class Resource
       assertNull("unknown", Resource.get("guru/gugus").m_url);
 
       // now for a directory
-      assertPattern("file", "file:/.*/css/",
+      assertPattern("file", "file:/.*/css/?",
                     Resource.get("css").toString());
 
       // now for a JAR file

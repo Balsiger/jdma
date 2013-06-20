@@ -209,6 +209,38 @@ public class TestCase extends org.junit.Assert
     }
   }
 
+  /**
+   * Assert that the map's string representations matches the given strings.
+   *
+   * @param inMessage   the message to print on failure
+   * @param inActual    the actual map
+   * @param inExpected  the expected key value pairs
+   */
+  public void assertStringContent(String inMessage, Map<?, ?> inActual,
+                                  String ... inExpected)
+  {
+    if(inActual.size() * 2 != inExpected.length)
+      throw new org.junit.ComparisonFailure(inMessage, "" + inActual.size(),
+                                            "" + (inExpected.length / 2));
+
+    for(int i = 0; i < inExpected.length; i += 2)
+    {
+      String key = inExpected[i];
+      String value = inExpected[i + 1];
+
+      String actual = inActual.get(key).toString();
+
+      if ((actual == null && value != null)
+          || (actual != null && !actual.equals(value)))
+        throw new org.junit.ComparisonFailure
+          (inMessage + " [" + key + "]",
+           value != null ? value.toString() : "NULL",
+           actual != null ? actual.toString() : "NULL");
+    }
+  }
+
+
+
   //........................................................................
 
   //----------------------------- raiseFailure -----------------------------

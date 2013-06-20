@@ -1643,59 +1643,6 @@ public class BaseProduct extends BaseEntry
 
   //........................................................................
 
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
-  // {
-  //   if("name".equals(inKey))
-  //     return new FormattedValue
-  //       (new Command(computeValue("_leader", inDM).format(this, inDM, true),
-  //                    " ",
-  //                    computeValue("_title", inDM).format(this, inDM, true)),
-  //        m_leader.get() + " " + m_title.get(), "name")
-  //       .withEditable(false); // the leader and title are editable, but the
-  //                             // wrapper is not
-
-  //   if("subtitle".equals(inKey))
-  //     return new FormattedValue
-  //       (new Subtitle(new BaseCommand(m_subtitle.get())),
-  //        m_subtitle, "subtitle")
-  //       .withEditable(true);
-
-  //   if("owners".equals(inKey))
-  //   {
-  //     List<Object> commands = new ArrayList<Object>();
-  //     for(Map.Entry<String, String> owner
-  //           : DMADataFactory.get().getOwners(this.getName()).entries())
-  //     {
-  //       if(!commands.isEmpty())
-  //         commands.add(", ");
-
-  //       commands.add(new Link(owner.getKey(), "/user/" + owner.getKey()
-  //                             + "/product/" + owner.getValue()));
-  //     }
-
-  //     commands.add(" | ");
-  //     commands.add(new Link("add",
-  //                           "/user/me/product/" + getName() + "?create"));
-  //     return new FormattedValue(new Command(commands), null, "owners")
-  //       .withPlural("owners");
-  //   }
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
   //------------------------------- compute --------------------------------
 
   /**

@@ -31,6 +31,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
@@ -403,6 +404,9 @@ public class EntryServlet extends PageServlet
       EasyMock.expect(m_response.getOutputStream()).andReturn(m_output);
       EasyMock.expect(m_request.hasUser()).andStubReturn(true);
       EasyMock.expect(m_request.getUser()).andReturn(null).anyTimes();
+      EasyMock.expect(m_request.getParams())
+        .andReturn(ImmutableListMultimap.<String, String>of())
+        .anyTimes();
       if(inEntry == null && inType != null && inID != null)
         EasyMock.expect(m_request.hasParam("create")).andReturn(inCreate);
       EasyMock.replay(m_request, m_response);

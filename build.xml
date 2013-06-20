@@ -477,6 +477,7 @@
       <jvmarg value="-Demma.coverage.out.merge=true" />
       <classpath>
         <pathelement location="${emma.instr.dir}" />
+	<pathelement location="" />
         <pathelement location="${lib.dir}/appengine-api.jar" />
         <path refid="emma.classpath" />
         <path refid="classpath" />

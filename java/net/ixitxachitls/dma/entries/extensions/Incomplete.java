@@ -100,36 +100,6 @@ public class Incomplete extends Extension<Entry<?>>
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //----------------------------- computeValue -----------------------------
-
-  /**
-   * Get a value for printing.
-   *
-   * @param     inKey  the name of the value to get
-   * @param     inDM   true if formattign for dm, false if not
-   *
-   * @return    a value handle ready for printing
-   *
-   */
-  // @Override
-  // public @Nullable ValueHandle computeValue(String inKey, boolean inDM)
-  // {
-  //   if(inDM && "summary".equals(inKey))
-  //   {
-  //     List<Object> commands = new ArrayList<Object>();
-  //     commands.add(new Symbol("\u2639"));
-  //     maybeAddValue(commands, "incomplete", inDM, null, null);
-
-  //     return new FormattedValue(new Color("dm-notes", new Command(commands)),
-  //                               null, "summary");
-  //   }
-
-  //   return super.computeValue(inKey, inDM);
-  // }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators

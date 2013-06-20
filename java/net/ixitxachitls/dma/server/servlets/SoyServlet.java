@@ -304,7 +304,7 @@ public class SoyServlet extends DMAServlet
       EasyMock.replay(request);
 
       SoyServlet servlet = new SoyServlet();
-      assertEquals("content", "{oldcontent=}",
+      assertEquals("content", "{}",
                    servlet.collectData(request,
                                        new SoyRenderer(new SoyTemplate()))
                    .toString());

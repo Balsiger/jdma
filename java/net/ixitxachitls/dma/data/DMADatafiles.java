@@ -1221,7 +1221,7 @@ public class DMADatafiles implements DMAData
     public void read()
     {
       DMADatafiles data =
-        new DMADatafiles("../lib/test", "Test.dma");
+        new DMADatafiles("lib/test", "Test.dma");
 
       assertTrue("read", data.read());
     }
