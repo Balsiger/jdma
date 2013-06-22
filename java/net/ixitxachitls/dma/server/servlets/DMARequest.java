@@ -662,6 +662,8 @@ public class DMARequest extends HttpServletRequestWrapper
       Log.warning("could not properly initialize base skill type");
     if(net.ixitxachitls.dma.entries.BaseSpell.TYPE == null)
       Log.warning("could not properly initialize base spell type");
+    if(net.ixitxachitls.dma.entries.BaseEncounter.TYPE == null)
+      Log.warning("could not properly initialize base encounter type");
   }
 
   //........................................................................

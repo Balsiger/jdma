@@ -55,6 +55,9 @@
     <property name="web.template.css.color_Spell" value="#8080ff" />
     <property name="web.template.css.lightcolor_Spell" value="#a0a0ff" />
     <property name="web.template.css.hilightcolor_Spell" value="#c0c0fff" />
+    <property name="web.template.css.color_Encounter" value="#ccccff" />
+    <property name="web.template.css.lightcolor_Encounter" value="#ddddff" />
+    <property name="web.template.css.hilightcolor_Encounter" value="#aaaaff" />
   </system-properties>
 
   <static-error-handlers>

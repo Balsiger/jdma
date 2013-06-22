@@ -1,0 +1,288 @@
+# file: BaseEncounters/WTC 88574.dma
+
+#----- City of the Spider Queen
+
+base encounter City of the Spider Queen =
+
+  adventure         "City of the Spider Queen";
+  worlds            Forgotten Realms;
+  references        WTC 88574.
+
+#.....
+
+#----- Part 1 Spinning the Web 
+
+base encounter Part 1 Spinning the Web = 
+  base              City of the Spider Queen; 
+  synonyms          "Part 1", "Spinning the Web".
+
+#.....
+#----- Part 2 The Deep Wastes 
+
+base encounter Part 2 The Deep Wastes =
+  base              City of the Spider Queen; 
+  synonyms          "Part 2", "The Deep Wastes".
+
+#.....
+#----- Part 3 Maerimydra
+
+base encounter Part 3 Maerimydra = 
+  base              City of the Spider Queen; 
+  synonyms          "Part 3", "Maerimydra".
+
+#.....
+
+#----- Mausoleum
+
+base encounter 1 Mausoleum =
+  base              Part 1 Spinning the Web;
+  adventure         "City of the Spider Queen";
+  location          Dordrien Crypts Outside;
+  doors             "4 in Stone, hardness 8, hp 60, AC 5, break DC 28";
+  floor             "Relatively smooth flagstones";
+  ceiling           "8 ft, smooth";
+  walls             "1 ft Superior Masonry, hardness 8, hp 90, AC 3, break DC 35, Climb DC 20";
+  feel              "Cooler than outside, misty";
+  sound             "birds, weather, crickets";
+  smell             "old, misty";
+  taste             "stale";
+  light             "Daylight through door";
+  references        WTC 88574: 11-15;
+  description       
+  "Encounters outside of the real crypt.";
+  short description "Outside encounters.".
+
+#.....
+#----- Crypt Cavern
+
+base encounter 2 Crypt Cavern =
+  base              Part 1 Spinning the Web;
+  adventure         "City of the Spider Queen";
+  location          Crypt Cavern below Dordrien Crypt;
+  doors             "Stone 4 in, hardness 8, hp 60, AC 5, break DC 28";
+  floor             "hewn from natural stone, relatively even, run or charge Balance DC 10 or prone";
+  ceiling           "12 to 15 ft., unhwen, stalagtites";
+  walls             "min 5 ft unworked stone, hardness 8, hp 900/5 ft, AC 3, break DC 65, Climb DC 20";
+  feel              "rather cold, damp";
+  sound             "dripping, shuffling of small feet (rats)";
+  smell             "damp, moldy";
+  taste             "moldy";
+  light             "None unless brought";
+  skills            Balance;
+  references        WTC 88574;
+  description       
+  "The first underground level of the crypts. Usually natural stone, sometimes worked.";
+  short description "first underground level, natural stone caverns.";
+  synonyms          "Cavern, Crypt".
+
+#.....
+#----- Szith Morcane 
+
+base encounter 3 Szith Morcane =
+  base              Part 1 Spinning the Web;
+  adventure         "City of the Spider Queen";
+  location          Szith Morcane;
+  doors             "Stone, 4 in, hardness 8, hp 60, AC 5, break DC 28";
+  floor             "hewn from natural stone, relatively even, run or charge Balance DC 10 or prone";
+  ceiling           "7 ft, smooth, some unhewn >15 ft with stalactites";
+  walls             "Hewn stone wall, min 3 ft. thick, hardness 8, hp 540, AC 3, break DC 50, Climb DC 22; Unworked stone wall, min 5 ft. thick, hardness 8, hp 900/5 ft, AC 3, break DC 65, Climb DC 20";
+  feel              "more or less clean, dry";
+  sound             "depends on the location, might hear town noices";
+  smell             "food, animals";
+  taste             "dry";
+  light             "None unless brought";
+  skills            Balance;
+  references        WTC 88574: 20-44;
+  description       
+  "All the encounters in and around Szith Morcane.";
+  short description "Encounters in Szith Morcane".
+
+#.....
+#----- House Morcane
+
+base encounter 4 House Morcane =
+  base              Part 1 Spinning the Web;
+  feel              "\Spell{Forbiddance}: each non-chaotic-evil character must make a Will save DC 21 to enter or be hedged out and take 3d6 damage (or 6d6 if two alignment differences). No planar travel, astral travel, ethereal travel, and summoning works. \par\Spell{Unhallow}: Every creature +2 deflection to AC and +2 resistance bonus on saves from good creatures. Wards against possesion or mental control and bodily contact by summoned or conjured creatures (except evil outsiders or elementals).4 profane bonus on turning checks, +4 profane on rebuke checks. \Spell{Invisibility Purge} negates any invisibility.";
+  references        WTC 88574: 37-44;
+  description       
+  "The area of former House Morcane.";
+  synonyms          "Morcane, House".
+
+#.....
+#----- Deep Wastes
+
+base encounter 1 Deep Wastes =
+  base              Part 2 The Deep Wastes;
+  location          Deep Wastes between Szith Morcane and Maerimydra;
+  doors             "There are usually no doors here.";
+  floor             "Natural stone with stalagmites, running and charging impossible.";
+  ceiling           "Unworked stone with stalagtites, 15 to 20 ft high.";
+  walls             "Unworked stone walls, min 5 ft thick, hardness 8, 900 hp per 5 feet, AC 3, break DC 65, Climb DC 20";
+  feel              "Oppresive, enclosed, quiet, threatening.";
+  sound             "Usually none, but sometimes water (dripping, streams, river) or some earth rumblings.";
+  smell             "Often damp, sometimes dry.";
+  taste             "Stale.";
+  light             "No light, unless otherwise specified.";
+  description       
+  "A typical encounter location in the deeper Underdark.";
+  short description "A typical encounter location in the deeper Underdark.";
+  synonyms          "Wastes, Deep".
+
+#.....
+#----- Naga Crawls
+
+base encounter 2 Naga Crawls =
+  base              Part 2 The Deep Wastes;
+  location          Naga Crawls in the Deeps Wastes between Szith Morcane and Maerimydra;
+  doors             "There are usually no doors here.";
+  floor             "Natural stone with stalagmites, running and charging impossible.";
+  ceiling           "Unworked stone with stalagtites, 15 to 20 ft high.";
+  walls             "Unworked stone walls, min 5 ft thick, hardness 8, 900 hp per 5 feet, AC 3, break DC 65, Climb DC 20";
+  feel              "Oppresive, enclosed, quiet, threatening.";
+  sound             "Usually none, but sometimes water (dripping, streams, river) or some earth rumblings.";
+  smell             "Often damp, sometimes dry.";
+  taste             "Stale.";
+  light             "No light, unless otherwise specified.";
+  description       
+  "A typical encounter location in the deeper Underdark.";
+  short description "A typical encounter location in the deeper Underdark.";
+  synonyms          "Crawls, Naga".
+
+#.....
+#----- Lake of Shadows
+
+base encounter 3 Lake of Shadows =
+  base              Part 2 The Deep Wastes;
+  location          The Lake of Shadows is a large body of fresh water beneath the Dagger Hills in the extreme northwest of Cormanthor;
+  doors             "There are usually no doors here.";
+  floor             "Natural stone with stalagmites, running and charging impossible.";
+  ceiling           "Unworked stone with stalagtites, 15 to 20 ft high.";
+  walls             "Unworked stone walls, min 5 ft thick, hardness 8, 900 hp per 5 feet, AC 3, break DC 65, Climb DC 20";
+  feel              "Open, damp, water everywhere.";
+  sound             "Usually none, sometimes water drippings, fish or other things moving through water.";
+  smell             "Often damp, sometimes dry.";
+  taste             "damp.";
+  light             "No light, unless otherwise specified.";
+  description       
+  "A near water encounter location in the deeper Underdark.";
+  short description "A typical encounter location in the deeper Underdark.";
+  synonyms          "Shadows, Lake of".
+
+#.....
+#----- Wailing Cliff
+
+base encounter 4 Wailing Cliff =
+  base              Part 2 The Deep Wastes;
+  location          The Wailing Cliff is a 300 ft cliff blocking easy passage between Szith Morcane and Maerimydra;
+  doors             "There are usually no doors here.";
+  floor             "Characters possibly fly, see p. 57.";
+  ceiling           "High up (more than 300 ft)";
+  walls             "Unworked stone walls, min 5 ft thick, hardness 8, 900 hp per 5 feet, AC 3, break DC 65, Climb DC 30 (DC 25 on south wall)";
+  feel              "windy, big open space.";
+  sound             "wind, like a constant moaning, occasionally rising to a high-pitched wail.";
+  smell             "not much, some dust";
+  taste             "not much, some dust";
+  light             "No light, unless otherwise specified.";
+  description       
+  ".";
+  short description "A cliff and climbing encounter area in the deeper Underdark.";
+  synonyms          "Cliff, Wailing".
+
+#.....
+#----- Yrthak Cavern
+
+base encounter 5 Yrthak Cavern =
+  base              Part 2 The Deep Wastes;
+  location          The caverns are the lairs of Yrthak near Maerimydra;
+  doors             "There are usually no doors here.";
+  floor             "natural, please note other scale.";
+  ceiling           "High up (more than 300 ft)";
+  walls             "Unworked stone walls, min 5 ft thick, hardness 8, 900 hp per 5 feet, AC 3, break DC 65, Climb DC 30 (DC 25 on south wall)";
+  feel              "calm, big open space.";
+  sound             "sometimes rothe sounds or Yrthaks, strange humming";
+  smell             "dung from rothe";
+  taste             "dung from rothe";
+  light             "No light, unless otherwise specified.";
+  description       
+  ".";
+  short description "The Yrthak's lair.";
+  synonyms          "Cavern, Yrthak".
+
+#.....
+#----- Vurnoth's Mire
+
+base encounter 6 Vurnoth's Mire =
+  base              Part 2 The Deep Wastes;
+  location          The crossing of an underground river and the path from Szith Morcane to Maerimydra;
+  doors             "There are usually no doors here.";
+  floor             "natural";
+  ceiling           "Usually high up";
+  walls             "Unworked stone walls, min 5 ft thick, hardness 8, 900 hp per 5 feet, AC 3, break DC 65, Climb DC 30 (DC 25 on south wall)";
+  feel              "damp, foul stagnat water";
+  sound             "water running, dripping";
+  smell             "damp, water lichen";
+  taste             "damp";
+  light             "No light, unless otherwise specified.";
+  description       
+  ".";
+  short description "The river path crossing.";
+  synonyms          "Mire, Vurnoth's".
+
+#.....
+#----- The Burning City
+
+base encounter 1 The Burning City = 
+  base              Part 3 Maerimydra; 
+  synonyms          "Burning City, The";
+  location          10 miles below the south-central border of Mistledale;
+  doors             "";
+  floor             "Rubble in the blocks of ruined buildings, Balance DC 10 for running or charging,4 on move silently";
+  light             "Prevalent light similar to moonlight, line of sight 30 ft in blocks, 120 in fields or streets (spotting 2d4 x 10)";
+  ceiling           "600 ft high, above 100 ft smoke, concealment, slight draft moves out smoke";
+  walls             "rough and steep, Climb C 25";
+  short description "All the parts in the burning city";
+  references        WTC 88574: 64-69;
+  description       
+
+  "".
+
+#............................................................................
+#----- Maerimydra 
+
+base encounter 2 Maerimydra = 
+  base              Part 3 Maerimydra; 
+  synonyms          "Maerimydra";
+  location          10 miles below the south-central border of Mistledale;
+  doors             "";
+  floor             "Rubble in the blocks of ruined buildings, Balance DC 10 for running or charging,4 on move silently";
+  light             "Prevalent light similar to moonlight, line of sight 30 ft in blocks, 120 in fields or streets (spotting 2d4 x 10)";
+  ceiling           "600 ft high, above 100 ft smoke, concealment, slight draft moves out smoke";
+  walls             "rough and steep, Climb C 25";
+  short description "All the parts in the burning city";
+  references         WTC 88574: 69-100;
+  description       
+
+  "".
+
+#............................................................................
+#----- Szith Morcane 
+
+base encounter 3 Castle Maerimydra =
+  base              Part 3 Maerimydra; 
+  adventure         "City of the Spider Queen";
+  location          Castle Maerimydra;
+  doors             "Strong Wooden, 2 in, hardness 5, hp 20, AC 5, break DC 25, open lock DC 30 (if locked); Stone Double Doors, 4 in, hardness 8, hp 60, AC 5, break DC 28, open lock DC 30 (if locked); Iron Doors (exerior), 2 in, hardness 15, hp 90, AC 5, break DC 35, Open Lock DC 40 (if locked).";
+  floor             "smooth, polished stone, many from high-quality marble";
+  ceiling           "30 ft, floor to floor total 40 ft, opponents use fly and levitate";
+  walls             "Magically treated superior masonry walls, 1 ft (interior) or 5-10 ft (exterior) thick, hardness 16, hp 180 (interior) or 900 (5 ft exterior) or 1800 (10 ft exterior), AC 3, break DC 55, Climb DC-;";
+  feel              "forbiddance spell bars entrance unless password is uttered; weave disruption (enhanced necromantic magic, positive magic impeded (including healing, requires Spellcraft DC 15 + level),3 on turn checks, +1 profane to attacks, damage, saves from undead, can be detected by detect magic)";
+  sound             "usually not much";
+  smell             "";
+  taste             "";
+  light             "None unless brought";
+  references        WTC 88574: 77-101;
+  description       
+  "All the encounters in the castle of Maerimydra. 10% change of a random encounter per 10 minutes.";
+  short description "Encounters in the castle of Maerimydra".
+
+#.....

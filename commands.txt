@@ -17,6 +17,7 @@ java net.ixitxachitls.dma.server.Importer dma/BaseFeats -n
 java net.ixitxachitls.dma.server.Importer dma/BaseSkills -n
 java net.ixitxachitls.dma.server.Importer dma/BaseMonsters -n
 java net.ixitxachitls.dma.server.Importer dma/BaseSpells -n
+java net.ixitxachitls.dma.server.Importer dma/BaseEncounters -n
 java net.ixitxachitls.dma.server.Importer dma/Items dma/Products -n
 java net.ixitxachitls.dma.server.Importer "resources/files/base\ character" "resources/files/base\ item" "resources/files/base\ product" -n
 java net.ixitxachitls.dma.server.Importer "resources/files/base\ monster" --main -n
@@ -26,6 +27,7 @@ java net.ixitxachitls.dma.server.Importer dma/BaseCharacters/Ixitxachitls.dma -n
 java net.ixitxachitls.dma.server.Importer dma/BaseCampaigns -n
 java net.ixitxachitls.dma.server.Importer "dma/Campaigns/Forgotten\ Realms.dma" -n
 java net.ixitxachitls.dma.server.Importer dma/Characters -n
+java net.ixitxachitls.dma.server.Importer dma/BaseEncounters -n
 java net.ixitxachitls.dma.server.Importer dma/BaseItems dma/BaseProducts dma/BaseQualities dma/BaseFeats dma/BaseSkills dma/BaseMonsters -n
 java net.ixitxachitls.dma.server.Importer dma/Items dma/Products -n
 java net.ixitxachitls.dma.server.Importer "resources/files/base\ product/WTC\ 88567" -n

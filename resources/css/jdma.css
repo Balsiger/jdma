@@ -1429,6 +1429,13 @@ A.library-title.type-image
   background-color: $color_Spell;
 }
 
+.value.base-encounter .value-label-container,
+.value.encounter .value-label-container
+{
+  color:            white;
+  background-color: $color_Encounter;
+}
+
 /******************************************************************************
  * overlays
  *****************************************************************************/
@@ -1836,6 +1843,10 @@ A.Item:hover      { color: $hilightcolor_Item }
 A.Spell           { color: $color_Spell }
 A.Spell:visited   { color: $lightcolor_Spell }
 A.Spell:hover     { color: $hilightcolor_Spell }
+
+A.Encounter           { color: $color_Encounter }
+A.Encounter:visited   { color: $lightcolor_Encounter }
+A.Encounter:hover     { color: $hilightcolor_Encounter }
 
 A.Event           { color: $color_Event }
 A.Event:visited   { color: $lightcolor_Event }

@@ -1,0 +1,197 @@
+/******************************************************************************
+ * Copyright (c) 2002-2013 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
+ * All rights reserved
+ *
+ * This file is part of Dungeon Master Assistant.
+ *
+ * Dungeon Master Assistant is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Dungeon Master Assistant; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *****************************************************************************/
+
+/**
+ * Templates for base monsters.
+ */
+{delpackage baseencounter}
+{namespace dma.entry.encounter}
+
+/**
+ * The values for the entry.
+ *
+ * @param entry The entry rendered
+ */
+{deltemplate dma.entry.values}
+  {if def($entry.incomplete) and $ij.isDM}
+    {call dma.entry.extension}
+      {param name: 'incomplete' /}
+      {param content}
+        {delcall dma.entry.keyvalue}
+          {param entry: $entry /}
+          {param name: 'Incomplete' /}
+          {param value: $entry.incomplete /}
+        {/delcall}
+      {/param}
+    {/call}
+  {/if}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Base' /}
+    {param value: $entry.base /}
+    {param access: 'dm' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Extensions' /}
+    {param value: $entry.extensions /}
+    {param access: 'dm' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Synonyms' /}
+    {param value: $entry.synonyms /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Worlds' /}
+    {param value: $entry.worlds /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Categoeries' /}
+    {param value: $entry.categories /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Adventure' /}
+    {param value: $entry.adventure /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Location' /}
+    {param value: $entry.location /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Doors' /}
+    {param value: $entry.doors /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Floor' /}
+    {param value: $entry.floor /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Ceiling' /}
+    {param value: $entry.ceiling /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Walls' /}
+    {param value: $entry.walls /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Feel' /}
+    {param value: $entry.feel /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Sound' /}
+    {param value: $entry.sound /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Smell' /}
+    {param value: $entry.smell /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Taste' /}
+    {param value: $entry.taste /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Light' /}
+    {param value: $entry.light /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Skills' /}
+    {param value: $entry.skills /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'References' /}
+    {param value: $entry.references /}
+  {/delcall}
+  {if length($entry.errors) > 0}
+    {delcall dma.entry.keyvalue}
+      {param entry: $entry /}
+      {param name: 'Errors' /}
+      {param content: $entry.errors /}
+    {/delcall}
+  {/if}
+  {if $ij.isAdmin}
+    {delcall dma.entry.keyvalue}
+      {param entry: $entry /}
+      {param name: 'DMA' /}
+      {param withoutbase: true /}
+      {param value: $entry.dmaValues /}
+    {/delcall}
+  {/if}
+{/deltemplate}
+
+/**
+ * Template for the list titles.
+ */
+{deltemplate dma.entry.listtitles}
+  {call dma.entry.listtitle}{param title: '' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Name' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Worlds' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Short description' /}{/call}
+  {call dma.entry.listtitle}{param title: 'Adventure' /}{/call}
+{/deltemplate}
+
+/**
+ * Template for a single list entry.
+ *
+ * @param entry The entry to render.
+ */
+{deltemplate dma.entry.listentry}
+  {call dma.entry.listentryvalue}
+    {param style: 'extensions' /}
+    {param value: $entry.extensions /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'name' /}
+    {param content: $entry.name /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'worlds' /}
+    {param value: $entry.worlds /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'short' /}
+    {param value: $entry.short_description /}
+    {param entry: $entry /}
+  {/call}
+  {call dma.entry.listentryvalue}
+    {param style: 'adventure' /}
+    {param value: $entry.adventure /}
+    {param entry: $entry /}
+  {/call}
+{/deltemplate}

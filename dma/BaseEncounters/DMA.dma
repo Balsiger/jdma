@@ -1,0 +1,20 @@
+#
+# These are the base encounter definitions.
+#
+#
+
+#----- Diplomatic ----------------------------------------------------------
+
+base encounter Diplomatic = 
+
+  skills            Diplomacy;
+  short description "A diplomatic encounter.";
+  worlds            generic;
+  references        ;
+  description       
+
+  "This is a typical encounter in a diplomatic situation. Players will need
+  diplomacy and etiquette and similar skills to successfully master such a
+  situation.".
+
+#...........................................................................

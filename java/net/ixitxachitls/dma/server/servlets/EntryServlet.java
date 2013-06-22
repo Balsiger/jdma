@@ -56,12 +56,9 @@ import net.ixitxachitls.util.logging.Log;
  * An entry servlet that has a single type and gets the id from the path of the
  * request.
  *
- *
  * @file          EntryServlet.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
- *
- *
  */
 
 //..........................................................................

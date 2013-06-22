@@ -920,7 +920,7 @@ public class BaseSpell extends BaseEntry
   /**
    * This is the normal constructor.
    *
-   * @param       inName the name of the base item
+   * @param       inName the name of the base spell
    */
   public BaseSpell(String inName)
   {

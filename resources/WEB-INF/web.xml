@@ -303,6 +303,9 @@
         ^/monster/([^/]+)$
         /_entry/base monster/$1
 
+        ^/encounter/([^/]+)$
+        /_entry/base encounter/$1
+
         ^/item/([^/]+)$
         /_entry/base item/$1
 
@@ -330,6 +333,9 @@
         ^/monsters/(.*)$
         /_index/base monster/$1
 
+        ^/encounters/(.*)$
+        /_index/base encounter/$1
+
         ^/items/(.*)$
         /_index/base item/$1
 
@@ -353,6 +359,9 @@
 
         ^/monsters
         /_entries/base monster
+
+        ^/encounters
+        /_entries/base encounter
 
         ^/items$
         /_entries/base item
