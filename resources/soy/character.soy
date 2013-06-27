@@ -1,4 +1,4 @@
-/******************************************************************************
+/* ****************************************************************************
  * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
@@ -19,11 +19,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-/**
+/*
  * Templates for base products
  */
 {delpackage character}
 {namespace dma.entry.character}
+
+// @printDirective number 0 0
 
 /**
  * The values for the entry.
@@ -118,6 +120,9 @@
  *
  */
 {deltemplate dma.entry.print}
+  {if false} /* Just to quite unused parameters. */
+    {$first}/{$previous}/{$list}/{$next}/{$last}
+  {/if}
   <h1>{$entry.name}{if $ij.isDM} (DM view){/if}</h1>
   <table>
     <tr><td>Player:</td><td>{$entry.base.print}</td></tr>

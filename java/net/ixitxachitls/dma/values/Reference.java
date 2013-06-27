@@ -31,23 +31,20 @@ import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.dma.data.DMADataFactory;
 import net.ixitxachitls.dma.entries.AbstractEntry;
-import net.ixitxachitls.dma.entries.BaseEntry;
-import net.ixitxachitls.dma.entries.BaseType;
+import net.ixitxachitls.dma.entries.AbstractType;
 import net.ixitxachitls.input.ParseReader;
-
 //..........................................................................
 
 //------------------------------------------------------------------- header
 
 /**
- * A text value representing a reference to a product.
+ * A text value representing a reference to a base entry.
  *
  * @file          Reference.java
  *
  * @author        balsiger@ixitxachitls.net (Peter Balsiger)
  *
  * @param         <T> the type of entry referenced
- *
  */
 
 //..........................................................................
@@ -56,7 +53,7 @@ import net.ixitxachitls.input.ParseReader;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class Reference<T extends BaseEntry> extends Value<Reference<T>>
+public class Reference<T extends AbstractEntry> extends Value<Reference<T>>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -71,7 +68,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @param   inType the type of entry referenced
    *
    */
-  public Reference(BaseType<T>inType)
+  public Reference(AbstractType<T>inType)
   {
     m_type = inType;
     m_name = new Name();
@@ -90,7 +87,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
    * @param       inText           the text to store
    *
    */
-  public Reference(BaseType<T>inType, String inText)
+  public Reference(AbstractType<T>inType, String inText)
   {
     m_type = inType;
     m_name = new Name(inText);
@@ -175,7 +172,7 @@ public class Reference<T extends BaseEntry> extends Value<Reference<T>>
   private @Nullable T m_entry;
 
   /** The type of entry referenced. */
-  private BaseType<T> m_type;
+  private AbstractType<T> m_type;
 
   /** The name of the refernce. */
   private Name m_name;

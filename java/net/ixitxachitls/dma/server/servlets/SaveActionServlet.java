@@ -338,8 +338,11 @@ public class SaveActionServlet extends ActionServlet
           saved.add(Encodings.escapeJS(entry.getType().toString()) + " "
                     + Encodings.escapeJS(entry.getName()));
 
-          if(store != null && store.add((CampaignEntry<?>)entry))
+          if(store != null)
+          {
+            store.add((CampaignEntry<?>)entry);
             path = Encodings.toJSString(store.getPath());
+          }
         }
         else
           errors.add("Coult not store " + entry.getType() + " '"

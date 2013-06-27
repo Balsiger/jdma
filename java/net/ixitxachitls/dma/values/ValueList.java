@@ -162,7 +162,7 @@ public class ValueList<T extends Value<T>>
    * @param       inValues the beginning values of the list
    *
    */
-  @SuppressWarnings("unchecked")
+  @SafeVarargs
   public ValueList(T ... inValues)
   {
     this(s_delimiter, inValues);

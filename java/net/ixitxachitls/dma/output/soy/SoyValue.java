@@ -189,7 +189,7 @@ public class SoyValue extends SoyAbstract
   //------------------------------ getSingle -------------------------------
 
   /**
-   * Get a single value out of the combination.
+   * Get a single value out of the value.
    *
    * @param  inName the name of the value to get
    *

@@ -103,7 +103,7 @@ gui.removeAction = function(inName)
 gui.info = function(inMessage)
 {
   gui.notification(inMessage, "/icons/info.png", "info");
-}
+};
 
 //..........................................................................
 //---------------------------------- alert ---------------------------------
@@ -116,7 +116,7 @@ gui.info = function(inMessage)
 gui.alert = function(inMessage)
 {
   gui.notification(inMessage, "/icons/alert.png", "alert");
-}
+};
 
 //..........................................................................
 //--------------------------------- debug ----------------------------------
@@ -129,7 +129,7 @@ gui.alert = function(inMessage)
 gui.debug = function(inMessage)
 {
   gui.notification(inMessage, "/icons/bug.png", "debug");
-}
+};
 
 //..........................................................................
 //------------------------------- notificaton ------------------------------
@@ -166,7 +166,7 @@ gui.notification = function(inMessage, inImage, inClass)
   delay(5000 * gui.pendingNotifications).
   animate({ bottom: -150 }, 1000, 'swing',
           function() { $(this).remove(); gui.pendingNotifications--; });
-}
+};
 
 //..........................................................................
 //-------------------------------- delayed ---------------------------------
@@ -188,7 +188,7 @@ gui.delayed = function(inAction, inDelay)
   handle.timeout = window.setTimeout(inAction, inDelay);
 
   return handle;
-}
+};
 
 //..........................................................................
 //--------------------------------- stop -----------------------------------
@@ -212,7 +212,7 @@ gui.stop = function(inReference)
   }
   else
     window.clearTimeout(inReference);
-}
+};
 
 //..........................................................................
 //----------------------------- setupHighlight -----------------------------
@@ -225,7 +225,7 @@ gui.setupHighlight = function()
 {
   $('img.highlight').mouseover(gui.toggleHighlight);
   $('img.highlight').mouseout(gui.toggleHighlight);
-}
+};
 
 //..........................................................................
 //---------------------------- toggleHighlight -----------------------------
@@ -240,13 +240,13 @@ gui.setupHighlight = function()
  */
 gui.toggleHighlight = function()
 {
-  var src = $(this).attr('src').match(/(.*?)(-highlight)?(\.png)/)
+  var src = $(this).attr('src').match(/(.*?)(-highlight)?(\.png)/);
 
   if(src[2])
     $(this).attr('src', src[1] + src[3]);
   else
     $(this).attr('src', src[1] + '-highlight' + src[3]);
-}
+};
 
 //..........................................................................
 //------------------------------- columnize --------------------------------
@@ -265,11 +265,11 @@ gui.columnize = function(inContainer, inColumns)
   inContainer.children(":not(.column)").each(function() {
     gui._shortest(columns).append(this);
   });
-}
+};
 
 gui._shortest = function(inColumns)
 {
-  var shortest;
+  var shortest = null;
   inColumns.each(function() {
     var element = $(this);
     if(!shortest)
@@ -280,7 +280,7 @@ gui._shortest = function(inColumns)
   });
 
   return shortest;
-}
+};
 
 //..........................................................................
 

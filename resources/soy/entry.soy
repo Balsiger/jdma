@@ -1,4 +1,4 @@
-/******************************************************************************
+/* ****************************************************************************
  * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
@@ -9,7 +9,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * Dungeon Master Assistant is distribbbuted in the hope that it will be useful,
+ * Dungeon Master Assistant is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -19,11 +19,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-/**
+/*
  * The basic templates for rendering entries.
  */
 
 {namespace dma.entry autoescape="false"}
+
+// @function def 1 0
+// @function entry 1 0
 
 /**
  * The main template for an entry.
@@ -393,7 +396,7 @@
  * @param entry The entry rendered
  */
 {deltemplate dma.entry.values}
-  No values in this entry.
+  No values in this entry ({$entry.name}).
 {/deltemplate}
 
 /**
@@ -1000,7 +1003,6 @@
           {if def($item.secondary.combine.total)}
           {call .overviewValue}
             {param prefix: ' ' /}
-            {param first: true /}
             {param value: $item.secondary_damage.combine.total /}
           {/call}
           {/if}
@@ -1186,7 +1188,6 @@
         {/call}
         {call .overviewValue}
           {param prefix: ' ' /}
-          {param first: true /}
         {/call}
         {if $item.range.combine.total}
           {call .overviewValue}
@@ -1257,7 +1258,8 @@
 
 /**
  * Print the value with the given pre and post fix.
- *
+ * 
+ * @param? entry       the entry containing the value
  * @param? prefix      the prefix for the value
  * @param? postfix     the postfix for the value
  * @param? value       the vaue to print
@@ -1281,19 +1283,18 @@
 /**
  * Print the raw value, ignoring dm handling.
  *
- * @param entry       the entry to render
- * @param prefix      the prefix for the value
- * @param postfix     the postfix for the value
- * @param value       the vaue to print
- * @param content     formatted content instead of a value
- * @param combination a combination value to print (instead of value or content)
+ * @param? entry        the entry to render
+ * @param? prefix      the prefix for the value
+ * @param? postfix     the postfix for the value
+ * @param? value       the vaue to print
+ * @param? content     formatted content instead of a value
+ * @param? combination a combination value to print (instead of value or content)
  */
 {template .overviewValueRaw private="true"}
   {if $combination}
-    {call dma.value.combination}
-      {param combination: $combination /}
+    {call dma.value.combined}
+      {param value: $combination /}
       {param entry: $entry /}
-      {param value: $value /}
       {param canEdit: false /}
       {param prefix: $prefix /}
       {param postfix: $postfix /}

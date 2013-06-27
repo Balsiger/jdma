@@ -1,4 +1,4 @@
-/******************************************************************************
+/* ****************************************************************************
  * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
@@ -20,6 +20,8 @@
  *****************************************************************************/
 
 {namespace dma.navigation}
+
+// @function isList 1
 
 /**
  * Setup the whole navigation.
@@ -46,6 +48,7 @@
  * @param entry the entry to compute navigation for
  */
 {template .entryNavigation}
+  {if isList($entry.navigation)}
   <script>
     $('#subnavigation').html('
     {foreach $navEntry in $entry.navigation}
@@ -73,4 +76,5 @@
     {/foreach}
     ');
   </script>
+  {/if}
 {/template}

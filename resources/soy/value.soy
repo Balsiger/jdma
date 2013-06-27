@@ -1,4 +1,4 @@
-/******************************************************************************
+/* ****************************************************************************
  * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
@@ -19,10 +19,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-/**
+/*
  * Templates for values.
  */
 {namespace dma.value autoescape="false"}
+
+// @function def 1 0
+// @function entry 1 0
+// @printDirective commands 0 0 
+// @printDirective css 0 0 
+// @printDirective firstline 0 0 
+// @printDirective print 0 0 
+// @printDirective raw 0 0 
 
 /**
  * Base template for values to make them editable.
@@ -725,7 +733,7 @@
  */
 {template .withbase}
   {if def($value.isCombined)}
-    {call dma.value.combined}
+    {call .combined}
       {param entry: $entry /}
       {param value: $value /}
       {param canEdit: $canEdit /}
@@ -736,7 +744,7 @@
       {param short: $short /}
     {/call}
   {else}
-    {call dma.value.combined}
+    {call .combined}
       {param entry: $entry /}
       {param value: $value.combined /}
       {param canEdit: $canEdit /}

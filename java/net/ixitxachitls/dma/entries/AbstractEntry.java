@@ -64,6 +64,7 @@ import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
 import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Reference;
+import net.ixitxachitls.dma.values.Text;
 import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
@@ -98,11 +99,6 @@ public class AbstractEntry extends ValueGroup
   //----------------------------------------------------------------- nested
 
   //----- EntryKey ---------------------------------------------------------
-
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
 
   /**
    * The key for an entry for storage.
@@ -475,7 +471,10 @@ public class AbstractEntry extends ValueGroup
     s_extensions =
     new HashSet<Class<? extends AbstractExtension<? extends AbstractEntry>>>();
 
-  //........................................................................
+  /** The serial version id. */
+  private static final long serialVersionUID = 1L;
+
+ //........................................................................
 
   //----- name -------------------------------------------------------------
 
@@ -500,9 +499,8 @@ public class AbstractEntry extends ValueGroup
   //........................................................................
   //----- base names -------------------------------------------------------
 
-  // Cannot use a static formatter here, as it depends on the
-  // real type; thus we need to init this in the constructor after we have
-  // the type.
+  // Cannot use a template here, as it depends on the real type; thus we need
+  // to initialize this in the constructor after we have the type.
   /** The base names. */
   @Key("base")
   @PrintUndefined
@@ -1629,6 +1627,33 @@ public class AbstractEntry extends ValueGroup
 
     return new EntryKey<T>(inID, inType,
                            new EntryKey<T>(inParentID, inParentType));
+  }
+
+  //........................................................................
+  //------------------------------ getSummary ------------------------------
+
+  /**
+   * Get a summary for the entry, using the given parameters.
+   *
+   * @param       inParameters  the parameters to parametrize the summary
+   *
+   * @return      the string with the summary
+   */
+  public String getSummary(@Nullable Parameters inParameters)
+  {
+    Combined<Text> combined = collect("short description");
+    String summary = combined.total().get();
+
+    if(inParameters == null || !inParameters.isDefined())
+      return summary;
+
+    summary = computeExpressions(summary, inParameters);
+
+    Value<?> notes = inParameters.getValue("Notes");
+    if(notes != null)
+      summary += " (" + notes + ")";
+
+    return summary;
   }
 
   //........................................................................

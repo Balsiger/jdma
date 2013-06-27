@@ -45,8 +45,8 @@ var form = new Object();
  */
 form.setupValidation = function(inElement)
 {
-  var inputs = $(':input', inElement).keyup(form.validate).each(form.validate);
-}
+  $(':input', inElement).keyup(form.validate).each(form.validate);
+};
 
 //..........................................................................
 //-------------------------------- validate --------------------------------
@@ -96,7 +96,6 @@ form.validate = function()
  */
 form.checkValue = function(inType, inValue)
 {
-  window.console.log("check value", inType, inValue);
   switch(inType)
   {
     case 'any':

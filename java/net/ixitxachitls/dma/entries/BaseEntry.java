@@ -36,12 +36,10 @@ import net.ixitxachitls.dma.entries.indexes.Index;
 import net.ixitxachitls.dma.values.LongFormattedText;
 import net.ixitxachitls.dma.values.Multiple;
 import net.ixitxachitls.dma.values.Name;
-import net.ixitxachitls.dma.values.Parameters;
 import net.ixitxachitls.dma.values.Range;
 import net.ixitxachitls.dma.values.Reference;
 import net.ixitxachitls.dma.values.Selection;
 import net.ixitxachitls.dma.values.Text;
-import net.ixitxachitls.dma.values.Value;
 import net.ixitxachitls.dma.values.ValueList;
 import net.ixitxachitls.input.ParseReader;
 import net.ixitxachitls.util.Encodings;
@@ -432,32 +430,6 @@ public class BaseEntry extends AbstractEntry
 
 
     return desc;
-  }
-
-  //........................................................................
-  //------------------------------ getSummary ------------------------------
-
-  /**
-   * Get a summary for the entry, using the given parameters.
-   *
-   * @param       inParameters  the parameters to parametrize the summary
-   *
-   * @return      the string with the summary
-   */
-  public String getSummary(@Nullable Parameters inParameters)
-  {
-    String summary = getShortDescription();
-
-    if(inParameters == null || !inParameters.isDefined())
-      return summary;
-
-    summary = computeExpressions(summary, inParameters);
-
-    Value<?> notes = inParameters.getValue("Notes");
-    if(notes != null)
-      summary += " (" + notes + ")";
-
-    return summary;
   }
 
   //........................................................................

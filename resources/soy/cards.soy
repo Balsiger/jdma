@@ -1,4 +1,4 @@
-/******************************************************************************
+/* ****************************************************************************
  * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
@@ -19,10 +19,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-/**
+/*
  * Templates for base items
  */
 {namespace dma.card autoescape="false"}
+
+// @function commands 1 0
 
 /**
  * The tiny item card.
@@ -221,10 +223,10 @@
         {if $entry.extension_contents}
           <div class="content">
             {foreach $item in $entry.contents.list}
-              {delcall dma.tiny}
+              {call .item_tiny}
                 {param entry: entry($entry.campaign.key + '/item/'
                     + $item.print) /}
-              {/delcall}
+              {/call}
             {/foreach}
           </div>
         {/if}

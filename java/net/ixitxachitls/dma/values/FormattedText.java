@@ -27,7 +27,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import javax.annotation.concurrent.Immutable;
 
 import net.ixitxachitls.input.ParseReader;
-import net.ixitxachitls.util.configuration.Config;
 
 //..........................................................................
 
@@ -36,12 +35,11 @@ import net.ixitxachitls.util.configuration.Config;
 /**
  * This class stores a text string and is capable of reading such strings from
  * a reader (and write it to a writer of course). The text is kept formatted as
- * it was when readig in in (e.g. keeping newlines intact).
+ * it was when reading in in (e.g. keeping newlines intact).
  *
  * @file          FormattedText.java
  *
  * @author        balsiger@ixitxachitls.net (Peter 'Merlin' Balsiger)
- *
  */
 
 //..........................................................................
@@ -50,7 +48,7 @@ import net.ixitxachitls.util.configuration.Config;
 
 @Immutable
 @ParametersAreNonnullByDefault
-public class FormattedText extends BaseText<FormattedText>
+public class FormattedText extends BaseFormattedText<FormattedText>
 {
   //--------------------------------------------------------- constructor(s)
 
@@ -108,86 +106,15 @@ public class FormattedText extends BaseText<FormattedText>
   //........................................................................
 
   //-------------------------------------------------------------- variables
-
-  /** The delimiters for ending the text. */
-  protected static final String s_nameDelimiters =
-    Config.get("resource:values/name.delimiter", "\":,.;=[]{}|/");
-
-  /** The pattern for the delimiters (escaped). */
-  protected static final String s_nameDelimPattern =
-    Config.get("resource:values/name.delimiter.pattern",
-               "\":,.;=\\[\\]\\{\\}\\|");
-
-  /** The delimiter to use to start and end the text when reading or
-   * printing. */
-  protected static final char s_stringDelimiter =
-    Config.get("resource:values/text.delimiter", '\"');
-
   //........................................................................
 
   //-------------------------------------------------------------- accessors
-
-  //------------------------------ doToString ------------------------------
-
-  /**
-   * Convert the value to a string.
-   *
-   * @return      the String representation.
-   *
-   */
-  @Override
-  protected String doToString()
-  {
-    return s_stringDelimiter
-      + m_text.replaceAll("([" + s_stringDelimiter + "])", "\\\\$1")
-      + s_stringDelimiter;
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //----------------------------------------------------------- manipulators
   //........................................................................
 
   //------------------------------------------------- other member functions
-
-  //------------------------------- doRead ---------------------------------
-
-  /**
-   * Read the value from the reader and replace the current one.
-   *
-   * @param       inReader   the reader to read from
-   *
-   * @return      true if read, false if not
-   *
-   */
-  @Override
-  public boolean doRead(ParseReader inReader)
-  {
-    // read and remove escapes for delimiters
-    String text = null;
-
-    if(!inReader.expect(s_stringDelimiter))
-      return false;
-
-    ParseReader.Position pos = inReader.getPosition();
-
-    text =
-      inReader.read(s_stringDelimiter).replaceAll("\\\\" + s_stringDelimiter,
-                                                  "" + s_stringDelimiter);
-
-    if(!inReader.expect(s_stringDelimiter))
-      inReader.logWarning(pos, "value.text.unterminated",
-                          "read till end of text");
-
-    m_text   = text;
-
-    return true;
-  }
-
-  //........................................................................
-
   //........................................................................
 
   //------------------------------------------------------------------- test

@@ -1,4 +1,4 @@
-/******************************************************************************
+/* ****************************************************************************
  * Copyright (c) 2002-2012 Peter 'Merlin' Balsiger and Fred 'Mythos' Dobler
  * All rights reserved
  *
@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *****************************************************************************/
 
-/**
+/*
  * Templates for base products
  */
 {delpackage campaign}
@@ -129,6 +129,41 @@
               + '/' + $entry.type.link + '/' + $entry.name + '\');' /}
           {param text: 'add' /}
           {param tooltip: 'Add a new item to this campaign.' /}
+        {/call}
+      {/if}
+    {/param}
+    {param access: 'user' /}
+  {/delcall}
+  {delcall dma.entry.keyvalue}
+    {param entry: $entry /}
+    {param name: 'Encounters' /}
+    {param content}
+      {foreach $encounter in $entry.encounters}
+        {call dma.page.link}
+          {param url: $encounter.path /}
+          {param text}
+            {if $encounter.number.isDefined}
+              {$encounter.number} -{sp}
+            {/if}
+            {if $encounter.title.isDefined}            
+              {$encounter.title}
+            {else}            
+              {$encounter.name}
+            {/if}
+          {/param}
+        {/call}
+        {if not isLast($encounter)}, {/if}
+      {ifempty}
+        No encounters. 
+      {/foreach}
+      {if $ij.isDM}
+        {sp}|{sp}
+        {call dma.page.link}
+          {param js: 'encounter.create(\'' + $entry.path
+              + '\', \'/base campaign/' + $entry.basename.print
+              + '/' + $entry.type.link + '/' + $entry.name + '\');' /}
+          {param text: 'add' /}
+          {param tooltip: 'Add a new encounter to this campaign.' /}
         {/call}
       {/if}
     {/param}

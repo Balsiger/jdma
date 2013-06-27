@@ -725,7 +725,7 @@ public class Monster extends CampaignEntry<BaseMonster>
     new EnumSelection<Gender>(Gender.class);
 
   //........................................................................
-  //----- possesions -------------------------------------------------------
+  //----- possessions ------------------------------------------------------
 
   /** The possessions value. */
   @Key("possesions")

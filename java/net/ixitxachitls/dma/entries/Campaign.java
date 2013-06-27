@@ -24,7 +24,9 @@
 package net.ixitxachitls.dma.entries;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -262,58 +264,71 @@ public class Campaign extends CampaignEntry<BaseCampaign>
       return new ValueList<Multiple>(list);
     }
 
+    if("encounters".equals(inKey))
+    {
+      List<Encounter> encounters =
+        DMADataFactory.get().getEntries(Encounter.TYPE, getKey(), 0, 100);
+
+      List<Encounter> list = new ArrayList<>();
+      for(Encounter encounter : encounters)
+        if (encounter.getCampaign().getName().equals(this.getName()))
+          list.add(encounter);
+
+      return list;
+    }
+
     if("items".equals(inKey))
     {
-      // List<Character> characters =
-      //   DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
+       List<Character> characters =
+         DMADataFactory.get().getEntries(Character.TYPE, getKey(), 0, 100);
       List<Multiple> list = new ArrayList<Multiple>();
 
-      // Map<String, Item> owned = new HashMap<String, Item>();
-      // for(Character character : characters)
-      // {
-      //   Map<String, Item> contained = character.containedItems(true);
-      //   for(String key : contained.keySet())
-      //     if(owned.containsKey(key))
-      //       Log.warning("item " + key + " is possessed by two characters");
+       Map<String, Item> owned = new HashMap<String, Item>();
+       for(Character character : characters)
+       {
+         Map<String, Item> contained = character.containedItems(true);
+         for(String key : contained.keySet())
+           if(owned.containsKey(key))
+             Log.warning("item " + key + " is possessed by two characters");
 
-      //   owned.putAll(contained);
-      // }
+         owned.putAll(contained);
+       }
 
-      // for(Monster monster : monsters())
-      // {
-      //   Map<String, Item> contained = monster.containedItems(true);
-      //   for(String key : contained.keySet())
-      //     if(owned.containsKey(key))
-      //       Log.warning("item " + key
-      //                   + " is possessed by two characters/monsters");
+       for(Monster monster : monsters())
+       {
+         Map<String, Item> contained = monster.containedItems(true);
+         for(String key : contained.keySet())
+           if(owned.containsKey(key))
+             Log.warning("item " + key
+                         + " is possessed by two characters/monsters");
 
-      //   owned.putAll(contained);
-      // }
+         owned.putAll(contained);
+       }
 
-      // for(int pos = 0;; pos += 100)
-      // {
-      //   // TODO: this is expensive, we might want to do this only on demand?
-      //   List<Item> items =
-      //     DMADataFactory.get().getEntries(Item.TYPE, getKey(), pos, 100);
+       for(int pos = 0;; pos += 100)
+       {
+         // TODO: this is expensive, we might want to do this only on demand?
+         List<Item> items =
+           DMADataFactory.get().getEntries(Item.TYPE, getKey(), pos, 100);
 
-      //   for(Item item : items)
-      //   {
-      //     if(owned.containsKey(item.getName()))
-      //       continue;
+         for(Item item : items)
+         {
+           if(owned.containsKey(item.getName()))
+             continue;
 
-      //     list.add(new Multiple
-      //              (new Multiple.Element(new Name(item.getPlayerName()),
-      //                                    false),
-      //               new Multiple.Element(new Name(item.getDMName()),
-      //                                    false),
-      //               new Multiple.Element(new Name(getPath() + "/"
-      //                                             + Item.TYPE.getLink() + "/"
-      //                                           + item.getName()), false)));
-      //   }
+           list.add(new Multiple
+                    (new Multiple.Element(new Name(item.getPlayerName()),
+                                          false),
+                     new Multiple.Element(new Name(item.getDMName()),
+                                          false),
+                     new Multiple.Element(new Name(getPath() + "/"
+                                                   + Item.TYPE.getLink() + "/"
+                                                 + item.getName()), false)));
+         }
 
-      //   if(items.size() < 100 || list.size() > 5)
-      //     break;
-      // }
+         if(items.size() < 100 || list.size() > 5)
+           break;
+       }
 
       if(list.isEmpty())
         return new ValueList<Multiple>
